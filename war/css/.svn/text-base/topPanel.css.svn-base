@@ -1,0 +1,76 @@
+ul.topPanelTabs {
+    display: block;
+    margin: 0 0 0 25px;
+    padding: 0;
+    width: 1049px;
+    float: left;
+    list-style: none;
+    height: 45px;
+    border-left: 1px solid #AAAAAA;
+    border-bottom: 1px solid #C9C5C7;
+    background-color: #B3C6E6;
+    /*box-shadow: 3px 1px 3px #888888;*/
+}
+
+ul.topPanelTabs li {
+    float: left;
+    margin: 0 0 -1px;
+    padding: 0px 5px;
+    height: 44px;
+    line-height: 44px;
+    border: 1px solid #AAAAAA;
+    border-left: none;
+    overflow: hidden;
+    position: relative;
+    background: #6E66B3;
+    width: 113px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+ul.adminTopPanelTabs li {
+    width: 138px;
+}
+
+ul.topPanelTabs li.selectedTab {
+    background: #918BC7;
+}
+
+.topPanelTabs a {
+    text-decoration: none;
+    color: white;
+}
+
+#v2vHeading a {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+    font-size: 1.8em;
+    font-family: Trebuchet, MS Times New Roman;
+}
+
+#v2vHeading {
+    background-color: #B3C6E6;
+    margin: -17px 25px 0;
+    padding: 20px;
+}
+
+.headlink {
+    float: right;
+    margin: -40px 50px 20px 0;
+}
+
+.headlink a {
+    color: #336699;
+    cursor: pointer;
+    margin: 0 20px 0 0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.topPanelUsername {
+    color: #000000;
+    display: inline;
+    margin-right: 25px;
+}

@@ -1,0 +1,30 @@
+#login {
+    margin-left: 20%
+}
+
+.actionButtonsPanel {
+    margin-left: 30%
+}
+
+.loginHeading {
+    color: #6E66B3;
+    font-family: Trebuchet, MS Times New Roman;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.loginButton {
+    background-color: #3B5998;
+    border-style: none;
+    color: #FFFFFF!important;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    height: 28px;
+    width: 65px;
+    margin: 30px 0 0 164px;
+}
+
+.loginPanel{
+    margin: 30px -215px 0;
+}

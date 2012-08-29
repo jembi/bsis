@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/267/trunk/src/interceptor
+END
+LoggingInterceptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/267/trunk/src/interceptor/LoggingInterceptor.java
+END
+LoginInterceptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/24/trunk/src/interceptor/LoginInterceptor.java
+END
+UserInterceptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/23/trunk/src/interceptor/UserInterceptor.java
+END

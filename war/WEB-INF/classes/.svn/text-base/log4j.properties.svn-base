@@ -1,0 +1,15 @@
+# Set root logger level to INFO
+log4j.rootLogger=WARN, ET
+
+log4j.category.ETlogger=WARN,ET
+# ET is set to be a File.
+log4j.appender.ET=org.apache.log4j.RollingFileAppender
+log4j.appender.ET.File=${catalina.home}/logs/v2v.log
+log4j.appender.ET.DatePattern=’.'yyyy-MM-dd
+log4j.appender.ET.Threshold=warn
+log4j.appender.ET.Append=true
+log4j.appender.ET.ImmediateFlush=true
+
+# ET uses PatternLayout.
+log4j.appender.ET.layout=org.apache.log4j.PatternLayout
+log4j.appender.ET.layout.ConversionPattern=[ %-5d %-5p %-4rms ] %F : %L – %m%n

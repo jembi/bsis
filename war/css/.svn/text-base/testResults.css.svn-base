@@ -1,0 +1,32 @@
+.testResultOptions {
+    display: inline;
+    margin: 0 5px 5px 5px;
+}
+
+.testResultsRow{
+    margin: 25px 0 0 15px;
+}
+
+.paddedLabel {
+    width: 140px;
+    float: left;
+    text-align: left;
+}
+
+#testResultsTable {
+    width: 100%;
+    border: 3px outset #BAB6B8;
+    border-collapse:collapse;
+}
+
+#testResultsTable th, td {
+    border: 1px solid #BAB6B8;
+    padding: 1px;
+    font-weight: normal;
+    text-align: center;
+    width: 10%;
+}
+
+#testResultsTable th{
+    background-color: #C9C5C7;
+}

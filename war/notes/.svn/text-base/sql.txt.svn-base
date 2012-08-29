@@ -1,0 +1,186 @@
+CREATE USER 'v2v'@'localhost' IDENTIFIED BY 'password'
+GRANT ALL PRIVILEGES ON *.* TO 'v2v'@'localhost' WITH GRANT OPTION
+
+delete from Donor;
+delete from Collection;
+delete from Product;
+
+drop table User;
+drop table Donor;
+drop table Collection;
+drop table Product;
+drop table Location;
+drop table LocationType;
+drop table ReportConfig;
+drop table DisplayNames;
+drop table TestResult;
+drop table Request;
+drop table Issue;
+drop table ProductUsage;
+drop table RecordFieldsConfig;
+drop table Feedback;
+
+GRANT ALL PRIVILEGES ON *.* TO 'v2v'@'%' WITH GRANT OPTION
+
+CREATE TABLE User (
+ userId INT PRIMARY KEY AUTO_INCREMENT,
+ username VARCHAR(32),
+ password VARCHAR(32),
+ type VARCHAR(32),
+ name VARCHAR(250),
+ contactNumber VARCHAR(50),
+ emailId VARCHAR(50),
+ isDeleted INT Default 0
+) ENGINE=InnoDB;
+
+
+CREATE TABLE Donor (
+ donorId INT PRIMARY KEY AUTO_INCREMENT,
+ donorNumber VARCHAR(32),
+ firstName VARCHAR(32),
+ lastName VARCHAR(32),
+ gender VARCHAR(32),
+ bloodType VARCHAR(32),
+ birthDate DATE,
+ address VARCHAR(64),
+ age INT,
+ isDeleted INT Default 0
+) ENGINE=InnoDB;
+
+
+CREATE TABLE Collection (
+ collectionId INT PRIMARY KEY AUTO_INCREMENT,
+ collectionNumber VARCHAR(32),
+ centerId INT,
+ siteId INT,
+ dateCollected DATE,
+ donorNumber VARCHAR(32),
+ donorType VARCHAR(32),
+ sampleNumber INT,
+ shippingNumber INT,
+ comment VARCHAR(250),
+ abo VARCHAR(250),
+ rhd VARCHAR(250),
+ isDeleted INT Default 0
+ )ENGINE=InnoDB;
+
+CREATE TABLE TestResult (
+ testResultId INT PRIMARY KEY AUTO_INCREMENT,
+ collectionNumber VARCHAR(32),
+ dateCollected DATE,
+ dateTested DATE,
+ hiv VARCHAR(250),
+ hbv VARCHAR(250),
+ hcv VARCHAR(250),
+ syphilis VARCHAR(250),
+ abo VARCHAR(250),
+ rhd VARCHAR(250),
+ comment VARCHAR(250),
+ isDeleted INT Default 0
+ )ENGINE=InnoDB;
+
+
+ CREATE TABLE Product (
+ productId INT PRIMARY KEY AUTO_INCREMENT,
+ productNumber VARCHAR(32),
+ collectionNumber VARCHAR(32),
+ dateCollected DATE,
+ type VARCHAR(32),
+ abo VARCHAR(250),
+ rhd VARCHAR(250),
+ isIssued INT Default 0,
+ isDeleted INT Default 0
+ )ENGINE=InnoDB;
+
+ CREATE TABLE LocationType (
+ locationTypeId INT PRIMARY KEY AUTO_INCREMENT,
+ name VARCHAR(32),
+ isDeleted INT Default 0
+) ENGINE=InnoDB;
+
+CREATE TABLE Location (
+ locationId INT PRIMARY KEY AUTO_INCREMENT,
+ name VARCHAR(32),
+ type INT,
+ isCenter INT,
+ isCollectionSite INT,
+ isUsageSite INT,
+ isMobileSite INT,
+ isDeleted INT Default 0,
+ FOREIGN KEY (type) REFERENCES LocationType (locationTypeId)
+) ENGINE=InnoDB;
+
+CREATE TABLE ReportConfig (
+ reportType VARCHAR(32) PRIMARY KEY,
+ fieldNames TEXT
+) ENGINE=InnoDB;
+
+
+CREATE TABLE DisplayNames (
+ formType VARCHAR(32) PRIMARY KEY,
+ fieldNames TEXT
+) ENGINE=InnoDB;
+
+CREATE TABLE Request (
+ requestId INT PRIMARY KEY AUTO_INCREMENT,
+ requestNumber VARCHAR(32),
+ dateRequested DATE,
+ siteId INT,
+ abo VARCHAR(250),
+ rhd VARCHAR(250),
+ productType VARCHAR(32),
+ quantity INT,
+ dateRequired DATE,
+ comment VARCHAR(250),
+ status VARCHAR(250),
+ isDeleted INT Default 0
+ )ENGINE=InnoDB;
+
+ CREATE TABLE Issue (
+ issueId INT PRIMARY KEY AUTO_INCREMENT,
+ productNumber VARCHAR(32),
+ dateIssued DATE,
+ siteId INT,
+ isDeleted INT Default 0
+ )ENGINE=InnoDB;
+
+
+ CREATE TABLE ProductUsage(
+ usageId INT PRIMARY KEY AUTO_INCREMENT,
+ productNumber VARCHAR(32),
+ dateUsed DATE,
+ hospital VARCHAR(250),
+ ward VARCHAR(250),
+ useIndication VARCHAR(200),
+ comment VARCHAR(250),
+ isDeleted INT Default 0
+ )ENGINE=InnoDB;
+
+CREATE TABLE RecordFieldsConfig (
+recordType VARCHAR(32) PRIMARY KEY,
+fieldNames TEXT
+) ENGINE=InnoDB;
+
+CREATE TABLE Feedback (
+feedbackId INT PRIMARY KEY AUTO_INCREMENT,
+comment VARCHAR(250),
+datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+
+insert into User values(1,'admin','admin321123','admin','admin','','',0);
+insert into ReportConfig values('collection','collectionNo,center,site,dateCollected,sampleNo,shippingNo,donorNo,donorType,comment,bloodGroup,rhd');
+insert into ReportConfig values('product','productNo,collectionNo,dateCollected,productType');
+insert into ReportConfig values('testResults','hiv,bloodGroup,collectionNo,dateTested,dateCollected,hbv,hcv,comment,syphilis');
+insert into DisplayNames values('collection','collectionNo:,center:,site:,dateCollected:,sampleNo:,shippingNo:,donorNo:,donorType:,comment:,bloodGroup:,rhd:,tips:');
+insert into DisplayNames values('donor','donorID:,firstName:,lastName:,gender:,bloodType:,dob:,address:,age:,tips:');
+insert into DisplayNames values('testResults','collectionNo:,dateCollected:,dateTested:,hiv:,hbv:,hcv:,syphilis:,abo:,rhd:,bloodGroup:,comment:,tips:');
+insert into DisplayNames values('product','productNo:,collectionNo:,dateCollected:,productType:,bloodGroup:,tips:');
+insert into DisplayNames values('request','requestNo:,requestDate:,requiredDate:,site:,productType:,abo:,rhd:,bloodGroup:,quantity:,comment:,status:,tips:');
+insert into DisplayNames values('issue','issueDate:,issue:,issueTips:');
+insert into DisplayNames values('usage','productNo:,usageDate:,hospital:,ward:,useIndication:,comment:,tips:');
+insert into DisplayNames values('reports','inventorySummaryTips:,inventoryDetailsTips:,collectionsTips:,testResultsTips:,productsTips:');
+insert into RecordFieldsConfig values('collection','center,site,sampleNo,shippingNo,donorNo,donorType,comment,bloodGroup,rhd');
+insert into RecordFieldsConfig values('donor','firstName,lastName,gender,bloodType,dateOfBirth,age,address');
+insert into RecordFieldsConfig values('request','requestDate,requiredDate,comment');
+insert into RecordFieldsConfig values('usage','usageDate,hospital,ward,comment');

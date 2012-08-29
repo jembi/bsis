@@ -1,0 +1,263 @@
+body {
+    background-color: #E3E1E1;
+    font-family: Tahoma, Arial, Sans-Serif
+}
+
+.mainContent {
+    background-color: white;
+    min-height: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+    border-bottom: 2px solid #ccc;
+    width: 1100px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -moz-box-shadow: 0px -1px 10px #000000;
+    -webkit-box-shadow: 0px -1px 10px #000000;
+    box-shadow: 0px -1px 10px #000000;
+    -moz-box-shadow: 0px;
+    -webkit-box-shadow: 0px;
+    box-shadow: 0px;
+}
+
+.headingPanel {
+    display: block;
+    color: black;
+    clear: both;
+    background-color: #B3C6E6;
+    padding: 10px 5px;
+    margin-top: 20px;
+    font-size: 1.3em;
+}
+
+.message {
+    padding: 25px 5px 0 10px;
+    color: red;
+}
+
+.infoMessage {
+    padding: 0px 5px;
+    color: #1638BA;
+    margin-top: 30px;
+}
+
+.actionButtonsPanel {
+    clear: both;
+}
+
+.actionButtonsPanel input {
+    margin: 20px 10px 10px;
+}
+
+.inputFieldRow {
+    margin: 25px 0 10px;
+}
+
+.inputFieldRow select {
+    width: 205px;
+}
+
+.inputFieldRow label {
+    display: block;
+    float: left;
+    width: 150px;
+    margin: 5px 0 0 15px;
+    text-align: left;
+}
+
+.inputFieldRow input[type="button"] {
+    margin-left: 10px;
+}
+
+.inputFieldRow input[type="text"],input[type="password"] {
+    width: 205px;
+}
+
+.subHeading {
+    clear: both;
+    margin: 0 0 15px;
+}
+
+.subHeading p {
+    display: inline;
+    padding: 5px;
+    background-color: #add8e6;
+    font-size: 1.1em
+}
+
+.expandButton {
+    float: left;
+    margin-top: 0px;
+}
+
+input[type="button"], input[type="submit"], input[type="reset"] {
+    color: #000000;
+    padding: 5px;
+}
+
+.leftPanel {
+    width: 200px;
+}
+
+.centerPanel {
+    margin-left: 200px;
+    float: left;
+    width: 60%;
+}
+
+.leftAlignedPanel {
+    float: left;
+    margin: 0 25px;
+    padding-top: 5px;
+    width: 70%;
+}
+
+.rightPanel {
+    float: right;
+    width: 200px;
+    margin: 40px 24px 0 0;
+    border: thin solid #000000;
+    background-color: #B3C6E6
+}
+
+.rightPanel p {
+    padding: 5px;
+}
+
+.tipsTitle {
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    clear: both;
+}
+
+.link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.radioButtonsList {
+    display: inline;
+    margin: 0 5px 5px 0px;
+}
+
+.radioLabel {
+    margin-right: 10px;
+}
+
+.radioButtonsList label {
+    display: inline;
+    float: none;
+    margin: 0 5px;
+}
+
+.collapsibleHeadingPanel {
+    margin-top: 40px;
+    width: 30%;
+    cursor: pointer;
+}
+
+.collapsibleHeadingPanel p img {
+    height: 15px;
+    padding: 8px 5px;
+    width: 15px;
+}
+
+.collapsibleHeadingPanelText {
+    height: 30px;
+    background-color: #B3C6E6;
+    padding-top: 6px;
+    font-size: 1.2em;
+}
+
+.leftPanelTabs {
+    position: absolute;
+    padding: 0 35px 0 46px;
+    margin-top: 75px;
+    height: 2000px;
+    border-right: thin solid #BAB6B8;
+    width: 76px;
+}
+
+.tabbedPanel {
+    padding: 5px 5px;
+    clear: both;
+}
+
+.leftPanelTabs li:hover {
+    cursor: pointer;
+}
+
+.leftPanelTabs li {
+    color: #336699;
+    margin: 35px 0;
+    list-style: none outside none;
+    text-decoration: none;
+}
+
+.leftPanelTabs a {
+    color: #336699;
+    text-decoration: none;
+}
+
+.leftPanelTabs li.selectedTab {
+    font-weight: bold;
+}
+
+.leftPanelTabs li.selectedTab a {
+    font-weight: bold;
+}
+
+.checkboxList {
+    display: inline;
+    margin: 0px;
+}
+
+.checkboxLabel {
+    margin-right: 10px;
+}
+
+.checkboxList label {
+    display: inline;
+    float: none;
+    margin: 0px;
+}
+
+.formHeading label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.leftColumn {
+    float: left;
+    width: 60%;
+}
+
+.rightColumn {
+    float: left;
+    margin: 50px 0 0 120px;
+    width: 20%;
+}
+
+.bottomPanel {
+    clear: both;
+    margin: 700px 0 0 170px;
+    border-top: 2px solid #ccc;
+    padding: 10px;
+}
+
+.showTips {
+    float: right;
+    margin: 15px -100px 0 0;
+    width: 200px;
+    display: none;
+
+}
+
+.hideTips{
+    float:right;
+    padding:10px;
+}

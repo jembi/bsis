@@ -1,0 +1,21 @@
+#inventory {
+    margin-top: 40px;
+}
+
+#inventoryTable {
+    width: 100%;
+    border: 3px outset #BAB6B8;
+    border-collapse:collapse;
+}
+
+#inventoryTable th, td {
+    border: 1px solid #BAB6B8;
+    padding: 1px;
+    font-weight: normal;
+    text-align: center;
+    width: 15%;
+}
+
+#inventoryTable th{
+    background-color: #C9C5C7;
+}

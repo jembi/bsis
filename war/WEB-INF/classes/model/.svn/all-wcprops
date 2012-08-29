@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/230/trunk/war/WEB-INF/classes/model
+END
+Collection.class
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/214/trunk/war/WEB-INF/classes/model/Collection.class
+END
+Product.class
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/184/trunk/war/WEB-INF/classes/model/Product.class
+END
+Donor.class
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/230/trunk/war/WEB-INF/classes/model/Donor.class
+END

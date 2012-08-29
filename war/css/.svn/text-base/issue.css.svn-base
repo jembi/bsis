@@ -1,0 +1,29 @@
+#products {
+    margin-top: 20px;
+}
+
+#productsTable {
+    width: 100%;
+    border: 3px outset #BAB6B8;
+    border-collapse: collapse;
+}
+
+#productsTable th, td {
+    border: 1px solid #BAB6B8;
+    font-weight: normal;
+    text-align: center;
+    width: 15%;
+}
+
+#productsTable th {
+    background-color: #C9C5C7;
+    padding: 3px 1px;
+}
+
+#productsTable td {
+    padding: 10px 1px;
+}
+
+.requestDetails {
+    margin-top: 5px;
+}

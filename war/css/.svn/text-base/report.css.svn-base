@@ -1,0 +1,78 @@
+#collectionReportTable {
+    border: 3px outset #BAB6B8;
+    border-collapse: collapse;
+    margin: 20px 0 0 1px;
+    width: 871px;
+}
+
+#collectionReportTable th, td {
+    border: 1px solid #BAB6B8;
+    padding: 1px;
+    font-weight: normal;
+    text-align: center;
+    width: 10%;
+}
+
+#collectionReportTable th{
+    background-color: #C9C5C7;
+}
+
+#testResultsReportTable {
+    border: 3px outset #BAB6B8;
+    border-collapse: collapse;
+    margin: 20px 0 0 1px;
+    width: 871px;
+}
+
+#testResultsReportTable th, td {
+    border: 1px solid #BAB6B8;
+    padding: 1px;
+    font-weight: normal;
+    text-align: center;
+    width: 10%;
+}
+
+#testResultsReportTable th{
+    background-color: #C9C5C7;
+}
+
+#productReportTable {
+    border: 3px outset #BAB6B8;
+    border-collapse: collapse;
+    margin: 20px 0 0 1px;
+    width: 871px;
+}
+
+#productReportTable th, td {
+    border: 1px solid #BAB6B8;
+    padding: 1px;
+    font-weight: normal;
+    text-align: center;
+    width: 30%;
+}
+#productReportTable th{
+    background-color: #C9C5C7;
+}
+
+.aggregateTable {
+    border: 3px outset #BAB6B8;
+    border-collapse: collapse;
+    margin: 20px 0 0 1px;
+    width: 871px;
+}
+.tableContainer {
+    width: 872px;
+    overflow: auto;
+}
+
+.aggregateTable th, td {
+    border: 1px solid #BAB6B8;
+    padding: 1px;
+    font-weight: normal;
+    text-align: center;
+    width: 40%;
+}
+
+.aggregateTable th{
+    background-color: #C9C5C7;
+}

@@ -1,0 +1,389 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/295/trunk/war/WEB-INF/jsp
+END
+testResultReport.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/testResultReport.jsp
+END
+usageAdd.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/285/trunk/war/WEB-INF/jsp/usageAdd.jsp
+END
+requestsUpdate.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/285/trunk/war/WEB-INF/jsp/requestsUpdate.jsp
+END
+issueViewRequests.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/278/trunk/war/WEB-INF/jsp/issueViewRequests.jsp
+END
+topPanel.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/234/trunk/war/WEB-INF/jsp/topPanel.jsp
+END
+issueLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/issueLandingPage.jsp
+END
+requestsTable.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/272/trunk/war/WEB-INF/jsp/requestsTable.jsp
+END
+requestsAdd.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/285/trunk/war/WEB-INF/jsp/requestsAdd.jsp
+END
+collectionReport.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/collectionReport.jsp
+END
+locationTypesLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/locationTypesLandingPage.jsp
+END
+issueDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/issueDisplayNamesConfig.jsp
+END
+testResultsLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/testResultsLandingPage.jsp
+END
+collectionsReportConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/268/trunk/war/WEB-INF/jsp/collectionsReportConfig.jsp
+END
+inventoryDetails.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/inventoryDetails.jsp
+END
+productsDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/productsDisplayNamesConfig.jsp
+END
+testResultsUpdate.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/283/trunk/war/WEB-INF/jsp/testResultsUpdate.jsp
+END
+usageFind.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/usageFind.jsp
+END
+usageDisplayFieldsConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/271/trunk/war/WEB-INF/jsp/usageDisplayFieldsConfig.jsp
+END
+login.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/124/trunk/war/WEB-INF/jsp/login.jsp
+END
+userLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/userLandingPage.jsp
+END
+adminAccessOnly.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/24/trunk/war/WEB-INF/jsp/adminAccessOnly.jsp
+END
+displayFieldsConfigLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/271/trunk/war/WEB-INF/jsp/displayFieldsConfigLandingPage.jsp
+END
+collectionsDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/collectionsDisplayNamesConfig.jsp
+END
+usageUpdateExisting.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/285/trunk/war/WEB-INF/jsp/usageUpdateExisting.jsp
+END
+testResultsReportConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/268/trunk/war/WEB-INF/jsp/testResultsReportConfig.jsp
+END
+locationsLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/locationsLandingPage.jsp
+END
+locations.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/279/trunk/war/WEB-INF/jsp/locations.jsp
+END
+reportConfigLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/reportConfigLandingPage.jsp
+END
+createData.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/createData.jsp
+END
+donorsLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/donorsLandingPage.jsp
+END
+reportsDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/reportsDisplayNamesConfig.jsp
+END
+usageLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/usageLandingPage.jsp
+END
+commonHeadIncludes.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/79/trunk/war/WEB-INF/jsp/commonHeadIncludes.jsp
+END
+usageDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/usageDisplayNamesConfig.jsp
+END
+donorsDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/donorsDisplayNamesConfig.jsp
+END
+issueAllProducts.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/issueAllProducts.jsp
+END
+requestsLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/requestsLandingPage.jsp
+END
+displayNamesConfigLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/displayNamesConfigLandingPage.jsp
+END
+inventorySummary.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/274/trunk/war/WEB-INF/jsp/inventorySummary.jsp
+END
+donorsTable.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/donorsTable.jsp
+END
+collections.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/289/trunk/war/WEB-INF/jsp/collections.jsp
+END
+feedbackPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/263/trunk/war/WEB-INF/jsp/feedbackPage.jsp
+END
+collectionsDisplayFieldsConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/271/trunk/war/WEB-INF/jsp/collectionsDisplayFieldsConfig.jsp
+END
+updateUser.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/290/trunk/war/WEB-INF/jsp/updateUser.jsp
+END
+donorDisplayFieldsConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/271/trunk/war/WEB-INF/jsp/donorDisplayFieldsConfig.jsp
+END
+bottomPanel.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/bottomPanel.jsp
+END
+productsReportConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/268/trunk/war/WEB-INF/jsp/productsReportConfig.jsp
+END
+issueMatchingProducts.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/278/trunk/war/WEB-INF/jsp/issueMatchingProducts.jsp
+END
+addUser.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/290/trunk/war/WEB-INF/jsp/addUser.jsp
+END
+adminTopPanel.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/241/trunk/war/WEB-INF/jsp/adminTopPanel.jsp
+END
+locationTypes.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/279/trunk/war/WEB-INF/jsp/locationTypes.jsp
+END
+reports.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/reports.jsp
+END
+donors.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/281/trunk/war/WEB-INF/jsp/donors.jsp
+END
+collectionsLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/collectionsLandingPage.jsp
+END
+testResultsTable.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/265/trunk/war/WEB-INF/jsp/testResultsTable.jsp
+END
+usersTable.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/usersTable.jsp
+END
+testResultsAdd.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/283/trunk/war/WEB-INF/jsp/testResultsAdd.jsp
+END
+requestsDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/requestsDisplayNamesConfig.jsp
+END
+productReport.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/274/trunk/war/WEB-INF/jsp/productReport.jsp
+END
+welcomePage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/welcomePage.jsp
+END
+requestDisplayFieldsConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/271/trunk/war/WEB-INF/jsp/requestDisplayFieldsConfig.jsp
+END
+productsLandingPage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/262/trunk/war/WEB-INF/jsp/productsLandingPage.jsp
+END
+testResultsDisplayNamesConfig.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/286/trunk/war/WEB-INF/jsp/testResultsDisplayNamesConfig.jsp
+END
+products.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/295/trunk/war/WEB-INF/jsp/products.jsp
+END
