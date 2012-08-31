@@ -20,7 +20,7 @@ drop table ProductUsage;
 drop table RecordFieldsConfig;
 drop table Feedback;
 
-GRANT ALL PRIVILEGES ON *.* TO 'v2v'@'%' WITH GRANT OPTION
+GRANT ALL PRIVILEGES ON *.* TO 'v2v'@'%' WITH GRANT OPTION;
 
 CREATE TABLE User (
  userId INT PRIMARY KEY AUTO_INCREMENT,
@@ -30,7 +30,8 @@ CREATE TABLE User (
  name VARCHAR(250),
  contactNumber VARCHAR(50),
  emailId VARCHAR(50),
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
 ) ENGINE=InnoDB;
 
 
@@ -44,7 +45,8 @@ CREATE TABLE Donor (
  birthDate DATE,
  address VARCHAR(64),
  age INT,
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
 ) ENGINE=InnoDB;
 
 
@@ -58,10 +60,10 @@ CREATE TABLE Collection (
  donorType VARCHAR(32),
  sampleNumber INT,
  shippingNumber INT,
- comment VARCHAR(250),
  abo VARCHAR(250),
  rhd VARCHAR(250),
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
  )ENGINE=InnoDB;
 
 CREATE TABLE TestResult (
@@ -75,8 +77,8 @@ CREATE TABLE TestResult (
  syphilis VARCHAR(250),
  abo VARCHAR(250),
  rhd VARCHAR(250),
- comment VARCHAR(250),
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
  )ENGINE=InnoDB;
 
 
@@ -89,13 +91,15 @@ CREATE TABLE TestResult (
  abo VARCHAR(250),
  rhd VARCHAR(250),
  isIssued INT Default 0,
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
  )ENGINE=InnoDB;
 
  CREATE TABLE LocationType (
  locationTypeId INT PRIMARY KEY AUTO_INCREMENT,
  name VARCHAR(32),
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
 ) ENGINE=InnoDB;
 
 CREATE TABLE Location (
@@ -107,6 +111,7 @@ CREATE TABLE Location (
  isUsageSite INT,
  isMobileSite INT,
  isDeleted INT Default 0,
+ comments VARCHAR(250),
  FOREIGN KEY (type) REFERENCES LocationType (locationTypeId)
 ) ENGINE=InnoDB;
 
@@ -131,9 +136,9 @@ CREATE TABLE Request (
  productType VARCHAR(32),
  quantity INT,
  dateRequired DATE,
- comment VARCHAR(250),
  status VARCHAR(250),
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
  )ENGINE=InnoDB;
 
  CREATE TABLE Issue (
@@ -141,7 +146,8 @@ CREATE TABLE Request (
  productNumber VARCHAR(32),
  dateIssued DATE,
  siteId INT,
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
  )ENGINE=InnoDB;
 
 
@@ -152,8 +158,8 @@ CREATE TABLE Request (
  hospital VARCHAR(250),
  ward VARCHAR(250),
  useIndication VARCHAR(200),
- comment VARCHAR(250),
- isDeleted INT Default 0
+ isDeleted INT Default 0,
+ comments VARCHAR(250)
  )ENGINE=InnoDB;
 
 CREATE TABLE RecordFieldsConfig (
@@ -168,19 +174,19 @@ datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 
-insert into User values(1,'admin','admin321123','admin','admin','','',0);
-insert into ReportConfig values('collection','collectionNo,center,site,dateCollected,sampleNo,shippingNo,donorNo,donorType,comment,bloodGroup,rhd');
-insert into ReportConfig values('product','productNo,collectionNo,dateCollected,productType');
-insert into ReportConfig values('testResults','hiv,bloodGroup,collectionNo,dateTested,dateCollected,hbv,hcv,comment,syphilis');
-insert into DisplayNames values('collection','collectionNo:,center:,site:,dateCollected:,sampleNo:,shippingNo:,donorNo:,donorType:,comment:,bloodGroup:,rhd:,tips:');
-insert into DisplayNames values('donor','donorID:,firstName:,lastName:,gender:,bloodType:,dob:,address:,age:,tips:');
-insert into DisplayNames values('testResults','collectionNo:,dateCollected:,dateTested:,hiv:,hbv:,hcv:,syphilis:,abo:,rhd:,bloodGroup:,comment:,tips:');
-insert into DisplayNames values('product','productNo:,collectionNo:,dateCollected:,productType:,bloodGroup:,tips:');
-insert into DisplayNames values('request','requestNo:,requestDate:,requiredDate:,site:,productType:,abo:,rhd:,bloodGroup:,quantity:,comment:,status:,tips:');
-insert into DisplayNames values('issue','issueDate:,issue:,issueTips:');
-insert into DisplayNames values('usage','productNo:,usageDate:,hospital:,ward:,useIndication:,comment:,tips:');
-insert into DisplayNames values('reports','inventorySummaryTips:,inventoryDetailsTips:,collectionsTips:,testResultsTips:,productsTips:');
-insert into RecordFieldsConfig values('collection','center,site,sampleNo,shippingNo,donorNo,donorType,comment,bloodGroup,rhd');
-insert into RecordFieldsConfig values('donor','firstName,lastName,gender,bloodType,dateOfBirth,age,address');
-insert into RecordFieldsConfig values('request','requestDate,requiredDate,comment');
-insert into RecordFieldsConfig values('usage','usageDate,hospital,ward,comment');
+insert into User values(1,'admin','admin321123','admin','admin','','',0, 'User with Administrative Privileges');
+insert into ReportConfig values('collection','collectionNo,center,site,dateCollected,sampleNo,shippingNo,donorNo,donorType,bloodGroup,rhd,comments');
+insert into ReportConfig values('product','productNo,collectionNo,dateCollected,productType,comments');
+insert into ReportConfig values('testResults','hiv,bloodGroup,collectionNo,dateTested,dateCollected,hbv,hcv,syphilis,comments');
+insert into DisplayNames values('collection','collectionNo:,center:,site:,dateCollected:,sampleNo:,shippingNo:,donorNo:,donorType:,bloodGroup:,rhd:,tips:,comments:Comments');
+insert into DisplayNames values('donor','donorID:,firstName:,lastName:,gender:,bloodType:,dob:,address:,age:,tips:,comments:Comments');
+insert into DisplayNames values('testResults','collectionNo:,dateCollected:,dateTested:,hiv:,hbv:,hcv:,syphilis:,abo:,rhd:,bloodGroup:,tips:,comments:Comments');
+insert into DisplayNames values('product','productNo:,collectionNo:,dateCollected:,productType:,bloodGroup:,tips:,comments:Comments');
+insert into DisplayNames values('request','requestNo:,requestDate:,requiredDate:,site:,productType:,abo:,rhd:,bloodGroup:,quantity:,status:,tips:,comments:Comments');
+insert into DisplayNames values('issue','issueDate:,issue:,issueTips:,comments:Comments');
+insert into DisplayNames values('usage','productNo:,usageDate:,hospital:,ward:,useIndication:,tips:,comments:Comments');
+insert into DisplayNames values('reports','inventorySummaryTips:,inventoryDetailsTips:,collectionsTips:,testResultsTips:,productsTips:,comments:Comments');
+insert into RecordFieldsConfig values('collection','center,site,sampleNo,shippingNo,donorNo,donorType,bloodGroup,rhd,comments');
+insert into RecordFieldsConfig values('donor','firstName,lastName,gender,bloodType,dateOfBirth,age,address,comments');
+insert into RecordFieldsConfig values('request','requestDate,requiredDate,comments');
+insert into RecordFieldsConfig values('usage','usageDate,hospital,ward,comments');

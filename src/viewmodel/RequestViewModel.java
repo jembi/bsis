@@ -9,88 +9,88 @@ import model.Location;
 import model.Request;
 
 public class RequestViewModel {
-    private Request request;
-    private List<Location> sites;
+	private Request request;
+	private List<Location> sites;
 
-    public RequestViewModel(Request request, List<Location> sites) {
-        this.request = request;
-        this.sites = sites;
-    }
+	public RequestViewModel(Request request, List<Location> sites) {
+		this.request = request;
+		this.sites = sites;
+	}
 
-    public Long getRequestId() {
-        return request.getRequestId();
-    }
+	public Long getRequestId() {
+		return request.getRequestId();
+	}
 
-    public String getRequestNumber() {
-        return request.getRequestNumber();
-    }
+	public String getRequestNumber() {
+		return request.getRequestNumber();
+	}
 
-    public String getDateRequested() {
-        Date dateRequested = request.getDateRequested();
-        if (dateRequested != null) {
-            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            return formatter.format(dateRequested);
-        }
-        return "";
-    }
+	public String getDateRequested() {
+		Date dateRequested = request.getDateRequested();
+		if (dateRequested != null) {
+			DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			return formatter.format(dateRequested);
+		}
+		return "";
+	}
 
-    public String getDateRequired() {
-        Date dateRequired = request.getDateRequired();
-        if (dateRequired != null) {
-            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            return formatter.format(dateRequired);
-        }
-        return "";
-    }
+	public String getDateRequired() {
+		Date dateRequired = request.getDateRequired();
+		if (dateRequired != null) {
+			DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			return formatter.format(dateRequired);
+		}
+		return "";
+	}
 
-    public String getSiteId() {
-        return getStringValue(request.getSiteId());
-    }
+	public String getSiteId() {
+		return getStringValue(request.getSiteId());
+	}
 
-    public String getSiteName() {
-        Long siteId = request.getSiteId();
-        if (sites != null && siteId != null) {
-            for (Location site : sites) {
-                if (site.getLocationId().equals(siteId)) {
-                    return site.getName();
-                }
-            }
-        }
-        return "";
-    }
+	public String getSiteName() {
+		Long siteId = request.getSiteId();
+		if (sites != null && siteId != null) {
+			for (Location site : sites) {
+				if (site.getLocationId().equals(siteId)) {
+					return site.getName();
+				}
+			}
+		}
+		return "";
+	}
 
-    public String getProductType() {
-        return request.getProductType();
-    }
+	public String getProductType() {
+		return request.getProductType();
+	}
 
-    public String getAbo() {
-        return request.getAbo();
-    }
+	public String getAbo() {
+		return request.getAbo();
+	}
 
-    public String getRhd() {
-        return request.getRhd();
-    }
+	public String getRhd() {
+		return request.getRhd();
+	}
 
-    public String getQuantity() {
-        return getStringValue(request.getQuantity().longValue());
-    }
+	public String getQuantity() {
+		return getStringValue(request.getQuantity().longValue());
+	}
 
-    public String getComment() {
-        return request.getComment();
-    }
+	public String getComments() {
+		return request.getComments();
+	}
 
-    public String getStatus() {
-        return request.getStatus();
-    }
+	public String getStatus() {
+		return request.getStatus();
+	}
 
-    public Boolean getUnfulfilled() {
-        if(!request.getStatus().equals("fulfilled")){
-            return true;
-        }
-        return false;
-    }
+	public Boolean getUnfulfilled() {
+		if (!request.getStatus().equals("fulfilled")) {
+			return true;
+		}
+		return false;
+	}
 
-    private String getStringValue(Long value) {
-        return value == null ? "" : value.toString();
-    }
+	private String getStringValue(Long value) {
+		return value == null ? "" : value.toString();
+	}
 }

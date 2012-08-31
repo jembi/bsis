@@ -13,115 +13,125 @@ import org.hibernate.annotations.Type;
 
 @Entity
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productId;
-    private String productNumber;
-    private String collectionNumber;
-    private Date dateCollected;
-    private String type;
-    private String abo;
-    private String rhd;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long productId;
+	private String productNumber;
+	private String collectionNumber;
+	private Date dateCollected;
+	private String type;
+	private String abo;
+	private String rhd;
 
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private Boolean isIssued;
 
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean isIssued;
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private Boolean isDeleted;
 
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean isDeleted;
+	private String comments;
 
+	public Product() {
+	}
 
-    public Product(String productNumber, Collection collection, String type, Boolean isDeleted, Boolean isIssued) {
-        this.productNumber = productNumber;
-        this.isDeleted = isDeleted;
-        if (collection != null) {
-            this.collectionNumber = collection.getCollectionNumber();
-            this.dateCollected = collection.getDateCollected();
-        }
-        this.type = type;
-        this.isIssued = isIssued;
-    }
+	public Product(String productNumber, Collection collection, String type,
+			Boolean isDeleted, Boolean isIssued, String comments) {
+		this.productNumber = productNumber;
+		this.isDeleted = isDeleted;
+		if (collection != null) {
+			this.collectionNumber = collection.getCollectionNumber();
+			this.dateCollected = collection.getDateCollected();
+		}
+		this.type = type;
+		this.isIssued = isIssued;
+		this.comments = comments;
+	}
 
-    public void copy(Product product) {
-        this.productNumber = product.productNumber;
-        this.collectionNumber = product.collectionNumber;
-        this.dateCollected = product.dateCollected;
-        this.type = product.type;
-        this.isDeleted = product.isDeleted;
-        this.abo = product.abo;
-        this.rhd = product.rhd;
-        this.isIssued = product.isIssued;
-    }
+	public void copy(Product product) {
+		this.productNumber = product.productNumber;
+		this.collectionNumber = product.collectionNumber;
+		this.dateCollected = product.dateCollected;
+		this.type = product.type;
+		this.isDeleted = product.isDeleted;
+		this.abo = product.abo;
+		this.rhd = product.rhd;
+		this.isIssued = product.isIssued;
+	}
 
-    public Product() {
-    }
+	public String getAbo() {
+		return abo;
+	}
 
-    public Long getProductId() {
-        return productId;
-    }
+	public String getCollectionNumber() {
+		return collectionNumber;
+	}
 
-    public String getProductNumber() {
-        return productNumber;
-    }
+	public String getComments() {
+		return comments;
+	}
 
-    public void setProductNumber(String productNumber) {
-        this.productNumber = productNumber;
-    }
+	public Date getDateCollected() {
+		return dateCollected;
+	}
 
-    public String getCollectionNumber() {
-        return collectionNumber;
-    }
+	public String getDateCollectedString() {
+		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		return formatter.format(dateCollected);
+	}
 
-    public void setCollectionNumber(String collectionNumber) {
-        this.collectionNumber = collectionNumber;
-    }
+	public Boolean getIssued() {
+		return isIssued;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public Long getProductId() {
+		return productId;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public String getProductNumber() {
+		return productNumber;
+	}
 
-    public Date getDateCollected() {
-        return dateCollected;
-    }
+	public String getRhd() {
+		return rhd;
+	}
 
-    public String getDateCollectedString() {
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        return formatter.format(dateCollected);
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setDateCollected(Date dateCollected) {
-        this.dateCollected = dateCollected;
-    }
+	public void setAbo(String abo) {
+		this.abo = abo;
+	}
 
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
+	public void setCollectionNumber(String collectionNumber) {
+		this.collectionNumber = collectionNumber;
+	}
 
-    public String getAbo() {
-        return abo;
-    }
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 
-    public void setAbo(String abo) {
-        this.abo = abo;
-    }
+	public void setDateCollected(Date dateCollected) {
+		this.dateCollected = dateCollected;
+	}
 
-    public String getRhd() {
-        return rhd;
-    }
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
-    public void setRhd(String rhd) {
-        this.rhd = rhd;
-    }
+	public void setIssued(Boolean issued) {
+		isIssued = issued;
+	}
 
-    public Boolean getIssued() {
-        return isIssued;
-    }
+	public void setProductNumber(String productNumber) {
+		this.productNumber = productNumber;
+	}
 
-    public void setIssued(Boolean issued) {
-        isIssued = issued;
-    }
+	public void setRhd(String rhd) {
+		this.rhd = rhd;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 }

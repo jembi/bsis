@@ -21,167 +21,201 @@ import utils.ControllerUtil;
 @Controller
 public class DisplayFieldConfigController {
 
-    @Autowired
-    private RecordFieldsConfigRepository recordFieldsConfigRepository;
+	@Autowired
+	private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-    public DisplayFieldConfigController() {
-    }
+	public DisplayFieldConfigController() {
+	}
 
-    @RequestMapping("/admin-displayFieldsConfigLandingPage.html")
-    public ModelAndView displayLandingPage(HttpServletRequest request) {
+	@RequestMapping("/admin-displayFieldsConfigLandingPage.html")
+	public ModelAndView displayLandingPage(HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("displayFieldsConfigLandingPage");
+		ModelAndView modelAndView = new ModelAndView(
+				"displayFieldsConfigLandingPage");
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-collectionsDisplayFieldsConfig.html")
-    public ModelAndView display(HttpServletRequest request) {
+	@RequestMapping("/admin-collectionsDisplayFieldsConfig.html")
+	public ModelAndView display(HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("collectionsDisplayFieldsConfig");
+		ModelAndView modelAndView = new ModelAndView(
+				"collectionsDisplayFieldsConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("hasCollection", true);
+		model.put("hasCollection", true);
 
-        ControllerUtil.addFieldsToDisplay("collection", model, recordFieldsConfigRepository);
+		ControllerUtil.addFieldsToDisplay("collection", model,
+				recordFieldsConfigRepository);
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-saveCollectionsDisplayFieldsConfig")
-    public ModelAndView saveReportConfig(@RequestParam Map<String, String> params,HttpServletRequest request) {
+	@RequestMapping("/admin-saveCollectionsDisplayFieldsConfig")
+	public ModelAndView saveReportConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        Set<String> fields = params.keySet();
-        String fieldNames = StringUtils.collectionToCommaDelimitedString(fields);
-        if (recordFieldsConfigRepository.getRecordFieldsConfig("collection") == null) {
-            recordFieldsConfigRepository.saveRecordFieldsConfig(new RecordFieldsConfig("collection", fieldNames));
-        } else {
-            recordFieldsConfigRepository.updateRecordFieldsConfig("collection", fieldNames);
-        }
+		Set<String> fields = params.keySet();
+		String fieldNames = StringUtils
+				.collectionToCommaDelimitedString(fields);
+		if (recordFieldsConfigRepository.getRecordFieldsConfig("collection") == null) {
+			recordFieldsConfigRepository
+					.saveRecordFieldsConfig(new RecordFieldsConfig(
+							"collection", fieldNames));
+		} else {
+			recordFieldsConfigRepository.updateRecordFieldsConfig("collection",
+					fieldNames);
+		}
 
-        ModelAndView modelAndView = new ModelAndView("collectionsDisplayFieldsConfig");
+		ModelAndView modelAndView = new ModelAndView(
+				"collectionsDisplayFieldsConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addFieldsToDisplay("collection", model, recordFieldsConfigRepository);
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addFieldsToDisplay("collection", model,
+				recordFieldsConfigRepository);
 
-        model.put("configSaved", true);
-        model.put("hasCollectionDetails", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		model.put("configSaved", true);
+		model.put("hasCollectionDetails", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-donorsDisplayFieldsConfig.html")
-    public ModelAndView displayDonorConfig(HttpServletRequest request) {
+	@RequestMapping("/admin-donorsDisplayFieldsConfig.html")
+	public ModelAndView displayDonorConfig(HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("donorDisplayFieldsConfig");
+		ModelAndView modelAndView = new ModelAndView("donorDisplayFieldsConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("hasNames", true);
+		model.put("hasNames", true);
 
-        ControllerUtil.addFieldsToDisplay("donor", model, recordFieldsConfigRepository);
+		ControllerUtil.addFieldsToDisplay("donor", model,
+				recordFieldsConfigRepository);
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-saveDonorsDisplayFieldsConfig")
-    public ModelAndView saveDonorConfig(@RequestParam Map<String, String> params,HttpServletRequest request) {
+	@RequestMapping("/admin-saveDonorsDisplayFieldsConfig")
+	public ModelAndView saveDonorConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        Set<String> fields = params.keySet();
-        String fieldNames = StringUtils.collectionToCommaDelimitedString(fields);
-        if (recordFieldsConfigRepository.getRecordFieldsConfig("donor") == null) {
-            recordFieldsConfigRepository.saveRecordFieldsConfig(new RecordFieldsConfig("donor", fieldNames));
-        } else {
-            recordFieldsConfigRepository.updateRecordFieldsConfig("donor", fieldNames);
-        }
+		Set<String> fields = params.keySet();
+		String fieldNames = StringUtils
+				.collectionToCommaDelimitedString(fields);
+		if (recordFieldsConfigRepository.getRecordFieldsConfig("donor") == null) {
+			recordFieldsConfigRepository
+					.saveRecordFieldsConfig(new RecordFieldsConfig("donor",
+							fieldNames));
+		} else {
+			recordFieldsConfigRepository.updateRecordFieldsConfig("donor",
+					fieldNames);
+		}
 
-        ModelAndView modelAndView = new ModelAndView("donorDisplayFieldsConfig");
+		ModelAndView modelAndView = new ModelAndView("donorDisplayFieldsConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addFieldsToDisplay("donor", model, recordFieldsConfigRepository);
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addFieldsToDisplay("donor", model,
+				recordFieldsConfigRepository);
 
-        model.put("configSaved", true);
-        model.put("hasDetails", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		model.put("configSaved", true);
+		model.put("hasDetails", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-requestsDisplayFieldsConfig.html")
-    public ModelAndView displayRequestConfig(HttpServletRequest request) {
+	@RequestMapping("/admin-requestsDisplayFieldsConfig.html")
+	public ModelAndView displayRequestConfig(HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("requestDisplayFieldsConfig");
+		ModelAndView modelAndView = new ModelAndView(
+				"requestDisplayFieldsConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("hasNames", true);
+		model.put("hasNames", true);
 
-        ControllerUtil.addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+		ControllerUtil.addFieldsToDisplay("request", model,
+				recordFieldsConfigRepository);
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-saveRequestsDisplayFieldsConfig")
-    public ModelAndView saveRequestConfig(@RequestParam Map<String, String> params,HttpServletRequest request) {
+	@RequestMapping("/admin-saveRequestsDisplayFieldsConfig")
+	public ModelAndView saveRequestConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        Set<String> fields = params.keySet();
-        String fieldNames = StringUtils.collectionToCommaDelimitedString(fields);
-        if (recordFieldsConfigRepository.getRecordFieldsConfig("request") == null) {
-            recordFieldsConfigRepository.saveRecordFieldsConfig(new RecordFieldsConfig("request", fieldNames));
-        } else {
-            recordFieldsConfigRepository.updateRecordFieldsConfig("request", fieldNames);
-        }
+		Set<String> fields = params.keySet();
+		String fieldNames = StringUtils
+				.collectionToCommaDelimitedString(fields);
+		if (recordFieldsConfigRepository.getRecordFieldsConfig("request") == null) {
+			recordFieldsConfigRepository
+					.saveRecordFieldsConfig(new RecordFieldsConfig("request",
+							fieldNames));
+		} else {
+			recordFieldsConfigRepository.updateRecordFieldsConfig("request",
+					fieldNames);
+		}
 
-        ModelAndView modelAndView = new ModelAndView("requestDisplayFieldsConfig");
+		ModelAndView modelAndView = new ModelAndView(
+				"requestDisplayFieldsConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addFieldsToDisplay("request", model,
+				recordFieldsConfigRepository);
 
-        model.put("configSaved", true);
-        model.put("hasDetails", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
-    @RequestMapping("/admin-usageDisplayFieldsConfig.html")
-    public ModelAndView displayUsageConfig(HttpServletRequest request) {
+		model.put("configSaved", true);
+		model.put("hasDetails", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("usageDisplayFieldsConfig");
+	@RequestMapping("/admin-usageDisplayFieldsConfig.html")
+	public ModelAndView displayUsageConfig(HttpServletRequest request) {
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		ModelAndView modelAndView = new ModelAndView("usageDisplayFieldsConfig");
 
-        model.put("hasNames", true);
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+		model.put("hasNames", true);
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-    @RequestMapping("/admin-saveUsageDisplayFieldsConfig")
-    public ModelAndView saveUsageConfig(@RequestParam Map<String, String> params,HttpServletRequest request) {
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Set<String> fields = params.keySet();
-        String fieldNames = StringUtils.collectionToCommaDelimitedString(fields);
-        if (recordFieldsConfigRepository.getRecordFieldsConfig("usage") == null) {
-            recordFieldsConfigRepository.saveRecordFieldsConfig(new RecordFieldsConfig("usage", fieldNames));
-        } else {
-            recordFieldsConfigRepository.updateRecordFieldsConfig("usage", fieldNames);
-        }
+	@RequestMapping("/admin-saveUsageDisplayFieldsConfig")
+	public ModelAndView saveUsageConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("usageDisplayFieldsConfig");
+		Set<String> fields = params.keySet();
+		String fieldNames = StringUtils
+				.collectionToCommaDelimitedString(fields);
+		if (recordFieldsConfigRepository.getRecordFieldsConfig("usage") == null) {
+			recordFieldsConfigRepository
+					.saveRecordFieldsConfig(new RecordFieldsConfig("usage",
+							fieldNames));
+		} else {
+			recordFieldsConfigRepository.updateRecordFieldsConfig("usage",
+					fieldNames);
+		}
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+		ModelAndView modelAndView = new ModelAndView("usageDisplayFieldsConfig");
 
-        model.put("configSaved", true);
-        model.put("hasDetails", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
+
+		model.put("configSaved", true);
+		model.put("hasDetails", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 }

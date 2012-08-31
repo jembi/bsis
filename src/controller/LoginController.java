@@ -21,56 +21,58 @@ import repository.LoginRepository;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private LoginRepository loginRepository;
+	@Autowired
+	private LoginRepository loginRepository;
 
-    @RequestMapping("/login")
-    public ModelAndView login(HttpServletRequest request) {
+	@RequestMapping("/login")
+	public ModelAndView login(HttpServletRequest request) {
 
-        return new ModelAndView("login");
-    }
+		return new ModelAndView("login");
+	}
 
-    @RequestMapping("/welcomePage")
-    public ModelAndView welcome(HttpServletRequest request) {
+	@RequestMapping("/welcomePage")
+	public ModelAndView welcome(HttpServletRequest request) {
 
-        return new ModelAndView("welcomePage");
-    }
+		return new ModelAndView("welcomePage");
+	}
 
-    @RequestMapping("/loginUser")
-    public ModelAndView addDonor(@RequestParam Map<String, String> params, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@RequestMapping("/loginUser")
+	public ModelAndView addDonor(@RequestParam Map<String, String> params,
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 
-        String username = params.get("username");
-        String password = params.get("password");
-        String targetUrl = params.get("targetUrl");
-        User user = loginRepository.getUser(username);
-        if (user != null && password.equals(user.getPassword())) {
-            request.getSession().setAttribute("user", user);
-            if (StringUtils.hasText(targetUrl)) {
-                response.sendRedirect("/v2v" + targetUrl);
-            } else {
-                response.sendRedirect("/v2v/welcomePage.html");
-            }
-        }
-        ModelAndView modelAndView = new ModelAndView("login");
+		String username = params.get("username");
+		String password = params.get("password");
+		String targetUrl = params.get("targetUrl");
+		User user = loginRepository.getUser(username);
+		if (user != null && password.equals(user.getPassword())) {
+			request.getSession().setAttribute("user", user);
+			if (StringUtils.hasText(targetUrl)) {
+				response.sendRedirect("/v2v" + targetUrl);
+			} else {
+				response.sendRedirect("/v2v/welcomePage.html");
+			}
+		}
+		ModelAndView modelAndView = new ModelAndView("login");
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("loginFailed", true);
-        modelAndView .addObject("targetUrl",targetUrl);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("loginFailed", true);
+		modelAndView.addObject("targetUrl", targetUrl);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/logout")
-    public ModelAndView logout(HttpServletRequest request) {
+	@RequestMapping("/logout")
+	public ModelAndView logout(HttpServletRequest request) {
 
-        request.getSession().removeAttribute("user");
-        request.getSession().removeAttribute("donor");
-        return new ModelAndView("login");
-    }
+		request.getSession().removeAttribute("user");
+		request.getSession().removeAttribute("donor");
+		return new ModelAndView("login");
+	}
 
-    @RequestMapping("/adminAccessOnly")
-    public ModelAndView adminAccessError(HttpServletRequest request) {
+	@RequestMapping("/adminAccessOnly")
+	public ModelAndView adminAccessError(HttpServletRequest request) {
 
-        return new ModelAndView("adminAccessOnly");
-    }
+		return new ModelAndView("adminAccessOnly");
+	}
 }

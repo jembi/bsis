@@ -18,35 +18,34 @@ import repository.FeedbackRepository;
 @Controller
 public class FeedbackController {
 
-    @Autowired
-    private FeedbackRepository feedbackRepository;
+	@Autowired
+	private FeedbackRepository feedbackRepository;
 
+	public FeedbackController() {
+	}
 
-    public FeedbackController() {
-    }
+	@RequestMapping("/feedbackPage")
+	public ModelAndView getFeedbackPage(HttpServletRequest request) {
 
-    @RequestMapping("/feedbackPage")
-    public ModelAndView getFeedbackPage(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("feedbackPage");
+		Map<String, Object> model = new HashMap<String, Object>();
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
+	@RequestMapping("/submitFeedback")
+	public ModelAndView addDonor(@RequestParam Map<String, String> params,
+			HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("feedbackPage");
-        Map<String, Object> model = new HashMap<String, Object>();
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		String comments = params.get("comments");
+		Feedback feedback = new Feedback(comments);
+		feedbackRepository.saveFeedback(feedback);
 
-    @RequestMapping("/submitFeedback")
-    public ModelAndView addDonor(@RequestParam Map<String, String> params,HttpServletRequest request) {
-
-        String comments = params.get("comments");
-        Feedback feedback = new Feedback(comments);
-        feedbackRepository.saveFeedback(feedback);
-
-        ModelAndView modelAndView = new ModelAndView("feedbackPage");
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("feedbackSaved", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("feedbackPage");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("feedbackSaved", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
 }

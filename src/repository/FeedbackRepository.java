@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class FeedbackRepository {
-    @PersistenceContext
-    private EntityManager em;
+	@PersistenceContext
+	private EntityManager em;
 
-    public void saveFeedback(Feedback feedback) {
-        em.persist(feedback);
-        em.flush();
-    }
+	public void saveFeedback(Feedback feedback) {
+		em.persist(feedback);
+		em.flush();
+	}
 }

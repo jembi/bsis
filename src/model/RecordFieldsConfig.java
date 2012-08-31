@@ -5,32 +5,32 @@ import javax.persistence.Id;
 
 @Entity
 public class RecordFieldsConfig {
-    @Id
-    private String recordType;
-    private String fieldNames;
+	@Id
+	private String recordType;
+	private String fieldNames;
 
-    public RecordFieldsConfig(String recordType, String fieldNames) {
+	public RecordFieldsConfig(String recordType, String fieldNames) {
 
-        this.recordType = recordType;
-        this.fieldNames = fieldNames;
-    }
+		this.recordType = recordType;
+		this.fieldNames = fieldNames;
+	}
 
-    public RecordFieldsConfig() {
-    }
+	public RecordFieldsConfig() {
+	}
 
-    public String getRecordType() {
-        return recordType;
-    }
+	public String getRecordType() {
+		return recordType;
+	}
 
-    public String getFieldNames() {
-        return fieldNames;
-    }
+	public String getFieldNames() {
+		return fieldNames;
+	}
 
-    public void setRecordType(String recordType) {
-        this.recordType = recordType;
-    }
+	public void setRecordType(String recordType) {
+		this.recordType = recordType;
+	}
 
-    public void setFieldNames(String fieldNames) {
-        this.fieldNames = fieldNames;
-    }
+	public void setFieldNames(String fieldNames) {
+		this.fieldNames = fieldNames;
+	}
 }

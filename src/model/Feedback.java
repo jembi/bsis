@@ -13,21 +13,20 @@ import javax.persistence.TemporalType;
 
 @Entity
 public class Feedback {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedbackId;
-    private String comment;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long feedbackId;
+	private String comment;
 
-    @Basic(optional = false)
-    @Column(name = "datetime", insertable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datetime;
+	@Basic(optional = false)
+	@Column(name = "datetime", insertable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date datetime;
 
+	public Feedback(String comment) {
+		this.comment = comment;
+	}
 
-    public Feedback(String comment) {
-        this.comment = comment;
-    }
-
-    public Feedback() {
-    }
+	public Feedback() {
+	}
 }

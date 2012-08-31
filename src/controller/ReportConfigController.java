@@ -22,112 +22,126 @@ import utils.LoggerUtil;
 @Controller
 public class ReportConfigController {
 
-    @Autowired
-    private ReportConfigRepository reportConfigRepository;
+	@Autowired
+	private ReportConfigRepository reportConfigRepository;
 
-    @RequestMapping("/admin-reportConfigLandingPage")
-    public ModelAndView getReportConfigLandingPage(HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        ModelAndView modelAndView = new ModelAndView("reportConfigLandingPage");
-        Map<String, Object> model = new HashMap<String, Object>();
+	@RequestMapping("/admin-reportConfigLandingPage")
+	public ModelAndView getReportConfigLandingPage(
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		ModelAndView modelAndView = new ModelAndView("reportConfigLandingPage");
+		Map<String, Object> model = new HashMap<String, Object>();
 
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-collectionsReportFieldsConfig")
+	public ModelAndView getCollectionReportConfig(
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		ModelAndView modelAndView = new ModelAndView("collectionsReportConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-    @RequestMapping("/admin-collectionsReportFieldsConfig")
-    public ModelAndView getCollectionReportConfig(HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        ModelAndView modelAndView = new ModelAndView("collectionsReportConfig");
-        Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addCollectionReportConfigFieldsToModel(model,
+				reportConfigRepository);
 
-        ControllerUtil.addCollectionReportConfigFieldsToModel(model, reportConfigRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-saveCollectionsReportConfig")
+	public ModelAndView saveCollectionReportConfig(
+			@RequestParam Map<String, String> params,
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		saveConfig(params, "collection");
 
-    @RequestMapping("/admin-saveCollectionsReportConfig")
-    public ModelAndView saveCollectionReportConfig(@RequestParam Map<String, String> params,HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        saveConfig(params, "collection");
+		ModelAndView modelAndView = new ModelAndView("collectionsReportConfig");
 
-        ModelAndView modelAndView = new ModelAndView("collectionsReportConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addCollectionReportConfigFieldsToModel(model,
+				reportConfigRepository);
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addCollectionReportConfigFieldsToModel(model, reportConfigRepository);
+		model.put("configSaved", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        model.put("configSaved", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-productsReportFieldsConfig")
+	public ModelAndView getProductReportConfig(
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		ModelAndView modelAndView = new ModelAndView("productsReportConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-    @RequestMapping("/admin-productsReportFieldsConfig")
-    public ModelAndView getProductReportConfig(HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        ModelAndView modelAndView = new ModelAndView("productsReportConfig");
-        Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addProductReportConfigFieldsToModel(model,
+				reportConfigRepository);
 
-        ControllerUtil.addProductReportConfigFieldsToModel(model, reportConfigRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-saveProductsReportConfig")
+	public ModelAndView saveProductReportConfig(
+			@RequestParam Map<String, String> params,
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		saveConfig(params, "product");
 
-    @RequestMapping("/admin-saveProductsReportConfig")
-    public ModelAndView saveProductReportConfig(@RequestParam Map<String, String> params,HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        saveConfig(params, "product");
+		ModelAndView modelAndView = new ModelAndView("productsReportConfig");
 
-        ModelAndView modelAndView = new ModelAndView("productsReportConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addProductReportConfigFieldsToModel(model,
+				reportConfigRepository);
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addProductReportConfigFieldsToModel(model, reportConfigRepository);
+		model.put("configSaved", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
+	@RequestMapping("/admin-testResultsReportFieldsConfig")
+	public ModelAndView getTestResultsReportConfig(
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		ModelAndView modelAndView = new ModelAndView("testResultsReportConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("configSaved", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ControllerUtil.addTestResultsReportConfigFieldsToModel(model,
+				reportConfigRepository);
 
-    @RequestMapping("/admin-testResultsReportFieldsConfig")
-    public ModelAndView getTestResultsReportConfig(HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        ModelAndView modelAndView = new ModelAndView("testResultsReportConfig");
-        Map<String, Object> model = new HashMap<String, Object>();
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ControllerUtil.addTestResultsReportConfigFieldsToModel(model, reportConfigRepository);
+	@RequestMapping("/admin-saveTestResultsReportConfig")
+	public ModelAndView saveTestResultsReportConfig(
+			@RequestParam Map<String, String> params,
+			HttpServletRequest httpServletRequest) {
+		LoggerUtil.logUrl(httpServletRequest);
+		saveConfig(params, "testResults");
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("testResultsReportConfig");
 
-    @RequestMapping("/admin-saveTestResultsReportConfig")
-    public ModelAndView saveTestResultsReportConfig(@RequestParam Map<String, String> params,HttpServletRequest httpServletRequest) {
-        LoggerUtil.logUrl(httpServletRequest);
-        saveConfig(params, "testResults");
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addTestResultsReportConfigFieldsToModel(model,
+				reportConfigRepository);
 
-        ModelAndView modelAndView = new ModelAndView("testResultsReportConfig");
+		model.put("configSaved", true);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addTestResultsReportConfigFieldsToModel(model, reportConfigRepository);
-
-
-        model.put("configSaved", true);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
-
-    private void saveConfig(Map<String, String> params, String reportType) {
-        Set<String> fields = params.keySet();
-        String fieldNames = StringUtils.collectionToCommaDelimitedString(fields);
-        if (reportConfigRepository.getReportConfig(reportType) == null) {
-            reportConfigRepository.saveReportConfig(new ReportConfig(reportType, fieldNames));
-        } else {
-            reportConfigRepository.updateReportConfig(reportType, fieldNames);
-        }
-    }
-
+	private void saveConfig(Map<String, String> params, String reportType) {
+		Set<String> fields = params.keySet();
+		String fieldNames = StringUtils
+				.collectionToCommaDelimitedString(fields);
+		if (reportConfigRepository.getReportConfig(reportType) == null) {
+			reportConfigRepository.saveReportConfig(new ReportConfig(
+					reportType, fieldNames));
+		} else {
+			reportConfigRepository.updateReportConfig(reportType, fieldNames);
+		}
+	}
 
 }

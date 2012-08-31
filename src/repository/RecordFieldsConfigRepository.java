@@ -14,29 +14,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class RecordFieldsConfigRepository {
-    @PersistenceContext
-    private EntityManager em;
+	@PersistenceContext
+	private EntityManager em;
 
-    public void saveRecordFieldsConfig(RecordFieldsConfig recordFieldsConfig) {
-        em.persist(recordFieldsConfig);
-        em.flush();
-    }
+	public void saveRecordFieldsConfig(RecordFieldsConfig recordFieldsConfig) {
+		em.persist(recordFieldsConfig);
+		em.flush();
+	}
 
-    public List<RecordFieldsConfig> getAllRecordFieldsConfigs() {
-        Query query = em.createQuery("SELECT rc FROM RecordFieldsConfig rc");
-        return query.getResultList();
-    }
+	public List<RecordFieldsConfig> getAllRecordFieldsConfigs() {
+		Query query = em.createQuery("SELECT rc FROM RecordFieldsConfig rc");
+		return query.getResultList();
+	}
 
+	public RecordFieldsConfig getRecordFieldsConfig(String recordType) {
+		return em.find(RecordFieldsConfig.class, recordType);
+	}
 
-    public RecordFieldsConfig getRecordFieldsConfig(String recordType) {
-        return em.find(RecordFieldsConfig.class, recordType);
-    }
-
-    public RecordFieldsConfig updateRecordFieldsConfig(String recordType, String fieldNames) {
-        RecordFieldsConfig existingRecordFieldsConfig = em.find(RecordFieldsConfig.class, recordType);
-        existingRecordFieldsConfig.setFieldNames(fieldNames);
-        em.merge(existingRecordFieldsConfig);
-        em.flush();
-        return existingRecordFieldsConfig;
-    }
+	public RecordFieldsConfig updateRecordFieldsConfig(String recordType,
+			String fieldNames) {
+		RecordFieldsConfig existingRecordFieldsConfig = em.find(
+				RecordFieldsConfig.class, recordType);
+		existingRecordFieldsConfig.setFieldNames(fieldNames);
+		em.merge(existingRecordFieldsConfig);
+		em.flush();
+		return existingRecordFieldsConfig;
+	}
 }

@@ -9,76 +9,87 @@ import org.hibernate.annotations.Type;
 
 @Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userId;
-    private String username;
-    private String password;
-    private String type;
-    private String name;
-    private String contactNumber;
-    private String emailId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long userId;
+	private String username;
+	private String password;
+	private String type;
+	private String name;
+	private String contactNumber;
+	private String emailId;
+	private String comments;
 
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean isDeleted;
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private Boolean isDeleted;
 
-    public User(String username, String password, String type, String name, String contactNumber, String emailId, Boolean isDeleted) {
-        this.username = username;
-        this.password = password;
-        this.type = type;
-        this.name = name;
-        this.contactNumber = contactNumber;
-        this.emailId = emailId;
-        this.isDeleted=isDeleted;
-    }
+	public User(String username, String password, String type, String name,
+			String contactNumber, String emailId, Boolean isDeleted,
+			String comments) {
+		this.username = username;
+		this.password = password;
+		this.type = type;
+		this.name = name;
+		this.contactNumber = contactNumber;
+		this.emailId = emailId;
+		this.isDeleted = isDeleted;
+		this.comments = comments;
+	}
 
-    public User() {
-    }
+	public String getComments() {
+		return comments;
+	}
 
-    public void copy(User otherUser) {
-        this.username = otherUser.username;
-        this.password = otherUser.password;
-        this.type = otherUser.type;
-        this.name = otherUser.name;
-        this.contactNumber = otherUser.contactNumber;
-        this.emailId = otherUser.emailId;
-        this.isDeleted=otherUser.isDeleted;
-    }
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 
+	public User() {
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void copy(User otherUser) {
+		this.username = otherUser.username;
+		this.password = otherUser.password;
+		this.type = otherUser.type;
+		this.name = otherUser.name;
+		this.contactNumber = otherUser.contactNumber;
+		this.emailId = otherUser.emailId;
+		this.isDeleted = otherUser.isDeleted;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public Long getUserId() {
-        return userId;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public Long getUserId() {
+		return userId;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getContactNumber() {
-        return contactNumber;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getEmailId() {
-        return emailId;
-    }
+	public String getContactNumber() {
+		return contactNumber;
+	}
 
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
+	public String getEmailId() {
+		return emailId;
+	}
 
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
+	public Boolean getDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 }

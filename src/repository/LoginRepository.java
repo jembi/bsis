@@ -14,19 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class LoginRepository {
-    @PersistenceContext
-    private EntityManager em;
+	@PersistenceContext
+	private EntityManager em;
 
-
-    public User getUser(String username) {
-        String queryString = "SELECT u FROM User u WHERE u.username= :username and u.isDeleted= :isDeleted";
-        TypedQuery<User> query = em.createQuery(
-                queryString, User.class);
-        query.setParameter("isDeleted", Boolean.FALSE);
-        List<User> users = query.setParameter("username", username).getResultList();
-        if(users==null||users.size()==0){
-            return null;
-        }
-        return users.get(0);
-    }
+	public User getUser(String username) {
+		String queryString = "SELECT u FROM User u WHERE u.username= :username and u.isDeleted= :isDeleted";
+		TypedQuery<User> query = em.createQuery(queryString, User.class);
+		query.setParameter("isDeleted", Boolean.FALSE);
+		List<User> users = query.setParameter("username", username)
+				.getResultList();
+		if (users == null || users.size() == 0) {
+			return null;
+		}
+		return users.get(0);
+	}
 }

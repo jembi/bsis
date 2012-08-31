@@ -25,124 +25,160 @@ import utils.ControllerUtil;
 @Controller
 public class UsageController {
 
+	@Autowired
+	private UsageRepository usageRepository;
 
-    @Autowired
-    private UsageRepository usageRepository;
+	@Autowired
+	private DisplayNamesRepository displayNamesRepository;
 
-    @Autowired
-    private DisplayNamesRepository displayNamesRepository;
+	@Autowired
+	private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-    @Autowired
-    private RecordFieldsConfigRepository recordFieldsConfigRepository;
+	@RequestMapping("/usageLandingPage")
+	public ModelAndView getUsagePage(HttpServletRequest request) {
 
-    @RequestMapping("/usageLandingPage")
-    public ModelAndView getUsagePage(HttpServletRequest request) {
+		return new ModelAndView("usageLandingPage");
+	}
 
+	@RequestMapping("/usageAdd")
+	public ModelAndView getAddUsagePage(HttpServletRequest request) {
 
-        return new ModelAndView("usageLandingPage");
-    }
+		ModelAndView modelAndView = new ModelAndView("usageAdd");
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-    @RequestMapping("/usageAdd")
-    public ModelAndView getAddUsagePage(HttpServletRequest request) {
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("usageAdd");
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+	@RequestMapping("/updateUsage")
+	public ModelAndView getUpdateUsagePage(HttpServletRequest request) {
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageFind");
+		Map<String, Object> model = new HashMap<String, Object>();
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-    @RequestMapping("/updateUsage")
-    public ModelAndView getUpdateUsagePage(HttpServletRequest request) {
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("usageFind");
-        Map<String, Object> model = new HashMap<String, Object>();
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+	@RequestMapping("/addNewUsage")
+	public ModelAndView addNewUsage(@RequestParam Map<String, String> params,
+			HttpServletRequest request) {
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageUpdateExisting");
+		Map<String, Object> model = new HashMap<String, Object>();
+		RecordFieldsConfig recordFieldsConfig = recordFieldsConfigRepository
+				.getRecordFieldsConfig("usage");
+		ProductUsage productUsage = new ProductUsage(
+				params.get("productNumber"), getOptionalParamValue(
+						getDate(params.get("usageDate")), recordFieldsConfig,
+						"usageDate"),
+				getOptionalParamValue(params.get("hospital"),
+						recordFieldsConfig, "hospital"), getOptionalParamValue(
+						params.get("ward"), recordFieldsConfig, "ward"),
+				params.get("useIndication"), Boolean.FALSE,
+				getOptionalParamValue(params.get("comment"),
+						recordFieldsConfig, "comment"));
+		usageRepository.saveUsage(productUsage);
+		model.put("usageAdded", true);
+		model.put("hasUsage", true);
+		model.put("usage", productUsage);
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-    @RequestMapping("/addNewUsage")
-    public ModelAndView addNewUsage(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("usageUpdateExisting");
-        Map<String, Object> model = new HashMap<String, Object>();
-        RecordFieldsConfig recordFieldsConfig = recordFieldsConfigRepository.getRecordFieldsConfig("usage");
-        ProductUsage productUsage = new ProductUsage(params.get("productNumber"), getOptionalParamValue(getDate(params.get("usageDate")), recordFieldsConfig, "usageDate"), getOptionalParamValue(params.get("hospital"), recordFieldsConfig, "hospital"), getOptionalParamValue(params.get("ward"), recordFieldsConfig, "ward"), params.get("useIndication"), getOptionalParamValue(params.get("comment"), recordFieldsConfig, "comment"), Boolean.FALSE);
-        usageRepository.saveUsage(productUsage);
-        model.put("usageAdded", true);
-        model.put("hasUsage", true);
-        model.put("usage", productUsage);
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+	@RequestMapping("/updateSelectedUsage")
+	public ModelAndView updateSelectedUsage(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageUpdateExisting");
+		Map<String, Object> model = new HashMap<String, Object>();
+		RecordFieldsConfig recordFieldsConfig = recordFieldsConfigRepository
+				.getRecordFieldsConfig("usage");
+		ProductUsage productUsage = new ProductUsage(
+				params.get("productNumber"), getOptionalParamValue(
+						getDate(params.get("usageDate")), recordFieldsConfig,
+						"usageDate"),
+				getOptionalParamValue(params.get("hospital"),
+						recordFieldsConfig, "hospital"), getOptionalParamValue(
+						params.get("ward"), recordFieldsConfig, "ward"),
+				params.get("useIndication"), Boolean.FALSE,
+				getOptionalParamValue(params.get("comment"),
+						recordFieldsConfig, "comment"));
+		usageRepository.updateUsage(productUsage);
+		model.put("usageUpdated", true);
+		model.put("hasUsage", true);
+		model.put("usage", productUsage);
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-    @RequestMapping("/updateSelectedUsage")
-    public ModelAndView updateSelectedUsage(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("usageUpdateExisting");
-        Map<String, Object> model = new HashMap<String, Object>();
-        RecordFieldsConfig recordFieldsConfig = recordFieldsConfigRepository.getRecordFieldsConfig("usage");
-        ProductUsage productUsage = new ProductUsage(params.get("productNumber"), getOptionalParamValue(getDate(params.get("usageDate")),recordFieldsConfig,"usageDate"), getOptionalParamValue(params.get("hospital"),recordFieldsConfig,"hospital"), getOptionalParamValue(params.get("ward"),recordFieldsConfig,"ward"), params.get("useIndication"), getOptionalParamValue(params.get("comment"),recordFieldsConfig,"comment"), Boolean.FALSE);
-        usageRepository.updateUsage(productUsage);
-        model.put("usageUpdated", true);
-        model.put("hasUsage", true);
-        model.put("usage", productUsage);
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+	@RequestMapping("/deleteExistingUsage")
+	public ModelAndView deleteExistingUsage(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageAdd");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-    @RequestMapping("/deleteExistingUsage")
-    public ModelAndView deleteExistingUsage(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		String productNumber = params.get("productNumber");
+		ProductUsage productUsage = usageRepository
+				.findProductUsage(productNumber);
+		ProductUsage deletedProductUsage = new ProductUsage();
+		deletedProductUsage.copy(productUsage);
+		deletedProductUsage.setDeleted(Boolean.TRUE);
+		usageRepository.updateUsage(deletedProductUsage);
+		model.put("usageDeleted", true);
+		model.put("deletedUsageProductNumber", productNumber);
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-        ModelAndView modelAndView = new ModelAndView("usageAdd");
-        Map<String, Object> model = new HashMap<String, Object>();
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        String productNumber = params.get("productNumber");
-        ProductUsage productUsage = usageRepository.findProductUsage(productNumber);
-        ProductUsage deletedProductUsage = new ProductUsage();
-        deletedProductUsage.copy(productUsage);
-        deletedProductUsage.setDeleted(Boolean.TRUE);
-        usageRepository.updateUsage(deletedProductUsage);
-        model.put("usageDeleted", true);
-        model.put("deletedUsageProductNumber", productNumber);
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
+	@RequestMapping("/findUsage")
+	public ModelAndView findUsage(@RequestParam Map<String, String> params,
+			HttpServletRequest request) {
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageUpdateExisting");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-    @RequestMapping("/findUsage")
-    public ModelAndView findUsage(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		String productNumber = params.get("productNumber");
+		ProductUsage productUsage = usageRepository
+				.findProductUsage(productNumber);
+		if (productUsage == null) {
+			modelAndView = new ModelAndView("usageFind");
+			model.put("usageNotFound", true);
+			model.put("productNumber", productNumber);
+		} else {
+			model.put("hasUsage", true);
+			model.put("usage", productUsage);
+		}
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		ControllerUtil.addFieldsToDisplay("usage", model,
+				recordFieldsConfigRepository);
 
-        ModelAndView modelAndView = new ModelAndView("usageUpdateExisting");
-        Map<String, Object> model = new HashMap<String, Object>();
-
-        String productNumber = params.get("productNumber");
-        ProductUsage productUsage = usageRepository.findProductUsage(productNumber);
-        if (productUsage == null) {
-            modelAndView = new ModelAndView("usageFind");
-            model.put("usageNotFound", true);
-            model.put("productNumber", productNumber);
-        } else {
-            model.put("hasUsage", true);
-            model.put("usage", productUsage);
-        }
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        ControllerUtil.addFieldsToDisplay("usage", model, recordFieldsConfigRepository);
-
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 }

@@ -20,282 +20,309 @@ import utils.ControllerUtil;
 @Controller
 public class DisplayNameConfigController {
 
-    @Autowired
-    private DisplayNamesRepository displayNamesRepository;
+	@Autowired
+	private DisplayNamesRepository displayNamesRepository;
 
+	public DisplayNameConfigController() {
 
-    public DisplayNameConfigController() {
+	}
 
-    }
+	@RequestMapping("/admin-displayNamesConfigLandingPage.html")
+	public ModelAndView displayLandingPage(HttpServletRequest request) {
 
-    @RequestMapping("/admin-displayNamesConfigLandingPage.html")
-    public ModelAndView displayLandingPage(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView(
+				"displayNamesConfigLandingPage");
 
-        ModelAndView modelAndView = new ModelAndView("displayNamesConfigLandingPage");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-collectionsDisplayNamesConfig.html")
+	public ModelAndView display(HttpServletRequest request) {
 
-    @RequestMapping("/admin-collectionsDisplayNamesConfig.html")
-    public ModelAndView display(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView(
+				"collectionsDisplayNamesConfig");
 
-        ModelAndView modelAndView = new ModelAndView("collectionsDisplayNamesConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		model.put("hasCollection", true);
 
-        model.put("hasCollection", true);
+		ControllerUtil.addCollectionDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ControllerUtil.addCollectionDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-donorsDisplayNamesConfig.html")
+	public ModelAndView displayDonors(HttpServletRequest request) {
 
-    @RequestMapping("/admin-donorsDisplayNamesConfig.html")
-    public ModelAndView displayDonors(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("donorsDisplayNamesConfig");
 
-        ModelAndView modelAndView = new ModelAndView("donorsDisplayNamesConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		model.put("hasNames", true);
 
-        model.put("hasNames", true);
+		ControllerUtil.addDonorDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-saveCollectionsDisplayNamesConfig")
+	public ModelAndView saveConfig(@RequestParam Map<String, String> params,
+			HttpServletRequest request) {
 
-    @RequestMapping("/admin-saveCollectionsDisplayNamesConfig")
-    public ModelAndView saveConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView(
+				"collectionsDisplayNamesConfig");
 
-        ModelAndView modelAndView = new ModelAndView("collectionsDisplayNamesConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "collection");
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "collection");
+		model.put("configSaved", true);
+		model.put("hasCollection", true);
+		ControllerUtil.addCollectionDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
+	@RequestMapping("/admin-saveDonorsDisplayNamesConfig")
+	public ModelAndView saveDonorsConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        model.put("configSaved", true);
-        model.put("hasCollection", true);
-        ControllerUtil.addCollectionDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("donorsDisplayNamesConfig");
 
-    @RequestMapping("/admin-saveDonorsDisplayNamesConfig")
-    public ModelAndView saveDonorsConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "donor");
 
-        ModelAndView modelAndView = new ModelAndView("donorsDisplayNamesConfig");
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addDonorDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "donor");
+	@RequestMapping("/admin-testResultsDisplayNamesConfig.html")
+	public ModelAndView displayTestResults(HttpServletRequest request) {
 
+		ModelAndView modelAndView = new ModelAndView(
+				"testResultsDisplayNamesConfig");
 
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		Map<String, Object> model = new HashMap<String, Object>();
 
-    @RequestMapping("/admin-testResultsDisplayNamesConfig.html")
-    public ModelAndView displayTestResults(HttpServletRequest request) {
+		model.put("hasNames", true);
 
-        ModelAndView modelAndView = new ModelAndView("testResultsDisplayNamesConfig");
+		ControllerUtil.addTestResultDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Map<String, Object> model = new HashMap<String, Object>();
+	@RequestMapping("/admin-saveTestResultsDisplayNamesConfig")
+	public ModelAndView saveTestResultsConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        model.put("hasNames", true);
+		ModelAndView modelAndView = new ModelAndView(
+				"testResultsDisplayNamesConfig");
 
-        ControllerUtil.addTestResultDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "testResults");
 
-    @RequestMapping("/admin-saveTestResultsDisplayNamesConfig")
-    public ModelAndView saveTestResultsConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addTestResultDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("testResultsDisplayNamesConfig");
+	@RequestMapping("/admin-productsDisplayNamesConfig.html")
+	public ModelAndView displayProducts(HttpServletRequest request) {
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "testResults");
+		ModelAndView modelAndView = new ModelAndView(
+				"productsDisplayNamesConfig");
 
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addTestResultDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		model.put("hasNames", true);
 
-    @RequestMapping("/admin-productsDisplayNamesConfig.html")
-    public ModelAndView displayProducts(HttpServletRequest request) {
+		ControllerUtil.addProductDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView("productsDisplayNamesConfig");
+	@RequestMapping("/admin-saveProductsDisplayNamesConfig")
+	public ModelAndView saveProductsConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		ModelAndView modelAndView = new ModelAndView(
+				"productsDisplayNamesConfig");
 
-        model.put("hasNames", true);
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "product");
 
-        ControllerUtil.addProductDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addProductDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-saveProductsDisplayNamesConfig")
-    public ModelAndView saveProductsConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+	@RequestMapping("/admin-requestsDisplayNamesConfig.html")
+	public ModelAndView displayRequests(HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("productsDisplayNamesConfig");
+		ModelAndView modelAndView = new ModelAndView(
+				"requestsDisplayNamesConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "product");
+		Map<String, Object> model = new HashMap<String, Object>();
 
+		model.put("hasNames", true);
 
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addProductDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ControllerUtil.addRequestDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-    @RequestMapping("/admin-requestsDisplayNamesConfig.html")
-    public ModelAndView displayRequests(HttpServletRequest request) {
+	@RequestMapping("/admin-saveRequestsDisplayNamesConfig")
+	public ModelAndView saveRequestsConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("requestsDisplayNamesConfig");
+		ModelAndView modelAndView = new ModelAndView(
+				"requestsDisplayNamesConfig");
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "request");
 
-        model.put("hasNames", true);
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addRequestDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        ControllerUtil.addRequestDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-issueDisplayNamesConfig.html")
+	public ModelAndView displayIssue(HttpServletRequest request) {
 
-    @RequestMapping("/admin-saveRequestsDisplayNamesConfig")
-    public ModelAndView saveRequestsConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("issueDisplayNamesConfig");
 
-        ModelAndView modelAndView = new ModelAndView("requestsDisplayNamesConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "request");
+		model.put("hasNames", true);
 
+		ControllerUtil.addIssueDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addRequestDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+	@RequestMapping("/admin-saveIssueDisplayNamesConfig")
+	public ModelAndView saveIssueConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-    @RequestMapping("/admin-issueDisplayNamesConfig.html")
-    public ModelAndView displayIssue(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("issueDisplayNamesConfig");
 
-        ModelAndView modelAndView = new ModelAndView("issueDisplayNamesConfig");
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "issue");
 
-        Map<String, Object> model = new HashMap<String, Object>();
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addIssueDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        model.put("hasNames", true);
+	@RequestMapping("/admin-usageDisplayNamesConfig.html")
+	public ModelAndView displayUsage(HttpServletRequest request) {
 
-        ControllerUtil.addIssueDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageDisplayNamesConfig");
 
-    @RequestMapping("/admin-saveIssueDisplayNamesConfig")
-    public ModelAndView saveIssueConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
 
-        ModelAndView modelAndView = new ModelAndView("issueDisplayNamesConfig");
+		model.put("hasNames", true);
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "issue");
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
+	@RequestMapping("/admin-saveUsageDisplayNamesConfig")
+	public ModelAndView saveUsageConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addIssueDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView("usageDisplayNamesConfig");
 
-    @RequestMapping("/admin-usageDisplayNamesConfig.html")
-    public ModelAndView displayUsage(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "usage");
 
-        ModelAndView modelAndView = new ModelAndView("usageDisplayNamesConfig");
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addUsageDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Map<String, Object> model = new HashMap<String, Object>();
+	@RequestMapping("/admin-reportsDisplayNamesConfig")
+	public ModelAndView displayReports(HttpServletRequest request) {
 
-        model.put("hasNames", true);
+		ModelAndView modelAndView = new ModelAndView(
+				"reportsDisplayNamesConfig");
 
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		Map<String, Object> model = new HashMap<String, Object>();
 
-    @RequestMapping("/admin-saveUsageDisplayNamesConfig")
-    public ModelAndView saveUsageConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
+		model.put("hasNames", true);
 
-        ModelAndView modelAndView = new ModelAndView("usageDisplayNamesConfig");
+		ControllerUtil.addReportsDisplayNamesToModel(model,
+				displayNamesRepository);
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "usage");
+	@RequestMapping("/admin-saveReportsDisplayNamesConfig")
+	public ModelAndView saveReportsConfig(
+			@RequestParam Map<String, String> params, HttpServletRequest request) {
 
+		ModelAndView modelAndView = new ModelAndView(
+				"reportsDisplayNamesConfig");
 
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addUsageDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
+		Map<String, Object> model = new HashMap<String, Object>();
+		saveFieldDisplayNames(params, model, "reports");
 
-    @RequestMapping("/admin-reportsDisplayNamesConfig")
-    public ModelAndView displayReports(HttpServletRequest request) {
+		model.put("configSaved", true);
+		model.put("hasNames", true);
+		ControllerUtil.addReportsDisplayNamesToModel(model,
+				displayNamesRepository);
 
-        ModelAndView modelAndView = new ModelAndView("reportsDisplayNamesConfig");
+		modelAndView.addObject("model", model);
+		return modelAndView;
+	}
 
-        Map<String, Object> model = new HashMap<String, Object>();
+	private void saveFieldDisplayNames(Map<String, String> params,
+			Map<String, Object> model, String recordType) {
+		Set<String> fields = params.keySet();
+		String fieldNames = "";
+		for (String field : fields) {
+			fieldNames = fieldNames + field + ":";
+			fieldNames = fieldNames + params.get(field) + ",";
 
-        model.put("hasNames", true);
-
-        ControllerUtil.addReportsDisplayNamesToModel(model, displayNamesRepository);
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
-
-    @RequestMapping("/admin-saveReportsDisplayNamesConfig")
-    public ModelAndView saveReportsConfig(@RequestParam Map<String, String> params, HttpServletRequest request) {
-
-        ModelAndView modelAndView = new ModelAndView("reportsDisplayNamesConfig");
-
-        Map<String, Object> model = new HashMap<String, Object>();
-        saveFieldDisplayNames(params, model, "reports");
-
-
-        model.put("configSaved", true);
-        model.put("hasNames", true);
-        ControllerUtil.addReportsDisplayNamesToModel(model, displayNamesRepository);
-
-        modelAndView.addObject("model", model);
-        return modelAndView;
-    }
-
-    private void saveFieldDisplayNames(Map<String, String> params, Map<String, Object> model, String recordType) {
-        Set<String> fields = params.keySet();
-        String fieldNames = "";
-        for (String field : fields) {
-            fieldNames = fieldNames + field + ":";
-            fieldNames = fieldNames + params.get(field) + ",";
-
-            model.put(field, params.get(field));
-        }
-        fieldNames = fieldNames.substring(0, fieldNames.length() - 1);
-        if (displayNamesRepository.getDisplayName(recordType) == null) {
-            displayNamesRepository.saveDisplayNames(new DisplayNames(recordType, fieldNames));
-        } else {
-            displayNamesRepository.updateDisplayNames(recordType, fieldNames);
-        }
-    }
-
+			model.put(field, params.get(field));
+		}
+		fieldNames = fieldNames.substring(0, fieldNames.length() - 1);
+		if (displayNamesRepository.getDisplayName(recordType) == null) {
+			displayNamesRepository.saveDisplayNames(new DisplayNames(
+					recordType, fieldNames));
+		} else {
+			displayNamesRepository.updateDisplayNames(recordType, fieldNames);
+		}
+	}
 
 }
