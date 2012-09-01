@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%
 	pageContext.setAttribute("newLineChar", "\n");
 %>
@@ -14,6 +15,8 @@
 <title>V2V</title>
 <jsp:include page="commonHeadIncludes.jsp" flush="true" />
 <script src="js/donor.js" type="text/javascript"></script>
+<script src="js/jquery-latest.js" type="text/javascript"></script>
+<script src="js/jquery.tablesorter.js" type="text/javascript"></script>
 <link type="text/css" rel="stylesheet" href="css/donor.css" />
 
 </head>
