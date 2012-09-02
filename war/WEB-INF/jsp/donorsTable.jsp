@@ -1,7 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%
 	pageContext.setAttribute("newLineChar", "\n");
 %>
@@ -9,35 +8,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V</title>
-<jsp:include page="commonHeadIncludes.jsp" flush="true" />
-
-<link type="text/css" href="plugins/DataTables/media/css/jquery.dataTables_themeroller.css" rel="Stylesheet" />	
-<link type="text/css" href="jquery-ui/css/redmond/redmond.css" rel="Stylesheet" />	
 <script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>
 
 <script src="js/donorTable.js" type="text/javascript"></script>
 <script src="js/jquery-latest.js" type="text/javascript"></script>
 <script src="plugins/DataTables/media/js/jquery.dataTables.js"></script>
-</head>
-<body>
-	<div class="mainBody">
-		<div class="mainContent">
-			<jsp:include page="topPanel.jsp" flush="true" />
-			<div class="leftPanel">
-				<ul id="donorsTabs" class="leftPanelTabs">
-					<li id="addDonorTab"><a href="donors.html">Find/Add</a></li>
-					<li id="viewDonorsTab" class="selectedTab"><a
-						href="viewDonors.html">View</a></li>
-				</ul>
-			</div>
-			<div class="centerPanel">
-				<div class="centralContent">
-					<div style="margin-top: 50px;"></div>
-					<table id="donorsTable" class="dataTable">
+					<table id="donorsTable" class="dataTable donorTableTest">
 						<thead>
 							<tr>
 								<th>${model.donorIDDisplayName}</th>
@@ -97,8 +73,6 @@
 							</c:forEach>
 						</tbody>
 					</table>
-				</div>
-			</div>
 			<c:if test="${fn:length(model.tipsDisplayName)>0}">
 				<div id="showTips" class="link showTips">show tips</div>
 				<div class="rightPanel">
@@ -109,8 +83,3 @@
 				</div>
 			</c:if>
 			<jsp:include page="bottomPanel.jsp" flush="true" />
-
-		</div>
-	</div>
-</body>
-</html>

@@ -7,17 +7,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>V2V</title>
     <jsp:include page="commonHeadIncludes.jsp" flush="true"/>
-
 </head>
 <body>
 <div class="mainBody">
     <div class="mainContent">
         <jsp:include page="topPanel.jsp" flush="true"/>
-
-        <div class="leftAlignedPanel">
-            <p style="font-weight: bold; font-size: 1.5em" class="infoMessage">Welcome to Vein-to-Vein</p>
-        </div>
-        <jsp:include page="bottomPanel.jsp" flush="true"/>
     </div>
 </div>
 </body>

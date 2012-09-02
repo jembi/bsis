@@ -7,9 +7,14 @@ import java.util.Date;
 import model.Donor;
 
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DonorViewModel {
 	private Donor donor;
+
+	public DonorViewModel() {
+	}
 
 	public DonorViewModel(Donor donor) {
 		this.donor = donor;
@@ -83,5 +88,9 @@ public class DonorViewModel {
 	public String getComments() {
 		Object comments = donor.getComments();
 		return comments == null ? "" : comments.toString();
+	}
+
+	public void setComments(String comments) {
+		donor.setComments(comments);
 	}
 }

@@ -57,6 +57,7 @@ public class Donor {
 		this.birthDate = otherDonor.birthDate;
 		this.age = otherDonor.age;
 		this.address = otherDonor.address;
+		this.comments = otherDonor.comments;
 		this.isDeleted = otherDonor.isDeleted;
 	}
 
@@ -121,8 +122,8 @@ public class Donor {
 		this.bloodType = bloodType;
 	}
 
-	public void setComments(String comment) {
-		this.comments = comment;
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	public void setDonorId(Long donorId) {
