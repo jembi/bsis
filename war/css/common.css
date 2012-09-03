@@ -103,7 +103,7 @@ input[type="button"], input[type="submit"], input[type="reset"] {
 #donorsTab {
 	position: relative;
 	padding-left: 11em;
-	min-height: 100px;
+	min-height: 500px;
 }
 
 #donorsTab .ui-tabs-nav {

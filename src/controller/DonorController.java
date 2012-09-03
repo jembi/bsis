@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.Donor;
+import model.FindDonorForm;
 import model.Location;
 import model.RecordFieldsConfig;
 
@@ -23,7 +24,10 @@ import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -213,15 +217,27 @@ public class DonorController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/findDonor")
-	public ModelAndView findDonor(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
+	public ModelAndView findDonorFormInit(Model model) {
 
-		String donorNumber = params.get("donorNumber");
-		String firstName = params.get("firstName");
-		String lastName = params.get("lastName");
+		FindDonorForm form = new FindDonorForm();
+		model.addAttribute("findDonorForm", form);
 
-		ModelAndView modelAndView = new ModelAndView("donors");
+		ModelAndView mv = new ModelAndView("findDonorForm");
+		Map<String, Object> m = model.asMap();
+		ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+		mv.addObject("model", m);
+		return mv;
+	}
+
+	@RequestMapping(value = "/findDonor", method = RequestMethod.POST)
+	public ModelAndView findDonor(
+			@ModelAttribute("findDonorForm") FindDonorForm form) {
+		String donorNumber = form.getDonorNumber();
+		String firstName = form.getFirstName();
+		String lastName = form.getLastName();
+
+		ModelAndView modelAndView = new ModelAndView("donorsTable");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<Donor> donors = donorRepository.find(donorNumber, firstName,
 				lastName);

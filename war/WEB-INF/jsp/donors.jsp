@@ -10,11 +10,13 @@
 
 <div id="donorsTab" class="leftPanel">
 	<ul>
-		<li id="findOrAddDonorsContent"><a href="#findOrAddDonors">Find/Add
+		<li id="addDonorsContent"><a href="addDonorFormGenerator.html">Add
 				Donor</a></li>
-		<li id="viewDonorsContent"><a href="viewDonors.html">View Donors</a></li>
+		<li id="findOrAddDonorsContent"><a href="findDonorFormGenerator.html">Find
+				Donors</a></li>
+		<li id="viewDonorsContent"><a href="viewDonors.html">View
+				Donors</a></li>
 	</ul>
-	<div id="findOrAddDonors" class="centerPanel">Find/Add Donors</div>
 </div>
 
 <div class="centerPanel" style="display: none;">
