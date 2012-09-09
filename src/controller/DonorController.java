@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -15,16 +16,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.Donor;
-import model.FindDonorForm;
+import model.DonorBackingForm;
 import model.Location;
 import model.RecordFieldsConfig;
 
+import org.eclipse.jdt.internal.compiler.impl.BooleanConstant;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,60 +84,32 @@ public class DonorController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/createDonor")
-	public ModelAndView addDonor(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/addDonorFormTab", method = RequestMethod.GET)
+	public ModelAndView addDonorFormTabInit() {
 
-		Date dob = getDonorDOB(params);
-		Integer age = getIntParam(params, "age");
+		ModelAndView mv = new ModelAndView("addDonor");
+		return mv;
+	}
 
-		if (dob == null && age != null) {
-			DateTime birthDate = DateTime.now();
-			birthDate = birthDate.withDayOfMonth(1);
-			birthDate = birthDate.withMonthOfYear(1);
-			birthDate = birthDate.withTime(0, 0, 0, 0);
-			birthDate = birthDate.minusYears(age);
-			dob = birthDate.toDate();
-		}
-		if (dob != null && age == null) {
-			DateMidnight birthDate = new DateMidnight(dob);
-			DateTime now = new DateTime();
-			age = Years.yearsBetween(birthDate, now).getYears();
-		}
+	@RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
+	public ModelAndView addDonorFormInit(Model model) {
 
-		RecordFieldsConfig donorFields = recordFieldsConfigRepository
-				.getRecordFieldsConfig("donor");
-		Donor donor = new Donor(params.get("donorNumber"),
-				ControllerUtil.getOptionalParamValue(params.get("firstName"),
-						donorFields, "firstName"),
-				ControllerUtil.getOptionalParamValue(params.get("lastName"),
-						donorFields, "lastName"),
-				ControllerUtil.getOptionalParamValue(params.get("gender"),
-						donorFields, "gender"),
-				ControllerUtil.getOptionalParamValue(params.get("bloodType"),
-						donorFields, "bloodType"),
-				ControllerUtil.getOptionalParamValue(dob, donorFields,
-						"dateOfBirth"), ControllerUtil.getOptionalParamValue(
-						age, donorFields, "age"),
-				ControllerUtil.getOptionalParamValue(params.get("address"),
-						donorFields, "address"), Boolean.FALSE, "");
-		donorRepository.saveDonor(donor);
-		ModelAndView modelAndView = new ModelAndView("donors");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("donorCreated", true);
-		model.put("displayDonorNumber", donor.getDonorNumber());
-		model.put("displayFirstName", donor.getFirstName());
-		model.put("displayLastName", donor.getLastName());
-		model.put("hasDonor", true);
-		model.put("donor", new DonorViewModel(donor));
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		addDonorHistory(donor.getDonorNumber(), model);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
+		DonorBackingForm form = new DonorBackingForm();
+		model.addAttribute("addDonorForm", form);
+
+		ModelAndView mv = new ModelAndView("addDonorForm");
+		Map<String, Object> m = model.asMap();
+		// to ensure custom field names are displayed in the form
+		ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+		mv.addObject("model", m);
+		return mv;
+	}
+
+	@RequestMapping(value = "/addDonor", method = RequestMethod.POST)
+	public ModelAndView addDonor(
+			@ModelAttribute("addDonorForm") DonorBackingForm form,
+			BindingResult result, Model m) {
+		ModelAndView modelAndView = new ModelAndView("addDonor");
 		return modelAndView;
 	}
 
@@ -220,53 +195,38 @@ public class DonorController {
 	@RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
 	public ModelAndView findDonorFormInit(Model model) {
 
-		FindDonorForm form = new FindDonorForm();
+		DonorBackingForm form = new DonorBackingForm();
 		model.addAttribute("findDonorForm", form);
 
 		ModelAndView mv = new ModelAndView("findDonorForm");
 		Map<String, Object> m = model.asMap();
+		// to ensure custom field names are displayed in the form
 		ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
 		mv.addObject("model", m);
 		return mv;
 	}
 
-	@RequestMapping(value = "/findDonor", method = RequestMethod.POST)
+	@RequestMapping(value = "/findDonor", method = RequestMethod.GET)
 	public ModelAndView findDonor(
-			@ModelAttribute("findDonorForm") FindDonorForm form) {
+			@ModelAttribute("findDonorForm") DonorBackingForm form,
+			BindingResult result, Model m) {
+
 		String donorNumber = form.getDonorNumber();
 		String firstName = form.getFirstName();
 		String lastName = form.getLastName();
+		List<String> bloodTypes = form.getBloodTypes();
 
 		ModelAndView modelAndView = new ModelAndView("donorsTable");
-		Map<String, Object> model = new HashMap<String, Object>();
-		List<Donor> donors = donorRepository.find(donorNumber, firstName,
-				lastName);
-		if (donors == null || donors.size() == 0) {
-			model.put("donorNotFound", true);
-			model.put("displayDonorNumber", donorNumber);
-			model.put("displayFirstName", firstName);
-			model.put("displayLastName", lastName);
+		List<Donor> donors = donorRepository.findAnyDonor(donorNumber,
+				firstName, lastName, bloodTypes);
 
-		} else if (donors.size() == 1) {
-			Donor donor = donors.get(0);
-			model.put("singleDonorFound", true);
-			model.put("displayDonorNumber", donor.getDonorNumber());
-			model.put("displayFirstName", donor.getFirstName());
-			model.put("displayLastName", donor.getLastName());
-			model.put("hasDonor", true);
-			model.put("donor", new DonorViewModel(donor));
-			addDonorHistory(donor.getDonorNumber(), model);
-		} else if (donors.size() > 1) {
-			model.put("multipleDonorsFound", true);
-			model.put("donors", getDonorsViewModels(donors));
-
-		}
+		Map<String, Object> model = m.asMap();
+		model.put("tableName", "findResultsTable");
 		ControllerUtil.addDonorDisplayNamesToModel(model,
 				displayNamesRepository);
 		ControllerUtil.addFieldsToDisplay("donor", model,
 				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
+		model.put("allDonors", donors);
 		modelAndView.addObject("model", model);
 		return modelAndView;
 	}
@@ -304,6 +264,7 @@ public class DonorController {
 		ModelAndView modelAndView = new ModelAndView("donorsTable");
 		Map<String, Object> model = new HashMap<String, Object>();
 
+		model.put("tableName", "viewAllDonors");
 		model.put("allDonors", getDonorsViewModels(allDonors));
 		ControllerUtil.addDonorDisplayNamesToModel(model,
 				displayNamesRepository);
@@ -314,7 +275,6 @@ public class DonorController {
 		modelAndView.addObject("model", model);
 		return modelAndView;
 	}
-
 	private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
 		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
 		for (Donor donor : donors) {

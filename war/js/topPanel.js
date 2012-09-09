@@ -5,20 +5,23 @@ $(document)
 						$('#topTabs li').removeClass('selectedTab');
 					};
 
-					$("#topPanelTabs").tabs();
+					$("#topPanelTabs").tabs({
+						cache : false
+					});
 					$(".leftPanel")
 							.tabs(
 									{
 										cache : false,
 										ajaxOptions : {
+											cache : false,
 											error : function(xhr, status,
 													index, anchor) {
 												$(anchor.hash)
 														.html(
-										"Oops ... There was an error " +
-										"loading this tab. Please try " +
-										"again in a while. If the problem " +
-										"persists report an Issue.");
+																"Oops ... There was an error "
+																		+ "loading this tab. Please try "
+																		+ "again in a while. If the problem "
+																		+ "persists report an Issue.");
 											}
 										}
 									});

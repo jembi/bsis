@@ -7,8 +7,10 @@
 	pageContext.setAttribute("newLineChar", "\n");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<form:form method="POST" action="findDonor.html"
-	commandName="findDonorForm">
+
+<script type="text/javascript" src="js/findDonorForm.js"></script>
+
+<form:form method="GET" commandName="findDonorForm" id="findDonorForm">
 	<table>
 		<thead>
 			<tr>
@@ -29,21 +31,24 @@
 				<td><form:input path="lastName" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="bloodGroups">${model.bloodTypeDisplayName}</form:label></td>
-				<td><form:checkbox path="bloodGroups" value="A+"  label="A+" />
-					<form:checkbox path="bloodGroups" value="B+"  label="B+" />
-					<form:checkbox path="bloodGroups" value="AB+" label="AB+"/>
-					<form:checkbox path="bloodGroups" value="O+"  label="O+" />
-					<form:checkbox path="bloodGroups" value="A-"  label="A-" />
-					<form:checkbox path="bloodGroups" value="B-"  label="B-" />
-					<form:checkbox path="bloodGroups" value="AB-" label="AB-"/>
-					<form:checkbox path="bloodGroups" value="O-"  label="O-" />
-				</td>
+				<td><form:label path="bloodTypes">${model.bloodTypeDisplayName}</form:label></td>
+				<td><form:checkbox path="bloodTypes" value="A+" label="A+" />
+					<form:checkbox path="bloodTypes" value="B+" label="B+" /> <form:checkbox
+						path="bloodTypes" value="AB+" label="AB+" /> <form:checkbox
+						path="bloodTypes" value="O+" label="O+" /> <form:checkbox
+						path="bloodTypes" value="A-" label="A-" /> <form:checkbox
+						path="bloodTypes" value="B-" label="B-" /> <form:checkbox
+						path="bloodTypes" value="AB-" label="AB-" /> <form:checkbox
+						path="bloodTypes" value="O-" label="O-" /></td>
 			</tr>
 			<tr>
-			    <td />
-				<td><input type="submit" value="Find Donor" /></td>
+				<td />
+				<td><input type="button" value="Find Donor"
+					id="findDonorButton" /></td>
 			</tr>
 		</tbody>
 	</table>
 </form:form>
+
+<div id="findDonorResult">
+</div>

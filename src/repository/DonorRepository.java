@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -81,6 +82,30 @@ public class DonorRepository {
 			return findDonorByName(firstName, lastName);
 		}
 		return null;
+	}
+
+	public List<Donor> findAnyDonor(String donorNumber, String firstName,
+			String lastName, List<String> bloodTypes) {
+
+		String queryString = "SELECT d from Donor d WHERE " +
+							 "(isDeleted = :isDeleted) AND (" +
+							 "d.donorNumber = :donorNumber " +
+							 "OR d.firstName = :firstName " +
+							 "OR d.lastName = :lastName " +
+							 "OR d.bloodType IN (:bloodTypes)" +
+							 ")";
+
+		TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+		query.setParameter("isDeleted", Boolean.FALSE);
+		query.setParameter("donorNumber", donorNumber);
+		query.setParameter("firstName", firstName);
+		query.setParameter("lastName", lastName);
+		query.setParameter("bloodTypes", bloodTypes);
+
+		List<Donor> donors = query.getResultList();
+		if (donors != null && donors.size() > 0)
+			return donors;
+		return new ArrayList<Donor>();
 	}
 
 	private List<Donor> findDonorByName(String firstName, String lastName) {

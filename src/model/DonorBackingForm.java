@@ -2,32 +2,35 @@ package model;
 
 import java.util.List;
 
-public class FindDonorForm {
+/** Advanced Search Form for finding donors
+ * @author iamrohitbanga
+ */
+public class DonorBackingForm {
 
 	private String donorNumber;
 	private String firstName;
 	private String lastName;
 
-	private List<String> bloodGroups;
+	private List<String> bloodTypes;
 
-	public List<String> getBloodGroups() {
-		return bloodGroups;
+	public List<String> getBloodTypes() {
+		return bloodTypes;
 	}
 
 	public String getDonorNumber() {
-		return this.donorNumber;
+		return (this.donorNumber == null ? "" : this.donorNumber);
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return (this.firstName == null ? "" : this.firstName);
 	}
 
 	public String getLastName() {
-		return lastName;
+		return (this.lastName == null ? "" : this.lastName) ;
 	}
 
-	public void setBloodGroups(List<String> bloodGroups) {
-		this.bloodGroups = bloodGroups;
+	public void setBloodTypes(List<String> bloodTypes) {
+		this.bloodTypes = bloodTypes;
 	}
 
 	public void setDonorNumber(String donorNumber) {

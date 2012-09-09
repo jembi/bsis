@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$("#donorsTable").dataTable({
+	$(".donorTable").dataTable({
 		"bJQueryUI": true
 		});
 });

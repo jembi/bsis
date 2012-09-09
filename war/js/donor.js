@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     $('.createDonorField').hide();
 
     if ($('#donorsTable').length > 0) {

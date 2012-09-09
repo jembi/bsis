@@ -10,12 +10,13 @@
 
 <div id="donorsTab" class="leftPanel">
 	<ul>
-		<li id="addDonorsContent"><a href="addDonorFormGenerator.html">Add
+		<li id="viewDonorsContent"><a href="viewDonors.html">View All
+				Donors</a></li>
+		<li id="findOrAddDonorsContent"><a
+			href="findDonorFormGenerator.html">Find Donors</a></li>
+		<li id="addDonorContent"><a href="addDonorFormTab.html">Add
 				Donor</a></li>
-		<li id="findOrAddDonorsContent"><a href="findDonorFormGenerator.html">Find
-				Donors</a></li>
-		<li id="viewDonorsContent"><a href="viewDonors.html">View
-				Donors</a></li>
+
 	</ul>
 </div>
 
@@ -311,9 +312,6 @@
 								<c:if test="${model.showdonorType==true}">
 									<th>${model.donorTypeDisplayName}</th>
 								</c:if>
-								<c:if test="${model.showcomment==true}">
-									<th>${model.commentDisplayName}</th>
-								</c:if>
 								<c:if test="${model.showbloodGroup==true}">
 									<th>${model.bloodGroupDisplayName}</th>
 								</c:if>
@@ -342,9 +340,6 @@
 									</c:if>
 									<c:if test="${model.showdonorType==true}">
 										<td>${collection.donorType}</td>
-									</c:if>
-									<c:if test="${model.showcomment==true}">
-										<td>${collection.comment}</td>
 									</c:if>
 									<c:if test="${model.showbloodGroup==true}">
 										<td>${collection.abo}</td>
