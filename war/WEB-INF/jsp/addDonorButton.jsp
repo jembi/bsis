@@ -3,34 +3,20 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%!
-	public long getCurrentTime() {
+<%!public long getCurrentTime() {
 		return System.nanoTime();
-	}
-%>
+	}%>
 
 <script>
 	$(document).ready( function() {$(".addDonorButton").button();});
 	
-	function bootup(x) {
-		$.ajax({url : 'addDonorFormGenerator.html',
-				data : {id: x},
-				success : function(data) {
-					   	  $('#addDonorFormDialog-' + x).html(data);
-						  $('#addDonorFormDialog-' + x).dialog({
-														  	autoOpen : true,
-														  	height : 300,
-														  	width : 500,
-														  	modal : true
-							  							});
-						  }
-				});
-		$("#addDonorFormDialog" + x).dialog("open");
+	function bootup() {
+    generateEditForm("editDonorFormGenerator.html", {}, null, 'Add New Donor', 'addDonorButtonEdit');
 	}
 </script>
 
-<c:set var="button_id"><%=getCurrentTime()%></c:set>
+
+<c:set var="button_id"><%= getCurrentTime()%></c:set>
 
 <button id="addDonorButton-${button_id}" onclick="bootup(${button_id});"
 	class="addDonorButton">Click here to Add a New Donor</button>
-<div id="addDonorFormDialog-${button_id}" title="Add New Donor"></div>

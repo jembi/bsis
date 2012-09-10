@@ -6,4 +6,3 @@
 <br />
 <jsp:include page="addDonorButton.jsp" flush="false" />
 <br />
-<br />

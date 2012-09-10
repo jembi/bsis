@@ -45,314 +45,314 @@ import viewmodel.DonorViewModel;
 @Controller
 public class DonorController {
 
-	@Autowired
-	private DonorRepository donorRepository;
+  @Autowired
+  private DonorRepository donorRepository;
 
-	@Autowired
-	private LocationRepository locationRepository;
+  @Autowired
+  private LocationRepository locationRepository;
 
-	@Autowired
-	private DisplayNamesRepository displayNamesRepository;
+  @Autowired
+  private DisplayNamesRepository displayNamesRepository;
 
-	@Autowired
-	private RecordFieldsConfigRepository recordFieldsConfigRepository;
+  @Autowired
+  private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-	public DonorController() {
-	}
+  public DonorController() {
+  }
 
-	@RequestMapping("/donorsLandingPage")
-	public ModelAndView getDonorsLandingPage(HttpServletRequest request) {
+  @RequestMapping("/donorsLandingPage")
+  public ModelAndView getDonorsLandingPage(HttpServletRequest request) {
 
-		ModelAndView modelAndView = new ModelAndView("donorsLandingPage");
-		Map<String, Object> model = new HashMap<String, Object>();
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    ModelAndView modelAndView = new ModelAndView("donorsLandingPage");
+    Map<String, Object> model = new HashMap<String, Object>();
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-	@RequestMapping("/donors")
-	public ModelAndView getDonorsPage(HttpServletRequest request) {
+  @RequestMapping("/donors")
+  public ModelAndView getDonorsPage(HttpServletRequest request) {
 
-		ModelAndView modelAndView = new ModelAndView("donors");
-		Map<String, Object> model = new HashMap<String, Object>();
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    ModelAndView modelAndView = new ModelAndView("donors");
+    Map<String, Object> model = new HashMap<String, Object>();
+    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("donor", model,
+        recordFieldsConfigRepository);
+    ControllerUtil.addFieldsToDisplay("collection", model,
+        recordFieldsConfigRepository);
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-	@RequestMapping(value = "/addDonorFormTab", method = RequestMethod.GET)
-	public ModelAndView addDonorFormTabInit() {
+  @RequestMapping(value = "/addDonorFormTab", method = RequestMethod.GET)
+  public ModelAndView addDonorFormTabInit() {
 
-		ModelAndView mv = new ModelAndView("addDonor");
-		return mv;
-	}
+    ModelAndView mv = new ModelAndView("addDonor");
+    return mv;
+  }
 
-	@RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
-	public ModelAndView addDonorFormInit(Model model) {
+  @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editDonorFormGenerator(Model model,
+      @RequestParam(value = "donorNumber", required = false) String donorNumber) {
 
-		DonorBackingForm form = new DonorBackingForm();
-		model.addAttribute("addDonorForm", form);
+    DonorBackingForm form = new DonorBackingForm();
+    ModelAndView mv = new ModelAndView("addDonorForm");
+    model.addAttribute("addDonorForm", form);
+    if (donorNumber != null) {
+      form.setDonorNumber(donorNumber);
+      Donor donor = donorRepository.findDonorByNumber(donorNumber);
+      // TODO: check for donor == null, also other members being null
+      form.setFirstName(donor.getFirstName());
+      form.setLastName(donor.getLastName());
+      form.setBloodTypes(Arrays.asList(donor.getBloodType()));
+    }
+    Map<String, Object> m = model.asMap();
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+    return mv;
+  }
 
-		ModelAndView mv = new ModelAndView("addDonorForm");
-		Map<String, Object> m = model.asMap();
-		// to ensure custom field names are displayed in the form
-		ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
-		mv.addObject("model", m);
-		return mv;
-	}
+  @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
+  public ModelAndView addDonor(
+      @ModelAttribute("addDonorForm") DonorBackingForm form,
+      BindingResult result, Model m) {
+    ModelAndView modelAndView = new ModelAndView("addDonor");
+    return modelAndView;
+  }
 
-	@RequestMapping(value = "/addDonor", method = RequestMethod.POST)
-	public ModelAndView addDonor(
-			@ModelAttribute("addDonorForm") DonorBackingForm form,
-			BindingResult result, Model m) {
-		ModelAndView modelAndView = new ModelAndView("addDonor");
-		return modelAndView;
-	}
+  @RequestMapping("/updateDonor")
+  public ModelAndView updateDonor(@RequestParam Map<String, String> params,
+      HttpServletRequest request) {
 
-	@RequestMapping("/updateDonor")
-	public ModelAndView updateDonor(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+    Date dob = getDonorDOB(params);
 
-		Date dob = getDonorDOB(params);
+    Integer age = getIntParam(params, "age");
 
-		Integer age = getIntParam(params, "age");
+    if (dob == null && age != null) {
+      DateTime birthDate = DateTime.now();
+      birthDate = birthDate.withDayOfMonth(1);
+      birthDate = birthDate.withMonthOfYear(1);
+      birthDate = birthDate.withTime(0, 0, 0, 0);
+      birthDate = birthDate.minusYears(age);
+      dob = birthDate.toDate();
+    }
+    if (dob != null && age == null) {
+      DateMidnight birthDate = new DateMidnight(dob);
+      DateTime now = new DateTime();
+      age = Years.yearsBetween(birthDate, now).getYears();
+    }
+    RecordFieldsConfig donorFields = recordFieldsConfigRepository
+        .getRecordFieldsConfig("donor");
+    Donor donor = new Donor(params.get("donorNumber"),
+        ControllerUtil.getOptionalParamValue(params.get("firstName"),
+            donorFields, "firstName"), ControllerUtil.getOptionalParamValue(
+            params.get("lastName"), donorFields, "lastName"),
+        ControllerUtil.getOptionalParamValue(params.get("gender"), donorFields,
+            "gender"), ControllerUtil.getOptionalParamValue(
+            params.get("bloodType"), donorFields, "bloodType"),
+        ControllerUtil.getOptionalParamValue(dob, donorFields, "dateOfBirth"),
+        ControllerUtil.getOptionalParamValue(age, donorFields, "age"),
+        ControllerUtil.getOptionalParamValue(params.get("address"),
+            donorFields, "address"), Boolean.FALSE, "");
+    ;
+    donor = donorRepository.updateDonor(donor);
+    ModelAndView modelAndView = new ModelAndView("donors");
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("donorUpdated", true);
+    model.put("displayDonorNumber", donor.getDonorNumber());
+    model.put("displayFirstName", donor.getFirstName());
+    model.put("displayLastName", donor.getLastName());
+    model.put("hasDonor", true);
+    model.put("donor", new DonorViewModel(donor));
+    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
+    addDonorHistory(donor.getDonorNumber(), model);
+    ControllerUtil.addFieldsToDisplay("donor", model,
+        recordFieldsConfigRepository);
+    ControllerUtil.addFieldsToDisplay("collection", model,
+        recordFieldsConfigRepository);
+    modelAndView.addObject("model", model);
 
-		if (dob == null && age != null) {
-			DateTime birthDate = DateTime.now();
-			birthDate = birthDate.withDayOfMonth(1);
-			birthDate = birthDate.withMonthOfYear(1);
-			birthDate = birthDate.withTime(0, 0, 0, 0);
-			birthDate = birthDate.minusYears(age);
-			dob = birthDate.toDate();
-		}
-		if (dob != null && age == null) {
-			DateMidnight birthDate = new DateMidnight(dob);
-			DateTime now = new DateTime();
-			age = Years.yearsBetween(birthDate, now).getYears();
-		}
-		RecordFieldsConfig donorFields = recordFieldsConfigRepository
-				.getRecordFieldsConfig("donor");
-		Donor donor = new Donor(params.get("donorNumber"),
-				ControllerUtil.getOptionalParamValue(params.get("firstName"),
-						donorFields, "firstName"),
-				ControllerUtil.getOptionalParamValue(params.get("lastName"),
-						donorFields, "lastName"),
-				ControllerUtil.getOptionalParamValue(params.get("gender"),
-						donorFields, "gender"),
-				ControllerUtil.getOptionalParamValue(params.get("bloodType"),
-						donorFields, "bloodType"),
-				ControllerUtil.getOptionalParamValue(dob, donorFields,
-						"dateOfBirth"), ControllerUtil.getOptionalParamValue(
-						age, donorFields, "age"),
-				ControllerUtil.getOptionalParamValue(params.get("address"),
-						donorFields, "address"), Boolean.FALSE, "");
-		;
-		donor = donorRepository.updateDonor(donor);
-		ModelAndView modelAndView = new ModelAndView("donors");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("donorUpdated", true);
-		model.put("displayDonorNumber", donor.getDonorNumber());
-		model.put("displayFirstName", donor.getFirstName());
-		model.put("displayLastName", donor.getLastName());
-		model.put("hasDonor", true);
-		model.put("donor", new DonorViewModel(donor));
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		addDonorHistory(donor.getDonorNumber(), model);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		return modelAndView;
-	}
+  @RequestMapping("/deleteDonor")
+  public ModelAndView deleteDonor(@RequestParam Map<String, String> params,
+      HttpServletRequest request) {
 
-	@RequestMapping("/deleteDonor")
-	public ModelAndView deleteDonor(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+    donorRepository.deleteDonor(Long.valueOf(params.get("donorId")));
+    ModelAndView modelAndView = new ModelAndView("donors");
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("donorDeleted", true);
+    model.put("donorNumberDeleted", params.get("donorNumber"));
+    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("donor", model,
+        recordFieldsConfigRepository);
+    ControllerUtil.addFieldsToDisplay("collection", model,
+        recordFieldsConfigRepository);
+    modelAndView.addObject("model", model);
 
-		donorRepository.deleteDonor(Long.valueOf(params.get("donorId")));
-		ModelAndView modelAndView = new ModelAndView("donors");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("donorDeleted", true);
-		model.put("donorNumberDeleted", params.get("donorNumber"));
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		return modelAndView;
-	}
+  @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findDonorFormInit(Model model) {
 
-	@RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
-	public ModelAndView findDonorFormInit(Model model) {
+    DonorBackingForm form = new DonorBackingForm();
+    model.addAttribute("findDonorForm", form);
 
-		DonorBackingForm form = new DonorBackingForm();
-		model.addAttribute("findDonorForm", form);
+    ModelAndView mv = new ModelAndView("findDonorForm");
+    Map<String, Object> m = model.asMap();
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+    return mv;
+  }
 
-		ModelAndView mv = new ModelAndView("findDonorForm");
-		Map<String, Object> m = model.asMap();
-		// to ensure custom field names are displayed in the form
-		ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
-		mv.addObject("model", m);
-		return mv;
-	}
+  @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
+  public ModelAndView findDonor(
+      @ModelAttribute("findDonorForm") DonorBackingForm form,
+      BindingResult result, Model m) {
 
-	@RequestMapping(value = "/findDonor", method = RequestMethod.GET)
-	public ModelAndView findDonor(
-			@ModelAttribute("findDonorForm") DonorBackingForm form,
-			BindingResult result, Model m) {
+    String donorNumber = form.getDonorNumber();
+    String firstName = form.getFirstName();
+    String lastName = form.getLastName();
+    List<String> bloodTypes = form.getBloodTypes();
 
-		String donorNumber = form.getDonorNumber();
-		String firstName = form.getFirstName();
-		String lastName = form.getLastName();
-		List<String> bloodTypes = form.getBloodTypes();
+    ModelAndView modelAndView = new ModelAndView("donorsTable");
+    List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName,
+        lastName, bloodTypes);
 
-		ModelAndView modelAndView = new ModelAndView("donorsTable");
-		List<Donor> donors = donorRepository.findAnyDonor(donorNumber,
-				firstName, lastName, bloodTypes);
+    Map<String, Object> model = m.asMap();
+    model.put("tableName", "findResultsTable");
+    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("donor", model,
+        recordFieldsConfigRepository);
+    model.put("allDonors", getDonorsViewModels(donors));
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		Map<String, Object> model = m.asMap();
-		model.put("tableName", "findResultsTable");
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		model.put("allDonors", donors);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+  @RequestMapping("/selectDonor")
+  public ModelAndView selectDonor(@RequestParam Map<String, String> params,
+      HttpServletRequest request) {
 
-	@RequestMapping("/selectDonor")
-	public ModelAndView selectDonor(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+    Donor donor = donorRepository.findDonorById(getParam(params,
+        "selectedDonorId"));
+    ModelAndView modelAndView = new ModelAndView("donors");
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("singleDonorFound", true);
+    model.put("displayDonorNumber", donor.getDonorNumber());
+    model.put("displayFirstName", donor.getFirstName());
+    model.put("displayLastName", donor.getLastName());
+    model.put("hasDonor", true);
+    model.put("donor", new DonorViewModel(donor));
+    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
+    addDonorHistory(donor.getDonorNumber(), model);
+    ControllerUtil.addFieldsToDisplay("donor", model,
+        recordFieldsConfigRepository);
+    ControllerUtil.addFieldsToDisplay("collection", model,
+        recordFieldsConfigRepository);
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		Donor donor = donorRepository.findDonorById(getParam(params,
-				"selectedDonorId"));
-		ModelAndView modelAndView = new ModelAndView("donors");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("singleDonorFound", true);
-		model.put("displayDonorNumber", donor.getDonorNumber());
-		model.put("displayFirstName", donor.getFirstName());
-		model.put("displayLastName", donor.getLastName());
-		model.put("hasDonor", true);
-		model.put("donor", new DonorViewModel(donor));
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		addDonorHistory(donor.getDonorNumber(), model);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+  @RequestMapping("/viewDonors")
+  public ModelAndView viewAllDonors(@RequestParam Map<String, String> params,
+      HttpServletRequest request) {
 
-	@RequestMapping("/viewDonors")
-	public ModelAndView viewAllDonors(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+    List<Donor> allDonors = donorRepository.getAllDonors();
+    ModelAndView modelAndView = new ModelAndView("donorsTable");
+    Map<String, Object> model = new HashMap<String, Object>();
 
-		List<Donor> allDonors = donorRepository.getAllDonors();
-		ModelAndView modelAndView = new ModelAndView("donorsTable");
-		Map<String, Object> model = new HashMap<String, Object>();
+    model.put("tableName", "viewAllDonors");
+    model.put("allDonors", getDonorsViewModels(allDonors));
+    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("donor", model,
+        recordFieldsConfigRepository);
+    ControllerUtil.addFieldsToDisplay("collection", model,
+        recordFieldsConfigRepository);
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		model.put("tableName", "viewAllDonors");
-		model.put("allDonors", getDonorsViewModels(allDonors));
-		ControllerUtil.addDonorDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addFieldsToDisplay("donor", model,
-				recordFieldsConfigRepository);
-		ControllerUtil.addFieldsToDisplay("collection", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-	private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
-		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-		for (Donor donor : donors) {
-			donorViewModels.add(new DonorViewModel(donor));
-		}
-		return donorViewModels;
-	}
+  private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
+    List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+    for (Donor donor : donors) {
+      donorViewModels.add(new DonorViewModel(donor));
+    }
+    return donorViewModels;
+  }
 
-	private Date getDate(String dateParam) {
-		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		Date collectionDate = null;
-		try {
-			String collectionDateEntered = dateParam;
-			if (collectionDateEntered.length() > 0) {
-				collectionDate = (Date) formatter.parse(collectionDateEntered);
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return collectionDate;
-	}
+  private Date getDate(String dateParam) {
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    Date collectionDate = null;
+    try {
+      String collectionDateEntered = dateParam;
+      if (collectionDateEntered.length() > 0) {
+        collectionDate = (Date) formatter.parse(collectionDateEntered);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
+    return collectionDate;
+  }
 
-	private Date getDonorDOB(Map<String, String> params) {
+  private Date getDonorDOB(Map<String, String> params) {
 
-		String dobmonth = params.get("dobmonth");
-		String dobday = params.get("dobday");
-		String dobyear = params.get("dobyear");
+    String dobmonth = params.get("dobmonth");
+    String dobday = params.get("dobday");
+    String dobyear = params.get("dobyear");
 
-		DateTime dob = new DateTime();
-		try {
-			dob = dob.withMonthOfYear(Integer.parseInt(dobmonth));
-			dob = dob.withDayOfMonth(Integer.parseInt(dobday));
-			dob = dob.withYear(Integer.parseInt(dobyear));
-			return dob.toDate();
-		} catch (NumberFormatException nfe) {
-			return null;
-		}
-	}
+    DateTime dob = new DateTime();
+    try {
+      dob = dob.withMonthOfYear(Integer.parseInt(dobmonth));
+      dob = dob.withDayOfMonth(Integer.parseInt(dobday));
+      dob = dob.withYear(Integer.parseInt(dobyear));
+      return dob.toDate();
+    } catch (NumberFormatException nfe) {
+      return null;
+    }
+  }
 
-	private Long getParam(Map<String, String> params, String paramName) {
-		String paramValue = params.get(paramName);
-		return paramValue == null || paramValue.isEmpty() ? null : Long
-				.parseLong(paramValue);
-	}
+  private Long getParam(Map<String, String> params, String paramName) {
+    String paramValue = params.get(paramName);
+    return paramValue == null || paramValue.isEmpty() ? null : Long
+        .parseLong(paramValue);
+  }
 
-	private Integer getIntParam(Map<String, String> params, String paramName) {
-		String paramValue = params.get(paramName);
-		return paramValue == null || paramValue.isEmpty() ? null : Integer
-				.parseInt(paramValue);
-	}
+  private Integer getIntParam(Map<String, String> params, String paramName) {
+    String paramValue = params.get(paramName);
+    return paramValue == null || paramValue.isEmpty() ? null : Integer
+        .parseInt(paramValue);
+  }
 
-	private void addDonorHistory(String donorNumber, Map<String, Object> model) {
-		List<Collection> donorCollections = donorRepository
-				.getDonorHistory(donorNumber);
-		if (donorCollections != null) {
-			Collections.sort(donorCollections, new Comparator<Collection>() {
-				public int compare(Collection collection, Collection collection1) {
-					return collection1.getDateCollected().compareTo(
-							collection.getDateCollected());
-				}
-			});
-			model.put("donorHistory", getCollectionViewModel(donorCollections));
-			ControllerUtil.addCollectionDisplayNamesToModel(model,
-					displayNamesRepository);
-		}
-	}
+  private void addDonorHistory(String donorNumber, Map<String, Object> model) {
+    List<Collection> donorCollections = donorRepository
+        .getDonorHistory(donorNumber);
+    if (donorCollections != null) {
+      Collections.sort(donorCollections, new Comparator<Collection>() {
+        public int compare(Collection collection, Collection collection1) {
+          return collection1.getDateCollected().compareTo(
+              collection.getDateCollected());
+        }
+      });
+      model.put("donorHistory", getCollectionViewModel(donorCollections));
+      ControllerUtil.addCollectionDisplayNamesToModel(model,
+          displayNamesRepository);
+    }
+  }
 
-	private List<CollectionViewModel> getCollectionViewModel(
-			List<Collection> donorCollections) {
-		ArrayList<CollectionViewModel> collectionViewModels = new ArrayList<CollectionViewModel>();
-		List<Location> allCollectionSites = locationRepository
-				.getAllCollectionSites();
-		List<Location> allCenters = locationRepository.getAllCenters();
-		for (Collection donorCollection : donorCollections) {
-			collectionViewModels.add(new CollectionViewModel(donorCollection,
-					allCollectionSites, allCenters));
-		}
-		return collectionViewModels;
-	}
+  private List<CollectionViewModel> getCollectionViewModel(
+      List<Collection> donorCollections) {
+    ArrayList<CollectionViewModel> collectionViewModels = new ArrayList<CollectionViewModel>();
+    List<Location> allCollectionSites = locationRepository
+        .getAllCollectionSites();
+    List<Location> allCenters = locationRepository.getAllCenters();
+    for (Collection donorCollection : donorCollections) {
+      collectionViewModels.add(new CollectionViewModel(donorCollection,
+          allCollectionSites, allCenters));
+    }
+    return collectionViewModels;
+  }
 }

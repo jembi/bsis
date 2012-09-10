@@ -3,16 +3,44 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
+<c:set var="table_id">${model.tableName}</c:set>
 
-<script src="plugins/DataTables/media/js/jquery.dataTables.js"></script>
-<script src="js/donorTable.js" type="text/javascript"></script>
+<script>
+  var table_id = "${table_id}";
+  var donorsTable = $("#" + table_id).dataTable({
+    "bJQueryUI" : true
+  });
+
+  $("#" + table_id + " tbody").dblclick(
+      function(event) {
+
+        // remove row_selected class everywhere
+        $(donorsTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
+
+        // add row_selected class to the current row
+        $(event.target.parentNode).addClass('row_selected');
+
+        var elements = $(event.target.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
+
+        var donorId = elements[0].innerHTML;
+        generateEditForm("editDonorFormGenerator.html", {
+          donorNumber : donorId
+        }, null, "Edit Donor: " + elements[1].innerHTML + " "
+            + elements[2].innerHTML, 'donorsTable');
+      });
+</script>
 
 <br />
-<jsp:include page="addDonorButton.jsp" flush="true"/>
+<jsp:include page="addDonorButton.jsp" flush="true" />
 <br />
 <br />
 
-<table id="${model.tableName}" class="dataTable donorTable">
+<table id="${table_id}" class="dataTable donorsTable">
 	<thead>
 		<tr>
 			<th>${model.donorIDDisplayName}</th>
