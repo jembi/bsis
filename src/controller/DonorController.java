@@ -91,6 +91,27 @@ public class DonorController {
 		return mv;
 	}
 
+	@RequestMapping(value = "/editDonor", method = RequestMethod.GET)
+	public ModelAndView editDonorForm(Model model,
+			@RequestParam(value = "donorNumber", required = false) String donorNumber) {
+		DonorBackingForm form = new DonorBackingForm();
+		ModelAndView mv = new ModelAndView("addDonorForm");
+		model.addAttribute("addDonorForm", form);
+		if (donorNumber != null) {
+			form.setDonorNumber(donorNumber);
+			Donor donor = donorRepository.findDonorByNumber(donorNumber);
+			// TODO: check for donor == null, also other members being null
+			form.setFirstName(donor.getFirstName());
+			form.setLastName(donor.getLastName());
+			form.setBloodTypes(Arrays.asList(donor.getBloodType()));
+		}
+		Map<String, Object> m = model.asMap();
+		// to ensure custom field names are displayed in the form
+		ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+		mv.addObject("model", m);
+		return mv;
+	}
+
 	@RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
 	public ModelAndView addDonorFormInit(Model model) {
 
@@ -275,6 +296,7 @@ public class DonorController {
 		modelAndView.addObject("model", model);
 		return modelAndView;
 	}
+
 	private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
 		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
 		for (Donor donor : donors) {
