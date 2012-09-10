@@ -45,6 +45,7 @@ import viewmodel.DonorViewModel;
 @Controller
 public class DonorController {
 
+<<<<<<< HEAD
   @Autowired
   private DonorRepository donorRepository;
 
