@@ -8,7 +8,7 @@
 <link type="text/css" href="jquery-ui/css/redmond/redmond.css"
 	rel="Stylesheet" />
 
-<link rel="shortcut icon" href="images/favicon/favicon.ico">
+<link rel="shortcut icon" href="favicon.ico">
 
 <script type="text/javascript" src="js/jquery-latest.js"></script>
 <script type="text/javascript"
