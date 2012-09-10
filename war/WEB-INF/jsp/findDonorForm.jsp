@@ -4,13 +4,26 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
-	pageContext.setAttribute("newLineChar", "\n");
+  pageContext.setAttribute("newLineChar", "\n");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<script type="text/javascript" src="js/findDonorForm.js"></script>
+<script>
+  $("#findDonorButton").button().click(function() {
+    var findDonorFormData = $("#findDonorForm").serialize();
+    $.ajax({
+      type : "GET",
+      url : "findDonor.html",
+      data : findDonorFormData,
+      success : function(data) {
+        $('#findDonorResult').html(data);
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    });
+  });
+</script>
 
-<form:form method="GET" commandName="findDonorForm" id="findDonorForm">
+<form:form method="GET" commandName="findDonorForm" id="findDonorForm" class="findDonorForm">
 	<table>
 		<thead>
 			<tr>
@@ -32,14 +45,15 @@
 			</tr>
 			<tr>
 				<td><form:label path="bloodTypes">${model.bloodTypeDisplayName}</form:label></td>
-				<td><form:checkbox path="bloodTypes" value="A+" label="A+" />
-					<form:checkbox path="bloodTypes" value="B+" label="B+" /> <form:checkbox
-						path="bloodTypes" value="AB+" label="AB+" /> <form:checkbox
-						path="bloodTypes" value="O+" label="O+" /> <form:checkbox
-						path="bloodTypes" value="A-" label="A-" /> <form:checkbox
-						path="bloodTypes" value="B-" label="B-" /> <form:checkbox
-						path="bloodTypes" value="AB-" label="AB-" /> <form:checkbox
-						path="bloodTypes" value="O-" label="O-" /></td>
+				<td><form:checkbox path="bloodTypes"
+						value="A+" label="A+" /> <form:checkbox path="bloodTypes"
+						value="B+" label="B+" /> <form:checkbox path="bloodTypes"
+						value="AB+" label="AB+" /> <form:checkbox path="bloodTypes"
+						value="O+" label="O+" /> <form:checkbox path="bloodTypes"
+						value="A-" label="A-" /> <form:checkbox path="bloodTypes"
+						value="B-" label="B-" /> <form:checkbox path="bloodTypes"
+						value="AB-" label="AB-" /> <form:checkbox path="bloodTypes"
+						value="O-" label="O-" /></td>
 			</tr>
 			<tr>
 				<td />
@@ -50,5 +64,4 @@
 	</table>
 </form:form>
 
-<div id="findDonorResult">
-</div>
+<div id="findDonorResult"></div>

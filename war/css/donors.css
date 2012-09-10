@@ -1,0 +1,5 @@
+.findDonorForm table tbody tr td, .findDonorForm table thead tr th {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: 0;
+}

@@ -26,7 +26,7 @@
 	<c:if test="${model.user.type=='admin'}">
 		<a href="admin-locationTypesLandingPage.html">Work As Admin</a>
 	</c:if>
-	<a href="logout.html">Logout</a>
+	<a href="logout.html">Sign Out</a>
 </div>
 
 <div id="topPanelTabs" class="topPanelTabs">
