@@ -32,7 +32,7 @@
         generateEditForm("editDonorFormGenerator.html", {
           donorNumber : donorId
         }, updateExistingDonor, "Edit Donor: " + elements[1].innerHTML + " "
-            + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog, 700, 400);
+            + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog, 550, 500);
       });
 </script>
 

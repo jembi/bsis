@@ -5,15 +5,15 @@
 }
 
 #donorAddressInputBox {
-	height: 100px;
-	width: 200px;
+	height: 65px;
+	width: 300px;
 	align: top;
 	resize: none;
 }
 
 #donorCommentsInputBox {
-	height: 100px;
-	width: 200px;
+	height: 65px;
+	width: 300px;
 	align: top;
 	resize: none;
 }
