@@ -1,94 +1,156 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-/** Advanced Search Form for finding donors
- * @author iamrohitbanga
- */
+import org.joda.time.DateTime;
+
+import viewmodel.DonorViewModel;
+
 public class DonorBackingForm {
+  private Donor donor;
+  private List<String> bloodTypes;
 
-	private String donorNumber;
-	private String firstName;
-	private String lastName;
-  private String gender;
-  private Date birthDate;
-  private Integer age;
-  private String address;
-  private String comments;
+  public DonorBackingForm() {
+    donor = new Donor();
+  }
 
+  public DonorBackingForm(Donor donor) {
+    this.donor = donor;
+  }
 
-	private List<String> bloodTypes;
+  public String getDonorId() {
+    return donor.getDonorId().toString();
+  }
 
-	public List<String> getBloodTypes() {
-		return bloodTypes;
-	}
+  public String getDonorNumber() {
+    return donor.getDonorNumber();
+  }
 
-	public String getDonorNumber() {
-		return (this.donorNumber == null ? "" : this.donorNumber);
-	}
+  public String getFirstName() {
+    return donor.getFirstName();
+  }
 
-	public String getFirstName() {
-		return (this.firstName == null ? "" : this.firstName);
-	}
-
-	public String getLastName() {
-		return (this.lastName == null ? "" : this.lastName) ;
-	}
-
-	public void setBloodTypes(List<String> bloodTypes) {
-		this.bloodTypes = bloodTypes;
-	}
-
-	public void setDonorNumber(String donorNumber) {
-		this.donorNumber = donorNumber;
-	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  public String getLastName() {
+    return donor.getLastName();
+  }
 
   public String getGender() {
-    return gender;
+    return donor.getGender();
   }
 
-  public void setGender(String gender) {
-    this.gender = gender;
+  public String getBloodType() {
+    return donor.getBloodType();
   }
 
-  public Date getBirthDate() {
-    return birthDate;
+  public String getBirthDate() {
+    Date birthDate = donor.getBirthDate();
+    if (birthDate != null) {
+      DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+      return formatter.format(birthDate);
+    }
+    return "";
   }
 
-  public void setBirthDate(Date birthDate) {
-    this.birthDate = birthDate;
+  public String getBirthDateMonth() {
+    if (getBirthDate().length() > 0) {
+      DateTime dob = new DateTime(donor.getBirthDate());
+      return String.format("%02d", dob.monthOfYear().get());
+    }
+    return "";
   }
 
-  public Integer getAge() {
-    return age;
+  public String getBirthDateDay() {
+    if (getBirthDate().length() > 0) {
+      DateTime dob = new DateTime(donor.getBirthDate());
+      return String.format("%02d", dob.dayOfMonth().get());
+    }
+    return "";
   }
 
-  public void setAge(Integer age) {
-    this.age = age;
+  public String getBirthDateYear() {
+    if (getBirthDate().length() > 0) {
+      DateTime dob = new DateTime(donor.getBirthDate());
+      return String.format("%04d", dob.year().get());
+    }
+    return "";
   }
 
   public String getAddress() {
-    return address;
+    return donor.getAddress();
   }
 
-  public void setAddress(String address) {
-    this.address = address;
+  public String getAge() {
+    return donor.getAge() == null ? "" : donor.getAge().toString();
   }
 
   public String getComments() {
-    return comments;
+    Object comments = donor.getComments();
+    return comments == null ? "" : comments.toString();
   }
 
   public void setComments(String comments) {
-    this.comments = comments;
+    donor.setComments(comments);
+  }
+
+  public void setDonorId(String donorId) {
+    donor.setDonorId(Long.parseLong(donorId));
+  }
+
+  public void setDonorNumber(String donorNumber) {
+    donor.setDonorNumber(donorNumber);
+  }
+
+  public void setFirstName(String firstName) {
+    donor.setFirstName(firstName);
+  }
+
+  public void setLastName(String lastName) {
+    donor.setLastName(lastName);
+  }
+
+  public void setGender(String gender) {
+    donor.setGender(gender);
+  }
+
+  public void setBloodType(String bloodType) {
+    donor.setBloodType(bloodType);
+  }
+
+  public void setBirthDate(String birthdDate) {
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    try {
+      this.setBirthDate(formatter.parse(birthdDate));
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void setBirthDate(Date birthDate) {
+    donor.setBirthDate(birthDate);
+  }
+
+  public void setAddress(String address) {
+    donor.setAddress(address);
+  }
+
+  public List<String> getBloodTypes() {
+    return (bloodTypes == null) ? Arrays.asList(new String[0]) : bloodTypes;
+  }
+
+  public void setBloodTypes(List<String> bloodTypes) {
+    this.bloodTypes = bloodTypes;
+  }
+
+  public DonorViewModel getDonorViewModel() {
+    return new DonorViewModel(donor);
+  }
+
+  public Donor getDonor() {
+    return donor;
   }
 }

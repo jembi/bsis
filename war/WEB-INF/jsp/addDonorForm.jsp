@@ -35,8 +35,8 @@
 					</form:select></td>
 			</tr>
 			<tr>
-				<td><form:label path="gender">${model.bloodTypeDisplayName}</form:label></td>
-				<td><form:select path="gender">
+				<td><form:label path="bloodType">${model.bloodTypeDisplayName}</form:label></td>
+				<td><form:select path="bloodType">
 						<form:option value="A+" label="A+" />
 						<form:option value="A-" label="A-" />
 						<form:option value="B+" label="B+" />

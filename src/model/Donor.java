@@ -142,7 +142,11 @@ public class Donor {
 		this.gender = gender;
 	}
 
-	public void setIsDeleted(Boolean isDeleted) {
+  public Boolean getIsDeleted() {
+    return this.isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 

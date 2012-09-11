@@ -29,13 +29,18 @@ public class DonorRepository {
 		em.flush();
 	}
 
-	public Donor updateDonor(Donor donor) {
+	public Donor updateOrAddDonor(Donor donor) {
 		Donor existingDonor = findDonorByNumber(donor.getDonorNumber());
 		if (existingDonor == null) {
+		  donor.setIsDeleted(false);
 		  saveDonor(donor);
 		  return donor;
 		}
+		System.out.println(donor.getFirstName());
+		System.out.println(donor.getLastName());
+		System.out.println(donor.getIsDeleted());
 		existingDonor.copy(donor);
+		existingDonor.setIsDeleted(false);
 		em.merge(existingDonor);
 		em.flush();
 		return existingDonor;
@@ -65,7 +70,11 @@ public class DonorRepository {
 			String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
 			TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
 			query.setParameter("isDeleted", Boolean.FALSE);
-			return query.setParameter("donorNumber", donorNumber).getSingleResult();
+			Donor resultDonor = query.setParameter("donorNumber", donorNumber).getSingleResult();
+			if (resultDonor != null) {
+			  resultDonor.setIsDeleted(Boolean.FALSE);
+			}
+			return resultDonor;
 		} catch (NoResultException ex) {
 			ex.printStackTrace();
 			return null;

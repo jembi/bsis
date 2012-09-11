@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -21,7 +20,6 @@ import model.DonorBackingForm;
 import model.Location;
 import model.RecordFieldsConfig;
 
-import org.eclipse.jdt.internal.compiler.impl.BooleanConstant;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
@@ -98,15 +96,15 @@ public class DonorController {
 
     DonorBackingForm form = new DonorBackingForm();
     ModelAndView mv = new ModelAndView("addDonorForm");
-    model.addAttribute("addDonorForm", form);
     if (donorNumber != null) {
       form.setDonorNumber(donorNumber);
       Donor donor = donorRepository.findDonorByNumber(donorNumber);
-      // TODO: check for donor == null, also other members being null
-      form.setFirstName(donor.getFirstName());
-      form.setLastName(donor.getLastName());
-      form.setBloodTypes(Arrays.asList(donor.getBloodType()));
+      if (donor != null)
+        form = new DonorBackingForm(donor);
+      else
+        form = new DonorBackingForm();
     }
+    model.addAttribute("addDonorForm", form);
     Map<String, Object> m = model.asMap();
     // to ensure custom field names are displayed in the form
     ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
@@ -115,19 +113,16 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
-  public @ResponseBody String updateOrAddDonor(
+  public @ResponseBody
+  String updateOrAddDonor(
       @ModelAttribute("addDonorForm") DonorBackingForm form,
       BindingResult result, Model model) {
 
     boolean success = true;
     String errMsg = "";
-    Donor donor = new Donor();
     try {
-      donor.setDonorNumber(form.getDonorNumber());
-      donor.setFirstName(form.getFirstName());
-      donor.setLastName(form.getLastName());
-      donor.setIsDeleted(false);
-      donorRepository.updateDonor(donor);
+      Donor donor = form.getDonor();
+      donorRepository.updateOrAddDonor(donor);
     } catch (EntityExistsException ex) {
       // TODO: Replace with logger
       System.err.println("Entity Already exists");
@@ -188,7 +183,7 @@ public class DonorController {
         ControllerUtil.getOptionalParamValue(params.get("address"),
             donorFields, "address"), Boolean.FALSE, "");
     ;
-    donor = donorRepository.updateDonor(donor);
+    donor = donorRepository.updateOrAddDonor(donor);
     ModelAndView modelAndView = new ModelAndView("donors");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("donorUpdated", true);
@@ -250,9 +245,6 @@ public class DonorController {
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
     List<String> bloodTypes = form.getBloodTypes();
-
-    System.out.println(firstName);
-    System.out.println(lastName);
 
     ModelAndView modelAndView = new ModelAndView("donorsTable");
     List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName,
@@ -317,21 +309,6 @@ public class DonorController {
       donorViewModels.add(new DonorViewModel(donor));
     }
     return donorViewModels;
-  }
-
-  private Date getDate(String dateParam) {
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    Date collectionDate = null;
-    try {
-      String collectionDateEntered = dateParam;
-      if (collectionDateEntered.length() > 0) {
-        collectionDate = (Date) formatter.parse(collectionDateEntered);
-      }
-    } catch (ParseException e) {
-      e.printStackTrace();
-      return null;
-    }
-    return collectionDate;
   }
 
   private Date getDonorDOB(Map<String, String> params) {
