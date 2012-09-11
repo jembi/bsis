@@ -115,7 +115,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
-  public @ResponseBody String addNewDonor(
+  public @ResponseBody String updateOrAddDonor(
       @ModelAttribute("addDonorForm") DonorBackingForm form,
       BindingResult result, Model model) {
 
@@ -145,38 +145,6 @@ public class DonorController {
     return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
   }
 
-  @RequestMapping(value = "/updateExistingDonor", method = RequestMethod.POST)
-  public @ResponseBody String updateExistingDonor(
-      @ModelAttribute("addDonorForm") DonorBackingForm form,
-      BindingResult result, Model model) {
-
-    boolean success = true;
-    String errMsg = "";
-    Donor donor = new Donor();
-    try {
-      donor.setDonorNumber(form.getDonorNumber());
-      donor.setFirstName(form.getFirstName());
-      donor.setLastName(form.getLastName());
-      donor.setIsDeleted(false);
-      donorRepository.saveDonor(donor);
-    } catch (EntityExistsException ex) {
-      // TODO: Replace with logger
-      System.err.println("Entity Already exists");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Donor Already Exists";
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> response;
-    
-    return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
-  }
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
   public ModelAndView addDonor(
       @ModelAttribute("addDonorForm") DonorBackingForm form,
