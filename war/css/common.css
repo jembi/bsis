@@ -1,54 +1,95 @@
 body {
-    background-color: #DADDEB;
-    font-family: Tahoma, Arial, Sans-Serif
+	background-color: #DADDEB;
+	font-family: Tahoma, Arial, Sans-Serif
 }
 
 input {
-    border:2px solid #dadada;
-    border-radius:7px;
-    font-size:20px;
-    margin-left:10px;
-    margin-top:5px;
-    margin-bottom:5px;
-    margin-right: 5px;
-    padding-left: 5px; 
+	border: 2px solid #dadada;
+	border-radius: 7px;
+	font-size: 20px;
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	padding-left: 5px;
 }
 
-input:focus { 
-    outline:none;
-    border-color:#9ecaed;
-    box-shadow:0 0 10px #9ecaed;
+textarea {
+	border: 2px solid #dadada;
+	border-radius: 7px;
+	font-size: 20px;
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	padding-left: 5px;
+}
+
+select {
+	border: 2px solid #dadada;
+	border-radius: 7px;
+	font-size: 20px;
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	padding-left: 5px;
+}
+
+input:focus {
+	outline: none;
+	border-color: #9ecaed;
+	box-shadow: 0 0 10px #9ecaed;
+}
+
+textarea:focus {
+	outline: none;
+	border-color: #9ecaed;
+	box-shadow: 0 0 10px #9ecaed;
+}
+
+select:focus {
+	outline: none;
+	border-color: #9ecaed;
+	box-shadow: 0 0 15px #9ecaed;
+}
+
+
+.ui-datepicker {
+	width: 17em;
+	padding: .2em .2em 0;
+	z-index: 9999 !important;
 }
 
 .mainContent {
-    background-color: white;
-    margin: 0 auto;
-    overflow: hidden;
-    position: relative;
-    padding: 0px;
-    border-bottom: 2px solid #ccc;
-    width: 1100px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    box-shadow: 0px -1px 100px beige;
-    -moz-box-shadow: 0px;
-    -webkit-box-shadow: 0px;
-    box-shadow: 0px;
+	background-color: white;
+	margin: 0 auto;
+	overflow: hidden;
+	position: relative;
+	padding: 0px;
+	border-bottom: 2px solid #ccc;
+	width: 1100px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	box-shadow: 0px -1px 100px beige;
+	-moz-box-shadow: 0px;
+	-webkit-box-shadow: 0px;
+	box-shadow: 0px;
 }
 
 .headingPanel {
-    display: block;
-    color: black;
-    clear: both;
-    background-color: #B3C6E6;
-    padding: 10px 5px;
-    margin-top: 20px;
-    font-size: 1.3em;
+	display: block;
+	color: black;
+	clear: both;
+	background-color: #B3C6E6;
+	padding: 10px 5px;
+	margin-top: 20px;
+	font-size: 1.3em;
 }
 
 .message {
-    padding: 25px 5px 0 10px;
-    color: red;
+	padding: 25px 5px 0 10px;
+	color: red;
 }
 
 h2 {
@@ -57,64 +98,64 @@ h2 {
 }
 
 .infoMessage {
-    padding-right: 3px;
-    color: #4253A7;
-    margin-top: 21px;
-    font-family: arial;
+	padding-right: 3px;
+	color: #4253A7;
+	margin-top: 21px;
+	font-family: arial;
 }
 
 .actionButtonsPanel {
-    clear: both;
+	clear: both;
 }
 
 .actionButtonsPanel input {
-    margin: 20px 10px 10px;
+	margin: 20px 10px 10px;
 }
 
 .inputFieldRow {
-    margin: 25px 0 10px;
+	margin: 25px 0 10px;
 }
 
 .inputFieldRow select {
-    width: 205px;
+	width: 205px;
 }
 
 .inputFieldRow label {
-    display: block;
-    float: left;
-    width: 150px;
-    margin: 5px 0 0 15px;
-    text-align: left;
+	display: block;
+	float: left;
+	width: 150px;
+	margin: 5px 0 0 15px;
+	text-align: left;
 }
 
 .inputFieldRow input[type="button"] {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
 .inputFieldRow input[type="text"],input[type="password"] {
-    width: 205px;
+	width: 205px;
 }
 
 .subHeading {
-    clear: both;
-    margin: 0 0 15px;
+	clear: both;
+	margin: 0 0 15px;
 }
 
 .subHeading p {
-    display: inline;
-    padding: 5px;
-    background-color: #add8e6;
-    font-size: 1.1em
+	display: inline;
+	padding: 5px;
+	background-color: #add8e6;
+	font-size: 1.1em
 }
 
 .expandButton {
-    float: left;
-    margin-top: 0px;
+	float: left;
+	margin-top: 0px;
 }
 
-input[type="button"], input[type="submit"], input[type="reset"] {
-    color: #000000;
-    padding: 5px;
+input[type="button"],input[type="submit"],input[type="reset"] {
+	color: #000000;
+	padding: 5px;
 }
 
 #donorsTab {
@@ -142,172 +183,173 @@ input[type="button"], input[type="submit"], input[type="reset"] {
 	border-radius: 4px 0px 0px 4px;
 	overflow: hidden;
 }
+
 #donorsTab .ui-tabs-nav li.ui-tabs-selected {
 	border-right: 1px solid transparent;
 }
+
 #donorsTab .ui-tabs-nav li a {
 	float: right;
 	width: 100%;
 	text-align: right;
 }
 
-#donorsTab > div {
+#donorsTab>div {
 	overflow: auto;
 }
 
 .leftAlignedPanel {
-    float: left;
-    margin: 0 25px;
-    padding-top: 5px;
-    width: 70%;
+	float: left;
+	margin: 0 25px;
+	padding-top: 5px;
+	width: 70%;
 }
 
 .rightPanel {
-    float: right;
-    width: 200px;
-    margin: 40px 24px 0 0;
-    border: thin solid #000000;
-    background-color: #B3C6E6
+	float: right;
+	width: 200px;
+	margin: 40px 24px 0 0;
+	border: thin solid #000000;
+	background-color: #B3C6E6
 }
 
 .rightPanel p {
-    padding: 5px;
+	padding: 5px;
 }
 
 .tipsTitle {
-    padding: 5px;
-    text-align: center;
-    font-weight: bold;
-    clear: both;
+	padding: 5px;
+	text-align: center;
+	font-weight: bold;
+	clear: both;
 }
 
 .link {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
+	color: blue;
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .radioButtonsList {
-    display: inline;
-    margin: 0 5px 5px 0px;
+	display: inline;
+	margin: 0 5px 5px 0px;
 }
 
 .radioLabel {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 .radioButtonsList label {
-    display: inline;
-    float: none;
-    margin: 0 5px;
+	display: inline;
+	float: none;
+	margin: 0 5px;
 }
 
 .collapsibleHeadingPanel {
-    margin-top: 40px;
-    width: 30%;
-    cursor: pointer;
+	margin-top: 40px;
+	width: 30%;
+	cursor: pointer;
 }
 
 .collapsibleHeadingPanel p img {
-    height: 15px;
-    padding: 8px 5px;
-    width: 15px;
+	height: 15px;
+	padding: 8px 5px;
+	width: 15px;
 }
 
 .collapsibleHeadingPanelText {
-    height: 30px;
-    background-color: #B3C6E6;
-    padding-top: 6px;
-    font-size: 1.2em;
+	height: 30px;
+	background-color: #B3C6E6;
+	padding-top: 6px;
+	font-size: 1.2em;
 }
 
 .leftPanelTabs {
-    position: absolute;
-    padding: 0 35px 0 46px;
-    margin-top: 75px;
-    height: 2000px;
-    border-right: thin solid #BAB6B8;
-    width: 76px;
+	position: absolute;
+	padding: 0 35px 0 46px;
+	margin-top: 75px;
+	height: 2000px;
+	border-right: thin solid #BAB6B8;
+	width: 76px;
 }
 
 .tabbedPanel {
-    padding: 5px 5px;
-    clear: both;
+	padding: 5px 5px;
+	clear: both;
 }
 
 .leftPanelTabs li:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .leftPanelTabs li {
-    color: #336699;
-    margin: 35px 0;
-    list-style: none outside none;
-    text-decoration: none;
+	color: #336699;
+	margin: 35px 0;
+	list-style: none outside none;
+	text-decoration: none;
 }
 
 .leftPanelTabs a {
-    color: #336699;
-    text-decoration: none;
+	color: #336699;
+	text-decoration: none;
 }
 
 .leftPanelTabs li.selectedTab {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .leftPanelTabs li.selectedTab a {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .checkboxList {
-    display: inline;
-    margin: 0px;
+	display: inline;
+	margin: 0px;
 }
 
 .checkboxLabel {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 .checkboxList label {
-    display: inline;
-    float: none;
-    margin: 0px;
+	display: inline;
+	float: none;
+	margin: 0px;
 }
 
 .formHeading label {
-    margin-bottom: 10px;
-    font-weight: bold;
+	margin-bottom: 10px;
+	font-weight: bold;
 }
 
 .leftColumn {
-    float: left;
-    width: 60%;
+	float: left;
+	width: 60%;
 }
 
 .rightColumn {
-    float: left;
-    margin: 50px 0 0 120px;
-    width: 20%;
+	float: left;
+	margin: 50px 0 0 120px;
+	width: 20%;
 }
 
 .bottomPanel {
-    clear: both;
-    margin: 700px 0 0 170px;
-    border-top: 2px solid #ccc;
-    padding: 10px;
+	clear: both;
+	margin: 700px 0 0 170px;
+	border-top: 2px solid #ccc;
+	padding: 10px;
 }
 
 .showTips {
-    float: right;
-    margin: 15px -100px 0 0;
-    width: 200px;
-    display: none;
-
+	float: right;
+	margin: 15px -100px 0 0;
+	width: 200px;
+	display: none;
 }
 
-.hideTips{
-    float:right;
-    padding:10px;
+.hideTips {
+	float: right;
+	padding: 10px;
 }
 
 .donorTableTest {

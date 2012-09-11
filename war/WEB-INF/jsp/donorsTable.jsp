@@ -28,10 +28,11 @@
         }
 
         var donorId = elements[0].innerHTML;
+
         generateEditForm("editDonorFormGenerator.html", {
           donorNumber : donorId
         }, updateExistingDonor, "Edit Donor: " + elements[1].innerHTML + " "
-            + elements[2].innerHTML, 'donorsTable');
+            + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog, 700, 400);
       });
 </script>
 

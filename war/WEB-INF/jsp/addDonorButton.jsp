@@ -14,7 +14,7 @@
 	
 	function bootup() {
 		generateEditForm("editDonorFormGenerator.html", {}, addNewDonor,
-		    						 "Add New Donor", "addDonorButtonEdit");
+		    						 "Add New Donor", "addDonorButtonEdit", decorateEditDonorDialog, 600, 400);
 	}
 </script>
 

@@ -1,7 +1,5 @@
 function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
-    title, divId, height, width) {
-  height = typeof height !== "undefined" ? height : 300;
-  width = typeof width !== "undefined" ? width : 500;
+    title, divId, onSuccessDecorate, height, width) {
 
   var editFormId = 'edit' + divId;
   $.ajax({
@@ -31,26 +29,26 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
 
       });
       $("#" + editFormId).dialog("open");
+      onSuccessDecorate();
     }
   });
 }
 
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    console.log(a);
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
+$.fn.serializeObject = function() {
+  var o = {};
+  var a = this.serializeArray();
+  console.log(a);
+  $.each(a, function() {
+    if (o[this.name] !== undefined) {
+      if (!o[this.name].push) {
+        o[this.name] = [ o[this.name] ];
+      }
+      o[this.name].push(this.value || '');
+    } else {
+      o[this.name] = this.value || '';
+    }
+  });
+  return o;
 };
 
 function isValidDate(txtDate) {

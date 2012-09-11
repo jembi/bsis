@@ -3,3 +3,17 @@
 	padding-bottom: 3px;
 	border: 0;
 }
+
+#donorAddressInputBox {
+	height: 100px;
+	width: 200px;
+	align: top;
+	resize: none;
+}
+
+#donorCommentsInputBox {
+	height: 100px;
+	width: 200px;
+	align: top;
+	resize: none;
+}
