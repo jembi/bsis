@@ -4,5 +4,5 @@
 	pageEncoding="ISO-8859-1"%>
 
 <br />
-<jsp:include page="addDonorButton.jsp" flush="false" />
+<jsp:include page="addDonorButton.jsp" flush="true" />
 <br />

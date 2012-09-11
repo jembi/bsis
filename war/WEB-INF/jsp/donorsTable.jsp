@@ -10,7 +10,7 @@
   var donorsTable = $("#" + table_id).dataTable({
     "bJQueryUI" : true
   });
-
+  
   $("#" + table_id + " tbody").dblclick(
       function(event) {
 
@@ -30,7 +30,7 @@
         var donorId = elements[0].innerHTML;
         generateEditForm("editDonorFormGenerator.html", {
           donorNumber : donorId
-        }, null, "Edit Donor: " + elements[1].innerHTML + " "
+        }, updateExistingDonor, "Edit Donor: " + elements[1].innerHTML + " "
             + elements[2].innerHTML, 'donorsTable');
       });
 </script>

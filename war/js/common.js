@@ -17,6 +17,8 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
         title : title,
         buttons : {
           "Update" : function() {
+            console.log("here");
+            updateFunction($("#" + editFormId).children()[0]);
             $(this).dialog("close");
           },
           "Cancel" : function() {
@@ -32,6 +34,24 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
     }
   });
 }
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    console.log(a);
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
 
 function isValidDate(txtDate) {
   var objDate, // date object initialized from the txtDate string

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.DisplayNamesRepository;
@@ -112,6 +114,69 @@ public class DonorController {
     return mv;
   }
 
+  @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
+  public @ResponseBody String addNewDonor(
+      @ModelAttribute("addDonorForm") DonorBackingForm form,
+      BindingResult result, Model model) {
+
+    boolean success = true;
+    String errMsg = "";
+    Donor donor = new Donor();
+    try {
+      donor.setDonorNumber(form.getDonorNumber());
+      donor.setFirstName(form.getFirstName());
+      donor.setLastName(form.getLastName());
+      donor.setIsDeleted(false);
+      donorRepository.updateDonor(donor);
+    } catch (EntityExistsException ex) {
+      // TODO: Replace with logger
+      System.err.println("Entity Already exists");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Donor Already Exists";
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
+  }
+
+  @RequestMapping(value = "/updateExistingDonor", method = RequestMethod.POST)
+  public @ResponseBody String updateExistingDonor(
+      @ModelAttribute("addDonorForm") DonorBackingForm form,
+      BindingResult result, Model model) {
+
+    boolean success = true;
+    String errMsg = "";
+    Donor donor = new Donor();
+    try {
+      donor.setDonorNumber(form.getDonorNumber());
+      donor.setFirstName(form.getFirstName());
+      donor.setLastName(form.getLastName());
+      donor.setIsDeleted(false);
+      donorRepository.saveDonor(donor);
+    } catch (EntityExistsException ex) {
+      // TODO: Replace with logger
+      System.err.println("Entity Already exists");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Donor Already Exists";
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> response;
+    
+    return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
+  }
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
   public ModelAndView addDonor(
       @ModelAttribute("addDonorForm") DonorBackingForm form,
@@ -217,6 +282,9 @@ public class DonorController {
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
     List<String> bloodTypes = form.getBloodTypes();
+
+    System.out.println(firstName);
+    System.out.println(lastName);
 
     ModelAndView modelAndView = new ModelAndView("donorsTable");
     List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName,

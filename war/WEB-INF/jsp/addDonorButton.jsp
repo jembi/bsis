@@ -8,15 +8,18 @@
 	}%>
 
 <script>
-	$(document).ready( function() {$(".addDonorButton").button();});
+	$(document).ready( function() {
+	  $(".addDonorButton").button();
+	});
 	
 	function bootup() {
-    generateEditForm("editDonorFormGenerator.html", {}, null, 'Add New Donor', 'addDonorButtonEdit');
+		generateEditForm("editDonorFormGenerator.html", {}, addNewDonor,
+		    						 "Add New Donor", "addDonorButtonEdit");
 	}
 </script>
 
 
-<c:set var="button_id"><%= getCurrentTime()%></c:set>
+<c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <button id="addDonorButton-${button_id}" onclick="bootup(${button_id});"
 	class="addDonorButton">Click here to Add a New Donor</button>

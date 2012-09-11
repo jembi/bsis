@@ -9,6 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <link type="text/css" rel="stylesheet" href="css/donors.css" />
+<script type="text/javascript" src="js/donors.js"></script>
 
 <div id="donorsTab" class="leftPanel">
 	<ul>

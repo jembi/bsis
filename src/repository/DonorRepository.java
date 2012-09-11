@@ -30,7 +30,11 @@ public class DonorRepository {
 	}
 
 	public Donor updateDonor(Donor donor) {
-		Donor existingDonor = find(donor.getDonorNumber(), null, null).get(0);
+		Donor existingDonor = findDonorByNumber(donor.getDonorNumber());
+		if (existingDonor == null) {
+		  saveDonor(donor);
+		  return donor;
+		}
 		existingDonor.copy(donor);
 		em.merge(existingDonor);
 		em.flush();
