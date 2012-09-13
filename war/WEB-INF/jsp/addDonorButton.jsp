@@ -8,10 +8,7 @@
 	}%>
 
 <script>
-	$(document).ready( function() {
-	  $(".addDonorButton").button();
-	});
-	
+	$(".addDonorButton").button();
 	function bootup() {
 		generateEditForm("editDonorFormGenerator.html", {}, addNewDonor,
 		    						 "Add New Donor", "addDonorButtonEdit", decorateEditDonorDialog, 550, 500);

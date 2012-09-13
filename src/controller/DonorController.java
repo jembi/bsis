@@ -85,7 +85,6 @@ public class DonorController {
 
   @RequestMapping(value = "/addDonorFormTab", method = RequestMethod.GET)
   public ModelAndView addDonorFormTabInit() {
-
     ModelAndView mv = new ModelAndView("addDonor");
     return mv;
   }

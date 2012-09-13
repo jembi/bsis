@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -85,4 +86,13 @@ public class LocationRepository {
 		em.merge(existingLocation);
 		em.flush();
 	}
+
+  public List<String> getAllCentersAsString() {
+    List<Location> locations = getAllCenters();
+    List<String> locationNames = new ArrayList<String>();
+    for (Location l : locations) {
+      locationNames.add(l.getName());
+    }
+    return locationNames;
+  }
 }

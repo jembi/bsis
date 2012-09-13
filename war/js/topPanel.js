@@ -1,13 +1,11 @@
 $(document)
 		.ready(
 				function() {
-					var removeAllSelectedTabs = function() {
-						$('#topTabs li').removeClass('selectedTab');
-					};
 
 					$("#topPanelTabs").tabs({
 						cache : false
 					});
+
 					$(".leftPanel")
 							.tabs(
 									{

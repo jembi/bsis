@@ -1,0 +1,50 @@
+.findCollectionForm table tbody tr td, .findCollectionForm table thead tr th {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: 0;
+}
+
+.findCollectionForm table tbody tr td button {
+	margin-left: 10px;
+}
+
+#collectionsTab {
+	position: relative;
+	padding-left: 11em;
+	min-height: 500px;
+}
+
+#collectionsTab .ui-tabs-nav {
+	position: absolute;
+	left: 0.25em;
+	top: 0.25em;
+	bottom: 0.25em;
+	width: 9em;
+	padding: 0.2em 0 0.2em 0.2em;
+}
+
+#collectionsTab .ui-tabs-nav li {
+	right: 1px;
+	width: 100%;
+	border-right: none;
+	border-bottom-width: 1px !important;
+	-moz-border-radius: 4px 0px 0px 4px;
+	-webkit-border-radius: 4px 0px 0px 4px;
+	border-radius: 4px 0px 0px 4px;
+	overflow: hidden;
+}
+
+#collectionsTab .ui-tabs-nav li.ui-tabs-selected {
+	border-right: 1px solid transparent;
+}
+
+#collectionsTab .ui-tabs-nav li a {
+	float: right;
+	width: 100%;
+	text-align: right;
+}
+
+#collectionsTab>div {
+	overflow: auto;
+}
+
