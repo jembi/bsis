@@ -22,30 +22,40 @@
       }
     });
   });
-  //$(document).ready(function() {
-  // TODO: can't position the multiselect elsewhere due to a bug in jquery
-  // when switching to latest jquery multiselect does not work
   $("#findCollectionFormCenters").multiselect({
     position : {
       my : 'left top',
       at : 'right center'
 
-    // only include the "of" property if you want to position
-    // the menu against an element other than the button.
-    // multiselect automatically sets "of" unless you explictly
-    // pass in a value.
     }
   });
-  //});
+  $("#dateCollectedFrom").datepicker({
+    changeMonth: true,
+    changeYear: true,
+    minDate: -36500,
+    maxDate: 0,
+    yearRange: "c-100:c0",
+    onSelect : function(selectedDate) {
+      $("#dateCollectedTo").datepicker("option", "minDate", selectedDate);
+    }
+  });
+  $("#dateCollectedTo").datepicker({
+    changeMonth: true,
+    changeYear: true,
+    minDate: -36500,
+    maxDate: 0,
+    yearRange: "c-100:c0",
+    onSelect : function(selectedDate) {
+      $("#dateCollectedFrom").datepicker("option", "maxDate", selectedDate);
+    }
+  });
 </script>
 
 <form:form method="GET" commandName="findCollectionForm"
 	id="findCollectionForm" class="findCollectionForm">
+				<h3>Find a Collection</h3>
 	<table>
 		<thead>
-			<tr>
-				<th>Find a Collection</th>
-			</tr>
 		</thead>
 		<tbody>
 			<tr>
@@ -53,10 +63,25 @@
 				<td><form:input path="collectionNumber" /></td>
 			</tr>
 			<tr>
+				<td><form:label path="sampleNumber">${model.sampleNoDisplayName}</form:label></td>
+				<td><form:input path="sampleNumber" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="shippingNumber">${model.shippingNoDisplayName}</form:label></td>
+				<td><form:input path="shippingNumber" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="dateCollectedFrom">${model.dateCollectedDisplayName} From </form:label></td>
+				<td><form:input path="dateCollectedFrom"
+						id="dateCollectedFrom" />   to</td>
+				<td><form:input path="dateCollectedTo" id="dateCollectedTo" /></td>
+			</tr>
+			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
 				<td><form:select path="centers" id="findCollectionFormCenters">
 						<form:options items="${model.centers}" />
 					</form:select></td>
+			</tr>
 			<tr>
 				<td />
 				<td><input type="button" value="Find Collection"

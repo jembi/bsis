@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.CollectionBackingForm;
-import model.DonorBackingForm;
 import model.Location;
 import model.RecordFieldsConfig;
 

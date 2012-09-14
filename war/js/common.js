@@ -15,7 +15,6 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
         title : title,
         buttons : {
           "Update" : function() {
-            console.log("here");
             updateFunction($("#" + editFormId).children()[0]);
             $(this).dialog("close");
           },
