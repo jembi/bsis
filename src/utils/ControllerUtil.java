@@ -37,6 +37,7 @@ public class ControllerUtil {
 	private static void initDefaultCollectionFieldNames() {
 		COLLECTION_DEFAULT_NAMES = new HashMap<String, String>();
 		COLLECTION_DEFAULT_NAMES.put("collectionNo", "Collection No.");
+    COLLECTION_DEFAULT_NAMES.put("donorNo", "Donor No.");
 		COLLECTION_DEFAULT_NAMES.put("center", "Center");
 		COLLECTION_DEFAULT_NAMES.put("site", "Site");
 		COLLECTION_DEFAULT_NAMES.put("dateCollected", "Date Collected");

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,8 @@ import model.RecordFieldsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,7 +63,34 @@ public class CollectionsController {
     mv.addObject("model", m);
     return mv;
   }
-  
+
+  @RequestMapping("/findCollection")
+  public ModelAndView findCollection(
+      @ModelAttribute("findCollectionForm") CollectionBackingForm form,
+      BindingResult result, Model model) {
+
+    List<Collection> collections = collectionRepository
+        .findAnyCollectionMatching(form.getCollectionNumber(),
+            form.getSampleNumber(), form.getShippingNumber(),
+            form.getDateCollectedFrom(), form.getDateCollectedTo(),
+            form.getCenters());
+
+    System.out.println(collections.size());
+    ModelAndView modelAndView = new ModelAndView("collectionsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findCollectionResultsTable");
+    ControllerUtil.addCollectionDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("collection", m,
+        recordFieldsConfigRepository);
+    m.put("allCollections", getCollectionViewModels(collections));
+
+    addCentersToModel(m);
+    addCollectionSitesToModel(m);
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
   @RequestMapping("/viewCollections")
   public ModelAndView viewAllCollections(
       @RequestParam Map<String, String> params, HttpServletRequest request) {
@@ -83,9 +113,13 @@ public class CollectionsController {
 
   private List<CollectionViewModel> getCollectionViewModels(
       List<Collection> collections) {
+    if (collections == null)
+      return Arrays.asList(new CollectionViewModel[0]);
     List<CollectionViewModel> collectionViewModels = new ArrayList<CollectionViewModel>();
     for (Collection collection : collections) {
-      collectionViewModels.add(new CollectionViewModel(collection));
+      collectionViewModels.add(new CollectionViewModel(collection,
+          locationRepository.getAllCenters(), locationRepository
+              .getAllUsageSites()));
     }
     return collectionViewModels;
   }
@@ -212,34 +246,6 @@ public class CollectionsController {
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("deletedCollection", true);
     model.put("collectionIdDeleted", collectionNumber);
-    addCentersToModel(model);
-    addCollectionSitesToModel(model);
-    ControllerUtil.addCollectionDisplayNamesToModel(model,
-        displayNamesRepository);
-
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
-
-    modelAndView.addObject("model", model);
-    return modelAndView;
-  }
-
-  @RequestMapping("/findCollection")
-  public ModelAndView findCollection(@RequestParam Map<String, String> params,
-      HttpServletRequest request) {
-    String updateCollectionNumber = params.get("updateCollectionNumber");
-    Collection collection = collectionRepository
-        .findCollection(updateCollectionNumber);
-
-    ModelAndView modelAndView = new ModelAndView("collections");
-    Map<String, Object> model = new HashMap<String, Object>();
-    if (collection == null) {
-      model.put("collectionNotFound", true);
-      model.put("collectionNumber", updateCollectionNumber);
-    } else {
-      model.put("hasCollection", true);
-      model.put("collection", new CollectionViewModel(collection));
-    }
     addCentersToModel(model);
     addCollectionSitesToModel(model);
     ControllerUtil.addCollectionDisplayNamesToModel(model,

@@ -10,7 +10,7 @@
   var collectionsTable = $("#" + table_id).dataTable({
     "bJQueryUI" : true
   });
-  
+
   $("#" + table_id + " tbody").dblclick(
       function(event) {
 
@@ -31,8 +31,9 @@
 
         generateEditForm("editCollectionFormGenerator.html", {
           collectionNumber : collectionId
-        }, updateExistingCollection, "Edit Collection: " + elements[1].innerHTML + " "
-            + elements[2].innerHTML, 'collectionsTable', decorateEditCollectionDialog, 550, 500);
+        }, updateExistingCollection, "Edit Collection: "
+            + elements[1].innerHTML + " " + elements[2].innerHTML,
+            'collectionsTable', decorateEditCollectionDialog, 550, 500);
       });
 </script>
 
@@ -44,7 +45,10 @@
 <table id="${table_id}" class="dataTable collectionsTable">
 	<thead>
 		<tr>
-			<th>${model.collectionIDDisplayName}</th>
+			<th>${model.collectionNoDisplayName}</th>
+			<c:if test="${model.showdonorNo==true}">
+				<td>${model.donorNoDisplayName}</td>
+			</c:if>
 			<c:if test="${model.showcenter==true}">
 				<th>${model.centerDisplayName}</th>
 			</c:if>
@@ -60,47 +64,33 @@
 			<c:if test="${model.showshippingNo==true}">
 				<th>${model.shippingNoDisplayName}</th>
 			</c:if>
-			<c:if test="${model.showdonorNo==true}">
-				<th>${model.donorNoDisplayName}</th>
-			</c:if>
 			<c:if test="${model.showdonorType==true}">
 				<th>${model.donorTypeDisplayName}</th>
 			</c:if>
-			<c:if test="${model.showbloodGroup==true}">
-				<th>${model.bloodGroupDisplayName}</th>
-			</c:if>
-			<c:if test="${model.showsampleNo==true}">
-				<th>${model.sampleNoDisplayName}</th>
-			</c:if>
-			<c:if test="${model.showsampleNo==true}">
-				<th>${model.sampleNoDisplayName}</th>
-			</c:if>
-			<th></th>
 		</tr>
 	</thead>
 	<tbody>
 		<c:forEach var="collection" items="${model.allCollections}">
 			<tr>
 				<td>${collection.collectionNumber}</td>
-				<c:if test="${model.showfirstName==true}">
-					<td>${donor.firstName}</td>
+				<c:if test="${model.showdonorNo==true}">
+					<td>${collection.donorNumber}</td>
 				</c:if>
-				<c:if test="${model.showlastName==true}">
-					<td>${donor.lastName}</td>
+				<c:if test="${model.showcenter==true}">
+					<td>${collection.centerName}</td>
 				</c:if>
-				<c:if test="${model.showgender==true}">
-					<td>${donor.gender}</td>
+				<c:if test="${model.showsite==true}">
+					<td>${collection.siteName}</td>
 				</c:if>
-				<c:if test="${model.showbloodType==true}">
-					<td>${donor.bloodType}</td>
+				<c:if test="${model.showsampleNo==true}">
+					<td>${collection.sampleNumber}</td>
 				</c:if>
-				<c:if test="${model.showdateOfBirth==true}">
-					<td>${donor.birthDate}</td>
+				<c:if test="${model.showshippingNo==true}">
+					<td>${collection.shippingNumber}</td>
 				</c:if>
-				<c:if test="${model.showaddress==true}">
-					<td>${donor.address}</td>
+				<c:if test="${model.showdonorType==true}">
+					<td>${collection.donorType}</td>
 				</c:if>
-			</tr>
 		</c:forEach>
 	</tbody>
 </table>

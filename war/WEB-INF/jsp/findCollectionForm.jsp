@@ -30,21 +30,23 @@
     }
   });
   $("#dateCollectedFrom").datepicker({
-    changeMonth: true,
-    changeYear: true,
-    minDate: -36500,
-    maxDate: 0,
-    yearRange: "c-100:c0",
+    changeMonth : true,
+    changeYear : true,
+    minDate : -36500,
+    maxDate : 0,
+    dateFormat : "yyyy-mm-dd",
+    yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateCollectedTo").datepicker("option", "minDate", selectedDate);
     }
   });
   $("#dateCollectedTo").datepicker({
-    changeMonth: true,
-    changeYear: true,
-    minDate: -36500,
-    maxDate: 0,
-    yearRange: "c-100:c0",
+    changeMonth : true,
+    changeYear : true,
+    minDate : -36500,
+    maxDate : 0,
+    dateFormat : "yy-mm-dd",
+    yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateCollectedFrom").datepicker("option", "maxDate", selectedDate);
     }
@@ -53,7 +55,7 @@
 
 <form:form method="GET" commandName="findCollectionForm"
 	id="findCollectionForm" class="findCollectionForm">
-				<h3>Find a Collection</h3>
+	<h3>Find a Collection</h3>
 	<table>
 		<thead>
 		</thead>
@@ -72,8 +74,8 @@
 			</tr>
 			<tr>
 				<td><form:label path="dateCollectedFrom">${model.dateCollectedDisplayName} From </form:label></td>
-				<td><form:input path="dateCollectedFrom"
-						id="dateCollectedFrom" />   to</td>
+				<td><form:input path="dateCollectedFrom" id="dateCollectedFrom" />
+					to</td>
 				<td><form:input path="dateCollectedTo" id="dateCollectedTo" /></td>
 			</tr>
 			<tr>

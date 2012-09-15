@@ -36,6 +36,8 @@ public class CollectionViewModel {
 		Long centerId = collection.getCenterId();
 		if (allCenters != null && centerId != null) {
 			for (Location center : allCenters) {
+			  System.out.println(center.getLocationId());
+			  System.out.println(centerId);
 				if (center.getLocationId().equals(centerId)) {
 					return center.getName();
 				}

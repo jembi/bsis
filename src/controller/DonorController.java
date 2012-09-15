@@ -1,8 +1,5 @@
 package controller;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -250,7 +247,7 @@ public class DonorController {
         lastName, bloodTypes);
 
     Map<String, Object> model = m.asMap();
-    model.put("tableName", "findResultsTable");
+    model.put("tableName", "findDonorResultsTable");
     ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("donor", model,
         recordFieldsConfigRepository);

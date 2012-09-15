@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CollectionBackingForm {
   private Collection collection;
-  List<Location> centers;
+  List<String> centers;
   private String dateCollectedFrom;
   private String dateCollectedTo;
 
@@ -126,11 +126,11 @@ public class CollectionBackingForm {
     return collection.toString();
   }
 
-  public List<Location> getCenters() {
+  public List<String> getCenters() {
     return centers;
   }
 
-  public void setCenters(List<Location> centers) {
+  public void setCenters(List<String> centers) {
     this.centers = centers;
   }
 
