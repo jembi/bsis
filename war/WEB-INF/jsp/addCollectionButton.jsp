@@ -5,22 +5,25 @@
 
 <%!public long getCurrentTime() {
 		return System.nanoTime();
-	}%>
+	}
+	Long button_id = getCurrentTime();
+%>
+
+<c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <script>
 	$(".addCollectionButton").button();
 
 	function bootup() {
 		generateEditForm("editCollectionFormGenerator.html", {isDialog : "yes"},
-		    						 function(){},
+		    						 addNewCollection,
 		    						 "Add New Collection",
-		    						 "addCollectionButtonEdit-1",
+		    						 "addCollectionButtonEdit-" + "<%=button_id%>",
 		    						 function(){}, 550, 500);
 	}
 </script>
 
 
-<c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <button id="addCollectionButton-${button_id}"
 	onclick="bootup(${button_id});" class="addCollectionButton">Click

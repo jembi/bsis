@@ -91,7 +91,8 @@ public class LocationRepository {
     List<Location> locations = getAllCenters();
     List<String> locationNames = new ArrayList<String>();
     for (Location l : locations) {
-      locationNames.add(l.getName());
+      if (l.getCenter())
+        locationNames.add(l.getName());
     }
     return locationNames;
   }
@@ -100,7 +101,27 @@ public class LocationRepository {
     List<Location> locations = getAllUsageSites();
     List<String> locationNames = new ArrayList<String>();
     for (Location l : locations) {
-      locationNames.add(l.getName());
+      if (l.getUsageSite())
+        locationNames.add(l.getName());
+    }
+    return locationNames;
+  }
+
+  public Long getIDByName(String name) {
+    List<Location> locations = getAllLocations();
+    for (Location l : locations) {
+      if (l.getName().equals(name))
+        return l.getLocationId();
+    }
+    return (long) -1;
+  }
+
+  public List<String> getAllCollectionSitesAsString() {
+    List<Location> locations = getAllUsageSites();
+    List<String> locationNames = new ArrayList<String>();
+    for (Location l : locations) {
+      if (l.getCollectionSite())
+        locationNames.add(l.getName());
     }
     return locationNames;
   }

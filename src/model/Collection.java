@@ -30,6 +30,13 @@ public class Collection {
 	private Boolean isDeleted;
 
 	public Collection() {
+	  collectionNumber = "";
+	  dateCollected = new Date();
+	  donorNumber = "";
+	  donorType = "";
+	  abo = "";
+	  rhd = "";
+	  comments = "";
 	}
 
 	public Collection(String collectionNumber, Long centerId, Long siteId,
@@ -176,4 +183,8 @@ public class Collection {
 	public void setRhd(String rhd) {
 		this.rhd = rhd;
 	}
+
+  public void setDonorType(String donorType) {
+    this.donorType = donorType;
+  }
 }

@@ -36,8 +36,6 @@ public class CollectionViewModel {
 		Long centerId = collection.getCenterId();
 		if (allCenters != null && centerId != null) {
 			for (Location center : allCenters) {
-			  System.out.println(center.getLocationId());
-			  System.out.println(centerId);
 				if (center.getLocationId().equals(centerId)) {
 					return center.getName();
 				}
@@ -54,6 +52,9 @@ public class CollectionViewModel {
 		Long siteId = collection.getSiteId();
 		if (allCollectionSites != null && siteId != null) {
 			for (Location site : allCollectionSites) {
+			  System.out.println("here");
+			  System.out.println(site.getLocationId());
+			  System.out.println(siteId);
 				if (site.getLocationId().equals(siteId)) {
 					return site.getName();
 				}

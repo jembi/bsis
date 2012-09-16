@@ -103,10 +103,9 @@ public class CollectionsController {
     List<String> centers = locationRepository.getAllCentersAsString();
     m.put("centers", centers);
     m.put("selectedCenter", centers.get(0));
-    List<String> sites = locationRepository.getAllUsageSitesAsString();
+    List<String> sites = locationRepository.getAllCollectionSitesAsString();
     m.put("sites", sites);
     m.put("selectedSite", sites.get(0));
-
     m.put("isDialog", isDialog);
 
     if (collectionNumber != null) {
@@ -130,9 +129,9 @@ public class CollectionsController {
     return mv;
   }
 
-  @RequestMapping(value = "/editCollectionForm", method = RequestMethod.POST)
+  @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
   public @ResponseBody
-  String updateOrAddDonor(
+  String updateOrAddCollection(
       @ModelAttribute("editCollectionForm") CollectionBackingForm form,
       BindingResult result, Model model) {
 
@@ -140,13 +139,19 @@ public class CollectionsController {
     String errMsg = "";
     try {
       Collection collection = form.getCollection();
-      // collectionRepository.updateOrAddCollection(collection);
+      String center = form.getCenters().get(0);
+      Long centerId = locationRepository.getIDByName(center);
+      collection.setCenterId(centerId);
+      String site = form.getSites().get(0);
+      Long siteId = locationRepository.getIDByName(site);
+      collection.setSiteId(siteId);
+      collectionRepository.updateOrAddCollection(collection);
     } catch (EntityExistsException ex) {
       // TODO: Replace with logger
       System.err.println("Entity Already exists");
       System.err.println(ex.getMessage());
       success = false;
-      errMsg = "Donor Already Exists";
+      errMsg = "Collection Already Exists";
     } catch (Exception ex) {
       // TODO: Replace with logger
       System.err.println("Internal Exception");
@@ -165,8 +170,8 @@ public class CollectionsController {
     List<CollectionViewModel> collectionViewModels = new ArrayList<CollectionViewModel>();
     for (Collection collection : collections) {
       collectionViewModels.add(new CollectionViewModel(collection,
-          locationRepository.getAllCenters(), locationRepository
-              .getAllUsageSites()));
+          locationRepository.getAllCollectionSites(), locationRepository
+              .getAllCenters()));
     }
     return collectionViewModels;
   }

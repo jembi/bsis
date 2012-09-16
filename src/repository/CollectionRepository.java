@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.Collection;
+import model.Donor;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,5 +137,20 @@ public class CollectionRepository {
 
     List<Collection> resultList = query.getResultList();
     return resultList;
+  }
+
+  public Collection updateOrAddCollection(Collection collection) {
+    Collection existingCollection = findCollectionByNumber(collection
+        .getCollectionNumber());
+    if (existingCollection == null) {
+      collection.setIsDeleted(false);
+      saveCollection(collection);
+      return collection;
+    }
+    existingCollection.copy(collection);
+    existingCollection.setIsDeleted(false);
+    em.merge(existingCollection);
+    em.flush();
+    return existingCollection;
   }
 }

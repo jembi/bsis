@@ -6,7 +6,10 @@
 
 <%!public long getCurrentTime() {
 		return System.nanoTime();
-	}%>
+	}
+	Long formId = getCurrentTime();%>
+<c:set var="formId"><%=formId%></c:set>
+
 
 <script>
   $(".addCollectionButton").button();
@@ -26,11 +29,16 @@
     header : false
   }
 );
+  function updateCollection() {
+    console.log($("#editCollectionForm-" + "<%=formId%>"));
+    addNewCollection($("#editCollectionForm-" + "<%=formId%>")[0]);
+    $("#editCollectionForm-" + "<%=formId%>")[0].reset();
+  }
 </script>
 
-<c:set var="form_id"><%=getCurrentTime()%></c:set>
 
-<form:form method="POST" commandName="editCollectionForm">
+<form:form method="POST" commandName="editCollectionForm"
+	id="editCollectionForm-${formId}">
 	<table>
 		<thead>
 			<tr>
@@ -44,6 +52,14 @@
 			<tr>
 				<td><form:label path="donorNumber">${model.donorNoDisplayName}</form:label></td>
 				<td><form:input path="donorNumber" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="shippingNumber">${model.shippingNoDisplayName}</form:label></td>
+				<td><form:input path="shippingNumber" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="sampleNumber">${model.sampleNoDisplayName}</form:label></td>
+				<td><form:input path="sampleNumber" /></td>
 			</tr>
 			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
@@ -77,7 +93,7 @@
 				<tr>
 					<td />
 					<td><input type="button" value="Add Collection"
-						class="addCollectionButton" /></td>
+						class="addCollectionButton" onclick="updateCollection();" /></td>
 				</tr>
 			</c:if>
 

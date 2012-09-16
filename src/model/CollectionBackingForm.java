@@ -140,13 +140,17 @@ public class CollectionBackingForm {
   }
 
   public List<String> getSites() {
-    return centers;
+    return sites;
   }
 
   public void setSites(List<String> sites) {
     this.sites = sites;
   }
 
+  public void setDonorType(String donorType) {
+    collection.setDonorType(donorType);
+  }
+  
   public String getDateCollectedFrom() {
     return dateCollectedFrom;
   }

@@ -9,9 +9,9 @@
 
 <script>
 	$(".addDonorButton").button();
-	function bootup() {
+	function bootup(button_id) {
 		generateEditForm("editDonorFormGenerator.html", {}, addNewDonor,
-		    						 "Add New Donor", "addDonorButtonEdit", decorateEditDonorDialog, 550, 500);
+		    						 "Add New Donor", "addDonorButtonEdit" + button_id, decorateEditDonorDialog, 550, 500);
 	}
 </script>
 

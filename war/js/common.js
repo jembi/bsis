@@ -230,14 +230,3 @@ $.extend({
     return validForm;
   }
 });
-
-$(document).ready(function() {
-  $('#hideTips').click(function() {
-    $('.rightPanel').hide();
-    $('#showTips').show();
-  });
-  $('#showTips').click(function() {
-    $('.rightPanel').show();
-    $('#showTips').hide();
-  });
-});

@@ -37,9 +37,6 @@ public class DonorRepository {
       saveDonor(donor);
       return donor;
     }
-    System.out.println(donor.getFirstName());
-    System.out.println(donor.getLastName());
-    System.out.println(donor.getIsDeleted());
     existingDonor.copy(donor);
     existingDonor.setIsDeleted(false);
     em.merge(existingDonor);
