@@ -46,7 +46,7 @@ public class CollectionRepository {
     query.executeUpdate();
   }
 
-  public Collection findCollection(String collectionNumber) {
+  public Collection findCollectionByNumber(String collectionNumber) {
     TypedQuery<Collection> query = em
         .createQuery(
             "SELECT c FROM Collection c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted",

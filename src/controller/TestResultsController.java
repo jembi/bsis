@@ -68,7 +68,7 @@ public class TestResultsController {
 
 		String collectionNumber = params.get("collectionNumber");
 		Collection collection = collectionRepository
-				.findCollection(collectionNumber);
+				.findCollectionByNumber(collectionNumber);
 		ModelAndView modelAndView = new ModelAndView("testResultsAdd");
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (collection == null) {
@@ -116,7 +116,7 @@ public class TestResultsController {
 
 		String collectionNumber = params.get("collectionNumber");
 		Collection collection = collectionRepository
-				.findCollection(collectionNumber);
+				.findCollectionByNumber(collectionNumber);
 		ModelAndView modelAndView = new ModelAndView("testResultsUpdate");
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (collection == null) {

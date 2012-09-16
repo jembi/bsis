@@ -10,10 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.CollectionBackingForm;
+import model.Donor;
+import model.DonorBackingForm;
 import model.Location;
 import model.RecordFieldsConfig;
 
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectionRepository;
@@ -91,24 +95,66 @@ public class CollectionsController {
     return modelAndView;
   }
 
-  @RequestMapping("/viewCollections")
-  public ModelAndView viewAllCollections(
-      @RequestParam Map<String, String> params, HttpServletRequest request) {
+  @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editCollectionFormGenerator(
+      Model model,
+      @RequestParam(value = "collectionNumber", required = false) String collectionNumber) {
 
-    List<Collection> allCollections = collectionRepository.getAllCollections();
-    ModelAndView modelAndView = new ModelAndView("collectionsTable");
-    Map<String, Object> model = new HashMap<String, Object>();
+    CollectionBackingForm form = new CollectionBackingForm();
+    Map<String, Object> m = model.asMap();
+    List<String> centers = locationRepository.getAllCentersAsString();
+    m.put("centers", centers);
+    m.put("selectedCenter", centers.get(0));
+    List<String> sites = locationRepository.getAllUsageSitesAsString();
+    m.put("sites", sites);
+    m.put("selectedSite", sites.get(0));
+    if (collectionNumber != null) {
+      form.setCollectionNumber(collectionNumber);
+      Collection collection = collectionRepository
+          .findCollectionByNumber(collectionNumber);
+      if (collection != null) {
+        form = new CollectionBackingForm(collection);
+        m.put("selectedCenter",
+            locationRepository.getLocation(collection.getCenterId()).getName());
+        m.put("selectedSite",
+            locationRepository.getLocation(collection.getSiteId()).getName());
+      } else
+        form = new CollectionBackingForm();
+    }
+    m.put("editCollectionForm", form);
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addCollectionDisplayNamesToModel(m, displayNamesRepository);
+    ModelAndView mv = new ModelAndView("editCollectionForm");
+    mv.addObject("model", m);
+    return mv;
+  }
 
-    model.put("tableName", "viewAllCollections");
-    model.put("allDonors", getCollectionViewModels(allCollections));
-    ControllerUtil.addCollectionDisplayNamesToModel(model,
-        displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
-    modelAndView.addObject("model", model);
-    return modelAndView;
+  @RequestMapping(value = "/editCollectionForm", method = RequestMethod.POST)
+  public @ResponseBody
+  String updateOrAddDonor(
+      @ModelAttribute("editCollectionForm") CollectionBackingForm form,
+      BindingResult result, Model model) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      Collection collection = form.getCollection();
+      // collectionRepository.updateOrAddCollection(collection);
+    } catch (EntityExistsException ex) {
+      // TODO: Replace with logger
+      System.err.println("Entity Already exists");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Donor Already Exists";
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
   }
 
   private List<CollectionViewModel> getCollectionViewModels(
@@ -140,8 +186,11 @@ public class CollectionsController {
   }
 
   @RequestMapping(value = "/addCollectionsFormTab", method = RequestMethod.GET)
-  public ModelAndView addDonorFormTabInit() {
-    ModelAndView mv = new ModelAndView("addCollections");
+  public ModelAndView addCollectionFormTabInit(Model model) {
+    ModelAndView mv = new ModelAndView("editCollectionForm");
+    Map<String, Object> m = model.asMap();
+    m.put("editCollectionForm", new CollectionBackingForm());
+    mv.addObject("model", m);
     return mv;
   }
 

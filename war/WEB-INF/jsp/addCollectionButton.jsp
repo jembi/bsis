@@ -8,21 +8,19 @@
 	}%>
 
 <script>
-	$(document).ready( function() {
-	  $(".addCollectionButton").button();
-	});
-	
+	 $(".addCollectionButton").button();
 	function bootup() {
 		generateEditForm("editCollectionFormGenerator.html", {},
-		    						 addNewCollection,
+		    						 function(){},
 		    						 "Add New Collection",
-		    						 "addCollectionButtonEdit",
-		    						 decorateEditCollectionDialog, 550, 500);
+		    						 "addCollectionButtonEdit-1",
+		    						 function(){}, 550, 500);
 	}
 </script>
 
 
 <c:set var="button_id"><%=getCurrentTime()%></c:set>
 
-<button id="addCollectionButton-${button_id}" onclick="bootup(${button_id});"
-	class="addCollectionButton">Click here to Add a New Collection</button>
+<button id="addCollectionButton-${button_id}"
+	onclick="bootup(${button_id});" class="addCollectionButton">Click
+	here to Add a New Collection</button>

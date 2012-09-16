@@ -95,7 +95,7 @@ public class ProductsController {
 
 		String collectionNumber = params.get("collectionNumber");
 		Collection collection = collectionRepository
-				.findCollection(collectionNumber);
+				.findCollectionByNumber(collectionNumber);
 
 		ModelAndView modelAndView = new ModelAndView("products");
 		if (collection == null) {
@@ -166,7 +166,7 @@ public class ProductsController {
 
 		String collectionNumber = params.get("updateCollectionNumber");
 		Collection collection = collectionRepository
-				.findCollection(collectionNumber);
+				.findCollectionByNumber(collectionNumber);
 		ModelAndView modelAndView = new ModelAndView("products");
 
 		if (collection == null) {

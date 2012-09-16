@@ -14,7 +14,7 @@
 <div id="collectionsTab" class="leftPanel">
 	<ul>
 		<li id="addCollectionsContent"><a
-			href="addCollectionsFormTab.html">Add Collection</a></li>
+			href="editCollectionFormGenerator.html">Add Collection</a></li>
 		<li id="findOrAddCollectionsContent"><a
 			href="findCollectionFormGenerator.html">Find Collections</a></li>
 	</ul>

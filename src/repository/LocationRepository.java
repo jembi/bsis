@@ -95,4 +95,13 @@ public class LocationRepository {
     }
     return locationNames;
   }
+
+  public List<String> getAllUsageSitesAsString() {
+    List<Location> locations = getAllUsageSites();
+    List<String> locationNames = new ArrayList<String>();
+    for (Location l : locations) {
+      locationNames.add(l.getName());
+    }
+    return locationNames;
+  }
 }

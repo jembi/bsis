@@ -29,7 +29,7 @@ public class ProductRepository {
 	private CollectionRepository collectionRepository;
 
 	public void saveProduct(Product product) {
-		Collection collection = collectionRepository.findCollection(product
+		Collection collection = collectionRepository.findCollectionByNumber(product
 				.getCollectionNumber());
 		product.setAbo(collection.getAbo());
 		product.setRhd(collection.getRhd());
@@ -39,7 +39,7 @@ public class ProductRepository {
 
 	public Product updateProduct(Product product, String existingProductNumber) {
 		Product existingProduct = findProduct(existingProductNumber);
-		Collection collection = collectionRepository.findCollection(product
+		Collection collection = collectionRepository.findCollectionByNumber(product
 				.getCollectionNumber());
 		product.setAbo(collection.getAbo());
 		product.setRhd(collection.getRhd());

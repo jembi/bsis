@@ -6,7 +6,8 @@ import java.util.List;
 
 public class CollectionBackingForm {
   private Collection collection;
-  List<String> centers;
+  private List<String> centers;
+  private List<String> sites;
   private String dateCollectedFrom;
   private String dateCollectedTo;
 
@@ -14,6 +15,10 @@ public class CollectionBackingForm {
     collection = new Collection();
   }
   
+  public CollectionBackingForm(Collection collection) {
+    this.collection = collection; 
+  }
+
   public void copy(Collection collection) {
     collection.copy(collection);
   }
@@ -134,6 +139,14 @@ public class CollectionBackingForm {
     this.centers = centers;
   }
 
+  public List<String> getSites() {
+    return centers;
+  }
+
+  public void setSites(List<String> sites) {
+    this.sites = sites;
+  }
+
   public String getDateCollectedFrom() {
     return dateCollectedFrom;
   }
@@ -148,5 +161,9 @@ public class CollectionBackingForm {
 
   public void setDateCollectedTo(String dateCollectedTo) {
     this.dateCollectedTo = dateCollectedTo;
+  }
+
+  public Collection getCollection() {
+    return this.collection;
   }
 }
