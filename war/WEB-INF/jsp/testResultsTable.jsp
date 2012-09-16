@@ -74,24 +74,24 @@
 					<td>${testResult.dateTested}</td>
 				</c:if>
 				<c:if test="${model.showhiv == true}">
-					<c:if test="${testResult.hiv =='reactive'}">
-						<td>&#10003;</td>
-					</c:if>
+					<td><c:if test="${testResult.hiv =='reactive'}">
+						&#10003;
+					</c:if></td>
 				</c:if>
 				<c:if test="${model.showhbv == true}">
-					<c:if test="${testResult.hbv =='reactive'}">
-						<td>&#10003;</td>
-					</c:if>
+					<td><c:if test="${testResult.hbv =='reactive'}">
+						&#10003;
+					</c:if></td>
 				</c:if>
 				<c:if test="${model.showhcv == true}">
-					<c:if test="${testResult.hcv =='reactive'}">
-						<td>&#10003;</td>
-					</c:if>
+					<td><c:if test="${testResult.hcv =='reactive'}">
+						&#10003;
+					</c:if></td>
 				</c:if>
 				<c:if test="${model.showsyphilis == true}">
-					<c:if test="${testResult.syphilis =='reactive'}">
-						<td>&#10003;</td>
-					</c:if>
+					<td><c:if test="${testResult.syphilis =='reactive'}">
+						&#10003;
+					</c:if></td>
 				</c:if>
 			</tr>
 		</c:forEach>
