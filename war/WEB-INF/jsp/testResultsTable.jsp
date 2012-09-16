@@ -7,8 +7,6 @@
 
 <script>
   var table_id = "${table_id}";
-  console.log(table_id);
-  console.log($("#" + table_id));
   var testResultsTable = $("#" + table_id).dataTable({
     "bJQueryUI" : true
   });
