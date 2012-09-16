@@ -91,7 +91,7 @@ public class DonorController {
       @RequestParam(value = "donorNumber", required = false) String donorNumber) {
 
     DonorBackingForm form = new DonorBackingForm();
-    ModelAndView mv = new ModelAndView("addDonorForm");
+    ModelAndView mv = new ModelAndView("editDonorForm");
     if (donorNumber != null) {
       form.setDonorNumber(donorNumber);
       Donor donor = donorRepository.findDonorByNumber(donorNumber);
@@ -100,7 +100,7 @@ public class DonorController {
       else
         form = new DonorBackingForm();
     }
-    model.addAttribute("addDonorForm", form);
+    model.addAttribute("editDonorForm", form);
     Map<String, Object> m = model.asMap();
     // to ensure custom field names are displayed in the form
     ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
@@ -111,7 +111,7 @@ public class DonorController {
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
   public @ResponseBody
   String updateOrAddDonor(
-      @ModelAttribute("addDonorForm") DonorBackingForm form,
+      @ModelAttribute("editDonorForm") DonorBackingForm form,
       BindingResult result, Model model) {
 
     boolean success = true;
@@ -138,7 +138,7 @@ public class DonorController {
 
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
   public ModelAndView addDonor(
-      @ModelAttribute("addDonorForm") DonorBackingForm form,
+      @ModelAttribute("editDonorForm") DonorBackingForm form,
       BindingResult result, Model m) {
     ModelAndView modelAndView = new ModelAndView("addDonor");
     return modelAndView;
