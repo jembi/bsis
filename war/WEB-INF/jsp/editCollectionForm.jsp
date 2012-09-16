@@ -9,7 +9,8 @@
 	}%>
 
 <script>
-	$(".editCollectionFormCenters").multiselect({
+	$(".addCollectionButton").button();
+  $(".editCollectionFormCenters").multiselect({
     multiple : false,
     selectedList : 1,
     header : false
@@ -23,7 +24,8 @@
     multiple : false,
     selectedList : 1,
     header : false
-  });
+  }
+);
 </script>
 
 <c:set var="form_id"><%=getCurrentTime()%></c:set>
@@ -45,7 +47,8 @@
 			</tr>
 			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
-				<td><form:select path="centers" class="editCollectionFormCenters">
+				<td><form:select path="centers"
+						class="editCollectionFormCenters">
 						<c:forEach var="center" items="${model.centers}">
 							<form:option value="${center}" label="${center}"
 								selected="${center == model.selectedCenter ? 'selected' : ''}" />
@@ -70,6 +73,14 @@
 						<form:option value="other" label="Other" />
 					</form:select></td>
 			</tr>
+			<c:if test="${model.isDialog != 'yes' }">
+				<tr>
+					<td>
+						<input type="button" value="Add Collection" class="addCollectionButton"/>
+					</td>
+				</tr>
+			</c:if>
+
 		</tbody>
 	</table>
 </form:form>

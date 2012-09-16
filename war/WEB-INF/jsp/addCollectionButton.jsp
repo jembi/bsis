@@ -11,7 +11,7 @@
 	$(".addCollectionButton").button();
 
 	function bootup() {
-		generateEditForm("editCollectionFormGenerator.html", {},
+		generateEditForm("editCollectionFormGenerator.html", {isDialog : "yes"},
 		    						 function(){},
 		    						 "Add New Collection",
 		    						 "addCollectionButtonEdit-1",

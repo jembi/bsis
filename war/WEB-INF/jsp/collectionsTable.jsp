@@ -30,7 +30,8 @@
         var collectionId = elements[0].innerHTML;
 
         generateEditForm("editCollectionFormGenerator.html", {
-          collectionNumber : collectionId
+          collectionNumber : collectionId,
+          isDialog : "yes"
         }, updateExistingCollection, "Edit Collection: "
             + elements[1].innerHTML + " " + elements[2].innerHTML,
             'collectionsTable', decorateEditCollectionDialog, 550, 500);

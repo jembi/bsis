@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.CollectionBackingForm;
-import model.Donor;
-import model.DonorBackingForm;
 import model.Location;
 import model.RecordFieldsConfig;
 
@@ -97,7 +95,8 @@ public class CollectionsController {
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView editCollectionFormGenerator(
       Model model,
-      @RequestParam(value = "collectionNumber", required = false) String collectionNumber) {
+      @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
+      @RequestParam(value = "isDialog", required = false) String isDialog) {
 
     CollectionBackingForm form = new CollectionBackingForm();
     Map<String, Object> m = model.asMap();
@@ -107,6 +106,9 @@ public class CollectionsController {
     List<String> sites = locationRepository.getAllUsageSitesAsString();
     m.put("sites", sites);
     m.put("selectedSite", sites.get(0));
+
+    m.put("isDialog", isDialog);
+
     if (collectionNumber != null) {
       form.setCollectionNumber(collectionNumber);
       Collection collection = collectionRepository
