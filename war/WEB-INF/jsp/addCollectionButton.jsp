@@ -8,7 +8,8 @@
 	}%>
 
 <script>
-	 $(".addCollectionButton").button();
+	$(".addCollectionButton").button();
+
 	function bootup() {
 		generateEditForm("editCollectionFormGenerator.html", {},
 		    						 function(){},

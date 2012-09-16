@@ -8,7 +8,7 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
     data : jsonInputData,
     success : function(responseData) {
       $("<div id='" + editFormId + "'>" + responseData + "</div>").dialog({
-        autoOpen : true,
+        autoOpen : false,
         height : height,
         width : width,
         modal : true,

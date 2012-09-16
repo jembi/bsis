@@ -79,7 +79,6 @@ public class CollectionsController {
             form.getDateCollectedFrom(), form.getDateCollectedTo(),
             form.getCenters());
 
-    System.out.println(collections.size());
     ModelAndView modelAndView = new ModelAndView("collectionsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findCollectionResultsTable");
