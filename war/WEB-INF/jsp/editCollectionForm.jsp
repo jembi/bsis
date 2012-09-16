@@ -9,7 +9,7 @@
 	}%>
 
 <script>
-	$(".addCollectionButton").button();
+  $(".addCollectionButton").button();
   $(".editCollectionFormCenters").multiselect({
     multiple : false,
     selectedList : 1,
@@ -75,9 +75,9 @@
 			</tr>
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
-					<td>
-						<input type="button" value="Add Collection" class="addCollectionButton"/>
-					</td>
+					<td />
+					<td><input type="button" value="Add Collection"
+						class="addCollectionButton" /></td>
 				</tr>
 			</c:if>
 
