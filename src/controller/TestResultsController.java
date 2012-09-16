@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -15,319 +16,451 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.TestResult;
+import model.TestResultBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectionRepository;
 import repository.DisplayNamesRepository;
 import repository.ProductRepository;
+import repository.RecordFieldsConfigRepository;
 import repository.TestResultRepository;
 import utils.ControllerUtil;
 import viewmodel.TestResultViewModel;
 
 @Controller
 public class TestResultsController {
-	@Autowired
-	private CollectionRepository collectionRepository;
+  @Autowired
+  private CollectionRepository collectionRepository;
 
-	@Autowired
-	private ProductRepository productRepository;
+  @Autowired
+  private ProductRepository productRepository;
 
-	@Autowired
-	private TestResultRepository testResultRepository;
+  @Autowired
+  private TestResultRepository testResultRepository;
 
-	@Autowired
-	private DisplayNamesRepository displayNamesRepository;
+  @Autowired
+  private DisplayNamesRepository displayNamesRepository;
 
-	@RequestMapping("/testResultsLandingPage")
-	public ModelAndView getTestResultsPage(HttpServletRequest request) {
+  @Autowired
+  private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-		return new ModelAndView("testResultsLandingPage");
-	}
+  @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findTestResultFormInit(Model model) {
 
-	@RequestMapping("/testResultsAdd")
-	public ModelAndView getAddTestResultsPage(HttpServletRequest request) {
+    TestResultBackingForm form = new TestResultBackingForm();
+    model.addAttribute("findTestResultForm", form);
 
-		ModelAndView modelAndView = new ModelAndView("testResultsAdd");
-		Map<String, Object> model = new HashMap<String, Object>();
+    ModelAndView mv = new ModelAndView("findTestResultForm");
+    Map<String, Object> m = model.asMap();
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+    return mv;
+  }
 
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
-		modelAndView.addObject("model", model);
+  @RequestMapping("/findTestResult")
+  public ModelAndView findTestResult(
+      @ModelAttribute("findTestResultForm") TestResultBackingForm form,
+      BindingResult result, Model model) {
 
-		return modelAndView;
-	}
+    List<TestResult> testResults = testResultRepository
+        .findAnyTestResultMatching(form.getCollectionNumber(), form.getHiv(),
+            form.getHbv(), form.getHcv(), form.getSyphilis(),
+            form.getDateTestedFrom(), form.getDateTestedTo());
 
-	@RequestMapping("/addNewTestResults")
-	public ModelAndView addNewTestResults(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+    ModelAndView modelAndView = new ModelAndView("testResultsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findTestResultsTable");
+    ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("testResult", m,
+        recordFieldsConfigRepository);
+     m.put("allTestResults", getTestResultViewModels(testResults));
 
-		String collectionNumber = params.get("collectionNumber");
-		Collection collection = collectionRepository
-				.findCollectionByNumber(collectionNumber);
-		ModelAndView modelAndView = new ModelAndView("testResultsAdd");
-		Map<String, Object> model = new HashMap<String, Object>();
-		if (collection == null) {
-			TestResult testResult = new TestResult(collectionNumber, null,
-					getDate(params.get("testResultDate")), params.get("hiv"),
-					params.get("hbv"), params.get("hcv"),
-					params.get("syphilis"), params.get("abo"),
-					params.get("rhd"), Boolean.FALSE, params.get("comment"));
-			model.put("collectionNotFound", true);
-			model.put("collectionNumber", collectionNumber);
-			model.put("hasTestResult", true);
-			model.put("testResult", new TestResultViewModel(testResult));
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
 
-		} else {
-			TestResult testResult = new TestResult(collectionNumber,
-					collection.getDateCollected(),
-					getDate(params.get("testResultDate")), params.get("hiv"),
-					params.get("hbv"), params.get("hcv"),
-					params.get("syphilis"), params.get("abo"),
-					params.get("rhd"), Boolean.FALSE, params.get("comment"));
-			testResultRepository.saveTestResult(testResult);
-			updateCollectionBloodType(testResult, collection);
-			modelAndView = new ModelAndView("testResultsUpdate");
-			model.put("testResult", new TestResultViewModel(testResult));
-			model.put("hasTestResult", true);
-			model.put("testResultAdded", true);
-			if (allIndicatorsNegative(params)) {
-				if (!productRepository.isProductCreated(collectionNumber)) {
-					model.put("createNewProduct", true);
-					model.put("collectionNumber", collectionNumber);
-				}
-			}
+  // @RequestMapping(value = "/editCollectionFormGenerator", method =
+  // RequestMethod.GET)
+  // public ModelAndView editCollectionFormGenerator(
+  // Model model,
+  // @RequestParam(value = "collectionNumber", required = false) String
+  // collectionNumber,
+  // @RequestParam(value = "isDialog", required = false) String isDialog) {
+  //
+  // CollectionBackingForm form = new CollectionBackingForm();
+  // Map<String, Object> m = model.asMap();
+  // List<String> centers = locationRepository.getAllCentersAsString();
+  // m.put("centers", centers);
+  // m.put("selectedCenter", centers.get(0));
+  // List<String> sites = locationRepository.getAllCollectionSitesAsString();
+  // m.put("sites", sites);
+  // m.put("selectedSite", sites.get(0));
+  // m.put("isDialog", isDialog);
+  //
+  // if (collectionNumber != null) {
+  // form.setCollectionNumber(collectionNumber);
+  // Collection collection = collectionRepository
+  // .findCollectionByNumber(collectionNumber);
+  // if (collection != null) {
+  // form = new CollectionBackingForm(collection);
+  // m.put("selectedCenter",
+  // locationRepository.getLocation(collection.getCenterId()).getName());
+  // m.put("selectedSite",
+  // locationRepository.getLocation(collection.getSiteId()).getName());
+  // } else
+  // form = new CollectionBackingForm();
+  // }
+  // m.put("editCollectionForm", form);
+  // // to ensure custom field names are displayed in the form
+  // ControllerUtil.addCollectionDisplayNamesToModel(m, displayNamesRepository);
+  // ModelAndView mv = new ModelAndView("editCollectionForm");
+  // mv.addObject("model", m);
+  // return mv;
+  // }
+  //
+  // @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
+  // public @ResponseBody
+  // String updateOrAddCollection(
+  // @ModelAttribute("editCollectionForm") CollectionBackingForm form,
+  // BindingResult result, Model model) {
+  //
+  // boolean success = true;
+  // String errMsg = "";
+  // try {
+  // Collection collection = form.getCollection();
+  // String center = form.getCenters().get(0);
+  // Long centerId = locationRepository.getIDByName(center);
+  // collection.setCenterId(centerId);
+  // String site = form.getSites().get(0);
+  // Long siteId = locationRepository.getIDByName(site);
+  // collection.setSiteId(siteId);
+  // collectionRepository.updateOrAddCollection(collection);
+  // } catch (EntityExistsException ex) {
+  // // TODO: Replace with logger
+  // System.err.println("Entity Already exists");
+  // System.err.println(ex.getMessage());
+  // success = false;
+  // errMsg = "Collection Already Exists";
+  // } catch (Exception ex) {
+  // // TODO: Replace with logger
+  // System.err.println("Internal Exception");
+  // System.err.println(ex.getMessage());
+  // success = false;
+  // errMsg = "Internal Server Error";
+  // }
+  //
+  // return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg +
+  // "\"}";
+  // }
+  //
+  // private List<CollectionViewModel> getCollectionViewModels(
+  // List<Collection> collections) {
+  // if (collections == null)
+  // return Arrays.asList(new CollectionViewModel[0]);
+  // List<CollectionViewModel> collectionViewModels = new
+  // ArrayList<CollectionViewModel>();
+  // for (Collection collection : collections) {
+  // collectionViewModels.add(new CollectionViewModel(collection,
+  // locationRepository.getAllCollectionSites(), locationRepository
+  // .getAllCenters()));
+  // }
+  // return collectionViewModels;
+  // }
 
-		}
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
+  private List<TestResultViewModel> getTestResultViewModels(List<TestResult> testResults) {
+    if (testResults == null)
+      return Arrays.asList(new TestResultViewModel[0]);
+    List<TestResultViewModel> testResultViewModels = new ArrayList<TestResultViewModel>();
+    for (TestResult testResult : testResults) {
+      testResultViewModels.add(new TestResultViewModel(testResult));
+    }
+    return testResultViewModels;
+  }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+  @RequestMapping("/testResultsAdd")
+  public ModelAndView getAddTestResultsPage(HttpServletRequest request) {
 
-	@RequestMapping("/updateExistingTestResults")
-	public ModelAndView updateExistingTestResults(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+    ModelAndView modelAndView = new ModelAndView("testResultsAdd");
+    Map<String, Object> model = new HashMap<String, Object>();
 
-		String collectionNumber = params.get("collectionNumber");
-		Collection collection = collectionRepository
-				.findCollectionByNumber(collectionNumber);
-		ModelAndView modelAndView = new ModelAndView("testResultsUpdate");
-		Map<String, Object> model = new HashMap<String, Object>();
-		if (collection == null) {
-			model.put("collectionNotFound", true);
-			model.put("collectionNumber", collectionNumber);
-			model.put("hasTestResult", true);
-			model.put("testResultUpdated", false);
-			TestResult existingTestResult = testResultRepository.find(params
-					.get("existingTestResultId"));
-			TestResult testResult = new TestResult(collectionNumber,
-					existingTestResult.getDateCollected(),
-					getDate(params.get("testResultDate")), params.get("hiv"),
-					params.get("hbv"), params.get("hcv"),
-					params.get("syphilis"), params.get("abo"),
-					params.get("rhd"), Boolean.FALSE, params.get("comment"));
-			existingTestResult.copy(testResult);
-			model.put("testResult", new TestResultViewModel(existingTestResult));
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
+    modelAndView.addObject("model", model);
 
-		} else {
-			TestResult testResult = new TestResult(collectionNumber,
-					collection.getDateCollected(),
-					getDate(params.get("testResultDate")), params.get("hiv"),
-					params.get("hbv"), params.get("hcv"),
-					params.get("syphilis"), params.get("abo"),
-					params.get("rhd"), Boolean.FALSE, params.get("comment"));
-			TestResult existingTestResult = testResultRepository
-					.updateTestResult(testResult,
-							getParam(params, "existingTestResultId"));
-			updateCollectionBloodType(testResult, collection);
-			model.put("testResult", new TestResultViewModel(existingTestResult));
-			model.put("hasTestResult", true);
-			model.put("testResultUpdated", true);
-			if (allIndicatorsNegative(params)) {
-				if (!productRepository.isProductCreated(collectionNumber)) {
-					model.put("createNewProduct", true);
-					model.put("collectionNumber", collectionNumber);
-				}
-			}
-		}
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
+    return modelAndView;
+  }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+  @RequestMapping("/addNewTestResults")
+  public ModelAndView addNewTestResults(
+      @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-	@RequestMapping("/deleteExistingTestResult")
-	public ModelAndView deleteExistingTestResults(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+    String collectionNumber = params.get("collectionNumber");
+    Collection collection = collectionRepository
+        .findCollectionByNumber(collectionNumber);
+    ModelAndView modelAndView = new ModelAndView("testResultsAdd");
+    Map<String, Object> model = new HashMap<String, Object>();
+    if (collection == null) {
+      TestResult testResult = new TestResult(collectionNumber, null,
+          getDate(params.get("testResultDate")), params.get("hiv"),
+          params.get("hbv"), params.get("hcv"), params.get("syphilis"),
+          params.get("abo"), params.get("rhd"), Boolean.FALSE,
+          params.get("comment"));
+      model.put("collectionNotFound", true);
+      model.put("collectionNumber", collectionNumber);
+      model.put("hasTestResult", true);
+      model.put("testResult", new TestResultViewModel(testResult));
 
-		ModelAndView modelAndView = new ModelAndView("testResultsAdd");
-		Map<String, Object> model = new HashMap<String, Object>();
-		Long existingTestResultId = getParam(params, "existingTestResultId");
-		testResultRepository.deleteTestResult(existingTestResultId);
-		model.put("testResultDeleted", true);
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
+    } else {
+      TestResult testResult = new TestResult(collectionNumber,
+          collection.getDateCollected(), getDate(params.get("testResultDate")),
+          params.get("hiv"), params.get("hbv"), params.get("hcv"),
+          params.get("syphilis"), params.get("abo"), params.get("rhd"),
+          Boolean.FALSE, params.get("comment"));
+      testResultRepository.saveTestResult(testResult);
+      updateCollectionBloodType(testResult, collection);
+      modelAndView = new ModelAndView("testResultsUpdate");
+      model.put("testResult", new TestResultViewModel(testResult));
+      model.put("hasTestResult", true);
+      model.put("testResultAdded", true);
+      if (allIndicatorsNegative(params)) {
+        if (!productRepository.isProductCreated(collectionNumber)) {
+          model.put("createNewProduct", true);
+          model.put("collectionNumber", collectionNumber);
+        }
+      }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    }
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
 
-	@RequestMapping("/testResultsView")
-	public ModelAndView viewTestResults(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		ModelAndView modelAndView = new ModelAndView("testResultsTable");
-		Map<String, Object> model = new HashMap<String, Object>();
+  @RequestMapping("/updateExistingTestResults")
+  public ModelAndView updateExistingTestResults(
+      @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
-		modelAndView.addObject("model", model);
+    String collectionNumber = params.get("collectionNumber");
+    Collection collection = collectionRepository
+        .findCollectionByNumber(collectionNumber);
+    ModelAndView modelAndView = new ModelAndView("testResultsUpdate");
+    Map<String, Object> model = new HashMap<String, Object>();
+    if (collection == null) {
+      model.put("collectionNotFound", true);
+      model.put("collectionNumber", collectionNumber);
+      model.put("hasTestResult", true);
+      model.put("testResultUpdated", false);
+      TestResult existingTestResult = testResultRepository.find(params
+          .get("existingTestResultId"));
+      TestResult testResult = new TestResult(collectionNumber,
+          existingTestResult.getDateCollected(),
+          getDate(params.get("testResultDate")), params.get("hiv"),
+          params.get("hbv"), params.get("hcv"), params.get("syphilis"),
+          params.get("abo"), params.get("rhd"), Boolean.FALSE,
+          params.get("comment"));
+      existingTestResult.copy(testResult);
+      model.put("testResult", new TestResultViewModel(existingTestResult));
 
-		return modelAndView;
-	}
+    } else {
+      TestResult testResult = new TestResult(collectionNumber,
+          collection.getDateCollected(), getDate(params.get("testResultDate")),
+          params.get("hiv"), params.get("hbv"), params.get("hcv"),
+          params.get("syphilis"), params.get("abo"), params.get("rhd"),
+          Boolean.FALSE, params.get("comment"));
+      TestResult existingTestResult = testResultRepository.updateTestResult(
+          testResult, getParam(params, "existingTestResultId"));
+      updateCollectionBloodType(testResult, collection);
+      model.put("testResult", new TestResultViewModel(existingTestResult));
+      model.put("hasTestResult", true);
+      model.put("testResultUpdated", true);
+      if (allIndicatorsNegative(params)) {
+        if (!productRepository.isProductCreated(collectionNumber)) {
+          model.put("createNewProduct", true);
+          model.put("collectionNumber", collectionNumber);
+        }
+      }
+    }
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
 
-	@RequestMapping("/findAllTestResultsByCollection")
-	public ModelAndView findAllTestResultsByCollection(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		String collectionNumber = params.get("collectionNumber");
-		ModelAndView modelAndView = new ModelAndView("testResultsTable");
-		Map<String, Object> model = new HashMap<String, Object>();
-		List<TestResult> allTestResults = testResultRepository
-				.getAllTestResults(collectionNumber);
-		if (allTestResults.size() == 0) {
-			model.put("noResultsFound", true);
-			model.put("collectionNumber", collectionNumber);
-		} else {
-			List<TestResultViewModel> allTestResultViewModels = new ArrayList<TestResultViewModel>();
-			for (TestResult testResult : allTestResults) {
-				allTestResultViewModels
-						.add(new TestResultViewModel(testResult));
-			}
-			model.put("allTestResults", allTestResultViewModels);
-		}
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
+  @RequestMapping("/deleteExistingTestResult")
+  public ModelAndView deleteExistingTestResults(
+      @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    ModelAndView modelAndView = new ModelAndView("testResultsAdd");
+    Map<String, Object> model = new HashMap<String, Object>();
+    Long existingTestResultId = getParam(params, "existingTestResultId");
+    testResultRepository.deleteTestResult(existingTestResultId);
+    model.put("testResultDeleted", true);
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
 
-	@RequestMapping("/selectTestResult")
-	public ModelAndView selectTestResultsByCollection(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		String selectedTestResultId = params.get("selectedTestResultId");
-		TestResult testResult = testResultRepository.find(selectedTestResultId);
-		ModelAndView modelAndView = new ModelAndView("testResultsUpdate");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("testResult", new TestResultViewModel(testResult));
-		model.put("hasTestResult", true);
-		ControllerUtil.addTestResultDisplayNamesToModel(model,
-				displayNamesRepository);
+  @RequestMapping("/testResultsView")
+  public ModelAndView viewTestResults(@RequestParam Map<String, String> params,
+      HttpServletRequest request) {
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    ModelAndView modelAndView = new ModelAndView("testResultsTable");
+    Map<String, Object> model = new HashMap<String, Object>();
 
-	private Long getParam(Map<String, String> params, String paramName) {
-		String paramValue = params.get(paramName);
-		return paramValue == null || paramValue.isEmpty() ? null : Long
-				.parseLong(paramValue);
-	}
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
+    modelAndView.addObject("model", model);
 
-	private boolean allIndicatorsNegative(Map<String, String> params) {
-		if ("negative".equals(params.get("hiv"))
-				&& "negative".equals(params.get("hbv"))
-				&& "negative".equals(params.get("hcv"))
-				&& "negative".equals(params.get("syphilis"))) {
-			return true;
-		}
-		return false;
-	}
+    return modelAndView;
+  }
 
-	private Date getDate(String dateParam) {
-		DateFormat formatter;
-		formatter = new SimpleDateFormat("MM/dd/yyyy");
-		Date collectionDate = null;
-		try {
-			String collectionDateEntered = dateParam;
-			if (collectionDateEntered.length() > 0) {
-				collectionDate = (Date) formatter.parse(collectionDateEntered);
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return collectionDate;
-	}
+  @RequestMapping("/findAllTestResultsByCollection")
+  public ModelAndView findAllTestResultsByCollection(
+      @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-	private void updateCollectionBloodType(TestResult testResult,
-			Collection collection) {
-		List<TestResult> allTestResults = testResultRepository
-				.getAllTestResults(collection.getCollectionNumber());
-		TestResult latestTestResult = null;
-		if (allTestResults.size() > 0) {
-			latestTestResult = Collections.max(allTestResults,
-					new Comparator<TestResult>() {
-						public int compare(TestResult testResult,
-								TestResult testResult1) {
-							return testResult.getDateTested().compareTo(
-									testResult1.getDateTested());
-						}
-					});
-		}
+    String collectionNumber = params.get("collectionNumber");
+    ModelAndView modelAndView = new ModelAndView("testResultsTable");
+    Map<String, Object> model = new HashMap<String, Object>();
+    List<TestResult> allTestResults = testResultRepository
+        .getAllTestResults(collectionNumber);
+    if (allTestResults.size() == 0) {
+      model.put("noResultsFound", true);
+      model.put("collectionNumber", collectionNumber);
+    } else {
+      List<TestResultViewModel> allTestResultViewModels = new ArrayList<TestResultViewModel>();
+      for (TestResult testResult : allTestResults) {
+        allTestResultViewModels.add(new TestResultViewModel(testResult));
+      }
+      model.put("allTestResults", allTestResultViewModels);
+    }
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
 
-		Boolean bloodGroupChanged = Boolean.FALSE;
-		String abo = "";
-		String rhd = "";
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
 
-		if (latestTestResult != null) {
-			if (testResult.getDateTested() != null
-					&& latestTestResult.getDateTested().compareTo(
-							testResult.getDateTested()) <= 0) {
-				if (latestTestResult.getAbo() != testResult.getAbo()
-						&& testResult.getAbo() != "") {
-					Collection updatedCollection = new Collection();
-					updatedCollection.copy(collection);
-					updatedCollection.setAbo(testResult.getAbo());
-					collection = collectionRepository.updateCollection(
-							updatedCollection, collection.getCollectionId());
-					bloodGroupChanged = Boolean.TRUE;
-					abo = testResult.getAbo();
+  @RequestMapping("/selectTestResult")
+  public ModelAndView selectTestResultsByCollection(
+      @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-				}
-				if (latestTestResult.getRhd() != testResult.getRhd()
-						&& testResult.getRhd() != "") {
-					Collection updatedCollection = new Collection();
-					updatedCollection.copy(collection);
-					updatedCollection.setRhd(testResult.getRhd());
-					collection = collectionRepository.updateCollection(
-							updatedCollection, collection.getCollectionId());
-					bloodGroupChanged = Boolean.TRUE;
-					rhd = testResult.getRhd();
+    String selectedTestResultId = params.get("selectedTestResultId");
+    TestResult testResult = testResultRepository.find(selectedTestResultId);
+    ModelAndView modelAndView = new ModelAndView("testResultsUpdate");
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("testResult", new TestResultViewModel(testResult));
+    model.put("hasTestResult", true);
+    ControllerUtil.addTestResultDisplayNamesToModel(model,
+        displayNamesRepository);
 
-				}
-				if (bloodGroupChanged) {
-					productRepository.updateProductBloodGroup(
-							collection.getCollectionNumber(), abo, rhd);
-				}
-			}
-		} else {
-			Collection updatedCollection = new Collection();
-			updatedCollection.copy(collection);
-			updatedCollection.setAbo(testResult.getAbo());
-			updatedCollection.setRhd(testResult.getRhd());
-			collection = collectionRepository.updateCollection(
-					updatedCollection, collection.getCollectionId());
-			bloodGroupChanged = Boolean.TRUE;
-			abo = testResult.getAbo();
-		}
-	}
+    modelAndView.addObject("model", model);
+    return modelAndView;
+  }
+
+  private Long getParam(Map<String, String> params, String paramName) {
+    String paramValue = params.get(paramName);
+    return paramValue == null || paramValue.isEmpty() ? null : Long
+        .parseLong(paramValue);
+  }
+
+  private boolean allIndicatorsNegative(Map<String, String> params) {
+    if ("negative".equals(params.get("hiv"))
+        && "negative".equals(params.get("hbv"))
+        && "negative".equals(params.get("hcv"))
+        && "negative".equals(params.get("syphilis"))) {
+      return true;
+    }
+    return false;
+  }
+
+  private Date getDate(String dateParam) {
+    DateFormat formatter;
+    formatter = new SimpleDateFormat("MM/dd/yyyy");
+    Date collectionDate = null;
+    try {
+      String collectionDateEntered = dateParam;
+      if (collectionDateEntered.length() > 0) {
+        collectionDate = (Date) formatter.parse(collectionDateEntered);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return collectionDate;
+  }
+
+  private void updateCollectionBloodType(TestResult testResult,
+      Collection collection) {
+    List<TestResult> allTestResults = testResultRepository
+        .getAllTestResults(collection.getCollectionNumber());
+    TestResult latestTestResult = null;
+    if (allTestResults.size() > 0) {
+      latestTestResult = Collections.max(allTestResults,
+          new Comparator<TestResult>() {
+            public int compare(TestResult testResult, TestResult testResult1) {
+              return testResult.getDateTested().compareTo(
+                  testResult1.getDateTested());
+            }
+          });
+    }
+
+    Boolean bloodGroupChanged = Boolean.FALSE;
+    String abo = "";
+    String rhd = "";
+
+    if (latestTestResult != null) {
+      if (testResult.getDateTested() != null
+          && latestTestResult.getDateTested().compareTo(
+              testResult.getDateTested()) <= 0) {
+        if (latestTestResult.getAbo() != testResult.getAbo()
+            && testResult.getAbo() != "") {
+          Collection updatedCollection = new Collection();
+          updatedCollection.copy(collection);
+          updatedCollection.setAbo(testResult.getAbo());
+          collection = collectionRepository.updateCollection(updatedCollection,
+              collection.getCollectionId());
+          bloodGroupChanged = Boolean.TRUE;
+          abo = testResult.getAbo();
+
+        }
+        if (latestTestResult.getRhd() != testResult.getRhd()
+            && testResult.getRhd() != "") {
+          Collection updatedCollection = new Collection();
+          updatedCollection.copy(collection);
+          updatedCollection.setRhd(testResult.getRhd());
+          collection = collectionRepository.updateCollection(updatedCollection,
+              collection.getCollectionId());
+          bloodGroupChanged = Boolean.TRUE;
+          rhd = testResult.getRhd();
+
+        }
+        if (bloodGroupChanged) {
+          productRepository.updateProductBloodGroup(
+              collection.getCollectionNumber(), abo, rhd);
+        }
+      }
+    } else {
+      Collection updatedCollection = new Collection();
+      updatedCollection.copy(collection);
+      updatedCollection.setAbo(testResult.getAbo());
+      updatedCollection.setRhd(testResult.getRhd());
+      collection = collectionRepository.updateCollection(updatedCollection,
+          collection.getCollectionId());
+      bloodGroupChanged = Boolean.TRUE;
+      abo = testResult.getAbo();
+    }
+  }
 }

@@ -46,5 +46,5 @@
             delayed = '$("#' + settings.id + '").animate({top:"-' + settings.size + 'px"}, ' + settings.speed + ');';
             setTimeout(delayed, settings.delay);
         }
-    }
+    };
 })(jQuery);

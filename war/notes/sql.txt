@@ -190,3 +190,4 @@ insert into RecordFieldsConfig values('collection','center,site,sampleNo,shippin
 insert into RecordFieldsConfig values('donor','firstName,lastName,gender,bloodType,dateOfBirth,age,address,comments');
 insert into RecordFieldsConfig values('request','requestDate,requiredDate,comments');
 insert into RecordFieldsConfig values('usage','usageDate,hospital,ward,comments');
+insert into RecordFieldsConfig values ('testResult', 'collectionNumber,dateTested,hiv,hbv,hcv,syphilis');

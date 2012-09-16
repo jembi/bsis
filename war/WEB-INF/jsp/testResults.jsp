@@ -14,8 +14,8 @@
 <div id="testResultsTab" class="leftPanel">
 	<ul>
 		<li id="addTestResultsContent"><a
-			href="editTestResultsFormGenerator.html">Add Test Results</a></li>
+			href="editTestResultFormGenerator.html">Add Test Results</a></li>
 		<li id="findOrAddTestResultsContent"><a
-			href="findTestResultsFormGenerator.html">Find Test Results</a></li>
+			href="findTestResultFormGenerator.html">Find Test Results</a></li>
 	</ul>
 </div>
