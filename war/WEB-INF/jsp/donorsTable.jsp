@@ -63,7 +63,6 @@
 			<c:if test="${model.showaddress==true}">
 				<th>${model.addressDisplayName}</th>
 			</c:if>
-			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -88,8 +87,6 @@
 				<c:if test="${model.showaddress==true}">
 					<td>${donor.address}</td>
 				</c:if>
-				<td><a href="selectDonor.html?selectedDonorId=${donor.donorId}">edit/delete</a>
-				</td>
 			</tr>
 		</c:forEach>
 	</tbody>
