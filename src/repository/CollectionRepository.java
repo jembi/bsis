@@ -101,9 +101,9 @@ public class CollectionRepository {
             + "c.collectionNumber = :collectionNumber OR "
             + "c.sampleNumber = :sampleNumber OR "
             + "c.shippingNumber = :shippingNumber OR "
-            + "L.name IN (:centers) OR "
+            + "L.name IN (:centers)) AND ("
             + "c.dateCollected BETWEEN :dateCollectedFrom AND "
-            + ":dateCollectedTo" + ") AND " + "c.isDeleted= :isDeleted",
+            + ":dateCollectedTo" + ") AND " + "(c.isDeleted= :isDeleted)",
         Collection.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
