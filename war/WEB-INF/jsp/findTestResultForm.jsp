@@ -11,7 +11,6 @@
 <script>
   $("#findTestResultButton").button().click(function() {
     var findTestResultFormData = $("#findTestResultForm").serialize();
-    console.log(findTestResultFormData);
     $.ajax({
       type : "GET",
       url : "findTestResult.html",
@@ -23,7 +22,6 @@
     });
   });
   
-  console.log($(".radioWithToggle"));
   $(".radioWithToggle").toggleRadio();
   
   $("#dateTestedFrom").datepicker({

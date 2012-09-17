@@ -52,9 +52,6 @@ public class CollectionViewModel {
 		Long siteId = collection.getSiteId();
 		if (allCollectionSites != null && siteId != null) {
 			for (Location site : allCollectionSites) {
-			  System.out.println("here");
-			  System.out.println(site.getLocationId());
-			  System.out.println(siteId);
 				if (site.getLocationId().equals(siteId)) {
 					return site.getName();
 				}

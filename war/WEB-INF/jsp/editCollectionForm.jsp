@@ -30,7 +30,6 @@
   }
 );
   function updateCollection() {
-    console.log($("#editCollectionForm-" + "<%=formId%>"));
     addNewCollection($("#editCollectionForm-" + "<%=formId%>")[0]);
     $("#editCollectionForm-" + "<%=formId%>")[0].reset();
   }

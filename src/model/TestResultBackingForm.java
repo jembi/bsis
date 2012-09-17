@@ -1,6 +1,11 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.springframework.format.datetime.DateFormatter;
 
 public class TestResultBackingForm {
   private TestResult testResult;
@@ -9,6 +14,10 @@ public class TestResultBackingForm {
 
   public TestResultBackingForm() {
     testResult = new TestResult();
+  }
+
+  public TestResultBackingForm(TestResult testResult) {
+    this.testResult = testResult;
   }
 
   public void copy(TestResult otherTestResult) {
@@ -31,8 +40,12 @@ public class TestResultBackingForm {
     return testResult.getDateCollected();
   }
 
-  public Date getDateTested() {
-    return testResult.getDateTested();
+  public String getDateTested() {
+    Date dateTested = testResult.getDateTested();
+    if (dateTested == null)
+      return "";
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return dateFormat.format(dateTested);
   }
 
   public String getComments() {
@@ -79,8 +92,14 @@ public class TestResultBackingForm {
     testResult.setDateCollected(dateCollected);
   }
 
-  public void setDateTested(Date dateTested) {
-    testResult.setDateTested(dateTested);
+  public void setDateTested(String dateTested) {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    try {
+      testResult.setDateTested(dateFormat.parse(dateTested));
+    } catch (ParseException e) {
+      e.printStackTrace();
+      testResult.setDateTested(new Date());
+    }
   }
 
   public void setComments(String comments) {
@@ -133,5 +152,9 @@ public class TestResultBackingForm {
 
   public void setDateTestedTo(String dateTestedTo) {
     this.dateTestedTo = dateTestedTo;
+  }
+
+  public TestResult getTestResult() {
+    return testResult;
   }
 }

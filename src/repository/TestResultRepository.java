@@ -136,4 +136,33 @@ public class TestResultRepository {
     List<TestResult> resultList = query.getResultList();
     return resultList;
   }
+
+  public TestResult findTestResultByCollectionNumber(String collectionNumber) {
+    TypedQuery<TestResult> query = em
+        .createQuery(
+            "SELECT t FROM TestResult t WHERE t.collectionNumber = :collectionNumber and t.isDeleted= :isDeleted",
+            TestResult.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("collectionNumber", collectionNumber);
+    List<TestResult> testResults = query.getResultList();
+    if (CollectionUtils.isEmpty(testResults)) {
+      return null;
+    }
+    return testResults.get(0);
+  }
+
+  public TestResult updateOrAddTestResult(TestResult testResult) {
+    TestResult existingTestResult = findTestResultByCollectionNumber(testResult
+        .getCollectionNumber());
+    if (existingTestResult == null) {
+      testResult.setIsDeleted(false);
+      saveTestResult(testResult);
+      return testResult;
+    }
+    existingTestResult.copy(testResult);
+    existingTestResult.setIsDeleted(false);
+    em.merge(existingTestResult);
+    em.flush();
+    return existingTestResult;
+  }
 }

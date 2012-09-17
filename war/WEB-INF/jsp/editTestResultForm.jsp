@@ -12,33 +12,26 @@
 
 
 <script>
-  $(".addCollectionButton").button();
-  $(".editCollectionFormCenters").multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
-  });
-  $(".editCollectionFormSites").multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
-  });
-  $(".editCollectionFormDonorType").multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
+  $(".addTestResultButton").button();
+  function updateTestResult() {
+    addNewTestResult($("#editTestResultForm-" + "<%=formId%>")[0]);
+    $("#editTestResultForm-" + "<%=formId%>")[0].reset();
   }
-);
-  function updateCollection() {
-    console.log($("#editCollectionForm-" + "<%=formId%>"));
-    addNewCollection($("#editCollectionForm-" + "<%=formId%>")[0]);
-    $("#editCollectionForm-" + "<%=formId%>")[0].reset();
-  }
+
+  $("#dateTested-" + "<%=formId%>").datepicker({
+    changeMonth : true,
+    changeYear : true,
+    minDate : -36500,
+    maxDate : 0,
+    dateFormat : "yyyy-mm-dd",
+    yearRange : "c-100:c0",
+  });
+
 </script>
 
 
-<form:form method="POST" commandName="editCollectionForm"
-	id="editCollectionForm-${formId}">
+<form:form method="POST" commandName="editTestResultForm"
+	id="editTestResultForm-${formId}">
 	<table>
 		<thead>
 			<tr>
@@ -50,53 +43,44 @@
 				<td><form:input path="collectionNumber" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="donorNumber">${model.donorNoDisplayName}</form:label></td>
-				<td><form:input path="donorNumber" /></td>
+				<td><form:label path="dateTested">${model.dateTestedDisplayName}</form:label></td>
+				<td><form:input path="dateTested" id="dateTested-${formId}" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="shippingNumber">${model.shippingNoDisplayName}</form:label></td>
-				<td><form:input path="shippingNumber" /></td>
+				<td><form:label path="hiv">${model.hivDisplayName}</form:label></td>
+				<td><form:radiobutton path="hiv" value="reactive"
+						label="reactive" class="radioWithToggle" /> <form:radiobutton
+						path="hiv" value="negative" label="negative"
+						class="radioWithToggle" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="sampleNumber">${model.sampleNoDisplayName}</form:label></td>
-				<td><form:input path="sampleNumber" /></td>
+				<td><form:label path="hbv">${model.hbvDisplayName}</form:label></td>
+				<td><form:radiobutton path="hbv" value="reactive"
+						label="reactive" class="radioWithToggle" /> <form:radiobutton
+						path="hbv" value="negative" label="negative"
+						class="radioWithToggle" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
-				<td><form:select path="centers"
-						class="editCollectionFormCenters">
-						<c:forEach var="center" items="${model.centers}">
-							<form:option value="${center}" label="${center}"
-								selected="${center == model.selectedCenter ? 'selected' : ''}" />
-						</c:forEach>
-					</form:select></td>
+				<td><form:label path="hcv">${model.hcvDisplayName}</form:label></td>
+				<td><form:radiobutton path="hcv" value="reactive"
+						label="reactive" class="radioWithToggle" /> <form:radiobutton
+						path="hcv" value="negative" label="negative"
+						class="radioWithToggle" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td><form:select path="sites" class="editCollectionFormSites">
-						<c:forEach var="site" items="${model.sites}">
-							<form:option value="${site}" label="${site}"
-								selected="${site == model.selectedSite ? 'selected' : ''}" />
-						</c:forEach>
-					</form:select></td>
-			</tr>
-			<tr>
-				<td><form:label path="donorType">${model.donorTypeDisplayName}</form:label></td>
-				<td><form:select path="donorType"
-						class="editCollectionFormDonorType">
-						<form:option value="voluntary" label="Voluntary" />
-						<form:option value="family" label="Family" />
-						<form:option value="other" label="Other" />
-					</form:select></td>
+				<td><form:label path="syphilis">${model.syphilisDisplayName}</form:label></td>
+				<td><form:radiobutton path="syphilis" value="reactive"
+						label="reactive" class="radioWithToggle" /> <form:radiobutton
+						path="syphilis" value="negative" label="negative"
+						class="radioWithToggle" /></td>
 			</tr>
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><input type="button" value="Add Collection"
-						class="addCollectionButton" onclick="updateCollection();" /></td>
+					<td><input type="button" value="Add Test Result"
+						class="addTestResultButton" onclick="updateTestResult();" /></td>
 				</tr>
 			</c:if>
-
 		</tbody>
 	</table>
 </form:form>

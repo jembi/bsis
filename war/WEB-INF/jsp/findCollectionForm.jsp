@@ -11,7 +11,6 @@
 <script>
   $("#findCollectionButton").button().click(function() {
     var findCollectionFormData = $("#findCollectionForm").serialize();
-    console.log(findCollectionFormData);
     $.ajax({
       type : "GET",
       url : "findCollection.html",

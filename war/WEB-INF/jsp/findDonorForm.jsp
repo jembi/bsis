@@ -11,7 +11,6 @@
 <script>
   $("#findDonorButton").button().click(function() {
     var findDonorFormData = $("#findDonorForm").serialize();
-    console.log(findDonorFormData);
     $.ajax({
       type : "GET",
       url : "findDonor.html",

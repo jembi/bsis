@@ -47,7 +47,7 @@
 	<thead>
 		<tr>
 			<th>${model.collectionNoDisplayName}</th>
-			<c:if test="${model.showdatetested==true}">
+			<c:if test="${model.showdateTested==true}">
 				<th>${model.dateTestedDisplayName}</th>
 			</c:if>
 			<c:if test="${model.showhiv==true}">
@@ -68,7 +68,7 @@
 		<c:forEach var="testResult" items="${model.allTestResults}">
 			<tr>
 				<td>${testResult.collectionNumber}</td>
-				<c:if test="${model.showdatetested==true}">
+				<c:if test="${model.showdateTested==true}">
 					<td>${testResult.dateTested}</td>
 				</c:if>
 				<c:if test="${model.showhiv == true}">

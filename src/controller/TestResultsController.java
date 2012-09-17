@@ -12,11 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Collection;
 import model.TestResult;
 import model.TestResultBackingForm;
+import model.UpdateResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectionRepository;
@@ -83,101 +86,70 @@ public class TestResultsController {
     ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("testResult", m,
         recordFieldsConfigRepository);
-     m.put("allTestResults", getTestResultViewModels(testResults));
+    m.put("allTestResults", getTestResultViewModels(testResults));
 
     modelAndView.addObject("model", m);
     return modelAndView;
   }
 
-  // @RequestMapping(value = "/editCollectionFormGenerator", method =
-  // RequestMethod.GET)
-  // public ModelAndView editCollectionFormGenerator(
-  // Model model,
-  // @RequestParam(value = "collectionNumber", required = false) String
-  // collectionNumber,
-  // @RequestParam(value = "isDialog", required = false) String isDialog) {
-  //
-  // CollectionBackingForm form = new CollectionBackingForm();
-  // Map<String, Object> m = model.asMap();
-  // List<String> centers = locationRepository.getAllCentersAsString();
-  // m.put("centers", centers);
-  // m.put("selectedCenter", centers.get(0));
-  // List<String> sites = locationRepository.getAllCollectionSitesAsString();
-  // m.put("sites", sites);
-  // m.put("selectedSite", sites.get(0));
-  // m.put("isDialog", isDialog);
-  //
-  // if (collectionNumber != null) {
-  // form.setCollectionNumber(collectionNumber);
-  // Collection collection = collectionRepository
-  // .findCollectionByNumber(collectionNumber);
-  // if (collection != null) {
-  // form = new CollectionBackingForm(collection);
-  // m.put("selectedCenter",
-  // locationRepository.getLocation(collection.getCenterId()).getName());
-  // m.put("selectedSite",
-  // locationRepository.getLocation(collection.getSiteId()).getName());
-  // } else
-  // form = new CollectionBackingForm();
-  // }
-  // m.put("editCollectionForm", form);
-  // // to ensure custom field names are displayed in the form
-  // ControllerUtil.addCollectionDisplayNamesToModel(m, displayNamesRepository);
-  // ModelAndView mv = new ModelAndView("editCollectionForm");
-  // mv.addObject("model", m);
-  // return mv;
-  // }
-  //
-  // @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
-  // public @ResponseBody
-  // String updateOrAddCollection(
-  // @ModelAttribute("editCollectionForm") CollectionBackingForm form,
-  // BindingResult result, Model model) {
-  //
-  // boolean success = true;
-  // String errMsg = "";
-  // try {
-  // Collection collection = form.getCollection();
-  // String center = form.getCenters().get(0);
-  // Long centerId = locationRepository.getIDByName(center);
-  // collection.setCenterId(centerId);
-  // String site = form.getSites().get(0);
-  // Long siteId = locationRepository.getIDByName(site);
-  // collection.setSiteId(siteId);
-  // collectionRepository.updateOrAddCollection(collection);
-  // } catch (EntityExistsException ex) {
-  // // TODO: Replace with logger
-  // System.err.println("Entity Already exists");
-  // System.err.println(ex.getMessage());
-  // success = false;
-  // errMsg = "Collection Already Exists";
-  // } catch (Exception ex) {
-  // // TODO: Replace with logger
-  // System.err.println("Internal Exception");
-  // System.err.println(ex.getMessage());
-  // success = false;
-  // errMsg = "Internal Server Error";
-  // }
-  //
-  // return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg +
-  // "\"}";
-  // }
-  //
-  // private List<CollectionViewModel> getCollectionViewModels(
-  // List<Collection> collections) {
-  // if (collections == null)
-  // return Arrays.asList(new CollectionViewModel[0]);
-  // List<CollectionViewModel> collectionViewModels = new
-  // ArrayList<CollectionViewModel>();
-  // for (Collection collection : collections) {
-  // collectionViewModels.add(new CollectionViewModel(collection,
-  // locationRepository.getAllCollectionSites(), locationRepository
-  // .getAllCenters()));
-  // }
-  // return collectionViewModels;
-  // }
+  @RequestMapping(value = "/editTestResultFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editCollectionFormGenerator(
+      Model model,
+      @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
+      @RequestParam(value = "isDialog", required = false) String isDialog) {
 
-  private List<TestResultViewModel> getTestResultViewModels(List<TestResult> testResults) {
+    TestResultBackingForm form = new TestResultBackingForm();
+    Map<String, Object> m = model.asMap();
+    m.put("isDialog", isDialog);
+
+    if (collectionNumber != null) {
+      form.setCollectionNumber(collectionNumber);
+      TestResult testResult = testResultRepository
+          .findTestResultByCollectionNumber(collectionNumber);
+      if (testResult != null) {
+        form = new TestResultBackingForm(testResult);
+      } else
+        form = new TestResultBackingForm();
+      System.out.println("here1");
+    }
+    m.put("editTestResultForm", form);
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
+    ModelAndView mv = new ModelAndView("editTestResultForm");
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
+  public @ResponseBody
+  UpdateResponse updateOrAddCollection(
+      @ModelAttribute("editTestResultForm") TestResultBackingForm form,
+      BindingResult result, Model model) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      TestResult testResult = form.getTestResult();
+      testResultRepository.updateOrAddTestResult(testResult);
+    } catch (EntityExistsException ex) {
+      // TODO: Replace with logger
+      System.err.println("Entity Already exists");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Collection Already Exists";
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    return new UpdateResponse(success, errMsg);
+  }
+
+  private List<TestResultViewModel> getTestResultViewModels(
+      List<TestResult> testResults) {
     if (testResults == null)
       return Arrays.asList(new TestResultViewModel[0]);
     List<TestResultViewModel> testResultViewModels = new ArrayList<TestResultViewModel>();
