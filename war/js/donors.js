@@ -12,10 +12,8 @@ function updateDonorGeneric(form, url) {
     type : "POST",
     url : url,
     data : donor,
-    success : function(responseStr) {
-      var jsonResponse = jQuery.parseJSON(responseStr);
-      console.log(jsonResponse);
-      if (jsonResponse["success"] === "true") {
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
         $.showMessage("Donor Updated Successfully!");
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {

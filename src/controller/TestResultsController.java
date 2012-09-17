@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import model.Collection;
 import model.TestResult;
 import model.TestResultBackingForm;
-import model.UpdateResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -122,9 +121,8 @@ public class TestResultsController {
 
   @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
   public @ResponseBody
-  UpdateResponse updateOrAddCollection(
-      @ModelAttribute("editTestResultForm") TestResultBackingForm form,
-      BindingResult result, Model model) {
+  Map<String, ? extends Object> updateOrAddCollection(
+      @ModelAttribute("editTestResultForm") TestResultBackingForm form) {
 
     boolean success = true;
     String errMsg = "";
@@ -145,7 +143,10 @@ public class TestResultsController {
       errMsg = "Internal Server Error";
     }
 
-    return new UpdateResponse(success, errMsg);
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
   }
 
   private List<TestResultViewModel> getTestResultViewModels(

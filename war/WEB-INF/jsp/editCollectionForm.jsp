@@ -6,32 +6,32 @@
 
 <%!public long getCurrentTime() {
 		return System.nanoTime();
-	}
-	Long formId = getCurrentTime();%>
-<c:set var="formId"><%=formId%></c:set>
+	}%>
+
+<c:set var="formId"><%=getCurrentTime()%></c:set>
 
 
 <script>
   $(".addCollectionButton").button();
-  $(".editCollectionFormCenters").multiselect({
+  $("#editCollectionFormCenters-" + '<c:out value="${formId}"/>').multiselect({
     multiple : false,
     selectedList : 1,
     header : false
   });
-  $(".editCollectionFormSites").multiselect({
+  $("#editCollectionFormSites-" + '<c:out value="${formId}"/>').multiselect({
     multiple : false,
     selectedList : 1,
     header : false
   });
-  $(".editCollectionFormDonorType").multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
-  }
-);
+  $("#editCollectionFormDonorType-" + '<c:out value="${formId}"/>')
+      .multiselect({
+        multiple : false,
+        selectedList : 1,
+        header : false
+      });
   function updateCollection() {
-    addNewCollection($("#editCollectionForm-" + "<%=formId%>")[0]);
-    $("#editCollectionForm-" + "<%=formId%>")[0].reset();
+    addNewCollection($("#editCollectionForm-" + '<c:out value="${formId}"/>')[0]);
+    $("#editCollectionForm-" + '<c:out value="${formId}"/>')[0].reset();
   }
 </script>
 
@@ -63,6 +63,7 @@
 			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
 				<td><form:select path="centers"
+						id="editCollectionFormCenters-${formId}"
 						class="editCollectionFormCenters">
 						<c:forEach var="center" items="${model.centers}">
 							<form:option value="${center}" label="${center}"
@@ -72,7 +73,9 @@
 			</tr>
 			<tr>
 				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td><form:select path="sites" class="editCollectionFormSites">
+				<td><form:select path="sites"
+						id="editCollectionFormSites-${formId}"
+						class="editCollectionFormSites">
 						<c:forEach var="site" items="${model.sites}">
 							<form:option value="${site}" label="${site}"
 								selected="${site == model.selectedSite ? 'selected' : ''}" />
@@ -82,6 +85,7 @@
 			<tr>
 				<td><form:label path="donorType">${model.donorTypeDisplayName}</form:label></td>
 				<td><form:select path="donorType"
+						id="editCollectionFormDonorType-${formId}"
 						class="editCollectionFormDonorType">
 						<form:option value="voluntary" label="Voluntary" />
 						<form:option value="family" label="Family" />

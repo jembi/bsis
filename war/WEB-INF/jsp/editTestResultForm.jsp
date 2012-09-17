@@ -7,18 +7,18 @@
 <%!public long getCurrentTime() {
 		return System.nanoTime();
 	}
-	Long formId = getCurrentTime();%>
-<c:set var="formId"><%=formId%></c:set>
+	%>
+<c:set var="formId"><%=getCurrentTime()%></c:set>
 
 
 <script>
   $(".addTestResultButton").button();
   function updateTestResult() {
-    addNewTestResult($("#editTestResultForm-" + "<%=formId%>")[0]);
-    $("#editTestResultForm-" + "<%=formId%>")[0].reset();
+    addNewTestResult($("#editTestResultForm-" + '<c:out value="${formId}"/>')[0]);
+    $("#editTestResultForm-" + '<c:out value="${formId}"/>')[0].reset();
   }
 
-  $("#dateTested-" + "<%=formId%>").datepicker({
+  $("#dateTested-" + '<c:out value="${formId}"/>').datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
@@ -26,7 +26,10 @@
     dateFormat : "yyyy-mm-dd",
     yearRange : "c-100:c0",
   });
-
+  function updateTestResult() {
+    addNewTestResult($("#editTestResultFormForm-" + '<c:out value="${formId}"/>')[0]);
+    $("#editTestResultForm-" + '<c:out value="${formId}"/>')[0].reset();
+  }
 </script>
 
 

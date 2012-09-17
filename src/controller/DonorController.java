@@ -110,7 +110,7 @@ public class DonorController {
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
   public @ResponseBody
-  String updateOrAddDonor(
+  Map<String, ? extends Object> updateOrAddDonor(
       @ModelAttribute("editDonorForm") DonorBackingForm form,
       BindingResult result, Model model) {
 
@@ -133,7 +133,10 @@ public class DonorController {
       errMsg = "Internal Server Error";
     }
 
-    return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
   }
 
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)

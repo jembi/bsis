@@ -91,7 +91,7 @@ public class CollectionRepository {
   }
 
   public List<Collection> findAnyCollectionMatching(String collectionNumber,
-      Long sampleNumber, Long shippingNumber, String dateCollectedFrom,
+      String sampleNumber, String shippingNumber, String dateCollectedFrom,
       String dateCollectedTo, List<String> centers) {
 
     // TODO: fix join condition
@@ -109,9 +109,9 @@ public class CollectionRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
     query.setParameter("collectionNumber", collectionNo);
-    Long sampleNo = ((sampleNumber == null) ? -1 : sampleNumber);
+    Long sampleNo = ((sampleNumber == null) ? -1 : Long.parseLong(sampleNumber));
     query.setParameter("sampleNumber", sampleNo);
-    Long shippingNo = ((shippingNumber == null) ? -1 : shippingNumber);
+    Long shippingNo = ((shippingNumber == null) ? -1 : Long.parseLong(shippingNumber));
     query.setParameter("shippingNumber", shippingNo);
 
     query.setParameter("centers", centers);
@@ -145,10 +145,15 @@ public class CollectionRepository {
       saveCollection(collection);
       return collection;
     }
+    System.out.println("here");
     existingCollection.copy(collection);
+    System.out.println("here1");
     existingCollection.setIsDeleted(false);
+    System.out.println("here2");
     em.merge(existingCollection);
+    System.out.println("here3");
     em.flush();
+    System.out.println("here4");
     return existingCollection;
   }
 }

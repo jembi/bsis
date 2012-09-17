@@ -3,7 +3,7 @@ function addNewTestResult(form) {
 }
 
 function updateExistingTestResult(form) {
-  updateCollectionGeneric(form, "updateCollection.html");
+  updateTestResultGeneric(form, "updateTestResult.html");
 }
 
 function updateTestResultGeneric(form, url) {
@@ -12,10 +12,8 @@ function updateTestResultGeneric(form, url) {
     type : "POST",
     url : url,
     data : testResult,
-    success : function(responseStr) {
-      var jsonResponse = jQuery.parseJSON(responseStr);
-      console.log(jsonResponse);
-      if (jsonResponse["success"] === "true") {
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
         $.showMessage("Test Result Updated Successfully!");
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {

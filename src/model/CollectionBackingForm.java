@@ -3,7 +3,6 @@ package model;
 import java.util.Date;
 import java.util.List;
 
-
 public class CollectionBackingForm {
   private Collection collection;
   private List<String> centers;
@@ -14,9 +13,9 @@ public class CollectionBackingForm {
   public CollectionBackingForm() {
     collection = new Collection();
   }
-  
+
   public CollectionBackingForm(Collection collection) {
-    this.collection = collection; 
+    this.collection = collection;
   }
 
   public void copy(Collection collection) {
@@ -43,12 +42,14 @@ public class CollectionBackingForm {
     return collection.getDateCollected();
   }
 
-  public Long getSampleNumber() {
-    return collection.getSampleNumber();
+  public String getSampleNumber() {
+    Long sampleNumber = collection.getSampleNumber();
+    return (sampleNumber == null) ? null : sampleNumber.toString();
   }
 
-  public Long getShippingNumber() {
-    return collection.getShippingNumber();
+  public String getShippingNumber() {
+    Long shippingNumber = collection.getShippingNumber();
+    return (shippingNumber == null) ? null : shippingNumber.toString();
   }
 
   public String getDonorNumber() {
@@ -99,12 +100,18 @@ public class CollectionBackingForm {
     collection.setDateCollected(dateCollected);
   }
 
-  public void setSampleNumber(Long sampleNumber) {
-    collection.setSampleNumber(sampleNumber);
+  public void setSampleNumber(String sampleNumber) {
+    if (sampleNumber == null)
+      collection.setSampleNumber((long)0);
+    else
+      collection.setSampleNumber(Long.parseLong(sampleNumber));
   }
 
-  public void setShippingNumber(Long shippingNumber) {
-    collection.setShippingNumber(shippingNumber);
+  public void setShippingNumber(String shippingNumber) {
+    if (shippingNumber == null)
+      collection.setShippingNumber((long)0);
+    else
+      collection.setShippingNumber(Long.parseLong(shippingNumber));
   }
 
   public void setDonorNumber(String donorNumber) {
@@ -150,7 +157,7 @@ public class CollectionBackingForm {
   public void setDonorType(String donorType) {
     collection.setDonorType(donorType);
   }
-  
+
   public String getDateCollectedFrom() {
     return dateCollectedFrom;
   }

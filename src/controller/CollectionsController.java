@@ -131,7 +131,7 @@ public class CollectionsController {
 
   @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
   public @ResponseBody
-  String updateOrAddCollection(
+  Map<String, ? extends Object> updateOrAddCollection(
       @ModelAttribute("editCollectionForm") CollectionBackingForm form,
       BindingResult result, Model model) {
 
@@ -154,13 +154,17 @@ public class CollectionsController {
       errMsg = "Collection Already Exists";
     } catch (Exception ex) {
       // TODO: Replace with logger
+      ex.printStackTrace();
       System.err.println("Internal Exception");
       System.err.println(ex.getMessage());
       success = false;
       errMsg = "Internal Server Error";
     }
 
-    return "{\"success\": \"" + success + "\", \"errMsg\": \"" + errMsg + "\"}";
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
   }
 
   private List<CollectionViewModel> getCollectionViewModels(

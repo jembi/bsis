@@ -4,6 +4,7 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
   var editFormId = 'edit' + divId;
   $.ajax({
     url : formGeneratorUrl,
+    contentType: "application/json",
     type : "GET",
     data : jsonInputData,
     success : function(responseData) {

@@ -8,14 +8,13 @@ function updateExistingCollection(form) {
 
 function updateCollectionGeneric(form, url) {
   var collection = $("#" + form.getAttribute("id")).serialize();
+  console.log(collection);
   $.ajax({
     type : "POST",
     url : url,
     data : collection,
-    success : function(responseStr) {
-      var jsonResponse = jQuery.parseJSON(responseStr);
-      console.log(jsonResponse);
-      if (jsonResponse["success"] === "true") {
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
         $.showMessage("Collection Updated Successfully!");
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
