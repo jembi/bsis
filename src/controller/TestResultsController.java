@@ -92,7 +92,7 @@ public class TestResultsController {
   }
 
   @RequestMapping(value = "/editTestResultFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editCollectionFormGenerator(
+  public ModelAndView editTestResultFormGenerator(
       Model model,
       @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
@@ -121,7 +121,7 @@ public class TestResultsController {
 
   @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
   public @ResponseBody
-  Map<String, ? extends Object> updateOrAddCollection(
+  Map<String, ? extends Object> updateOrAddTestResult(
       @ModelAttribute("editTestResultForm") TestResultBackingForm form) {
 
     boolean success = true;
@@ -134,7 +134,7 @@ public class TestResultsController {
       System.err.println("Entity Already exists");
       System.err.println(ex.getMessage());
       success = false;
-      errMsg = "Collection Already Exists";
+      errMsg = "Test Result Already Exists";
     } catch (Exception ex) {
       // TODO: Replace with logger
       System.err.println("Internal Exception");

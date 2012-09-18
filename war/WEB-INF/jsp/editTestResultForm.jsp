@@ -27,7 +27,7 @@
     yearRange : "c-100:c0",
   });
   function updateTestResult() {
-    addNewTestResult($("#editTestResultFormForm-" + '<c:out value="${formId}"/>')[0]);
+    addNewTestResult($("#editTestResultForm-" + '<c:out value="${formId}"/>')[0]);
     $("#editTestResultForm-" + '<c:out value="${formId}"/>')[0].reset();
   }
 </script>

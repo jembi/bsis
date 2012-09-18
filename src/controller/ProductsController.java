@@ -1,29 +1,34 @@
 package controller;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
-import model.Collection;
 import model.Product;
-import model.TestResult;
+import model.ProductBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.CollectionRepository;
 import repository.DisplayNamesRepository;
 import repository.ProductRepository;
-import repository.TestResultRepository;
+import repository.RecordFieldsConfigRepository;
 import utils.ControllerUtil;
 import utils.LoggerUtil;
+import viewmodel.ProductViewModel;
 
 @Controller
 public class ProductsController {
@@ -33,12 +38,111 @@ public class ProductsController {
 	@Autowired
 	private DisplayNamesRepository displayNamesRepository;
 
-	@Autowired
-	private CollectionRepository collectionRepository;
+  @Autowired
+  private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-	@Autowired
-	private TestResultRepository testResultRepository;
+  @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findProductFormInit(Model model) {
 
+    ProductBackingForm form = new ProductBackingForm();
+    model.addAttribute("findProductForm", form);
+
+    ModelAndView mv = new ModelAndView("findProductForm");
+    Map<String, Object> m = model.asMap();
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping("/findProduct")
+  public ModelAndView findProduct(
+      @ModelAttribute("findProductForm") ProductBackingForm form,
+      BindingResult result, Model model) {
+
+    List<Product> products = productRepository
+        .findAnyProductMatching(form.getProductNumber(), form.getCollectionNumber(), form.getType());
+
+    ModelAndView modelAndView = new ModelAndView("productsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findProductsTable");
+    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("product", m,
+        recordFieldsConfigRepository);
+    m.put("allProducts", getProductViewModels(products));
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editProductFormGenerator(
+      Model model,
+      @RequestParam(value = "productNumber", required = false) String productNumber,
+      @RequestParam(value = "isDialog", required = false) String isDialog) {
+
+    ProductBackingForm form = new ProductBackingForm();
+    Map<String, Object> m = model.asMap();
+    m.put("isDialog", isDialog);
+
+    if (productNumber != null) {
+      form.setCollectionNumber(productNumber);
+      Product product = productRepository
+          .findTestResultByProductNumber(productNumber);
+      if (product != null) {
+        form = new ProductBackingForm(product);
+      } else
+        form = new ProductBackingForm();
+    }
+    m.put("editProductForm", form);
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+    ModelAndView mv = new ModelAndView("editProductForm");
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> updateOrAddProduct(
+      @ModelAttribute("editProductForm") ProductBackingForm form) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      Product product = form.getProduct();
+      productRepository.updateOrAddProduct(product);
+    } catch (EntityExistsException ex) {
+      // TODO: Replace with logger
+      System.err.println("Entity Already exists");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Product Already Exists";
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+
+  private List<ProductViewModel> getProductViewModels(
+      List<Product> products) {
+    if (products == null)
+      return Arrays.asList(new ProductViewModel[0]);
+    List<ProductViewModel> productViewModels = new ArrayList<ProductViewModel>();
+    for (Product product : products) {
+      productViewModels.add(new ProductViewModel(product));
+    }
+    return productViewModels;
+  }
+	
 	@RequestMapping("/productsLandingPage")
 	public ModelAndView getProductsLandingPage(
 			HttpServletRequest httpServletRequest) {
@@ -59,187 +163,6 @@ public class ProductsController {
 		modelAndView.addObject("model", model);
 
 		return modelAndView;
-	}
-
-	@RequestMapping("/findProduct")
-	public ModelAndView findProduct(@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		String productNumber = params.get("findProductNumber");
-		Product product = productRepository.findProduct(productNumber);
-		ModelAndView modelAndView = new ModelAndView("products");
-		Map<String, Object> model = new HashMap<String, Object>();
-
-		if (product == null) {
-			model.put("productNotFound", true);
-			model.put("productNumber", productNumber);
-
-		} else {
-			model.put("productFound", true);
-			model.put("hasProduct", true);
-			model.put("product", product);
-		}
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-		modelAndView.addObject("model", model);
-
-		return modelAndView;
-
-	}
-
-	@RequestMapping("/addProduct")
-	public ModelAndView addProduct(@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		Map<String, Object> model = new HashMap<String, Object>();
-
-		String collectionNumber = params.get("collectionNumber");
-		Collection collection = collectionRepository
-				.findCollectionByNumber(collectionNumber);
-
-		ModelAndView modelAndView = new ModelAndView("products");
-		if (collection == null) {
-			model.put("collectionNotFound", true);
-			model.put("collectionNumber", collectionNumber);
-		} else {
-			if (isCollectionSafe(collection)) {
-
-				Product product = new Product(params.get("productNumber"),
-						collection, params.get("productType"), Boolean.FALSE,
-						Boolean.FALSE, params.get("comments"));
-				product.setAbo(collection.getAbo());
-				product.setRhd(collection.getRhd());
-				productRepository.saveProduct(product);
-				model.put("productCreated", true);
-
-				model.put("product", product);
-				model.put("hasProduct", true);
-			} else {
-				model.put("collectionUnsafe", true);
-				model.put("quarantineCollectionNo", collectionNumber);
-			}
-		}
-
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-		modelAndView.addObject("model", model);
-
-		return modelAndView;
-
-	}
-
-	private boolean isCollectionSafe(Collection collection) {
-		List<TestResult> allTestResults = testResultRepository
-				.getAllTestResults(collection.getCollectionNumber());
-		TestResult latestTestResult = null;
-		if (allTestResults.size() > 0) {
-			latestTestResult = Collections.max(allTestResults,
-					new Comparator<TestResult>() {
-						public int compare(TestResult testResult,
-								TestResult testResult1) {
-							return testResult.getDateTested().compareTo(
-									testResult1.getDateTested());
-						}
-					});
-		}
-		if (latestTestResult != null
-				&& isNegativeTestResult(latestTestResult.getHbv())
-				&& isNegativeTestResult(latestTestResult.getHcv())
-				&& isNegativeTestResult(latestTestResult.getHiv())
-				&& isNegativeTestResult(latestTestResult.getSyphilis())) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isNegativeTestResult(String testResult) {
-		return testResult != null
-				&& testResult.toLowerCase().equals("negative");
-	}
-
-	@RequestMapping("/updateProduct")
-	public ModelAndView updateProduct(@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		Map<String, Object> model = new HashMap<String, Object>();
-		String existingProductNumber = params.get("updateProductNumber");
-
-		String collectionNumber = params.get("updateCollectionNumber");
-		Collection collection = collectionRepository
-				.findCollectionByNumber(collectionNumber);
-		ModelAndView modelAndView = new ModelAndView("products");
-
-		if (collection == null) {
-			model.put("collectionNotFound", true);
-			model.put("collectionNumber", collectionNumber);
-			Collection dummyCollection = new Collection();
-			dummyCollection.setCollectionNumber(collectionNumber);
-			Product product = new Product(params.get("updateProductNumber"),
-					dummyCollection, params.get("updateProductType"),
-					Boolean.FALSE, Boolean.FALSE, params.get("comments"));
-			model.put("product", product);
-			model.put("hasProduct", true);
-			model.put("productNotUpdated", true);
-
-		} else {
-			if (isCollectionSafe(collection)) {
-
-				Product product1 = new Product(
-						params.get("updateProductNumber"), collection,
-						params.get("updateProductType"), Boolean.FALSE,
-						Boolean.FALSE, params.get("comments"));
-				product1.setAbo(collection.getAbo());
-				product1.setRhd(collection.getRhd());
-				Product existingProduct = productRepository.updateProduct(
-						product1, existingProductNumber);
-				model.put("productUpdated", true);
-				Product product = existingProduct;
-
-				model.put("productUpdated", true);
-
-				model.put("product", product);
-				model.put("hasProduct", true);
-			} else {
-				Product product = productRepository
-						.findProduct(existingProductNumber);
-				model.put("product", product);
-				model.put("hasProduct", true);
-				model.put("productNotUpdated", true);
-				model.put("quarantineCollectionNo", collectionNumber);
-				model.put("collectionUnsafe", true);
-			}
-		}
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-
-		modelAndView.addObject("model", model);
-
-		return modelAndView;
-
-	}
-
-	@RequestMapping("/deleteProduct")
-	public ModelAndView deleteProduct(@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		Product product = null;
-		Map<String, Object> model = new HashMap<String, Object>();
-		String existingProductNumber = params.get("updateProductNumber");
-
-		productRepository.delete(existingProductNumber);
-
-		model.put("productDeleted", true);
-		model.put("productNumberDeleted", existingProductNumber);
-
-		ModelAndView modelAndView = new ModelAndView("products");
-
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-
-		modelAndView.addObject("model", model);
-
-		return modelAndView;
-
 	}
 
 }

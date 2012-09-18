@@ -8,7 +8,6 @@ function updateExistingCollection(form) {
 
 function updateCollectionGeneric(form, url) {
   var collection = $("#" + form.getAttribute("id")).serialize();
-  console.log(collection);
   $.ajax({
     type : "POST",
     url : url,

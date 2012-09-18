@@ -60,9 +60,6 @@
 			<c:if test="${model.showdateOfBirth==true}">
 				<th>${model.dobDisplayName}</th>
 			</c:if>
-			<c:if test="${model.showaddress==true}">
-				<th>${model.addressDisplayName}</th>
-			</c:if>
 		</tr>
 	</thead>
 	<tbody>
@@ -83,9 +80,6 @@
 				</c:if>
 				<c:if test="${model.showdateOfBirth==true}">
 					<td>${donor.birthDate}</td>
-				</c:if>
-				<c:if test="${model.showaddress==true}">
-					<td>${donor.address}</td>
 				</c:if>
 			</tr>
 		</c:forEach>

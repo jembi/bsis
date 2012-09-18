@@ -186,4 +186,20 @@ public class ProductRepository {
 		}
 		em.flush();
 	}
+
+  public List<Product> findAnyProductMatching(String productNumber,
+      String collectionNumber, String type) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Product findTestResultByProductNumber(String productNumber) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void updateOrAddProduct(Product product) {
+    // TODO Auto-generated method stub
+    
+  }
 }

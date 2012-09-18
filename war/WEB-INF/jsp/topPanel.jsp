@@ -36,7 +36,7 @@
 		<li class="topPanelTab"><a href="#collectionsLandingPageContent">Collections</a></li>
 		<li class="topPanelTab"><a href="#testResultsLandingPageContent">Test
 				Results</a></li>
-		<li class="topPanelTab"><a href="productsLandingPage.html">Products</a></li>
+		<li class="topPanelTab"><a href="#productsLandingPageContent">Products</a></li>
 		<li class="topPanelTab"><a href="requestsLandingPage.html">Request</a></li>
 		<li class="topPanelTab"><a href="issueLandingPage.html">Issue</a></li>
 		<li class="topPanelTab"><a href="usageLandingPage.html">Usage</a></li>
@@ -66,6 +66,10 @@
 
 	<div id="testResultsLandingPageContent">
 		<jsp:include page="testResults.jsp" />
+	</div>
+
+	<div id="productsLandingPageContent">
+		<jsp:include page="products.jsp" />
 	</div>
 
 </div>
