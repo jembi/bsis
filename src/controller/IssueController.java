@@ -147,8 +147,6 @@ public class IssueController {
 			Product issuedProduct = new Product();
 			issuedProduct.copy(product);
 			issuedProduct.setIssued(Boolean.TRUE);
-			productRepository.updateProduct(issuedProduct,
-					product.getProductNumber());
 			if (issuedProduct.getType().equals("platelets")) {
 				plateletsIssued++;
 			}
