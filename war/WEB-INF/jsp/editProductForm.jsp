@@ -44,15 +44,19 @@
 				<td><form:input path="collectionNumber" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="types">${model.productTypeDisplayName}</form:label></td>
-				<td><form:select path="types"
+				<td><form:label path="type">${model.productTypeDisplayName}</form:label></td>
+				<td><form:select path="type"
 						id="editProductFormTypes-${formId}" class="editProductFormTypes">
 						<form:option value="wholeBlood" label="Whole Blood"
-							selected="selected" />
-						<form:option value="rcc" label="RCC" />
-						<form:option value="ffp" label="ffp" />
-						<form:option value="platelets" label="Platelets" />
-						<form:option value="partialPlatelets" label="Partial Platelets" />
+							selected="${model.selectedType == 'wholeBlood' ? 'selected' : ''}" />
+						<form:option value="rcc" label="RCC"
+							selected="${model.selectedType == 'rcc' ? 'selected' : ''}" />
+						<form:option value="ffp" label="ffp"
+							selected="${model.selectedType == 'ffp' ? 'selected' : ''}" />
+						<form:option value="platelets" label="Platelets"
+							selected="${model.selectedType == 'platelets' ? 'selected' : ''}" />
+						<form:option value="partialPlatelets" label="Partial Platelets"
+							selected="${model.selectedType == 'partialPlatelets' ? 'selected' : ''}" />
 					</form:select></td>
 			</tr>
 			<c:if test="${model.isDialog != 'yes' }">

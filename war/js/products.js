@@ -1,9 +1,9 @@
 function addNewProduct(form) {
-  updateTestResultGeneric(form, "updateProduct.html");
+  updateProductGeneric(form, "updateProduct.html");
 }
 
 function updateExistingProduct(form) {
-  updateTestResultGeneric(form, "updateProduct.html");
+  updateProductGeneric(form, "updateProduct.html");
 }
 
 function updateProductGeneric(form, url) {

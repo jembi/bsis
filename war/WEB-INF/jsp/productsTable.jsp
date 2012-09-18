@@ -30,11 +30,11 @@
         var productId = elements[0].innerHTML;
 
         generateEditForm("editProductFormGenerator.html", {
-          productNumber : productId
+          productNumber : productId,
           isDialog : "yes"
-        }, updateExistingTestResult, "Edit Product: "
+        }, updateExistingProduct, "Edit Product: "
             + elements[1].innerHTML + " " + elements[2].innerHTML,
-            'ProductsTable', decorateEditProductDialog, 550, 500);
+            'productsTable', decorateEditProductDialog, 550, 500);
       });
 </script>
 
@@ -58,8 +58,8 @@
 			<tr>
 				<td>${product.productNumber}</td>
 				<td>${product.collectionNumber}</td>
-				<c:if test="${product.showproductType}">
-					<td>${product.productType}</td>
+				<c:if test="${model.showproductType}">
+					<td>${product.type}</td>
 				</c:if>
 			</tr>
 		</c:forEach>

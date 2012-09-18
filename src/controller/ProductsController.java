@@ -32,11 +32,11 @@ import viewmodel.ProductViewModel;
 
 @Controller
 public class ProductsController {
-	@Autowired
-	private ProductRepository productRepository;
+  @Autowired
+  private ProductRepository productRepository;
 
-	@Autowired
-	private DisplayNamesRepository displayNamesRepository;
+  @Autowired
+  private DisplayNamesRepository displayNamesRepository;
 
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
@@ -60,8 +60,8 @@ public class ProductsController {
       @ModelAttribute("findProductForm") ProductBackingForm form,
       BindingResult result, Model model) {
 
-    List<Product> products = productRepository
-        .findAnyProductMatching(form.getProductNumber(), form.getCollectionNumber(), form.getType());
+    List<Product> products = productRepository.findAnyProductMatching(
+        form.getProductNumber(), form.getCollectionNumber(), form.getTypes());
 
     ModelAndView modelAndView = new ModelAndView("productsTable");
     Map<String, Object> m = model.asMap();
@@ -84,13 +84,14 @@ public class ProductsController {
     ProductBackingForm form = new ProductBackingForm();
     Map<String, Object> m = model.asMap();
     m.put("isDialog", isDialog);
-
+    m.put("selectedType", "wholeBlood");
     if (productNumber != null) {
       form.setCollectionNumber(productNumber);
       Product product = productRepository
-          .findTestResultByProductNumber(productNumber);
+          .findProductByProductNumber(productNumber);
       if (product != null) {
         form = new ProductBackingForm(product);
+        m.put("selectedType", product.getType());
       } else
         form = new ProductBackingForm();
     }
@@ -132,8 +133,7 @@ public class ProductsController {
     return m;
   }
 
-  private List<ProductViewModel> getProductViewModels(
-      List<Product> products) {
+  private List<ProductViewModel> getProductViewModels(List<Product> products) {
     if (products == null)
       return Arrays.asList(new ProductViewModel[0]);
     List<ProductViewModel> productViewModels = new ArrayList<ProductViewModel>();
@@ -142,27 +142,26 @@ public class ProductsController {
     }
     return productViewModels;
   }
-	
-	@RequestMapping("/productsLandingPage")
-	public ModelAndView getProductsLandingPage(
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
 
-		return new ModelAndView("productsLandingPage");
-	}
+  @RequestMapping("/productsLandingPage")
+  public ModelAndView getProductsLandingPage(
+      HttpServletRequest httpServletRequest) {
+    LoggerUtil.logUrl(httpServletRequest);
 
-	@RequestMapping("/products")
-	public ModelAndView getProducts(HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
+    return new ModelAndView("productsLandingPage");
+  }
 
-		ModelAndView modelAndView = new ModelAndView("products");
-		Map<String, Object> model = new HashMap<String, Object>();
+  @RequestMapping("/products")
+  public ModelAndView getProducts(HttpServletRequest httpServletRequest) {
+    LoggerUtil.logUrl(httpServletRequest);
 
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-		modelAndView.addObject("model", model);
+    ModelAndView modelAndView = new ModelAndView("products");
+    Map<String, Object> model = new HashMap<String, Object>();
 
-		return modelAndView;
-	}
+    ControllerUtil.addProductDisplayNamesToModel(model, displayNamesRepository);
+    modelAndView.addObject("model", model);
+
+    return modelAndView;
+  }
 
 }
