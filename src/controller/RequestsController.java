@@ -97,9 +97,7 @@ public class RequestsController {
   @RequestMapping("/pendingRequests")
   public ModelAndView findPendingRequests(Model model) {
 
-    List<Request> requests = requestRepository.findAnyRequestMatching("", "",
-        "", "", "", Arrays.asList(""), Arrays.asList(""),
-        Arrays.asList("pending", "partiallyFulfilled"));
+    List<Request> requests = requestRepository.findRequestsNotFulfilled();
 
     ModelAndView modelAndView = new ModelAndView("requestsTable");
     Map<String, Object> m = model.asMap();

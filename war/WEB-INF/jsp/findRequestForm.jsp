@@ -125,6 +125,12 @@
 					</form:select></td>
 			</tr>
 			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><b><i>Filter Requests</i></b></td>
+			</tr>
+			<tr>
 				<td><form:label path="statuses">${model.statusDisplayName}</form:label></td>
 				<td style="padding-left:10px;"><form:select path="statuses" id="findRequestFormStatuses">
 						<form:option value="partiallyFulfilled"
@@ -134,12 +140,6 @@
 						<form:option path="status" value="fulfilled" label="Fulfilled"
 							selected="selected" />
 					</form:select></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b><i>Filter Requests</i></b></td>
 			</tr>
 			<tr>
 				<td>Having Request Date Between</td>

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -113,15 +114,16 @@ public class RequestRepository {
       String dateRequiredFrom, String dateRequiredTo, List<String> sites,
       List<String> productTypes, List<String> statuses) {
 
-    TypedQuery<Request> query = em.createQuery(
-        "SELECT r FROM Request r, Location L WHERE "
-            + "(L.locationId=r.siteId AND L.isCollectionSite=TRUE) AND "
-            + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
-            + "r.productType IN (:productTypes) OR r.status IN (:statuses)) AND "
-            + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
-            + ":dateRequestedTo) AND (r.dateRequired BETWEEN "
-            + ":dateRequiredFrom AND " + ":dateRequiredTo)) AND "
-            + "(r.isDeleted= :isDeleted)", Request.class);
+    TypedQuery<Request> query = em
+        .createQuery(
+            "SELECT r FROM Request r, Location L WHERE "
+                + "(L.locationId=r.siteId AND L.isCollectionSite=TRUE) AND "
+                + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
+                + "r.productType IN (:productTypes)) AND (r.status IN (:statuses)) AND "
+                + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
+                + ":dateRequestedTo) AND (r.dateRequired BETWEEN "
+                + ":dateRequiredFrom AND " + ":dateRequiredTo)) AND "
+                + "(r.isDeleted= :isDeleted)", Request.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
 
@@ -195,5 +197,18 @@ public class RequestRepository {
     em.merge(existingRequest);
     em.flush();
     return existingRequest;
+  }
+
+  public List<Request> findRequestsNotFulfilled() {
+    TypedQuery<Request> query = em.createQuery(
+        "SELECT r FROM Request r, Location L WHERE "
+            + "(L.locationId=r.siteId AND L.isCollectionSite=TRUE) AND"
+            + "(r.status NOT IN (:statuses)) AND "
+            + "(r.isDeleted= :isDeleted)", Request.class);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("statuses", Arrays.asList("fulfilled"));
+    List<Request> resultList = query.getResultList();
+    return resultList;
   }
 }
