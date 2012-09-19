@@ -107,4 +107,22 @@ public class RequestRepository {
 		query.setParameter("isDeleted", Boolean.FALSE);
 		return new ArrayList<Request>(query.getResultList());
 	}
+
+  public List<Request> findAnyRequestMatching(String requestNumber,
+      String dateRequestedFrom, String dateRequestedTo,
+      String dateRequiredFrom, String dateRequiredTo, List<String> sites,
+      List<String> productTypes) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Request findRequestByRequestNumber(String requestNumber) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Request updateOrAddRequest(Request request) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

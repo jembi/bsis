@@ -1,205 +1,168 @@
 package controller;
 
-import static utils.ControllerUtil.addFieldsToDisplay;
-import static utils.ControllerUtil.addRequestDisplayNamesToModel;
-import static utils.ControllerUtil.getDate;
-import static utils.ControllerUtil.getOptionalParamValue;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
-import model.Location;
-import model.RecordFieldsConfig;
 import model.Request;
+import model.RequestBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.DisplayNamesRepository;
 import repository.LocationRepository;
 import repository.RecordFieldsConfigRepository;
 import repository.RequestRepository;
-import utils.LoggerUtil;
+import utils.ControllerUtil;
 import viewmodel.RequestViewModel;
 
 @Controller
 public class RequestsController {
 
-	@Autowired
-	private RequestRepository requestRepository;
+  @Autowired
+  private RequestRepository requestRepository;
 
-	@Autowired
-	private LocationRepository locationRepository;
+  @Autowired
+  private LocationRepository locationRepository;
 
-	@Autowired
-	private DisplayNamesRepository displayNamesRepository;
-	@Autowired
-	private RecordFieldsConfigRepository recordFieldsConfigRepository;
+  @Autowired
+  private DisplayNamesRepository displayNamesRepository;
+  @Autowired
+  private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-	@RequestMapping("/requestsLandingPage")
-	public ModelAndView getRequestsPage(HttpServletRequest request) {
+  @RequestMapping("/requestsLandingPage")
+  public ModelAndView getRequestsPage(HttpServletRequest request) {
 
-		return new ModelAndView("requestsLandingPage");
-	}
+    return new ModelAndView("requestsLandingPage");
+  }
 
-	@RequestMapping("/requestsAdd")
-	public ModelAndView getAddRequestsPage(HttpServletRequest request) {
+  @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findRequestFormInit(Model model) {
 
-		ModelAndView modelAndView = new ModelAndView("requestsAdd");
-		Map<String, Object> model = new HashMap<String, Object>();
-		addUsageSitesToModel(model);
-		addRequestDisplayNamesToModel(model, displayNamesRepository);
-		addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+    RequestBackingForm form = new RequestBackingForm();
+    model.addAttribute("findRequestForm", form);
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    ModelAndView mv = new ModelAndView("findRequestForm");
+    Map<String, Object> m = model.asMap();
 
-	@RequestMapping("/requestsUpdate")
-	public ModelAndView getUpdateRequestsPage(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		Long requestId = getParam(params, "selectedRequestId");
-		Request request = requestRepository.findRequest(requestId);
-		ModelAndView modelAndView = new ModelAndView("requestsUpdate");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("hasRequest", true);
-		List<Location> sites = addUsageSitesToModel(model);
-		model.put("request", new RequestViewModel(request, sites));
-		addRequestDisplayNamesToModel(model, displayNamesRepository);
-		addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+    m.put("sites", sites);
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+    return mv;
+  }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+  @RequestMapping("/findRequest")
+  public ModelAndView findRequest(
+      @ModelAttribute("findRequestForm") RequestBackingForm form,
+      BindingResult result, Model model) {
 
-	@RequestMapping("/addNewRequest")
-	public ModelAndView addNewRequests(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		ModelAndView modelAndView = new ModelAndView("requestsUpdate");
-		Map<String, Object> model = new HashMap<String, Object>();
+    List<Request> requests = requestRepository.findAnyRequestMatching(
+        form.getRequestNumber(), form.getDateRequestedFrom(),
+        form.getDateRequestedTo(), form.getDateRequiredFrom(),
+        form.getDateRequiredTo(), form.getSites(), form.getProductTypes());
 
-		RecordFieldsConfig recordFieldsConfig = recordFieldsConfigRepository
-				.getRecordFieldsConfig("request");
-		Request request = new Request(params.get("requestNumber"),
-				getOptionalParamValue(getDate(params.get("requestDate")),
-						recordFieldsConfig, "requestDate"),
-				getOptionalParamValue(getDate(params.get("requiredDate")),
-						recordFieldsConfig, "requiredDate"), getParam(params,
-						"site"), params.get("productType"), params.get("abo"),
-				params.get("rhd"), getParam(params, "quantity").intValue(),
-				params.get("status"), Boolean.FALSE, getOptionalParamValue(
-						params.get("comment"), recordFieldsConfig, "comment"));
-		requestRepository.saveRequest(request);
-		model.put("requestAdded", true);
-		model.put("hasRequest", true);
-		List<Location> sites = addUsageSitesToModel(model);
-		model.put("request", new RequestViewModel(request, sites));
-		addRequestDisplayNamesToModel(model, displayNamesRepository);
-		addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+    ModelAndView modelAndView = new ModelAndView("requestsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findRequestsTable");
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+    m.put("sites", sites);
 
-	@RequestMapping("/updateExistingRequest")
-	public ModelAndView updateExistingRequests(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		ModelAndView modelAndView = new ModelAndView("requestsUpdate");
-		Map<String, Object> model = new HashMap<String, Object>();
+    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("request", m,
+        recordFieldsConfigRepository);
+    m.put("allRequests", getRequestViewModels(requests));
 
-		RecordFieldsConfig recordFieldsConfig = recordFieldsConfigRepository
-				.getRecordFieldsConfig("request");
-		Request request = new Request(params.get("requestNumber"),
-				getOptionalParamValue(getDate(params.get("requestDate")),
-						recordFieldsConfig, "requestDate"),
-				getOptionalParamValue(getDate(params.get("requiredDate")),
-						recordFieldsConfig, "requiredDate"), getParam(params,
-						"site"), params.get("productType"), params.get("abo"),
-				params.get("rhd"), getParam(params, "quantity").intValue(),
-				params.get("status"), Boolean.FALSE, getOptionalParamValue(
-						params.get("comment"), recordFieldsConfig, "comment"));
-		String requestNumber = params.get("requestNumber");
-		requestRepository.updateRequest(request, requestNumber);
-		model.put("requestUpdated", true);
-		model.put("hasRequest", true);
-		List<Location> sites = addUsageSitesToModel(model);
-		model.put("request", new RequestViewModel(request, sites));
-		addRequestDisplayNamesToModel(model, displayNamesRepository);
-		addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+  @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editRequestFormGenerator(
+      Model model,
+      @RequestParam(value = "requestNumber", required = false) String requestNumber,
+      @RequestParam(value = "isDialog", required = false) String isDialog) {
 
-	@RequestMapping("/deleteExistingRequest")
-	public ModelAndView deleteExistingRequests(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		ModelAndView modelAndView = new ModelAndView("requestsAdd");
-		Map<String, Object> model = new HashMap<String, Object>();
+    RequestBackingForm form = new RequestBackingForm();
+    Map<String, Object> m = model.asMap();
+    m.put("isDialog", isDialog);
 
-		String requestNumber = params.get("requestNumber");
+    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+    m.put("sites", sites);
 
-		requestRepository.delete(requestNumber);
-		model.put("requestDeleted", true);
-		model.put("deletedRequestNumber", requestNumber);
-		List<Location> sites = addUsageSitesToModel(model);
-		addRequestDisplayNamesToModel(model, displayNamesRepository);
-		addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+    if (requestNumber != null) {
+      form.setRequestNumber(requestNumber);
+      Request request = requestRepository
+          .findRequestByRequestNumber(requestNumber);
+      if (request != null) {
+        form = new RequestBackingForm(request);
+      } else
+        form = new RequestBackingForm();
+    }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    m.put("editRequestForm", form);
+    // to ensure custom field names are displayed in the form
+    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
+    ModelAndView mv = new ModelAndView("editRequestForm");
+    mv.addObject("model", m);
+    return mv;
+  }
 
-	@RequestMapping("/viewAllRequests")
-	public ModelAndView findAllRequestsByCollection(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		ModelAndView modelAndView = new ModelAndView("requestsTable");
-		Map<String, Object> model = new HashMap<String, Object>();
-		ArrayList<Request> allRequests = requestRepository.getAllRequests();
-		if (allRequests.size() == 0) {
-			model.put("noRequestsFound", true);
-		} else {
-			List<RequestViewModel> allRequestViewModels = new ArrayList<RequestViewModel>();
-			List<Location> sites = addUsageSitesToModel(model);
+  @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> updateOrAddRequest(
+      @ModelAttribute("editRequestForm") RequestBackingForm form) {
 
-			for (Request request : allRequests) {
-				allRequestViewModels.add(new RequestViewModel(request, sites));
-			}
-			model.put("allRequests", allRequestViewModels);
-		}
-		addRequestDisplayNamesToModel(model, displayNamesRepository);
-		addFieldsToDisplay("request", model, recordFieldsConfigRepository);
+    boolean success = true;
+    String errMsg = "";
+    try {
+      Request request = form.getRequest();
+      requestRepository.updateOrAddRequest(request);
+    } catch (EntityExistsException ex) {
+      // TODO: Replace with logger
+      System.err.println("Entity Already exists");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Request Already Exists";
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
 
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
 
-	private Long getParam(Map<String, String> params, String paramName) {
-		String paramValue = params.get(paramName);
-		return paramValue == null || paramValue.isEmpty() ? null : Long
-				.parseLong(paramValue);
-	}
+  private List<RequestViewModel> getRequestViewModels(
+      List<Request> requests) {
+    if (requests == null)
+      return Arrays.asList(new RequestViewModel[0]);
+    List<RequestViewModel> requestViewModels = new ArrayList<RequestViewModel>();
+    for (Request request : requests) {
+      requestViewModels.add(new RequestViewModel(request));
+    }
+    return requestViewModels;
+  }
 
-	private List<Location> addUsageSitesToModel(Map<String, Object> model) {
-		List<Location> allUsageSites = locationRepository.getAllUsageSites();
-		model.put("sites", allUsageSites);
-		return allUsageSites;
-	}
 }

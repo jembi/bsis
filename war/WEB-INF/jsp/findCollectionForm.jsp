@@ -33,7 +33,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yyyy-mm-dd",
+    dateFormat : "yy-mm-dd",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateCollectedTo").datepicker("option", "minDate", selectedDate);

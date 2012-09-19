@@ -1,26 +1,28 @@
-$(document).ready(function() {
-    $("#requestsErrorMessagePanel").hide();
-    $("#requestDate").datepicker();
-    $("#requiredDate").datepicker();
-    var today = new Date();
-    $.setDefaultDate($('#requestDate'), today);
+function addNewRequest(form) {
+  updateRequestGeneric(form, "updateRequest.html");
+}
 
-    $('#addRequestButton').click(function() {
-        $('#requestMessagePanel').hide();
-        if ($.validateForm('addRequestsForm', "requestsErrorMessagePanel") == true) {
-            $('#addRequestsForm').submit();
-        }
-    });
+function updateExistingRequest(form) {
+  updateRequestGeneric(form, "updateRequest.html");
+}
 
-    $('#updateRequestButton').click(function() {
-        $('#requestMessagePanel').hide();
-        if ($.validateForm('updateRequestsForm', "requestsErrorMessagePanel") == true) {
-            $('#updateRequestsForm').submit();
-        }
-    });
+function updateRequestGeneric(form, url) {
+  var request = $("#" + form.getAttribute("id")).serialize();
+  $.ajax({
+    type : "POST",
+    url : url,
+    data : request,
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Request Updated Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
 
-    $('#deleteRequestButton').click(function() {
-        $('#updateRequestsForm').attr("action", "deleteExistingRequest.html");
-        $('#updateRequestsForm').submit();
-    });
-});
+function decorateEditRequestDialog() {
+};

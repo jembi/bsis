@@ -17,7 +17,11 @@ public class RequestViewModel {
 		this.sites = sites;
 	}
 
-	public Long getRequestId() {
+	public RequestViewModel(Request request) {
+	  this.request = request;
+  }
+
+  public Long getRequestId() {
 		return request.getRequestId();
 	}
 

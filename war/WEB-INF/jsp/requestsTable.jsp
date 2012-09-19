@@ -1,122 +1,107 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
-<% pageContext.setAttribute("newLineChar", "\n"); %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>V2V</title>
-    <link type="text/css" rel="stylesheet" href="css/requests.css"/>
-    <jsp:include page="commonHeadIncludes.jsp" flush="true"/>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 
+<c:set var="table_id">${model.tableName}</c:set>
 
-</head>
-<body>
-<div class="mainBody">
-    <div class="mainContent">
-        <jsp:include page="topPanel.jsp" flush="true"/>
-        <div class="leftPanel">
-            <ul id="requestsTabs" class="leftPanelTabs">
-                <li id="addRequestsTab"><a href="requestsAdd.html">Add</a></li>
-                <li id="updateRequestsTab" class="selectedTab"><a href="viewAllRequests.html">View</a>
-                </li>
-            </ul>
-        </div>
-        <div class="centerPanel">
-            <div class="centralContent">
-                <div id="requestsMessagePanel" class="infoMessage">
-                    <c:if test="${model.noRequestsFound==true}">
-                        <p>No requests found</p>
-                    </c:if>
-                </div>
+<script>
+  var table_id = "${table_id}";
+  var requestsTable = $("#" + table_id).dataTable({
+    "bJQueryUI" : true
+  });
 
+  $("#" + table_id + " tbody").dblclick(
+      function(event) {
 
-                <c:if test="${not empty model.allRequests}">
-                    <div id="allRequests">
+        // remove row_selected class everywhere
+        $(requestsTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
 
-                        <table id="requestsTable">
-                            <tr>
-                                <th>${model.requestNoDisplayName}</th>
-                                <c:if test="${model.showrequestDate==true}">
+        // add row_selected class to the current row
+        $(event.target.parentNode).addClass('row_selected');
 
-                                <th>${model.requestDateDisplayName}</th>
-                                </c:if>
-                                <c:if test="${model.showrequiredDate==true}">
+        var elements = $(event.target.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
 
-                                <th>${model.requiredDateDisplayName}</th>
-                                </c:if>
-                                <th>${model.siteDisplayName}</th>
-                                <th>${model.bloodGroupDisplayName}</th>
-                                <th>${model.productTypeDisplayName}</th>
-                                <th>${model.quantityDisplayName}</th>
-                                <c:if test="${model.showcomment==true}">
+        var requestId = elements[0].innerHTML;
 
-                                <th>${model.commentDisplayName}</th>
-                                </c:if>
-                                <th>${model.statusDisplayName}</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            <c:forEach var="request" items="${model.allRequests}">
-                                <tr>
-                                    <td>${request.requestNumber}</td>
-                                    <c:if test="${model.showrequestDate==true}">
+        generateEditForm("editRequestFormGenerator.html", {
+          requestNumber : requestId,
+          isDialog : "yes"
+        }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
+            + " " + elements[2].innerHTML, 'requestsTable',
+            decorateEditRequestDialog, 550, 500);
+      });
+</script>
 
-                                    <td>${request.dateRequested}</td>
-                                    </c:if>
-                                    <c:if test="${model.showrequiredDate==true}">
+<br />
+<jsp:include page="addRequest.jsp" flush="true" />
+<br />
+<br />
 
-                                    <td>${request.dateRequired}</td>
-                                    </c:if>
-                                    <td>${request.siteName}</td>
-                                    <td>${request.abo}
-                                        <c:choose>
-                                            <c:when test="${request.rhd=='positive'}">
-                                                +
-                                            </c:when>
-                                            <c:when test="${request.rhd=='negative'}">
-                                                -
-                                            </c:when>
-                                        </c:choose>
-                                    </td>
-                                    <td>${request.productType}</td>
-                                    <td>${request.quantity}</td>
-                                    <c:if test="${model.showcomment==true}">
-
-                                    <td>${request.comment}</td>
-                                    </c:if>
-                                    <td>${request.status}</td>
-                                    <td>
-                                        <a href="requestsUpdate.html?selectedRequestId=${request.requestId}">edit/delete</a>
-                                    </td>
-
-                                    <td>
-                                        <c:if test="${request.unfulfilled==true}">
-                                            <a href="issueProduct.html?selectedRequestId=${request.requestId}">issue</a>
-                                        </c:if>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
-                    </div>
-                </c:if>
-            </div>
-
-        </div>
-        <c:if test="${fn:length(model.tipsDisplayName)>0}">
-           <div id="showTips" class="link showTips">show tips</div>
-    <div class="rightPanel">
-        <div id="hideTips" class="link hideTips">hide tips</div>
-                <p class="tipsTitle">Tips</p>
-
-                <p>${fn:replace(model.tipsDisplayName,newLineChar,"<br/>")}</p>
-            </div>
-        </c:if>
-        <jsp:include page="bottomPanel.jsp" flush="true"/>
-    </div>
-</div>
-</body>
-</html>
+<table id="${table_id}" class="dataTable collectionsTable">
+	<thead>
+		<tr>
+			<th>${model.requestNoDisplayName}</th>
+			<c:if test="${model.showdateRequested==true}">
+				<th>${model.dateRequestedDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showdateRequired==true}">
+				<th>${model.dateRequiredDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showsite==true}">
+				<th>${model.siteDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showabo==true}">
+				<th>${model.aboDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showrhd==true}">
+				<th>${model.rhdDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showproductType==true}">
+				<th>${model.productTypeDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showquantity==true}">
+				<th>${model.quantityDisplayName}</th>
+			</c:if>
+			<c:if test="${model.showstatus==true}">
+				<th>${model.statusDisplayName}</th>
+			</c:if>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="request" items="${model.allRequests}">
+			<tr>
+				<td>${request.requestNumber}</td>
+				<c:if test="${model.showdateRequested==true}">
+					<td>${request.dateRequested}</td>
+				</c:if>
+				<c:if test="${model.showdateRequired==true}">
+					<td>${request.dateRequired}</td>
+				</c:if>
+				<c:if test="${model.showsite == true}">
+					<td>${request.site}</td>
+				</c:if>
+				<c:if test="${model.showabo == true}">
+					<td>${request.abo}</td>
+				</c:if>
+				<c:if test="${model.showrhd == true}">
+					<td>${request.rhd}</td>
+				</c:if>
+				<c:if test="${model.showproductType == true}">
+					<td>${request.type}</td>
+				</c:if>
+				<c:if test="${model.showquantity == true}">
+					<td>${request.quantity}</td>
+				</c:if>
+				<c:if test="${model.showstatus == true}">
+					<td>${request.status}</td>
+				</c:if>
+			</tr>
+		</c:forEach>
+	</tbody>
+</table>

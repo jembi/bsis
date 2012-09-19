@@ -1,19 +1,50 @@
-#requestsTable {
-    width: 100%;
-    border: 3px outset #BAB6B8;
-    border-collapse: collapse;
-    margin-top: 30px;
+.findRequestsForm table tbody tr td, .findRequestsForm table thead tr th {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: 0;
 }
 
-#requestsTable th, td {
-    border: 1px solid #BAB6B8;
-    padding: 1px;
-    font-weight: normal;
-    text-align: center;
-    width: 10%;
+.findRequestsForm table tbody tr td button {
+	margin-left: 10px;
 }
 
-#requestsTable th {
-    background-color: #C9C5C7;
+#requestsTab {
+	position: relative;
+	padding-left: 11em;
+	min-height: 500px;
+}
+
+#requestsTab .ui-tabs-nav {
+	position: absolute;
+	left: 0.25em;
+	top: 0.25em;
+	bottom: 0.25em;
+	width: 9.4em;
+	padding: 0.2em 0 0.2em 0.2em;
+}
+
+#requestsTab .ui-tabs-nav li {
+	right: 1px;
+	width: 100%;
+	border-right: none;
+	border-bottom-width: 1px !important;
+	-moz-border-radius: 4px 0px 0px 4px;
+	-webkit-border-radius: 4px 0px 0px 4px;
+	border-radius: 4px 0px 0px 4px;
+	overflow: hidden;
+}
+
+#requestsTab .ui-tabs-nav li.ui-tabs-selected {
+	border-right: 1px solid transparent;
+}
+
+#requestsTab .ui-tabs-nav li a {
+	float: right;
+	width: 100%;
+	text-align: right;
+}
+
+#requestsTab>div {
+	overflow: auto;
 }
 

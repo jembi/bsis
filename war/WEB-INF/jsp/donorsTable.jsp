@@ -8,9 +8,10 @@
 <script>
   var table_id = "${table_id}";
   var donorsTable = $("#" + table_id).dataTable({
-    "bJQueryUI" : true
+    "bJQueryUI" : true,
+    "sDom" : 'Rlfrtip'
   });
-  
+
   $("#" + table_id + " tbody").dblclick(
       function(event) {
 
@@ -32,7 +33,8 @@
         generateEditForm("editDonorFormGenerator.html", {
           donorNumber : donorId
         }, updateExistingDonor, "Edit Donor: " + elements[1].innerHTML + " "
-            + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog, 550, 500);
+            + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog,
+            550, 500);
       });
 </script>
 
