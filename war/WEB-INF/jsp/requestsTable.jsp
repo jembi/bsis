@@ -36,6 +36,41 @@
             + " " + elements[2].innerHTML, 'requestsTable',
             decorateEditRequestDialog, 550, 575);
       });
+
+  function showIssueRequestDialog(requestNumber) {
+
+      var issueDialogId = 'issueRequest' + requestNumber;
+      console.log(issueDialogId);
+      $.ajax({
+        url : "findAvailableProducts.html",
+        contentType: "application/json",
+        type : "GET",
+        data : {},
+        success : function(responseData) {
+          var message = "<h3>" + "Select a Product to Issue for Request Number: " + requestNumber + "</h3>";
+          $("<div id='" + issueDialogId + "'>" + message + responseData + "</div>").dialog({
+            autoOpen : false,
+            height : 600,
+            width : 718,
+            modal : true,
+            title : "Select a Product to issue for Request Number: " + requestNumber,
+            buttons : {
+              "Issue Selected Product" : function() {
+                $(this).dialog("close");
+              },
+              "Cancel" : function() {
+                $(this).dialog("close");
+              }
+            },
+            close : function() {
+              $("#" + issueDialogId).remove();
+            }
+          });
+          $('#' + issueDialogId).dialog("open");
+        }
+      });
+  }
+
 </script>
 
 <jsp:include page="addRequestButton.jsp" flush="true" />
@@ -101,7 +136,11 @@
 				<c:if test="${model.showstatus == true}">
 					<td>${request.status}</td>
 				</c:if>
-				<td><a href="">Issue</a></td>
+				<td><c:if test="${request.status != 'fulfilled'}">
+						<a style="color: darkblue;"
+							onclick="showIssueRequestDialog(${request.requestNumber})"> <u>Issue</u>
+						</a>
+					</c:if></td>
 			</tr>
 		</c:forEach>
 	</tbody>

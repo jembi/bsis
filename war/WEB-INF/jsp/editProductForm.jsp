@@ -31,9 +31,11 @@
 	id="editProductForm-${formId}">
 	<table>
 		<thead>
-			<tr>
-				<td><b>Add a New Product</b></td>
-			</tr>
+			<c:if test="${model.isDialog != 'yes' }">
+				<tr>
+					<td><b>Add a New Product</b></td>
+				</tr>
+			</c:if>
 		</thead>
 		<tbody>
 			<tr>

@@ -38,9 +38,12 @@
       });
 </script>
 
-<jsp:include page="addProductButton.jsp" flush="true" />
-<br />
-<br />
+<c:if
+	test="${empty model.showAddProductButton || model.showAddProductButton == true}">
+	<jsp:include page="addProductButton.jsp" flush="true" />
+	<br />
+	<br />
+</c:if>
 
 <table id="${table_id}" class="dataTable collectionsTable">
 	<thead>

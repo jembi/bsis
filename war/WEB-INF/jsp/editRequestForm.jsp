@@ -58,9 +58,11 @@
 	id="editRequestForm-${formId}">
 	<table>
 		<thead>
-			<tr>
-				<td><b>Add a New Request</b></td>
-			</tr>
+			<c:if test="${model.isDialog != 'yes' }">
+				<tr>
+					<td><b>Add a New Request</b></td>
+				</tr>
+			</c:if>
 		</thead>
 		<tbody>
 			<tr>

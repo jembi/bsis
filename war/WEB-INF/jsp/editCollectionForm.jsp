@@ -40,9 +40,11 @@
 	id="editCollectionForm-${formId}">
 	<table>
 		<thead>
-			<tr>
-				<td><b>Add a New Collection</b></td>
-			</tr>
+			<c:if test="${model.isDialog != 'yes' }">
+				<tr>
+					<td><b>Add a New Collection</b></td>
+				</tr>
+			</c:if>
 		</thead>
 		<tbody>
 			<tr>

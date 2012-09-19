@@ -76,6 +76,26 @@ public class ProductsController {
     return modelAndView;
   }
 
+  @RequestMapping("/findAvailableProducts")
+  public ModelAndView findAvailableProducts(Model model) {
+
+    List<Product> products = productRepository.findAnyProductMatching(
+        "", "", Arrays.asList(""),
+        Arrays.asList("available"));
+
+    ModelAndView modelAndView = new ModelAndView("productsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findAvailableProductsTable");
+    m.put("showAddProductButton", false);
+    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("product", m,
+        recordFieldsConfigRepository);
+    m.put("allProducts", getProductViewModels(products));
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
   public ModelAndView editProductFormGenerator(
       Model model,

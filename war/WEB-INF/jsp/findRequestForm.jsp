@@ -128,11 +128,11 @@
 				<td><form:label path="statuses">${model.statusDisplayName}</form:label></td>
 				<td style="padding-left:10px;"><form:select path="statuses" id="findRequestFormStatuses">
 						<form:option value="partiallyFulfilled"
-							label="Partially Fulfilled" selected="" />
+							label="Partially Fulfilled" selected="selected" />
 						<form:option path="status" value="pending" label="Pending"
-							selected="" />
+							selected="selected" />
 						<form:option path="status" value="fulfilled" label="Fulfilled"
-							selected="" />
+							selected="selected" />
 					</form:select></td>
 			</tr>
 			<tr>

@@ -36,9 +36,16 @@
 	id="editTestResultForm-${formId}">
 	<table>
 		<thead>
-			<tr>
-				<td><b>Add a New Test Result</b></td>
-			</tr>
+			<c:if test="${model.isDialog != 'yes' }">
+				<tr>
+					<td><b>Add a New Test Result</b></td>
+				</tr>
+			</c:if>
+			<c:if test="${!(empty model.alternateHeader)}">
+				<tr>
+					<td><b>${model.alternateHeader}</b></td>
+				</tr>
+			</c:if>
 		</thead>
 		<tbody>
 			<tr>
