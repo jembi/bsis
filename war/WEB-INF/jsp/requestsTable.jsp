@@ -48,10 +48,10 @@
 		<tr>
 			<th>${model.requestNoDisplayName}</th>
 			<c:if test="${model.showdateRequested==true}">
-				<th>${model.dateRequestedDisplayName}</th>
+				<th>${model.requestDateDisplayName}</th>
 			</c:if>
 			<c:if test="${model.showdateRequired==true}">
-				<th>${model.dateRequiredDisplayName}</th>
+				<th>${model.requiredDateDisplayName}</th>
 			</c:if>
 			<c:if test="${model.showsite==true}">
 				<th>${model.siteDisplayName}</th>
@@ -93,7 +93,7 @@
 					<td>${request.rhd}</td>
 				</c:if>
 				<c:if test="${model.showproductType == true}">
-					<td>${request.type}</td>
+					<td>${request.productType}</td>
 				</c:if>
 				<c:if test="${model.showquantity == true}">
 					<td>${request.quantity}</td>

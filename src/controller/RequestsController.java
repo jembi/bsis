@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
+import model.Location;
 import model.Request;
 import model.RequestBackingForm;
 
@@ -110,10 +111,11 @@ public class RequestsController {
       form.setRequestNumber(requestNumber);
       Request request = requestRepository
           .findRequestByRequestNumber(requestNumber);
-      if (request != null) {
+      Location l = locationRepository.getLocation(request.getSiteId());
+      if (l != null)
+        m.put("selectedSite", l.getName());
+      if (request != null)
         form = new RequestBackingForm(request);
-      } else
-        form = new RequestBackingForm();
     }
 
     m.put("editRequestForm", form);
@@ -133,6 +135,10 @@ public class RequestsController {
     String errMsg = "";
     try {
       Request request = form.getRequest();
+      String site = form.getSites().get(0);
+      Long siteId = locationRepository.getIDByName(site);
+      request.setComment("");
+      request.setSiteId(siteId);
       requestRepository.updateOrAddRequest(request);
     } catch (EntityExistsException ex) {
       // TODO: Replace with logger

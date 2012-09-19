@@ -1,5 +1,8 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -33,12 +36,24 @@ public class RequestBackingForm {
     request.setRequestNumber(requestNumber);
   }
 
-  public void setDateRequested(Date dateRequested) {
-    request.setDateRequested(dateRequested);
+  public void setDateRequested(String dateRequested) {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    try {
+      request.setDateRequested(dateFormat.parse(dateRequested));
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
-  public void setDateRequired(Date dateRequired) {
-    request.setDateRequired(dateRequired);
+  public void setDateRequired(String dateRequired) {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    try {
+      request.setDateRequired(dateFormat.parse(dateRequired));
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public void setSiteId(Long siteId) {
@@ -77,12 +92,20 @@ public class RequestBackingForm {
     return request.getRequestNumber();
   }
 
-  public Date getDateRequested() {
-    return request.getDateRequested();
+  public String getDateRequested() {
+    Date dateRequested = request.getDateRequested();
+    if (dateRequested == null)
+      return null;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return dateFormat.format(dateRequested);
   }
 
-  public Date getDateRequired() {
-    return request.getDateRequired();
+  public String getDateRequired() {
+    Date dateRequired = request.getDateRequired();
+    if (dateRequired == null)
+      return null;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return dateFormat.format(dateRequired);
   }
 
   public Long getSiteId() {

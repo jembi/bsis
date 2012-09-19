@@ -87,8 +87,8 @@
 </script>
 
 <form:form method="GET" commandName="findRequestForm"
-	id="findRequestedForm" class="findRequestedForm">
-	<h3>Find a Test Result</h3>
+	id="findRequestForm" class="findRequestForm">
+	<h3>Find a Request</h3>
 	<table>
 		<thead>
 		</thead>

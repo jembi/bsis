@@ -145,15 +145,10 @@ public class CollectionRepository {
       saveCollection(collection);
       return collection;
     }
-    System.out.println("here");
     existingCollection.copy(collection);
-    System.out.println("here1");
     existingCollection.setIsDeleted(false);
-    System.out.println("here2");
     em.merge(existingCollection);
-    System.out.println("here3");
     em.flush();
-    System.out.println("here4");
     return existingCollection;
   }
 }

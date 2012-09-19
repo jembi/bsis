@@ -1,5 +1,8 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,8 +41,12 @@ public class CollectionBackingForm {
     return collection.getSiteId();
   }
 
-  public Date getDateCollected() {
-    return collection.getDateCollected();
+  public String getDateCollected() {
+    Date dateCollected = collection.getDateCollected();
+    if (dateCollected == null)
+      return null;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return dateFormat.format(dateCollected);
   }
 
   public String getSampleNumber() {
@@ -96,8 +103,14 @@ public class CollectionBackingForm {
     collection.setSiteId(siteId);
   }
 
-  public void setDateCollected(Date dateCollected) {
-    collection.setDateCollected(dateCollected);
+  public void setDateCollected(String dateCollected) {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    try {
+      collection.setDateCollected(dateFormat.parse(dateCollected));
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public void setSampleNumber(String sampleNumber) {

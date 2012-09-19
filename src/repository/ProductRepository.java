@@ -1,8 +1,5 @@
 package repository;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,12 +9,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.Collection;
 import model.Product;
-import model.TestResult;
 
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -33,18 +27,6 @@ public class ProductRepository {
     em.persist(product);
     em.flush();
   }
-
-//  public Product updateProduct(Product product, String existingProductNumber) {
-//    Product existingProduct = findProduct(existingProductNumber);
-//    Collection collection = collectionRepository.findCollectionByNumber(product
-//        .getCollectionNumber());
-//    product.setAbo(collection.getAbo());
-//    product.setRhd(collection.getRhd());
-//    existingProduct.copy(product);
-//    em.merge(existingProduct);
-//    em.flush();
-//    return existingProduct;
-//  }
 
   public Product findProduct(String productNumber) {
     Product product = null;
