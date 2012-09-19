@@ -32,9 +32,9 @@
         generateEditForm("editProductFormGenerator.html", {
           productNumber : productId,
           isDialog : "yes"
-        }, updateExistingProduct, "Edit Product: "
-            + elements[1].innerHTML + " " + elements[2].innerHTML,
-            'productsTable', decorateEditProductDialog, 550, 500);
+        }, updateExistingProduct, "Edit Product: " + elements[1].innerHTML
+            + " " + elements[2].innerHTML, 'productsTable',
+            decorateEditProductDialog, 550, 500);
       });
 </script>
 
@@ -50,6 +50,9 @@
 			<c:if test="${model.showproductType==true}">
 				<th>${model.productTypeDisplayName}</th>
 			</c:if>
+			<c:if test="${model.showisIssued==true}">
+				<th>${model.isIssuedDisplayName}</th>
+			</c:if>
 		</tr>
 	</thead>
 	<tbody>
@@ -59,6 +62,9 @@
 				<td>${product.collectionNumber}</td>
 				<c:if test="${model.showproductType}">
 					<td>${product.type}</td>
+				</c:if>
+				<c:if test="${model.showisIssued==true}">
+					<td><c:if test="${product.isIssued == 'no'}">&#10003;</c:if></td>
 				</c:if>
 			</tr>
 		</c:forEach>

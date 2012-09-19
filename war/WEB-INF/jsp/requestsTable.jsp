@@ -70,6 +70,7 @@
 			<c:if test="${model.showstatus==true}">
 				<th>${model.statusDisplayName}</th>
 			</c:if>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -100,6 +101,7 @@
 				<c:if test="${model.showstatus == true}">
 					<td>${request.status}</td>
 				</c:if>
+				<td><a href="">Issue</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

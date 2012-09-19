@@ -21,6 +21,7 @@
       }
     });
   });
+
   $("#findProductFormTypes").multiselect({
     position : {
       my : 'left top',
@@ -28,6 +29,17 @@
 
     }
   });
+
+  $("#findProductFormAvailabilityStatuses").multiselect({
+    position : {
+      my : 'left top',
+      at : 'right center',
+      multiple : false,
+      selectedList : 1,
+      header : false
+    }
+  });
+
 </script>
 
 <form:form method="GET" commandName="findProductForm"
@@ -55,6 +67,16 @@
 						<form:option value="ffp" label="FFP" />
 						<form:option value="platelets" label="Platelets" />
 						<form:option value="partialPlatelets" label="Partial Platelets" />
+					</form:select></td>
+			</tr>
+			<tr>
+				<td><form:label path="availability">${model.isIssuedDisplayName}</form:label></td>
+				<td><form:select path="availability"
+						id="findProductFormAvailabilityStatuses">
+						<form:option value="available" label="Available"
+							selected="" />
+						<form:option value="notAvailable" label="Not Available"
+							selected="" />
 					</form:select></td>
 			</tr>
 			<tr>

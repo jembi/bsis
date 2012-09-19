@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 public class ProductBackingForm {
   private Product product;
   private List<String> types;
+  private List<String> availability;
 
   public ProductBackingForm() {
     product = new Product();
@@ -120,5 +120,13 @@ public class ProductBackingForm {
 
   public void setTypes(List<String> types) {
     this.types = types;
+  }
+
+  public List<String> getAvailability() {
+    return availability;
+  }
+
+  public void setAvailability(List<String> availability) {
+    this.availability = availability;
   }
 }

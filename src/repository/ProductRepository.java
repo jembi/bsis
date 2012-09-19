@@ -166,11 +166,13 @@ public class ProductRepository {
   }
 
   public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<String> types) {
+      String collectionNumber, List<String> types, List<String> availability) {
+
     TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
         + "(p.productNumber = :productNumber OR "
         + "p.collectionNumber = :collectionNumber "
-        + "OR p.type IN (:types)) AND " + "(p.isDeleted= :isDeleted)",
+        + "OR p.type IN (:types) OR p.isIssued IN (:isIssued) ) AND "
+        + "(p.isDeleted= :isDeleted)",
         Product.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -179,9 +181,22 @@ public class ProductRepository {
     String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
     query.setParameter("collectionNumber", collectionNo);
     query.setParameter("types", types);
+    query.setParameter("isIssued", getIssuedListFromAvailability(availability));
 
     List<Product> resultList = query.getResultList();
     return resultList;
+  }
+
+  private List<Boolean> getIssuedListFromAvailability(List<String> availability) {
+    List<Boolean> issued = new ArrayList<Boolean>();
+    for (String available : availability) {
+      if (available.equals("available"))
+        issued.add(false);
+      if (available.equals("notAvailable")) {
+        issued.add(true);
+      }
+    }
+    return issued;
   }
 
   public Product findProductByProductNumber(String productNumber) {

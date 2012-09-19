@@ -61,7 +61,8 @@ public class ProductsController {
       BindingResult result, Model model) {
 
     List<Product> products = productRepository.findAnyProductMatching(
-        form.getProductNumber(), form.getCollectionNumber(), form.getTypes());
+        form.getProductNumber(), form.getCollectionNumber(), form.getTypes(),
+        form.getAvailability());
 
     ModelAndView modelAndView = new ModelAndView("productsTable");
     Map<String, Object> m = model.asMap();

@@ -38,4 +38,8 @@ public class ProductViewModel {
     return product.getType();
   }
 
+  public String getisIssued() {
+    return product.getIssued() ? "yes" : "no";
+  }
+
 }

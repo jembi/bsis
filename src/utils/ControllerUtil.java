@@ -87,6 +87,7 @@ public class ControllerUtil {
 		PRODUCT_DEFAULT_NAMES.put("dateCollected", "Date Collected");
 		PRODUCT_DEFAULT_NAMES.put("productType", "Product Type");
 		PRODUCT_DEFAULT_NAMES.put("bloodGroup", "Blood Group");
+		PRODUCT_DEFAULT_NAMES.put("isIssued", "Available");
 		PRODUCT_DEFAULT_NAMES.put("tips", "");
 	}
 
