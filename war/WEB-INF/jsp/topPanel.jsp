@@ -38,7 +38,6 @@
 				Results</a></li>
 		<li class="topPanelTab"><a href="#productsLandingPageContent">Products</a></li>
 		<li class="topPanelTab"><a href="#requestsLandingPageContent">Requests</a></li>
-		<li class="topPanelTab"><a href="issueLandingPage.html">Issue</a></li>
 		<li class="topPanelTab"><a href="usageLandingPage.html">Usage</a></li>
 		<li class="topPanelTab"><a href="reports.html">Reports</a></li>
 	</ul>

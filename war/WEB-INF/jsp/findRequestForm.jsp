@@ -108,13 +108,13 @@
 			</tr>
 			<tr>
 				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td><form:select path="sites" id="findRequestFormSites">
+				<td style="padding-left:10px;"><form:select path="sites" id="findRequestFormSites">
 						<form:options items="${model.sites}" />
 					</form:select></td>
 			</tr>
 			<tr>
 				<td><form:label path="productTypes">${model.productTypeDisplayName}</form:label></td>
-				<td><form:select path="productTypes"
+				<td style="padding-left:10px;"><form:select path="productTypes"
 						id="findRequestFormProductTypes">
 						<form:option value="wholeBlood" label="Whole Blood" selected="" />
 						<form:option value="rcc" label="RCC" selected="" />
@@ -126,7 +126,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="statuses">${model.statusDisplayName}</form:label></td>
-				<td><form:select path="statuses" id="findRequestFormStatuses">
+				<td style="padding-left:10px;"><form:select path="statuses" id="findRequestFormStatuses">
 						<form:option value="partiallyFulfilled"
 							label="Partially Fulfilled" selected="" />
 						<form:option path="status" value="pending" label="Pending"
