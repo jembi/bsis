@@ -6,8 +6,7 @@
 
 <%!public long getCurrentTime() {
 		return System.nanoTime();
-	}
-	%>
+	}%>
 <c:set var="formId"><%=getCurrentTime()%></c:set>
 
 
@@ -38,6 +37,7 @@
 	<table>
 		<thead>
 			<tr>
+				<td><b>Add a New Test Result</b></td>
 			</tr>
 		</thead>
 		<tbody>

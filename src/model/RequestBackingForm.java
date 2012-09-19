@@ -11,6 +11,7 @@ public class RequestBackingForm {
   private Request request;
   private List<String> sites;
   private List<String> productTypes;
+  private List<String> statuses;
   private String dateRequestedFrom;
   private String dateRequestedTo;
   private String dateRequiredFrom;
@@ -208,4 +209,11 @@ public class RequestBackingForm {
     this.productTypes = productTypes;
   }
 
+  public List<String> getStatuses() {
+    return this.statuses;
+  }
+
+  public void setStatuses(List<String> statuses) {
+    this.statuses = statuses;
+  }
 }

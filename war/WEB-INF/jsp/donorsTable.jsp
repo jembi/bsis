@@ -8,8 +8,7 @@
 <script>
   var table_id = "${table_id}";
   var donorsTable = $("#" + table_id).dataTable({
-    "bJQueryUI" : true,
-    "sDom" : 'Rlfrtip'
+    "bJQueryUI" : true
   });
 
   $("#" + table_id + " tbody").dblclick(
@@ -38,7 +37,6 @@
       });
 </script>
 
-<br />
 <jsp:include page="addDonorButton.jsp" flush="true" />
 <br />
 <br />

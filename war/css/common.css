@@ -310,6 +310,11 @@ input[type="button"],input[type="submit"],input[type="reset"] {
 	padding: 10px;
 }
 
+tr > td
+{
+  padding-bottom: 0em;
+}
+
 .donorTableTest {
 	width: 60%;
 }

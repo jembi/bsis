@@ -38,8 +38,7 @@
       });
 </script>
 
-<br />
-<jsp:include page="addProduct.jsp" flush="true" />
+<jsp:include page="addProductButton.jsp" flush="true" />
 <br />
 <br />
 

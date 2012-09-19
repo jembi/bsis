@@ -38,8 +38,7 @@
       });
 </script>
 
-<br />
-<jsp:include page="addTestResult.jsp" flush="true" />
+<jsp:include page="addTestResultButton.jsp" flush="true" />
 <br />
 <br />
 

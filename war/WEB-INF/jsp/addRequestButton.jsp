@@ -19,7 +19,7 @@
 		    						 addNewRequest,
 		    						 "Add New Request",
 		    						 "addRequestButtonEdit-" + "<%=button_id%>",
-		    						 function(){}, 550, 550);
+		    						 function(){}, 550, 575);
 	}
 </script>
 

@@ -21,9 +21,9 @@
       }
     });
   });
-  
+
   $(".radioWithToggle").toggleRadio();
-  
+
   $("#dateTestedFrom").datepicker({
     changeMonth : true,
     changeYear : true,
@@ -50,9 +50,11 @@
 
 <form:form method="GET" commandName="findTestResultForm"
 	id="findTestResultForm" class="findTestResultForm">
-	<h3>Find a Test Result</h3>
 	<table>
 		<thead>
+			<tr>
+				<td><b>Find Test Results</b></td>
+			</tr>
 		</thead>
 		<tbody>
 			<tr>

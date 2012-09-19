@@ -32,9 +32,11 @@
 
 <form:form method="GET" commandName="findProductForm"
 	id="findProductForm" class="findProductForm">
-	<h3>Find a Product</h3>
 	<table>
 		<thead>
+			<tr>
+				<td><b>Find Products</b></td>
+			</tr>
 		</thead>
 		<tbody>
 			<tr>

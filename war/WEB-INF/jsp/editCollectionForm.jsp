@@ -41,6 +41,7 @@
 	<table>
 		<thead>
 			<tr>
+				<td><b>Add a New Collection</b></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -62,7 +63,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
-				<td><form:select path="centers"
+				<td style="padding-left: 10px;"><form:select path="centers"
 						id="editCollectionFormCenters-${formId}"
 						class="editCollectionFormCenters">
 						<c:forEach var="center" items="${model.centers}">
@@ -73,7 +74,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td><form:select path="sites"
+				<td style="padding-left: 10px;"><form:select path="sites"
 						id="editCollectionFormSites-${formId}"
 						class="editCollectionFormSites">
 						<c:forEach var="site" items="${model.sites}">
@@ -84,7 +85,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="donorType">${model.donorTypeDisplayName}</form:label></td>
-				<td><form:select path="donorType"
+				<td style="padding-left: 10px;"><form:select path="donorType"
 						id="editCollectionFormDonorType-${formId}"
 						class="editCollectionFormDonorType">
 						<form:option value="voluntary" label="Voluntary" />

@@ -59,6 +59,7 @@
 	<table>
 		<thead>
 			<tr>
+				<td><b>Add a New Request</b></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -76,14 +77,8 @@
 				<td><form:input path="dateRequired" id="dateRequired-${formId}" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td><form:select path="sites"
-						id="editRequestFormSites-${formId}" class="editRequestFormSites">
-						<c:forEach var="site" items="${model.sites}">
-							<form:option value="${site}" label="${site}"
-								selected="${site == model.selectedSite ? 'selected' : ''}" />
-						</c:forEach>
-					</form:select></td>
+				<td><form:label path="quantity">${model.quantityDisplayName}</form:label></td>
+				<td><form:input path="quantity"></form:input></td>
 			</tr>
 			<tr>
 				<td><form:label path="abo">${model.aboDisplayName}</form:label></td>
@@ -101,10 +96,6 @@
 						class="radioWithToggle" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="quantity">${model.quantityDisplayName}</form:label></td>
-				<td><form:input path="quantity"></form:input></td>
-			</tr>
-			<tr>
 				<td><form:label path="status">${model.statusDisplayName}</form:label></td>
 				<td><form:radiobutton path="status" value="partiallyFulfilled"
 						label="Partially Fulfilled" /> <form:radiobutton path="status"
@@ -112,8 +103,18 @@
 						path="status" value="fulfilled" label="Fulfilled" /></td>
 			</tr>
 			<tr>
+				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
+				<td style="padding-left: 10px;"><form:select path="sites"
+						id="editRequestFormSites-${formId}" class="editRequestFormSites">
+						<c:forEach var="site" items="${model.sites}">
+							<form:option value="${site}" label="${site}"
+								selected="${site == model.selectedSite ? 'selected' : ''}" />
+						</c:forEach>
+					</form:select></td>
+			</tr>
+			<tr>
 				<td><form:label path="productType">${model.productTypeDisplayName}</form:label></td>
-				<td><form:select path="productType"
+				<td style="padding-left: 10px;"><form:select path="productType"
 						id="editRequestFormTypes-${formId}" class="editRequestFormTypes">
 						<form:option value="wholeBlood" label="Whole Blood"
 							selected="${model.selectedType == 'wholeBlood' ? 'selected' : ''}" />

@@ -32,6 +32,7 @@
 	<table>
 		<thead>
 			<tr>
+				<td><b>Add a New Product</b></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -45,7 +46,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="type">${model.productTypeDisplayName}</form:label></td>
-				<td><form:select path="type"
+				<td style="padding-left: 10px;"><form:select path="type"
 						id="editProductFormTypes-${formId}" class="editProductFormTypes">
 						<form:option value="wholeBlood" label="Whole Blood"
 							selected="${model.selectedType == 'wholeBlood' ? 'selected' : ''}" />

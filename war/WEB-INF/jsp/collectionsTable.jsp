@@ -38,7 +38,6 @@
       });
 </script>
 
-<br />
 <jsp:include page="addCollectionButton.jsp" flush="true" />
 <br />
 <br />

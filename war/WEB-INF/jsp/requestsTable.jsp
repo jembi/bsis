@@ -34,12 +34,11 @@
           isDialog : "yes"
         }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
             + " " + elements[2].innerHTML, 'requestsTable',
-            decorateEditRequestDialog, 550, 500);
+            decorateEditRequestDialog, 550, 575);
       });
 </script>
 
-<br />
-<jsp:include page="addRequest.jsp" flush="true" />
+<jsp:include page="addRequestButton.jsp" flush="true" />
 <br />
 <br />
 

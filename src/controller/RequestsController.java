@@ -76,11 +76,34 @@ public class RequestsController {
     List<Request> requests = requestRepository.findAnyRequestMatching(
         form.getRequestNumber(), form.getDateRequestedFrom(),
         form.getDateRequestedTo(), form.getDateRequiredFrom(),
-        form.getDateRequiredTo(), form.getSites(), form.getProductTypes());
+        form.getDateRequiredTo(), form.getSites(), form.getProductTypes(), form.getStatuses());
 
     ModelAndView modelAndView = new ModelAndView("requestsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findRequestsTable");
+
+    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+    m.put("sites", sites);
+
+    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("request", m,
+        recordFieldsConfigRepository);
+    m.put("allRequests", getRequestViewModels(requests));
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
+  @RequestMapping("/pendingRequests")
+  public ModelAndView findPendingRequests(Model model) {
+
+    List<Request> requests = requestRepository.findAnyRequestMatching("", "",
+        "", "", "", Arrays.asList(""), Arrays.asList(""),
+        Arrays.asList("pending", "partiallyFulfilled"));
+
+    ModelAndView modelAndView = new ModelAndView("requestsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findPendingRequestsTable");
 
     List<String> sites = locationRepository.getAllCollectionSitesAsString();
     m.put("sites", sites);
@@ -160,8 +183,7 @@ public class RequestsController {
     return m;
   }
 
-  private List<RequestViewModel> getRequestViewModels(
-      List<Request> requests) {
+  private List<RequestViewModel> getRequestViewModels(List<Request> requests) {
     if (requests == null)
       return Arrays.asList(new RequestViewModel[0]);
     List<RequestViewModel> requestViewModels = new ArrayList<RequestViewModel>();

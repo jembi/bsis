@@ -54,9 +54,11 @@
 
 <form:form method="GET" commandName="findCollectionForm"
 	id="findCollectionForm" class="findCollectionForm">
-	<h3>Find a Collection</h3>
 	<table>
 		<thead>
+			<tr>
+				<td><b>Find Collections</b></td>
+			</tr>
 		</thead>
 		<tbody>
 			<tr>

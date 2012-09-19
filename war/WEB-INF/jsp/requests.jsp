@@ -17,5 +17,7 @@
 			href="editRequestFormGenerator.html">Add Requests</a></li>
 		<li id="findOrAddRequestsContent"><a
 			href="findRequestFormGenerator.html">Find Requests</a></li>
+		<li id="PendingRequestsContent"><a
+			href="pendingRequests.html">Pending Requests</a></li>
 	</ul>
 </div>

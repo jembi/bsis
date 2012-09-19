@@ -111,13 +111,13 @@ public class RequestRepository {
   public List<Request> findAnyRequestMatching(String requestNumber,
       String dateRequestedFrom, String dateRequestedTo,
       String dateRequiredFrom, String dateRequiredTo, List<String> sites,
-      List<String> productTypes) {
+      List<String> productTypes, List<String> statuses) {
 
     TypedQuery<Request> query = em.createQuery(
         "SELECT r FROM Request r, Location L WHERE "
             + "(L.locationId=r.siteId AND L.isCollectionSite=TRUE) AND "
             + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
-            + "r.productType IN (:productTypes)) AND "
+            + "r.productType IN (:productTypes) OR r.status IN (:statuses)) AND "
             + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
             + ":dateRequestedTo) AND (r.dateRequired BETWEEN "
             + ":dateRequiredFrom AND " + ":dateRequiredTo)) AND "
@@ -129,6 +129,7 @@ public class RequestRepository {
         : requestNumber);
     query.setParameter("sites", sites);
     query.setParameter("productTypes", productTypes);
+    query.setParameter("statuses", statuses);
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     try {
