@@ -32,8 +32,8 @@
         generateEditForm("editUsageFormGenerator.html", {
           productNumber : productId,
           isDialog : "yes"
-        }, updateExistingProduct, "Edit Product: " + elements[1].innerHTML
-            + " " + elements[2].innerHTML, 'productsTable',
+        }, updateExistingUsage, "Edit Usage: " + elements[1].innerHTML
+            + " " + elements[2].innerHTML, 'usageTable',
             decorateEditProductDialog, 550, 575);
       });
 </script>

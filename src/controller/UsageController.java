@@ -114,7 +114,12 @@ public class UsageController {
     String errMsg = "";
     try {
       ProductUsage usage = form.getUsage();
-      usage.setComment("");
+      System.out.println("here");
+      System.out.println(form.getProductNumber());
+      System.out.println(form.getDateUsed());
+      System.out.println(form.getHospital());
+      System.out.println(form.getWard());
+      System.out.println(form.getUseIndication());
       usageRepository.updateOrAddUsage(usage);
     } catch (EntityExistsException ex) {
       // TODO: Replace with logger
