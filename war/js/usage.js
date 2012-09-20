@@ -1,33 +1,28 @@
-$(document).ready(function() {
-    $("#usageErrorMessagePanel").hide();
-    $("#usageDate").datepicker();
-    var today = new Date();
-    $.setDefaultDate($('#usageDate'), today);
+function addNewUsage(form) {
+  updateUsageGeneric(form, "updateUsage.html");
+}
 
-    $('#addUsageButton').click(function() {
-        $('#usageMessagePanel').hide();
-        if ($.validateForm('addUsageForm', "usageErrorMessagePanel") == true) {
-            $('#addUsageForm').submit();
-        }
-    });
+function updateExistingUsage(form) {
+  updateUsageGeneric(form, "updateUsage.html");
+}
 
-    $('#updateUsageButton').click(function() {
-        $('#usageMessagePanel').hide();
-        if ($.validateForm('updateUsageForm', "usageErrorMessagePanel") == true) {
-            $('#updateUsageForm').submit();
-        }
-    });
-
-    $('#deleteUsageButton').click(function() {
-        $('#updateUsageForm').attr("action", "deleteExistingUsage.html");
-        $('#updateUsageForm').submit();
-    });
-
-    if ($('#usageErrorMessagePanel').html().trim().length == 0) {
-        $('#usageErrorMessagePanel').hide();
+function updateUsageGeneric(form, url) {
+  var usage = $("#" + form.getAttribute("id")).serialize();
+  $.ajax({
+    type : "POST",
+    url : url,
+    data : usage,
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Usage Updated Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
     }
+  });
+}
 
-    if ($('#usageMessagePanel').html().trim().length == 0) {
-        $('#usageMessagePanel').hide();
-    }
-});
+function decorateEditUsageDialog() {
+};

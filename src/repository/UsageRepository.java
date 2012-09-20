@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.ProductUsage;
+import model.Request;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,4 +53,20 @@ public class UsageRepository {
 		Query query = em.createQuery("DELETE FROM ProductUsage u");
 		query.executeUpdate();
 	}
+
+  public List<ProductUsage> findAnyUsageMatching(String productNumber,
+      String dateUsedFrom, String dateUsedTo, List<String> useIndications) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public ProductUsage findUsageByProductNumber(String productNumber) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public ProductUsage updateOrAddUsage(ProductUsage usage) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

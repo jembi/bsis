@@ -104,7 +104,7 @@ public class ProductUsage {
 		this.ward = ward;
 	}
 
-	public void setDeleted(Boolean deleted) {
+	public void setIsDeleted(Boolean deleted) {
 		isDeleted = deleted;
 	}
 

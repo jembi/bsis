@@ -45,12 +45,6 @@ public class RequestsController {
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
-  @RequestMapping("/requestsLandingPage")
-  public ModelAndView getRequestsPage(HttpServletRequest request) {
-
-    return new ModelAndView("requestsLandingPage");
-  }
-
   @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
   public ModelAndView findRequestFormInit(Model model) {
 
@@ -194,5 +188,4 @@ public class RequestsController {
     }
     return requestViewModels;
   }
-
 }

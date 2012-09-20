@@ -118,7 +118,7 @@ public class ControllerUtil {
 	private static void initDefaultUsageFieldNames() {
 		USAGE_DEFAULT_NAMES = new HashMap<String, String>();
 		USAGE_DEFAULT_NAMES.put("productNo", "Product No.");
-		USAGE_DEFAULT_NAMES.put("usageDate", "Usage Date");
+		USAGE_DEFAULT_NAMES.put("dateUsed", "Usage Date");
 		USAGE_DEFAULT_NAMES.put("hospital", "Hospital");
 		USAGE_DEFAULT_NAMES.put("ward", "Ward");
 		USAGE_DEFAULT_NAMES.put("useIndication", "Use Indication");
