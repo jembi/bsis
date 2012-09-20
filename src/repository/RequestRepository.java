@@ -133,10 +133,10 @@ public class RequestRepository {
     query.setParameter("productTypes", productTypes);
     query.setParameter("statuses", statuses);
 
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
-          .parse("1970-12-31") : dateFormat.parse(dateRequestedFrom);
+          .parse("12/31/1970") : dateFormat.parse(dateRequestedFrom);
       query.setParameter("dateRequestedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();
@@ -152,7 +152,7 @@ public class RequestRepository {
 
     try {
       Date from = (dateRequiredFrom == null || dateRequiredFrom.equals("")) ? dateFormat
-          .parse("1970-12-31") : dateFormat.parse(dateRequiredFrom);
+          .parse("12/31/1970") : dateFormat.parse(dateRequiredFrom);
       query.setParameter("dateRequiredFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();

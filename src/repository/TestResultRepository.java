@@ -116,10 +116,10 @@ public class TestResultRepository {
     String syphilisValue = ((syphilis == null) ? "" : syphilis);
     query.setParameter("syphilis", syphilisValue);
 
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       Date from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
-          .parse("1970-12-31") : dateFormat.parse(dateTestedFrom);
+          .parse("12/31/1970") : dateFormat.parse(dateTestedFrom);
       query.setParameter("dateTestedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();

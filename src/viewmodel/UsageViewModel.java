@@ -30,7 +30,7 @@ public class UsageViewModel {
     return "";
   }
 
-  public String getUseIndications() {
+  public String getUseIndication() {
     return usage.getUseIndication();
   }
 

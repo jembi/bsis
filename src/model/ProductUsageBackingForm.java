@@ -22,7 +22,7 @@ public class ProductUsageBackingForm {
   }
 
   public void setDateUsed(String dateRequested) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       productUsage.setDateUsed(dateFormat.parse(dateRequested));
     } catch (ParseException e) {
@@ -39,7 +39,7 @@ public class ProductUsageBackingForm {
     Date dateUsed = productUsage.getDateUsed();
     if (dateUsed == null)
       return null;
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     return dateFormat.format(dateUsed);
   }
 
@@ -63,7 +63,7 @@ public class ProductUsageBackingForm {
     return useIndications;
   }
 
-  public void setSites(List<String> useIndications) {
+  public void setUseIndications(List<String> useIndications) {
     this.useIndications = useIndications;
   }
 

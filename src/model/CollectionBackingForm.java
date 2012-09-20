@@ -45,7 +45,7 @@ public class CollectionBackingForm {
     Date dateCollected = collection.getDateCollected();
     if (dateCollected == null)
       return null;
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     return dateFormat.format(dateCollected);
   }
 
@@ -104,7 +104,7 @@ public class CollectionBackingForm {
   }
 
   public void setDateCollected(String dateCollected) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       collection.setDateCollected(dateFormat.parse(dateCollected));
     } catch (ParseException e) {

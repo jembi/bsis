@@ -49,7 +49,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateRequestedTo").datepicker("option", "minDate", selectedDate);
@@ -61,7 +61,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateRequestedFrom").datepicker("option", "maxDate", selectedDate);
@@ -73,7 +73,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateRequiredTo").datepicker("option", "minDate", selectedDate);
@@ -85,7 +85,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateRequiredFrom").datepicker("option", "maxDate", selectedDate);

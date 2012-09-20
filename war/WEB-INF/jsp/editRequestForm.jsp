@@ -22,7 +22,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
   });
 
@@ -31,7 +31,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
   });
 

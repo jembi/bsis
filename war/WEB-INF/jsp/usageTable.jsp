@@ -65,16 +65,16 @@
 			<tr>
 				<td>${usage.productNumber}</td>
 				<c:if test="${model.showdateUsed==true}">
-					<td>${request.dateUsed}</td>
+					<td>${usage.dateUsed}</td>
 				</c:if>
 				<c:if test="${model.showhospital==true}">
-					<td>${request.hospital}</td>
+					<td>${usage.hospital}</td>
 				</c:if>
 				<c:if test="${model.showward == true}">
-					<td>${request.ward}</td>
+					<td>${usage.ward}</td>
 				</c:if>
 				<c:if test="${model.showuseIndication == true}">
-					<td>${request.useIndication}</td>
+					<td>${usage.useIndication}</td>
 				</c:if>
 			</tr>
 		</c:forEach>

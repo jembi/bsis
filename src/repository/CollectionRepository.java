@@ -116,10 +116,10 @@ public class CollectionRepository {
 
     query.setParameter("centers", centers);
 
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       Date from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("1970-12-31") : dateFormat.parse(dateCollectedFrom);
+          .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
       query.setParameter("dateCollectedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();

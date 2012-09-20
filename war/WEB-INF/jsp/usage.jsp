@@ -14,8 +14,8 @@
 <div id="usageTab" class="leftPanel">
 	<ul>
 		<li id="addUsageContent"><a
-			href="editUsageFormGenerator.html">Add Requests</a></li>
+			href="editUsageFormGenerator.html">Add Usage</a></li>
 		<li id="findOrAddUsageContent"><a
-			href="findUsageFormGenerator.html">Find Requests</a></li>
+			href="findUsageFormGenerator.html">Find Usage</a></li>
 	</ul>
 </div>

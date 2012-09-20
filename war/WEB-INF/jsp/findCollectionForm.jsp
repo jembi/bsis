@@ -33,7 +33,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateCollectedTo").datepicker("option", "minDate", selectedDate);
@@ -44,7 +44,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "yy-mm-dd",
+    dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateCollectedFrom").datepicker("option", "maxDate", selectedDate);

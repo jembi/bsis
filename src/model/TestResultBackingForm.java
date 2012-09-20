@@ -44,7 +44,7 @@ public class TestResultBackingForm {
     Date dateTested = testResult.getDateTested();
     if (dateTested == null)
       return "";
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     return dateFormat.format(dateTested);
   }
 
@@ -93,7 +93,7 @@ public class TestResultBackingForm {
   }
 
   public void setDateTested(String dateTested) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       testResult.setDateTested(dateFormat.parse(dateTested));
     } catch (ParseException e) {

@@ -38,7 +38,7 @@ public class RequestBackingForm {
   }
 
   public void setDateRequested(String dateRequested) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       request.setDateRequested(dateFormat.parse(dateRequested));
     } catch (ParseException e) {
@@ -48,7 +48,7 @@ public class RequestBackingForm {
   }
 
   public void setDateRequired(String dateRequired) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       request.setDateRequired(dateFormat.parse(dateRequired));
     } catch (ParseException e) {
@@ -97,7 +97,7 @@ public class RequestBackingForm {
     Date dateRequested = request.getDateRequested();
     if (dateRequested == null)
       return null;
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     return dateFormat.format(dateRequested);
   }
 
@@ -105,7 +105,7 @@ public class RequestBackingForm {
     Date dateRequired = request.getDateRequired();
     if (dateRequired == null)
       return null;
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     return dateFormat.format(dateRequired);
   }
 
