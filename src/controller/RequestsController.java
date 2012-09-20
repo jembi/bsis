@@ -127,16 +127,20 @@ public class RequestsController {
 
     List<String> sites = locationRepository.getAllCollectionSitesAsString();
     m.put("sites", sites);
+    m.put("selectedSite", "");
+    m.put("selectedProductType", "");
 
     if (requestNumber != null) {
       form.setRequestNumber(requestNumber);
       Request request = requestRepository
           .findRequestByRequestNumber(requestNumber);
-      Location l = locationRepository.getLocation(request.getSiteId());
-      if (l != null)
-        m.put("selectedSite", l.getName());
-      if (request != null)
+      if (request != null) {
+        Location l = locationRepository.getLocation(request.getSiteId());
+        m.put("selectedProductType", request.getProductType());
         form = new RequestBackingForm(request);
+        if (l != null)
+          m.put("selectedSite", l.getName());
+      }
     }
 
     m.put("editRequestForm", form);

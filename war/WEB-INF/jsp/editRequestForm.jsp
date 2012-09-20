@@ -119,15 +119,15 @@
 				<td style="padding-left: 10px;"><form:select path="productType"
 						id="editRequestFormTypes-${formId}" class="editRequestFormTypes">
 						<form:option value="wholeBlood" label="Whole Blood"
-							selected="${model.selectedType == 'wholeBlood' ? 'selected' : ''}" />
+							selected="${model.selectedProductType == 'wholeBlood' ? 'selected' : ''}" />
 						<form:option value="rcc" label="RCC"
-							selected="${model.selectedType == 'rcc' ? 'selected' : ''}" />
+							selected="${model.selectedProductType == 'rcc' ? 'selected' : ''}" />
 						<form:option value="ffp" label="ffp"
-							selected="${model.selectedType == 'ffp' ? 'selected' : ''}" />
+							selected="${model.selectedProductType == 'ffp' ? 'selected' : ''}" />
 						<form:option value="platelets" label="Platelets"
-							selected="${model.selectedType == 'platelets' ? 'selected' : ''}" />
+							selected="${model.selectedProductType == 'platelets' ? 'selected' : ''}" />
 						<form:option value="partialPlatelets" label="Partial Platelets"
-							selected="${model.selectedType == 'partialPlatelets' ? 'selected' : ''}" />
+							selected="${model.selectedProductType == 'partialPlatelets' ? 'selected' : ''}" />
 					</form:select></td>
 			</tr>
 			<c:if test="${model.isDialog != 'yes' }">
