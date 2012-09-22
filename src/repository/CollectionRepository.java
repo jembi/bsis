@@ -16,7 +16,6 @@ import javax.persistence.TypedQuery;
 
 import model.Collection;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -156,7 +155,7 @@ public class CollectionRepository {
     return existingCollection;
   }
 
-  public Map<String, Long> findNumberOfCollections(String dateCollectedFrom,
+  public Map<Long, Long> findNumberOfCollections(String dateCollectedFrom,
       String dateCollectedTo) {
 
     TypedQuery<Object[]> query = em.createQuery(
@@ -184,11 +183,11 @@ public class CollectionRepository {
       e.printStackTrace();
     }
 
-    Map<String, Long> m = new HashMap<String, Long>();
+    Map<Long, Long> m = new HashMap<Long, Long>();
     List<Object[]> resultList = query.getResultList();
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
-      m.put(dateFormat.format(d), (Long) result[0]);
+      m.put(d.getTime(), (Long) result[0]);
     }
     return m;
   }

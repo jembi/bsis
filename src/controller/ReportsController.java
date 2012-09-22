@@ -1,5 +1,9 @@
 package controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,12 +85,23 @@ public class ReportsController {
     String dateCollectedTo = form.getDateCollectedTo();
     System.out.println(dateCollectedFrom);
     System.out.println(dateCollectedTo);
-    Map<String, Long> numCollections = collectionRepository.findNumberOfCollections(
+    Map<Long, Long> numCollections = collectionRepository.findNumberOfCollections(
         dateCollectedFrom, dateCollectedTo);
     System.out.println(numCollections);
     
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("numCollections", numCollections);
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date date;
+    try {
+      date = dateFormat.parse(dateCollectedFrom);
+      m.put("dateCollectedFromUTC", date.getTime());
+      date = dateFormat.parse(dateCollectedTo);
+      m.put("dateCollectedToUTC", date.getTime());
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     return m;
   }
 

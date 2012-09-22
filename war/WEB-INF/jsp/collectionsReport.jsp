@@ -45,6 +45,16 @@
       data : formData,
       success : function(data) {
         console.log(data);
+        var chart = getTimeChart({
+          data : data.numCollections,
+          renderDest : "collectionsReportResult",
+          title : "Collections Report",
+          hoverText : "Collections",
+          yAxisTitle : "No. of Collections",
+          startTime : data.dateCollectedFromUTC,
+          endTime : data.dateCollectedToUTC,
+          interval : 24 * 3600 * 1000
+        });
       }
     });
   });

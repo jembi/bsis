@@ -10,6 +10,9 @@
 
 <link type="text/css" rel="stylesheet" href="css/reports.css" />
 <script type="text/javascript" src="js/reports.js"></script>
+<script type="text/javascript" src="plugins/highcharts/js/highcharts.js"></script>
+<script type="text/javascript"
+	src="plugins/highcharts/js/modules/exporting.js"></script>
 
 <div id="reportsTab" class="leftPanel">
 	<ul>
