@@ -134,7 +134,6 @@ $(document)
 							"/v2v/admin-deleteDummyData.html" ];
 
 					var url = $(location).attr('href');
-					removeAllSelectedTabs();
 
 					var startIndex = url.indexOf("/v2v");
 					var endIndex = url.indexOf("?");

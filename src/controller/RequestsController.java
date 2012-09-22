@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
-import javax.servlet.http.HttpServletRequest;
 
 import model.Location;
 import model.Request;

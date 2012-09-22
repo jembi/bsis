@@ -151,4 +151,45 @@ public class CollectionRepository {
     em.flush();
     return existingCollection;
   }
+
+  public List<Object[]> findNumberOfCollections(String dateCollectedFrom,
+      String dateCollectedTo) {
+    
+    TypedQuery<Object[]> query = em.createQuery(
+        "SELECT count(c), c.dateCollected FROM Collection c WHERE "
+            + "c.dateCollected BETWEEN :dateCollectedFrom AND "
+            + ":dateCollectedTo AND (c.isDeleted= :isDeleted)"
+            + "GROUP BY dateCollected",
+            Object[].class);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    try {
+      Date from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
+          .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
+      query.setParameter("dateCollectedFrom", from);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    try {
+      Date to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? dateFormat
+          .parse(dateFormat.format(new Date())) : dateFormat
+          .parse(dateCollectedTo);
+      query.setParameter("dateCollectedTo", to);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    List<Object[]> resultList = query.getResultList();
+    for (Object[] result : resultList) {
+      System.out.println(result[0].toString());
+      try {
+        System.out.println(dateFormat.parseObject(result[1].toString()));
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    return resultList;
+  }
 }
