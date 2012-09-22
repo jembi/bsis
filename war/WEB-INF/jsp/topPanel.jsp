@@ -39,7 +39,7 @@
 		<li class="topPanelTab"><a href="reports.html">Reports</a></li>
 	</ul>
 
-	<div id="homeLandingPageContent">
+	<div id="homeLandingPageContent" class="centerContent">
 		<h3>Welcome to Vein-To-Vein</h3>
 		<div class="infoMessage">
 			Vein-to-Vein (V2V) is a system to monitor and analyze data from blood

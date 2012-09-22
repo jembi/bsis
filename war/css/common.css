@@ -60,6 +60,10 @@ select:focus {
 	z-index: 9999 !important;
 }
 
+.dataTables_length > label > select {
+	margin: 1px;
+}
+
 .mainContent {
 	background-color: white;
 	margin: 0 auto;
