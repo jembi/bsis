@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +16,7 @@ import javax.persistence.TypedQuery;
 
 import model.Collection;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -111,7 +114,8 @@ public class CollectionRepository {
     query.setParameter("collectionNumber", collectionNo);
     Long sampleNo = ((sampleNumber == null) ? -1 : Long.parseLong(sampleNumber));
     query.setParameter("sampleNumber", sampleNo);
-    Long shippingNo = ((shippingNumber == null) ? -1 : Long.parseLong(shippingNumber));
+    Long shippingNo = ((shippingNumber == null) ? -1 : Long
+        .parseLong(shippingNumber));
     query.setParameter("shippingNumber", shippingNo);
 
     query.setParameter("centers", centers);
@@ -152,18 +156,17 @@ public class CollectionRepository {
     return existingCollection;
   }
 
-  public List<Object[]> findNumberOfCollections(String dateCollectedFrom,
+  public Map<String, Long> findNumberOfCollections(String dateCollectedFrom,
       String dateCollectedTo) {
-    
+
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.dateCollected FROM Collection c WHERE "
             + "c.dateCollected BETWEEN :dateCollectedFrom AND "
             + ":dateCollectedTo AND (c.isDeleted= :isDeleted)"
-            + "GROUP BY dateCollected",
-            Object[].class);
+            + "GROUP BY dateCollected", Object[].class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
-    
+
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
       Date from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
@@ -180,16 +183,13 @@ public class CollectionRepository {
     } catch (ParseException e) {
       e.printStackTrace();
     }
+
+    Map<String, Long> m = new HashMap<String, Long>();
     List<Object[]> resultList = query.getResultList();
     for (Object[] result : resultList) {
-      System.out.println(result[0].toString());
-      try {
-        System.out.println(dateFormat.parseObject(result[1].toString()));
-      } catch (ParseException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+      Date d = (Date) result[1];
+      m.put(dateFormat.format(d), (Long) result[0]);
     }
-    return resultList;
+    return m;
   }
 }

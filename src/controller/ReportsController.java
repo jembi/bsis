@@ -81,7 +81,7 @@ public class ReportsController {
     String dateCollectedTo = form.getDateCollectedTo();
     System.out.println(dateCollectedFrom);
     System.out.println(dateCollectedTo);
-    List<Object[]> numCollections = collectionRepository.findNumberOfCollections(
+    Map<String, Long> numCollections = collectionRepository.findNumberOfCollections(
         dateCollectedFrom, dateCollectedTo);
     System.out.println(numCollections);
     
