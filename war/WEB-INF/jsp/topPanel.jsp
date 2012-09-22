@@ -23,9 +23,6 @@
 		</c:choose>
 
 	</p>
-	<c:if test="${model.user.type=='admin'}">
-		<a href="admin-locationTypesLandingPage.html">Work As Admin</a>
-	</c:if>
 	<a href="logout.html">Sign Out</a>
 </div>
 
@@ -43,7 +40,7 @@
 	</ul>
 
 	<div id="homeLandingPageContent">
-		<h2>Welcome to Vein-To-Vein</h2>
+		<h3>Welcome to Vein-To-Vein</h3>
 		<div class="infoMessage">
 			Vein-to-Vein (V2V) is a system to monitor and analyze data from blood
 			collection, testing, and utilization. This is an initiative of the

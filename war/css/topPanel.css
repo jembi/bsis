@@ -29,7 +29,7 @@ ul.adminTopPanelTabs li {
 
 #v2vHeading {
 	background-color: #4D5479;
-	padding: 15px;
+	padding: 10px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 }
@@ -38,7 +38,7 @@ ul.adminTopPanelTabs li {
 	text-decoration: none;
 	color: white;
 	font-weight: bold;
-	font-size: 30pt;
+	font-size: 16pt;
 	font-family: arial;
 }
 

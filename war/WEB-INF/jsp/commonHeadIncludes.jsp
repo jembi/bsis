@@ -5,7 +5,7 @@
 <link type="text/css"
 	href="plugins/DataTables/media/css/jquery.dataTables_themeroller.css"
 	rel="Stylesheet" />
-<link type="text/css" href="jquery-ui/css/redmond/redmond.css"
+<link type="text/css" href="css/redmond/redmond.css"
 	rel="Stylesheet" />
 
 <link rel="shortcut icon" href="favicon.ico">
