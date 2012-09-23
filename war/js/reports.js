@@ -3,8 +3,6 @@ function getTimeChart(options) {
   var seriesData = getSeriesData(options.startTime, options.endTime,
       options.interval, options.data);
 
-  console.log(seriesData);
-
   var chart = new Highcharts.Chart(
       {
         chart : {
@@ -72,7 +70,6 @@ function getTimeChart(options) {
         series : [ {
           type : 'line',
           name : options.hoverText,
-          pointInterval : options.interval,
           pointStart : options.startTime,
           data : seriesData
         } ]
@@ -82,15 +79,14 @@ function getTimeChart(options) {
 }
 
 function getSeriesData(beginDate, endDate, interval, data) {
-  series = [];
+  seriesData = [];
 
-  for ( var date = beginDate; date <= endDate; date += interval) {
-    console.log(date);
-    if (data[date] == undefined)
-      series.push(0);
-    else
-      series.push(data[date]);
+  for ( var x in data) {
+    seriesData.push([ parseInt(x), data[x] ]);
   }
 
-  return series;
+  seriesData.sort(function(a, b) {
+    return a[0] - b[0];
+  });
+  return seriesData;
 }

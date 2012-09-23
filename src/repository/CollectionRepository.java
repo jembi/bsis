@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,26 +158,28 @@ public class CollectionRepository {
   }
 
   public Map<Long, Long> findNumberOfCollections(String dateCollectedFrom,
-      String dateCollectedTo) {
+      String dateCollectedTo, String aggregationCriteria) {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.dateCollected FROM Collection c WHERE "
             + "c.dateCollected BETWEEN :dateCollectedFrom AND "
-            + ":dateCollectedTo AND (c.isDeleted= :isDeleted)"
-            + "GROUP BY dateCollected", Object[].class);
+            + ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY "
+            + "dateCollected", Object[].class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
 
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date from = null;
+    Date to = null;
     try {
-      Date from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
+      from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
           .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
       query.setParameter("dateCollectedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();
     }
     try {
-      Date to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? dateFormat
+      to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? dateFormat
           .parse(dateFormat.format(new Date())) : dateFormat
           .parse(dateCollectedTo);
       query.setParameter("dateCollectedTo", to);
@@ -183,11 +187,53 @@ public class CollectionRepository {
       e.printStackTrace();
     }
 
-    Map<Long, Long> m = new HashMap<Long, Long>();
+    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    String groupByFunc = "DAY";
+    int incrementBy = Calendar.DAY_OF_YEAR;
+    if (aggregationCriteria.equals("monthly")) {
+      groupByFunc = "MONTH";
+      incrementBy = Calendar.MONTH;
+      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+    } else if (aggregationCriteria.equals("yearly")) {
+      groupByFunc = "YEAR";
+      incrementBy = Calendar.YEAR;
+      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
+    }
+
     List<Object[]> resultList = query.getResultList();
+
+    Map<Long, Long> m = new HashMap<Long, Long>();
+    Calendar gcal = new GregorianCalendar();
+    Date lowerDate = null;
+    Date upperDate = null;
+    try {
+      lowerDate = resultDateFormat.parse(resultDateFormat.format(from));
+      upperDate = resultDateFormat.parse(resultDateFormat.format(to));
+    } catch (ParseException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    gcal.setTime(lowerDate);
+    while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+      m.put(gcal.getTime().getTime(), (long) 0);
+      gcal.add(incrementBy, 1);
+    }
+
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
-      m.put(d.getTime(), (Long) result[0]);
+      try {
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Long utcTime = formattedDate.getTime();
+        if (m.containsKey(utcTime)) {
+          Long newVal = m.get(utcTime) + (Long) result[0];
+          m.put(utcTime, newVal);
+        } else {
+          m.put(utcTime, (Long) result[0]);
+        }
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
     return m;
   }

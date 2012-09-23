@@ -36,16 +36,21 @@
               selectedDate);
         }
       });
+
+  $("#collectionsReportFormAggregationCriteria").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
   $("#generateCollectionsReportButton").button().click(function() {
     var formData = $("#collectionsReportForm").serialize();
-    console.log(formData);
     $.ajax({
       type : "GET",
       url : "getCollectionsReport.html",
       data : formData,
       success : function(data) {
-        console.log(data);
-        var chart = getTimeChart({
+        getTimeChart({
           data : data.numCollections,
           renderDest : "collectionsReportResult",
           title : "Collections Report",
@@ -53,7 +58,7 @@
           yAxisTitle : "No. of Collections",
           startTime : data.dateCollectedFromUTC,
           endTime : data.dateCollectedToUTC,
-          interval : 24 * 3600 * 1000
+          interval : data.interval
         });
       }
     });
@@ -71,11 +76,25 @@
 			</tr>
 			<tr>
 				<td><form:input path="dateCollectedFrom"
-						id="creportsDateCollectedFrom" />&nbsp;and</td>
+						id="creportsDateCollectedFrom" />&nbsp;to</td>
 				<td><form:input path="dateCollectedTo"
 						id="creportsDateCollectedTo" /></td>
 			</tr>
 			<tr>
+				<td />
+			</tr>
+			<tr>
+				<td><form:label path="aggregationCriteria"> Aggregation Criteria </form:label></td>
+				<td style="padding-left: 10px;"><form:select
+						path="aggregationCriteria"
+						id="collectionsReportFormAggregationCriteria">
+						<form:option value="daily" label="Daily" selected="selected" />
+						<form:option value="monthly" label="Monthly" selected="" />
+						<form:option value="yearly" label="Yearly" selected="" />
+					</form:select></td>
+			</tr>
+			<tr>
+				<td />
 				<td><input type="button" value="Generate Report"
 					id="generateCollectionsReportButton" /></td>
 			</tr>

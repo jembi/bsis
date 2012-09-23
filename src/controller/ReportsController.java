@@ -46,6 +46,7 @@ public class ReportsController {
 
     String dateCollectedFrom;
     String dateCollectedTo;
+    String aggregationCriteria;
 
     public CollectionsReportBackingForm() {
     }
@@ -65,6 +66,14 @@ public class ReportsController {
     public void setDateCollectedTo(String dateCollectedTo) {
       this.dateCollectedTo = dateCollectedTo;
     }
+
+    public String getAggregationCriteria() {
+      return aggregationCriteria;
+    }
+
+    public void setAggregationCriteria(String aggregationCriteria) {
+      this.aggregationCriteria = aggregationCriteria;
+    }
   }
 
   @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
@@ -83,13 +92,16 @@ public class ReportsController {
 
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
-    System.out.println(dateCollectedFrom);
-    System.out.println(dateCollectedTo);
     Map<Long, Long> numCollections = collectionRepository.findNumberOfCollections(
-        dateCollectedFrom, dateCollectedTo);
-    System.out.println(numCollections);
-    
+        dateCollectedFrom, dateCollectedTo, form.getAggregationCriteria());
     Map<String, Object> m = new HashMap<String, Object>();
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
+    if (form.getAggregationCriteria().equals("monthly"))
+      interval = interval * 30;
+    else if (form.getAggregationCriteria().equals("yearly"))
+      interval = interval * 365;
+    m.put("interval", interval);
     m.put("numCollections", numCollections);
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Date date;
