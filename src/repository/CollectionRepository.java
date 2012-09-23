@@ -173,7 +173,7 @@ public class CollectionRepository {
     Date to = null;
     try {
       from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
+          .parse("12/31/2011") : dateFormat.parse(dateCollectedFrom);
       query.setParameter("dateCollectedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();

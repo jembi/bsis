@@ -207,7 +207,7 @@ public class TestResultRepository {
     Date to = null;
     try {
       from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateTestedFrom);
+          .parse("12/31/2011") : dateFormat.parse(dateTestedFrom);
       query.setParameter("dateTestedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();

@@ -19,26 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectionRepository;
-import repository.DisplayNamesRepository;
-import repository.LocationRepository;
-import repository.RecordFieldsConfigRepository;
-import repository.RequestRepository;
 import repository.TestResultRepository;
 
 @Controller
 public class ReportsController {
-
-  @Autowired
-  private RequestRepository requestRepository;
-
-  @Autowired
-  private LocationRepository locationRepository;
-
-  @Autowired
-  private DisplayNamesRepository displayNamesRepository;
-
-  @Autowired
-  private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
   @Autowired
   private CollectionRepository collectionRepository;
@@ -226,12 +210,20 @@ public class ReportsController {
 
     String dateTestedFrom = form.getDateTestedFrom();
     String dateTestedTo = form.getDateTestedTo();
-    String hiv = form.getTests().contains("hiv") ? "reactive" : "";
-    String hbv = form.getTests().contains("hbv") ? "reactive" : "";
-    String hcv = form.getTests().contains("hcv") ? "reactive" : "";
-    String syphilis = form.getTests().contains("syphilis") ? "reactive" : "";
-    String none = form.getTests().contains("none") ? "none" : "";
-    Map<Long, Long> numCollections = testResultsRepository
+    String hiv = "";
+    String hbv = "";
+    String hcv = "";
+    String syphilis = "";
+    String none = "";
+    if (form.getTests() != null) {
+      hiv = form.getTests().contains("hiv") ? "reactive" : "";
+      hbv = form.getTests().contains("hbv") ? "reactive" : "";
+      hcv = form.getTests().contains("hcv") ? "reactive" : "";
+      syphilis = form.getTests().contains("syphilis") ? "reactive" : "";
+      none = form.getTests().contains("none") ? "none" : "";
+    }
+
+    Map<Long, Long> numTestResults = testResultsRepository
         .findNumberOfPositiveTests(dateTestedFrom, dateTestedTo,
             form.getAggregationCriteria(), hiv, hbv, hcv, syphilis, none);
     Map<String, Object> m = new HashMap<String, Object>();
@@ -242,13 +234,15 @@ public class ReportsController {
     else if (form.getAggregationCriteria().equals("yearly"))
       interval = interval * 365;
     m.put("interval", interval);
-    m.put("numTestResults", numCollections);
+    m.put("numTestResults", numTestResults);
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Date date;
     try {
-      date = dateFormat.parse(dateTestedFrom);
+      date = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
+          .parse("12/31/2011") : dateFormat.parse(dateTestedFrom);
       m.put("dateTestedFromUTC", date.getTime());
-      date = dateFormat.parse(dateTestedTo);
+      date = (dateTestedTo == null || dateTestedTo.equals("")) ? new Date()
+          : dateFormat.parse(dateTestedTo);
       m.put("dateTestedToUTC", date.getTime());
     } catch (ParseException e) {
       // TODO Auto-generated catch block
