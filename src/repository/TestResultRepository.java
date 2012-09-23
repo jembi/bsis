@@ -4,8 +4,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -165,4 +169,107 @@ public class TestResultRepository {
     em.flush();
     return existingTestResult;
   }
+
+  public Map<Long, Long> findNumberOfPositiveTests(String dateTestedFrom,
+      String dateTestedTo, String aggregationCriteria, String hiv, String hbv,
+      String hcv, String syphilis, String none) {
+    String queryStr = "SELECT count(t), t.dateTested FROM TestResult t WHERE "
+        + "t.dateTested BETWEEN :dateTestedFrom AND "
+        + ":dateTestedTo AND (t.isDeleted= :isDeleted) ";
+    List<String> conditions = new ArrayList<String>();
+    if (hiv.equals("reactive"))
+      conditions.add(" hiv='reactive' ");
+    if (hbv.equals("reactive"))
+      conditions.add(" hbv='reactive' ");
+    if (hcv.equals("reactive"))
+      conditions.add(" hcv='reactive' ");
+    if (syphilis.equals("reactive"))
+      conditions.add(" syphilis='reactive' ");
+    if (none.equals("none"))
+      conditions
+          .add("(hiv='negative' AND hbv='negative' AND hcv='negative' AND syphilis='negative')");
+
+    if (conditions.size() > 0) {
+      String conditionStr = " (" + conditions.get(0);
+      for (int i = 1; i < conditions.size(); ++i) {
+        conditionStr += "OR " + conditions.get(i) + " ";
+      }
+      conditionStr += ") ";
+      queryStr += "AND " + conditionStr;
+    }
+    TypedQuery<Object[]> query = em.createQuery(queryStr
+        + " GROUP BY dateTested", Object[].class);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date from = null;
+    Date to = null;
+    try {
+      from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
+          .parse("12/31/1970") : dateFormat.parse(dateTestedFrom);
+      query.setParameter("dateTestedFrom", from);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    try {
+      to = (dateTestedTo == null || dateTestedTo.equals("")) ? dateFormat
+          .parse(dateFormat.format(new Date())) : dateFormat
+          .parse(dateTestedTo);
+      query.setParameter("dateTestedTo", to);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
+    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    String groupByFunc = "DAY";
+    int incrementBy = Calendar.DAY_OF_YEAR;
+    if (aggregationCriteria.equals("monthly")) {
+      groupByFunc = "MONTH";
+      incrementBy = Calendar.MONTH;
+      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+    } else if (aggregationCriteria.equals("yearly")) {
+      groupByFunc = "YEAR";
+      incrementBy = Calendar.YEAR;
+      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
+    }
+
+    List<Object[]> resultList = query.getResultList();
+
+    Map<Long, Long> m = new HashMap<Long, Long>();
+    Calendar gcal = new GregorianCalendar();
+    Date lowerDate = null;
+    Date upperDate = null;
+    try {
+      lowerDate = resultDateFormat.parse(resultDateFormat.format(from));
+      upperDate = resultDateFormat.parse(resultDateFormat.format(to));
+    } catch (ParseException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    gcal.setTime(lowerDate);
+    while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+      m.put(gcal.getTime().getTime(), (long) 0);
+      gcal.add(incrementBy, 1);
+    }
+
+    for (Object[] result : resultList) {
+      Date d = (Date) result[1];
+      try {
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Long utcTime = formattedDate.getTime();
+        if (m.containsKey(utcTime)) {
+          Long newVal = m.get(utcTime) + (Long) result[0];
+          m.put(utcTime, newVal);
+        } else {
+          m.put(utcTime, (Long) result[0]);
+        }
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    return m;
+  }
+
 }

@@ -14,22 +14,23 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class UserInterceptor extends HandlerInterceptorAdapter {
 
+  @SuppressWarnings("unchecked")
   @Override
   public void postHandle(HttpServletRequest request,
       HttpServletResponse response, Object handler, ModelAndView modelAndView)
       throws Exception {
-    if (modelAndView == null)
-      return;
     HttpSession session = request.getSession();
-    @SuppressWarnings("unchecked")
-    Map<String, Object> model = (Map<String, Object>) modelAndView.getModel()
-        .get("model");
+    Map<String, Object> model = null;
+    if (modelAndView != null) {
+      model = (Map<String, Object>) modelAndView.getModel().get("model");
+    }
     User user = (User) session.getAttribute("user");
     if (user != null) {
       if (model == null) {
         model = new HashMap<String, Object>();
         model.put("user", user);
-        modelAndView.addObject("model", model);
+        if (modelAndView != null)
+          modelAndView.addObject("model", model);
       } else {
         model.put("user", user);
       }

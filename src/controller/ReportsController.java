@@ -23,6 +23,7 @@ import repository.DisplayNamesRepository;
 import repository.LocationRepository;
 import repository.RecordFieldsConfigRepository;
 import repository.RequestRepository;
+import repository.TestResultRepository;
 
 @Controller
 public class ReportsController {
@@ -41,6 +42,9 @@ public class ReportsController {
 
   @Autowired
   private CollectionRepository collectionRepository;
+
+  @Autowired
+  private TestResultRepository testResultsRepository;
 
   public static class CollectionsReportBackingForm {
 
@@ -77,7 +81,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
-  public ModelAndView collectionReportFormGenerator(Model model) {
+  public ModelAndView collectionsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("collectionsReport");
     mv.addObject("collectionsReportForm", new CollectionsReportBackingForm());
     mv.addObject("model", model);
@@ -92,8 +96,9 @@ public class ReportsController {
 
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
-    Map<Long, Long> numCollections = collectionRepository.findNumberOfCollections(
-        dateCollectedFrom, dateCollectedTo, form.getAggregationCriteria());
+    Map<Long, Long> numCollections = collectionRepository
+        .findNumberOfCollections(dateCollectedFrom, dateCollectedTo,
+            form.getAggregationCriteria());
     Map<String, Object> m = new HashMap<String, Object>();
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
@@ -110,6 +115,141 @@ public class ReportsController {
       m.put("dateCollectedFromUTC", date.getTime());
       date = dateFormat.parse(dateCollectedTo);
       m.put("dateCollectedToUTC", date.getTime());
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return m;
+  }
+
+  public static class TestResultsReportBackingForm {
+
+    String dateTestedFrom;
+    String dateTestedTo;
+    String aggregationCriteria;
+    String hiv;
+    String hbv;
+    String hcv;
+    String syphilis;
+    String none;
+    List<String> tests;
+
+    public TestResultsReportBackingForm() {
+    }
+
+    public String getDateTestedFrom() {
+      return dateTestedFrom;
+    }
+
+    public void setDateTestedFrom(String dateCollectedFrom) {
+      this.dateTestedFrom = dateCollectedFrom;
+    }
+
+    public String getDateTestedTo() {
+      return dateTestedTo;
+    }
+
+    public void setDateTestedTo(String dateTestedTo) {
+      this.dateTestedTo = dateTestedTo;
+    }
+
+    public String getAggregationCriteria() {
+      return aggregationCriteria;
+    }
+
+    public void setAggregationCriteria(String aggregationCriteria) {
+      this.aggregationCriteria = aggregationCriteria;
+    }
+
+    public String getHiv() {
+      return hiv;
+    }
+
+    public void setHiv(String hiv) {
+      this.hiv = hiv;
+    }
+
+    public String getHbv() {
+      return hbv;
+    }
+
+    public void setHbv(String hbv) {
+      this.hbv = hbv;
+    }
+
+    public String getHcv() {
+      return hcv;
+    }
+
+    public void setHcv(String hcv) {
+      this.hcv = hcv;
+    }
+
+    public String getSyphilis() {
+      return syphilis;
+    }
+
+    public void setSyphilis(String syphilis) {
+      this.syphilis = syphilis;
+    }
+
+    public String getNone() {
+      return none;
+    }
+
+    public void setNone(String none) {
+      this.none = none;
+    }
+
+    public List<String> getTests() {
+      return tests;
+    }
+
+    public void setTests(List<String> tests) {
+      this.tests = tests;
+    }
+  }
+
+  @RequestMapping(value = "/testResultsReportFormGenerator", method = RequestMethod.GET)
+  public ModelAndView testResultsReportFormGenerator(Model model) {
+    ModelAndView mv = new ModelAndView("testResultsReport");
+    mv.addObject("testResultsReportForm", new TestResultsReportBackingForm());
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping("/getTestResultsReport")
+  public @ResponseBody
+  Map<String, Object> getTestResultsReport(
+      @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form,
+      BindingResult result, Model model) {
+
+    String dateTestedFrom = form.getDateTestedFrom();
+    String dateTestedTo = form.getDateTestedTo();
+    String hiv = form.getTests().contains("hiv") ? "reactive" : "";
+    String hbv = form.getTests().contains("hbv") ? "reactive" : "";
+    String hcv = form.getTests().contains("hcv") ? "reactive" : "";
+    String syphilis = form.getTests().contains("syphilis") ? "reactive" : "";
+    String none = form.getTests().contains("none") ? "none" : "";
+    Map<Long, Long> numCollections = testResultsRepository
+        .findNumberOfPositiveTests(dateTestedFrom, dateTestedTo,
+            form.getAggregationCriteria(), hiv, hbv, hcv, syphilis, none);
+    Map<String, Object> m = new HashMap<String, Object>();
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
+    if (form.getAggregationCriteria().equals("monthly"))
+      interval = interval * 30;
+    else if (form.getAggregationCriteria().equals("yearly"))
+      interval = interval * 365;
+    m.put("interval", interval);
+    m.put("numTestResults", numCollections);
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date date;
+    try {
+      date = dateFormat.parse(dateTestedFrom);
+      m.put("dateTestedFromUTC", date.getTime());
+      date = dateFormat.parse(dateTestedTo);
+      m.put("dateTestedToUTC", date.getTime());
     } catch (ParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

@@ -79,9 +79,10 @@ function getTimeChart(options) {
 }
 
 function getSeriesData(beginDate, endDate, interval, data) {
-  seriesData = [];
 
-  for ( var x in data) {
+  seriesData = [];
+  console.log(data);
+  for (var x in data) {
     seriesData.push([ parseInt(x), data[x] ]);
   }
 

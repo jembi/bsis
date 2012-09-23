@@ -17,6 +17,8 @@
 <div id="reportsTab" class="leftPanel">
 	<ul>
 		<li id="collectionsReport"><a
-			href="collectionsReportFormGenerator.html">Collections Report</a></li>
+			href="collectionsReportFormGenerator.html">Collections</a></li>
+		<li id="testResultsReport"><a
+			href="testResultsReportFormGenerator.html">Test Results</a></li>
 	</ul>
 </div>
