@@ -9,19 +9,7 @@
 </div>
 <div class="headlink">
 	<p class="topPanelUsername">
-		Logged in as ${model.user.username} |
-
-		<c:choose>
-			<c:when test="${model.user.type=='admin'}">
-				<a href="admin-findUser.html?username=${model.user.username}"
-					class="topPanelLink"> Edit Profile</a>
-			</c:when>
-			<c:otherwise>
-				<a href="findUser.html?username=${model.user.username}"> Edit
-					Profile</a>
-			</c:otherwise>
-		</c:choose>
-
+		Logged in as ${model.user.username}
 	</p>
 	<a href="logout.html">Sign Out</a>
 </div>
