@@ -25,4 +25,4 @@
 
 <button id="addTestResultButton-${button_id}"
 	onclick="bootup(${button_id});" class="addTestResultButton">Click
-	here to Add a New Test Result</button>
+	here to add a new test result</button>

@@ -25,4 +25,4 @@
 
 <button id="addProductButton-${button_id}"
 	onclick="bootup(${button_id});" class="addProductButton">Click
-	here to Add a New Product</button>
+	here to add a new product</button>

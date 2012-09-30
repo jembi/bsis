@@ -19,4 +19,4 @@
 <c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <button id="addDonorButton-${button_id}" onclick="bootup(${button_id});"
-	class="addDonorButton">Click here to Add a New Donor</button>
+	class="addDonorButton">Click here to add a new donor</button>

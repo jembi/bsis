@@ -26,4 +26,4 @@
 
 <button id="addCollectionButton-${button_id}"
 	onclick="bootup(${button_id});" class="addCollectionButton">Click
-	here to Add a New Collection</button>
+	here to add a new collection</button>

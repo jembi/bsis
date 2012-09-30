@@ -23,4 +23,4 @@
 </script>
 
 <button id="addUsageButton-${button_id}" onclick="bootup(${button_id});"
-	class="addUsageButton">Click here to Add New Usage</button>
+	class="addUsageButton">Click here to add new usage</button>

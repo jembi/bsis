@@ -25,4 +25,4 @@
 
 <button id="addRequestButton-${button_id}"
 	onclick="bootup(${button_id});" class="addRequestButton">Click
-	here to Add a New Request</button>
+	here to add a new request</button>
