@@ -48,7 +48,6 @@
   function showIssueRequestDialog(requestNumber) {
 
       var issueDialogId = 'issueRequest' + requestNumber;
-      console.log(issueDialogId);
       $.ajax({
         url : "findAvailableProducts.html",
         contentType: "application/json",
