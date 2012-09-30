@@ -10,42 +10,37 @@ import model.Feedback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import repository.FeedbackRepository;
 
 @Controller
 public class FeedbackController {
 
-	@Autowired
-	private FeedbackRepository feedbackRepository;
+  @Autowired
+  private FeedbackRepository feedbackRepository;
 
-	public FeedbackController() {
-	}
+  public FeedbackController() {
+  }
 
-	@RequestMapping("/feedbackPage")
-	public ModelAndView getFeedbackPage(HttpServletRequest request) {
+  @RequestMapping(value = "/submitFeedback", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> addDonor(
+      @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-		ModelAndView modelAndView = new ModelAndView("feedbackPage");
-		Map<String, Object> model = new HashMap<String, Object>();
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    String comments = params.get("comments");
+    Feedback feedback = new Feedback(comments);
+    feedbackRepository.saveFeedback(feedback);
 
-	@RequestMapping("/submitFeedback")
-	public ModelAndView addDonor(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("feedbackSaved", true);
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", true);
+    m.put("errMsg", "Error");
 
-		String comments = params.get("comments");
-		Feedback feedback = new Feedback(comments);
-		feedbackRepository.saveFeedback(feedback);
-
-		ModelAndView modelAndView = new ModelAndView("feedbackPage");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("feedbackSaved", true);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+    return m;
+  }
 
 }

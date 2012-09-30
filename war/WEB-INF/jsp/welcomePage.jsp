@@ -12,22 +12,49 @@
 <body>
 	<script>
     $(function() {
-      $('#commentsBox').dialog({
-        autoOpen : false,
-        height : 480,
-        width : 580,
-        modal : true,
-        title : "Comments and Feedback on Vein-to-Vein",
-        buttons : {
-          "Give feedback" : function() {
+      $('#commentsBox').dialog(
+          {
+            autoOpen : false,
+            height : 480,
+            width : 580,
+            modal : true,
+            title : "Comments and Feedback on Vein-to-Vein",
+            buttons : {
+              "Give feedback" : function() {
+                console.log($("#commentsContent").val());
+                $.ajax({
+                  type : "POST",
+                  url : "submitFeedback.html",
+                  data : {
+                    comments : $("#commentsContent").val()
+                  },
+                  success : function(jsonResponse) {
+                    if (jsonResponse["success"] === true) {
+                      $.showMessage("Feedback Submitted Successfully!");
+                      $("#commentsContent").val("");
+                      $('#commentsBox').dialog("close");
+                    } else {
+                      $.showMessage("Something went wrong."
+                          + jsonResponse["errMsg"], {
+                        backgroundColor : 'red'
+                      });
+                    }
+                  },
+                  error : function() {
+                    $.showMessage("Something went wrong."
+                        + jsonResponse["errMsg"], {
+                      backgroundColor : 'red'
+                    });
+                    $('#commentsBox').dialog("close");
+                  }
 
-            $(this).dialog("close");
-          },
-          "Cancel" : function() {
-            $(this).dialog("close");
-          }
-        }
-      });
+                });
+              },
+              "Cancel" : function() {
+                $(this).dialog("close");
+              }
+            }
+          });
       $('#commentsLink').click(function() {
         $('#commentsBox').dialog("open");
       });
@@ -38,16 +65,17 @@
 			<jsp:include page="topPanel.jsp" flush="true" />
 		</div>
 		<div class="bottomPanel">
-			<span class="bottomPanelText" id="commentsLink"> Comments and Feedback </span> <a
+			<span class="bottomPanelText" id="commentsLink"> Comments and
+				Feedback </span> <a
 				href="mailto:rohit.banga@cc.gatech.edu, vempala@cc.gatech.edu"
 				target="_blank"> Contact Us</a>
 		</div>
 		<div id="commentsBox">
 			<div>
 				<br /> <span style="padding-left: 15px; padding-right: 15px;">
-					Your suggestions can help us in making Vein-to-Vein better
-				</span>
-				<textarea rows="15" cols="50" style="margin-top: 20px;"> </textarea>
+					Your suggestions can help us in making Vein-to-Vein better </span>
+				<textarea id="commentsContent" rows="15" cols="50"
+					style="margin-top: 20px;"> </textarea>
 			</div>
 		</div>
 	</div>
