@@ -1,18 +1,55 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>V2V</title>
-    <jsp:include page="commonHeadIncludes.jsp" flush="true"/>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>V2V</title>
+<jsp:include page="commonHeadIncludes.jsp" flush="true" />
 </head>
 <body>
-<div class="mainBody">
-    <div class="mainContent">
-        <jsp:include page="topPanel.jsp" flush="true"/>
-    </div>
-</div>
+	<script>
+    $(function() {
+      $('#commentsBox').dialog({
+        autoOpen : false,
+        height : 480,
+        width : 580,
+        modal : true,
+        title : "Comments and Feedback on Vein-to-Vein",
+        buttons : {
+          "Give feedback" : function() {
+
+            $(this).dialog("close");
+          },
+          "Cancel" : function() {
+            $(this).dialog("close");
+          }
+        }
+      });
+      $('#commentsLink').click(function() {
+        $('#commentsBox').dialog("open");
+      });
+    });
+  </script>
+	<div class="mainBody">
+		<div class="mainContent">
+			<jsp:include page="topPanel.jsp" flush="true" />
+		</div>
+		<div class="bottomPanel">
+			<span class="bottomPanelText" id="commentsLink"> Comments and Feedback </span> <a
+				href="mailto:rohit.banga@cc.gatech.edu, vempala@cc.gatech.edu"
+				target="_blank"> Contact Us</a>
+		</div>
+		<div id="commentsBox">
+			<div>
+				<br /> <span style="padding-left: 15px; padding-right: 15px;">
+					Your suggestions can help us in making Vein-to-Vein better
+				</span>
+				<textarea rows="15" cols="50" style="margin-top: 20px;"> </textarea>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

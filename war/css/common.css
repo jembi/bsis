@@ -74,7 +74,7 @@ select:focus {
 	width: 1100px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	box-shadow: 0px -1px 100px beige;
+	box-shadow: 0px -1px 10px beige;
 	-moz-box-shadow: 0px;
 	-webkit-box-shadow: 0px;
 	box-shadow: 0px;
@@ -296,10 +296,14 @@ input[type="button"],input[type="submit"],input[type="reset"] {
 }
 
 .bottomPanel {
-	clear: both;
-	margin: 700px 0 0 170px;
-	border-top: 2px solid #ccc;
-	padding: 10px;
+	text-align: center;
+}
+
+.bottomPanel a, a:visited, .bottomPanelText {
+	color: grey;
+	padding-top: 30px;
+	padding-right: 30px;
+	text-decoration: underline;
 }
 
 .showTips {
