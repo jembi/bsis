@@ -11,7 +11,11 @@
 
 
 <script>
-  $(".addUsageButton").button();
+  $(".addUsageButton").button({
+    icons : {
+      primary : 'ui-icon-circle-plus'
+    }
+  });
   function updateUsage() {
     addNewUsage($("#editUsageForm-" + '<c:out value="${formId}"/>')[0]);
     $("#editUsageForm-" + '<c:out value="${formId}"/>')[0].reset();
@@ -77,8 +81,8 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><input type="button" value="Add Usage"
-						class="addUsageButton" onclick="updateUsage();" /></td>
+					<td><button type="button" class="addUsageButton"
+							onclick="updateUsage();">Add Usage</button></td>
 				</tr>
 			</c:if>
 		</tbody>

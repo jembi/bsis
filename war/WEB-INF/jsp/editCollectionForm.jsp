@@ -12,7 +12,11 @@
 
 
 <script>
-  $(".addCollectionButton").button();
+  $(".addCollectionButton").button({
+    icons : {
+      primary : 'ui-icon-circle-plus'
+    }
+  });
   $("#editCollectionFormCenters-" + '<c:out value="${formId}"/>').multiselect({
     multiple : false,
     selectedList : 1,
@@ -98,8 +102,8 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><input type="button" value="Add Collection"
-						class="addCollectionButton" onclick="updateCollection();" /></td>
+					<td><button type="button" class="addCollectionButton"
+							onclick="updateCollection();">Add Collection</button></td>
 				</tr>
 			</c:if>
 

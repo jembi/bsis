@@ -9,7 +9,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <script>
-  $("#findUsageButton").button().click(function() {
+  $("#findUsageButton").button({
+    icons : {
+      primary : 'ui-icon-search'
+    }
+  }).click(function() {
     var findUsageFormData = $("#findUsageForm").serialize();
     $.ajax({
       type : "GET",
@@ -69,7 +73,8 @@
 			</tr>
 			<tr>
 				<td><form:label path="useIndications">${model.useIndicationDisplayName}</form:label></td>
-				<td><form:select path="useIndications" id="findUsageFormUseIndications">
+				<td><form:select path="useIndications"
+						id="findUsageFormUseIndications">
 						<form:option path="useIndications" value="used" label="Used" />
 						<form:option path="useIndications" value="discarded"
 							label="Discarded" />
@@ -91,8 +96,8 @@
 				<td><form:input path="dateUsedTo" id="dateUsedTo" /></td>
 			</tr>
 			<tr>
-				<td><input type="button" value="Find Usage"
-					id="findUsageButton" /></td>
+				<td><button id="findUsageButton" type="button">Find
+						Usage</button></td>
 			</tr>
 		</tbody>
 	</table>

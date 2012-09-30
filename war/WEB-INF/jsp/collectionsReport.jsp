@@ -43,7 +43,11 @@
     header : false
   });
 
-  $("#generateCollectionsReportButton").button().click(function() {
+  $("#generateCollectionsReportButton").button({
+    icons : {
+      primary : 'ui-icon-print'
+    }
+  }).click(function() {
     var formData = $("#collectionsReportForm").serialize();
     $.ajax({
       type : "GET",
@@ -95,8 +99,8 @@
 			</tr>
 			<tr>
 				<td />
-				<td><input type="button" value="Generate Report"
-					id="generateCollectionsReportButton" /></td>
+				<td><button type="button" id="generateCollectionsReportButton">Generate
+						Report</button></td>
 			</tr>
 		</tbody>
 	</table>

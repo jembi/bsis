@@ -11,7 +11,11 @@
 
 
 <script>
-  $(".addProductButton").button();
+  $(".addProductButton").button({
+    icons : {
+      primary : 'ui-icon-circle-plus'
+    }
+  });
   function updateTestResult() {
     addNewTestResult($("#editProductForm-" + '<c:out value="${formId}"/>')[0]);
     $("#editProductForm-" + '<c:out value="${formId}"/>')[0].reset();
@@ -65,8 +69,8 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><input type="button" value="Add Product"
-						class="addProductButton" onclick="updateProduct();" /></td>
+					<td><button type="button" class="addProductButton"
+							onclick="updateProduct();">Add Product</button></td>
 				</tr>
 			</c:if>
 		</tbody>

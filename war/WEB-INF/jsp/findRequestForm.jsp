@@ -9,7 +9,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <script>
-  $("#findRequestButton").button().click(function() {
+  $("#findRequestButton").button({
+    icons : {
+      primary : 'ui-icon-search'
+    }
+  }).click(function() {
     var findRequestFormData = $("#findRequestForm").serialize();
     $.ajax({
       type : "GET",
@@ -108,14 +112,15 @@
 			</tr>
 			<tr>
 				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td style="padding-left:10px;"><form:select path="sites" id="findRequestFormSites">
+				<td style="padding-left: 10px;"><form:select path="sites"
+						id="findRequestFormSites">
 						<form:options items="${model.sites}" />
 					</form:select></td>
 			</tr>
 			<tr>
 				<td><form:label path="productTypes">${model.productTypeDisplayName}</form:label></td>
-				<td style="padding-left:10px;"><form:select path="productTypes"
-						id="findRequestFormProductTypes">
+				<td style="padding-left: 10px;"><form:select
+						path="productTypes" id="findRequestFormProductTypes">
 						<form:option value="wholeBlood" label="Whole Blood" selected="" />
 						<form:option value="rcc" label="RCC" selected="" />
 						<form:option value="ffp" label="ffp" selected="" />
@@ -132,7 +137,8 @@
 			</tr>
 			<tr>
 				<td><form:label path="statuses">${model.statusDisplayName}</form:label></td>
-				<td style="padding-left:10px;"><form:select path="statuses" id="findRequestFormStatuses">
+				<td style="padding-left: 10px;"><form:select path="statuses"
+						id="findRequestFormStatuses">
 						<form:option value="partiallyFulfilled"
 							label="Partially Fulfilled" selected="selected" />
 						<form:option path="status" value="pending" label="Pending"
@@ -159,8 +165,8 @@
 				<td><form:input path="dateRequiredTo" id="dateRequiredTo" /></td>
 			</tr>
 			<tr>
-				<td><input type="button" value="Find Request"
-					id="findRequestButton" /></td>
+				<td><button id="findRequestButton" type="button">Find
+						Request</button></td>
 			</tr>
 		</tbody>
 	</table>

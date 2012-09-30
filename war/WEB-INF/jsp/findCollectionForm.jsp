@@ -9,7 +9,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <script>
-  $("#findCollectionButton").button().click(function() {
+  $("#findCollectionButton").button({
+    icons : {
+      primary : 'ui-icon-search'
+    }
+  }).click(function() {
     var findCollectionFormData = $("#findCollectionForm").serialize();
     $.ajax({
       type : "GET",
@@ -87,8 +91,8 @@
 			</tr>
 			<tr>
 				<td />
-				<td><input type="button" value="Find Collection"
-					id="findCollectionButton" /></td>
+				<td><button type="button" id="findCollectionButton">Find
+						Collection</button></td>
 			</tr>
 		</tbody>
 	</table>

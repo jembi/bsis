@@ -9,7 +9,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <script>
-  $("#findDonorButton").button().click(function() {
+  $("#findDonorButton").button({
+    icons : {
+      primary : 'ui-icon-search'
+    }
+  }).click(function() {
     var findDonorFormData = $("#findDonorForm").serialize();
     $.ajax({
       type : "GET",
@@ -23,7 +27,8 @@
   });
 </script>
 
-<form:form method="GET" commandName="findDonorForm" id="findDonorForm" class="findDonorForm">
+<form:form method="GET" commandName="findDonorForm" id="findDonorForm"
+	class="findDonorForm">
 	<table>
 		<thead>
 			<tr>
@@ -45,20 +50,19 @@
 			</tr>
 			<tr>
 				<td><form:label path="bloodTypes">${model.bloodTypeDisplayName}</form:label></td>
-				<td><form:checkbox path="bloodTypes"
-						value="A+" label="A+" /> <form:checkbox path="bloodTypes"
-						value="B+" label="B+" /> <form:checkbox path="bloodTypes"
-						value="AB+" label="AB+" /> <form:checkbox path="bloodTypes"
-						value="O+" label="O+" /> <form:checkbox path="bloodTypes"
-						value="A-" label="A-" /> <form:checkbox path="bloodTypes"
-						value="B-" label="B-" /> <form:checkbox path="bloodTypes"
-						value="AB-" label="AB-" /> <form:checkbox path="bloodTypes"
-						value="O-" label="O-" /></td>
+				<td><form:checkbox path="bloodTypes" value="A+" label="A+" />
+					<form:checkbox path="bloodTypes" value="B+" label="B+" /> <form:checkbox
+						path="bloodTypes" value="AB+" label="AB+" /> <form:checkbox
+						path="bloodTypes" value="O+" label="O+" /> <form:checkbox
+						path="bloodTypes" value="A-" label="A-" /> <form:checkbox
+						path="bloodTypes" value="B-" label="B-" /> <form:checkbox
+						path="bloodTypes" value="AB-" label="AB-" /> <form:checkbox
+						path="bloodTypes" value="O-" label="O-" /></td>
 			</tr>
 			<tr>
 				<td />
-				<td><input type="button" value="Find Donor"
-					id="findDonorButton" /></td>
+				<td><button type="button" id="findDonorButton">Find
+						Donor</button></td>
 			</tr>
 		</tbody>
 	</table>

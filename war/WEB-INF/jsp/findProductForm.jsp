@@ -9,7 +9,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <script>
-  $("#findProductButton").button().click(function() {
+  $("#findProductButton").button({
+    icons : {
+      primary : 'ui-icon-search'
+    }
+  }).click(function() {
     var findProductFormData = $("#findProductForm").serialize();
     $.ajax({
       type : "GET",
@@ -39,7 +43,6 @@
       header : false
     }
   });
-
 </script>
 
 <form:form method="GET" commandName="findProductForm"
@@ -73,16 +76,15 @@
 				<td><form:label path="availability">${model.isIssuedDisplayName}</form:label></td>
 				<td><form:select path="availability"
 						id="findProductFormAvailabilityStatuses">
-						<form:option value="available" label="Available"
-							selected="" />
+						<form:option value="available" label="Available" selected="" />
 						<form:option value="notAvailable" label="Not Available"
 							selected="" />
 					</form:select></td>
 			</tr>
 			<tr>
 				<td />
-				<td><input type="button" value="Find Product"
-					id="findProductButton" /></td>
+				<td><button type="button" id="findProductButton">Find
+						Product</button></td>
 			</tr>
 		</tbody>
 	</table>

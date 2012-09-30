@@ -189,6 +189,8 @@ public class ProductRepository {
 
   private List<Boolean> getIssuedListFromAvailability(List<String> availability) {
     List<Boolean> issued = new ArrayList<Boolean>();
+    if (availability == null)
+      return issued;
     for (String available : availability) {
       if (available.equals("available"))
         issued.add(false);
@@ -217,13 +219,14 @@ public class ProductRepository {
     Product existingProduct = findProductByProductNumber(product
         .getProductNumber());
     if (existingProduct == null) {
-      System.out.println("here");
+      product.setIssued(Boolean.FALSE);
       product.setIsDeleted(false);
       saveProduct(product);
       return product;
     }
     existingProduct.setCollectionNumber(product.getCollectionNumber());
     existingProduct.setType(product.getType());
+    product.setIssued(Boolean.FALSE);
     existingProduct.setIsDeleted(false);
     em.merge(existingProduct);
     em.flush();

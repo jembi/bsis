@@ -11,7 +11,11 @@
 
 
 <script>
-  $(".addRequestButton").button();
+  $(".addRequestButton").button({
+    icons : {
+      primary : 'ui-icon-circle-plus'
+    }
+  });
   function updateRequest() {
     addNewRequest($("#editRequestForm-" + '<c:out value="${formId}"/>')[0]);
     $("#editRequestForm-" + '<c:out value="${formId}"/>')[0].reset();
@@ -133,8 +137,8 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><input type="button" value="Add Request"
-						class="addRequestButton" onclick="updateRequest();" /></td>
+					<td><button type="button" class="addRequestButton"
+							onclick="updateRequest();">Add Request</button></td>
 				</tr>
 			</c:if>
 		</tbody>

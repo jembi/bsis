@@ -50,7 +50,11 @@
     header : false
   });
 
-  $("#generateTestResultsReportButton").button().click(function() {
+  $("#generateTestResultsReportButton").button({
+    icons : {
+      primary : 'ui-icon-print'
+    }
+  }).click(function() {
     var formData = $("#testResultsReportForm").serialize();
     $.ajax({
       type : "GET",
@@ -111,8 +115,8 @@
 			</tr>
 			<tr>
 				<td />
-				<td><input type="button" value="Generate Report"
-					id="generateTestResultsReportButton" /></td>
+				<td><button type="button" id="generateTestResultsReportButton">Generate
+						Report</button></td>
 			</tr>
 		</tbody>
 	</table>
