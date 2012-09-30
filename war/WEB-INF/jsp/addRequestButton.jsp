@@ -12,7 +12,7 @@
 <c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <script>
-	$(".addRequestButton").button();
+	$(".addRequestButton").button({icons: {primary:'ui-icon-plusthick'}});
 
 	function bootup() {
 		generateEditForm("editRequestFormGenerator.html", {isDialog : "yes"},

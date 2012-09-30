@@ -8,7 +8,7 @@
 	}%>
 
 <script>
-	$(".addDonorButton").button();
+	$(".addDonorButton").button({icons: {primary:'ui-icon-plusthick'}});
 	function bootup(button_id) {
 		generateEditForm("editDonorFormGenerator.html", {}, addNewDonor,
 		    						 "Add New Donor", "addDonorButtonEdit" + button_id, decorateEditDonorDialog, 550, 500);

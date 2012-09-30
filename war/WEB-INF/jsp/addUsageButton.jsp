@@ -11,7 +11,7 @@
 <c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <script>
-	$(".addUsageButton").button();
+	$(".addUsageButton").button({icons: {primary:'ui-icon-plusthick'}});
 
 	function bootup() {
 		generateEditForm("editUsageFormGenerator.html", {isDialog : "yes"},

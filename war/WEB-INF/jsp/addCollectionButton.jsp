@@ -6,13 +6,12 @@
 <%!public long getCurrentTime() {
 		return System.nanoTime();
 	}
-	Long button_id = getCurrentTime();
-%>
+	Long button_id = getCurrentTime();%>
 
 <c:set var="button_id"><%=getCurrentTime()%></c:set>
 
 <script>
-	$(".addCollectionButton").button();
+	$(".addCollectionButton").button({icons: {primary:'ui-icon-plusthick'}});
 
 	function bootup() {
 		generateEditForm("editCollectionFormGenerator.html", {isDialog : "yes"},
