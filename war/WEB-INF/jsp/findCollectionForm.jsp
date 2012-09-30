@@ -78,16 +78,24 @@
 				<td><form:input path="shippingNumber" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="dateCollectedFrom">${model.dateCollectedDisplayName} From </form:label></td>
-				<td><form:input path="dateCollectedFrom" id="dateCollectedFrom" />
-					to</td>
-				<td><form:input path="dateCollectedTo" id="dateCollectedTo" /></td>
-			</tr>
-			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
 				<td><form:select path="centers" id="findCollectionFormCenters">
 						<form:options items="${model.centers}" />
 					</form:select></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><b><i>Filter Collections</i></b></td>
+			</tr>
+			<tr>
+				<td>Having Date Collected Between</td>
+			</tr>
+			<tr>
+				<td><form:input path="dateCollectedFrom" id="dateCollectedFrom" />
+					to</td>
+				<td><form:input path="dateCollectedTo" id="dateCollectedTo" /></td>
 			</tr>
 			<tr>
 				<td />

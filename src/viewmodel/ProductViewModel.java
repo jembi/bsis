@@ -39,6 +39,8 @@ public class ProductViewModel {
   }
 
   public String getisIssued() {
+    if (product == null || product.getIssued() == null)
+      return null;
     return product.getIssued() ? "yes" : "no";
   }
 

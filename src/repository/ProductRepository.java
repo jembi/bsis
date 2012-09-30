@@ -171,7 +171,7 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
         + "(p.productNumber = :productNumber OR "
         + "p.collectionNumber = :collectionNumber "
-        + "OR p.type IN (:types) OR p.isIssued IN (:isIssued) ) AND "
+        + "OR p.type IN (:types)) AND (p.isIssued IN (:isIssued)) AND "
         + "(p.isDeleted= :isDeleted)",
         Product.class);
 

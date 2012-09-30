@@ -73,12 +73,18 @@
 					</form:select></td>
 			</tr>
 			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><b><i>Filter Products</i></b></td>
+			</tr>
+			<tr>
 				<td><form:label path="availability">${model.isIssuedDisplayName}</form:label></td>
 				<td><form:select path="availability"
 						id="findProductFormAvailabilityStatuses">
-						<form:option value="available" label="Available" selected="" />
+						<form:option value="available" label="Available" selected="selected" />
 						<form:option value="notAvailable" label="Not Available"
-							selected="" />
+							selected="selected" />
 					</form:select></td>
 			</tr>
 			<tr>

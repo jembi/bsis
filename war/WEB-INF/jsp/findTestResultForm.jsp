@@ -103,7 +103,6 @@
 				<td>Having Date Tested Between</td>
 			</tr>
 			<tr>
-				<td><form:label path="dateTestedFrom">${model.dateTestedDisplayName} From </form:label></td>
 				<td><form:input path="dateTestedFrom" id="dateTestedFrom" />
 					to</td>
 				<td><form:input path="dateTestedTo" id="dateTestedTo" /></td>
