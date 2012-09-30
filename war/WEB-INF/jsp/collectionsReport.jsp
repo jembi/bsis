@@ -99,8 +99,8 @@
 			</tr>
 			<tr>
 				<td />
-				<td><button type="button" id="generateCollectionsReportButton">Generate
-						report</button></td>
+				<td><button type="button" id="generateCollectionsReportButton"
+						style="margin-left: 10px">Generate report</button></td>
 			</tr>
 		</tbody>
 	</table>

@@ -137,7 +137,7 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><button type="button" class="addRequestButton"
+					<td><button type="button" class="addRequestButton" style="margin-left: 10px"
 							onclick="updateRequest();">Add request</button></td>
 				</tr>
 			</c:if>
