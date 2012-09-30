@@ -66,12 +66,6 @@
 				<td><form:input path="collectionNumber" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="dateTestedFrom">${model.dateTestedDisplayName} From </form:label></td>
-				<td><form:input path="dateTestedFrom" id="dateTestedFrom" />
-					to</td>
-				<td><form:input path="dateTestedTo" id="dateTestedTo" /></td>
-			</tr>
-			<tr>
 				<td><form:label path="hiv">${model.hivDisplayName}</form:label></td>
 				<td><form:radiobutton path="hiv" value="reactive"
 						label="reactive" class="radioWithToggle" /> <form:radiobutton
@@ -98,6 +92,21 @@
 						label="reactive" class="radioWithToggle" /> <form:radiobutton
 						path="syphilis" value="negative" label="negative"
 						class="radioWithToggle" /></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><b><i>Filter Test Results</i></b></td>
+			</tr>
+			<tr>
+				<td>Having Date Tested Between</td>
+			</tr>
+			<tr>
+				<td><form:label path="dateTestedFrom">${model.dateTestedDisplayName} From </form:label></td>
+				<td><form:input path="dateTestedFrom" id="dateTestedFrom" />
+					to</td>
+				<td><form:input path="dateTestedTo" id="dateTestedTo" /></td>
 			</tr>
 			<tr>
 				<td />
