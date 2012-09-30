@@ -19,7 +19,7 @@
   });
 
 
-  $("#" + table_id + " tbody").dblclick(
+  $("." + table_id + "Edit").click(
       function(event) {
 
         // remove row_selected class everywhere
@@ -28,9 +28,9 @@
         });
 
         // add row_selected class to the current row
-        $(event.target.parentNode).addClass('row_selected');
+        $(event.target.parentNode.parentNode).addClass('row_selected');
 
-        var elements = $(event.target.parentNode).children();
+        var elements = $(event.target.parentNode.parentNode).children();
         if (elements[0].getAttribute("class") === "dataTables_empty") {
           return;
         }
@@ -75,6 +75,7 @@
 			<c:if test="${model.showdonorType==true}">
 				<th>${model.donorTypeDisplayName}</th>
 			</c:if>
+			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -99,6 +100,12 @@
 				<c:if test="${model.showdonorType==true}">
 					<td>${collection.donorType}</td>
 				</c:if>
+				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
+					style="display: inline-block;" title="Edit"
+					></span> <span
+					class="ui-icon ui-icon-trash ${table_id}Delete"
+					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
+				</td>
 		</c:forEach>
 	</tbody>
 </table>

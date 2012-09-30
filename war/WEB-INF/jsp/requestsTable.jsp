@@ -6,30 +6,31 @@
 <c:set var="table_id">${model.tableName}</c:set>
 
 <script>
-  var table_id = "${table_id}";
-  var requestsTable = $("#" + table_id).dataTable({
+
+  $("#${table_id}").dataTable({
     "bJQueryUI" : true
   });
 
   $("#${table_id}_filter").find("label").find("input").keyup(function() {
     var searchBox = $("#${table_id}_filter").find("label").find("input");
-    $("#" + table_id).removeHighlight();
+    $("#${table_id}").removeHighlight();
     if (searchBox.val() != "")
-    	$("#" + table_id).find("td").highlight(searchBox.val());
+    	$("#${table_id}").find("td").highlight(searchBox.val());
   });
 
-  $("#" + table_id + " tbody").dblclick(
+  $(".${table_id}Edit").click(
       function(event) {
 
+        var requestsTable = $("#${table_id}").dataTable();
         // remove row_selected class everywhere
         $(requestsTable.fnSettings().aoData).each(function() {
           $(this.nTr).removeClass('row_selected');
         });
 
         // add row_selected class to the current row
-        $(event.target.parentNode).addClass('row_selected');
+        $(event.target.parentNode.parentNode).addClass('row_selected');
 
-        var elements = $(event.target.parentNode).children();
+        var elements = $(event.target.parentNode.parentNode).children();
         if (elements[0].getAttribute("class") === "dataTables_empty") {
           return;
         }
@@ -113,6 +114,7 @@
 				<th>${model.statusDisplayName}</th>
 			</c:if>
 			<th></th>
+			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -148,6 +150,12 @@
 							onclick="showIssueRequestDialog(${request.requestNumber})"> <u>Issue</u>
 						</a>
 					</c:if></td>
+				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
+					style="display: inline-block;" title="Edit"></span> <span
+					class="ui-icon ui-icon-trash ${table_id}Delete"
+					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
+				</td>
+
 			</tr>
 		</c:forEach>
 	</tbody>

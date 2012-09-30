@@ -15,10 +15,10 @@
     var searchBox = $("#${table_id}_filter").find("label").find("input");
     $("#" + table_id).removeHighlight();
     if (searchBox.val() != "")
-    	$("#" + table_id).find("td").highlight(searchBox.val());
+      $("#" + table_id).find("td").highlight(searchBox.val());
   });
 
-  $("#" + table_id + " tbody").dblclick(
+  $("." + table_id + "Edit").click(
       function(event) {
 
         // remove row_selected class everywhere
@@ -26,14 +26,16 @@
           $(this.nTr).removeClass('row_selected');
         });
 
+       	console.log(event.target.parentNode.parentNode);
         // add row_selected class to the current row
-        $(event.target.parentNode).addClass('row_selected');
+        $(event.target.parentNode.parentNode).addClass('row_selected');
 
-        var elements = $(event.target.parentNode).children();
+        var elements = $(event.target.parentNode.parentNode).children();
         if (elements[0].getAttribute("class") === "dataTables_empty") {
           return;
         }
 
+       	console.log(elements[0]);
         var donorId = elements[0].innerHTML;
 
         generateEditForm("editDonorFormGenerator.html", {
@@ -67,6 +69,7 @@
 			<c:if test="${model.showdateOfBirth==true}">
 				<th>${model.dobDisplayName}</th>
 			</c:if>
+			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -88,6 +91,12 @@
 				<c:if test="${model.showdateOfBirth==true}">
 					<td>${donor.birthDate}</td>
 				</c:if>
+				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
+					style="display: inline-block;" title="Edit"
+					></span> <span
+					class="ui-icon ui-icon-trash ${table_id}Delete"
+					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
+				</td>
 			</tr>
 		</c:forEach>
 	</tbody>

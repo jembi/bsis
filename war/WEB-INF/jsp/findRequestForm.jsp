@@ -14,13 +14,17 @@
       primary : 'ui-icon-search'
     }
   }).click(function() {
+    console.log("here");
     var findRequestFormData = $("#findRequestForm").serialize();
+    console.log("here1");
     $.ajax({
       type : "GET",
       url : "findRequest.html",
       data : findRequestFormData,
       success : function(data) {
+        console.log("here2");
         $('#findRequestResult').html(data);
+        console.log("here3");
         window.scrollTo(0, document.body.scrollHeight);
       }
     });
