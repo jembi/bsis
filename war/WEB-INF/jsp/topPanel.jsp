@@ -8,23 +8,30 @@
 	<a href="/v2v">VEIN-TO-VEIN</a>
 </div>
 <div class="headlink">
-	<p class="topPanelUsername">
-		Logged in as ${model.user.username}
-	</p>
-	<a href="logout.html">Sign Out</a>
+	<p class="topPanelUsername">Logged in as ${model.user.username}</p>
+	<a href="logout.html"><span
+				class="ui-icon ui-icon-locked" style="display: inline-block;"></span>Sign Out</a>
 </div>
 
 <div id="topPanelTabs" class="topPanelTabs">
 	<ul id="topTabs">
-		<li class="topPanelTab"><a href="#homeLandingPageContent">Home</a></li>
-		<li class="topPanelTab"><a href="#donorsLandingPageContent">Donors</a></li>
-		<li class="topPanelTab"><a href="#collectionsLandingPageContent">Collections</a></li>
-		<li class="topPanelTab"><a href="#testResultsLandingPageContent">Test
+		<li class="topPanelTab"><a href="#homeLandingPageContent"><span
+				class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>
+		<li class="topPanelTab"><a href="#donorsLandingPageContent"><span
+				class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
+		<li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
+				class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
+		<li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
+				class="ui-icon ui-icon-pencil" style="display: inline-block;"></span>Test
 				Results</a></li>
-		<li class="topPanelTab"><a href="#productsLandingPageContent">Products</a></li>
-		<li class="topPanelTab"><a href="#requestsLandingPageContent">Requests</a></li>
-		<li class="topPanelTab"><a href="#usageLandingPageContent">Usage</a></li>
-		<li class="topPanelTab"><a href="#reportsLandingPageContent">Reports</a></li>
+		<li class="topPanelTab"><a href="#productsLandingPageContent"><span
+				class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
+		<li class="topPanelTab"><a href="#requestsLandingPageContent"><span
+				class="ui-icon ui-icon-tag" style="display: inline-block;"></span>Requests</a></li>
+		<li class="topPanelTab"><a href="#usageLandingPageContent"><span
+				class="ui-icon ui-icon-transferthick-e-w" style="display: inline-block;"></span>Usage</a></li>
+		<li class="topPanelTab"><a href="#reportsLandingPageContent"><span
+				class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
 	</ul>
 
 	<div id="homeLandingPageContent" class="centerContent">

@@ -65,8 +65,12 @@
 			<jsp:include page="topPanel.jsp" flush="true" />
 		</div>
 		<div class="bottomPanel">
+		<span
+				class="ui-icon ui-icon-comment" style="display: inline-block;"></span>
 			<span class="bottomPanelText" id="commentsLink"> Comments and
-				Feedback </span> <a
+				Feedback </span>
+				<span
+				class="ui-icon ui-icon-mail-closed" style="display: inline-block; margin-left: 20px;"></span><a
 				href="mailto:rohit.banga@cc.gatech.edu, vempala@cc.gatech.edu"
 				target="_blank"> Contact Us</a>
 		</div>

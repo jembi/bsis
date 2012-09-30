@@ -300,7 +300,7 @@ input[type="button"],input[type="submit"],input[type="reset"] {
 }
 
 .bottomPanel a, a:visited, .bottomPanelText {
-	color: grey;
+	color: #43466D;
 	padding-top: 30px;
 	padding-right: 30px;
 	text-decoration: underline;
