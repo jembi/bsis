@@ -139,6 +139,29 @@ public class DonorController {
     return m;
   }
 
+  @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteDonor(
+      @RequestParam("donorId") String donorId) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      donorRepository.deleteDonor(donorId);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+  
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
   public ModelAndView addDonor(
       @ModelAttribute("editDonorForm") DonorBackingForm form,
@@ -193,25 +216,6 @@ public class DonorController {
     model.put("donor", new DonorViewModel(donor));
     ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
     addDonorHistory(donor.getDonorNumber(), model);
-    ControllerUtil.addFieldsToDisplay("donor", model,
-        recordFieldsConfigRepository);
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
-    modelAndView.addObject("model", model);
-
-    return modelAndView;
-  }
-
-  @RequestMapping("/deleteDonor")
-  public ModelAndView deleteDonor(@RequestParam Map<String, String> params,
-      HttpServletRequest request) {
-
-    donorRepository.deleteDonor(Long.valueOf(params.get("donorId")));
-    ModelAndView modelAndView = new ModelAndView("donors");
-    Map<String, Object> model = new HashMap<String, Object>();
-    model.put("donorDeleted", true);
-    model.put("donorNumberDeleted", params.get("donorNumber"));
-    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("donor", model,
         recordFieldsConfigRepository);
     ControllerUtil.addFieldsToDisplay("collection", model,

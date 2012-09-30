@@ -24,6 +24,23 @@ function updateDonorGeneric(form, url) {
   });
 }
 
+function deleteDonor(donorId) {
+  $.ajax({
+    type : "POST",
+    url : "deleteDonor.html",
+    data : {donorId: donorId},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Donor Deleted Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
+
 function decorateEditDonorDialog() {
   $("#updateDonorBirthDate").datepicker({
     changeMonth: true,

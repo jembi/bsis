@@ -26,7 +26,7 @@
           $(this.nTr).removeClass('row_selected');
         });
 
-       	console.log(event.target.parentNode.parentNode);
+        console.log(event.target.parentNode.parentNode);
         // add row_selected class to the current row
         $(event.target.parentNode.parentNode).addClass('row_selected');
 
@@ -35,7 +35,7 @@
           return;
         }
 
-       	console.log(elements[0]);
+        console.log(elements[0]);
         var donorId = elements[0].innerHTML;
 
         generateEditForm("editDonorFormGenerator.html", {
@@ -44,6 +44,43 @@
             + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog,
             550, 500);
       });
+
+  $("." + table_id + "Delete").click(
+      function(event) {
+        // remove row_selected class everywhere
+        $(donorsTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
+
+        console.log(event.target.parentNode.parentNode);
+        // add row_selected class to the current row
+        $(event.target.parentNode.parentNode).addClass('row_selected');
+
+        var elements = $(event.target.parentNode.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
+
+        var donorId = elements[0].innerHTML;
+
+        $("<div> Are you sure you want to delete Donor with Id: " + donorId + "</div>").dialog({
+      			autoOpen : true,
+      			height : 150,
+      			width : 400,
+      			modal : true,
+      			title : "Confirm Delete",
+      			buttons : {
+        				"Delete" : function() {
+          									 deleteDonor(donorId);
+          									 $(this).dialog("close");
+        									 },
+				        "Cancel" : function() {
+				          					 $(this).dialog("close");
+				        			     }
+				      }
+
+		    });
+  });
 </script>
 
 <jsp:include page="addDonorButton.jsp" flush="true" />
@@ -92,8 +129,7 @@
 					<td>${donor.birthDate}</td>
 				</c:if>
 				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
-					style="display: inline-block;" title="Edit"
-					></span> <span
+					style="display: inline-block;" title="Edit"></span> <span
 					class="ui-icon ui-icon-trash ${table_id}Delete"
 					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
 				</td>
