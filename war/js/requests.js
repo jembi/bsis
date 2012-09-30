@@ -24,5 +24,22 @@ function updateRequestGeneric(form, url) {
   });
 }
 
+function deleteRequest(requestNumber) {
+  $.ajax({
+    type : "POST",
+    url : "deleteRequest.html",
+    data : {requestNumber: requestNumber},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Request Deleted Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
+
 function decorateEditRequestDialog() {
 };

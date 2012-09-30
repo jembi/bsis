@@ -44,6 +44,41 @@
             + elements[1].innerHTML + " " + elements[2].innerHTML,
             'collectionsTable', decorateEditCollectionDialog, 550, 500);
       });
+
+  $("." + table_id + "Delete").click(
+      function(event) {
+        // remove row_selected class everywhere
+        $(collectionsTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
+
+        // add row_selected class to the current row
+        $(event.target.parentNode.parentNode).addClass('row_selected');
+
+        var elements = $(event.target.parentNode.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
+
+        var collectionId = elements[0].innerHTML;
+        $("<div> Are you sure you want to delete Collection with Number: " + collectionId + "</div>").dialog({
+      			autoOpen : true,
+      			height : 150,
+      			width : 400,
+      			modal : true,
+      			title : "Confirm Delete",
+      			buttons : {
+        				"Delete" : function() {
+          									 deleteCollection(collectionId);
+          									 $(this).dialog("close");
+        									 },
+				        "Cancel" : function() {
+				          					 $(this).dialog("close");
+				        			     }
+				      }
+
+		    });
+  });  
 </script>
 
 <jsp:include page="addCollectionButton.jsp" flush="true" />

@@ -45,6 +45,42 @@
             decorateEditRequestDialog, 550, 575);
       });
 
+		 $(".${table_id}Delete").click(
+    	function(event) {
+    	  var requestsTable = $("#${table_id}").dataTable();
+        // remove row_selected class everywhere
+        $(requestsTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
+
+        // add row_selected class to the current row
+        $(event.target.parentNode.parentNode).addClass('row_selected');
+
+        var elements = $(event.target.parentNode.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
+
+        var requestId = elements[0].innerHTML;
+        $("<div> Are you sure you want to delete Request with Number: " + requestId + "</div>").dialog({
+      			autoOpen : true,
+      			height : 150,
+      			width : 400,
+      			modal : true,
+      			title : "Confirm Delete",
+      			buttons : {
+        				"Delete" : function() {
+          									 deleteRequest(requestId);
+          									 $(this).dialog("close");
+        									 },
+				        "Cancel" : function() {
+				          					 $(this).dialog("close");
+				        			     }
+				      }
+
+		    });
+  });  
+
   function showIssueRequestDialog(requestNumber) {
 
       var issueDialogId = 'issueRequest' + requestNumber;

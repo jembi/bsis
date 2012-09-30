@@ -43,6 +43,42 @@
             + elements[2].innerHTML, 'usageTable', decorateEditProductDialog,
             550, 575);
       });
+
+  $("." + table_id + "Delete").click(
+      function(event) {
+        // remove row_selected class everywhere
+        $(usageTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
+
+        // add row_selected class to the current row
+        $(event.target.parentNode.parentNode).addClass('row_selected');
+
+        var elements = $(event.target.parentNode.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
+
+        var productId = elements[0].innerHTML;
+        $("<div> Are you sure you want to delete Usage for product with Number: " + productId + "</div>").dialog({
+      			autoOpen : true,
+      			height : 150,
+      			width : 400,
+      			modal : true,
+      			title : "Confirm Delete",
+      			buttons : {
+        				"Delete" : function() {
+          									 deleteUsage(productId);
+          									 $(this).dialog("close");
+        									 },
+				        "Cancel" : function() {
+				          					 $(this).dialog("close");
+				        			     }
+				      }
+
+		    });
+  });  
+
 </script>
 
 <jsp:include page="addUsageButton.jsp" flush="true" />

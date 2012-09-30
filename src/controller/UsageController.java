@@ -144,4 +144,27 @@ public class UsageController {
     }
     return usageViewModels;
   }
+
+  @RequestMapping(value = "/deleteUsage", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteRequest(
+      @RequestParam("productNumber") String productNumber) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      usageRepository.deleteUsage(productNumber);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
 }

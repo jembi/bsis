@@ -293,30 +293,29 @@ public class CollectionsController {
     return modelAndView;
   }
 
-  @RequestMapping("/deleteCollection")
-  public ModelAndView deleteCollection(
-      @RequestParam Map<String, String> params, HttpServletRequest request) {
+  @RequestMapping(value = "/deleteCollection", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteCollection(
+      @RequestParam("collectionNumber") String collectionNumber) {
 
-    Long collectionId = getParam(params, "updateCollectionId");
-    String collectionNumber = params.get("updateCollectionNumber");
+    boolean success = true;
+    String errMsg = "";
+    try {
+      collectionRepository.deleteCollection(collectionNumber);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
 
-    collectionRepository.deleteCollection(collectionId);
-    ModelAndView modelAndView = new ModelAndView("collections");
-    Map<String, Object> model = new HashMap<String, Object>();
-    model.put("deletedCollection", true);
-    model.put("collectionIdDeleted", collectionNumber);
-    addCentersToModel(model);
-    addCollectionSitesToModel(model);
-    ControllerUtil.addCollectionDisplayNamesToModel(model,
-        displayNamesRepository);
-
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
-
-    modelAndView.addObject("model", model);
-    return modelAndView;
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
   }
-
+  
   private Long getParam(Map<String, String> params, String paramName) {
     String paramValue = params.get(paramName);
     return paramValue == null || paramValue.isEmpty() ? null : Long

@@ -69,8 +69,8 @@ public class TestResultRepository {
     return testResults;
   }
 
-  public void deleteTestResult(Long testResultId) {
-    TestResult existingTestResult = em.find(TestResult.class, testResultId);
+  public void deleteTestResult(String collectionNumber) {
+    TestResult existingTestResult = findTestResultByCollectionNumber(collectionNumber);
     existingTestResult.setIsDeleted(Boolean.TRUE);
     em.merge(existingTestResult);
     em.flush();

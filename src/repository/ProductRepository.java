@@ -108,13 +108,6 @@ public class ProductRepository {
     return products;
   }
 
-  public void delete(String existingProductNumber) {
-    Product existingProduct = findProduct(existingProductNumber);
-    existingProduct.setIsDeleted(Boolean.TRUE);
-    em.merge(existingProduct);
-    em.flush();
-  }
-
   public List<Product> getAllUnissuedProducts(String productType, String abo,
       String rhd) {
     String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued";
@@ -231,5 +224,12 @@ public class ProductRepository {
     em.merge(existingProduct);
     em.flush();
     return existingProduct;
+  }
+
+  public void deleteProduct(String productNumber) {
+    Product existingProduct = findProductByProductNumber(productNumber);
+    existingProduct.setIsDeleted(Boolean.TRUE);
+    em.merge(existingProduct);
+    em.flush();
   }
 }

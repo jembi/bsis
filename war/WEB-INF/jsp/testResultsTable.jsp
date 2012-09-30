@@ -43,6 +43,42 @@
             + elements[1].innerHTML + " " + elements[2].innerHTML,
             'testResultsTable', decorateEditTestResultDialog, 550, 500);
       });
+
+  $("." + table_id + "Delete").click(
+      function(event) {
+        // remove row_selected class everywhere
+        $(testResultsTable.fnSettings().aoData).each(function() {
+          $(this.nTr).removeClass('row_selected');
+        });
+
+        // add row_selected class to the current row
+        $(event.target.parentNode.parentNode).addClass('row_selected');
+
+        var elements = $(event.target.parentNode.parentNode).children();
+        if (elements[0].getAttribute("class") === "dataTables_empty") {
+          return;
+        }
+
+        var collectionId = elements[0].innerHTML;
+        $("<div> Are you sure you want to delete Test Results for Collection Number: " + collectionId + "</div>").dialog({
+      			autoOpen : true,
+      			height : 150,
+      			width : 400,
+      			modal : true,
+      			title : "Confirm Delete",
+      			buttons : {
+        				"Delete" : function() {
+          									 deleteTestResult(collectionId);
+          									 $(this).dialog("close");
+        									 },
+				        "Cancel" : function() {
+				          					 $(this).dialog("close");
+				        			     }
+				      }
+
+		    });
+  });  
+
 </script>
 
 <jsp:include page="addTestResultButton.jsp" flush="true" />

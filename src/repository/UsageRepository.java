@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.ProductUsage;
+import model.Request;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,5 +122,12 @@ public class UsageRepository {
     em.merge(existingUsage);
     em.flush();
     return existingUsage;
+  }
+
+  public void deleteUsage(String productNumber) {
+    ProductUsage existingUsage = findUsageByProductNumber(productNumber);
+    existingUsage.setIsDeleted(Boolean.TRUE);
+    em.merge(existingUsage);
+    em.flush();
   }
 }

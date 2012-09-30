@@ -87,8 +87,8 @@ public class CollectionRepository {
     return collections;
   }
 
-  public void deleteCollection(Long collectionId) {
-    Collection existingCollection = findCollectionById(collectionId);
+  public void deleteCollection(String collectionNumber) {
+    Collection existingCollection = findCollectionByNumber(collectionNumber);
     existingCollection.setIsDeleted(Boolean.TRUE);
     em.merge(existingCollection);
     em.flush();

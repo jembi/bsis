@@ -35,7 +35,6 @@
           return;
         }
 
-        console.log(elements[0]);
         var donorId = elements[0].innerHTML;
 
         generateEditForm("editDonorFormGenerator.html", {
@@ -52,7 +51,6 @@
           $(this.nTr).removeClass('row_selected');
         });
 
-        console.log(event.target.parentNode.parentNode);
         // add row_selected class to the current row
         $(event.target.parentNode.parentNode).addClass('row_selected');
 

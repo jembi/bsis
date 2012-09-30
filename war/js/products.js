@@ -24,5 +24,22 @@ function updateProductGeneric(form, url) {
   });
 }
 
+function deleteProduct(productNumber) {
+  $.ajax({
+    type : "POST",
+    url : "deleteProduct.html",
+    data : {productNumber: productNumber},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Product Deleted Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
+
 function decorateEditProductDialog() {
 };

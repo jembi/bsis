@@ -24,5 +24,22 @@ function updateTestResultGeneric(form, url) {
   });
 }
 
+function deleteTestResult(collectionNumber) {
+  $.ajax({
+    type : "POST",
+    url : "deleteTestResult.html",
+    data : {collectionNumber: collectionNumber},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Test Result Deleted Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
+
 function decorateEditTestResultDialog() {
 };

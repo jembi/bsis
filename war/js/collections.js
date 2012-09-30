@@ -24,5 +24,22 @@ function updateCollectionGeneric(form, url) {
   });
 }
 
+function deleteCollection(collectionNumber) {
+  $.ajax({
+    type : "POST",
+    url : "deleteCollection.html",
+    data : {collectionNumber: collectionNumber},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Collection Deleted Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
+
 function decorateEditCollectionDialog() {
 };

@@ -95,13 +95,6 @@ public class RequestRepository {
     return requests;
   }
 
-  public void delete(String existingRequestNumber) {
-    Request existingRequest = findRequest(existingRequestNumber);
-    existingRequest.setIsDeleted(Boolean.TRUE);
-    em.merge(existingRequest);
-    em.flush();
-  }
-
   public ArrayList<Request> getAllUnfulfilledRequests() {
     String queryString = "SELECT p FROM Request p where p.status = 'pending' or p.status='partiallyFulfilled' and p.isDeleted = :isDeleted order by p.dateRequested";
     TypedQuery<Request> query = em.createQuery(queryString, Request.class);
@@ -210,5 +203,12 @@ public class RequestRepository {
     query.setParameter("statuses", Arrays.asList("fulfilled"));
     List<Request> resultList = query.getResultList();
     return resultList;
+  }
+
+  public void deleteRequest(String requestNumber) {
+    Request existingRequest = findRequestByRequestNumber(requestNumber);
+    existingRequest.setIsDeleted(Boolean.TRUE);
+    em.merge(existingRequest);
+    em.flush();
   }
 }

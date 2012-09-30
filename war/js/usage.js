@@ -24,5 +24,22 @@ function updateUsageGeneric(form, url) {
   });
 }
 
+function deleteUsage(productNumber) {
+  $.ajax({
+    type : "POST",
+    url : "deleteUsage.html",
+    data : {productNumber: productNumber},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        $.showMessage("Usage Deleted Successfully!");
+      } else {
+        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+          backgroundColor : 'red'
+        });
+      }
+    }
+  });
+}
+
 function decorateEditUsageDialog() {
 };

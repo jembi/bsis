@@ -185,4 +185,27 @@ public class ProductsController {
     return modelAndView;
   }
 
+  @RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteProduct(
+      @RequestParam("productNumber") String productNumber) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      productRepository.deleteProduct(productNumber);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+
 }

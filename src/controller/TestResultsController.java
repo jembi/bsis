@@ -271,21 +271,29 @@ public class TestResultsController {
     return modelAndView;
   }
 
-  @RequestMapping("/deleteExistingTestResult")
-  public ModelAndView deleteExistingTestResults(
-      @RequestParam Map<String, String> params, HttpServletRequest request) {
+  @RequestMapping(value = "/deleteTestResult", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteTestResult(
+      @RequestParam("collectionNumber") String collectionNumber) {
 
-    ModelAndView modelAndView = new ModelAndView("testResultsAdd");
-    Map<String, Object> model = new HashMap<String, Object>();
-    Long existingTestResultId = getParam(params, "existingTestResultId");
-    testResultRepository.deleteTestResult(existingTestResultId);
-    model.put("testResultDeleted", true);
-    ControllerUtil.addTestResultDisplayNamesToModel(model,
-        displayNamesRepository);
+    boolean success = true;
+    String errMsg = "";
+    try {
+      testResultRepository.deleteTestResult(collectionNumber);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
 
-    modelAndView.addObject("model", model);
-    return modelAndView;
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
   }
+  
 
   @RequestMapping("/testResultsView")
   public ModelAndView viewTestResults(@RequestParam Map<String, String> params,
