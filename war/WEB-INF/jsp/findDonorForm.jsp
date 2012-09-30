@@ -62,7 +62,7 @@
 			<tr>
 				<td />
 				<td><button type="button" id="findDonorButton">Find
-						Donor</button></td>
+						donor</button></td>
 			</tr>
 		</tbody>
 	</table>

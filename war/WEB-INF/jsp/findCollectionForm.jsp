@@ -100,7 +100,7 @@
 			<tr>
 				<td />
 				<td><button type="button" id="findCollectionButton">Find
-						Collection</button></td>
+						collection</button></td>
 			</tr>
 		</tbody>
 	</table>

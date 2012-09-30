@@ -138,7 +138,7 @@
 				<tr>
 					<td />
 					<td><button type="button" class="addRequestButton"
-							onclick="updateRequest();">Add Request</button></td>
+							onclick="updateRequest();">Add request</button></td>
 				</tr>
 			</c:if>
 		</tbody>

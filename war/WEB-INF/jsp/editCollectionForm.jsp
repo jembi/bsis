@@ -103,7 +103,7 @@
 				<tr>
 					<td />
 					<td><button type="button" class="addCollectionButton"
-							onclick="updateCollection();">Add Collection</button></td>
+							onclick="updateCollection();">Add collection</button></td>
 				</tr>
 			</c:if>
 

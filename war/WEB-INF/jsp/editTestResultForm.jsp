@@ -92,7 +92,7 @@
 				<tr>
 					<td />
 					<td><button type="button" class="addTestResultButton"
-							onclick="updateTestResult();">Add Test Result</button></td>
+							onclick="updateTestResult();">Add test result</button></td>
 				</tr>
 			</c:if>
 		</tbody>

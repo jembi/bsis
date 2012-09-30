@@ -70,7 +70,7 @@
 				<tr>
 					<td />
 					<td><button type="button" class="addProductButton"
-							onclick="updateProduct();">Add Product</button></td>
+							onclick="updateProduct();">Add product</button></td>
 				</tr>
 			</c:if>
 		</tbody>

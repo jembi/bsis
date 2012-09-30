@@ -116,7 +116,7 @@
 			<tr>
 				<td />
 				<td><button type="button" id="generateTestResultsReportButton">Generate
-						Report</button></td>
+						report</button></td>
 			</tr>
 		</tbody>
 	</table>

@@ -97,7 +97,7 @@
 			</tr>
 			<tr>
 				<td><button id="findUsageButton" type="button">Find
-						Usage</button></td>
+						usage</button></td>
 			</tr>
 		</tbody>
 	</table>

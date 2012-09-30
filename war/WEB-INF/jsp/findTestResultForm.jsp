@@ -110,7 +110,7 @@
 			<tr>
 				<td />
 				<td><button id="findTestResultButton" type="button">Find
-						Test Result</button></td>
+						test result</button></td>
 			</tr>
 		</tbody>
 	</table>

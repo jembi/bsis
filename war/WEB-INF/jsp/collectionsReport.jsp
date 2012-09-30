@@ -100,7 +100,7 @@
 			<tr>
 				<td />
 				<td><button type="button" id="generateCollectionsReportButton">Generate
-						Report</button></td>
+						report</button></td>
 			</tr>
 		</tbody>
 	</table>

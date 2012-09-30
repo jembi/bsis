@@ -166,7 +166,7 @@
 			</tr>
 			<tr>
 				<td><button id="findRequestButton" type="button">Find
-						Request</button></td>
+						request</button></td>
 			</tr>
 		</tbody>
 	</table>

@@ -90,7 +90,7 @@
 			<tr>
 				<td />
 				<td><button type="button" id="findProductButton">Find
-						Product</button></td>
+						product</button></td>
 			</tr>
 		</tbody>
 	</table>
