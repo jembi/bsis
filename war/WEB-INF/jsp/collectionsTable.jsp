@@ -18,8 +18,10 @@
     	$("#" + table_id).find("td").highlight(searchBox.val());
   });
 
-
-  $("." + table_id + "Edit").click(
+  // we need to invoke the live function here in order for click event to be
+  // registered across pages of table
+  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+  $("." + table_id + "Edit").live("click",
       function(event) {
 
         // remove row_selected class everywhere
@@ -45,7 +47,10 @@
             'collectionsTable', decorateEditCollectionDialog, 550, 500);
       });
 
-  $("." + table_id + "Delete").click(
+  // we need to invoke the live function here in order for click event to be
+  // registered across pages of table
+  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+  $("." + table_id + "Delete").live("click",
       function(event) {
         // remove row_selected class everywhere
         $(collectionsTable.fnSettings().aoData).each(function() {

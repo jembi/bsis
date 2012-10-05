@@ -7,112 +7,118 @@
 
 <script>
 
-  $("#${table_id}").dataTable({
-    "bJQueryUI" : true
-  });
-
-  $("#${table_id}_filter").find("label").find("input").keyup(function() {
-    var searchBox = $("#${table_id}_filter").find("label").find("input");
-    $("#${table_id}").removeHighlight();
-    if (searchBox.val() != "")
-    	$("#${table_id}").find("td").highlight(searchBox.val());
-  });
-
-  $(".${table_id}Edit").click(
-      function(event) {
-
-        var requestsTable = $("#${table_id}").dataTable();
-        // remove row_selected class everywhere
-        $(requestsTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
-        });
-
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
-
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
-
-        var requestId = elements[0].innerHTML;
-
-        generateEditForm("editRequestFormGenerator.html", {
-          requestNumber : requestId,
-          isDialog : "yes"
-        }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
-            + " " + elements[2].innerHTML, 'requestsTable',
-            decorateEditRequestDialog, 550, 575);
-      });
-
-		 $(".${table_id}Delete").click(
-    	function(event) {
-    	  var requestsTable = $("#${table_id}").dataTable();
-        // remove row_selected class everywhere
-        $(requestsTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
-        });
-
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
-
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
-
-        var requestId = elements[0].innerHTML;
-        $("<div> Are you sure you want to delete Request with Number: " + requestId + "</div>").dialog({
-      			autoOpen : true,
-      			height : 150,
-      			width : 400,
-      			modal : true,
-      			title : "Confirm Delete",
-      			buttons : {
-        				"Delete" : function() {
-          									 deleteRequest(requestId);
-          									 $(this).dialog("close");
-        									 },
-				        "Cancel" : function() {
-				          					 $(this).dialog("close");
-				        			     }
-				      }
-
-		    });
-  });  
-
-  function showIssueRequestDialog(requestNumber) {
-
-      var issueDialogId = 'issueRequest' + requestNumber;
-      $.ajax({
-        url : "findAvailableProducts.html",
-        contentType: "application/json",
-        type : "GET",
-        data : {},
-        success : function(responseData) {
-          var message = "<h3>" + "Select a Product to Issue for Request Number: " + requestNumber + "</h3>";
-          $("<div id='" + issueDialogId + "'>" + message + responseData + "</div>").dialog({
-            autoOpen : false,
-            height : 600,
-            width : 718,
-            modal : true,
-            title : "Select a Product to issue for Request Number: " + requestNumber,
-            buttons : {
-              "Issue Selected Product" : function() {
-                $(this).dialog("close");
-              },
-              "Cancel" : function() {
-                $(this).dialog("close");
-              }
-            },
-            close : function() {
-              $("#" + issueDialogId).remove();
-            }
-          });
-          $('#' + issueDialogId).dialog("open");
-        }
-      });
-  }
+	$(function() {
+	  var requestsTable = $("#${table_id}").dataTable({
+	    										"bJQueryUI" : true
+	  										  });
+	
+	  $("#${table_id}_filter").find("label").find("input").keyup(function() {
+	    var searchBox = $("#${table_id}_filter").find("label").find("input");
+	    $("#${table_id}").removeHighlight();
+	    if (searchBox.val() != "")
+	    	$("#${table_id}").find("td").highlight(searchBox.val());
+	  });
+	
+	  // we need to invoke the live function here in order for click event to be
+	  // registered across pages of table
+	  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+	  $(".${table_id}Edit").live("click",
+	      function(event) {
+	
+	        // remove row_selected class everywhere
+	        $(requestsTable.fnSettings().aoData).each(function() {
+	          $(this.nTr).removeClass('row_selected');
+	        });
+	
+	        // add row_selected class to the current row
+	        $(event.target.parentNode.parentNode).addClass('row_selected');
+	
+	        var elements = $(event.target.parentNode.parentNode).children();
+	        if (elements[0].getAttribute("class") === "dataTables_empty") {
+	          return;
+	        }
+	
+	        var requestId = elements[0].innerHTML;
+	
+	        generateEditForm("editRequestFormGenerator.html", {
+	          requestNumber : requestId,
+	          isDialog : "yes"
+	        }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
+	            + " " + elements[2].innerHTML, 'requestsTable',
+	            decorateEditRequestDialog, 550, 575);
+	      });
+	
+	  	 // we need to invoke the live function here in order for click event to be
+	  	 // registered across pages of table
+	  	 // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+			 $(".${table_id}Delete").live("click",
+	    	function(event) {
+	        // remove row_selected class everywhere
+	        $(requestsTable.fnSettings().aoData).each(function() {
+	          $(this.nTr).removeClass('row_selected');
+	        });
+	
+	        // add row_selected class to the current row
+	        $(event.target.parentNode.parentNode).addClass('row_selected');
+	
+	        var elements = $(event.target.parentNode.parentNode).children();
+	        if (elements[0].getAttribute("class") === "dataTables_empty") {
+	          return;
+	        }
+	
+	        var requestId = elements[0].innerHTML;
+	        $("<div> Are you sure you want to delete Request with Number: " + requestId + "</div>").dialog({
+	      			autoOpen : true,
+	      			height : 150,
+	      			width : 400,
+	      			modal : true,
+	      			title : "Confirm Delete",
+	      			buttons : {
+	        				"Delete" : function() {
+	          									 deleteRequest(requestId);
+	          									 $(this).dialog("close");
+	        									 },
+					        "Cancel" : function() {
+					          					 $(this).dialog("close");
+					        			     }
+					      }
+	
+			    });
+	  });  
+	
+	  function showIssueRequestDialog(requestNumber) {
+	
+	      var issueDialogId = 'issueRequest' + requestNumber;
+	      $.ajax({
+	        url : "findAvailableProducts.html",
+	        contentType: "application/json",
+	        type : "GET",
+	        data : {},
+	        success : function(responseData) {
+	          var message = "<h3>" + "Select a Product to Issue for Request Number: " + requestNumber + "</h3>";
+	          $("<div id='" + issueDialogId + "'>" + message + responseData + "</div>").dialog({
+	            autoOpen : false,
+	            height : 600,
+	            width : 718,
+	            modal : true,
+	            title : "Select a Product to issue for Request Number: " + requestNumber,
+	            buttons : {
+	              "Issue Selected Product" : function() {
+	                $(this).dialog("close");
+	              },
+	              "Cancel" : function() {
+	                $(this).dialog("close");
+	              }
+	            },
+	            close : function() {
+	              $("#" + issueDialogId).remove();
+	            }
+	          });
+	          $('#' + issueDialogId).dialog("open");
+	        }
+	      });
+	  }
+	});
 
 </script>
 
