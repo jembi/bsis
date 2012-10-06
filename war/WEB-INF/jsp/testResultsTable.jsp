@@ -6,6 +6,7 @@
 <c:set var="table_id">${model.tableName}</c:set>
 
 <script>
+$(function() {
   var table_id = "${table_id}";
   var testResultsTable = $("#" + table_id).dataTable({
     "bJQueryUI" : true
@@ -21,6 +22,7 @@
   // we need to invoke the live function here in order for click event to be
   // registered across pages of table
   // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+  $("." + table_id + "Edit").die("click");
   $("." + table_id + "Edit").live("click",
       function(event) {
 
@@ -50,6 +52,7 @@
   // we need to invoke the live function here in order for click event to be
   // registered across pages of table
   // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+  $("." + table_id + "Delete").die("click");
   $("." + table_id + "Delete").live("click",
       function(event) {
         // remove row_selected class everywhere
@@ -66,8 +69,8 @@
         }
 
         var collectionId = elements[0].innerHTML;
-        $("<div> Are you sure you want to delete Test Results for Collection Number: " + collectionId + "</div>").dialog({
-      			autoOpen : true,
+        $("<div id='deleteTestResultDialog'> Are you sure you want to delete Test Results for Collection Number: " + collectionId + "</div>").dialog({
+      			autoOpen : false,
       			height : 150,
       			width : 400,
       			modal : true,
@@ -80,11 +83,14 @@
 				        "Cancel" : function() {
 				          					 $(this).dialog("close");
 				        			     }
-				      }
-
+				      },
+              close : function() {
+                $("#deleteTestResultDialog").remove();
+              }
+            });
+            $("#deleteTestResultDialog").dialog("open");
 		    });
-  });  
-
+  });
 </script>
 
 <jsp:include page="addTestResultButton.jsp" flush="true" />

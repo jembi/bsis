@@ -6,85 +6,97 @@
 <c:set var="table_id">${model.tableName}</c:set>
 
 <script>
-  var table_id = "${table_id}";
-  var usageTable = $("#" + table_id).dataTable({
-    "bJQueryUI" : true
-  });
+  $(function() {
+    var usageTable = $("#${table_id}").dataTable({
+      "bJQueryUI" : true
+    });
 
-  $("#${table_id}_filter").find("label").find("input").keyup(function() {
-    var searchBox = $("#${table_id}_filter").find("label").find("input");
-    $("#" + table_id).removeHighlight();
-    if (searchBox.val() != "")
-      $("#" + table_id).find("td").highlight(searchBox.val());
-  });
+    $("#${table_id}_filter").find("label").find("input").keyup(function() {
+      var searchBox = $("#${table_id}_filter").find("label").find("input");
+      $("#${table_id}").removeHighlight();
+      if (searchBox.val() != "")
+        $("#${table_id}").find("td").highlight(searchBox.val());
+    });
 
-  // we need to invoke the live function here in order for click event to be
-  // registered across pages of table
-  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Edit").live("click",
-      function(event) {
+    // we need to invoke the live function here in order for click event to be
+    // registered across pages of table
+    // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+    $(".${table_id}Edit").die("click");
+    $(".${table_id}Edit").live(
+        "click",
+        function(event) {
 
-        // remove row_selected class everywhere
-        $(usageTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
+          // remove row_selected class everywhere
+          $(usageTable.fnSettings().aoData).each(function() {
+            $(this.nTr).removeClass('row_selected');
+          });
+
+          // add row_selected class to the current row
+          $(event.target.parentNode.parentNode).addClass('row_selected');
+
+          var elements = $(event.target.parentNode.parentNode).children();
+          if (elements[0].getAttribute("class") === "dataTables_empty") {
+            return;
+          }
+
+          var productId = elements[0].innerHTML;
+
+          generateEditForm("editUsageFormGenerator.html", {
+            productNumber : productId,
+            isDialog : "yes"
+          }, updateExistingUsage, "Edit Usage: " + elements[1].innerHTML + " "
+              + elements[2].innerHTML, 'usageTable', decorateEditProductDialog,
+              550, 575);
         });
 
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
+    // we need to invoke the live function here in order for click event to be
+    // registered across pages of table
+    // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+    $(".${table_id}Delete").die("click");
+    $(".${table_id}Delete")
+        .live(
+            "click",
+            function(event) {
+              // remove row_selected class everywhere
+              $(usageTable.fnSettings().aoData).each(function() {
+                $(this.nTr).removeClass('row_selected');
+              });
 
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
+              // add row_selected class to the current row
+              $(event.target.parentNode.parentNode).addClass('row_selected');
 
-        var productId = elements[0].innerHTML;
+              var elements = $(event.target.parentNode.parentNode).children();
+              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                return;
+              }
 
-        generateEditForm("editUsageFormGenerator.html", {
-          productNumber : productId,
-          isDialog : "yes"
-        }, updateExistingUsage, "Edit Usage: " + elements[1].innerHTML + " "
-            + elements[2].innerHTML, 'usageTable', decorateEditProductDialog,
-            550, 575);
-      });
+              console.log($(event.target.parentNode.parentNode));
+              var productId = elements[0].innerHTML;
+              $(
+                  "<div id='deleteUsageDialog'> Are you sure you want to delete Usage for product with Number: "
+                      + productId + "</div>").dialog({
+                autoOpen : false,
+                height : 150,
+                width : 400,
+                modal : true,
+                title : "Confirm Delete",
+                buttons : {
+                  "Delete" : function() {
+                    deleteUsage(productId);
+                    $(this).dialog("close");
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                },
+                close : function() {
+                  $("#deleteUsageDialog").remove();
+                }
 
-  // we need to invoke the live function here in order for click event to be
-  // registered across pages of table
-  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Delete").live("click",
-      function(event) {
-        // remove row_selected class everywhere
-        $(usageTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
-        });
-
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
-
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
-
-        var productId = elements[0].innerHTML;
-        $("<div> Are you sure you want to delete Usage for product with Number: " + productId + "</div>").dialog({
-      			autoOpen : true,
-      			height : 150,
-      			width : 400,
-      			modal : true,
-      			title : "Confirm Delete",
-      			buttons : {
-        				"Delete" : function() {
-          									 deleteUsage(productId);
-          									 $(this).dialog("close");
-        									 },
-				        "Cancel" : function() {
-				          					 $(this).dialog("close");
-				        			     }
-				      }
-
-		    });
-  });  
-
+              });
+              $("#deleteUsageDialog").dialog("open");
+            });
+  });
 </script>
 
 <jsp:include page="addUsageButton.jsp" flush="true" />

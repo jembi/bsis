@@ -22,6 +22,7 @@
 	  // we need to invoke the live function here in order for click event to be
 	  // registered across pages of table
 	  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+	  $(".${table_id}Edit").die("click");
 	  $(".${table_id}Edit").live("click",
 	      function(event) {
 	
@@ -51,6 +52,7 @@
 	  	 // we need to invoke the live function here in order for click event to be
 	  	 // registered across pages of table
 	  	 // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+	  	 $(".${table_id}Delete").die("click");
 			 $(".${table_id}Delete").live("click",
 	    	function(event) {
 	        // remove row_selected class everywhere
@@ -67,8 +69,8 @@
 	        }
 	
 	        var requestId = elements[0].innerHTML;
-	        $("<div> Are you sure you want to delete Request with Number: " + requestId + "</div>").dialog({
-	      			autoOpen : true,
+	        $("<div id='deleteRequestDialog'> Are you sure you want to delete Request with Number: " + requestId + "</div>").dialog({
+	      			autoOpen : false,
 	      			height : 150,
 	      			width : 400,
 	      			modal : true,
@@ -81,10 +83,14 @@
 					        "Cancel" : function() {
 					          					 $(this).dialog("close");
 					        			     }
-					      }
+					      },
+                close : function() {
+                  $("#deleteRequestDialog").remove();
+                }
+              });
+              $("#deleteRequestDialog").dialog("open");
 	
 			    });
-	  });  
 	
 	  function showIssueRequestDialog(requestNumber) {
 	

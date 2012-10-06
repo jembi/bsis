@@ -15,6 +15,7 @@
     }
   }).click(function() {
     var findDonorFormData = $("#findDonorForm").serialize();
+    $('#findDonorResult').empty();
     $.ajax({
       type : "GET",
       url : "findDonor.html",

@@ -15,13 +15,15 @@
     var searchBox = $("#${table_id}_filter").find("label").find("input");
     $("#" + table_id).removeHighlight();
     if (searchBox.val() != "")
-    	$("#" + table_id).find("td").highlight(searchBox.val());
+      $("#" + table_id).find("td").highlight(searchBox.val());
   });
 
   // we need to invoke the live function here in order for click event to be
   // registered across pages of table
   // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Edit").live("click",
+  $("." + table_id + "Edit").die("click");
+  $("." + table_id + "Edit").live(
+      "click",
       function(event) {
 
         // remove row_selected class everywhere
@@ -50,7 +52,9 @@
   // we need to invoke the live function here in order for click event to be
   // registered across pages of table
   // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Delete").live("click",
+  $("." + table_id + "Delete").die("click");
+  $("." + table_id + "Delete").live(
+      "click",
       function(event) {
         // remove row_selected class everywhere
         $(collectionsTable.fnSettings().aoData).each(function() {
@@ -66,24 +70,29 @@
         }
 
         var collectionId = elements[0].innerHTML;
-        $("<div> Are you sure you want to delete Collection with Number: " + collectionId + "</div>").dialog({
-      			autoOpen : true,
-      			height : 150,
-      			width : 400,
-      			modal : true,
-      			title : "Confirm Delete",
-      			buttons : {
-        				"Delete" : function() {
-          									 deleteCollection(collectionId);
-          									 $(this).dialog("close");
-        									 },
-				        "Cancel" : function() {
-				          					 $(this).dialog("close");
-				        			     }
-				      }
-
-		    });
-  });  
+        $(
+            "<div id='deleteCollectionDialog'> Are you sure you want to delete Collection with Number: "
+                + collectionId + "</div>").dialog({
+          autoOpen : false,
+          height : 150,
+          width : 400,
+          modal : true,
+          title : "Confirm Delete",
+          buttons : {
+            "Delete" : function() {
+              deleteCollection(collectionId);
+              $(this).dialog("close");
+            },
+            "Cancel" : function() {
+              $(this).dialog("close");
+            }
+          },
+          close : function() {
+            $("#deleteCollectionDialog").remove();
+          }
+        });
+        $("#deleteCollectionDialog").dialog("open");
+      });
 </script>
 
 <jsp:include page="addCollectionButton.jsp" flush="true" />
@@ -141,8 +150,7 @@
 					<td>${collection.donorType}</td>
 				</c:if>
 				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
-					style="display: inline-block;" title="Edit"
-					></span> <span
+					style="display: inline-block;" title="Edit"></span> <span
 					class="ui-icon ui-icon-trash ${table_id}Delete"
 					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
 				</td>

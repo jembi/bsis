@@ -6,85 +6,105 @@
 <c:set var="table_id">${model.tableName}</c:set>
 
 <script>
-  var table_id = "${table_id}";
-  var donorsTable = $("#" + table_id).dataTable({
-    "bJQueryUI" : true
-  });
+  $(document).ready(
+      function() {
 
-  $("#${table_id}_filter").find("label").find("input").keyup(function() {
-    var searchBox = $("#${table_id}_filter").find("label").find("input");
-    $("#" + table_id).removeHighlight();
-    if (searchBox.val() != "")
-      $("#" + table_id).find("td").highlight(searchBox.val());
-  });
-
-  // we need to invoke the live function here in order for click event to be
-  // registered across pages of table
-  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Edit").live("click",
-      function(event) {
-
-        // remove row_selected class everywhere
-        $(donorsTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
+        var table_id = "${table_id}";
+        var donorsTable = $("#" + table_id).dataTable({
+          "bJQueryUI" : true
         });
 
-        console.log(event.target.parentNode.parentNode);
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
+        $("#${table_id}_filter").find("label").find("input").keyup(function() {
+          var searchBox = $("#${table_id}_filter").find("label").find("input");
+          $("#" + table_id).removeHighlight();
+          if (searchBox.val() != "")
+            $("#" + table_id).find("td").highlight(searchBox.val());
+        });
 
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
+        // we need to invoke the live function here in order for click event to be
+        // registered across pages of table and this handler must return false
+        // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+        $("." + table_id + "Edit").die("click");
+        $("." + table_id + "Edit").live(
+            "click",
+            function(event) {
+              console.log("clicked on", jQuery(this), "which has id", jQuery(
+                  this).attr('id'));
+              // remove row_selected class everywhere
+              $(donorsTable.fnSettings().aoData).each(function() {
+                $(this.nTr).removeClass('row_selected');
+              });
 
-        var donorId = elements[0].innerHTML;
+              console.log(event.target.parentNode.parentNode);
+              // add row_selected class to the current row
+              $(event.target.parentNode.parentNode).addClass('row_selected');
 
-        generateEditForm("editDonorFormGenerator.html", {
-          donorNumber : donorId
-        }, updateExistingDonor, "Edit Donor: " + elements[1].innerHTML + " "
-            + elements[2].innerHTML, 'donorsTable', decorateEditDonorDialog,
-            550, 500);
+              var elements = $(event.target.parentNode.parentNode).children();
+              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                return;
+              }
+
+              var donorId = elements[0].innerHTML;
+
+              generateEditForm("editDonorFormGenerator.html", {
+                donorNumber : donorId
+              }, updateExistingDonor, "Edit Donor: " + elements[1].innerHTML
+                  + " " + elements[2].innerHTML, 'donorsTable',
+                  decorateEditDonorDialog, 550, 500);
+              return false;
+            });
+
+        // we need to invoke the live function here in order for click event to be
+        // registered across pages of table and this handler must return false
+        // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+        $("." + table_id + "Delete").die("click");
+        $("." + table_id + "Delete").live(
+            "click",
+            function(event) {
+
+              console.log("clicked on", jQuery(this), "which has id", jQuery(
+                  this).attr('id'));
+              // remove row_selected class everywhere
+              $(donorsTable.fnSettings().aoData).each(function() {
+                $(this.nTr).removeClass('row_selected');
+              });
+
+              // add row_selected class to the current row
+              $(event.target.parentNode.parentNode).addClass('row_selected');
+
+              var elements = $(event.target.parentNode.parentNode).children();
+              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                return;
+              }
+
+              var donorId = elements[0].innerHTML;
+
+              $(
+                  "<div id='deleteDonorDialog'> Are you sure you want to delete Donor with Id: "
+                      + donorId + "</div>").dialog({
+                autoOpen : false,
+                height : 150,
+                width : 400,
+                modal : true,
+                title : "Confirm Delete",
+                buttons : {
+                  "Delete" : function() {
+                    deleteDonor(donorId);
+                    $(this).dialog("close");
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                },
+                close : function() {
+                  $("#deleteDonorDialog").remove();
+                }
+              });
+              $("#deleteDonorDialog").dialog("open");
+              return false;
+            });
+
       });
-
-  // we need to invoke the live function here in order for click event to be
-  // registered across pages of table
-  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Delete").live("click",
-      function(event) {
-        // remove row_selected class everywhere
-        $(donorsTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
-        });
-
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
-
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
-
-        var donorId = elements[0].innerHTML;
-
-        $("<div> Are you sure you want to delete Donor with Id: " + donorId + "</div>").dialog({
-      			autoOpen : true,
-      			height : 150,
-      			width : 400,
-      			modal : true,
-      			title : "Confirm Delete",
-      			buttons : {
-        				"Delete" : function() {
-          									 deleteDonor(donorId);
-          									 $(this).dialog("close");
-        									 },
-				        "Cancel" : function() {
-				          					 $(this).dialog("close");
-				        			     }
-				      }
-
-		    });
-  });
 </script>
 
 <jsp:include page="addDonorButton.jsp" flush="true" />

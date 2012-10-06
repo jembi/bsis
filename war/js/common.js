@@ -231,3 +231,14 @@ $.extend({
     return validForm;
   }
 });
+
+$.fn.isBound = function(type) {
+  if (this.data('events') === undefined)
+    return false;
+  var data = this.data('events')[type];
+
+  if (data === undefined || data.length === 0) {
+      return false;
+  }
+  return true;
+};
