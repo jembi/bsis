@@ -6,147 +6,162 @@
 <c:set var="table_id">${model.tableName}</c:set>
 
 <script>
+  $(function() {
+    var requestsTable = $("#${table_id}").dataTable({
+      "bJQueryUI" : true,
+      "sDom": '<"H"lfrT>t<"F"ip>T',
+      "oTableTools" : {
+        "sRowSelect" : "multi",
+        "aButtons": [ "print", "select_all", "select_none" ]
+      }
+    });
 
-	$(function() {
-	  var requestsTable = $("#${table_id}").dataTable({
-	    										"bJQueryUI" : true
-	  										  });
-	
-	  $("#${table_id}_filter").find("label").find("input").keyup(function() {
-	    var searchBox = $("#${table_id}_filter").find("label").find("input");
-	    $("#${table_id}").removeHighlight();
-	    if (searchBox.val() != "")
-	    	$("#${table_id}").find("td").highlight(searchBox.val());
-	  });
-	
-	  // we need to invoke the live function here in order for click event to be
-	  // registered across pages of table
-	  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-	  $(".${table_id}Edit").die("click");
-	  $(".${table_id}Edit").live("click",
-	      function(event) {
-	
-	        // remove row_selected class everywhere
-	        $(requestsTable.fnSettings().aoData).each(function() {
-	          $(this.nTr).removeClass('row_selected');
-	        });
-	
-	        // add row_selected class to the current row
-	        $(event.target.parentNode.parentNode).addClass('row_selected');
-	
-	        var elements = $(event.target.parentNode.parentNode).children();
-	        if (elements[0].getAttribute("class") === "dataTables_empty") {
-	          return;
-	        }
-	
-	        var requestId = elements[0].innerHTML;
-	
-	        generateEditForm("editRequestFormGenerator.html", {
-	          requestNumber : requestId,
-	          isDialog : "yes"
-	        }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
-	            + " " + elements[2].innerHTML, 'requestsTable',
-	            decorateEditRequestDialog, 550, 575);
-	      });
-	
-	  	 // we need to invoke the live function here in order for click event to be
-	  	 // registered across pages of table
-	  	 // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-	  	 $(".${table_id}Delete").die("click");
-			 $(".${table_id}Delete").live("click",
-	    	function(event) {
-	        // remove row_selected class everywhere
-	        $(requestsTable.fnSettings().aoData).each(function() {
-	          $(this.nTr).removeClass('row_selected');
-	        });
-	
-	        // add row_selected class to the current row
-	        $(event.target.parentNode.parentNode).addClass('row_selected');
-	
-	        var elements = $(event.target.parentNode.parentNode).children();
-	        if (elements[0].getAttribute("class") === "dataTables_empty") {
-	          return;
-	        }
-	
-	        var requestId = elements[0].innerHTML;
-	        $("<div id='deleteRequestDialog'> Are you sure you want to delete Request with Number: " + requestId + "</div>").dialog({
-	      			autoOpen : false,
-	      			height : 150,
-	      			width : 400,
-	      			modal : true,
-	      			title : "Confirm Delete",
-	      			buttons : {
-	        				"Delete" : function() {
-	          									 deleteRequest(requestId);
-	          									 $(this).dialog("close");
-	        									 },
-					        "Cancel" : function() {
-					          					 $(this).dialog("close");
-					        			     }
-					      },
+    $("#${table_id}_filter").find("label").find("input").keyup(function() {
+      var searchBox = $("#${table_id}_filter").find("label").find("input");
+      $("#${table_id}").removeHighlight();
+      if (searchBox.val() != "")
+        $("#${table_id}").find("td").highlight(searchBox.val());
+    });
+
+    // we need to invoke the live function here in order for click event to be
+    // registered across pages of table
+    // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+    $(".${table_id}Edit").die("click");
+    $(".${table_id}Edit").live(
+        "click",
+        function(event) {
+
+          // remove row_selected class everywhere
+          $(requestsTable.fnSettings().aoData).each(function() {
+            $(this.nTr).removeClass('row_selected');
+          });
+
+          // add row_selected class to the current row
+          $(event.target.parentNode.parentNode).addClass('row_selected');
+
+          var elements = $(event.target.parentNode.parentNode).children();
+          if (elements[0].getAttribute("class") === "dataTables_empty") {
+            return;
+          }
+
+          var requestId = elements[0].innerHTML;
+
+          generateEditForm("editRequestFormGenerator.html", {
+            requestNumber : requestId,
+            isDialog : "yes"
+          }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
+              + " " + elements[2].innerHTML, 'requestsTable',
+              decorateEditRequestDialog, 550, 575);
+        });
+
+    // we need to invoke the live function here in order for click event to be
+    // registered across pages of table
+    // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
+    $(".${table_id}Delete").die("click");
+    $(".${table_id}Delete")
+        .live(
+            "click",
+            function(event) {
+              // remove row_selected class everywhere
+              $(requestsTable.fnSettings().aoData).each(function() {
+                $(this.nTr).removeClass('row_selected');
+              });
+
+              // add row_selected class to the current row
+              $(event.target.parentNode.parentNode).addClass('row_selected');
+
+              var elements = $(event.target.parentNode.parentNode).children();
+              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                return;
+              }
+
+              var requestId = elements[0].innerHTML;
+              $(
+                  "<div id='deleteRequestDialog'> Are you sure you want to delete Request with Number: "
+                      + requestId + "</div>").dialog({
+                autoOpen : false,
+                height : 150,
+                width : 400,
+                modal : true,
+                title : "Confirm Delete",
+                buttons : {
+                  "Delete" : function() {
+                    deleteRequest(requestId);
+                    $(this).dialog("close");
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                },
                 close : function() {
                   $("#deleteRequestDialog").remove();
                 }
               });
               $("#deleteRequestDialog").dialog("open");
-	
-			    });
-	
-			  $(".${table_id}Issue").die("click");
-			  $(".${table_id}Issue").live("click",
-			      function(event) {
-			
-			        // remove row_selected class everywhere
-			        $(requestsTable.fnSettings().aoData).each(function() {
-			          $(this.nTr).removeClass('row_selected');
-			        });
-			
-			        // add row_selected class to the current row
-			        $(event.target.parentNode.parentNode).addClass('row_selected');
-			
-			        var elements = $(event.target.parentNode.parentNode).children();
-			        if (elements[0].getAttribute("class") === "dataTables_empty") {
-			          return;
-			        }
-			
-			        var requestId = elements[0].innerHTML;
-							showIssueRequestDialog(requestId);			
-			      });
 
-		function showIssueRequestDialog(requestNumber) {
-	
-	      var issueDialogId = 'issueRequest' + requestNumber;
-	      $.ajax({
-	        url : "findAvailableProducts.html",
-	        contentType: "application/json",
-	        type : "GET",
-	        data : {requestNumber : requestNumber},
-	        success : function(responseData) {
-	          var message = "<h3>" + "Select a Product to Issue for Request Number: " + requestNumber + "</h3>";
-	          $("<div id='" + issueDialogId + "'>" + message + responseData + "</div>").dialog({
-	            autoOpen : false,
-	            height : 600,
-	            width : 718,
-	            modal : true,
-	            title : "Select a Product to issue for Request Number: " + requestNumber,
-	            buttons : {
-	              "Issue Selected Product" : function() {
-	                $(this).dialog("close");
-	              },
-	              "Cancel" : function() {
-	                $(this).dialog("close");
-	              }
-	            },
-	            close : function() {
-	              $("#" + issueDialogId).remove();
-	            }
-	          });
-	          $('#' + issueDialogId).dialog("open");
-	        }
-	      });
-	  }
-	});
+            });
 
+    $(".${table_id}Issue").die("click");
+    $(".${table_id}Issue").live("click", function(event) {
+
+      // remove row_selected class everywhere
+      $(requestsTable.fnSettings().aoData).each(function() {
+        $(this.nTr).removeClass('row_selected');
+      });
+
+      // add row_selected class to the current row
+      $(event.target.parentNode.parentNode).addClass('row_selected');
+
+      var elements = $(event.target.parentNode.parentNode).children();
+      if (elements[0].getAttribute("class") === "dataTables_empty") {
+        return;
+      }
+
+      var requestId = elements[0].innerHTML;
+      showIssueRequestDialog(requestId);
+    });
+
+    function showIssueRequestDialog(requestNumber) {
+
+      var issueDialogId = 'issueRequest' + requestNumber;
+      $.ajax({
+        url : "findAvailableProducts.html",
+        contentType : "application/json",
+        type : "GET",
+        data : {
+          requestNumber : requestNumber
+        },
+        success : function(responseData) {
+          var message = "<h3>"
+              + "Select a Product to Issue for Request Number: "
+              + requestNumber + "</h3>";
+          $(
+              "<div id='" + issueDialogId + "'>" + message + responseData
+                  + "</div>").dialog(
+              {
+                autoOpen : false,
+                height : 600,
+                width : 718,
+                modal : true,
+                title : "Select a Product to issue for Request Number: "
+                    + requestNumber,
+                buttons : {
+                  "Issue Selected Product" : function() {
+                    $(this).dialog("close");
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                },
+                close : function() {
+                  $("#" + issueDialogId).remove();
+                }
+              });
+          $('#' + issueDialogId).dialog("open");
+        }
+      });
+    }
+  });
 </script>
 
 <jsp:include page="addRequestButton.jsp" flush="true" />
@@ -215,7 +230,8 @@
 				</c:if>
 				<td><c:if test="${request.status != 'fulfilled'}">
 						<span class="${table_id}Issue"
-					style="display: inline-block; text-color: blue; text-decoration: underline;" title="Issue">Issue</span>
+							style="display: inline-block; text-color: blue; text-decoration: underline;"
+							title="Issue">Issue</span>
 					</c:if></td>
 				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
 					style="display: inline-block;" title="Edit"></span> <span

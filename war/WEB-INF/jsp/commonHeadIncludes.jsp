@@ -15,13 +15,19 @@
 	src="jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>
 <script src="js/common.js" type="text/javascript"></script>
 <script src="plugins/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="plugins/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
 <script src="plugins/slidingmessage/jquery.slidingmessage.js"></script>
 
 <link type="text/css"
 	href="plugins/jqueryui-multiselect/jquery.multiselect.css"
 	rel="Stylesheet" />
+
 <link type="text/css"
 	href="plugins/jqueryui-multiselect/jquery.multiselect.filter.css"
+	rel="Stylesheet" />
+
+<link type="text/css"
+	href="plugins/DataTables/extras/TableTools/media/css/TableTools_JUI.css"
 	rel="Stylesheet" />
 
 <script src="plugins/jqueryui-multiselect/jquery.multiselect.js"></script>
