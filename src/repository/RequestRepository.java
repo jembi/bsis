@@ -211,4 +211,12 @@ public class RequestRepository {
     em.merge(existingRequest);
     em.flush();
   }
+
+  public Long issueRequest(String requestNumber, String status) {
+    Request existingRequest = findRequestByRequestNumber(requestNumber);
+    existingRequest.setStatus(status);
+    em.merge(existingRequest);
+    em.flush();
+    return existingRequest.getSiteId();
+  }
 }

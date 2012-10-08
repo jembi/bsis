@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -8,9 +9,11 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.Issue;
+import model.Request;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Repository
 @Transactional
@@ -19,11 +22,31 @@ public class IssueRepository {
 	private EntityManager em;
 
 	public void saveIssue(Issue issue) {
-		em.persist(issue);
-		em.flush();
+    em.persist(issue);
+    em.flush();
+//    Issue existingIssue = findByIssueNumber(issue.getIssueId());
+//    if (existingIssue == null) {
+//    } else {
+//        em.merge(existingIssue);
+//        em.flush();
+//    }
 	}
 
-	public Issue updateIssue(Issue issue, String existingIssueId) {
+	private Issue findByIssueNumber(Long issueId) {
+    TypedQuery<Issue> query = em
+        .createQuery(
+            "SELECT i FROM Issue i WHERE i.issueId = :issueId and i.isDeleted= :isDeleted",
+            Issue.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("issueId", issueId);
+    List<Issue> issues = query.getResultList();
+    if (CollectionUtils.isEmpty(issues)) {
+      return null;
+    }
+    return issues.get(0);
+  }
+
+  public Issue updateIssue(Issue issue, String existingIssueId) {
 		Issue existingIssue = em.find(Issue.class, existingIssueId);
 		existingIssue.copy(issue);
 		em.merge(existingIssue);

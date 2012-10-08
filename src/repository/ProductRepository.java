@@ -232,4 +232,11 @@ public class ProductRepository {
     em.merge(existingProduct);
     em.flush();
   }
+
+  public void issueProduct(String productNumber) {
+    Product existingProduct = findProductByProductNumber(productNumber);
+    existingProduct.setIssued(Boolean.TRUE);
+    em.merge(existingProduct);
+    em.flush();
+  }
 }

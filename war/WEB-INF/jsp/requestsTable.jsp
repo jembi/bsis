@@ -8,12 +8,7 @@
 <script>
   $(function() {
     var requestsTable = $("#${table_id}").dataTable({
-      "bJQueryUI" : true,
-      "sDom": '<"H"lfrT>t<"F"ip>T',
-      "oTableTools" : {
-        "sRowSelect" : "multi",
-        "aButtons": [ "print", "select_all", "select_none" ]
-      }
+      "bJQueryUI" : true
     });
 
     $("#${table_id}_filter").find("label").find("input").keyup(function() {
@@ -125,41 +120,83 @@
 
       var issueDialogId = 'issueRequest' + requestNumber;
       $.ajax({
-        url : "findAvailableProducts.html",
-        contentType : "application/json",
-        type : "GET",
-        data : {
-          requestNumber : requestNumber
-        },
-        success : function(responseData) {
-          var message = "<h3>"
-              + "Select a Product to Issue for Request Number: "
-              + requestNumber + "</h3>";
-          $(
-              "<div id='" + issueDialogId + "'>" + message + responseData
-                  + "</div>").dialog(
-              {
-                autoOpen : false,
-                height : 600,
-                width : 718,
-                modal : true,
-                title : "Select a Product to issue for Request Number: "
-                    + requestNumber,
-                buttons : {
-                  "Issue Selected Product" : function() {
-                    $(this).dialog("close");
-                  },
-                  "Cancel" : function() {
-                    $(this).dialog("close");
-                  }
-                },
-                close : function() {
-                  $("#" + issueDialogId).remove();
-                }
-              });
-          $('#' + issueDialogId).dialog("open");
-        }
-      });
+            url : "findAvailableProducts.html",
+            contentType : "application/json",
+            type : "GET",
+            data : {
+              requestNumber : requestNumber
+            },
+            success : function(responseData) {
+              var message = "<h3>"
+                  + "Select a Product to Issue for Request Number: "
+                  + requestNumber + "</h3>";
+              $(
+                  "<div id='" + issueDialogId + "'>" + message + responseData
+                      + "</div>")
+                  .dialog(
+                      {
+                        autoOpen : false,
+                        height : 600,
+                        width : 718,
+                        modal : true,
+                        title : "Select a Product to issue for Request Number: "
+                            + requestNumber,
+                        buttons : {
+                          "Issue selected products" : function() {
+                            var selectedRows = $("#" + issueDialogId).find(
+                                "table").find(".DTTT_selected");
+                            console.log(selectedRows);
+                            if (selectedRows == undefined
+                                || selectedRows.length == 0)
+                              return false;
+                            var selectedProducts = {};
+                            for ( var index = 0; index < selectedRows.length; ++index) {
+                              var row = selectedRows[index];
+                              var elements = $(row).children();
+                              if (elements === undefined
+                                  || elements[0] === undefined)
+                                continue;
+                              if (elements[0].getAttribute("class") === "dataTables_empty")
+                                continue;
+                              selectedProducts[index] = elements[0].innerHTML;
+                            }
+                            console.log(selectedProducts);
+                            issueProducts(requestNumber, selectedProducts);
+                            $(this).dialog("close");
+                          },
+                          "Cancel" : function() {
+                            $(this).dialog("close");
+                          }
+                        },
+                        close : function() {
+                          $("#" + issueDialogId).remove();
+                        }
+                      });
+              $('#' + issueDialogId).dialog("open");
+            }
+          });
+    }
+
+    function issueProducts(requestNumber, products) {
+      $.ajax({
+        type : "POST",
+        url : "issueProducts.html",
+        data : {products: JSON.stringify(products),
+          			requestNumber: requestNumber
+        			 },
+        success : function(jsonResponse) {
+						          if (jsonResponse["success"] === true) {
+						            $.showMessage("Products Issued Successfully!");
+						          } else {
+						            $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
+						              backgroundColor : 'red'
+						            });
+						          }
+       	 					},
+    		error: function() {
+    		  				$.showMessage("Something went wrong", {backgroundColor : 'red'});
+    					 }
+    		});
     }
   });
 </script>

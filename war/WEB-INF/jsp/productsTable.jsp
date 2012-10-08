@@ -10,10 +10,11 @@
     var table_id = "${table_id}";
     var productsTable = $("#" + table_id).dataTable({
       "bJQueryUI" : true,
-      "oTableTools": {
-  			"sRowSelect": "multi",
-  			"aButtons": [ "select_all", "select_none" ]
-  		}
+      "sDom": '<"H"lfrT>t<"F"ip>T',
+      "oTableTools" : {
+        "sRowSelect" : "multi",
+        "aButtons": ["select_all", "select_none"]
+      }
     });
 
     $("#${table_id}_filter").find("label").find("input").keyup(function() {
