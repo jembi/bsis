@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Product;
 import model.ProductBackingForm;
+import model.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.DisplayNamesRepository;
 import repository.ProductRepository;
 import repository.RecordFieldsConfigRepository;
+import repository.RequestRepository;
 import utils.ControllerUtil;
 import utils.LoggerUtil;
 import viewmodel.ProductViewModel;
@@ -37,6 +39,9 @@ public class ProductsController {
 
   @Autowired
   private DisplayNamesRepository displayNamesRepository;
+
+  @Autowired
+  private RequestRepository requestRepository;
 
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
@@ -71,17 +76,23 @@ public class ProductsController {
     ControllerUtil.addFieldsToDisplay("product", m,
         recordFieldsConfigRepository);
     m.put("allProducts", getProductViewModels(products));
-
+    m.put("showActions", true);
     modelAndView.addObject("model", m);
     return modelAndView;
   }
 
   @RequestMapping("/findAvailableProducts")
-  public ModelAndView findAvailableProducts(Model model) {
+  public ModelAndView findAvailableProducts(
+      @RequestParam(value = "requestNumber", required = true) String requestNumber,
+      Model model) {
 
-    List<Product> products = productRepository.findAnyProductMatching(
-        "", "", Arrays.asList(""),
-        Arrays.asList("available"));
+    Request request = requestRepository.findRequestByRequestNumber(requestNumber);
+
+    List<Product> products = new ArrayList<Product>();
+    if (request != null) {
+      products = productRepository.findAnyProductMatching("", "",
+          Arrays.asList(request.getProductType()), Arrays.asList("available"));
+    }
 
     ModelAndView modelAndView = new ModelAndView("productsTable");
     Map<String, Object> m = model.asMap();
@@ -91,6 +102,7 @@ public class ProductsController {
     ControllerUtil.addFieldsToDisplay("product", m,
         recordFieldsConfigRepository);
     m.put("allProducts", getProductViewModels(products));
+    m.put("showActions", false);
 
     modelAndView.addObject("model", m);
     return modelAndView;

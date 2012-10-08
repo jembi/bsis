@@ -22,7 +22,7 @@
     // we need to invoke the live function here in order for click event to be
     // registered across pages of table
     // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-	  $("." + table_id + "Edit").die("click");
+    $("." + table_id + "Edit").die("click");
     $("." + table_id + "Edit").live(
         "click",
         function(event) {
@@ -72,7 +72,8 @@
               }
 
               var productId = elements[0].innerHTML;
-              $("<div id='deleteProductDialog'> Are you sure you want to delete Product with Number: "
+              $(
+                  "<div id='deleteProductDialog'> Are you sure you want to delete Product with Number: "
                       + productId + "</div>").dialog({
                 autoOpen : false,
                 height : 150,
@@ -116,7 +117,9 @@
 			<c:if test="${model.showisIssued==true}">
 				<th>${model.isIssuedDisplayName}</th>
 			</c:if>
-			<th>Actions</th>
+			<c:if test="${model.showActions==true}">
+				<th>Actions</th>
+			</c:if>
 		</tr>
 	</thead>
 	<tbody>
@@ -128,13 +131,18 @@
 					<td>${product.type}</td>
 				</c:if>
 				<c:if test="${model.showisIssued==true}">
-					<td><c:if test="${product.isIssued == 'no'}">&#10003;</c:if></td>
+					<td>
+					<c:if test="${product.isIssued == 'no'}">&#10003;</c:if>
+					<c:if test="${product.isIssued == 'yes'}">&#10007;</c:if>
+					</td>
 				</c:if>
-				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
-					style="display: inline-block;" title="Edit"></span> <span
-					class="ui-icon ui-icon-trash ${table_id}Delete"
-					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
-				</td>
+				<c:if test="${model.showActions==true}">
+					<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
+						style="display: inline-block;" title="Edit"></span> <span
+						class="ui-icon ui-icon-trash ${table_id}Delete"
+						style="display: inline-block; margin-left: 10px;" title="Delete"></span>
+					</td>
+				</c:if>
 			</tr>
 		</c:forEach>
 	</tbody>

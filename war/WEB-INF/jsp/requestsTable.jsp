@@ -92,14 +92,35 @@
 	
 			    });
 	
-	  function showIssueRequestDialog(requestNumber) {
+			  $(".${table_id}Issue").die("click");
+			  $(".${table_id}Issue").live("click",
+			      function(event) {
+			
+			        // remove row_selected class everywhere
+			        $(requestsTable.fnSettings().aoData).each(function() {
+			          $(this.nTr).removeClass('row_selected');
+			        });
+			
+			        // add row_selected class to the current row
+			        $(event.target.parentNode.parentNode).addClass('row_selected');
+			
+			        var elements = $(event.target.parentNode.parentNode).children();
+			        if (elements[0].getAttribute("class") === "dataTables_empty") {
+			          return;
+			        }
+			
+			        var requestId = elements[0].innerHTML;
+							showIssueRequestDialog(requestId);			
+			      });
+
+		function showIssueRequestDialog(requestNumber) {
 	
 	      var issueDialogId = 'issueRequest' + requestNumber;
 	      $.ajax({
 	        url : "findAvailableProducts.html",
 	        contentType: "application/json",
 	        type : "GET",
-	        data : {},
+	        data : {requestNumber : requestNumber},
 	        success : function(responseData) {
 	          var message = "<h3>" + "Select a Product to Issue for Request Number: " + requestNumber + "</h3>";
 	          $("<div id='" + issueDialogId + "'>" + message + responseData + "</div>").dialog({
@@ -193,9 +214,8 @@
 					<td>${request.status}</td>
 				</c:if>
 				<td><c:if test="${request.status != 'fulfilled'}">
-						<a style="color: darkblue;"
-							onclick="showIssueRequestDialog(${request.requestNumber})"> <u>Issue</u>
-						</a>
+						<span class="${table_id}Issue"
+					style="display: inline-block; text-color: blue; text-decoration: underline;" title="Issue">Issue</span>
 					</c:if></td>
 				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
 					style="display: inline-block;" title="Edit"></span> <span
