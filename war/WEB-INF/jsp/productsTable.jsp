@@ -13,7 +13,7 @@
       "sDom": '<"H"lfrT>t<"F"ip>T',
       "oTableTools" : {
         "sRowSelect" : "multi",
-        "aButtons": ["select_all", "select_none"]
+        "aButtons": ["select_all", "select_none", "print"]
       }
     });
 

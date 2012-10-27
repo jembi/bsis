@@ -9,7 +9,9 @@
 $(function() {
   var table_id = "${table_id}";
   var testResultsTable = $("#" + table_id).dataTable({
-    "bJQueryUI" : true
+    "bJQueryUI" : true,
+    "sDom": '<"H"lfrT>t<"F"ip>T',
+    "oTableTools" : {"aButtons": ["print"]}
   });
 
   $("#${table_id}_filter").find("label").find("input").keyup(function() {
