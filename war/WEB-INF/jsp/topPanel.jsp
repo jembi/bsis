@@ -13,7 +13,7 @@
 				class="ui-icon ui-icon-locked" style="display: inline-block;"></span>Sign out</a>
 </div>
 
-<div id="topPanelTabs" class="topPanelTabs">
+<div id="topPanelTabs" class="topPanelTabs tabs">
 	<ul id="topTabs">
 		<li class="topPanelTab"><a href="#homeLandingPageContent"><span
 				class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>

@@ -1,172 +1,60 @@
-$(document)
-		.ready(
-				function() {
+$(document).ready(function() {
 
-					$("#topPanelTabs").tabs({
-						cache : false
-					});
+  // This selector will be reused when selecting actual tab widget
+  // elements.
+  var tab_a_selector = 'ul.ui-tabs-nav a';
 
-					$(".leftPanel")
-							.tabs(
-									{
-										cache : false,
-										ajaxOptions : {
-											cache : false,
-											error : function(xhr, status,
-													index, anchor) {
-												$(anchor.hash)
-														.html(
-																"Oops ... There was an error "
-																		+ "loading this tab. Please try "
-																		+ "again in a while. If the problem "
-																		+ "persists report an Issue.");
-											}
-										}
-									});
+  var tabs = $(".tabs").tabs();
 
-					var donorTabUrls = [ "/v2v/donorsLandingPage.html",
-							"/v2v/viewDonors.html", "/v2v/donors.html",
-							"/v2v/findDonor.html", "/v2v/selectDonor.html",
-							"/v2v/createDonor.html", "/v2v/updateDonor.html",
-							"/v2v/deleteDonor.html" ];
-					var collectionTabUrls = [ "/v2v/collections.html",
-							"/v2v/addCollection.html",
-							"/v2v/deleteCollection.html",
-							"/v2v/updateCollection.html",
-							"/v2v/findCollection.html",
-							"/v2v/collectionsLandingPage.html" ];
-					var testResultsTabUrls = [
-							"/v2v/testResultsLandingPage.html",
-							"/v2v/testResultsAdd.html",
-							"/v2v/addNewTestResults.html",
-							"/v2v/updateExistingTestResults.html",
-							"/v2v/deleteExistingTestResult.html",
-							"/v2v/testResultsView.html",
-							"/v2v/findAllTestResultsByCollection.html",
-							"/v2v/selectTestResult.html" ];
-					var productsTabUrls = [ "/v2v/productsLandingPage.html",
-							"/v2v/products.html", "/v2v/products.html",
-							"/v2v/addProduct.html", "/v2v/deleteProduct.html",
-							"/v2v/findProduct.html", "/v2v/updateProduct.html" ];
-					var requestsTabUrls = [ "/v2v/requestsLandingPage.html",
-							"/v2v/requestsAdd.html",
-							"/v2v/requestsUpdate.html",
-							"/v2v/addNewRequest.html",
-							"/v2v/updateExistingRequest.html",
-							"/v2v/deleteExistingRequest.html",
-							"/v2v/viewAllRequests.html" ];
-					var issueTabUrls = [ "/v2v/issueLandingPage.html",
-							"/v2v/issueViewRequests.html",
-							"/v2v/issueProduct.html",
-							"/v2v/issueAnyProduct.html",
-							"/v2v/issueSelectedProducts.html" ];
-					var usageTabUrls = [ "/v2v/usageLandingPage.html",
-							"/v2v/usageAdd.html", "/v2v/updateUsage.html",
-							"/v2v/addNewUsage.html",
-							"/v2v/updateSelectedUsage.html",
-							"/v2v/findUsage.html",
-							"/v2v/deleteExistingUsage.html" ];
-					var reportsTabUrls = [ "/v2v/reports.html",
-							"/v2v/collectionReport.html",
-							"/v2v/testResultReport.html",
-							"/v2v/productReport.html",
-							"/v2v/getCollectionReport.html",
-							"/v2v/getTestResultReport.html",
-							"/v2v/getProductReport.html",
-							"/v2v/inventorySummary.html",
-							"/v2v/inventoryDetails.html" ];
-					var locationsTabUrls = [
-							"/v2v/admin-locationsLandingPage.html",
-							"/v2v/admin-locations.html",
-							"/v2v/admin-addLocation.html",
-							"/v2v/admin-selectLocation.html",
-							"/v2v/admin-updateLocation.html",
-							"/v2v/admin-deleteLocation.html" ];
-					var locationTypesTabUrls = [
-							"/v2v/admin-locationTypesLandingPage.html",
-							"/v2v/admin-locationTypes.html",
-							"/v2v/admin-addLocationType.html",
-							"/v2v/admin-selectLocationType.html",
-							"/v2v/admin-updateLocationType.html",
-							"/v2v/admin-deleteLocationType.html" ];
-					var reportConfigTabUrls = [
-							"/v2v/admin-reportConfigLandingPage.html",
-							"/v2v/admin-collectionsReportFieldsConfig.html",
-							"/v2v/admin-saveCollectionsReportConfig.html",
-							"/v2v/admin-testResultsReportFieldsConfig.html",
-							"/v2v/admin-saveTestResultsReportConfig.html",
-							"/v2v/admin-productsReportFieldsConfig.html",
-							"/v2v/admin-saveProductsReportConfig.html" ];
-					var displayNamesConfigTabUrls = [
-							"/v2v/admin-displayNamesConfigLandingPage.html",
-							"/v2v/admin-donorsDisplayNamesConfig.html",
-							"/v2v/admin-saveDonorsDisplayNamesConfig.html",
-							"/v2v/admin-collectionsDisplayNamesConfig.html",
-							"/v2v/admin-saveCollectionsDisplayNamesConfig.html",
-							"/v2v/admin-testResultsDisplayNamesConfig.html",
-							"/v2v/admin-saveTestResultsDisplayNamesConfig.html",
-							"/v2v/admin-productsDisplayNamesConfig.html",
-							"/v2v/admin-saveProductsDisplayNamesConfig.html",
-							"/v2v/admin-requestsDisplayNamesConfig.html",
-							"/v2v/admin-saveRequestsDisplayNamesConfig.html",
-							"/v2v/admin-issueDisplayNamesConfig.html",
-							"/v2v/admin-saveIssueDisplayNamesConfig.html",
-							"/v2v/admin-usageDisplayNamesConfig.html",
-							"/v2v/admin-saveUsageDisplayNamesConfig.html",
-							"/v2v/admin-reportsDisplayNamesConfig.html",
-							"/v2v/admin-saveReportsDisplayNamesConfig.html" ];
-					var displayFieldsConfigTabUrls = [
-							"/v2v/admin-displayFieldsConfigLandingPage.html",
-							"/v2v/admin-collectionsDisplayFieldsConfig.html",
-							"/v2v/admin-saveCollectionsDisplayFieldsConfig.html",
-							"/v2v/admin-donorsDisplayFieldsConfig.html",
-							"/v2v/admin-saveDonorsDisplayFieldsConfig.html" ];
-					var usersTabUrls = [ "/v2v/admin-userLandingPage.html",
-							"/v2v/admin-addUser.html",
-							"/v2v/admin-updateUser.html",
-							"/v2v/admin-createNewUser.html",
-							"/v2v/admin-updateExistingUser.html",
-							"/v2v/admin-deleteUser.html",
-							"/v2v/admin-userTable.html",
-							"/v2v/admin-findUser.html" ];
-					var createDateTabUrls = [ "/v2v/admin-createData.html",
-							"/v2v/admin-createDummyData.html",
-							"/v2v/admin-deleteDummyData.html" ];
+  // Enable tabs on all tab widgets. The `event` property must be overridden so
+  // that the tabs aren't changed on click, and any custom event name can be
+  // specified. Note that if you define a callback for the 'select' event, it
+  // will be executed for the selected tab whenever the hash changes.
+  tabs.tabs({ event: 'change' });
 
-					var url = $(location).attr('href');
+  // Define our own click handler for the tabs, overriding the default.
+  tabs.find(tab_a_selector).click(function() {
+    var state = {},
 
-					var startIndex = url.indexOf("/v2v");
-					var endIndex = url.indexOf("?");
-					if (endIndex != -1) {
-						url = url.substr(startIndex, endIndex - startIndex);
-					} else {
-						url = url.substr(startIndex);
-					}
+    // Get the id of this tab widget.
+    id = $(this).closest('.tabs').attr('id'),
 
-					var tabUrlMapping = {
-						"donorTabOption" : donorTabUrls,
-						"collectionTabOption" : collectionTabUrls,
-						"testResultsTabOption" : testResultsTabUrls,
-						"productsTabOption" : productsTabUrls,
-						"requestsTabOption" : requestsTabUrls,
-						"issueTabOption" : issueTabUrls,
-						"usageTabOption" : usageTabUrls,
-						"reportsTabOption" : reportsTabUrls,
-						"locationsTabOption" : locationsTabUrls,
-						"locationTypesTabOption" : locationTypesTabUrls,
-						"reportConfigTabOption" : reportConfigTabUrls,
-						"displayNamesConfigTabOption" : displayNamesConfigTabUrls,
-						"displayFieldsConfigTabOption" : displayFieldsConfigTabUrls,
-						"createDataTabOption" : createDateTabUrls,
-						"usersTabOption" : usersTabUrls
-					};
+    // Get the index of this tab.
+    idx = $(this).parent().prevAll().length;
 
-					$.each(tabUrlMapping, function(key, value) {
-						if (value != null) {
-							if ($.inArray(url, value) != -1) {
-								$("#" + key).addClass('selectedTab');
-							}
-						}
-					});
+    // Set the state!
+    state[id] = idx;
+    $.bbq.pushState(state);
+  });
 
-				});
+  // Bind an event to window.onhashchange that, when the history state
+  // changes,
+  // iterates over all tab widgets, changing the current tab as necessary.
+  $(window).bind('hashchange', function(e) {
+
+    // Iterate over all tab widgets.
+    tabs.each(function() {
+
+      // Get the index for this tab widget from the hash, based on the
+      // appropriate id property. In jQuery 1.4, you should use e.getState()
+      // instead of $.bbq.getState(). The second, 'true' argument coerces
+      // the
+      // string value to a number.
+      var idx = $.bbq.getState(this.id, true) || 0;
+
+      // Select the appropriate tab for this tab widget by triggering the
+      // custom
+      // event specified in the .tabs() init above (you could keep track of
+      // what
+      // tab each widget is on using .data, and only select a tab if it has
+      // changed).
+      $(this).find(tab_a_selector).eq(idx).triggerHandler('change');
+    });
+  })
+
+  // Since the event is only triggered when the hash changes, we need to
+  // trigger
+  // the event now, to handle the hash the page may have loaded with.
+  $(window).trigger('hashchange');
+
+});

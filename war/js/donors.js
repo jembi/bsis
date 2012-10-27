@@ -53,3 +53,16 @@ function decorateEditDonorDialog() {
     yearRange: "c-100:c0"
   });
 };
+
+function decorateEditDonorForm() {
+  $("#updateDonorBirthDate").datepicker({
+    changeMonth: true,
+    changeYear: true,
+    minDate: -36500,
+    maxDate: 0,
+    showOn: "button",
+    buttonImage: "images/calendar.gif",
+    buttonImageOnly: true,
+    yearRange: "c-100:c0"
+  });
+};

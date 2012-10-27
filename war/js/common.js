@@ -34,6 +34,42 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
   });
 }
 
+function generateEditFormOnPage(formGeneratorUrl, jsonInputData, updateFunction,
+    title, divId, onSuccessDecorate, height, width) {
+
+  var editFormId = 'edit' + divId;
+  $.ajax({
+    url : formGeneratorUrl,
+    contentType: "application/json",
+    type : "GET",
+    data : jsonInputData,
+    success : function(responseData) {
+      $("<div id='" + editFormId + "'>" + responseData + "</div>").dialog({
+        autoOpen : false,
+        height : height,
+        width : width,
+        modal : true,
+        title : title,
+        buttons : {
+          "Update" : function() {
+            updateFunction($("#" + editFormId).children()[0]);
+            $(this).dialog("close");
+          },
+          "Cancel" : function() {
+            $(this).dialog("close");
+          }
+        },
+        close : function() {
+          $("#" + editFormId).remove();
+        }
+
+      });
+      $("#" + editFormId).dialog("open");
+      onSuccessDecorate();
+    }
+  });
+}
+
 $.fn.serializeObject = function() {
   var o = {};
   var a = this.serializeArray();

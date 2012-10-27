@@ -13,7 +13,28 @@
         var donorsTable = $("#" + table_id).dataTable({
           "bJQueryUI" : true,
           "sDom": '<"H"lfrT>t<"F"ip>T',
-          "oTableTools" : {"aButtons": ["print"]}
+          "oTableTools" : {
+            "sRowSelect": "single",
+            "aButtons": ["print"],
+            "fnRowSelected" :
+              function (node) {
+								console.log(node);
+	              var elements = $(node).children();
+	              if (elements[0].getAttribute("class") === "dataTables_empty") {
+	                return;
+	              }
+
+	              $.ajax({
+	                url: "editDonorFormGenerator.html",
+	                data: { donorNumber: elements[0].innerHTML },
+	                method: "GET",
+	                success: function(responseData) {
+	                  				 console.log(responseData);
+	                  				 $("#editDonorDiv").html(responseData);
+	                				 }
+	              });
+            	}
+          }
         });
 
         $("#${table_id}_filter").find("label").find("input").keyup(function() {
@@ -108,6 +129,10 @@
 
       });
 </script>
+
+<hr/>
+<div id="editDonorDiv" class="inPageEdit">
+</div>
 
 <jsp:include page="addDonorButton.jsp" flush="true" />
 <br />

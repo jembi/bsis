@@ -11,7 +11,7 @@
 <link type="text/css" rel="stylesheet" href="css/donors.css" />
 <script type="text/javascript" src="js/donors.js"></script>
 
-<div id="donorsTab" class="leftPanel">
+<div id="donorsTab" class="leftPanel tabs">
 	<ul>
 		<li id="addDonorContent"><a href="addDonorFormTab.html">Add
 				Donor</a></li>
