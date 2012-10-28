@@ -331,12 +331,12 @@ function getSelectedTabs() {
 }
 
 function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) {
+
   if (!(targetId in history.state)) {
     console.log("targetId is not present");
     var revertState = {
       targetId: targetId,
-      oldRequestUrl: oldRequestUrl,
-      newContentUrl: newRequestUrl,
+      oldRequestUrl: oldRequestUrl
     };
     $.extend(revertState, history.state);
     history.replaceState(revertState, "", "");
@@ -345,7 +345,12 @@ function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) 
     console.log("targetId is present");
   }
 
-  history.pushState(getSelectedTabs(), "", "");
+  var newState = {targetId: targetId,
+                  oldRequestUrl: newRequestUrl,
+                  oldRequestData: newRequestData
+                 }
+  $.extend(newState, getSelectedTabs());
+  history.pushState(newState, "", "");
   $.ajax({
     url : newRequestUrl,
     data : newRequestData,

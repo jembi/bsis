@@ -4,9 +4,9 @@ $(document).ready(function() {
   // elements.
   var tab_a_selector = 'ul.ui-tabs-nav a';
 
-  var topPanelTabs = $("#topPanelTabs").tabs();
-  var donorsTabs = $("#donorsTab").tabs();
-  var collectionsTabs = $("#collectionsTab").tabs();
+  var topPanelTabs = $("#topPanelTabs").tabs({cache: true});
+  var donorsTabs = $("#donorsTab").tabs({cache: true});
+  var collectionsTabs = $("#collectionsTab").tabs({cache: true});
 
   // Define our own click handler for the tabs, overriding the default.
   $(".tabs").find(tab_a_selector).click(function() {
@@ -34,7 +34,9 @@ $(document).ready(function() {
     console.log(state);
     if (state == undefined)
       return;
+
     if (state.topPanelSelected !== undefined) {
+
       topPanelTabs.tabs("select", state.topPanelSelected);
       if (state.leftPanelSelected !== undefined) {
         switch(state.topPanelSelected) {
@@ -47,9 +49,15 @@ $(document).ready(function() {
         }
 
         if (state.targetId !== undefined && state.oldRequestUrl !== undefined) {
+          var data = {};
+          // there may or may not be data to send data for this request
+          // the data may already be encoded as part of the URL string
+          if (state.oldRequestData !== undefined) {
+            data = state.oldRequestData;
+          }
           $.ajax({
             url : state.oldRequestUrl,
-            data : {},
+            data : data,
             method : "GET",
             success : function(responseData) {
                         $('#'+state.targetId).html(responseData);
