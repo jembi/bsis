@@ -11,7 +11,7 @@
 <link type="text/css" rel="stylesheet" href="css/collections.css" />
 <script type="text/javascript" src="js/collections.js"></script>
 
-<div id="collectionsTab" class="leftPanel">
+<div id="collectionsTab" class="leftPanel tabs">
 	<ul>
 		<li id="addCollectionsContent"><a
 			href="editCollectionFormGenerator.html">Add Collection</a></li>

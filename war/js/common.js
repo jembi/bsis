@@ -4,7 +4,7 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
   var editFormId = 'edit' + divId;
   $.ajax({
     url : formGeneratorUrl,
-    contentType: "application/json",
+    contentType : "application/json",
     type : "GET",
     data : jsonInputData,
     success : function(responseData) {
@@ -34,13 +34,25 @@ function generateEditForm(formGeneratorUrl, jsonInputData, updateFunction,
   });
 }
 
-function generateEditFormOnPage(formGeneratorUrl, jsonInputData, updateFunction,
-    title, divId, onSuccessDecorate, height, width) {
+// render $form in $target
+function renderForm($form, $target, buttons) {
+  $target.html($form);
+}
+
+function resetForm($form) {
+  $form.find('input:text, input:password, input:file, select, textarea')
+      .val('');
+  $form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr(
+      'selected');
+}
+
+function generateEditFormOnPage(formGeneratorUrl, jsonInputData,
+    updateFunction, title, divId, onSuccessDecorate, height, width) {
 
   var editFormId = 'edit' + divId;
   $.ajax({
     url : formGeneratorUrl,
-    contentType: "application/json",
+    contentType : "application/json",
     type : "GET",
     data : jsonInputData,
     success : function(responseData) {
@@ -274,7 +286,69 @@ $.fn.isBound = function(type) {
   var data = this.data('events')[type];
 
   if (data === undefined || data.length === 0) {
-      return false;
+    return false;
   }
   return true;
 };
+
+var myvar = 1000;
+
+function getSelectedTabs() {
+  var topPanelSelected = $("#topPanelTabs").tabs("option", "selected");
+  var leftPanelSelected;
+  switch (topPanelSelected) {
+  case 1:
+    leftPanelSelected = $("#donorsTab").tabs("option", "selected");
+    break;
+  case 2:
+    leftPanelSelected = $("#collectionsTab").tabs("option", "selected");
+    break;
+  case 3:
+    url = '/testresults';
+    break;
+  case 4:
+    url = '/products';
+    break;
+  case 5:
+    url = '/products';
+    break;
+  case 6:
+    url = '/products';
+    break;
+  case 7:
+    url = '/products';
+    break;
+  default:
+    leftPanelSelected = null;
+    break;
+  }
+  myvar++;
+  return {
+    topPanelSelected : topPanelSelected,
+    leftPanelSelected : leftPanelSelected,
+    here : myvar
+  };
+}
+
+function replaceContent(targetId, oldContent, newContent) {
+  if (!(targetId in history.state)) {
+    console.log("targetId is not present");
+    var oldState = {
+      targetId : targetId,
+      targetContent : oldContent
+    };
+    $.extend(oldState, history.state);
+    history.replaceState(oldState, "", "");
+  }
+  else {
+    console.log("targetId is present");
+  }
+
+  var newState = {targetId: targetId,
+                  targetContent: newContent
+                 };
+
+  $.extend(newState, getSelectedTabs());
+  history.pushState(newState, "", "");
+  $('#' + targetId).html(newContent);
+}

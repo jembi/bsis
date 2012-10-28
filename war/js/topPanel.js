@@ -4,57 +4,57 @@ $(document).ready(function() {
   // elements.
   var tab_a_selector = 'ul.ui-tabs-nav a';
 
-  var tabs = $(".tabs").tabs();
-
-  // Enable tabs on all tab widgets. The `event` property must be overridden so
-  // that the tabs aren't changed on click, and any custom event name can be
-  // specified. Note that if you define a callback for the 'select' event, it
-  // will be executed for the selected tab whenever the hash changes.
-  tabs.tabs({ event: 'change' });
+  var topPanelTabs = $("#topPanelTabs").tabs();
+  var donorsTabs = $("#donorsTab").tabs();
+  var collectionsTabs = $("#collectionsTab").tabs();
 
   // Define our own click handler for the tabs, overriding the default.
-  tabs.find(tab_a_selector).click(function() {
-    var state = {},
-
-    // Get the id of this tab widget.
-    id = $(this).closest('.tabs').attr('id'),
-
-    // Get the index of this tab.
-    idx = $(this).parent().prevAll().length;
-
-    // Set the state!
-    state[id] = idx;
-    $.bbq.pushState(state);
+  $(".tabs").find(tab_a_selector).click(function() {
+    var t = getSelectedTabs();
+    console.log("pushstate called " + JSON.stringify(t));
+    history.pushState(t, "", "");
+    return false;
   });
 
-  // Bind an event to window.onhashchange that, when the history state
-  // changes,
-  // iterates over all tab widgets, changing the current tab as necessary.
-  $(window).bind('hashchange', function(e) {
+  var pushState = history.pushState;
+  history.pushState = function () {
+    console.log(arguments);
+    pushState.apply(history, arguments);
+  };
 
-    // Iterate over all tab widgets.
-    tabs.each(function() {
+  $(window).bind("popstate", function(event) {
+    console.log("popstate called");
+    console.log(event);
+    if (event === undefined || event.originalEvent == undefined ||
+        event.originalEvent.state == undefined) {
+      console.log("state is null");
+      return;
+    }
+    var state = event.originalEvent.state;
+    console.log(state);
+    if (state == undefined)
+      return;
+    if (state.topPanelSelected !== undefined) {
+      topPanelTabs.tabs("select", state.topPanelSelected);
+      if (state.leftPanelSelected !== undefined) {
+        switch(state.topPanelSelected) {
+          case 1: donorsTabs.tabs("select", state.leftPanelSelected);
+                  break;
+          case 2: collectionsTabs.tabs("select", state.leftPanelSelected);
+                  break;
+          default:
+                  break;
+        }
 
-      // Get the index for this tab widget from the hash, based on the
-      // appropriate id property. In jQuery 1.4, you should use e.getState()
-      // instead of $.bbq.getState(). The second, 'true' argument coerces
-      // the
-      // string value to a number.
-      var idx = $.bbq.getState(this.id, true) || 0;
+        if (state.targetId !== undefined && state.targetContent !== undefined) {
+          console.log(state.targetId);
+          //$('#'+state.targetId).html("here");
+          $('#' + state.targetId).html(state.targetContent);
+        }
+      }
+    }
+  });
 
-      // Select the appropriate tab for this tab widget by triggering the
-      // custom
-      // event specified in the .tabs() init above (you could keep track of
-      // what
-      // tab each widget is on using .data, and only select a tab if it has
-      // changed).
-      $(this).find(tab_a_selector).eq(idx).triggerHandler('change');
-    });
-  })
-
-  // Since the event is only triggered when the hash changes, we need to
-  // trigger
-  // the event now, to handle the hash the page may have loaded with.
-  $(window).trigger('hashchange');
+  history.pushState({topPanelSelected : 0}, "", "")
 
 });

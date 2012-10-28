@@ -60,6 +60,10 @@ select:focus {
 	z-index: 9999 !important;
 }
 
+.ui-button {
+	border-radius: 3px;
+}
+
 .dataTables_length > label > select {
 	margin: 1px;
 }
