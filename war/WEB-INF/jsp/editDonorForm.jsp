@@ -71,6 +71,7 @@
   });
 </script>
 
+<div class="editFormDiv">
 <form:form id="${editDonorFormId}" method="POST"
 	commandName="editDonorForm">
 	<table>
@@ -137,6 +138,6 @@
 		</tbody>
 	</table>
 </form:form>
-
+</div>
 <div id="${deleteDonorConfirmDialogId}" style="display: none">Are
 	you sure you want to delete this Donor?</div>

@@ -46,9 +46,15 @@ $(document).ready(function() {
                   break;
         }
 
-        if (state.oldContentId !== undefined && state.newContentId !== undefined) {
-          $('#' + state.newContentId).hide();
-          $('#' + state.oldContentId).show();
+        if (state.targetId !== undefined && state.oldRequestUrl !== undefined) {
+          $.ajax({
+            url : state.oldRequestUrl,
+            data : {},
+            method : "GET",
+            success : function(responseData) {
+                        $('#'+state.targetId).html(responseData);
+                      }
+          });
         }
       }
     }

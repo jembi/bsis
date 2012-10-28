@@ -57,13 +57,13 @@ public class DonorController {
   public DonorController() {
   }
 
-  @RequestMapping("/donorsLandingPage")
-  public ModelAndView getDonorsLandingPage(HttpServletRequest request) {
-
-    ModelAndView modelAndView = new ModelAndView("donorsLandingPage");
-    Map<String, Object> model = new HashMap<String, Object>();
-    modelAndView.addObject("model", model);
-    return modelAndView;
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
   }
 
   @RequestMapping("/donors")
@@ -76,6 +76,7 @@ public class DonorController {
         recordFieldsConfigRepository);
     ControllerUtil.addFieldsToDisplay("collection", model,
         recordFieldsConfigRepository);
+    model.put("requestUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
   }
@@ -87,7 +88,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editDonorFormGenerator(Model model,
+  public ModelAndView editDonorFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorNumber", required = false) String donorNumber) {
 
     DonorBackingForm form = new DonorBackingForm();
@@ -102,6 +103,7 @@ public class DonorController {
     }
     model.addAttribute("editDonorForm", form);
     Map<String, Object> m = model.asMap();
+    m.put("requestUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
     mv.addObject("model", m);
@@ -240,7 +242,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
-  public ModelAndView findDonor(
+  public ModelAndView findDonor(HttpServletRequest request,
       @ModelAttribute("findDonorForm") DonorBackingForm form,
       BindingResult result, Model m) {
 
@@ -255,6 +257,7 @@ public class DonorController {
 
     Map<String, Object> model = m.asMap();
     model.put("tableName", "findDonorResultsTable");
+    model.put("requestUrl", getUrl(request));
     ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("donor", model,
         recordFieldsConfigRepository);
@@ -294,6 +297,7 @@ public class DonorController {
     List<Donor> allDonors = donorRepository.getAllDonors();
     ModelAndView modelAndView = new ModelAndView("donorsTable");
     Map<String, Object> model = new HashMap<String, Object>();
+    model.put("requestUrl", getUrl(request));
 
     model.put("tableName", "viewAllDonors");
     model.put("allDonors", getDonorsViewModels(allDonors));

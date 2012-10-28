@@ -22,17 +22,7 @@
       if (elements[0].getAttribute("class") === "dataTables_empty") {
         return;
       }
-
-      $.ajax({
-        url : "editDonorFormGenerator.html",
-        data : {
-          donorNumber : elements[0].innerHTML
-        },
-        method : "GET",
-        success : function(responseData) {
-          replaceContent("${tabContentId}", "${editDonorContentId}", responseData);
-        }
-      });
+      replaceContent("${tabContentId}", "${model.requestUrl}", "editDonorFormGenerator.html", {donorNumber: elements[0].innerHTML});
     }
 
     var donorsTable = $("#${table_id}").dataTable({
@@ -54,9 +44,6 @@
 
   });
 </script>
-
-<div id="${editDonorContentId}" style="display: none">
-</div>
 
 <div id="${tabContentId}">
 	<jsp:include page="addDonorButton.jsp" flush="true" />

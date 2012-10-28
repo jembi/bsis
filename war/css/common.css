@@ -54,6 +54,15 @@ select:focus {
 	box-shadow: 0 0 15px #9ecaed;
 }
 
+.editFormDiv {
+	border: 2px solid #8eb2b2;
+	border-radius: 6px;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 10px;
+}
+
 .ui-datepicker {
 	width: 17em;
 	padding: .2em .2em 0;

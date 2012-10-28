@@ -330,22 +330,28 @@ function getSelectedTabs() {
   };
 }
 
-function replaceContent(oldContentId, newContentId, newContent) {
-  if (!(oldContentId in history.state)) {
-    console.log("oldContentId is not present");
+function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) {
+  if (!(targetId in history.state)) {
+    console.log("targetId is not present");
     var revertState = {
-      oldContentId: oldContentId,
-      newContentId: newContentId,
+      targetId: targetId,
+      oldRequestUrl: oldRequestUrl,
+      newContentUrl: newRequestUrl,
     };
     $.extend(revertState, history.state);
     history.replaceState(revertState, "", "");
   }
   else {
-    console.log("oldContentId is present");
+    console.log("targetId is present");
   }
 
   history.pushState(getSelectedTabs(), "", "");
-  $('#' + oldContentId).hide();
-  $('#' + newContentId).html(newContent);
-  $('#' + newContentId).show();
+  $.ajax({
+    url : newRequestUrl,
+    data : newRequestData,
+    method : "GET",
+    success : function(responseData) {
+                $('#'+targetId).html(responseData);
+              }
+  });
 }
