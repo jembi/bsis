@@ -9,54 +9,54 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="editDivId">editDiv-${unique_page_id}</c:set>
-<c:set var="editContentId">editContent-${unique_page_id}</c:set>
+<c:set var="editDonorContentId">editDonorContent-${unique_page_id}</c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 
 <c:set var="table_id">${model.tableName}</c:set>
 
 <script>
-  $(document).ready(
-      function() {
+  $(document).ready(function() {
 
-        var fnRowSelected = function(node) {
-          var elements = $(node).children();
-          if (elements[0].getAttribute("class") === "dataTables_empty") {
-            return;
-          }
+    var fnRowSelected = function(node) {
+      var elements = $(node).children();
+      if (elements[0].getAttribute("class") === "dataTables_empty") {
+        return;
+      }
 
-          $.ajax({
-            url : "editDonorFormGenerator.html",
-            data : {
-              donorNumber : elements[0].innerHTML
-            },
-            method : "GET",
-            success : function(responseData) {
-              replaceContent("${tabContentId}",
-                  					 $("#${tabContentId}").html(),
-                  					 responseData);
-            }
-          });
+      $.ajax({
+        url : "editDonorFormGenerator.html",
+        data : {
+          donorNumber : elements[0].innerHTML
+        },
+        method : "GET",
+        success : function(responseData) {
+          replaceContent("${tabContentId}", "${editDonorContentId}", responseData);
         }
-
-        var donorsTable = $("#${table_id}").dataTable({
-          "bJQueryUI" : true,
-          "sDom" : '<"H"lfrT>t<"F"ip>T',
-          "oTableTools" : {
-            "sRowSelect" : "single",
-            "aButtons" : [ "print" ],
-            "fnRowSelected" : fnRowSelected
-          }
-        });
-
-        $("#${table_id}_filter").find("label").find("input").keyup(function() {
-          var searchBox = $("#${table_id}_filter").find("label").find("input");
-          $("#${table_id}").removeHighlight();
-          if (searchBox.val() != "")
-            $("#${table_id}").find("td").highlight(searchBox.val());
-        });
-
       });
+    }
+
+    var donorsTable = $("#${table_id}").dataTable({
+      "bJQueryUI" : true,
+      "sDom" : '<"H"lfrT>t<"F"ip>T',
+      "oTableTools" : {
+        "sRowSelect" : "single",
+        "aButtons" : [ "print" ],
+        "fnRowSelected" : fnRowSelected
+      }
+    });
+
+    $("#${table_id}_filter").find("label").find("input").keyup(function() {
+      var searchBox = $("#${table_id}_filter").find("label").find("input");
+      $("#${table_id}").removeHighlight();
+      if (searchBox.val() != "")
+        $("#${table_id}").find("td").highlight(searchBox.val());
+    });
+
+  });
 </script>
+
+<div id="${editDonorContentId}" style="display: none">
+</div>
 
 <div id="${tabContentId}">
 	<jsp:include page="addDonorButton.jsp" flush="true" />

@@ -330,25 +330,22 @@ function getSelectedTabs() {
   };
 }
 
-function replaceContent(targetId, oldContent, newContent) {
-  if (!(targetId in history.state)) {
-    console.log("targetId is not present");
-    var oldState = {
-      targetId : targetId,
-      targetContent : oldContent
+function replaceContent(oldContentId, newContentId, newContent) {
+  if (!(oldContentId in history.state)) {
+    console.log("oldContentId is not present");
+    var revertState = {
+      oldContentId: oldContentId,
+      newContentId: newContentId,
     };
-    $.extend(oldState, history.state);
-    history.replaceState(oldState, "", "");
+    $.extend(revertState, history.state);
+    history.replaceState(revertState, "", "");
   }
   else {
-    console.log("targetId is present");
+    console.log("oldContentId is present");
   }
 
-  var newState = {targetId: targetId,
-                  targetContent: newContent
-                 };
-
-  $.extend(newState, getSelectedTabs());
-  history.pushState(newState, "", "");
-  $('#' + targetId).html(newContent);
+  history.pushState(getSelectedTabs(), "", "");
+  $('#' + oldContentId).hide();
+  $('#' + newContentId).html(newContent);
+  $('#' + newContentId).show();
 }

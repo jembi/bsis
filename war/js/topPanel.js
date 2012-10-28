@@ -46,10 +46,9 @@ $(document).ready(function() {
                   break;
         }
 
-        if (state.targetId !== undefined && state.targetContent !== undefined) {
-          console.log(state.targetId);
-          //$('#'+state.targetId).html("here");
-          $('#' + state.targetId).html(state.targetContent);
+        if (state.oldContentId !== undefined && state.newContentId !== undefined) {
+          $('#' + state.newContentId).hide();
+          $('#' + state.oldContentId).show();
         }
       }
     }
