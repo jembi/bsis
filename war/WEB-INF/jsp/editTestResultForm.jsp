@@ -7,49 +7,79 @@
 <%!public long getCurrentTime() {
 		return System.nanoTime();
 	}%>
-<c:set var="formId"><%=getCurrentTime()%></c:set>
 
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editTestResultFormId">editTestResultForm-${unique_page_id}</c:set>
+<c:set var="deleteTestResultConfirmDialogId">deleteTestResultConfirmDialog-${unique_page_id}</c:set>
+<c:set var="dateTestedId">dateTested-${unique_page_id}</c:set>
+<c:set var="updateTestResultButtonId">updateTestResultButton-${unique_page_id}</c:set>
+<c:set var="deleteTestResultButtonId">deleteTestResultButton-${unique_page_id}</c:set>
+<c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
 
 <script>
-  $(".addTestResultButton").button({
-    icons : {
-      primary : 'ui-icon-circle-plus'
-    }
-  });
-  function updateTestResult() {
-    addNewTestResult($("#editTestResultForm-" + '<c:out value="${formId}"/>')[0]);
-    $("#editTestResultForm-" + '<c:out value="${formId}"/>')[0].reset();
-  }
+  $(document).ready(
+      function() {
+        $("#${updateTestResultButtonId}").button({
+          icons : {
+            primary : 'ui-icon-plusthick'
+          }
+        }).click(function() {
+          updateExistingTestResult($("#${editTestResultFormId}")[0]);
+        });
 
-  $("#dateTested-" + '<c:out value="${formId}"/>').datepicker({
-    changeMonth : true,
-    changeYear : true,
-    minDate : -36500,
-    maxDate : 0,
-    dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
-  });
-  function updateTestResult() {
-    addNewTestResult($("#editTestResultForm-" + '<c:out value="${formId}"/>')[0]);
-    $("#editTestResultForm-" + '<c:out value="${formId}"/>')[0].reset();
-  }
+        $("#${deleteTestResultButtonId}").button({
+          icons : {
+            primary : 'ui-icon-minusthick'
+          }
+        }).click(
+            function() {
+              $("#${deleteTestResultConfirmDialogId}").dialog(
+                  {
+                    modal : true,
+                    title : "Confirm Delete",
+                    buttons : {
+                      "Delete" : function() {
+                        var collectionNumber = $("#${editTestResultFormId}")
+                            .find("[name='collectionNumber']").val();
+                        deleteTestResult(collectionNumber,
+                            $("#${editTestResultFormId}"));
+                        $(this).dialog("close");
+                      },
+                      "Cancel" : function() {
+                        $(this).dialog("close");
+                      }
+                    }
+                  });
+            });
+
+        $("#${goBackButtonId}").button({
+          icons : {
+            primary : 'ui-icon-circle-arrow-w'
+          }
+        }).click(function() {
+          window.history.back();
+          return false;
+        });
+
+        $("#${dateTestedId}").datepicker({
+          changeMonth : true,
+          changeYear : true,
+          minDate : -36500,
+          maxDate : 0,
+          dateFormat : "mm/dd/yy",
+          yearRange : "c-100:c0",
+        });
+      });
 </script>
 
-
+<div class="editFormDiv">
 <form:form method="POST" commandName="editTestResultForm"
-	id="editTestResultForm-${formId}">
+	id="${editTestResultFormId}">
 	<table>
 		<thead>
-			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
-					<td><b>Add a New Test Result</b></td>
+					<td><b>Test Result</b></td>
 				</tr>
-			</c:if>
-			<c:if test="${!(empty model.alternateHeader)}">
-				<tr>
-					<td><b>${model.alternateHeader}</b></td>
-				</tr>
-			</c:if>
 		</thead>
 		<tbody>
 			<tr>
@@ -58,7 +88,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="dateTested">${model.dateTestedDisplayName}</form:label></td>
-				<td><form:input path="dateTested" id="dateTested-${formId}" /></td>
+				<td><form:input path="dateTested" id="${dateTestedId}" /></td>
 			</tr>
 			<tr>
 				<td><form:label path="hiv">${model.hivDisplayName}</form:label></td>
@@ -91,10 +121,18 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><button type="button" class="addTestResultButton" style="margin-left: 10px"
-							onclick="updateTestResult();">Add test result</button></td>
+					<td><button type="button" id="${updateTestResultButtonId}"
+							style="margin-left: 10px">Save changes</button>
+						<button type="button" id="${deleteTestResultButtonId}"
+							style="margin-left: 10px">Delete</button>
+						<button type="button" id="${goBackButtonId}"
+							style="margin-left: 10px">Go Back</button></td>
 				</tr>
 			</c:if>
 		</tbody>
 	</table>
 </form:form>
+</div>
+
+<div id="${deleteTestResultConfirmDialogId}" style="display: none">Are
+	you sure you want to delete this Test Result?</div>

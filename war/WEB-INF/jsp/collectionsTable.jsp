@@ -39,9 +39,9 @@
 
         $("#${table_id}_filter").find("label").find("input").keyup(function() {
           var searchBox = $("#${table_id}_filter").find("label").find("input");
-          $("#" + table_id).removeHighlight();
+          $("#${table_id}").removeHighlight();
           if (searchBox.val() != "")
-            $("#" + table_id).find("td").highlight(searchBox.val());
+            $("#${table_id}").find("td").highlight(searchBox.val());
         });
       });
 </script>

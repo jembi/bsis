@@ -55,8 +55,17 @@ public class TestResultsController {
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findTestResultFormInit(Model model) {
+  public ModelAndView findTestResultFormInit(HttpServletRequest request, Model model) {
 
     TestResultBackingForm form = new TestResultBackingForm();
     model.addAttribute("findTestResultForm", form);
@@ -65,12 +74,13 @@ public class TestResultsController {
     Map<String, Object> m = model.asMap();
     // to ensure custom field names are displayed in the form
     ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
+    m.put("requestUrl", getUrl(request));
     mv.addObject("model", m);
     return mv;
   }
 
   @RequestMapping("/findTestResult")
-  public ModelAndView findTestResult(
+  public ModelAndView findTestResult(HttpServletRequest request,
       @ModelAttribute("findTestResultForm") TestResultBackingForm form,
       BindingResult result, Model model) {
 
@@ -82,6 +92,7 @@ public class TestResultsController {
     ModelAndView modelAndView = new ModelAndView("testResultsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findTestResultsTable");
+    m.put("requestUrl", getUrl(request));
     ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("testResult", m,
         recordFieldsConfigRepository);
@@ -92,7 +103,7 @@ public class TestResultsController {
   }
 
   @RequestMapping(value = "/editTestResultFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editTestResultFormGenerator(
+  public ModelAndView editTestResultFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
@@ -100,6 +111,7 @@ public class TestResultsController {
     TestResultBackingForm form = new TestResultBackingForm();
     Map<String, Object> m = model.asMap();
     m.put("isDialog", isDialog);
+    m.put("requestUrl", getUrl(request));
 
     if (collectionNumber != null) {
       form.setCollectionNumber(collectionNumber);

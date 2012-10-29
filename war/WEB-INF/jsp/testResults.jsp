@@ -11,11 +11,11 @@
 <link type="text/css" rel="stylesheet" href="css/testResults.css" />
 <script type="text/javascript" src="js/testResults.js"></script>
 
-<div id="testResultsTab" class="leftPanel">
+<div id="testResultsTab" class="leftPanel tabs">
 	<ul>
-		<li id="addTestResultsContent"><a
-			href="editTestResultFormGenerator.html">Add Test Results</a></li>
 		<li id="findOrAddTestResultsContent"><a
 			href="findTestResultFormGenerator.html">Find Test Results</a></li>
+		<li id="addTestResultsContent"><a
+			href="editTestResultFormGenerator.html">Add Test Results</a></li>
 	</ul>
 </div>

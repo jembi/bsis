@@ -15,6 +15,10 @@ function updateTestResultGeneric(form, url) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Test Result Updated Successfully!");
+        $('#' + form.getAttribute("id")).each(function() {
+          this.reset();
+        });
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -32,6 +36,7 @@ function deleteTestResult(collectionNumber) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Test Result Deleted Successfully!");
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -40,6 +45,3 @@ function deleteTestResult(collectionNumber) {
     }
   });
 }
-
-function decorateEditTestResultDialog() {
-};

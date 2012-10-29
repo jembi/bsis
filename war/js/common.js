@@ -304,7 +304,7 @@ function getSelectedTabs() {
     leftPanelSelected = $("#collectionsTab").tabs("option", "selected");
     break;
   case 3:
-    url = '/testresults';
+    leftPanelSelected = $("#testResultsTab").tabs("option", "selected");
     break;
   case 4:
     url = '/products';

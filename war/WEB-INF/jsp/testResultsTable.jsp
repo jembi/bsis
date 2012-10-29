@@ -3,98 +3,46 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<c:set var="table_id">${model.tableName}</c:set>
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
+<c:set var="table_id">donorsTable-${unique_page_id}</c:set>
 
 <script>
-$(function() {
-  var table_id = "${table_id}";
-  var testResultsTable = $("#" + table_id).dataTable({
+$(document).ready(function() {
+
+  var fnRowSelected = function(node) {
+    var elements = $(node).children();
+    if (elements[0].getAttribute("class") === "dataTables_empty") {
+      return;
+    }
+    replaceContent("${tabContentId}", "${model.requestUrl}", "editTestResultFormGenerator.html", {collectionNumber: elements[0].innerHTML});
+  }
+
+  var testResultsTable = $("#${table_id}").dataTable({
     "bJQueryUI" : true,
-    "sDom": '<"H"lfrT>t<"F"ip>T',
-    "oTableTools" : {"aButtons": ["print"]}
+    "sDom" : '<"H"lfrT>t<"F"ip>T',
+    "oTableTools" : {
+      "sRowSelect" : "single",
+      "aButtons" : [ "print" ],
+      "fnRowSelected" : fnRowSelected
+    }
   });
 
   $("#${table_id}_filter").find("label").find("input").keyup(function() {
     var searchBox = $("#${table_id}_filter").find("label").find("input");
-    $("#" + table_id).removeHighlight();
+    $("#${table_id}").removeHighlight();
     if (searchBox.val() != "")
-      $("#" + table_id).find("td").highlight(searchBox.val());
+      $("#${table_id}").find("td").highlight(searchBox.val());
   });
 
-  // we need to invoke the live function here in order for click event to be
-  // registered across pages of table
-  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Edit").die("click");
-  $("." + table_id + "Edit").live("click",
-      function(event) {
-
-        // remove row_selected class everywhere
-        $(testResultsTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
-        });
-
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
-
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
-
-        var collectionId = elements[0].innerHTML;
-
-        generateEditForm("editTestResultFormGenerator.html", {
-          collectionNumber : collectionId,
-          isDialog : "yes"
-        }, updateExistingTestResult, "Edit Test Result: "
-            + elements[1].innerHTML + " " + elements[2].innerHTML,
-            'testResultsTable', decorateEditTestResultDialog, 550, 500);
-      });
-
-  // we need to invoke the live function here in order for click event to be
-  // registered across pages of table
-  // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-  $("." + table_id + "Delete").die("click");
-  $("." + table_id + "Delete").live("click",
-      function(event) {
-        // remove row_selected class everywhere
-        $(testResultsTable.fnSettings().aoData).each(function() {
-          $(this.nTr).removeClass('row_selected');
-        });
-
-        // add row_selected class to the current row
-        $(event.target.parentNode.parentNode).addClass('row_selected');
-
-        var elements = $(event.target.parentNode.parentNode).children();
-        if (elements[0].getAttribute("class") === "dataTables_empty") {
-          return;
-        }
-
-        var collectionId = elements[0].innerHTML;
-        $("<div id='deleteTestResultDialog'> Are you sure you want to delete Test Results for Collection Number: " + collectionId + "</div>").dialog({
-      			autoOpen : false,
-      			height : 150,
-      			width : 400,
-      			modal : true,
-      			title : "Confirm Delete",
-      			buttons : {
-        				"Delete" : function() {
-          									 deleteTestResult(collectionId);
-          									 $(this).dialog("close");
-        									 },
-				        "Cancel" : function() {
-				          					 $(this).dialog("close");
-				        			     }
-				      },
-              close : function() {
-                $("#deleteTestResultDialog").remove();
-              }
-            });
-            $("#deleteTestResultDialog").dialog("open");
-		    });
   });
 </script>
 
+<div id="${tabContentId}">
 <jsp:include page="addTestResultButton.jsp" flush="true" />
 <br />
 <br />
@@ -118,7 +66,6 @@ $(function() {
 			<c:if test="${model.showsyphilis==true}">
 				<th>${model.syphilisDisplayName} Reactive</th>
 			</c:if>
-			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -148,12 +95,8 @@ $(function() {
 						&#10003;
 					</c:if></td>
 				</c:if>
-				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
-					style="display: inline-block;" title="Edit"></span> <span
-					class="ui-icon ui-icon-trash ${table_id}Delete"
-					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
-				</td>
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+</div>
