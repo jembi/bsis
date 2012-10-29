@@ -26,9 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import repository.DisplayNamesRepository;
 import repository.IssueRepository;
 import repository.ProductRepository;
@@ -37,6 +34,8 @@ import repository.RequestRepository;
 import utils.ControllerUtil;
 import utils.LoggerUtil;
 import viewmodel.ProductViewModel;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ProductsController {
@@ -55,8 +54,17 @@ public class ProductsController {
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findProductFormInit(Model model) {
+  public ModelAndView findProductFormInit(HttpServletRequest request, Model model) {
 
     ProductBackingForm form = new ProductBackingForm();
     model.addAttribute("findProductForm", form);
@@ -65,12 +73,13 @@ public class ProductsController {
     Map<String, Object> m = model.asMap();
     // to ensure custom field names are displayed in the form
     ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+    m.put("requestUrl", getUrl(request));
     mv.addObject("model", m);
     return mv;
   }
 
   @RequestMapping("/findProduct")
-  public ModelAndView findProduct(
+  public ModelAndView findProduct(HttpServletRequest request,
       @ModelAttribute("findProductForm") ProductBackingForm form,
       BindingResult result, Model model) {
 
@@ -85,22 +94,22 @@ public class ProductsController {
     ControllerUtil.addFieldsToDisplay("product", m,
         recordFieldsConfigRepository);
     m.put("allProducts", getProductViewModels(products));
-    m.put("showActions", true);
+    m.put("requestUrl", getUrl(request));
     modelAndView.addObject("model", m);
     return modelAndView;
   }
 
   @RequestMapping("/findAvailableProducts")
-  public ModelAndView findAvailableProducts(
+  public ModelAndView findAvailableProducts(HttpServletRequest request,
       @RequestParam(value = "requestNumber", required = true) String requestNumber,
       Model model) {
 
-    Request request = requestRepository.findRequestByRequestNumber(requestNumber);
+    Request productRequest = requestRepository.findRequestByRequestNumber(requestNumber);
 
     List<Product> products = new ArrayList<Product>();
-    if (request != null) {
+    if (productRequest != null) {
       products = productRepository.findAnyProductMatching("", "",
-          Arrays.asList(request.getProductType()), Arrays.asList("available"));
+          Arrays.asList(productRequest.getProductType()), Arrays.asList("available"));
     }
 
     ModelAndView modelAndView = new ModelAndView("productsTable");
@@ -111,14 +120,14 @@ public class ProductsController {
     ControllerUtil.addFieldsToDisplay("product", m,
         recordFieldsConfigRepository);
     m.put("allProducts", getProductViewModels(products));
-    m.put("showActions", false);
+    m.put("requestUrl", getUrl(request));
 
     modelAndView.addObject("model", m);
     return modelAndView;
   }
 
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editProductFormGenerator(
+  public ModelAndView editProductFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value = "productNumber", required = false) String productNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
@@ -138,6 +147,7 @@ public class ProductsController {
         form = new ProductBackingForm();
     }
     m.put("editProductForm", form);
+    m.put("requestUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
     ModelAndView mv = new ModelAndView("editProductForm");
@@ -223,7 +233,6 @@ public class ProductsController {
     m.put("errMsg", errMsg);
     return m;
   }
-
   
   @RequestMapping("/productsLandingPage")
   public ModelAndView getProductsLandingPage(

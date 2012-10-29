@@ -17,6 +17,9 @@ $(document).ready(
       var testResultsTabs = $("#testResultsTab").tabs({
         cache : true
       });
+      var productsTabs = $("#productsTab").tabs({
+        cache : true
+      });
 
       // Define our own click handler for the tabs, overriding the default.
       $(".tabs").find(tab_a_selector).click(function() {
@@ -62,6 +65,9 @@ $(document).ready(
                   break;
                 case 3:
                   leftPanelTabs = testResultsTabs;
+                  break;
+                case 4:
+                  leftPanelTabs = productsTabs;
                   break;
                 default:
                   break;

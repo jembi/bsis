@@ -7,39 +7,76 @@
 <%!public long getCurrentTime() {
 		return System.nanoTime();
 	}%>
-<c:set var="formId"><%=getCurrentTime()%></c:set>
 
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editProductFormId">editProductForm-${unique_page_id}</c:set>
+<c:set var="deleteProductConfirmDialogId">deleteProductConfirmDialog-${unique_page_id}</c:set>
+<c:set var="editProductFormProductTypesId">editProductFormProductTypes-${unique_page_id}</c:set>
+<c:set var="updateProductButtonId">updateProductButton-${unique_page_id}</c:set>
+<c:set var="deleteProductButtonId">deleteProductButton-${unique_page_id}</c:set>
+<c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
 
 <script>
-  $(".addProductButton").button({
-    icons : {
-      primary : 'ui-icon-circle-plus'
-    }
-  });
-  function updateTestResult() {
-    addNewTestResult($("#editProductForm-" + '<c:out value="${formId}"/>')[0]);
-    $("#editProductForm-" + '<c:out value="${formId}"/>')[0].reset();
-  }
-  $("#editProductFormTypes-" + '<c:out value="${formId}"/>').multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
-  });
-  function updateProduct() {
-    addNewProduct($("#editProductForm-" + '<c:out value="${formId}"/>')[0]);
-    $("#editProductForm-" + '<c:out value="${formId}"/>')[0].reset();
-  }
+  $(document).ready(
+      function() {
+        $("#${updateProductButtonId}").button({
+          icons : {
+            primary : 'ui-icon-plusthick'
+          }
+        }).click(function() {
+          updateExistingProduct($("#${editProductFormId}")[0]);
+        });
+
+        $("#${deleteProductButtonId}").button({
+          icons : {
+            primary : 'ui-icon-minusthick'
+          }
+        }).click(
+            function() {
+              $("#${deleteProductConfirmDialogId}").dialog(
+                  {
+                    modal : true,
+                    title : "Confirm Delete",
+                    buttons : {
+                      "Delete" : function() {
+                        var productNumber = $("#${editProductFormId}").find(
+                            "[name='productNumber']").val();
+                        deleteProduct(productNumber);
+                        $(this).dialog("close");
+                      },
+                      "Cancel" : function() {
+                        $(this).dialog("close");
+                      }
+                    }
+                  });
+            });
+
+        $("#${goBackButtonId}").button({
+          icons : {
+            primary : 'ui-icon-circle-arrow-w'
+          }
+        }).click(function() {
+          window.history.back();
+          return false;
+        });
+
+        $("#${editProductFormProductTypesId}").multiselect(
+            {
+              multiple : false,
+              selectedList : 1,
+              header : false
+            });
+      });
 </script>
 
+<div class="editFormDiv">
 <form:form method="POST" commandName="editProductForm"
-	id="editProductForm-${formId}">
+	id="${editProductFormId}">
 	<table>
 		<thead>
-			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
-					<td><b>Add a New Product</b></td>
+					<td><b>Product</b></td>
 				</tr>
-			</c:if>
 		</thead>
 		<tbody>
 			<tr>
@@ -53,7 +90,7 @@
 			<tr>
 				<td><form:label path="type">${model.productTypeDisplayName}</form:label></td>
 				<td style="padding-left: 10px;"><form:select path="type"
-						id="editProductFormTypes-${formId}" class="editProductFormTypes">
+						id="${editProductFormProductTypesId}">
 						<form:option value="wholeBlood" label="Whole Blood"
 							selected="${model.selectedType == 'wholeBlood' ? 'selected' : ''}" />
 						<form:option value="rcc" label="RCC"
@@ -69,10 +106,18 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><button type="button" class="addProductButton" style="margin-left: 10px"
-							onclick="updateProduct();">Add product</button></td>
+					<td><button type="button" id="${updateProductButtonId}"
+							style="margin-left: 10px">Save changes</button>
+						<button type="button" id="${deleteProductButtonId}"
+							style="margin-left: 10px">Delete</button>
+						<button type="button" id="${goBackButtonId}"
+							style="margin-left: 10px">Go Back</button></td>
 				</tr>
 			</c:if>
 		</tbody>
 	</table>
 </form:form>
+</div>
+
+<div id="${deleteProductConfirmDialogId}" style="display: none">Are
+	you sure you want to delete this Product?</div>

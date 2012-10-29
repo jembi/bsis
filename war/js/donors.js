@@ -15,6 +15,9 @@ function updateDonorGeneric(form, url) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Donor Updated Successfully!");
+        $('#' + form.getAttribute("id")).each(function() {
+          this.reset();
+        });
         window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
@@ -25,7 +28,7 @@ function updateDonorGeneric(form, url) {
   });
 }
 
-function deleteDonor(donorId, formToReset) {
+function deleteDonor(donorId) {
   $.ajax({
     type : "POST",
     url : "deleteDonor.html",

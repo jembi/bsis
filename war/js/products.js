@@ -15,6 +15,10 @@ function updateProductGeneric(form, url) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Product Updated Successfully!");
+        $('#' + form.getAttribute("id")).each(function() {
+          this.reset();
+        });
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -32,6 +36,7 @@ function deleteProduct(productNumber) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Product Deleted Successfully!");
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -40,6 +45,3 @@ function deleteProduct(productNumber) {
     }
   });
 }
-
-function decorateEditProductDialog() {
-};

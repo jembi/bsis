@@ -42,7 +42,7 @@
                       "Delete" : function() {
                         var donorNumber = $("#${editDonorFormId}").find(
                             "[name='donorNumber']").val();
-                        deleteDonor(donorNumber, $("#${editDonorFormId}"));
+                        deleteDonor(donorNumber);
                         $(this).dialog("close");
                       },
                       "Cancel" : function() {
