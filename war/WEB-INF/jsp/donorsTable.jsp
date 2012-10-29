@@ -8,11 +8,8 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editDivId">editDiv-${unique_page_id}</c:set>
-<c:set var="editDonorContentId">editDonorContent-${unique_page_id}</c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
-
-<c:set var="table_id">${model.tableName}</c:set>
+<c:set var="table_id">donorsTable-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(function() {

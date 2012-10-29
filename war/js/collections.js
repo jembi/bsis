@@ -15,6 +15,10 @@ function updateCollectionGeneric(form, url) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Collection Updated Successfully!");
+        $('#' + form.getAttribute("id")).each(function() {
+          this.reset();
+        });
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -28,10 +32,13 @@ function deleteCollection(collectionNumber) {
   $.ajax({
     type : "POST",
     url : "deleteCollection.html",
-    data : {collectionNumber: collectionNumber},
+    data : {
+      collectionNumber : collectionNumber
+    },
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Collection Deleted Successfully!");
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'

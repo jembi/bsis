@@ -8,40 +8,81 @@
 		return System.nanoTime();
 	}%>
 
-<c:set var="formId"><%=getCurrentTime()%></c:set>
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editCollectionFormId">editCollectionForm-${unique_page_id}</c:set>
+<c:set var="deleteCollectionConfirmDialogId">deleteCollectionConfirmDialog-${unique_page_id}</c:set>
+<c:set var="editCollectionFormCentersId">editCollectionFormCenters-${unique_page_id}</c:set>
+<c:set var="editCollectionFormSitesId">editCollectionFormSites-${unique_page_id}</c:set>
+<c:set var="editCollectionFormDonorTypeId">editCollectionFormDonorType-${unique_page_id}</c:set>
+<c:set var="updateCollectionButtonId">updateCollectionButton-${unique_page_id}</c:set>
+<c:set var="deleteCollectionButtonId">deleteCollectionButton-${unique_page_id}</c:set>
+<c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
 
 
 <script>
-  $(".addCollectionButton").button({
+  $("#${updateCollectionButtonId}").button({
     icons : {
       primary : 'ui-icon-circle-plus'
     }
+  }).click(function() {
+    updateExistingCollection($("#${editCollectionFormId}")[0]);
   });
-  $("#editCollectionFormCenters-" + '<c:out value="${formId}"/>').multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
-  });
-  $("#editCollectionFormSites-" + '<c:out value="${formId}"/>').multiselect({
-    multiple : false,
-    selectedList : 1,
-    header : false
-  });
-  $("#editCollectionFormDonorType-" + '<c:out value="${formId}"/>')
-      .multiselect({
-        multiple : false,
-        selectedList : 1,
-        header : false
+
+  $("#${deleteCollectionButtonId}").button({
+    icons : {
+      primary : 'ui-icon-minusthick'
+    }
+  }).click(
+      function() {
+        $("#${deleteCollectionConfirmDialogId}").dialog(
+            {
+              modal : true,
+              title : "Confirm Delete",
+              buttons : {
+                "Delete" : function() {
+                  var collectionNumber = $("#${editCollectionFormId}").find(
+                      "[name='collectionNumber']").val();
+                  deleteCollection(collectionNumber,
+                      $("#${editCollectionFormId}"));
+                  $(this).dialog("close");
+                },
+                "Cancel" : function() {
+                  $(this).dialog("close");
+                }
+              }
+            });
       });
-  function updateCollection() {
-    addNewCollection($("#editCollectionForm-" + '<c:out value="${formId}"/>')[0]);
-    $("#editCollectionForm-" + '<c:out value="${formId}"/>')[0].reset();
-  }
+
+  $("#${goBackButtonId}").button({
+    icons : {
+      primary : 'ui-icon-circle-arrow-w'
+    }
+  }).click(function() {
+    window.history.back();
+    return false;
+  });
+
+  $("#${editCollectionFormCentersId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+  $("#${editCollectionFormSitesId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+  $("#${editCollectionFormDonorTypeId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
 </script>
 
-
+<div class="editFormDiv">
 <form:form method="POST" commandName="editCollectionForm"
-	id="editCollectionForm-${formId}">
+	id="${editCollectionFormId}">
 	<table>
 		<thead>
 			<c:if test="${model.isDialog != 'yes' }">
@@ -70,7 +111,7 @@
 			<tr>
 				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
 				<td style="padding-left: 10px;"><form:select path="centers"
-						id="editCollectionFormCenters-${formId}"
+						id="${editCollectionFormCentersId}"
 						class="editCollectionFormCenters">
 						<c:forEach var="center" items="${model.centers}">
 							<form:option value="${center}" label="${center}"
@@ -81,7 +122,7 @@
 			<tr>
 				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
 				<td style="padding-left: 10px;"><form:select path="sites"
-						id="editCollectionFormSites-${formId}"
+						id="${editCollectionFormSitesId}"
 						class="editCollectionFormSites">
 						<c:forEach var="site" items="${model.sites}">
 							<form:option value="${site}" label="${site}"
@@ -92,7 +133,7 @@
 			<tr>
 				<td><form:label path="donorType">${model.donorTypeDisplayName}</form:label></td>
 				<td style="padding-left: 10px;"><form:select path="donorType"
-						id="editCollectionFormDonorType-${formId}"
+						id="${editCollectionFormDonorTypeId}"
 						class="editCollectionFormDonorType">
 						<form:option value="voluntary" label="Voluntary" />
 						<form:option value="family" label="Family" />
@@ -102,11 +143,19 @@
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />
-					<td><button type="button" class="addCollectionButton" style="margin-left: 10px"
-							onclick="updateCollection();">Add collection</button></td>
+					<td><button type="button" id="${updateCollectionButtonId}"
+							style="margin-left: 10px">Save changes</button>
+						<button type="button" id="${deleteCollectionButtonId}"
+							style="margin-left: 10px">Delete</button>
+						<button type="button" id="${goBackButtonId}"
+							style="margin-left: 10px">Go Back</button></td>
 				</tr>
 			</c:if>
 
 		</tbody>
 	</table>
 </form:form>
+</div>
+
+<div id="${deleteCollectionConfirmDialogId}" style="display: none">Are
+	you sure you want to delete this Collection?</div>

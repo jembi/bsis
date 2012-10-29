@@ -51,6 +51,15 @@ public class CollectionsController {
   public CollectionsController() {
   }
 
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView findCollectionFormInit(Model model) {
 
@@ -67,7 +76,7 @@ public class CollectionsController {
   }
 
   @RequestMapping("/findCollection")
-  public ModelAndView findCollection(
+  public ModelAndView findCollection(HttpServletRequest request,
       @ModelAttribute("findCollectionForm") CollectionBackingForm form,
       BindingResult result, Model model) {
 
@@ -84,7 +93,7 @@ public class CollectionsController {
     ControllerUtil.addFieldsToDisplay("collection", m,
         recordFieldsConfigRepository);
     m.put("allCollections", getCollectionViewModels(collections));
-
+    m.put("requestUrl", getUrl(request));
     addCentersToModel(m);
     addCollectionSitesToModel(m);
 
@@ -93,7 +102,7 @@ public class CollectionsController {
   }
 
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editCollectionFormGenerator(
+  public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
@@ -107,7 +116,7 @@ public class CollectionsController {
     m.put("sites", sites);
     m.put("selectedSite", sites.get(0));
     m.put("isDialog", isDialog);
-
+    m.put("requestUrl", getUrl(request));
     if (collectionNumber != null) {
       form.setCollectionNumber(collectionNumber);
       Collection collection = collectionRepository
