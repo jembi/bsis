@@ -3,14 +3,33 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<c:set var="table_id">${model.tableName}</c:set>
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
+<c:set var="table_id">requestsTable-${unique_page_id}</c:set>
 
 <script>
-  $(function() {
+$(document).ready(function() {
+
+  var fnRowSelected = function(node) {
+    var elements = $(node).children();
+    if (elements[0].getAttribute("class") === "dataTables_empty") {
+      return;
+    }
+    replaceContent("${tabContentId}", "${model.requestUrl}", "editRequestFormGenerator.html", {requestNumber: elements[0].innerHTML});
+  }
+
     var requestsTable = $("#${table_id}").dataTable({
       "bJQueryUI" : true,
-      "sDom": '<"H"lfrT>t<"F"ip>T',
-      "oTableTools" : {"aButtons": ["print"]}
+      "sDom" : '<"H"lfrT>t<"F"ip>T',
+      "oTableTools" : {
+        "sRowSelect" : "single",
+        "aButtons" : [ "print" ],
+        "fnRowSelected" : fnRowSelected
+      }
     });
 
     $("#${table_id}_filter").find("label").find("input").keyup(function() {
@@ -20,103 +39,6 @@
         $("#${table_id}").find("td").highlight(searchBox.val());
     });
 
-    // we need to invoke the live function here in order for click event to be
-    // registered across pages of table
-    // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-    $(".${table_id}Edit").die("click");
-    $(".${table_id}Edit").live(
-        "click",
-        function(event) {
-
-          // remove row_selected class everywhere
-          $(requestsTable.fnSettings().aoData).each(function() {
-            $(this.nTr).removeClass('row_selected');
-          });
-
-          // add row_selected class to the current row
-          $(event.target.parentNode.parentNode).addClass('row_selected');
-
-          var elements = $(event.target.parentNode.parentNode).children();
-          if (elements[0].getAttribute("class") === "dataTables_empty") {
-            return;
-          }
-
-          var requestId = elements[0].innerHTML;
-
-          generateEditForm("editRequestFormGenerator.html", {
-            requestNumber : requestId,
-            isDialog : "yes"
-          }, updateExistingRequest, "Edit Request: " + elements[1].innerHTML
-              + " " + elements[2].innerHTML, 'requestsTable',
-              decorateEditRequestDialog, 550, 575);
-        });
-
-    // we need to invoke the live function here in order for click event to be
-    // registered across pages of table
-    // http://stackoverflow.com/questions/5985884/jquery-datatables-row-click-not-registering-on-pages-other-than-first
-    $(".${table_id}Delete").die("click");
-    $(".${table_id}Delete")
-        .live(
-            "click",
-            function(event) {
-              // remove row_selected class everywhere
-              $(requestsTable.fnSettings().aoData).each(function() {
-                $(this.nTr).removeClass('row_selected');
-              });
-
-              // add row_selected class to the current row
-              $(event.target.parentNode.parentNode).addClass('row_selected');
-
-              var elements = $(event.target.parentNode.parentNode).children();
-              if (elements[0].getAttribute("class") === "dataTables_empty") {
-                return;
-              }
-
-              var requestId = elements[0].innerHTML;
-              $(
-                  "<div id='deleteRequestDialog'> Are you sure you want to delete Request with Number: "
-                      + requestId + "</div>").dialog({
-                autoOpen : false,
-                height : 150,
-                width : 400,
-                modal : true,
-                title : "Confirm Delete",
-                buttons : {
-                  "Delete" : function() {
-                    deleteRequest(requestId);
-                    $(this).dialog("close");
-                  },
-                  "Cancel" : function() {
-                    $(this).dialog("close");
-                  }
-                },
-                close : function() {
-                  $("#deleteRequestDialog").remove();
-                }
-              });
-              $("#deleteRequestDialog").dialog("open");
-
-            });
-
-    $(".${table_id}Issue").die("click");
-    $(".${table_id}Issue").live("click", function(event) {
-
-      // remove row_selected class everywhere
-      $(requestsTable.fnSettings().aoData).each(function() {
-        $(this.nTr).removeClass('row_selected');
-      });
-
-      // add row_selected class to the current row
-      $(event.target.parentNode.parentNode).addClass('row_selected');
-
-      var elements = $(event.target.parentNode.parentNode).children();
-      if (elements[0].getAttribute("class") === "dataTables_empty") {
-        return;
-      }
-
-      var requestId = elements[0].innerHTML;
-      showIssueRequestDialog(requestId);
-    });
 
     function showIssueRequestDialog(requestNumber) {
 
@@ -203,10 +125,7 @@
   });
 </script>
 
-<jsp:include page="addRequestButton.jsp" flush="true" />
-<br />
-<br />
-
+<div id="${tabContentId}">
 <table id="${table_id}" class="dataTable collectionsTable">
 	<thead>
 		<tr>
@@ -235,8 +154,6 @@
 			<c:if test="${model.showstatus==true}">
 				<th>${model.statusDisplayName}</th>
 			</c:if>
-			<th></th>
-			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -267,18 +184,8 @@
 				<c:if test="${model.showstatus == true}">
 					<td>${request.status}</td>
 				</c:if>
-				<td><c:if test="${request.status != 'fulfilled'}">
-						<span class="${table_id}Issue"
-							style="display: inline-block; text-color: blue; text-decoration: underline;"
-							title="Issue">Issue</span>
-					</c:if></td>
-				<td><span class="ui-icon ui-icon-pencil ${table_id}Edit"
-					style="display: inline-block;" title="Edit"></span> <span
-					class="ui-icon ui-icon-trash ${table_id}Delete"
-					style="display: inline-block; margin-left: 10px;" title="Delete"></span>
-				</td>
-
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+</div>

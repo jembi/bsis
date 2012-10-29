@@ -20,6 +20,9 @@ $(document).ready(
       var productsTabs = $("#productsTab").tabs({
         cache : true
       });
+      var requestsTabs = $("#requestsTab").tabs({
+        cache : true
+      });
 
       // Define our own click handler for the tabs, overriding the default.
       $(".tabs").find(tab_a_selector).click(function() {
@@ -69,6 +72,9 @@ $(document).ready(
                 case 4:
                   leftPanelTabs = productsTabs;
                   break;
+                case 5:
+                  leftPanelTabs = requestsTabs;
+                  break;
                 default:
                   break;
                 }
@@ -100,8 +106,6 @@ $(document).ready(
             }
           });
 
-      history.pushState({
-        topPanelSelected : 0
-      }, "", "")
-
+      // for initial page load
+      history.pushState({topPanelSelected : 0}, "", "")
     });

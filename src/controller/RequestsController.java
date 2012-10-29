@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
 
 import model.Location;
 import model.Request;
@@ -44,8 +45,17 @@ public class RequestsController {
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findRequestFormInit(Model model) {
+  public ModelAndView findRequestFormInit(HttpServletRequest servletRequest, Model model) {
 
     RequestBackingForm form = new RequestBackingForm();
     model.addAttribute("findRequestForm", form);
@@ -55,6 +65,7 @@ public class RequestsController {
 
     List<String> sites = locationRepository.getAllCollectionSitesAsString();
     m.put("sites", sites);
+    m.put("requestUrl", getUrl(servletRequest));
     // to ensure custom field names are displayed in the form
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
     mv.addObject("model", m);
@@ -62,7 +73,7 @@ public class RequestsController {
   }
 
   @RequestMapping("/findRequest")
-  public ModelAndView findRequest(
+  public ModelAndView findRequest(HttpServletRequest servletRequest,
       @ModelAttribute("findRequestForm") RequestBackingForm form,
       BindingResult result, Model model) {
 
@@ -77,6 +88,7 @@ public class RequestsController {
 
     List<String> sites = locationRepository.getAllCollectionSitesAsString();
     m.put("sites", sites);
+    m.put("requestUrl", getUrl(servletRequest));
 
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("request", m,
@@ -88,7 +100,7 @@ public class RequestsController {
   }
 
   @RequestMapping("/pendingRequests")
-  public ModelAndView findPendingRequests(Model model) {
+  public ModelAndView findPendingRequests(HttpServletRequest servletRequest, Model model) {
 
     List<Request> requests = requestRepository.findRequestsNotFulfilled();
 
@@ -98,6 +110,7 @@ public class RequestsController {
 
     List<String> sites = locationRepository.getAllCollectionSitesAsString();
     m.put("sites", sites);
+    m.put("requestUrl", getUrl(servletRequest));
 
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("request", m,

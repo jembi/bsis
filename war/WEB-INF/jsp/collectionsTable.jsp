@@ -47,8 +47,6 @@
 </script>
 
 <div id="${tabContentId}">
-	<jsp:include page="addCollectionButton.jsp" flush="true" />
-	<br /> <br />
 
 	<table id="${table_id}" class="dataTable collectionsTable">
 		<thead>

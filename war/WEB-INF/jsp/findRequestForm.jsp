@@ -76,9 +76,9 @@
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
-    maxDate : 0,
+    maxDate : 365,
     dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
+    yearRange : "c-100:c1",
     onSelect : function(selectedDate) {
       $("#dateRequiredTo").datepicker("option", "minDate", selectedDate);
     }
@@ -88,9 +88,9 @@
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
-    maxDate : 0,
+    maxDate : 365,
     dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
+    yearRange : "c-100:c1",
     onSelect : function(selectedDate) {
       $("#dateRequiredFrom").datepicker("option", "maxDate", selectedDate);
     }

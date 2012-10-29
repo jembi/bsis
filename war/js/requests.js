@@ -15,6 +15,10 @@ function updateRequestGeneric(form, url) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Request Updated Successfully!");
+        $('#' + form.getAttribute("id")).each(function() {
+          this.reset();
+        });
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -32,6 +36,7 @@ function deleteRequest(requestNumber) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Request Deleted Successfully!");
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
