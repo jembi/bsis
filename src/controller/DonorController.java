@@ -93,17 +93,22 @@ public class DonorController {
 
     DonorBackingForm form = new DonorBackingForm();
     ModelAndView mv = new ModelAndView("editDonorForm");
+    Map<String, Object> m = model.asMap();
+    m.put("requestUrl", getUrl(request));
     if (donorNumber != null) {
       form.setDonorNumber(donorNumber);
       Donor donor = donorRepository.findDonorByNumber(donorNumber);
-      if (donor != null)
+      if (donor != null) {
         form = new DonorBackingForm(donor);
-      else
+        m.put("existingDonor", "true");
+        m.put("donorNumber", donor.getDonorNumber());
+      }
+      else {
         form = new DonorBackingForm();
+        m.put("existingDonor", "false");
+      }
     }
-    model.addAttribute("editDonorForm", form);
-    Map<String, Object> m = model.asMap();
-    m.put("requestUrl", getUrl(request));
+    m.put("editDonorForm", form);
     // to ensure custom field names are displayed in the form
     ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
     mv.addObject("model", m);

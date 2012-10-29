@@ -9,6 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editDonorFormDivId">editDonorFormDiv-${unique_page_id}</c:set>
 <c:set var="editDonorFormId">editDonorForm-${unique_page_id}</c:set>
 <c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 <c:set var="genderSelectorId">genderSelector-${unique_page_id}</c:set>
@@ -16,6 +17,7 @@
 <c:set var="updateDonorButtonId">updateDonorButton-${unique_page_id}</c:set>
 <c:set var="deleteDonorButtonId">deleteDonorButton-${unique_page_id}</c:set>
 <c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
+<c:set var="addCollectionButtonId">addCollectionButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -61,6 +63,16 @@
           return false;
         });
 
+        $("#${addCollectionButtonId}").button({
+          icons : {
+            primary : 'ui-icon-disk'
+          }
+        }).click(function() {
+          var parentDivId = $("#${editDonorFormDivId}").parent().attr("id");
+          replaceContent(parentDivId, "${model.requestUrl}", "editCollectionFormGenerator.html", {donorNumber: "${model.donorNumber}"});
+          return false;
+        });
+
         $("#${genderSelectorId}").multiselect({
           multiple : false,
           selectedList : 1,
@@ -75,7 +87,7 @@
       });
 </script>
 
-<div class="editFormDiv">
+<div id="${editDonorFormDivId}" class="editFormDiv">
 	<form:form id="${editDonorFormId}" method="POST"
 		commandName="editDonorForm">
 		<table>
@@ -132,12 +144,18 @@
 				</tr>
 				<tr>
 					<td />
-					<td><button type="button" id="${updateDonorButtonId}"
+					<td>
+						<button type="button" id="${updateDonorButtonId}"
 							style="margin-left: 10px">Save changes</button>
 						<button type="button" id="${deleteDonorButtonId}"
 							style="margin-left: 10px">Delete</button>
 						<button type="button" id="${goBackButtonId}"
-							style="margin-left: 10px">Go Back</button></td>
+							style="margin-left: 10px">Go Back</button>
+						<c:if test="${model.existingDonor == 'true'}">
+							<button type="button" id="${addCollectionButtonId}"
+								style="margin-left: 10px">Add collection for this donor</button>
+						</c:if>
+					</td>
 				</tr>
 			</tbody>
 		</table>

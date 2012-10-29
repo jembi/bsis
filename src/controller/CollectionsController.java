@@ -105,6 +105,7 @@ public class CollectionsController {
   public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
+      @RequestParam(value = "donorNumber", required = false) String donorNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
 
     CollectionBackingForm form = new CollectionBackingForm();
@@ -130,6 +131,10 @@ public class CollectionsController {
       } else
         form = new CollectionBackingForm();
     }
+    else if (donorNumber != null){
+      form.setDonorNumber(donorNumber);
+    }
+
     m.put("editCollectionForm", form);
     // to ensure custom field names are displayed in the form
     ControllerUtil.addCollectionDisplayNamesToModel(m, displayNamesRepository);
