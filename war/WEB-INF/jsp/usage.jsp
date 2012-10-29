@@ -11,11 +11,11 @@
 <link type="text/css" rel="stylesheet" href="css/usage.css" />
 <script type="text/javascript" src="js/usage.js"></script>
 
-<div id="usageTab" class="leftPanel">
+<div id="usageTab" class="leftPanel tabs">
 	<ul>
-		<li id="addUsageContent"><a
-			href="editUsageFormGenerator.html">Add Usage</a></li>
 		<li id="findOrAddUsageContent"><a
 			href="findUsageFormGenerator.html">Find Usage</a></li>
+		<li id="addUsageContent"><a
+			href="editUsageFormGenerator.html">Add Usage</a></li>
 	</ul>
 </div>

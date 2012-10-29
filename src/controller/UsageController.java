@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
 
 import model.ProductUsage;
 import model.ProductUsageBackingForm;
@@ -40,15 +41,24 @@ public class UsageController {
 	@Autowired
 	private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
 
   @RequestMapping(value = "/findUsageFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findUsageFormInit(Model model) {
+  public ModelAndView findUsageFormInit(HttpServletRequest servletRequest, Model model) {
 
     ProductUsageBackingForm form = new ProductUsageBackingForm();
     model.addAttribute("findUsageForm", form);
 
     ModelAndView mv = new ModelAndView("findUsageForm");
     Map<String, Object> m = model.asMap();
+    m.put("requestUrl", getUrl(servletRequest));
 
     // to ensure custom field names are displayed in the form
     ControllerUtil.addUsageDisplayNamesToModel(m, displayNamesRepository);
@@ -57,7 +67,7 @@ public class UsageController {
   }
 
   @RequestMapping("/findUsage")
-  public ModelAndView findUsage(
+  public ModelAndView findUsage(HttpServletRequest servletRequest,
       @ModelAttribute("findUsageForm") ProductUsageBackingForm form,
       BindingResult result, Model model) {
 
@@ -73,13 +83,14 @@ public class UsageController {
     ControllerUtil.addFieldsToDisplay("usage", m,
         recordFieldsConfigRepository);
     m.put("allUsage", getUsageViewModels(requests));
+    m.put("requestUrl", getUrl(servletRequest));
 
     modelAndView.addObject("model", m);
     return modelAndView;
   }
 
   @RequestMapping(value = "/editUsageFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editUsageFormGenerator(
+  public ModelAndView editUsageFormGenerator(HttpServletRequest servletRequest,
       Model model,
       @RequestParam(value = "productNumber", required = false) String productNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
@@ -98,6 +109,8 @@ public class UsageController {
     }
 
     m.put("editUsageForm", form);
+    m.put("requestUrl", getUrl(servletRequest));
+
     // to ensure custom field names are displayed in the form
     ControllerUtil.addUsageDisplayNamesToModel(m, displayNamesRepository);
     ModelAndView mv = new ModelAndView("editUsageForm");
@@ -147,7 +160,7 @@ public class UsageController {
 
   @RequestMapping(value = "/deleteUsage", method = RequestMethod.POST)
   public @ResponseBody
-  Map<String, ? extends Object> deleteRequest(
+  Map<String, ? extends Object> deleteUsage(
       @RequestParam("productNumber") String productNumber) {
 
     boolean success = true;

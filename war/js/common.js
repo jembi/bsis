@@ -313,7 +313,7 @@ function getSelectedTabs() {
     leftPanelSelected = $("#requestsTab").tabs("option", "selected");
     break;
   case 6:
-    url = '/products';
+    leftPanelSelected = $("#usageTab").tabs("option", "selected");
     break;
   case 7:
     url = '/products';

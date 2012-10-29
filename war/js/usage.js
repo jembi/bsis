@@ -15,6 +15,10 @@ function updateUsageGeneric(form, url) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Usage Updated Successfully!");
+        $('#' + form.getAttribute("id")).each(function() {
+          this.reset();
+        });
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
@@ -32,6 +36,7 @@ function deleteUsage(productNumber) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Usage Deleted Successfully!");
+        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'
