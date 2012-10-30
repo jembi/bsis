@@ -101,11 +101,12 @@
 					<td><form:input path="ward" /></td>
 				</tr>
 				<tr>
+					<td><form:label path="patientName">Patient Name</form:label></td>
+					<td><form:input path="patientName" /></td>
+				</tr>
+				<tr>
 					<td><form:label path="useIndication">${model.useIndicationDisplayName}</form:label></td>
-					<td><form:radiobutton path="useIndication" value="used"
-							label="Used" /> <form:radiobutton path="useIndication"
-							value="discarded" label="Discarded" /> <form:radiobutton
-							path="useIndication" value="other" label="Other" /></td>
+					<td><form:input path="useIndication"/></td>
 				</tr>
 				<c:if test="${model.isDialog != 'yes' }">
 					<tr>

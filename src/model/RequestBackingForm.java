@@ -216,4 +216,12 @@ public class RequestBackingForm {
   public void setStatuses(List<String> statuses) {
     this.statuses = statuses;
   }
+
+  public String getPatientName() {
+    return request.getPatientName();
+  }
+
+  public void setPatientName(String patientName) {
+    request.setPatientName(patientName);
+  }
 }

@@ -62,12 +62,16 @@
           }
         }).click(
             function() {
-          		var parentDivId = $("#${editRequestFormDivId}").parent().attr("id");
-          		console.log(parentDivId);
+              var parentDivId = $("#${editRequestFormDivId}").parent().attr(
+                  "id");
+              console.log(parentDivId);
               replaceContent(parentDivId, "${model.requestUrl}",
-		    					"findMatchingProductsForRequest.html",
-		    					{requestNumber: "${model.requestNumber}"});
-              $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                  "findMatchingProductsForRequest.html", {
+                    requestNumber : "${model.requestNumber}"
+                  });
+              $("html, body").animate({
+                scrollTop : $(document).height()
+              }, "slow");
             });
 
         $("#${goBackButtonId}").button({
@@ -97,19 +101,17 @@
           yearRange : "c-100:c2",
         });
 
-        $("#${editRequestFormSitesId}").multiselect(
-            {
-              multiple : false,
-              selectedList : 1,
-              header : false
-            });
+        $("#${editRequestFormSitesId}").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
 
-        $("#${editRequestFormProductTypesId}").multiselect(
-            {
-              multiple : false,
-              selectedList : 1,
-              header : false
-            });
+        $("#${editRequestFormProductTypesId}").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
       });
 </script>
 
@@ -141,6 +143,10 @@
 				<tr>
 					<td><form:label path="quantity">Requested Quantity</form:label></td>
 					<td><form:input path="quantity"></form:input></td>
+				</tr>
+				<tr>
+					<td><form:label path="patientName">Patient Name</form:label></td>
+					<td><form:input path="patientName" /></td>
 				</tr>
 				<tr>
 					<td><form:label path="abo">Blood ABO</form:label></td>
@@ -201,8 +207,7 @@
 							<button type="button" id="${findProductsButtonId}"
 								style="margin-left: 10px">Find Products to Issue</button>
 							<button type="button" id="${deleteRequestButtonId}"
-								style="margin-left: 10px">Delete</button>
-						</td>
+								style="margin-left: 10px">Delete</button></td>
 					</tr>
 				</c:if>
 			</tbody>

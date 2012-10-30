@@ -19,6 +19,7 @@ public class ProductUsage {
 	private String productNumber;
 	private Date dateUsed;
 	private String hospital;
+	private String patientName;
 	private String ward;
 	private String useIndication;
 	private String comments;
@@ -30,13 +31,14 @@ public class ProductUsage {
 	}
 
 	public ProductUsage(String productNumber, Date dateUsed, String hospital,
-			String ward, String useIndication, Boolean isDeleted,
+			String ward, String patientName, String useIndication, Boolean isDeleted,
 			String comments) {
 		this.productNumber = productNumber;
 		this.dateUsed = dateUsed;
 		this.hospital = hospital;
 		this.ward = ward;
 		this.isDeleted = isDeleted;
+		this.patientName = patientName;
 		this.useIndication = useIndication;
 		this.comments = comments;
 	}
@@ -46,6 +48,7 @@ public class ProductUsage {
 		this.dateUsed = productUsage.dateUsed;
 		this.hospital = productUsage.hospital;
 		this.ward = productUsage.ward;
+		this.patientName = productUsage.patientName;
 		this.isDeleted = productUsage.isDeleted;
 		this.useIndication = productUsage.useIndication;
 		this.comments = productUsage.comments;
@@ -115,4 +118,12 @@ public class ProductUsage {
 	public void setComment(String comments) {
 		this.comments = comments;
 	}
+
+  public String getPatientName() {
+    return patientName;
+  }
+
+  public void setPatientName(String patientName) {
+    this.patientName = patientName;
+  }
 }

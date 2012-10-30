@@ -122,4 +122,12 @@ public class ProductUsageBackingForm {
   public ProductUsage getUsage() {
     return productUsage;
   }
+
+  public String getPatientName() {
+    return productUsage.getPatientName();
+  }
+
+  public void setPatientName(String patientName) {
+    productUsage.setPatientName(patientName);
+  }
 }

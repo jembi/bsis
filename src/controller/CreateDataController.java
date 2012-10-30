@@ -510,19 +510,19 @@ public class CreateDataController {
 		List<Location> sites = locationRepository.getAllCollectionSites();
 
 		for (int i = 0; i < requestNumber; i++) {
-			Date requestDate = getRandomCollectionDate();
-			Date requiredDate = new DateTime(requestDate).plusDays(15).toDate();
-			String productType = productTypes[r.nextInt(productTypes.length)];
-			productType = productType.equals("partialPlatelets") ? "platelets"
-					: productType;
-			Request request = new Request(new Integer(i + 1).toString(),
-					requestDate, requiredDate, sites.get(
-							r.nextInt(sites.size())).getLocationId(),
-					productType, bloodTypes[r.nextInt(bloodTypes.length)],
-					rhd[r.nextInt(rhd.length)], r.nextInt(20),
-					status[r.nextInt(status.length)], Boolean.FALSE, "comment_"
-							+ i);
-			requestRepository.saveRequest(request);
+//			Date requestDate = getRandomCollectionDate();
+//			Date requiredDate = new DateTime(requestDate).plusDays(15).toDate();
+//			String productType = productTypes[r.nextInt(productTypes.length)];
+//			productType = productType.equals("partialPlatelets") ? "platelets"
+//					: productType;
+//			Request request = new Request(new Integer(i + 1).toString(),
+//					requestDate, requiredDate, sites.get(
+//							r.nextInt(sites.size())).getLocationId(),
+//					productType, bloodTypes[r.nextInt(bloodTypes.length)],
+//					rhd[r.nextInt(rhd.length)], r.nextInt(20),
+//					status[r.nextInt(status.length)], Boolean.FALSE, "comment_"
+//							+ i);
+//			requestRepository.saveRequest(request);
 		}
 	}
 

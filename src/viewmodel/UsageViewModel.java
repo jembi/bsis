@@ -42,6 +42,10 @@ public class UsageViewModel {
     return usage.getWard();
   }
 
+  public String getPatientName() {
+    return usage.getPatientName();
+  }
+
   public String getComments() {
     return usage.getComments();
   }

@@ -104,4 +104,8 @@ public class RequestViewModel {
 	  String rh = request.getRhd().equals("positive") ? "+" : "-"; 
 	  return request.getAbo() + rh;
 	}
+
+	public String getPatientName() {
+    return request.getPatientName();
+  }
 }

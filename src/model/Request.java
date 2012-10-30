@@ -23,6 +23,7 @@ public class Request {
 	private String rhd;
 	private Integer quantity;
 	private String status;
+	private String patientName;
 	private String comments;
 
 	@Type(type = "org.hibernate.type.NumericBooleanType")
@@ -33,7 +34,7 @@ public class Request {
 
 	public Request(String requestNumber, Date dateRequested, Date dateRequired,
 			Long siteId, String productType, String abo, String rhd,
-			Integer quantity, String status, Boolean deleted, String comments) {
+			Integer quantity, String status, String patientName, Boolean deleted, String comments) {
 		this.requestNumber = requestNumber;
 		this.dateRequested = dateRequested;
 		this.dateRequired = dateRequired;
@@ -42,6 +43,7 @@ public class Request {
 		this.abo = abo;
 		this.rhd = rhd;
 		this.quantity = quantity;
+		this.patientName = patientName;
 		this.comments = comments;
 		this.status = status;
 		isDeleted = deleted;
@@ -57,6 +59,7 @@ public class Request {
 		this.rhd = request.rhd;
 		this.quantity = request.quantity;
 		this.comments = request.comments;
+		this.patientName = request.patientName;
 		this.status = request.status;
 		isDeleted = request.isDeleted;
 	}
@@ -149,6 +152,14 @@ public class Request {
 		return status;
 	}
 
+	public String getPatientName() {
+	  return patientName;
+	}
+
+	public void setPatientName(String patientName) {
+	  this.patientName = patientName;
+	}
+	
 	public Boolean getDeleted() {
 		return isDeleted;
 	}
