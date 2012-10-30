@@ -17,6 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.Collection;
+import model.TestResult;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -236,5 +237,36 @@ public class CollectionRepository {
       }
     }
     return m;
+  }
+
+  public List<TestResult> findUntestedCollections(String dateCollectedFrom,
+      String dateCollectedTo) {
+
+    TypedQuery<Collection> query = em
+        .createQuery(
+            "SELECT c FROM Collection c WHERE c.dateCollected >= :fromDate "
+                + "AND c.dateCollected<= :toDate AND c.isDeleted= :isDeleted AND "
+                + "c.collectionNumber NOT IN (SELECT t.collectionNumber FROM TestResult t)",
+            Collection.class);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    try {
+      query.setParameter("fromDate", formatter.parse(dateCollectedFrom));
+      query.setParameter("toDate", formatter.parse(dateCollectedTo));
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    List<TestResult> testResults = new ArrayList<TestResult>();
+    for (Collection collection : query.getResultList()) {
+      testResults.add(new TestResult(collection.getCollectionNumber(),
+          collection.getDateCollected(), new Date(), "", "", "", "", "", "",
+          false, ""));
+    }
+
+    return testResults;
   }
 }

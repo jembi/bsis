@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -161,6 +162,45 @@ public class TestResultsController {
     return m;
   }
 
+  @RequestMapping("/ttiWorksheet")
+  public ModelAndView ttiWorksheet(Model model) {
+
+    Calendar today = Calendar.getInstance();
+    Calendar yesterday = Calendar.getInstance();
+    yesterday.add(Calendar.DATE, -1);
+
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+
+    Map<String, Object> m = model.asMap();
+    m.put("dateCollectedFrom", formatter.format(yesterday.getTime()));
+    m.put("dateCollectedTo", formatter.format(today.getTime()));
+
+    ModelAndView mv = new ModelAndView("ttiWorksheet");
+    mv.addObject("model", model);
+
+    return mv;
+  }
+  
+  @RequestMapping("/showTTIWorksheet")
+  public ModelAndView showTTIWorksheet(Model model, HttpServletRequest servletRequest,
+      @RequestParam("dateCollectedFrom")String dateCollectedFrom,
+      @RequestParam("dateCollectedTo")String dateCollectedTo) {
+
+    ModelAndView mv = new ModelAndView("testResultsTable");
+    List<TestResult> testResults = collectionRepository.findUntestedCollections(dateCollectedFrom, dateCollectedTo);
+    System.out.println(testResults);
+    Map<String, Object> m = model.asMap();
+    ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("testResult", m,
+        recordFieldsConfigRepository);
+    m.put("allTestResults", getTestResultViewModels(testResults));
+    m.put("tableName", "ttiWorksheetsTable");
+    m.put("requestUrl", getUrl(servletRequest));
+    mv.addObject("model", m);
+    return mv;
+  }
+
+
   private List<TestResultViewModel> getTestResultViewModels(
       List<TestResult> testResults) {
     if (testResults == null)
@@ -305,7 +345,6 @@ public class TestResultsController {
     m.put("errMsg", errMsg);
     return m;
   }
-  
 
   @RequestMapping("/testResultsView")
   public ModelAndView viewTestResults(@RequestParam Map<String, String> params,

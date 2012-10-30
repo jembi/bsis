@@ -12,8 +12,6 @@
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
 
 <script>
-$(document).ready(function() {
-
   var fnRowSelected = function(node) {
     var elements = $(node).children();
     if (elements[0].getAttribute("class") === "dataTables_empty") {
@@ -39,18 +37,18 @@ $(document).ready(function() {
       $("#${table_id}").find("td").highlight(searchBox.val());
   });
 
-  });
 </script>
 
 <div id="${tabContentId}">
-<jsp:include page="addTestResultButton.jsp" flush="true" />
-<br />
 <br />
 
 <table id="${table_id}" class="dataTable collectionsTable">
 	<thead>
 		<tr>
 			<th>${model.collectionNoDisplayName}</th>
+			<c:if test="${model.showdateCollected==true}">
+				<th>${model.dateCollectedDisplayName}</th>
+			</c:if>
 			<c:if test="${model.showdateTested==true}">
 				<th>${model.dateTestedDisplayName}</th>
 			</c:if>
@@ -72,6 +70,9 @@ $(document).ready(function() {
 		<c:forEach var="testResult" items="${model.allTestResults}">
 			<tr>
 				<td>${testResult.collectionNumber}</td>
+				<c:if test="${model.showdateCollected==true}">
+					<td>${testResult.dateCollected}</td>
+				</c:if>
 				<c:if test="${model.showdateTested==true}">
 					<td>${testResult.dateTested}</td>
 				</c:if>
