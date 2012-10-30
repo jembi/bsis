@@ -44,4 +44,18 @@ public class ProductViewModel {
     return product.getIssued() ? "yes" : "no";
   }
 
+  public String getAbo() {
+    return product.getAbo();
+  }
+
+  public String getRh() {
+    return product.getRhd();
+  }
+
+  public String getBloodType() {
+    if (product.getAbo() == null || product.getRhd() == null)
+        return "";
+    String rh = product.getRhd().equals("positive") ? "+" : "-"; 
+    return product.getAbo() + rh;
+  }
 }

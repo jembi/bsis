@@ -145,6 +145,7 @@ public class RequestsController {
     List<Product> products = new ArrayList<Product>();
     if (request != null) {
       products = productRepository.findAnyProductMatching("", "",
+          Arrays.asList(request.getAbo()), Arrays.asList(request.getRhd()),
           Arrays.asList(request.getProductType()), Arrays.asList("available"));
     }
 

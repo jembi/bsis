@@ -62,6 +62,7 @@
 			<c:if test="${model.showproductType==true}">
 				<th>${model.productTypeDisplayName}</th>
 			</c:if>
+			<th>Blood Type</th>
 			<c:if test="${model.showisIssued==true}">
 				<th>${model.isIssuedDisplayName}</th>
 			</c:if>
@@ -75,6 +76,7 @@
 				<c:if test="${model.showproductType}">
 					<td>${product.type}</td>
 				</c:if>
+				<td>${product.bloodType}</td>
 				<c:if test="${model.showisIssued==true}">
 					<td><c:if test="${product.isIssued == 'no'}">&#10003;</c:if> <c:if
 							test="${product.isIssued == 'yes'}">&#10007;</c:if></td>

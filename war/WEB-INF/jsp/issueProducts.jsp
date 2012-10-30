@@ -74,24 +74,33 @@
 	<span style="display: block; margin-top: 20px; font-weight: bold;">
 		Request Details</span>
 
-	<div>
-		<label>${model.requestNoDisplayName}</label> <input
-			value="${model.request.requestNumber}" readonly="readonly" />
+	<div style="margin: 10px 0 10px 0;">
+		<label>${model.requestNoDisplayName}</label>
+		<span>${model.request.requestNumber}</span>
+	</div>
+	<div style="margin: 10px 0 10px 0;">
+		<label>${model.requestDateDisplayName}</label>
+		<span>${model.request.dateRequested}</span>
 	</div>
 	<div>
-		<label>${model.requestDateDisplayName}</label> <input
-			value="${model.request.dateRequested}" readonly="readonly" /> <label>${model.requiredDateDisplayName}</label>
-		<input value="${model.request.dateRequired}" readonly="readonly" />
+		<label>${model.requiredDateDisplayName}</label>
+		<span>${model.request.dateRequired}</span>
 	</div>
-	<div>
-		<label>${model.quantityDisplayName}</label> <input
-			value="${model.request.quantity}" readonly="readonly" /> <label>${model.siteDisplayName}</label>
-		<input value="${model.request.siteName}" readonly="readonly" />
+	<div style="margin: 10px 0 10px 0;">
+		<label>${model.quantityDisplayName}</label>
+		<span>${model.request.quantity}</span>
 	</div>
-	<div>
-		<label>Blood Type</label> <input name="bloodType"
-			value="${model.request.bloodType}" readonly="readonly" /> <label>${model.productTypeDisplayName}</label>
-		<input value="${model.request.productType}" readonly="readonly" />
+	<div style="margin: 10px 0 10px 0;">
+		<label>${model.siteDisplayName}</label>
+		<span>${model.request.siteName}</span>
+	</div>
+	<div style="margin: 10px 0 10px 0;">
+		<label>Blood Type</label>
+		<span>${model.request.bloodType}</span>
+	</div>
+	<div style="margin: 10px 0 10px 0;">
+		<label>${model.productTypeDisplayName}</label>
+		<span>${model.request.productType}</span>
 	</div>
 
 	<div id="${issueProductSelectorId}" class="issueProductSelector">

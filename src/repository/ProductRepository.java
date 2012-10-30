@@ -165,14 +165,38 @@ public class ProductRepository {
         + "(p.productNumber = :productNumber OR "
         + "p.collectionNumber = :collectionNumber "
         + "OR p.type IN (:types)) AND (p.isIssued IN (:isIssued)) AND "
-        + "(p.isDeleted= :isDeleted)",
-        Product.class);
+        + "(p.isDeleted= :isDeleted)", Product.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     String productNo = ((productNumber == null) ? "" : productNumber);
     query.setParameter("productNumber", productNo);
     String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
     query.setParameter("collectionNumber", collectionNo);
+    query.setParameter("types", types);
+    query.setParameter("isIssued", getIssuedListFromAvailability(availability));
+
+    List<Product> resultList = query.getResultList();
+    return resultList;
+  }
+
+  public List<Product> findAnyProductMatching(String productNumber,
+      String collectionNumber, List<String> bloodAbo, List<String> bloodRhd,
+      List<String> types, List<String> availability) {
+
+    TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
+        + "(p.productNumber = :productNumber OR "
+        + "p.collectionNumber = :collectionNumber "
+        + "OR p.type IN (:types)) AND (p.isIssued IN (:isIssued)) AND "
+        + "p.abo IN (:bloodAbo) AND p.rhd IN (:bloodRhd) AND "
+        + "(p.isDeleted= :isDeleted)", Product.class);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    String productNo = ((productNumber == null) ? "" : productNumber);
+    query.setParameter("productNumber", productNo);
+    String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
+    query.setParameter("collectionNumber", collectionNo);
+    query.setParameter("bloodAbo", bloodAbo);
+    query.setParameter("bloodRhd", bloodRhd);
     query.setParameter("types", types);
     query.setParameter("isIssued", getIssuedListFromAvailability(availability));
 
