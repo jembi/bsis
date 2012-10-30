@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -161,22 +162,9 @@ public class ProductRepository {
   public List<Product> findAnyProductMatching(String productNumber,
       String collectionNumber, List<String> types, List<String> availability) {
 
-    TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
-        + "(p.productNumber = :productNumber OR "
-        + "p.collectionNumber = :collectionNumber "
-        + "OR p.type IN (:types)) AND (p.isIssued IN (:isIssued)) AND "
-        + "(p.isDeleted= :isDeleted)", Product.class);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    String productNo = ((productNumber == null) ? "" : productNumber);
-    query.setParameter("productNumber", productNo);
-    String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
-    query.setParameter("collectionNumber", collectionNo);
-    query.setParameter("types", types);
-    query.setParameter("isIssued", getIssuedListFromAvailability(availability));
-
-    List<Product> resultList = query.getResultList();
-    return resultList;
+    return findAnyProductMatching(productNumber, collectionNumber,
+        Arrays.asList("A", "B", "O", "AB"),
+        Arrays.asList("positive", "negative"), types, availability);
   }
 
   public List<Product> findAnyProductMatching(String productNumber,

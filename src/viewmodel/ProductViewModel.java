@@ -1,11 +1,23 @@
 package viewmodel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import repository.CollectionRepository;
+
+import model.Collection;
 import model.Product;
 
 public class ProductViewModel {
 
 	private Product product;
 
+	@Autowired
+	CollectionRepository collectionRepository;
+	
 	public ProductViewModel() {
 	  product = new Product();
 	}
@@ -57,5 +69,13 @@ public class ProductViewModel {
         return "";
     String rh = product.getRhd().equals("positive") ? "+" : "-"; 
     return product.getAbo() + rh;
+  }
+
+  public String getDateCollected() {
+    Date dateCollected = product.getDateCollected();
+    if (dateCollected == null)
+      return "";
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    return formatter.format(dateCollected);
   }
 }

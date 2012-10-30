@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Map;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
-import model.Issue;
 import model.Product;
 import model.ProductBackingForm;
 import model.Request;
@@ -26,16 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.CollectionRepository;
 import repository.DisplayNamesRepository;
-import repository.IssueRepository;
 import repository.ProductRepository;
 import repository.RecordFieldsConfigRepository;
 import repository.RequestRepository;
 import utils.ControllerUtil;
 import utils.LoggerUtil;
 import viewmodel.ProductViewModel;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ProductsController {
@@ -49,7 +45,7 @@ public class ProductsController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private IssueRepository issueRepository;
+  static private CollectionRepository collectionRepository;
   
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
@@ -79,7 +75,7 @@ public class ProductsController {
   }
 
   @RequestMapping("/findProduct")
-  public ModelAndView findProduct(HttpServletRequest request,
+  public ModelAndView findProducts(HttpServletRequest request,
       @ModelAttribute("findProductForm") ProductBackingForm form,
       BindingResult result, Model model) {
 

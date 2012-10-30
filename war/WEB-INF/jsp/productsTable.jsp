@@ -36,6 +36,7 @@
         var productsTable = $("#${table_id}").dataTable({
           "bJQueryUI" : true,
           "sDom" : '<"H"lfrT>t<"F"ip>T',
+          "aaSorting": [[ 2, "asc" ]],
           "oTableTools" : {
             "sRowSelect" : rowSelectableProperty,
             "aButtons" : [ "print" ],
@@ -59,6 +60,7 @@
 		<tr>
 			<th>${model.productNoDisplayName}</th>
 			<th>${model.collectionNoDisplayName}</th>
+			<th>Date Collected</th>
 			<c:if test="${model.showproductType==true}">
 				<th>${model.productTypeDisplayName}</th>
 			</c:if>
@@ -73,6 +75,7 @@
 			<tr>
 				<td>${product.productNumber}</td>
 				<td>${product.collectionNumber}</td>
+				<td>${product.dateCollected}</td>
 				<c:if test="${model.showproductType}">
 					<td>${product.type}</td>
 				</c:if>
