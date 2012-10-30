@@ -190,4 +190,12 @@ public class CollectionBackingForm {
   public Collection getCollection() {
     return this.collection;
   }
+
+  public String getBloodBagType() {
+    return collection.getBloodBagType();
+  }
+
+  public void setBloodBagType(String bloodBagType) {
+    collection.setBloodBagType(bloodBagType);
+  }
 }

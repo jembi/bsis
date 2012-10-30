@@ -22,6 +22,7 @@ public class Collection {
   private Long shippingNumber;
   private String donorNumber;
   private String donorType;
+  private String bloodBagType;
   private String abo;
   private String rhd;
   private String comments;
@@ -36,12 +37,14 @@ public class Collection {
     donorType = "";
     abo = "";
     rhd = "";
+    bloodBagType = "";
     comments = "";
   }
 
   public Collection(String collectionNumber, Long centerId, Long siteId,
       Date dateCollected, Long sampleNumber, Long shippingNumber,
-      String donorNumber, String donorType, Boolean isDeleted, String comments) {
+      String donorNumber, String donorType, Boolean isDeleted,
+      String bloodBagType, String comments) {
     this.collectionNumber = collectionNumber;
     this.centerId = centerId;
     this.siteId = siteId;
@@ -50,6 +53,7 @@ public class Collection {
     this.shippingNumber = shippingNumber;
     this.donorNumber = donorNumber;
     this.donorType = donorType;
+    this.bloodBagType = bloodBagType;
     this.comments = comments;
     this.isDeleted = isDeleted;
   }
@@ -185,5 +189,13 @@ public class Collection {
 
   public void setDonorType(String donorType) {
     this.donorType = donorType;
+  }
+
+  public String getBloodBagType() {
+    return bloodBagType;
+  }
+
+  public void setBloodBagType(String bloodBagType) {
+    this.bloodBagType = bloodBagType;
   }
 }

@@ -101,4 +101,12 @@ public class CollectionViewModel {
 	private String getStringValue(Long value) {
 		return value == null ? "" : value.toString();
 	}
+
+  public String getBloodBagType() {
+    return collection.getBloodBagType();
+  }
+
+  public void setBloodBagType(String bloodBagType) {
+    collection.setBloodBagType(bloodBagType);
+  }
 }
