@@ -14,8 +14,9 @@
 <script>
   $(document).ready(
       function() {
-
         var fnRowSelected = function(node) {
+          if ("${model.productsTableRowEditable}" == "false")
+            return;
           var elements = $(node).children();
           if (elements[0].getAttribute("class") === "dataTables_empty") {
             return;
@@ -26,11 +27,17 @@
               });
         }
 
+        var rowSelectableProperty = "single";
+        if ("${model.productsTableRowSelectableProperty}" !== "") {
+          rowSelectableProperty = "${model.productsTableRowSelectableProperty}";
+        }
+
+        
         var productsTable = $("#${table_id}").dataTable({
           "bJQueryUI" : true,
           "sDom" : '<"H"lfrT>t<"F"ip>T',
           "oTableTools" : {
-            "sRowSelect" : "single",
+            "sRowSelect" : rowSelectableProperty,
             "aButtons" : [ "print" ],
             "fnRowSelected" : fnRowSelected
           }

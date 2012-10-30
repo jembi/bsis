@@ -194,45 +194,6 @@ public class ProductsController {
     }
     return productViewModels;
   }
-
-  @RequestMapping(value = "/issueProducts", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> issueProducts(
-      @RequestParam(value="products", required=false) String productsJson,
-      @RequestParam(value="requestNumber", required=true) String requestNumber 
-      ) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      System.out.println("products: " + productsJson);
-      System.out.println("requestNumber: " + requestNumber);
-      ObjectMapper mapper = new ObjectMapper();
-      Map<String, String> products = mapper.readValue(productsJson, Map.class);
-      System.out.println(products);
-      Long siteId = requestRepository.issueRequest(requestNumber, "fulfilled");
-      for (String productNumber : products.values()) {
-        System.out.println("Issuing Product Number: " + productNumber);
-        Issue issue = new Issue();
-        issue.setDateIssued(new Date());
-        issue.setProductNumber(productNumber);
-        issue.setSiteId(siteId);
-        issue.setComments("issued product");
-        issue.setDeleted(Boolean.FALSE);
-        issueRepository.saveIssue(issue);
-        productRepository.issueProduct(productNumber);
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
-  }
   
   @RequestMapping("/productsLandingPage")
   public ModelAndView getProductsLandingPage(
