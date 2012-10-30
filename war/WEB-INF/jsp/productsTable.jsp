@@ -46,8 +46,8 @@
       });
 </script>
 
-<div id="${tabContentId}">
-<table id="${table_id}" class="dataTable collectionsTable">
+<div id="${tabContentId}" style="width: 100%;">
+<table id="${table_id}">
 	<thead>
 		<tr>
 			<th>${model.productNoDisplayName}</th>

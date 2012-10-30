@@ -9,6 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editRequestFormDivId">editRequestFormDiv-${unique_page_id}</c:set>
 <c:set var="editRequestFormId">editRequestForm-${unique_page_id}</c:set>
 <c:set var="deleteRequestConfirmDialogId">deleteRequestConfirmDialog-${unique_page_id}</c:set>
 <c:set var="editRequestFormProductTypesId">editRequestFormProductTypesId-${unique_page_id}</c:set>
@@ -17,6 +18,7 @@
 <c:set var="editRequestFormDateRequiredId">editRequestFormDateRequiredId-${unique_page_id}</c:set>
 <c:set var="updateRequestButtonId">updateRequestButton-${unique_page_id}</c:set>
 <c:set var="deleteRequestButtonId">deleteRequestButton-${unique_page_id}</c:set>
+<c:set var="findProductsButtonId">findProductsButton-${unique_page_id}</c:set>
 <c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
 
 <script>
@@ -52,6 +54,20 @@
                       }
                     }
                   });
+            });
+
+        $("#${findProductsButtonId}").button({
+          icons : {
+            primary : 'ui-icon-search'
+          }
+        }).click(
+            function() {
+          		var parentDivId = $("#${editRequestFormDivId}").parent().attr("id");
+          		console.log(parentDivId);
+              replaceContent(parentDivId, "${model.requestUrl}",
+		    					"findMatchingProductsForRequest.html",
+		    					{requestNumber: "${model.requestNumber}"});
+              $("html, body").animate({ scrollTop: $(document).height() }, "slow");
             });
 
         $("#${goBackButtonId}").button({
@@ -98,7 +114,7 @@
 </script>
 
 
-<div class="editFormDiv">
+<div id="${editRequestFormDivId}" class="editFormDiv">
 	<form:form method="POST" commandName="editRequestForm"
 		id="${editRequestFormId}">
 		<table>
@@ -123,7 +139,7 @@
 							id="${editRequestFormDateRequiredId}" /></td>
 				</tr>
 				<tr>
-					<td><form:label path="quantity">${model.quantityDisplayName}</form:label></td>
+					<td><form:label path="quantity">Requested Quantity</form:label></td>
 					<td><form:input path="quantity"></form:input></td>
 				</tr>
 				<tr>
@@ -180,10 +196,13 @@
 						<td />
 						<td><button type="button" id="${updateRequestButtonId}"
 								style="margin-left: 10px">Save changes</button>
+							<button type="button" id="${goBackButtonId}"
+								style="margin-left: 10px">Go Back</button>
+							<button type="button" id="${findProductsButtonId}"
+								style="margin-left: 10px">Find Products to Issue</button>
 							<button type="button" id="${deleteRequestButtonId}"
 								style="margin-left: 10px">Delete</button>
-							<button type="button" id="${goBackButtonId}"
-								style="margin-left: 10px">Go Back</button></td>
+						</td>
 					</tr>
 				</c:if>
 			</tbody>

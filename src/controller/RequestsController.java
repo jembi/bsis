@@ -10,6 +10,7 @@ import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Location;
+import model.Product;
 import model.Request;
 import model.RequestBackingForm;
 
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.DisplayNamesRepository;
 import repository.LocationRepository;
+import repository.ProductRepository;
 import repository.RecordFieldsConfigRepository;
 import repository.RequestRepository;
 import utils.ControllerUtil;
@@ -39,6 +41,9 @@ public class RequestsController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private ProductRepository productRepository;
 
   @Autowired
   private DisplayNamesRepository displayNamesRepository;
@@ -121,6 +126,35 @@ public class RequestsController {
     return modelAndView;
   }
 
+  @RequestMapping("/findMatchingProductsForRequest")
+  public ModelAndView findMatchingProductsForRequest(HttpServletRequest servletRequest,
+      @RequestParam(value = "requestNumber", required = true) String requestNumber,
+      Model model) {
+
+    Request request = requestRepository.findRequestByRequestNumber(requestNumber);
+
+    List<Product> products = new ArrayList<Product>();
+    if (request != null) {
+      products = productRepository.findAnyProductMatching("", "",
+          Arrays.asList(request.getProductType()), Arrays.asList("available"));
+    }
+
+    ModelAndView modelAndView = new ModelAndView("issueProducts");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findAvailableProductsTable");
+    m.put("showAddProductButton", false);
+    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
+    ControllerUtil.addFieldsToDisplay("product", m,
+        recordFieldsConfigRepository);
+    m.put("allProducts", ProductsController.getProductViewModels(products));
+    m.put("requestUrl", getUrl(servletRequest));
+    m.put("request", new RequestViewModel(request, locationRepository.getAllCollectionSites()));
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
   @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
   public ModelAndView editRequestFormGenerator(
       Model model,
@@ -146,6 +180,7 @@ public class RequestsController {
         form = new RequestBackingForm(request);
         if (l != null)
           m.put("selectedSite", l.getName());
+        m.put("requestNumber", request.getRequestNumber());
       }
     }
 

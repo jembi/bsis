@@ -97,4 +97,11 @@ public class RequestViewModel {
 	private String getStringValue(Long value) {
 		return value == null ? "" : value.toString();
 	}
+
+	public String getBloodType() {
+	  if (request.getAbo() == null || request.getRhd() == null)
+	      return "";
+	  String rh = request.getRhd().equals("positive") ? "+" : "-"; 
+	  return request.getAbo() + rh;
+	}
 }

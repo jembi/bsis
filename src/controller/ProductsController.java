@@ -185,7 +185,7 @@ public class ProductsController {
     return m;
   }
 
-  private List<ProductViewModel> getProductViewModels(List<Product> products) {
+  static List<ProductViewModel> getProductViewModels(List<Product> products) {
     if (products == null)
       return Arrays.asList(new ProductViewModel[0]);
     List<ProductViewModel> productViewModels = new ArrayList<ProductViewModel>();

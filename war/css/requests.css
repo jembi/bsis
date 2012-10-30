@@ -48,3 +48,12 @@
 	overflow: auto;
 }
 
+.issueProductsDiv > div > label {
+	width: 150px;
+	display: inline-block;
+	margin-left: 30px;
+}
+
+.issueProductSelector {
+	margin-top: 10px;
+}
