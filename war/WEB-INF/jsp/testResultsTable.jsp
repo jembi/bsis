@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -17,7 +18,10 @@
     if (elements[0].getAttribute("class") === "dataTables_empty") {
       return;
     }
-    replaceContent("${tabContentId}", "${model.requestUrl}", "editTestResultFormGenerator.html", {collectionNumber: elements[0].innerHTML});
+    replaceContent("${tabContentId}", "${model.requestUrl}",
+        "editTestResultFormGenerator.html", {
+          collectionNumber : elements[0].innerHTML
+        });
   }
 
   var testResultsTable = $("#${table_id}").dataTable({
@@ -36,68 +40,77 @@
     if (searchBox.val() != "")
       $("#${table_id}").find("td").highlight(searchBox.val());
   });
-
 </script>
 
 <div id="${tabContentId}">
-<br />
+	<c:choose>
 
-<table id="${table_id}" class="dataTable collectionsTable">
-	<thead>
-		<tr>
-			<th>${model.collectionNoDisplayName}</th>
-			<c:if test="${model.showdateCollected==true}">
-				<th>${model.dateCollectedDisplayName}</th>
-			</c:if>
-			<c:if test="${model.showdateTested==true}">
-				<th>${model.dateTestedDisplayName}</th>
-			</c:if>
-			<c:if test="${model.showhiv==true}">
-				<th>${model.hivDisplayName} Reactive</th>
-			</c:if>
-			<c:if test="${model.showhbv==true}">
-				<th>${model.hbvDisplayName} Reactive</th>
-			</c:if>
-			<c:if test="${model.showhcv==true}">
-				<th>${model.hcvDisplayName} Reactive</th>
-			</c:if>
-			<c:if test="${model.showsyphilis==true}">
-				<th>${model.syphilisDisplayName} Reactive</th>
-			</c:if>
-		</tr>
-	</thead>
-	<tbody>
-		<c:forEach var="testResult" items="${model.allTestResults}">
-			<tr>
-				<td>${testResult.collectionNumber}</td>
-				<c:if test="${model.showdateCollected==true}">
-					<td>${testResult.dateCollected}</td>
-				</c:if>
-				<c:if test="${model.showdateTested==true}">
-					<td>${testResult.dateTested}</td>
-				</c:if>
-				<c:if test="${model.showhiv == true}">
-					<td><c:if test="${testResult.hiv =='reactive'}">
+		<c:when test="${fn:length(model.allTestResults) eq 0}">
+			<span
+				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+				Sorry no results found matching your search request </span>
+		</c:when>
+
+		<c:otherwise>
+
+			<table id="${table_id}" class="dataTable collectionsTable">
+				<thead>
+					<tr>
+						<th>${model.collectionNoDisplayName}</th>
+						<c:if test="${model.showdateCollected==true}">
+							<th>${model.dateCollectedDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showdateTested==true}">
+							<th>${model.dateTestedDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showhiv==true}">
+							<th>${model.hivDisplayName} Reactive</th>
+						</c:if>
+						<c:if test="${model.showhbv==true}">
+							<th>${model.hbvDisplayName} Reactive</th>
+						</c:if>
+						<c:if test="${model.showhcv==true}">
+							<th>${model.hcvDisplayName} Reactive</th>
+						</c:if>
+						<c:if test="${model.showsyphilis==true}">
+							<th>${model.syphilisDisplayName} Reactive</th>
+						</c:if>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="testResult" items="${model.allTestResults}">
+						<tr>
+							<td>${testResult.collectionNumber}</td>
+							<c:if test="${model.showdateCollected==true}">
+								<td>${testResult.dateCollected}</td>
+							</c:if>
+							<c:if test="${model.showdateTested==true}">
+								<td>${testResult.dateTested}</td>
+							</c:if>
+							<c:if test="${model.showhiv == true}">
+								<td><c:if test="${testResult.hiv =='reactive'}">
 						&#10003;
 					</c:if></td>
-				</c:if>
-				<c:if test="${model.showhbv == true}">
-					<td><c:if test="${testResult.hbv =='reactive'}">
+							</c:if>
+							<c:if test="${model.showhbv == true}">
+								<td><c:if test="${testResult.hbv =='reactive'}">
 						&#10003;
 					</c:if></td>
-				</c:if>
-				<c:if test="${model.showhcv == true}">
-					<td><c:if test="${testResult.hcv =='reactive'}">
+							</c:if>
+							<c:if test="${model.showhcv == true}">
+								<td><c:if test="${testResult.hcv =='reactive'}">
 						&#10003;
 					</c:if></td>
-				</c:if>
-				<c:if test="${model.showsyphilis == true}">
-					<td><c:if test="${testResult.syphilis =='reactive'}">
+							</c:if>
+							<c:if test="${model.showsyphilis == true}">
+								<td><c:if test="${testResult.syphilis =='reactive'}">
 						&#10003;
 					</c:if></td>
-				</c:if>
-			</tr>
-		</c:forEach>
-	</tbody>
-</table>
+							</c:if>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</c:otherwise>
+	</c:choose>
 </div>

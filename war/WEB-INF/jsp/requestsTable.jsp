@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -126,6 +127,16 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}">
+	<c:choose>
+
+		<c:when test="${fn:length(model.allRequests) eq 0}">
+			<span
+				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+				Sorry no results found matching your search request </span>
+		</c:when>
+
+		<c:otherwise>
+
 <table id="${table_id}" class="dataTable collectionsTable">
 	<thead>
 		<tr>
@@ -188,4 +199,6 @@ $(document).ready(function() {
 		</c:forEach>
 	</tbody>
 </table>
+</c:otherwise>
+</c:choose>
 </div>

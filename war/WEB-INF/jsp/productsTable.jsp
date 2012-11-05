@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -12,80 +13,94 @@
 <c:set var="table_id">productsTable-${unique_page_id}</c:set>
 
 <script>
-  $(document).ready(
-      function() {
-        var fnRowSelected = function(node) {
-          if ("${model.productsTableRowEditable}" == "false")
-            return;
-          var elements = $(node).children();
-          if (elements[0].getAttribute("class") === "dataTables_empty") {
-            return;
-          }
-          replaceContent("${tabContentId}", "${model.requestUrl}",
-              "editProductFormGenerator.html", {
-                productNumber : elements[0].innerHTML
-              });
-        }
+  $(document)
+      .ready(
+          function() {
+            var fnRowSelected = function(node) {
+              if ("${model.productsTableRowEditable}" == "false")
+                return;
+              var elements = $(node).children();
+              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                return;
+              }
+              replaceContent("${tabContentId}", "${model.requestUrl}",
+                  "editProductFormGenerator.html", {
+                    productNumber : elements[0].innerHTML
+                  });
+            }
 
-        var rowSelectableProperty = "single";
-        if ("${model.productsTableRowSelectableProperty}" !== "") {
-          rowSelectableProperty = "${model.productsTableRowSelectableProperty}";
-        }
+            var rowSelectableProperty = "single";
+            if ("${model.productsTableRowSelectableProperty}" !== "") {
+              rowSelectableProperty = "${model.productsTableRowSelectableProperty}";
+            }
 
-        
-        var productsTable = $("#${table_id}").dataTable({
-          "bJQueryUI" : true,
-          "sDom" : '<"H"lfrT>t<"F"ip>T',
-          "aaSorting": [[ 2, "asc" ]],
-          "oTableTools" : {
-            "sRowSelect" : rowSelectableProperty,
-            "aButtons" : [ "print" ],
-            "fnRowSelected" : fnRowSelected
-          }
-        });
+            var productsTable = $("#${table_id}").dataTable({
+              "bJQueryUI" : true,
+              "sDom" : '<"H"lfrT>t<"F"ip>T',
+              "aaSorting" : [ [ 2, "asc" ] ],
+              "oTableTools" : {
+                "sRowSelect" : rowSelectableProperty,
+                "aButtons" : [ "print" ],
+                "fnRowSelected" : fnRowSelected
+              }
+            });
 
-        $("#${table_id}_filter").find("label").find("input").keyup(function() {
-          var searchBox = $("#${table_id}_filter").find("label").find("input");
-          $("#${table_id}").removeHighlight();
-          if (searchBox.val() != "")
-            $("#${table_id}").find("td").highlight(searchBox.val());
-        });
+            $("#${table_id}_filter").find("label").find("input").keyup(
+                function() {
+                  var searchBox = $("#${table_id}_filter").find("label").find(
+                      "input");
+                  $("#${table_id}").removeHighlight();
+                  if (searchBox.val() != "")
+                    $("#${table_id}").find("td").highlight(searchBox.val());
+                });
 
-      });
+          });
 </script>
 
 <div id="${tabContentId}" style="width: 100%;">
-<table id="${table_id}">
-	<thead>
-		<tr>
-			<th>${model.productNoDisplayName}</th>
-			<th>${model.collectionNoDisplayName}</th>
-			<th>Date Collected</th>
-			<c:if test="${model.showproductType==true}">
-				<th>${model.productTypeDisplayName}</th>
-			</c:if>
-			<th>Blood Type</th>
-			<c:if test="${model.showisIssued==true}">
-				<th>${model.isIssuedDisplayName}</th>
-			</c:if>
-		</tr>
-	</thead>
-	<tbody>
-		<c:forEach var="product" items="${model.allProducts}">
-			<tr>
-				<td>${product.productNumber}</td>
-				<td>${product.collectionNumber}</td>
-				<td>${product.dateCollected}</td>
-				<c:if test="${model.showproductType}">
-					<td>${product.type}</td>
-				</c:if>
-				<td>${product.bloodType}</td>
-				<c:if test="${model.showisIssued==true}">
-					<td><c:if test="${product.isIssued == 'no'}">&#10003;</c:if> <c:if
-							test="${product.isIssued == 'yes'}">&#10007;</c:if></td>
-				</c:if>
-			</tr>
-		</c:forEach>
-	</tbody>
-</table>
+	<c:choose>
+
+		<c:when test="${fn:length(model.allProducts) eq 0}">
+			<span
+				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+				Sorry no results found matching your search request </span>
+		</c:when>
+
+		<c:otherwise>
+
+		<table id="${table_id}">
+			<thead>
+				<tr>
+					<th>${model.productNoDisplayName}</th>
+					<th>${model.collectionNoDisplayName}</th>
+					<th>Date Collected</th>
+					<c:if test="${model.showproductType==true}">
+						<th>${model.productTypeDisplayName}</th>
+					</c:if>
+					<th>Blood Type</th>
+					<c:if test="${model.showisIssued==true}">
+						<th>${model.isIssuedDisplayName}</th>
+					</c:if>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="product" items="${model.allProducts}">
+					<tr>
+						<td>${product.productNumber}</td>
+						<td>${product.collectionNumber}</td>
+						<td>${product.dateCollected}</td>
+						<c:if test="${model.showproductType}">
+							<td>${product.type}</td>
+						</c:if>
+						<td>${product.bloodType}</td>
+						<c:if test="${model.showisIssued==true}">
+							<td><c:if test="${product.isIssued == 'no'}">&#10003;</c:if>
+								<c:if test="${product.isIssued == 'yes'}">&#10007;</c:if></td>
+						</c:if>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		</c:otherwise>
+	</c:choose>
 </div>

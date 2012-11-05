@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -47,57 +48,68 @@
 </script>
 
 <div id="${tabContentId}">
+	<c:choose>
 
-	<table id="${table_id}" class="dataTable collectionsTable">
-		<thead>
-			<tr>
-				<th>${model.collectionNoDisplayName}</th>
-				<c:if test="${model.showdonorNo==true}">
-					<td>${model.donorNoDisplayName}</td>
-				</c:if>
-				<c:if test="${model.showcenter==true}">
-					<th>${model.centerDisplayName}</th>
-				</c:if>
-				<c:if test="${model.showsite==true}">
-					<th>${model.siteDisplayName}</th>
-				</c:if>
-				<c:if test="${model.showdateCollected==true}">
-					<th>${model.dateCollectedDisplayName}</th>
-				</c:if>
-				<c:if test="${model.showsampleNo==true}">
-					<th>${model.sampleNoDisplayName}</th>
-				</c:if>
-				<c:if test="${model.showshippingNo==true}">
-					<th>${model.shippingNoDisplayName}</th>
-				</c:if>
-				<c:if test="${model.showdonorType==true}">
-					<th>${model.donorTypeDisplayName}</th>
-				</c:if>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="collection" items="${model.allCollections}">
-				<tr>
-					<td>${collection.collectionNumber}</td>
-					<c:if test="${model.showdonorNo==true}">
-						<td>${collection.donorNumber}</td>
-					</c:if>
-					<c:if test="${model.showcenter==true}">
-						<td>${collection.centerName}</td>
-					</c:if>
-					<c:if test="${model.showsite==true}">
-						<td>${collection.siteName}</td>
-					</c:if>
-					<c:if test="${model.showsampleNo==true}">
-						<td>${collection.sampleNumber}</td>
-					</c:if>
-					<c:if test="${model.showshippingNo==true}">
-						<td>${collection.shippingNumber}</td>
-					</c:if>
-					<c:if test="${model.showdonorType==true}">
-						<td>${collection.donorType}</td>
-					</c:if>
-			</c:forEach>
-		</tbody>
-	</table>
+		<c:when test="${fn:length(model.allCollections) eq 0}">
+			<span
+				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+				Sorry no results found matching your search request </span>
+		</c:when>
+
+		<c:otherwise>
+
+			<table id="${table_id}" class="dataTable collectionsTable">
+				<thead>
+					<tr>
+						<th>${model.collectionNoDisplayName}</th>
+						<c:if test="${model.showdonorNo==true}">
+							<td>${model.donorNoDisplayName}</td>
+						</c:if>
+						<c:if test="${model.showcenter==true}">
+							<th>${model.centerDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showsite==true}">
+							<th>${model.siteDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showdateCollected==true}">
+							<th>${model.dateCollectedDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showsampleNo==true}">
+							<th>${model.sampleNoDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showshippingNo==true}">
+							<th>${model.shippingNoDisplayName}</th>
+						</c:if>
+						<c:if test="${model.showdonorType==true}">
+							<th>${model.donorTypeDisplayName}</th>
+						</c:if>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="collection" items="${model.allCollections}">
+						<tr>
+							<td>${collection.collectionNumber}</td>
+							<c:if test="${model.showdonorNo==true}">
+								<td>${collection.donorNumber}</td>
+							</c:if>
+							<c:if test="${model.showcenter==true}">
+								<td>${collection.centerName}</td>
+							</c:if>
+							<c:if test="${model.showsite==true}">
+								<td>${collection.siteName}</td>
+							</c:if>
+							<c:if test="${model.showsampleNo==true}">
+								<td>${collection.sampleNumber}</td>
+							</c:if>
+							<c:if test="${model.showshippingNo==true}">
+								<td>${collection.shippingNumber}</td>
+							</c:if>
+							<c:if test="${model.showdonorType==true}">
+								<td>${collection.donorType}</td>
+							</c:if>
+					</c:forEach>
+				</tbody>
+			</table>
+		</c:otherwise>
+	</c:choose>
 </div>
