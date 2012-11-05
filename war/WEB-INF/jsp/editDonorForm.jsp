@@ -146,7 +146,7 @@
 					<td />
 					<td>
 						<button type="button" id="${updateDonorButtonId}"
-							style="margin-left: 10px">Save changes</button>
+							style="margin-left: 10px">Save</button>
 						<button type="button" id="${deleteDonorButtonId}"
 							style="margin-left: 10px">Delete</button>
 						<button type="button" id="${goBackButtonId}"

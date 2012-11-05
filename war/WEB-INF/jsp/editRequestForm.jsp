@@ -201,7 +201,7 @@
 					<tr>
 						<td />
 						<td><button type="button" id="${updateRequestButtonId}"
-								style="margin-left: 10px">Save changes</button>
+								style="margin-left: 10px">Save</button>
 							<button type="button" id="${goBackButtonId}"
 								style="margin-left: 10px">Go Back</button>
 							<button type="button" id="${findProductsButtonId}"

@@ -112,7 +112,7 @@
 					<tr>
 						<td />
 						<td><button type="button" id="${updateUsageButtonId}"
-								style="margin-left: 10px">Save changes</button>
+								style="margin-left: 10px">Save</button>
 							<button type="button" id="${deleteUsageButtonId}"
 								style="margin-left: 10px">Delete</button>
 							<button type="button" id="${goBackButtonId}"
