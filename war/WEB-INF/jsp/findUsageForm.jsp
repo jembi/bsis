@@ -30,7 +30,8 @@
     position : {
       my : 'left top',
       at : 'right center'
-    }
+    },
+    selectedList: 4
   });
 
   $("#dateUsedFrom").datepicker({

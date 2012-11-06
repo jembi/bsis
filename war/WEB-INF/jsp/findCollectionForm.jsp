@@ -30,7 +30,8 @@
       my : 'left top',
       at : 'right center'
 
-    }
+    },
+    selectedList: 4
   });
   $("#dateCollectedFrom").datepicker({
     changeMonth : true,

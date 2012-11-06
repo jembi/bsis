@@ -5,6 +5,8 @@
 <link type="text/css"
 	href="plugins/DataTables/media/css/jquery.dataTables_themeroller.css"
 	rel="Stylesheet" />
+<!-- link type="text/css" href="css/bootstrap/bootstrap.css"
+	rel="Stylesheet" /-->
 <link type="text/css" href="css/redmond.custom/redmond.custom.css"
 	rel="Stylesheet" />
 

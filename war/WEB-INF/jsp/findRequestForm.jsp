@@ -30,14 +30,16 @@
     position : {
       my : 'left top',
       at : 'right center'
-    }
+    },
+    selectedList: 4
   });
 
   $("#findRequestFormStatuses").multiselect({
     position : {
       my : 'left top',
       at : 'right center'
-    }
+    },
+    selectedList: 4
   });
 
   $("#findRequestFormSites").multiselect({
@@ -45,7 +47,8 @@
       my : 'left top',
       at : 'right center'
 
-    }
+    },
+    selectedList: 4
   });
 
   $("#dateRequestedFrom").datepicker({

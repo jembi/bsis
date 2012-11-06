@@ -31,7 +31,8 @@
       my : 'left top',
       at : 'right center'
 
-    }
+    },
+    selectedList: 4
   });
 
   $("#findProductFormAvailabilityStatuses").multiselect({
@@ -41,7 +42,8 @@
       multiple : false,
       selectedList : 1,
       header : false
-    }
+    },
+    selectedList: 4
   });
 </script>
 
