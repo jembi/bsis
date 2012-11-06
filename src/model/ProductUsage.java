@@ -115,7 +115,7 @@ public class ProductUsage {
 		this.useIndication = useIndication;
 	}
 
-	public void setComment(String comments) {
+	public void setComments(String comments) {
 		this.comments = comments;
 	}
 

@@ -101,12 +101,17 @@
 					<td><form:input path="ward" /></td>
 				</tr>
 				<tr>
+					<td><form:label path="useIndication">${model.useIndicationDisplayName}</form:label></td>
+					<td><form:input path="useIndication"/></td>
+				</tr>
+				<tr>
 					<td><form:label path="patientName">Patient Name</form:label></td>
 					<td><form:input path="patientName" /></td>
 				</tr>
 				<tr>
-					<td><form:label path="useIndication">${model.useIndicationDisplayName}</form:label></td>
-					<td><form:input path="useIndication"/></td>
+					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
+					<td><form:textarea path="comments" class="commentsInputBox"
+							maxlength="255" /></td>
 				</tr>
 				<c:if test="${model.isDialog != 'yes' }">
 					<tr>

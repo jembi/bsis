@@ -19,6 +19,8 @@ public class TestResultViewModel {
 	}
 
 	public String getDateCollected() {
+	  if (testResult.getDateCollected() == null)
+	    return "";
 		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 		return formatter.format(testResult.getDateCollected());
 	}

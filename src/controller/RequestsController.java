@@ -254,7 +254,6 @@ public class RequestsController {
       Request request = form.getRequest();
       String site = form.getSites().get(0);
       Long siteId = locationRepository.getIDByName(site);
-      request.setComment("");
       request.setSiteId(siteId);
       requestRepository.updateOrAddRequest(request);
     } catch (EntityExistsException ex) {

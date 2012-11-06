@@ -73,8 +73,8 @@ public class RequestBackingForm {
     request.setQuantity(quantity);
   }
 
-  public void setComment(String comment) {
-    request.setComment(comment);
+  public void setComments(String comments) {
+    request.setComments(comments);
   }
 
   public void setStatus(String status) {

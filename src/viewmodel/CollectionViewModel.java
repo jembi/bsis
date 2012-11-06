@@ -78,7 +78,7 @@ public class CollectionViewModel {
 
 	}
 
-	public String getComment() {
+	public String getComments() {
 		return collection.getComments();
 	}
 

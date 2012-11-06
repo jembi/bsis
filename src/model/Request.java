@@ -96,7 +96,7 @@ public class Request {
 		this.quantity = quantity;
 	}
 
-	public void setComment(String comment) {
+	public void setComments(String comments) {
 		this.comments = comments;
 	}
 

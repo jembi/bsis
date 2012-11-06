@@ -11,13 +11,6 @@
 	resize: none;
 }
 
-#donorCommentsInputBox {
-	height: 65px;
-	width: 300px;
-	align: top;
-	resize: none;
-}
-
 #donorsTab {
 	position: relative;
 	padding-left: 11em;

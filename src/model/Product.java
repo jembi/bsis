@@ -53,9 +53,7 @@ public class Product {
     this.dateCollected = product.dateCollected;
     this.type = product.type;
     this.isDeleted = product.isDeleted;
-    this.abo = product.abo;
-    this.rhd = product.rhd;
-    this.isIssued = product.isIssued;
+    this.comments = product.comments;
   }
 
   public String getAbo() {

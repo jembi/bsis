@@ -50,7 +50,7 @@ public class ProductViewModel {
     return product.getType();
   }
 
-  public String getisIssued() {
+  public String getIsIssued() {
     if (product == null || product.getIssued() == null)
       return null;
     return product.getIssued() ? "yes" : "no";

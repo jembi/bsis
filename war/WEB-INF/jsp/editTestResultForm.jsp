@@ -118,6 +118,11 @@
 						path="syphilis" value="negative" label="negative"
 						class="radioWithToggle" /></td>
 			</tr>
+			<tr>
+					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
+					<td><form:textarea path="comments" class="commentsInputBox"
+							maxlength="255" /></td>
+			</tr>
 			<c:if test="${model.isDialog != 'yes' }">
 				<tr>
 					<td />

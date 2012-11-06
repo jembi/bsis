@@ -145,10 +145,6 @@
 					<td><form:input path="quantity"></form:input></td>
 				</tr>
 				<tr>
-					<td><form:label path="patientName">Patient Name</form:label></td>
-					<td><form:input path="patientName" /></td>
-				</tr>
-				<tr>
 					<td><form:label path="abo">Blood ABO</form:label></td>
 					<td><form:radiobutton path="abo" value="A" label="A"
 							class="radioWithToggle" /> <form:radiobutton path="abo"
@@ -196,6 +192,15 @@
 							<form:option value="partialPlatelets" label="Partial Platelets"
 								selected="${model.selectedProductType == 'partialPlatelets' ? 'selected' : ''}" />
 						</form:select></td>
+				</tr>
+				<tr>
+					<td><form:label path="patientName">Patient Name</form:label></td>
+					<td><form:input path="patientName" /></td>
+				</tr>
+				<tr>
+					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
+					<td><form:textarea path="comments" class="commentsInputBox"
+							maxlength="255" /></td>
 				</tr>
 				<c:if test="${model.isDialog != 'yes' }">
 					<tr>

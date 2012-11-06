@@ -229,9 +229,7 @@ public class ProductRepository {
       saveProduct(product);
       return product;
     }
-    existingProduct.setCollectionNumber(product.getCollectionNumber());
-    existingProduct.setType(product.getType());
-    product.setIssued(Boolean.FALSE);
+    existingProduct.copy(product);
     existingProduct.setIsDeleted(false);
     em.merge(existingProduct);
     em.flush();

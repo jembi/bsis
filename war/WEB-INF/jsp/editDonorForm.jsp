@@ -139,7 +139,7 @@
 				</tr>
 				<tr>
 					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
-					<td><form:textarea path="comments" id="donorCommentsInputBox"
+					<td><form:textarea path="comments" class="commentsInputBox"
 							maxlength="255" /></td>
 				</tr>
 				<tr>

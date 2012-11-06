@@ -130,4 +130,12 @@ public class ProductUsageBackingForm {
   public void setPatientName(String patientName) {
     productUsage.setPatientName(patientName);
   }
+  
+  public String getComments() {
+    return productUsage.getComments();
+  }
+
+  public void setComments(String comments) {
+    productUsage.setComments(comments);
+  }
 }
