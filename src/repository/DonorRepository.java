@@ -1,7 +1,6 @@
 package repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,15 +8,18 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import model.CollectedSample;
 import model.donor.Donor;
+import model.util.BloodGroup;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Repository
 @Transactional
@@ -85,92 +87,45 @@ public class DonorRepository {
     query.executeUpdate();
   }
 
-  public List<Donor> find(String donorNumber, String firstName, String lastName) {
-    if (StringUtils.hasText(donorNumber)) {
-      String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
-      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      List<Donor> donors = query.setParameter("donorNumber", donorNumber)
-          .getResultList();
-      if (donors != null && donors.size() > 0) {
-        return donors;
-      } else {
-        if (StringUtils.hasText(firstName) || StringUtils.hasText(lastName)) {
-          return findDonorByName(firstName, lastName);
-        }
-      }
-    }
-    if (StringUtils.hasText(firstName) || StringUtils.hasText(lastName)) {
-      return findDonorByName(firstName, lastName);
-    }
-    return null;
-  }
-
   public List<Donor> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<String> bloodTypes) {
+      String lastName, List<BloodGroup> bloodGroups) {
 
-    String queryString = "SELECT d from Donor d WHERE "
-        + "(isDeleted = :isDeleted) AND (" + "d.donorNumber = :donorNumber "
-        + "OR d.firstName = :firstName " + "OR d.lastName = :lastName "
-        + "OR d.bloodType IN (:bloodTypes)" + ")";
+    CriteriaBuilder cb = em.getCriteriaBuilder();
+    CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
+    Root<Donor> root = cq.from(Donor.class);
 
-    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donorNumber", donorNumber);
-    query.setParameter("firstName", firstName);
-    query.setParameter("lastName", lastName);
-    query.setParameter("bloodTypes",
-        bloodTypes == null || bloodTypes.size() == 0 ? Arrays.asList("")
-            : bloodTypes);
+    List<Predicate> bgPredicates = new ArrayList<Predicate>();
+    for (BloodGroup bg : bloodGroups) {
+      Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo());
+      Expression<Boolean> rhdExp = cb.equal(root.<String>get("bloodRhd"), bg.getBloodRhd());
+      bgPredicates.add(cb.and(aboExp, rhdExp));
+    }
 
+    Expression<Boolean> exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
+
+    Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
+    
+    Predicate firstNameExp;
+    if (firstName.trim().equals(""))
+      firstNameExp = cb.disjunction();
+    else
+      firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+
+    Predicate lastNameExp;
+    if (lastName.trim().equals(""))
+      lastNameExp = cb.disjunction();
+    else
+      lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+
+    Expression<Boolean> exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
+
+    Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
+    cq.where(cb.and(notDeleted, exp2));
+    TypedQuery<Donor> query = em.createQuery(cq);
     List<Donor> donors = query.getResultList();
     if (donors != null && donors.size() > 0)
       return donors;
     return new ArrayList<Donor>();
-  }
-
-  private List<Donor> findDonorByName(String firstName, String lastName) {
-    if (StringUtils.hasText(lastName)) {
-      String queryString = "SELECT d FROM Donor d WHERE d.lastName = :lastName and d.isDeleted = :isDeleted";
-      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      List<Donor> donors = query.setParameter("lastName", lastName)
-          .getResultList();
-      if (donors == null || donors.size() == 0) {
-        return null;
-      }
-      if (StringUtils.hasText(firstName)) {
-        return filterByFirstName(donors, firstName);
-      }
-    } else if (StringUtils.hasText(firstName)) {
-      String queryString = "SELECT d FROM Donor d WHERE d.firstName = :firstName and d.isDeleted = :isDeleted";
-      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      List<Donor> donors = query.setParameter("firstName", firstName)
-          .getResultList();
-      if (donors == null || donors.size() == 0) {
-        return null;
-      }
-      return donors;
-    }
-    return null;
-  }
-
-  private List<Donor> filterByFirstName(List<Donor> donors,
-      final String firstName) {
-    List<Donor> filteredDonors = (List<Donor>) CollectionUtils.select(donors,
-        new Predicate() {
-          public boolean evaluate(Object o) {
-            Donor donor = (Donor) o;
-            return firstName.equals(donor.getFirstName());
-          }
-        });
-    if (filteredDonors == null || filteredDonors.size() == 0) {
-      return donors;
-    } else {
-      return filteredDonors;
-    }
-
   }
 
   public List<Donor> getAllDonors() {

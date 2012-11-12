@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.donor.Donor;
 import model.donor.DonorBackingForm;
 import model.donor.DonorBackingFormValidator;
+import model.util.BloodGroup;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -197,11 +198,11 @@ public class DonorController {
     String donorNumber = form.getDonorNumber();
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
-    List<String> bloodTypes = form.getBloodTypes();
+    List<BloodGroup> bloodGroups = form.getBloodGroups();
 
     ModelAndView modelAndView = new ModelAndView("donorsTable");
     List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodTypes);
+        lastName, bloodGroups);
 
     Map<String, Object> model = m.asMap();
     model.put("tableName", "findDonorResultsTable");

@@ -89,7 +89,7 @@
 						<td>${donor.gender}</td>
 					</c:if>
 					<c:if test="${model.showbloodType==true}">
-						<td>${donor.bloodType}</td>
+						<td>${donor.bloodGroup}</td>
 					</c:if>
 					<c:if test="${model.showdateOfBirth==true}">
 						<td>${donor.birthDate}</td>

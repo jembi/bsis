@@ -39,7 +39,7 @@ public class BloodGroup {
       rhd = bg.rhd;
     }
   }
-  
+
   public BloodGroup(BloodAbo abo, BloodRhd rhd) {
     this.abo = abo;
     this.rhd = rhd;

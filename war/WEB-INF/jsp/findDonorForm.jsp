@@ -50,15 +50,15 @@
 				<td><form:input path="lastName" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="bloodTypes">${model.bloodTypeDisplayName}</form:label></td>
-				<td><form:checkbox path="bloodTypes" value="A+" label="A+" />
-					<form:checkbox path="bloodTypes" value="B+" label="B+" /> <form:checkbox
-						path="bloodTypes" value="AB+" label="AB+" /> <form:checkbox
-						path="bloodTypes" value="O+" label="O+" /> <form:checkbox
-						path="bloodTypes" value="A-" label="A-" /> <form:checkbox
-						path="bloodTypes" value="B-" label="B-" /> <form:checkbox
-						path="bloodTypes" value="AB-" label="AB-" /> <form:checkbox
-						path="bloodTypes" value="O-" label="O-" /></td>
+				<td><form:label path="bloodGroups">Blood Groups</form:label></td>
+				<td><form:checkbox path="bloodGroups" value="A+" label="A+" />
+					<form:checkbox path="bloodGroups" value="B+" label="B+" /> <form:checkbox
+						path="bloodGroups" value="AB+" label="AB+" /> <form:checkbox
+						path="bloodGroups" value="O+" label="O+" /> <form:checkbox
+						path="bloodGroups" value="A-" label="A-" /> <form:checkbox
+						path="bloodGroups" value="B-" label="B-" /> <form:checkbox
+						path="bloodGroups" value="AB-" label="AB-" /> <form:checkbox
+						path="bloodGroups" value="O-" label="O-" /></td>
 			</tr>
 			<tr>
 				<td />

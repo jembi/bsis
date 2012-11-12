@@ -1,5 +1,6 @@
 package model.donor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class DonorBackingForm {
   @NotNull
   @Valid
   private Donor donor;
-  private List<String> bloodTypes;
+  private List<BloodGroup> bloodGroups;
 
   private String birthDate;
 
@@ -42,12 +43,15 @@ public class DonorBackingForm {
     donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
   }
 
-  public List<String> getBloodTypes() {
-    return (bloodTypes == null) ? Arrays.asList(new String[0]) : bloodTypes;
+  public List<BloodGroup> getBloodGroups() {
+    return (bloodGroups == null) ? Arrays.asList(new BloodGroup[0]) : bloodGroups;
   }
 
-  public void setBloodTypes(List<String> bloodTypes) {
-    this.bloodTypes = bloodTypes;
+  public void setBloodGroups(List<String> bloodGroups) {
+    this.bloodGroups = new ArrayList<BloodGroup>();
+    for (String bg : bloodGroups) {
+      this.bloodGroups.add(new BloodGroup(bg));
+    }
   }
 
   public DonorViewModel getDonorViewModel() {

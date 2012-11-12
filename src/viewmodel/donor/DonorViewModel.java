@@ -6,6 +6,7 @@ import java.util.Date;
 
 import model.donor.Donor;
 import model.util.BloodAbo;
+import model.util.BloodGroup;
 import model.util.BloodRhd;
 
 import org.springframework.stereotype.Component;
@@ -47,6 +48,10 @@ public class DonorViewModel {
 
   public BloodRhd getBloodRhd() {
     return donor.getBloodRhd();
+  }
+
+  public String getBloodGroup() {
+    return new BloodGroup(donor.getBloodAbo(), donor.getBloodRhd()).toString();
   }
 
   public String getBirthDate() {
