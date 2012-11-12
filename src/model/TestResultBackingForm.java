@@ -4,14 +4,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-import org.springframework.format.datetime.DateFormatter;
+import model.user.User;
 
 public class TestResultBackingForm {
   private TestResult testResult;
   private String dateTestedFrom;
   private String dateTestedTo;
 
+  private List<String> tests;
+  
   public TestResultBackingForm() {
     testResult = new TestResult();
   }
@@ -28,114 +31,22 @@ public class TestResultBackingForm {
     return testResult.equals(obj);
   }
 
-  public Long getTestResultId() {
-    return testResult.getTestResultId();
-  }
-
-  public String getCollectionNumber() {
-    return testResult.getCollectionNumber();
-  }
-
-  public Date getDateCollected() {
-    return testResult.getDateCollected();
-  }
-
-  public String getDateTested() {
-    Date dateTested = testResult.getDateTested();
+  public String getTestedOn() {
+    Date dateTested = testResult.getTestedOn();
     if (dateTested == null)
       return "";
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     return dateFormat.format(dateTested);
   }
 
-  public String getComments() {
-    return testResult.getComments();
-  }
-
-  public String getHiv() {
-    return testResult.getHiv();
-  }
-
-  public String getHbv() {
-    return testResult.getHbv();
-  }
-
-  public String getHcv() {
-    return testResult.getHcv();
-  }
-
-  public String getSyphilis() {
-    return testResult.getSyphilis();
-  }
-
-  public String getAbo() {
-    return testResult.getAbo();
-  }
-
-  public String getRhd() {
-    return testResult.getRhd();
-  }
-
-  public Boolean getIsDeleted() {
-    return testResult.getIsDeleted();
-  }
-
-  public int hashCode() {
-    return testResult.hashCode();
-  }
-
-  public void setCollectionNumber(String collectionNumber) {
-    testResult.setCollectionNumber(collectionNumber);
-  }
-
-  public void setDateCollected(Date dateCollected) {
-    testResult.setDateCollected(dateCollected);
-  }
-
-  public void setDateTested(String dateTested) {
+  public void setTestedOn(String dateTested) {
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
-      testResult.setDateTested(dateFormat.parse(dateTested));
+      testResult.setTestedOn(dateFormat.parse(dateTested));
     } catch (ParseException e) {
       e.printStackTrace();
-      testResult.setDateTested(new Date());
+      testResult.setTestedOn(new Date());
     }
-  }
-
-  public void setComments(String comments) {
-    testResult.setComments(comments);
-  }
-
-  public void setHiv(String hiv) {
-    testResult.setHiv(hiv);
-  }
-
-  public void setHbv(String hbv) {
-    testResult.setHbv(hbv);
-  }
-
-  public void setHcv(String hcv) {
-    testResult.setHcv(hcv);
-  }
-
-  public void setSyphilis(String syphilis) {
-    testResult.setSyphilis(syphilis);
-  }
-
-  public void setAbo(String abo) {
-    testResult.setAbo(abo);
-  }
-
-  public void setRhd(String rhd) {
-    testResult.setRhd(rhd);
-  }
-
-  public void setIsDeleted(Boolean deleted) {
-    testResult.setIsDeleted(deleted);
-  }
-
-  public String toString() {
-    return testResult.toString();
   }
 
   public String getDateTestedFrom() {
@@ -154,7 +65,107 @@ public class TestResultBackingForm {
     this.dateTestedTo = dateTestedTo;
   }
 
+  public Long getId() {
+    return testResult.getId();
+  }
+
+  public CollectedSample getCollectedSample() {
+    return testResult.getCollectedSample();
+  }
+
+  public String getName() {
+    return testResult.getName();
+  }
+
+  public String getResult() {
+    return testResult.getResult();
+  }
+
+  public Date getLastUpdated() {
+    return testResult.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return testResult.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return testResult.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return testResult.getLastUpdatedBy();
+  }
+
+  public String getNotes() {
+    return testResult.getNotes();
+  }
+
+  public Boolean getIsDeleted() {
+    return testResult.getIsDeleted();
+  }
+
+  public int hashCode() {
+    return testResult.hashCode();
+  }
+
+  public void setId(Long id) {
+    testResult.setId(id);
+  }
+
+  public void setCollectedSample(CollectedSample collectedSample) {
+    testResult.setCollectedSample(collectedSample);
+  }
+
+  public void setTestedOn(Date testedOn) {
+    testResult.setTestedOn(testedOn);
+  }
+
+  public void setName(String testName) {
+    testResult.setName(testName);
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    testResult.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    testResult.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    testResult.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    testResult.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public void setNotes(String notes) {
+    testResult.setNotes(notes);
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    testResult.setIsDeleted(isDeleted);
+  }
+
+  public String toString() {
+    return testResult.toString();
+  }
+
   public TestResult getTestResult() {
     return testResult;
+  }
+
+  public void setTestResult(TestResult testResult) {
+    this.testResult = testResult;
+  }
+
+  public String getCollectionNumber() {
+    return testResult.getCollectedSample().getCollectionNumber();
+  }
+
+  public List<String> getTests() {
+    return tests;
   }
 }

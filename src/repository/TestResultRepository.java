@@ -157,7 +157,7 @@ public class TestResultRepository {
 
   public TestResult updateOrAddTestResult(TestResult testResult) {
     TestResult existingTestResult = findTestResultByCollectionNumber(testResult
-        .getCollectionNumber());
+        .getCollectedSample().getCollectionNumber());
     if (existingTestResult == null) {
       testResult.setIsDeleted(false);
       saveTestResult(testResult);

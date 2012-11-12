@@ -13,10 +13,10 @@ import java.util.Map;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
-import model.Collection;
-import model.CollectionBackingForm;
-import model.Location;
+import model.CollectedSample;
+import model.CollectedSampleBackingForm;
 import model.RecordFieldsConfig;
+import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,7 +63,7 @@ public class CollectionsController {
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView findCollectionFormInit(Model model) {
 
-    CollectionBackingForm form = new CollectionBackingForm();
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
     model.addAttribute("findCollectionForm", form);
 
     ModelAndView mv = new ModelAndView("findCollectionForm");
@@ -77,10 +77,10 @@ public class CollectionsController {
 
   @RequestMapping("/findCollection")
   public ModelAndView findCollection(HttpServletRequest request,
-      @ModelAttribute("findCollectionForm") CollectionBackingForm form,
+      @ModelAttribute("findCollectionForm") CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    List<Collection> collections = collectionRepository
+    List<CollectedSample> collections = collectionRepository
         .findAnyCollectionMatching(form.getCollectionNumber(),
             form.getSampleNumber(), form.getShippingNumber(),
             form.getDateCollectedFrom(), form.getDateCollectedTo(),
@@ -108,7 +108,7 @@ public class CollectionsController {
       @RequestParam(value = "donorNumber", required = false) String donorNumber,
       @RequestParam(value = "isDialog", required = false) String isDialog) {
 
-    CollectionBackingForm form = new CollectionBackingForm();
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
     Map<String, Object> m = model.asMap();
     List<String> centers = locationRepository.getAllCentersAsString();
     m.put("centers", centers);
@@ -120,19 +120,17 @@ public class CollectionsController {
     m.put("requestUrl", getUrl(request));
     if (collectionNumber != null) {
       form.setCollectionNumber(collectionNumber);
-      Collection collection = collectionRepository
+      CollectedSample collection = collectionRepository
           .findCollectionByNumber(collectionNumber);
       if (collection != null) {
-        form = new CollectionBackingForm(collection);
-        m.put("selectedCenter",
-            locationRepository.getLocation(collection.getCenterId()).getName());
-        m.put("selectedSite",
-            locationRepository.getLocation(collection.getSiteId()).getName());
+        form = new CollectedSampleBackingForm(collection);
+        m.put("selectedCenter",collection.getCenter().getName());
+        m.put("selectedSite",collection.getSite().getName());
       } else
-        form = new CollectionBackingForm();
+        form = new CollectedSampleBackingForm();
     }
     else if (donorNumber != null){
-      form.setDonorNumber(donorNumber);
+      form.setDonor(donorNumber);
     }
 
     m.put("editCollectionForm", form);
@@ -146,19 +144,19 @@ public class CollectionsController {
   @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
   public @ResponseBody
   Map<String, ? extends Object> updateOrAddCollection(
-      @ModelAttribute("editCollectionForm") CollectionBackingForm form,
+      @ModelAttribute("editCollectionForm") CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
     boolean success = true;
     String errMsg = "";
     try {
-      Collection collection = form.getCollection();
+      CollectedSample collection = form.getCollection();
       String center = form.getCenters().get(0);
       Long centerId = locationRepository.getIDByName(center);
-      collection.setCenterId(centerId);
+      collection.setCenter(centerId);
       String site = form.getSites().get(0);
       Long siteId = locationRepository.getIDByName(site);
-      collection.setSiteId(siteId);
+      collection.setSite(siteId);
       collectionRepository.updateOrAddCollection(collection);
     } catch (EntityExistsException ex) {
       // TODO: Replace with logger
@@ -182,11 +180,11 @@ public class CollectionsController {
   }
 
   private List<CollectionViewModel> getCollectionViewModels(
-      List<Collection> collections) {
+      List<CollectedSample> collections) {
     if (collections == null)
       return Arrays.asList(new CollectionViewModel[0]);
     List<CollectionViewModel> collectionViewModels = new ArrayList<CollectionViewModel>();
-    for (Collection collection : collections) {
+    for (CollectedSample collection : collections) {
       collectionViewModels.add(new CollectionViewModel(collection,
           locationRepository.getAllCollectionSites(), locationRepository
               .getAllCenters()));
@@ -213,7 +211,7 @@ public class CollectionsController {
   public ModelAndView addCollectionFormTabInit(Model model) {
     ModelAndView mv = new ModelAndView("editCollectionForm");
     Map<String, Object> m = model.asMap();
-    m.put("editCollectionForm", new CollectionBackingForm());
+    m.put("editCollectionForm", new CollectedSampleBackingForm());
     mv.addObject("model", m);
     return mv;
   }

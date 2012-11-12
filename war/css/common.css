@@ -365,3 +365,39 @@ tr > td
 	align: top;
 	resize: none;
 }
+
+.editForm > div {
+	position: relative;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.editForm > div > label {
+	width: 120px;
+	display: inline-block;
+	position: absolute;
+	top: 20%;
+	margin-left: 15px;
+}
+
+.editForm > div > input {
+	width: 220px;
+	margin-left: 150px;
+	margin-right: 20px;
+	display: inline-block;
+}
+
+.editForm > div > .ui-multiselect {
+	width: 231px;
+	margin-left: 150px;
+	margin-right: 20px;
+	display: inline-block;
+}
+
+.editForm > div > textarea {
+	width: 240px;
+	margin-left: 150px;
+	display: inline-block;
+	height: 65px;
+	resize: none;
+}

@@ -2,8 +2,8 @@ package viewmodel;
 
 import java.util.List;
 
-import model.Location;
 import model.LocationType;
+import model.util.Location;
 
 public class LocationViewModel {
 	private Location location;

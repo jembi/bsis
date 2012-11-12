@@ -11,6 +11,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.Product;
+import model.ProductType;
+import model.util.BloodAbo;
+import model.util.BloodRhd;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -140,36 +143,17 @@ public class ProductRepository {
     return em.find(Product.class, productId);
   }
 
-  public void updateProductBloodGroup(String collectionNumber, String abo,
-      String rhd) {
-    String queryString = "SELECT p FROM Product p WHERE p.collectionNumber = :collectionNumber and p.isDeleted = :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    List<Product> products = query.setParameter("collectionNumber",
-        collectionNumber).getResultList();
-    for (Product product : products) {
-      if (StringUtils.hasText(abo)) {
-        product.setAbo(abo);
-      }
-      if (StringUtils.hasText(rhd)) {
-        product.setRhd(rhd);
-      }
-      em.merge(product);
-    }
-    em.flush();
-  }
-
   public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<String> types, List<String> availability) {
+      String collectionNumber, List<ProductType> types, List<String> availability) {
 
     return findAnyProductMatching(productNumber, collectionNumber,
-        Arrays.asList("A", "B", "O", "AB"),
-        Arrays.asList("positive", "negative"), types, availability);
+        Arrays.asList(BloodAbo.A, BloodAbo.B, BloodAbo.O, BloodAbo.AB),
+        Arrays.asList(BloodRhd.POSITIVE, BloodRhd.NEGATIVE), types, availability);
   }
 
   public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<String> bloodAbo, List<String> bloodRhd,
-      List<String> types, List<String> availability) {
+      String collectionNumber, List<BloodAbo> bloodAbo, List<BloodRhd> bloodRhd,
+      List<ProductType> types, List<String> availability) {
 
     TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
         + "(p.productNumber = :productNumber OR "
@@ -224,7 +208,7 @@ public class ProductRepository {
     Product existingProduct = findProductByProductNumber(product
         .getProductNumber());
     if (existingProduct == null) {
-      product.setIssued(Boolean.FALSE);
+//      product.setIssued(Boolean.FALSE);
       product.setIsDeleted(false);
       saveProduct(product);
       return product;
@@ -245,7 +229,7 @@ public class ProductRepository {
 
   public void issueProduct(String productNumber) {
     Product existingProduct = findProductByProductNumber(productNumber);
-    existingProduct.setIssued(Boolean.TRUE);
+//    existingProduct.setIssued(Boolean.TRUE);
     em.merge(existingProduct);
     em.flush();
   }

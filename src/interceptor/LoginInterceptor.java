@@ -3,7 +3,7 @@ package interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.User;
+import model.user.User;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
@@ -35,7 +35,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	private boolean checkForAdmin(String url, User user)
 			throws ModelAndViewDefiningException {
 		if (url.startsWith("/admin-")) {
-			if (user.getType().equals("admin")) {
+			if (user.getIsAdmin()) {
 				return true;
 			} else {
 				ModelAndView modelAndView = new ModelAndView("adminAccessOnly");

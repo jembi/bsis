@@ -2,21 +2,26 @@ package viewmodel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-import model.Collection;
-import model.Location;
+import model.CollectedSample;
+import model.DonorType;
+import model.TestResult;
+import model.donor.Donor;
+import model.user.User;
+import model.util.Location;
 
 public class CollectionViewModel {
-	private Collection collection;
+	private CollectedSample collection;
 	private List<Location> allCollectionSites;
 	private List<Location> allCenters;
 
-	public CollectionViewModel(Collection collection) {
+	public CollectionViewModel(CollectedSample collection) {
 		this.collection = collection;
 	}
 
-	public CollectionViewModel(Collection collection,
+	public CollectionViewModel(CollectedSample collection,
 			List<Location> allCollectionSites, List<Location> allCenters) {
 
 		this.collection = collection;
@@ -24,89 +29,101 @@ public class CollectionViewModel {
 		this.allCenters = allCenters;
 	}
 
-	public String getCollectionId() {
-		return getStringValue(collection.getCollectionId());
-	}
-
-	public String getCenterId() {
-		return getStringValue(collection.getCenterId());
-	}
-
-	public String getCenterName() {
-		Long centerId = collection.getCenterId();
-		if (allCenters != null && centerId != null) {
-			for (Location center : allCenters) {
-				if (center.getLocationId().equals(centerId)) {
-					return center.getName();
-				}
-			}
-		}
-		return "";
-	}
-
-	public String getSiteId() {
-		return getStringValue(collection.getSiteId());
-	}
-
-	public String getSiteName() {
-		Long siteId = collection.getSiteId();
-		if (allCollectionSites != null && siteId != null) {
-			for (Location site : allCollectionSites) {
-				if (site.getLocationId().equals(siteId)) {
-					return site.getName();
-				}
-			}
-		}
-		return "";
-	}
-
-	public String getDateCollected() {
-		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		return formatter.format(collection.getDateCollected());
-	}
-
-	public String getSampleNumber() {
-		return getStringValue(collection.getSampleNumber());
-	}
-
-	public String getShippingNumber() {
-		return getStringValue(collection.getShippingNumber());
-	}
-
-	public String getDonorNumber() {
-		return collection.getDonorNumber();
-
-	}
-
-	public String getComments() {
-		return collection.getComments();
-	}
-
-	public String getDonorType() {
-		return collection.getDonorType();
-	}
-
-	public String getCollectionNumber() {
-		return collection.getCollectionNumber();
-	}
-
-	public String getAbo() {
-		return collection.getAbo();
-	}
-
-	public String getRhd() {
-		return collection.getRhd();
-	}
-
-	private String getStringValue(Long value) {
-		return value == null ? "" : value.toString();
-	}
-
-  public String getBloodBagType() {
-    return collection.getBloodBagType();
+  public void copy(CollectedSample collection) {
+    collection.copy(collection);
   }
 
-  public void setBloodBagType(String bloodBagType) {
-    collection.setBloodBagType(bloodBagType);
+  public boolean equals(Object obj) {
+    return collection.equals(obj);
   }
+
+  public Long getId() {
+    return collection.getId();
+  }
+
+  public String getCollectionNumber() {
+    return collection.getCollectionNumber();
+  }
+
+  public Donor getDonor() {
+    return collection.getDonor();
+  }
+
+  public List<TestResult> getTestResults() {
+    return collection.getTestResults();
+  }
+
+  public Location getCenter() {
+    return collection.getCenter();
+  }
+
+  public Location getSite() {
+    return collection.getSite();
+  }
+
+  public String getCollectedOn() {
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    return formatter.format(collection.getCollectedOn());
+  }
+
+  public DonorType getDonorType() {
+    return collection.getDonorType();
+  }
+
+  public String getSampleNumber() {
+    return collection.getSampleNumber();
+  }
+
+  public String getShippingNumber() {
+    return collection.getShippingNumber();
+  }
+
+  public Date getLastUpdated() {
+    return collection.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return collection.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return collection.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return collection.getLastUpdatedBy();
+  }
+
+  public String getNotes() {
+    return collection.getNotes();
+  }
+
+  public Boolean getIsDeleted() {
+    return collection.getIsDeleted();
+  }
+
+  public CollectedSample getCollection() {
+    return collection;
+  }
+
+  public List<Location> getAllCollectionSites() {
+    return allCollectionSites;
+  }
+
+  public List<Location> getAllCenters() {
+    return allCenters;
+  }
+
+  public void setCollection(CollectedSample collection) {
+    this.collection = collection;
+  }
+
+  public void setAllCollectionSites(List<Location> allCollectionSites) {
+    this.allCollectionSites = allCollectionSites;
+  }
+
+  public void setAllCenters(List<Location> allCenters) {
+    this.allCenters = allCenters;
+  }
+
 }

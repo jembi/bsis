@@ -74,26 +74,26 @@ public class ProductsController {
     return mv;
   }
 
-  @RequestMapping("/findProduct")
-  public ModelAndView findProducts(HttpServletRequest request,
-      @ModelAttribute("findProductForm") ProductBackingForm form,
-      BindingResult result, Model model) {
-
-    List<Product> products = productRepository.findAnyProductMatching(
-        form.getProductNumber(), form.getCollectionNumber(), form.getTypes(),
-        form.getAvailability());
-
-    ModelAndView modelAndView = new ModelAndView("productsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("tableName", "findProductsTable");
-    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("product", m,
-        recordFieldsConfigRepository);
-    m.put("allProducts", getProductViewModels(products));
-    m.put("requestUrl", getUrl(request));
-    modelAndView.addObject("model", m);
-    return modelAndView;
-  }
+//  @RequestMapping("/findProduct")
+//  public ModelAndView findProducts(HttpServletRequest request,
+//      @ModelAttribute("findProductForm") ProductBackingForm form,
+//      BindingResult result, Model model) {
+//
+//    List<Product> products = productRepository.findAnyProductMatching(
+//        form.getProductNumber(), form.getCollectionNumber(), form.getTypes(),
+//        form.getAvailability());
+//
+//    ModelAndView modelAndView = new ModelAndView("productsTable");
+//    Map<String, Object> m = model.asMap();
+//    m.put("tableName", "findProductsTable");
+//    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
+//    ControllerUtil.addFieldsToDisplay("product", m,
+//        recordFieldsConfigRepository);
+//    m.put("allProducts", getProductViewModels(products));
+//    m.put("requestUrl", getUrl(request));
+//    modelAndView.addObject("model", m);
+//    return modelAndView;
+//  }
 
   @RequestMapping("/findAvailableProducts")
   public ModelAndView findAvailableProducts(HttpServletRequest request,
@@ -104,8 +104,8 @@ public class ProductsController {
 
     List<Product> products = new ArrayList<Product>();
     if (productRequest != null) {
-      products = productRepository.findAnyProductMatching("", "",
-          Arrays.asList(productRequest.getProductType()), Arrays.asList("available"));
+//      products = productRepository.findAnyProductMatching("", "",
+//          Arrays.asList(productRequest.getProductType()), Arrays.asList("available"));
     }
 
     ModelAndView modelAndView = new ModelAndView("productsTable");
@@ -133,12 +133,12 @@ public class ProductsController {
     m.put("isDialog", isDialog);
     m.put("selectedType", "wholeBlood");
     if (productNumber != null) {
-      form.setCollectionNumber(productNumber);
+//      form.setCollectionNumber(productNumber);
       Product product = productRepository
           .findProductByProductNumber(productNumber);
       if (product != null) {
         form = new ProductBackingForm(product);
-        m.put("selectedType", product.getType());
+//        m.put("selectedType", product.getType());
       } else
         form = new ProductBackingForm();
     }

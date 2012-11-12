@@ -11,10 +11,10 @@ import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Issue;
-import model.Location;
 import model.Product;
 import model.Request;
 import model.RequestBackingForm;
+import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -144,9 +144,9 @@ public class RequestsController {
 
     List<Product> products = new ArrayList<Product>();
     if (request != null) {
-      products = productRepository.findAnyProductMatching("", "",
-          Arrays.asList(request.getAbo()), Arrays.asList(request.getRhd()),
-          Arrays.asList(request.getProductType()), Arrays.asList("available"));
+//      products = productRepository.findAnyProductMatching("", "",
+//          Arrays.asList(request.getAbo()), Arrays.asList(request.getRhd()),
+//          Arrays.asList(request.getProductType()), Arrays.asList("available"));
     }
 
     ModelAndView modelAndView = new ModelAndView("issueProducts");

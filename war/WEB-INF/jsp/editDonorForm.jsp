@@ -13,7 +13,7 @@
 <c:set var="editDonorFormId">editDonorForm-${unique_page_id}</c:set>
 <c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 <c:set var="genderSelectorId">genderSelector-${unique_page_id}</c:set>
-<c:set var="bloodTypeSelectorId">bloodTypeSelector-${unique_page_id}</c:set>
+<c:set var="bloodGroupSelectorId">bloodTypeSelector-${unique_page_id}</c:set>
 <c:set var="updateDonorButtonId">updateDonorButton-${unique_page_id}</c:set>
 <c:set var="deleteDonorButtonId">deleteDonorButton-${unique_page_id}</c:set>
 <c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
@@ -67,11 +67,17 @@
           icons : {
             primary : 'ui-icon-disk'
           }
-        }).click(function() {
-          var parentDivId = $("#${editDonorFormDivId}").parent().attr("id");
-          replaceContent(parentDivId, "${model.requestUrl}", "editCollectionFormGenerator.html", {donorNumber: "${model.donorNumber}"});
-          return false;
-        });
+        })
+            .click(
+                function() {
+                  var parentDivId = $("#${editDonorFormDivId}").parent().attr(
+                      "id");
+                  replaceContent(parentDivId, "${model.requestUrl}",
+                      "editCollectionFormGenerator.html", {
+                        donorNumber : "${model.donorNumber}"
+                      });
+                  return false;
+                });
 
         $("#${genderSelectorId}").multiselect({
           multiple : false,
@@ -79,87 +85,98 @@
           header : false
         });
 
-        $("#${bloodTypeSelectorId}").multiselect({
+        $("#${bloodGroupSelectorId}").multiselect({
           multiple : false,
           selectedList : 1,
           header : false
         });
+
+        $("#${editDonorFormId}").find(".birthdateinput").datepicker({
+          changeMonth : true,
+          changeYear : true,
+          minDate : -36500,
+          maxDate : 0,
+          dateFormat : "mm/dd/yy",
+          yearRange : "c-100:c0",
+        });
+
       });
 </script>
 
 <div id="${editDonorFormDivId}" class="editFormDiv">
-	<form:form id="${editDonorFormId}" method="POST"
+	<form:form id="${editDonorFormId}" method="POST" class="editForm"
 		commandName="editDonorForm">
-		<table>
-			<thead>
-				<tr>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><form:label path="donorNumber">${model.donorIDDisplayName}</form:label></td>
-					<td><form:input path="donorNumber" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="firstName">${model.firstNameDisplayName}</form:label></td>
-					<td><form:input path="firstName" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="lastName">${model.lastNameDisplayName}</form:label></td>
-					<td><form:input path="lastName" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="birthDate">${model.dobDisplayName}</form:label></td>
-					<td><form:input path="birthDate" id="updateDonorBirthDate" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="gender">${model.genderDisplayName}</form:label></td>
-					<td><form:select path="gender" id="${genderSelectorId}">
-							<form:option value="male" label="Male" />
-							<form:option value="female" label="Female" />
-						</form:select></td>
-				</tr>
-				<tr>
-					<td><form:label path="bloodType">${model.bloodTypeDisplayName}</form:label></td>
-					<td><form:select path="bloodType" id="${bloodTypeSelectorId}">
-							<form:option value="A+" label="A+" />
-							<form:option value="A-" label="A-" />
-							<form:option value="B+" label="B+" />
-							<form:option value="B-" label="B-" />
-							<form:option value="AB+" label="AB+" />
-							<form:option value="AB-" label="AB-" />
-							<form:option value="O+" label="O+" />
-							<form:option value="O-" label="O-" />
-						</form:select></td>
-				</tr>
-				<tr>
-					<td><form:label path="address">${model.addressDisplayName}</form:label></td>
-					<td><form:textarea path="address" id="donorAddressInputBox"
-							maxlength="255" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
-					<td><form:textarea path="comments" class="commentsInputBox"
-							maxlength="255" /></td>
-				</tr>
-				<tr>
-					<td />
-					<td>
-						<button type="button" id="${updateDonorButtonId}"
-							style="margin-left: 10px">Save</button>
-						<button type="button" id="${deleteDonorButtonId}"
-							style="margin-left: 10px">Delete</button>
-						<button type="button" id="${goBackButtonId}"
-							style="margin-left: 10px">Go Back</button>
-						<c:if test="${model.existingDonor == 'true'}">
-							<button type="button" id="${addCollectionButtonId}"
-								style="margin-left: 10px">Add collection for this donor</button>
-						</c:if>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</form:form>
+		<div>
+				<form:label path="donorNumber">${model.donorIDDisplayName}</form:label>
+				<form:input path="donorNumber" />
+		</div>
+		<div>
+			<form:label path="firstName">${model.firstNameDisplayName}</form:label>
+			<form:input path="firstName" />
+			<form:label path="lastName">${model.lastNameDisplayName}</form:label>
+			<form:input path="lastName" />
+		</div>
+		<div>
+			<form:label path="birthDate">${model.dobDisplayName}</form:label>
+			<form:input path="birthDate" class="birthdateinput" />
+		</div>
+		<div>
+			<form:label path="gender">${model.genderDisplayName}</form:label>
+			<form:select path="gender" id="${genderSelectorId}">
+				<form:option value="male" label="Male" />
+				<form:option value="female" label="Female" />
+				<form:option value="not_known" label="Not Known" />
+				<form:option value="not_applicable" label="Not Applicable" />
+			</form:select>
+
+			<form:label path="bloodGroup">Blood Group</form:label>
+			<form:select path="bloodGroup" id="${bloodGroupSelectorId}">
+				<form:option value="A+" label="A+" />
+				<form:option value="A-" label="A-" />
+				<form:option value="B+" label="B+" />
+				<form:option value="B-" label="B-" />
+				<form:option value="AB+" label="AB+" />
+				<form:option value="AB-" label="AB-" />
+				<form:option value="O+" label="O+" />
+				<form:option value="O-" label="O-" />
+			</form:select>
+		</div>
+		<div>
+			<form:label path="address">Address</form:label>
+			<form:textarea path="address"
+				maxlength="255" />
+		</div>
+		<div>
+			<form:label path="city">City</form:label>
+			<form:input path="city" />
+			<form:label path="state">State</form:label>
+			<form:input path="state" />
+		</div>
+		<div>
+			<form:label path="country">Country</form:label>
+			<form:input path="country" />
+			<form:label path="zipcode">Zip Code</form:label>
+			<form:input path="zipcode" />
+		</div>
+		<div>
+			<form:label path="notes">Notes</form:label>
+			<form:textarea path="notes"
+				maxlength="255" />
+		</div>
+		<div>
+			<button type="button" id="${updateDonorButtonId}"
+				style="margin-left: 10px">Save</button>
+			<button type="button" id="${deleteDonorButtonId}"
+				style="margin-left: 10px">Delete</button>
+			<button type="button" id="${goBackButtonId}"
+				style="margin-left: 10px">Go Back</button>
+			<c:if test="${model.existingDonor == 'true'}">
+				<button type="button" id="${addCollectionButtonId}"
+					style="margin-left: 10px">Add collection for this donor</button>
+			</c:if>
+
+		</div>
+</form:form>
 </div>
 
 <div id="${deleteDonorConfirmDialogId}" style="display: none">Are

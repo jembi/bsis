@@ -16,12 +16,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.Collection;
+import model.CollectedSample;
 import model.TestResult;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import viewmodel.TestResultViewModel;
 
 @Repository
 @Transactional
@@ -29,21 +31,21 @@ public class CollectionRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public void saveCollection(Collection collection) {
+  public void saveCollection(CollectedSample collection) {
     em.persist(collection);
     em.flush();
   }
 
-  public Collection updateCollection(Collection collection, Long collectionId) {
-    Collection existingCollection = findCollectionById(collectionId);
+  public CollectedSample updateCollection(CollectedSample collection, Long collectionId) {
+    CollectedSample existingCollection = findCollectionById(collectionId);
     existingCollection.copy(collection);
     em.merge(existingCollection);
     em.flush();
     return existingCollection;
   }
 
-  public Collection findCollectionById(Long collectionId) {
-    return em.find(Collection.class, collectionId);
+  public CollectedSample findCollectionById(Long collectionId) {
+    return em.find(CollectedSample.class, collectionId);
   }
 
   public void deleteAllCollections() {
@@ -51,56 +53,56 @@ public class CollectionRepository {
     query.executeUpdate();
   }
 
-  public Collection findCollectionByNumber(String collectionNumber) {
-    TypedQuery<Collection> query = em
+  public CollectedSample findCollectionByNumber(String collectionNumber) {
+    TypedQuery<CollectedSample> query = em
         .createQuery(
             "SELECT c FROM Collection c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted",
-            Collection.class);
+            CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    List<Collection> collections = query.getResultList();
+    List<CollectedSample> collections = query.getResultList();
     if (CollectionUtils.isEmpty(collections)) {
       return null;
     }
     return collections.get(0);
   }
 
-  public List<Collection> getAllCollections() {
+  public List<CollectedSample> getAllCollections() {
     Query query = em.createQuery(
         "SELECT c FROM Collection c WHERE c.isDeleted= :isDeleted",
-        Collection.class);
+        CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.getResultList();
   }
 
-  public List<Collection> getCollections(Date fromDate, Date toDate) {
-    TypedQuery<Collection> query = em
+  public List<CollectedSample> getCollections(Date fromDate, Date toDate) {
+    TypedQuery<CollectedSample> query = em
         .createQuery(
             "SELECT c FROM Collection c WHERE c.dateCollected >= :fromDate and c.dateCollected<= :toDate and c.isDeleted= :isDeleted",
-            Collection.class);
+            CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
-    List<Collection> collections = query.getResultList();
+    List<CollectedSample> collections = query.getResultList();
     if (CollectionUtils.isEmpty(collections)) {
-      return new ArrayList<Collection>();
+      return new ArrayList<CollectedSample>();
     }
     return collections;
   }
 
   public void deleteCollection(String collectionNumber) {
-    Collection existingCollection = findCollectionByNumber(collectionNumber);
+    CollectedSample existingCollection = findCollectionByNumber(collectionNumber);
     existingCollection.setIsDeleted(Boolean.TRUE);
     em.merge(existingCollection);
     em.flush();
   }
 
-  public List<Collection> findAnyCollectionMatching(String collectionNumber,
+  public List<CollectedSample> findAnyCollectionMatching(String collectionNumber,
       String sampleNumber, String shippingNumber, String dateCollectedFrom,
       String dateCollectedTo, List<String> centers) {
 
     // TODO: fix join condition
-    TypedQuery<Collection> query = em.createQuery(
+    TypedQuery<CollectedSample> query = em.createQuery(
         "SELECT c FROM Collection c, Location L WHERE "
             + " L.locationId=c.centerId AND L.isCenter=TRUE AND ("
             + "c.collectionNumber = :collectionNumber OR "
@@ -109,7 +111,7 @@ public class CollectionRepository {
             + "L.name IN (:centers)) AND ("
             + "c.dateCollected BETWEEN :dateCollectedFrom AND "
             + ":dateCollectedTo" + ") AND " + "(c.isDeleted= :isDeleted)",
-        Collection.class);
+        CollectedSample.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
@@ -139,12 +141,12 @@ public class CollectionRepository {
       e.printStackTrace();
     }
 
-    List<Collection> resultList = query.getResultList();
+    List<CollectedSample> resultList = query.getResultList();
     return resultList;
   }
 
-  public Collection updateOrAddCollection(Collection collection) {
-    Collection existingCollection = findCollectionByNumber(collection
+  public CollectedSample updateOrAddCollection(CollectedSample collection) {
+    CollectedSample existingCollection = findCollectionByNumber(collection
         .getCollectionNumber());
     if (existingCollection == null) {
       collection.setIsDeleted(false);
@@ -239,15 +241,15 @@ public class CollectionRepository {
     return m;
   }
 
-  public List<TestResult> findUntestedCollections(String dateCollectedFrom,
+  public List<TestResultViewModel> findUntestedCollections(String dateCollectedFrom,
       String dateCollectedTo) {
 
-    TypedQuery<Collection> query = em
+    TypedQuery<CollectedSample> query = em
         .createQuery(
             "SELECT c FROM Collection c WHERE c.dateCollected >= :fromDate "
                 + "AND c.dateCollected<= :toDate AND c.isDeleted= :isDeleted AND "
                 + "c.collectionNumber NOT IN (SELECT t.collectionNumber FROM TestResult t)",
-            Collection.class);
+            CollectedSample.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     
@@ -260,11 +262,11 @@ public class CollectionRepository {
       e.printStackTrace();
     }
 
-    List<TestResult> testResults = new ArrayList<TestResult>();
-    for (Collection collection : query.getResultList()) {
-      testResults.add(new TestResult(collection.getCollectionNumber(),
-          collection.getDateCollected(), new Date(), "", "", "", "", "", "",
-          false, ""));
+    List<TestResultViewModel> testResults = new ArrayList<TestResultViewModel>();
+    for (CollectedSample collectedSample : query.getResultList()) {
+      TestResult testResult = new TestResult();
+      testResult.setCollectedSample(collectedSample);
+//      testResults.add(testResult);
     }
 
     return testResults;

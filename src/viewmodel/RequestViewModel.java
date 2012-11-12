@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import model.Location;
 import model.Request;
+import model.util.Location;
 
 public class RequestViewModel {
 	private Request request;

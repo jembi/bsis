@@ -1,23 +1,17 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import repository.CollectionRepository;
-
-import model.Collection;
+import model.CollectedSample;
 import model.Product;
+import model.user.User;
+import model.util.BloodAbo;
+import model.util.BloodRhd;
 
 public class ProductViewModel {
 
 	private Product product;
 
-	@Autowired
-	CollectionRepository collectionRepository;
-	
 	public ProductViewModel() {
 	  product = new Product();
 	}
@@ -30,52 +24,55 @@ public class ProductViewModel {
     product.copy(product);
   }
 
-  public boolean equals(Object obj) {
-    return product.equals(obj);
+  public BloodAbo getBloodAbo() {
+    return product.getBloodAbo();
   }
 
-  public String getCollectionNumber() {
-    return product.getCollectionNumber();
+  public BloodRhd getBloodRhd() {
+    return product.getBloodRhd();
   }
 
-  public String getComments() {
-    return product.getComments();
+  public Long getId() {
+    return product.getId();
   }
 
   public String getProductNumber() {
     return product.getProductNumber();
   }
 
-  public String getType() {
-    return product.getType();
+  public CollectedSample getCollectedSample() {
+    return product.getCollectedSample();
   }
 
-  public String getIsIssued() {
-    if (product == null || product.getIssued() == null)
-      return null;
-    return product.getIssued() ? "yes" : "no";
+  public String getProductType() {
+    return product.getProductType();
   }
 
-  public String getAbo() {
-    return product.getAbo();
+  public Date getExpiryDate() {
+    return product.getExpiryDate();
   }
 
-  public String getRh() {
-    return product.getRhd();
+  public Date getLastUpdated() {
+    return product.getLastUpdated();
   }
 
-  public String getBloodType() {
-    if (product.getAbo() == null || product.getRhd() == null)
-        return "";
-    String rh = product.getRhd().equals("positive") ? "+" : "-"; 
-    return product.getAbo() + rh;
+  public Date getCreatedDate() {
+    return product.getCreatedDate();
   }
 
-  public String getDateCollected() {
-    Date dateCollected = product.getDateCollected();
-    if (dateCollected == null)
-      return "";
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(dateCollected);
+  public User getCreatedBy() {
+    return product.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return product.getLastUpdatedBy();
+  }
+
+  public String getNotes() {
+    return product.getNotes();
+  }
+
+  public Boolean getIsDeleted() {
+    return product.getIsDeleted();
   }
 }

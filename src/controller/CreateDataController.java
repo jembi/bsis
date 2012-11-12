@@ -12,13 +12,13 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.Collection;
-import model.Donor;
-import model.Location;
+import model.CollectedSample;
 import model.LocationType;
 import model.Product;
 import model.Request;
 import model.TestResult;
+import model.donor.Donor;
+import model.util.Location;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -379,10 +379,10 @@ public class CreateDataController {
 				gender = "female";
 			}
 			String lastName = LAST_NAMES[r.nextInt(LAST_NAMES.length)];
-			donorRepository.saveDonor(new Donor(new Integer(i + 1).toString(),
-					firstName, lastName, gender, bloodTypes[r
-							.nextInt(bloodTypes.length)], getRandomDOB(), null,
-					"address" + i, Boolean.FALSE, "dummy comment"));
+//			donorRepository.saveDonor(new Donor(new Integer(i + 1).toString(),
+//					firstName, lastName, gender, bloodTypes[r
+//							.nextInt(bloodTypes.length)], getRandomDOB(), null,
+//					"address" + i, Boolean.FALSE, "dummy comment"));
 		}
 
 	}
@@ -473,33 +473,33 @@ public class CreateDataController {
 					.getDonorNumber();
 			Long sampleNo = (long) (r.nextInt(5000));
 			Long shippingNo = (long) (r.nextInt(5000));
-			Collection collection = new Collection(collectionNo.toString(),
-					centerId, siteId, getRandomCollectionDate(), sampleNo,
-					shippingNo, donorNo,
-					donorTypes[r.nextInt(donorTypes.length)],
-					bloodTypes[r.nextInt(bloodTypes.length)],
-					rhd[r.nextInt(rhd.length)], Boolean.FALSE, "comment_" + i);
-			collectionRepository.saveCollection(collection);
-			TestResult testResult = new TestResult(
-					collection.getCollectionNumber(),
-					collection.getDateCollected(),
-					new DateTime(collection.getDateCollected()).plusDays(1)
-							.toDate(), getRandomTestResult(),
-					getRandomTestResult(), getRandomTestResult(),
-					getRandomTestResult(), collection.getAbo(),
-					collection.getRhd(), Boolean.FALSE, "comment_" + i);
-			testResultRepository.saveTestResult(testResult);
+//			CollectedSample collection = new CollectedSample(collectionNo.toString(),
+//					centerId, siteId, getRandomCollectionDate(), sampleNo,
+//					shippingNo, donorNo,
+//					donorTypes[r.nextInt(donorTypes.length)],
+//					bloodTypes[r.nextInt(bloodTypes.length)],
+//					rhd[r.nextInt(rhd.length)], Boolean.FALSE, "comment_" + i);
+//			collectionRepository.saveCollection(collection);
+//			TestResult testResult = new TestResult(
+//					collection.getCollectionNumber(),
+//					collection.getDateCollected(),
+//					new DateTime(collection.getDateCollected()).plusDays(1)
+//							.toDate(), getRandomTestResult(),
+//					getRandomTestResult(), getRandomTestResult(),
+//					getRandomTestResult(), collection.getAbo(),
+//					collection.getRhd(), Boolean.FALSE, "comment_" + i);
+//			testResultRepository.saveTestResult(testResult);
 		}
 	}
 
 	private void createProducts(int productNumber) {
-		List<Collection> collections = collectionRepository.getAllCollections();
+		List<CollectedSample> collections = collectionRepository.getAllCollections();
 		for (int i = 0; i < productNumber; i++) {
-			Product product = new Product(new Integer(i + 1).toString(),
-					collections.get(r.nextInt(collections.size())),
-					productTypes[r.nextInt(productTypes.length)],
-					Boolean.FALSE, Boolean.FALSE, "comment_" + i);
-			productRepository.saveProduct(product);
+//			Product product = new Product(new Integer(i + 1).toString(),
+//					collections.get(r.nextInt(collections.size())),
+//					productTypes[r.nextInt(productTypes.length)],
+//					Boolean.FALSE, Boolean.FALSE, "comment_" + i);
+//			productRepository.saveProduct(product);
 		}
 	}
 

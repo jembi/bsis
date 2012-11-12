@@ -15,9 +15,9 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Issue;
-import model.Location;
 import model.Product;
 import model.Request;
+import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,107 +73,107 @@ public class IssueController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/issueProduct")
-	public ModelAndView getUpdateRequestsPage(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		Long requestId = getParam(params, "selectedRequestId");
-		Map<String, Object> model = new HashMap<String, Object>();
-		ModelAndView modelAndView = new ModelAndView("issueMatchingProducts");
-		Request request = requestRepository.findRequest(requestId);
-		List<Location> sites = addCollectionSitesToModel(model);
-		model.put("siteId", request.getSiteId());
-		model.put("request", new RequestViewModel(request, sites));
-		List<Product> matchingProducts = productRepository
-				.getAllUnissuedThirtyFiveDayProducts(request.getProductType(),
-						request.getAbo(), request.getRhd());
-		if (request.getProductType().equals("platelets")) {
-			matchingProducts.addAll(productRepository
-					.getAllUnissuedThirtyFiveDayProducts("partialPlatelets",
-							request.getAbo(), request.getRhd()));
-		}
-		Collections.sort(matchingProducts, new Comparator<Product>() {
-			public int compare(Product product, Product product1) {
-				return product.getDateCollected().compareTo(
-						product1.getDateCollected());
-			}
-		});
-		model.put("products", matchingProducts);
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addIssueDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addRequestDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addFieldsToDisplay("request", model,
-				recordFieldsConfigRepository);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+//	@RequestMapping("/issueProduct")
+//	public ModelAndView getUpdateRequestsPage(
+//			@RequestParam Map<String, String> params,
+//			HttpServletRequest httpServletRequest) {
+//		LoggerUtil.logUrl(httpServletRequest);
+//		Long requestId = getParam(params, "selectedRequestId");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		ModelAndView modelAndView = new ModelAndView("issueMatchingProducts");
+//		Request request = requestRepository.findRequest(requestId);
+//		List<Location> sites = addCollectionSitesToModel(model);
+//		model.put("siteId", request.getSiteId());
+//		model.put("request", new RequestViewModel(request, sites));
+//		List<Product> matchingProducts = productRepository
+//				.getAllUnissuedThirtyFiveDayProducts(request.getProductType(),
+//						request.getAbo(), request.getRhd());
+//		if (request.getProductType().equals("platelets")) {
+//			matchingProducts.addAll(productRepository
+//					.getAllUnissuedThirtyFiveDayProducts("partialPlatelets",
+//							request.getAbo(), request.getRhd()));
+//		}
+//		Collections.sort(matchingProducts, new Comparator<Product>() {
+//			public int compare(Product product, Product product1) {
+//				return product.getDateCollected().compareTo(
+//						product1.getDateCollected());
+//			}
+//		});
+//		model.put("products", matchingProducts);
+//		ControllerUtil.addProductDisplayNamesToModel(model,
+//				displayNamesRepository);
+//		ControllerUtil.addIssueDisplayNamesToModel(model,
+//				displayNamesRepository);
+//		ControllerUtil.addRequestDisplayNamesToModel(model,
+//				displayNamesRepository);
+//		ControllerUtil.addFieldsToDisplay("request", model,
+//				recordFieldsConfigRepository);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
-	@RequestMapping("/issueAnyProduct")
-	public ModelAndView issueAnyProductPage(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+//	@RequestMapping("/issueAnyProduct")
+//	public ModelAndView issueAnyProductPage(
+//			@RequestParam Map<String, String> params, HttpServletRequest request) {
+//
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		ModelAndView modelAndView = new ModelAndView("issueAllProducts");
+//		setUpModelForIssueAnyProducts(model);
+//
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
-		Map<String, Object> model = new HashMap<String, Object>();
-		ModelAndView modelAndView = new ModelAndView("issueAllProducts");
-		setUpModelForIssueAnyProducts(model);
-
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-
-	@RequestMapping("/issueSelectedProducts")
-	public ModelAndView addNewRequests(
-			@RequestParam Map<String, String> params,
-			HttpServletRequest httpServletRequest) {
-		LoggerUtil.logUrl(httpServletRequest);
-		ModelAndView modelAndView = new ModelAndView("issueAllProducts");
-		Map<String, Object> model = new HashMap<String, Object>();
-		ArrayList<Long> productIds = getAllProductIds(params);
-		TreeMap<Long, String> sites = getAllProductIdValueMaps("site", params);
-		TreeMap<Long, String> dateIssued = getAllProductIdValueMaps(
-				"issueDate", params);
-		int plateletsIssued = 0;
-		int partialPlateletsIssued = 0;
-		for (Long productId : productIds) {
-			Product product = productRepository.findProduct(productId);
-			Issue issue = new Issue(product.getProductNumber(),
-					getDate(dateIssued.get(product.getProductId())),
-					getSiteForIssue(sites, product), Boolean.FALSE,
-					product.getComments());
-			issueRepository.saveIssue(issue);
-			Product issuedProduct = new Product();
-			issuedProduct.copy(product);
-			issuedProduct.setIssued(Boolean.TRUE);
-			if (issuedProduct.getType().equals("platelets")) {
-				plateletsIssued++;
-			}
-			if (issuedProduct.getType().equals("partialPlatelets")) {
-				partialPlateletsIssued++;
-			}
-		}
-		if (params.containsKey("requestId")) {
-			modelAndView = new ModelAndView("issueViewRequests");
-			Request request = requestRepository.findRequest(getParam(params,
-					"requestId"));
-			Request updatedRequest = new Request();
-			updatedRequest.copy(request);
-			Long quantityIssued = getParam(params, "quantityIssued");
-			updateRequestStatus(request, updatedRequest, quantityIssued,
-					plateletsIssued, partialPlateletsIssued);
-			requestRepository.updateRequest(updatedRequest,
-					request.getRequestNumber());
-			model.put("requestNumber", request.getRequestNumber());
-			setUpModelForIssueViewRequests(model);
-		} else {
-			setUpModelForIssueAnyProducts(model);
-		}
-		model.put("productsIssued", true);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+//	@RequestMapping("/issueSelectedProducts")
+//	public ModelAndView addNewRequests(
+//			@RequestParam Map<String, String> params,
+//			HttpServletRequest httpServletRequest) {
+//		LoggerUtil.logUrl(httpServletRequest);
+//		ModelAndView modelAndView = new ModelAndView("issueAllProducts");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		ArrayList<Long> productIds = getAllProductIds(params);
+//		TreeMap<Long, String> sites = getAllProductIdValueMaps("site", params);
+//		TreeMap<Long, String> dateIssued = getAllProductIdValueMaps(
+//				"issueDate", params);
+//		int plateletsIssued = 0;
+//		int partialPlateletsIssued = 0;
+//		for (Long productId : productIds) {
+//			Product product = productRepository.findProduct(productId);
+//			Issue issue = new Issue(product.getProductNumber(),
+//					getDate(dateIssued.get(product.getProductId())),
+//					getSiteForIssue(sites, product), Boolean.FALSE,
+//					product.getComments());
+//			issueRepository.saveIssue(issue);
+//			Product issuedProduct = new Product();
+//			issuedProduct.copy(product);
+//			issuedProduct.setIssued(Boolean.TRUE);
+//			if (issuedProduct.getType().equals("platelets")) {
+//				plateletsIssued++;
+//			}
+//			if (issuedProduct.getType().equals("partialPlatelets")) {
+//				partialPlateletsIssued++;
+//			}
+//		}
+//		if (params.containsKey("requestId")) {
+//			modelAndView = new ModelAndView("issueViewRequests");
+//			Request request = requestRepository.findRequest(getParam(params,
+//					"requestId"));
+//			Request updatedRequest = new Request();
+//			updatedRequest.copy(request);
+//			Long quantityIssued = getParam(params, "quantityIssued");
+//			updateRequestStatus(request, updatedRequest, quantityIssued,
+//					plateletsIssued, partialPlateletsIssued);
+//			requestRepository.updateRequest(updatedRequest,
+//					request.getRequestNumber());
+//			model.put("requestNumber", request.getRequestNumber());
+//			setUpModelForIssueViewRequests(model);
+//		} else {
+//			setUpModelForIssueAnyProducts(model);
+//		}
+//		model.put("productsIssued", true);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
 	private void updateRequestStatus(Request request, Request updatedRequest,
 			Long quantityIssued, int plateletsIssued, int partialPlateletsIssued) {
@@ -190,34 +190,34 @@ public class IssueController {
 		}
 	}
 
-	private Long getSiteForIssue(TreeMap<Long, String> sites, Product product) {
-		String site = sites.get(product.getProductId());
-		if (StringUtils.hasText(site)) {
-			return Long.valueOf(site);
-		}
-		return null;
-	}
+//	private Long getSiteForIssue(TreeMap<Long, String> sites, Product product) {
+//		String site = sites.get(product.getProductId());
+//		if (StringUtils.hasText(site)) {
+//			return Long.valueOf(site);
+//		}
+//		return null;
+//	}
 
-	private void setUpModelForIssueAnyProducts(Map<String, Object> model) {
-		List<Location> sites = addCollectionSitesToModel(model);
-		List<Product> unissuedProducts = productRepository
-				.getAllUnissuedThirtyFiveDayProducts();
-		Collections.sort(unissuedProducts, new Comparator<Product>() {
-			public int compare(Product product, Product product1) {
-				return product.getDateCollected().compareTo(
-						product1.getDateCollected());
-			}
-		});
-		model.put("products", unissuedProducts);
-		ControllerUtil.addProductDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addIssueDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addRequestDisplayNamesToModel(model,
-				displayNamesRepository);
-		ControllerUtil.addFieldsToDisplay("request", model,
-				recordFieldsConfigRepository);
-	}
+//	private void setUpModelForIssueAnyProducts(Map<String, Object> model) {
+//		List<Location> sites = addCollectionSitesToModel(model);
+//		List<Product> unissuedProducts = productRepository
+//				.getAllUnissuedThirtyFiveDayProducts();
+//		Collections.sort(unissuedProducts, new Comparator<Product>() {
+//			public int compare(Product product, Product product1) {
+//				return product.getDateCollected().compareTo(
+//						product1.getDateCollected());
+//			}
+//		});
+//		model.put("products", unissuedProducts);
+//		ControllerUtil.addProductDisplayNamesToModel(model,
+//				displayNamesRepository);
+//		ControllerUtil.addIssueDisplayNamesToModel(model,
+//				displayNamesRepository);
+//		ControllerUtil.addRequestDisplayNamesToModel(model,
+//				displayNamesRepository);
+//		ControllerUtil.addFieldsToDisplay("request", model,
+//				recordFieldsConfigRepository);
+//	}
 
 	private TreeMap<Long, String> getAllProductIdValueMaps(String field,
 			Map<String, String> params) {

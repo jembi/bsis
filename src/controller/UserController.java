@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.User;
+import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,37 +49,37 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/admin-createNewUser")
-	public ModelAndView addUser(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
-
-		String username = params.get("username");
-		User existingUser = userRepository.findUser(username);
-		Map<String, Object> model = new HashMap<String, Object>();
-		ModelAndView modelAndView = new ModelAndView("updateUser");
-		if (existingUser == null) {
-			User user = new User(username, params.get("password"),
-					params.get("type"), params.get("name"),
-					params.get("contactNumber"), params.get("emailId"),
-					Boolean.FALSE, params.get("comments"));
-			userRepository.saveUser(user);
-			model.put("userAdded", true);
-			model.put("userDetails", user);
-			model.put("hasUserDetails", true);
-		} else {
-			modelAndView = new ModelAndView("addUser");
-			model.put("userExists", true);
-			model.put("username", username);
-			User user = new User(username, params.get("password"),
-					params.get("type"), params.get("name"),
-					params.get("contactNumber"), params.get("emailId"),
-					Boolean.FALSE, params.get("comments"));
-			model.put("hasUserDetails", true);
-			model.put("userDetails", user);
-		}
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+//	@RequestMapping("/admin-createNewUser")
+//	public ModelAndView addUser(@RequestParam Map<String, String> params,
+//			HttpServletRequest request) {
+//
+//		String username = params.get("username");
+//		User existingUser = userRepository.findUser(username);
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		ModelAndView modelAndView = new ModelAndView("updateUser");
+//		if (existingUser == null) {
+//			User user = new User(username, params.get("password"),
+//					params.get("type"), params.get("name"),
+//					params.get("contactNumber"), params.get("emailId"),
+//					Boolean.FALSE, params.get("comments"));
+//			userRepository.saveUser(user);
+//			model.put("userAdded", true);
+//			model.put("userDetails", user);
+//			model.put("hasUserDetails", true);
+//		} else {
+//			modelAndView = new ModelAndView("addUser");
+//			model.put("userExists", true);
+//			model.put("username", username);
+//			User user = new User(username, params.get("password"),
+//					params.get("type"), params.get("name"),
+//					params.get("contactNumber"), params.get("emailId"),
+//					Boolean.FALSE, params.get("comments"));
+//			model.put("hasUserDetails", true);
+//			model.put("userDetails", user);
+//		}
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
 	@RequestMapping("/admin-findUser")
 	public ModelAndView findUser(@RequestParam Map<String, String> params,
@@ -138,47 +138,47 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/updateSelfUser")
-	public ModelAndView updateUser(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
-
-		String username = params.get("username");
-		User sessionUser = (User) request.getSession().getAttribute("user");
-		if (!sessionUser.getUsername().equals(username)) {
-			return new ModelAndView("adminAccessOnly");
-		}
-		User user = new User(params.get("username"), params.get("password"),
-				params.get("type"), params.get("name"),
-				params.get("contactNumber"), params.get("emailId"),
-				Boolean.FALSE, params.get("comments"));
-		userRepository.updateUser(user);
-		ModelAndView modelAndView = new ModelAndView("updateUser");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("userUpdated", true);
-		model.put("userDetails", user);
-		model.put("hasUserDetails", true);
-		model.put("selfUser", true);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-
-	@RequestMapping("/admin-updateExistingUser")
-	public ModelAndView updateAdminUser(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
-
-		User user = new User(params.get("username"), params.get("password"),
-				params.get("type"), params.get("name"),
-				params.get("contactNumber"), params.get("emailId"),
-				Boolean.FALSE, params.get("comments"));
-		userRepository.updateUser(user);
-		ModelAndView modelAndView = new ModelAndView("updateUser");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("userUpdated", true);
-		model.put("userDetails", user);
-		model.put("hasUserDetails", true);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+//	@RequestMapping("/updateSelfUser")
+//	public ModelAndView updateUser(@RequestParam Map<String, String> params,
+//			HttpServletRequest request) {
+//
+//		String username = params.get("username");
+//		User sessionUser = (User) request.getSession().getAttribute("user");
+//		if (!sessionUser.getUsername().equals(username)) {
+//			return new ModelAndView("adminAccessOnly");
+//		}
+//		User user = new User(params.get("username"), params.get("password"),
+//				params.get("type"), params.get("name"),
+//				params.get("contactNumber"), params.get("emailId"),
+//				Boolean.FALSE, params.get("comments"));
+//		userRepository.updateUser(user);
+//		ModelAndView modelAndView = new ModelAndView("updateUser");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		model.put("userUpdated", true);
+//		model.put("userDetails", user);
+//		model.put("hasUserDetails", true);
+//		model.put("selfUser", true);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
+//
+//	@RequestMapping("/admin-updateExistingUser")
+//	public ModelAndView updateAdminUser(
+//			@RequestParam Map<String, String> params, HttpServletRequest request) {
+//
+//		User user = new User(params.get("username"), params.get("password"),
+//				params.get("type"), params.get("name"),
+//				params.get("contactNumber"), params.get("emailId"),
+//				Boolean.FALSE, params.get("comments"));
+//		userRepository.updateUser(user);
+//		ModelAndView modelAndView = new ModelAndView("updateUser");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		model.put("userUpdated", true);
+//		model.put("userDetails", user);
+//		model.put("hasUserDetails", true);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
 	@RequestMapping("/admin-deleteUser")
 	public ModelAndView deleteUser(@RequestParam Map<String, String> params,
