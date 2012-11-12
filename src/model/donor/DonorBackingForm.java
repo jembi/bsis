@@ -246,8 +246,8 @@ public class DonorBackingForm {
     donor.setZipcode(zipcode);
   }
 
-  public BloodGroup getBloodGroup() {
-    return new BloodGroup(donor.getBloodAbo(), donor.getBloodRhd());
+  public String getBloodGroup() {
+    return new BloodGroup(donor.getBloodAbo(), donor.getBloodRhd()).toString();
   }
 
   public void setBloodGroup(String bloodGroupStr) {

@@ -45,4 +45,8 @@ public class CustomDateFormatter {
     }
     return valid;
   }
+
+  public static String getErrorMessage() {
+    return "Invalid Date specified. Use " + pattern.toLowerCase();
+  }
 }

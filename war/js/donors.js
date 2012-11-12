@@ -1,30 +1,26 @@
-function addNewDonor(form) {
-  updateDonorGeneric(form, "updateDonor.html");
+function addNewDonor(form, resultDivId) {
+  updateDonorGeneric(form, resultDivId, "addDonor.html");
 }
 
-function updateExistingDonor(form) {
-  updateDonorGeneric(form, "updateDonor.html");
+function updateExistingDonor(form, resultDivId) {
+  updateDonorGeneric(form, resultDivId, "updateDonor.html");
 }
 
-function updateDonorGeneric(form, url) {
+function updateDonorGeneric(form, resultDivId, url) {
   var donor = $("#" + form.getAttribute("id")).serialize();
   $.ajax({
-    type : "POST",
-    url : url,
-    data : donor,
-    success : function(jsonResponse) {
-      if (jsonResponse["success"] === true) {
-        $.showMessage("Donor Updated Successfully!");
-        $('#' + form.getAttribute("id")).each(function() {
-          this.reset();
-        });
-        window.history.back();
-      } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
-      }
-    }
+    type: "POST",
+    url: url,
+    data: donor,
+    success: function(jsonResponse, data, data1, data2) {
+                console.log(jsonResponse);
+                $("#" + resultDivId).replaceWith(jsonResponse);
+              },
+    error: function(jsonResponse) {
+             console.log("here");
+             console.log(jsonResponse);
+             $("#" + resultDivId).replaceWith(jsonResponse);
+           }
   });
 }
 

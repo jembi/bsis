@@ -32,20 +32,6 @@ public class DonorRepository {
     em.flush();
   }
 
-  public Donor updateOrAddDonor(Donor donor) {
-    Donor existingDonor = findDonorByNumber(donor.getDonorNumber());
-    if (existingDonor == null) {
-      donor.setIsDeleted(false);
-      saveDonor(donor);
-      return donor;
-    }
-    existingDonor.copy(donor);
-    existingDonor.setIsDeleted(false);
-    em.merge(existingDonor);
-    em.flush();
-    return existingDonor;
-  }
-
   public void deleteDonor(String donorId) {
     Donor existingDonor = findDonorByNumber(donorId);
     existingDonor.setIsDeleted(Boolean.TRUE);
@@ -147,5 +133,22 @@ public class DonorRepository {
       return null;
     }
     return collections;
+  }
+
+  public void addDonor(Donor donor) {
+    em.persist(donor);
+    em.flush();
+  }
+
+  public Donor updateDonor(Donor donor) {
+    Donor existingDonor = findDonorByNumber(donor.getDonorNumber());
+    if (existingDonor == null) {
+      return null;
+    }
+    existingDonor.copy(donor);
+    existingDonor.setIsDeleted(false);
+    em.merge(existingDonor);
+    em.flush();
+    return existingDonor;
   }
 }

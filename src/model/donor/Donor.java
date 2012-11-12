@@ -39,7 +39,7 @@ public class Donor implements ModificationTracker {
 	private Long id;
 
   @NotBlank
-  @Column(unique=true, length=30, nullable=false)
+  @Column(length=30, nullable=false)
   private String donorNumber;
 
   @NotBlank

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import model.donor.Donor;
 import model.donor.DonorBackingForm;
@@ -28,7 +29,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.DisplayNamesRepository;
 import repository.DonorRepository;
-import repository.LocationRepository;
 import repository.RecordFieldsConfigRepository;
 import utils.ControllerUtil;
 import viewmodel.donor.DonorViewModel;
@@ -38,9 +38,6 @@ public class DonorController {
 
   @Autowired
   private DonorRepository donorRepository;
-
-  @Autowired
-  private LocationRepository locationRepository;
 
   @Autowired
   private DisplayNamesRepository displayNamesRepository;
@@ -99,12 +96,12 @@ public class DonorController {
       Donor donor = donorRepository.findDonorByNumber(donorNumber);
       if (donor != null) {
         form = new DonorBackingForm(donor);
-        m.put("existingDonor", "true");
+        m.put("existingDonor", true);
         m.put("donorNumber", donor.getDonorNumber());
       }
       else {
         form = new DonorBackingForm();
-        m.put("existingDonor", "false");
+        m.put("existingDonor", false);
       }
     }
     m.put("editDonorForm", form);
@@ -114,35 +111,108 @@ public class DonorController {
     return mv;
   }
 
-  @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> updateOrAddDonor(
-      @ModelAttribute("editDonorForm") DonorBackingForm form,
+  @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
+  public ModelAndView addDonor(
+      @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
       BindingResult result, Model model) {
 
-    boolean success = true;
-    String errMsg = "";
-    try {
-      Donor donor = form.getDonor();
-      donorRepository.updateOrAddDonor(donor);
-    } catch (EntityExistsException ex) {
-      // TODO: Replace with logger
-      System.err.println("Entity Already exists");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Donor Already Exists";
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
+    ModelAndView mv = new ModelAndView("editDonorForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = new HashMap<String, Object>();
+    if (form == null) {
+      form = new DonorBackingForm();
+    } else {
+      if (result.hasErrors()) {
+        m.put("hasErrors", true);
+        success = false;
+        message = "Please fix the errors noted above";
+      } else {
+        try {
+          Donor donor = form.getDonor();
+          donor.setIsDeleted(false);
+          donorRepository.addDonor(donor);
+          m.put("hasErrors", false);
+          form = new DonorBackingForm();
+          success = true;
+          m.put("existingDonor", true);
+          message = "Donor Successfully Added";
+        } catch (EntityExistsException ex) {
+          ex.printStackTrace();
+          success = false;
+          message = "Donor Already exists.";
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          success = false;
+          message = "Internal Error. Please try again or report a Problem.";
+        }
+      }
     }
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("editDonorForm", form);
     m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+    m.put("message", message);
+
+    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+
+    return mv;
+  }
+
+  @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
+  public ModelAndView updateDonor(
+      @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView("editDonorForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = new HashMap<String, Object>();
+    if (form == null) {
+      form = new DonorBackingForm();
+    } else {
+      if (result.hasErrors()) {
+        m.put("hasErrors", true);
+        success = false;
+        message = "Please fix the errors noted above";
+      } else {
+        try {
+          Donor donor = form.getDonor();
+          donor.setIsDeleted(false);
+          Donor existingDonor = donorRepository.updateDonor(donor);
+          if (existingDonor == null) {
+            m.put("hasErrors", true);
+            success = false;
+            m.put("existingDonor", false);
+            message = "Donor does not already exist.";
+          }
+          else {
+            m.put("hasErrors", false);
+            form = new DonorBackingForm();
+            success = true;
+            m.put("existingDonor", true);
+            message = "Donor Successfully Updated";
+          }
+        } catch (EntityExistsException ex) {
+          ex.printStackTrace();
+          success = false;
+          message = "Donor Already exists.";
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          success = false;
+          message = "Internal Error. Please try again or report a Problem.";
+        }
+      }
+    }
+
+    m.put("editDonorForm", form);
+    m.put("success", success);
+    m.put("message", message);
+
+    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    mv.addObject("model", m);
+
+    return mv;
   }
 
   @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
@@ -168,14 +238,6 @@ public class DonorController {
     return m;
   }
   
-  @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
-  public ModelAndView addDonor(
-      @ModelAttribute("editDonorForm") DonorBackingForm form,
-      BindingResult result, Model m) {
-    ModelAndView modelAndView = new ModelAndView("addDonor");
-    return modelAndView;
-  }
-
   @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView findDonorFormInit(Model model) {
 

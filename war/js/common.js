@@ -360,3 +360,11 @@ function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) 
               }
   });
 }
+
+function showMessage(message) {
+  $.showMessage(message, {backgroundColor: '#a7d2d7'});
+}
+
+function showErrorMessage(message) {
+  $.showMessage(message, {backgroundColor: '#d35344'});
+}

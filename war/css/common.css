@@ -400,3 +400,7 @@ tr > td
 	height: 65px;
 	resize: none;
 }
+
+.formError {
+	color: red;
+}

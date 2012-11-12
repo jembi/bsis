@@ -31,6 +31,6 @@ public class DonorBackingFormValidator implements Validator {
     String birthDate = form.getBirthDate();
     if (!CustomDateFormatter.isDateStringValid(birthDate))
       errors.rejectValue("donor.birthDate", "dateFormat.incorrect",
-          "Invalid Date specified. Use " + CustomDateFormatter.pattern);
+          CustomDateFormatter.getErrorMessage());
   }
 }
