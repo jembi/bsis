@@ -173,7 +173,7 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonor(String donorNumber) {
-    donor = donorRepository.findDonorByNumber(donorNumber);
+    donor = donorRepository.findDonorById(donorNumber);
   }
 
   public void setDonor(Donor donor) {

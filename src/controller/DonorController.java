@@ -85,19 +85,18 @@ public class DonorController {
 
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView editDonorFormGenerator(HttpServletRequest request, Model model,
-      @RequestParam(value = "donorNumber", required = false) String donorNumber) {
+      @RequestParam(value = "donorId", required = false) Long donorId) {
 
     DonorBackingForm form = new DonorBackingForm();
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", getUrl(request));
-    if (donorNumber != null) {
-      form.setDonorNumber(donorNumber);
-      Donor donor = donorRepository.findDonorByNumber(donorNumber);
+    if (donorId != null) {
+      form.setId(donorId);
+      Donor donor = donorRepository.findDonorById(donorId);
       if (donor != null) {
         form = new DonorBackingForm(donor);
         m.put("existingDonor", true);
-        m.put("donorNumber", donor.getDonorNumber());
       }
       else {
         form = new DonorBackingForm();
@@ -170,14 +169,18 @@ public class DonorController {
     Map<String, Object> m = new HashMap<String, Object>();
     if (form == null) {
       form = new DonorBackingForm();
-    } else {
+    }
+    else {
       if (result.hasErrors()) {
         m.put("hasErrors", true);
         success = false;
         message = "Please fix the errors noted above";
-      } else {
+      }
+      else {
         try {
           Donor donor = form.getDonor();
+          System.out.println(donor.getBirthDate());
+          System.out.println(form.getBirthDate());
           donor.setIsDeleted(false);
           Donor existingDonor = donorRepository.updateDonor(donor);
           if (existingDonor == null) {
@@ -202,7 +205,7 @@ public class DonorController {
           success = false;
           message = "Internal Error. Please try again or report a Problem.";
         }
-      }
+     }
     }
 
     m.put("editDonorForm", form);

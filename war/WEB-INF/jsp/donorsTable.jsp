@@ -17,10 +17,11 @@
 
     var fnRowSelected = function(node) {
       var elements = $(node).children();
+      console.log(elements);
       if (elements[0].getAttribute("class") === "dataTables_empty") {
         return;
       }
-      replaceContent("${tabContentId}", "${model.requestUrl}", "editDonorFormGenerator.html", {donorNumber: elements[0].innerHTML});
+      replaceContent("${tabContentId}", "${model.requestUrl}", "editDonorFormGenerator.html", {donorId: elements[0].innerHTML});
     }
 
     var donorsTable = $("#${table_id}").dataTable({
@@ -57,6 +58,7 @@
 	<table id="${table_id}" class="dataTable donorsTable">
 		<thead>
 			<tr>
+				<th style="display:none"></th>
 				<th>${model.donorIDDisplayName}</th>
 				<c:if test="${model.showfirstName==true}">
 					<th>${model.firstNameDisplayName}</th>
@@ -78,6 +80,7 @@
 		<tbody>
 			<c:forEach var="donor" items="${model.allDonors}">
 				<tr>
+					<td style="display: none">${donor.id}</td>
 					<td>${donor.donorNumber}</td>
 					<c:if test="${model.showfirstName==true}">
 						<td>${donor.firstName}</td>

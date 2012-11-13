@@ -24,8 +24,6 @@ public class DonorBackingForm {
   private Donor donor;
   private List<BloodGroup> bloodGroups;
 
-  private String birthDate;
-
   public DonorBackingForm() {
     donor = new Donor();
   }
@@ -35,11 +33,10 @@ public class DonorBackingForm {
   }
 
   public String getBirthDate() {
-    return birthDate;
+    return CustomDateFormatter.getDateString(donor.getBirthDate());
   }
 
   public void setBirthDate(String birthDate) {
-    this.birthDate = birthDate;
     donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
   }
 

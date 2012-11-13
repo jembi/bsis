@@ -19,10 +19,12 @@ public class CustomDateFormatter {
     Date date = null;
     try {
       if (!isDateEmpty(dateString))
-        format.parse(dateString);
+        date = format.parse(dateString);
     } catch (ParseException ex) {
       ex.printStackTrace();
     }
+    System.out.println("here");
+    System.out.println(date);
     return date;
   }
 
@@ -48,5 +50,12 @@ public class CustomDateFormatter {
 
   public static String getErrorMessage() {
     return "Invalid Date specified. Use " + pattern.toLowerCase();
+  }
+
+  public static String getDateString(Date date) {
+    if (date == null)
+      return "";
+    else
+      return format.format(date);
   }
 }

@@ -268,7 +268,7 @@ $.extend({
 
     if (datesList.length > 0) {
       errorPanelUl.append('<li> ' + datesList.join(',')
-          + ' should be in format mm/dd/yyyy</li>')
+          + ' should be in format mm/dd/yyyy</li>');
       validForm = false;
     }
 

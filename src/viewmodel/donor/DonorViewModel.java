@@ -22,7 +22,7 @@ public class DonorViewModel {
     this.donor = donor;
   }
 
-  public String getDonorId() {
+  public String getId() {
     return donor.getId().toString();
   }
 

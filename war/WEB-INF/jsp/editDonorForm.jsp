@@ -46,9 +46,9 @@ $(document).ready(
                   title : "Confirm Delete",
                   buttons : {
                     "Delete" : function() {
-                      var donorNumber = $("#${editDonorFormId}").find(
-                          "[name='donorNumber']").val();
-                      deleteDonor(donorNumber);
+                      var donorId = $("#${editDonorFormId}").find(
+                          "[name='id']").val();
+                      deleteDonor(donorId);
                       $(this).dialog("close");
                     },
                     "Cancel" : function() {
@@ -124,6 +124,7 @@ $(document).ready(
 <div id="${editDonorFormDivId}" class="editFormDiv">
 	<form:form id="${editDonorFormId}" method="POST" class="editForm"
 		commandName="editDonorForm">
+		<form:hidden path="id" />
 		<div>
 			<form:label path="donorNumber">Donor Number</form:label>
 			<form:input path="donorNumber" />

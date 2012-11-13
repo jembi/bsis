@@ -14,7 +14,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import model.CollectedSample;
 import model.donor.Donor;
 import model.util.BloodGroup;
 
@@ -33,7 +32,7 @@ public class DonorRepository {
   }
 
   public void deleteDonor(String donorId) {
-    Donor existingDonor = findDonorByNumber(donorId);
+    Donor existingDonor = findDonorById(donorId);
     existingDonor.setIsDeleted(Boolean.TRUE);
     em.merge(existingDonor);
     em.flush();
@@ -41,7 +40,7 @@ public class DonorRepository {
 
   public Donor findDonorById(Long donorId) {
     try {
-      String queryString = "SELECT d FROM Donor d WHERE d.donorId = :donorId and d.isDeleted = :isDeleted";
+      String queryString = "SELECT d FROM Donor d WHERE d.id = :donorId and d.isDeleted = :isDeleted";
       TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       return query.setParameter("donorId", donorId).getSingleResult();
@@ -51,12 +50,12 @@ public class DonorRepository {
     }
   }
 
-  public Donor findDonorByNumber(String donorNumber) {
+  public Donor findDonorById(String donorId) {
     try {
-      String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
+      String queryString = "SELECT d FROM Donor d WHERE d.id = :donorId and d.isDeleted = :isDeleted";
       TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      Donor resultDonor = query.setParameter("donorNumber", donorNumber)
+      Donor resultDonor = query.setParameter("donorId", donorId)
           .getSingleResult();
       if (resultDonor != null) {
         resultDonor.setIsDeleted(Boolean.FALSE);
@@ -121,27 +120,13 @@ public class DonorRepository {
     return query.getResultList();
   }
 
-  public List<CollectedSample> getDonorHistory(String donorNumber) {
-    TypedQuery<CollectedSample> query = em
-        .createQuery(
-            "SELECT c FROM Collection c WHERE c.donorNumber = :donorNumber and c.isDeleted= :isDeleted",
-            CollectedSample.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donorNumber", donorNumber);
-    List<CollectedSample> collections = query.getResultList();
-    if (org.springframework.util.CollectionUtils.isEmpty(collections)) {
-      return null;
-    }
-    return collections;
-  }
-
   public void addDonor(Donor donor) {
     em.persist(donor);
     em.flush();
   }
 
   public Donor updateDonor(Donor donor) {
-    Donor existingDonor = findDonorByNumber(donor.getDonorNumber());
+    Donor existingDonor = findDonorById(donor.getId());
     if (existingDonor == null) {
       return null;
     }
