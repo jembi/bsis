@@ -221,7 +221,7 @@ public class DonorController {
   @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
   public @ResponseBody
   Map<String, ? extends Object> deleteDonor(
-      @RequestParam("donorId") String donorId) {
+      @RequestParam("donorId") Long donorId) {
 
     boolean success = true;
     String errMsg = "";

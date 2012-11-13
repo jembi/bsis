@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Map;
 
 import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 
 import org.hibernate.HibernateException;
 import org.hibernate.event.spi.MergeEvent;
@@ -38,8 +37,8 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   @Override
   public void onMerge(MergeEvent event) throws HibernateException {
     System.out.println("onMerge");
-    if (event.getEntity() instanceof RowModificationTracker) {
-      RowModificationTracker entity = (RowModificationTracker) event.getEntity();
+    if (event.getEntity() instanceof ModificationTracker) {
+      ModificationTracker entity = (ModificationTracker) event.getEntity();
       entity.setLastUpdated(new Date());
     }
   }

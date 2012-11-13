@@ -31,7 +31,7 @@ public class DonorRepository {
     em.flush();
   }
 
-  public void deleteDonor(String donorId) {
+  public void deleteDonor(Long donorId) {
     Donor existingDonor = findDonorById(donorId);
     existingDonor.setIsDeleted(Boolean.TRUE);
     em.merge(existingDonor);
