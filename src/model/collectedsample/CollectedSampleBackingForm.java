@@ -1,4 +1,4 @@
-package model;
+package model.collectedsample;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import model.TestResult;
 import model.donor.Donor;
 import model.user.User;
 import model.util.Location;
@@ -13,10 +14,11 @@ import model.util.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import repository.DonorRepository;
+import repository.LocationRepository;
 
 public class CollectedSampleBackingForm {
 
-  private CollectedSample collection;
+  private CollectedSample collectedSample;
   private List<String> centers;
   private List<String> sites;
   private String dateCollectedFrom;
@@ -25,21 +27,24 @@ public class CollectedSampleBackingForm {
   @Autowired
   private DonorRepository donorRepository;
   private Donor donor;
-  
+
+  @Autowired
+  private LocationRepository locationRepository;
+
   public CollectedSampleBackingForm() {
-    collection = new CollectedSample();
+    collectedSample = new CollectedSample();
   }
 
   public CollectedSampleBackingForm(CollectedSample collection) {
-    this.collection = collection;
+    this.collectedSample = collection;
   }
 
   public void copy(CollectedSample collection) {
     collection.copy(collection);
   }
 
-  public CollectedSample getCollection() {
-    return this.collection;
+  public CollectedSample getCollectedSample() {
+    return this.collectedSample;
   }
 
   public List<String> getCenters() {
@@ -51,7 +56,7 @@ public class CollectedSampleBackingForm {
   }
 
   public String getCollectedOn() {
-    Date dateCollected = collection.getCollectedOn();
+    Date dateCollected = collectedSample.getCollectedOn();
     if (dateCollected == null)
       return null;
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -59,13 +64,13 @@ public class CollectedSampleBackingForm {
   }
 
   public String getCollectionNumber() {
-    return collection.getCollectionNumber();
+    return collectedSample.getCollectionNumber();
   }
 
   public void setCollectedOn(String dateCollected) {
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     try {
-      collection.setCollectedOn(dateFormat.parse(dateCollected));
+      collectedSample.setCollectedOn(dateFormat.parse(dateCollected));
     } catch (ParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -89,7 +94,7 @@ public class CollectedSampleBackingForm {
   }
 
   public void setCollection(CollectedSample collection) {
-    this.collection = collection;
+    this.collectedSample = collection;
   }
 
   public void setCenters(List<String> centers) {
@@ -101,75 +106,79 @@ public class CollectedSampleBackingForm {
   }
 
   public boolean equals(Object obj) {
-    return collection.equals(obj);
+    return collectedSample.equals(obj);
   }
 
   public Long getId() {
-    return collection.getId();
+    return collectedSample.getId();
   }
 
   public Donor getDonor() {
-    return collection.getDonor();
+    return collectedSample.getDonor();
   }
 
   public List<TestResult> getTestResults() {
-    return collection.getTestResults();
+    return collectedSample.getTestResults();
   }
 
-  public Location getCenter() {
-    return collection.getCenter();
+  public String getCenter() {
+    return collectedSample.getCenter().getName();
   }
 
   public Location getSite() {
-    return collection.getSite();
+    return collectedSample.getSite();
   }
 
-  public DonorType getDonorType() {
-    return collection.getDonorType();
+  public String getDonorType() {
+    return collectedSample.getDonorType();
+  }
+
+  public String getBloodBagType() {
+    return collectedSample.getBloodBagType();
   }
 
   public String getSampleNumber() {
-    return collection.getSampleNumber();
+    return collectedSample.getSampleNumber();
   }
 
   public String getShippingNumber() {
-    return collection.getShippingNumber();
+    return collectedSample.getShippingNumber();
   }
 
   public Date getLastUpdated() {
-    return collection.getLastUpdated();
+    return collectedSample.getLastUpdated();
   }
 
   public Date getCreatedDate() {
-    return collection.getCreatedDate();
+    return collectedSample.getCreatedDate();
   }
 
   public User getCreatedBy() {
-    return collection.getCreatedBy();
+    return collectedSample.getCreatedBy();
   }
 
   public User getLastUpdatedBy() {
-    return collection.getLastUpdatedBy();
+    return collectedSample.getLastUpdatedBy();
   }
 
   public String getNotes() {
-    return collection.getNotes();
+    return collectedSample.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return collection.getIsDeleted();
+    return collectedSample.getIsDeleted();
   }
 
   public int hashCode() {
-    return collection.hashCode();
+    return collectedSample.hashCode();
   }
 
   public void setId(Long id) {
-    collection.setId(id);
+    collectedSample.setId(id);
   }
 
   public void setCollectionNumber(String collectionNumber) {
-    collection.setCollectionNumber(collectionNumber);
+    collectedSample.setCollectionNumber(collectionNumber);
   }
 
   public void setDonor(String donorNumber) {
@@ -177,62 +186,66 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonor(Donor donor) {
-    collection.setDonor(donor);
+    collectedSample.setDonor(donor);
   }
 
   public void setTestResults(List<TestResult> testResults) {
-    collection.setTestResults(testResults);
+    collectedSample.setTestResults(testResults);
   }
 
-  public void setCenter(Location center) {
-    collection.setCenter(center);
+  public void setCenter(String center) {
+    collectedSample.setCenter(locationRepository.getCenterByName(center));
   }
 
-  public void setSite(Location site) {
-    collection.setSite(site);
+  public void setSite(String site) {
+    collectedSample.setSite(locationRepository.getCenterByName(site));
   }
 
   public void setCollectedOn(Date collectedOn) {
-    collection.setCollectedOn(collectedOn);
+    collectedSample.setCollectedOn(collectedOn);
   }
 
-  public void setDonorType(DonorType donorType) {
-    collection.setDonorType(donorType);
+  public void setDonorType(String donorType) {
+    collectedSample.setDonorType(donorType);
+  }
+
+  public void setBloodBagType(String bloodBagType) {
+    collectedSample.setBloodBagType(bloodBagType);
   }
 
   public void setSampleNumber(String sampleNumber) {
-    collection.setSampleNumber(sampleNumber);
+    collectedSample.setSampleNumber(sampleNumber);
   }
 
   public void setShippingNumber(String shippingNumber) {
-    collection.setShippingNumber(shippingNumber);
+    collectedSample.setShippingNumber(shippingNumber);
   }
 
   public void setLastUpdated(Date lastUpdated) {
-    collection.setLastUpdated(lastUpdated);
+    collectedSample.setLastUpdated(lastUpdated);
   }
 
   public void setCreatedDate(Date createdDate) {
-    collection.setCreatedDate(createdDate);
+    collectedSample.setCreatedDate(createdDate);
   }
 
   public void setCreatedBy(User createdBy) {
-    collection.setCreatedBy(createdBy);
+    collectedSample.setCreatedBy(createdBy);
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
-    collection.setLastUpdatedBy(lastUpdatedBy);
+    collectedSample.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public void setNotes(String notes) {
-    collection.setNotes(notes);
+    collectedSample.setNotes(notes);
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    collection.setIsDeleted(isDeleted);
+    collectedSample.setIsDeleted(isDeleted);
   }
 
   public String toString() {
-    return collection.toString();
+    return collectedSample.toString();
   }
 }

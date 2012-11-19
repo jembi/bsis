@@ -153,7 +153,7 @@ public class ControllerUtil {
 				DONOR_DEFAULT_NAMES);
 	}
 
-	public static void addCollectionDisplayNamesToModel(
+	public static void addCollectedSampleDisplayNamesToModel(
 			Map<String, Object> model,
 			DisplayNamesRepository displayNamesRepository) {
 		addDisplayNamesToModel(model, displayNamesRepository, "collection",

@@ -107,6 +107,24 @@ public class LocationRepository {
     return locationNames;
   }
 
+  public Location getCollectionSiteByName(String name) {
+    List<Location> locations = getAllCollectionSites();
+    for (Location l : locations) {
+      if (l.getName().equals(name))
+        return l;
+    }
+    return null;
+  }
+
+  public Location getCenterByName(String name) {
+    List<Location> locations = getAllCenters();
+    for (Location l : locations) {
+      if (l.getName().equals(name))
+        return l;
+    }
+    return null;
+  }
+
   public Long getIDByName(String name) {
     List<Location> locations = getAllLocations();
     for (Location l : locations) {

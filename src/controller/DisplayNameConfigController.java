@@ -49,7 +49,7 @@ public class DisplayNameConfigController {
 
 		model.put("hasCollection", true);
 
-		ControllerUtil.addCollectionDisplayNamesToModel(model,
+		ControllerUtil.addCollectedSampleDisplayNamesToModel(model,
 				displayNamesRepository);
 		modelAndView.addObject("model", model);
 		return modelAndView;
@@ -82,7 +82,7 @@ public class DisplayNameConfigController {
 
 		model.put("configSaved", true);
 		model.put("hasCollection", true);
-		ControllerUtil.addCollectionDisplayNamesToModel(model,
+		ControllerUtil.addCollectedSampleDisplayNamesToModel(model,
 				displayNamesRepository);
 		modelAndView.addObject("model", model);
 		return modelAndView;

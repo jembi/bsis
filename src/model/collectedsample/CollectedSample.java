@@ -1,12 +1,10 @@
-package model;
+package model.collectedsample;
 
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,8 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import repository.LocationRepository;
-
+import model.Product;
+import model.TestResult;
 import model.donor.Donor;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -31,7 +29,7 @@ public class CollectedSample {
   @Column(nullable=false)
   private Long id;
 
-  @Column(unique=true, length=30, nullable=false)
+  @Column(length=30, nullable=false)
   private String collectionNumber;
 
   @ManyToOne(optional=false)
@@ -49,9 +47,12 @@ public class CollectedSample {
   @Temporal(TemporalType.TIMESTAMP)
   private Date collectedOn;
 
-  @Enumerated(EnumType.STRING)
-  private DonorType donorType;
+  @Column(length=30)
+  private String donorType;
 
+  @Column(length=30)
+  private String bloodBagType;
+  
   @Column(length=50)
   private String sampleNumber;
 
@@ -100,8 +101,12 @@ public class CollectedSample {
     return collectedOn;
   }
 
-  public DonorType getDonorType() {
+  public String getDonorType() {
     return donorType;
+  }
+
+  public String getBloodBagType() {
+    return bloodBagType;
   }
 
   public String getSampleNumber() {
@@ -148,8 +153,12 @@ public class CollectedSample {
     this.collectedOn = collectedOn;
   }
 
-  public void setDonorType(DonorType donorType) {
+  public void setDonorType(String donorType) {
     this.donorType = donorType;
+  }
+
+  public void setBloodBagType(String bloodBagType) {
+    this.bloodBagType = bloodBagType;
   }
 
   public void setSampleNumber(String sampleNumber) {

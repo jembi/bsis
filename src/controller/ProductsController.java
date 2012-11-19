@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.CollectionRepository;
+import repository.CollectedSampleRepository;
 import repository.DisplayNamesRepository;
 import repository.ProductRepository;
 import repository.RecordFieldsConfigRepository;
@@ -45,7 +45,7 @@ public class ProductsController {
   private RequestRepository requestRepository;
 
   @Autowired
-  static private CollectionRepository collectionRepository;
+  static private CollectedSampleRepository collectionRepository;
   
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;

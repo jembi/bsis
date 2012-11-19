@@ -5,26 +5,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import model.CollectedSample;
-import model.DonorType;
 import model.TestResult;
+import model.collectedsample.CollectedSample;
 import model.donor.Donor;
+import model.donor.DonorType;
 import model.user.User;
 import model.util.Location;
 
-public class CollectionViewModel {
-	private CollectedSample collection;
+public class CollectedSampleViewModel {
+	private CollectedSample collectedSample;
 	private List<Location> allCollectionSites;
 	private List<Location> allCenters;
 
-	public CollectionViewModel(CollectedSample collection) {
-		this.collection = collection;
+	public CollectedSampleViewModel(CollectedSample collection) {
+		this.collectedSample = collection;
 	}
 
-	public CollectionViewModel(CollectedSample collection,
+	public CollectedSampleViewModel(CollectedSample collection,
 			List<Location> allCollectionSites, List<Location> allCenters) {
 
-		this.collection = collection;
+		this.collectedSample = collection;
 		this.allCollectionSites = allCollectionSites;
 		this.allCenters = allCenters;
 	}
@@ -34,76 +34,76 @@ public class CollectionViewModel {
   }
 
   public boolean equals(Object obj) {
-    return collection.equals(obj);
+    return collectedSample.equals(obj);
   }
 
   public Long getId() {
-    return collection.getId();
+    return collectedSample.getId();
   }
 
   public String getCollectionNumber() {
-    return collection.getCollectionNumber();
+    return collectedSample.getCollectionNumber();
   }
 
   public Donor getDonor() {
-    return collection.getDonor();
+    return collectedSample.getDonor();
   }
 
   public List<TestResult> getTestResults() {
-    return collection.getTestResults();
+    return collectedSample.getTestResults();
   }
 
   public Location getCenter() {
-    return collection.getCenter();
+    return collectedSample.getCenter();
   }
 
   public Location getSite() {
-    return collection.getSite();
+    return collectedSample.getSite();
   }
 
   public String getCollectedOn() {
     DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(collection.getCollectedOn());
+    return formatter.format(collectedSample.getCollectedOn());
   }
 
-  public DonorType getDonorType() {
-    return collection.getDonorType();
+  public String getDonorType() {
+    return collectedSample.getDonorType();
   }
 
   public String getSampleNumber() {
-    return collection.getSampleNumber();
+    return collectedSample.getSampleNumber();
   }
 
   public String getShippingNumber() {
-    return collection.getShippingNumber();
+    return collectedSample.getShippingNumber();
   }
 
   public Date getLastUpdated() {
-    return collection.getLastUpdated();
+    return collectedSample.getLastUpdated();
   }
 
   public Date getCreatedDate() {
-    return collection.getCreatedDate();
+    return collectedSample.getCreatedDate();
   }
 
   public User getCreatedBy() {
-    return collection.getCreatedBy();
+    return collectedSample.getCreatedBy();
   }
 
   public User getLastUpdatedBy() {
-    return collection.getLastUpdatedBy();
+    return collectedSample.getLastUpdatedBy();
   }
 
   public String getNotes() {
-    return collection.getNotes();
+    return collectedSample.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return collection.getIsDeleted();
+    return collectedSample.getIsDeleted();
   }
 
   public CollectedSample getCollection() {
-    return collection;
+    return collectedSample;
   }
 
   public List<Location> getAllCollectionSites() {
@@ -115,7 +115,7 @@ public class CollectionViewModel {
   }
 
   public void setCollection(CollectedSample collection) {
-    this.collection = collection;
+    this.collectedSample = collection;
   }
 
   public void setAllCollectionSites(List<Location> allCollectionSites) {

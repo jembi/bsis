@@ -1,40 +1,31 @@
-function addNewCollection(form) {
-  updateCollectionGeneric(form, "updateCollection.html");
+function addNewCollectedSample(form) {
+  updateCollectionGeneric(form, "addCollectedSample.html");
 }
 
 function updateExistingCollection(form) {
-  updateCollectionGeneric(form, "updateCollection.html");
+  updateCollectionGeneric(form, "updateCollectedSample.html");
 }
 
 function updateCollectionGeneric(form, url) {
-  var collection = $("#" + form.getAttribute("id")).serialize();
+  var collectedSample = $("#" + form.getAttribute("id")).serialize();
   $.ajax({
-    type : "POST",
-    url : url,
-    data : collection,
-    success : function(jsonResponse) {
-      if (jsonResponse["success"] === true) {
-        $.showMessage("Collection Updated Successfully!");
-        $('#' + form.getAttribute("id")).each(function() {
-          this.reset();
-        });
-        window.history.back();
-      } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
-      }
-    }
+    type: "POST",
+    url: url,
+    data: donor,
+    success: function(jsonResponse, data, data1, data2) {
+                $("#" + resultDivId).replaceWith(jsonResponse);
+              },
+    error: function(jsonResponse) {
+             $("#" + resultDivId).replaceWith(jsonResponse);
+           }
   });
 }
 
-function deleteCollection(collectionNumber) {
+function deleteCollectedSample(collectedSampleId) {
   $.ajax({
     type : "POST",
-    url : "deleteCollection.html",
-    data : {
-      collectionNumber : collectionNumber
-    },
+    url : "deleteCollectedSample.html",
+    data : {collectedSampleId: collectedSampleId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Collection Deleted Successfully!");
@@ -47,6 +38,3 @@ function deleteCollection(collectionNumber) {
     }
   });
 }
-
-function decorateEditCollectionDialog() {
-};

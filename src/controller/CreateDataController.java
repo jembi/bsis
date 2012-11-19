@@ -12,11 +12,11 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.CollectedSample;
 import model.LocationType;
 import model.Product;
 import model.Request;
 import model.TestResult;
+import model.collectedsample.CollectedSample;
 import model.donor.Donor;
 import model.util.Location;
 
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.CollectionRepository;
+import repository.CollectedSampleRepository;
 import repository.DonorRepository;
 import repository.IssueRepository;
 import repository.LocationRepository;
@@ -49,7 +49,7 @@ public class CreateDataController {
 	@Autowired
 	private LocationRepository locationRepository;
 	@Autowired
-	private CollectionRepository collectionRepository;
+	private CollectedSampleRepository collectionRepository;
 
 	@Autowired
 	private TestResultRepository testResultRepository;
@@ -353,7 +353,7 @@ public class CreateDataController {
 		locationRepository.deleteAllLocations();
 		locationTypeRepository.deleteAllLocationTypes();
 		donorRepository.deleteAllDonors();
-		collectionRepository.deleteAllCollections();
+//		collectionRepository.deleteAllCollections();
 		usageRepository.deleteAllUsages();
 		issueRepository.deleteAllIssues();
 
@@ -493,7 +493,7 @@ public class CreateDataController {
 	}
 
 	private void createProducts(int productNumber) {
-		List<CollectedSample> collections = collectionRepository.getAllCollections();
+//		List<CollectedSample> collections = collectionRepository.getAllCollections();
 		for (int i = 0; i < productNumber; i++) {
 //			Product product = new Product(new Integer(i + 1).toString(),
 //					collections.get(r.nextInt(collections.size())),

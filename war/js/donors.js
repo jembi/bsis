@@ -13,12 +13,9 @@ function updateDonorGeneric(form, resultDivId, url) {
     url: url,
     data: donor,
     success: function(jsonResponse, data, data1, data2) {
-                console.log(jsonResponse);
                 $("#" + resultDivId).replaceWith(jsonResponse);
               },
     error: function(jsonResponse) {
-             console.log("here");
-             console.log(jsonResponse);
              $("#" + resultDivId).replaceWith(jsonResponse);
            }
   });
@@ -41,29 +38,3 @@ function deleteDonor(donorId) {
     }
   });
 }
-
-function decorateEditDonorDialog() {
-  $("#updateDonorBirthDate").datepicker({
-    changeMonth: true,
-    changeYear: true,
-    minDate: -36500,
-    maxDate: 0,
-    showOn: "button",
-    buttonImage: "images/calendar.gif",
-    buttonImageOnly: true,
-    yearRange: "c-100:c0"
-  });
-};
-
-function decorateEditDonorForm() {
-  $("#updateDonorBirthDate").datepicker({
-    changeMonth: true,
-    changeYear: true,
-    minDate: -36500,
-    maxDate: 0,
-    showOn: "button",
-    buttonImage: "images/calendar.gif",
-    buttonImageOnly: true,
-    yearRange: "c-100:c0"
-  });
-};

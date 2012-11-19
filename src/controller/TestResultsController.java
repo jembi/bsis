@@ -3,7 +3,7 @@ package controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import repository.CollectionRepository;
+import repository.CollectedSampleRepository;
 import repository.DisplayNamesRepository;
 import repository.ProductRepository;
 import repository.RecordFieldsConfigRepository;
@@ -12,7 +12,7 @@ import repository.TestResultRepository;
 @Controller
 public class TestResultsController {
   @Autowired
-  private CollectionRepository collectionRepository;
+  private CollectedSampleRepository collectionRepository;
 
   @Autowired
   private ProductRepository productRepository;

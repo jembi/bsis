@@ -2,8 +2,8 @@ package viewmodel;
 
 import java.util.Date;
 
-import model.CollectedSample;
 import model.Product;
+import model.collectedsample.CollectedSample;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;

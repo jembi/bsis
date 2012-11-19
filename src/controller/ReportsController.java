@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.CollectionRepository;
+import repository.CollectedSampleRepository;
 import repository.TestResultRepository;
 
 @Controller
 public class ReportsController {
 
   @Autowired
-  private CollectionRepository collectionRepository;
+  private CollectedSampleRepository collectionRepository;
 
   @Autowired
   private TestResultRepository testResultsRepository;
@@ -81,7 +81,7 @@ public class ReportsController {
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
     Map<Long, Long> numCollections = collectionRepository
-        .findNumberOfCollections(dateCollectedFrom, dateCollectedTo,
+        .findNumberOfCollectedSamples(dateCollectedFrom, dateCollectedTo,
             form.getAggregationCriteria());
     Map<String, Object> m = new HashMap<String, Object>();
     // TODO: potential leap year bug here

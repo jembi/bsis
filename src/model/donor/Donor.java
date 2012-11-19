@@ -16,8 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import model.CollectedSample;
 import model.address.ContactInformation;
+import model.collectedsample.CollectedSample;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import model.collectedsample.CollectedSample;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
