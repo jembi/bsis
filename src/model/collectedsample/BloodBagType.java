@@ -17,4 +17,9 @@ public class BloodBagType {
   public void setBloodBagType(String bloodBagType) {
     this.bloodBagType = bloodBagType;
   }
+
+  @Override
+  public String toString() {
+    return bloodBagType;
+  }
 }

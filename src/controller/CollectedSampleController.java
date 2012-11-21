@@ -13,8 +13,6 @@ import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
-import model.donor.Donor;
-import model.donor.DonorBackingForm;
 import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DisplayNamesRepository;
+import repository.DonorRepository;
+import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import repository.RecordFieldsConfigRepository;
 import utils.ControllerUtil;
@@ -49,12 +50,23 @@ public class CollectedSampleController {
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
+  @Autowired
+  private BloodBagTypeRepository bloodBagTypeRepository;
+  @Autowired
+  private DonorTypeRepository donorTypeRepository;
+  @Autowired
+  private DonorRepository donorRepository;
+
   public CollectedSampleController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator()));
+    binder.setValidator(
+        new CollectedSampleBackingFormValidator(binder.getValidator(),
+                                                donorRepository,
+                                                donorTypeRepository,
+                                                bloodBagTypeRepository));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -116,12 +128,9 @@ public class CollectedSampleController {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
     Map<String, Object> m = model.asMap();
-    List<String> centers = locationRepository.getAllCentersAsString();
-    m.put("centers", centers);
-    m.put("selectedCenter", centers.get(0));
-    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-    m.put("sites", sites);
-    m.put("selectedSite", sites.get(0));
+    m.put("centers", locationRepository.getAllCentersAsString());
+    m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
+    m.put("sites", locationRepository.getAllCollectionSitesAsString());
     m.put("isDialog", isDialog);
     m.put("requestUrl", getUrl(request));
     if (collectionNumber != null) {

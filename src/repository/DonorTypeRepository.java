@@ -17,7 +17,7 @@ public class DonorTypeRepository {
   private EntityManager em;
 
   public boolean isDonorTypeValid(String checkDonorType) {
-    String queryString = "SELECT dt from DonorType";
+    String queryString = "SELECT dt from DonorType dt";
     TypedQuery<DonorType> query = em.createQuery(queryString, DonorType.class);
     for (DonorType donorType : query.getResultList()) {
       if (donorType.getDonorType().equals(checkDonorType))

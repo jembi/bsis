@@ -10,7 +10,7 @@ import org.springframework.validation.Validator;
 
 public class DonorBackingFormValidator implements Validator {
 
-  public Validator validator;
+  private Validator validator;
 
   public DonorBackingFormValidator(Validator validator) {
     super();

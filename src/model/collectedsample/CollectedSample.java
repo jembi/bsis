@@ -15,6 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import model.Product;
 import model.TestResult;
 import model.donor.Donor;
@@ -29,6 +31,7 @@ public class CollectedSample {
   @Column(nullable=false)
   private Long id;
 
+  @NotBlank
   @Column(length=30, nullable=false)
   private String collectionNumber;
 
@@ -50,8 +53,8 @@ public class CollectedSample {
   @Column(length=30)
   private String donorType;
 
-  @Column(length=30)
-  private String bloodBagType;
+  @ManyToOne
+  private BloodBagType bloodBagType;
   
   @Column(length=50)
   private String sampleNumber;
@@ -105,7 +108,7 @@ public class CollectedSample {
     return donorType;
   }
 
-  public String getBloodBagType() {
+  public BloodBagType getBloodBagType() {
     return bloodBagType;
   }
 
@@ -157,7 +160,7 @@ public class CollectedSample {
     this.donorType = donorType;
   }
 
-  public void setBloodBagType(String bloodBagType) {
+  public void setBloodBagType(BloodBagType bloodBagType) {
     this.bloodBagType = bloodBagType;
   }
 
@@ -204,10 +207,6 @@ public class CollectedSample {
 
   public User getLastUpdatedBy() {
     return modificationTracker.getLastUpdatedBy();
-  }
-
-  public int hashCode() {
-    return modificationTracker.hashCode();
   }
 
   public void setLastUpdated(Date lastUpdated) {

@@ -1,17 +1,17 @@
-function addNewCollectedSample(form) {
-  updateCollectionGeneric(form, "addCollectedSample.html");
+function addNewCollectedSample(form, resultDivId) {
+  updateCollectionGeneric(form, resultDivId, "addCollectedSample.html");
 }
 
-function updateExistingCollection(form) {
-  updateCollectionGeneric(form, "updateCollectedSample.html");
+function updateExistingCollection(form, resultDivId) {
+  updateCollectionGeneric(form, resultDivId, "updateCollectedSample.html");
 }
 
-function updateCollectionGeneric(form, url) {
+function updateCollectionGeneric(form, resultDivId, url) {
   var collectedSample = $("#" + form.getAttribute("id")).serialize();
   $.ajax({
     type: "POST",
     url: url,
-    data: donor,
+    data: collectedSample,
     success: function(jsonResponse, data, data1, data2) {
                 $("#" + resultDivId).replaceWith(jsonResponse);
               },

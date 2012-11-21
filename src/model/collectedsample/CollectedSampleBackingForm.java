@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import model.TestResult;
 import model.donor.Donor;
 import model.user.User;
@@ -13,11 +16,14 @@ import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import repository.BloodBagTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 
 public class CollectedSampleBackingForm {
 
+  @NotNull
+  @Valid
   private CollectedSample collectedSample;
   private List<String> centers;
   private List<String> sites;
@@ -26,11 +32,13 @@ public class CollectedSampleBackingForm {
 
   @Autowired
   private DonorRepository donorRepository;
-  private Donor donor;
 
   @Autowired
   private LocationRepository locationRepository;
 
+  @Autowired
+  private BloodBagTypeRepository bloodBagTypeRepository;
+  
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
   }
@@ -134,7 +142,11 @@ public class CollectedSampleBackingForm {
   }
 
   public String getBloodBagType() {
-    return collectedSample.getBloodBagType();
+    BloodBagType bloodBagType = collectedSample.getBloodBagType();
+    if (bloodBagType == null)
+      return "";
+    else
+      return bloodBagType.toString();
   }
 
   public String getSampleNumber() {
@@ -181,8 +193,8 @@ public class CollectedSampleBackingForm {
     collectedSample.setCollectionNumber(collectionNumber);
   }
 
-  public void setDonor(String donorNumber) {
-    donor = donorRepository.findDonorById(donorNumber);
+  public void setDonor(String donorId) {
+    collectedSample.setDonor(donorRepository.findDonorById(donorId));
   }
 
   public void setDonor(Donor donor) {
@@ -210,7 +222,7 @@ public class CollectedSampleBackingForm {
   }
 
   public void setBloodBagType(String bloodBagType) {
-    collectedSample.setBloodBagType(bloodBagType);
+    collectedSample.setBloodBagType(bloodBagTypeRepository.fromString(bloodBagType));
   }
 
   public void setSampleNumber(String sampleNumber) {
@@ -243,9 +255,5 @@ public class CollectedSampleBackingForm {
 
   public void setIsDeleted(Boolean isDeleted) {
     collectedSample.setIsDeleted(isDeleted);
-  }
-
-  public String toString() {
-    return collectedSample.toString();
   }
 }

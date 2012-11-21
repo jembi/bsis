@@ -3,24 +3,31 @@ package model.collectedsample;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import repository.BloodBagTypeRepository;
+import repository.DonorRepository;
 import repository.DonorTypeRepository;
 
 public class CollectedSampleBackingFormValidator implements Validator {
 
-  public Validator validator;
-  @Autowired
-  public DonorTypeRepository donorTypeRepository;
-  @Autowired
-  public BloodBagTypeRepository bloodBagTypeRepository;
+  private Validator validator;
+  private DonorRepository donorRepository;
+  private DonorTypeRepository donorTypeRepository;
+  private BloodBagTypeRepository bloodBagTypeRepository;
 
-  public CollectedSampleBackingFormValidator(Validator validator) {
+  public CollectedSampleBackingFormValidator(Validator validator,
+                                             DonorRepository donorRepository,
+                                             DonorTypeRepository donorTypeRepository,
+                                             BloodBagTypeRepository bloodBagTypeRepository) {
     super();
     this.validator = validator;
+    this.donorRepository = donorRepository;
+    this.donorTypeRepository = donorTypeRepository;
+    this.bloodBagTypeRepository = bloodBagTypeRepository;
   }
 
   @Override
@@ -34,13 +41,20 @@ public class CollectedSampleBackingFormValidator implements Validator {
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
     CollectedSampleBackingForm form = (CollectedSampleBackingForm) obj;
-    if (!donorTypeRepository.isDonorTypeValid(form.getDonorType()))
+    System.out.println(form);
+    System.out.println(donorTypeRepository);
+    System.out.println(bloodBagTypeRepository);
+    if (!donorTypeRepository.isDonorTypeValid(form.getDonorType())) {
+      System.out.println("here");
       errors.rejectValue("collectedSample.donorType",
                          "donorType.invalid",
                          "Invalid Donor Type Specified");
-    if (!bloodBagTypeRepository.isBloodBagTypeValid(form.getBloodBagType()))
+    }
+    if (!bloodBagTypeRepository.isBloodBagTypeValid(form.getBloodBagType())) {
+      System.out.println("here1");
       errors.rejectValue("collectedSample.bloodBagType",
                          "bloodBagType.invalid",
                          "Invalid Blood Bag Type Specified");
+    }
   }
 }
