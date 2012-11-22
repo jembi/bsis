@@ -144,8 +144,8 @@ public class CollectedSampleController {
       } else
         form = new CollectedSampleBackingForm();
     }
-    else if (donorNumber != null){
-      form.setDonor(donorNumber);
+    else if (donorNumber != null && !donorNumber.isEmpty()){
+//      form.setDonor(donorNumber);
     }
 
     m.put("editCollectedSampleForm", form);
@@ -165,6 +165,10 @@ public class CollectedSampleController {
     boolean success = false;
     String message = "";
     Map<String, Object> m = new HashMap<String, Object>();
+    System.out.println("Collected Sample Form");
+//    form.setDonor("123");
+    System.out.println(form.getDonor());
+    System.out.println(form.getCollectionNumber());
     if (form == null) {
       form = new CollectedSampleBackingForm();
     } else {

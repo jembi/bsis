@@ -41,17 +41,12 @@ public class CollectedSampleBackingFormValidator implements Validator {
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
     CollectedSampleBackingForm form = (CollectedSampleBackingForm) obj;
-    System.out.println(form);
-    System.out.println(donorTypeRepository);
-    System.out.println(bloodBagTypeRepository);
     if (!donorTypeRepository.isDonorTypeValid(form.getDonorType())) {
-      System.out.println("here");
       errors.rejectValue("collectedSample.donorType",
                          "donorType.invalid",
                          "Invalid Donor Type Specified");
     }
     if (!bloodBagTypeRepository.isBloodBagTypeValid(form.getBloodBagType())) {
-      System.out.println("here1");
       errors.rejectValue("collectedSample.bloodBagType",
                          "bloodBagType.invalid",
                          "Invalid Blood Bag Type Specified");

@@ -136,4 +136,16 @@ public class DonorRepository {
     em.flush();
     return existingDonor;
   }
+
+  public Donor findDonorByNumber(String donorNumber) {
+    try {
+      String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
+      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+      query.setParameter("isDeleted", Boolean.FALSE);
+      return query.setParameter("donorNumber", donorNumber).getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      return null;
+    }
+  }
 }

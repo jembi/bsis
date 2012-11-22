@@ -121,8 +121,11 @@ public class CollectedSampleBackingForm {
     return collectedSample.getId();
   }
 
-  public Donor getDonor() {
-    return collectedSample.getDonor();
+  public String getDonor() {
+    Donor donor = collectedSample.getDonor();
+    if (donor == null)
+      return "";
+    return donor.getDonorNumber();
   }
 
   public List<TestResult> getTestResults() {
@@ -194,11 +197,15 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonor(String donorId) {
-    collectedSample.setDonor(donorRepository.findDonorById(donorId));
-  }
-
-  public void setDonor(Donor donor) {
-    collectedSample.setDonor(donor);
+    System.out.println("setting donorId: " + donorId);
+    if (donorId == null || donorId.isEmpty()) {
+      collectedSample.setDonor(null);
+    }
+    else {
+      Donor donor = new Donor();
+      donor.setDonorNumber(donorId);
+      collectedSample.setDonor(donor);
+    }
   }
 
   public void setTestResults(List<TestResult> testResults) {

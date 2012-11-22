@@ -101,10 +101,10 @@
 				path="collectedSample.collectionNumber" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="donor.donorNumber">${model.donorNoDisplayName}</form:label>
-			<form:input path="donor.donorNumber" />
+			<form:label path="donor">${model.donorNoDisplayName}</form:label>
+			<form:input path="donor" />
 			<form:errors class="formError"
-				path="collectedSample.donor.donorNumber" delimiter=", "></form:errors>
+				path="collectedSample.donor" delimiter=", "></form:errors>
 		</div>
 		<div>
 			<form:label path="donorType">${model.donorTypeDisplayName}</form:label>

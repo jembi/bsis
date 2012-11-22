@@ -15,14 +15,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import model.Product;
 import model.TestResult;
 import model.donor.Donor;
+import model.donor.DonorExists;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 import model.util.Location;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class CollectedSample {
@@ -35,6 +36,7 @@ public class CollectedSample {
   @Column(length=30, nullable=false)
   private String collectionNumber;
 
+  @DonorExists
   @ManyToOne(optional=false)
   private Donor donor;
 
@@ -137,6 +139,7 @@ public class CollectedSample {
   }
 
   public void setDonor(Donor donor) {
+    System.out.println("here2");
     this.donor = donor;
   }
 
