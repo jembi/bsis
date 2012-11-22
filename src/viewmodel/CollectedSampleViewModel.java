@@ -8,7 +8,7 @@ import java.util.List;
 import model.TestResult;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
-import model.donor.DonorType;
+import model.donortype.DonorType;
 import model.user.User;
 import model.util.Location;
 
@@ -66,7 +66,7 @@ public class CollectedSampleViewModel {
     return formatter.format(collectedSample.getCollectedOn());
   }
 
-  public String getDonorType() {
+  public DonorType getDonorType() {
     return collectedSample.getDonorType();
   }
 

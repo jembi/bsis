@@ -1,4 +1,4 @@
-package model.donor;
+package model.donortype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,5 +16,9 @@ public class DonorType {
 
   public void setDonorType(String donorType) {
     this.donorType = donorType;
+  }
+
+  public String toString() {
+    return donorType;
   }
 }

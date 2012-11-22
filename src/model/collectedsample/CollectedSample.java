@@ -17,8 +17,12 @@ import javax.validation.Valid;
 
 import model.Product;
 import model.TestResult;
+import model.bloodbagtype.BloodBagType;
+import model.bloodbagtype.BloodBagTypeExists;
 import model.donor.Donor;
 import model.donor.DonorExists;
+import model.donortype.DonorType;
+import model.donortype.DonorTypeExists;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 import model.util.Location;
@@ -52,9 +56,11 @@ public class CollectedSample {
   @Temporal(TemporalType.TIMESTAMP)
   private Date collectedOn;
 
-  @Column(length=30)
-  private String donorType;
+  @DonorTypeExists
+  @ManyToOne
+  private DonorType donorType;
 
+  @BloodBagTypeExists
   @ManyToOne
   private BloodBagType bloodBagType;
   
@@ -106,7 +112,7 @@ public class CollectedSample {
     return collectedOn;
   }
 
-  public String getDonorType() {
+  public DonorType getDonorType() {
     return donorType;
   }
 
@@ -139,7 +145,6 @@ public class CollectedSample {
   }
 
   public void setDonor(Donor donor) {
-    System.out.println("here2");
     this.donor = donor;
   }
 
@@ -159,7 +164,7 @@ public class CollectedSample {
     this.collectedOn = collectedOn;
   }
 
-  public void setDonorType(String donorType) {
+  public void setDonorType(DonorType donorType) {
     this.donorType = donorType;
   }
 

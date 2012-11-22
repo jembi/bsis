@@ -1,4 +1,4 @@
-package model.collectedsample;
+package model.bloodbagtype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

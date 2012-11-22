@@ -63,10 +63,7 @@ public class CollectedSampleController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(
-        new CollectedSampleBackingFormValidator(binder.getValidator(),
-                                                donorRepository,
-                                                donorTypeRepository,
-                                                bloodBagTypeRepository));
+        new CollectedSampleBackingFormValidator(binder.getValidator()));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -119,6 +116,13 @@ public class CollectedSampleController {
     return modelAndView;
   }
 
+  private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("centers", locationRepository.getAllCentersAsString());
+    m.put("donorTypes", donorTypeRepository.getAllDonorTypes());
+    m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
+    m.put("sites", locationRepository.getAllCollectionSitesAsString());    
+  }
+
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       Model model,
@@ -128,9 +132,7 @@ public class CollectedSampleController {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
     Map<String, Object> m = model.asMap();
-    m.put("centers", locationRepository.getAllCentersAsString());
-    m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
-    m.put("sites", locationRepository.getAllCollectionSitesAsString());
+    addEditSelectorOptions(m);
     m.put("isDialog", isDialog);
     m.put("requestUrl", getUrl(request));
     if (collectionNumber != null) {
@@ -145,7 +147,9 @@ public class CollectedSampleController {
         form = new CollectedSampleBackingForm();
     }
     else if (donorNumber != null && !donorNumber.isEmpty()){
-//      form.setDonor(donorNumber);
+      // generating edit collection form for an existing Donor
+      // TODO: make this property readonly in the jsp
+      form.setDonor(donorNumber);
     }
 
     m.put("editCollectedSampleForm", form);
@@ -165,15 +169,12 @@ public class CollectedSampleController {
     boolean success = false;
     String message = "";
     Map<String, Object> m = new HashMap<String, Object>();
-    System.out.println("Collected Sample Form");
-//    form.setDonor("123");
-    System.out.println(form.getDonor());
-    System.out.println(form.getCollectionNumber());
     if (form == null) {
       form = new CollectedSampleBackingForm();
     } else {
       if (result.hasErrors()) {
         m.put("hasErrors", true);
+        addEditSelectorOptions(m);
         success = false;
         message = "Please fix the errors noted above";
       } else {

@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.collectedsample.BloodBagType;
+import model.bloodbagtype.BloodBagType;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +38,7 @@ public class BloodBagTypeRepository {
     TypedQuery<BloodBagType> query;
     query = em.createQuery("SELECT b from BloodBagType b " +
     		    "where b.bloodBagType=:bloodBagType", BloodBagType.class);
+    query.setParameter("bloodBagType", bloodBagType);
     return query.getSingleResult();
   }
 }

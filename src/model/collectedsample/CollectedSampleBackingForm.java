@@ -10,16 +10,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.TestResult;
+import model.bloodbagtype.BloodBagType;
 import model.donor.Donor;
+import model.donortype.DonorType;
 import model.user.User;
 import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import repository.BloodBagTypeRepository;
-import repository.DonorRepository;
+import repository.DonorTypeRepository;
 import repository.LocationRepository;
 
+@Component
 public class CollectedSampleBackingForm {
 
   @NotNull
@@ -31,7 +35,7 @@ public class CollectedSampleBackingForm {
   private String dateCollectedTo;
 
   @Autowired
-  private DonorRepository donorRepository;
+  private DonorTypeRepository donorTypeRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -141,7 +145,11 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorType() {
-    return collectedSample.getDonorType();
+    DonorType donorType = collectedSample.getDonorType();
+    if (donorType == null)
+      return "";
+    else
+      return donorType.toString();
   }
 
   public String getBloodBagType() {
@@ -197,7 +205,6 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonor(String donorId) {
-    System.out.println("setting donorId: " + donorId);
     if (donorId == null || donorId.isEmpty()) {
       collectedSample.setDonor(null);
     }
@@ -225,11 +232,25 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorType(String donorType) {
-    collectedSample.setDonorType(donorType);
+    if (donorType == null) {
+      collectedSample.setDonorType(null);
+    }
+    else {
+      DonorType dt = new DonorType();
+      dt.setDonorType(donorType);
+      collectedSample.setDonorType(dt);
+    }
   }
 
   public void setBloodBagType(String bloodBagType) {
-    collectedSample.setBloodBagType(bloodBagTypeRepository.fromString(bloodBagType));
+    if (bloodBagType == null) {
+      collectedSample.setBloodBagType(null);
+    }
+    else {
+      BloodBagType bt = new BloodBagType();
+      bt.setBloodBagType(bloodBagType);
+      collectedSample.setBloodBagType(bt);
+    }
   }
 
   public void setSampleNumber(String sampleNumber) {

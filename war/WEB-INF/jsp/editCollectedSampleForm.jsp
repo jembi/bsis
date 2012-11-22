@@ -111,9 +111,10 @@
 			<form:select path="donorType"
 				id="${editCollectedSampleFormDonorTypeId}"
 				class="editCollectedSampleFormDonorType">
-				<form:option value="voluntary" label="Voluntary" />
-				<form:option value="family" label="Family" />
-				<form:option value="other" label="Other" />
+				<form:option label="" value="" selected="selected" />
+				<c:forEach var="donorType" items="${model.donorTypes}">
+					<form:option value="${donorType}" label="${donorType}" />
+				</c:forEach>
 			</form:select>
 			<form:errors class="formError" path="collectedSample.donorType"
 				delimiter=", "></form:errors>
