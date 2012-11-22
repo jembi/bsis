@@ -11,6 +11,7 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="editCollectedSampleFormDivId">editCollectedSampleFormDiv-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormId">editCollectedSampleForm-${unique_page_id}</c:set>
+<c:set var="editCollectedSampleFormDonorId">editCollectedSampleFormDonor-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleConfirmDialogId">deleteCollectedSampleConfirmDialog-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormCentersId">editCollectedSampleFormCenters-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormSitesId">editCollectedSampleFormSites-${unique_page_id}</c:set>
@@ -87,6 +88,19 @@
           selectedList : 1,
           header : false
         });
+
+        $( "#${editCollectedSampleFormDonorId}" ).autocomplete({
+          source: "donorTypeAhead.html",
+          minLength: 2,
+          response: function(event, ui) {
+            					console.log(event);
+            					console.log(ui);
+          },
+          select: function( event, ui ) {
+            				console.log(event);
+            				console.log(ui);
+          },
+      	});
       });
 </script>
 
@@ -102,7 +116,7 @@
 		</div>
 		<div>
 			<form:label path="donor">${model.donorNoDisplayName}</form:label>
-			<form:input path="donor" />
+			<form:input path="donor" id="${editCollectedSampleFormDonorId}" />
 			<form:errors class="formError"
 				path="collectedSample.donor" delimiter=", "></form:errors>
 		</div>

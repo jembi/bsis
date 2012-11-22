@@ -218,6 +218,20 @@ public class DonorController {
     return mv;
   }
 
+  @RequestMapping(value = "/donorTypeAhead", method = RequestMethod.GET)
+  public @ResponseBody
+  List<String> donorTypeAhead(
+      @RequestParam("term") String term) {
+
+    List<String> l = new ArrayList<String>();
+    l.add(term);
+    l.add(term);
+    l.add(term);
+    l.add(term.substring(1, 2));
+    l.add(term.substring(0, 2));
+    return l;
+  }
+  
   @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
   public @ResponseBody
   Map<String, ? extends Object> deleteDonor(
