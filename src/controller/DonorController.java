@@ -15,6 +15,7 @@ import model.donor.DonorBackingForm;
 import model.donor.DonorBackingFormValidator;
 import model.util.BloodGroup;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,6 +90,8 @@ public class DonorController {
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
     DonorBackingForm form = new DonorBackingForm();
+    form.generateDonorNumber();
+
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", getUrl(request));

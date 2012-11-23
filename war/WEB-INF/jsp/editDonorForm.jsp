@@ -23,15 +23,21 @@
 $(document).ready(
     function() {
 
+      function resetForm() {
+        $("#${editDonorFormId}").each(function() {
+          															this.reset();}
+            												 );
+      }
+      
       $("#${updateDonorButtonId}").button({
         icons : {
           primary : 'ui-icon-plusthick'
         }
       }).click(function() {
         if ("${model.existingDonor}" == "true")
-        	updateExistingDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}");
+        	updateExistingDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}", function() {});
         else
-          addNewDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}");
+          addNewDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}", resetForm);
       });
 
       $("#${deleteDonorButtonId}").button({
@@ -212,9 +218,9 @@ $(document).ready(
 		<div>
 			<button type="button" id="${updateDonorButtonId}"
 				style="margin-left: 10px">Save</button>
+			<c:if test="${model.existingDonor == 'true'}">
 			<button type="button" id="${deleteDonorButtonId}"
 				style="margin-left: 10px">Delete</button>
-			<c:if test="${model.existingDonor == 'true'}">
 				<button type="button" id="${addCollectionButtonId}"
 					style="margin-left: 10px">Add collection for this donor</button>
 			</c:if>

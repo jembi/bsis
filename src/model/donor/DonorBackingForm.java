@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.RandomStringUtils;
 
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
@@ -18,6 +21,8 @@ import model.util.Gender;
 import viewmodel.donor.DonorViewModel;
 
 public class DonorBackingForm {
+
+  public static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid
@@ -251,5 +256,12 @@ public class DonorBackingForm {
     BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
     donor.setBloodAbo(bloodGroup.getBloodAbo());
     donor.setBloodRhd(bloodGroup.getBloodRhd());
+  }
+
+  public void generateDonorNumber() {
+    String uniqueDonorNumber;
+    uniqueDonorNumber = "D-" +
+                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+    donor.setDonorNumber(uniqueDonorNumber);
   }
 }

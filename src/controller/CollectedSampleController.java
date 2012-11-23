@@ -131,6 +131,7 @@ public class CollectedSampleController {
       @RequestParam(value = "isDialog", required = false) String isDialog) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
+    form.generateCollectionNumber();
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
     m.put("isDialog", isDialog);

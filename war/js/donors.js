@@ -1,12 +1,12 @@
-function addNewDonor(form, resultDivId) {
-  updateDonorGeneric(form, resultDivId, "addDonor.html");
+function addNewDonor(form, resultDivId, successCallback) {
+  updateDonorGeneric(form, resultDivId, "addDonor.html", successCallback);
 }
 
-function updateExistingDonor(form, resultDivId) {
-  updateDonorGeneric(form, resultDivId, "updateDonor.html");
+function updateExistingDonor(form, resultDivId, successCallback) {
+  updateDonorGeneric(form, resultDivId, "updateDonor.html", successCallback);
 }
 
-function updateDonorGeneric(form, resultDivId, url) {
+function updateDonorGeneric(form, resultDivId, url, successCallback) {
   var donor = $("#" + form.getAttribute("id")).serialize();
   $.ajax({
     type: "POST",
@@ -14,6 +14,7 @@ function updateDonorGeneric(form, resultDivId, url) {
     data: donor,
     success: function(jsonResponse, data, data1, data2) {
                 $("#" + resultDivId).replaceWith(jsonResponse);
+                successCallback();
               },
     error: function(jsonResponse) {
              $("#" + resultDivId).replaceWith(jsonResponse);

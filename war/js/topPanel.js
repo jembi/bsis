@@ -9,25 +9,25 @@ $(document).ready(
         cache : true
       });
       var donorsTabs = $("#donorsTab").tabs({
-        cache : true
+//        cache : true
       });
       var collectionsTabs = $("#collectionsTab").tabs({
-        cache : true
+//        cache : true
       });
       var testResultsTabs = $("#testResultsTab").tabs({
-        cache : true
+//        cache : true
       });
       var productsTabs = $("#productsTab").tabs({
-        cache : true
+//        cache : true
       });
       var requestsTabs = $("#requestsTab").tabs({
-        cache : true
+//        cache : true
       });
       var usageTabs = $("#usageTab").tabs({
-        cache : true
+//        cache : true
       });
       var reportsTabs = $("#reportsTab").tabs({
-        cache : true
+//        cache : true
       });
 
       // Define our own click handler for the tabs, overriding the default.

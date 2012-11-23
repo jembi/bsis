@@ -16,6 +16,7 @@ import model.donortype.DonorType;
 import model.user.User;
 import model.util.Location;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,8 @@ import repository.LocationRepository;
 
 @Component
 public class CollectedSampleBackingForm {
+
+  public static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid
@@ -283,5 +286,12 @@ public class CollectedSampleBackingForm {
 
   public void setIsDeleted(Boolean isDeleted) {
     collectedSample.setIsDeleted(isDeleted);
+  }
+
+  public void generateCollectionNumber() {
+    String uniqueCollectedSampleNumber;
+    uniqueCollectedSampleNumber = "C-" +
+                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+    collectedSample.setCollectionNumber(uniqueCollectedSampleNumber);
   }
 }
