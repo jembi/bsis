@@ -95,7 +95,7 @@
         });
 
         $("#${editCollectedSampleFormDonorId}").autocomplete({
-          minLength: 2,
+          minLength: 3,
           source: function(request, response) {
             				$.ajax({
             				  url: "donorTypeAhead.html",
@@ -116,7 +116,6 @@
           				},
           select: function(event, ui) {
             				var item = ui.item;
-            				console.log(item);
             				$("#${editCollectedSampleFormDonorId}").val(item.label);
 				    		    $("#${editCollectedSampleFormDonorHiddenId}").val(item.id);
 				    		    $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");
