@@ -103,6 +103,9 @@
             				  data: {term: request.term},
             				  success: function(jsonResponse) {
             				    				 var suggestions = [];
+            				    				 if (jsonResponse.length == 0) {
+																   suggestions.push({label: "No Matching Results", id: null});
+							            			 }
             				    				 for (var index in jsonResponse) {
             				    				   var donor = jsonResponse[index];
             				    				   var label = donor.firstName + " " +
