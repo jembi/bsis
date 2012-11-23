@@ -12,6 +12,7 @@
 <c:set var="editCollectedSampleFormDivId">editCollectedSampleFormDiv-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormId">editCollectedSampleForm-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorId">editCollectedSampleFormDonor-${unique_page_id}</c:set>
+<c:set var="editCollectedSampleFormDonorHiddenId">editCollectedSampleFormDonorHidden-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleConfirmDialogId">deleteCollectedSampleConfirmDialog-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormCentersId">editCollectedSampleFormCenters-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormSitesId">editCollectedSampleFormSites-${unique_page_id}</c:set>
@@ -89,17 +90,37 @@
           header : false
         });
 
-        $( "#${editCollectedSampleFormDonorId}" ).autocomplete({
-          source: "donorTypeAhead.html",
+        $("#${editCollectedSampleFormDonorId}").click(function() {
+          $("#${editCollectedSampleFormDonorId}").removeAttr("readonly");
+        });
+
+        $("#${editCollectedSampleFormDonorId}").autocomplete({
           minLength: 2,
-          response: function(event, ui) {
-            					console.log(event);
-            					console.log(ui);
-          },
-          select: function( event, ui ) {
-            				console.log(event);
-            				console.log(ui);
-          },
+          source: function(request, response) {
+            				$.ajax({
+            				  url: "donorTypeAhead.html",
+            				  method: "GET",
+            				  data: {term: request.term},
+            				  success: function(jsonResponse) {
+            				    				 var suggestions = [];
+            				    				 for (var index in jsonResponse) {
+            				    				   var donor = jsonResponse[index];
+            				    				   var label = donor.firstName + " " +
+		    				       												 donor.lastName + ": " +
+		    				       												 donor.donorNumber;
+            				    				   suggestions.push({label: label, id: donor.id});
+            				    				 }
+            				    				 response(suggestions);
+            				  				 }
+            				});
+          				},
+          select: function(event, ui) {
+            				var item = ui.item;
+            				console.log(item);
+            				$("#${editCollectedSampleFormDonorId}").val(item.label);
+				    		    $("#${editCollectedSampleFormDonorHiddenId}").val(item.id);
+				    		    $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");
+          				},
       	});
       });
 </script>
@@ -116,7 +137,8 @@
 		</div>
 		<div>
 			<form:label path="donor">${model.donorNoDisplayName}</form:label>
-			<form:input path="donor" id="${editCollectedSampleFormDonorId}" />
+			<form:hidden path="donor" id="${editCollectedSampleFormDonorHiddenId}" />
+			<input id="${editCollectedSampleFormDonorId}" />
 			<form:errors class="formError"
 				path="collectedSample.donor" delimiter=", "></form:errors>
 		</div>

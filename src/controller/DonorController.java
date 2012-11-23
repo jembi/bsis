@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -220,16 +221,10 @@ public class DonorController {
 
   @RequestMapping(value = "/donorTypeAhead", method = RequestMethod.GET)
   public @ResponseBody
-  List<String> donorTypeAhead(
+  List<DonorViewModel> donorTypeAhead(
       @RequestParam("term") String term) {
-
-    List<String> l = new ArrayList<String>();
-    l.add(term);
-    l.add(term);
-    l.add(term);
-    l.add(term.substring(1, 2));
-    l.add(term.substring(0, 2));
-    return l;
+    List<Donor> donors = donorRepository.findAnyDonorStartsWith(term);
+    return getDonorsViewModels(donors);
   }
   
   @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)

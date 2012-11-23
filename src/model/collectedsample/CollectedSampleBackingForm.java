@@ -210,7 +210,7 @@ public class CollectedSampleBackingForm {
     }
     else {
       Donor donor = new Donor();
-      donor.setDonorNumber(donorId);
+      donor.setId(Long.parseLong(donorId));
       collectedSample.setDonor(donor);
     }
   }

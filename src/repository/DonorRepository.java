@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -89,7 +90,7 @@ public class DonorRepository {
     Expression<Boolean> exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
 
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
-    
+
     Predicate firstNameExp;
     if (firstName.trim().equals(""))
       firstNameExp = cb.disjunction();
@@ -143,6 +144,44 @@ public class DonorRepository {
       TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       return query.setParameter("donorNumber", donorNumber).getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      return null;
+    }
+  }
+
+  public List<Donor> findAnyDonorStartsWith(String term) {
+
+    term = term.trim();
+    if (term.length() < 2)
+      return Arrays.asList(new Donor[0]);
+
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
+      Root<Donor> root = cq.from(Donor.class);
+
+      Predicate donorNumberExp = cb.like(root.<String>get("donorNumber"), term + "%");
+      Predicate firstNameExp;
+      if (term.equals(""))
+        firstNameExp = cb.disjunction();
+      else
+        firstNameExp = cb.like(root.<String>get("firstName"), term + "%");
+
+      Predicate lastNameExp;
+      if (term.equals(""))
+        lastNameExp = cb.disjunction();
+      else
+        lastNameExp = cb.like(root.<String>get("lastName"), term + "%");
+      Expression<Boolean> exp = cb.or(donorNumberExp, firstNameExp, lastNameExp);
+
+      Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
+      cq.where(cb.and(notDeleted, exp));
+      TypedQuery<Donor> query = em.createQuery(cq);
+      List<Donor> donors = query.getResultList();
+      if (donors != null && donors.size() > 0)
+        return donors;
+      return new ArrayList<Donor>();
     } catch (NoResultException ex) {
       ex.printStackTrace();
       return null;
