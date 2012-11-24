@@ -18,6 +18,7 @@
 <script src="js/common.js" type="text/javascript"></script>
 <script src="plugins/DataTables/media/js/jquery.dataTables.js"></script>
 <script src="plugins/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
+<script src="plugins/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
 <script src="plugins/slidingmessage/jquery.slidingmessage.js"></script>
 
 <link type="text/css"
@@ -30,6 +31,9 @@
 
 <link type="text/css"
 	href="plugins/DataTables/extras/TableTools/media/css/TableTools_JUI.css"
+	rel="Stylesheet" />
+<link type="text/css"
+	href="plugins/DataTables/extras/ColVis/media/css/ColVis.css"
 	rel="Stylesheet" />
 
 <script src="plugins/jqueryui-multiselect/jquery.multiselect.js"></script>

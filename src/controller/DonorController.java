@@ -305,11 +305,7 @@ public class DonorController {
 
     model.put("tableName", "viewAllDonors");
     model.put("allDonors", getDonorsViewModels(allDonors));
-    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("donor", model,
-        recordFieldsConfigRepository);
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
+    model.put("donor", utilController.getFormFieldsForForm("donor"));
     modelAndView.addObject("model", model);
     return modelAndView;
   }

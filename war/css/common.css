@@ -473,3 +473,8 @@ tr > td
 .ui-autocomplete-loading {
   background: white url('images/ajax-loader.gif') right center no-repeat;
 }
+
+.ColVis {
+	float: right;
+	margin-bottom: 1em;
+}
