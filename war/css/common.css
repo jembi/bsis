@@ -67,6 +67,16 @@ select:focus {
 	position: relative;
 }
 
+.formDiv {
+	border: 2px solid #8eb2b2;
+	border-radius: 6px;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 10px;
+	position: relative;
+}
+
 .editFormDiv {
 	border: 2px solid #8eb2b2;
 	border-radius: 6px;
@@ -376,6 +386,48 @@ tr > td
 	height: 65px;
 	width: 300px;
 	align: top;
+	resize: none;
+}
+
+.formInTabPane > div {
+	position: relative;
+	margin-top: 6px;
+}
+
+.formInTabPane > div > label {
+	width: 150px;
+	display: inline-block;
+	position: absolute;
+	top: 20%;
+	margin-left: 15px;
+}
+
+.formInTabPane > div > input {
+	width: 220px;
+	margin-left: 170px;
+	margin-right: 20px;
+	display: inline-block;
+}
+
+.formInTabPane > div > button {
+	width: 220px;
+	margin-left: 170px;
+	margin-right: 20px;
+	display: inline-block;
+}
+
+.formInTabPane > div > .ui-multiselect {
+	width: 231px;
+	margin-left: 170px;
+	margin-right: 20px;
+	display: inline-block;
+}
+
+.formInTabPane > div > textarea {
+	width: 240px;
+	margin-left: 170px;
+	display: inline-block;
+	height: 65px;
 	resize: none;
 }
 

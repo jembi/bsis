@@ -8,7 +8,17 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="findDonorFormDivId">findDonorFormDiv-${unique_page_id}</c:set>
+<c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
+
 <script>
+$(document).ready(function() {
   $("#findDonorButton").button({
     icons : {
       primary : 'ui-icon-search'
@@ -26,47 +36,62 @@
       }
     });
   });
+
+  $("#${findDonorFormBloodGroupSelectorId}").multiselect({
+    position : {
+      my : 'left top',
+      at : 'right center'
+    },
+    noneSelectedText: 'Any Blood Group',
+    selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "Any Blood Group";
+										}
+										else {
+										  var checkedValues = $.map(selectedValues, function(input) { return input.value; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'Any Blood Group';
+										}
+										  
+    							}
+  });
+  $("#${findDonorFormBloodGroupSelectorId}").multiselect("checkAll");
+
+});
 </script>
 
-<form:form method="GET" commandName="findDonorForm" id="findDonorForm"
-	class="findDonorForm">
-	<table>
-		<thead>
-			<tr>
-				<th>Advanced Search</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label></td>
-				<td><form:input path="donorNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="firstName">${model.donor.firstName.displayName}</form:label></td>
-				<td><form:input path="firstName" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="lastName">${model.donor.lastName.displayName}</form:label></td>
-				<td><form:input path="lastName" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="bloodGroups">${model.donor.bloodGroup.displayName}</form:label></td>
-				<td><form:checkbox path="bloodGroups" value="A+" label="A+" />
-					<form:checkbox path="bloodGroups" value="B+" label="B+" /> <form:checkbox
-						path="bloodGroups" value="AB+" label="AB+" /> <form:checkbox
-						path="bloodGroups" value="O+" label="O+" /> <form:checkbox
-						path="bloodGroups" value="A-" label="A-" /> <form:checkbox
-						path="bloodGroups" value="B-" label="B-" /> <form:checkbox
-						path="bloodGroups" value="AB-" label="AB-" /> <form:checkbox
-						path="bloodGroups" value="O-" label="O-" /></td>
-			</tr>
-			<tr>
-				<td />
-				<td><button type="button" id="findDonorButton" class="two">Find
-						donor</button></td>
-			</tr>
-		</tbody>
-	</table>
-</form:form>
+<div id="${findDonorFormDivId}" class="formDiv">
+	<form:form method="GET" commandName="findDonorForm" id="findDonorForm"
+		class="formInTabPane">
+		<div>
+			<form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label>
+			<form:input path="donorNumber" />
+		</div>
+		<div>
+			<form:label path="firstName">${model.donor.firstName.displayName}</form:label>
+			<form:input path="firstName" />
+		</div>
+		<div>
+			<form:label path="lastName">${model.donor.lastName.displayName}</form:label>
+			<form:input path="lastName" />
+		</div>
+		<div>
+			<form:label path="bloodGroups">${model.donor.bloodGroup.displayName}</form:label>
+				<form:select path="bloodGroup" id="${findDonorFormBloodGroupSelectorId}">
+					<form:option value="A+" label="A+" />
+					<form:option value="A-" label="A-" />
+					<form:option value="B+" label="B+" />
+					<form:option value="B-" label="B-" />
+					<form:option value="AB+" label="AB+" />
+					<form:option value="AB-" label="AB-" />
+					<form:option value="O+" label="O+" />
+					<form:option value="O-" label="O-" />
+				</form:select>
+		</div>
+		<div>
+			<button type="button" id="findDonorButton" class="two">
+					Find donor</button>
+		</div>
+	</form:form>
+</div>
 
 <div id="findDonorResult"></div>
