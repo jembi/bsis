@@ -2,7 +2,7 @@ package viewmodel;
 
 import java.util.List;
 
-import model.LocationType;
+import model.location.LocationType;
 import model.util.Location;
 
 public class LocationViewModel {
@@ -15,8 +15,8 @@ public class LocationViewModel {
 		this.allLocationTypes = allLocationTypes;
 	}
 
-	public Long getLocationId() {
-		return location.getLocationId();
+	public Long getId() {
+		return location.getId();
 	}
 
 	public String getName() {
@@ -33,25 +33,25 @@ public class LocationViewModel {
 	}
 
 	public String getCenter() {
-		return location.getCenter().toString();
+		return location.getIsCenter().toString();
 	}
 
 	public String getCollectionSite() {
-		return location.getCollectionSite().toString();
+		return location.getIsCollectionSite().toString();
 	}
 
 	public String getUsageSite() {
-		return location.getUsageSite().toString();
+		return location.getIsUsageSite().toString();
 	}
 
 	public String getMobileSite() {
-		return location.getMobileSite().toString();
+		return location.getIsMobileSite().toString();
 	}
 
 	private String getLocationTypeName(Long typeId,
 			List<LocationType> allLocationTypes) {
 		for (LocationType type : allLocationTypes) {
-			if (type.getLocationTypeId().equals(typeId)) {
+			if (type.getId().equals(typeId)) {
 				return type.getName();
 			}
 		}

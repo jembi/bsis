@@ -32,6 +32,10 @@
 				class="ui-icon ui-icon-transferthick-e-w" style="display: inline-block;"></span>Usage</a></li>
 		<li class="topPanelTab"><a href="#reportsLandingPageContent"><span
 				class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
+		<c:if test="${model.user.isAdmin}">
+		<li class="topPanelTab"><a href="#adminLandingPageContent"><span
+				class="ui-icon ui-icon-gear" style="display: inline-block;"></span>Admin</a></li>
+		</c:if>
 	</ul>
 
 	<div id="homeLandingPageContent" class="centerContent">
@@ -75,4 +79,9 @@
 		<jsp:include page="reports.jsp" />
 	</div>
 
+	<c:if test="${model.user.isAdmin}">
+		<div id="adminLandingPageContent">
+			<jsp:include page="admin/admin.jsp" />
+		</div>
+	</c:if>
 </div>

@@ -55,7 +55,7 @@ public class RequestViewModel {
 		Long siteId = request.getSiteId();
 		if (sites != null && siteId != null) {
 			for (Location site : sites) {
-				if (site.getLocationId().equals(siteId)) {
+				if (site.getId().equals(siteId)) {
 					return site.getName();
 				}
 			}

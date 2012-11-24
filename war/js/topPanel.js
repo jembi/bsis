@@ -29,6 +29,9 @@ $(document).ready(
       var reportsTabs = $("#reportsTab").tabs({
 //        cache : true
       });
+      var adminTabs = $("#adminTab").tabs({
+//      cache : true
+      });
 
       // Define our own click handler for the tabs, overriding the default.
       $(".tabs").find(tab_a_selector).click(function() {
@@ -86,6 +89,10 @@ $(document).ready(
                   break;
                 case 7:
                   leftPanelTabs = reportsTabs;
+                  break;
+                case 7:
+                  leftPanelTabs = adminTabs;
+                  break;
                 default:
                   break;
                 }

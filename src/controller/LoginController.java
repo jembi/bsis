@@ -2,20 +2,22 @@ package controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.configchange.ConfigChange;
 import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.ConfigChangeRepository;
 import repository.LoginRepository;
 
 @Controller
@@ -24,6 +26,9 @@ public class LoginController {
 	@Autowired
 	private LoginRepository loginRepository;
 
+	@Autowired
+	private ConfigChangeRepository configChangeRepository;
+	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request) {
 
@@ -32,9 +37,18 @@ public class LoginController {
 
 	@RequestMapping("/welcomePage")
 	public ModelAndView welcome(HttpServletRequest request) {
-
 		return new ModelAndView("welcomePage");
 	}
+
+  @RequestMapping("/firstTimeConfig")
+  public ModelAndView firstTimeConfig(HttpServletRequest request) {
+    return new ModelAndView("admin/firstTimeConfig");
+  }
+
+  @RequestMapping("/firstTimeConfigNotAllowed")
+  public ModelAndView firstTimeConfigNotAllowed(HttpServletRequest request) {
+    return new ModelAndView("admin/firstTimeConfigNotAllowed");
+  }
 
 	@RequestMapping("/loginUser")
 	public ModelAndView addDonor(@RequestParam Map<String, String> params,
@@ -47,11 +61,17 @@ public class LoginController {
 		User user = loginRepository.getUser(username);
 		if (user != null && password.equals(user.getPassword())) {
 			request.getSession().setAttribute("user", user);
-			if (StringUtils.hasText(targetUrl)) {
-				response.sendRedirect("/v2v" + targetUrl);
-			} else {
-				response.sendRedirect("/v2v/welcomePage.html");
+
+			String redirectPage = "/v2v/welcomePage.html";
+			if (configChangeRepository.isFirstTimeConfig()) {
+			  if (user.getIsAdmin()) {
+			    redirectPage = "/v2v/firstTimeConfig.html";
+			  }
+			  else {
+			    redirectPage = "/v2v/firstTimeConfigNotAllowed.html";
+			  }
 			}
+			response.sendRedirect(redirectPage);
 		}
 		ModelAndView modelAndView = new ModelAndView("login");
 

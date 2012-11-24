@@ -1,4 +1,4 @@
-package model;
+package model.location;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,17 +11,17 @@ import org.hibernate.annotations.Type;
 public class LocationType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long locationTypeId;
+	private Long id;
 	private String name;
-	private String comments;
+	private String notes;
 
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean isDeleted;
 
-	public LocationType(String name, Boolean isDeleted, String comments) {
+	public LocationType(String name, Boolean isDeleted, String notes) {
 		this.name = name;
 		this.isDeleted = isDeleted;
-		this.comments = comments;
+		this.notes = notes;
 	}
 
 	public LocationType() {
@@ -31,12 +31,12 @@ public class LocationType {
 		return name;
 	}
 
-	public Long getLocationTypeId() {
-		return locationTypeId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setLocationTypeId(Long locationTypeId) {
-		this.locationTypeId = locationTypeId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setName(String name) {
@@ -56,12 +56,12 @@ public class LocationType {
 		this.isDeleted = isDeleted;
 	}
 
-	public String getComments() {
-		return comments;
+	public String getNotes() {
+		return notes;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 }

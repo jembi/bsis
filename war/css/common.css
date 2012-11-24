@@ -54,6 +54,19 @@ select:focus {
 	box-shadow: 0 0 15px #9ecaed;
 }
 
+.firstTimeConfigDiv {
+	border: 2px solid #8eb2b2;
+	border-radius: 6px;
+	padding-left: 30px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+	position: relative;
+}
+
 .editFormDiv {
 	border: 2px solid #8eb2b2;
 	border-radius: 6px;

@@ -1,6 +1,6 @@
 package viewmodel;
 
-import model.LocationType;
+import model.location.LocationType;
 
 public class LocationTypeViewModel {
 	private LocationType locationType;
@@ -10,7 +10,7 @@ public class LocationTypeViewModel {
 	}
 
 	public String getLocationTypeId() {
-		return locationType.getLocationTypeId().toString();
+		return locationType.getId().toString();
 	}
 
 	public String getName() {

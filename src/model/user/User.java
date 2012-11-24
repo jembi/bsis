@@ -11,14 +11,13 @@ import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-public class User implements ModificationTracker {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -173,43 +172,43 @@ public class User implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  @Override
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  @Override
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  @Override
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  @Override
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  @Override
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  @Override
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  @Override
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  @Override
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
+//  @Override
+//  public Date getLastUpdated() {
+//    return modificationTracker.getLastUpdated();
+//  }
+//
+//  @Override
+//  public Date getCreatedDate() {
+//    return modificationTracker.getCreatedDate();
+//  }
+//
+//  @Override
+//  public User getCreatedBy() {
+//    return modificationTracker.getCreatedBy();
+//  }
+//
+//  @Override
+//  public User getLastUpdatedBy() {
+//    return modificationTracker.getLastUpdatedBy();
+//  }
+//
+//  @Override
+//  public void setLastUpdated(Date lastUpdated) {
+//    modificationTracker.setLastUpdated(lastUpdated);
+//  }
+//
+//  @Override
+//  public void setCreatedDate(Date createdDate) {
+//    modificationTracker.setCreatedDate(createdDate);
+//  }
+//
+//  @Override
+//  public void setCreatedBy(User createdBy) {
+//    modificationTracker.setCreatedBy(createdBy);
+//  }
+//
+//  @Override
+//  public void setLastUpdatedBy(User lastUpdatedBy) {
+//    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+//  }
 }

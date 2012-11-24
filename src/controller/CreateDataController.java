@@ -12,12 +12,8 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.LocationType;
-import model.Product;
-import model.Request;
-import model.TestResult;
-import model.collectedsample.CollectedSample;
 import model.donor.Donor;
+import model.location.LocationType;
 import model.util.Location;
 
 import org.joda.time.DateTime;
@@ -347,15 +343,15 @@ public class CreateDataController {
 	@RequestMapping("/admin-deleteDummyData")
 	public ModelAndView deleteData(HttpServletRequest request) {
 
-		requestRepository.deleteAllRequests();
-		productRepository.deleteAllProducts();
-		testResultRepository.deleteAllTestResults();
-		locationRepository.deleteAllLocations();
-		locationTypeRepository.deleteAllLocationTypes();
-		donorRepository.deleteAllDonors();
+//		requestRepository.deleteAllRequests();
+//		productRepository.deleteAllProducts();
+//		testResultRepository.deleteAllTestResults();
+//		locationRepository.deleteAllLocations();
+//		locationTypeRepository.deleteAllLocationTypes();
+//		donorRepository.deleteAllDonors();
 //		collectionRepository.deleteAllCollections();
-		usageRepository.deleteAllUsages();
-		issueRepository.deleteAllIssues();
+//		usageRepository.deleteAllUsages();
+//		issueRepository.deleteAllIssues();
 
 		ModelAndView modelAndView = new ModelAndView("createData");
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -417,15 +413,15 @@ public class CreateDataController {
 		String[] locationNames = { "Lusaka", "Ndola", "Kitwe", "Kabwe",
 				"Chingola", "Mufulira", "Livingstone", "Luanshya ", "Kasama",
 				"Chipata" };
-		for (String locationName : locationNames) {
-			locationRepository
-					.saveLocation(new Location(locationName,
-							getRandomLocationType(allLocationTypes)
-									.getLocationTypeId(),
-							getRandomBooleanValue(), getRandomBooleanValue(),
-							getRandomBooleanValue(), getRandomBooleanValue(),
-							Boolean.FALSE, "comment_" + locationName));
-		}
+//		for (String locationName : locationNames) {
+//			locationRepository
+//					.saveLocation(new Location(locationName,
+//							getRandomLocationType(allLocationTypes)
+//									.getId(),
+//							getRandomBooleanValue(), getRandomBooleanValue(),
+//							getRandomBooleanValue(), getRandomBooleanValue(),
+//							Boolean.FALSE, "comment_" + locationName));
+//		}
 
 	}
 
@@ -465,14 +461,14 @@ public class CreateDataController {
 		List<Donor> donors = donorRepository.getAllDonors();
 		String[] donorTypes = { "family", "voluntary", "other" };
 		for (int i = 0; i < collectionNumber; i++) {
-			Integer collectionNo = new Integer(i + 1);
-			Long centerId = centers.get(r.nextInt(centers.size()))
-					.getLocationId();
-			Long siteId = sites.get(r.nextInt(sites.size())).getLocationId();
-			String donorNo = donors.get(r.nextInt(donors.size()))
-					.getDonorNumber();
-			Long sampleNo = (long) (r.nextInt(5000));
-			Long shippingNo = (long) (r.nextInt(5000));
+//			Integer collectionNo = new Integer(i + 1);
+//			Long centerId = centers.get(r.nextInt(centers.size()))
+//					.getLocationId();
+//			Long siteId = sites.get(r.nextInt(sites.size())).getLocationId();
+//			String donorNo = donors.get(r.nextInt(donors.size()))
+//					.getDonorNumber();
+//			Long sampleNo = (long) (r.nextInt(5000));
+//			Long shippingNo = (long) (r.nextInt(5000));
 //			CollectedSample collection = new CollectedSample(collectionNo.toString(),
 //					centerId, siteId, getRandomCollectionDate(), sampleNo,
 //					shippingNo, donorNo,

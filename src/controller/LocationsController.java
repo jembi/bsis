@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.LocationType;
+import model.location.LocationType;
 import model.util.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,71 +53,71 @@ public class LocationsController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/admin-addLocation")
-	public ModelAndView addLocation(@RequestParam Map<String, String> params,
-			HttpServletRequest request) {
+//	@RequestMapping("/admin-addLocation")
+//	public ModelAndView addLocation(@RequestParam Map<String, String> params,
+//			HttpServletRequest request) {
+//
+//		Location location = new Location(params.get("name"), getParam(params,
+//				"locationType"), getBooleanParam(params, "center"),
+//				getBooleanParam(params, "collectionSite"), getBooleanParam(
+//						params, "usageSite"), getBooleanParam(params,
+//						"mobileSite"), Boolean.FALSE, params.get("comments"));
+//		locationRepository.saveLocation(location);
+//		ModelAndView modelAndView = new ModelAndView("locations");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		model.put("locationAdded", true);
+//		List<LocationType> allLocationTypes = locationTypeRepository
+//				.getAllLocationTypes();
+//		model.put("location", new LocationViewModel(location, allLocationTypes));
+//		model.put("hasLocation", true);
+//		addAllLocationsToModel(model);
+//		model.put("locationTypes", allLocationTypes);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
-		Location location = new Location(params.get("name"), getParam(params,
-				"locationType"), getBooleanParam(params, "center"),
-				getBooleanParam(params, "collectionSite"), getBooleanParam(
-						params, "usageSite"), getBooleanParam(params,
-						"mobileSite"), Boolean.FALSE, params.get("comments"));
-		locationRepository.saveLocation(location);
-		ModelAndView modelAndView = new ModelAndView("locations");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("locationAdded", true);
-		List<LocationType> allLocationTypes = locationTypeRepository
-				.getAllLocationTypes();
-		model.put("location", new LocationViewModel(location, allLocationTypes));
-		model.put("hasLocation", true);
-		addAllLocationsToModel(model);
-		model.put("locationTypes", allLocationTypes);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-
-	@RequestMapping("/admin-updateLocation")
-	public ModelAndView updateLocation(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
-
-		Location location = new Location(params.get("name"), getParam(params,
-				"locationType"), getBooleanParam(params, "center"),
-				getBooleanParam(params, "collectionSite"), getBooleanParam(
-						params, "usageSite"), getBooleanParam(params,
-						"mobileSite"), Boolean.FALSE, params.get("comments"));
-		Location updatedLocation = locationRepository.updateLocation(
-				getParam(params, "locationId"), location);
-		ModelAndView modelAndView = new ModelAndView("locations");
-		Map<String, Object> model = new HashMap<String, Object>();
-		List<LocationType> allLocationTypes = locationTypeRepository
-				.getAllLocationTypes();
-		model.put("location", new LocationViewModel(updatedLocation,
-				allLocationTypes));
-		model.put("locationUpdated", true);
-		model.put("hasLocation", true);
-		addAllLocationsToModel(model);
-		model.put("locationTypes", allLocationTypes);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-
-	@RequestMapping("/admin-deleteLocation")
-	public ModelAndView deleteLocation(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
-
-		Long locationId = getParam(params, "locationId");
-		locationRepository.deleteLocation(locationId);
-		ModelAndView modelAndView = new ModelAndView("locations");
-		Map<String, Object> model = new HashMap<String, Object>();
-		List<LocationType> allLocationTypes = locationTypeRepository
-				.getAllLocationTypes();
-		model.put("locationDeleted", true);
-		model.put("locationNameDeleted", params.get("name"));
-		addAllLocationsToModel(model);
-		model.put("locationTypes", allLocationTypes);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+//	@RequestMapping("/admin-updateLocation")
+//	public ModelAndView updateLocation(
+//			@RequestParam Map<String, String> params, HttpServletRequest request) {
+//
+//		Location location = new Location(params.get("name"), getParam(params,
+//				"locationType"), getBooleanParam(params, "center"),
+//				getBooleanParam(params, "collectionSite"), getBooleanParam(
+//						params, "usageSite"), getBooleanParam(params,
+//						"mobileSite"), Boolean.FALSE, params.get("comments"));
+//		Location updatedLocation = locationRepository.updateLocation(
+//				getParam(params, "locationId"), location);
+//		ModelAndView modelAndView = new ModelAndView("locations");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		List<LocationType> allLocationTypes = locationTypeRepository
+//				.getAllLocationTypes();
+//		model.put("location", new LocationViewModel(updatedLocation,
+//				allLocationTypes));
+//		model.put("locationUpdated", true);
+//		model.put("hasLocation", true);
+//		addAllLocationsToModel(model);
+//		model.put("locationTypes", allLocationTypes);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
+//
+//	@RequestMapping("/admin-deleteLocation")
+//	public ModelAndView deleteLocation(
+//			@RequestParam Map<String, String> params, HttpServletRequest request) {
+//
+//		Long locationId = getParam(params, "locationId");
+//		locationRepository.deleteLocation(locationId);
+//		ModelAndView modelAndView = new ModelAndView("locations");
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		List<LocationType> allLocationTypes = locationTypeRepository
+//				.getAllLocationTypes();
+//		model.put("locationDeleted", true);
+//		model.put("locationNameDeleted", params.get("name"));
+//		addAllLocationsToModel(model);
+//		model.put("locationTypes", allLocationTypes);
+//		modelAndView.addObject("model", model);
+//		return modelAndView;
+//	}
 
 	@RequestMapping("/admin-selectLocation")
 	public ModelAndView selectLocation(

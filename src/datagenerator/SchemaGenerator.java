@@ -1,11 +1,23 @@
-package schemagenerator;
+package datagenerator;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Entity;
+
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.SystemPropertyUtils;
 
 /**
  * Source:
@@ -20,9 +32,10 @@ public class SchemaGenerator {
     cfg = new Configuration();
     cfg.setProperty("hibernate.show_sql", "true");
     cfg.setProperty("hibernate.hbm2ddl.import_files", "initial_data.sql");
-//    cfg.setProperty("hibernate.hbm2ddl.auto", "none");
+    cfg.setProperty("hibernate.hbm2ddl.auto", "none");
 
-    for (Class<?> clazz : getClasses(packageName)) {
+    for (Class<?> clazz : findAllClasses(packageName)) {
+      System.out.println("Class: " + clazz);
       cfg.addAnnotatedClass(clazz);
     }
   }
@@ -107,5 +120,46 @@ public class SchemaGenerator {
     public String getDialectClass() {
       return dialectClass;
     }
+  }
+
+
+  private List<Class<?>> findAllClasses(String basePackage)
+      throws IOException, ClassNotFoundException {
+
+      ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+      MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+
+      List<Class<?>> candidates = new ArrayList<Class<?>>();
+      String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+                                 resolveBasePackage(basePackage) + "/" + "**/*.class";
+      Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+      System.out.println("here: " + resources.length);
+      for (Resource resource : resources) {
+          if (resource.isReadable()) {
+              MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+              if (isCandidate(metadataReader)) {
+                  candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
+                  System.out.println(metadataReader.getClassMetadata().getClassName());
+              }
+          }
+      }
+      return candidates;
+  }
+
+  private String resolveBasePackage(String basePackage) {
+      return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
+  }
+
+  private boolean isCandidate(MetadataReader metadataReader) throws ClassNotFoundException
+  {
+      try {
+          Class<?> c = Class.forName(metadataReader.getClassMetadata().getClassName());
+          if (c.getAnnotation(Entity.class) != null) {
+              return true;
+          }
+      }
+      catch(Throwable e){
+      }
+      return false;
   }
 }

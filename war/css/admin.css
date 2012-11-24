@@ -1,0 +1,40 @@
+#adminTab {
+	position: relative;
+	padding-left: 11em;
+	min-height: 500px;
+}
+
+#adminTab .ui-tabs-nav {
+	position: absolute;
+	left: 0.25em;
+	top: 0.25em;
+	bottom: 0.25em;
+	width: 10.0em;
+	padding: 0.2em 0 0.2em 0.2em;
+}
+
+#adminTab .ui-tabs-nav li {
+	right: 1px;
+	width: 100%;
+	border-right: none;
+	border-bottom-width: 1px !important;
+	-moz-border-radius: 4px 0px 0px 4px;
+	-webkit-border-radius: 4px 0px 0px 4px;
+	border-radius: 4px 0px 0px 4px;
+	overflow: hidden;
+}
+
+#adminTab .ui-tabs-nav li.ui-tabs-selected {
+	border-right: 1px solid transparent;
+}
+
+#adminTab .ui-tabs-nav li a {
+	float: right;
+	width: 100%;
+	text-align: right;
+}
+
+#adminTab>div {
+	overflow: auto;
+}
+

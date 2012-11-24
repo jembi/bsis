@@ -78,7 +78,7 @@ public class Donor implements ModificationTracker {
 
   @Valid
   private RowModificationTracker modificationTracker;
-  
+
 	private Boolean isDeleted;
 
   @OneToMany(mappedBy="donor")

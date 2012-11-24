@@ -318,6 +318,9 @@ function getSelectedTabs() {
   case 7:
     leftPanelSelected = $("#reportsTab").tabs("option", "selected");
     break;
+  case 8:
+    leftPanelSelected = $("#adminTab").tabs("option", "selected");
+    break;
   default:
     leftPanelSelected = null;
     break;

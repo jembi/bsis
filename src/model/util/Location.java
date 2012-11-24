@@ -4,125 +4,108 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.hibernate.annotations.Type;
+import javax.persistence.Lob;
 
 @Entity
 public class Location {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long locationId;
+	private Long id;
 	private String name;
 	private Long type;
 
-	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean isCenter;
 
-	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean isCollectionSite;
 
-	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean isUsageSite;
 
-	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean isMobileSite;
 
-	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean isDeleted;
 
-	private String comments;
+	@Lob
+	private String notes;
 
 	public Location() {
-	}
-
-	public Location(String name, Long type, Boolean center,
-			Boolean collectionSite, Boolean usageSite, Boolean mobileSite,
-			Boolean isDeleted, String comments) {
-		this.name = name;
-		this.type = type;
-		this.isCenter = center;
-		this.isCollectionSite = collectionSite;
-		this.isUsageSite = usageSite;
-		this.isMobileSite = mobileSite;
-		this.isDeleted = isDeleted;
-		this.comments = comments;
 	}
 
 	public void copy(Location location) {
 		this.name = location.name;
 		this.type = location.type;
-		isCenter = location.isCenter;
-		isCollectionSite = location.isCollectionSite;
-		isUsageSite = location.isUsageSite;
-		isMobileSite = location.isMobileSite;
-		isDeleted = location.isDeleted;
+		this.isCenter = location.isCenter;
+		this.isCollectionSite = location.isCollectionSite;
+		this.isUsageSite = location.isUsageSite;
+		this.isMobileSite = location.isMobileSite;
+		this.isDeleted = location.isDeleted;
+		this.notes = location.notes;
 	}
 
-	public Boolean getCenter() {
+  public String getName() {
+    return name;
+  }
+
+  public Long getType() {
+    return type;
+  }
+
+	public Boolean getIsCenter() {
 		return isCenter;
 	}
 
-	public Boolean getCollectionSite() {
+	public Boolean getIsCollectionSite() {
 		return isCollectionSite;
 	}
 
-	public String getComments() {
-		return comments;
+	public Long getId() {
+		return id;
 	}
 
-	public Boolean getDeleted() {
-		return isDeleted;
-	}
-
-	public Long getLocationId() {
-		return locationId;
-	}
-
-	public Boolean getMobileSite() {
+	public Boolean getIsMobileSite() {
 		return isMobileSite;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public Long getType() {
-		return type;
-	}
-
-	public Boolean getUsageSite() {
+	public Boolean getIsUsageSite() {
 		return isUsageSite;
 	}
 
-	public void setCenter(Boolean center) {
+  public String getNotes() {
+    return notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setType(Long type) {
+    this.type = type;
+  }
+
+	public void setIsCenter(Boolean center) {
 		isCenter = center;
 	}
 
-	public void setCollectionSite(Boolean collectionSite) {
+	public void setIsCollectionSite(Boolean collectionSite) {
 		isCollectionSite = collectionSite;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-
-	public void setMobileSite(Boolean mobileSite) {
+	public void setIsMobileSite(Boolean mobileSite) {
 		isMobileSite = mobileSite;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setType(Long type) {
-		this.type = type;
-	}
-
-	public void setUsageSite(Boolean usageSite) {
+	public void setIsUsageSite(Boolean usageSite) {
 		isUsageSite = usageSite;
 	}
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 }

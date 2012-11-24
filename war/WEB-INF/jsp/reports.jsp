@@ -14,7 +14,7 @@
 <script type="text/javascript"
 	src="plugins/highcharts/js/modules/exporting.js"></script>
 
-<div id="reportsTab" class="leftPanel">
+<div id="reportsTab" class="leftPanel tabs">
 	<ul>
 		<li id="collectionsReport"><a
 			href="collectionsReportFormGenerator.html">Collections</a></li>

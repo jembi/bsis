@@ -68,11 +68,6 @@ public class DonorRepository {
     }
   }
 
-  public void deleteAllDonors() {
-    Query query = em.createQuery("DELETE FROM Donor d");
-    query.executeUpdate();
-  }
-
   public List<Donor> findAnyDonor(String donorNumber, String firstName,
       String lastName, List<BloodGroup> bloodGroups) {
 
