@@ -286,9 +286,7 @@ public class DonorController {
     Map<String, Object> model = m.asMap();
     model.put("tableName", "findDonorResultsTable");
     model.put("requestUrl", getUrl(request));
-    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("donor", model,
-        recordFieldsConfigRepository);
+    model.put("donor", utilController.getFormFieldsForForm("donor"));
     model.put("allDonors", getDonorsViewModels(donors));
     modelAndView.addObject("model", model);
     return modelAndView;
