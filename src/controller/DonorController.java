@@ -45,6 +45,9 @@ public class DonorController {
   @Autowired
   private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
+  @Autowired
+  private UtilController utilController;
+  
   public DonorController() {
   }
 
@@ -107,7 +110,8 @@ public class DonorController {
     }
     m.put("editDonorForm", form);
     // to ensure custom field names are displayed in the form
-    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    System.out.println(utilController.getFormFieldsForForm("donor"));
+    m.put("donor", utilController.getFormFieldsForForm("donor"));
     mv.addObject("model", m);
     return mv;
   }
@@ -260,7 +264,7 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("findDonorForm");
     Map<String, Object> m = model.asMap();
     // to ensure custom field names are displayed in the form
-    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    m.put("donor", utilController.getFormFieldsForForm("donor"));
     mv.addObject("model", m);
     return mv;
   }

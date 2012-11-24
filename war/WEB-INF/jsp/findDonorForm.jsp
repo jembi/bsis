@@ -38,19 +38,19 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><form:label path="donorNumber">${model.donorIDDisplayName}</form:label></td>
+				<td><form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label></td>
 				<td><form:input path="donorNumber" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="firstName">${model.firstNameDisplayName} </form:label></td>
+				<td><form:label path="firstName">${model.donor.firstName.displayName}</form:label></td>
 				<td><form:input path="firstName" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="lastName">${model.lastNameDisplayName}</form:label></td>
+				<td><form:label path="lastName">${model.donor.lastName.displayName}</form:label></td>
 				<td><form:input path="lastName" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="bloodGroups">Blood Groups</form:label></td>
+				<td><form:label path="bloodGroups">${model.donor.bloodGroup.displayName}</form:label></td>
 				<td><form:checkbox path="bloodGroups" value="A+" label="A+" />
 					<form:checkbox path="bloodGroups" value="B+" label="B+" /> <form:checkbox
 						path="bloodGroups" value="AB+" label="AB+" /> <form:checkbox

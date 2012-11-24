@@ -1,21 +1,21 @@
 package controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import model.user.User;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.ConfigChangeRepository;
@@ -34,14 +35,22 @@ import repository.ConfigChangeRepository;
 @Controller
 public class FirstTimeConfigController {
 
+  public final static String INSTALLED_CHECK_FILE_NAME = "v2v-version.txt"; 
+
   @Autowired
   ConfigChangeRepository configChangeRepository;
 
   private void firstTimeConfigure() throws Exception {
+    File f = new File(INSTALLED_CHECK_FILE_NAME);
+    BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+    bw.write("#Vein-to-Vein Installed " + new Date().toString());
+    bw.write("version: " + UtilController.VERSION_NUMBER);
+    bw.flush();
+    bw.close();
     System.out.println("Configured");
   }
   
-  @RequestMapping("/configureServerFirstTime")
+  @RequestMapping(value="/configureServerFirstTime", method=RequestMethod.POST)
   public ModelAndView configureServerFirstTime(HttpServletRequest request) {
 
     // check if user is allowed to configure server
@@ -51,7 +60,7 @@ public class FirstTimeConfigController {
     }
 
     // check if first time configuration is required
-    if (!configChangeRepository.isFirstTimeConfig()) {
+    if (!isFirstTimeConfig()) {
       return new ModelAndView("admin/firstTimeConfigNotRequired");
     }
 
@@ -147,5 +156,10 @@ public class FirstTimeConfigController {
       catch(Throwable e){
       }
       return false;
+  }
+
+  public boolean isFirstTimeConfig() {
+    File f = new File(INSTALLED_CHECK_FILE_NAME);
+    return !f.exists();
   }
 }

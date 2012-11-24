@@ -132,32 +132,32 @@ $(document).ready(
 		commandName="editDonorForm">
 		<form:hidden path="id" />
 		<div>
-			<form:label path="donorNumber">Donor Number</form:label>
+			<form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label>
 			<form:input path="donorNumber" />
 			<form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="firstName">${model.firstNameDisplayName}</form:label>
+			<form:label path="firstName">${model.donor.firstName.displayName}</form:label>
 			<form:input path="firstName" />
 			<form:errors class="formError" path="donor.firstName" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="middleName">Middle Name</form:label>
+			<form:label path="middleName">${model.donor.middleName.displayName}</form:label>
 			<form:input path="middleName" />
 			<form:errors class="formError" path="donor.middleName" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="lastName">${model.lastNameDisplayName}</form:label>
+			<form:label path="lastName">${model.donor.lastName.displayName}</form:label>
 			<form:input path="lastName" />
 			<form:errors class="formError" path="donor.lastName" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="birthDate">${model.dobDisplayName}</form:label>
+			<form:label path="birthDate">${model.donor.birthDate.displayName}</form:label>
 			<form:input path="birthDate" id="${birthDateInputId}" />
 			<form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="gender">${model.genderDisplayName}</form:label>
+			<form:label path="gender">${model.donor.gender.displayName}</form:label>
 			<form:select path="gender" id="${genderSelectorId}">
 				<form:option value="male" label="Male" />
 				<form:option value="female" label="Female" />
@@ -167,7 +167,7 @@ $(document).ready(
 			<form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="bloodGroup">Blood Group</form:label>
+			<form:label path="bloodGroup">${model.donor.bloodGroup.displayName}</form:label>
 			<form:select path="bloodGroup" id="${bloodGroupSelectorId}">
 				<form:option value="Unknown" label="Unknown" />
 				<form:option value="A+" label="A+" />
@@ -182,35 +182,35 @@ $(document).ready(
 				<form:errors class="formError" path="bloodGroup" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="address">Address</form:label>
+			<form:label path="address">${model.donor.address.displayName}</form:label>
 			<form:textarea path="address"
 				maxlength="255" />
 			<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="city">City</form:label>
+			<form:label path="city">${model.donor.city.displayName}</form:label>
 			<form:input path="city" />
 			<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="state">State</form:label>
+			<form:label path="state">${model.donor.state.displayName}</form:label>
 			<form:input path="state" />
 			<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="country">Country</form:label>
+			<form:label path="country">${model.donor.country.displayName}</form:label>
 			<form:input path="country" />
 			<form:errors class="formError" path="donor.country" delimiter=", "></form:errors>
 		</div>
 		<div>
-			<form:label path="zipcode">Zip Code</form:label>
+			<form:label path="zipcode">${model.donor.zipcode.displayName}</form:label>
 			<form:input path="zipcode" />
 			<ul>
 				<form:errors class="formError" path="donor.zipcode" delimiter=", "></form:errors>
 			</ul>
 		</div>
 		<div>
-			<form:label path="notes">Notes</form:label>
+			<form:label path="notes">${model.donor.notes.displayName}</form:label>
 			<form:textarea path="notes"
 				maxlength="255" />
 			<form:errors class="formError" path="donor.notes"></form:errors>

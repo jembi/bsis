@@ -40,6 +40,7 @@
 
 	<div id="homeLandingPageContent" class="centerContent">
 		<h3>Welcome to Vein-To-Vein</h3>
+		<i>Version ${model.versionNumber}</i>
 		<div class="infoMessage">
 			Vein-to-Vein (V2V) is a system to monitor and analyze data from blood
 			collection, testing, and utilization. This is an initiative of the

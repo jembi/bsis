@@ -13,6 +13,7 @@ import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,16 +29,21 @@ public class LoginController {
 
 	@Autowired
 	private ConfigChangeRepository configChangeRepository;
+
+	@Autowired
+	private FirstTimeConfigController firstTimeConfigController;
 	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request) {
-
 		return new ModelAndView("login");
 	}
 
 	@RequestMapping("/welcomePage")
-	public ModelAndView welcome(HttpServletRequest request) {
-		return new ModelAndView("welcomePage");
+	public ModelAndView welcome(HttpServletRequest request, Model m) {
+	  ModelAndView mv = new ModelAndView("welcomePage");
+	  m.addAttribute("versionNumber", UtilController.VERSION_NUMBER);
+	  mv.addObject("model", m);
+		return mv;
 	}
 
   @RequestMapping("/firstTimeConfig")
@@ -63,14 +69,14 @@ public class LoginController {
 			request.getSession().setAttribute("user", user);
 
 			String redirectPage = "/v2v/welcomePage.html";
-			if (configChangeRepository.isFirstTimeConfig()) {
-			  if (user.getIsAdmin()) {
-			    redirectPage = "/v2v/firstTimeConfig.html";
-			  }
-			  else {
-			    redirectPage = "/v2v/firstTimeConfigNotAllowed.html";
-			  }
-			}
+//			if (firstTimeConfigController.isFirstTimeConfig()) {
+//			  if (user.getIsAdmin()) {
+//			    redirectPage = "/v2v/firstTimeConfig.html";
+//			  }
+//			  else {
+//			    redirectPage = "/v2v/firstTimeConfigNotAllowed.html";
+//			  }
+//			}
 			response.sendRedirect(redirectPage);
 		}
 		ModelAndView modelAndView = new ModelAndView("login");

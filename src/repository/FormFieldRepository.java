@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -54,5 +55,17 @@ public class FormFieldRepository {
     em.merge(existingFormField);
     em.flush();
     return existingFormField;
+  }
+
+  public List<FormField> getFormFields(String formName) {
+    try {
+      String queryString = "SELECT f FROM FormField f where form=:formName";
+      TypedQuery<FormField> query = em.createQuery(queryString, FormField.class);
+      query.setParameter("formName", formName);
+      return query.getResultList();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      return Arrays.asList(new FormField[0]);
+    }
   }
 }
