@@ -14,6 +14,7 @@ public class FormField {
 
   public static final String FIELD = "field";
   public static final String DISPLAY_NAME = "displayName";
+  public static final String DEFAULT_DISPLAY_NAME = "defaultDisplayName";
   public static final String DEFAULT_VALUE = "defaultValue";
   public static final String HIDDEN = "hidden";
   public static final String DERIVED = "derived";
@@ -32,9 +33,12 @@ public class FormField {
   @Column(length=30, nullable=false)
   private String field;
 
+  @Column(length=30)
+  private String displayName;
+
   @NotBlank
   @Column(length=30, nullable=false)
-  private String displayName;
+  private String defaultDisplayName;
 
   @Lob
   private String defaultValue;
@@ -60,7 +64,13 @@ public class FormField {
   }
 
   public String getDisplayName() {
+    if (displayName == null || displayName.trim().equals(""))
+      return getDefaultDisplayName();
     return displayName;
+  }
+
+  public String getDefaultDisplayName() {
+    return defaultDisplayName;
   }
 
   public String getDefaultValue() {
@@ -95,6 +105,10 @@ public class FormField {
     this.displayName = displayName;
   }
 
+  public void setDefaultDisplayName(String defaultDisplayName) {
+    this.defaultDisplayName = defaultDisplayName;
+  }
+
   public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
   }
@@ -112,8 +126,6 @@ public class FormField {
   }
 
   public void copy(FormField formField) {
-    this.form = formField.form;
-    this.field = formField.field;
     this.displayName = formField.displayName;
     this.defaultValue = formField.defaultValue;
     this.hidden = formField.hidden;

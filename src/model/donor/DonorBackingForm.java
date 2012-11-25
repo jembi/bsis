@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
-import org.apache.commons.lang3.RandomStringUtils;
 
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
@@ -18,6 +15,9 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 import model.util.Gender;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
 import viewmodel.donor.DonorViewModel;
 
 public class DonorBackingForm {

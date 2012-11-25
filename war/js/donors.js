@@ -30,7 +30,6 @@ function deleteDonor(donorId) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Donor Deleted Successfully!");
-        window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'

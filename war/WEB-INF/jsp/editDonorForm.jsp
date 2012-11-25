@@ -37,11 +37,10 @@
             function() {
               if ("${model.existingDonor}" == "true")
                 updateExistingDonor($("#${editDonorFormId}")[0],
-                    "${editDonorFormDivId}", function() {
-                    });
+                    "${editDonorFormDivId}", reloadCurrentTab);
               else
                 addNewDonor($("#${editDonorFormId}")[0],
-                    "${editDonorFormDivId}", resetForm);
+                    "${editDonorFormDivId}", reloadCurrentTab);
             });
 
         $("#${deleteDonorButtonId}").button({
@@ -59,6 +58,7 @@
                         var donorId = $("#${editDonorFormId}").find(
                             "[name='id']").val();
                         deleteDonor(donorId);
+                        reloadCurrentTab();
                         $(this).dialog("close");
                       },
                       "Cancel" : function() {

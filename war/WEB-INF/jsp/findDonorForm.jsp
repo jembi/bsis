@@ -42,7 +42,7 @@ $(document).ready(function() {
       my : 'left top',
       at : 'right center'
     },
-    noneSelectedText: 'Any Blood Group',
+    noneSelectedText: 'None Selected',
     selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Blood Group";
@@ -76,7 +76,7 @@ $(document).ready(function() {
 		</div>
 		<div>
 			<form:label path="bloodGroups">${model.donor.bloodGroup.displayName}</form:label>
-				<form:select path="bloodGroup" id="${findDonorFormBloodGroupSelectorId}">
+				<form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
 					<form:option value="A+" label="A+" />
 					<form:option value="A-" label="A-" />
 					<form:option value="B+" label="B+" />

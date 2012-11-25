@@ -43,7 +43,6 @@ $(document).ready(
 
       var pushState = history.pushState;
       history.pushState = function() {
-        console.log(arguments);
         pushState.apply(history, arguments);
       };
 

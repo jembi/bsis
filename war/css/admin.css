@@ -38,3 +38,6 @@
 	overflow: auto;
 }
 
+.tableInputShort {
+	max-width: 140px;
+}

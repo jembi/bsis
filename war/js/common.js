@@ -295,31 +295,41 @@ var myvar = 1000;
 
 function getSelectedTabs() {
   var topPanelSelected = $("#topPanelTabs").tabs("option", "selected");
+  var topPanelSelectedId = "topPanelTabs";
   var leftPanelSelected;
+  var leftPanelTabsId = "";
   switch (topPanelSelected) {
   case 1:
     leftPanelSelected = $("#donorsTab").tabs("option", "selected");
+    leftPanelSelectedId = "donorsTab";
     break;
   case 2:
     leftPanelSelected = $("#collectionsTab").tabs("option", "selected");
+    leftPanelSelectedId = "collectionsTab";
     break;
   case 3:
     leftPanelSelected = $("#testResultsTab").tabs("option", "selected");
+    leftPanelSelectedId = "testResultsTab";
     break;
   case 4:
     leftPanelSelected = $("#productsTab").tabs("option", "selected");
+    leftPanelSelectedId = "productsTab";
     break;
   case 5:
     leftPanelSelected = $("#requestsTab").tabs("option", "selected");
+    leftPanelSelectedId = "requestsTab";
     break;
   case 6:
     leftPanelSelected = $("#usageTab").tabs("option", "selected");
+    leftPanelSelectedId = "usageTab";
     break;
   case 7:
     leftPanelSelected = $("#reportsTab").tabs("option", "selected");
+    leftPanelSelectedId = "reportsTab";
     break;
   case 8:
     leftPanelSelected = $("#adminTab").tabs("option", "selected");
+    leftPanelSelectedId = "adminTab";
     break;
   default:
     leftPanelSelected = null;
@@ -328,8 +338,9 @@ function getSelectedTabs() {
   myvar++;
   return {
     topPanelSelected : topPanelSelected,
+    topPanelSelectedId : topPanelSelectedId,
     leftPanelSelected : leftPanelSelected,
-    here : myvar
+    leftPanelSelectedId : leftPanelSelectedId,
   };
 }
 
@@ -370,4 +381,14 @@ function showMessage(message) {
 
 function showErrorMessage(message) {
   $.showMessage(message, {backgroundColor: '#d35344'});
+}
+
+function reloadCurrentTab() {
+  var selected_tabs = getSelectedTabs();
+  var topId = selected_tabs.topPanelSelectedId;
+  var leftId = selected_tabs.leftPanelSelectedId;
+  if (leftId === "")
+    $("#" + topId).tabs("load", selected_tabs.topPanelSelected);
+  else
+    $("#" + leftId).tabs("load", selected_tabs.leftPanelSelected);
 }

@@ -30,7 +30,6 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.DisplayNamesRepository;
 import repository.DonorRepository;
 import repository.RecordFieldsConfigRepository;
-import utils.ControllerUtil;
 import viewmodel.donor.DonorViewModel;
 
 @Controller
@@ -70,11 +69,6 @@ public class DonorController {
 
     ModelAndView modelAndView = new ModelAndView("donors");
     Map<String, Object> model = new HashMap<String, Object>();
-    ControllerUtil.addDonorDisplayNamesToModel(model, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("donor", model,
-        recordFieldsConfigRepository);
-    ControllerUtil.addFieldsToDisplay("collection", model,
-        recordFieldsConfigRepository);
     model.put("requestUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
@@ -158,7 +152,7 @@ public class DonorController {
     m.put("success", success);
     m.put("message", message);
 
-    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
+    m.put("donor", utilController.getFormFieldsForForm("donor"));
     mv.addObject("model", m);
 
     return mv;
@@ -217,8 +211,8 @@ public class DonorController {
     m.put("editDonorForm", form);
     m.put("success", success);
     m.put("message", message);
+    m.put("donor", utilController.getFormFieldsForForm("donor"));
 
-    ControllerUtil.addDonorDisplayNamesToModel(m, displayNamesRepository);
     mv.addObject("model", m);
 
     return mv;

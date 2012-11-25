@@ -190,9 +190,10 @@
 
     create table FormField (
         id bigint not null auto_increment,
+        defaultDisplayName varchar(30) not null,
         defaultValue longtext,
         derived boolean,
-        displayName varchar(30) not null,
+        displayName varchar(30),
         field varchar(30) not null,
         form varchar(30) not null,
         hidden boolean,
