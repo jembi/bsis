@@ -18,12 +18,16 @@ import javax.persistence.criteria.Root;
 import model.donor.Donor;
 import model.util.BloodGroup;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
 public class DonorRepository {
+
+  public static final int ID_LENGTH = 12;
+
   @PersistenceContext
   private EntityManager em;
 
@@ -181,5 +185,19 @@ public class DonorRepository {
       ex.printStackTrace();
       return null;
     }
+  }
+
+  public static String generateUniqueDonorNumber() {
+    String uniqueDonorNumber;
+    uniqueDonorNumber = "D-" +
+                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+    return uniqueDonorNumber;
+  }
+
+  public void addAllDonors(List<Donor> donors) {
+    for (Donor donor : donors) {
+      em.persist(donor);
+    }
+    em.flush();
   }
 }

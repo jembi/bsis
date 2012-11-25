@@ -24,6 +24,9 @@ public class AdminController {
   @Autowired
   FormFieldRepository formFieldRepository;
 
+  @Autowired
+  CreateDataController createDataController;
+  
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
@@ -102,4 +105,43 @@ public class AdminController {
     mv.addObject("model", m);
     return mv;
   }
+
+  @RequestMapping("/createSampleDataFormGenerator")
+  public ModelAndView createSampleDataFormGenerator(
+                HttpServletRequest request, Map<String, Object> params) {
+
+    ModelAndView mv = new ModelAndView("admin/createSampleDataForm");
+    return mv;
+  }
+
+  @RequestMapping(value="/createSampleData", method=RequestMethod.POST)
+  public @ResponseBody Map<String, ? extends Object> createSampleData(
+                HttpServletRequest request,
+                @RequestParam Map<String, String> params) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      Integer numDonors = Integer.parseInt(params.get("numDonors"));
+      Integer numCollections = Integer.parseInt(params.get("numCollections"));
+      Integer numProducts = Integer.parseInt(params.get("numProducts"));
+      Integer numTestResults = Integer.parseInt(params.get("numTestResults"));
+      Integer numRequests = Integer.parseInt(params.get("numRequests"));
+      Integer numUsages = Integer.parseInt(params.get("numUsages"));
+      Integer numIssues = Integer.parseInt(params.get("numIssues"));
+
+      createDataController.createDonors(numDonors);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("requestUrl", getUrl(request));
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+
 }

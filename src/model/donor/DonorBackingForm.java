@@ -15,14 +15,10 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 import model.util.Gender;
-
-import org.apache.commons.lang3.RandomStringUtils;
-
+import repository.DonorRepository;
 import viewmodel.donor.DonorViewModel;
 
 public class DonorBackingForm {
-
-  public static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid
@@ -259,9 +255,6 @@ public class DonorBackingForm {
   }
 
   public void generateDonorNumber() {
-    String uniqueDonorNumber;
-    uniqueDonorNumber = "D-" +
-                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    donor.setDonorNumber(uniqueDonorNumber);
+    donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
   }
 }

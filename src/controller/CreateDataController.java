@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.donor.Donor;
 import model.location.LocationType;
+import model.util.BloodGroup;
+import model.util.Gender;
 import model.util.Location;
 
 import org.joda.time.DateTime;
@@ -59,7 +61,11 @@ public class CreateDataController {
 	@Autowired
 	private UsageRepository usageRepository;
 
-	Random r = new Random();
+	Random random = new Random();
+
+	private static final String[] cities = {"Lusaka", "Ndola", "Kitwe", "Kabwe",
+	                                        "Chingola", "Livingstone",
+	                                        "Luanshya", "Kasama", "Chipata"};
 
 	@Autowired
 	private ProductRepository productRepository;
@@ -360,30 +366,44 @@ public class CreateDataController {
 		return modelAndView;
 	}
 
-	private void createDonors(int donorNumber) {
-		String bloodTypes[] = { "A+", "A-", "B+", "B-", "O+", "O-", "AB+",
-				"AB-" };
-		for (int i = 0; i < donorNumber; i++) {
+	public void createDonors(int numDonors) {
+
+	  String[] bloodGroups = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
+	  List<Donor> donors = new ArrayList<Donor>();
+
+		for (int i = 0; i < numDonors; i++) {
 			String firstName = "";
-			String gender = "";
+			Gender gender = Gender.male;
 			if (i % 2 == 0) {
-				firstName = MALE_FIRST_NAMES[r.nextInt(MALE_FIRST_NAMES.length)];
-				gender = "male";
+				firstName = MALE_FIRST_NAMES[random.nextInt(MALE_FIRST_NAMES.length)];
+				gender = Gender.male;
 			} else {
-				firstName = FEMALE_FIRST_NAMES[r
-						.nextInt(FEMALE_FIRST_NAMES.length)];
-				gender = "female";
+				firstName = FEMALE_FIRST_NAMES[random.nextInt(FEMALE_FIRST_NAMES.length)];
+				gender = Gender.female;
 			}
-			String lastName = LAST_NAMES[r.nextInt(LAST_NAMES.length)];
-//			donorRepository.saveDonor(new Donor(new Integer(i + 1).toString(),
-//					firstName, lastName, gender, bloodTypes[r
-//							.nextInt(bloodTypes.length)], getRandomDOB(), null,
-//					"address" + i, Boolean.FALSE, "dummy comment"));
+			String lastName = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
+			Donor donor = new Donor();
+			donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
+			donor.setFirstName(firstName);
+			donor.setLastName(lastName);
+			donor.setGender(gender);
+			donor.setBirthDate(getRandomBirthDate());
+			String bloodGroupStr = bloodGroups[random.nextInt(bloodGroups.length)];
+			BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
+			donor.setBloodAbo(bloodGroup.getBloodAbo());
+			donor.setBloodRhd(bloodGroup.getBloodRhd());
+			donor.setAddress("address " + i);
+			donor.setCity(cities[random.nextInt(cities.length)]);
+			donor.setCountry("Zambia");
+			donor.setNotes("notes " + i);
+			donor.setIsDeleted(false);
+			donors.add(donor);
 		}
+    donorRepository.addAllDonors(donors);
 
 	}
 
-	private Date getRandomDOB() {
+	private Date getRandomBirthDate() {
 		try {
 			return getRandomDate(
 					new SimpleDateFormat("dd MM yyyy").parse("01 01 1970"),
@@ -402,7 +422,7 @@ public class CreateDataController {
 		cal.setTime(toDate);
 		long decTo = cal.getTimeInMillis();
 		long diff = decTo - decFrom;
-		long randomOffset = r.nextLong() % diff;
+		long randomOffset = random.nextLong() % diff;
 		Date date = new Date(decFrom + randomOffset);
 		return date;
 	}
@@ -426,12 +446,12 @@ public class CreateDataController {
 	}
 
 	private boolean getRandomBooleanValue() {
-		return r.nextBoolean();
+		return random.nextBoolean();
 	}
 
 	private LocationType getRandomLocationType(
 			List<LocationType> allLocationTypes) {
-		return allLocationTypes.get(r.nextInt(allLocationTypes.size()));
+		return allLocationTypes.get(random.nextInt(allLocationTypes.size()));
 	}
 
 	private void createLocationTypes() {
@@ -523,7 +543,6 @@ public class CreateDataController {
 	}
 
 	private String getRandomTestResult() {
-		return r.nextBoolean() == true ? "reactive" : "negative";
+		return random.nextBoolean() == true ? "reactive" : "negative";
 	}
-
 }

@@ -3,8 +3,6 @@ package model.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Embeddable;
-
 public class BloodGroup {
 
   private BloodAbo abo;

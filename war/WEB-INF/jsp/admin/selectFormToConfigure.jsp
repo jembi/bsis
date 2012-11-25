@@ -27,12 +27,12 @@
         $("#${selectFormToConfigureButtonId}").button().click(
             function() {
               $.ajax({
-                url : "getFormToConfigure.html",
-                data : {
+                url: "getFormToConfigure.html",
+                data: {
                   formToConfigure : $("#${selectFormToConfigureSelectId} :selected").val()
                 },
-                method : "GET",
-                success : function(responseData) {
+                type: "GET",
+                success: function(responseData) {
                   $("#${selectFormToConfigureConfigurationFormId}").html(
                       responseData);
                 }

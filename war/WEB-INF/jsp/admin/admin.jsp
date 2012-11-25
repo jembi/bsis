@@ -15,5 +15,7 @@
 	<ul>
 		<li id="configureForms">
 			<a href="configureForms.html">Configure Forms</a></li>
+		<li id="createSampleData">
+			<a href="createSampleDataFormGenerator.html">Sample Data</a></li>
 	</ul>
 </div>
