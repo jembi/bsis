@@ -20,7 +20,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('CollectedSample', 'donor', 'Donor', '', '0', '0', ''),
 ('CollectedSample', 'donorType', 'Donor Type', '', '0', '0', ''),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '0', '1', 'collectionNumber'),
-('CollectedSample', 'sampleNumber', 'sampleNumber', '', '0', '1', 'collectionNumber'),
+('CollectedSample', 'sampleNumber', 'Sample Number', '', '0', '1', 'collectionNumber'),
 ('CollectedSample', 'collectionCenter', 'Center', '', '0', '0', ''),
 ('CollectedSample', 'bloodBagType', 'Blood Bag Type', '', '0', '0', ''),
 ('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '0', ''),

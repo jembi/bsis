@@ -81,8 +81,7 @@
           icons : {
             primary : 'ui-icon-disk'
           }
-        })
-            .click(
+        }).click(
                 function() {
                   var parentDivId = $("#${editDonorFormDivId}").parent().attr(
                       "id");
@@ -139,7 +138,7 @@
 		<c:if test="${model.donor.donorNumber.hidden != true }">
 			<div>
 				<form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label>
-				<form:input path="donorNumber" />
+				<form:input path="donorNumber" value="${model.donor.donorNumber.defaultValue}" />
 				<form:errors class="formError" path="donor.donorNumber"
 					delimiter=", "></form:errors>
 			</div>
@@ -147,14 +146,14 @@
 		<c:if test="${model.donor.firstName.hidden != true }">
 			<div>
 				<form:label path="firstName">${model.donor.firstName.displayName}</form:label>
-				<form:input path="firstName" />
+				<form:input path="firstName" value="${model.donor.firstName.defaultValue}" />
 				<form:errors class="formError" path="donor.firstName" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donor.middleName.hidden != true }">
 			<div>
 				<form:label path="middleName">${model.donor.middleName.displayName}</form:label>
-				<form:input path="middleName" />
+				<form:input path="middleName" value="${model.donor.middleName.defaultValue}" />
 				<form:errors class="formError" path="donor.middleName"
 					delimiter=", "></form:errors>
 			</div>
@@ -162,7 +161,7 @@
 		<c:if test="${model.donor.lastName.hidden != true }">
 			<div>
 				<form:label path="lastName">${model.donor.lastName.displayName}</form:label>
-				<form:input path="lastName" />
+				<form:input path="lastName" value="${model.donor.lastName.defaultValue}" />
 				<form:errors class="formError" path="donor.lastName" delimiter=", "></form:errors>
 			</div>
 		</c:if>
@@ -170,7 +169,7 @@
 
 			<div>
 				<form:label path="birthDate">${model.donor.birthDate.displayName}</form:label>
-				<form:input path="birthDate" id="${birthDateInputId}" />
+				<form:input path="birthDate" id="${birthDateInputId}" value="${model.donor.birthDate.defaultValue}" />
 				<form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
 			</div>
 		</c:if>
@@ -206,35 +205,35 @@
 		<c:if test="${model.donor.address.hidden != true }">
 			<div>
 				<form:label path="address">${model.donor.address.displayName}</form:label>
-				<form:textarea path="address" maxlength="255" />
+				<form:textarea path="address" value="${model.donor.address.defaultValue}" maxlength="255" />
 				<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donor.city.hidden != true }">
 			<div>
 				<form:label path="city">${model.donor.city.displayName}</form:label>
-				<form:input path="city" />
+				<form:input path="city" value="${model.donor.city.defaultValue}" />
 				<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donor.state.hidden != true }">
 			<div>
 				<form:label path="state">${model.donor.state.displayName}</form:label>
-				<form:input path="state" />
+				<form:input path="state" value="${model.donor.state.defaultValue}" />
 				<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donor.country.hidden != true }">
 			<div>
 				<form:label path="country">${model.donor.country.displayName}</form:label>
-				<form:input path="country" />
+				<form:input path="country" value="${model.donor.country.defaultValue}" />
 				<form:errors class="formError" path="donor.country" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donor.zipcode.hidden != true }">
 			<div>
 				<form:label path="zipcode">${model.donor.zipcode.displayName}</form:label>
-				<form:input path="zipcode" />
+				<form:input path="zipcode" value="${model.donor.zipcode.defaultValue}" />
 				<ul>
 					<form:errors class="formError" path="donor.zipcode" delimiter=", "></form:errors>
 				</ul>
@@ -243,7 +242,7 @@
 		<c:if test="${model.donor.notes.hidden != true }">
 			<div>
 				<form:label path="notes">${model.donor.notes.displayName}</form:label>
-				<form:textarea path="notes" maxlength="255" />
+				<textarea name="notes">${model.donor.notes.defaultValue}</textarea>
 				<form:errors class="formError" path="donor.notes"></form:errors>
 			</div>
 		</c:if>

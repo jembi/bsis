@@ -72,7 +72,7 @@
 				<span
 				class="ui-icon ui-icon-mail-closed" style="display: inline-block; margin-left: 20px;"></span><a
 				href="mailto:rohit.banga@gatech.edu, vempala@cc.gatech.edu"
-				target="_blank"> Contact Us</a>
+				target="_blank">Contact Us</a>
 		</div>
 		<div id="commentsBox">
 			<div>

@@ -30,12 +30,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
-import repository.DisplayNamesRepository;
-import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
-import repository.RecordFieldsConfigRepository;
-import utils.ControllerUtil;
 import viewmodel.CollectedSampleViewModel;
 
 @Controller
@@ -45,18 +41,15 @@ public class CollectedSampleController {
 
   @Autowired
   private LocationRepository locationRepository;
-  @Autowired
-  private DisplayNamesRepository displayNamesRepository;
-  @Autowired
-  private RecordFieldsConfigRepository recordFieldsConfigRepository;
 
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
   @Autowired
   private DonorTypeRepository donorTypeRepository;
-  @Autowired
-  private DonorRepository donorRepository;
 
+  @Autowired
+  private UtilController utilController;
+  
   public CollectedSampleController() {
   }
 
@@ -85,7 +78,7 @@ public class CollectedSampleController {
     Map<String, Object> m = model.asMap();
     addCentersToModel(m);
     // to ensure custom field names are displayed in the form
-    ControllerUtil.addCollectedSampleDisplayNamesToModel(m, displayNamesRepository);
+    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
     return mv;
   }
@@ -104,9 +97,7 @@ public class CollectedSampleController {
     ModelAndView modelAndView = new ModelAndView("collectionsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findCollectionResultsTable");
-    ControllerUtil.addCollectedSampleDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("collection", m,
-        recordFieldsConfigRepository);
+    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
     m.put("allCollections", getCollectionViewModels(collections));
     m.put("requestUrl", getUrl(request));
     addCentersToModel(m);
@@ -153,9 +144,10 @@ public class CollectedSampleController {
       form.setDonor(donorNumber);
     }
 
+    System.out.println(utilController.getFormFieldsForForm("collectedSample"));
     m.put("editCollectedSampleForm", form);
     // to ensure custom field names are displayed in the form
-    ControllerUtil.addCollectedSampleDisplayNamesToModel(m, displayNamesRepository);
+    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     mv.addObject("model", m);
     return mv;
@@ -204,7 +196,7 @@ public class CollectedSampleController {
     m.put("success", success);
     m.put("message", message);
 
-    ControllerUtil.addCollectedSampleDisplayNamesToModel(m, displayNamesRepository);
+    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
 
     return mv;
@@ -263,7 +255,7 @@ public class CollectedSampleController {
     m.put("success", success);
     m.put("message", message);
 
-    ControllerUtil.addCollectedSampleDisplayNamesToModel(m, displayNamesRepository);
+    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
 
     return mv;

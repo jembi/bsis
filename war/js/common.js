@@ -392,3 +392,12 @@ function reloadCurrentTab() {
   else
     $("#" + leftId).tabs("load", selected_tabs.leftPanelSelected);
 }
+
+$.fn.mirror = function ($selector) {
+  return this.each(function () {
+      var $this = $(this);
+      $this.bind('keyup', function () {
+          $selector.val(($this.val()));
+      });
+  });
+};
