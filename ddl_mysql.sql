@@ -379,6 +379,16 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
+    create index donor_donorNumber_index on Donor (donorNumber);
+
+    create index donor_bloodAbo_index on Donor (bloodAbo);
+
+    create index donor_lastName_index on Donor (lastName);
+
+    create index donor_bloodRhd_index on Donor (bloodRhd);
+
+    create index donor_firstName_index on Donor (firstName);
+
     alter table Donor 
         add index FK3F25E46A49787C4 (createdBy_id), 
         add constraint FK3F25E46A49787C4 

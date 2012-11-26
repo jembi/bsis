@@ -25,6 +25,7 @@ import model.util.BloodAbo;
 import model.util.BloodRhd;
 import model.util.Gender;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,10 +40,12 @@ public class Donor implements ModificationTracker {
 
   @NotBlank
   @Column(length=30, nullable=false)
+  @Index(name="donor_donorNumber_index")
   private String donorNumber;
 
   @NotBlank
   @Column(length=30, nullable=false)
+  @Index(name="donor_firstName_index")
   @Length(min=1, max=30)
 	private String firstName;
 
@@ -51,6 +54,7 @@ public class Donor implements ModificationTracker {
   private String middleName;
 
   @Length(max=30)
+  @Index(name="donor_lastName_index")
   @Column(length=30)
 	private String lastName;
 
@@ -60,10 +64,12 @@ public class Donor implements ModificationTracker {
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-	private BloodAbo bloodAbo;
+  @Index(name="donor_bloodAbo_index")
+  private BloodAbo bloodAbo;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
+  @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
 
   @DateTimeFormat(pattern="mm/dd/yyyy")

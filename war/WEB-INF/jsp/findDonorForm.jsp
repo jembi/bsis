@@ -55,7 +55,7 @@ $(document).ready(function() {
 										  
     							}
   });
-  $("#${findDonorFormBloodGroupSelectorId}").multiselect("checkAll");
+  $("#${findDonorFormBloodGroupSelectorId}").multiselect("uncheckAll");
 
 });
 </script>
