@@ -9,7 +9,12 @@ $(document).ready(
         cache : true
       });
       var donorsTabs = $("#donorsTab").tabs({
-//        cache : true
+//        cache : true,
+        // select event is deprecated in jquery 1.9. Use it for now.
+        select: function(event, ui) {
+                  var tabElement = $(ui.tab)[0];
+                  showLoadingImage(tabElement.hash.substr(1));
+                }
       });
       var collectionsTabs = $("#collectionsTab").tabs({
 //        cache : true
@@ -33,8 +38,15 @@ $(document).ready(
 //      cache : true
       });
 
+      console.log($(".leftPanel"));
+      $(".leftPanel").on("tabsbeforeActivate",
+                           function(event, ui) {
+                             console.log("here");
+                             console.log(ui.tab);
+                           });
+      
       // Define our own click handler for the tabs, overriding the default.
-      $(".tabs").find(tab_a_selector).click(function() {
+      $(".tabs").find(tab_a_selector).click(function(event, ui) {
         var t = getSelectedTabs();
         console.log("pushstate called " + JSON.stringify(t));
         history.pushState(t, "", "");
@@ -107,6 +119,7 @@ $(document).ready(
                   if (state.oldRequestData !== undefined) {
                     data = state.oldRequestData;
                   }
+                  showLoadingImage(state.targetId);
                   $.ajax({
                     url : state.oldRequestUrl,
                     data : data,

@@ -365,6 +365,8 @@ function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) 
                  }
   $.extend(newState, getSelectedTabs());
   history.pushState(newState, "", "");
+  console.log("targetId");
+  console.log(targetId);
   $.ajax({
     url : newRequestUrl,
     data : newRequestData,
@@ -401,3 +403,17 @@ $.fn.mirror = function ($selector) {
       });
   });
 };
+
+function copyMirroredFields(targetFormId, mirroredFields) {
+  for (var destField in mirroredFields) {
+    var sourceField = mirroredFields[destField];
+    var destInputKey = $("#" + targetFormId).find('input[name="' + destField + '"]');
+    var sourceInputKey = $("#" + targetFormId).find('input[name="' + sourceField + '"]');
+    $(destInputKey).val($(sourceInputKey).val());
+    $(sourceInputKey).mirror($(destInputKey));
+  }
+}
+
+function showLoadingImage(targetElementId) {
+  $('#' + targetElementId).html($("#preloader").html());
+}

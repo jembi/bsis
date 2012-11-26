@@ -16,6 +16,7 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="findDonorFormDivId">findDonorFormDiv-${unique_page_id}</c:set>
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="findDonorFormResultId">findDonorFormResult-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -25,13 +26,13 @@ $(document).ready(function() {
     }
   }).click(function() {
     var findDonorFormData = $("#findDonorForm").serialize();
-    $('#findDonorResult').empty();
+    showLoadingImage('${findDonorFormResultId}');
     $.ajax({
       type : "GET",
       url : "findDonor.html",
       data : findDonorFormData,
       success : function(data) {
-        $('#findDonorResult').html(data);
+        $('#${findDonorFormResultId}').html(data);
         window.scrollTo(0, document.body.scrollHeight);
       }
     });
@@ -94,4 +95,4 @@ $(document).ready(function() {
 	</form:form>
 </div>
 
-<div id="findDonorResult"></div>
+<div id="${findDonorFormResultId}"></div>

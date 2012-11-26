@@ -497,3 +497,7 @@ tr > td
 	/* prevent horizontal scrollbar */
 	overflow-x: hidden;
 }
+
+#preloader {
+	display: none;
+}

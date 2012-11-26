@@ -112,6 +112,8 @@
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c0",
         });
+
+        copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donor.mirroredFields}'))
       });
 </script>
 

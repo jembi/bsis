@@ -20,7 +20,6 @@
 <c:set var="editCollectedSampleFormDonorTypeId">editCollectedSampleFormDonorType-${unique_page_id}</c:set>
 <c:set var="updateCollectedSampleButtonId">updateCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleButtonId">deleteCollectedSampleButton-${unique_page_id}</c:set>
-<c:set var="mirroredFields">${model.collectedSample.mirroredFields}</c:set>
 
 <script>
   $(document).ready(
@@ -135,14 +134,7 @@
               },
             });
 
-        var mirroredFields = JSON.parse('${mirroredFields}');
-        for (var destField in mirroredFields) {
-          var sourceField = mirroredFields[destField];
-          var destInputKey = $("#${editCollectedSampleFormId}").find('input[name="' + destField + '"]');
-          var sourceInputKey = $("#${editCollectedSampleFormId}").find('input[name="' + sourceField + '"]');
-          $(destInputKey).val($(sourceInputKey).val());
-          $(sourceInputKey).mirror($(destInputKey));
-        }
+        copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSample.mirroredFields}'))
       });
 </script>
 

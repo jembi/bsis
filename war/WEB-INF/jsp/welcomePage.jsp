@@ -83,5 +83,13 @@
 			</div>
 		</div>
 	</div>
+	<div id="preloader">
+		<div style="text-align: center;">
+			<img src="images/content_loading.gif" />
+			<div>
+				<span style="font-size: 21pt;">Loading... </span>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
