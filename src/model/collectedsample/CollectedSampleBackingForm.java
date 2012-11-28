@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import repository.BloodBagTypeRepository;
+import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
 
@@ -37,15 +38,11 @@ public class CollectedSampleBackingForm {
   private String dateCollectedFrom;
   private String dateCollectedTo;
 
-  @Autowired
-  private DonorTypeRepository donorTypeRepository;
+  private String donorIdHidden;
 
   @Autowired
   private LocationRepository locationRepository;
 
-  @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
-  
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
   }
@@ -128,11 +125,8 @@ public class CollectedSampleBackingForm {
     return collectedSample.getId();
   }
 
-  public String getDonor() {
-    Donor donor = collectedSample.getDonor();
-    if (donor == null)
-      return "";
-    return donor.getDonorNumber();
+  public Donor getDonor() {
+    return collectedSample.getDonor();
   }
 
   public List<TestResult> getTestResults() {
@@ -195,6 +189,10 @@ public class CollectedSampleBackingForm {
     return collectedSample.getIsDeleted();
   }
 
+  public String getDonorIdHidden() {
+    return donorIdHidden;
+  }
+  
   public int hashCode() {
     return collectedSample.hashCode();
   }
@@ -207,15 +205,8 @@ public class CollectedSampleBackingForm {
     collectedSample.setCollectionNumber(collectionNumber);
   }
 
-  public void setDonor(String donorId) {
-    if (donorId == null || donorId.isEmpty()) {
-      collectedSample.setDonor(null);
-    }
-    else {
-      Donor donor = new Donor();
-      donor.setId(Long.parseLong(donorId));
-      collectedSample.setDonor(donor);
-    }
+  public void setDonor(Donor donor) {
+    collectedSample.setDonor(donor);
   }
 
   public void setTestResults(List<TestResult> testResults) {
@@ -288,6 +279,10 @@ public class CollectedSampleBackingForm {
     collectedSample.setIsDeleted(isDeleted);
   }
 
+  public void setDonorIdHidden(String donorId) {
+    this.donorIdHidden = donorId;
+  }
+  
   public void generateCollectionNumber() {
     String uniqueCollectedSampleNumber;
     uniqueCollectedSampleNumber = "C-" +

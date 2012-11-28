@@ -23,15 +23,6 @@ public class LocationViewModel {
 		return location.getName();
 	}
 
-	public Long getType() {
-		return location.getType();
-	}
-
-	public String getTypeName() {
-		return location.getType() == null ? "" : getLocationTypeName(
-				location.getType(), allLocationTypes);
-	}
-
 	public String getCenter() {
 		return location.getIsCenter().toString();
 	}

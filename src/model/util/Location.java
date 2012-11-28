@@ -12,7 +12,6 @@ public class Location {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
-	private Long type;
 
 	private Boolean isCenter;
 
@@ -32,7 +31,6 @@ public class Location {
 
 	public void copy(Location location) {
 		this.name = location.name;
-		this.type = location.type;
 		this.isCenter = location.isCenter;
 		this.isCollectionSite = location.isCollectionSite;
 		this.isUsageSite = location.isUsageSite;
@@ -43,10 +41,6 @@ public class Location {
 
   public String getName() {
     return name;
-  }
-
-  public Long getType() {
-    return type;
   }
 
 	public Boolean getIsCenter() {
@@ -79,10 +73,6 @@ public class Location {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public void setType(Long type) {
-    this.type = type;
   }
 
 	public void setIsCenter(Boolean center) {

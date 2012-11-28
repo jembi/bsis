@@ -21,7 +21,17 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('CollectedSample', 'donorType', 'Donor Type', '', '0', '0', ''),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '0', '1', 'collectionNumber'),
 ('CollectedSample', 'sampleNumber', 'Sample Number', '', '0', '1', 'collectionNumber'),
-('CollectedSample', 'collectionCenter', 'Center', '', '0', '0', ''),
+('CollectedSample', 'center', 'Collection Center', '', '0', '0', ''),
 ('CollectedSample', 'bloodBagType', 'Blood Bag Type', '', '0', '0', ''),
-('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '0', ''),
+('CollectedSample', 'site', 'Collection Site', '', '0', '0', ''),
 ('CollectedSample', 'notes', 'Notes', '', '0', '0', '');
+insert into DonorType (donorType) values ('Voluntary'), ('Family'), ('Other');
+insert into BloodBagType (bloodBagType) values ('Single'), ('Triple'), ('Paedi');
+insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite, isDeleted, notes) values
+('Lusaka', 1, 0, 0, 0, 0, ''),
+('Ndola', 1, 1, 0, 0, 0, ''),
+('Livingstone', 1, 1, 0, 0, 0, ''),
+('Luanshya', 1, 0, 0, 0, 0, ''),
+('Kasama', 1, 1, 0, 0, 0, ''),
+('Chipata', 1, 0, 0, 0, 0, ''),
+('Chingola', 1, 1, 0, 0, 0, '');

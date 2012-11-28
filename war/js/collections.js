@@ -39,3 +39,8 @@ function deleteCollectedSample(collectedSampleId) {
     }
   });
 }
+
+function getLabelForDonor(donor) {
+  return donor.firstName + " " + donor.lastName + ": "
+         + donor.donorNumber;
+}

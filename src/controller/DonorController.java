@@ -111,7 +111,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
-  public ModelAndView addDonor(
+  public ModelAndView addDonor(HttpServletRequest request,
       @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
       BindingResult result, Model model) {
 

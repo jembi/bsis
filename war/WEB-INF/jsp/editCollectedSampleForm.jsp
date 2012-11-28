@@ -114,10 +114,11 @@
                     }
                     for ( var index in jsonResponse) {
                       var donor = jsonResponse[index];
-                      var label = donor.firstName + " " + donor.lastName + ": "
-                          + donor.donorNumber;
                       suggestions.push({
-                        label : label,
+                        label : getLabelForDonor({firstName: donor.firstName,
+                          												lastName: donor.lastName,
+                          												donorNumber: donor.donorNumber,
+                          											 }),
                         id : donor.id
                       });
                     }
@@ -134,7 +135,17 @@
               },
             });
 
-        copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSample.mirroredFields}'))
+        if ("${model.editCollectedSampleForm.donor}" != "") {
+	        $("#${editCollectedSampleFormDonorId}").val(
+						getLabelForDonor({ donorNumber: "${model.editCollectedSampleForm.donor.donorNumber}",
+						  								 firstName: "${model.editCollectedSampleForm.donor.firstName}",
+						  								 lastName: "${model.editCollectedSampleForm.donor.lastName}",
+														 }));
+	        $("#${editCollectedSampleFormDonorHiddenId}").val("${model.editCollectedSampleForm.donor.id}");
+	        $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");
+	
+	        copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
+        }
       });
 </script>
 
@@ -142,27 +153,27 @@
 	<form:form method="POST" commandName="editCollectedSampleForm"
 		class="editForm" id="${editCollectedSampleFormId}">
 		<form:hidden path="id" />
-		<c:if test="${model.collectedSample.collectionNumber.hidden != true }">
+		<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
 			<div>
-				<form:label path="collectionNumber">${model.collectedSample.collectionNumber.displayName}</form:label>
+				<form:label path="collectionNumber">${model.collectedSampleFields.collectionNumber.displayName}</form:label>
 				<form:input path="collectionNumber" />
 				<form:errors class="formError"
 					path="collectedSample.collectionNumber" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.donor.hidden != true }">
+		<c:if test="${model.collectedSampleFields.donor.hidden != true }">
 			<div>
-				<form:label path="donor">${model.collectedSample.donor.displayName}</form:label>
-				<form:hidden path="donor"
+				<form:label path="donor">${model.collectedSampleFields.donor.displayName}</form:label>
+				<form:hidden path="donorIdHidden"
 					id="${editCollectedSampleFormDonorHiddenId}" />
 				<input id="${editCollectedSampleFormDonorId}" />
 				<form:errors class="formError" path="collectedSample.donor"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.donorType.hidden != true }">
+		<c:if test="${model.collectedSampleFields.donorType.hidden != true }">
 			<div>
-				<form:label path="donorType">${model.collectedSample.donorType.displayName}</form:label>
+				<form:label path="donorType">${model.collectedSampleFields.donorType.displayName}</form:label>
 				<form:select path="donorType"
 					id="${editCollectedSampleFormDonorTypeId}"
 					class="editCollectedSampleFormDonorType">
@@ -175,38 +186,38 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.shippingNumber.hidden != true }">
+		<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true }">
 			<div>
-				<form:label path="shippingNumber">${model.collectedSample.shippingNumber.displayName}</form:label>
+				<form:label path="shippingNumber">${model.collectedSampleFields.shippingNumber.displayName}</form:label>
 				<form:input path="shippingNumber" />
 				<form:errors class="formError" path="collectedSample.shippingNumber"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.sampleNumber.hidden != true }">
+		<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true }">
 			<div>
-				<form:label path="sampleNumber">${model.collectedSample.sampleNumber.displayName}</form:label>
+				<form:label path="sampleNumber">${model.collectedSampleFields.sampleNumber.displayName}</form:label>
 				<form:input path="sampleNumber" />
 				<form:errors class="formError" path="collectedSample.sampleNumber"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.center.hidden != true }">
+		<c:if test="${model.collectedSampleFields.center.hidden != true }">
 			<div>
-				<form:label path="centers">${model.collectedSample.center.displayName}</form:label>
+				<form:label path="centers">${model.collectedSampleFields.center.displayName}</form:label>
 				<form:select path="centers" id="${editCollectedSampleFormCentersId}"
 					class="editCollectedSampleFormCenters">
 					<form:option label="" value="" selected="selected" />
 					<c:forEach var="center" items="${model.centers}">
-						<form:option value="${center}" label="${center}" />
+						<form:option value="${center.id}" label="${center.name}" />
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="centers" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.bloodBagType.hidden != true }">
+		<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true }">
 			<div>
-				<form:label path="bloodBagType">${model.collectedSample.bloodBagType.displayName}</form:label>
+				<form:label path="bloodBagType">${model.collectedSampleFields.bloodBagType.displayName}</form:label>
 				<form:select path="bloodBagType"
 					id="${editCollectedSampleFormBloodBagTypeId}">
 					<form:option label="" value="" selected="selected" />
@@ -218,22 +229,22 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.site.hidden != true }">
+		<c:if test="${model.collectedSampleFields.site.hidden != true }">
 			<div>
-				<form:label path="sites">${model.collectedSample.site.displayName}</form:label>
+				<form:label path="sites">${model.collectedSampleFields.site.displayName}</form:label>
 				<form:select path="sites" id="${editCollectedSampleFormSitesId}"
 					class="editCollectedSampleFormSites">
 					<form:option label="" value="" selected="selected" />
 					<c:forEach var="site" items="${model.sites}">
-						<form:option value="${site}" label="${site}" />
+						<form:option value="${site.id}" label="${site.name}" />
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="sites" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSample.notes.hidden != true }">
+		<c:if test="${model.collectedSampleFields.notes.hidden != true }">
 			<div>
-				<form:label path="notes">${model.collectedSample.notes.displayName}</form:label>
+				<form:label path="notes">${model.collectedSampleFields.notes.displayName}</form:label>
 				<form:textarea path="notes" maxlength="255" />
 				<form:errors class="formError" path="collectedSample.notes"
 					delimiter=", "></form:errors>

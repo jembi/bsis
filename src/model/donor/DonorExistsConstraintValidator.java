@@ -4,15 +4,20 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import repository.DonorRepository;
 
+@Component
 public class DonorExistsConstraintValidator implements
     ConstraintValidator<DonorExists, Donor> {
 
   @Autowired
   private DonorRepository donorRepository;
 
+  public DonorExistsConstraintValidator() {
+  }
+  
   @Override
   public void initialize(DonorExists constraint) {
 
@@ -22,6 +27,8 @@ public class DonorExistsConstraintValidator implements
 
    if (target == null)
      return true;
+
+   System.out.println("target: " + target.getId());
 
    try {
     Donor donor = donorRepository.findDonorById(target.getId());

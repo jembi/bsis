@@ -37,20 +37,6 @@ public class LocationRepository {
 		return query.getResultList();
 	}
 
-	public List<Location> getAllCenters() {
-		Query query = em
-				.createQuery("SELECT l FROM Location l where l.isCenter=true and l.isDeleted= :isDeleted");
-		query.setParameter("isDeleted", Boolean.FALSE);
-		return query.getResultList();
-	}
-
-	public List<Location> getAllCollectionSites() {
-		Query query = em
-				.createQuery("SELECT l FROM Location l where l.isCollectionSite=true and l.isDeleted= :isDeleted");
-		query.setParameter("isDeleted", Boolean.FALSE);
-		return query.getResultList();
-	}
-
 	public List<Location> getAllUsageSites() {
 		Query query = em
 				.createQuery("SELECT l FROM Location l where l.isUsageSite=true and l.isDeleted= :isDeleted");
@@ -134,13 +120,20 @@ public class LocationRepository {
     return (long) -1;
   }
 
-  public List<String> getAllCollectionSitesAsString() {
-    List<Location> locations = getAllUsageSites();
-    List<String> locationNames = new ArrayList<String>();
-    for (Location l : locations) {
-      if (l.getIsCollectionSite())
-        locationNames.add(l.getName());
-    }
-    return locationNames;
+  public List<Location> getAllCollectionSites() {
+    TypedQuery<Location> query = em.createQuery(
+        "SELECT l from Location l where l.isCollectionSite=:isCollectionSite and l.isDeleted=:isDeleted",
+        Location.class);
+    query.setParameter("isCollectionSite", true);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
+  }
+
+  public List<Location> getAllCenters() {
+    TypedQuery<Location> query = em
+        .createQuery("SELECT l FROM Location l where l.isCenter=:isCenter and l.isDeleted= :isDeleted", Location.class);
+    query.setParameter("isCenter", true);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
   }
 }

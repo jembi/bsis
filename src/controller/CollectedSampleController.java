@@ -13,8 +13,11 @@ import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
+import model.donor.Donor;
 import model.util.Location;
 
+import org.springframework.beans.PropertyValue;
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
+import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import viewmodel.CollectedSampleViewModel;
@@ -48,8 +52,11 @@ public class CollectedSampleController {
   private DonorTypeRepository donorTypeRepository;
 
   @Autowired
+  private DonorRepository donorRepository;
+
+  @Autowired
   private UtilController utilController;
-  
+
   public CollectedSampleController() {
   }
 
@@ -69,7 +76,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findCollectionFormInit(Model model) {
+  public ModelAndView findCollectionFormGenerator(Model model) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
     model.addAttribute("findCollectionForm", form);
@@ -78,7 +85,7 @@ public class CollectedSampleController {
     Map<String, Object> m = model.asMap();
     addCentersToModel(m);
     // to ensure custom field names are displayed in the form
-    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
     return mv;
   }
@@ -108,24 +115,23 @@ public class CollectedSampleController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("centers", locationRepository.getAllCentersAsString());
+    m.put("centers", locationRepository.getAllCenters());
     m.put("donorTypes", donorTypeRepository.getAllDonorTypes());
     m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
-    m.put("sites", locationRepository.getAllCollectionSitesAsString());    
+    m.put("sites", locationRepository.getAllCollectionSites());    
   }
 
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       Model model,
-      @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
-      @RequestParam(value = "donorNumber", required = false) String donorNumber,
-      @RequestParam(value = "isDialog", required = false) String isDialog) {
+      @RequestParam Map<String, String> params) {
 
+    String collectionNumber = params.get("collectionNumber");
+    String donorId = params.get("donorId");
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
     form.generateCollectionNumber();
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
-    m.put("isDialog", isDialog);
     m.put("requestUrl", getUrl(request));
     if (collectionNumber != null) {
       form.setCollectionNumber(collectionNumber);
@@ -138,16 +144,18 @@ public class CollectedSampleController {
       } else
         form = new CollectedSampleBackingForm();
     }
-    else if (donorNumber != null && !donorNumber.isEmpty()){
+    else if (donorId != null && !donorId.isEmpty()){
       // generating edit collection form for an existing Donor
       // TODO: make this property readonly in the jsp
-      form.setDonor(donorNumber);
+      Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+      form.setDonor(donor);
+      System.out.println("donor: " + form.getDonor());
     }
 
     System.out.println(utilController.getFormFieldsForForm("collectedSample"));
     m.put("editCollectedSampleForm", form);
     // to ensure custom field names are displayed in the form
-    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     mv.addObject("model", m);
     return mv;
@@ -165,7 +173,14 @@ public class CollectedSampleController {
     if (form == null) {
       form = new CollectedSampleBackingForm();
     } else {
+      String donorId = form.getDonorIdHidden();
+      if (donorId != null && !donorId.isEmpty()) {
+        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+        form.setDonor(donor);
+      }
       if (result.hasErrors()) {
+        System.out.println("here");
+        System.out.println(form.getDonor());
         m.put("hasErrors", true);
         addEditSelectorOptions(m);
         success = false;
@@ -196,7 +211,7 @@ public class CollectedSampleController {
     m.put("success", success);
     m.put("message", message);
 
-    m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
 
     return mv;

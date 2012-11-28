@@ -18,7 +18,6 @@
 
         var fnRowSelected = function(node) {
           var elements = $(node).children();
-          console.log(elements);
           if (elements[0].getAttribute("class") === "dataTables_empty") {
             return;
           }
@@ -105,7 +104,7 @@
 							<c:if test="${model.donor.bloodGroup.hidden != true}">
 								<td>${donor.bloodGroup}</td>
 							</c:if>
-						<c:if test="${model.donor.birthDate.hidden != true}">
+							<c:if test="${model.donor.birthDate.hidden != true}">
 								<td>${donor.birthDate}</td>
 							</c:if>
 						</tr>

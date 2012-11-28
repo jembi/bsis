@@ -68,15 +68,6 @@
                   });
             });
 
-        $("#${goBackButtonId}").button({
-          icons : {
-            primary : 'ui-icon-circle-arrow-w'
-          }
-        }).click(function() {
-          window.history.back();
-          return false;
-        });
-
         $("#${addCollectionButtonId}").button({
           icons : {
             primary : 'ui-icon-disk'
@@ -85,10 +76,12 @@
                 function() {
                   var parentDivId = $("#${editDonorFormDivId}").parent().attr(
                       "id");
-                  replaceContent(parentDivId, "${model.requestUrl}",
-                      "editCollectionFormGenerator.html", {
-                        donorNumber : "${model.donorNumber}"
-                      });
+                  var donorId = $("#${editDonorFormId}").find(
+                  "[name='id']").val();
+                  replaceContent(parentDivId,
+                      					 "${model.requestUrl}",
+                      					 "editCollectionFormGenerator.html",
+                      					 { donorId : donorId });
                   return false;
                 });
 

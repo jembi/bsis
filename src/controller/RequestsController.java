@@ -77,8 +77,8 @@ public class RequestsController {
     ModelAndView mv = new ModelAndView("findRequestForm");
     Map<String, Object> m = model.asMap();
 
-    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-    m.put("sites", sites);
+//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+//    m.put("sites", sites);
     m.put("requestUrl", getUrl(servletRequest));
     // to ensure custom field names are displayed in the form
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
@@ -100,8 +100,8 @@ public class RequestsController {
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findRequestsTable");
 
-    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-    m.put("sites", sites);
+//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+//    m.put("sites", sites);
     m.put("requestUrl", getUrl(servletRequest));
 
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
@@ -122,8 +122,8 @@ public class RequestsController {
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findPendingRequestsTable");
 
-    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-    m.put("sites", sites);
+//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+//    m.put("sites", sites);
     m.put("requestUrl", getUrl(servletRequest));
 
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
@@ -216,8 +216,8 @@ public class RequestsController {
     Map<String, Object> m = model.asMap();
     m.put("isDialog", isDialog);
 
-    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-    m.put("sites", sites);
+//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
+//    m.put("sites", sites);
     m.put("selectedSite", "");
     m.put("selectedProductType", "");
 

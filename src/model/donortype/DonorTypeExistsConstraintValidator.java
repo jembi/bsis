@@ -6,18 +6,22 @@ import javax.validation.ConstraintValidatorContext;
 import model.donortype.DonorType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import repository.DonorTypeRepository;
 
+@Component
 public class DonorTypeExistsConstraintValidator implements
     ConstraintValidator<DonorTypeExists, DonorType> {
 
   @Autowired
   private DonorTypeRepository donorTypeRepository;
 
+  public DonorTypeExistsConstraintValidator() {
+  }
+  
   @Override
   public void initialize(DonorTypeExists constraint) {
-
   }
 
   public boolean isValid(DonorType target, ConstraintValidatorContext context) {
@@ -35,7 +39,7 @@ public class DonorTypeExistsConstraintValidator implements
    return false;
   }
 
-  public void setDonorRepository(DonorTypeRepository donorTypeRepository) {
+  public void setDonorTypeRepository(DonorTypeRepository donorTypeRepository) {
     this.donorTypeRepository = donorTypeRepository;
   }
 }

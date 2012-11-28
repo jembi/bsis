@@ -12,6 +12,7 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
 	<context:property-placeholder location="classpath:database.properties" />
+	<context:annotation-config />
 
 	<!-- Configures the @Controller programming model -->
 	<mvc:annotation-driven />
@@ -20,6 +21,11 @@
 	<context:component-scan base-package="repository" />
 	<context:component-scan base-package="model" />
 	<context:component-scan base-package="viewmodel" />
+
+	<!-- The LocalValidatorFactoryBean is able to instantiate custom validators and inject autowired dependencies. -->
+	<bean id="validator"
+  	    class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
