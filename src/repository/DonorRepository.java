@@ -56,20 +56,7 @@ public class DonorRepository {
   }
 
   public Donor findDonorById(String donorId) {
-    try {
-      String queryString = "SELECT d FROM Donor d WHERE d.id = :donorId and d.isDeleted = :isDeleted";
-      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      Donor resultDonor = query.setParameter("donorId", donorId)
-          .getSingleResult();
-      if (resultDonor != null) {
-        resultDonor.setIsDeleted(Boolean.FALSE);
-      }
-      return resultDonor;
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-      return null;
-    }
+    return findDonorById(Long.parseLong(donorId));
   }
 
   public List<Donor> findAnyDonor(String donorNumber, String firstName,

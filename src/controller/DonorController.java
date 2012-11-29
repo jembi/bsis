@@ -85,7 +85,6 @@ public class DonorController {
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
     DonorBackingForm form = new DonorBackingForm();
-    form.generateDonorNumber();
 
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
@@ -104,57 +103,53 @@ public class DonorController {
     }
     m.put("editDonorForm", form);
     // to ensure custom field names are displayed in the form
-    System.out.println(utilController.getFormFieldsForForm("donor"));
     m.put("donor", utilController.getFormFieldsForForm("donor"));
     mv.addObject("model", m);
     return mv;
   }
 
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
-  public ModelAndView addDonor(HttpServletRequest request,
-      @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
-      BindingResult result, Model model) {
+  public ModelAndView
+        addDonor(HttpServletRequest request,
+                 @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
+                 BindingResult result, Model model) {
 
     ModelAndView mv = new ModelAndView("editDonorForm");
     boolean success = false;
     String message = "";
     Map<String, Object> m = new HashMap<String, Object>();
-    if (form == null) {
-      form = new DonorBackingForm();
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      success = false;
+      message = "Please fix the errors noted above.";
     } else {
-      if (result.hasErrors()) {
-        m.put("hasErrors", true);
+      try {
+        Donor donor = form.getDonor();
+        donor.setIsDeleted(false);
+        donorRepository.addDonor(donor);
+        m.put("hasErrors", false);
+        success = true;
+        message = "Donor Successfully Added";
+        form = new DonorBackingForm();
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
         success = false;
-        message = "Please fix the errors noted above";
-      } else {
-        try {
-          Donor donor = form.getDonor();
-          donor.setIsDeleted(false);
-          donorRepository.addDonor(donor);
-          m.put("hasErrors", false);
-          form = new DonorBackingForm();
-          success = true;
-          m.put("existingDonor", true);
-          message = "Donor Successfully Added";
-        } catch (EntityExistsException ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Donor Already exists.";
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Internal Error. Please try again or report a Problem.";
-        }
+        message = "Donor Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
     m.put("editDonorForm", form);
+    m.put("existingDonor", false);
     m.put("success", success);
     m.put("message", message);
-
     m.put("donor", utilController.getFormFieldsForForm("donor"));
-    mv.addObject("model", m);
 
+    mv.addObject("model", m);
     return mv;
   }
 

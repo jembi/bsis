@@ -27,6 +27,7 @@ public class DonorBackingForm {
 
   public DonorBackingForm() {
     donor = new Donor();
+    generateDonorNumber();
   }
 
   public DonorBackingForm(Donor donor) {

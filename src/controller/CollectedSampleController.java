@@ -118,15 +118,34 @@ public class CollectedSampleController {
     m.put("sites", locationRepository.getAllCollectionSites());    
   }
 
+  @RequestMapping(value = "/addCollectionFormForDonorGenerator", method = RequestMethod.GET)
+  public ModelAndView addCollectionFormForDonorGenerator(HttpServletRequest request,
+      Model model,
+      @RequestParam(value="donorId", required=true) String donorId) {
+
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    m.put("requestUrl", getUrl(request));
+    if (donorId != null) {
+      form.setDonorIdHidden(donorId);
+      form.setDonor(donorRepository.findDonorById(donorId));
+    }
+
+    m.put("editCollectedSampleForm", form);
+    // to ensure custom field names are displayed in the form
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       Model model,
-      @RequestParam Map<String, String> params) {
+      @RequestParam(value="collectionNumber", required=false) String collectionNumber) {
 
-    String collectionNumber = params.get("collectionNumber");
-    String donorId = params.get("donorId");
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
-    form.generateCollectionNumber();
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
     m.put("requestUrl", getUrl(request));
@@ -141,15 +160,7 @@ public class CollectedSampleController {
       } else
         form = new CollectedSampleBackingForm();
     }
-    else if (donorId != null && !donorId.isEmpty()){
-      // generating edit collection form for an existing Donor
-      // TODO: make this property readonly in the jsp
-      Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
-      form.setDonor(donor);
-      System.out.println("donor: " + form.getDonor());
-    }
 
-    System.out.println(utilController.getFormFieldsForForm("collectedSample"));
     m.put("editCollectedSampleForm", form);
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
@@ -171,6 +182,7 @@ public class CollectedSampleController {
       form = new CollectedSampleBackingForm();
     } else {
       String donorId = form.getDonorIdHidden();
+      System.out.println(donorId);
       if (donorId != null && !donorId.isEmpty()) {
         Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
         form.setDonor(donor);

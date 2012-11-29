@@ -142,10 +142,11 @@
 						  								 lastName: "${model.editCollectedSampleForm.donor.lastName}",
 														 }));
 	        $("#${editCollectedSampleFormDonorHiddenId}").val("${model.editCollectedSampleForm.donor.id}");
-	        $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");
-	
-	        copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
+	        $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");	
         }
+
+        copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
+
       });
 </script>
 

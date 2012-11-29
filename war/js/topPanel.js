@@ -125,6 +125,8 @@ $(document).ready(
                     data : data,
                     method : "GET",
                     success : function(responseData) {
+                      console.log(state.targetId);
+                      console.log(responseData);
                       $('#' + state.targetId).html(responseData);
                     }
                   });

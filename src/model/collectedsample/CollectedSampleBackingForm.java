@@ -20,9 +20,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import repository.BloodBagTypeRepository;
-import repository.DonorRepository;
-import repository.DonorTypeRepository;
 import repository.LocationRepository;
 
 @Component
@@ -45,6 +42,7 @@ public class CollectedSampleBackingForm {
 
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
+    generateCollectionNumber();
   }
 
   public CollectedSampleBackingForm(CollectedSample collection) {

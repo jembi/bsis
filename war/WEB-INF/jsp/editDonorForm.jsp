@@ -37,10 +37,10 @@
             function() {
               if ("${model.existingDonor}" == "true")
                 updateExistingDonor($("#${editDonorFormId}")[0],
-                    "${editDonorFormDivId}", reloadCurrentTab);
+                    "${editDonorFormDivId}", function() {});
               else
                 addNewDonor($("#${editDonorFormId}")[0],
-                    "${editDonorFormDivId}", reloadCurrentTab);
+                    "${editDonorFormDivId}", function() {});
             });
 
         $("#${deleteDonorButtonId}").button({
@@ -80,7 +80,7 @@
                   "[name='id']").val();
                   replaceContent(parentDivId,
                       					 "${model.requestUrl}",
-                      					 "editCollectionFormGenerator.html",
+                      					 "addCollectionFormForDonorGenerator.html",
                       					 { donorId : donorId });
                   return false;
                 });
@@ -106,7 +106,7 @@
           yearRange : "c-100:c0",
         });
 
-        copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donor.mirroredFields}'))
+        copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donor.mirroredFields}'));
       });
 </script>
 

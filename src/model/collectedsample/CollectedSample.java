@@ -23,6 +23,7 @@ import model.donor.Donor;
 import model.donor.DonorExists;
 import model.donortype.DonorType;
 import model.donortype.DonorTypeExists;
+import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 import model.util.Location;
@@ -30,7 +31,8 @@ import model.util.Location;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-public class CollectedSample {
+public class CollectedSample implements ModificationTracker {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false)
@@ -82,6 +84,7 @@ public class CollectedSample {
   private Boolean isDeleted;
 
   public CollectedSample() {
+    modificationTracker = new RowModificationTracker();
   }
 
   public Long getId() {

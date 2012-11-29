@@ -14,6 +14,7 @@ function updateDonorGeneric(form, resultDivId, url, successCallback) {
     data: donor,
     success: function(jsonResponse, data, data1, data2) {
                 $("#" + resultDivId).replaceWith(jsonResponse);
+                successCallback();
               },
     error: function(jsonResponse) {
              $("#" + resultDivId).replaceWith(jsonResponse);
