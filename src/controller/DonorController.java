@@ -74,17 +74,11 @@ public class DonorController {
     return modelAndView;
   }
 
-  @RequestMapping(value = "/addDonorFormTab", method = RequestMethod.GET)
-  public ModelAndView addDonorFormTabInit() {
-    ModelAndView mv = new ModelAndView("addDonor");
-    return mv;
-  }
-
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView editDonorFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
-    DonorBackingForm form = new DonorBackingForm();
+    DonorBackingForm form = new DonorBackingForm(true);
 
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
@@ -97,7 +91,7 @@ public class DonorController {
         m.put("existingDonor", true);
       }
       else {
-        form = new DonorBackingForm();
+        form = new DonorBackingForm(true);
         m.put("existingDonor", false);
       }
     }
@@ -117,7 +111,7 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("editDonorForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = model.asMap();
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);
@@ -131,7 +125,8 @@ public class DonorController {
         m.put("hasErrors", false);
         success = true;
         message = "Donor Successfully Added";
-        form = new DonorBackingForm();
+        form = new DonorBackingForm(true);
+        System.out.println(form.getFirstName());
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
@@ -163,7 +158,7 @@ public class DonorController {
     String message = "";
     Map<String, Object> m = new HashMap<String, Object>();
     if (form == null) {
-      form = new DonorBackingForm();
+      form = new DonorBackingForm(true);
     }
     else {
       if (result.hasErrors()) {
@@ -186,7 +181,7 @@ public class DonorController {
           }
           else {
             m.put("hasErrors", false);
-            form = new DonorBackingForm();
+            form = new DonorBackingForm(true);
             success = true;
             m.put("existingDonor", true);
             message = "Donor Successfully Updated";

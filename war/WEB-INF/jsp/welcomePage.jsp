@@ -84,7 +84,7 @@
 		</div>
 	</div>
 	<div id="preloader">
-		<div style="text-align: center;">
+		<div style="text-align: center; -webkit-transition: 4s ease-out; -webkit-transition-delay: 2s;">
 			<img src="images/content_loading.gif" />
 			<div>
 				<span style="font-size: 21pt;">Loading... </span>

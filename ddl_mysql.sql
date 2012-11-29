@@ -1,3 +1,80 @@
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33A49787C4;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D10E68A8;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33F17A8E4E;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A3359FAB30D;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A331EA5B4F;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D0AFB367;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A335DB0AB81;
+
+    alter table ConfigChange 
+        drop 
+        foreign key FKF9B3DDB2A49787C4;
+
+    alter table ConfigChange 
+        drop 
+        foreign key FKF9B3DDB2D0AFB367;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46A49787C4;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46D0AFB367;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFA49787C4;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF32E145A;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFD0AFB367;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FA49787C4;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F32E145A;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FD0AFB367;
+
+    alter table User 
+        drop 
+        foreign key FK285FEBA49787C4;
+
+    alter table User 
+        drop 
+        foreign key FK285FEBD0AFB367;
+
     drop table if exists BloodBagType;
 
     drop table if exists CollectedSample;
