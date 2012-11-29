@@ -10,10 +10,12 @@ import org.hibernate.event.spi.MergeEvent;
 import org.hibernate.event.spi.MergeEventListener;
 import org.hibernate.event.spi.PersistEvent;
 import org.hibernate.event.spi.PersistEventListener;
+import org.hibernate.event.spi.PreInsertEvent;
+import org.hibernate.event.spi.PreInsertEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EntitySaveListener implements PersistEventListener, MergeEventListener {
+public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
   private static final long serialVersionUID = 1L;
 
@@ -46,6 +48,12 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   @Override
   public void onMerge(MergeEvent arg0, Map arg1) throws HibernateException {
     // TODO Auto-generated method stub
+  }
+
+  @Override
+  public boolean onPreInsert(PreInsertEvent arg0) {
+    // TODO Auto-generated method stub
+    return false;
   }
 
 }

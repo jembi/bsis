@@ -16,13 +16,11 @@ import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.donor.Donor;
 import model.util.Location;
 
-import org.springframework.beans.PropertyValue;
-import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,9 +59,8 @@ public class CollectedSampleController {
   }
 
   @InitBinder
-  protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(
-        new CollectedSampleBackingFormValidator(binder.getValidator()));
+  protected void initBinder(DataBinder binder) {
+    binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator()));
   }
 
   public static String getUrl(HttpServletRequest req) {
