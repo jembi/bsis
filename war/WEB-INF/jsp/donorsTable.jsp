@@ -67,7 +67,13 @@ $(document).ready(
 
     	$(".closeButton").click(clearEditSection);
 
-      $("#${tabContentId}").find(".editDonor").button({disabled: true}).click(function() {
+      $("#${tabContentId}").find(".editDonor").button(
+          {
+            disabled: true,
+            icons : {
+        			primary : 'ui-icon-pencil'
+      			}
+          }).click(function() {
         $("#${donorsTableEditRowDivId}").bind("editDonorSuccess", refreshResults);
         createEditSection("editDonorFormGenerator.html",
             							{donorId: selectedRowId});
@@ -84,19 +90,41 @@ $(document).ready(
         });
       }
 
-      $("#${tabContentId}").find(".refreshResults").button().click(refreshResults);
+      $("#${tabContentId}").find(".refreshResults").button({
+        icons : {
+          primary : 'ui-icon-arrowrefresh-1-e'
+        }
+      }).click(refreshResults);
 
-      $("#${tabContentId}").find(".createCollection").button({disabled: true}).click(function() {
+      $("#${tabContentId}").find(".createCollection").button(
+          {
+            disabled: true,
+            icons : {
+        			primary : 'ui-icon-circle-zoomin'
+      			}
+          }).click(function() {
         $("#${donorsTableEditRowDivId}").bind("editCollectionSuccess", clearEditSection);
         createEditSection("addCollectionFormForDonorGenerator.html",
 						{donorId: selectedRowId});
       });
 
-      $("#${tabContentId}").find(".viewDonorHistory").button({disabled: true}).click(function() {
+      $("#${tabContentId}").find(".viewDonorHistory").button(
+          {
+            disabled: true,
+            icons : {
+        			primary : 'ui-icon-info'
+      			}
+          }).click(function() {
         console.log("view donor history clicked");
       });
 
-      $("#${tabContentId}").find(".deleteDonor").button({disabled: true}).click(function() {
+      $("#${tabContentId}").find(".deleteDonor").button(
+          {
+            disabled: true,
+            icons : {
+        			primary : 'ui-icon-trash'
+      			}
+          }).click(function() {
         $("#${deleteDonorConfirmDialogId}").dialog(
             {
               modal : true,
@@ -136,7 +164,7 @@ $(document).ready(
 		<c:otherwise>
 
 			<button class="refreshResults">
-				Refresh results
+				Refresh
 			</button>
 			<button class="rowEditButton editDonor">
 				Edit Donor
@@ -145,7 +173,7 @@ $(document).ready(
 				Create Collection for Donor
 			</button>
 			<button class="rowEditButton viewDonorHistory">
-				View Donor History
+				Donor History
 			</button>
 			<button class="rowEditButton deleteDonor">
 				Delete Donor
@@ -203,7 +231,7 @@ $(document).ready(
 			</table>
 
 			<button class="refreshResults">
-				Refresh results
+				Refresh
 			</button>
 			<button class="rowEditButton editDonor">
 				Edit Donor
@@ -212,7 +240,7 @@ $(document).ready(
 				Create Collection for Donor
 			</button>
 			<button class="rowEditButton viewDonorHistory">
-				View Donor History
+				Donor History
 			</button>
 			<button class="rowEditButton deleteDonor">
 				Delete Donor
