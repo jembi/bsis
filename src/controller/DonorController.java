@@ -97,7 +97,8 @@ public class DonorController {
     }
     m.put("editDonorForm", form);
     // to ensure custom field names are displayed in the form
-    m.put("donor", utilController.getFormFieldsForForm("donor"));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Edit Donor - " + form.getDonorNumber());
     mv.addObject("model", m);
     return mv;
   }
@@ -142,7 +143,7 @@ public class DonorController {
     m.put("existingDonor", false);
     m.put("success", success);
     m.put("message", message);
-    m.put("donor", utilController.getFormFieldsForForm("donor"));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
 
     mv.addObject("model", m);
     return mv;
@@ -156,7 +157,7 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("editDonorForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = model.asMap();
     if (form == null) {
       form = new DonorBackingForm(true);
     }
@@ -168,11 +169,8 @@ public class DonorController {
       }
       else {
         try {
-          Donor donor = form.getDonor();
-          System.out.println(donor.getBirthDate());
-          System.out.println(form.getBirthDate());
-          donor.setIsDeleted(false);
-          Donor existingDonor = donorRepository.updateDonor(donor);
+          form.setIsDeleted(false);
+          Donor existingDonor = donorRepository.updateDonor(form.getDonor());
           if (existingDonor == null) {
             m.put("hasErrors", true);
             success = false;
@@ -201,7 +199,7 @@ public class DonorController {
     m.put("editDonorForm", form);
     m.put("success", success);
     m.put("message", message);
-    m.put("donor", utilController.getFormFieldsForForm("donor"));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
 
     mv.addObject("model", m);
 
@@ -248,7 +246,8 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("findDonorForm");
     Map<String, Object> m = model.asMap();
     // to ensure custom field names are displayed in the form
-    m.put("donor", utilController.getFormFieldsForForm("donor"));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Find Donors");
     mv.addObject("model", m);
     return mv;
   }
@@ -270,14 +269,15 @@ public class DonorController {
     Map<String, Object> model = m.asMap();
     model.put("tableName", "findDonorResultsTable");
     model.put("requestUrl", getUrl(request));
-    model.put("donor", utilController.getFormFieldsForForm("donor"));
+    model.put("donorFields", utilController.getFormFieldsForForm("donor"));
     model.put("allDonors", getDonorsViewModels(donors));
+    model.put("contentLabel", "Find Donors");
     modelAndView.addObject("model", model);
     return modelAndView;
   }
 
   @RequestMapping("/viewDonors")
-  public ModelAndView viewAllDonors(@RequestParam Map<String, String> params,
+  public ModelAndView viewDonors(@RequestParam Map<String, String> params,
       HttpServletRequest request) {
 
     List<Donor> allDonors = donorRepository.getAllDonors();
@@ -287,7 +287,8 @@ public class DonorController {
 
     model.put("tableName", "viewAllDonors");
     model.put("allDonors", getDonorsViewModels(allDonors));
-    model.put("donor", utilController.getFormFieldsForForm("donor"));
+    model.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    model.put("contentLabel", "View All Donors");
     modelAndView.addObject("model", model);
     return modelAndView;
   }

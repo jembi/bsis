@@ -23,10 +23,11 @@ import model.donor.Donor;
 import model.donor.DonorExists;
 import model.donortype.DonorType;
 import model.donortype.DonorTypeExists;
+import model.location.Location;
+import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
-import model.util.Location;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -49,9 +50,11 @@ public class CollectedSample implements ModificationTracker {
   @OneToMany(mappedBy="collectedSample")
   private List<TestResult> testResults;
 
+  @LocationExists
   @ManyToOne
   private Location center;
 
+  @LocationExists
   @ManyToOne
   private Location site;
 
@@ -191,9 +194,13 @@ public class CollectedSample implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(CollectedSample collection) {
-    // TODO Auto-generated method stub
-    
+  public void copy(CollectedSample collectedSample) {
+    assert (this.getId().equals(collectedSample.getId()));
+    this.collectionNumber = collectedSample.collectionNumber;
+    this.collectedOn = collectedSample.collectedOn;
+    this.center = collectedSample.center;
+    this.site = collectedSample.site;
+    this.notes = collectedSample.notes;
   }
 
   public List<Product> getProducts() {
@@ -234,12 +241,6 @@ public class CollectedSample implements ModificationTracker {
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public void setCenter(Long centerId) {
-  }
-
-  public void setSite(Long siteId) {
   }
 
 }

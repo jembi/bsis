@@ -10,24 +10,18 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="editDonorFormDivId">editDonorFormDiv-${unique_page_id}</c:set>
+<c:set var="editDonorFormBarcodeId">editDonorFormBarcode-${unique_page_id}</c:set>
 <c:set var="editDonorFormId">editDonorForm-${unique_page_id}</c:set>
 <c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 <c:set var="genderSelectorId">genderSelector-${unique_page_id}</c:set>
 <c:set var="bloodGroupSelectorId">bloodTypeSelector-${unique_page_id}</c:set>
 <c:set var="birthDateInputId">birthDateInput-${unique_page_id}</c:set>
 <c:set var="updateDonorButtonId">updateDonorButton-${unique_page_id}</c:set>
-<c:set var="deleteDonorButtonId">deleteDonorButton-${unique_page_id}</c:set>
-<c:set var="addCollectionButtonId">addCollectionButton-${unique_page_id}</c:set>
+<c:set var="printButtonId">printButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
-
-        function resetForm() {
-          $("#${editDonorFormId}").each(function() {
-            this.reset();
-          });
-        }
 
         $("#${updateDonorButtonId}").button({
           icons : {
@@ -43,47 +37,13 @@
                     "${editDonorFormDivId}", function() {});
             });
 
-        $("#${deleteDonorButtonId}").button({
+        $("#${printButtonId}").button({
           icons : {
-            primary : 'ui-icon-minusthick'
+            primary : 'ui-icon-print'
           }
-        }).click(
-            function() {
-              $("#${deleteDonorConfirmDialogId}").dialog(
-                  {
-                    modal : true,
-                    title : "Confirm Delete",
-                    buttons : {
-                      "Delete" : function() {
-                        var donorId = $("#${editDonorFormId}").find(
-                            "[name='id']").val();
-                        deleteDonor(donorId);
-                        reloadCurrentTab();
-                        $(this).dialog("close");
-                      },
-                      "Cancel" : function() {
-                        $(this).dialog("close");
-                      }
-                    }
-                  });
-            });
-
-        $("#${addCollectionButtonId}").button({
-          icons : {
-            primary : 'ui-icon-disk'
-          }
-        }).click(
-                function() {
-                  var parentDivId = $("#${editDonorFormDivId}").parent().attr(
-                      "id");
-                  var donorId = $("#${editDonorFormId}").find(
-                  "[name='id']").val();
-                  replaceContent(parentDivId,
-                      					 "${model.requestUrl}",
-                      					 "addCollectionFormForDonorGenerator.html",
-                      					 { donorId : donorId });
-                  return false;
-                });
+        }).click(function() {
+          $("#${editDonorFormId}").printArea();
+        });
 
         $("#${genderSelectorId}").multiselect({
           multiple : false,
@@ -106,7 +66,12 @@
           yearRange : "c-100:c0",
         });
 
-        copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donor.mirroredFields}'));
+        $("#${editDonorFormBarcodeId}").barcode(
+            							  "${editDonorForm.donor.donorNumber}-${editDonorForm.donor.id}",
+            								"code128",
+            								{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        
+        copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donorFields.mirroredFields}'));
       });
 </script>
 
@@ -129,48 +94,51 @@
 <div id="${editDonorFormDivId}" class="editFormDiv">
 	<form:form id="${editDonorFormId}" method="POST" class="editForm"
 		commandName="editDonorForm">
+		<c:if test="${model.existingDonor == true}">
+			<div id="${editDonorFormBarcodeId}"></div>
+		</c:if>
 		<form:hidden path="id" />
-		<c:if test="${model.donor.donorNumber.hidden != true }">
+		<c:if test="${model.donorFields.donorNumber.hidden != true }">
 			<div>
-				<form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label>
-				<form:input path="donorNumber" value="${model.donor.donorNumber.defaultValue}" />
+				<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
+				<form:input path="donorNumber" value="${model.donorFields.donorNumber.defaultValue}" />
 				<form:errors class="formError" path="donor.donorNumber"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.firstName.hidden != true }">
+		<c:if test="${model.donorFields.firstName.hidden != true }">
 			<div>
-				<form:label path="firstName">${model.donor.firstName.displayName}</form:label>
-				<form:input path="firstName" value="${model.donor.firstName.defaultValue}" />
+				<form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
+				<form:input path="firstName" value="${model.donorFields.firstName.defaultValue}" />
 				<form:errors class="formError" path="donor.firstName" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.middleName.hidden != true }">
+		<c:if test="${model.donorFields.middleName.hidden != true }">
 			<div>
-				<form:label path="middleName">${model.donor.middleName.displayName}</form:label>
-				<form:input path="middleName" value="${model.donor.middleName.defaultValue}" />
+				<form:label path="middleName">${model.donorFields.middleName.displayName}</form:label>
+				<form:input path="middleName" value="${model.donorFields.middleName.defaultValue}" />
 				<form:errors class="formError" path="donor.middleName"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.lastName.hidden != true }">
+		<c:if test="${model.donorFields.lastName.hidden != true }">
 			<div>
-				<form:label path="lastName">${model.donor.lastName.displayName}</form:label>
-				<form:input path="lastName" value="${model.donor.lastName.defaultValue}" />
+				<form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
+				<form:input path="lastName" value="${model.donorFields.lastName.defaultValue}" />
 				<form:errors class="formError" path="donor.lastName" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.birthDate.hidden != true }">
+		<c:if test="${model.donorFields.birthDate.hidden != true }">
 
 			<div>
-				<form:label path="birthDate">${model.donor.birthDate.displayName}</form:label>
-				<form:input path="birthDate" id="${birthDateInputId}" value="${model.donor.birthDate.defaultValue}" />
+				<form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
+				<form:input path="birthDate" id="${birthDateInputId}" value="${model.donorFields.birthDate.defaultValue}" />
 				<form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.gender.hidden != true }">
+		<c:if test="${model.donorFields.gender.hidden != true }">
 			<div>
-				<form:label path="gender">${model.donor.gender.displayName}</form:label>
+				<form:label path="gender">${model.donorFields.gender.displayName}</form:label>
 				<form:select path="gender" id="${genderSelectorId}">
 					<form:option value="not_known" label="Not Known" />
 					<form:option value="male" label="Male" />
@@ -180,9 +148,9 @@
 				<form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.bloodGroup.hidden != true }">
+		<c:if test="${model.donorFields.bloodGroup.hidden != true }">
 			<div>
-				<form:label path="bloodGroup">${model.donor.bloodGroup.displayName}</form:label>
+				<form:label path="bloodGroup">${model.donorFields.bloodGroup.displayName}</form:label>
 				<form:select path="bloodGroup" id="${bloodGroupSelectorId}">
 					<form:option value="Unknown" label="Unknown" />
 					<form:option value="A+" label="A+" />
@@ -197,63 +165,63 @@
 				<form:errors class="formError" path="bloodGroup" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.address.hidden != true }">
+		<c:if test="${model.donorFields.address.hidden != true }">
 			<div>
-				<form:label path="address">${model.donor.address.displayName}</form:label>
-				<form:textarea path="address" value="${model.donor.address.defaultValue}" maxlength="255" />
+				<form:label path="address">${model.donorFields.address.displayName}</form:label>
+				<form:textarea path="address" value="${model.donorFields.address.defaultValue}" maxlength="255" />
 				<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.city.hidden != true }">
+		<c:if test="${model.donorFields.city.hidden != true }">
 			<div>
-				<form:label path="city">${model.donor.city.displayName}</form:label>
-				<form:input path="city" value="${model.donor.city.defaultValue}" />
+				<form:label path="city">${model.donorFields.city.displayName}</form:label>
+				<form:input path="city" value="${model.donorFields.city.defaultValue}" />
 				<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.state.hidden != true }">
+		<c:if test="${model.donorFields.state.hidden != true }">
 			<div>
-				<form:label path="state">${model.donor.state.displayName}</form:label>
-				<form:input path="state" value="${model.donor.state.defaultValue}" />
+				<form:label path="state">${model.donorFields.state.displayName}</form:label>
+				<form:input path="state" value="${model.donorFields.state.defaultValue}" />
 				<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.country.hidden != true }">
+		<c:if test="${model.donorFields.country.hidden != true }">
 			<div>
-				<form:label path="country">${model.donor.country.displayName}</form:label>
-				<form:input path="country" value="${model.donor.country.defaultValue}" />
+				<form:label path="country">${model.donorFields.country.displayName}</form:label>
+				<form:input path="country" value="${model.donorFields.country.defaultValue}" />
 				<form:errors class="formError" path="donor.country" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.zipcode.hidden != true }">
+		<c:if test="${model.donorFields.zipcode.hidden != true }">
 			<div>
-				<form:label path="zipcode">${model.donor.zipcode.displayName}</form:label>
-				<form:input path="zipcode" value="${model.donor.zipcode.defaultValue}" />
+				<form:label path="zipcode">${model.donorFields.zipcode.displayName}</form:label>
+				<form:input path="zipcode" value="${model.donorFields.zipcode.defaultValue}" />
 				<ul>
 					<form:errors class="formError" path="donor.zipcode" delimiter=", "></form:errors>
 				</ul>
 			</div>
 		</c:if>
-		<c:if test="${model.donor.notes.hidden != true }">
+		<c:if test="${model.donorFields.notes.hidden != true }">
 			<div>
-				<form:label path="notes">${model.donor.notes.displayName}</form:label>
-				<textarea name="notes">${model.donor.notes.defaultValue}</textarea>
+				<form:label path="notes">${model.donorFields.notes.displayName}</form:label>
+				<textarea name="notes">${model.donorFields.notes.defaultValue}</textarea>
 				<form:errors class="formError" path="donor.notes"></form:errors>
 			</div>
 		</c:if>
 		<div>
-			<button type="button" id="${updateDonorButtonId}"
-				style="margin-left: 10px">Save</button>
-			<c:if test="${model.existingDonor == 'true'}">
-				<button type="button" id="${deleteDonorButtonId}"
-					style="margin-left: 10px">Delete</button>
-				<button type="button" id="${addCollectionButtonId}"
-					style="margin-left: 10px">Add collection for this donor</button>
+			<c:if test="${model.existingDonor != true}">
+				<button type="button" id="${updateDonorButtonId}"
+					style="margin-left: 10px">Save and add another</button>
 			</c:if>
+			<c:if test="${model.existingDonor == true}">
+				<button type="button" id="${updateDonorButtonId}"
+					style="margin-left: 10px">Save</button>
+			</c:if>
+
+			<button type="button" id="${printButtonId}"
+				style="margin-left: 10px">Print</button>
 
 		</div>
 	</form:form>
 </div>
-
-<div id="${deleteDonorConfirmDialogId}" style="display: none">Are
-	you sure you want to delete this Donor?</div>

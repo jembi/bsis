@@ -61,22 +61,23 @@ $(document).ready(function() {
 </script>
 
 <div id="${findDonorFormDivId}" class="formDiv">
+	<b><i>Find Donors</i></b>
 	<form:form method="GET" commandName="findDonorForm" id="findDonorForm"
 		class="formInTabPane">
 		<div>
-			<form:label path="donorNumber">${model.donor.donorNumber.displayName}</form:label>
+			<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
 			<form:input path="donorNumber" />
 		</div>
 		<div>
-			<form:label path="firstName">${model.donor.firstName.displayName}</form:label>
+			<form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
 			<form:input path="firstName" />
 		</div>
 		<div>
-			<form:label path="lastName">${model.donor.lastName.displayName}</form:label>
+			<form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
 			<form:input path="lastName" />
 		</div>
 		<div>
-			<form:label path="bloodGroups">${model.donor.bloodGroup.displayName}</form:label>
+			<form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
 				<form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
 					<form:option value="A+" label="A+" />
 					<form:option value="A-" label="A-" />

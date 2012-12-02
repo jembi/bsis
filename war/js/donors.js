@@ -25,7 +25,7 @@ function updateDonorGeneric(form, resultDivId, url, successCallback) {
   });
 }
 
-function deleteDonor(donorId) {
+function deleteDonor(donorId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteDonor.html",
@@ -33,6 +33,7 @@ function deleteDonor(donorId) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         $.showMessage("Donor Deleted Successfully!");
+        successCallback();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
           backgroundColor : 'red'

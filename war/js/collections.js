@@ -1,12 +1,12 @@
-function addNewCollectedSample(form, resultDivId) {
-  updateCollectionGeneric(form, resultDivId, "addCollectedSample.html");
+function addNewCollectedSample(form, resultDivId, successCallback, successCallbackArguments) {
+  updateCollectionGeneric(form, resultDivId, "addCollectedSample.html", successCallback, successCallbackArguments);
 }
 
 function updateExistingCollection(form, resultDivId) {
-  updateCollectionGeneric(form, resultDivId, "updateCollectedSample.html");
+  updateCollectionGeneric(form, resultDivId, "updateCollectedSample.html", successCallback, successCallbackArguments);
 }
 
-function updateCollectionGeneric(form, resultDivId, url) {
+function updateCollectionGeneric(form, resultDivId, url, successCallback, successCallbackArguments) {
   var collectedSample = $("#" + form.getAttribute("id")).serialize();
   console.log(collectedSample);
   $.ajax({
@@ -14,8 +14,9 @@ function updateCollectionGeneric(form, resultDivId, url) {
     url: url,
     data: collectedSample,
     success: function(jsonResponse, data, data1, data2) {
-                $("#" + resultDivId).replaceWith(jsonResponse);
-              },
+               $("#" + resultDivId).replaceWith(jsonResponse);
+               successCallback(successCallbackArguments);
+             },
     error: function(jsonResponse) {
              $("#" + resultDivId).replaceWith(jsonResponse);
            }

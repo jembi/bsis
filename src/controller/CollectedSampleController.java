@@ -14,7 +14,7 @@ import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.donor.Donor;
-import model.util.Location;
+import model.location.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,7 +80,7 @@ public class CollectedSampleController {
 
     ModelAndView mv = new ModelAndView("findCollectionForm");
     Map<String, Object> m = model.asMap();
-    addCentersToModel(m);
+    addEditSelectorOptions(m);
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
@@ -102,9 +102,9 @@ public class CollectedSampleController {
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findCollectionResultsTable");
     m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
-    m.put("allCollections", getCollectionViewModels(collections));
+    m.put("allCollectedSamples", getCollectionViewModels(collections));
     m.put("requestUrl", getUrl(request));
-    addCentersToModel(m);
+    addEditSelectorOptions(m);
     addCollectionSitesToModel(m);
 
     modelAndView.addObject("model", m);
@@ -115,7 +115,7 @@ public class CollectedSampleController {
     m.put("centers", locationRepository.getAllCenters());
     m.put("donorTypes", donorTypeRepository.getAllDonorTypes());
     m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
-    m.put("sites", locationRepository.getAllCollectionSites());    
+    m.put("sites", locationRepository.getAllCollectionSites());
   }
 
   @RequestMapping(value = "/addCollectionFormForDonorGenerator", method = RequestMethod.GET)
@@ -123,7 +123,7 @@ public class CollectedSampleController {
       Model model,
       @RequestParam(value="donorId", required=true) String donorId) {
 
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm(true);
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
     m.put("requestUrl", getUrl(request));
@@ -135,6 +135,8 @@ public class CollectedSampleController {
     m.put("editCollectedSampleForm", form);
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    if (form.getDonor() != null)
+      m.put("contentLabel", "Add Collection for Donor " + form.getDonor().getDonorNumber());
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     mv.addObject("model", m);
     return mv;
@@ -145,7 +147,7 @@ public class CollectedSampleController {
       Model model,
       @RequestParam(value="collectionNumber", required=false) String collectionNumber) {
 
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm(true);
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
     m.put("requestUrl", getUrl(request));
@@ -155,10 +157,9 @@ public class CollectedSampleController {
           .findCollectedSampleByNumber(collectionNumber);
       if (collection != null) {
         form = new CollectedSampleBackingForm(collection);
-        m.put("selectedCenter",collection.getCenter().getName());
-        m.put("selectedSite",collection.getSite().getName());
-      } else
-        form = new CollectedSampleBackingForm();
+      } else {
+        form = new CollectedSampleBackingForm(true);
+      }
     }
 
     m.put("editCollectedSampleForm", form);
@@ -177,52 +178,45 @@ public class CollectedSampleController {
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = new HashMap<String, Object>();
-    if (form == null) {
-      form = new CollectedSampleBackingForm();
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      success = false;
+      message = "Please fix the errors noted above.";
     } else {
-      String donorId = form.getDonorIdHidden();
-      System.out.println(donorId);
-      if (donorId != null && !donorId.isEmpty()) {
-        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
-        form.setDonor(donor);
-      }
-      if (result.hasErrors()) {
-        System.out.println("here");
-        System.out.println(form.getDonor());
-        m.put("hasErrors", true);
-        addEditSelectorOptions(m);
-        success = false;
-        message = "Please fix the errors noted above";
-      } else {
-        try {
-          CollectedSample collectedSample = form.getCollectedSample();
-          collectedSample.setIsDeleted(false);
-          collectedSampleRepository.addCollectedSample(collectedSample);
-          m.put("hasErrors", false);
-          form = new CollectedSampleBackingForm();
-          success = true;
-          m.put("existingCollectedSample", true);
-          message = "Collection Successfully Added";
-        } catch (EntityExistsException ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Collection Already Exists";
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Internal Error. Please try again or report a Problem.";
+      try {
+        String donorId = form.getDonorIdHidden();
+        if (donorId != null && !donorId.isEmpty()) {
+          Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+          form.setDonor(donor);
         }
+        CollectedSample collectedSample = form.getCollectedSample();
+        collectedSample.setIsDeleted(false);
+        collectedSampleRepository.addCollectedSample(collectedSample);
+        m.put("hasErrors", false);
+        success = true;
+        message = "Collected Sample Successfully Added";
+        form = new CollectedSampleBackingForm(true);
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Collected Sample Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
     m.put("editCollectedSampleForm", form);
+    m.put("existingCollectedSample", false);
     m.put("success", success);
     m.put("message", message);
-
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    mv.addObject("model", m);
 
+    mv.addObject("model", m);
     return mv;
   }
 
@@ -234,9 +228,9 @@ public class CollectedSampleController {
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = model.asMap();
     if (form == null) {
-      form = new CollectedSampleBackingForm();
+      form = new CollectedSampleBackingForm(true);
     }
     else {
       if (result.hasErrors()) {
@@ -246,10 +240,14 @@ public class CollectedSampleController {
       }
       else {
         try {
-          CollectedSample collectedSample = form.getCollectedSample();
-          collectedSample.setIsDeleted(false);
-          CollectedSample existingCollectedSample;
-          existingCollectedSample = collectedSampleRepository.updateCollectedSample(collectedSample);
+          String donorId = form.getDonorIdHidden();
+          if (donorId != null && !donorId.isEmpty()) {
+            Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+            form.setDonor(donor);
+          }
+          form.setIsDeleted(false);
+          CollectedSample existingCollectedSample = 
+            collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
           if (existingCollectedSample == null) {
             m.put("hasErrors", true);
             success = false;
@@ -258,7 +256,7 @@ public class CollectedSampleController {
           }
           else {
             m.put("hasErrors", false);
-            form = new CollectedSampleBackingForm();
+            form = new CollectedSampleBackingForm(true);
             success = true;
             m.put("existingCollectedSample", true);
             message = "Collected Sample Successfully Updated";
@@ -278,8 +276,8 @@ public class CollectedSampleController {
     m.put("editCollectedSampleForm", form);
     m.put("success", success);
     m.put("message", message);
-
     m.put("collectedSample", utilController.getFormFieldsForForm("collectedSample"));
+
     mv.addObject("model", m);
 
     return mv;
@@ -319,11 +317,6 @@ public class CollectedSampleController {
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
-  }
-  
-  private void addCentersToModel(Map<String, Object> model) {
-    List<String> allCenters = locationRepository.getAllCentersAsString();
-    model.put("centers", allCenters);
   }
 
   private void addCollectionSitesToModel(Map<String, Object> model) {

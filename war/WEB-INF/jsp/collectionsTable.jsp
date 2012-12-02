@@ -4,8 +4,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<c:set var="table_id">${model.tableName}</c:set>
-
 <%!public long getCurrentTime() {
 		return System.nanoTime();
 	}%>
@@ -17,6 +15,7 @@
 <script>
   $(document).ready(
       function() {
+
         var fnRowSelected = function(node) {
           var elements = $(node).children();
           if (elements[0].getAttribute("class") === "dataTables_empty") {
@@ -24,17 +23,20 @@
           }
           replaceContent("${tabContentId}", "${model.requestUrl}",
               "editCollectionFormGenerator.html", {
-                collectionNumber : elements[0].innerHTML
+                collectionId : elements[0].innerHTML
               });
         }
 
         var collectionsTable = $("#${table_id}").dataTable({
           "bJQueryUI" : true,
-          "sDom" : '<"H"lfrT>t<"F"ip>T',
+          "sDom" : 'C<"H"lfrT>t<"F"ip>T',
           "oTableTools" : {
             "sRowSelect" : "single",
             "aButtons" : [ "print" ],
             "fnRowSelected" : fnRowSelected
+          },
+          "oColVis" : {
+            "aiExclude" : [ 0 ],
           }
         });
 
@@ -50,7 +52,7 @@
 <div id="${tabContentId}">
 	<c:choose>
 
-		<c:when test="${fn:length(model.allCollections) eq 0}">
+		<c:when test="${fn:length(model.allCollectedSamples) eq 0}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
@@ -61,52 +63,72 @@
 			<table id="${table_id}" class="dataTable collectionsTable">
 				<thead>
 					<tr>
-						<th>${model.collectionNoDisplayName}</th>
-						<c:if test="${model.showdonorNo==true}">
-							<td>${model.donorNoDisplayName}</td>
+						<th style="display: none"></th>
+						<c:if
+							test="${model.collectedSampleFields.collectionNumber.hidden != true}">
+							<td>${model.collectedSampleFields.collectionNumber.displayName}</td>
 						</c:if>
-						<c:if test="${model.showcenter==true}">
-							<th>${model.centerDisplayName}</th>
+						<c:if test="${model.collectedSampleFields.donor.hidden != true}">
+							<td>${model.collectedSampleFields.donor.displayName}</td>
 						</c:if>
-						<c:if test="${model.showsite==true}">
-							<th>${model.siteDisplayName}</th>
+						<c:if test="${model.collectedSampleFields.center.hidden != true}">
+							<th>${model.collectedSampleFields.center.displayName}</th>
 						</c:if>
-						<c:if test="${model.showdateCollected==true}">
-							<th>${model.dateCollectedDisplayName}</th>
+						<c:if test="${model.collectedSampleFields.site.hidden != true}">
+							<th>${model.collectedSampleFields.site.displayName}</th>
 						</c:if>
-						<c:if test="${model.showsampleNo==true}">
-							<th>${model.sampleNoDisplayName}</th>
+						<c:if
+							test="${model.collectedSampleFields.collectedOn.hidden != true}">
+							<th>${model.collectedSampleFields.collectedOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.showshippingNo==true}">
-							<th>${model.shippingNoDisplayName}</th>
+						<c:if
+							test="${model.collectedSampleFields.sampleNumber.hidden != true}">
+							<th>${model.collectedSampleFields.sampleNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.showdonorType==true}">
-							<th>${model.donorTypeDisplayName}</th>
+						<c:if
+							test="${model.collectedSampleFields.shippingNumber.hidden != true}">
+							<th>${model.collectedSampleFields.shippingNumber.displayName}</th>
+						</c:if>
+						<c:if
+							test="${model.collectedSampleFields.donorType.hidden != true}">
+							<th>${model.collectedSampleFields.donorType.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="collection" items="${model.allCollections}">
+					<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
 						<tr>
-							<td>${collection.collectionNumber}</td>
-							<c:if test="${model.showdonorNo==true}">
-								<td>${collection.donorNumber}</td>
+							<th style="display: none"></th>
+							<c:if
+								test="${model.collectedSampleFields.collectionNumber.hidden != true}">
+								<td>${collectedSample.collectionNumber}</td>
 							</c:if>
-							<c:if test="${model.showcenter==true}">
-								<td>${collection.centerName}</td>
+							<c:if test="${model.collectedSampleFields.donor.hidden != true}">
+								<td>${collectedSample.donor.donorNumber}</td>
 							</c:if>
-							<c:if test="${model.showsite==true}">
-								<td>${collection.siteName}</td>
+							<c:if test="${model.collectedSampleFields.center.hidden != true}">
+								<td>${collectedSample.center}</td>
 							</c:if>
-							<c:if test="${model.showsampleNo==true}">
-								<td>${collection.sampleNumber}</td>
+							<c:if test="${model.collectedSampleFields.site.hidden != true}">
+								<td>${collectedSample.site}</td>
 							</c:if>
-							<c:if test="${model.showshippingNo==true}">
-								<td>${collection.shippingNumber}</td>
+							<c:if
+								test="${model.collectedSampleFields.collectedOn.hidden != true}">
+								<td>${collectedSample.collectedOn}</td>
 							</c:if>
-							<c:if test="${model.showdonorType==true}">
-								<td>${collection.donorType}</td>
+							<c:if
+								test="${model.collectedSampleFields.sampleNumber.hidden != true}">
+								<td>${collectedSample.sampleNumber}</td>
 							</c:if>
+							<c:if
+								test="${model.collectedSampleFields.shippingNumber.hidden != true}">
+								<td>${collectedSample.shippingNumber}</td>
+							</c:if>
+							<c:if
+								test="${model.collectedSampleFields.donorType.hidden != true}">
+								<td>${collectedSample.donorType}</td>
+							</c:if>
+						</tr>
 					</c:forEach>
 				</tbody>
 			</table>

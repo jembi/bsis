@@ -1,14 +1,12 @@
-<link type="text/css" rel="stylesheet" href="css/common.css" />
-<link type="text/css" rel="stylesheet" href="css/topPanel.css" />
 <link type="text/css" rel="stylesheet"
-	href="css/jquery-ui-1.8.16.custom.css" />
+	href="css/jquery-ui-1.8.16.custom.css" media="all" />
 <link type="text/css"
 	href="plugins/DataTables/media/css/jquery.dataTables_themeroller.css"
-	rel="Stylesheet" />
+	rel="stylesheet" media="all" />
 <!-- link type="text/css" href="css/bootstrap/bootstrap.css"
 	rel="Stylesheet" /-->
 <link type="text/css" href="css/redmond.custom/redmond.custom.css"
-	rel="Stylesheet" />
+	rel="stylesheet" media="all" />
 
 <link rel="shortcut icon" href="favicon.ico">
 
@@ -20,21 +18,26 @@
 <script src="plugins/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
 <script src="plugins/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
 <script src="plugins/slidingmessage/jquery.slidingmessage.js"></script>
+<script src="plugins/barcode/jquery-barcode-2.0.2.min.js"></script>
+<script src="plugins/printarea/jquery.PrintArea.js"></script>
 
 <link type="text/css"
 	href="plugins/jqueryui-multiselect/jquery.multiselect.css"
-	rel="Stylesheet" />
+	rel="Stylesheet" media="all" />
 
 <link type="text/css"
 	href="plugins/jqueryui-multiselect/jquery.multiselect.filter.css"
-	rel="Stylesheet" />
+	rel="Stylesheet" media="all" />
 
 <link type="text/css"
 	href="plugins/DataTables/extras/TableTools/media/css/TableTools_JUI.css"
-	rel="Stylesheet" />
+	rel="Stylesheet" media="all" />
 <link type="text/css"
 	href="plugins/DataTables/extras/ColVis/media/css/ColVis.css"
-	rel="Stylesheet" />
+	rel="Stylesheet" media="all" />
+
+<link type="text/css" rel="stylesheet" href="css/common.css" media="all" />
+<link type="text/css" rel="stylesheet" href="css/topPanel.css" media="all" />
 
 <script src="plugins/jqueryui-multiselect/jquery.multiselect.js"></script>
 <script src="plugins/jqueryui-multiselect/jquery.multiselect.filter.js"></script>

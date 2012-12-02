@@ -13,10 +13,10 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 import model.donor.Donor;
+import model.location.Location;
 import model.location.LocationType;
 import model.util.BloodGroup;
 import model.util.Gender;
-import model.util.Location;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -297,7 +297,7 @@ function getSelectedTabs() {
   var topPanelSelected = $("#topPanelTabs").tabs("option", "selected");
   var topPanelSelectedId = "topPanelTabs";
   var leftPanelSelected;
-  var leftPanelTabsId = "";
+  var leftPanelSelectedId = "";
   switch (topPanelSelected) {
   case 1:
     leftPanelSelected = $("#donorsTab").tabs("option", "selected");
@@ -344,16 +344,19 @@ function getSelectedTabs() {
   };
 }
 
-function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) {
+function replaceContent(targetId, oldRequestUrl, oldLabel, newRequestUrl, newRequestData, label) {
 
   if (!(targetId in history.state)) {
     console.log("targetId is not present");
     var revertState = {
       targetId: targetId,
-      oldRequestUrl: oldRequestUrl
+      oldRequestUrl: oldRequestUrl,
+      contentLabel: oldLabel,
     };
     $.extend(revertState, history.state);
     history.replaceState(revertState, "", "");
+    console.log("adding");
+    $(document).trigger("addTabContentInitial", revertState);
   }
   else {
     console.log("targetId is present");
@@ -361,9 +364,13 @@ function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) 
 
   var newState = {targetId: targetId,
                   oldRequestUrl: newRequestUrl,
-                  oldRequestData: newRequestData
+                  oldRequestData: newRequestData,
+                  contentLabel: label,
                  }
   $.extend(newState, getSelectedTabs());
+
+  $(document).trigger("addTabContent", newState);
+  
   history.pushState(newState, "", "");
   console.log("targetId");
   console.log(targetId);
@@ -376,6 +383,7 @@ function replaceContent(targetId, oldRequestUrl, newRequestUrl, newRequestData) 
               }
   });
 }
+
 
 function showMessage(message) {
   $.showMessage(message, {backgroundColor: '#a7d2d7'});
@@ -416,4 +424,15 @@ function copyMirroredFields(targetFormId, mirroredFields) {
 
 function showLoadingImage(targetElementId) {
   $('#' + targetElementId).html($("#preloader").html());
+}
+
+function actionCallback(action) {
+  console.log("here");
+  switch(action) {
+  case "GO_BACK":
+    window.history.back();
+    break;
+  default:
+    break;
+  }
 }

@@ -176,8 +176,7 @@ public class DonorRepository {
 
   public static String generateUniqueDonorNumber() {
     String uniqueDonorNumber;
-    uniqueDonorNumber = "D-" +
-                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+    uniqueDonorNumber = "D-" + RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
     return uniqueDonorNumber;
   }
 

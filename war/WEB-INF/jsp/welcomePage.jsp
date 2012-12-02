@@ -9,7 +9,7 @@
 <title>V2V</title>
 <jsp:include page="commonHeadIncludes.jsp" flush="true" />
 </head>
-<body>
+<body style="margin-top: 2px;">
 	<script>
     $(function() {
       $('#commentsBox').dialog(

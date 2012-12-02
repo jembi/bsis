@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import model.Request;
-import model.util.Location;
+import model.location.Location;
 
 public class RequestViewModel {
 	private Request request;

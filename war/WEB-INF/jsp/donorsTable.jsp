@@ -11,43 +11,104 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
+<c:set var="donorsTableEditDonorButtonId">donorsTableEditDonorButton-${unique_page_id}</c:set>
+<c:set var="donorsTableDeleteDonorButtonId">donorsTableDeleteDonorButton-${unique_page_id}</c:set>
+<c:set var="donorsTableCreateCollectionButtonId">donorsTableCreateCollectionButton-${unique_page_id}</c:set>
+<c:set var="donorsTableViewDonorHistoryButtonId">donorsTableViewDonorHistoryButton-${unique_page_id}</c:set>
+<c:set var="donorsTableEditRowDivId">donorsTableEditRowDiv-${unique_page_id}</c:set>
+<c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 
 <script>
-  $(document).ready(
-      function() {
+$(document).ready(
+    function() {
 
-        var fnRowSelected = function(node) {
-          var elements = $(node).children();
-          if (elements[0].getAttribute("class") === "dataTables_empty") {
-            return;
-          }
-          replaceContent("${tabContentId}", "${model.requestUrl}",
-              "editDonorFormGenerator.html", {
-                donorId : elements[0].innerHTML
-              });
+      var selectedRowId = null;
+      var donorsTable = $("#${table_id}").dataTable({
+        "bJQueryUI" : true,
+        "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "oTableTools" : {
+          "sRowSelect" : "single",
+          "aButtons" : [ "print" ],
+          "fnRowSelected" : function(node) {
+            									clearEditSection();
+            									$(".rowEditButton").button("enable");
+            					        var elements = $(node).children();
+            					        if (elements[0].getAttribute("class") === "dataTables_empty") {
+            					          return;
+            					        }
+            					        selectedRowId = elements[0].innerHTML;
+          									},
+          "fnRowDeselected" : function(node) {
+            									clearEditSection();
+            									$(".rowEditButton").button("disable");
+          									},
+        },
+        "oColVis" : {
+         	"aiExclude": [0,1],
         }
-
-        var donorsTable = $("#${table_id}").dataTable({
-          "bJQueryUI" : true,
-          "sDom" : 'C<"H"lfrT>t<"F"ip>T',
-          "oTableTools" : {
-            "sRowSelect" : "single",
-            "aButtons" : [ "print" ],
-            "fnRowSelected" : fnRowSelected
-          },
-          "oColVis" : {
-           	"aiExclude": [0],
-          }
-        });
-
-        $("#${table_id}_filter").find("label").find("input").keyup(function() {
-          var searchBox = $("#${table_id}_filter").find("label").find("input");
-          $("#${table_id}").removeHighlight();
-          if (searchBox.val() != "")
-            $("#${table_id}").find("td").highlight(searchBox.val());
-        });
-
       });
+
+      function createEditSection(url, data) {
+        $.ajax({
+          url: url,
+          data: data,
+          type: "GET",
+          success: function(response) {
+            				 $("#${donorsTableEditRowDivId}").html(response);
+            				 $(".editRowDiv").show();
+            				 $('html, body').animate({
+            				 		scrollTop: $("#${donorsTableEditRowDivId}").offset().top
+            				 }, 700);
+            			 }
+        });
+      }
+
+      function clearEditSection() {
+        $("#${donorsTableEditRowDivId}").html("");
+        $(".editRowDiv").hide();
+      }
+
+    	$(".closeButton").click(clearEditSection);
+
+      $("#${tabContentId}").find(".editDonor").button({disabled: true}).click(function() {
+        createEditSection("editDonorFormGenerator.html",
+            							{donorId: selectedRowId});
+      });
+
+      $("#${tabContentId}").find(".createCollection").button({disabled: true}).click(function() {
+        createEditSection("addCollectionFormForDonorGenerator.html",
+						{donorId: selectedRowId});
+      });
+
+      $("#${tabContentId}").find(".viewDonorHistory").button({disabled: true}).click(function() {
+        console.log("view donor history clicked");
+      });
+
+      $("#${tabContentId}").find(".deleteDonor").button({disabled: true}).click(function() {
+        $("#${deleteDonorConfirmDialogId}").dialog(
+            {
+              modal : true,
+              title : "Confirm Delete",
+              buttons : {
+                "Delete" : function() {
+                  deleteDonor(selectedRowId, reloadCurrentTab);
+                  $(this).dialog("close");
+                },
+                "Cancel" : function() {
+                  $(this).dialog("close");
+                }
+              }
+            });
+      });
+
+      $("#${table_id}_filter").find("label").find("input").keyup(function() {
+        var searchBox = $("#${table_id}_filter").find("label").find("input");
+        $("#${table_id}").removeHighlight();
+        if (searchBox.val() != "")
+          $("#${table_id}").find("td").highlight(searchBox.val());
+      });
+
+    });
 </script>
 
 <div id="${tabContentId}">
@@ -61,27 +122,41 @@
 		</c:when>
 
 		<c:otherwise>
+
+			<button class="rowEditButton editDonor">
+				Edit Donor
+			</button>
+			<button class="rowEditButton createCollection">
+				Create Collection for Donor
+			</button>
+			<button class="rowEditButton viewDonorHistory">
+				View Donor History
+			</button>
+			<button class="rowEditButton deleteDonor">
+				Delete Donor
+			</button>
+
 			<table id="${table_id}" class="dataTable donorsTable">
 				<thead>
 					<tr>
 						<th style="display: none"></th>
-						<c:if test="${model.donor.donorNumber.hidden != true}">
-							<th>${model.donor.donorNumber.displayName}</th>
+						<c:if test="${model.donorFields.donorNumber.hidden != true}">
+							<th>${model.donorFields.donorNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.donor.firstName.hidden != true}">
-							<th>${model.donor.firstName.displayName}</th>
+						<c:if test="${model.donorFields.firstName.hidden != true}">
+							<th>${model.donorFields.firstName.displayName}</th>
 						</c:if>
-						<c:if test="${model.donor.lastName.hidden != true}">
-							<th>${model.donor.lastName.displayName}</th>
+						<c:if test="${model.donorFields.lastName.hidden != true}">
+							<th>${model.donorFields.lastName.displayName}</th>
 						</c:if>
-						<c:if test="${model.donor.gender.hidden != true}">
-							<th>${model.donor.gender.displayName}</th>
+						<c:if test="${model.donorFields.gender.hidden != true}">
+							<th>${model.donorFields.gender.displayName}</th>
 						</c:if>
-						<c:if test="${model.donor.bloodGroup.hidden != true}">
-							<th>${model.donor.bloodGroup.displayName}</th>
+						<c:if test="${model.donorFields.bloodGroup.hidden != true}">
+							<th>${model.donorFields.bloodGroup.displayName}</th>
 						</c:if>
-						<c:if test="${model.donor.birthDate.hidden != true}">
-							<th>${model.donor.birthDate.displayName}</th>
+						<c:if test="${model.donorFields.birthDate.hidden != true}">
+							<th>${model.donorFields.birthDate.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
@@ -111,6 +186,30 @@
 					</c:forEach>
 				</tbody>
 			</table>
+
+			<button class="rowEditButton editDonor">
+				Edit Donor
+			</button>
+			<button class="rowEditButton createCollection">
+				Create Collection for Donor
+			</button>
+			<button class="rowEditButton viewDonorHistory">
+				View Donor History
+			</button>
+			<button class="rowEditButton deleteDonor">
+				Delete Donor
+			</button>
+
 		</c:otherwise>
 	</c:choose>
+
+	<div class="editRowDiv" style="display: none;">
+	<span class="closeButton">X</span>
+		<div id="${donorsTableEditRowDivId}">	
+		</div>
+	</div>
+
 </div>
+
+<div id="${deleteDonorConfirmDialogId}" style="display: none;">Are
+	you sure you want to delete this Donor?</div>

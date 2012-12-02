@@ -101,26 +101,21 @@ public class CollectedSampleRepository {
       String sampleNumber, String shippingNumber, String dateCollectedFrom,
       String dateCollectedTo, List<String> centers) {
 
-    // TODO: fix join condition
     TypedQuery<CollectedSample> query = em.createQuery(
-        "SELECT c FROM CollectedSample c, Location L WHERE "
-            + " L.locationId=c.centerId AND L.isCenter=TRUE AND ("
-            + "c.collectionNumber = :collectionNumber OR "
+        "SELECT c FROM CollectedSample c JOIN c.center center WHERE "
+            + "(c.collectionNumber = :collectionNumber OR "
             + "c.sampleNumber = :sampleNumber OR "
             + "c.shippingNumber = :shippingNumber OR "
-            + "L.name IN (:centers)) AND ("
-            + "c.dateCollected BETWEEN :dateCollectedFrom AND "
+            + "center.id IN (:centers)) AND ("
+            + "c.collectedOn BETWEEN :dateCollectedFrom AND "
             + ":dateCollectedTo" + ") AND " + "(c.isDeleted= :isDeleted)",
         CollectedSample.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     String collectedSampleNo = ((collectionNumber == null) ? "" : collectionNumber);
     query.setParameter("collectionNumber", collectedSampleNo);
-    Long sampleNo = ((sampleNumber == null) ? -1 : Long.parseLong(sampleNumber));
-    query.setParameter("sampleNumber", sampleNo);
-    Long shippingNo = ((shippingNumber == null) ? -1 : Long
-        .parseLong(shippingNumber));
-    query.setParameter("shippingNumber", shippingNo);
+    query.setParameter("sampleNumber", sampleNumber);
+    query.setParameter("shippingNumber", shippingNumber);
 
     query.setParameter("centers", centers);
 

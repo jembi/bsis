@@ -57,54 +57,48 @@
   });
 </script>
 
-<form:form method="GET" commandName="findCollectionForm"
-	id="findCollectionForm" class="findCollectionForm">
-	<table>
-		<thead>
-			<tr>
-				<td><b>Find Collections</b></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><form:label path="collectionNumber">${model.collectionNoDisplayName}</form:label></td>
-				<td><form:input path="collectionNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="sampleNumber">${model.sampleNoDisplayName}</form:label></td>
-				<td><form:input path="sampleNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="shippingNumber">${model.shippingNoDisplayName}</form:label></td>
-				<td><form:input path="shippingNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="centers">${model.centerDisplayName}</form:label></td>
-				<td><form:select path="centers" id="findCollectionFormCenters">
-						<form:options items="${model.centers}" />
-					</form:select></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b><i>Filter Collections</i></b></td>
-			</tr>
-			<tr>
-				<td>Having Date Collected Between</td>
-			</tr>
-			<tr>
-				<td><form:input path="dateCollectedFrom" id="dateCollectedFrom" />
-					to</td>
-				<td><form:input path="dateCollectedTo" id="dateCollectedTo" /></td>
-			</tr>
-			<tr>
-				<td />
-				<td><button type="button" id="findCollectionButton">Find
-						collection</button></td>
-			</tr>
-		</tbody>
-	</table>
+<div id="${findDonorFormDivId}" class="formDiv">
+	<b><i>Find Collections</i></b>
+	<form:form method="GET" commandName="findCollectionForm" id="findDonorForm"
+		class="formInTabPane">
+		<div>
+				<form:label path="collectionNumber">${model.collectedSampleFields.collectionNumber.displayName}</form:label>
+				<form:input path="collectionNumber" />
+		</div>
+		<div>
+				<form:label path="sampleNumber">${model.collectedSampleFields.sampleNumber.displayName}</form:label>
+				<form:input path="sampleNumber" />
+		</div>
+		<div>
+				<form:label path="shippingNumber">${model.collectedSampleFields.shippingNumber.displayName}</form:label>
+				<form:input path="shippingNumber" />
+		</div>
+		<div>
+			<form:label path="centers">${model.collectedSampleFields.center.displayName}</form:label>
+			<form:select path="centers" id="findCollectionFormCenters">
+					<c:forEach var="center" items="${model.centers}">
+						<form:option value="${center.id}" label="${center.name}" />
+					</c:forEach>
+				</form:select>
+		</div>
+		<div>&nbsp;</div>
+		<div>
+			<b><i>Filter Collections</i></b>
+		</div>
+		<div>
+			Having Date Collected Between
+		</div>
+		<div>
+			<div>
+				<form:input path="dateCollectedFrom" id="dateCollectedFrom" />
+					and
+				<form:input path="dateCollectedTo" id="dateCollectedTo" />
+			</div>
+			<button type="button" id="findCollectionButton">
+				Find collection
+			</button>
+		</div>
 </form:form>
+</div>
 
 <div id="findCollectionResult"></div>

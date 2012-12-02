@@ -1,4 +1,4 @@
-package model.util;
+package model.location;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,6 +69,10 @@ public class Location {
 
   public Boolean getIsDeleted() {
     return isDeleted;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setName(String name) {

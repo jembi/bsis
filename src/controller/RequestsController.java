@@ -14,7 +14,7 @@ import model.Issue;
 import model.Product;
 import model.Request;
 import model.RequestBackingForm;
-import model.util.Location;
+import model.location.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

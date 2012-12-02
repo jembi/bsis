@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.util.Location;
+import model.location.Location;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,17 +44,13 @@ public class LocationRepository {
 	}
 
 	public Location getLocation(Long selectedLocationId) {
-		try {
-			TypedQuery<Location> query = em
-					.createQuery(
-							"SELECT l FROM Location l where l.locationId= :locationId and l.isDeleted= :isDeleted",
-							Location.class);
-			query.setParameter("isDeleted", Boolean.FALSE);
-			query.setParameter("locationId", selectedLocationId);
-			return query.getSingleResult();
-		} catch (NoResultException ex) {
-			return null;
-		}
+	  System.out.println("getLocation");
+		TypedQuery<Location> query = em.createQuery(
+			"SELECT l FROM Location l where l.id= :locationId and l.isDeleted= :isDeleted",
+			Location.class);
+		query.setParameter("isDeleted", Boolean.FALSE);
+		query.setParameter("locationId", selectedLocationId);
+		return query.getSingleResult();
 	}
 
 	public Location updateLocation(Long locationId, Location location) {

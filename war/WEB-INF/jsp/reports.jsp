@@ -8,13 +8,14 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<link type="text/css" rel="stylesheet" href="css/reports.css" />
+<link type="text/css" rel="stylesheet" href="css/reports.css" media="all" />
 <script type="text/javascript" src="js/reports.js"></script>
 <script type="text/javascript" src="plugins/highcharts/js/highcharts.js"></script>
 <script type="text/javascript"
 	src="plugins/highcharts/js/modules/exporting.js"></script>
 
-<div id="reportsTab" class="leftPanel tabs">
+<div id="reportsTab" class="leftPanel tabs
+">
 	<ul>
 		<li id="collectionsReport"><a
 			href="collectionsReportFormGenerator.html">Collections</a></li>

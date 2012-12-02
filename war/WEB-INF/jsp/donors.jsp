@@ -8,16 +8,21 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<link type="text/css" rel="stylesheet" href="css/donors.css" />
+<link type="text/css" rel="stylesheet" href="css/donors.css" media="all" />
 <script type="text/javascript" src="js/donors.js"></script>
 
 <div id="donorsTab" class="leftPanel tabs">
+	<div class="breadCrumb"></div>
 	<ul>
 		<li id="findOrAddDonorsContent">
-			<a href="findDonorFormGenerator.html">Find Donors</a>
+			<a href="findDonorFormGenerator.html">
+				Find Donors
+			</a>
 		</li>
 		<li id="addDonorContent">
-			<a href="editDonorFormGenerator.html">Add Donor</a>
+			<a href="editDonorFormGenerator.html">
+				New Donor
+			</a>
 		</li>
 		<li id="viewDonorsContent">
 			<a href="viewDonors.html">View All Donors</a>

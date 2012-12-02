@@ -79,8 +79,6 @@ select:focus {
 }
 
 .editFormDiv {
-	border: 2px solid #8eb2b2;
-	border-radius: 6px;
 	padding-left: 10px;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -124,10 +122,6 @@ select:focus {
 	width: 1100px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	box-shadow: 0px -1px 10px beige;
-	-moz-box-shadow: 0px;
-	-webkit-box-shadow: 0px;
-	box-shadow: 0px;
 }
 
 .headingPanel {
@@ -482,6 +476,14 @@ tr > td
 	color: red;
 }
 
+.ui-tabs .ui-tabs-nav {
+	font-size: 0.87em;
+}
+
+.ui-tabs .ui-tabs-panel {
+	padding: 0;
+}
+
 .ui-autocomplete-loading {
   background: white url('images/ajax-loader.gif') right center no-repeat;
 }
@@ -500,4 +502,43 @@ tr > td
 
 #preloader {
 	display: none;
+}
+
+.breadCrumb {
+	margin-top: 10px;
+}
+
+.breadCrumbText {
+	font-weight: bold;
+	color: #3459CC;
+	font-style: italic;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.editRowDiv {
+	margin-top: 50px;
+	background-color: #e5ebee;
+	border: 2px solid #8eb2b2;
+	border-radius: 6px;
+	position: relative;
+}
+
+.rowEditButton {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.closeButton {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: right;
+	background-color: red;
+	color: white;
+	font-family: cursive;
+	position: absolute;
+	right: 3px;
+	top: 3px;
+	cursor: pointer;
+	z-index: 100;
 }

@@ -32,12 +32,11 @@
         }).click(
             function() {
               if ("${model.existingCollectedSample}" == "true")
-                updateExistingCollectedSample(
-                    $("#${editCollectedSampleFormId}")[0],
-                    "${editCollectedSampleFormDivId}");
+                updateExistingCollectedSample($("#${editCollectedSampleFormId}")[0],
+                    "${editCollectedSampleFormDivId}", actionCallback, {action: "${model.onSuccess}"});
               else
                 addNewCollectedSample($("#${editCollectedSampleFormId}")[0],
-                    "${editCollectedSampleFormDivId}");
+                    "${editCollectedSampleFormDivId}", actionCallback, {action: "${model.onSuccess}"});
             });
 
         $("#${deleteCollectedSampleButtonId}").button({
@@ -96,7 +95,7 @@
 
         $("#${editCollectedSampleFormDonorId}").autocomplete(
             {
-              minLength : 2,
+              minLength : 3,
               source : function(request, response) {
                 $.ajax({
                   url : "donorTypeAhead.html",
@@ -150,7 +149,24 @@
       });
 </script>
 
+<c:if test="${model.hasErrors}">
+	<script>
+    showErrorMessage("${model.message}");
+  </script>
+</c:if>
+<c:if test="${model.success == true}">
+	<script>
+    showMessage("${model.message}");
+  </script>
+</c:if>
+<c:if test="${model.success == false}">
+	<script>
+    showErrorMessage("${model.message}");
+  </script>
+</c:if>
+
 <div id="${editCollectedSampleFormDivId}" class="editFormDiv">
+
 	<form:form method="POST" commandName="editCollectedSampleForm"
 		class="editForm" id="${editCollectedSampleFormId}">
 		<form:hidden path="id" />
@@ -205,15 +221,15 @@
 		</c:if>
 		<c:if test="${model.collectedSampleFields.center.hidden != true }">
 			<div>
-				<form:label path="centers">${model.collectedSampleFields.center.displayName}</form:label>
-				<form:select path="centers" id="${editCollectedSampleFormCentersId}"
+				<form:label path="center">${model.collectedSampleFields.center.displayName}</form:label>
+				<form:select path="center" id="${editCollectedSampleFormCentersId}"
 					class="editCollectedSampleFormCenters">
 					<form:option label="" value="" selected="selected" />
 					<c:forEach var="center" items="${model.centers}">
 						<form:option value="${center.id}" label="${center.name}" />
 					</c:forEach>
 				</form:select>
-				<form:errors class="formError" path="centers" delimiter=", "></form:errors>
+				<form:errors class="formError" path="collectedSample.center" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true }">
@@ -221,7 +237,7 @@
 				<form:label path="bloodBagType">${model.collectedSampleFields.bloodBagType.displayName}</form:label>
 				<form:select path="bloodBagType"
 					id="${editCollectedSampleFormBloodBagTypeId}">
-					<form:option label="" value="" selected="selected" />
+					<form:option label="" value="" />
 					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
 						<form:option value="${bloodBagType}" label="${bloodBagType}" />
 					</c:forEach>
@@ -232,15 +248,15 @@
 		</c:if>
 		<c:if test="${model.collectedSampleFields.site.hidden != true }">
 			<div>
-				<form:label path="sites">${model.collectedSampleFields.site.displayName}</form:label>
-				<form:select path="sites" id="${editCollectedSampleFormSitesId}"
+				<form:label path="site">${model.collectedSampleFields.site.displayName}</form:label>
+				<form:select path="site" id="${editCollectedSampleFormSitesId}"
 					class="editCollectedSampleFormSites">
 					<form:option label="" value="" selected="selected" />
 					<c:forEach var="site" items="${model.sites}">
 						<form:option value="${site.id}" label="${site.name}" />
 					</c:forEach>
 				</form:select>
-				<form:errors class="formError" path="sites" delimiter=", "></form:errors>
+				<form:errors class="formError" path="collectedSample.site" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.collectedSampleFields.notes.hidden != true }">

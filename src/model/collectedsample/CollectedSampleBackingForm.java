@@ -13,16 +13,11 @@ import model.TestResult;
 import model.bloodbagtype.BloodBagType;
 import model.donor.Donor;
 import model.donortype.DonorType;
+import model.location.Location;
 import model.user.User;
-import model.util.Location;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import repository.LocationRepository;
-
-@Component
 public class CollectedSampleBackingForm {
 
   public static final int ID_LENGTH = 12;
@@ -37,12 +32,14 @@ public class CollectedSampleBackingForm {
 
   private String donorIdHidden;
 
-  @Autowired
-  private LocationRepository locationRepository;
-
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
-    generateCollectionNumber();
+  }
+
+  public CollectedSampleBackingForm(boolean autoGenerateCollectionNumber) {
+    collectedSample = new CollectedSample();
+    if (autoGenerateCollectionNumber)
+      generateCollectionNumber();
   }
 
   public CollectedSampleBackingForm(CollectedSample collection) {
@@ -132,11 +129,17 @@ public class CollectedSampleBackingForm {
   }
 
   public String getCenter() {
-    return collectedSample.getCenter().getName();
+    Location center = collectedSample.getCenter();
+    if (center == null)
+      return null;
+    return center.getId().toString();
   }
 
-  public Location getSite() {
-    return collectedSample.getSite();
+  public String getSite() {
+    Location site = collectedSample.getSite();
+    if (site == null)
+      return null;
+    return site.getId().toString();
   }
 
   public String getDonorType() {
@@ -212,11 +215,25 @@ public class CollectedSampleBackingForm {
   }
 
   public void setCenter(String center) {
-    collectedSample.setCenter(locationRepository.getCenterByName(center));
+    if (center == null) {
+      collectedSample.setCenter(null);
+    }
+    else {
+      Location l = new Location();
+      l.setId(Long.parseLong(center));
+      collectedSample.setCenter(l);
+    }
   }
 
   public void setSite(String site) {
-    collectedSample.setSite(locationRepository.getCenterByName(site));
+    if (site == null) {
+      collectedSample.setSite(null);
+    }
+    else {
+      Location l = new Location();
+      l.setId(Long.parseLong(site));
+      collectedSample.setSite(l);
+    }
   }
 
   public void setCollectedOn(Date collectedOn) {

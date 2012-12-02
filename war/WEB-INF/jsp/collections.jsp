@@ -8,7 +8,7 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<link type="text/css" rel="stylesheet" href="css/collections.css" />
+<link type="text/css" rel="stylesheet" href="css/collections.css" media="all"/>
 <script type="text/javascript" src="js/collections.js"></script>
 
 <div id="collectionsTab" class="leftPanel tabs">
