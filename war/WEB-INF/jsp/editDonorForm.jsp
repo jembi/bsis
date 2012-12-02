@@ -79,24 +79,8 @@
       });
 </script>
 
-<c:if test="${model.hasErrors}">
-	<script>
-    showErrorMessage("${model.message}");
-  </script>
-</c:if>
-<c:if test="${model.success == true}">
-	<script>
-    showMessage("${model.message}");
-  </script>
-</c:if>
-<c:if test="${model.success == false}">
-	<script>
-    showErrorMessage("${model.message}");
-  </script>
-</c:if>
-
-<div id="${editDonorFormDivId}" class="editFormDiv">
-	<form:form id="${editDonorFormId}" method="POST" class="editForm"
+<div id="${editDonorFormDivId}">
+	<form:form id="${editDonorFormId}" method="POST" class="formInTabPane"
 		commandName="editDonorForm">
 		<c:if test="${model.existingDonor}">
 			<div id="${editDonorFormBarcodeId}"></div>
@@ -172,7 +156,7 @@
 		</c:if>
 		<c:if test="${model.donorFields.address.hidden != true }">
 			<div>
-				<form:label path="address">${model.donorFields.address.displayName}</form:label>
+				<form:label path="address" class="labelForTextArea">${model.donorFields.address.displayName}</form:label>
 				<form:textarea path="address" value="${model.existingDonor ? '' : model.donorFields.address.defaultValue}" maxlength="255" />
 				<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
 			</div>
@@ -209,12 +193,13 @@
 		</c:if>
 		<c:if test="${model.donorFields.notes.hidden != true }">
 			<div>
-				<form:label path="notes">${model.donorFields.notes.displayName}</form:label>
+				<form:label path="notes" class="labelForTextArea">${model.donorFields.notes.displayName}</form:label>
 				<textarea name="notes">${model.existingDonor ? '' : model.donorFields.notes.defaultValue}</textarea>
 				<form:errors class="formError" path="donor.notes"></form:errors>
 			</div>
 		</c:if>
 		<div>
+			<label></label>
 			<c:if test="${!(model.existingDonor)}">
 				<button type="button" id="${updateDonorButtonId}"
 					style="margin-left: 10px">Save and add another</button>

@@ -386,11 +386,14 @@ function replaceContent(targetId, oldRequestUrl, oldLabel, newRequestUrl, newReq
 
 
 function showMessage(message) {
-  $.showMessage(message, {backgroundColor: '#a7d2d7'});
+  $.showMessage(message);
 }
 
 function showErrorMessage(message) {
-  $.showMessage(message, {backgroundColor: '#d35344'});
+  $.showMessage(message, {id: 'error_message_box',
+                          backgroundColor: '#a72f1f',
+                          fontColor: '#ebe6d1'
+                          });
 }
 
 function reloadCurrentTab() {

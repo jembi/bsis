@@ -15,17 +15,18 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="findDonorFormDivId">findDonorFormDiv-${unique_page_id}</c:set>
+<c:set var="findDonorFormId">findDonorForm-${unique_page_id}</c:set>
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
 <c:set var="findDonorFormResultId">findDonorFormResult-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
-  $("#findDonorButton").button({
+  $("#${findDonorFormDivId}").find(".findDonorButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
   }).click(function() {
-    var findDonorFormData = $("#findDonorForm").serialize();
+    var findDonorFormData = $("#${findDonorFormId}").serialize();
     showLoadingImage('${findDonorFormResultId}');
     $.ajax({
       type : "GET",
@@ -37,6 +38,19 @@ $(document).ready(function() {
       }
     });
   });
+
+  $("#${findDonorFormDivId}").find(".clearFindFormButton").button({
+    icons : {
+      primary : 'ui-icon-grip-solid-horizontal'
+    }
+  }).click(clearFindDonorForm);
+  
+  function clearFindDonorForm() {
+		$("#${findDonorFormId}").each(function() {
+		  this.reset();
+		});
+		$("#${findDonorFormResultId}").html("");
+  }
 
   $("#${findDonorFormBloodGroupSelectorId}").multiselect({
     position : {
@@ -62,7 +76,7 @@ $(document).ready(function() {
 
 <div id="${findDonorFormDivId}" class="formDiv">
 	<b><i>Find Donors</i></b>
-	<form:form method="GET" commandName="findDonorForm" id="findDonorForm"
+	<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
 		class="formInTabPane">
 		<div>
 			<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
@@ -90,8 +104,13 @@ $(document).ready(function() {
 				</form:select>
 		</div>
 		<div>
-			<button type="button" id="findDonorButton" class="two">
-					Find donor</button>
+			<label></label>
+			<button type="button" class="findDonorButton">
+				Find donor
+			</button>
+			<button type="button" class="clearFindFormButton">
+				Clear form
+			</button>
 		</div>
 	</form:form>
 </div>

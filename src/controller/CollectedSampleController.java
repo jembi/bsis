@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
@@ -172,6 +173,7 @@ public class CollectedSampleController {
 
   @RequestMapping(value = "/addCollectedSample", method = RequestMethod.POST)
   public ModelAndView addCollectedSample(
+      HttpServletResponse response,
       @ModelAttribute("editCollectedSampleForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
@@ -183,6 +185,7 @@ public class CollectedSampleController {
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
       message = "Please fix the errors noted above.";
     } else {
@@ -222,6 +225,7 @@ public class CollectedSampleController {
 
   @RequestMapping(value = "/updateCollectedSample", method = RequestMethod.POST)
   public ModelAndView updateCollectedSample(
+      HttpServletResponse response,
       @ModelAttribute("editCollectedSampleForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
@@ -232,6 +236,7 @@ public class CollectedSampleController {
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
       message = "Please fix the errors noted above";
     }
@@ -247,6 +252,7 @@ public class CollectedSampleController {
           collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {
           m.put("hasErrors", true);
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
           m.put("existingCollectedSample", false);
           message = "Collected Sample does not already exist.";
@@ -259,10 +265,12 @@ public class CollectedSampleController {
         }
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Collected Sample Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Internal Error. Please try again or report a Problem.";
       }

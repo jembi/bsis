@@ -20,6 +20,7 @@
             
             elem.css({'z-index': '999',
                       'background-color': settings.backgroundColor,
+                      'color': settings.fontColor,
                       'text-align': 'center',
                       'position': 'absolute',
                       'position': 'fixed',

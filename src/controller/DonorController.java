@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.donor.Donor;
@@ -15,6 +16,7 @@ import model.donor.DonorBackingFormValidator;
 import model.util.BloodGroup;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -100,6 +102,7 @@ public class DonorController {
   @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
   public ModelAndView
         addDonor(HttpServletRequest request,
+                 HttpServletResponse response,
                  @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
                  BindingResult result, Model model) {
 
@@ -110,6 +113,7 @@ public class DonorController {
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
       success = false;
       message = "Please fix the errors noted above.";
     } else {
@@ -145,6 +149,7 @@ public class DonorController {
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
   public ModelAndView updateDonor(
+      HttpServletResponse response,
       @ModelAttribute(value="editDonorForm") @Valid DonorBackingForm form,
       BindingResult result, Model model) {
 
@@ -154,6 +159,7 @@ public class DonorController {
     Map<String, Object> m = model.asMap();
     if (result.hasErrors()) {
       m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
       message = "Please fix the errors noted above";
     }
@@ -163,6 +169,7 @@ public class DonorController {
         Donor existingDonor = donorRepository.updateDonor(form.getDonor());
         if (existingDonor == null) {
           m.put("hasErrors", true);
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
           m.put("existingDonor", false);
           message = "Donor does not already exist.";
@@ -175,10 +182,12 @@ public class DonorController {
         }
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Donor Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Internal Error. Please try again or report a Problem.";
       }
@@ -226,7 +235,7 @@ public class DonorController {
   }
   
   @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findDonorFormInit(Model model) {
+  public ModelAndView findDonorFormGenerator(HttpServletRequest request, Model model) {
 
     DonorBackingForm form = new DonorBackingForm();
     model.addAttribute("findDonorForm", form);
@@ -236,6 +245,7 @@ public class DonorController {
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
+    m.put("refreshUrl", getUrl(request));
     mv.addObject("model", m);
     return mv;
   }

@@ -13,11 +13,13 @@ function updateCollectionGeneric(form, resultDivId, url, successCallback) {
     url: url,
     data: collectedSample,
     success: function(jsonResponse, data, data1, data2) {
+               showMessage("Collection Updated Successfully!");
                successCallback();
                $("#" + resultDivId).replaceWith(jsonResponse);
              },
-    error: function(jsonResponse) {
-             $("#" + resultDivId).replaceWith(jsonResponse);
+    error: function(response) {
+             showErrorMessage("Something went wrong. Please fix the errors noted.");
+             $("#" + resultDivId).replaceWith(response.responseText);
            }
   });
 }
@@ -29,7 +31,7 @@ function deleteCollectedSample(collectedSampleId) {
     data : {collectedSampleId: collectedSampleId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
-        $.showMessage("Collection Deleted Successfully!");
+        showMessage("Collection Deleted Successfully!");
         window.history.back();
       } else {
         $.showMessage("Something went wrong." + jsonResponse["errMsg"], {

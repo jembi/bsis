@@ -155,26 +155,10 @@
       });
 </script>
 
-<c:if test="${model.hasErrors}">
-	<script>
-    showErrorMessage("${model.message}");
-  </script>
-</c:if>
-<c:if test="${model.success == true}">
-	<script>
-    showMessage("${model.message}");
-  </script>
-</c:if>
-<c:if test="${model.success == false}">
-	<script>
-    showErrorMessage("${model.message}");
-  </script>
-</c:if>
-
-<div id="${editCollectedSampleFormDivId}" class="editFormDiv">
+<div id="${editCollectedSampleFormDivId}">
 
 	<form:form method="POST" commandName="editCollectedSampleForm"
-		class="editForm" id="${editCollectedSampleFormId}">
+		class="formInTabPane" id="${editCollectedSampleFormId}">
 		<form:hidden path="id" />
 		<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
 			<div>
@@ -267,13 +251,14 @@
 		</c:if>
 		<c:if test="${model.collectedSampleFields.notes.hidden != true }">
 			<div>
-				<form:label path="notes">${model.collectedSampleFields.notes.displayName}</form:label>
+				<form:label path="notes" class="labelForTextArea">${model.collectedSampleFields.notes.displayName}</form:label>
 				<form:textarea path="notes" maxlength="255" />
 				<form:errors class="formError" path="collectedSample.notes"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<div>
+			<label></label>
 			<button type="button" id="${updateCollectedSampleButtonId}"
 				style="margin-left: 10px">Save</button>
 			<button type="button" id="${deleteCollectedSampleButtonId}"
