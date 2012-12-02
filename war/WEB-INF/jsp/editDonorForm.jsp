@@ -23,6 +23,11 @@
   $(document).ready(
       function() {
 
+        function notifyParent() {
+					 // let the parent know we are done
+				   $("#${editDonorFormDivId}").parent().trigger("editDonorSuccess");
+    		}
+
         $("#${updateDonorButtonId}").button({
           icons : {
             primary : 'ui-icon-plusthick'
@@ -31,10 +36,9 @@
             function() {
               if ("${model.existingDonor}" == "true")
                 updateExistingDonor($("#${editDonorFormId}")[0],
-                    "${editDonorFormDivId}", function() {});
+                    								"${editDonorFormDivId}", notifyParent);
               else
-                addNewDonor($("#${editDonorFormId}")[0],
-                    "${editDonorFormDivId}", function() {});
+                addNewDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}", notifyParent);
             });
 
         $("#${printButtonId}").button({
@@ -94,14 +98,14 @@
 <div id="${editDonorFormDivId}" class="editFormDiv">
 	<form:form id="${editDonorFormId}" method="POST" class="editForm"
 		commandName="editDonorForm">
-		<c:if test="${model.existingDonor == true}">
+		<c:if test="${model.existingDonor}">
 			<div id="${editDonorFormBarcodeId}"></div>
 		</c:if>
 		<form:hidden path="id" />
 		<c:if test="${model.donorFields.donorNumber.hidden != true }">
 			<div>
 				<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
-				<form:input path="donorNumber" value="${model.donorFields.donorNumber.defaultValue}" />
+				<form:input path="donorNumber" value="${model.existingDonor ? '' : model.donorFields.donorNumber.defaultValue}" />
 				<form:errors class="formError" path="donor.donorNumber"
 					delimiter=", "></form:errors>
 			</div>
@@ -109,14 +113,14 @@
 		<c:if test="${model.donorFields.firstName.hidden != true }">
 			<div>
 				<form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
-				<form:input path="firstName" value="${model.donorFields.firstName.defaultValue}" />
+				<form:input path="firstName" value="${model.existingDonor ? '' : model.donorFields.firstName.defaultValue}" />
 				<form:errors class="formError" path="donor.firstName" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donorFields.middleName.hidden != true }">
 			<div>
 				<form:label path="middleName">${model.donorFields.middleName.displayName}</form:label>
-				<form:input path="middleName" value="${model.donorFields.middleName.defaultValue}" />
+				<form:input path="middleName" value="${model.existingDonor ? '' : model.donorFields.middleName.defaultValue}" />
 				<form:errors class="formError" path="donor.middleName"
 					delimiter=", "></form:errors>
 			</div>
@@ -124,7 +128,7 @@
 		<c:if test="${model.donorFields.lastName.hidden != true }">
 			<div>
 				<form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
-				<form:input path="lastName" value="${model.donorFields.lastName.defaultValue}" />
+				<form:input path="lastName" value="${model.existingDonor ? '' : model.donorFields.lastName.defaultValue}" />
 				<form:errors class="formError" path="donor.lastName" delimiter=", "></form:errors>
 			</div>
 		</c:if>
@@ -132,7 +136,8 @@
 
 			<div>
 				<form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
-				<form:input path="birthDate" id="${birthDateInputId}" value="${model.donorFields.birthDate.defaultValue}" />
+				<form:input path="birthDate" id="${birthDateInputId}"
+										value="${model.existingDonor ? '' : model.donorFields.birthDate.defaultValue}" />
 				<form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
 			</div>
 		</c:if>
@@ -168,35 +173,35 @@
 		<c:if test="${model.donorFields.address.hidden != true }">
 			<div>
 				<form:label path="address">${model.donorFields.address.displayName}</form:label>
-				<form:textarea path="address" value="${model.donorFields.address.defaultValue}" maxlength="255" />
+				<form:textarea path="address" value="${model.existingDonor ? '' : model.donorFields.address.defaultValue}" maxlength="255" />
 				<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donorFields.city.hidden != true }">
 			<div>
 				<form:label path="city">${model.donorFields.city.displayName}</form:label>
-				<form:input path="city" value="${model.donorFields.city.defaultValue}" />
+				<form:input path="city" value="${model.existingDonor ? '' : model.donorFields.city.defaultValue}" />
 				<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donorFields.state.hidden != true }">
 			<div>
 				<form:label path="state">${model.donorFields.state.displayName}</form:label>
-				<form:input path="state" value="${model.donorFields.state.defaultValue}" />
+				<form:input path="state" value="${model.existingDonor ? '' : model.donorFields.state.defaultValue}" />
 				<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donorFields.country.hidden != true }">
 			<div>
 				<form:label path="country">${model.donorFields.country.displayName}</form:label>
-				<form:input path="country" value="${model.donorFields.country.defaultValue}" />
+				<form:input path="country" value="${model.existingDonor ? '' : model.donorFields.country.defaultValue}" />
 				<form:errors class="formError" path="donor.country" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.donorFields.zipcode.hidden != true }">
 			<div>
 				<form:label path="zipcode">${model.donorFields.zipcode.displayName}</form:label>
-				<form:input path="zipcode" value="${model.donorFields.zipcode.defaultValue}" />
+				<form:input path="zipcode" value="${model.existingDonor ? '' : model.donorFields.zipcode.defaultValue}" />
 				<ul>
 					<form:errors class="formError" path="donor.zipcode" delimiter=", "></form:errors>
 				</ul>
@@ -205,16 +210,16 @@
 		<c:if test="${model.donorFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes">${model.donorFields.notes.displayName}</form:label>
-				<textarea name="notes">${model.donorFields.notes.defaultValue}</textarea>
+				<textarea name="notes">${model.existingDonor ? '' : model.donorFields.notes.defaultValue}</textarea>
 				<form:errors class="formError" path="donor.notes"></form:errors>
 			</div>
 		</c:if>
 		<div>
-			<c:if test="${model.existingDonor != true}">
+			<c:if test="${!(model.existingDonor)}">
 				<button type="button" id="${updateDonorButtonId}"
 					style="margin-left: 10px">Save and add another</button>
 			</c:if>
-			<c:if test="${model.existingDonor == true}">
+			<c:if test="${model.existingDonor}">
 				<button type="button" id="${updateDonorButtonId}"
 					style="margin-left: 10px">Save</button>
 			</c:if>

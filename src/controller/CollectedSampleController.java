@@ -229,49 +229,44 @@ public class CollectedSampleController {
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
-    if (form == null) {
-      form = new CollectedSampleBackingForm(true);
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      success = false;
+      message = "Please fix the errors noted above";
     }
     else {
-      if (result.hasErrors()) {
-        m.put("hasErrors", true);
-        success = false;
-        message = "Please fix the errors noted above";
-      }
-      else {
-        try {
-          String donorId = form.getDonorIdHidden();
-          if (donorId != null && !donorId.isEmpty()) {
-            Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
-            form.setDonor(donor);
-          }
-          form.setIsDeleted(false);
-          CollectedSample existingCollectedSample = 
-            collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
-          if (existingCollectedSample == null) {
-            m.put("hasErrors", true);
-            success = false;
-            m.put("existingCollectedSample", false);
-            message = "Collected Sample does not already exist.";
-          }
-          else {
-            m.put("hasErrors", false);
-            form = new CollectedSampleBackingForm(true);
-            success = true;
-            m.put("existingCollectedSample", true);
-            message = "Collected Sample Successfully Updated";
-          }
-        } catch (EntityExistsException ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Collected Sample Already exists.";
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Internal Error. Please try again or report a Problem.";
+      try {
+        String donorId = form.getDonorIdHidden();
+        if (donorId != null && !donorId.isEmpty()) {
+          Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+          form.setDonor(donor);
         }
-     }
-    }
+        form.setIsDeleted(false);
+        CollectedSample existingCollectedSample = 
+          collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+        if (existingCollectedSample == null) {
+          m.put("hasErrors", true);
+          success = false;
+          m.put("existingCollectedSample", false);
+          message = "Collected Sample does not already exist.";
+        }
+        else {
+          m.put("hasErrors", false);
+          success = true;
+          m.put("existingCollectedSample", true);
+          message = "Collected Sample Successfully Updated";
+        }
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Collected Sample Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+   }
 
     m.put("editCollectedSampleForm", form);
     m.put("success", success);

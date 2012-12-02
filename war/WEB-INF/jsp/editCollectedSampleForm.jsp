@@ -25,6 +25,11 @@
   $(document).ready(
       function() {
 
+        function notifyParent() {
+						// let the parent know we are done
+						$("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionSuccess");
+				}
+
         $("#${updateCollectedSampleButtonId}").button({
           icons : {
             primary : 'ui-icon-plusthick'
@@ -33,10 +38,11 @@
             function() {
               if ("${model.existingCollectedSample}" == "true")
                 updateExistingCollectedSample($("#${editCollectedSampleFormId}")[0],
-                    "${editCollectedSampleFormDivId}", actionCallback, {action: "${model.onSuccess}"});
+                  														"${editCollectedSampleFormDivId}",
+                  														notifyParent);
               else
                 addNewCollectedSample($("#${editCollectedSampleFormId}")[0],
-                    "${editCollectedSampleFormDivId}", actionCallback, {action: "${model.onSuccess}"});
+                    									"${editCollectedSampleFormDivId}", notifyParent);
             });
 
         $("#${deleteCollectedSampleButtonId}").button({

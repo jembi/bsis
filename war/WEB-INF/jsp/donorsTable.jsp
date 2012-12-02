@@ -60,6 +60,7 @@ $(document).ready(
       }
 
       function clearEditSection() {
+        console.log("clear");
         $("#${donorsTableEditRowDivId}").html("");
         $(".editRowDiv").hide();
       }
@@ -67,6 +68,7 @@ $(document).ready(
     	$(".closeButton").click(clearEditSection);
 
       $("#${tabContentId}").find(".editDonor").button({disabled: true}).click(function() {
+        $("#${donorsTableEditRowDivId}").bind("editDonorSuccess", refreshResults);
         createEditSection("editDonorFormGenerator.html",
             							{donorId: selectedRowId});
       });
@@ -85,6 +87,7 @@ $(document).ready(
       $("#${tabContentId}").find(".refreshResults").button().click(refreshResults);
 
       $("#${tabContentId}").find(".createCollection").button({disabled: true}).click(function() {
+        $("#${donorsTableEditRowDivId}").bind("editCollectionSuccess", clearEditSection);
         createEditSection("addCollectionFormForDonorGenerator.html",
 						{donorId: selectedRowId});
       });
@@ -219,7 +222,7 @@ $(document).ready(
 	</c:choose>
 
 	<div class="editRowDiv" style="display: none;">
-	<span class="closeButton">X</span>
+		<span class="closeButton">X</span>
 		<div id="${donorsTableEditRowDivId}">	
 		</div>
 	</div>

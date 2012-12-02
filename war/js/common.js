@@ -425,14 +425,3 @@ function copyMirroredFields(targetFormId, mirroredFields) {
 function showLoadingImage(targetElementId) {
   $('#' + targetElementId).html($("#preloader").html());
 }
-
-function actionCallback(action) {
-  console.log("here");
-  switch(action) {
-  case "GO_BACK":
-    window.history.back();
-    break;
-  default:
-    break;
-  }
-}

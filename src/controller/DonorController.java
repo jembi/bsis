@@ -39,12 +39,6 @@ public class DonorController {
   private DonorRepository donorRepository;
 
   @Autowired
-  private DisplayNamesRepository displayNamesRepository;
-
-  @Autowired
-  private RecordFieldsConfigRepository recordFieldsConfigRepository;
-
-  @Autowired
   private UtilController utilController;
   
   public DonorController() {
@@ -151,50 +145,44 @@ public class DonorController {
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
   public ModelAndView updateDonor(
-      @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
+      @ModelAttribute(value="editDonorForm") @Valid DonorBackingForm form,
       BindingResult result, Model model) {
 
     ModelAndView mv = new ModelAndView("editDonorForm");
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
-    if (form == null) {
-      form = new DonorBackingForm(true);
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      success = false;
+      message = "Please fix the errors noted above";
     }
     else {
-      if (result.hasErrors()) {
-        m.put("hasErrors", true);
-        success = false;
-        message = "Please fix the errors noted above";
-      }
-      else {
-        try {
-          form.setIsDeleted(false);
-          Donor existingDonor = donorRepository.updateDonor(form.getDonor());
-          if (existingDonor == null) {
-            m.put("hasErrors", true);
-            success = false;
-            m.put("existingDonor", false);
-            message = "Donor does not already exist.";
-          }
-          else {
-            m.put("hasErrors", false);
-            form = new DonorBackingForm(true);
-            success = true;
-            m.put("existingDonor", true);
-            message = "Donor Successfully Updated";
-          }
-        } catch (EntityExistsException ex) {
-          ex.printStackTrace();
+      try {
+        form.setIsDeleted(false);
+        Donor existingDonor = donorRepository.updateDonor(form.getDonor());
+        if (existingDonor == null) {
+          m.put("hasErrors", true);
           success = false;
-          message = "Donor Already exists.";
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          success = false;
-          message = "Internal Error. Please try again or report a Problem.";
+          m.put("existingDonor", false);
+          message = "Donor does not already exist.";
         }
-     }
-    }
+        else {
+          m.put("hasErrors", false);
+          success = true;
+          m.put("existingDonor", true);
+          message = "Donor Successfully Updated";
+        }
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Donor Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+   }
 
     m.put("editDonorForm", form);
     m.put("success", success);

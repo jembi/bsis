@@ -7,17 +7,15 @@ function updateExistingDonor(form, resultDivId, successCallback) {
 }
 
 function updateDonorGeneric(form, resultDivId, url, successCallback) {
-  var donor = $("#" + form.getAttribute("id")).serialize();
+  var donor = $(form).serialize();
   showLoadingImage(resultDivId);
   $.ajax({
     type: "POST",
     url: url,
     data: donor,
     success: function(jsonResponse, data, data1, data2) {
-                console.log(resultDivId);
-                $("#" + resultDivId).replaceWith(jsonResponse);
-                console.log(jsonResponse);
                 successCallback();
+                $("#" + resultDivId).replaceWith(jsonResponse);
               },
     error: function(jsonResponse) {
              $("#" + resultDivId).replaceWith(jsonResponse);
