@@ -72,7 +72,7 @@ $(document).ready(
       });
 
       $("#${tabContentId}").find(".refreshResults").button().click(function() {
-        $("#${tabContentId}").html("");
+        showLoadingImage("${tabContentId}");
         $.ajax({url: "${model.refreshUrl}",
           			data: {},
           			type: "GET",
