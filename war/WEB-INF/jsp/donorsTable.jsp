@@ -71,7 +71,7 @@ $(document).ready(
             							{donorId: selectedRowId});
       });
 
-      $("#${tabContentId}").find(".refreshResults").button().click(function() {
+      function refreshResults() {
         showLoadingImage("${tabContentId}");
         $.ajax({url: "${model.refreshUrl}",
           			data: {},
@@ -80,7 +80,9 @@ $(document).ready(
           			  				 $("#${tabContentId}").html(response);
           							 }
         });
-      });
+      }
+
+      $("#${tabContentId}").find(".refreshResults").button().click(refreshResults);
 
       $("#${tabContentId}").find(".createCollection").button({disabled: true}).click(function() {
         createEditSection("addCollectionFormForDonorGenerator.html",
@@ -98,7 +100,7 @@ $(document).ready(
               title : "Confirm Delete",
               buttons : {
                 "Delete" : function() {
-                  deleteDonor(selectedRowId, reloadCurrentTab);
+                  deleteDonor(selectedRowId, refreshResults);
                   $(this).dialog("close");
                 },
                 "Cancel" : function() {
