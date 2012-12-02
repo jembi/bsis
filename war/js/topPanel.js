@@ -20,7 +20,7 @@ $(document).ready(
         // select event is deprecated in jquery 1.9. Use it for now.
 //        select: function(event, ui) {
 //                  var tabElement = $(ui.tab)[0];
-//                  var tab = $(tabElement.hash);
+//                  showLoadingImage(tabElement.hash.substr(1));
 //                }
       });
       var collectionsTabs = $("#collectionsTab").tabs({
