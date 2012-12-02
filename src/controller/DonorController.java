@@ -272,6 +272,7 @@ public class DonorController {
     model.put("donorFields", utilController.getFormFieldsForForm("donor"));
     model.put("allDonors", getDonorsViewModels(donors));
     model.put("contentLabel", "Find Donors");
+    model.put("refreshUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
   }
@@ -289,6 +290,7 @@ public class DonorController {
     model.put("allDonors", getDonorsViewModels(allDonors));
     model.put("donorFields", utilController.getFormFieldsForForm("donor"));
     model.put("contentLabel", "View All Donors");
+    model.put("refreshUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
   }

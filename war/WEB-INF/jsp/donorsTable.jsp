@@ -11,10 +11,6 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
-<c:set var="donorsTableEditDonorButtonId">donorsTableEditDonorButton-${unique_page_id}</c:set>
-<c:set var="donorsTableDeleteDonorButtonId">donorsTableDeleteDonorButton-${unique_page_id}</c:set>
-<c:set var="donorsTableCreateCollectionButtonId">donorsTableCreateCollectionButton-${unique_page_id}</c:set>
-<c:set var="donorsTableViewDonorHistoryButtonId">donorsTableViewDonorHistoryButton-${unique_page_id}</c:set>
 <c:set var="donorsTableEditRowDivId">donorsTableEditRowDiv-${unique_page_id}</c:set>
 <c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 
@@ -75,6 +71,17 @@ $(document).ready(
             							{donorId: selectedRowId});
       });
 
+      $("#${tabContentId}").find(".refreshResults").button().click(function() {
+        $("#${tabContentId}").html("");
+        $.ajax({url: "${model.refreshUrl}",
+          			data: {},
+          			type: "GET",
+          			success: function(response) {
+          			  				 $("#${tabContentId}").html(response);
+          							 }
+        });
+      });
+
       $("#${tabContentId}").find(".createCollection").button({disabled: true}).click(function() {
         createEditSection("addCollectionFormForDonorGenerator.html",
 						{donorId: selectedRowId});
@@ -123,6 +130,9 @@ $(document).ready(
 
 		<c:otherwise>
 
+			<button class="refreshResults">
+				Refresh results
+			</button>
 			<button class="rowEditButton editDonor">
 				Edit Donor
 			</button>
@@ -187,6 +197,9 @@ $(document).ready(
 				</tbody>
 			</table>
 
+			<button class="refreshResults">
+				Refresh results
+			</button>
 			<button class="rowEditButton editDonor">
 				Edit Donor
 			</button>
