@@ -11,6 +11,7 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="editCollectedSampleFormDivId">editCollectedSampleFormDiv-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormId">editCollectedSampleForm-${unique_page_id}</c:set>
+<c:set var="editCollectedSampleFormBarcodeId">editCollectedSampleFormBarcode-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorId">editCollectedSampleFormDonor-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorHiddenId">editCollectedSampleFormDonorHidden-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleConfirmDialogId">deleteCollectedSampleConfirmDialog-${unique_page_id}</c:set>
@@ -20,6 +21,7 @@
 <c:set var="editCollectedSampleFormDonorTypeId">editCollectedSampleFormDonorType-${unique_page_id}</c:set>
 <c:set var="updateCollectedSampleButtonId">updateCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleButtonId">deleteCollectedSampleButton-${unique_page_id}</c:set>
+<c:set var="printButtonId">printButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -37,39 +39,21 @@
         }).click(
             function() {
               if ("${model.existingCollectedSample}" == "true")
-                updateExistingCollectedSample($("#${editCollectedSampleFormId}")[0],
+                updateExistingCollection($("#${editCollectedSampleFormId}")[0],
                   														"${editCollectedSampleFormDivId}",
                   														notifyParent);
               else
-                addNewCollectedSample($("#${editCollectedSampleFormId}")[0],
+                addNewCollection($("#${editCollectedSampleFormId}")[0],
                     									"${editCollectedSampleFormDivId}", notifyParent);
             });
 
-        $("#${deleteCollectedSampleButtonId}").button({
+        $("#${printButtonId}").button({
           icons : {
-            primary : 'ui-icon-minusthick'
+            primary : 'ui-icon-print'
           }
-        }).click(
-            function() {
-              $("#${deleteCollectedSampleConfirmDialogId}").dialog(
-                  {
-                    modal : true,
-                    title : "Confirm Delete",
-                    buttons : {
-                      "Delete" : function() {
-                        var collectedSampleId = $(
-                            "#${editCollectedSampleFormId}")
-                            .find("[name='id']").val();
-                        deleteCollectedSample(collectedSampleId,
-                            $("#${editCollectedSampleFormId}"));
-                        $(this).dialog("close");
-                      },
-                      "Cancel" : function() {
-                        $(this).dialog("close");
-                      }
-                    }
-                  });
-            });
+        }).click(function() {
+          $("#${editCollectedSampleFormId}").printArea();
+        });
 
         $("#${editCollectedSampleFormCentersId}").multiselect({
           multiple : false,
@@ -95,9 +79,35 @@
           header : false
         });
 
-        $("#${editCollectedSampleFormDonorId}").click(function() {
-          $("#${editCollectedSampleFormDonorId}").removeAttr("readonly");
+        $("#${editCollectedSampleFormId}").find(".collectedOn").datepicker({
+          changeMonth : true,
+          changeYear : true,
+          minDate : -36500,
+          maxDate : 0,
+          dateFormat : "mm/dd/yy",
+          yearRange : "c-100:c0",
         });
+
+        $("#${editCollectedSampleFormId}").find(".clearFormButton").button({
+          icons : {
+            primary : 'ui-icon-grip-solid-horizontal'
+          }
+        }).click(refetchForm);
+
+        function refetchForm() {
+          $.ajax({
+            url: "${model.refreshUrl}",
+            data: {},
+            type: "GET",
+            success: function (response) {
+              			 	 $("#${editCollectedSampleFormDivId}").replaceWith(response);
+            				 },
+            error:   function (response) {
+											 showErrorMessage("Something went wrong. Please try again.");
+            				 }
+            
+          });
+        }
 
         $("#${editCollectedSampleFormDonorId}").autocomplete(
             {
@@ -150,6 +160,18 @@
 	        $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");	
         }
 
+        var collectedOnDatePicker = $("#${editCollectedSampleFormId}").find(".collectedOn");
+        console.log(collectedOnDatePicker.val());
+        console.log("${model.existingCollectedSample}");
+        if ("${model.existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
+          collectedOnDatePicker.datepicker('setDate', new Date());
+        }
+
+        $("#${editCollectedSampleFormBarcodeId}").barcode(
+					  "${editCollectedSampleForm.collectedSample.collectionNumber}-${editCollectedSampleForm.collectedSample.id}",
+						"code128",
+						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+
         copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
 
       });
@@ -159,6 +181,9 @@
 
 	<form:form method="POST" commandName="editCollectedSampleForm"
 		class="formInTabPane" id="${editCollectedSampleFormId}">
+		<c:if test="${model.existingCollectedSample}">
+			<div id="${editCollectedSampleFormBarcodeId}"></div>
+		</c:if>
 		<form:hidden path="id" />
 		<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
 			<div>
@@ -175,6 +200,14 @@
 					id="${editCollectedSampleFormDonorHiddenId}" />
 				<input id="${editCollectedSampleFormDonorId}" />
 				<form:errors class="formError" path="collectedSample.donor"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.collectedSampleFields.collectedOn.hidden != true }">
+			<div>
+				<form:label path="collectedOn">${model.collectedSampleFields.collectedOn.displayName}</form:label>
+				<form:input path="collectedOn" class="collectedOn" />
+				<form:errors class="formError" path="collectedSample.collectedOn"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
@@ -209,17 +242,17 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSampleFields.center.hidden != true }">
+		<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true }">
 			<div>
-				<form:label path="center">${model.collectedSampleFields.center.displayName}</form:label>
-				<form:select path="center" id="${editCollectedSampleFormCentersId}"
+				<form:label path="collectionCenter">${model.collectedSampleFields.collectionCenter.displayName}</form:label>
+				<form:select path="collectionCenter" id="${editCollectedSampleFormCentersId}"
 					class="editCollectedSampleFormCenters">
 					<form:option label="" value="" selected="selected" />
 					<c:forEach var="center" items="${model.centers}">
 						<form:option value="${center.id}" label="${center.name}" />
 					</c:forEach>
 				</form:select>
-				<form:errors class="formError" path="collectedSample.center" delimiter=", "></form:errors>
+				<form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true }">
@@ -238,15 +271,15 @@
 		</c:if>
 		<c:if test="${model.collectedSampleFields.site.hidden != true }">
 			<div>
-				<form:label path="site">${model.collectedSampleFields.site.displayName}</form:label>
-				<form:select path="site" id="${editCollectedSampleFormSitesId}"
+				<form:label path="collectionSite">${model.collectedSampleFields.collectionSite.displayName}</form:label>
+				<form:select path="collectionSite" id="${editCollectedSampleFormSitesId}"
 					class="editCollectedSampleFormSites">
 					<form:option label="" value="" selected="selected" />
 					<c:forEach var="site" items="${model.sites}">
 						<form:option value="${site.id}" label="${site.name}" />
 					</c:forEach>
 				</form:select>
-				<form:errors class="formError" path="collectedSample.site" delimiter=", "></form:errors>
+				<form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.collectedSampleFields.notes.hidden != true }">
@@ -259,10 +292,22 @@
 		</c:if>
 		<div>
 			<label></label>
-			<button type="button" id="${updateCollectedSampleButtonId}"
-				style="margin-left: 10px">Save</button>
-			<button type="button" id="${deleteCollectedSampleButtonId}"
-				style="margin-left: 10px">Delete</button>
+			<c:if test="${!(model.existingCollectedSample)}">
+				<button type="button" id="${updateCollectedSampleButtonId}">
+					Save and add another
+				</button>
+				<button type="button" class="clearFormButton">
+					Clear form
+				</button>
+			</c:if>
+			<c:if test="${model.existingCollectedSample}">
+				<button type="button" id="${updateCollectedSampleButtonId}"
+								class="autoWidthButton">Save</button>
+			</c:if>
+
+			<button type="button" id="${printButtonId}">
+				Print
+			</button>
 		</div>
 	</form:form>
 </div>

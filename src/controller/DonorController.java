@@ -16,7 +16,6 @@ import model.donor.DonorBackingFormValidator;
 import model.util.BloodGroup;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,9 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.DisplayNamesRepository;
 import repository.DonorRepository;
-import repository.RecordFieldsConfigRepository;
 import viewmodel.donor.DonorViewModel;
 
 @Controller
@@ -92,9 +89,9 @@ public class DonorController {
       }
     }
     m.put("editDonorForm", form);
+    m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
-    m.put("contentLabel", "Edit Donor - " + form.getDonorNumber());
     mv.addObject("model", m);
     return mv;
   }
@@ -125,7 +122,6 @@ public class DonorController {
         success = true;
         message = "Donor Successfully Added";
         form = new DonorBackingForm(true);
-        System.out.println(form.getFirstName());
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;

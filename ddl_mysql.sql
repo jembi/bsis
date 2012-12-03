@@ -1,80 +1,4 @@
 
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33A49787C4;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33D10E68A8;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33F17A8E4E;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A3359FAB30D;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A331EA5B4F;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33D0AFB367;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A335DB0AB81;
-
-    alter table ConfigChange 
-        drop 
-        foreign key FKF9B3DDB2A49787C4;
-
-    alter table ConfigChange 
-        drop 
-        foreign key FKF9B3DDB2D0AFB367;
-
-    alter table Donor 
-        drop 
-        foreign key FK3F25E46A49787C4;
-
-    alter table Donor 
-        drop 
-        foreign key FK3F25E46D0AFB367;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFA49787C4;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF32E145A;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFD0AFB367;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FA49787C4;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6F32E145A;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FD0AFB367;
-
-    alter table User 
-        drop 
-        foreign key FK285FEBA49787C4;
-
-    alter table User 
-        drop 
-        foreign key FK285FEBD0AFB367;
-
     drop table if exists BloodBagType;
 
     drop table if exists CollectedSample;
@@ -86,8 +10,6 @@
     drop table if exists Donor;
 
     drop table if exists DonorType;
-
-    drop table if exists Feedback;
 
     drop table if exists FormField;
 
@@ -127,12 +49,12 @@
         sampleNumber varchar(50),
         shippingNumber varchar(50),
         bloodBagType_bloodBagType varchar(30),
-        center_id bigint,
+        collectionCenter_id bigint,
+        collectionSite_id bigint,
         donor_id bigint not null,
         donorType_donorType varchar(30),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
-        site_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -179,13 +101,6 @@
     create table DonorType (
         donorType varchar(30) not null,
         primary key (donorType)
-    ) ENGINE=InnoDB;
-
-    create table Feedback (
-        feedbackId bigint not null auto_increment,
-        comment varchar(255),
-        datetime datetime not null,
-        primary key (feedbackId)
     ) ENGINE=InnoDB;
 
     create table FormField (
@@ -337,6 +252,18 @@
         references BloodBagType (bloodBagType);
 
     alter table CollectedSample 
+        add index FKF0658A33AED1731E (collectionSite_id), 
+        add constraint FKF0658A33AED1731E 
+        foreign key (collectionSite_id) 
+        references Location (id);
+
+    alter table CollectedSample 
+        add index FKF0658A33B29562D0 (collectionCenter_id), 
+        add constraint FKF0658A33B29562D0 
+        foreign key (collectionCenter_id) 
+        references Location (id);
+
+    alter table CollectedSample 
         add index FKF0658A33F17A8E4E (donorType_donorType), 
         add constraint FKF0658A33F17A8E4E 
         foreign key (donorType_donorType) 
@@ -349,22 +276,10 @@
         references Donor (id);
 
     alter table CollectedSample 
-        add index FKF0658A331EA5B4F (site_id), 
-        add constraint FKF0658A331EA5B4F 
-        foreign key (site_id) 
-        references Location (id);
-
-    alter table CollectedSample 
         add index FKF0658A33D0AFB367 (lastUpdatedBy_id), 
         add constraint FKF0658A33D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
-
-    alter table CollectedSample 
-        add index FKF0658A335DB0AB81 (center_id), 
-        add constraint FKF0658A335DB0AB81 
-        foreign key (center_id) 
-        references Location (id);
 
     alter table ConfigChange 
         add index FKF9B3DDB2A49787C4 (createdBy_id), 

@@ -292,4 +292,18 @@ public class Donor implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
+
+  public String toString() {
+    if (firstName == null || firstName.isEmpty() ||
+        donorNumber == null || donorNumber.isEmpty())
+      return "";
+
+    StringBuilder builder = new StringBuilder();
+    builder.append(firstName);
+    if (!lastName.isEmpty())
+      builder.append(" ").append(lastName);
+    builder.append(":").append(donorNumber);
+
+    return builder.toString();
+  }
 }

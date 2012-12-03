@@ -102,4 +102,8 @@ public class Location {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
+
+  public String toString() {
+    return name;
+  }
 }

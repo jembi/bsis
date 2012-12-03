@@ -49,6 +49,27 @@
           $("#${editDonorFormId}").printArea();
         });
 
+        $("#${editDonorFormId}").find(".clearFormButton").button({
+          icons : {
+            primary : 'ui-icon-grip-solid-horizontal'
+          }
+        }).click(refetchForm);
+
+        function refetchForm() {
+          $.ajax({
+            url: "${model.refreshUrl}",
+            data: {},
+            type: "GET",
+            success: function (response) {
+              			 	 $("#${editDonorFormDivId}").replaceWith(response);
+            				 },
+            error:   function (response) {
+											 showErrorMessage("Something went wrong. Please try again.");
+            				 }
+            
+          });
+        }
+
         $("#${genderSelectorId}").multiselect({
           multiple : false,
           selectedList : 1,
@@ -201,16 +222,22 @@
 		<div>
 			<label></label>
 			<c:if test="${!(model.existingDonor)}">
-				<button type="button" id="${updateDonorButtonId}"
-					style="margin-left: 10px">Save and add another</button>
+				<button type="button" id="${updateDonorButtonId}" class="autoWidthButton">
+					Save and add another
+				</button>
+				<button type="button" class="clearFormButton autoWidthButton">
+					Clear form
+				</button>				
 			</c:if>
 			<c:if test="${model.existingDonor}">
-				<button type="button" id="${updateDonorButtonId}"
-					style="margin-left: 10px">Save</button>
+				<button type="button" id="${updateDonorButtonId}">
+					Save
+				</button>
 			</c:if>
 
-			<button type="button" id="${printButtonId}"
-				style="margin-left: 10px">Print</button>
+			<button type="button" id="${printButtonId}">
+				Print
+			</button>
 
 		</div>
 	</form:form>

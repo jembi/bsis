@@ -28,8 +28,6 @@ public class DonorExistsConstraintValidator implements
    if (target == null)
      return true;
 
-   System.out.println("target: " + target.getId());
-
    try {
     Donor donor = donorRepository.findDonorById(target.getId());
     if (donor != null) {

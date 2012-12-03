@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import model.Product;
 import model.TestResult;
@@ -43,6 +44,7 @@ public class CollectedSample implements ModificationTracker {
   @Column(length=30, nullable=false)
   private String collectionNumber;
 
+  @NotNull
   @DonorExists
   @ManyToOne(optional=false)
   private Donor donor;
@@ -52,11 +54,11 @@ public class CollectedSample implements ModificationTracker {
 
   @LocationExists
   @ManyToOne
-  private Location center;
+  private Location collectionCenter;
 
   @LocationExists
   @ManyToOne
-  private Location site;
+  private Location collectionSite;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date collectedOn;
@@ -106,12 +108,12 @@ public class CollectedSample implements ModificationTracker {
     return testResults;
   }
 
-  public Location getCenter() {
-    return center;
+  public Location getCollectionCenter() {
+    return collectionCenter;
   }
 
-  public Location getSite() {
-    return site;
+  public Location getCollectionSite() {
+    return collectionSite;
   }
 
   public Date getCollectedOn() {
@@ -158,12 +160,12 @@ public class CollectedSample implements ModificationTracker {
     this.testResults = testResults;
   }
 
-  public void setCenter(Location center) {
-    this.center = center;
+  public void setCollectionCenter(Location collectionCenter) {
+    this.collectionCenter = collectionCenter;
   }
 
-  public void setSite(Location site) {
-    this.site = site;
+  public void setCollectionSite(Location collectionSite) {
+    this.collectionSite = collectionSite;
   }
 
   public void setCollectedOn(Date collectedOn) {
@@ -198,8 +200,8 @@ public class CollectedSample implements ModificationTracker {
     assert (this.getId().equals(collectedSample.getId()));
     this.collectionNumber = collectedSample.collectionNumber;
     this.collectedOn = collectedSample.collectedOn;
-    this.center = collectedSample.center;
-    this.site = collectedSample.site;
+    this.collectionCenter = collectedSample.collectionCenter;
+    this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
   }
 

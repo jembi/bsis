@@ -1,14 +1,13 @@
 package model.collectedsample;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.CustomDateFormatter;
 import model.TestResult;
 import model.bloodbagtype.BloodBagType;
 import model.donor.Donor;
@@ -32,13 +31,15 @@ public class CollectedSampleBackingForm {
 
   private String donorIdHidden;
 
+  private String collectedOn;
+
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
   }
 
-  public CollectedSampleBackingForm(boolean autoGenerateCollectionNumber) {
+  public CollectedSampleBackingForm(boolean autoGenerate) {
     collectedSample = new CollectedSample();
-    if (autoGenerateCollectionNumber)
+    if (autoGenerate)
       generateCollectionNumber();
   }
 
@@ -63,24 +64,24 @@ public class CollectedSampleBackingForm {
   }
 
   public String getCollectedOn() {
-    Date dateCollected = collectedSample.getCollectedOn();
-    if (dateCollected == null)
-      return null;
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    return dateFormat.format(dateCollected);
+    if (collectedOn != null)
+      return collectedOn;
+    if (collectedSample == null)
+      return "";
+    return CustomDateFormatter.getDateString(collectedSample.getCollectedOn());
   }
 
   public String getCollectionNumber() {
     return collectedSample.getCollectionNumber();
   }
 
-  public void setCollectedOn(String dateCollected) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+  public void setCollectedOn(String collectedOn) {
+    this.collectedOn = collectedOn;
     try {
-      collectedSample.setCollectedOn(dateFormat.parse(dateCollected));
-    } catch (ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      collectedSample.setCollectedOn(null);
     }
   }
 
@@ -128,15 +129,15 @@ public class CollectedSampleBackingForm {
     return collectedSample.getTestResults();
   }
 
-  public String getCenter() {
-    Location center = collectedSample.getCenter();
+  public String getCollectionCenter() {
+    Location center = collectedSample.getCollectionCenter();
     if (center == null)
       return null;
     return center.getId().toString();
   }
 
-  public String getSite() {
-    Location site = collectedSample.getSite();
+  public String getCollectionSite() {
+    Location site = collectedSample.getCollectionSite();
     if (site == null)
       return null;
     return site.getId().toString();
@@ -214,25 +215,25 @@ public class CollectedSampleBackingForm {
     collectedSample.setTestResults(testResults);
   }
 
-  public void setCenter(String center) {
+  public void setCollectionCenter(String center) {
     if (center == null) {
-      collectedSample.setCenter(null);
+      collectedSample.setCollectionCenter(null);
     }
     else {
       Location l = new Location();
       l.setId(Long.parseLong(center));
-      collectedSample.setCenter(l);
+      collectedSample.setCollectionCenter(l);
     }
   }
 
-  public void setSite(String site) {
-    if (site == null) {
-      collectedSample.setSite(null);
+  public void setCollectionSite(String collectionSite) {
+    if (collectionSite == null) {
+      collectedSample.setCollectionSite(null);
     }
     else {
       Location l = new Location();
-      l.setId(Long.parseLong(site));
-      collectedSample.setSite(l);
+      l.setId(Long.parseLong(collectionSite));
+      collectedSample.setCollectionSite(l);
     }
   }
 
@@ -295,7 +296,20 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorIdHidden(String donorId) {
-    this.donorIdHidden = donorId;
+    if (donorId == null) {
+      collectedSample.setDonor(null);
+    }
+    else {
+      
+      try {
+        Donor d = new Donor();
+        d.setId(Long.parseLong(donorId));
+        collectedSample.setDonor(d);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        collectedSample.setDonor(null);
+      }
+    }
   }
   
   public void generateCollectionNumber() {

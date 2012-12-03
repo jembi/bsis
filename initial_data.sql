@@ -17,6 +17,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('Donor', 'notes', 'Notes', '', '0', '0', '');
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, derived, sourceField) values
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', '0', '0', ''),
+('CollectedSample', 'collectedOn', 'Collected On', '', '0', '0', ''),
 ('CollectedSample', 'donor', 'Donor', '', '0', '0', ''),
 ('CollectedSample', 'donorType', 'Donor Type', '', '0', '0', ''),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '0', '1', 'collectionNumber'),

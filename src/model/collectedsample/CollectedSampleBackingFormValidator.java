@@ -2,6 +2,8 @@ package model.collectedsample;
 
 import java.util.Arrays;
 
+import model.CustomDateFormatter;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -17,7 +19,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(CollectedSampleBackingForm.class, CollectedSample.class).contains(clazz);
+    return Arrays.asList(FindCollectedSampleBackingForm.class, CollectedSampleBackingForm.class, CollectedSample.class).contains(clazz);
   }
 
   @Override
@@ -25,5 +27,10 @@ public class CollectedSampleBackingFormValidator implements Validator {
     if (obj == null || validator == null)
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
+    CollectedSampleBackingForm form = (CollectedSampleBackingForm) obj;
+    String collectedOn = form.getCollectedOn();
+    if (!CustomDateFormatter.isDateStringValid(collectedOn))
+      errors.rejectValue("collectedSample.collectedOn", "dateFormat.incorrect",
+          CustomDateFormatter.getErrorMessage());
   }
 }

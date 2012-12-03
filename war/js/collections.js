@@ -1,4 +1,4 @@
-function addNewCollectedSample(form, resultDivId, successCallback) {
+function addNewCollection(form, resultDivId, successCallback) {
   updateCollectionGeneric(form, resultDivId, "addCollectedSample.html", successCallback);
 }
 
@@ -24,7 +24,7 @@ function updateCollectionGeneric(form, resultDivId, url, successCallback) {
   });
 }
 
-function deleteCollectedSample(collectedSampleId) {
+function deleteCollection(collectedSampleId) {
   $.ajax({
     type : "POST",
     url : "deleteCollectedSample.html",

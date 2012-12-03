@@ -43,9 +43,9 @@ $(document).ready(function() {
     icons : {
       primary : 'ui-icon-grip-solid-horizontal'
     }
-  }).click(clearFindDonorForm);
+  }).click(clearFindForm);
   
-  function clearFindDonorForm() {
+  function clearFindForm() {
 		$("#${findDonorFormId}").each(function() {
 		  this.reset();
 		});
@@ -63,7 +63,7 @@ $(document).ready(function() {
 										  return "Any Blood Group";
 										}
 										else {
-										  var checkedValues = $.map(selectedValues, function(input) { return input.value; });
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 										  return checkedValues.length ? checkedValues.join(', ') : 'Any Blood Group';
 										}
 										  

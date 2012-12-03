@@ -425,7 +425,7 @@ tr > td
 }
 
 .formInTabPane > div > button {
-	width: 220px;
+	width: auto;
 	margin-left: 10px;
 	display: inline-block;
 }
@@ -512,4 +512,8 @@ tr > td
 	top: 3px;
 	cursor: pointer;
 	z-index: 100;
+}
+
+.hidableDiv {
+	display: inline-block;
 }

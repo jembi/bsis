@@ -16,6 +16,6 @@
 		<li id="findOrAddCollectionsContent"><a
 			href="findCollectionFormGenerator.html">Find Collections</a></li>
 		<li id="addCollectionsContent"><a
-			href="editCollectionFormGenerator.html">Add Collection</a></li>
+			href="editCollectionFormGenerator.html">New Collection</a></li>
 	</ul>
 </div>

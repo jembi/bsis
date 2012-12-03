@@ -20,6 +20,7 @@ import model.TestResult;
 import model.collectedsample.CollectedSample;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,18 +54,76 @@ public class CollectedSampleRepository {
     query.executeUpdate();
   }
 
-  public CollectedSample findCollectedSampleByNumber(String collectionNumber) {
+  public List<CollectedSample> findCollectedSampleByCollectionNumber(
+      String collectionNumber, String dateCollectedFrom,
+      String dateCollectedTo) {
+
     TypedQuery<CollectedSample> query = em
         .createQuery(
-            "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted",
+            "SELECT c FROM CollectedSample c WHERE " +
+            "c.collectionNumber = :collectionNumber and " +
+            "((c.collectedOn is NULL) or " +
+            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
+            "c.isDeleted= :isDeleted",
             CollectedSample.class);
+
+    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
+    Date to = getDateCollectedToOrDefault(dateCollectedTo);
+
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    List<CollectedSample> collectedSamples = query.getResultList();
-    if (CollectionUtils.isEmpty(collectedSamples)) {
-      return null;
-    }
-    return collectedSamples.get(0);
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
+
+    return query.getResultList();
+  }
+
+  public List<CollectedSample> findCollectedSampleByShippingNumber(
+      String shippingNumber, String dateCollectedFrom,
+      String dateCollectedTo) {
+
+    TypedQuery<CollectedSample> query = em
+        .createQuery(
+            "SELECT c FROM CollectedSample c WHERE " +
+            "c.shippingNumber = :shippingNumber and " +
+            "((c.collectedOn is NULL) or " +
+            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
+            "c.isDeleted= :isDeleted",
+            CollectedSample.class);
+
+    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
+    Date to = getDateCollectedToOrDefault(dateCollectedTo);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("shippingNumber", shippingNumber);
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
+
+    return query.getResultList();
+  }
+
+  public List<CollectedSample> findCollectedSampleBySampleNumber(
+      String sampleNumber, String dateCollectedFrom,
+      String dateCollectedTo) {
+
+    TypedQuery<CollectedSample> query = em
+        .createQuery(
+            "SELECT c FROM CollectedSample c WHERE " +
+            "c.sampleNumber = :sampleNumber and " +
+            "((c.collectedOn is NULL) or " +
+            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
+            "c.isDeleted= :isDeleted",
+            CollectedSample.class);
+
+    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
+    Date to = getDateCollectedToOrDefault(dateCollectedTo);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("sampleNumber", sampleNumber);
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
+
+    return query.getResultList();
   }
 
   public List<CollectedSample> getAllCollectedSamples() {
@@ -119,40 +178,48 @@ public class CollectedSampleRepository {
 
     query.setParameter("centers", centers);
 
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    try {
-      Date from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
-      query.setParameter("dateCollectedFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
-      Date to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? dateFormat
-          .parse(dateFormat.format(new Date())) : dateFormat
-          .parse(dateCollectedTo);
-      query.setParameter("dateCollectedTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
     List<CollectedSample> resultList = query.getResultList();
     return resultList;
   }
 
-  public CollectedSample updateOrAddCollectedSample(CollectedSample collectedSample) {
-    CollectedSample existingCollectedSample =
-        findCollectedSampleByNumber(collectedSample.getCollectionNumber());
-    if (existingCollectedSample == null) {
-      collectedSample.setIsDeleted(false);
-      saveCollectedSample(collectedSample);
-      return collectedSample;
+  private Date getDateCollectedFromOrDefault(String dateCollectedFrom) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date from = null;
+    try {
+      from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
+          .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
+    } catch (ParseException ex) {
+      ex.printStackTrace();
     }
-    existingCollectedSample.copy(collectedSample);
-    existingCollectedSample.setIsDeleted(false);
-    em.merge(existingCollectedSample);
-    em.flush();
-    return existingCollectedSample;
+    return from;      
+  }
+
+  private Date getDateCollectedToOrDefault(String dateCollectedTo) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date to = null;
+    try {
+      to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
+              dateFormat.parse(dateCollectedTo);
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+    }
+    return to;      
+  }
+
+  public CollectedSample updateOrAddCollectedSample(CollectedSample collectedSample) {
+//    CollectedSample existingCollectedSample =
+//        findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber());
+//    if (existingCollectedSample == null) {
+//      collectedSample.setIsDeleted(false);
+//      saveCollectedSample(collectedSample);
+//      return collectedSample;
+//    }
+//    existingCollectedSample.copy(collectedSample);
+//    existingCollectedSample.setIsDeleted(false);
+//    em.merge(existingCollectedSample);
+//    em.flush();
+//    return existingCollectedSample;
+    return null;
   }
 
   public Map<Long, Long> findNumberOfCollectedSamples(String dateCollectedFrom,
@@ -270,5 +337,27 @@ public class CollectedSampleRepository {
   public void addCollectedSample(CollectedSample collectedSample) {
     em.persist(collectedSample);
     em.flush();
+  }
+
+  public List<CollectedSample> findCollectedSampleByCenters(
+      List<Long> centerIds, String dateCollectedFrom, String dateCollectedTo) {
+    TypedQuery<CollectedSample> query = em
+        .createQuery(
+            "SELECT c FROM CollectedSample c WHERE " +
+            "c.collectionCenter.id IN (:centers) and " +
+            "((c.collectedOn is NULL) or " +
+            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
+            "c.isDeleted= :isDeleted",
+            CollectedSample.class);
+
+    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
+    Date to = getDateCollectedToOrDefault(dateCollectedTo);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("centers", centerIds);
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
+
+    return query.getResultList();
   }
 }

@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import model.Product;
 import model.TestResult;
+import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
 import model.donortype.DonorType;
@@ -14,23 +16,18 @@ import model.user.User;
 
 public class CollectedSampleViewModel {
 	private CollectedSample collectedSample;
-	private List<Location> allCollectionSites;
-	private List<Location> allCenters;
 
 	public CollectedSampleViewModel(CollectedSample collection) {
 		this.collectedSample = collection;
 	}
 
-	public CollectedSampleViewModel(CollectedSample collection,
-			List<Location> allCollectionSites, List<Location> allCenters) {
-
-		this.collectedSample = collection;
-		this.allCollectionSites = allCollectionSites;
-		this.allCenters = allCenters;
-	}
-
   public void copy(CollectedSample collection) {
     collection.copy(collection);
+  }
+
+  public String getCollectedOn() {
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    return formatter.format(collectedSample.getCollectedOn());
   }
 
   public boolean equals(Object obj) {
@@ -53,21 +50,20 @@ public class CollectedSampleViewModel {
     return collectedSample.getTestResults();
   }
 
-  public Location getCenter() {
-    return collectedSample.getCenter();
+  public Location getCollectionCenter() {
+    return collectedSample.getCollectionCenter();
   }
 
-  public Location getSite() {
-    return collectedSample.getSite();
-  }
-
-  public String getCollectedOn() {
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(collectedSample.getCollectedOn());
+  public Location getCollectionSite() {
+    return collectedSample.getCollectionSite();
   }
 
   public DonorType getDonorType() {
     return collectedSample.getDonorType();
+  }
+
+  public BloodBagType getBloodBagType() {
+    return collectedSample.getBloodBagType();
   }
 
   public String getSampleNumber() {
@@ -76,6 +72,18 @@ public class CollectedSampleViewModel {
 
   public String getShippingNumber() {
     return collectedSample.getShippingNumber();
+  }
+
+  public String getNotes() {
+    return collectedSample.getNotes();
+  }
+
+  public Boolean getIsDeleted() {
+    return collectedSample.getIsDeleted();
+  }
+
+  public List<Product> getProducts() {
+    return collectedSample.getProducts();
   }
 
   public Date getLastUpdated() {
@@ -94,36 +102,13 @@ public class CollectedSampleViewModel {
     return collectedSample.getLastUpdatedBy();
   }
 
-  public String getNotes() {
-    return collectedSample.getNotes();
+  public int hashCode() {
+    return collectedSample.hashCode();
   }
 
-  public Boolean getIsDeleted() {
-    return collectedSample.getIsDeleted();
+  public String toString() {
+    return collectedSample.toString();
   }
 
-  public CollectedSample getCollection() {
-    return collectedSample;
-  }
-
-  public List<Location> getAllCollectionSites() {
-    return allCollectionSites;
-  }
-
-  public List<Location> getAllCenters() {
-    return allCenters;
-  }
-
-  public void setCollection(CollectedSample collection) {
-    this.collectedSample = collection;
-  }
-
-  public void setAllCollectionSites(List<Location> allCollectionSites) {
-    this.allCollectionSites = allCollectionSites;
-  }
-
-  public void setAllCenters(List<Location> allCenters) {
-    this.allCenters = allCenters;
-  }
 
 }

@@ -44,15 +44,10 @@ public class DonorRepository {
   }
 
   public Donor findDonorById(Long donorId) {
-    try {
-      String queryString = "SELECT d FROM Donor d WHERE d.id = :donorId and d.isDeleted = :isDeleted";
-      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      return query.setParameter("donorId", donorId).getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-      return null;
-    }
+    String queryString = "SELECT d FROM Donor d WHERE d.id = :donorId and d.isDeleted = :isDeleted";
+    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    return query.setParameter("donorId", donorId).getSingleResult();
   }
 
   public Donor findDonorById(String donorId) {

@@ -1,5 +1,6 @@
 package model.donor;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,6 +26,9 @@ public class DonorBackingForm {
   private Donor donor;
   private List<BloodGroup> bloodGroups;
 
+  // store a local copy of birthdate string as validation may have failed
+  String birthDate;
+  
   public DonorBackingForm() {
     donor = new Donor();
   }
@@ -40,11 +44,21 @@ public class DonorBackingForm {
   }
 
   public String getBirthDate() {
+    if (birthDate != null)
+      return birthDate;
+    if (donor == null)
+      return "";
     return CustomDateFormatter.getDateString(donor.getBirthDate());
   }
 
   public void setBirthDate(String birthDate) {
-    donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+    this.birthDate = birthDate;
+    try {
+      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      donor.setBirthDate(null);
+    }
   }
 
   public List<BloodGroup> getBloodGroups() {

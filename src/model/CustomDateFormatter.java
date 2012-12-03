@@ -15,14 +15,10 @@ public class CustomDateFormatter {
     format.setLenient(false);
   }
 
-  public static Date getDateFromString(String dateString) {
+  public static Date getDateFromString(String dateString) throws ParseException {
     Date date = null;
-    try {
-      if (!isDateEmpty(dateString))
-        date = format.parse(dateString);
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
+    if (!isDateEmpty(dateString))
+      date = format.parse(dateString);
     System.out.println("here");
     System.out.println(date);
     return date;
