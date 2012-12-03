@@ -20,12 +20,11 @@ public class DonorExistsConstraintValidator implements
   
   @Override
   public void initialize(DonorExists constraint) {
-
   }
 
   public boolean isValid(Donor target, ConstraintValidatorContext context) {
 
-   System.out.println("validating here");
+   System.out.println("here1 donorexists constraint validator");
    System.out.println(target);
    if (target == null)
      return true;

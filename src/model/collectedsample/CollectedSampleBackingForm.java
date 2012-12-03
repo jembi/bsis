@@ -4,6 +4,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import model.CustomDateFormatter;
 import model.TestResult;
 import model.bloodbagtype.BloodBagType;
@@ -18,7 +21,10 @@ public class CollectedSampleBackingForm {
 
   public static final int ID_LENGTH = 12;
 
+  @NotNull
+  @Valid
   private CollectedSample collectedSample;
+
   private List<String> centers;
   private List<String> sites;
   private String dateCollectedFrom;

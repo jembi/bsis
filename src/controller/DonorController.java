@@ -45,6 +45,8 @@ public class DonorController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
+    System.out.println("here1");
+    System.out.println("validator: " + binder.getValidator());
     binder.setValidator(new DonorBackingFormValidator(binder.getValidator()));
   }
 

@@ -46,7 +46,7 @@ public class CustomIntegrator implements Integrator {
         System.out.println(el.getClass());
         BeanValidationEventListener listener = (BeanValidationEventListener) el;
         System.out.println(listener);
-//        iter1.remove();
+       // iter1.remove();
       }
   }
 

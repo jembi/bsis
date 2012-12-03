@@ -22,9 +22,9 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('CollectedSample', 'donorType', 'Donor Type', '', '0', '0', ''),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '0', '1', 'collectionNumber'),
 ('CollectedSample', 'sampleNumber', 'Sample Number', '', '0', '1', 'collectionNumber'),
-('CollectedSample', 'center', 'Collection Center', '', '0', '0', ''),
+('CollectedSample', 'collectionCenter', 'Collection Center', '', '0', '0', ''),
 ('CollectedSample', 'bloodBagType', 'Blood Bag Type', '', '0', '0', ''),
-('CollectedSample', 'site', 'Collection Site', '', '0', '0', ''),
+('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '0', ''),
 ('CollectedSample', 'notes', 'Notes', '', '0', '0', '');
 insert into DonorType (donorType) values ('Voluntary'), ('Family'), ('Other');
 insert into BloodBagType (bloodBagType) values ('Single'), ('Triple'), ('Paedi');

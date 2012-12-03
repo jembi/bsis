@@ -217,9 +217,9 @@
 				<form:select path="donorType"
 					id="${editCollectedSampleFormDonorTypeId}"
 					class="editCollectedSampleFormDonorType">
-					<form:option label="" value="" selected="selected" />
+					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="donorType" items="${model.donorTypes}">
-						<form:option value="${donorType}" label="${donorType}" />
+						<form:option value="${donorType}">${donorType}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="collectedSample.donorType"
@@ -247,9 +247,9 @@
 				<form:label path="collectionCenter">${model.collectedSampleFields.collectionCenter.displayName}</form:label>
 				<form:select path="collectionCenter" id="${editCollectedSampleFormCentersId}"
 					class="editCollectedSampleFormCenters">
-					<form:option label="" value="" selected="selected" />
+					<form:option value="" selected="selected">&nbsp;</form:option>
 					<c:forEach var="center" items="${model.centers}">
-						<form:option value="${center.id}" label="${center.name}" />
+						<form:option value="${center.id}">${center.name}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
@@ -260,9 +260,9 @@
 				<form:label path="bloodBagType">${model.collectedSampleFields.bloodBagType.displayName}</form:label>
 				<form:select path="bloodBagType"
 					id="${editCollectedSampleFormBloodBagTypeId}">
-					<form:option label="" value="" />
+					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
-						<form:option value="${bloodBagType}" label="${bloodBagType}" />
+						<form:option value="${bloodBagType}">${bloodBagType}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="collectedSample.bloodBagType"
@@ -274,9 +274,9 @@
 				<form:label path="collectionSite">${model.collectedSampleFields.collectionSite.displayName}</form:label>
 				<form:select path="collectionSite" id="${editCollectedSampleFormSitesId}"
 					class="editCollectedSampleFormSites">
-					<form:option label="" value="" selected="selected" />
+					<form:option value="" selected="selected">&nbsp;</form:option>
 					<c:forEach var="site" items="${model.sites}">
-						<form:option value="${site.id}" label="${site.name}" />
+						<form:option value="${site.id}">${site.name}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
