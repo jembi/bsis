@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import model.CustomDateFormatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 public class CollectedSampleBackingFormValidator implements Validator {
@@ -24,9 +24,11 @@ public class CollectedSampleBackingFormValidator implements Validator {
 
   @Override
   public void validate(Object obj, Errors errors) {
+    System.out.println("validating");
+    System.out.println(validator);
     if (obj == null || validator == null)
       return;
-    ValidationUtils.invokeValidator(validator, obj, errors);
+    validator.validate(obj, errors);
     CollectedSampleBackingForm form = (CollectedSampleBackingForm) obj;
     String collectedOn = form.getCollectedOn();
     if (!CustomDateFormatter.isDateStringValid(collectedOn))

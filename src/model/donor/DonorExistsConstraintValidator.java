@@ -25,6 +25,8 @@ public class DonorExistsConstraintValidator implements
 
   public boolean isValid(Donor target, ConstraintValidatorContext context) {
 
+   System.out.println("validating here");
+   System.out.println(target);
    if (target == null)
      return true;
 
