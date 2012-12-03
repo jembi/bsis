@@ -2,7 +2,7 @@ function addNewCollection(form, resultDivId, successCallback) {
   updateCollectionGeneric(form, resultDivId, "addCollectedSample.html", successCallback);
 }
 
-function updateExistingCollection(form, resultDivId) {
+function updateExistingCollection(form, resultDivId, successCallback) {
   updateCollectionGeneric(form, resultDivId, "updateCollectedSample.html", successCallback);
 }
 
@@ -34,9 +34,7 @@ function deleteCollection(collectedSampleId) {
         showMessage("Collection Deleted Successfully!");
         window.history.back();
       } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
   });

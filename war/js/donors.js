@@ -32,12 +32,10 @@ function deleteDonor(donorId, successCallback) {
     data : {donorId: donorId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
-        $.showMessage("Donor Deleted Successfully!");
         successCallback();
+        showMessage("Donor Deleted Successfully!");
       } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
+        showErrorMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
   });

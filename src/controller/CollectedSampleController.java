@@ -263,7 +263,7 @@ public class CollectedSampleController {
       @ModelAttribute("editCollectedSampleForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editDonorForm");
+    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
@@ -332,7 +332,7 @@ public class CollectedSampleController {
     return collectionViewModels;
   }
 
-  @RequestMapping(value = "/deleteCollection", method = RequestMethod.POST)
+  @RequestMapping(value = "/deleteCollectedSample", method = RequestMethod.POST)
   public @ResponseBody
   Map<String, ? extends Object> deleteCollection(
       @RequestParam("collectedSampleId") Long collectionSampleId) {

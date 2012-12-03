@@ -18,6 +18,7 @@ import javax.persistence.TypedQuery;
 
 import model.TestResult;
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,9 @@ public class CollectedSampleRepository {
 
   public CollectedSample updateCollectedSample(CollectedSample collectedSample) {
     CollectedSample existingCollectedSample = findCollectedSampleById(collectedSample.getId());
+    if (existingCollectedSample == null) {
+      return null;
+    }
     existingCollectedSample.copy(collectedSample);
     em.merge(existingCollectedSample);
     em.flush();
