@@ -45,8 +45,6 @@ public class DonorController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    System.out.println("here1");
-    System.out.println("validator: " + binder.getValidator());
     binder.setValidator(new DonorBackingFormValidator(binder.getValidator()));
   }
 
@@ -155,6 +153,10 @@ public class DonorController {
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
+    // only when the collection is correctly added the existingCollectedSample
+    // property will be changed
+    m.put("existingDonor", true);
+
     if (result.hasErrors()) {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -175,7 +177,6 @@ public class DonorController {
         else {
           m.put("hasErrors", false);
           success = true;
-          m.put("existingDonor", true);
           message = "Donor Successfully Updated";
         }
       } catch (EntityExistsException ex) {
