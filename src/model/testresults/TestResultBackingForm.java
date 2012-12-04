@@ -17,7 +17,6 @@ public class TestResultBackingForm {
   private String dateTestedFrom;
   private String dateTestedTo;
 
-  private String collectionNumber;
   private List<String> tests;
 
   private String testedOn;
@@ -77,10 +76,6 @@ public class TestResultBackingForm {
     return testResult.getId();
   }
 
-  public CollectedSample getCollectedSample() {
-    return testResult.getCollectedSample();
-  }
-
   public String getName() {
     return testResult.getName();
   }
@@ -119,10 +114,6 @@ public class TestResultBackingForm {
 
   public void setId(Long id) {
     testResult.setId(id);
-  }
-
-  public void setCollectedSample(CollectedSample collectedSample) {
-    testResult.setCollectedSample(collectedSample);
   }
 
   public void setTestedOn(Date testedOn) {
@@ -174,11 +165,15 @@ public class TestResultBackingForm {
   }
 
   public String getCollectionNumber() {
-    return collectionNumber;
+    if (testResult == null || testResult.getCollectedSample() == null ||
+        testResult.getCollectedSample().getCollectionNumber() == null
+       )
+      return "";
+    return testResult.getCollectedSample().getCollectionNumber();
   }
 
   public void setCollectionNumber(String collectionNumber) {
-    this.collectionNumber = collectionNumber;
+    CollectedSample collectedSample = new CollectedSample();
+    collectedSample.setCollectionNumber(collectionNumber);
   }
-
 }

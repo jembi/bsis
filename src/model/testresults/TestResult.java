@@ -11,8 +11,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import model.collectedsample.CollectedSample;
+import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
 import model.user.User;
 
@@ -23,6 +25,8 @@ public class TestResult implements ModificationTracker {
   @Column(nullable=false)
 	private Long id;
 
+	@NotNull
+	@CollectedSampleExists
 	@ManyToOne(optional=false)
 	private CollectedSample collectedSample;
 
