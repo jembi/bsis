@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import model.collectedsample.CollectedSample;
+import model.testresults.TestResult;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;

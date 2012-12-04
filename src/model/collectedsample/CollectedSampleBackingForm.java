@@ -8,11 +8,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.CustomDateFormatter;
-import model.TestResult;
 import model.bloodbagtype.BloodBagType;
 import model.donor.Donor;
 import model.donortype.DonorType;
 import model.location.Location;
+import model.testresults.TestResult;
 import model.user.User;
 
 import org.apache.commons.lang3.RandomStringUtils;

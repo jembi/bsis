@@ -9,135 +9,161 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editTestResultFormDivId">editTestResultFormDiv-${unique_page_id}</c:set>
 <c:set var="editTestResultFormId">editTestResultForm-${unique_page_id}</c:set>
-<c:set var="deleteTestResultConfirmDialogId">deleteTestResultConfirmDialog-${unique_page_id}</c:set>
-<c:set var="dateTestedId">dateTested-${unique_page_id}</c:set>
+<c:set var="editTestResultFormBarcodeId">editTestResultFormBarcode-${unique_page_id}</c:set>
 <c:set var="updateTestResultButtonId">updateTestResultButton-${unique_page_id}</c:set>
+<c:set var="bloodTestResultId">bloodTestResultId-${unique_page_id}</c:set>
 <c:set var="deleteTestResultButtonId">deleteTestResultButton-${unique_page_id}</c:set>
-<c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
+<c:set var="printButtonId">printButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
+
+        function notifyParent() {
+						// let the parent know we are done
+						$("#${editTestResultFormDivId}").parent().trigger("editTestResultSuccess");
+				}
+
         $("#${updateTestResultButtonId}").button({
           icons : {
             primary : 'ui-icon-plusthick'
           }
-        }).click(function() {
-          updateExistingTestResult($("#${editTestResultFormId}")[0]);
-        });
-
-        $("#${deleteTestResultButtonId}").button({
-          icons : {
-            primary : 'ui-icon-minusthick'
-          }
         }).click(
             function() {
-              $("#${deleteTestResultConfirmDialogId}").dialog(
-                  {
-                    modal : true,
-                    title : "Confirm Delete",
-                    buttons : {
-                      "Delete" : function() {
-                        var collectionNumber = $("#${editTestResultFormId}")
-                            .find("[name='collectionNumber']").val();
-                        deleteTestResult(collectionNumber,
-                            $("#${editTestResultFormId}"));
-                        $(this).dialog("close");
-                      },
-                      "Cancel" : function() {
-                        $(this).dialog("close");
-                      }
-                    }
-                  });
+              if ("${model.existingTestResult}" == "true")
+                updateExistingTestResult($("#${editTestResultFormId}")[0],
+                  												 "${editTestResultFormDivId}",
+                  												 notifyParent);
+              else
+                addNewTestResult($("#${editTestResultFormId}")[0],
+                    							 "${editTestResultFormDivId}",
+                    							 notifyParent);
             });
 
-        $("#${goBackButtonId}").button({
+        $("#${printButtonId}").button({
           icons : {
-            primary : 'ui-icon-circle-arrow-w'
+            primary : 'ui-icon-print'
           }
         }).click(function() {
-          window.history.back();
-          return false;
+          $("#${editTestResultFormId}").printArea();
         });
 
-        $("#${dateTestedId}").datepicker({
-          changeMonth : true,
-          changeYear : true,
-          minDate : -36500,
-          maxDate : 0,
-          dateFormat : "mm/dd/yy",
-          yearRange : "c-100:c0",
-        });
+        $("#${editTestResultFormId}").find(".clearFormButton").button({
+          icons : {
+            primary : 'ui-icon-grip-solid-horizontal'
+          }
+        }).click(refetchForm);
+
+        function refetchForm() {
+          $.ajax({
+            url: "${model.refreshUrl}",
+            data: {},
+            type: "GET",
+            success: function (response) {
+              			 	 $("#${editTestResultFormDivId}").replaceWith(response);
+            				 },
+            error:   function (response) {
+											 showErrorMessage("Something went wrong. Please try again.");
+            				 }
+            
+          });
+        }
+
+        // toggle test result selector based on selection in test result name
+        $("#${editTestResultFormId}").find(".editTestNames").change(toggleTestResultSelector);
+
+        function hideAllTestResults() {
+          $("#${editTestResultFormId}").find(".testResultsDiv").hide();
+        }
+
+        function toggleTestResultSelector() {
+          var testNamesSelector = $("#${editTestResultFormId}").find(".editTestNames");
+          var testNameVal = testNamesSelector.val();
+          hideAllTestResults();
+          var testResultDivId = "${bloodTestResultId}-" + testNameVal;
+          $("#" + testResultDivId).show();
+        }
+        
+        copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
+
       });
 </script>
 
-<div class="editFormDiv">
-<form:form method="POST" commandName="editTestResultForm"
-	id="${editTestResultFormId}">
-	<table>
-		<thead>
-				<tr>
-					<td><b>Test Result</b></td>
-				</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><form:label path="collectionNumber">${model.collectionNoDisplayName}</form:label></td>
-				<td><form:input path="collectionNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="dateTested">${model.dateTestedDisplayName}</form:label></td>
-				<td><form:input path="dateTested" id="${dateTestedId}" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="hiv">${model.hivDisplayName}</form:label></td>
-				<td><form:radiobutton path="hiv" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="hiv" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="hbv">${model.hbvDisplayName}</form:label></td>
-				<td><form:radiobutton path="hbv" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="hbv" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="hcv">${model.hcvDisplayName}</form:label></td>
-				<td><form:radiobutton path="hcv" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="hcv" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="syphilis">${model.syphilisDisplayName}</form:label></td>
-				<td><form:radiobutton path="syphilis" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="syphilis" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
-					<td><form:textarea path="comments" class="commentsInputBox"
-							maxlength="255" /></td>
-			</tr>
-			<c:if test="${model.isDialog != 'yes' }">
-				<tr>
-					<td />
-					<td><button type="button" id="${updateTestResultButtonId}"
-							style="margin-left: 10px">Save</button>
-						<button type="button" id="${deleteTestResultButtonId}"
-							style="margin-left: 10px">Delete</button>
-						<button type="button" id="${goBackButtonId}"
-							style="margin-left: 10px">Go Back</button></td>
-				</tr>
-			</c:if>
-		</tbody>
-	</table>
-</form:form>
-</div>
+<div id="${editTestResultFormDivId}">
 
-<div id="${deleteTestResultConfirmDialogId}" style="display: none">Are
-	you sure you want to delete this Test Result?</div>
+	<form:form method="POST" commandName="editTestResultForm"
+		class="formInTabPane" id="${editTestResultFormId}">
+		<form:hidden path="id" />
+		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
+			<div>
+				<form:label path="collectionNumber">${model.testResultFields.collectionNumber.displayName}</form:label>
+				<form:input path="collectionNumber" />
+				<form:errors class="formError"
+					path="testResult.collectionNumber" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.testResultFields.testedOn.hidden != true }">
+			<div>
+				<form:label path="testedOn">${model.testResultFields.testedOn.displayName}</form:label>
+				<form:input path="testedOn" />
+				<form:errors class="formError"
+					path="testResult.testedOn" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+
+		<div>
+			<form:label path="name">${model.testResultFields.name.displayName}</form:label>
+			<form:select path="name" class="editTestNames">
+				<form:option value="" selected="selected">&nbsp;</form:option>
+				<c:forEach var="bloodTest" items="${model.bloodTests}">
+					<form:option value="${bloodTest.id}">${bloodTest.name}</form:option>
+				</c:forEach>
+			</form:select>
+			<form:errors class="formError"
+				path="testResult.name" delimiter=", "></form:errors>
+		</div>
+
+		<c:forEach var="bloodTest" items="${model.bloodTests}">
+			<div id="${bloodTestResultId-bloodTest.id}" style="display: none;">
+				<form:label path="result">${model.testResultFields.result.displayName}</form:label>
+				<form:select path="result">
+					<form:option value="" selected="selected">&nbsp;</form:option>
+						<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
+							<form:option value="${allowedResult.id}">${allowedResult.result}</form:option>
+						</c:forEach>
+				</form:select>
+			</div>
+		</c:forEach>
+		
+		<c:if test="${model.testResultFields.notes.hidden != true }">
+			<div>
+				<form:label path="notes" class="labelForTextArea">${model.testResultFields.notes.displayName}</form:label>
+				<form:textarea path="notes" maxlength="255" />
+				<form:errors class="formError" path="testResultFields.notes"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+
+		<div>
+			<label></label>
+			<c:if test="${!(model.existingTestResult)}">
+				<button type="button" id="${updateTestResultButtonId}">
+					Save and add another
+				</button>
+				<button type="button" class="clearFormButton">
+					Clear form
+				</button>
+			</c:if>
+			<c:if test="${model.existingTestResult}">
+				<button type="button" id="${updateTestResultButtonId}"
+								class="autoWidthButton">Save</button>
+			</c:if>
+
+			<button type="button" id="${printButtonId}">
+				Print
+			</button>
+		</div>
+	</form:form>
+</div>

@@ -1,6 +1,10 @@
 
     drop table if exists BloodBagType;
 
+    drop table if exists BloodTest;
+
+    drop table if exists BloodTestAllowedResults;
+
     drop table if exists CollectedSample;
 
     drop table if exists ConfigChange;
@@ -36,6 +40,23 @@
     create table BloodBagType (
         bloodBagType varchar(30) not null,
         primary key (bloodBagType)
+    ) ENGINE=InnoDB;
+
+    create table BloodTest (
+        id bigint not null auto_increment,
+        correctResult varchar(30) not null,
+        isDeleted boolean,
+        isRequired boolean,
+        name varchar(30) not null,
+        notes longtext,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table BloodTestAllowedResults (
+        id bigint not null auto_increment,
+        result varchar(255),
+        bloodTest_id bigint,
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -238,6 +259,12 @@
         lastUpdatedBy_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
+
+    alter table BloodTestAllowedResults 
+        add index FK88855DDAA7871EEB (bloodTest_id), 
+        add constraint FK88855DDAA7871EEB 
+        foreign key (bloodTest_id) 
+        references BloodTest (id);
 
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 

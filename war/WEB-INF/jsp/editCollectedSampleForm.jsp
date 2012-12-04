@@ -14,7 +14,6 @@
 <c:set var="editCollectedSampleFormBarcodeId">editCollectedSampleFormBarcode-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorId">editCollectedSampleFormDonor-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorHiddenId">editCollectedSampleFormDonorHidden-${unique_page_id}</c:set>
-<c:set var="deleteCollectedSampleConfirmDialogId">deleteCollectedSampleConfirmDialog-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormCentersId">editCollectedSampleFormCenters-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormSitesId">editCollectedSampleFormSites-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormBloodBagTypeId">editCollectedSampleFormBloodBagType-${unique_page_id}</c:set>
@@ -311,6 +310,3 @@
 		</div>
 	</form:form>
 </div>
-
-<div id="${deleteCollectedSampleConfirmDialogId}" style="display: none">Are
-	you sure you want to delete this Collection?</div>

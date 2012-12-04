@@ -1,4 +1,4 @@
-package model;
+package model.testresults;
 
 import java.util.Date;
 
@@ -13,10 +13,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import model.collectedsample.CollectedSample;
+import model.modificationtracker.ModificationTracker;
 import model.user.User;
 
 @Entity
-public class TestResult {
+public class TestResult implements ModificationTracker {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false)
@@ -28,6 +29,7 @@ public class TestResult {
   @Temporal(TemporalType.TIMESTAMP)
 	private Date testedOn;
 
+  @TestExists
 	private String name;
 	private String result;
 
@@ -53,6 +55,15 @@ public class TestResult {
 
   public Long getId() {
     return id;
+  }
+
+  public void copy(TestResult testResult) {
+    assert (this.id == testResult.id);
+    this.name = testResult.name;
+    this.testedOn = testResult.testedOn;
+    this.result = testResult.result;
+    this.notes = testResult.notes;
+    this.isDeleted = testResult.isDeleted;
   }
 
   public CollectedSample getCollectedSample() {
@@ -137,8 +148,5 @@ public class TestResult {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public void copy(TestResult otherTestResult) {
   }
 }

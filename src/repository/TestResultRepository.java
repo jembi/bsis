@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.TestResult;
+import model.testresults.TestResult;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -270,6 +270,11 @@ public class TestResultRepository {
       }
     }
     return m;
+  }
+
+  public TestResult findTestResultByCollectionId(Long collectionId) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

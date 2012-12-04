@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import model.Product;
-import model.TestResult;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
 import model.donortype.DonorType;
 import model.location.Location;
+import model.testresults.TestResult;
 import model.user.User;
 
 public class CollectedSampleViewModel {

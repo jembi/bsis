@@ -63,8 +63,6 @@ public class CollectedSampleController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    System.out.println("validator called");
-    System.out.println(binder.getValidator());
     binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator()));
   }
 

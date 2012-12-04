@@ -18,6 +18,6 @@
 		<li id="findOrAddTestResultsContent"><a
 			href="findTestResultFormGenerator.html">Find Test Results</a></li>
 		<li id="addTestResultsContent"><a
-			href="editTestResultFormGenerator.html">Add Test Results</a></li>
+			href="editTestResultFormGenerator.html">New Test Result</a></li>
 	</ul>
 </div>

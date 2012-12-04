@@ -16,9 +16,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.TestResult;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
+import model.testresults.TestResult;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

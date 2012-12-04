@@ -1,40 +1,47 @@
 package controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import model.testresults.TestResult;
+import model.testresults.TestResultBackingForm;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.portlet.ModelAndView;
 
-import repository.CollectedSampleRepository;
-import repository.DisplayNamesRepository;
-import repository.ProductRepository;
-import repository.RecordFieldsConfigRepository;
+import repository.BloodTestRepository;
 import repository.TestResultRepository;
 
 @Controller
 public class TestResultsController {
-  @Autowired
-  private CollectedSampleRepository collectionRepository;
-
-  @Autowired
-  private ProductRepository productRepository;
 
   @Autowired
   private TestResultRepository testResultRepository;
 
   @Autowired
-  private DisplayNamesRepository displayNamesRepository;
+  private BloodTestRepository bloodTestRepository;
 
   @Autowired
-  private RecordFieldsConfigRepository recordFieldsConfigRepository;
+  private UtilController utilController;
 
-//  public static String getUrl(HttpServletRequest req) {
-//    String reqUrl = req.getRequestURL().toString();
-//    String queryString = req.getQueryString();   // d=789
-//    if (queryString != null) {
-//        reqUrl += "?"+queryString;
-//    }
-//    return reqUrl;
-//  }
-//
+  public TestResultsController() {
+  }
+  
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
 //  @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
 //  public ModelAndView findTestResultFormInit(HttpServletRequest request, Model model) {
 //
@@ -73,35 +80,40 @@ public class TestResultsController {
 //    return modelAndView;
 //  }
 //
-//  @RequestMapping(value = "/editTestResultFormGenerator", method = RequestMethod.GET)
-//  public ModelAndView editTestResultFormGenerator(HttpServletRequest request,
-//      Model model,
-//      @RequestParam(value = "collectionNumber", required = false) String collectionNumber,
-//      @RequestParam(value = "isDialog", required = false) String isDialog) {
-//
-//    TestResultBackingForm form = new TestResultBackingForm();
-//    Map<String, Object> m = model.asMap();
-//    m.put("isDialog", isDialog);
-//    m.put("requestUrl", getUrl(request));
-//
-//    if (collectionNumber != null) {
-//      form.setCollectionNumber(collectionNumber);
-//      TestResult testResult = testResultRepository
-//          .findTestResultByCollectionNumber(collectionNumber);
-//      if (testResult != null) {
-//        form = new TestResultBackingForm(testResult);
-//      } else
-//        form = new TestResultBackingForm();
-//      System.out.println("here1");
-//    }
-//    m.put("editTestResultForm", form);
-//    // to ensure custom field names are displayed in the form
-//    ControllerUtil.addTestResultDisplayNamesToModel(m, displayNamesRepository);
-//    ModelAndView mv = new ModelAndView("editTestResultForm");
-//    mv.addObject("model", m);
-//    return mv;
-//  }
-//
+  @RequestMapping(value = "/editTestResultFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editTestResultFormGenerator(HttpServletRequest request,
+      Model model,
+      @RequestParam(value="collectionNumber", required=false) Long collectionNumber,
+      @RequestParam(value="collectionId", required=false) Long collectionId) {
+
+    TestResultBackingForm form = new TestResultBackingForm();
+
+    ModelAndView mv = new ModelAndView("editTestResultForm");
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+    m.put("existingTestResult", false);
+    if (collectionId != null) {
+      form.setId(collectionId);
+      TestResult testResult = testResultRepository.findTestResultByCollectionId(collectionId);
+      if (testResult != null) {
+        form = new TestResultBackingForm(testResult);
+        m.put("existingTestResult", true);
+      }
+      else {
+        form = new TestResultBackingForm();
+      }
+    }
+
+    addEditSelectorOptions(m);
+    m.put("editTestResultForm", form);
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    System.out.println(m);
+    mv.addObject("model", m);
+    return mv;
+  }
+
 //  @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
 //  public @ResponseBody
 //  Map<String, ? extends Object> updateOrAddTestResult(
@@ -465,4 +477,8 @@ public class TestResultsController {
 //      abo = testResult.getAbo();
 //    }
 //  }
+
+  private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
+  }
 }

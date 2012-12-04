@@ -3,7 +3,7 @@ package viewmodel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import model.TestResult;
+import model.testresults.TestResult;
 
 public class TestResultViewModel {
 
