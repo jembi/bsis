@@ -71,11 +71,30 @@
           });
         }
 
+        $("#${editTestResultFormId}").find(".editTestNames").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+
         // toggle test result selector based on selection in test result name
         $("#${editTestResultFormId}").find(".editTestNames").change(toggleTestResultSelector);
 
         function hideAllTestResults() {
-          $("#${editTestResultFormId}").find(".testResultsDiv").hide();
+          $("#${editTestResultFormId}").find(".testResultsDiv").each(function() {
+          	console.log($(this).find("select"));
+          	$(this).find("select").multiselect("destroy");
+          	$(this).hide();
+	        });
+        }
+
+        function showTestResultsSelector(testResultDivId) {
+          $("#" + testResultDivId).show();
+          $("#" + testResultDivId).find("select").multiselect({
+            multiple : false,
+            selectedList : 1,
+            header : false
+          });          
         }
 
         function toggleTestResultSelector() {
@@ -83,7 +102,7 @@
           var testNameVal = testNamesSelector.val();
           hideAllTestResults();
           var testResultDivId = "${bloodTestResultId}-" + testNameVal;
-          $("#" + testResultDivId).show();
+          showTestResultsSelector(testResultDivId);
         }
         
         copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
@@ -99,15 +118,15 @@
 		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${model.testResultFields.collectionNumber.displayName}</form:label>
-				<form:input path="collectionNumber" />
+				<form:input path="collectionNumber" placeholder="Collection Number Tested" />
 				<form:errors class="formError"
-					path="testResult.collectionNumber" delimiter=", "></form:errors>
+					path="testResult.collectedSample.collectionNumber" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.testResultFields.testedOn.hidden != true }">
 			<div>
 				<form:label path="testedOn">${model.testResultFields.testedOn.displayName}</form:label>
-				<form:input path="testedOn" />
+				<form:input path="testedOn" placeholder="Date Tested"/>
 				<form:errors class="formError"
 					path="testResult.testedOn" delimiter=", "></form:errors>
 			</div>
@@ -126,7 +145,7 @@
 		</div>
 
 		<c:forEach var="bloodTest" items="${model.bloodTests}">
-			<div id="${bloodTestResultId-bloodTest.id}" style="display: none;">
+			<div id="${bloodTestResultId}-${bloodTest.id}" class="testResultsDiv" style="display: none;">
 				<form:label path="result">${model.testResultFields.result.displayName}</form:label>
 				<form:select path="result">
 					<form:option value="" selected="selected">&nbsp;</form:option>
@@ -141,7 +160,7 @@
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.testResultFields.notes.displayName}</form:label>
 				<form:textarea path="notes" maxlength="255" />
-				<form:errors class="formError" path="testResultFields.notes"
+				<form:errors class="formError" path="testResult.notes"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>

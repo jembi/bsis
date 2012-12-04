@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class BloodTest{
 
   private Boolean isDeleted;
 
-  @OneToMany(mappedBy="bloodTest")
+  @OneToMany(mappedBy="bloodTest", fetch=FetchType.EAGER)
   private List<BloodTestAllowedResults> allowedResults;
 
   public Long getId() {

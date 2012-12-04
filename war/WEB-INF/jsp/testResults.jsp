@@ -13,11 +13,11 @@
 
 <div id="testResultsTab" class="leftPanel tabs">
 	<ul>
+		<li id="addTestResultsContent"><a
+			href="editTestResultFormGenerator.html">New Test Result</a></li>
 		<li id="showTTIWorksheet"><a
 			href="ttiWorksheet.html">TTI Worksheet</a></li>
 		<li id="findOrAddTestResultsContent"><a
 			href="findTestResultFormGenerator.html">Find Test Results</a></li>
-		<li id="addTestResultsContent"><a
-			href="editTestResultFormGenerator.html">New Test Result</a></li>
 	</ul>
 </div>

@@ -45,40 +45,7 @@ $(document).ready(
         cache : true
       });
 
-      $(".leftPanel").on("tabsbeforeActivate",
-                           function(event, ui) {
-                             console.log("here");
-                             console.log(ui.tab);
-                           });
-      
       var tabContent = {};
-
-      function loadTabContent(state) {
-        if (state.targetId !== undefined
-            && state.oldRequestUrl !== undefined) {
-          var data = {};
-          // there may or may not be data to send data for this request
-          // the data is already encoded as part of the URL string
-          if (state.oldRequestData !== undefined) {
-            data = state.oldRequestData;
-          }
-          //showLoadingImage(state.targetId);
-          $.ajax({
-            url : state.oldRequestUrl,
-            data : data,
-            method : "GET",
-            success : function(responseData) {
-              console.log(state.targetId);
-              $('#' + state.targetId).html(responseData);
-              console.log("loading state");
-              console.log(state);
-              createBreadCrumb(state);
-            }
-          });
-        } else {
-          leftPanelTabs.tabs("load", state.leftPanelSelected);
-        }
-      }
 
       // Define our own click handler for the tabs, overriding the default.
       $(".tabs").find(tab_a_selector).click(function(event, ui) {
@@ -92,73 +59,6 @@ $(document).ready(
         return false;
       });
 
-      $(document).bind("addTabContentInitial", function(event, state) {
-        console.log("here");
-        var topId = state.topPanelSelected;
-        var leftId = state.leftPanelSelected;
-        if (tabContent[topId] == undefined)
-          tabContent[topId] = {};
-        console.log(tabContent[topId]);
-        if (tabContent[topId][leftId].length == 0) {
-          tabContent[topId][leftId] = [];
-          tabContent[topId][leftId].push(state);
-        }
-        console.log(tabContent[topId][leftId]);
-        console.log(tabContent[topId][leftId].length);
-      });
-
-      $(document).bind("addTabContent", function(event, state) {
-        var topId = state.topPanelSelected;
-        var leftId = state.leftPanelSelected;
-        var content = tabContent[topId][leftId];
-        content.push(state);
-        createBreadCrumb(state);
-      });
-
-      function createBreadCrumb(state, linkDepth) {
-        var topId = state.topPanelSelected;
-        var leftId = state.leftPanelSelected;
-        var breadCrumb = getBreadCrumb(state);
-        var breadCrumbElement = $("#" + state.leftPanelSelectedId).find(".breadCrumb");
-        breadCrumbElement.html(breadCrumb);
-        var breadCrumbLinks = breadCrumbElement.find(".breadCrumbText");
-        var numLinks = breadCrumbLinks.length;
-        for (var i = 0; i < numLinks-1; i++){
-          // storing the value in depth is important because of closure
-          var depth = i+1;
-          $(breadCrumbLinks[i]).click(
-              function() {
-                showBreadCrumb(topId, leftId, depth);
-              });
-        }
-      }
-
-      function showBreadCrumb(topId, leftId, depth) {
-        var content = tabContent[topId][leftId];
-        content.splice(depth, content.length-depth);
-        loadTabContent(content[depth-1]);
-        createBreadCrumb(content[depth-1]);
-      }
-
-      function getBreadCrumb(state) {
-        var breadCrumbText = [];
-        var topId = state.topPanelSelected;
-        var leftId = state.leftPanelSelected;
-        var content = tabContent[topId][leftId];
-        console.log(content);
-        if (content.length == 0)
-          return;
-        console.log("length: " + content.length);
-        console.log("tabDepth: " + state.tabDepth);
-        var numLinks = content.length;
-        for (var i = 0; i < numLinks; ++i) {
-          console.log("contentLabel: " + content[i].contentLabel);
-          breadCrumbText.push('<span class="breadCrumbText">' + content[i].contentLabel + '</span>');
-        }
-        console.log(breadCrumbText);
-        return "<div>" + breadCrumbText.join(" > ") + "</div>";
-      }
-      
       $(window).bind(
           "popstate",
           function(event) {
@@ -207,7 +107,6 @@ $(document).ready(
                 }
 
                 leftPanelTabs.tabs("select", state.leftPanelSelected);
-                loadTabContent(state);
               }
             }
           });

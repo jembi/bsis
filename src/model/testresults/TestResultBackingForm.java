@@ -10,10 +10,13 @@ import model.collectedsample.CollectedSample;
 import model.user.User;
 
 public class TestResultBackingForm {
+
   private TestResult testResult;
+
   private String dateTestedFrom;
   private String dateTestedTo;
 
+  private String collectionNumber;
   private List<String> tests;
   
   public TestResultBackingForm() {
@@ -162,11 +165,16 @@ public class TestResultBackingForm {
     this.testResult = testResult;
   }
 
-  public String getCollectionNumber() {
-    return testResult.getCollectedSample().getCollectionNumber();
-  }
-
   public List<String> getTests() {
     return tests;
   }
+
+  public String getCollectionNumber() {
+    return collectionNumber;
+  }
+
+  public void setCollectionNumber(String collectionNumber) {
+    this.collectionNumber = collectionNumber;
+  }
+
 }

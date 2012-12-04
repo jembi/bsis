@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import model.CustomDateFormatter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
