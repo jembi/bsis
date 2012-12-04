@@ -30,8 +30,6 @@ public class CollectedSampleBackingForm {
   private String dateCollectedFrom;
   private String dateCollectedTo;
 
-  private String donorIdHidden;
-
   private String collectedOn;
 
   public CollectedSampleBackingForm() {
@@ -132,14 +130,14 @@ public class CollectedSampleBackingForm {
 
   public String getCollectionCenter() {
     Location center = collectedSample.getCollectionCenter();
-    if (center == null)
+    if (center == null || center.getId() == null)
       return null;
     return center.getId().toString();
   }
 
   public String getCollectionSite() {
     Location site = collectedSample.getCollectionSite();
-    if (site == null)
+    if (site == null || site.getId() == null)
       return null;
     return site.getId().toString();
   }
@@ -193,7 +191,12 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorIdHidden() {
-    return donorIdHidden;
+    if (collectedSample == null)
+      return null;
+    Donor donor = collectedSample.getDonor();
+    if (donor == null || donor.getId() == null)
+      return null;
+    return donor.getId().toString();
   }
   
   public int hashCode() {

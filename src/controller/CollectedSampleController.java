@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -213,6 +214,18 @@ public class CollectedSampleController {
     String message = "";
     Map<String, Object> m = model.asMap();
 
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the donor as part of the collected sample.
+    String donorId = form.getDonorIdHidden();
+    if (donorId != null && !donorId.isEmpty()) {
+      try {
+        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+        form.setDonor(donor);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+
     if (result.hasErrors()) {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
@@ -221,13 +234,6 @@ public class CollectedSampleController {
     } else {
       try {
 
-        // IMPORTANT: Validation code just checks if the ID exists.
-        // We still need to store the donor as part of the collected sample.
-        String donorId = form.getDonorIdHidden();
-        if (donorId != null && !donorId.isEmpty()) {
-          Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
-          form.setDonor(donor);
-        }
 
         CollectedSample collectedSample = form.getCollectedSample();
         collectedSample.setIsDeleted(false);
@@ -269,6 +275,27 @@ public class CollectedSampleController {
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // only when the collection is correctly added the existingCollectedSample
+    // property will be changed
+    m.put("existingCollectedSample", true);
+
+    System.out.println("here");
+    System.out.println(form.getCollectionCenter());
+    System.out.println(form.getCollectionSite());
+
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the donor as part of the collected sample.
+    String donorId = form.getDonorIdHidden();
+    if (donorId != null && !donorId.isEmpty()) {
+      try {
+        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+        form.setDonor(donor);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+
     if (result.hasErrors()) {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -277,13 +304,6 @@ public class CollectedSampleController {
     }
     else {
       try {
-        // IMPORTANT: Validation code just checks if the ID exists.
-        // We still need to store the donor as part of the collected sample.
-        String donorId = form.getDonorIdHidden();
-        if (donorId != null && !donorId.isEmpty()) {
-          Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
-          form.setDonor(donor);
-        }
 
         form.setIsDeleted(false);
         CollectedSample existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
@@ -291,20 +311,19 @@ public class CollectedSampleController {
           m.put("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          m.put("existingDonor", false);
+          m.put("existingCollectedSample", false);
           message = "Collection does not already exist.";
         }
         else {
           m.put("hasErrors", false);
           success = true;
-          m.put("existingCollectedSample", true);
           message = "Collection Successfully Updated";
         }
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
-        message = "Donor Already exists.";
+        message = "Collection Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

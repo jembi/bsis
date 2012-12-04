@@ -200,6 +200,7 @@ public class CollectedSample implements ModificationTracker {
     assert (this.getId().equals(collectedSample.getId()));
     this.collectionNumber = collectedSample.collectionNumber;
     this.donor = collectedSample.donor;
+    this.donorType = collectedSample.donorType;
     this.collectedOn = collectedSample.collectedOn;
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;

@@ -24,15 +24,15 @@ function updateCollectionGeneric(form, resultDivId, url, successCallback) {
   });
 }
 
-function deleteCollection(collectedSampleId) {
+function deleteCollection(collectedSampleId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteCollectedSample.html",
     data : {collectedSampleId: collectedSampleId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
+        successCallback();
         showMessage("Collection Deleted Successfully!");
-        window.history.back();
       } else {
         showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
