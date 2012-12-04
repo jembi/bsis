@@ -87,6 +87,11 @@
           yearRange : "c-100:c0",
         });
 
+        var collectedOnDatePicker = $("#${editCollectedSampleFormId}").find(".collectedOn");
+        if ("${model.existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
+          collectedOnDatePicker.datepicker('setDate', new Date());
+        }
+
         $("#${editCollectedSampleFormId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
@@ -157,13 +162,6 @@
 														 }));
 	        $("#${editCollectedSampleFormDonorHiddenId}").val("${model.editCollectedSampleForm.donor.id}");
 	        $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");	
-        }
-
-        var collectedOnDatePicker = $("#${editCollectedSampleFormId}").find(".collectedOn");
-        console.log(collectedOnDatePicker.val());
-        console.log("${model.existingCollectedSample}");
-        if ("${model.existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
-          collectedOnDatePicker.datepicker('setDate', new Date());
         }
 
         $("#${editCollectedSampleFormBarcodeId}").barcode(

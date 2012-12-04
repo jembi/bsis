@@ -1,46 +1,40 @@
-function addNewTestResult(form) {
-  updateTestResultGeneric(form, "updateTestResult.html");
+function addNewTestResult(form, resultDivId, successCallback) {
+  updateTestResultGeneric(form, resultDivId, "addTestResult.html", successCallback);
 }
 
-function updateExistingTestResult(form) {
-  updateTestResultGeneric(form, "updateTestResult.html");
+function updateExistingTestResult(form, resultDivId, successCallback) {
+  updateTestResultGeneric(form, resultDivId, "updateTestResult.html", successCallback);
 }
 
-function updateTestResultGeneric(form, url) {
-  var testResult = $("#" + form.getAttribute("id")).serialize();
+function updateTestResultGeneric(form, resultDivId, url, successCallback) {
+  var testResult = $(form).serialize();
   $.ajax({
-    type : "POST",
-    url : url,
-    data : testResult,
-    success : function(jsonResponse) {
-      if (jsonResponse["success"] === true) {
-        $.showMessage("Test Result Updated Successfully!");
-        $('#' + form.getAttribute("id")).each(function() {
-          this.reset();
-        });
-        window.history.back();
-      } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
-      }
-    }
+    type: "POST",
+    url: url,
+    data: testResult,
+    success: function(jsonResponse, data, data1, data2) {
+               showMessage("Test Result Updated Successfully!");
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             showErrorMessage("Something went wrong. Please fix the errors noted.");
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
   });
 }
 
-function deleteTestResult(collectionNumber) {
+function deleteTestResult(testResultId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteTestResult.html",
-    data : {collectionNumber: collectionNumber},
+    data : {testResultId: testResultId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
-        $.showMessage("Test Result Deleted Successfully!");
-        window.history.back();
+        successCallback();
+        showMessage("Test Result Deleted Successfully!");
       } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
   });

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.user.User;
 
@@ -18,7 +19,9 @@ public class TestResultBackingForm {
 
   private String collectionNumber;
   private List<String> tests;
-  
+
+  private String testedOn;
+
   public TestResultBackingForm() {
     testResult = new TestResult();
   }
@@ -36,20 +39,21 @@ public class TestResultBackingForm {
   }
 
   public String getTestedOn() {
-    Date dateTested = testResult.getTestedOn();
-    if (dateTested == null)
+    if (testedOn != null)
+      return testedOn;
+    if (testResult == null)
       return "";
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    return dateFormat.format(dateTested);
+    return CustomDateFormatter.getDateString(testResult.getTestedOn());
+
   }
 
-  public void setTestedOn(String dateTested) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+  public void setTestedOn(String testedOn) {
+    this.testedOn = testedOn;
     try {
-      testResult.setTestedOn(dateFormat.parse(dateTested));
-    } catch (ParseException e) {
-      e.printStackTrace();
-      testResult.setTestedOn(new Date());
+      testResult.setTestedOn(CustomDateFormatter.getDateFromString(testedOn));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      testResult.setTestedOn(null);
     }
   }
 

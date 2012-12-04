@@ -364,4 +364,12 @@ public class CollectedSampleRepository {
 
     return query.getResultList();
   }
+
+  public CollectedSample findSingleCollectedSampleByCollectionNumber(
+      String collectionNumber) {
+    List<CollectedSample> collectedSamples = findCollectedSampleByCollectionNumber(collectionNumber, "", "");
+    if (collectedSamples != null && collectedSamples.size() == 1)
+      return collectedSamples.get(0);
+    return null;
+  }
 }

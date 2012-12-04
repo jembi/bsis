@@ -277,4 +277,9 @@ public class TestResultRepository {
     return null;
   }
 
+  public void addTestResult(TestResult testResult) {
+    em.persist(testResult);
+    em.flush();
+  }
+
 }

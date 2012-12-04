@@ -2,14 +2,21 @@ package controller;
 
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
+import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,4 +105,66 @@ public class TestResultController {
     System.out.println(mv.getView());
     return mv;
   }
+
+  @RequestMapping(value = "/addTestResult", method = RequestMethod.POST)
+  public ModelAndView addTestResult(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @ModelAttribute("editTestResultForm") @Valid TestResultBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView("editTestResultForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = model.asMap();
+
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the donor as part of the collected sample.
+    String collectionNumber = form.getCollectionNumber();
+    if (collectionNumber != null && !collectionNumber.isEmpty()) {
+      try {
+        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+        form.setCollectedSample(collectedSample);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      success = false;
+      message = "Please fix the errors noted above.";
+    } else {
+      try {
+        TestResult testResult = form.getTestResult();
+        testResult.setIsDeleted(false);
+        testResultRepository.addTestResult(testResult);
+        m.put("hasErrors", false);
+        success = true;
+        message = "Test Result Successfully Added";
+        form = new TestResultBackingForm();
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Test Result Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+    }
+
+    m.put("editTestResultForm", form);
+    m.put("existingTestResult", false);
+    m.put("success", success);
+    m.put("message", message);
+    m.put("refreshUrl", getUrl(request));
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    addEditSelectorOptions(m);
+
+    mv.addObject("model", m);
+    return mv;
+  }
+
 }

@@ -71,6 +71,20 @@
           });
         }
 
+        $("#${editTestResultFormId}").find(".testedOn").datepicker({
+          changeMonth : true,
+          changeYear : true,
+          minDate : -36500,
+          maxDate : 0,
+          dateFormat : "mm/dd/yy",
+          yearRange : "c-100:c0",
+        });
+
+        var testedOnDatePicker = $("#${editTestResultFormId}").find(".testedOn");
+        if ("${model.existingTestResult}" == "false" && testedOnDatePicker.val() == "") {
+          testedOnDatePicker.datepicker('setDate', new Date());
+        }
+
         $("#${editTestResultFormId}").find(".editTestNames").multiselect({
           multiple : false,
           selectedList : 1,
@@ -118,7 +132,7 @@
 		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${model.testResultFields.collectionNumber.displayName}</form:label>
-				<form:input path="collectionNumber" placeholder="Collection Number Tested" />
+				<form:input path="collectionNumber" />
 				<form:errors class="formError"
 					path="testResult.collectedSample.collectionNumber" delimiter=", "></form:errors>
 			</div>
@@ -126,7 +140,7 @@
 		<c:if test="${model.testResultFields.testedOn.hidden != true }">
 			<div>
 				<form:label path="testedOn">${model.testResultFields.testedOn.displayName}</form:label>
-				<form:input path="testedOn" placeholder="Date Tested"/>
+				<form:input path="testedOn" class="testedOn" />
 				<form:errors class="formError"
 					path="testResult.testedOn" delimiter=", "></form:errors>
 			</div>
