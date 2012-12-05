@@ -33,14 +33,6 @@ public class TestResultRepository {
     em.flush();
   }
 
-  public TestResult updateTestResult(TestResult testResult, Long testResultId) {
-    TestResult existingTestResult = em.find(TestResult.class, testResultId);
-    existingTestResult.copy(testResult);
-    em.merge(existingTestResult);
-    em.flush();
-    return existingTestResult;
-  }
-
   public void deleteAllTestResults() {
     Query query = em.createQuery("DELETE FROM TestResult t");
     query.executeUpdate();
@@ -69,8 +61,8 @@ public class TestResultRepository {
     return testResults;
   }
 
-  public void deleteTestResult(String collectionNumber) {
-    TestResult existingTestResult = findTestResultByCollectionNumber(collectionNumber);
+  public void deleteTestResult(Long testResultId) {
+    TestResult existingTestResult = findTestResultById(testResultId);
     existingTestResult.setIsDeleted(Boolean.TRUE);
     em.merge(existingTestResult);
     em.flush();
@@ -272,9 +264,8 @@ public class TestResultRepository {
     return m;
   }
 
-  public TestResult findTestResultByCollectionId(Long collectionId) {
-    // TODO Auto-generated method stub
-    return null;
+  public TestResult findTestResultById(Long testResultId) {
+    return em.find(TestResult.class, testResultId);
   }
 
   public void addTestResult(TestResult testResult) {
@@ -282,4 +273,61 @@ public class TestResultRepository {
     em.flush();
   }
 
+  public List<TestResult> findTestResultByCollectionNumber(
+      String collectionNumber, String dateTestedFrom, String dateTestedTo) {
+
+    TypedQuery<TestResult> query = em
+        .createQuery(
+            "SELECT t FROM TestResult t WHERE " +
+            "t.collectedSample.collectionNumber = :collectionNumber and " +
+            "((t.testedOn is NULL) or " +
+            " (t.testedOn >= :fromDate and t.testedOn <= :toDate)) and " +
+            "t.isDeleted= :isDeleted",
+            TestResult.class);
+
+    Date from = getDateTestedFromOrDefault(dateTestedFrom);
+    Date to = getDateTestedToOrDefault(dateTestedTo);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
+
+    return query.getResultList();
+  }
+
+  private Date getDateTestedFromOrDefault(String dateTestedFrom) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date from = null;
+    try {
+      from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
+          .parse("12/31/1970") : dateFormat.parse(dateTestedFrom);
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+    }
+    return from;      
+  }
+
+  private Date getDateTestedToOrDefault(String dateTestedTo) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date to = null;
+    try {
+      to = (dateTestedTo == null || dateTestedTo.equals("")) ? new Date() :
+              dateFormat.parse(dateTestedTo);
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+    }
+    return to;      
+  }
+
+  public TestResult updateTestResult(TestResult testResult) {
+    TestResult existingTestResult = findTestResultById(testResult.getId());
+    if (existingTestResult == null) {
+      return null;
+    }
+    existingTestResult.copy(testResult);
+    em.merge(existingTestResult);
+    em.flush();
+    return existingTestResult;
+  }
 }

@@ -17,11 +17,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.collectedsample.CollectedSample;
-import model.donor.Donor;
 import model.testresults.TestResult;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

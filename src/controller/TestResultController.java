@@ -1,5 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
@@ -9,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
-import model.collectedsample.FindCollectedSampleBackingForm;
+import model.collectedsample.CollectedSampleBackingForm;
+import model.donor.Donor;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.testresults.TestResultBackingFormValidator;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
@@ -34,6 +40,7 @@ import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import repository.TestResultRepository;
+import viewmodel.TestResultViewModel;
 
 @Controller
 public class TestResultController {
@@ -102,7 +109,7 @@ public class TestResultController {
   public ModelAndView editTestResultFormGenerator(HttpServletRequest request,
       Model model,
       //@RequestParam(value="collectionNumber", required=false) Long collectionNumber,
-      @RequestParam(value="collectionId", required=false) Long collectionId) {
+      @RequestParam(value="testResultId", required=false) Long testResultId) {
 
     TestResultBackingForm form = new TestResultBackingForm();
 
@@ -111,9 +118,9 @@ public class TestResultController {
     Map<String, Object> m = model.asMap();
     m.put("refreshUrl", getUrl(request));
     m.put("existingTestResult", false);
-    if (collectionId != null) {
-      form.setId(collectionId);
-      TestResult testResult = testResultRepository.findTestResultByCollectionId(collectionId);
+    if (testResultId != null) {
+      form.setId(testResultId);
+      TestResult testResult = testResultRepository.findTestResultById(testResultId);
       if (testResult != null) {
         form = new TestResultBackingForm(testResult);
         m.put("existingTestResult", true);
@@ -199,6 +206,127 @@ public class TestResultController {
 
     mv.addObject("model", m);
     return mv;
+  }
+
+  @RequestMapping("/findTestResult")
+  public ModelAndView findTestResult(HttpServletRequest request,
+      @ModelAttribute("findTestResultForm") TestResultBackingForm form,
+      BindingResult result, Model model) {
+
+    List<TestResult> testResults = Arrays.asList(new TestResult[0]);
+
+    String dateTestedFrom = form.getDateTestedFrom();
+    String dateTestedTo = form.getDateTestedTo();
+    testResults = testResultRepository.findTestResultByCollectionNumber(
+                                        form.getCollectionNumber(),
+                                        dateTestedFrom, dateTestedTo);
+    System.out.println(testResults);
+
+    ModelAndView modelAndView = new ModelAndView("testResultsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findTestResultsTable");
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    m.put("allTestResults", getTestResultViewModels(testResults));
+    m.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(m);
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
+  public ModelAndView updateTestResult(
+      HttpServletResponse response,
+      @ModelAttribute("editTestResultForm") @Valid TestResultBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView("editTestResultForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // only when the collection is correctly added the existingCollectedSample
+    // property will be changed
+    m.put("existingTestResult", true);
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      success = false;
+      message = "Please fix the errors noted above now!";
+    }
+    else {
+      try {
+
+        form.setIsDeleted(false);
+        TestResult existingTestResult = testResultRepository.updateTestResult(form.getTestResult());
+        if (existingTestResult == null) {
+          m.put("hasErrors", true);
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          success = false;
+          m.put("existingTestResult", false);
+          message = "Test Result does not already exist.";
+        }
+        else {
+          m.put("hasErrors", false);
+          success = true;
+          message = "Test Result Successfully Updated";
+        }
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        success = false;
+        message = "Test Result Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+   }
+
+    m.put("editTestResultForm", form);
+    m.put("success", success);
+    m.put("message", message);
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+
+    mv.addObject("model", m);
+
+    return mv;
+  }
+
+  @RequestMapping(value = "/deleteTestResult", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteTestResult(
+      @RequestParam("testResultId") Long testResultId) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      testResultRepository.deleteTestResult(testResultId);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+
+  private List<TestResultViewModel> getTestResultViewModels(
+      List<TestResult> testResults) {
+    if (testResults == null)
+      return Arrays.asList(new TestResultViewModel[0]);
+    List<TestResultViewModel> testResultViewModels = new ArrayList<TestResultViewModel>();
+    for (TestResult testResult : testResults) {
+      testResultViewModels.add(new TestResultViewModel(testResult));
+    }
+    return testResultViewModels;
   }
 
 }

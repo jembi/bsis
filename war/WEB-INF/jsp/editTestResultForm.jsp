@@ -94,12 +94,20 @@
         // toggle test result selector based on selection in test result name
         $("#${editTestResultFormId}").find(".editTestNames").change(toggleTestResultSelector);
 
+        if ("${model.existingTestResult}" == "true") {
+          console.log("${bloodTestResultId}-${model.editTestResultForm.bloodTest}");
+          console.log("${model.editTestResultForm.testResultId}");
+          $("#${bloodTestResultId}-${model.editTestResultForm.bloodTest}").find("select").val("${model.editTestResultForm.testResultId}");
+        }
+        
         // trigger this event for the first time
         $("#${editTestResultFormId}").find(".editTestNames").trigger("change");
 
+        console.log("${model.editTestResultForm.bloodTest}");
+        console.log("${model.editTestResultForm.bloodTestResult}");
+
         function hideAllTestResults() {
           $("#${editTestResultFormId}").find(".testResultsDiv").each(function() {
-          	console.log($(this).find("select"));
           	$(this).find("select").multiselect("destroy");
           	// need to set the disabled property to prevent multiple values
           	// for bloodTestResult to be submitted.
@@ -156,7 +164,7 @@
 		</c:if>
 
 		<div>
-			<form:label path="bloodTest">${model.testResultFields.name.displayName}</form:label>
+			<form:label path="bloodTest">${model.testResultFields.bloodTest.displayName}</form:label>
 			<form:select path="bloodTest" class="editTestNames">
 				<form:option value="" selected="selected">&nbsp;</form:option>
 				<c:forEach var="bloodTest" items="${model.bloodTests}">
@@ -169,7 +177,7 @@
 
 		<c:forEach var="bloodTest" items="${model.bloodTests}">
 			<div id="${bloodTestResultId}-${bloodTest.name}" class="testResultsDiv" style="display: none;">
-				<form:label path="bloodTestResult">${model.testResultFields.result.displayName}</form:label>
+				<form:label path="bloodTestResult">${model.testResultFields.bloodTestResult.displayName}</form:label>
 				<form:select path="bloodTestResult">
 					<!-- Auto incremented IDs begin with zero -->
 					<form:option value="-1" selected="selected">&nbsp;</form:option>

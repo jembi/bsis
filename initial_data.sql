@@ -31,8 +31,8 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, derived, sourceField) values
 ('TestResult', 'collectionNumber', 'Collection Number', '', '0', '0', ''),
-('TestResult', 'name', 'Test Name', '', '0', '0', ''),
-('TestResult', 'result', 'Test Result', '', '0', '0', ''),
+('TestResult', 'bloodTest', 'Test Name', '', '0', '0', ''),
+('TestResult', 'bloodTestResult', 'Test Result', '', '0', '0', ''),
 ('TestResult', 'testedOn', 'Tested On', '', '0', '0', ''),
 ('TestResult', 'notes', 'Notes', '', '0', '0', '');
 

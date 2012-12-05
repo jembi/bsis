@@ -199,4 +199,10 @@ public class TestResultBackingForm {
   public void setCollectedSample(CollectedSample collectedSample) {
     testResult.setCollectedSample(collectedSample);
   }
+
+  public String getTestResultId() {
+    if (testResult == null || testResult.getBloodTestResult() == null)
+      return "";
+    return testResult.getBloodTestResult().getId().toString();
+  }
 }

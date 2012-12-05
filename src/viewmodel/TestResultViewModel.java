@@ -2,71 +2,127 @@ package viewmodel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import model.bloodtest.BloodTest;
+import model.bloodtest.BloodTestResult;
+import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
+import model.user.User;
 
 public class TestResultViewModel {
 
-//	private TestResult testResult;
-//
-//	public TestResultViewModel(TestResult testResult) {
-//
-//		this.testResult = testResult;
-//	}
-//
-//	public String getCollectionNumber() {
-//		return testResult.getCollectionNumber();
-//	}
-//
-//	public String getDateCollected() {
-//	  if (testResult.getDateCollected() == null)
-//	    return "";
-//		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-//	 return formatter.format(testResult.getDateCollected());
-//	}
-//
-//	public String getDateTested() {
-//		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-//		return formatter.format(testResult.getDateTested());
-//	}
-//
-//	public String getTestResultId() {
-//		return getStringValue(testResult.getTestResultId());
-//	}
-//
-//	public String getComments() {
-//		return testResult.getComments();
-//	}
-//
-//	public String getHiv() {
-//		return testResult.getHiv();
-//	}
-//
-//	public String getHbv() {
-//		return testResult.getHbv();
-//	}
-//
-//	public String getHcv() {
-//		return testResult.getHcv();
-//	}
-//
-//	public String getSyphilis() {
-//		return testResult.getSyphilis();
-//	}
-//
-//	public String getAbo() {
-//		return testResult.getAbo();
-//	}
-//
-//	public String getRhd() {
-//		return testResult.getRhd();
-//	}
-//
-//	public Boolean getIsDeleted() {
-//		return testResult.getIsDeleted();
-//	}
-//
-//	private String getStringValue(Long value) {
-//		return value == null ? "" : value.toString();
-//	}
+	private TestResult testResult;
+
+	public TestResultViewModel() {
+	}
+
+	public TestResultViewModel(TestResult testResult) {
+		this.testResult = testResult;
+	}
+
+  public boolean equals(Object obj) {
+    return testResult.equals(obj);
+  }
+
+  public Long getId() {
+    return testResult.getId();
+  }
+
+  public CollectedSample getCollectedSample() {
+    return testResult.getCollectedSample();
+  }
+
+  public String getTestedOn() {
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    return formatter.format(testResult.getTestedOn());
+  }
+
+  public BloodTest getBloodTest() {
+    return testResult.getBloodTest();
+  }
+
+  public BloodTestResult getBloodTestResult() {
+    return testResult.getBloodTestResult();
+  }
+
+  public Date getLastUpdated() {
+    return testResult.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return testResult.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return testResult.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return testResult.getLastUpdatedBy();
+  }
+
+  public String getNotes() {
+    return testResult.getNotes();
+  }
+
+  public Boolean getIsDeleted() {
+    return testResult.getIsDeleted();
+  }
+
+  public int hashCode() {
+    return testResult.hashCode();
+  }
+
+  public void setId(Long id) {
+    testResult.setId(id);
+  }
+
+  public void setCollectedSample(CollectedSample collectedSample) {
+    testResult.setCollectedSample(collectedSample);
+  }
+
+  public void setTestedOn(Date testedOn) {
+    testResult.setTestedOn(testedOn);
+  }
+
+  public void setName(BloodTest bloodTest) {
+    testResult.setName(bloodTest);
+  }
+
+  public void setBloodTestResult(BloodTestResult bloodTestResult) {
+    testResult.setBloodTestResult(bloodTestResult);
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    testResult.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    testResult.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    testResult.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    testResult.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public void setNotes(String notes) {
+    testResult.setNotes(notes);
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    testResult.setIsDeleted(isDeleted);
+  }
+
+  public void setBloodTest(BloodTest bloodTest) {
+    testResult.setBloodTest(bloodTest);
+  }
+
+  public String toString() {
+    return testResult.toString();
+  }
 }
