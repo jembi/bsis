@@ -232,8 +232,6 @@ public class CollectedSampleController {
       message = "Please fix the errors noted above.";
     } else {
       try {
-
-
         CollectedSample collectedSample = form.getCollectedSample();
         collectedSample.setIsDeleted(false);
         collectedSampleRepository.addCollectedSample(collectedSample);
@@ -256,7 +254,7 @@ public class CollectedSampleController {
     m.put("existingCollectedSample", false);
     m.put("success", success);
     m.put("message", message);
-    m.put("refreshUrl", getUrl(request));
+    m.put("refreshUrl", "editCollectionFormGenerator.html");
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     addEditSelectorOptions(m);
 

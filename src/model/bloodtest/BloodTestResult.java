@@ -1,22 +1,23 @@
-package model.testresults;
+package model.bloodtest;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class BloodTestAllowedResults {
+public class BloodTestResult {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @OneToOne
+  @ManyToOne
   private BloodTest bloodTest;
 
+  @Column(length=255)
   private String result;
 
   public Long getId() {

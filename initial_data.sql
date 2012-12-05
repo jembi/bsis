@@ -49,18 +49,18 @@ insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite
 ('Chipata', 1, 0, 0, 0, 0, ''),
 ('Chingola', 1, 1, 0, 0, 0, '');
 
-insert into BloodTest (id, name, correctResult, isRequired, notes) values
-(1, 'HIV', 'negative', '1', ''),
-(2, 'HBV', 'negative', '1', ''),
-(3, 'HCV', 'negative', '1', ''),
-(4, 'Syphilis', 'negative', '1', '');
+insert into BloodTest (name, correctResult, isRequired, notes) values
+('HIV', 'negative', '1', ''),
+('HBV', 'negative', '1', ''),
+('HCV', 'negative', '1', ''),
+('Syphilis', 'negative', '1', '');
 
-insert into BloodTestAllowedResults(bloodTest_id, result) values
-(1, 'positive'),
-(1, 'negative'),
-(2, 'positive'),
-(2, 'negative'),
-(3, 'positive'),
-(3, 'negative'),
-(4, 'positive'),
-(4, 'negative');
+insert into BloodTestResult(bloodTest_name, result) values
+('HIV', 'positive'),
+('HIV', 'negative'),
+('HBV', 'positive'),
+('HBV', 'negative'),
+('HCV', 'positive'),
+('HCV', 'negative'),
+('Syphilis', 'positive'),
+('Syphilis', 'negative');

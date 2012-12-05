@@ -94,16 +94,25 @@
         // toggle test result selector based on selection in test result name
         $("#${editTestResultFormId}").find(".editTestNames").change(toggleTestResultSelector);
 
+        // trigger this event for the first time
+        $("#${editTestResultFormId}").find(".editTestNames").trigger("change");
+
         function hideAllTestResults() {
           $("#${editTestResultFormId}").find(".testResultsDiv").each(function() {
           	console.log($(this).find("select"));
           	$(this).find("select").multiselect("destroy");
+          	// need to set the disabled property to prevent multiple values
+          	// for bloodTestResult to be submitted.
+          	// enable it only for the select required.
+          	$(this).find("select").attr("disabled", "disabled");
           	$(this).hide();
 	        });
         }
 
         function showTestResultsSelector(testResultDivId) {
           $("#" + testResultDivId).show();
+          // remove the disabled property exclusively from this attribute
+          $("#" + testResultDivId).find("select").removeAttr("disabled");
           $("#" + testResultDivId).find("select").multiselect({
             multiple : false,
             selectedList : 1,
@@ -134,7 +143,7 @@
 				<form:label path="collectionNumber">${model.testResultFields.collectionNumber.displayName}</form:label>
 				<form:input path="collectionNumber" />
 				<form:errors class="formError"
-					path="testResult.collectedSample.collectionNumber" delimiter=", "></form:errors>
+					path="testResult.collectedSample" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.testResultFields.testedOn.hidden != true }">
@@ -147,26 +156,30 @@
 		</c:if>
 
 		<div>
-			<form:label path="name">${model.testResultFields.name.displayName}</form:label>
-			<form:select path="name" class="editTestNames">
+			<form:label path="bloodTest">${model.testResultFields.name.displayName}</form:label>
+			<form:select path="bloodTest" class="editTestNames">
 				<form:option value="" selected="selected">&nbsp;</form:option>
 				<c:forEach var="bloodTest" items="${model.bloodTests}">
-					<form:option value="${bloodTest.id}">${bloodTest.name}</form:option>
+					<form:option value="${bloodTest.name}">${bloodTest.name}</form:option>
 				</c:forEach>
 			</form:select>
 			<form:errors class="formError"
-				path="testResult.name" delimiter=", "></form:errors>
+				path="testResult.bloodTest" delimiter=", "></form:errors>
 		</div>
 
 		<c:forEach var="bloodTest" items="${model.bloodTests}">
-			<div id="${bloodTestResultId}-${bloodTest.id}" class="testResultsDiv" style="display: none;">
-				<form:label path="result">${model.testResultFields.result.displayName}</form:label>
-				<form:select path="result">
-					<form:option value="" selected="selected">&nbsp;</form:option>
+			<div id="${bloodTestResultId}-${bloodTest.name}" class="testResultsDiv" style="display: none;">
+				<form:label path="bloodTestResult">${model.testResultFields.result.displayName}</form:label>
+				<form:select path="bloodTestResult">
+					<!-- Auto incremented IDs begin with zero -->
+					<form:option value="-1" selected="selected">&nbsp;</form:option>
+						<!-- Send the id of the test result as there may be repeats in the result -->
 						<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
 							<form:option value="${allowedResult.id}">${allowedResult.result}</form:option>
 						</c:forEach>
 				</form:select>
+				<form:errors class="formError"
+				path="testResult.bloodTestResult" delimiter=", "></form:errors>
 			</div>
 		</c:forEach>
 		

@@ -1,23 +1,25 @@
 package model.testresults;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import model.CustomDateFormatter;
+import model.bloodtest.BloodTest;
+import model.bloodtest.BloodTestResult;
 import model.collectedsample.CollectedSample;
 import model.user.User;
 
 public class TestResultBackingForm {
 
+  @NotNull
+  @Valid
   private TestResult testResult;
 
   private String dateTestedFrom;
   private String dateTestedTo;
-
-  private List<String> tests;
 
   private String testedOn;
 
@@ -76,13 +78,21 @@ public class TestResultBackingForm {
     return testResult.getId();
   }
 
-  public String getName() {
-    return testResult.getName();
+  public String getBloodTest() {
+    if (testResult == null ||
+        testResult.getBloodTest() == null ||
+        testResult.getBloodTest().getName() == null)
+      return "";
+    return testResult.getBloodTest().getName();
   }
 
-  public String getResult() {
-    return testResult.getResult();
-  }
+  public String getBloodTestResult() {
+    if (testResult == null ||
+        testResult.getBloodTestResult() == null ||
+        testResult.getBloodTestResult().getResult() == null)
+      return "";
+    return testResult.getBloodTestResult().getResult();
+   }
 
   public Date getLastUpdated() {
     return testResult.getLastUpdated();
@@ -120,8 +130,20 @@ public class TestResultBackingForm {
     testResult.setTestedOn(testedOn);
   }
 
-  public void setName(String testName) {
-    testResult.setName(testName);
+  public void setBloodTest(String bloodTestName) {
+    if (testResult == null)
+      return;
+    BloodTest bloodTest = new BloodTest();
+    bloodTest.setName(bloodTestName);
+    testResult.setBloodTest(bloodTest);
+  }
+
+  public void setBloodTestResult(String result) {
+    if (testResult == null)
+      return;
+    BloodTestResult bloodTestResult = new BloodTestResult();
+    bloodTestResult.setId(Long.parseLong(result));
+    testResult.setBloodTestResult(bloodTestResult);
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -160,10 +182,6 @@ public class TestResultBackingForm {
     this.testResult = testResult;
   }
 
-  public List<String> getTests() {
-    return tests;
-  }
-
   public String getCollectionNumber() {
     if (testResult == null || testResult.getCollectedSample() == null ||
         testResult.getCollectedSample().getCollectionNumber() == null
@@ -175,5 +193,10 @@ public class TestResultBackingForm {
   public void setCollectionNumber(String collectionNumber) {
     CollectedSample collectedSample = new CollectedSample();
     collectedSample.setCollectionNumber(collectionNumber);
+    testResult.setCollectedSample(collectedSample);
+  }
+
+  public void setCollectedSample(CollectedSample collectedSample) {
+    testResult.setCollectedSample(collectedSample);
   }
 }

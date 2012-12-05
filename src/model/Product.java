@@ -61,20 +61,20 @@ public class Product {
 
   public BloodAbo getBloodAbo() {
     BloodAbo abo = BloodAbo.Unknown;
-    for (TestResult t : collectedSample.getTestResults()) {
-      if (t.getName().equals("bloodAbo"))
-        abo = BloodAbo.valueOf(t.getResult());
-    }
+//    for (TestResult t : collectedSample.getTestResults()) {
+//      if (t.getName().equals("bloodAbo"))
+//        abo = BloodAbo.valueOf(t.getResult());
+//    }
     return abo;
   }
   
 
   public BloodRhd getBloodRhd() {
     BloodRhd rhd = BloodRhd.Unknown;
-    for (TestResult t : collectedSample.getTestResults()) {
-      if (t.getName().equals("bloodRhd"))
-        rhd = BloodRhd.valueOf(t.getResult());
-    }
+//    for (TestResult t : collectedSample.getTestResults()) {
+//      if (t.getName().equals("bloodRhd"))
+//        rhd = BloodRhd.valueOf(t.getResult());
+//    }
     return rhd;
   }
 

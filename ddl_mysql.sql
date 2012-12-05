@@ -3,7 +3,7 @@
 
     drop table if exists BloodTest;
 
-    drop table if exists BloodTestAllowedResults;
+    drop table if exists BloodTestResult;
 
     drop table if exists CollectedSample;
 
@@ -43,19 +43,18 @@
     ) ENGINE=InnoDB;
 
     create table BloodTest (
-        id bigint not null auto_increment,
+        name varchar(30) not null,
         correctResult varchar(30) not null,
         isDeleted boolean,
         isRequired boolean,
-        name varchar(30) not null,
         notes longtext,
-        primary key (id)
+        primary key (name)
     ) ENGINE=InnoDB;
 
-    create table BloodTestAllowedResults (
+    create table BloodTestResult (
         id bigint not null auto_increment,
         result varchar(255),
-        bloodTest_id bigint,
+        bloodTest_name varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -229,10 +228,10 @@
         createdDate datetime,
         isDeleted boolean,
         lastUpdated datetime,
-        name varchar(255),
         notes longtext,
-        result varchar(255),
         testedOn datetime,
+        bloodTest_name varchar(30),
+        bloodTestResult_id bigint,
         collectedSample_id bigint not null,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -260,11 +259,11 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    alter table BloodTestAllowedResults 
-        add index FK88855DDAA7871EEB (bloodTest_id), 
-        add constraint FK88855DDAA7871EEB 
-        foreign key (bloodTest_id) 
-        references BloodTest (id);
+    alter table BloodTestResult 
+        add index FK39946CC93A6D02C3 (bloodTest_name), 
+        add constraint FK39946CC93A6D02C3 
+        foreign key (bloodTest_name) 
+        references BloodTest (name);
 
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 
@@ -373,10 +372,22 @@
         references CollectedSample (id);
 
     alter table TestResult 
+        add index FKDB459F6F3A6D02C3 (bloodTest_name), 
+        add constraint FKDB459F6F3A6D02C3 
+        foreign key (bloodTest_name) 
+        references BloodTest (name);
+
+    alter table TestResult 
         add index FKDB459F6FD0AFB367 (lastUpdatedBy_id), 
         add constraint FKDB459F6FD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table TestResult 
+        add index FKDB459F6F71B0E253 (bloodTestResult_id), 
+        add constraint FKDB459F6F71B0E253 
+        foreign key (bloodTestResult_id) 
+        references BloodTestResult (id);
 
     alter table User 
         add index FK285FEBA49787C4 (createdBy_id), 

@@ -1,4 +1,4 @@
-package model.testresults;
+package model.bloodtest;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -9,12 +9,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = TestExistsConstraintValidator.class)
+@Constraint(validatedBy = BloodTestExistsConstraintValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TestExists {
+public @interface BloodTestExists {
 
-  String message() default "Test does not exist";
+  String message() default "Blood Test does not exist";
 
   Class<?>[] groups() default {};
 

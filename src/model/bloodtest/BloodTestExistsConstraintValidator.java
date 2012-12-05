@@ -1,4 +1,4 @@
-package model.testresults;
+package model.bloodtest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
 import repository.BloodTestRepository;
 
 @Component
-public class TestExistsConstraintValidator implements
-    ConstraintValidator<TestExists, BloodTest> {
+public class BloodTestExistsConstraintValidator implements
+    ConstraintValidator<BloodTestExists, BloodTest> {
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
 
-  public TestExistsConstraintValidator() {
+  public BloodTestExistsConstraintValidator() {
   }
-
+  
   @Override
-  public void initialize(TestExists constraint) {
+  public void initialize(BloodTestExists constraint) {
   }
 
   public boolean isValid(BloodTest target, ConstraintValidatorContext context) {
@@ -27,18 +27,13 @@ public class TestExistsConstraintValidator implements
    if (target == null)
      return true;
 
-   try {
-    BloodTest bloodTest = bloodTestRepository.findBloodTestById(target.getId());
-    if (bloodTest != null) {
+   if (bloodTestRepository.isBloodTestValid(target.getName()))
      return true;
-    }
-   } catch (Exception e) {
-    e.printStackTrace();
-   }
+
    return false;
   }
 
-  public void setBloodTestRepository(BloodTestRepository bloodTestRepository) {
+  public void setDonorRepository(BloodTestRepository bloodTestRepository) {
     this.bloodTestRepository = bloodTestRepository;
   }
 }

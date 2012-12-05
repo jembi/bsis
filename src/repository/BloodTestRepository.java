@@ -7,7 +7,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.testresults.BloodTest;
+import model.bloodtest.BloodTest;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +42,21 @@ public class BloodTestRepository {
     } catch (NoResultException ex) {
       ex.printStackTrace();
       return null;
+    }
+  }
+
+  public boolean isBloodTestValid(String name) {
+    try {
+      String queryString = "SELECT t FROM BloodTest t where name=:name";
+      TypedQuery<BloodTest> query = em.createQuery(queryString, BloodTest.class);
+      query.setParameter("name", name);
+      if (query.getSingleResult() != null)
+        return true;
+      else
+        return false;
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      return false;
     }
   }
 }

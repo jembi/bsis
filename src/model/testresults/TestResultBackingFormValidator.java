@@ -26,14 +26,14 @@ public class TestResultBackingFormValidator implements Validator {
   public void validate(Object obj, Errors errors) {
     System.out.println("validating");
     System.out.println(validator);
-    System.out.println(obj);
+    System.out.println(obj.getClass());
     if (obj == null || validator == null)
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
     TestResultBackingForm form = (TestResultBackingForm) obj;
-    String collectedOn = form.getTestedOn();
-    if (!CustomDateFormatter.isDateStringValid(collectedOn))
-      errors.rejectValue("collectedSample.collectedOn", "dateFormat.incorrect",
+    String testedOn = form.getTestedOn();
+    if (!CustomDateFormatter.isDateStringValid(testedOn))
+      errors.rejectValue("testResult.testedOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
   }
 }

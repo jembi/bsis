@@ -1,4 +1,4 @@
-package model.testresults;
+package model.bloodtest;
 
 import java.util.List;
 
@@ -17,12 +17,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class BloodTest{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
-
-  @NotBlank
-  @Column(length=30, nullable=false)
+  @Column(nullable=false, updatable=false, insertable=false, length=30)
   private String name;
 
   @NotBlank
@@ -37,11 +32,7 @@ public class BloodTest{
   private Boolean isDeleted;
 
   @OneToMany(mappedBy="bloodTest", fetch=FetchType.EAGER)
-  private List<BloodTestAllowedResults> allowedResults;
-
-  public Long getId() {
-    return id;
-  }
+  private List<BloodTestResult> allowedResults;
 
   public String getName() {
     return name;
@@ -63,12 +54,8 @@ public class BloodTest{
     return isDeleted;
   }
 
-  public List<BloodTestAllowedResults> getAllowedResults() {
+  public List<BloodTestResult> getAllowedResults() {
     return allowedResults;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setName(String name) {
@@ -92,7 +79,7 @@ public class BloodTest{
   }
 
   public void setAllowedResults(
-      List<BloodTestAllowedResults> allowedResults) {
+      List<BloodTestResult> allowedResults) {
     this.allowedResults = allowedResults;
   }
 }

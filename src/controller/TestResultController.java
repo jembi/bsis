@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -143,6 +144,14 @@ public class TestResultController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
       success = false;
       message = "Please fix the errors noted above.";
+      System.out.println("there are errors");
+      for (ObjectError error : result.getAllErrors()) {
+        System.out.println(error.getObjectName());
+        System.out.println(error.getCode());
+        System.out.println(form.getTestResult());
+        System.out.println(error.toString());
+        System.out.println(error.getDefaultMessage());
+      }
     } else {
       try {
         TestResult testResult = form.getTestResult();
@@ -167,7 +176,7 @@ public class TestResultController {
     m.put("existingTestResult", false);
     m.put("success", success);
     m.put("message", message);
-    m.put("refreshUrl", getUrl(request));
+    m.put("refreshUrl", "editTestResultFormGenerator.html");
     m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
     addEditSelectorOptions(m);
 

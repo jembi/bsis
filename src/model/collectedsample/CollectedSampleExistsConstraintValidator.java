@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import repository.CollectedSampleRepository;
-import repository.DonorRepository;
 
 @Component
 public class CollectedSampleExistsConstraintValidator implements
@@ -29,7 +28,13 @@ public class CollectedSampleExistsConstraintValidator implements
      return true;
 
    try {
+
       CollectedSample collectedSample = null;
+
+      System.out.println("target: " + target);
+      System.out.println(target.getId());
+      System.out.println(target.getCollectionNumber());
+
       if (target.getId() != null) {
         collectedSample = collectedSampleRepository.findCollectedSampleById(target.getId());
       }

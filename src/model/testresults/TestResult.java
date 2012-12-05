@@ -13,6 +13,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import model.bloodtest.BloodTest;
+import model.bloodtest.BloodTestExists;
+import model.bloodtest.BloodTestResult;
+import model.bloodtest.BloodTestResultExists;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
@@ -33,9 +37,13 @@ public class TestResult implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
 	private Date testedOn;
 
-  @TestExists
-	private String name;
-	private String result;
+  @BloodTestExists
+  @ManyToOne
+	private BloodTest bloodTest;
+
+  @BloodTestResultExists
+  @ManyToOne
+	private BloodTestResult bloodTestResult;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastUpdated;
@@ -63,9 +71,9 @@ public class TestResult implements ModificationTracker {
 
   public void copy(TestResult testResult) {
     assert (this.id == testResult.id);
-    this.name = testResult.name;
+    this.bloodTest = testResult.bloodTest;
     this.testedOn = testResult.testedOn;
-    this.result = testResult.result;
+    this.bloodTestResult = testResult.bloodTestResult;
     this.notes = testResult.notes;
     this.isDeleted = testResult.isDeleted;
   }
@@ -78,12 +86,12 @@ public class TestResult implements ModificationTracker {
     return testedOn;
   }
 
-  public String getName() {
-    return name;
+  public BloodTest getBloodTest() {
+    return bloodTest;
   }
 
-  public String getResult() {
-    return result;
+  public BloodTestResult getBloodTestResult() {
+    return bloodTestResult;
   }
 
   public Date getLastUpdated() {
@@ -122,12 +130,12 @@ public class TestResult implements ModificationTracker {
     this.testedOn = testedOn;
   }
 
-  public void setName(String testName) {
-    this.name = testName;
+  public void setName(BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
   }
 
-  public void setResult(String testResult) {
-    this.result = testResult;
+  public void setBloodTestResult(BloodTestResult bloodTestResult) {
+    this.bloodTestResult = bloodTestResult;
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -152,5 +160,9 @@ public class TestResult implements ModificationTracker {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public void setBloodTest(BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
   }
 }
