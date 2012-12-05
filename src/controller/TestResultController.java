@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
+import model.collectedsample.FindCollectedSampleBackingForm;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.testresults.TestResultBackingFormValidator;
@@ -65,6 +66,22 @@ public class TestResultController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new TestResultBackingFormValidator(binder.getValidator()));
+  }
+
+  @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findTestResultFormGenerator(HttpServletRequest request, Model model) {
+
+    TestResultBackingForm form = new TestResultBackingForm();
+    model.addAttribute("findTestResultForm", form);
+
+    ModelAndView mv = new ModelAndView("findTestResultForm");
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", m);
+    return mv;
   }
 
   public static String getUrl(HttpServletRequest req) {

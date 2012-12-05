@@ -8,27 +8,62 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="findTestResultFormDivId">findTestResultFormDiv-${unique_page_id}</c:set>
+<c:set var="findTestResultFormId">findTestResultForm-${unique_page_id}</c:set>
+<c:set var="findTestResultFormSearchById">findTestResultFormSearchBySelector-${unique_page_id}</c:set>
+<c:set var="findTestResultFormResultId">findTestResultFormResult-${unique_page_id}</c:set>
+
 <script>
-  $("#findTestResultButton").button({
+$(document).ready(function() {
+  $("#${findTestResultFormDivId}").find(".findTestResultButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
   }).click(function() {
-    var findTestResultFormData = $("#findTestResultForm").serialize();
+    var findTestResultFormData = $("#${findTestResultFormId}").serialize();
+    showLoadingImage('${findTestResultFormResultId}');
     $.ajax({
       type : "GET",
       url : "findTestResult.html",
       data : findTestResultFormData,
-      success : function(data) {
-        $('#findTestResultResult').html(data);
-        window.scrollTo(0, document.body.scrollHeight);
-      }
+      success: function(data) {
+      				   $('#${findTestResultFormResultId}').html(data);
+        				 window.scrollTo(0, document.body.scrollHeight);
+      				 },
+      error: function(data) {
+							 showErrorMessage("Something went wrong. Please try again later.");        
+      			 }
     });
   });
 
-  $(".radioWithToggle").toggleRadio();
+  $("#${findTestResultFormDivId}").find(".clearFindFormButton").button({
+    icons : {
+      primary : 'ui-icon-grip-solid-horizontal'
+    }
+  }).click(clearFindForm);
+  
+  function clearFindForm() {
+		$("#${findTestResultFormId}").each(function() {
+		  this.reset();
+		});
+		$("#${findTestResultFormResultId}").html("");
+  }
 
-  $("#dateTestedFrom").datepicker({
+  function getDateTestedFromInput() {
+    return $("#${findTestResultFormId}").find(".dateTestedFrom");  
+  }
+
+  function getDateTestedToInput() {
+    return $("#${findTestResultFormId}").find(".dateTestedTo");  
+  }
+
+  getDateTestedFromInput().datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
@@ -36,10 +71,11 @@
     dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
-      $("#dateTestedTo").datepicker("option", "minDate", selectedDate);
+      getDateTestedToInput().datepicker("option", "minDate", selectedDate);
     }
   });
-  $("#dateTestedTo").datepicker({
+
+  getDateTestedToInput().datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
@@ -47,73 +83,43 @@
     dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
-      $("#dateTestedFrom").datepicker("option", "maxDate", selectedDate);
+      getDateTestedFromInput().datepicker("option", "maxDate", selectedDate);
     }
   });
+
+});
 </script>
 
-<form:form method="GET" commandName="findTestResultForm"
-	id="findTestResultForm" class="findTestResultForm">
-	<table>
-		<thead>
-			<tr>
-				<td><b>Find Test Results</b></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><form:label path="collectionNumber">${model.collectionNoDisplayName}</form:label></td>
-				<td><form:input path="collectionNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="hiv">${model.hivDisplayName}</form:label></td>
-				<td><form:radiobutton path="hiv" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="hiv" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="hbv">${model.hbvDisplayName}</form:label></td>
-				<td><form:radiobutton path="hbv" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="hbv" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="hcv">${model.hcvDisplayName}</form:label></td>
-				<td><form:radiobutton path="hcv" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="hcv" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="syphilis">${model.syphilisDisplayName}</form:label></td>
-				<td><form:radiobutton path="syphilis" value="reactive"
-						label="reactive" class="radioWithToggle" /> <form:radiobutton
-						path="syphilis" value="negative" label="negative"
-						class="radioWithToggle" /></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b><i>Filter Test Results</i></b></td>
-			</tr>
-			<tr>
-				<td>Having Date Tested Between</td>
-			</tr>
-			<tr>
-				<td><form:input path="dateTestedFrom" id="dateTestedFrom" />
-					to</td>
-				<td><form:input path="dateTestedTo" id="dateTestedTo" /></td>
-			</tr>
-			<tr>
-				<td />
-				<td><button id="findTestResultButton" type="button">Find
-						test result</button></td>
-			</tr>
-		</tbody>
-	</table>
-</form:form>
+<div id="${findTestResultFormDivId}" class="formDiv">
+	<b><i>Find test results</i></b>
+	<form:form method="GET" commandName="findTestResultForm" id="${findTestResultFormId}"
+		class="formInTabPane">
 
-<div id="findTestResultResult"></div>
+		<div class="collectionNumberInput">
+			<form:label path="collectionNumber">${model.testResultFields.collectionNumber.displayName}</form:label>
+			<!-- Spring supports dynamic attributes so placeholder can be added -->
+			<form:input path="collectionNumber" placeholder="Collection Number"/>
+		</div>
+
+		<div>
+			<span style="margin-left: 15px; font-style: italic;"> Date of testing between (optional)</span>
+		</div>
+		<div>
+			<form:input path="dateTestedFrom" class="dateTestedFrom" placeholder="Any Date"/>
+				and
+			<form:input path="dateTestedTo" class="dateTestedTo" placeholder="Any Date"/>
+		</div>
+
+		<div>
+			<label></label>
+			<button type="button" class="findTestResultButton">
+				Find test result
+			</button>
+			<button type="button" class="clearFindFormButton">
+				Clear form
+			</button>
+		</div>
+	</form:form>
+</div>
+
+<div id="${findTestResultFormResultId}"></div>
