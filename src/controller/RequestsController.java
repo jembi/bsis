@@ -11,10 +11,10 @@ import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Issue;
-import model.Product;
 import model.Request;
 import model.RequestBackingForm;
 import model.location.Location;
+import model.product.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -157,7 +157,7 @@ public class RequestsController {
     ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
     ControllerUtil.addFieldsToDisplay("product", m,
         recordFieldsConfigRepository);
-    m.put("allProducts", ProductsController.getProductViewModels(products));
+//    m.put("allProducts", ProductController.getProductViewModels(products));
     m.put("requestUrl", getUrl(servletRequest));
     m.put("request", new RequestViewModel(request, locationRepository.getAllCollectionSites()));
     m.put("productsTableRowEditable", "false");

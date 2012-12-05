@@ -36,7 +36,20 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('TestResult', 'testedOn', 'Tested On', '', '0', '0', ''),
 ('TestResult', 'notes', 'Notes', '', '0', '0', '');
 
+insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, derived, sourceField) values
+('Product', 'productNumber', 'Product Number', '', '0', '0', ''),
+('Product', 'collectionNumber', 'Collection Number', '', '0', '0', ''),
+('Product', 'productType', 'Product Type', '', '0', '0', ''),
+('Product', 'bloodGroup', 'Blood Group', '', '0', '0', ''),
+('Product', 'createdOn', 'Created On', '', '0', '0', ''),
+('Product', 'expiresOn', 'Expires On', '', '0', '0', ''),
+('Product', 'isQuarantined', 'Quarantined', '', '0', '0', ''),
+('Product', 'isAvailable', 'Available', '', '0', '0', ''),
+('Product', 'notes', 'Notes', '', '0', '0', '');
+
 insert into DonorType (donorType) values ('Voluntary'), ('Family'), ('Other');
+
+insert into ProductType (productType) values ('Whole Blood'), ('RCC'), ('FFP'), ('Platelets'), ('Partial Platelets');
 
 insert into BloodBagType (bloodBagType) values ('Single'), ('Triple'), ('Paedi');
 

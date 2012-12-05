@@ -16,7 +16,6 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.Product;
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
 import model.donor.Donor;
@@ -27,6 +26,7 @@ import model.location.Location;
 import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+import model.product.Product;
 import model.testresults.TestResult;
 import model.user.User;
 

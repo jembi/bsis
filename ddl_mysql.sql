@@ -25,6 +25,8 @@
 
     drop table if exists Product;
 
+    drop table if exists ProductType;
+
     drop table if exists ProductUsage;
 
     drop table if exists RecordFieldsConfig;
@@ -107,6 +109,7 @@
         donorNumber varchar(30) not null,
         firstName varchar(30) not null,
         gender varchar(30),
+        isAvailable boolean,
         isDeleted boolean,
         lastName varchar(30),
         middleName varchar(30),
@@ -168,17 +171,26 @@
 
     create table Product (
         id bigint not null auto_increment,
+        bloodAbo varchar(30),
+        bloodRhd varchar(30),
         createdDate datetime,
-        expiryDate datetime,
+        createdOn datetime,
+        expiresOn datetime,
         isDeleted boolean,
+        isQuarantined boolean,
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(255) not null,
-        productType varchar(255),
         collectedSample_id bigint,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
+        productType_productType varchar(30),
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductType (
+        productType varchar(30) not null,
+        primary key (productType)
     ) ENGINE=InnoDB;
 
     create table ProductUsage (
@@ -341,6 +353,10 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
+    create index donor_bloodAbo_index on Product (bloodAbo);
+
+    create index donor_bloodRhd_index on Product (bloodRhd);
+
     alter table Product 
         add index FK50C664CFA49787C4 (createdBy_id), 
         add constraint FK50C664CFA49787C4 
@@ -358,6 +374,12 @@
         add constraint FK50C664CFD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table Product 
+        add index FK50C664CFC5DF532 (productType_productType), 
+        add constraint FK50C664CFC5DF532 
+        foreign key (productType_productType) 
+        references ProductType (productType);
 
     alter table TestResult 
         add index FKDB459F6FA49787C4 (createdBy_id), 

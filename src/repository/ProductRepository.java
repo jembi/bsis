@@ -10,8 +10,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.Product;
-import model.ProductType;
+import model.collectedsample.CollectedSample;
+import model.product.Product;
+import model.producttype.ProductType;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
@@ -140,6 +141,10 @@ public class ProductRepository {
   }
 
   public Product findProduct(Long productId) {
+    return em.find(Product.class, productId);
+  }
+
+  public Product findProductById(Long productId) {
     return em.find(Product.class, productId);
   }
 

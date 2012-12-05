@@ -15,9 +15,9 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Issue;
-import model.Product;
 import model.Request;
 import model.location.Location;
+import model.product.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

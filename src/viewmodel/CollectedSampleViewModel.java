@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import model.Product;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
 import model.donortype.DonorType;
 import model.location.Location;
+import model.product.Product;
 import model.testresults.TestResult;
 import model.user.User;
 

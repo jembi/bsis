@@ -1,7 +1,8 @@
-package model;
+package model.product;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,14 +15,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Index;
+
 import model.collectedsample.CollectedSample;
-import model.testresults.TestResult;
+import model.modificationtracker.ModificationTracker;
+import model.producttype.ProductType;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
 @Entity
-public class Product {
+public class Product implements ModificationTracker {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false)
@@ -33,11 +38,24 @@ public class Product {
   @ManyToOne
   private CollectedSample collectedSample;
 
-  @Enumerated(EnumType.STRING)
+  @ManyToOne
   private ProductType productType;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date expiryDate;
+  private Date createdOn;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date expiresOn;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  @Index(name="donor_bloodAbo_index")
+  private BloodAbo bloodAbo;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  @Index(name="donor_bloodRhd_index")
+  private BloodRhd bloodRhd;
   
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastUpdated;
@@ -56,26 +74,9 @@ public class Product {
 
   private Boolean isDeleted;
 
+  private Boolean isQuarantined;
+
   public Product() {
-  }
-
-  public BloodAbo getBloodAbo() {
-    BloodAbo abo = BloodAbo.Unknown;
-//    for (TestResult t : collectedSample.getTestResults()) {
-//      if (t.getName().equals("bloodAbo"))
-//        abo = BloodAbo.valueOf(t.getResult());
-//    }
-    return abo;
-  }
-  
-
-  public BloodRhd getBloodRhd() {
-    BloodRhd rhd = BloodRhd.Unknown;
-//    for (TestResult t : collectedSample.getTestResults()) {
-//      if (t.getName().equals("bloodRhd"))
-//        rhd = BloodRhd.valueOf(t.getResult());
-//    }
-    return rhd;
   }
 
   public void copy(Product product) {
@@ -93,12 +94,12 @@ public class Product {
     return collectedSample;
   }
 
-  public String getProductType() {
-    return productType.name();
+  public ProductType getProductType() {
+    return productType;
   }
 
-  public Date getExpiryDate() {
-    return expiryDate;
+  public Date getExpiresOn() {
+    return expiresOn;
   }
 
   public Date getLastUpdated() {
@@ -137,12 +138,12 @@ public class Product {
     this.collectedSample = collectedSample;
   }
 
-  public void setProductType(String type) {
-    this.productType = ProductType.valueOf(type);
+  public void setProductType(ProductType productType) {
+    this.productType = productType;
   }
 
-  public void setExpiryDate(Date expiryDate) {
-    this.expiryDate = expiryDate;
+  public void setExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -169,4 +170,35 @@ public class Product {
     this.isDeleted = isDeleted;
   }
 
+  public void setIsQuarantined(Boolean isQuarantined) {
+    this.isQuarantined = isQuarantined;
+  }
+
+  public Date getCreatedOn() {
+    return createdOn;
+  }
+
+  public void setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  public Boolean getIsQuarantined() {
+    return isQuarantined;
+  }
+
+  public BloodAbo getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(BloodAbo bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public BloodRhd getBloodRhd() {
+    return bloodRhd;
+  }
+
+  public void setBloodRhd(BloodRhd bloodRhd) {
+    this.bloodRhd = bloodRhd;
+  }
 }
