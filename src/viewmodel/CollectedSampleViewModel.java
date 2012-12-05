@@ -15,7 +15,11 @@ import model.testresults.TestResult;
 import model.user.User;
 
 public class CollectedSampleViewModel {
-	private CollectedSample collectedSample;
+
+  private CollectedSample collectedSample;
+
+  public CollectedSampleViewModel() {
+  }
 
 	public CollectedSampleViewModel(CollectedSample collection) {
 		this.collectedSample = collection;

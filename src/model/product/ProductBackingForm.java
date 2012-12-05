@@ -29,9 +29,9 @@ public class ProductBackingForm {
 
   private String expiresOn;
 
-  private List<String> types;
+  private List<String> productTypes;
 
-  private List<String> availability;
+  private List<String> bloodGroups;
 
   public ProductBackingForm() {
     setProduct(new Product());
@@ -206,20 +206,12 @@ public class ProductBackingForm {
     return getProduct().toString();
   }
 
-  public List<String> getTypes() {
-    return types;
+  public List<String> getProductTypes() {
+    return productTypes;
   }
 
-  public void setTypes(List<String> types) {
-    this.types = types;
-  }
-
-  public List<String> getAvailability() {
-    return availability;
-  }
-
-  public void setAvailability(List<String> availability) {
-    this.availability = availability;
+  public void setProductTypes(List<String> productTypes) {
+    this.productTypes = productTypes;
   }
 
   public void generateProductNumber() {
@@ -267,5 +259,13 @@ public class ProductBackingForm {
 
   public void setIsAvailable(Boolean isAvailable) {
     product.setIsAvailable(isAvailable);
+  }
+
+  public List<String> getBloodGroups() {
+    return bloodGroups;
+  }
+
+  public void setBloodGroups(List<String> bloodGroups) {
+    this.bloodGroups = bloodGroups;
   }
 }

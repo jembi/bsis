@@ -51,11 +51,6 @@ public class CollectedSampleRepository {
     return em.find(CollectedSample.class, collectedSampleId);
   }
 
-  public void deleteAllCollectedSamples() {
-    Query query = em.createQuery("DELETE FROM CollectedSample c");
-    query.executeUpdate();
-  }
-
   public List<CollectedSample> findCollectedSampleByCollectionNumber(
       String collectionNumber, String dateCollectedFrom,
       String dateCollectedTo) {

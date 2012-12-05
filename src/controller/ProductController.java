@@ -17,6 +17,7 @@ import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
 import model.location.Location;
+import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.product.ProductBackingFormValidator;
@@ -42,6 +43,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import viewmodel.CollectedSampleViewModel;
+import viewmodel.ProductViewModel;
 
 @Controller
 public class ProductController {
@@ -87,68 +89,61 @@ public class ProductController {
     return reqUrl;
   }
 
-//  @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
-//  public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
-//
-//    FindCollectedSampleBackingForm form = new FindCollectedSampleBackingForm();
-//    model.addAttribute("findCollectedSampleForm", form);
-//
-//    ModelAndView mv = new ModelAndView("findCollectionForm");
-//    Map<String, Object> m = model.asMap();
-//    addEditSelectorOptions(m);
-//    // to ensure custom field names are displayed in the form
-//    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-//    m.put("refreshUrl", getUrl(request));
-//    mv.addObject("model", m);
-//    return mv;
-//  }
-//
-//  @RequestMapping("/findCollection")
-//  public ModelAndView findCollection(HttpServletRequest request,
-//      @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
-//      BindingResult result, Model model) {
-//
-//    List<CollectedSample> collectedSamples = Arrays.asList(new CollectedSample[0]);
-//
-//    String searchBy = form.getSearchBy();
-//    String dateCollectedFrom = form.getDateCollectedFrom();
-//    String dateCollectedTo = form.getDateCollectedTo();
-//    if (searchBy.equals("collectionNumber")) {
-//      collectedSamples = collectedSampleRepository.findCollectedSampleByCollectionNumber(
-//                                          form.getCollectionNumber(),
-//                                          dateCollectedFrom, dateCollectedTo);
-//    } else if (searchBy.equals("shippingNumber")) {
-//      collectedSamples = collectedSampleRepository.findCollectedSampleByShippingNumber(
-//          form.getShippingNumber(),
-//          dateCollectedFrom, dateCollectedTo);
-//    } else if (searchBy.equals("sampleNumber")) {
-//      collectedSamples = collectedSampleRepository.findCollectedSampleBySampleNumber(
-//          form.getSampleNumber(),
-//          dateCollectedFrom, dateCollectedTo);
-//    } else if (searchBy.equals("collectionCenter")) {
-//
-//      List<Long> centerIds = new ArrayList<Long>();
-//      for (String center : form.getCenters()) {
-//        centerIds.add(Long.parseLong(center));
-//      }
-//
-//      collectedSamples = collectedSampleRepository.findCollectedSampleByCenters(
-//          centerIds,
-//          dateCollectedFrom, dateCollectedTo);
-//    }
-//    
-//    ModelAndView modelAndView = new ModelAndView("collectionsTable");
-//    Map<String, Object> m = model.asMap();
-//    m.put("tableName", "findCollectionResultsTable");
-//    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-//    m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
-//    m.put("refreshUrl", getUrl(request));
-//    addEditSelectorOptions(m);
-//    addCollectionSitesToModel(m);
-//
-//    modelAndView.addObject("model", m);
-//    return modelAndView;
-//  }
+  @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findProductFormGenerator(HttpServletRequest request, Model model) {
+
+    FindProductBackingForm form = new FindProductBackingForm();
+    model.addAttribute("findProductForm", form);
+
+    ModelAndView mv = new ModelAndView("findProductForm");
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // to ensure custom field names are displayed in the form
+    m.put("productFields", utilController.getFormFieldsForForm("product"));
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping("/findProduct")
+  public ModelAndView findProduct(HttpServletRequest request,
+      @ModelAttribute("findProductForm") FindProductBackingForm form,
+      BindingResult result, Model model) {
+
+    List<Product> products = Arrays.asList(new Product[0]);
+
+    String searchBy = form.getSearchBy();
+    String dateExpiresFrom = form.getDateExpiresFrom();
+    String dateExpiresTo = form.getDateExpiresTo();
+    if (searchBy.equals("productNumber")) {
+      products = productRepository.findProductByProductNumber(
+                                          form.getProductNumber(),
+                                          dateExpiresFrom, dateExpiresTo);
+    } else if (searchBy.equals("collectionNumber")) {
+      products = productRepository.findProductByCollectionNumber(
+          form.getCollectionNumber(),
+          dateExpiresFrom, dateExpiresTo);
+    } else if (searchBy.equals("productType")) {
+
+      products = productRepository.findProductByProductTypes(
+          form.getProductTypes(),
+          dateExpiresFrom, dateExpiresTo);
+    }
+
+    System.out.println("products: ");
+    System.out.println(products);
+    
+    ModelAndView modelAndView = new ModelAndView("productsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findProductsTable");
+    m.put("productFields", utilController.getFormFieldsForForm("product"));
+    m.put("allProducts", getProductViewModels(products));
+    m.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(m);
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
@@ -324,37 +319,37 @@ public class ProductController {
 //    return mv;
 //  }
 //
-//  private List<CollectedSampleViewModel> getCollectionViewModels(
-//      List<CollectedSample> collections) {
-//    if (collections == null)
-//      return Arrays.asList(new CollectedSampleViewModel[0]);
-//    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
-//    for (CollectedSample collection : collections) {
-//      collectionViewModels.add(new CollectedSampleViewModel(collection));
-//    }
-//    return collectionViewModels;
-//  }
-//
-//  @RequestMapping(value = "/deleteCollectedSample", method = RequestMethod.POST)
-//  public @ResponseBody
-//  Map<String, ? extends Object> deleteCollection(
-//      @RequestParam("collectedSampleId") Long collectionSampleId) {
-//
-//    boolean success = true;
-//    String errMsg = "";
-//    try {
-//      collectedSampleRepository.deleteCollectedSample(collectionSampleId);
-//    } catch (Exception ex) {
-//      // TODO: Replace with logger
-//      System.err.println("Internal Exception");
-//      System.err.println(ex.getMessage());
-//      success = false;
-//      errMsg = "Internal Server Error";
-//    }
-//
-//    Map<String, Object> m = new HashMap<String, Object>();
-//    m.put("success", success);
-//    m.put("errMsg", errMsg);
-//    return m;
-//  }
+  private List<ProductViewModel> getProductViewModels(
+      List<Product> products) {
+    if (products == null)
+      return Arrays.asList(new ProductViewModel[0]);
+    List<ProductViewModel> productViewModels = new ArrayList<ProductViewModel>();
+    for (Product product : products) {
+      productViewModels.add(new ProductViewModel(product));
+    }
+    return productViewModels;
+  }
+
+  @RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteProduct(
+      @RequestParam("productId") Long productId) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      productRepository.deleteProduct(productId);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
 }

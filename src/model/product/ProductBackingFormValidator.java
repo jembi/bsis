@@ -19,7 +19,7 @@ public class ProductBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(ProductBackingForm.class).contains(clazz);
+    return Arrays.asList(FindProductBackingForm.class, ProductBackingForm.class).contains(clazz);
   }
 
   @Override

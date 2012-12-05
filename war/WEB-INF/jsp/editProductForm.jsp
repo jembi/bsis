@@ -131,7 +131,7 @@
         }
 
         $("#${editProductFormBarcodeId}").barcode(
-					  "${editProductForm.collectedSample.collectionNumber}-${editProductForm.collectedSample.id}",
+					  "${editProductForm.product.productNumber}-${editProductForm.product.id}",
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 
