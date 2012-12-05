@@ -176,6 +176,7 @@
         createdDate datetime,
         createdOn datetime,
         expiresOn datetime,
+        isAvailable boolean,
         isDeleted boolean,
         isQuarantined boolean,
         lastUpdated datetime,

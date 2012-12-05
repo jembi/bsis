@@ -443,6 +443,11 @@ tr > td
 	resize: none;
 }
 
+.formInTabPane > div > .checkBoxInForm {
+	width: 20px;
+	display: inline-block;
+}
+
 .formError {
 	color: red;
 }

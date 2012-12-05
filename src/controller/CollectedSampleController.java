@@ -160,6 +160,7 @@ public class CollectedSampleController {
     }
 
     m.put("editCollectedSampleForm", form);
+    m.put("existingCollectedSample", false);
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     if (form.getDonor() != null)

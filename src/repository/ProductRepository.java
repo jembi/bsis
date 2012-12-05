@@ -213,7 +213,6 @@ public class ProductRepository {
     Product existingProduct = findProductByProductNumber(product
         .getProductNumber());
     if (existingProduct == null) {
-//      product.setIssued(Boolean.FALSE);
       product.setIsDeleted(false);
       saveProduct(product);
       return product;
@@ -236,6 +235,11 @@ public class ProductRepository {
     Product existingProduct = findProductByProductNumber(productNumber);
 //    existingProduct.setIssued(Boolean.TRUE);
     em.merge(existingProduct);
+    em.flush();
+  }
+
+  public void addProduct(Product product) {
+    em.persist(product);
     em.flush();
   }
 }

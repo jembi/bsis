@@ -16,10 +16,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.validator.constraints.NotBlank;
 
 import model.collectedsample.CollectedSample;
+import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
 import model.producttype.ProductType;
+import model.producttype.ProductTypeExists;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
@@ -32,12 +35,15 @@ public class Product implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
+  @NotBlank
   @Column(nullable=false)
   private String productNumber;
 
+  @CollectedSampleExists
   @ManyToOne
   private CollectedSample collectedSample;
 
+  @ProductTypeExists
   @ManyToOne
   private ProductType productType;
 
@@ -73,6 +79,8 @@ public class Product implements ModificationTracker {
   private String notes;
 
   private Boolean isDeleted;
+
+  private Boolean isAvailable;
 
   private Boolean isQuarantined;
 
@@ -200,5 +208,13 @@ public class Product implements ModificationTracker {
 
   public void setBloodRhd(BloodRhd bloodRhd) {
     this.bloodRhd = bloodRhd;
+  }
+
+  public Boolean getIsAvailable() {
+    return isAvailable;
+  }
+
+  public void setIsAvailable(Boolean isAvailable) {
+    this.isAvailable = isAvailable;
   }
 }

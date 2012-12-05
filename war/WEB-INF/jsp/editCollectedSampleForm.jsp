@@ -88,6 +88,8 @@
         });
 
         var collectedOnDatePicker = $("#${editCollectedSampleFormId}").find(".collectedOn");
+        console.log("${model.existingCollectedSample}");
+        console.log(collectedOnDatePicker.val());
         if ("${model.existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
           collectedOnDatePicker.datepicker('setDate', new Date());
         }

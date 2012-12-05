@@ -84,6 +84,7 @@
           yearRange : "c-100:c+1",
         });
 
+        // second condition required for the case where the form is returned with errors
         var createdOnDatePicker = $("#${editProductFormId}").find(".createdOn");
         if ("${model.existingProduct}" == "false" && createdOnDatePicker.val() == "") {
           createdOnDatePicker.datepicker('setDate', new Date());
@@ -95,6 +96,17 @@
           var later = new Date();
           later.setDate(today.getDate() + 30);
           expiresOnDatePicker.datepicker('setDate', later);
+        }
+
+        // set the checkboxes if required
+        var isAvailableCheckbox = $("#${editProductFormId}").find(".isAvailable");
+        if ("${model.existingProduct}" == "false") {
+          isAvailableCheckbox.prop("checked", true);
+        }
+
+        var isQuarantinedCheckbox = $("#${editProductFormId}").find(".isQuarantined");
+        if ("${model.existingProduct}" == "false") {
+          isQuarantinedCheckbox.prop("checked", true);
         }
 
         $("#${editProductFormId}").find(".clearFormButton").button({
@@ -136,6 +148,14 @@
 			<div id="${editProductFormBarcodeId}"></div>
 		</c:if>
 		<form:hidden path="id" />
+		<c:if test="${model.productFields.productNumber.hidden != true }">
+			<div>
+				<form:label path="productNumber">${model.productFields.productNumber.displayName}</form:label>
+				<form:input path="productNumber" />
+				<form:errors class="formError"
+					path="product.productNumber" delimiter=", "></form:errors>
+			</div>
+		</c:if>
 		<c:if test="${model.productFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${model.productFields.collectionNumber.displayName}</form:label>
@@ -187,6 +207,22 @@
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="product.productType"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.productFields.isAvailable.hidden != true }">
+			<div>
+				<form:label path="isAvailable">${model.productFields.isAvailable.displayName}</form:label>
+				<form:checkbox path="isAvailable" class="isAvailable checkBoxInForm" />
+				<form:errors class="formError" path="product.isAvailable"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.productFields.isQuarantined.hidden != true }">
+			<div>
+				<form:label path="isQuarantined">${model.productFields.isQuarantined.displayName}</form:label>
+				<form:checkbox path="isQuarantined" class="isQuarantined checkBoxInForm"/>
+				<form:errors class="formError" path="product.isQuarantined"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>

@@ -1,46 +1,40 @@
-function addNewProduct(form) {
-  updateProductGeneric(form, "updateProduct.html");
+function addNewProduct(form, resultDivId, successCallback) {
+  updateProductGeneric(form, resultDivId, "addProduct.html", successCallback);
 }
 
-function updateExistingProduct(form) {
-  updateProductGeneric(form, "updateProduct.html");
+function updateExistingProduct(form, resultDivId, successCallback) {
+  updateProductGeneric(form, resultDivId, "updateProduct.html", successCallback);
 }
 
-function updateProductGeneric(form, url) {
-  var testResult = $("#" + form.getAttribute("id")).serialize();
+function updateProductGeneric(form, resultDivId, url, successCallback) {
+  var product = $(form).serialize();
   $.ajax({
-    type : "POST",
-    url : url,
-    data : testResult,
-    success : function(jsonResponse) {
-      if (jsonResponse["success"] === true) {
-        $.showMessage("Product Updated Successfully!");
-        $('#' + form.getAttribute("id")).each(function() {
-          this.reset();
-        });
-        window.history.back();
-      } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
-      }
-    }
+    type: "POST",
+    url: url,
+    data: product,
+    success: function(jsonResponse, data, data1, data2) {
+               showMessage("Product Updated Successfully!");
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             showErrorMessage("Something went wrong. Please fix the errors noted.");
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
   });
 }
 
-function deleteProduct(productNumber) {
+function deleteProduct(productId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteProduct.html",
-    data : {productNumber: productNumber},
+    data : {productId: productId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
-        $.showMessage("Product Deleted Successfully!");
-        window.history.back();
+        successCallback();
+        showMessage("Product Deleted Successfully!");
       } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
   });

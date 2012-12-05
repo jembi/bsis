@@ -1,5 +1,6 @@
 package model.product;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -175,10 +176,22 @@ public class ProductBackingForm {
 
   public void setCreatedOn(String createdOn) {
     this.createdOn = createdOn;
+    try {
+      product.setCreatedOn(CustomDateFormatter.getDateFromString(createdOn));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      product.setCreatedOn(null);
+    }
   }
 
   public void setExpiresOn(String expiresOn) {
     this.expiresOn = expiresOn;
+    try {
+      product.setExpiresOn(CustomDateFormatter.getDateFromString(expiresOn));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      product.setExpiresOn(null);
+    }
   }
 
   public void setBloodAbo(BloodAbo bloodAbo) {
@@ -246,5 +259,13 @@ public class ProductBackingForm {
 
   public void setProduct(Product product) {
     this.product = product;
+  }
+
+  public Boolean getIsAvailable() {
+    return product.getIsAvailable();
+  }
+
+  public void setIsAvailable(Boolean isAvailable) {
+    product.setIsAvailable(isAvailable);
   }
 }

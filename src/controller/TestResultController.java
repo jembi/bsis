@@ -152,7 +152,7 @@ public class TestResultController {
     Map<String, Object> m = model.asMap();
 
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the donor as part of the collected sample.
+    // We still need to store the collected sample as part of the product.
     String collectionNumber = form.getCollectionNumber();
     if (collectionNumber != null && !collectionNumber.isEmpty()) {
       try {
