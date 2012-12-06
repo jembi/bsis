@@ -67,15 +67,19 @@ public class ProductRepository {
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Date to = null;
     try {
-      to = (dateExpiresTo == null || dateExpiresTo.equals("")) ? new Date() :
-              dateFormat.parse(dateExpiresTo);
+      if (dateExpiresTo == null || dateExpiresTo.equals("")) {
+        to = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(to);
+        cal.add(Calendar.DATE, 365);
+        to = cal.getTime();
+      }
+      else {
+        to = dateFormat.parse(dateExpiresTo);
+      }
     } catch (ParseException ex) {
       ex.printStackTrace();
     }
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(to);
-    cal.add(Calendar.DATE, 365);
-    to = cal.getTime();
     return to;      
   }
 
@@ -89,7 +93,7 @@ public class ProductRepository {
             "p.productNumber = :productNumber and " +
             "((p.expiresOn is NULL) or " +
             " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
-            "c.isDeleted= :isDeleted",
+            "p.isDeleted= :isDeleted",
             Product.class);
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
@@ -110,14 +114,16 @@ public class ProductRepository {
     TypedQuery<Product> query = em
         .createQuery(
             "SELECT p FROM Product p WHERE " +
-            "p.collectionNumber = :collectionNumber and " +
+            "p.collectedSample.collectionNumber = :collectionNumber and " +
             "((p.expiresOn is NULL) or " +
             " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
-            "c.isDeleted= :isDeleted",
+            "p.isDeleted= :isDeleted",
             Product.class);
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
     Date to = getDateExpiresToOrDefault(dateExpiresTo);
+    System.out.println(from);
+    System.out.println(to);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
