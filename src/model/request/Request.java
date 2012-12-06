@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import model.location.Location;
 import model.location.LocationExists;
@@ -45,14 +46,17 @@ public class Request implements ModificationTracker {
   @Index(name="request_requestNumber_index")
   private String requestNumber;
 
+  @NotNull
   @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
   private Date requestDate;
 
+  @NotNull
   @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
   private Date requiredDate;
 
+  @NotNull
   private Integer requestedQuantity;
 
   @Enumerated(EnumType.STRING)

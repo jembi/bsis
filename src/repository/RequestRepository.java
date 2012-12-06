@@ -234,4 +234,9 @@ public class RequestRepository {
   public Request findRequestById(Long requestId) {
     return em.find(Request.class, requestId);
   }
+
+  public void addRequest(Request productRequest) {
+    em.persist(productRequest);
+    em.flush();
+  }
 }

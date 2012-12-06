@@ -53,11 +53,11 @@
         }).click(
             function() {
               if ("${model.existingRequest}" == "true")
-                updateExistingProduct($("#${editRequestFormId}")[0],
+                updateExistingRequest($("#${editRequestFormId}")[0],
                   														"${editRequestFormDivId}",
                   														notifyParentSuccess);
               else
-                addNewProduct($("#${editRequestFormId}")[0],
+                addNewRequest($("#${editRequestFormId}")[0],
                     									"${editRequestFormDivId}", notifyParentSuccess);
             });
 
@@ -94,6 +94,9 @@
           maxDate : 0,
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c0",
+          onSelect : function(selectedDate) {
+            $("#${editRequestFormId}").find(".requiredDate").datepicker("option", "minDate", selectedDate);
+          },
         });
 
         $("#${editRequestFormId}").find(".requiredDate").datepicker({
@@ -103,20 +106,15 @@
           maxDate : 60,
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c+1",
+          onSelect : function(selectedDate) {
+            $("#${editRequestFormId}").find(".requestDate").datepicker("option", "maxDate", selectedDate);
+          },
         });
 
         // second condition required for the case where the form is returned with errors
-        var createdOnDatePicker = $("#${editRequestFormId}").find(".createdOn");
-        if ("${model.existingRequest}" == "false" && createdOnDatePicker.val() == "") {
-          createdOnDatePicker.datepicker('setDate', new Date());
-        }
-
-        var expiresOnDatePicker = $("#${editRequestFormId}").find(".expiresOn");
-        if ("${model.existingRequest}" == "false" && expiresOnDatePicker.val() == "") {
-          var today = new Date();
-          var later = new Date();
-          later.setDate(today.getDate() + 30);
-          expiresOnDatePicker.datepicker('setDate', later);
+        var requestedOnDatePicker = $("#${editRequestFormId}").find(".requestDate");
+        if ("${model.existingRequest}" == "false" && requestedOnDatePicker.val() == "") {
+          requestedOnDatePicker.datepicker('setDate', new Date());
         }
 
         // set the checkboxes if required

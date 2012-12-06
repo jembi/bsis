@@ -3,6 +3,9 @@ package model.request;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import model.CustomDateFormatter;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
@@ -16,7 +19,10 @@ import repository.RequestRepository;
 
 public class RequestBackingForm {
 
+  @NotNull
+  @Valid
   private Request request;
+
   private String requestDate;
   private String requiredDate;
 
@@ -90,8 +96,11 @@ public class RequestBackingForm {
       return productType.toString();
   }
 
-  public Location getRequestSite() {
-    return getRequest().getRequestSite();
+  public String getRequestSite() {
+    Location site = request.getRequestSite();
+    if (site == null || site.getId() == null)
+      return null;
+    return site.getId().toString();
   }
 
   public String getPatientName() {
@@ -150,8 +159,15 @@ public class RequestBackingForm {
     getRequest().setNotes(notes);
   }
 
-  public void setProductType(ProductType productType) {
-    getRequest().setProductType(productType);
+  public void setProductType(String productType) {
+    if (productType == null) {
+      request.setProductType(null);
+    }
+    else {
+      ProductType pt = new ProductType();
+      pt.setProductType(productType);
+      request.setProductType(pt);
+    }
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -170,8 +186,15 @@ public class RequestBackingForm {
     getRequest().setModificationTracker(modificationTracker);
   }
 
-  public void setRequestSite(Location requestSite) {
-    getRequest().setRequestSite(requestSite);
+  public void setRequestSite(String requestSite) {
+    if (requestSite == null) {
+      request.setRequestSite(null);
+    }
+    else {
+      Location l = new Location();
+      l.setId(Long.parseLong(requestSite));
+      request.setRequestSite(l);
+    }
   }
 
   public void setPatientName(String patientName) {

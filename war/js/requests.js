@@ -3,10 +3,10 @@ function addNewRequest(form, resultDivId, successCallback) {
 }
 
 function updateExistingProduct(form, resultDivId, successCallback) {
-  updateProductGeneric(form, resultDivId, "updateRequest.html", successCallback);
+  updateRequestGeneric(form, resultDivId, "updateRequest.html", successCallback);
 }
 
-function updateProductGeneric(form, resultDivId, url, successCallback) {
+function updateRequestGeneric(form, resultDivId, url, successCallback) {
   var request = $(form).serialize();
   $.ajax({
     type: "POST",

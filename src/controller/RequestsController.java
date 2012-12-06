@@ -2,7 +2,10 @@ package controller;
 
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import model.request.Request;
 import model.request.RequestBackingForm;
@@ -11,8 +14,10 @@ import model.request.RequestBackingFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -181,67 +186,55 @@ public class RequestsController {
     return mv;
   }
 
-//  @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
-//  public ModelAndView addProduct(
-//      HttpServletRequest request,
-//      HttpServletResponse response,
-//      @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
-//      BindingResult result, Model model) {
-//
-//    ModelAndView mv = new ModelAndView("editProductForm");
-//    boolean success = false;
-//    String message = "";
-//    Map<String, Object> m = model.asMap();
-//
-//    // IMPORTANT: Validation code just checks if the ID exists.
-//    // We still need to store the collected sample as part of the product.
-//    String collectionNumber = form.getCollectionNumber();
-//    if (collectionNumber != null && !collectionNumber.isEmpty()) {
-//      try {
-//        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
-//        form.setCollectedSample(collectedSample);
-//      } catch (NoResultException ex) {
-//        ex.printStackTrace();
-//      }
-//    }
-//
-//    if (result.hasErrors()) {
-//      m.put("hasErrors", true);
-//      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
-//      success = false;
-//      message = "Please fix the errors noted above.";
-//    } else {
-//      try {
-//        Product product = form.getProduct();
-//        product.setIsDeleted(false);
-//        productRepository.addProduct(product);
-//        m.put("hasErrors", false);
-//        success = true;
-//        message = "Product Successfully Added";
-//        form = new ProductBackingForm(true);
-//      } catch (EntityExistsException ex) {
-//        ex.printStackTrace();
-//        success = false;
-//        message = "Product Already exists.";
-//      } catch (Exception ex) {
-//        ex.printStackTrace();
-//        success = false;
-//        message = "Internal Error. Please try again or report a Problem.";
-//      }
-//    }
-//
-//    m.put("editProductForm", form);
-//    m.put("existingProduct", false);
-//    m.put("success", success);
-//    m.put("message", message);
-//    m.put("refreshUrl", "editProductFormGenerator.html");
-//    m.put("productFields", utilController.getFormFieldsForForm("product"));
-//    addEditSelectorOptions(m);
-//
-//    mv.addObject("model", m);
-//    return mv;
-//  }
-//
+  @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
+  public ModelAndView addProduct(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @ModelAttribute("editRequestForm") @Valid RequestBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView("editRequestForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = model.asMap();
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      success = false;
+      message = "Please fix the errors noted above.";
+    } else {
+      try {
+        Request productRequest = form.getRequest();
+        productRequest.setIsDeleted(false);
+        requestRepository.addRequest(productRequest);
+        m.put("hasErrors", false);
+        success = true;
+        message = "Request Successfully Added";
+        form = new RequestBackingForm(true);
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Request Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+    }
+
+    m.put("editRequestForm", form);
+    m.put("existingRequest", false);
+    m.put("success", success);
+    m.put("message", message);
+    m.put("refreshUrl", "editRequestFormGenerator.html");
+    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    addEditSelectorOptions(m);
+
+    mv.addObject("model", m);
+    return mv;
+  }
+
 //  @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
 //  public ModelAndView updateProduct(
 //      HttpServletResponse response,
