@@ -12,7 +12,6 @@
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
 <c:set var="childContentId">childContentId-${unique_page_id}</c:set>
-<c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(

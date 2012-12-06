@@ -21,15 +21,30 @@
 <c:set var="updateProductButtonId">updateProductButton-${unique_page_id}</c:set>
 <c:set var="deleteProductButtonId">deleteProductButton-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
+<c:set var="cancelButtonId">cancelButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
 
-        function notifyParent() {
+        function notifyParentSuccess() {
 						// let the parent know we are done
 						$("#${editProductFormDivId}").parent().trigger("editProductSuccess");
 				}
+
+        function notifyParentCancel() {
+					// let the parent know we are done
+					$("#${editProductFormDivId}").parent().trigger("editProductCancel");
+				}
+
+        $("#${cancelButtonId}").button({
+          icons : {
+            primary : 'ui-icon-closethick'
+          }
+        }).click(
+	           function() {
+               notifyParentCancel();
+        });
 
         $("#${updateProductButtonId}").button({
           icons : {
@@ -40,10 +55,10 @@
               if ("${model.existingProduct}" == "true")
                 updateExistingProduct($("#${editProductFormId}")[0],
                   														"${editProductFormDivId}",
-                  														notifyParent);
+                  														notifyParentSuccess);
               else
                 addNewProduct($("#${editProductFormId}")[0],
-                    									"${editProductFormDivId}", notifyParent);
+                    									"${editProductFormDivId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -231,6 +246,9 @@
 			<c:if test="${model.existingProduct}">
 				<button type="button" id="${updateProductButtonId}"
 								class="autoWidthButton">Save</button>
+				<button type="button" id="${cancelButtonId}">
+					Cancel
+				</button>
 			</c:if>
 
 			<button type="button" id="${printButtonId}">

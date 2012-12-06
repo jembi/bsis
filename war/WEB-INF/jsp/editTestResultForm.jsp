@@ -16,15 +16,30 @@
 <c:set var="bloodTestResultId">bloodTestResultId-${unique_page_id}</c:set>
 <c:set var="deleteTestResultButtonId">deleteTestResultButton-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
+<c:set var="cancelButtonId">cancelButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
 
-        function notifyParent() {
-						// let the parent know we are done
-						$("#${editTestResultFormDivId}").parent().trigger("editTestResultSuccess");
-				}
+        function notifyParentSuccess() {
+					 // let the parent know we are done
+				   $("#${editTestResultFormDivId}").parent().trigger("editTestResultSuccess");
+   		}
+
+       function notifyParentCancel() {
+					 // let the parent know we are done
+				   $("#${editTestResultFormDivId}").parent().trigger("editTestResultCancel");
+	   		}
+
+        $("#${cancelButtonId}").button({
+          icons : {
+            primary : 'ui-icon-closethick'
+          }
+        }).click(
+	           function() {
+               notifyParentCancel();
+        });
 
         $("#${updateTestResultButtonId}").button({
           icons : {
@@ -35,11 +50,11 @@
               if ("${model.existingTestResult}" == "true")
                 updateExistingTestResult($("#${editTestResultFormId}")[0],
                   												 "${editTestResultFormDivId}",
-                  												 notifyParent);
+                  												 notifyParentSuccess);
               else
                 addNewTestResult($("#${editTestResultFormId}")[0],
                     							 "${editTestResultFormDivId}",
-                    							 notifyParent);
+                    							 notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -213,6 +228,9 @@
 			<c:if test="${model.existingTestResult}">
 				<button type="button" id="${updateTestResultButtonId}"
 								class="autoWidthButton">Save</button>
+				<button type="button" id="${cancelButtonId}">
+					Cancel
+				</button>
 			</c:if>
 
 			<button type="button" id="${printButtonId}">

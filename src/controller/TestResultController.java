@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
-import model.collectedsample.CollectedSampleBackingForm;
-import model.donor.Donor;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.testresults.TestResultBackingFormValidator;
@@ -36,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
-import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import repository.TestResultRepository;
@@ -57,9 +54,6 @@ public class TestResultController {
   private BloodBagTypeRepository bloodBagTypeRepository;
   @Autowired
   private DonorTypeRepository donorTypeRepository;
-
-  @Autowired
-  private DonorRepository donorRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -87,6 +81,35 @@ public class TestResultController {
     // to ensure custom field names are displayed in the form
     m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
     m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping(value = "/testResultSummary", method = RequestMethod.GET)
+  public ModelAndView testResultSummaryGenerator(HttpServletRequest request, Model model,
+      @RequestParam(value = "testResultId", required = false) Long testResultId) {
+
+    ModelAndView mv = new ModelAndView("testResultSummary");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    TestResult testResult = null;
+    if (testResultId != null) {
+      testResult = testResultRepository.findTestResultById(testResultId);
+      if (testResult != null) {
+        m.put("existingTestResult", true);
+      }
+      else {
+        m.put("existingTestResult", false);
+      }
+    }
+
+    TestResultViewModel testResultViewModel = getTestResultViewModels(Arrays.asList(testResult)).get(0);
+    m.put("testResult", testResultViewModel);
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
     mv.addObject("model", m);
     return mv;
   }

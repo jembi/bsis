@@ -11,6 +11,8 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">testResultsTable-${unique_page_id}</c:set>
+<c:set var="childContentId">childContentId-${unique_page_id}</c:set>
+
 <c:set var="testResultsTableEditRowDivId">testResultsTableEditRowDiv-${unique_page_id}</c:set>
 <c:set var="deleteTestResultConfirmDialogId">deleteTestResultConfirmDialog-${unique_page_id}</c:set>
 
@@ -26,61 +28,36 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("enable");
-            					        var elements = $(node).children();
-            					        if (elements[0].getAttribute("class") === "dataTables_empty") {
-            					          return;
-            					        }
-            					        selectedRowId = elements[0].innerHTML;
-          									},
-          "fnRowDeselected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("disable");
-          									},
+															$("#${tabContentId}").parent().trigger("testResultSummaryView");
+											        var elements = $(node).children();
+											        if (elements[0].getAttribute("class") === "dataTables_empty") {
+											          return;
+											        }
+											        selectedRowId = elements[0].innerHTML;
+											        createTestResultSummary("testResultSummary.html",
+									  							{testResultId: selectedRowId});
+														},
+					"fnRowDeselected" : function(node) {
+															},
         },
         "oColVis" : {
          	"aiExclude": [0,1],
         }
       });
 
-      function createEditSection(url, data) {
+      function createTestResultSummary(url, data) {
         $.ajax({
           url: url,
           data: data,
           type: "GET",
           success: function(response) {
-            				 $("#${testResultsTableEditRowDivId}").html(response);
-            				 $(".editRowDiv").show();
-            				 $('html, body').animate({
-            				 		scrollTop: $("#${testResultsTableEditRowDivId}").offset().top
-            				 }, 700);
+            				 $("#${tabContentId}").trigger("testResultSummaryView", response);
             			 }
         });
       }
 
-      function clearEditSection() {
-        console.log("clear");
-        $("#${testResultsTableEditRowDivId}").html("");
-        $(".editRowDiv").hide();
-      }
-
-    	$(".closeButton").click(clearEditSection);
-
-      $("#${tabContentId}").find(".editTestResult").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-pencil'
-      			}
-          }).click(function() {
-        $("#${testResultsTableEditRowDivId}").bind("editTestResultSuccess", refreshResults);
-        createEditSection("editTestResultFormGenerator.html",
-            							{testResultId: selectedRowId});
-      });
-
       function refreshResults() {
-        showLoadingImage("${tabContentId}");
+        showLoadingImage($("#${tabContentId}"));
         $.ajax({url: "${model.refreshUrl}",
           			data: {},
           			type: "GET",
@@ -90,34 +67,7 @@ $(document).ready(
         });
       }
 
-      $("#${tabContentId}").find(".refreshResults").button({
-        icons : {
-          primary : 'ui-icon-arrowrefresh-1-e'
-        }
-      }).click(refreshResults);
-
-      $("#${tabContentId}").find(".deleteTestResult").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-trash'
-      			}
-          }).click(function() {
-        $("#${deleteTestResultConfirmDialogId}").dialog(
-            {
-              modal : true,
-              title : "Confirm Delete",
-              buttons : {
-                "Delete" : function() {
-                  deleteTestResult(selectedRowId, refreshResults);
-                  $(this).dialog("close");
-                },
-                "Cancel" : function() {
-                  $(this).dialog("close");
-                }
-              }
-            });
-      });
+      $("#${tabContentId}").find(".testResultsTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
@@ -140,16 +90,6 @@ $(document).ready(
 		</c:when>
 
 		<c:otherwise>
-
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editTestResult">
-				Edit Test Result
-			</button>
-			<button class="rowEditButton deleteTestResult">
-				Delete Test Result
-			</button>
 
 			<table id="${table_id}" class="dataTable testResultsTable">
 				<thead>
@@ -190,27 +130,7 @@ $(document).ready(
 				</tbody>
 			</table>
 
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editTestResult">
-				Edit Test Result
-			</button>
-			<button class="rowEditButton deleteTestResult">
-				Delete Test Result
-			</button>
-
 		</c:otherwise>
 	</c:choose>
 
-	<div class="editRowDiv" style="display: none;">
-		<span class="closeButton">X</span>
-		<div id="${testResultsTableEditRowDivId}">	
-		</div>
-	</div>
-
-</div>
-
-<div id="${deleteTestResultConfirmDialogId}" style="display: none;">
-	Are	you sure you want to delete this Test Result?
 </div>
