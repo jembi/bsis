@@ -131,6 +131,7 @@ public class AdminController {
       Integer numIssues = Integer.parseInt(params.get("numIssues"));
 
       createDataController.createDonors(numDonors);
+      createDataController.createCollectionsWithTestResults(numCollections);
     }
     catch (Exception ex) {
       ex.printStackTrace();

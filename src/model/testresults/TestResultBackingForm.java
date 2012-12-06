@@ -126,9 +126,6 @@ public class TestResultBackingForm {
     testResult.setId(id);
   }
 
-  public void setTestedOn(Date testedOn) {
-    testResult.setTestedOn(testedOn);
-  }
 
   public void setBloodTest(String bloodTestName) {
     if (testResult == null)
