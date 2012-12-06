@@ -18,15 +18,30 @@
 <c:set var="birthDateInputId">birthDateInput-${unique_page_id}</c:set>
 <c:set var="updateDonorButtonId">updateDonorButton-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
+<c:set var="cancelButtonId">cancelButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
 
-        function notifyParent() {
+        function notifyParentSuccess() {
 					 // let the parent know we are done
 				   $("#${editDonorFormDivId}").parent().trigger("editDonorSuccess");
     		}
+
+        function notifyParentCancel() {
+					 // let the parent know we are done
+				   $("#${editDonorFormDivId}").parent().trigger("editDonorCancel");
+	   		}
+
+        $("#${cancelButtonId}").button({
+          icons : {
+            primary : 'ui-icon-closethick'
+          }
+        }).click(
+	           function() {
+               notifyParentCancel();
+        });
 
         $("#${updateDonorButtonId}").button({
           icons : {
@@ -36,9 +51,9 @@
             function() {
               if ("${model.existingDonor}" == "true")
                 updateExistingDonor($("#${editDonorFormId}")[0],
-                    								"${editDonorFormDivId}", notifyParent);
+                    								"${editDonorFormDivId}", notifyParentSuccess);
               else
-                addNewDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}", notifyParent);
+                addNewDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -103,9 +118,6 @@
 <div id="${editDonorFormDivId}">
 	<form:form id="${editDonorFormId}" method="POST" class="formInTabPane"
 		commandName="editDonorForm">
-		<c:if test="${model.existingDonor}">
-			<div id="${editDonorFormBarcodeId}"></div>
-		</c:if>
 		<form:hidden path="id" />
 		<c:if test="${model.donorFields.donorNumber.hidden != true }">
 			<div>
@@ -232,6 +244,9 @@
 			<c:if test="${model.existingDonor}">
 				<button type="button" id="${updateDonorButtonId}">
 					Save
+				</button>
+				<button type="button" id="${cancelButtonId}">
+					Cancel
 				</button>
 			</c:if>
 

@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,35 @@ public class DonorController {
     model.put("requestUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
+  }
+
+  @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
+  public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
+      @RequestParam(value = "donorId", required = false) Long donorId) {
+
+    ModelAndView mv = new ModelAndView("donorSummary");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    Donor donor = null;
+    if (donorId != null) {
+      donor = donorRepository.findDonorById(donorId);
+      if (donor != null) {
+        m.put("existingDonor", true);
+      }
+      else {
+        m.put("existingDonor", false);
+      }
+    }
+
+    DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
+    m.put("donor", donorViewModel);
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    mv.addObject("model", m);
+    return mv;
   }
 
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
@@ -233,7 +263,7 @@ public class DonorController {
     m.put("errMsg", errMsg);
     return m;
   }
-  
+
   @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView findDonorFormGenerator(HttpServletRequest request, Model model) {
 

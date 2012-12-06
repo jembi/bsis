@@ -519,6 +519,14 @@ tr > td
 	z-index: 100;
 }
 
+.summaryPageButtonSection {
+	position: absolute;
+	right: 3px;
+	top: 3px;
+	cursor: pointer;
+	z-index: 100;
+}
+
 .hidableDiv {
 	display: inline-block;
 }

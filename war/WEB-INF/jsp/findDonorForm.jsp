@@ -14,39 +14,43 @@
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="findDonorFormDivId">findDonorFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+
 <c:set var="findDonorFormId">findDonorForm-${unique_page_id}</c:set>
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="childContentId">findDonorFormResult-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
-  $("#${findDonorFormDivId}").find(".findDonorButton").button({
+
+  $("#${tabContentId}").find(".findDonorButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
   }).click(function() {
     var findDonorFormData = $("#${findDonorFormId}").serialize();
-    showLoadingImage('${childContentId}');
+    var resultsDiv = $("#${mainContentId}").find(".findDonorResults");
+    showLoadingImage(resultsDiv);
     $.ajax({
       type : "GET",
       url : "findDonor.html",
       data : findDonorFormData,
       success : function(data) {
-        $('#${childContentId}').html(data);
+        resultsDiv.html(data);
         window.scrollTo(0, document.body.scrollHeight);
       }
     });
   });
 
-  $("#${findDonorFormDivId}").find(".clearFindFormButton").button({
+  $("#${tabContentId}").find(".clearFindFormButton").button({
     icons : {
       primary : 'ui-icon-grip-solid-horizontal'
     }
   }).click(clearFindForm);
   
   function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${findDonorFormDivId}"));
+    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
   }
 
@@ -67,50 +71,69 @@ $(document).ready(function() {
 										  
     							}
   });
+
   $("#${findDonorFormBloodGroupSelectorId}").multiselect("checkAll");
+
+  // child div shows donor information. bind this div to donorView event
+  $("#${tabContentId}").bind("donorSummaryView",
+      function(event, content) {
+    		$("#${mainContentId}").hide();
+    		$("#${childContentId}").html(content);
+  		});
+
+  $("#${tabContentId}").bind("donorSummarySuccess",
+      function(event, content) {
+    		$("#${mainContentId}").show();
+    		$("#${childContentId}").html("");
+    		$("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
+  		});
 
 });
 </script>
 
-<div id="${findDonorFormDivId}" class="formDiv">
-	<b>Find Donors</b>
-	<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
-		class="formInTabPane">
-		<div>
-			<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
-			<form:input path="donorNumber" />
-		</div>
-		<div>
-			<form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
-			<form:input path="firstName" />
-		</div>
-		<div>
-			<form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
-			<form:input path="lastName" />
-		</div>
-		<div>
-			<form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-				<form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
-					<form:option value="A+" label="A+" />
-					<form:option value="A-" label="A-" />
-					<form:option value="B+" label="B+" />
-					<form:option value="B-" label="B-" />
-					<form:option value="AB+" label="AB+" />
-					<form:option value="AB-" label="AB-" />
-					<form:option value="O+" label="O+" />
-					<form:option value="O-" label="O-" />
-				</form:select>
-		</div>
-		<div>
-			<label></label>
-			<button type="button" class="findDonorButton">
-				Find donor
-			</button>
-			<button type="button" class="clearFindFormButton">
-				Clear form
-			</button>
-		</div>
-	</form:form>
-</div>
+<div id="${tabContentId}" class="formDiv">
+	<div id="${mainContentId}">
+		<b>Find Donors</b>
+		<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
+			class="formInTabPane">
+			<div>
+				<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
+				<form:input path="donorNumber" />
+			</div>
+			<div>
+				<form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
+				<form:input path="firstName" />
+			</div>
+			<div>
+				<form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
+				<form:input path="lastName" />
+			</div>
+			<div>
+				<form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
+					<form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
+						<form:option value="A+" label="A+" />
+						<form:option value="A-" label="A-" />
+						<form:option value="B+" label="B+" />
+						<form:option value="B-" label="B-" />
+						<form:option value="AB+" label="AB+" />
+						<form:option value="AB-" label="AB-" />
+						<form:option value="O+" label="O+" />
+						<form:option value="O-" label="O-" />
+					</form:select>
+			</div>
+			<div>
+				<label></label>
+				<button type="button" class="findDonorButton">
+					Find donor
+				</button>
+				<button type="button" class="clearFindFormButton">
+					Clear form
+				</button>
+			</div>
+		</form:form>
+		<div class="findDonorResults"></div>
+	</div>
 
-<div id="${childContentId}"></div>
+	<div id="${childContentId}"></div>
+
+</div>

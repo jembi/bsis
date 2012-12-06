@@ -425,8 +425,24 @@ function copyMirroredFields(targetFormId, mirroredFields) {
   }
 }
 
-function showLoadingImage(targetElementId) {
-  $('#' + targetElementId).html($("#preloader").html());
+function showLoadingImage(targetElement) {
+  targetElement.html($("#preloader").html());
+}
+
+function fetchContent(url, data, replaceTarget) {
+  $.ajax({
+    url: url,
+    data: data,
+    type: "GET",
+    success: function (response) {
+                replaceTarget.html(response);
+                $('html, body').animate({ scrollTop: replaceTarget.offset().top}, 300);
+             },
+    error:   function (response) {
+               showErrorMessage("Something went wrong. Please try again.");
+             }
+    
+  });
 }
 
 function refetchContent(url, replaceTarget) {

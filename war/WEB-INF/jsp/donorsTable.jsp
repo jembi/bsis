@@ -11,7 +11,7 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
-<c:set var="donorsTableEditRowDivId">donorsTableEditRowDiv-${unique_page_id}</c:set>
+<c:set var="childContentId">childContentId-${unique_page_id}</c:set>
 <c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
 
 <script>
@@ -26,17 +26,16 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("enable");
+            									$("#${tabContentId}").parent().trigger("donorView");
             					        var elements = $(node).children();
             					        if (elements[0].getAttribute("class") === "dataTables_empty") {
             					          return;
             					        }
             					        selectedRowId = elements[0].innerHTML;
+            					        createDonorSummary("donorSummary.html",
+                    							{donorId: selectedRowId});
           									},
           "fnRowDeselected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("disable");
           									},
         },
         "oColVis" : {
@@ -44,43 +43,19 @@ $(document).ready(
         }
       });
 
-      function createEditSection(url, data) {
+      function createDonorSummary(url, data) {
         $.ajax({
           url: url,
           data: data,
           type: "GET",
           success: function(response) {
-            				 $("#${donorsTableEditRowDivId}").html(response);
-            				 $(".editRowDiv").show();
-            				 $('html, body').animate({
-            				 		scrollTop: $("#${donorsTableEditRowDivId}").offset().top
-            				 }, 700);
+            				 $("#${tabContentId}").trigger("donorSummaryView", response);
             			 }
         });
       }
 
-      function clearEditSection() {
-        console.log("clear");
-        $("#${donorsTableEditRowDivId}").html("");
-        $(".editRowDiv").hide();
-      }
-
-    	$(".closeButton").click(clearEditSection);
-
-      $("#${tabContentId}").find(".editDonor").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-pencil'
-      			}
-          }).click(function() {
-        $("#${donorsTableEditRowDivId}").bind("editDonorSuccess", refreshResults);
-        createEditSection("editDonorFormGenerator.html",
-            							{donorId: selectedRowId});
-      });
-
       function refreshResults() {
-        showLoadingImage("${tabContentId}");
+        showLoadingImage($("#${tabContentId}"));
         $.ajax({url: "${model.refreshUrl}",
           			data: {},
           			type: "GET",
@@ -90,56 +65,7 @@ $(document).ready(
         });
       }
 
-      $("#${tabContentId}").find(".refreshResults").button({
-        icons : {
-          primary : 'ui-icon-arrowrefresh-1-e'
-        }
-      }).click(refreshResults);
-
-      $("#${tabContentId}").find(".createCollection").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-circle-zoomin'
-      			}
-          }).click(function() {
-        $("#${donorsTableEditRowDivId}").bind("editCollectionSuccess", clearEditSection);
-        createEditSection("addCollectionFormForDonorGenerator.html",
-						{donorId: selectedRowId});
-      });
-
-      $("#${tabContentId}").find(".viewDonorHistory").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-info'
-      			}
-          }).click(function() {
-        console.log("view donor history clicked");
-      });
-
-      $("#${tabContentId}").find(".deleteDonor").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-trash'
-      			}
-          }).click(function() {
-        $("#${deleteDonorConfirmDialogId}").dialog(
-            {
-              modal : true,
-              title : "Confirm Delete",
-              buttons : {
-                "Delete" : function() {
-                  deleteDonor(selectedRowId, refreshResults);
-                  $(this).dialog("close");
-                },
-                "Cancel" : function() {
-                  $(this).dialog("close");
-                }
-              }
-            });
-      });
+      $("#${tabContentId}").find(".donorsTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
@@ -162,22 +88,6 @@ $(document).ready(
 		</c:when>
 
 		<c:otherwise>
-
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editDonor">
-				Edit Donor
-			</button>
-			<button class="rowEditButton createCollection">
-				Create Collection for Donor
-			</button>
-			<button class="rowEditButton viewDonorHistory">
-				Donor History
-			</button>
-			<button class="rowEditButton deleteDonor">
-				Delete Donor
-			</button>
 
 			<table id="${table_id}" class="dataTable donorsTable">
 				<thead>
@@ -230,30 +140,8 @@ $(document).ready(
 				</tbody>
 			</table>
 
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editDonor">
-				Edit Donor
-			</button>
-			<button class="rowEditButton createCollection">
-				Create Collection for Donor
-			</button>
-			<button class="rowEditButton viewDonorHistory">
-				Donor History
-			</button>
-			<button class="rowEditButton deleteDonor">
-				Delete Donor
-			</button>
-
 		</c:otherwise>
 	</c:choose>
-
-	<div class="editRowDiv" style="display: none;">
-		<span class="closeButton">X</span>
-		<div id="${donorsTableEditRowDivId}">	
-		</div>
-	</div>
 
 </div>
 

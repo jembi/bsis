@@ -293,7 +293,7 @@
 			<label></label>
 			<c:if test="${!(model.existingCollectedSample)}">
 				<button type="button" id="${updateCollectedSampleButtonId}">
-					Save and add another
+					Save
 				</button>
 				<button type="button" class="clearFormButton">
 					Clear form

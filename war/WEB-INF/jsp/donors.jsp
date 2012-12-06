@@ -10,6 +10,7 @@
 
 <link type="text/css" rel="stylesheet" href="css/donors.css" media="all" />
 <script type="text/javascript" src="js/donors.js"></script>
+<script type="text/javascript" src="js/collections.js"></script>
 
 <div id="donorsTab" class="leftPanel tabs">
 	<div class="breadCrumb"></div>

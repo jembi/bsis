@@ -8,7 +8,7 @@ function updateExistingDonor(form, resultDivId, successCallback) {
 
 function updateDonorGeneric(form, resultDivId, url, successCallback) {
   var donor = $(form).serialize();
-  showLoadingImage(resultDivId);
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: url,
