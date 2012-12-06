@@ -88,6 +88,15 @@ public class Product implements ModificationTracker {
   }
 
   public void copy(Product product) {
+    assert (this.getId().equals(product.getId()));
+    this.productNumber = product.productNumber;
+    this.collectedSample = product.collectedSample;
+    this.productType = product.productType;
+    this.createdOn = product.createdOn;
+    this.expiresOn = product.expiresOn;
+    this.bloodAbo = product.bloodAbo;
+    this.bloodRhd = product.bloodRhd;
+    this.notes = product.notes;
   }
 
   public Long getId() {

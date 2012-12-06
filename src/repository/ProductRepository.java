@@ -310,6 +310,17 @@ public class ProductRepository {
     return products.get(0);
   }
 
+  public Product updateProduct(Product product) {
+    Product existingProduct = findProductById(product.getId());
+    if (existingProduct == null) {
+      return null;
+    }
+    existingProduct.copy(product);
+    em.merge(existingProduct);
+    em.flush();
+    return existingProduct;
+  }
+
   public Product updateOrAddProduct(Product product) {
     Product existingProduct = findProductByProductNumber(product
         .getProductNumber());

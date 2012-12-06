@@ -26,7 +26,7 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-            									$("#${tabContentId}").parent().trigger("donorView");
+            									$("#${tabContentId}").parent().trigger("donorSummaryView");
             					        var elements = $(node).children();
             					        if (elements[0].getAttribute("class") === "dataTables_empty") {
             					          return;
@@ -144,6 +144,3 @@ $(document).ready(
 	</c:choose>
 
 </div>
-
-<div id="${deleteDonorConfirmDialogId}" style="display: none;">Are
-	you sure you want to delete this Donor?</div>

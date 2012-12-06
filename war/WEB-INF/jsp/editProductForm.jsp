@@ -210,22 +210,6 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.productFields.isAvailable.hidden != true }">
-			<div>
-				<form:label path="isAvailable">${model.productFields.isAvailable.displayName}</form:label>
-				<form:checkbox path="isAvailable" class="isAvailable checkBoxInForm" />
-				<form:errors class="formError" path="product.isAvailable"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.isQuarantined.hidden != true }">
-			<div>
-				<form:label path="isQuarantined">${model.productFields.isQuarantined.displayName}</form:label>
-				<form:checkbox path="isQuarantined" class="isQuarantined checkBoxInForm"/>
-				<form:errors class="formError" path="product.isQuarantined"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
 		<c:if test="${model.productFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.productFields.notes.displayName}</form:label>

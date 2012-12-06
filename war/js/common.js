@@ -303,31 +303,31 @@ function getSelectedTabs() {
     leftPanelSelected = $("#donorsTab").tabs("option", "selected");
     leftPanelSelectedId = "donorsTab";
     break;
+//  case 2:
+//    leftPanelSelected = $("#collectionsTab").tabs("option", "selected");
+//    leftPanelSelectedId = "collectionsTab";
+//    break;
   case 2:
-    leftPanelSelected = $("#collectionsTab").tabs("option", "selected");
-    leftPanelSelectedId = "collectionsTab";
-    break;
-  case 3:
     leftPanelSelected = $("#testResultsTab").tabs("option", "selected");
     leftPanelSelectedId = "testResultsTab";
     break;
-  case 4:
+  case 3:
     leftPanelSelected = $("#productsTab").tabs("option", "selected");
     leftPanelSelectedId = "productsTab";
     break;
-  case 5:
+  case 4:
     leftPanelSelected = $("#requestsTab").tabs("option", "selected");
     leftPanelSelectedId = "requestsTab";
     break;
-  case 6:
+  case 5:
     leftPanelSelected = $("#usageTab").tabs("option", "selected");
     leftPanelSelectedId = "usageTab";
     break;
-  case 7:
+  case 6:
     leftPanelSelected = $("#reportsTab").tabs("option", "selected");
     leftPanelSelectedId = "reportsTab";
     break;
-  case 8:
+  case 7:
     leftPanelSelected = $("#adminTab").tabs("option", "selected");
     leftPanelSelectedId = "adminTab";
     break;

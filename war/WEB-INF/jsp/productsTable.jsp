@@ -26,61 +26,36 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("enable");
-            					        var elements = $(node).children();
-            					        if (elements[0].getAttribute("class") === "dataTables_empty") {
-            					          return;
-            					        }
-            					        selectedRowId = elements[0].innerHTML;
-          									},
-          "fnRowDeselected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("disable");
-          									},
+															$("#${tabContentId}").parent().trigger("productSummaryView");
+											        var elements = $(node).children();
+											        if (elements[0].getAttribute("class") === "dataTables_empty") {
+											          return;
+											        }
+											        selectedRowId = elements[0].innerHTML;
+											        createProductSummary("productSummary.html",
+									  							{productId: selectedRowId});
+ 													  },
+				"fnRowDeselected" : function(node) {
+														},
         },
         "oColVis" : {
          	"aiExclude": [0,1],
         }
       });
 
-      function createEditSection(url, data) {
+      function createProductSummary(url, data) {
         $.ajax({
           url: url,
           data: data,
           type: "GET",
           success: function(response) {
-            				 $("#${productsTableEditRowDivId}").html(response);
-            				 $(".editRowDiv").show();
-            				 $('html, body').animate({
-            				 		scrollTop: $("#${productsTableEditRowDivId}").offset().top
-            				 }, 700);
+            				 $("#${tabContentId}").trigger("productSummaryView", response);
             			 }
         });
       }
 
-      function clearEditSection() {
-        console.log("clear");
-        $("#${productsTableEditRowDivId}").html("");
-        $(".editRowDiv").hide();
-      }
-
-    	$(".closeButton").click(clearEditSection);
-
-      $("#${tabContentId}").find(".editProduct").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-pencil'
-      			}
-          }).click(function() {
-        $("#${productsTableEditRowDivId}").bind("editProductSuccess", refreshResults);
-        createEditSection("editProductFormGenerator.html",
-            							{productId: selectedRowId});
-      });
-
       function refreshResults() {
-        showLoadingImage("${tabContentId}");
+        showLoadingImage($("#${tabContentId}"));
         $.ajax({url: "${model.refreshUrl}",
           			data: {},
           			type: "GET",
@@ -90,34 +65,7 @@ $(document).ready(
         });
       }
 
-      $("#${tabContentId}").find(".refreshResults").button({
-        icons : {
-          primary : 'ui-icon-arrowrefresh-1-e'
-        }
-      }).click(refreshResults);
-
-      $("#${tabContentId}").find(".deleteProduct").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-trash'
-      			}
-          }).click(function() {
-        $("#${deleteProductConfirmDialogId}").dialog(
-            {
-              modal : true,
-              title : "Confirm Delete",
-              buttons : {
-                "Delete" : function() {
-                  deleteProduct(selectedRowId, refreshResults);
-                  $(this).dialog("close");
-                },
-                "Cancel" : function() {
-                  $(this).dialog("close");
-                }
-              }
-            });
-      });
+      $("#${tabContentId}").find(".productsTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
@@ -140,16 +88,6 @@ $(document).ready(
 		</c:when>
 
 		<c:otherwise>
-
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editProduct">
-				Edit Product
-			</button>
-			<button class="rowEditButton deleteProduct">
-				Delete Product
-			</button>
 
 			<table id="${table_id}" class="dataTable productsTable">
 				<thead>
@@ -202,26 +140,7 @@ $(document).ready(
 				</tbody>
 			</table>
 
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editProduct">
-				Edit Product
-			</button>
-			<button class="rowEditButton deleteProduct">
-				Delete Product
-			</button>
-
 		</c:otherwise>
 	</c:choose>
 
-	<div class="editRowDiv" style="display: none;">
-		<span class="closeButton">X</span>
-		<div id="${productsTableEditRowDivId}">	
-		</div>
-	</div>
-
 </div>
-
-<div id="${deleteProductConfirmDialogId}" style="display: none;">Are
-	you sure you want to delete this Product?</div>

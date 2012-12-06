@@ -24,11 +24,11 @@
 		<!-- li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
 				class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li-->
 
+		<li class="topPanelTab"><a href="#productsLandingPageContent"><span
+				class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
 		<li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
 				class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test
 				Results</a></li>
-		<li class="topPanelTab"><a href="#productsLandingPageContent"><span
-				class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
 		<li class="topPanelTab"><a href="#requestsLandingPageContent"><span
 				class="ui-icon ui-icon-tag" style="display: inline-block;"></span>Requests</a></li>
 		<li class="topPanelTab"><a href="#usageLandingPageContent"><span

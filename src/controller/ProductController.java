@@ -44,6 +44,7 @@ import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.ProductViewModel;
+import viewmodel.donor.DonorViewModel;
 
 @Controller
 public class ProductController {
@@ -87,6 +88,35 @@ public class ProductController {
         reqUrl += "?"+queryString;
     }
     return reqUrl;
+  }
+
+  @RequestMapping(value = "/productSummary", method = RequestMethod.GET)
+  public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
+      @RequestParam(value = "productId", required = false) Long productId) {
+
+    ModelAndView mv = new ModelAndView("productSummary");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    Product product = null;
+    if (productId != null) {
+      product = productRepository.findProductById(productId);
+      if (product != null) {
+        m.put("existingProduct", true);
+      }
+      else {
+        m.put("existingProduct", false);
+      }
+    }
+
+    ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
+    m.put("product", productViewModel);
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("productFields", utilController.getFormFieldsForForm("Product"));
+    mv.addObject("model", m);
+    return mv;
   }
 
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
@@ -242,83 +272,81 @@ public class ProductController {
     return mv;
   }
 
-//  @RequestMapping(value = "/updateCollectedSample", method = RequestMethod.POST)
-//  public ModelAndView updateCollectedSample(
-//      HttpServletResponse response,
-//      @ModelAttribute("editCollectedSampleForm") @Valid CollectedSampleBackingForm form,
-//      BindingResult result, Model model) {
-//
-//    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
-//    boolean success = false;
-//    String message = "";
-//    Map<String, Object> m = model.asMap();
-//    addEditSelectorOptions(m);
-//    // only when the collection is correctly added the existingCollectedSample
-//    // property will be changed
-//    m.put("existingCollectedSample", true);
-//
-//    System.out.println("here");
-//    System.out.println(form.getCollectionCenter());
-//    System.out.println(form.getCollectionSite());
-//
-//    // IMPORTANT: Validation code just checks if the ID exists.
-//    // We still need to store the donor as part of the collected sample.
-//    String donorId = form.getDonorIdHidden();
-//    if (donorId != null && !donorId.isEmpty()) {
-//      try {
-//        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
-//        form.setDonor(donor);
-//      } catch (NoResultException ex) {
-//        ex.printStackTrace();
-//      }
-//    }
-//
-//    if (result.hasErrors()) {
-//      m.put("hasErrors", true);
-//      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//      success = false;
-//      message = "Please fix the errors noted above now!";
-//    }
-//    else {
-//      try {
-//
-//        form.setIsDeleted(false);
-//        CollectedSample existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
-//        if (existingCollectedSample == null) {
-//          m.put("hasErrors", true);
-//          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//          success = false;
-//          m.put("existingCollectedSample", false);
-//          message = "Collection does not already exist.";
-//        }
-//        else {
-//          m.put("hasErrors", false);
-//          success = true;
-//          message = "Collection Successfully Updated";
-//        }
-//      } catch (EntityExistsException ex) {
-//        ex.printStackTrace();
-//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//        success = false;
-//        message = "Collection Already exists.";
-//      } catch (Exception ex) {
-//        ex.printStackTrace();
-//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//        success = false;
-//        message = "Internal Error. Please try again or report a Problem.";
-//      }
-//   }
-//
-//    m.put("editCollectedSampleForm", form);
-//    m.put("success", success);
-//    m.put("message", message);
-//    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-//
-//    mv.addObject("model", m);
-//
-//    return mv;
-//  }
-//
+  @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+  public ModelAndView updateProduct(
+      HttpServletResponse response,
+      @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView("editProductForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // only when the collection is correctly added the existingCollectedSample
+    // property will be changed
+    m.put("existingProduct", true);
+
+    System.out.println("here");
+
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the collected sample as part of the product.
+    String collectionNumber = form.getCollectionNumber();
+    if (collectionNumber != null && !collectionNumber.isEmpty()) {
+      try {
+        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+        form.setCollectedSample(collectedSample);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      success = false;
+      message = "Please fix the errors noted above now!";
+    }
+    else {
+      try {
+
+        form.setIsDeleted(false);
+        Product existingProduct = productRepository.updateProduct(form.getProduct());
+        if (existingProduct == null) {
+          m.put("hasErrors", true);
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          success = false;
+          m.put("existingProduct", false);
+          message = "Product does not already exist.";
+        }
+        else {
+          m.put("hasErrors", false);
+          success = true;
+          message = "Product Successfully Updated";
+        }
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        success = false;
+        message = "Product Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+   }
+
+    m.put("editProductForm", form);
+    m.put("success", success);
+    m.put("message", message);
+    m.put("productFields", utilController.getFormFieldsForForm("Product"));
+
+    mv.addObject("model", m);
+
+    return mv;
+  }
+
   private List<ProductViewModel> getProductViewModels(
       List<Product> products) {
     if (products == null)

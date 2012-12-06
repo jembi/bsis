@@ -5,11 +5,11 @@ $(document).ready(
       // elements.
       var tab_a_selector = 'ul.ui-tabs-nav a';
 
-      var pushState = history.pushState;
-      history.pushState = function() {
-        console.log("pushState called");
-        pushState.apply(history, arguments);
-      };
+//      var pushState = history.pushState;
+//      history.pushState = function() {
+//        console.log("pushState called");
+//        pushState.apply(history, arguments);
+//      };
 
       var topPanelTabs = $("#topPanelTabs").tabs({
         cache : true
@@ -50,7 +50,8 @@ $(document).ready(
       // Define our own click handler for the tabs, overriding the default.
       $(".tabs").find(tab_a_selector).click(function(event, ui) {
         var t = getSelectedTabs();
-        console.log("pushstate called " + JSON.stringify(t));
+        console.log(t);
+//        console.log("pushstate called " + JSON.stringify(t));
         if (tabContent[t.topPanelSelected] == undefined)
           tabContent[t.topPanelSelected] = {};
         if (tabContent[t.topPanelSelected][t.leftPanelSelected] == undefined)
@@ -81,22 +82,22 @@ $(document).ready(
                 case 1:
                   leftPanelTabs = donorsTabs;
                   break;
+//                case 2:
+//                  leftPanelTabs = collectionsTabs;
+//                  break;
                 case 2:
-                  leftPanelTabs = collectionsTabs;
-                  break;
-                case 3:
                   leftPanelTabs = testResultsTabs;
                   break;
-                case 4:
+                case 3:
                   leftPanelTabs = productsTabs;
                   break;
-                case 5:
+                case 4:
                   leftPanelTabs = requestsTabs;
                   break;
-                case 6:
+                case 5:
                   leftPanelTabs = usageTabs;
                   break;
-                case 7:
+                case 6:
                   leftPanelTabs = reportsTabs;
                   break;
                 case 7:

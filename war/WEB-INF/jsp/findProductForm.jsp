@@ -14,7 +14,12 @@
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="findProductFormDivId">findProductFormDiv-${unique_page_id}</c:set>
+
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+
+<c:set var="tabContentId">findProductFormDiv-${unique_page_id}</c:set>
 <c:set var="findProductFormId">findProductForm-${unique_page_id}</c:set>
 <c:set var="findProductFormSearchById">findProductFormSearchBySelector-${unique_page_id}</c:set>
 <c:set var="findProductFormResultId">findProductFormResult-${unique_page_id}</c:set>
@@ -22,19 +27,20 @@
 
 <script>
 $(document).ready(function() {
-  $("#${findProductFormDivId}").find(".findProductButton").button({
+  $("#${tabContentId}").find(".findProductButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
   }).click(function() {
     var findProductFormData = $("#${findProductFormId}").serialize();
-    showLoadingImage('${findProductFormResultId}');
+    var resultsDiv = $("#${mainContentId}").find(".findProductResults");
+    showLoadingImage(resultsDiv);
     $.ajax({
       type : "GET",
       url : "findProduct.html",
       data : findProductFormData,
       success: function(data) {
-      				   $('#${findProductFormResultId}').html(data);
+				         resultsDiv.html(data);
         				 window.scrollTo(0, document.body.scrollHeight);
       				 },
       error: function(data) {
@@ -43,17 +49,15 @@ $(document).ready(function() {
     });
   });
 
-  $("#${findProductFormDivId}").find(".clearFindFormButton").button({
+  $("#${tabContentId}").find(".clearFindFormButton").button({
     icons : {
       primary : 'ui-icon-grip-solid-horizontal'
     }
   }).click(clearFindForm);
   
   function clearFindForm() {
-		$("#${findProductFormId}").each(function() {
-		  this.reset();
-		});
-		$("#${findProductFormResultId}").html("");
+    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    $("#${childContentId}").html("");
 		// show the appropriate input based on default search by
 	  $("#${findProductFormId}").find(".searchBy").trigger("change");
   }
@@ -146,10 +150,24 @@ $(document).ready(function() {
     }
   });
 
+  // child div shows donor information. bind this div to productSummaryView event
+  $("#${tabContentId}").bind("productSummaryView",
+      function(event, content) {
+    		$("#${mainContentId}").hide();
+    		$("#${childContentId}").html(content);
+  		});
+
+  $("#${tabContentId}").bind("productSummarySuccess",
+      function(event, content) {
+    		$("#${mainContentId}").show();
+    		$("#${childContentId}").html("");
+    		$("#${tabContentId}").find(".productsTable").trigger("refreshResults");
+  		});
 });
 </script>
 
-<div id="${findProductFormDivId}" class="formDiv">
+<div id="${tabContentId}" class="formDiv">
+	<div id="${mainContentId}">
 	<b>Find Products</b>
 	<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
 		class="formInTabPane">
@@ -196,13 +214,14 @@ $(document).ready(function() {
 		<div>
 			<label></label>
 			<button type="button" class="findProductButton">
-				Find collection
+				Find product
 			</button>
 			<button type="button" class="clearFindFormButton">
 				Clear form
 			</button>
 		</div>
 	</form:form>
+	<div class="findProductResults"></div>	
 </div>
-
-<div id="${findProductFormResultId}"></div>
+	<div id="${childContentId}"></div>
+</div>

@@ -8,6 +8,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import viewmodel.ProductViewModel;
+
 public class ProductBackingFormValidator implements Validator {
 
   private Validator validator;
@@ -19,7 +21,7 @@ public class ProductBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(FindProductBackingForm.class, ProductBackingForm.class).contains(clazz);
+    return Arrays.asList(FindProductBackingForm.class, ProductBackingForm.class, ProductViewModel.class).contains(clazz);
   }
 
   @Override
