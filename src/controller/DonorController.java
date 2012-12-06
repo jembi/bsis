@@ -135,6 +135,7 @@ public class DonorController {
 
     m.put("editDonorForm", form);
     m.put("existingDonor", false);
+    m.put("refreshUrl", "editDonorFormGenerator.html");
     m.put("success", success);
     m.put("message", message);
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
@@ -244,7 +245,7 @@ public class DonorController {
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
-    m.put("refreshUrl", getUrl(request));
+    m.put("refreshUrl", "findDonorFormGenerator.html");
     mv.addObject("model", m);
     return mv;
   }

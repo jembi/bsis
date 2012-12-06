@@ -17,7 +17,7 @@
 <c:set var="findDonorFormDivId">findDonorFormDiv-${unique_page_id}</c:set>
 <c:set var="findDonorFormId">findDonorForm-${unique_page_id}</c:set>
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="findDonorFormResultId">findDonorFormResult-${unique_page_id}</c:set>
+<c:set var="childContentId">findDonorFormResult-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -27,13 +27,13 @@ $(document).ready(function() {
     }
   }).click(function() {
     var findDonorFormData = $("#${findDonorFormId}").serialize();
-    showLoadingImage('${findDonorFormResultId}');
+    showLoadingImage('${childContentId}');
     $.ajax({
       type : "GET",
       url : "findDonor.html",
       data : findDonorFormData,
       success : function(data) {
-        $('#${findDonorFormResultId}').html(data);
+        $('#${childContentId}').html(data);
         window.scrollTo(0, document.body.scrollHeight);
       }
     });
@@ -46,10 +46,8 @@ $(document).ready(function() {
   }).click(clearFindForm);
   
   function clearFindForm() {
-		$("#${findDonorFormId}").each(function() {
-		  this.reset();
-		});
-		$("#${findDonorFormResultId}").html("");
+    refetchContent("${model.refreshUrl}", $("#${findDonorFormDivId}"));
+    $("#${childContentId}").html("");
   }
 
   $("#${findDonorFormBloodGroupSelectorId}").multiselect({
@@ -69,13 +67,13 @@ $(document).ready(function() {
 										  
     							}
   });
-  $("#${findDonorFormBloodGroupSelectorId}").multiselect("uncheckAll");
+  $("#${findDonorFormBloodGroupSelectorId}").multiselect("checkAll");
 
 });
 </script>
 
 <div id="${findDonorFormDivId}" class="formDiv">
-	<b><i>Find Donors</i></b>
+	<b>Find Donors</b>
 	<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
 		class="formInTabPane">
 		<div>
@@ -115,4 +113,4 @@ $(document).ready(function() {
 	</form:form>
 </div>
 
-<div id="${findDonorFormResultId}"></div>
+<div id="${childContentId}"></div>

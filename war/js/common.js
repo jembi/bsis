@@ -428,3 +428,18 @@ function copyMirroredFields(targetFormId, mirroredFields) {
 function showLoadingImage(targetElementId) {
   $('#' + targetElementId).html($("#preloader").html());
 }
+
+function refetchContent(url, replaceTarget) {
+  $.ajax({
+    url: url,
+    data: {},
+    type: "GET",
+    success: function (response) {
+                replaceTarget.replaceWith(response);
+             },
+    error:   function (response) {
+               showErrorMessage("Something went wrong. Please try again.");
+             }
+    
+  });
+}

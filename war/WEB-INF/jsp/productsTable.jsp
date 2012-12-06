@@ -167,12 +167,6 @@ $(document).ready(
 						<c:if test="${model.productFields.productType.hidden != true}">
 							<th>${model.productFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.isAvailable.hidden != true}">
-							<th>${model.productFields.isAvailable.displayName}</th>
-						</c:if>
-						<c:if test="${model.productFields.isQuarantined.hidden != true}">
-							<th>${model.productFields.isQuarantined.displayName}</th>
-						</c:if>
 						<c:if test="${model.productFields.createdOn.hidden != true}">
 							<th>${model.productFields.createdOn.displayName}</th>
 						</c:if>
@@ -196,12 +190,6 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.productType.hidden != true}">
 								<td>${product.productType}</td>
-							</c:if>
-							<c:if test="${model.productFields.isAvailable.hidden != true}">
-								<td>${product.isAvailable}</td>
-							</c:if>
-							<c:if test="${model.productFields.isQuarantined.hidden != true}">
-								<td>${product.isQuarantined}</td>
 							</c:if>
 							<c:if test="${model.productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>

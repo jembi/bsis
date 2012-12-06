@@ -49,10 +49,8 @@ $(document).ready(function() {
   }).click(clearFindForm);
   
   function clearFindForm() {
-		$("#${findTestResultFormId}").each(function() {
-		  this.reset();
-		});
 		$("#${findTestResultFormResultId}").html("");
+		refetchContent("${model.refreshUrl}", $("${findTestResultFormDivId}"));
   }
 
   function getDateTestedFromInput() {
@@ -91,7 +89,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${findTestResultFormDivId}" class="formDiv">
-	<b><i>Find test results</i></b>
+	<b>Find test results</b>
 	<form:form method="GET" commandName="findTestResultForm" id="${findTestResultFormId}"
 		class="formInTabPane">
 
@@ -102,12 +100,12 @@ $(document).ready(function() {
 		</div>
 
 		<div>
-			<span style="margin-left: 15px; font-style: italic;"> Date of testing between (optional)</span>
+			<span style="margin-left: 15px;"> Date of testing between (optional)</span>
 		</div>
 		<div>
-			<form:input path="dateTestedFrom" class="dateTestedFrom" placeholder="Any Date"/>
+			<form:input path="dateTestedFrom" class="dateTestedFrom" placeholder="From"/>
 				and
-			<form:input path="dateTestedTo" class="dateTestedTo" placeholder="Any Date"/>
+			<form:input path="dateTestedTo" class="dateTestedTo" placeholder="To"/>
 		</div>
 
 		<div>

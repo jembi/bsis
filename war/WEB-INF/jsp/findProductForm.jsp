@@ -90,7 +90,7 @@ $(document).ready(function() {
   }
 
   function createProductTypeMultiSelect() {
-		$("#${findProductFormId}").find(".productTypeInput").multiselect({
+		$("#${findProductFormId}").find(".productTypeSelector").multiselect({
 		  position : {
 		    my : 'left top',
 		    at : 'right center'
@@ -107,6 +107,7 @@ $(document).ready(function() {
 											}
 		  							}
 		});
+		$("#${findProductFormId}").find(".productTypeSelector").multiselect("checkAll");
   }
 
   function destroyProductTypeMultiSelect() {
@@ -149,7 +150,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${findProductFormDivId}" class="formDiv">
-	<b><i>Find Products</i></b>
+	<b>Find Products</b>
 	<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
 		class="formInTabPane">
 		<div>
@@ -184,7 +185,7 @@ $(document).ready(function() {
 		<br />
 
 		<div>
-			<span style="margin-left: 15px; font-style: italic;"> Date of collection between (optional)</span>
+			<span style="margin-left: 15px;"> Date of expiry between (optional)</span>
 		</div>
 		<div>
 			<form:input path="dateExpiresFrom" class="dateExpiresFrom" placeholder="Any Date"/>

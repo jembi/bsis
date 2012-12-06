@@ -76,15 +76,15 @@ public class DonorRepository {
     if (firstName.trim().equals(""))
       firstNameExp = cb.disjunction();
     else
-      firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+      firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
 
     Predicate lastNameExp;
     if (lastName.trim().equals(""))
       lastNameExp = cb.disjunction();
     else
-      lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+      lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
 
-    Expression<Boolean> exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
+    Expression<Boolean> exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
 
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
