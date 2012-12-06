@@ -47,6 +47,18 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('Product', 'isAvailable', 'Available', '', '0', '0', ''),
 ('Product', 'notes', 'Notes', '', '0', '0', '');
 
+insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, derived, sourceField) values
+('Request', 'requestNumber', 'Request Number', '', '0', '0', ''),
+('Request', 'requestDate', 'Request Date', '', '0', '0', ''),
+('Request', 'requiredDate', 'Required Date', '', '0', '0', ''),
+('Request', 'requestSite', 'Request Site', '', '0', '0', ''),
+('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '0', ''),
+('Request', 'requestStatus', 'Request Status', '', '0', '0', ''),
+('Request', 'bloodGroup', 'Blood Group', '', '0', '0', ''),
+('Request', 'productType', 'Product Type', '', '0', '0', ''),
+('Request', 'patientName', 'Patient Name', '', '0', '0', ''),
+('Request', 'notes', 'Notes', '', '0', '0', '');
+
 insert into DonorType (donorType) values ('Voluntary'), ('Family'), ('Other');
 
 insert into ProductType (productType) values ('Whole Blood'), ('RCC'), ('FFP'), ('Platelets'), ('Partial Platelets');
@@ -55,12 +67,12 @@ insert into BloodBagType (bloodBagType) values ('Single'), ('Triple'), ('Paedi')
 
 insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite, isDeleted, notes) values
 ('Lusaka', 1, 0, 0, 0, 0, ''),
-('Ndola', 1, 1, 0, 0, 0, ''),
-('Livingstone', 1, 1, 0, 0, 0, ''),
+('Ndola', 1, 1, 0, 1, 0, ''),
+('Livingstone', 1, 1, 0, 1, 0, ''),
 ('Luanshya', 1, 0, 0, 0, 0, ''),
-('Kasama', 1, 1, 0, 0, 0, ''),
+('Kasama', 1, 1, 0, 1, 0, ''),
 ('Chipata', 1, 0, 0, 0, 0, ''),
-('Chingola', 1, 1, 0, 0, 0, '');
+('Chingola', 1, 1, 0, 1, 0, '');
 
 insert into BloodTest (name, correctResult, isRequired, notes) values
 ('HIV', 'negative', '1', ''),

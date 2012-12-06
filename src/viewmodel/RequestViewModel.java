@@ -1,111 +1,174 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import model.Request;
 import model.location.Location;
+import model.modificationtracker.RowModificationTracker;
+import model.product.Product;
+import model.producttype.ProductType;
+import model.request.Request;
+import model.request.RequestStatus;
+import model.user.User;
+import model.util.BloodAbo;
+import model.util.BloodRhd;
 
 public class RequestViewModel {
 	private Request request;
-	private List<Location> sites;
 
-	public RequestViewModel(Request request, List<Location> sites) {
-		this.request = request;
-		this.sites = sites;
-	}
-
-	public RequestViewModel(Request request) {
-	  this.request = request;
+  public Long getId() {
+    return request.getId();
   }
 
-  public Long getRequestId() {
-		return request.getRequestId();
-	}
+  public String getRequestNumber() {
+    return request.getRequestNumber();
+  }
 
-	public String getRequestNumber() {
-		return request.getRequestNumber();
-	}
+  public Date getRequestDate() {
+    return request.getRequestDate();
+  }
 
-	public String getDateRequested() {
-		Date dateRequested = request.getDateRequested();
-		if (dateRequested != null) {
-			DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			return formatter.format(dateRequested);
-		}
-		return "";
-	}
+  public Date getRequiredDate() {
+    return request.getRequiredDate();
+  }
 
-	public String getDateRequired() {
-		Date dateRequired = request.getDateRequired();
-		if (dateRequired != null) {
-			DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			return formatter.format(dateRequired);
-		}
-		return "";
-	}
+  public Integer getRequestedQuantity() {
+    return request.getRequestedQuantity();
+  }
 
-	public String getSiteId() {
-		return getStringValue(request.getSiteId());
-	}
+  public RequestStatus getRequestStatus() {
+    return request.getRequestStatus();
+  }
 
-	public String getSiteName() {
-		Long siteId = request.getSiteId();
-		if (sites != null && siteId != null) {
-			for (Location site : sites) {
-				if (site.getId().equals(siteId)) {
-					return site.getName();
-				}
-			}
-		}
-		return "";
-	}
+  public BloodAbo getBloodAbo() {
+    return request.getBloodAbo();
+  }
 
-	public String getProductType() {
-		return request.getProductType();
-	}
+  public BloodRhd getBloodRhd() {
+    return request.getBloodRhd();
+  }
 
-	public String getAbo() {
-		return request.getAbo();
-	}
+  public String getNotes() {
+    return request.getNotes();
+  }
 
-	public String getRhd() {
-		return request.getRhd();
-	}
+  public RowModificationTracker getModificationTracker() {
+    return request.getModificationTracker();
+  }
 
-	public String getQuantity() {
-		return getStringValue(request.getQuantity().longValue());
-	}
+  public ProductType getProductType() {
+    return request.getProductType();
+  }
 
-	public String getComments() {
-		return request.getComments();
-	}
+  public Location getRequestSite() {
+    return request.getRequestSite();
+  }
 
-	public String getStatus() {
-		return request.getStatus();
-	}
-
-	public Boolean getUnfulfilled() {
-		if (!request.getStatus().equals("fulfilled")) {
-			return true;
-		}
-		return false;
-	}
-
-	private String getStringValue(Long value) {
-		return value == null ? "" : value.toString();
-	}
-
-	public String getBloodType() {
-	  if (request.getAbo() == null || request.getRhd() == null)
-	      return "";
-	  String rh = request.getRhd().equals("positive") ? "+" : "-"; 
-	  return request.getAbo() + rh;
-	}
-
-	public String getPatientName() {
+  public String getPatientName() {
     return request.getPatientName();
+  }
+
+  public Boolean getIsDeleted() {
+    return request.getIsDeleted();
+  }
+
+  public List<Product> getIssuedProducts() {
+    return request.getIssuedProducts();
+  }
+
+  public Date getLastUpdated() {
+    return request.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return request.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return request.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return request.getLastUpdatedBy();
+  }
+
+  public int hashCode() {
+    return request.hashCode();
+  }
+
+  public void setId(Long id) {
+    request.setId(id);
+  }
+
+  public void setRequestNumber(String requestNumber) {
+    request.setRequestNumber(requestNumber);
+  }
+
+  public void setRequestDate(Date requestDate) {
+    request.setRequestDate(requestDate);
+  }
+
+  public void setRequiredDate(Date requiredDate) {
+    request.setRequiredDate(requiredDate);
+  }
+
+  public void setRequestedQuantity(Integer requestedQuantity) {
+    request.setRequestedQuantity(requestedQuantity);
+  }
+
+  public void setRequestStatus(RequestStatus requestStatus) {
+    request.setRequestStatus(requestStatus);
+  }
+
+  public void setBloodAbo(BloodAbo bloodAbo) {
+    request.setBloodAbo(bloodAbo);
+  }
+
+  public void setBloodRhd(BloodRhd bloodRhd) {
+    request.setBloodRhd(bloodRhd);
+  }
+
+  public void setNotes(String notes) {
+    request.setNotes(notes);
+  }
+
+  public void setModificationTracker(RowModificationTracker modificationTracker) {
+    request.setModificationTracker(modificationTracker);
+  }
+
+  public void setProductType(ProductType productType) {
+    request.setProductType(productType);
+  }
+
+  public void setRequestSite(Location requestSite) {
+    request.setRequestSite(requestSite);
+  }
+
+  public void setPatientName(String patientName) {
+    request.setPatientName(patientName);
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    request.setIsDeleted(isDeleted);
+  }
+
+  public void setIssuedProducts(List<Product> issuedProducts) {
+    request.setIssuedProducts(issuedProducts);
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    request.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    request.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    request.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    request.setLastUpdatedBy(lastUpdatedBy);
   }
 }

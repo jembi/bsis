@@ -35,6 +35,8 @@
 
     drop table if exists Request;
 
+    drop table if exists Request_Product;
+
     drop table if exists TestResult;
 
     drop table if exists User;
@@ -179,11 +181,13 @@
         isAvailable boolean,
         isDeleted boolean,
         isQuarantined boolean,
+        issuedOn datetime,
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(255) not null,
         collectedSample_id bigint,
         createdBy_id bigint,
+        issuedTo_id bigint,
         lastUpdatedBy_id bigint,
         productType_productType varchar(30),
         primary key (id)
@@ -220,20 +224,30 @@
     ) ENGINE=InnoDB;
 
     create table Request (
-        requestId bigint not null auto_increment,
-        abo varchar(255),
-        comments varchar(255),
-        dateRequested datetime,
-        dateRequired datetime,
-        isDeleted integer,
+        id bigint not null auto_increment,
+        bloodAbo varchar(30),
+        bloodRhd varchar(30),
+        isDeleted boolean,
+        createdDate datetime,
+        lastUpdated datetime,
+        notes longtext,
         patientName varchar(255),
-        productType varchar(255),
-        quantity integer,
-        requestNumber varchar(255),
-        rhd varchar(255),
-        siteId bigint,
-        status varchar(255),
-        primary key (requestId)
+        requestDate date,
+        requestNumber varchar(30) not null,
+        requestStatus varchar(30),
+        requestedQuantity integer,
+        requiredDate date,
+        createdBy_id bigint,
+        lastUpdatedBy_id bigint,
+        productType_productType varchar(30),
+        requestSite_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table Request_Product (
+        Request_id bigint not null,
+        issuedProducts_id bigint not null,
+        unique (issuedProducts_id)
     ) ENGINE=InnoDB;
 
     create table TestResult (
@@ -365,6 +379,12 @@
         references User (id);
 
     alter table Product 
+        add index FK50C664CF994002DF (issuedTo_id), 
+        add constraint FK50C664CF994002DF 
+        foreign key (issuedTo_id) 
+        references Request (id);
+
+    alter table Product 
         add index FK50C664CF32E145A (collectedSample_id), 
         add constraint FK50C664CF32E145A 
         foreign key (collectedSample_id) 
@@ -381,6 +401,48 @@
         add constraint FK50C664CFC5DF532 
         foreign key (productType_productType) 
         references ProductType (productType);
+
+    create index request_bloodRhd_index on Request (bloodRhd);
+
+    create index request_requestNumber_index on Request (requestNumber);
+
+    create index request_bloodAbo_index on Request (bloodAbo);
+
+    alter table Request 
+        add index FKA4878A6FA49787C4 (createdBy_id), 
+        add constraint FKA4878A6FA49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table Request 
+        add index FKA4878A6F1520E0D (requestSite_id), 
+        add constraint FKA4878A6F1520E0D 
+        foreign key (requestSite_id) 
+        references Location (id);
+
+    alter table Request 
+        add index FKA4878A6FD0AFB367 (lastUpdatedBy_id), 
+        add constraint FKA4878A6FD0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
+
+    alter table Request 
+        add index FKA4878A6FC5DF532 (productType_productType), 
+        add constraint FKA4878A6FC5DF532 
+        foreign key (productType_productType) 
+        references ProductType (productType);
+
+    alter table Request_Product 
+        add index FK385FB6FF27F33616 (Request_id), 
+        add constraint FK385FB6FF27F33616 
+        foreign key (Request_id) 
+        references Request (id);
+
+    alter table Request_Product 
+        add index FK385FB6FF4C68456 (issuedProducts_id), 
+        add constraint FK385FB6FF4C68456 
+        foreign key (issuedProducts_id) 
+        references Product (id);
 
     alter table TestResult 
         add index FKDB459F6FA49787C4 (createdBy_id), 

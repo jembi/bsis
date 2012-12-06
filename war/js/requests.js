@@ -1,50 +1,41 @@
-function addNewRequest(form) {
-  updateRequestGeneric(form, "updateRequest.html");
+function addNewRequest(form, resultDivId, successCallback) {
+  updateRequestGeneric(form, resultDivId, "addRequest.html", successCallback);
 }
 
-function updateExistingRequest(form) {
-  updateRequestGeneric(form, "updateRequest.html");
+function updateExistingProduct(form, resultDivId, successCallback) {
+  updateProductGeneric(form, resultDivId, "updateRequest.html", successCallback);
 }
 
-function updateRequestGeneric(form, url) {
-  var request = $("#" + form.getAttribute("id")).serialize();
+function updateProductGeneric(form, resultDivId, url, successCallback) {
+  var request = $(form).serialize();
   $.ajax({
-    type : "POST",
-    url : url,
-    data : request,
-    success : function(jsonResponse) {
-      if (jsonResponse["success"] === true) {
-        $.showMessage("Request Updated Successfully!");
-        $('#' + form.getAttribute("id")).each(function() {
-          this.reset();
-        });
-        window.history.back();
-      } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
-      }
-    }
+    type: "POST",
+    url: url,
+    data: request,
+    success: function(jsonResponse, data, data1, data2) {
+               showMessage("Request Updated Successfully!");
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             showErrorMessage("Something went wrong. Please fix the errors noted.");
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
   });
 }
 
-function deleteRequest(requestNumber) {
+function deleteRequest(productId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteRequest.html",
-    data : {requestNumber: requestNumber},
+    data : {requestId: requestId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
-        $.showMessage("Request Deleted Successfully!");
-        window.history.back();
+        successCallback();
+        showMessage("Request Deleted Successfully!");
       } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
   });
 }
-
-function decorateEditRequestDialog() {
-};

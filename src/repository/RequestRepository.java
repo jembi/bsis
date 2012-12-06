@@ -13,8 +13,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.Request;
+import model.product.Product;
+import model.request.Request;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +24,9 @@ import org.springframework.util.CollectionUtils;
 @Repository
 @Transactional
 public class RequestRepository {
+
+  public static final int ID_LENGTH = 12;
+
   @PersistenceContext
   private EntityManager em;
 
@@ -214,9 +219,19 @@ public class RequestRepository {
 
   public Request issueRequest(String requestNumber, String status) {
     Request existingRequest = findRequestByRequestNumber(requestNumber);
-    existingRequest.setStatus(status);
+//    existingRequest.setRequestStatus(status);
     em.merge(existingRequest);
     em.flush();
     return existingRequest;
+  }
+
+  public static String generateUniqueRequestNumber() {
+    String uniqueRequestNumber;
+    uniqueRequestNumber = "R-" + RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+    return uniqueRequestNumber;
+  }
+
+  public Request findRequestById(Long requestId) {
+    return em.find(Request.class, requestId);
   }
 }

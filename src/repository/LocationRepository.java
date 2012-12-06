@@ -37,10 +37,12 @@ public class LocationRepository {
 	}
 
 	public List<Location> getAllUsageSites() {
-		Query query = em
-				.createQuery("SELECT l FROM Location l where l.isUsageSite=true and l.isDeleted= :isDeleted");
-		query.setParameter("isDeleted", Boolean.FALSE);
-		return query.getResultList();
+    TypedQuery<Location> query = em.createQuery(
+        "SELECT l from Location l where l.isUsageSite=:isUsageSite and l.isDeleted=:isDeleted",
+        Location.class);
+    query.setParameter("isUsageSite", true);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
 	}
 
 	public Location getLocation(Long selectedLocationId) {

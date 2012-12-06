@@ -1,42 +1,27 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 
-import model.Issue;
-import model.Request;
-import model.RequestBackingForm;
-import model.location.Location;
-import model.product.Product;
+import model.request.Request;
+import model.request.RequestBackingForm;
+import model.request.RequestBackingFormValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import repository.DisplayNamesRepository;
-import repository.IssueRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
-import repository.RecordFieldsConfigRepository;
+import repository.ProductTypeRepository;
 import repository.RequestRepository;
-import utils.ControllerUtil;
-import viewmodel.RequestViewModel;
 
 @Controller
 public class RequestsController {
@@ -45,20 +30,25 @@ public class RequestsController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private LocationRepository locationRepository;
-
-  @Autowired
   private ProductRepository productRepository;
 
   @Autowired
-  private DisplayNamesRepository displayNamesRepository;
+  private LocationRepository locationRepository;
 
   @Autowired
-  private RecordFieldsConfigRepository recordFieldsConfigRepository;
+  private ProductTypeRepository productTypeRepository;
 
   @Autowired
-  private IssueRepository issueRepository;
-  
+  private UtilController utilController;
+
+  public RequestsController() {
+  }
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(new RequestBackingFormValidator(binder.getValidator()));
+  }
+
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
@@ -68,244 +58,296 @@ public class RequestsController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findRequestFormInit(HttpServletRequest servletRequest, Model model) {
+//  @RequestMapping(value = "/productSummary", method = RequestMethod.GET)
+//  public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
+//      @RequestParam(value = "productId", required = false) Long productId) {
+//
+//    ModelAndView mv = new ModelAndView("productSummary");
+//    Map<String, Object> m = model.asMap();
+//
+//    m.put("requestUrl", getUrl(request));
+//
+//    Product product = null;
+//    if (productId != null) {
+//      product = productRepository.findProductById(productId);
+//      if (product != null) {
+//        m.put("existingProduct", true);
+//      }
+//      else {
+//        m.put("existingProduct", false);
+//      }
+//    }
+//
+//    ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
+//    m.put("product", productViewModel);
+//    m.put("refreshUrl", getUrl(request));
+//    // to ensure custom field names are displayed in the form
+//    m.put("productFields", utilController.getFormFieldsForForm("Product"));
+//    mv.addObject("model", m);
+//    return mv;
+//  }
+//
+//  @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
+//  public ModelAndView findProductFormGenerator(HttpServletRequest request, Model model) {
+//
+//    FindProductBackingForm form = new FindProductBackingForm();
+//    model.addAttribute("findProductForm", form);
+//
+//    ModelAndView mv = new ModelAndView("findProductForm");
+//    Map<String, Object> m = model.asMap();
+//    addEditSelectorOptions(m);
+//    // to ensure custom field names are displayed in the form
+//    m.put("productFields", utilController.getFormFieldsForForm("product"));
+//    m.put("refreshUrl", getUrl(request));
+//    mv.addObject("model", m);
+//    return mv;
+//  }
+//
+//  @RequestMapping("/findProduct")
+//  public ModelAndView findProduct(HttpServletRequest request,
+//      @ModelAttribute("findProductForm") FindProductBackingForm form,
+//      BindingResult result, Model model) {
+//
+//    List<Product> products = Arrays.asList(new Product[0]);
+//
+//    String searchBy = form.getSearchBy();
+//    String dateExpiresFrom = form.getDateExpiresFrom();
+//    String dateExpiresTo = form.getDateExpiresTo();
+//    if (searchBy.equals("productNumber")) {
+//      products = productRepository.findProductByProductNumber(
+//                                          form.getProductNumber(),
+//                                          dateExpiresFrom, dateExpiresTo);
+//    } else if (searchBy.equals("collectionNumber")) {
+//      products = productRepository.findProductByCollectionNumber(
+//          form.getCollectionNumber(),
+//          dateExpiresFrom, dateExpiresTo);
+//    } else if (searchBy.equals("productType")) {
+//
+//      products = productRepository.findProductByProductTypes(
+//          form.getProductTypes(),
+//          dateExpiresFrom, dateExpiresTo);
+//    }
+//
+//    System.out.println("products: ");
+//    System.out.println(products);
+//    
+//    ModelAndView modelAndView = new ModelAndView("productsTable");
+//    Map<String, Object> m = model.asMap();
+//    m.put("tableName", "findProductsTable");
+//    m.put("productFields", utilController.getFormFieldsForForm("product"));
+//    m.put("allProducts", getProductViewModels(products));
+//    m.put("refreshUrl", getUrl(request));
+//    addEditSelectorOptions(m);
+//
+//    modelAndView.addObject("model", m);
+//    return modelAndView;
+//  }
+//
 
-    RequestBackingForm form = new RequestBackingForm();
-    model.addAttribute("findRequestForm", form);
-
-    ModelAndView mv = new ModelAndView("findRequestForm");
-    Map<String, Object> m = model.asMap();
-
-//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-//    m.put("sites", sites);
-    m.put("requestUrl", getUrl(servletRequest));
-    // to ensure custom field names are displayed in the form
-    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
-    mv.addObject("model", m);
-    return mv;
-  }
-
-  @RequestMapping("/findRequest")
-  public ModelAndView findRequest(HttpServletRequest servletRequest,
-      @ModelAttribute("findRequestForm") RequestBackingForm form,
-      BindingResult result, Model model) {
-
-    List<Request> requests = requestRepository.findAnyRequestMatching(
-        form.getRequestNumber(), form.getDateRequestedFrom(),
-        form.getDateRequestedTo(), form.getDateRequiredFrom(),
-        form.getDateRequiredTo(), form.getSites(), form.getProductTypes(), form.getStatuses());
-
-    ModelAndView modelAndView = new ModelAndView("requestsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("tableName", "findRequestsTable");
-
-//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-//    m.put("sites", sites);
-    m.put("requestUrl", getUrl(servletRequest));
-
-    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("request", m,
-        recordFieldsConfigRepository);
-    m.put("allRequests", getRequestViewModels(requests));
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
-  }
-
-  @RequestMapping("/pendingRequests")
-  public ModelAndView findPendingRequests(HttpServletRequest servletRequest, Model model) {
-
-    List<Request> requests = requestRepository.findRequestsNotFulfilled();
-
-    ModelAndView modelAndView = new ModelAndView("requestsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("tableName", "findPendingRequestsTable");
-
-//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-//    m.put("sites", sites);
-    m.put("requestUrl", getUrl(servletRequest));
-
-    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("request", m,
-        recordFieldsConfigRepository);
-    m.put("allRequests", getRequestViewModels(requests));
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
-  }
-
-  @RequestMapping("/findMatchingProductsForRequest")
-  public ModelAndView findMatchingProductsForRequest(HttpServletRequest servletRequest,
-      @RequestParam(value = "requestNumber", required = true) String requestNumber,
-      Model model) {
-
-    Request request = requestRepository.findRequestByRequestNumber(requestNumber);
-
-    List<Product> products = new ArrayList<Product>();
-    if (request != null) {
-//      products = productRepository.findAnyProductMatching("", "",
-//          Arrays.asList(request.getAbo()), Arrays.asList(request.getRhd()),
-//          Arrays.asList(request.getProductType()), Arrays.asList("available"));
-    }
-
-    ModelAndView modelAndView = new ModelAndView("issueProducts");
-    Map<String, Object> m = model.asMap();
-    m.put("tableName", "findAvailableProductsTable");
-    m.put("showAddProductButton", false);
-    ControllerUtil.addProductDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("product", m,
-        recordFieldsConfigRepository);
-//    m.put("allProducts", ProductController.getProductViewModels(products));
-    m.put("requestUrl", getUrl(servletRequest));
-    m.put("request", new RequestViewModel(request, locationRepository.getAllCollectionSites()));
-    m.put("productsTableRowEditable", "false");
-    m.put("productsTableRowSelectableProperty", "multi");
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
-  }
-
-  @RequestMapping(value = "/issueProductsForRequest", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> issueProductsForRequest(
-      @RequestParam(value="products", required=false) String productsJson,
-      @RequestParam(value="requestNumber", required=true) String requestNumber 
-      ) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      System.out.println("products: " + productsJson);
-      System.out.println("requestNumber: " + requestNumber);
-      ObjectMapper mapper = new ObjectMapper();
-      Map<String, String> products = mapper.readValue(productsJson, Map.class);
-      System.out.println(products);
-      Request request = requestRepository.issueRequest(requestNumber, "fulfilled");
-      for (String productNumber : products.values()) {
-        System.out.println("Issuing Product Number: " + productNumber);
-        Issue issue = new Issue();
-        issue.setDateIssued(new Date());
-        issue.setProductNumber(productNumber);
-        issue.setSiteId(request.getSiteId());
-        issue.setComments("issued product");
-        issue.setDeleted(Boolean.FALSE);
-        issueRepository.saveIssue(issue);
-        productRepository.issueProduct(productNumber);
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+  private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("sites", locationRepository.getAllUsageSites());
   }
 
   @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editRequestFormGenerator(
+  public ModelAndView editRequestFormGenerator(HttpServletRequest request,
       Model model,
-      @RequestParam(value = "requestNumber", required = false) String requestNumber,
-      @RequestParam(value = "isDialog", required = false) String isDialog) {
+      @RequestParam(value="requestId", required=false) Long requestId) {
 
-    RequestBackingForm form = new RequestBackingForm();
+    RequestBackingForm form = new RequestBackingForm(true);
+
+    ModelAndView mv = new ModelAndView("editRequestForm");
     Map<String, Object> m = model.asMap();
-    m.put("isDialog", isDialog);
-
-//    List<String> sites = locationRepository.getAllCollectionSitesAsString();
-//    m.put("sites", sites);
-    m.put("selectedSite", "");
-    m.put("selectedProductType", "");
-
-    if (requestNumber != null) {
-      form.setRequestNumber(requestNumber);
-      Request request = requestRepository
-          .findRequestByRequestNumber(requestNumber);
-      if (request != null) {
-        Location l = locationRepository.getLocation(request.getSiteId());
-        m.put("selectedProductType", request.getProductType());
-        form = new RequestBackingForm(request);
-        if (l != null)
-          m.put("selectedSite", l.getName());
-        m.put("requestNumber", request.getRequestNumber());
+    m.put("refreshUrl", getUrl(request));
+    m.put("existingRequest", false);
+    if (requestId != null) {
+      form.setId(requestId);
+      Request productRequest = requestRepository.findRequestById(requestId);
+      if (productRequest != null) {
+        form = new RequestBackingForm(productRequest);
+        m.put("existingRequest", true);
+      }
+      else {
+        form = new RequestBackingForm(true);
       }
     }
-
+    addEditSelectorOptions(m);
     m.put("editRequestForm", form);
+    m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    ControllerUtil.addRequestDisplayNamesToModel(m, displayNamesRepository);
-    ModelAndView mv = new ModelAndView("editRequestForm");
+    m.put("requestFields", utilController.getFormFieldsForForm("Request"));
     mv.addObject("model", m);
+    System.out.println(mv.getViewName());
     return mv;
   }
 
-  @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> updateOrAddRequest(
-      @ModelAttribute("editRequestForm") RequestBackingForm form) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      Request request = form.getRequest();
-      String site = form.getSites().get(0);
-      Long siteId = locationRepository.getIDByName(site);
-      request.setSiteId(siteId);
-      requestRepository.updateOrAddRequest(request);
-    } catch (EntityExistsException ex) {
-      // TODO: Replace with logger
-      System.err.println("Entity Already exists");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Request Already Exists";
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
-  }
-
-  private List<RequestViewModel> getRequestViewModels(List<Request> requests) {
-    if (requests == null)
-      return Arrays.asList(new RequestViewModel[0]);
-    List<RequestViewModel> requestViewModels = new ArrayList<RequestViewModel>();
-    for (Request request : requests) {
-      requestViewModels.add(new RequestViewModel(request));
-    }
-    return requestViewModels;
-  }
-
-  @RequestMapping(value = "/deleteRequest", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> deleteRequest(
-      @RequestParam("requestNumber") String requestNumber) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      requestRepository.deleteRequest(requestNumber);
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
-  }
+//  @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
+//  public ModelAndView addProduct(
+//      HttpServletRequest request,
+//      HttpServletResponse response,
+//      @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
+//      BindingResult result, Model model) {
+//
+//    ModelAndView mv = new ModelAndView("editProductForm");
+//    boolean success = false;
+//    String message = "";
+//    Map<String, Object> m = model.asMap();
+//
+//    // IMPORTANT: Validation code just checks if the ID exists.
+//    // We still need to store the collected sample as part of the product.
+//    String collectionNumber = form.getCollectionNumber();
+//    if (collectionNumber != null && !collectionNumber.isEmpty()) {
+//      try {
+//        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+//        form.setCollectedSample(collectedSample);
+//      } catch (NoResultException ex) {
+//        ex.printStackTrace();
+//      }
+//    }
+//
+//    if (result.hasErrors()) {
+//      m.put("hasErrors", true);
+//      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+//      success = false;
+//      message = "Please fix the errors noted above.";
+//    } else {
+//      try {
+//        Product product = form.getProduct();
+//        product.setIsDeleted(false);
+//        productRepository.addProduct(product);
+//        m.put("hasErrors", false);
+//        success = true;
+//        message = "Product Successfully Added";
+//        form = new ProductBackingForm(true);
+//      } catch (EntityExistsException ex) {
+//        ex.printStackTrace();
+//        success = false;
+//        message = "Product Already exists.";
+//      } catch (Exception ex) {
+//        ex.printStackTrace();
+//        success = false;
+//        message = "Internal Error. Please try again or report a Problem.";
+//      }
+//    }
+//
+//    m.put("editProductForm", form);
+//    m.put("existingProduct", false);
+//    m.put("success", success);
+//    m.put("message", message);
+//    m.put("refreshUrl", "editProductFormGenerator.html");
+//    m.put("productFields", utilController.getFormFieldsForForm("product"));
+//    addEditSelectorOptions(m);
+//
+//    mv.addObject("model", m);
+//    return mv;
+//  }
+//
+//  @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+//  public ModelAndView updateProduct(
+//      HttpServletResponse response,
+//      @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
+//      BindingResult result, Model model) {
+//
+//    ModelAndView mv = new ModelAndView("editProductForm");
+//    boolean success = false;
+//    String message = "";
+//    Map<String, Object> m = model.asMap();
+//    addEditSelectorOptions(m);
+//    // only when the collection is correctly added the existingCollectedSample
+//    // property will be changed
+//    m.put("existingProduct", true);
+//
+//    System.out.println("here");
+//
+//    // IMPORTANT: Validation code just checks if the ID exists.
+//    // We still need to store the collected sample as part of the product.
+//    String collectionNumber = form.getCollectionNumber();
+//    if (collectionNumber != null && !collectionNumber.isEmpty()) {
+//      try {
+//        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+//        form.setCollectedSample(collectedSample);
+//      } catch (NoResultException ex) {
+//        ex.printStackTrace();
+//      }
+//    }
+//
+//    if (result.hasErrors()) {
+//      m.put("hasErrors", true);
+//      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//      success = false;
+//      message = "Please fix the errors noted above now!";
+//    }
+//    else {
+//      try {
+//
+//        form.setIsDeleted(false);
+//        Product existingProduct = productRepository.updateProduct(form.getProduct());
+//        if (existingProduct == null) {
+//          m.put("hasErrors", true);
+//          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//          success = false;
+//          m.put("existingProduct", false);
+//          message = "Product does not already exist.";
+//        }
+//        else {
+//          m.put("hasErrors", false);
+//          success = true;
+//          message = "Product Successfully Updated";
+//        }
+//      } catch (EntityExistsException ex) {
+//        ex.printStackTrace();
+//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//        success = false;
+//        message = "Product Already exists.";
+//      } catch (Exception ex) {
+//        ex.printStackTrace();
+//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//        success = false;
+//        message = "Internal Error. Please try again or report a Problem.";
+//      }
+//   }
+//
+//    m.put("editProductForm", form);
+//    m.put("success", success);
+//    m.put("message", message);
+//    m.put("productFields", utilController.getFormFieldsForForm("Product"));
+//
+//    mv.addObject("model", m);
+//
+//    return mv;
+//  }
+//
+//  private List<ProductViewModel> getProductViewModels(
+//      List<Product> products) {
+//    if (products == null)
+//      return Arrays.asList(new ProductViewModel[0]);
+//    List<ProductViewModel> productViewModels = new ArrayList<ProductViewModel>();
+//    for (Product product : products) {
+//      productViewModels.add(new ProductViewModel(product));
+//    }
+//    return productViewModels;
+//  }
+//
+//  @RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
+//  public @ResponseBody
+//  Map<String, ? extends Object> deleteProduct(
+//      @RequestParam("productId") Long productId) {
+//
+//    boolean success = true;
+//    String errMsg = "";
+//    try {
+//      productRepository.deleteProduct(productId);
+//    } catch (Exception ex) {
+//      // TODO: Replace with logger
+//      System.err.println("Internal Exception");
+//      System.err.println(ex.getMessage());
+//      success = false;
+//      errMsg = "Internal Server Error";
+//    }
+//
+//    Map<String, Object> m = new HashMap<String, Object>();
+//    m.put("success", success);
+//    m.put("errMsg", errMsg);
+//    return m;
+//  }
 }

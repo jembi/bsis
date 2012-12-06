@@ -55,5 +55,4 @@ public class RowModificationTracker implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
   }
-
 }

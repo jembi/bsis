@@ -41,17 +41,17 @@
 		</c:if>
 	</ul>
 
-	<div id="homeLandingPageContent" class="centerContent">
-		<h3>Welcome to Vein-To-Vein</h3>
-		<i>Version ${model.versionNumber}</i>
+	<div id="homeLandingPageContent" class="centerContent" style="padding: 20px;">
+		<h3>Welcome to Vein-To-Vein - ${model.versionNumber}</h3>
 		<div class="infoMessage">
-			Vein-to-Vein (V2V) is a system to monitor and analyze data from blood
-			collection, testing, and utilization. This is an initiative of the
-			Compute For Good (C4G) program at the Georgia Institute of Technology
-			in collaboration with the Center for Disease Control and Prevention
+			Vein-to-Vein (V2V) is a system to monitor blood inventory from the point of
+			collection, storage, testing and transfusion.
+			<br />
+			An initiative of Computing For Good (C4G) program at the Georgia Institute of Technology
+			in collaboration with the Centers for Disease Control and Prevention
 			(CDC). <br /> <br /> See <a
 				href="http://www.cc.gatech.edu/about/advancing/c4g/" target="_blank">
-				http://www.cc.gatech.edu/about/advancing/c4g/ </a> for more information.
+				C4G Website </a> for more information.
 		</div>
 	</div>
 

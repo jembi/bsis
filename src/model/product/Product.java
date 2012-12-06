@@ -2,7 +2,6 @@ package model.product;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,17 +14,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Index;
-import org.hibernate.validator.constraints.NotBlank;
-
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
+import model.request.Request;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
+
+import org.hibernate.annotations.Index;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Product implements ModificationTracker {
@@ -74,6 +74,12 @@ public class Product implements ModificationTracker {
 
   @ManyToOne
   private User lastUpdatedBy;
+
+  @ManyToOne
+  private Request issuedTo;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date issuedOn;
 
   @Lob
   private String notes;
@@ -225,5 +231,21 @@ public class Product implements ModificationTracker {
 
   public void setIsAvailable(Boolean isAvailable) {
     this.isAvailable = isAvailable;
+  }
+
+  public Request getIssuedTo() {
+    return issuedTo;
+  }
+
+  public void setIssuedTo(Request issuedTo) {
+    this.issuedTo = issuedTo;
+  }
+
+  public Date getIssuedOn() {
+    return issuedOn;
+  }
+
+  public void setIssuedOn(Date issuedOn) {
+    this.issuedOn = issuedOn;
   }
 }
