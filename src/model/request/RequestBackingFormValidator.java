@@ -21,7 +21,7 @@ public class RequestBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(RequestBackingForm.class, Request.class, RequestViewModel.class).contains(clazz);
+    return Arrays.asList(RequestBackingForm.class, Request.class, RequestViewModel.class, FindRequestBackingForm.class).contains(clazz);
   }
 
   @Override

@@ -8,171 +8,186 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+
+<c:set var="findRequestFormId">findRequestForm-${unique_page_id}</c:set>
+<c:set var="findRequestFormBloodGroupSelectorId">findRequestFormBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="findRequestFormSiteSelectorId">findRequestFormSiteSelector-${unique_page_id}</c:set>
+
 <script>
-  $("#findRequestButton").button({
+$(document).ready(function() {
+
+  $("#${tabContentId}").find(".findRequestButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
   }).click(function() {
-    var findRequestFormData = $("#findRequestForm").serialize();
+    var findRequestFormData = $("#${findRequestFormId}").serialize();
+    var resultsDiv = $("#${mainContentId}").find(".findRequestResults");
+    showLoadingImage(resultsDiv);
     $.ajax({
       type : "GET",
       url : "findRequest.html",
       data : findRequestFormData,
       success : function(data) {
-        $('#findRequestResult').html(data);
+        resultsDiv.html(data);
         window.scrollTo(0, document.body.scrollHeight);
       }
     });
   });
 
-  $("#findRequestFormProductTypes").multiselect({
+  $("#${tabContentId}").find(".clearFindFormButton").button({
+    icons : {
+      primary : 'ui-icon-grip-solid-horizontal'
+    }
+  }).click(clearFindForm);
+  
+  function clearFindForm() {
+    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    $("#${childContentId}").html("");
+  }
+
+  $("#${tabContentId}").find(".productTypeSelector").multiselect({
     position : {
       my : 'left top',
       at : 'right center'
     },
-    selectedList: 4
+    noneSelectedText: 'None Selected',
+    selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "Any Product Type";
+										}
+										else {
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'Any Product Type';
+										}
+										  
+    							}
   });
+  $("#${tabContentId}").find(".productTypeSelector").multiselect("checkAll");
 
-  $("#findRequestFormStatuses").multiselect({
+  $("#${tabContentId}").find(".requestSiteSelector").multiselect({
     position : {
       my : 'left top',
       at : 'right center'
     },
-    selectedList: 4
+    noneSelectedText: 'None Selected',
+    selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "Any Site";
+										}
+										else {
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
+										}
+										  
+    							}
+  });
+  $("#${tabContentId}").find(".requestSiteSelector").multiselect("checkAll");
+
+  $("#${tabContentId}").find(".statusSelector").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
   });
 
-  $("#findRequestFormSites").multiselect({
-    position : {
-      my : 'left top',
-      at : 'right center'
+  // child div shows request information. bind this div to requestView event
+  $("#${tabContentId}").bind("requestSummaryView",
+      function(event, content) {
+    		$("#${mainContentId}").hide();
+    		$("#${childContentId}").html(content);
+  		});
 
-    },
-    selectedList: 4
-  });
+  $("#${tabContentId}").bind("requestSummarySuccess",
+      function(event, content) {
+    		$("#${mainContentId}").show();
+    		$("#${childContentId}").html("");
+    		$("#${tabContentId}").find(".requestsTable").trigger("refreshResults");
+  		});
 
-  $("#dateRequestedFrom").datepicker({
+  $("#${tabContentId}").find(".requestedAfter").datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
     dateFormat : "mm/dd/yy",
     yearRange : "c-100:c0",
-    onSelect : function(selectedDate) {
-      $("#dateRequestedTo").datepicker("option", "minDate", selectedDate);
-    }
   });
 
-  $("#dateRequestedTo").datepicker({
-    changeMonth : true,
-    changeYear : true,
-    minDate : -36500,
-    maxDate : 0,
-    dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
-    onSelect : function(selectedDate) {
-      $("#dateRequestedFrom").datepicker("option", "maxDate", selectedDate);
-    }
-  });
-
-  $("#dateRequiredFrom").datepicker({
+  $("#${tabContentId}").find(".requiredBy").datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
     maxDate : 365,
     dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c1",
-    onSelect : function(selectedDate) {
-      $("#dateRequiredTo").datepicker("option", "minDate", selectedDate);
-    }
+    yearRange : "c-100:c+1",
   });
 
-  $("#dateRequiredTo").datepicker({
-    changeMonth : true,
-    changeYear : true,
-    minDate : -36500,
-    maxDate : 365,
-    dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c1",
-    onSelect : function(selectedDate) {
-      $("#dateRequiredFrom").datepicker("option", "maxDate", selectedDate);
-    }
-  });
+});
 </script>
 
-<form:form method="GET" commandName="findRequestForm"
-	id="findRequestForm" class="findRequestForm">
-	<table>
-		<thead>
-			<tr>
-				<td><b>Find Requests</b></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><form:label path="requestNumber">${model.requestNoDisplayName}</form:label></td>
-				<td><form:input path="requestNumber" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="sites">${model.siteDisplayName}</form:label></td>
-				<td style="padding-left: 10px;"><form:select path="sites"
-						id="findRequestFormSites">
-						<form:options items="${model.sites}" />
-					</form:select></td>
-			</tr>
-			<tr>
-				<td><form:label path="productTypes">${model.productTypeDisplayName}</form:label></td>
-				<td style="padding-left: 10px;"><form:select
-						path="productTypes" id="findRequestFormProductTypes">
-						<form:option value="wholeBlood" label="Whole Blood" selected="" />
-						<form:option value="rcc" label="RCC" selected="" />
-						<form:option value="ffp" label="ffp" selected="" />
-						<form:option value="platelets" label="Platelets" selected="" />
-						<form:option value="partialPlatelets" label="Partial Platelets"
-							selected="" />
-					</form:select></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b><i>Filter Requests</i></b></td>
-			</tr>
-			<tr>
-				<td><form:label path="statuses">${model.statusDisplayName}</form:label></td>
-				<td style="padding-left: 10px;"><form:select path="statuses"
-						id="findRequestFormStatuses">
-						<form:option value="partiallyFulfilled"
-							label="Partially Fulfilled" selected="selected" />
-						<form:option path="status" value="pending" label="Pending"
-							selected="selected" />
-						<form:option path="status" value="fulfilled" label="Fulfilled"
-							selected="selected" />
-					</form:select></td>
-			</tr>
-			<tr>
-				<td>Having Request Date Between</td>
-			</tr>
-			<tr>
-				<td><form:input path="dateRequestedFrom" id="dateRequestedFrom" />&nbsp;and
-				</td>
-				<td><form:input path="dateRequestedTo" id="dateRequestedTo" /></td>
-			</tr>
-			<tr>
-				<td>Having Required Date Between</td>
-			</tr>
-			<tr />
-			<tr>
-				<td><form:input path="dateRequiredFrom" id="dateRequiredFrom" />&nbsp;and
-				</td>
-				<td><form:input path="dateRequiredTo" id="dateRequiredTo" /></td>
-			</tr>
-			<tr>
-				<td><button id="findRequestButton" type="button">Find
-						request</button></td>
-			</tr>
-		</tbody>
-	</table>
-</form:form>
+<div id="${tabContentId}" class="formDiv">
+	<div id="${mainContentId}">
+		<b>Find Requests</b>
+		<form:form method="GET" commandName="findRequestForm" id="${findRequestFormId}"
+			class="formInTabPane">
 
-<div id="findRequestResult"></div>
+			<div>
+				<form:label path="productTypes">Product Type</form:label>
+				<form:select path="productTypes" class="productTypeSelector">
+					<c:forEach var="productType" items="${model.productTypes}">
+						<form:option value="${productType.productType}" label="${productType.productType}" />
+					</c:forEach>
+				</form:select>
+			</div>
+
+			<div>
+				<form:label path="requestSites">Requested by site</form:label>
+				<form:select path="requestSites" class="requestSiteSelector">
+					<c:forEach var="requestSite" items="${model.sites}">
+						<form:option value="${requestSite.id}" label="${requestSite.name}" />
+					</c:forEach>
+				</form:select>
+			</div>
+
+			<div>
+				<form:label path="status">Status</form:label>
+				<form:select path="status" class="statusSelector">
+					<form:option value="pending" label="Pending" />
+					<form:option value="partiallyFulfilled" label="Partially Fulfilled" />
+					<form:option value="fulfilled" label="Fulfilled" />
+				</form:select>
+			</div>
+
+			<div>
+				<form:label path="requestedAfter">Requested after </form:label>
+				<form:input path="requestedAfter" class="requestedAfter" placeholder="Request Date"/>
+			</div>
+			<div>
+				<form:label path="requiredBy">Required by </form:label>
+				<form:input path="requiredBy" class="requiredBy" placeholder="Required By Date" />
+			</div>
+			<div>
+				<label></label>
+				<button type="button" class="findRequestButton">
+					Find requests
+				</button>
+				<button type="button" class="clearFindFormButton">
+					Clear form
+				</button>
+			</div>
+		</form:form>
+		<div class="findRequestResults"></div>
+	</div>
+
+	<div id="${childContentId}"></div>
+
+</div>

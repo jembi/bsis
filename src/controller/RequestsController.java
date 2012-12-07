@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.request.FindRequestBackingForm;
 import model.request.Request;
 import model.request.RequestBackingForm;
 import model.request.RequestBackingFormValidator;
@@ -92,22 +93,22 @@ public class RequestsController {
 //    return mv;
 //  }
 //
-//  @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
-//  public ModelAndView findProductFormGenerator(HttpServletRequest request, Model model) {
-//
-//    FindProductBackingForm form = new FindProductBackingForm();
-//    model.addAttribute("findProductForm", form);
-//
-//    ModelAndView mv = new ModelAndView("findProductForm");
-//    Map<String, Object> m = model.asMap();
-//    addEditSelectorOptions(m);
-//    // to ensure custom field names are displayed in the form
-//    m.put("productFields", utilController.getFormFieldsForForm("product"));
-//    m.put("refreshUrl", getUrl(request));
-//    mv.addObject("model", m);
-//    return mv;
-//  }
-//
+  @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findRequestFormGenerator(HttpServletRequest request, Model model) {
+
+    FindRequestBackingForm form = new FindRequestBackingForm();
+    model.addAttribute("findRequestForm", form);
+
+    ModelAndView mv = new ModelAndView("findRequestForm");
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // to ensure custom field names are displayed in the form
+    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", m);
+    return mv;
+  }
+
 //  @RequestMapping("/findProduct")
 //  public ModelAndView findProduct(HttpServletRequest request,
 //      @ModelAttribute("findProductForm") FindProductBackingForm form,
