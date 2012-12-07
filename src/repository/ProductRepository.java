@@ -407,4 +407,11 @@ public class ProductRepository {
     }
     return safeProducts;
   }
+
+  public Product findSingleProductByProductNumber(String productNumber) {
+    List<Product> products = findProductByProductNumber(productNumber, "", "");
+    if (products != null && products.size() == 1)
+      return products.get(0);
+    return null;
+  }
 }

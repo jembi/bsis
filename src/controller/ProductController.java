@@ -13,10 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
-import model.collectedsample.CollectedSampleBackingForm;
-import model.collectedsample.FindCollectedSampleBackingForm;
-import model.donor.Donor;
-import model.location.Location;
 import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
@@ -42,9 +38,7 @@ import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
-import viewmodel.CollectedSampleViewModel;
 import viewmodel.ProductViewModel;
-import viewmodel.donor.DonorViewModel;
 
 @Controller
 public class ProductController {

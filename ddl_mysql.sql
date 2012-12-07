@@ -35,8 +35,6 @@
 
     drop table if exists Request;
 
-    drop table if exists Request_Product;
-
     drop table if exists TestResult;
 
     drop table if exists User;
@@ -199,16 +197,21 @@
     ) ENGINE=InnoDB;
 
     create table ProductUsage (
-        usageId bigint not null auto_increment,
-        comments varchar(255),
-        dateUsed datetime,
+        id bigint not null auto_increment,
         hospital varchar(255),
-        isDeleted integer,
-        patientName varchar(255),
-        productNumber varchar(255),
-        useIndication varchar(255),
-        ward varchar(255),
-        primary key (usageId)
+        isAvailable boolean,
+        isDeleted boolean,
+        createdDate datetime,
+        lastUpdated datetime,
+        notes longtext,
+        patientName varchar(30) not null,
+        usageDate date,
+        useIndication varchar(30) not null,
+        ward varchar(30) not null,
+        createdBy_id bigint,
+        lastUpdatedBy_id bigint,
+        product_id bigint,
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table RecordFieldsConfig (
@@ -242,12 +245,6 @@
         productType_productType varchar(30),
         requestSite_id bigint,
         primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Request_Product (
-        Request_id bigint not null,
-        issuedProducts_id bigint not null,
-        unique (issuedProducts_id)
     ) ENGINE=InnoDB;
 
     create table TestResult (
@@ -402,6 +399,24 @@
         foreign key (productType_productType) 
         references ProductType (productType);
 
+    alter table ProductUsage 
+        add index FK45B6D212A49787C4 (createdBy_id), 
+        add constraint FK45B6D212A49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table ProductUsage 
+        add index FK45B6D212A8E71476 (product_id), 
+        add constraint FK45B6D212A8E71476 
+        foreign key (product_id) 
+        references Product (id);
+
+    alter table ProductUsage 
+        add index FK45B6D212D0AFB367 (lastUpdatedBy_id), 
+        add constraint FK45B6D212D0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
+
     create index request_bloodRhd_index on Request (bloodRhd);
 
     create index request_requestNumber_index on Request (requestNumber);
@@ -431,18 +446,6 @@
         add constraint FKA4878A6FC5DF532 
         foreign key (productType_productType) 
         references ProductType (productType);
-
-    alter table Request_Product 
-        add index FK385FB6FF27F33616 (Request_id), 
-        add constraint FK385FB6FF27F33616 
-        foreign key (Request_id) 
-        references Request (id);
-
-    alter table Request_Product 
-        add index FK385FB6FF4C68456 (issuedProducts_id), 
-        add constraint FK385FB6FF4C68456 
-        foreign key (issuedProducts_id) 
-        references Product (id);
 
     alter table TestResult 
         add index FKDB459F6FA49787C4 (createdBy_id), 

@@ -9,58 +9,81 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="editUsageFormDivId">editUsageFormDiv-${unique_page_id}</c:set>
+<c:set var="editUsageFormBarcodeId">editUsageFormBarcode-${unique_page_id}</c:set>
 <c:set var="editUsageFormId">editUsageForm-${unique_page_id}</c:set>
 <c:set var="deleteUsageConfirmDialogId">deleteUsageConfirmDialog-${unique_page_id}</c:set>
-<c:set var="editUsageFormUsageDateId">editUsageFormUsageDateId-${unique_page_id}</c:set>
+<c:set var="usageDateInputId">usageDateInput-${unique_page_id}</c:set>
 <c:set var="updateUsageButtonId">updateUsageButton-${unique_page_id}</c:set>
-<c:set var="deleteUsageButtonId">deleteUsageButton-${unique_page_id}</c:set>
-<c:set var="goBackButtonId">goBackButton-${unique_page_id}</c:set>
+<c:set var="printButtonId">printButton-${unique_page_id}</c:set>
+<c:set var="cancelButtonId">cancelButton-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
+
+        function notifyParentSuccess() {
+					 // let the parent know we are done
+				   $("#${editUsageFormDivId}").parent().trigger("editUsageSuccess");
+    		}
+
+        function notifyParentCancel() {
+					 // let the parent know we are done
+				   $("#${editUsageFormDivId}").parent().trigger("editUsageCancel");
+	   		}
+
+        $("#${cancelButtonId}").button({
+          icons : {
+            primary : 'ui-icon-closethick'
+          }
+        }).click(
+	           function() {
+               notifyParentCancel();
+        });
+
         $("#${updateUsageButtonId}").button({
           icons : {
             primary : 'ui-icon-plusthick'
           }
-        }).click(function() {
-          updateExistingUsage($("#${editUsageFormId}")[0]);
-        });
-
-        $("#${deleteUsageButtonId}").button({
-          icons : {
-            primary : 'ui-icon-minusthick'
-          }
         }).click(
             function() {
-              $("#${deleteUsageConfirmDialogId}").dialog(
-                  {
-                    modal : true,
-                    title : "Confirm Delete",
-                    buttons : {
-                      "Delete" : function() {
-                        var productNumber = $("#${editUsageFormId}").find(
-                            "[name='productNumber']").val();
-                        deleteUsage(productNumber);
-                        $(this).dialog("close");
-                      },
-                      "Cancel" : function() {
-                        $(this).dialog("close");
-                      }
-                    }
-                  });
+              if ("${model.existingUsage}" == "true")
+                updateExistingUsage($("#${editUsageFormId}")[0],
+                    								"${editUsageFormDivId}", notifyParentSuccess);
+              else
+                addNewUsage($("#${editUsageFormId}")[0], "${editUsageFormDivId}", notifyParentSuccess);
             });
 
-        $("#${goBackButtonId}").button({
+        $("#${printButtonId}").button({
           icons : {
-            primary : 'ui-icon-circle-arrow-w'
+            primary : 'ui-icon-print'
           }
         }).click(function() {
-          window.history.back();
-          return false;
+          $("#${editUsageFormId}").printArea();
         });
 
-        $("#${editUsageFormUsageDateId}").datepicker({
+        $("#${editUsageFormId}").find(".clearFormButton").button({
+          icons : {
+            primary : 'ui-icon-grip-solid-horizontal'
+          }
+        }).click(refetchForm);
+
+        function refetchForm() {
+          $.ajax({
+            url: "${model.refreshUrl}",
+            data: {},
+            type: "GET",
+            success: function (response) {
+              			 	 $("#${editUsageFormDivId}").replaceWith(response);
+            				 },
+            error:   function (response) {
+											 showErrorMessage("Something went wrong. Please try again.");
+            				 }
+            
+          });
+        }
+
+        $("#${usageDateInputId}").datepicker({
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
@@ -68,66 +91,91 @@
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c0",
         });
+
+        copyMirroredFields("${editUsageFormId}", JSON.parse('${model.usageFields.mirroredFields}'));
       });
 </script>
 
-<div class="editFormDiv">
-	<form:form method="POST" commandName="editUsageForm"
-		id="${editUsageFormId}">
-		<table>
-			<thead>
-				<c:if test="${model.isDialog != 'yes' }">
-					<tr>
-						<td><b>Add New Usage</b></td>
-					</tr>
-				</c:if>
-			</thead>
-			<tbody>
-				<tr>
-					<td><form:label path="productNumber">${model.productNoDisplayName}</form:label></td>
-					<td><form:input path="productNumber" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="dateUsed">${model.dateUsedDisplayName}</form:label></td>
-					<td><form:input path="dateUsed"
-							id="${editUsageFormUsageDateId}" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="hospital">${model.hospitalDisplayName}</form:label></td>
-					<td><form:input path="hospital" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="ward">${model.wardDisplayName}</form:label></td>
-					<td><form:input path="ward" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="useIndication">${model.useIndicationDisplayName}</form:label></td>
-					<td><form:input path="useIndication"/></td>
-				</tr>
-				<tr>
-					<td><form:label path="patientName">Patient Name</form:label></td>
-					<td><form:input path="patientName" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="comments">${model.commentsDisplayName}</form:label></td>
-					<td><form:textarea path="comments" class="commentsInputBox"
-							maxlength="255" /></td>
-				</tr>
-				<c:if test="${model.isDialog != 'yes' }">
-					<tr>
-						<td />
-						<td><button type="button" id="${updateUsageButtonId}"
-								style="margin-left: 10px">Save</button>
-							<button type="button" id="${deleteUsageButtonId}"
-								style="margin-left: 10px">Delete</button>
-							<button type="button" id="${goBackButtonId}"
-								style="margin-left: 10px">Go Back</button></td>
-					</tr>
-				</c:if>
-			</tbody>
-		</table>
+<div id="${editUsageFormDivId}">
+	<form:form id="${editUsageFormId}" method="POST" class="formInTabPane"
+		commandName="editUsageForm">
+		<form:hidden path="id" />
+		<c:if test="${model.usageFields.product.hidden != true }">
+			<div>
+				<form:label path="productNumber">${model.usageFields.product.displayName}</form:label>
+				<form:input path="productNumber" value="${model.existingUsage ? '' : model.usageFields.product.defaultValue}" />
+				<form:errors class="formError" path="usage.product"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.usageFields.hospital.hidden != true }">
+			<div>
+				<form:label path="hospital">${model.usageFields.hospital.displayName}</form:label>
+				<form:input path="hospital" value="${model.existingUsage ? '' : model.usageFields.hospital.defaultValue}" />
+				<form:errors class="formError" path="usage.hospital"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.usageFields.patientName.hidden != true }">
+			<div>
+				<form:label path="patientName">${model.usageFields.patientName.displayName}</form:label>
+				<form:input path="patientName" value="${model.existingUsage ? '' : model.usageFields.patientName.defaultValue}" />
+				<form:errors class="formError" path="usage.patientName" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.usageFields.ward.hidden != true }">
+			<div>
+				<form:label path="ward">${model.usageFields.ward.displayName}</form:label>
+				<form:input path="ward" value="${model.existingUsage ? '' : model.usageFields.ward.defaultValue}" />
+				<form:errors class="formError" path="usage.ward"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.usageFields.lastName.hidden != true }">
+			<div>
+				<form:label path="useIndication">${model.usageFields.useIndication.displayName}</form:label>
+				<form:input path="useIndication" value="${model.existingUsage ? '' : model.usageFields.useIndication.defaultValue}" />
+				<form:errors class="formError" path="usage.useIndication" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.usageFields.usageDate.hidden != true }">
+			<div>
+				<form:label path="usageDate">${model.usageFields.usageDate.displayName}</form:label>
+				<form:input path="usageDate" id="${usageDateInputId}"
+										value="${model.existingUsage ? '' : model.usageFields.usageDate.defaultValue}" />
+				<form:errors class="formError" path="usage.usageDate" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.usageFields.notes.hidden != true }">
+			<div>
+				<form:label path="notes" class="labelForTextArea">${model.usageFields.notes.displayName}</form:label>
+				<textarea name="notes">${model.existingUsage ? '' : model.usageFields.notes.defaultValue}</textarea>
+				<form:errors class="formError" path="usage.notes"></form:errors>
+			</div>
+		</c:if>
+		<div>
+			<label></label>
+			<c:if test="${!(model.existingUsage)}">
+				<button type="button" id="${updateUsageButtonId}" class="autoWidthButton">
+					Save and add another
+				</button>
+				<button type="button" class="clearFormButton autoWidthButton">
+					Clear form
+				</button>				
+			</c:if>
+			<c:if test="${model.existingUsage}">
+				<button type="button" id="${updateUsageButtonId}">
+					Save
+				</button>
+				<button type="button" id="${cancelButtonId}">
+					Cancel
+				</button>
+			</c:if>
+
+			<button type="button" id="${printButtonId}">
+				Print
+			</button>
+
+		</div>
 	</form:form>
 </div>
-
-<div id="${deleteUsageConfirmDialogId}" style="display: none">Are
-	you sure you want to delete this Usage?</div>

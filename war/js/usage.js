@@ -1,50 +1,41 @@
-function addNewUsage(form) {
-  updateUsageGeneric(form, "updateUsage.html");
+function addNewUsage(form, resultDivId, successCallback) {
+  updateUsageGeneric(form, resultDivId, "addUsage.html", successCallback);
 }
 
-function updateExistingUsage(form) {
-  updateUsageGeneric(form, "updateUsage.html");
+function updateExistingUsage(form, resultDivId, successCallback) {
+  updateUsageGeneric(form, resultDivId, "updateUsage.html", successCallback);
 }
 
-function updateUsageGeneric(form, url) {
-  var usage = $("#" + form.getAttribute("id")).serialize();
+function updateUsageGeneric(form, resultDivId, url, successCallback) {
+  var usage = $(form).serialize();
   $.ajax({
-    type : "POST",
-    url : url,
-    data : usage,
-    success : function(jsonResponse) {
-      if (jsonResponse["success"] === true) {
-        $.showMessage("Usage Updated Successfully!");
-        $('#' + form.getAttribute("id")).each(function() {
-          this.reset();
-        });
-        window.history.back();
-      } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
-      }
-    }
+    type: "POST",
+    url: url,
+    data: usage,
+    success: function(jsonResponse, data, data1, data2) {
+               showMessage("Usage Updated Successfully!");
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             showErrorMessage("Something went wrong. Please fix the errors noted.");
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
   });
 }
 
-function deleteUsage(productNumber) {
+function deleteUsage(productId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteUsage.html",
-    data : {productNumber: productNumber},
+    data : {productId: productId},
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
-        $.showMessage("Usage Deleted Successfully!");
-        window.history.back();
+        successCallback();
+        showMessage("Usage Deleted Successfully!");
       } else {
-        $.showMessage("Something went wrong." + jsonResponse["errMsg"], {
-          backgroundColor : 'red'
-        });
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
   });
 }
-
-function decorateEditUsageDialog() {
-};

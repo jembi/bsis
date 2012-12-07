@@ -11,8 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.ProductUsage;
-import model.request.Request;
+import model.usage.ProductUsage;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,15 +42,6 @@ public class UsageRepository {
       }
     }
     return productUsage;
-  }
-
-  public ProductUsage updateUsage(ProductUsage productUsage) {
-    ProductUsage existingProductUsage = findProductUsage(productUsage
-        .getProductNumber());
-    existingProductUsage.copy(productUsage);
-    em.merge(existingProductUsage);
-    em.flush();
-    return existingProductUsage;
   }
 
   public void deleteAllUsages() {
@@ -109,25 +99,19 @@ public class UsageRepository {
     return usage.get(0);
   }
 
-  public ProductUsage updateOrAddUsage(ProductUsage usage) {
-    ProductUsage existingUsage = findUsageByProductNumber(usage
-        .getProductNumber());
-    if (existingUsage == null) {
-      usage.setIsDeleted(false);
-      saveUsage(usage);
-      return usage;
-    }
-    existingUsage.copy(usage);
-    existingUsage.setIsDeleted(false);
-    em.merge(existingUsage);
-    em.flush();
-    return existingUsage;
-  }
-
   public void deleteUsage(String productNumber) {
     ProductUsage existingUsage = findUsageByProductNumber(productNumber);
     existingUsage.setIsDeleted(Boolean.TRUE);
     em.merge(existingUsage);
+    em.flush();
+  }
+
+  public ProductUsage findUsageById(Long usageId) {
+    return em.find(ProductUsage.class, usageId);
+  }
+
+  public void addUsage(ProductUsage usage) {
+    em.persist(usage);
     em.flush();
   }
 }

@@ -60,6 +60,15 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('Request', 'patientName', 'Patient Name', '', '0', '0', ''),
 ('Request', 'notes', 'Notes', '', '0', '0', '');
 
+insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, derived, sourceField) values
+('Usage', 'hospital', 'Hospital', '', '0', '0', ''),
+('Usage', 'patientName', 'Patient Name', '', '0', '0', ''),
+('Usage', 'ward', 'Ward', '', '0', '0', ''),
+('Usage', 'useIndication', 'Use Indication', '', '0', '0', ''),
+('Usage', 'usageDate', 'Usage Date', '', '0', '0', ''),
+('Usage', 'product', 'Product', '', '0', '0', ''),
+('Usage', 'notes', 'Notes', '', '0', '0', '');
+
 insert into DonorType (donorType) values ('Voluntary'), ('Family'), ('Other');
 
 insert into ProductType (productType) values ('Whole Blood'), ('RCC'), ('FFP'), ('Platelets'), ('Partial Platelets');

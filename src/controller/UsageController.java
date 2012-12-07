@@ -1,33 +1,34 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
-import model.ProductUsage;
-import model.ProductUsageBackingForm;
+import model.collectedsample.CollectedSample;
+import model.product.Product;
+import model.product.ProductBackingForm;
+import model.usage.ProductUsage;
+import model.usage.ProductUsageBackingForm;
+import model.usage.ProductUsageBackingFormValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.DisplayNamesRepository;
-import repository.RecordFieldsConfigRepository;
+import repository.ProductRepository;
 import repository.UsageRepository;
-import utils.ControllerUtil;
-import viewmodel.UsageViewModel;
 
 @Controller
 public class UsageController {
@@ -36,10 +37,18 @@ public class UsageController {
 	private UsageRepository usageRepository;
 
 	@Autowired
-	private DisplayNamesRepository displayNamesRepository;
-
+	private ProductRepository productRepository;
+	
 	@Autowired
-	private RecordFieldsConfigRepository recordFieldsConfigRepository;
+	private UtilController utilController;
+
+	public UsageController() {
+	}
+	
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(new ProductUsageBackingFormValidator(binder.getValidator()));
+  }
 
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -50,134 +59,94 @@ public class UsageController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/findUsageFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findUsageFormInit(HttpServletRequest servletRequest, Model model) {
+  @RequestMapping(value = "/editUsageFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editUsageFormGenerator(HttpServletRequest request,
+      Model model,
+      @RequestParam(value="usageId", required=false) Long usageId) {
 
     ProductUsageBackingForm form = new ProductUsageBackingForm();
-    model.addAttribute("findUsageForm", form);
 
-    ModelAndView mv = new ModelAndView("findUsageForm");
+    ModelAndView mv = new ModelAndView("editUsageForm");
     Map<String, Object> m = model.asMap();
-    m.put("requestUrl", getUrl(servletRequest));
-
+    m.put("refreshUrl", getUrl(request));
+    m.put("existingUsage", false);
+    if (usageId != null) {
+      form.setId(usageId);
+      ProductUsage usage = usageRepository.findUsageById(usageId);
+      if (usage != null) {
+        form = new ProductUsageBackingForm(usage);
+        m.put("existingUsage", true);
+      }
+      else {
+        form = new ProductUsageBackingForm();
+      }
+    }
+    m.put("editUsageForm", form);
+    m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    ControllerUtil.addUsageDisplayNamesToModel(m, displayNamesRepository);
+    m.put("usageFields", utilController.getFormFieldsForForm("Usage"));
     mv.addObject("model", m);
+    System.out.println(mv.getViewName());
     return mv;
   }
 
-  @RequestMapping("/findUsage")
-  public ModelAndView findUsage(HttpServletRequest servletRequest,
-      @ModelAttribute("findUsageForm") ProductUsageBackingForm form,
+  @RequestMapping(value = "/addUsage", method = RequestMethod.POST)
+  public ModelAndView addUsage(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @ModelAttribute("editUsageForm") @Valid ProductUsageBackingForm form,
       BindingResult result, Model model) {
 
-    List<ProductUsage> requests = usageRepository.findAnyUsageMatching(
-        form.getProductNumber(), form.getDateUsedFrom(),
-        form.getDateUsedTo(), form.getUseIndications());
-
-    ModelAndView modelAndView = new ModelAndView("usageTable");
+    ModelAndView mv = new ModelAndView("editUsageForm");
+    boolean success = false;
+    String message = "";
     Map<String, Object> m = model.asMap();
-    m.put("tableName", "findUsageTable");
 
-    ControllerUtil.addUsageDisplayNamesToModel(m, displayNamesRepository);
-    ControllerUtil.addFieldsToDisplay("usage", m,
-        recordFieldsConfigRepository);
-    m.put("allUsage", getUsageViewModels(requests));
-    m.put("requestUrl", getUrl(servletRequest));
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the product as part of the Usage
+    String productNumber = form.getProductNumber();
+    if (productNumber != null && !productNumber.isEmpty()) {
+      try {
+        Product product = productRepository.findSingleProductByProductNumber(productNumber);
+        form.setProduct(product);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
 
-    modelAndView.addObject("model", m);
-    return modelAndView;
-  }
-
-  @RequestMapping(value = "/editUsageFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editUsageFormGenerator(HttpServletRequest servletRequest,
-      Model model,
-      @RequestParam(value = "productNumber", required = false) String productNumber,
-      @RequestParam(value = "isDialog", required = false) String isDialog) {
-
-    ProductUsageBackingForm form = new ProductUsageBackingForm();
-    Map<String, Object> m = model.asMap();
-    m.put("isDialog", isDialog);
-
-    if (productNumber != null) {
-      form.setProductNumber(productNumber);
-      ProductUsage usage = usageRepository
-          .findUsageByProductNumber(productNumber);
-      if (usage != null) {
-        form = new ProductUsageBackingForm(usage);
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      success = false;
+      message = "Please fix the errors noted above.";
+    } else {
+      try {
+        ProductUsage usage = form.getUsage();
+        usage.setIsDeleted(false);
+        usageRepository.addUsage(usage);
+        m.put("hasErrors", false);
+        success = true;
+        message = "Usage Successfully Added";
+        form = new ProductUsageBackingForm();
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Usage Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
     m.put("editUsageForm", form);
-    m.put("requestUrl", getUrl(servletRequest));
+    m.put("existingUsage", false);
+    m.put("success", success);
+    m.put("message", message);
+    m.put("refreshUrl", "editUsageFormGenerator.html");
+    m.put("usageFields", utilController.getFormFieldsForForm("usage"));
 
-    // to ensure custom field names are displayed in the form
-    ControllerUtil.addUsageDisplayNamesToModel(m, displayNamesRepository);
-    ModelAndView mv = new ModelAndView("editUsageForm");
     mv.addObject("model", m);
     return mv;
-  }
-
-  @RequestMapping(value = "/updateUsage", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> updateOrAddUsage(
-      @ModelAttribute("editUsageForm") ProductUsageBackingForm form) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      ProductUsage usage = form.getUsage();
-      usageRepository.updateOrAddUsage(usage);
-    } catch (EntityExistsException ex) {
-      // TODO: Replace with logger
-      System.err.println("Entity Already exists");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Usage Already Exists";
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
-  }
-
-  private List<UsageViewModel> getUsageViewModels(List<ProductUsage> usages) {
-    if (usages == null)
-      return Arrays.asList(new UsageViewModel[0]);
-    List<UsageViewModel> usageViewModels = new ArrayList<UsageViewModel>();
-    for (ProductUsage usage : usages) {
-      usageViewModels.add(new UsageViewModel(usage));
-    }
-    return usageViewModels;
-  }
-
-  @RequestMapping(value = "/deleteUsage", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> deleteUsage(
-      @RequestParam("productNumber") String productNumber) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      usageRepository.deleteUsage(productNumber);
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
   }
 }
