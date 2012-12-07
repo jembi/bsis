@@ -31,8 +31,8 @@ $(document).ready(
 											          return;
 											        }
 											        selectedRowId = elements[0].innerHTML;
-											        createProductSummary("requestSummary.html",
-									  							{productId: selectedRowId});
+											        createRequestSummary("requestSummary.html",
+									  							{requestId: selectedRowId});
  													  },
 				"fnRowDeselected" : function(node) {
 														},
@@ -42,7 +42,7 @@ $(document).ready(
         }
       });
 
-      function createProductSummary(url, data) {
+      function createRequestSummary(url, data) {
         $.ajax({
           url: url,
           data: data,

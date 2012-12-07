@@ -169,7 +169,7 @@ $(document).ready(function() {
 			<div>
 				<label></label>
 				<button type="button" class="findRequestButton">
-					Find requests
+					Find pending requests
 				</button>
 				<button type="button" class="clearFindFormButton">
 					Clear form

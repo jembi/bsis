@@ -2,7 +2,7 @@ function addNewRequest(form, resultDivId, successCallback) {
   updateRequestGeneric(form, resultDivId, "addRequest.html", successCallback);
 }
 
-function updateExistingProduct(form, resultDivId, successCallback) {
+function updateExistingRequest(form, resultDivId, successCallback) {
   updateRequestGeneric(form, resultDivId, "updateRequest.html", successCallback);
 }
 
@@ -24,7 +24,7 @@ function updateRequestGeneric(form, resultDivId, url, successCallback) {
   });
 }
 
-function deleteRequest(productId, successCallback) {
+function deleteRequest(requestId, successCallback) {
   $.ajax({
     type : "POST",
     url : "deleteRequest.html",

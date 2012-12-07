@@ -17,7 +17,7 @@
 			href="findRequestFormGenerator.html">Issue Products</a></li>
 		<li id="addRequestsContent"><a
 			href="editRequestFormGenerator.html">Add Requests</a></li>
-		<li id="PendingRequestsContent"><a
-			href="pendingRequests.html">Pending Requests</a></li>
+		<!-- li id="PendingRequestsContent"><a
+			href="pendingRequests.html">Pending Requests</a></li-->
 	</ul>
 </div>

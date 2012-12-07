@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +26,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.LocationRepository;
-import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import viewmodel.RequestViewModel;
@@ -38,9 +39,6 @@ public class RequestsController {
 
   @Autowired
   private RequestRepository requestRepository;
-
-  @Autowired
-  private ProductRepository productRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -68,35 +66,35 @@ public class RequestsController {
     return reqUrl;
   }
 
-//  @RequestMapping(value = "/productSummary", method = RequestMethod.GET)
-//  public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
-//      @RequestParam(value = "productId", required = false) Long productId) {
-//
-//    ModelAndView mv = new ModelAndView("productSummary");
-//    Map<String, Object> m = model.asMap();
-//
-//    m.put("requestUrl", getUrl(request));
-//
-//    Product product = null;
-//    if (productId != null) {
-//      product = productRepository.findProductById(productId);
-//      if (product != null) {
-//        m.put("existingProduct", true);
-//      }
-//      else {
-//        m.put("existingProduct", false);
-//      }
-//    }
-//
-//    ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
-//    m.put("product", productViewModel);
-//    m.put("refreshUrl", getUrl(request));
-//    // to ensure custom field names are displayed in the form
-//    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-//    mv.addObject("model", m);
-//    return mv;
-//  }
-//
+  @RequestMapping(value = "/requestSummary", method = RequestMethod.GET)
+  public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
+      @RequestParam(value = "requestId", required = false) Long requestId) {
+
+    ModelAndView mv = new ModelAndView("requestSummary");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    Request productRequest = null;
+    if (requestId != null) {
+      productRequest = requestRepository.findRequestById(requestId);
+      if (productRequest != null) {
+        m.put("existingRequest", true);
+      }
+      else {
+        m.put("existingRequest", false);
+      }
+    }
+
+    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
+    m.put("request", requestViewModel);
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
   public ModelAndView findRequestFormGenerator(HttpServletRequest request, Model model) {
 
@@ -233,81 +231,69 @@ public class RequestsController {
     return mv;
   }
 
-//  @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
-//  public ModelAndView updateProduct(
-//      HttpServletResponse response,
-//      @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
-//      BindingResult result, Model model) {
-//
-//    ModelAndView mv = new ModelAndView("editProductForm");
-//    boolean success = false;
-//    String message = "";
-//    Map<String, Object> m = model.asMap();
-//    addEditSelectorOptions(m);
-//    // only when the collection is correctly added the existingCollectedSample
-//    // property will be changed
-//    m.put("existingProduct", true);
-//
-//    System.out.println("here");
-//
-//    // IMPORTANT: Validation code just checks if the ID exists.
-//    // We still need to store the collected sample as part of the product.
-//    String collectionNumber = form.getCollectionNumber();
-//    if (collectionNumber != null && !collectionNumber.isEmpty()) {
-//      try {
-//        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
-//        form.setCollectedSample(collectedSample);
-//      } catch (NoResultException ex) {
-//        ex.printStackTrace();
-//      }
-//    }
-//
-//    if (result.hasErrors()) {
-//      m.put("hasErrors", true);
-//      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//      success = false;
-//      message = "Please fix the errors noted above now!";
-//    }
-//    else {
-//      try {
-//
-//        form.setIsDeleted(false);
-//        Product existingProduct = productRepository.updateProduct(form.getProduct());
-//        if (existingProduct == null) {
-//          m.put("hasErrors", true);
-//          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//          success = false;
-//          m.put("existingProduct", false);
-//          message = "Product does not already exist.";
-//        }
-//        else {
-//          m.put("hasErrors", false);
-//          success = true;
-//          message = "Product Successfully Updated";
-//        }
-//      } catch (EntityExistsException ex) {
-//        ex.printStackTrace();
-//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//        success = false;
-//        message = "Product Already exists.";
-//      } catch (Exception ex) {
-//        ex.printStackTrace();
-//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//        success = false;
-//        message = "Internal Error. Please try again or report a Problem.";
-//      }
-//   }
-//
-//    m.put("editProductForm", form);
-//    m.put("success", success);
-//    m.put("message", message);
-//    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-//
-//    mv.addObject("model", m);
-//
-//    return mv;
-//  }
-//
+  @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
+  public ModelAndView updateRequest(
+      HttpServletResponse response,
+      @ModelAttribute("editRequestForm") @Valid RequestBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView("editRequestForm");
+    boolean success = false;
+    String message = "";
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    // only when the collection is correctly added the existingCollectedSample
+    // property will be changed
+    m.put("existingRequest", true);
+
+    System.out.println("here");
+
+    if (result.hasErrors()) {
+      m.put("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      success = false;
+      message = "Please fix the errors noted above now!";
+    }
+    else {
+      try {
+
+        form.setIsDeleted(false);
+        Request existingRequest = requestRepository.updateRequest(form.getRequest());
+        if (existingRequest == null) {
+          m.put("hasErrors", true);
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          success = false;
+          m.put("existingRequest", false);
+          message = "Request does not already exist.";
+        }
+        else {
+          m.put("hasErrors", false);
+          success = true;
+          message = "Request Successfully Updated";
+        }
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        success = false;
+        message = "Request Already exists.";
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        success = false;
+        message = "Internal Error. Please try again or report a Problem.";
+      }
+   }
+
+    m.put("editRequestForm", form);
+    m.put("success", success);
+    m.put("message", message);
+    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+
+    mv.addObject("model", m);
+
+    return mv;
+  }
+
   private List<RequestViewModel> getRequestViewModels(
       List<Request> productRequests) {
     if (productRequests == null)
@@ -319,26 +305,26 @@ public class RequestsController {
     return requestViewModels;
   }
 
-//  @RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
-//  public @ResponseBody
-//  Map<String, ? extends Object> deleteProduct(
-//      @RequestParam("productId") Long productId) {
-//
-//    boolean success = true;
-//    String errMsg = "";
-//    try {
-//      productRepository.deleteProduct(productId);
-//    } catch (Exception ex) {
-//      // TODO: Replace with logger
-//      System.err.println("Internal Exception");
-//      System.err.println(ex.getMessage());
-//      success = false;
-//      errMsg = "Internal Server Error";
-//    }
-//
-//    Map<String, Object> m = new HashMap<String, Object>();
-//    m.put("success", success);
-//    m.put("errMsg", errMsg);
-//    return m;
-//  }
+  @RequestMapping(value = "/deleteRequest", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteProduct(
+      @RequestParam("requestId") Long requestId) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      requestRepository.deleteRequest(requestId);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
 }

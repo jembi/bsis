@@ -14,9 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.product.Product;
 import model.request.Request;
-import model.request.RequestStatus;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
@@ -297,4 +295,24 @@ public class RequestRepository {
 
     return query.getResultList();
   }
+
+  public void deleteRequest(Long requestId) {
+    Request existingRequest = findRequestById(requestId);
+    existingRequest.setIsDeleted(Boolean.TRUE);
+    em.merge(existingRequest);
+    em.flush();
+  }
+
+  public Request updateRequest(Request request) {
+    Request existingRequest = findRequestById(request.getId());
+    if (existingRequest == null) {
+      return null;
+    }
+    existingRequest.copy(request);
+    em.merge(existingRequest);
+    em.flush();
+    return existingRequest;
+  }
+
+
 }
