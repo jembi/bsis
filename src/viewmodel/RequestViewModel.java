@@ -11,10 +11,15 @@ import model.request.Request;
 import model.request.RequestStatus;
 import model.user.User;
 import model.util.BloodAbo;
+import model.util.BloodGroup;
 import model.util.BloodRhd;
 
 public class RequestViewModel {
 	private Request request;
+
+  public RequestViewModel(Request productRequest) {
+    this.request = productRequest;
+  }
 
   public Long getId() {
     return request.getId();
@@ -34,10 +39,6 @@ public class RequestViewModel {
 
   public Integer getRequestedQuantity() {
     return request.getRequestedQuantity();
-  }
-
-  public RequestStatus getRequestStatus() {
-    return request.getRequestStatus();
   }
 
   public BloodAbo getBloodAbo() {
@@ -84,6 +85,10 @@ public class RequestViewModel {
     return request.getCreatedDate();
   }
 
+  public String getBloodGroup() {
+    return new BloodGroup(request.getBloodAbo(), request.getBloodRhd()).toString();
+  }
+
   public User getCreatedBy() {
     return request.getCreatedBy();
   }
@@ -96,79 +101,9 @@ public class RequestViewModel {
     return request.hashCode();
   }
 
-  public void setId(Long id) {
-    request.setId(id);
-  }
-
-  public void setRequestNumber(String requestNumber) {
-    request.setRequestNumber(requestNumber);
-  }
-
-  public void setRequestDate(Date requestDate) {
-    request.setRequestDate(requestDate);
-  }
-
-  public void setRequiredDate(Date requiredDate) {
-    request.setRequiredDate(requiredDate);
-  }
-
-  public void setRequestedQuantity(Integer requestedQuantity) {
-    request.setRequestedQuantity(requestedQuantity);
-  }
-
-  public void setRequestStatus(RequestStatus requestStatus) {
-    request.setRequestStatus(requestStatus);
-  }
-
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    request.setBloodAbo(bloodAbo);
-  }
-
-  public void setBloodRhd(BloodRhd bloodRhd) {
-    request.setBloodRhd(bloodRhd);
-  }
-
-  public void setNotes(String notes) {
-    request.setNotes(notes);
-  }
-
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
-    request.setModificationTracker(modificationTracker);
-  }
-
-  public void setProductType(ProductType productType) {
-    request.setProductType(productType);
-  }
-
-  public void setRequestSite(Location requestSite) {
-    request.setRequestSite(requestSite);
-  }
-
-  public void setPatientName(String patientName) {
-    request.setPatientName(patientName);
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    request.setIsDeleted(isDeleted);
-  }
-
-  public void setIssuedProducts(List<Product> issuedProducts) {
-    request.setIssuedProducts(issuedProducts);
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    request.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    request.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    request.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    request.setLastUpdatedBy(lastUpdatedBy);
+  public Integer getIssuedQuantity() {
+    if (request == null || request.getIssuedProducts() == null)
+      return 0;
+    return request.getIssuedProducts().size();
   }
 }

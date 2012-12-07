@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javax.persistence.TypedQuery;
 
 import model.product.Product;
 import model.request.Request;
+import model.request.RequestStatus;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
@@ -238,5 +240,61 @@ public class RequestRepository {
   public void addRequest(Request productRequest) {
     em.persist(productRequest);
     em.flush();
+  }
+
+  private Date getDateRequestedAfterOrDefault(String requestedAfter) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date from = null;
+    try {
+      from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
+          .parse("12/31/1970") : dateFormat.parse(requestedAfter);
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+    }
+    return from;      
+  }
+
+  private Date getDateRequiredByOrDefault(String dateExpiresTo) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Date to = null;
+    try {
+      if (dateExpiresTo == null || dateExpiresTo.equals("")) {
+        to = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(to);
+        cal.add(Calendar.DATE, 365);
+        to = cal.getTime();
+      }
+      else {
+        to = dateFormat.parse(dateExpiresTo);
+      }
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+    }
+    return to;      
+  }
+
+  public List<Request> findRequests(List<String> productTypes,
+      List<Long> requestSiteIds, String requestedAfter,
+      String requiredBy) {
+    TypedQuery<Request> query = em.createQuery(
+            "SELECT r FROM Request r WHERE " +
+            "(r.productType.productType IN (:productTypes) AND " +
+            "r.requestSite.id IN (:requestSiteIds)) AND (r.fulfilled = :fulfilled) AND" +
+            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
+            "r.isDeleted= :isDeleted",
+            Request.class);
+
+    Date from = getDateRequestedAfterOrDefault(requestedAfter);
+    Date to = getDateRequiredByOrDefault(requiredBy);
+
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("productTypes", productTypes);
+    query.setParameter("requestSiteIds", requestSiteIds);
+    query.setParameter("fulfilled", Boolean.FALSE);
+    query.setParameter("requestedAfter", from);
+    query.setParameter("requiredBy", to);
+
+    return query.getResultList();
   }
 }

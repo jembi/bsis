@@ -53,6 +53,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('Request', 'requiredDate', 'Required Date', '', '0', '0', ''),
 ('Request', 'requestSite', 'Request Site', '', '0', '0', ''),
 ('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '0', ''),
+('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', ''),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', ''),
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '0', ''),
 ('Request', 'productType', 'Product Type', '', '0', '0', ''),

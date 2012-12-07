@@ -159,15 +159,6 @@ $(document).ready(function() {
 			</div>
 
 			<div>
-				<form:label path="status">Status</form:label>
-				<form:select path="status" class="statusSelector">
-					<form:option value="pending" label="Pending" />
-					<form:option value="partiallyFulfilled" label="Partially Fulfilled" />
-					<form:option value="fulfilled" label="Fulfilled" />
-				</form:select>
-			</div>
-
-			<div>
 				<form:label path="requestedAfter">Requested after </form:label>
 				<form:input path="requestedAfter" class="requestedAfter" placeholder="Request Date"/>
 			</div>

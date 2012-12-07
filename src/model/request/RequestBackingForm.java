@@ -68,10 +68,6 @@ public class RequestBackingForm {
     return getRequest().getRequestedQuantity();
   }
 
-  public RequestStatus getRequestStatus() {
-    return getRequest().getRequestStatus();
-  }
-
   public BloodAbo getBloodAbo() {
     return getRequest().getBloodAbo();
   }
@@ -141,10 +137,6 @@ public class RequestBackingForm {
 
   public void setRequestedQuantity(Integer requestedQuantity) {
     getRequest().setRequestedQuantity(requestedQuantity);
-  }
-
-  public void setRequestStatus(RequestStatus requestStatus) {
-    getRequest().setRequestStatus(requestStatus);
   }
 
   public void setBloodAbo(BloodAbo bloodAbo) {

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +30,9 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -59,9 +63,7 @@ public class Request implements ModificationTracker {
   @NotNull
   private Integer requestedQuantity;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length=30)
-  private RequestStatus requestStatus;
+  private Boolean fulfilled;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
@@ -73,7 +75,7 @@ public class Request implements ModificationTracker {
   @Index(name="request_bloodRhd_index")
   private BloodRhd bloodRhd;
 
-  @OneToMany
+  @OneToMany(fetch=FetchType.EAGER)
   private List<Product> issuedProducts;
 
   @Lob
@@ -130,10 +132,6 @@ public class Request implements ModificationTracker {
     return requestedQuantity;
   }
 
-  public RequestStatus getRequestStatus() {
-    return requestStatus;
-  }
-
   public BloodAbo getBloodAbo() {
     return bloodAbo;
   }
@@ -184,10 +182,6 @@ public class Request implements ModificationTracker {
 
   public void setRequestedQuantity(Integer requestedQuantity) {
     this.requestedQuantity = requestedQuantity;
-  }
-
-  public void setRequestStatus(RequestStatus requestStatus) {
-    this.requestStatus = requestStatus;
   }
 
   public void setBloodAbo(BloodAbo bloodAbo) {
@@ -260,5 +254,13 @@ public class Request implements ModificationTracker {
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public Boolean getFulfilled() {
+    return fulfilled;
+  }
+
+  public void setFulfilled(Boolean fulfilled) {
+    this.fulfilled = fulfilled;
   }
 }

@@ -12,7 +12,6 @@
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">productsTable-${unique_page_id}</c:set>
 <c:set var="productsTableEditRowDivId">productsTableEditRowDiv-${unique_page_id}</c:set>
-<c:set var="deleteProductConfirmDialogId">deleteProductConfirmDialog-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
