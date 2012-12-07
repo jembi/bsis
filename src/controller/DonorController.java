@@ -97,6 +97,36 @@ public class DonorController {
     return mv;
   }
 
+  @RequestMapping(value = "/viewDonorHistory", method = RequestMethod.GET)
+  public ModelAndView viewDonorHistory(HttpServletRequest request, Model model,
+      @RequestParam(value = "donorId", required = false) Long donorId) {
+
+    ModelAndView mv = new ModelAndView("collectionsForDonor");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    Donor donor = null;
+    if (donorId != null) {
+      donor = donorRepository.findDonorById(donorId);
+      if (donor != null) {
+        m.put("existingDonor", true);
+      }
+      else {
+        m.put("existingDonor", false);
+      }
+    }
+
+    DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
+    m.put("donor", donorViewModel);
+    m.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView editDonorFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {

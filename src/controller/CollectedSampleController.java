@@ -340,7 +340,7 @@ public class CollectedSampleController {
     return mv;
   }
 
-  private List<CollectedSampleViewModel> getCollectionViewModels(
+  public static List<CollectedSampleViewModel> getCollectionViewModels(
       List<CollectedSample> collections) {
     if (collections == null)
       return Arrays.asList(new CollectedSampleViewModel[0]);

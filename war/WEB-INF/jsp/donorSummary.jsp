@@ -66,6 +66,19 @@
 	        						);
         });
 
+        $("#${tabContentId}").find(".donorHistoryButton").button({
+          icons : {
+            primary : 'ui-icon-disk'
+          }
+        }).click(function() {
+          $("#${tabContentId}").bind("donorHistoryDone", emptyChildContent);
+
+	        fetchContent("viewDonorHistory.html",
+            					 {donorId: "${model.donor.id}"},
+            					 $("#${childContentId}")
+	        						);
+        });
+
         $("#${tabContentId}").find(".cancelButton").button({
           icons : {
             primary : 'ui-icon-check'
@@ -121,6 +134,9 @@
 			<button type="button" class="editButton">
 				Edit
 			</button>
+			<button type="button" class="donorHistoryButton">
+				View Donor History
+			</button>
 			<button type="button" class="createCollectionButton">
 				Add Collection
 			</button>
@@ -131,6 +147,9 @@
 				Print
 			</button>
 		</div>
+
+		<br />
+		<br />
 
 		<div id="${donorSummaryBarcodeId}"></div>
 
