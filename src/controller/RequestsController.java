@@ -352,6 +352,7 @@ public class RequestsController {
     }
 
     System.out.println("Request found");
+    m.put("request", productRequest);
     List<Product> products = productRepository.findMatchingProductsForRequest(productRequest);
     System.out.println(products);
     
@@ -364,4 +365,28 @@ public class RequestsController {
     return mv;
   }
 
+  @RequestMapping("/issueSelectedProducts")
+  public @ResponseBody Map<String, Object> issueSelectedProducts(
+      HttpServletResponse response,
+      @RequestParam("requestId") Long requestId,
+      @RequestParam("productsToIssue") String productsToIssue) {
+    boolean success = true;
+    String errMsg = "";
+    try {
+      requestRepository.issueProductsToRequest(requestId, productsToIssue);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
 }

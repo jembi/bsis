@@ -147,6 +147,12 @@
 				<label>${model.product.productType}</label>
 			</div>
 		</c:if>
+		<c:if test="${model.productFields.isAvailable.hidden != true }">
+			<div>
+				<label>${model.productFields.isAvailable.displayName}</label>
+				<label>${model.product.isAvailable ? "Yes" : "No"}</label>
+			</div>
+		</c:if>
 	</div>
 
 	<hr />

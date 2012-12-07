@@ -14,12 +14,17 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.product.Product;
 import model.request.Request;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
@@ -312,6 +317,20 @@ public class RequestRepository {
     em.merge(existingRequest);
     em.flush();
     return existingRequest;
+  }
+
+  public void issueProductsToRequest(Long requestId, String productsToIssue) {
+    Request request = findRequestById(requestId);
+    productsToIssue = productsToIssue.replaceAll("\"", "");
+    productsToIssue = productsToIssue.replaceAll("\\[", "");
+    productsToIssue = productsToIssue.replaceAll("\\]", "");
+    String[] productIds = productsToIssue.split(",");
+    for (String productId : productIds) {
+      Product product = em.find(Product.class, Long.parseLong(productId));
+      product.setIsAvailable(false);
+      product.setIssuedTo(request);
+      product.setIssuedOn(new Date());
+    }
   }
 
 

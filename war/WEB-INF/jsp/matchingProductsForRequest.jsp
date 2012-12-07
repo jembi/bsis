@@ -17,24 +17,37 @@
 $(document).ready(
     function() {
 
+      var selected_products = [];
+      
       var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "aaSorting": [[7, "asc"]],	// sort by last column
         "oTableTools" : {
-          "sRowSelect" : "single",
+          "sRowSelect" : "multi",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-															$("#${tabContentId}").parent().trigger("productSummaryView");
 											        var elements = $(node).children();
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
 											        }
 											        selectedRowId = elements[0].innerHTML;
-											        createProductSummary("productSummary.html",
-									  							{productId: selectedRowId});
+											        var checkbox = $(node).find(":checkbox");
+										        	selected_products.push(selectedRowId);
+										        	checkbox.attr("checked", true);
+											        console.log(selected_products);
  													  },
 				"fnRowDeselected" : function(node) {
+														  var elements = $(node).children();
+											        if (elements[0].getAttribute("class") === "dataTables_empty") {
+											          return;
+											        }
+											        selectedRowId = elements[0].innerHTML;
+											        var checkbox = $(node).find(":checkbox");
+											        selected_products.splice(selected_products.indexOf(selectedRowId), 1);
+											        checkbox.attr('checked', false);
+											        console.log(selected_products);
 														},
         },
         "oColVis" : {
@@ -42,30 +55,42 @@ $(document).ready(
         }
       });
 
-      function createProductSummary(url, data) {
+      $("#${tabContentId}").find(".issueSelectedProductsButton").button({
+        icons : {
+          primary : 'ui-icon-check'
+        }
+      }).click(issueSelectedProducts);
+
+      $("#${tabContentId}").find(".cancelButton").button({
+        icons : {
+          primary : 'ui-icon-closethick'
+        }
+      }).click(function() {
+        $("#${tabContentId}").trigger("productIssueCancel");
+      });
+
+
+      function issueSelectedProducts() {
+        console.log(selected_products);
+        if (selected_products.length == 0) {
+          showMessage("You must select at least one product to issue.");
+          return;
+        }
+
         $.ajax({
-          url: url,
-          data: data,
-          type: "GET",
-          success: function(response) {
-            				 $("#${tabContentId}").trigger("productSummaryView", response);
-            			 }
+          url: "issueSelectedProducts.html",
+          type: "POST",
+          data: {requestId: "${model.request.id}", productsToIssue: JSON.stringify(selected_products)},
+          success: function() {
+            				 showMessage("Products Issued Successfully!");
+            				 $("#${tabContentId}").parent().trigger("productIssueSuccess");
+          				 },
+         	error:   function() {
+										 showErrorMessage("Something went wrong while issuing your request");         	  
+         					 }
         });
       }
-
-      function refreshResults() {
-        showLoadingImage($("#${tabContentId}"));
-        $.ajax({url: "${model.refreshUrl}",
-          			data: {},
-          			type: "GET",
-          			success: function(response) {
-          			  				 $("#${tabContentId}").html(response);
-          							 }
-        });
-      }
-
-      $("#${tabContentId}").find(".productsTable").bind("refreshResults", refreshResults);
-
+      
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
         $("#${table_id}").removeHighlight();
@@ -83,15 +108,22 @@ $(document).ready(
 		<c:when test="${fn:length(model.allProducts) eq 0}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
-				Sorry no results found matching your search request </span>
+				Sorry no matching products found for this request </span>
 		</c:when>
 
 		<c:otherwise>
 
+			Select the products you want to issue from the table below and then click on Issue button on the right.
+			<br />
+			<button class="issueSelectedProductsButton">Issue Selected Products</button>
+			<button class="cancelButton">Cancel</button>
+			<br />
+			<br />
 			<table id="${table_id}" class="dataTable productsTable">
 				<thead>
 					<tr>
 						<th style="display: none"></th>
+						<th></th>
 						<c:if test="${model.productFields.productNumber.hidden != true}">
 							<th>${model.productFields.productNumber.displayName}</th>
 						</c:if>
@@ -116,6 +148,9 @@ $(document).ready(
 					<c:forEach var="product" items="${model.allProducts}">
 						<tr>
 							<td style="display: none">${product.id}</td>
+							<td>
+								<input type="checkbox" />
+							</td>
 							<c:if test="${model.productFields.productNumber.hidden != true}">
 								<td>${product.productNumber}</td>
 							</c:if>

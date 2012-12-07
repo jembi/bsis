@@ -51,7 +51,7 @@
         			}
             }).click(function() {
 
-            $("#${tabContentId}").bind("productIssueSuccess", editRequestSuccess);
+            $("#${tabContentId}").bind("productIssueSuccess", productIssueSuccess);
             $("#${tabContentId}").bind("productIssueCancel", emptyChildContent);
 
   	        fetchContent("findMatchingProductsForRequest.html",

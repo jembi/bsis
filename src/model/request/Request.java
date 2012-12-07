@@ -75,7 +75,7 @@ public class Request implements ModificationTracker {
   @Index(name="request_bloodRhd_index")
   private BloodRhd bloodRhd;
 
-  @OneToMany(fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="issuedTo", fetch=FetchType.EAGER)
   private List<Product> issuedProducts;
 
   @Lob
