@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.product.Product;
 import model.request.FindRequestBackingForm;
 import model.request.Request;
 import model.request.RequestBackingForm;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.LocationRepository;
+import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import viewmodel.RequestViewModel;
@@ -39,6 +41,9 @@ public class RequestsController {
 
   @Autowired
   private RequestRepository requestRepository;
+
+  @Autowired
+  private ProductRepository productRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -112,7 +117,7 @@ public class RequestsController {
   }
 
   @RequestMapping("/findRequest")
-  public ModelAndView findProduct(HttpServletRequest request,
+  public ModelAndView findRequest(HttpServletRequest request,
       @ModelAttribute("findRequestForm") FindRequestBackingForm form,
       BindingResult result, Model model) {
 
@@ -327,4 +332,36 @@ public class RequestsController {
     m.put("errMsg", errMsg);
     return m;
   }
+
+
+  @RequestMapping("/findMatchingProductsForRequest")
+  public ModelAndView findMatchingProductsForRequest(HttpServletRequest request,
+      Model model,
+      @RequestParam(value="requestId", required=false) Long requestId) {
+
+    ModelAndView mv = new ModelAndView("matchingProductsForRequest");
+
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+    m.put("existingRequest", false);
+
+    Request productRequest = requestRepository.findRequestById(requestId);
+    if (productRequest == null) {
+      m.put("invalidRequest", true);
+      return mv;
+    }
+
+    System.out.println("Request found");
+    List<Product> products = productRepository.findMatchingProductsForRequest(productRequest);
+    System.out.println(products);
+    
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("productFields", utilController.getFormFieldsForForm("Product"));
+    m.put("allProducts", ProductController.getProductViewModels(products));
+    mv.addObject("model", m);
+    System.out.println(mv.getViewName());
+    return mv;
+  }
+
 }

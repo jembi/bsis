@@ -44,6 +44,22 @@
   	        						);
         });
 
+        $("#${tabContentId}").find(".findMatchingProductsButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-search'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("productIssueSuccess", editRequestSuccess);
+            $("#${tabContentId}").bind("productIssueCancel", emptyChildContent);
+
+  	        fetchContent("findMatchingProductsForRequest.html",
+              					 {requestId: "${model.request.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
@@ -86,6 +102,11 @@
           refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
         }
 
+        function productIssueSuccess() {
+          emptyChildContent();
+          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+        }
+
 				function emptyChildContent() {
 				  $("#${childContentId}").html("");
 				}
@@ -99,6 +120,9 @@
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
 				Done
+			</button>
+			<button type="button" class="findMatchingProductsButton">
+				Find matching products
 			</button>
 			<button type="button" class="editButton">
 				Edit

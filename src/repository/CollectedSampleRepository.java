@@ -124,7 +124,7 @@ public class CollectedSampleRepository {
   }
 
   public List<CollectedSample> getAllCollectedSamples() {
-    Query query = em.createQuery(
+    TypedQuery<CollectedSample> query = em.createQuery(
         "SELECT c FROM CollectedSample c WHERE c.isDeleted= :isDeleted",
         CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);

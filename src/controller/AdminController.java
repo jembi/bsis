@@ -132,6 +132,7 @@ public class AdminController {
 
       createDataController.createDonors(numDonors);
       createDataController.createCollectionsWithTestResults(numCollections);
+      createDataController.createProducts(numProducts);
     }
     catch (Exception ex) {
       ex.printStackTrace();

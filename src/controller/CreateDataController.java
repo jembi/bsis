@@ -15,11 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import model.CustomDateFormatter;
 import model.bloodtest.BloodTest;
 import model.bloodtest.BloodTestResult;
+import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.donor.Donor;
 import model.donortype.DonorType;
 import model.location.Location;
 import model.location.LocationType;
+import model.product.Product;
+import model.product.ProductBackingForm;
+import model.producttype.ProductType;
 import model.testresults.TestResultBackingForm;
 import model.util.BloodGroup;
 import model.util.Gender;
@@ -39,6 +43,7 @@ import repository.IssueRepository;
 import repository.LocationRepository;
 import repository.LocationTypeRepository;
 import repository.ProductRepository;
+import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.TestResultRepository;
 import repository.UsageRepository;
@@ -51,6 +56,9 @@ public class CreateDataController {
 
   @Autowired
   private DonorTypeRepository donorTypeRepository;
+
+  @Autowired
+  private ProductTypeRepository productTypeRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -532,14 +540,25 @@ public class CreateDataController {
 		}
 	}
 
-	private void createProducts(int productNumber) {
-//		List<CollectedSample> collections = collectionRepository.getAllCollections();
-		for (int i = 0; i < productNumber; i++) {
-//			Product product = new Product(new Integer(i + 1).toString(),
-//					collections.get(r.nextInt(collections.size())),
-//					productTypes[r.nextInt(productTypes.length)],
-//					Boolean.FALSE, Boolean.FALSE, "comment_" + i);
-//			productRepository.saveProduct(product);
+	public void createProducts(int numProducts) {
+		List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
+		List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+		for (int i = 0; i < numProducts; i++) {
+		  CollectedSample c = collections.get(random.nextInt(collections.size()));
+			Product p = new ProductBackingForm(true).getProduct();
+			p.setBloodAbo(c.getDonor().getBloodAbo());
+			p.setBloodRhd(c.getDonor().getBloodRhd());
+			p.setCollectedSample(c);
+			p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
+			Date d = c.getCollectedOn();
+			p.setCreatedOn(d);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(d);
+			cal.add(Calendar.DATE, 35);
+			p.setExpiresOn(cal.getTime());
+			p.setIsAvailable(true);
+			p.setIsDeleted(false);
+			productRepository.saveProduct(p);
 		}
 	}
 

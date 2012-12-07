@@ -17,6 +17,8 @@ import javax.persistence.TypedQuery;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.producttype.ProductType;
+import model.request.Request;
+import model.testresults.TestResult;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
@@ -366,5 +368,43 @@ public class ProductRepository {
     existingProduct.setIsDeleted(Boolean.TRUE);
     em.merge(existingProduct);
     em.flush();
+  }
+
+  public List<Product> findMatchingProductsForRequest(Request productRequest) {
+    Date today = new Date();
+    TypedQuery<Product> query = em.createQuery(
+                 "SELECT p from Product p where p.productType = :productType AND " +
+                 "(p.bloodRhd = :bloodRhd AND " +
+                 "(p.bloodAbo = :bloodAbo OR p.bloodAbo=:universalDonorGroup)) AND " +
+                 "p.expiresOn >= :today AND " +
+                 "p.isAvailable = :isAvailable AND " +
+                 "p.isDeleted = :isDeleted",
+                  Product.class);
+    query.setParameter("productType", productRequest.getProductType());
+    query.setParameter("bloodAbo", productRequest.getBloodAbo());
+    query.setParameter("bloodRhd", productRequest.getBloodRhd());
+    query.setParameter("universalDonorGroup", BloodAbo.O);
+    query.setParameter("today", today);
+    query.setParameter("isAvailable", true);
+    query.setParameter("isDeleted", false);
+
+    List<Product> products = query.getResultList();
+    List<Product> safeProducts = new ArrayList<Product>();
+    for (Product product : products) {
+      CollectedSample collectedSample = product.getCollectedSample();
+      List<TestResult> results = collectedSample.getTestResults();
+      boolean isSafe = true;
+      for (TestResult testResult : results) {
+        String correctResult = testResult.getBloodTest().getCorrectResult();
+        String actualResult = testResult.getBloodTestResult().getResult();
+        if (!correctResult.equals(actualResult)) {
+          isSafe = false;
+          break;
+        }
+      }
+      if (isSafe)
+        safeProducts.add(product);
+    }
+    return safeProducts;
   }
 }

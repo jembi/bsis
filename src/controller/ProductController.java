@@ -244,6 +244,7 @@ public class ProductController {
       try {
         Product product = form.getProduct();
         product.setIsDeleted(false);
+        product.setIsAvailable(true);
         productRepository.addProduct(product);
         m.put("hasErrors", false);
         success = true;
@@ -347,7 +348,7 @@ public class ProductController {
     return mv;
   }
 
-  private List<ProductViewModel> getProductViewModels(
+  public static List<ProductViewModel> getProductViewModels(
       List<Product> products) {
     if (products == null)
       return Arrays.asList(new ProductViewModel[0]);
