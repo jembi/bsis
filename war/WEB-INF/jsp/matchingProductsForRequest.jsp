@@ -113,7 +113,7 @@ $(document).ready(
 
 		<c:otherwise>
 
-			Select the products you want to issue from the table below and then click on Issue button on the right.
+			Select the products you want to issue from the table below and then click on Issue button.
 			<br />
 			<button class="issueSelectedProductsButton">Issue Selected Products</button>
 			<button class="cancelButton">Cancel</button>

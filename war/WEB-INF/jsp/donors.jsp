@@ -25,8 +25,8 @@
 				New Donor
 			</a>
 		</li>
-		<li id="viewDonorsContent">
+		<!-- li id="viewDonorsContent">
 			<a href="viewDonors.html">View All Donors</a>
-		</li>
+		</li-->
 	</ul>
 </div>
