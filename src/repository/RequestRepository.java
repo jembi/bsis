@@ -14,17 +14,15 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodtest.BloodTest;
 import model.product.Product;
 import model.request.Request;
+import model.testresults.TestResult;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
@@ -319,7 +317,7 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public void issueProductsToRequest(Long requestId, String productsToIssue) {
+  public void issueProductsToRequest(Long requestId, String productsToIssue) throws Exception {
     Request request = findRequestById(requestId);
     productsToIssue = productsToIssue.replaceAll("\"", "");
     productsToIssue = productsToIssue.replaceAll("\\[", "");
@@ -327,11 +325,83 @@ public class RequestRepository {
     String[] productIds = productsToIssue.split(",");
     for (String productId : productIds) {
       Product product = em.find(Product.class, Long.parseLong(productId));
-      product.setIsAvailable(false);
-      product.setIssuedTo(request);
-      product.setIssuedOn(new Date());
+      // handle the case where the product, test result has been updated
+      // between the time when matching products are searched and selected
+      if (canIssueProduct(product, request)) {
+        product.setIsAvailable(false);
+        product.setIssuedTo(request);
+        product.setIssuedOn(new Date());
+      }
+      else {
+        throw new Exception("Could not issue products");
+      }
     }
   }
 
+  private boolean canIssueProduct(Product product, Request request) {
+    List<TestResult> testResults = product.getCollectedSample().getTestResults();
+    String requestedProductType = request.getProductType().getProductType();
+    String productType = product.getProductType().getProductType();
+
+    if (!productType.equals(requestedProductType))
+      return false;
+    
+    // already issued
+    if (!product.getIsAvailable())
+      return false;
+
+    if (product.getIsDeleted())
+      return false;
+
+    Date today = new Date();
+    if (product.getExpiresOn().before(today))
+      return false;
+    
+    String bloodAbo = "";
+    String bloodRh = "";
+
+    boolean canIssue = true;
+    for (TestResult testResult : testResults) {
+      BloodTest bloodTest = testResult.getBloodTest();
+      String actualResult = testResult.getResult();
+
+      System.out.println("name: " + bloodTest.getName());
+      System.out.println("result: " + actualResult);
+      if (bloodTest.getName().equals("Blood Rh")) {
+        System.out.println("here");
+        bloodRh = actualResult;
+      }
+
+      if (bloodTest.getName().equals("Blood ABO")) {
+        bloodAbo = actualResult;
+      }
+
+      String correctResult = bloodTest.getCorrectResult();
+      if (correctResult.isEmpty())
+        continue;
+      if (!correctResult.equals(actualResult)) {
+        canIssue = false;
+        break;
+      }
+    }
+
+    String requestedAbo = request.getBloodAbo().toString();
+    String requestedRh = request.getBloodRhd().toString(); 
+    if (canIssue && bloodCrossmatch(bloodAbo, bloodRh, requestedAbo, requestedRh)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private boolean bloodCrossmatch(String abo1, String rhd1, String abo2, String rhd2) {
+    System.out.println("matching " + abo1 + ", " + ", " + rhd1 + ", " + abo2 + ", " + rhd2);
+    if (abo1.equals(abo2) && rhd1.equals(rhd2))
+      return true;
+    if (abo1.equals("O") && (rhd1.equals(rhd2) || rhd1.equals("NEGATIVE")))
+      return true;
+    return false;
+  }
+  
 
 }

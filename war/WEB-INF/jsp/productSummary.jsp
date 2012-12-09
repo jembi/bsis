@@ -71,7 +71,7 @@
                 title : "Confirm Delete",
                 buttons : {
                   "Delete" : function() {
-                    deleteDonor("${model.product.id}", notifyParentDone);
+                    deleteProduct("${model.product.id}", notifyParentDone);
                     $(this).dialog("close");
                   },
                   "Cancel" : function() {

@@ -54,6 +54,7 @@
             $("#${tabContentId}").bind("productIssueSuccess", productIssueSuccess);
             $("#${tabContentId}").bind("productIssueCancel", emptyChildContent);
 
+            showLoadingImage($("#${childContentId}"));
   	        fetchContent("findMatchingProductsForRequest.html",
               					 {requestId: "${model.request.id}"},
               					 $("#${childContentId}")

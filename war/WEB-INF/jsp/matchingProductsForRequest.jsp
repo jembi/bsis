@@ -86,7 +86,7 @@ $(document).ready(
             				 $("#${tabContentId}").parent().trigger("productIssueSuccess");
           				 },
          	error:   function() {
-										 showErrorMessage("Something went wrong while issuing your request");         	  
+										 showErrorMessage("Something went wrong while issuing your request. Please try again.");         	  
          					 }
         });
       }
