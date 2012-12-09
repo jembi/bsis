@@ -209,22 +209,6 @@ public class Product implements ModificationTracker {
     return isQuarantined;
   }
 
-  public BloodAbo getBloodAbo() {
-    return bloodAbo;
-  }
-
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public BloodRhd getBloodRhd() {
-    return bloodRhd;
-  }
-
-  public void setBloodRhd(BloodRhd bloodRhd) {
-    this.bloodRhd = bloodRhd;
-  }
-
   public Boolean getIsAvailable() {
     return isAvailable;
   }

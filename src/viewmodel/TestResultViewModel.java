@@ -85,10 +85,6 @@ public class TestResultViewModel {
     testResult.setTestedOn(testedOn);
   }
 
-  public void setName(BloodTest bloodTest) {
-    testResult.setName(bloodTest);
-  }
-
   public void setResult(String bloodTestResult) {
     testResult.setResult(bloodTestResult);
   }

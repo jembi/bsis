@@ -115,6 +115,9 @@
 			</button>
 		</div>
 
+		<br />
+		<br />
+
 		<div id="${productSummaryBarcodeId}"></div>
 
 		<c:if test="${model.productFields.productNumber.hidden != true }">

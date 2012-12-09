@@ -467,8 +467,6 @@ public class CreateDataController {
 		for (int i = 0; i < numProducts; i++) {
 		  CollectedSample c = collections.get(random.nextInt(collections.size()));
 			Product p = new ProductBackingForm(true).getProduct();
-			p.setBloodAbo(c.getDonor().getBloodAbo());
-			p.setBloodRhd(c.getDonor().getBloodRhd());
 			p.setCollectedSample(c);
 			p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
 			Date d = c.getCollectedOn();

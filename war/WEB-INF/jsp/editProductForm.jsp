@@ -179,23 +179,6 @@
 					path="product.collectedSample" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.productFields.bloodGroup.hidden != true }">
-			<div>
-				<form:label path="bloodGroup">${model.productFields.bloodGroup.displayName}</form:label>
-				<form:select path="bloodGroup" class="bloodGroup">
-					<form:option value="Unknown" label="Unknown" />
-					<form:option value="A+" label="A+" />
-					<form:option value="A-" label="A-" />
-					<form:option value="B+" label="B+" />
-					<form:option value="B-" label="B-" />
-					<form:option value="AB+" label="AB+" />
-					<form:option value="AB-" label="AB-" />
-					<form:option value="O+" label="O+" />
-					<form:option value="O-" label="O-" />
-				</form:select>
-				<form:errors class="formError" path="bloodGroup" delimiter=", "></form:errors>
-			</div>
-		</c:if>
 		<c:if test="${model.productFields.createdOn.hidden != true }">
 			<div>
 				<form:label path="createdOn">${model.productFields.createdOn.displayName}</form:label>

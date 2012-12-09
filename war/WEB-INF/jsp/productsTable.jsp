@@ -98,9 +98,6 @@ $(document).ready(
 						<c:if test="${model.productFields.collectionNumber.hidden != true}">
 							<th>${model.productFields.collectionNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.bloodGroup.hidden != true}">
-							<th>${model.productFields.bloodGroup.displayName}</th>
-						</c:if>
 						<c:if test="${model.productFields.productType.hidden != true}">
 							<th>${model.productFields.productType.displayName}</th>
 						</c:if>
@@ -121,9 +118,6 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.collectionNumber.hidden != true}">
 								<td>${product.collectionNumber}</td>
-							</c:if>
-							<c:if test="${model.productFields.bloodGroup.hidden != true}">
-								<td>${product.bloodGroup}</td>
 							</c:if>
 							<c:if test="${model.productFields.productType.hidden != true}">
 								<td>${product.productType}</td>

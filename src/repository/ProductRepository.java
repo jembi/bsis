@@ -14,18 +14,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.testresults.TestResult;
 import model.util.BloodAbo;
+import model.util.BloodGroup;
 import model.util.BloodRhd;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import viewmodel.MatchingProductViewModel;
 
 @Repository
 @Transactional
@@ -370,46 +374,73 @@ public class ProductRepository {
     em.flush();
   }
 
-  public List<Product> findMatchingProductsForRequest(Request productRequest) {
+  public List<MatchingProductViewModel> findMatchingProductsForRequest(Request productRequest) {
     Date today = new Date();
     TypedQuery<Product> query = em.createQuery(
                  "SELECT p from Product p where p.productType = :productType AND " +
-                 "(p.bloodRhd = :bloodRhd AND " +
-                 "(p.bloodAbo = :bloodAbo OR p.bloodAbo=:universalDonorGroup)) AND " +
                  "p.expiresOn >= :today AND " +
                  "p.isAvailable = :isAvailable AND " +
                  "p.isDeleted = :isDeleted",
                   Product.class);
     query.setParameter("productType", productRequest.getProductType());
-    query.setParameter("bloodAbo", productRequest.getBloodAbo());
-    query.setParameter("bloodRhd", productRequest.getBloodRhd());
-    query.setParameter("universalDonorGroup", BloodAbo.O);
     query.setParameter("today", today);
     query.setParameter("isAvailable", true);
     query.setParameter("isDeleted", false);
 
     List<Product> products = query.getResultList();
-    List<Product> safeProducts = new ArrayList<Product>();
+    List<MatchingProductViewModel> safeProducts = new ArrayList<MatchingProductViewModel>();
     for (Product product : products) {
-      CollectedSample collectedSample = product.getCollectedSample();
-      List<TestResult> results = collectedSample.getTestResults();
       boolean isSafe = true;
+      CollectedSample collectedSample = product.getCollectedSample();
+
+      List<TestResult> results = collectedSample.getTestResults();
+
+      String bloodAbo = "";
+      String bloodRh = "";
+
       for (TestResult testResult : results) {
-        String correctResult = testResult.getBloodTest().getCorrectResult();
+        BloodTest bloodTest = testResult.getBloodTest();
+        String actualResult = testResult.getResult();
+
+        System.out.println("name: " + bloodTest.getName());
+        System.out.println("result: " + actualResult);
+        if (bloodTest.getName().equals("Blood Rh")) {
+          System.out.println("here");
+          bloodRh = actualResult;
+        }
+
+        if (bloodTest.getName().equals("Blood ABO")) {
+          bloodAbo = actualResult;
+        }
+
+        String correctResult = bloodTest.getCorrectResult();
         if (correctResult.isEmpty())
           continue;
-        String actualResult = testResult.getResult();
         if (!correctResult.equals(actualResult)) {
           isSafe = false;
           break;
         }
       }
-      if (isSafe)
-        safeProducts.add(product);
+
+      String requestedAbo = productRequest.getBloodAbo().toString();
+      String requestedRh = productRequest.getBloodRhd().toString(); 
+      if (isSafe && bloodCrossmatch(bloodAbo, bloodRh, requestedAbo, requestedRh)) {
+        BloodGroup bg = new BloodGroup(BloodAbo.valueOf(bloodAbo), BloodRhd.valueOf(bloodRh));
+        safeProducts.add(new MatchingProductViewModel(product, bg));
+      }
     }
     return safeProducts;
   }
 
+  private boolean bloodCrossmatch(String abo1, String rhd1, String abo2, String rhd2) {
+    System.out.println("matching " + abo1 + ", " + ", " + rhd1 + ", " + abo2 + ", " + rhd2);
+    if (abo1.equals(abo2) && rhd1.equals(rhd2))
+      return true;
+    if (abo1.equals("O") && (rhd1.equals(rhd2) || rhd1.equals("NEGATIVE")))
+      return true;
+    return false;
+  }
+  
   public Product findSingleProductByProductNumber(String productNumber) {
     List<Product> products = findProductByProductNumber(productNumber, "", "");
     if (products != null && products.size() == 1)

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.product.Product;
 import model.request.FindRequestBackingForm;
 import model.request.Request;
 import model.request.RequestBackingForm;
@@ -34,6 +33,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
+import viewmodel.MatchingProductViewModel;
 import viewmodel.RequestViewModel;
 
 @Controller
@@ -353,13 +353,13 @@ public class RequestsController {
 
     System.out.println("Request found");
     m.put("request", productRequest);
-    List<Product> products = productRepository.findMatchingProductsForRequest(productRequest);
+    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(productRequest);
     System.out.println(products);
     
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
-    m.put("allProducts", ProductController.getProductViewModels(products));
+    m.put("allProducts", products);
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;

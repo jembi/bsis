@@ -135,6 +135,9 @@
 			</button>
 		</div>
 
+		<br />
+		<br />
+
 		<div id="${requestSummaryBarcodeId}"></div>
 
 		<c:if test="${model.requestFields.requestDate.hidden != true }">

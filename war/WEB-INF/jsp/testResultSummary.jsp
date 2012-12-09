@@ -111,6 +111,9 @@
 			</button>
 		</div>
 
+		<br />
+		<br />
+
 		<div id="${testResultSummaryBarcodeId}"></div>
 
 		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
