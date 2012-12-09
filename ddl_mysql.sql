@@ -3,21 +3,15 @@
 
     drop table if exists BloodTest;
 
-    drop table if exists BloodTestResult;
-
     drop table if exists CollectedSample;
 
     drop table if exists ConfigChange;
-
-    drop table if exists DisplayNames;
 
     drop table if exists Donor;
 
     drop table if exists DonorType;
 
     drop table if exists FormField;
-
-    drop table if exists Issue;
 
     drop table if exists Location;
 
@@ -28,10 +22,6 @@
     drop table if exists ProductType;
 
     drop table if exists ProductUsage;
-
-    drop table if exists RecordFieldsConfig;
-
-    drop table if exists ReportConfig;
 
     drop table if exists Request;
 
@@ -46,18 +36,12 @@
 
     create table BloodTest (
         name varchar(30) not null,
-        correctResult varchar(30) not null,
+        allowedResults varchar(255),
+        correctResult varchar(255),
         isDeleted boolean,
         isRequired boolean,
         notes longtext,
         primary key (name)
-    ) ENGINE=InnoDB;
-
-    create table BloodTestResult (
-        id bigint not null auto_increment,
-        result varchar(255),
-        bloodTest_name varchar(30),
-        primary key (id)
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -87,12 +71,6 @@
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table DisplayNames (
-        formType varchar(255) not null,
-        fieldNames varchar(255),
-        primary key (formType)
     ) ENGINE=InnoDB;
 
     create table Donor (
@@ -137,16 +115,6 @@
         hidden boolean,
         sourceField varchar(30) not null,
         primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Issue (
-        issueId bigint not null auto_increment,
-        comments varchar(255),
-        dateIssued datetime,
-        isDeleted integer,
-        productNumber varchar(255),
-        siteId bigint,
-        primary key (issueId)
     ) ENGINE=InnoDB;
 
     create table Location (
@@ -214,18 +182,6 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table RecordFieldsConfig (
-        recordType varchar(255) not null,
-        fieldNames varchar(255),
-        primary key (recordType)
-    ) ENGINE=InnoDB;
-
-    create table ReportConfig (
-        reportType varchar(255) not null,
-        fieldNames varchar(255),
-        primary key (reportType)
-    ) ENGINE=InnoDB;
-
     create table Request (
         id bigint not null auto_increment,
         bloodAbo varchar(30),
@@ -253,9 +209,9 @@
         isDeleted boolean,
         lastUpdated datetime,
         notes longtext,
+        result varchar(255),
         testedOn datetime,
         bloodTest_name varchar(30),
-        bloodTestResult_id bigint,
         collectedSample_id bigint not null,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -282,12 +238,6 @@
         lastUpdatedBy_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
-
-    alter table BloodTestResult 
-        add index FK39946CC93A6D02C3 (bloodTest_name), 
-        add constraint FK39946CC93A6D02C3 
-        foreign key (bloodTest_name) 
-        references BloodTest (name);
 
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 
@@ -470,12 +420,6 @@
         add constraint FKDB459F6FD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
-
-    alter table TestResult 
-        add index FKDB459F6F71B0E253 (bloodTestResult_id), 
-        add constraint FKDB459F6F71B0E253 
-        foreign key (bloodTestResult_id) 
-        references BloodTestResult (id);
 
     alter table User 
         add index FK285FEBA49787C4 (createdBy_id), 

@@ -39,7 +39,7 @@ public class TestResultRepository {
   }
 
   public List<TestResult> getAllTestResults() {
-    Query query = em.createQuery(
+    TypedQuery<TestResult> query = em.createQuery(
         "SELECT t FROM TestResult t WHERE t.isDeleted= :isDeleted",
         TestResult.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -69,7 +69,7 @@ public class TestResultRepository {
   }
 
   public List<TestResult> getAllTestResults(String collectionNumber) {
-    Query query = em
+    TypedQuery<TestResult> query = em
         .createQuery(
             "SELECT t FROM TestResult t WHERE t.collectionNumber= :collectionNumber and t.isDeleted= :isDeleted",
             TestResult.class);

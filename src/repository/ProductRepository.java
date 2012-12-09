@@ -396,7 +396,9 @@ public class ProductRepository {
       boolean isSafe = true;
       for (TestResult testResult : results) {
         String correctResult = testResult.getBloodTest().getCorrectResult();
-        String actualResult = testResult.getBloodTestResult().getResult();
+        if (correctResult.isEmpty())
+          continue;
+        String actualResult = testResult.getResult();
         if (!correctResult.equals(actualResult)) {
           isSafe = false;
           break;

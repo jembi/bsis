@@ -23,17 +23,6 @@ public class BloodTestRepository {
     em.flush();
   }
 
-  public BloodTest findBloodTestById(Long bloodTestId) {
-    try {
-      String queryString = "SELECT t FROM BloodTest t WHERE t.id = :bloodTestId";
-      TypedQuery<BloodTest> query = em.createQuery(queryString, BloodTest.class);
-      return query.setParameter("bloodTestId", bloodTestId).getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-      return null;
-    }
-  }
-
   public List<BloodTest> getAllBloodTests() {
     try {
       String queryString = "SELECT t FROM BloodTest t";
@@ -58,5 +47,9 @@ public class BloodTestRepository {
       ex.printStackTrace();
       return false;
     }
+  }
+
+  public BloodTest findBloodTestByName(String testName) {
+    return em.find(BloodTest.class, testName);
   }
 }

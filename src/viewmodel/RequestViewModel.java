@@ -8,7 +8,6 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
-import model.request.RequestStatus;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;

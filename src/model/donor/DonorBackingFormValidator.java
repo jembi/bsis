@@ -8,7 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import viewmodel.donor.DonorViewModel;
+import viewmodel.DonorViewModel;
 
 public class DonorBackingFormValidator implements Validator {
 

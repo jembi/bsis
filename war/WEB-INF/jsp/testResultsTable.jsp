@@ -104,8 +104,8 @@ $(document).ready(
 						<c:if test="${model.testResultFields.bloodTest.hidden != true}">
 							<th>${model.testResultFields.bloodTest.displayName}</th>
 						</c:if>
-						<c:if test="${model.testResultFields.bloodTestResult.hidden != true}">
-							<th>${model.testResultFields.bloodTestResult.displayName}</th>
+						<c:if test="${model.testResultFields.result.hidden != true}">
+							<th>${model.testResultFields.result.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
@@ -122,8 +122,8 @@ $(document).ready(
 							<c:if test="${model.testResultFields.bloodTest.hidden != true}">
 								<td>${testResult.bloodTest.name}</td>
 							</c:if>
-							<c:if test="${model.testResultFields.bloodTestResult.hidden != true}">
-								<td>${testResult.bloodTestResult.result}</td>
+							<c:if test="${model.testResultFields.result.hidden != true}">
+								<td>${testResult.result}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

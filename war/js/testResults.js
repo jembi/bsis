@@ -24,6 +24,23 @@ function updateTestResultGeneric(form, resultDivId, url, successCallback) {
   });
 }
 
+function addAllTestResults(allTestResultsData, resultDivId, successCallback) {
+  $.ajax({
+    type: "POST",
+    url: "addAllTestResults.html",
+    data: allTestResultsData,
+    success: function(jsonResponse, data, data1, data2) {
+               showMessage("Test Results Updated Successfully!");
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             showErrorMessage("Something went wrong. Please fix the errors noted.");
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
+  });
+}
+
 function deleteTestResult(testResultId, successCallback) {
   $.ajax({
     type : "POST",

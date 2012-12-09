@@ -33,7 +33,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, derived, sourceField) values
 ('TestResult', 'collectionNumber', 'Collection Number', '', '0', '0', ''),
 ('TestResult', 'bloodTest', 'Test Name', '', '0', '0', ''),
-('TestResult', 'bloodTestResult', 'Test Result', '', '0', '0', ''),
+('TestResult', 'result', 'Test Result', '', '0', '0', ''),
 ('TestResult', 'testedOn', 'Tested On', '', '0', '0', ''),
 ('TestResult', 'notes', 'Notes', '', '0', '0', '');
 
@@ -85,18 +85,10 @@ insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite
 ('Chipata', 1, 0, 0, 0, 0, ''),
 ('Chingola', 1, 1, 0, 1, 0, '');
 
-insert into BloodTest (name, correctResult, isRequired, notes) values
-('HIV', 'negative', '1', ''),
-('HBV', 'negative', '1', ''),
-('HCV', 'negative', '1', ''),
-('Syphilis', 'negative', '1', '');
-
-insert into BloodTestResult(bloodTest_name, result) values
-('HIV', 'positive'),
-('HIV', 'negative'),
-('HBV', 'positive'),
-('HBV', 'negative'),
-('HCV', 'positive'),
-('HCV', 'negative'),
-('Syphilis', 'positive'),
-('Syphilis', 'negative');
+insert into BloodTest (name, correctResult, allowedResults, isRequired, notes) values
+('HIV', 'negative', 'positive,negative', '1', ''),
+('HBV', 'negative', 'positive,negative', '1', ''),
+('HCV', 'negative', 'positive,negative', '1', ''),
+('Syphilis', 'negative', 'positive,negative', '1', ''),
+('Blood ABO', '', 'A,B,AB,O', '1', ''),
+('Blood Rh', '', 'POSITIVE,NEGATIVE', '1', '');

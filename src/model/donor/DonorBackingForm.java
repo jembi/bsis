@@ -17,7 +17,7 @@ import model.util.BloodGroup;
 import model.util.BloodRhd;
 import model.util.Gender;
 import repository.DonorRepository;
-import viewmodel.donor.DonorViewModel;
+import viewmodel.DonorViewModel;
 
 public class DonorBackingForm {
 

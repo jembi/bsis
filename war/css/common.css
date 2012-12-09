@@ -3,6 +3,11 @@ body {
 	font-family: Tahoma, Arial, Sans-Serif
 }
 
+label {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
 input {
 	border: 2px solid #dadada;
 	border-radius: 7px;

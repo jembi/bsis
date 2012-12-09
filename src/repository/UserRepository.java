@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.user.User;
@@ -46,8 +45,8 @@ public class UserRepository {
   }
 
   public List<User> getAllUsers() {
-    Query query = em
-        .createQuery("SELECT u FROM User u where u.isDeleted= :isDeleted");
+    TypedQuery<User> query = em
+        .createQuery("SELECT u FROM User u where u.isDeleted= :isDeleted", User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.getResultList();
   }

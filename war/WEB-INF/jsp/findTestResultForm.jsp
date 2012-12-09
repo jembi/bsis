@@ -128,7 +128,7 @@ $(document).ready(function() {
 			<div>
 				<label></label>
 				<button type="button" class="findTestResultButton">
-					Find test result
+					Find test results
 				</button>
 				<button type="button" class="clearFindFormButton">
 					Clear form

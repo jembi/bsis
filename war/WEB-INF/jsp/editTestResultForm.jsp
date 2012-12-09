@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -110,16 +111,16 @@
         $("#${editTestResultFormId}").find(".editTestNames").change(toggleTestResultSelector);
 
         if ("${model.existingTestResult}" == "true") {
-          console.log("${bloodTestResultId}-${model.editTestResultForm.bloodTest}");
-          console.log("${model.editTestResultForm.testResultId}");
-          $("#${bloodTestResultId}-${model.editTestResultForm.bloodTest}").find("select").val("${model.editTestResultForm.testResultId}");
+          $("#${bloodTestResultId}-" + "${model.editTestResultForm.bloodTest}".replace(" ", "")).
+          			find("select").val("${model.editTestResultForm.result}");
+          console.log("#${bloodTestResultId}-" + "${model.editTestResultForm.bloodTest}".replace(" ", ""));
         }
         
         // trigger this event for the first time
         $("#${editTestResultFormId}").find(".editTestNames").trigger("change");
 
         console.log("${model.editTestResultForm.bloodTest}");
-        console.log("${model.editTestResultForm.bloodTestResult}");
+        console.log("${model.editTestResultForm.result}");
 
         function hideAllTestResults() {
           $("#${editTestResultFormId}").find(".testResultsDiv").each(function() {
@@ -145,9 +146,10 @@
 
         function toggleTestResultSelector() {
           var testNamesSelector = $("#${editTestResultFormId}").find(".editTestNames");
-          var testNameVal = testNamesSelector.val();
+          var testNameVal = testNamesSelector.val().replace(" ", "");
           hideAllTestResults();
           var testResultDivId = "${bloodTestResultId}-" + testNameVal;
+          console.log(testResultDivId);
           showTestResultsSelector(testResultDivId);
         }
         
@@ -191,18 +193,17 @@
 		</div>
 
 		<c:forEach var="bloodTest" items="${model.bloodTests}">
-			<div id="${bloodTestResultId}-${bloodTest.name}" class="testResultsDiv" style="display: none;">
-				<form:label path="bloodTestResult">${model.testResultFields.bloodTestResult.displayName}</form:label>
-				<form:select path="bloodTestResult">
+			<div id="${bloodTestResultId}-${fn:replace(bloodTest.name, ' ', '')}" class="testResultsDiv" style="display: none;">
+				<form:label path="result">${model.testResultFields.result.displayName}</form:label>
+				<form:select path="result">
 					<!-- Auto incremented IDs begin with zero -->
 					<form:option value="-1" selected="selected">&nbsp;</form:option>
-						<!-- Send the id of the test result as there may be repeats in the result -->
 						<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
-							<form:option value="${allowedResult.id}">${allowedResult.result}</form:option>
+							<form:option value="${allowedResult}">${allowedResult}</form:option>
 						</c:forEach>
 				</form:select>
 				<form:errors class="formError"
-				path="testResult.bloodTestResult" delimiter=", "></form:errors>
+				path="testResult.result" delimiter=", "></form:errors>
 			</div>
 		</c:forEach>
 		

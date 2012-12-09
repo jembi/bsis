@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.DonorRepository;
-import viewmodel.donor.DonorViewModel;
+import viewmodel.DonorViewModel;
 
 @Controller
 public class DonorController {

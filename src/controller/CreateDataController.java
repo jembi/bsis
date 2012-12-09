@@ -5,16 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
 import model.CustomDateFormatter;
 import model.bloodtest.BloodTest;
-import model.bloodtest.BloodTestResult;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.donor.Donor;
@@ -32,16 +29,13 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonorRepository;
 import repository.DonorTypeRepository;
-import repository.IssueRepository;
 import repository.LocationRepository;
-import repository.LocationTypeRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
@@ -64,9 +58,6 @@ public class CreateDataController {
   private BloodTestRepository bloodTestRepository;
   
 	@Autowired
-	private LocationTypeRepository locationTypeRepository;
-
-	@Autowired
 	private LocationRepository locationRepository;
 	@Autowired
 	private CollectedSampleRepository collectionRepository;
@@ -76,9 +67,6 @@ public class CreateDataController {
 
 	@Autowired
 	private RequestRepository requestRepository;
-
-	@Autowired
-	private IssueRepository issueRepository;
 
 	@Autowired
 	private UsageRepository usageRepository;
@@ -341,53 +329,6 @@ public class CreateDataController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/admin-createDummyData")
-	public ModelAndView createDummyData(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
-
-		String collectionNumber = params.get("collectionNumber");
-		String productNumber = params.get("productNumber");
-		String requestNumber = params.get("requestNumber");
-		String donorNumber = params.get("donorNumber");
-		createLocationTypes();
-		createLocations();
-		createDonors(Integer.parseInt(donorNumber));
-		createCollectionsWithTestResults(Integer.parseInt(collectionNumber));
-		createProducts(Integer.parseInt(productNumber));
-		createRequests(Integer.parseInt(requestNumber));
-
-		ModelAndView modelAndView = new ModelAndView("createData");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("dataCreated", true);
-		model.put("hadDetails", true);
-		model.put("collectionNumber", collectionNumber);
-		model.put("productNumber", productNumber);
-		model.put("requestNumber", requestNumber);
-		model.put("donorNumber", donorNumber);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-
-	@RequestMapping("/admin-deleteDummyData")
-	public ModelAndView deleteData(HttpServletRequest request) {
-
-//		requestRepository.deleteAllRequests();
-//		productRepository.deleteAllProducts();
-//		testResultRepository.deleteAllTestResults();
-//		locationRepository.deleteAllLocations();
-//		locationTypeRepository.deleteAllLocationTypes();
-//		donorRepository.deleteAllDonors();
-//		collectionRepository.deleteAllCollections();
-//		usageRepository.deleteAllUsages();
-//		issueRepository.deleteAllIssues();
-
-		ModelAndView modelAndView = new ModelAndView("createData");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("dataDeleted", true);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
-
 	public void createDonors(int numDonors) {
 
 	  String[] bloodGroups = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
@@ -449,24 +390,6 @@ public class CreateDataController {
 		return date;
 	}
 
-	private void createLocations() {
-		List<LocationType> allLocationTypes = locationTypeRepository
-				.getAllLocationTypes();
-		String[] locationNames = { "Lusaka", "Ndola", "Kitwe", "Kabwe",
-				"Chingola", "Mufulira", "Livingstone", "Luanshya ", "Kasama",
-				"Chipata" };
-//		for (String locationName : locationNames) {
-//			locationRepository
-//					.saveLocation(new Location(locationName,
-//							getRandomLocationType(allLocationTypes)
-//									.getId(),
-//							getRandomBooleanValue(), getRandomBooleanValue(),
-//							getRandomBooleanValue(), getRandomBooleanValue(),
-//							Boolean.FALSE, "comment_" + locationName));
-//		}
-
-	}
-
 	private boolean getRandomBooleanValue() {
 		return random.nextBoolean();
 	}
@@ -474,20 +397,6 @@ public class CreateDataController {
 	private LocationType getRandomLocationType(
 			List<LocationType> allLocationTypes) {
 		return allLocationTypes.get(random.nextInt(allLocationTypes.size()));
-	}
-
-	private void createLocationTypes() {
-		List<String> locationTypeNames = new ArrayList<String>();
-		locationTypeNames.add("hospital");
-		locationTypeNames.add("school");
-		locationTypeNames.add("church");
-		locationTypeNames.add("mall");
-		locationTypeNames.add("government building");
-		for (String locationTypeName : locationTypeNames) {
-			locationTypeRepository.saveLocationType(new LocationType(
-					locationTypeName, Boolean.FALSE, "comment_"
-							+ locationTypeName));
-		}
 	}
 
 	private Date getRandomCollectionDate() {
@@ -524,17 +433,29 @@ public class CreateDataController {
 		  collectionRepository.addCollectedSample(collection.getCollectedSample());
 
 		  for (BloodTest b : bloodTests) {
-    	  TestResultBackingForm t1 = new TestResultBackingForm();
-    	  t1.setCollectedSample(collection.getCollectedSample());
-    	  t1.setTestedOn(collectionDate);
-    	  t1.setIsDeleted(false);
-    	  t1.getTestResult().setBloodTest(b);
-    	  BloodTestResult bloodTestResult = b.getAllowedResults().get(1);
-    	  if (Math.abs(random.nextInt()) % 100 < 10) {
-          bloodTestResult = b.getAllowedResults().get(0);
-        }
-    	  t1.getTestResult().setBloodTestResult(bloodTestResult);
-    	  testResultRepository.addTestResult(t1.getTestResult());
+
+    	  TestResultBackingForm t = new TestResultBackingForm();
+    	  t.setCollectedSample(collection.getCollectedSample());
+    	  t.setTestedOn(collectionDate);
+    	  t.setIsDeleted(false);
+    	  t.getTestResult().setBloodTest(b);
+
+    	  String result = null;
+    	  List<String> allowedResults = new ArrayList<String>(b.getAllowedResults());
+
+    	  if (!b.getCorrectResult().isEmpty()) {
+    	    if (Math.abs(random.nextInt(100)) > 20) {
+    	      result = b.getCorrectResult();
+    	    }
+    	    else {
+    	      allowedResults.remove(b.getCorrectResult());
+    	    }
+    	  }
+    	  if (result == null)
+    	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
+
+    	  t.setResult(result);
+    	  testResultRepository.addTestResult(t.getTestResult());
 		  }
 
 		}

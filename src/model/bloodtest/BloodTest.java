@@ -1,17 +1,14 @@
 package model.bloodtest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
 public class BloodTest{
@@ -20,8 +17,8 @@ public class BloodTest{
   @Column(nullable=false, updatable=false, insertable=false, length=30)
   private String name;
 
-  @NotBlank
-  @Column(length=30, nullable=false)
+  private String allowedResults;
+
   private String correctResult;
 
   @Lob
@@ -30,9 +27,6 @@ public class BloodTest{
   private Boolean isRequired;
 
   private Boolean isDeleted;
-
-  @OneToMany(mappedBy="bloodTest", fetch=FetchType.EAGER)
-  private List<BloodTestResult> allowedResults;
 
   public String getName() {
     return name;
@@ -54,16 +48,14 @@ public class BloodTest{
     return isDeleted;
   }
 
-  public List<BloodTestResult> getAllowedResults() {
-    return allowedResults;
+  public List<String> getAllowedResults() {
+    if (allowedResults == null)
+      return null;
+    return Arrays.asList(allowedResults.split(","));
   }
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public void setCorrectResult(String correctResult) {
-    this.correctResult = correctResult;
   }
 
   public void setNotes(String notes) {
@@ -79,7 +71,7 @@ public class BloodTest{
   }
 
   public void setAllowedResults(
-      List<BloodTestResult> allowedResults) {
-    this.allowedResults = allowedResults;
+      List<String> allowedResults) {
+    this.allowedResults = StringUtils.join(allowedResults, ",");
   }
 }

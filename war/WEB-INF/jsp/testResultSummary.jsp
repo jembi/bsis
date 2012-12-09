@@ -133,8 +133,8 @@
 		</c:if>
 		<c:if test="${model.testResultFields.bloodTestResult.hidden != true }">
 			<div>
-				<label>${model.testResultFields.bloodTestResult.displayName}</label>
-				<label>${model.testResult.bloodTestResult.result}</label>
+				<label>${model.testResultFields.result.displayName}</label>
+				<label>${model.testResult.result}</label>
 			</div>
 		</c:if>
 	</div>

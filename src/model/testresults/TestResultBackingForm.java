@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import model.CustomDateFormatter;
 import model.bloodtest.BloodTest;
-import model.bloodtest.BloodTestResult;
 import model.collectedsample.CollectedSample;
 import model.user.User;
 
@@ -86,12 +85,8 @@ public class TestResultBackingForm {
     return testResult.getBloodTest().getName();
   }
 
-  public String getBloodTestResult() {
-    if (testResult == null ||
-        testResult.getBloodTestResult() == null ||
-        testResult.getBloodTestResult().getResult() == null)
-      return "";
-    return testResult.getBloodTestResult().getResult();
+  public String getResult() {
+    return testResult.getResult();
    }
 
   public Date getLastUpdated() {
@@ -135,12 +130,8 @@ public class TestResultBackingForm {
     testResult.setBloodTest(bloodTest);
   }
 
-  public void setBloodTestResult(String result) {
-    if (testResult == null)
-      return;
-    BloodTestResult bloodTestResult = new BloodTestResult();
-    bloodTestResult.setId(Long.parseLong(result));
-    testResult.setBloodTestResult(bloodTestResult);
+  public void setResult(String result) {
+    testResult.setResult(result);
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -195,11 +186,5 @@ public class TestResultBackingForm {
 
   public void setCollectedSample(CollectedSample collectedSample) {
     testResult.setCollectedSample(collectedSample);
-  }
-
-  public String getTestResultId() {
-    if (testResult == null || testResult.getBloodTestResult() == null)
-      return "";
-    return testResult.getBloodTestResult().getId().toString();
   }
 }

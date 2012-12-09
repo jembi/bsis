@@ -14,9 +14,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import model.bloodtest.BloodTest;
-import model.bloodtest.BloodTestExists;
-import model.bloodtest.BloodTestResult;
-import model.bloodtest.BloodTestResultExists;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
@@ -37,14 +34,12 @@ public class TestResult implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
 	private Date testedOn;
 
-  @BloodTestExists
   @ManyToOne
 	private BloodTest bloodTest;
 
-  @BloodTestResultExists
-  @ManyToOne
-	private BloodTestResult bloodTestResult;
-
+  @Column(length=255)
+  private String result;
+  
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastUpdated;
 
@@ -72,8 +67,8 @@ public class TestResult implements ModificationTracker {
   public void copy(TestResult testResult) {
     assert (this.id == testResult.id);
     this.bloodTest = testResult.bloodTest;
+    this.result = testResult.result;
     this.testedOn = testResult.testedOn;
-    this.bloodTestResult = testResult.bloodTestResult;
     this.notes = testResult.notes;
     this.isDeleted = testResult.isDeleted;
   }
@@ -90,8 +85,8 @@ public class TestResult implements ModificationTracker {
     return bloodTest;
   }
 
-  public BloodTestResult getBloodTestResult() {
-    return bloodTestResult;
+  public String getResult() {
+    return result;
   }
 
   public Date getLastUpdated() {
@@ -130,12 +125,8 @@ public class TestResult implements ModificationTracker {
     this.testedOn = testedOn;
   }
 
-  public void setName(BloodTest bloodTest) {
-    this.bloodTest = bloodTest;
-  }
-
-  public void setBloodTestResult(BloodTestResult bloodTestResult) {
-    this.bloodTestResult = bloodTestResult;
+  public void setResult(String result) {
+    this.result = result;
   }
 
   public void setLastUpdated(Date lastUpdated) {

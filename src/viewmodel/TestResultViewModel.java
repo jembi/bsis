@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.bloodtest.BloodTest;
-import model.bloodtest.BloodTestResult;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.user.User;
@@ -42,8 +41,8 @@ public class TestResultViewModel {
     return testResult.getBloodTest();
   }
 
-  public BloodTestResult getBloodTestResult() {
-    return testResult.getBloodTestResult();
+  public String getResult() {
+    return testResult.getResult();
   }
 
   public Date getLastUpdated() {
@@ -90,8 +89,8 @@ public class TestResultViewModel {
     testResult.setName(bloodTest);
   }
 
-  public void setBloodTestResult(BloodTestResult bloodTestResult) {
-    testResult.setBloodTestResult(bloodTestResult);
+  public void setResult(String bloodTestResult) {
+    testResult.setResult(bloodTestResult);
   }
 
   public void setLastUpdated(Date lastUpdated) {

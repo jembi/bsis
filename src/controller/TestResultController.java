@@ -1,10 +1,13 @@
 package controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
@@ -12,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.CustomDateFormatter;
+import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
@@ -162,6 +167,22 @@ public class TestResultController {
     return mv;
   }
 
+  @RequestMapping(value = "/addAllTestResultsFormGenerator", method = RequestMethod.GET, 
+      headers = "X-Requested-With=XMLHttpRequest")
+  public ModelAndView addAllTestResultsFormGenerator(HttpServletRequest request,
+      Model model) {
+
+    System.out.println("");
+    ModelAndView mv = new ModelAndView("addAllTestResultsForm");
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(m);
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping(value = "/addTestResult", method = RequestMethod.POST)
   public ModelAndView addTestResult(
       HttpServletRequest request,
@@ -228,6 +249,86 @@ public class TestResultController {
     addEditSelectorOptions(m);
 
     mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping(value = "/addAllTestResults", method = RequestMethod.POST)
+  public ModelAndView addAllTestResults(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam Map<String, String> params) {
+
+    ModelAndView mv = new ModelAndView("addAllTestResultsForm");
+    Boolean hasErrors = false; 
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    System.out.println(params);
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the collected sample as part of the product.
+    String collectionNumber = params.get("collectionNumber");
+    CollectedSample collectedSample = null;
+    if (collectionNumber == null) {
+      hasErrors = true;
+      m.put("collectionNumberError", "Collection does not exist");
+    }
+    else {
+      try {
+        collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+        if (collectedSample == null) {
+          hasErrors = true;
+          m.put("collectionNumberError", "Collection does not exist");
+        }
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+        hasErrors = true;
+        m.put("collectionNumberError", "Collection does not exist");
+      }
+    }
+
+    String testedOnStr = params.get("testedOn");
+    Date testedOn = null;
+    try {
+        testedOn = CustomDateFormatter.getDateFromString(testedOnStr);
+    } catch (ParseException e) {
+      hasErrors = true;
+      m.put("testedOnError", CustomDateFormatter.getErrorMessage());
+      e.printStackTrace();
+    }
+
+    m.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(m);
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    mv.addObject("model", m);
+
+    if (hasErrors) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return mv;
+    }
+
+    for (Entry<String, String> param : params.entrySet()) {
+      String name = param.getKey();
+      if (!name.startsWith("Test"))
+        continue;
+
+      String testName = name.substring(4);
+      String testResult = param.getValue();
+
+      BloodTest bloodTest = bloodTestRepository.findBloodTestByName(testName);
+      TestResult t = new TestResult();
+      t.setCollectedSample(collectedSample);
+      t.setTestedOn(testedOn);
+      t.setBloodTest(bloodTest);
+      t.setResult(testResult);
+      t.setIsDeleted(false);
+      try {
+        testResultRepository.addTestResult(t);
+      } catch (Exception ex) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      }
+    }
+
     return mv;
   }
 

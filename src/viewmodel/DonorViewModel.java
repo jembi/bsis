@@ -1,4 +1,4 @@
-package viewmodel.donor;
+package viewmodel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
