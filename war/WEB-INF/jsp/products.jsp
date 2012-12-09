@@ -16,6 +16,6 @@
 		<li id="findOrAddProductsContent"><a
 			href="findProductFormGenerator.html">Find Products</a></li>
 		<li id="addProductsContent"><a
-			href="editProductFormGenerator.html">New Product</a></li>
+			href="editProductFormGenerator.html">Add Product</a></li>
 	</ul>
 </div>

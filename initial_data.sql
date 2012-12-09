@@ -13,7 +13,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, der
 ('Donor', 'bloodGroup', 'Blood Group', '', '0', '0', ''),
 ('Donor', 'address', 'Address', '', '0', '0', ''),
 ('Donor', 'city', 'City', 'Lusaka', '0', '0', ''),
-('Donor', 'state', 'State', '', '0', '1', ''),
+('Donor', 'state', 'State', '', '1', '0', ''),
 ('Donor', 'country', 'Country', 'Zambia', '0', '0', ''),
 ('Donor', 'zipcode', 'Zip Code', '', '0', '0', ''),
 ('Donor', 'notes', 'Notes', '', '0', '0', '');

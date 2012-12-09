@@ -22,7 +22,7 @@
 		</li>
 		<li id="addDonorContent">
 			<a href="editDonorFormGenerator.html">
-				New Donor
+				Add Donor
 			</a>
 		</li>
 		<!-- li id="viewDonorsContent">

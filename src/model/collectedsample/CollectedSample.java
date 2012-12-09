@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ import model.product.Product;
 import model.testresults.TestResult;
 import model.user.User;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -42,33 +44,35 @@ public class CollectedSample implements ModificationTracker {
 
   @NotBlank
   @Column(length=30, nullable=false)
+  @Index(name="collectedSample_collectionNumber_index")
   private String collectionNumber;
 
   @NotNull
   @DonorExists
-  @ManyToOne(optional=false)
+  @ManyToOne(optional=false, fetch=FetchType.LAZY)
   private Donor donor;
 
   @OneToMany(mappedBy="collectedSample")
   private List<TestResult> testResults;
 
   @LocationExists
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private Location collectionCenter;
 
   @LocationExists
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private Location collectionSite;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @Index(name="collectedSample_collectedOn_index")
   private Date collectedOn;
 
   @DonorTypeExists
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private DonorType donorType;
 
   @BloodBagTypeExists
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private BloodBagType bloodBagType;
   
   @Column(length=50)

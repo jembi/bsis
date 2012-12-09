@@ -323,6 +323,7 @@ public class RequestRepository {
     productsToIssue = productsToIssue.replaceAll("\\[", "");
     productsToIssue = productsToIssue.replaceAll("\\]", "");
     String[] productIds = productsToIssue.split(",");
+    int numIssued = 0;
     for (String productId : productIds) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
@@ -331,10 +332,14 @@ public class RequestRepository {
         product.setIsAvailable(false);
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
+        numIssued++;
       }
       else {
         throw new Exception("Could not issue products");
       }
+    }
+    if (request.getIssuedProducts().size() >= numIssued) {
+      request.setFulfilled(true);
     }
   }
 

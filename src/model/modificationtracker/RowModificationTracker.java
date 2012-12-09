@@ -3,6 +3,7 @@ package model.modificationtracker;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,10 +19,10 @@ public class RowModificationTracker implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;
 
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private User createdBy;
 
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private User lastUpdatedBy;
 
   public Date getLastUpdated() {

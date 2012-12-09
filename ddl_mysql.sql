@@ -5,8 +5,6 @@
 
     drop table if exists CollectedSample;
 
-    drop table if exists ConfigChange;
-
     drop table if exists Donor;
 
     drop table if exists DonorType;
@@ -64,15 +62,6 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ConfigChange (
-        id bigint not null auto_increment,
-        createdDate datetime,
-        lastUpdated datetime,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
     create table Donor (
         id bigint not null auto_increment,
         birthDate date,
@@ -87,7 +76,6 @@
         donorNumber varchar(30) not null,
         firstName varchar(30) not null,
         gender varchar(30),
-        isAvailable boolean,
         isDeleted boolean,
         lastName varchar(30),
         middleName varchar(30),
@@ -239,6 +227,10 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create index collectedSample_collectedOn_index on CollectedSample (collectedOn);
+
+    create index collectedSample_collectionNumber_index on CollectedSample (collectionNumber);
+
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 
         add constraint FKF0658A33A49787C4 
@@ -281,18 +273,6 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table ConfigChange 
-        add index FKF9B3DDB2A49787C4 (createdBy_id), 
-        add constraint FKF9B3DDB2A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table ConfigChange 
-        add index FKF9B3DDB2D0AFB367 (lastUpdatedBy_id), 
-        add constraint FKF9B3DDB2D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
     create index donor_donorNumber_index on Donor (donorNumber);
 
     create index donor_bloodAbo_index on Donor (bloodAbo);
@@ -314,6 +294,8 @@
         add constraint FK3F25E46D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    create index product_expiresOn_index on Product (expiresOn);
 
     create index donor_bloodAbo_index on Product (bloodAbo);
 
@@ -366,6 +348,10 @@
         add constraint FK45B6D212D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    create index request_requiredDate_index on Request (requiredDate);
+
+    create index request_requestDate_index on Request (requestDate);
 
     create index request_bloodRhd_index on Request (bloodRhd);
 

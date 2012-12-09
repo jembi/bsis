@@ -30,9 +30,6 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.FetchProfile;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,11 +50,13 @@ public class Request implements ModificationTracker {
   @NotNull
   @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
+  @Index(name="request_requestDate_index")
   private Date requestDate;
 
   @NotNull
   @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
+  @Index(name="request_requiredDate_index")
   private Date requiredDate;
 
   @NotNull
@@ -75,6 +74,7 @@ public class Request implements ModificationTracker {
   @Index(name="request_bloodRhd_index")
   private BloodRhd bloodRhd;
 
+  // fetch type eager to check how many products issued
   @OneToMany(mappedBy="issuedTo", fetch=FetchType.EAGER)
   private List<Product> issuedProducts;
 

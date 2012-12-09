@@ -88,8 +88,6 @@ public class Donor implements ModificationTracker {
 
 	private Boolean isDeleted;
 
-	private Boolean isAvailable;
-
   @OneToMany(mappedBy="donor", fetch=FetchType.EAGER)
   private List<CollectedSample> collectedSamples;
   
@@ -308,13 +306,5 @@ public class Donor implements ModificationTracker {
     builder.append(":").append(donorNumber);
 
     return builder.toString();
-  }
-
-  public Boolean getIsAvailable() {
-    return isAvailable;
-  }
-
-  public void setIsAvailable(Boolean isAvailable) {
-    this.isAvailable = isAvailable;
   }
 }

@@ -31,11 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
-import repository.DonorRepository;
-import repository.DonorTypeRepository;
-import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import viewmodel.ProductViewModel;
@@ -50,19 +46,7 @@ public class ProductController {
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private LocationRepository locationRepository;
-
-  @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
-
-  @Autowired
   private ProductTypeRepository productTypeRepository;
-
-  @Autowired
-  private DonorTypeRepository donorTypeRepository;
-
-  @Autowired
-  private DonorRepository donorRepository;
 
   @Autowired
   private UtilController utilController;
@@ -154,8 +138,8 @@ public class ProductController {
           dateExpiresFrom, dateExpiresTo);
     }
 
-    System.out.println("products: ");
-    System.out.println(products);
+//    System.out.println("products: ");
+//    System.out.println(products);
     
     ModelAndView modelAndView = new ModelAndView("productsTable");
     Map<String, Object> m = model.asMap();

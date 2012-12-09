@@ -51,6 +51,7 @@ public class Product implements ModificationTracker {
   private Date createdOn;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @Index(name="product_expiresOn_index")
   private Date expiresOn;
 
   @Enumerated(EnumType.STRING)
@@ -100,8 +101,8 @@ public class Product implements ModificationTracker {
     this.productType = product.productType;
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
-    this.bloodAbo = product.bloodAbo;
-    this.bloodRhd = product.bloodRhd;
+    this.setBloodAbo(product.getBloodAbo());
+    this.setBloodRhd(product.getBloodRhd());
     this.notes = product.notes;
   }
 
@@ -231,5 +232,21 @@ public class Product implements ModificationTracker {
 
   public void setIssuedOn(Date issuedOn) {
     this.issuedOn = issuedOn;
+  }
+
+  public BloodAbo getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(BloodAbo bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public BloodRhd getBloodRhd() {
+    return bloodRhd;
+  }
+
+  public void setBloodRhd(BloodRhd bloodRhd) {
+    this.bloodRhd = bloodRhd;
   }
 }
