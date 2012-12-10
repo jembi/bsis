@@ -95,8 +95,6 @@ function getSeriesData(beginDate, endDate, interval, data) {
 function parseInventoryData(data) {
 
   var result = {};
-  result.categories = [];
-  result.data = {};
 
   result.data = [];
   var bloodGroups = {'A+'  : 'A+',
@@ -109,9 +107,8 @@ function parseInventoryData(data) {
                      'O-'  : 'O-'
                     };
   for (var category in data) {
-    result.categories.push(category);
     var productTypeData = data[category];
-    var bloodGroupData = []
+    var bloodGroupData = [];
     for (var bloodGroup in bloodGroups) {
       console.log(bloodGroup);
       var inventoryByBloodGroup = productTypeData[bloodGroup];
@@ -120,7 +117,25 @@ function parseInventoryData(data) {
       for (var index in inventoryByBloodGroup) {
         numUnits = numUnits + inventoryByBloodGroup[index];
       }
-      bloodGroupData.push(numUnits);
+      var drilldown = {
+        name: category + " " + bloodGroup,
+        categories: ['Less than 5 days old',
+                     '5 to 9 days old',
+                     '10-14 days old',
+                     '15 to 19 days old',
+                     '20 to 24 days old',
+                     '25 to 29 days old',
+                     '30 days or older'],
+        data: [inventoryByBloodGroup[0],
+               inventoryByBloodGroup[5],
+               inventoryByBloodGroup[10],
+               inventoryByBloodGroup[15],
+               inventoryByBloodGroup[20],
+               inventoryByBloodGroup[25],
+               inventoryByBloodGroup[30]
+              ]
+      };
+      bloodGroupData.push({y: numUnits, drilldown: drilldown});
     }
     result.data.push({name: category, data: bloodGroupData});
   }
@@ -129,9 +144,45 @@ function parseInventoryData(data) {
   return result;
 }
 
+function setChart(chart, categories, data) {
+
+  chart.xAxis[0].setCategories(categories, false);
+  for (var index = chart.series.length-1; index >= 0; --index) {
+    chart.series[index].remove(false);
+  }
+
+  for (var index = 0; index < data.length; index++) {
+    console.log("adding series: ");
+    console.log(data[index]);
+    chart.addSeries({name: data[index].name, data: data[index].data}, false);
+  }
+  console.log(chart.series);
+  chart.redraw();
+}
+
+function setDrilldownChart(chart, name, categories, data) {
+
+  chart.xAxis[0].setCategories(categories, false);
+  for (var index = chart.series.length-1; index >= 0; --index) {
+    chart.series[index].remove(false);
+  }
+
+  chart.addSeries({
+    name: name,
+    data: data
+  }, false);
+  chart.redraw();
+}
+
 function generateInventoryChart(options) {
  
   var seriesData = parseInventoryData(options.data);
+
+  var categories = ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"];
+  var title = 'Product Inventory';
+  var subtitle = 'Available Products in Inventory by Product Type and Blood Group. Click the columns to view products by Age. Click again to return.';
+
+  var data = seriesData.data;
 
   var chart = new Highcharts.Chart({
     chart: {
@@ -139,13 +190,13 @@ function generateInventoryChart(options) {
         type: 'column'
     },
     title: {
-        text: 'Product Inventory'
+        text: title
     },
     subtitle: {
-        text: 'Number of units of Available Products by Product Type and Blood Group'
+        text: subtitle,
     },
     xAxis: {
-        categories: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"]
+        categories: categories
     },
     yAxis: {
         min: 0,
@@ -166,6 +217,24 @@ function generateInventoryChart(options) {
     },
     plotOptions: {
         column: {
+            cursor: "pointer",
+            point: {
+              events: {
+                click: function() {
+                         console.log(this);
+                         console.log("clicked");
+                         console.log(this.drilldown);
+                         var drilldown = this.drilldown;
+                         if (drilldown) {
+                           setDrilldownChart(chart, drilldown.name, drilldown.categories, drilldown.data);
+                         }
+                         else {
+                           console.log(data);
+                           setChart(chart, categories, data);
+                         }
+                       }
+              }
+            },
             dataLabels: {
               align: 'left',
               enabled: true,
@@ -177,7 +246,7 @@ function generateInventoryChart(options) {
             borderWidth: 0
         }
     },
-    series: seriesData.data
+    series: data
   });
   return chart;
 }
