@@ -23,6 +23,21 @@
 <script>
 $(document).ready(function() {
 
+  $("#${tabContentId}").find(".addLocationButton").button({
+    icons : {
+      primary : 'ui-icon-plusthick'
+    }
+  }).click(function() {
+    var div = $("#${configureLocationsFormId}").find(".locationDiv")[0];
+    var newDiv = $($(div).clone());
+    console.log(newDiv);
+    newDiv.find('input[name="id"]').val("newLocation-" + new Date().getTime());
+    newDiv.find('input[name="locationName"]').val("");
+    newDiv.find('input[name="isCenter"]').removeAttr('checked');
+    newDiv.find('input[name="isCollectionSite"]').removeAttr('checked');
+    $("#${configureLocationsFormId}").append(newDiv);
+  });
+
   $("#${tabContentId}").find(".saveLocationsButton").button({
     icons : {
       primary : 'ui-icon-disk'
@@ -107,6 +122,7 @@ $(document).ready(function() {
 			<br />
 			<div>
 				<label>&nbsp;</label>
+				<button class="addLocationButton">Add new Center/Site</button>
 				<button class="saveLocationsButton">Save</button>
 				<button class="cancelButton">Cancel</button>
 			</div>
