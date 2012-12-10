@@ -6,15 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import model.location.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import repository.LocationRepository;
 import viewmodel.LocationViewModel;
@@ -25,47 +29,66 @@ public class LocationsController {
 	@Autowired
 	private LocationRepository locationRepository;
 
-	@RequestMapping("/admin-locationsLandingPage")
-	public ModelAndView locationsLandingPage(HttpServletRequest request) {
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
 
-		ModelAndView modelAndView = new ModelAndView("locationsLandingPage");
-		Map<String, Object> model = new HashMap<String, Object>();
-		addAllLocationsToModel(model);
-		modelAndView.addObject("model", model);
-		return modelAndView;
+	@RequestMapping(value="/configureLocationsFormGenerator", method=RequestMethod.GET)
+	public ModelAndView configureLocationsFormGenerator(
+	    HttpServletRequest request, HttpServletResponse response,
+	    Model model) {
+
+	  ModelAndView mv = new ModelAndView("admin/configureLocations");
+	  Map<String, Object> m = model.asMap();
+	  addAllLocationsToModel(m);
+	  m.put("refreshUrl", getUrl(request));
+	  mv.addObject("model", model);
+	  return mv;
 	}
 
-	@RequestMapping("/admin-locations")
-	public ModelAndView locations(HttpServletRequest request) {
+  @RequestMapping("/configureLocations")
+  public ModelAndView configureLocations(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureLocations");
+    System.out.println(paramsAsJson);
+    List<Location> locations = new ArrayList<Location>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String id : params.keySet()) {
+        Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
+        Location location = new Location();
 
-		ModelAndView modelAndView = new ModelAndView("locations");
-		Map<String, Object> model = new HashMap<String, Object>();
-		addAllLocationsToModel(model);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+        if (id.startsWith("newLocation"))
+          location.setId(null);
+        else
+          location.setId(Long.parseLong(id));
 
-	@RequestMapping("/admin-selectLocation")
-	public ModelAndView selectLocation(
-			@RequestParam Map<String, String> params, HttpServletRequest request) {
+        location.setName((String) paramValue.get("name"));
+        location.setIsCenter((Boolean) paramValue.get("isCenter"));
+        location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
 
-		Location location = locationRepository.getLocation(getParam(params,
-				"selectedLocationId"));
-		ModelAndView modelAndView = new ModelAndView("locations");
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("location", new LocationViewModel(location));
-		model.put("hasLocation", true);
-		addAllLocationsToModel(model);
-		modelAndView.addObject("model", model);
-		return modelAndView;
-	}
+        locations.add(location);
+      }
+      locationRepository.saveAllLocations(locations);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
 
-	private Boolean getBooleanParam(Map<String, String> params, String paramName) {
-		String paramValue = params.get(paramName);
-		return StringUtils.hasText(paramValue) ? Boolean
-				.parseBoolean(paramValue) : false;
-	}
-
+    Map<String, Object> m = model.asMap();
+    addAllLocationsToModel(m);
+    m.put("refreshUrl", "configureLocationsFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
+  
 	private void addAllLocationsToModel(Map<String, Object> model) {
 		List<Location> allLocations = locationRepository.getAllLocations();
 		List<LocationViewModel> locations = new ArrayList<LocationViewModel>();
@@ -73,12 +96,6 @@ public class LocationsController {
 			locations.add(new LocationViewModel(allLocation));
 		}
 		model.put("allLocations", locations);
-	}
-
-	private Long getParam(Map<String, String> params, String paramName) {
-		String paramValue = params.get(paramName);
-		return paramValue == null || paramValue.isEmpty() ? null : Long
-				.parseLong(paramValue);
 	}
 
 }

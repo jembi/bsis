@@ -14,7 +14,7 @@
 <div id="productsTab" class="leftPanel tabs">
 	<ul>
 		<li id="findOrAddProductsContent"><a
-			href="findProductFormGenerator.html">Find Products</a></li>
+			href="findProductFormGenerator.html">Find/Edit Products</a></li>
 		<li id="addProductsContent"><a
 			href="editProductFormGenerator.html">Add Product</a></li>
 	</ul>

@@ -17,19 +17,19 @@ public class LocationViewModel {
 		return location.getName();
 	}
 
-	public String getCenter() {
+	public String getIsCenter() {
 		return location.getIsCenter().toString();
 	}
 
-	public String getCollectionSite() {
+	public String getIsCollectionSite() {
 		return location.getIsCollectionSite().toString();
 	}
 
-	public String getUsageSite() {
+	public String getIsUsageSite() {
 		return location.getIsUsageSite().toString();
 	}
 
-	public String getMobileSite() {
+	public String getIsMobileSite() {
 		return location.getIsMobileSite().toString();
 	}
 }

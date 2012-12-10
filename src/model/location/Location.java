@@ -33,9 +33,6 @@ public class Location {
 		this.name = location.name;
 		this.isCenter = location.isCenter;
 		this.isCollectionSite = location.isCollectionSite;
-		this.isUsageSite = location.isUsageSite;
-		this.isMobileSite = location.isMobileSite;
-		this.isDeleted = location.isDeleted;
 		this.notes = location.notes;
 	}
 

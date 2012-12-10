@@ -30,8 +30,8 @@ public class LocationRepository {
 	}
 
 	public List<Location> getAllLocations() {
-		Query query = em
-				.createQuery("SELECT l FROM Location l where l.isDeleted= :isDeleted");
+		TypedQuery<Location> query = em
+				.createQuery("SELECT l FROM Location l where l.isDeleted= :isDeleted", Location.class);
 		query.setParameter("isDeleted", Boolean.FALSE);
 		return query.getResultList();
 	}
@@ -133,4 +133,23 @@ public class LocationRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
+
+  public void saveAllLocations(List<Location> locations) {
+    for (Location location : locations) {
+      if (location.getId() == null) {
+        location.setIsDeleted(false);
+        em.persist(location);
+      }
+      else {
+        Location existingLocation = em.find(Location.class, location.getId());
+        if (existingLocation != null) {
+          existingLocation.setIsDeleted(false);
+          existingLocation.copy(location);
+          em.merge(existingLocation);
+        }
+      }
+    }
+    em.flush();
+  }
+
 }

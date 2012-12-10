@@ -17,7 +17,7 @@
 	<ul>
 		<li id="findOrAddDonorsContent">
 			<a href="findDonorFormGenerator.html">
-				Find Donors
+				Find/Edit Donors
 			</a>
 		</li>
 		<li id="addDonorContent">
