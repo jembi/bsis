@@ -67,6 +67,9 @@ public class AdminController {
       Boolean hidden = params.get("hidden").equals("true") ? true : false;
       ff.setHidden(hidden);
 
+      String displayName = params.get("displayName").trim();
+      ff.setDisplayName(displayName);
+
       String defaultValue = params.get("defaultValue").trim();
       ff.setDefaultValue(defaultValue);
 

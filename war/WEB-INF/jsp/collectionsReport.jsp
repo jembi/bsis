@@ -125,9 +125,9 @@
 			</tr>
 			<tr>
 				<td><form:input path="dateCollectedFrom"
-						id="creportsDateCollectedFrom" />&nbsp;to</td>
+						id="creportsDateCollectedFrom" placeholder="From Date" />&nbsp;to</td>
 				<td><form:input path="dateCollectedTo"
-						id="creportsDateCollectedTo" /></td>
+						id="creportsDateCollectedTo" placeholder="To Date" /></td>
 			</tr>
 			<tr>
 				<td />
