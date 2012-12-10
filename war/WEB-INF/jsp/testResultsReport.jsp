@@ -79,6 +79,10 @@
     });
   });
   
+  $("#clearTestResultsReportButton").button().click(function() {
+    $("#testResultsReportResult").html("");
+  });
+
   $("#testResultsReportForm").find(".collectionCenterSelector").multiselect({
 	  position : {
 	    my : 'left top',
@@ -172,7 +176,11 @@
 			<tr>
 				<td />
 				<td><button type="button" id="generateTestResultsReportButton"
-						style="margin-left: 10px">Generate report</button></td>
+						style="margin-left: 10px">Generate report</button>
+						<button type="button" id="clearTestResultsReportButton"
+						style="margin-left: 10px">Clear report</button>
+						
+						</td>
 			</tr>
 		</tbody>
 	</table>
