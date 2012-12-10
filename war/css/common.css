@@ -536,3 +536,7 @@ tr > td
 .hidableDiv {
 	display: inline-block;
 }
+
+.reportMessage {
+	margin: 20px;
+}

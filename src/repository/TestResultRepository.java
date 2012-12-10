@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 
 import org.springframework.stereotype.Repository;
@@ -329,5 +330,12 @@ public class TestResultRepository {
     em.merge(existingTestResult);
     em.flush();
     return existingTestResult;
+  }
+
+  public void addAllTestResults(List<TestResult> testResults) {
+    for (TestResult t : testResults) {
+      em.persist(t);
+    }
+    em.flush();    
   }
 }

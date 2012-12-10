@@ -17,6 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.collectedsample.CollectedSample;
+import model.product.Product;
 import model.testresults.TestResult;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -364,5 +365,12 @@ public class CollectedSampleRepository {
     if (collectedSamples != null && collectedSamples.size() == 1)
       return collectedSamples.get(0);
     return null;
+  }
+
+  public void addAllCollectedSamples(List<CollectedSample> collectedSamples) {
+    for (CollectedSample c : collectedSamples) {
+      em.persist(c);
+    }
+    em.flush();
   }
 }

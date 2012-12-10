@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,7 +26,9 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 
+import org.hibernate.Session;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -446,5 +450,90 @@ public class ProductRepository {
     if (products != null && products.size() == 1)
       return products.get(0);
     return null;
+  }
+
+  public Map<String, Object> generateInventorySummary() {
+
+    Map<String, Object> inventory = new HashMap<String, Object>();
+    Session session = em.unwrap(Session.class);
+    session.enableFilter("availableProductsNotExpiredFilter");
+
+    TypedQuery<ProductType> productTypeQuery = em.createQuery("select pt from ProductType pt", ProductType.class);
+
+    DateTime today = new DateTime();
+    for (ProductType productType : productTypeQuery.getResultList()) {
+
+      Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
+
+      inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("B+", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("AB+", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("O+", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("A-", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("B-", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
+
+      for (Product product : productType.getProducts()) {
+        String bloodGroup = getBloodGroupForProduct(product).toString();
+        Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
+        DateTime expiresOn = new DateTime(product.getExpiresOn().getTime());
+        Long age = (long) Days.daysBetween(expiresOn, today).getDays();
+        // compute window based on age
+        age = Math.abs((age / 5) * 5);
+        if (age > 30)
+          age = (long) 30;
+        Long count = numDayMap.get(age);
+        System.out.println(numDayMap);
+        System.out.println(count);
+        System.out.println(age);
+        numDayMap.put(age, count+1);
+      }
+
+      inventory.put(productType.getProductType(), inventoryByBloodGroup);
+    }
+    
+    session.disableFilter("availableProductsNotExpiredFilter");
+    return inventory;
+  }
+
+  private Map<Long, Long> getMapWithNumDaysWindows() {
+    Map<Long, Long> m = new HashMap<Long, Long>();
+    m.put((long)0, (long)0); // age < 5 days
+    m.put((long)5, (long)0); // 5 <= age < 10 days
+    m.put((long)10, (long)0); // 10 <= age < 15 days
+    m.put((long)15, (long)0); // 15 <= age < 20 days
+    m.put((long)20, (long)0); // 20 <= age < 25 days
+    m.put((long)25, (long)0); // 25 <= age < 30 days
+    m.put((long)30, (long)0); // age > 30 days
+    return m;
+  }
+
+  public BloodGroup getBloodGroupForProduct(Product product) {
+
+    CollectedSample c = product.getCollectedSample();
+    String abo = null;
+    String rh = null;
+
+    for (TestResult t : c.getTestResults()) {
+      String testName = t.getBloodTest().getName();
+      if (testName.equals("Blood ABO"))
+        abo = t.getResult();
+      else if (testName.equals("Blood Rh"))
+        rh = t.getResult();
+    }
+
+    if (abo == null || rh == null) {
+      return new BloodGroup(BloodAbo.Unknown, BloodRhd.Unknown);
+    }
+
+    return new BloodGroup(BloodAbo.valueOf(abo), BloodRhd.valueOf(rh));
+  }
+
+  public void addAllProducts(List<Product> products) {
+    for (Product p : products) {
+      em.persist(p);
+    }
+    em.flush();
   }
 }

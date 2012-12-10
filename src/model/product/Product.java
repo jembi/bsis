@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,10 +14,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
 import model.request.Request;
@@ -24,9 +27,11 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.NotBlank;
 
+@FilterDef(name="availableProductsNotExpiredFilter", defaultCondition="isDeleted = '0' && isAvailable = '1'")
 @Entity
 public class Product implements ModificationTracker {
 
@@ -65,22 +70,10 @@ public class Product implements ModificationTracker {
   private BloodRhd bloodRhd;
   
   @Temporal(TemporalType.TIMESTAMP)
-  private Date lastUpdated;
-
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date createdDate;
-
-  @ManyToOne
-  private User createdBy;
-
-  @ManyToOne
-  private User lastUpdatedBy;
-
-  @ManyToOne
-  private Request issuedTo;
-
-  @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
+
+  @ManyToOne(fetch=FetchType.LAZY)
+  private Request issuedTo;
 
   @Lob
   private String notes;
@@ -91,7 +84,11 @@ public class Product implements ModificationTracker {
 
   private Boolean isQuarantined;
 
+  @Valid
+  private RowModificationTracker modificationTracker;
+
   public Product() {
+    modificationTracker = new RowModificationTracker();
   }
 
   public void copy(Product product) {
@@ -126,22 +123,6 @@ public class Product implements ModificationTracker {
     return expiresOn;
   }
 
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
-
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  public User getCreatedBy() {
-    return createdBy;
-  }
-
-  public User getLastUpdatedBy() {
-    return lastUpdatedBy;
-  }
-
   public String getNotes() {
     return notes;
   }
@@ -168,22 +149,6 @@ public class Product implements ModificationTracker {
 
   public void setExpiresOn(Date expiresOn) {
     this.expiresOn = expiresOn;
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public void setCreatedBy(User createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    this.lastUpdatedBy = lastUpdatedBy;
   }
 
   public void setNotes(String notes) {
@@ -248,5 +213,37 @@ public class Product implements ModificationTracker {
 
   public void setBloodRhd(BloodRhd bloodRhd) {
     this.bloodRhd = bloodRhd;
+  }
+
+  public Date getLastUpdated() {
+    return modificationTracker.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    modificationTracker.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 }
