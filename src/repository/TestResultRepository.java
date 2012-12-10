@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 
@@ -163,44 +164,52 @@ public class TestResultRepository {
     return existingTestResult;
   }
 
-  public Map<Long, Long> findNumberOfPositiveTests(String dateTestedFrom,
-      String dateTestedTo, String aggregationCriteria, String hiv, String hbv,
-      String hcv, String syphilis, String none) {
-    String queryStr = "SELECT count(t), t.dateTested FROM TestResult t WHERE "
-        + "t.dateTested BETWEEN :dateTestedFrom AND "
-        + ":dateTestedTo AND (t.isDeleted= :isDeleted) ";
-    List<String> conditions = new ArrayList<String>();
-    if (hiv.equals("reactive"))
-      conditions.add(" hiv='reactive' ");
-    if (hbv.equals("reactive"))
-      conditions.add(" hbv='reactive' ");
-    if (hcv.equals("reactive"))
-      conditions.add(" hcv='reactive' ");
-    if (syphilis.equals("reactive"))
-      conditions.add(" syphilis='reactive' ");
-    if (none.equals("none"))
-      conditions
-          .add("(hiv='negative' AND hbv='negative' AND hcv='negative' AND syphilis='negative')");
+  public Map<String, Map<Long, Long>> findNumberOfPositiveTests(String dateTestedFrom,
+      String dateTestedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
 
-    if (conditions.size() > 0) {
-      String conditionStr = " (" + conditions.get(0);
-      for (int i = 1; i < conditions.size(); ++i) {
-        conditionStr += "OR " + conditions.get(i) + " ";
+    TypedQuery<Object[]> query = em.createQuery("SELECT count(t), t.testedOn, t.bloodTest.name FROM TestResult t WHERE "
+        + "t.result != t.bloodTest.correctResult AND "
+        + "t.collectedSample.collectionCenter.id IN (:centerIds) AND "
+        + "t.collectedSample.collectionSite.id IN (:siteIds) AND "
+        + "t.testedOn BETWEEN :dateTestedFrom AND "
+        + ":dateTestedTo AND (t.isDeleted= :isDeleted) AND (t.bloodTest.correctResult != '') "
+        + " GROUP BY t.bloodTest.name, testedOn", Object[].class);
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (centers != null) {
+      for (String center : centers) {
+        centerIds.add(Long.parseLong(center));
       }
-      conditionStr += ") ";
-      queryStr += "AND " + conditionStr;
+    } else {
+      centerIds.add((long)-1);
     }
-    TypedQuery<Object[]> query = em.createQuery(queryStr
-        + " GROUP BY dateTested", Object[].class);
 
-    query.setParameter("isDeleted", Boolean.FALSE);
+    List<Long> siteIds = new ArrayList<Long>();
+    if (sites != null) {
+      for (String site : sites) {
+        siteIds.add(Long.parseLong(site));
+      }
+    } else {
+      siteIds.add((long)-1);
+    }
+
+    query.setParameter("isDeleted", false);
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
+
+    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    TypedQuery<BloodTest> bloodTestQuery = em.createQuery("SELECT t FROM BloodTest t", BloodTest.class);
+    for (BloodTest bt : bloodTestQuery.getResultList()) {
+      if (!bt.getCorrectResult().isEmpty())
+        resultMap.put(bt.getName(), new HashMap<Long, Long>());
+    }
 
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Date from = null;
     Date to = null;
     try {
       from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
-          .parse("12/31/2011") : dateFormat.parse(dateTestedFrom);
+          .parse("11/01/2012") : dateFormat.parse(dateTestedFrom);
       query.setParameter("dateTestedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();
@@ -229,7 +238,6 @@ public class TestResultRepository {
 
     List<Object[]> resultList = query.getResultList();
 
-    Map<Long, Long> m = new HashMap<Long, Long>();
     Calendar gcal = new GregorianCalendar();
     Date lowerDate = null;
     Date upperDate = null;
@@ -240,10 +248,14 @@ public class TestResultRepository {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
-    gcal.setTime(lowerDate);
-    while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
-      m.put(gcal.getTime().getTime(), (long) 0);
-      gcal.add(incrementBy, 1);
+    
+    for (String bloodTestName : resultMap.keySet()) {
+      Map<Long, Long> m = resultMap.get(bloodTestName);
+      gcal.setTime(lowerDate);
+      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+        m.put(gcal.getTime().getTime(), (long) 0);
+        gcal.add(incrementBy, 1);
+      }
     }
 
     for (Object[] result : resultList) {
@@ -251,6 +263,8 @@ public class TestResultRepository {
       try {
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
+        System.out.println(result[2]);
+        Map<Long, Long> m = resultMap.get(result[2]);
         if (m.containsKey(utcTime)) {
           Long newVal = m.get(utcTime) + (Long) result[0];
           m.put(utcTime, newVal);
@@ -262,7 +276,9 @@ public class TestResultRepository {
         e.printStackTrace();
       }
     }
-    return m;
+
+    System.out.println(resultMap);
+    return resultMap;
   }
 
   public TestResult findTestResultById(Long testResultId) {

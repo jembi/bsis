@@ -255,7 +255,7 @@ public class CollectedSampleRepository {
     Date to = null;
     try {
       from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("12/31/2011") : dateFormat.parse(dateCollectedFrom);
+          .parse("11/01/2012") : dateFormat.parse(dateCollectedFrom);
       query.setParameter("dateCollectedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();

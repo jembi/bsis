@@ -250,3 +250,64 @@ function generateInventoryChart(options) {
   });
   return chart;
 }
+
+function getTestResultsChart(options) {
+
+  var seriesData = parseTestResultsData(options.startTime, options.endTime,
+      options.interval, options.data);
+
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'Positive Test Results for different Disease Markers over time'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
+          },
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'Number of Test Results Found Negative'
+          }
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
+
+  var chart = new Highcharts.Chart(options);
+
+  return chart;
+}
+
+function parseTestResultsData(beginDate, endDate, interval, data) {
+
+  var resultData = [];
+  console.log(data);
+  for (var testName in data) {
+    var resultsForTest = {}
+    resultsForTest.name = testName;
+    resultsForTest.data = [];
+    for (var x in data[testName]) {
+      resultsForTest.data.push([ parseInt(x), data[testName][x] ]);
+    }
+    resultsForTest.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForTest);
+  }
+
+  console.log(resultData);
+  return resultData;
+}

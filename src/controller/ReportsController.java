@@ -154,104 +154,60 @@ public class ReportsController {
       m.put("dateCollectedFromUTC", date.getTime());
       date = dateFormat.parse(dateCollectedTo);
       m.put("dateCollectedToUTC", date.getTime());
-    } catch (ParseException e) {
+    } catch (ParseException ex) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      ex.printStackTrace();
     }
     return m;
   }
 
   public static class TestResultsReportBackingForm {
 
-    String dateTestedFrom;
-    String dateTestedTo;
-    String aggregationCriteria;
-    String hiv;
-    String hbv;
-    String hcv;
-    String syphilis;
-    String none;
-    List<String> tests;
-
-    public TestResultsReportBackingForm() {
-    }
+    private String dateTestedFrom;
+    private String dateTestedTo;
+    private String aggregationCriteria;
+    private List<String> centers;
+    private List<String> sites;
 
     public String getDateTestedFrom() {
       return dateTestedFrom;
     }
-
-    public void setDateTestedFrom(String dateCollectedFrom) {
-      this.dateTestedFrom = dateCollectedFrom;
-    }
-
     public String getDateTestedTo() {
       return dateTestedTo;
     }
-
-    public void setDateTestedTo(String dateTestedTo) {
-      this.dateTestedTo = dateTestedTo;
-    }
-
     public String getAggregationCriteria() {
       return aggregationCriteria;
     }
-
+    public List<String> getCenters() {
+      return centers;
+    }
+    public List<String> getSites() {
+      return sites;
+    }
+    public void setDateTestedFrom(String dateTestedFrom) {
+      this.dateTestedFrom = dateTestedFrom;
+    }
+    public void setDateTestedTo(String dateTestedTo) {
+      this.dateTestedTo = dateTestedTo;
+    }
     public void setAggregationCriteria(String aggregationCriteria) {
       this.aggregationCriteria = aggregationCriteria;
     }
-
-    public String getHiv() {
-      return hiv;
+    public void setCenters(List<String> centers) {
+      this.centers = centers;
+    }
+    public void setSites(List<String> sites) {
+      this.sites = sites;
     }
 
-    public void setHiv(String hiv) {
-      this.hiv = hiv;
-    }
-
-    public String getHbv() {
-      return hbv;
-    }
-
-    public void setHbv(String hbv) {
-      this.hbv = hbv;
-    }
-
-    public String getHcv() {
-      return hcv;
-    }
-
-    public void setHcv(String hcv) {
-      this.hcv = hcv;
-    }
-
-    public String getSyphilis() {
-      return syphilis;
-    }
-
-    public void setSyphilis(String syphilis) {
-      this.syphilis = syphilis;
-    }
-
-    public String getNone() {
-      return none;
-    }
-
-    public void setNone(String none) {
-      this.none = none;
-    }
-
-    public List<String> getTests() {
-      return tests;
-    }
-
-    public void setTests(List<String> tests) {
-      this.tests = tests;
-    }
   }
 
   @RequestMapping(value = "/testResultsReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView testResultsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("testResultsReport");
+    Map<String, Object> m = model.asMap();
+    m.put("centers", locationRepository.getAllCenters());
+    m.put("sites", locationRepository.getAllCollectionSites());
     mv.addObject("testResultsReportForm", new TestResultsReportBackingForm());
     mv.addObject("model", model);
     return mv;
@@ -265,22 +221,11 @@ public class ReportsController {
 
     String dateTestedFrom = form.getDateTestedFrom();
     String dateTestedTo = form.getDateTestedTo();
-    String hiv = "";
-    String hbv = "";
-    String hcv = "";
-    String syphilis = "";
-    String none = "";
-    if (form.getTests() != null) {
-      hiv = form.getTests().contains("hiv") ? "reactive" : "";
-      hbv = form.getTests().contains("hbv") ? "reactive" : "";
-      hcv = form.getTests().contains("hcv") ? "reactive" : "";
-      syphilis = form.getTests().contains("syphilis") ? "reactive" : "";
-      none = form.getTests().contains("none") ? "none" : "";
-    }
 
-    Map<Long, Long> numTestResults = testResultsRepository
+    Map<String, Map<Long, Long>> numTestResults = testResultsRepository
         .findNumberOfPositiveTests(dateTestedFrom, dateTestedTo,
-            form.getAggregationCriteria(), hiv, hbv, hcv, syphilis, none);
+            form.getAggregationCriteria(), form.getCenters(), form.getSites());
+
     Map<String, Object> m = new HashMap<String, Object>();
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
@@ -303,6 +248,7 @@ public class ReportsController {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+
     return m;
   }
 

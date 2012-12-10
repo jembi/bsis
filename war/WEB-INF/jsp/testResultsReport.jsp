@@ -61,7 +61,8 @@
       url : "getTestResultsReport.html",
       data : formData,
       success : function(data) {
-        getTimeChart({
+        console.log(data);
+        getTestResultsChart({
           data : data.numTestResults,
           renderDest : "testResultsReportResult",
           title : "Test Results Report",
@@ -71,35 +72,89 @@
           endTime : data.dateTestedToUTC,
           interval : data.interval
         });
-      }
+      },
+      error: function(data) {
+        			 showErrorMessage("Something went wrong. Please try again later.");
+      			 }
     });
   });
+  
+  $("#testResultsReportForm").find(".collectionCenterSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+									if (numSelected == numTotal) {
+									  return "Any Center";
+									}
+									else {
+									  console.log(selectedValues);
+									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+									  return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
+									}
+	  }
+	});
+
+  $("#testResultsReportForm").find(".collectionCenterSelector").multiselect("checkAll");
+
+  $("#testResultsReportForm").find(".collectionSiteSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+									if (numSelected == numTotal) {
+									  return "Any Site";
+									}
+									else {
+									  console.log(selectedValues);
+									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+									  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
+									}
+	  }
+	});
+
+  $("#testResultsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
+
 </script>
 
 <form:form method="GET" commandName="testResultsReportForm"
 	id="testResultsReportForm">
-	Under Construction
 	<table>
 		<thead>
 		</thead>
 		<tbody>
 			<tr>
-				<td><form:label path="tests">Select One or More Tests</form:label></td>
-				<td><form:select path="tests" id="testResultReportTests">
-						<form:option value="hiv" label="HIV" />
-						<form:option value="hbv" label="HBV" />
-						<form:option value="hcv" label="HCV" />
-						<form:option value="syphilis" label="Syphilis" />
-						<form:option value="none" label="None" />
-					</form:select></td>
+				<td><form:label path="centers">Collection Centers</form:label></td>
+				<td style="padding-left: 10px;"><form:select path="centers" class="collectionCenterSelector">
+					<c:forEach var="center" items="${model.centers}">
+						<form:option value="${center.id}" label="${center.name}" />
+					</c:forEach>
+				</form:select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form:label path="sites">Collection Sites</form:label>
+				</td>
+				<td style="padding-left: 10px;">
+					<form:select path="sites" class="collectionSiteSelector">
+						<c:forEach var="site" items="${model.sites}">
+							<form:option value="${site.id}" label="${site.name}" />
+						</c:forEach>
+					</form:select>
+				</td>
 			</tr>
 			<tr>
 				<td>Enter Date Range</td>
 			</tr>
 			<tr>
 				<td><form:input path="dateTestedFrom"
-						id="trreportsDateTestedFrom" />&nbsp;to</td>
-				<td><form:input path="dateTestedTo" id="trreportsDateTestedTo" /></td>
+						id="trreportsDateTestedFrom" placeholder="From Date" />&nbsp;to</td>
+				<td><form:input path="dateTestedTo" id="trreportsDateTestedTo" placeholder="To Date" /></td>
 			</tr>
 			<tr>
 				<td />
