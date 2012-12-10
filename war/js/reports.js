@@ -91,3 +91,93 @@ function getSeriesData(beginDate, endDate, interval, data) {
   });
   return seriesData;
 }
+
+function parseInventoryData(data) {
+
+  var result = {};
+  result.categories = [];
+  result.data = {};
+
+  result.data = [];
+  var bloodGroups = {'A+'  : 'A+',
+                     'B+'  : 'B+',
+                     'AB+' : 'AB+',
+                     'O+'  : 'O+',
+                     'A-'  : 'A-',
+                     'B-'  : 'B-',
+                     'AB-' : 'AB-',
+                     'O-'  : 'O-'
+                    };
+  for (var category in data) {
+    result.categories.push(category);
+    var productTypeData = data[category];
+    var bloodGroupData = []
+    for (var bloodGroup in bloodGroups) {
+      console.log(bloodGroup);
+      var inventoryByBloodGroup = productTypeData[bloodGroup];
+      var numUnits = 0;
+      console.log(inventoryByBloodGroup);
+      for (var index in inventoryByBloodGroup) {
+        numUnits = numUnits + inventoryByBloodGroup[index];
+      }
+      bloodGroupData.push(numUnits);
+    }
+    result.data.push({name: category, data: bloodGroupData});
+  }
+
+  console.log(result.data);
+  return result;
+}
+
+function generateInventoryChart(options) {
+ 
+  var seriesData = parseInventoryData(options.data);
+
+  var chart = new Highcharts.Chart({
+    chart: {
+        renderTo: options.renderDest,
+        type: 'column'
+    },
+    title: {
+        text: 'Product Inventory'
+    },
+    subtitle: {
+        text: 'Number of units of Available Products by Product Type and Blood Group'
+    },
+    xAxis: {
+        categories: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"]
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Number of units of Product in Inventory'
+        }
+    },
+    legend: {
+        backgroundColor: '#FFFFFF',
+        align: 'center',
+        verticalAlign: 'bottom',
+    },
+    tooltip: {
+        formatter: function() {
+            return ''+
+                this.x +': '+ this.y +' units';
+        }
+    },
+    plotOptions: {
+        column: {
+            dataLabels: {
+              align: 'left',
+              enabled: true,
+              rotation: 270,
+              x: 4,
+              y: -5
+            },
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: seriesData.data
+  });
+  return chart;
+}

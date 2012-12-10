@@ -19,6 +19,7 @@
         $("#${tabContentId}").find(".generateInventoryReportButton").button().click(function() {
           console.log("generate inventory report clicked");
           
+          showLoadingImage($("#${childContentId}"));
           $.ajax({
             url: "generateInventoryReport.html",
             type: "GET",
@@ -26,6 +27,11 @@
             success: function(responseData) {
               				 console.log(responseData);
               				 showMessage("Inventory Report successfully generated");
+              	        generateInventoryChart({
+              	          data : responseData,
+              	          renderDest : "${childContentId}",
+              	        });
+
             				 },
             error: 	 function(responseData) {
               				 console.log(responseData);
