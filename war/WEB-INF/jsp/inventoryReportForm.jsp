@@ -17,8 +17,7 @@
   $(document).ready(
       function() {
         $("#${tabContentId}").find(".generateInventoryReportButton").button().click(function() {
-          console.log("generate inventory report clicked");
-          
+
           showLoadingImage($("#${childContentId}"));
           $.ajax({
             url: "generateInventoryReport.html",
@@ -41,6 +40,10 @@
           
         });
         
+        $("#${tabContentId}").find(".clearReportButton").button().click(function() {
+          $("#${childContentId}").html("");
+        });
+        
       });
 </script>
 
@@ -51,6 +54,7 @@
 		</div>
 		<div style="margin-top: 10px;">
 			<button class="generateInventoryReportButton">Generate Inventory Report</button>
+			<button class="clearReportButton">Clear Report</button>
 		</div>
 	</div>
 
