@@ -3,6 +3,7 @@ package controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
+import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.TestResultRepository;
 
@@ -37,13 +39,20 @@ public class ReportsController {
   @Autowired
   private ProductRepository productRepository;
 
+  @Autowired
+  private LocationRepository locationRepository;
+  
   public static class CollectionsReportBackingForm {
 
-    String dateCollectedFrom;
-    String dateCollectedTo;
-    String aggregationCriteria;
+    private String dateCollectedFrom;
+    private String dateCollectedTo;
+    private String aggregationCriteria;
+    private List<String> centers;
+    private List<String> sites;
 
     public CollectionsReportBackingForm() {
+      centers = Arrays.asList(new String[0]);
+      sites = Arrays.asList(new String[0]);
     }
 
     public String getDateCollectedFrom() {
@@ -68,6 +77,22 @@ public class ReportsController {
 
     public void setAggregationCriteria(String aggregationCriteria) {
       this.aggregationCriteria = aggregationCriteria;
+    }
+
+    public List<String> getCenters() {
+      return centers;
+    }
+
+    public void setCenters(List<String> centers) {
+      this.centers = centers;
+    }
+
+    public List<String> getSites() {
+      return sites;
+    }
+
+    public void setSites(List<String> sites) {
+      this.sites = sites;
     }
   }
 
@@ -94,6 +119,9 @@ public class ReportsController {
   @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView collectionsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("collectionsReport");
+    Map<String, Object> m = model.asMap();
+    m.put("centers", locationRepository.getAllCenters());
+    m.put("sites", locationRepository.getAllCollectionSites());
     mv.addObject("collectionsReportForm", new CollectionsReportBackingForm());
     mv.addObject("model", model);
     return mv;
@@ -109,7 +137,7 @@ public class ReportsController {
     String dateCollectedTo = form.getDateCollectedTo();
     Map<Long, Long> numCollections = collectionRepository
         .findNumberOfCollectedSamples(dateCollectedFrom, dateCollectedTo,
-            form.getAggregationCriteria());
+            form.getAggregationCriteria(), form.getCenters(), form.getSites());
     Map<String, Object> m = new HashMap<String, Object>();
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);

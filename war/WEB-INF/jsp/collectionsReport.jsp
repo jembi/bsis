@@ -67,11 +67,55 @@
       }
     });
   });
+
+  $("#clearCollectionsReportButton").button().click(function() {
+    $("#collectionsReportResult").html("");
+  });
+
+  $("#collectionsReportForm").find(".collectionCenterSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+									if (numSelected == numTotal) {
+									  return "Any Center";
+									}
+									else {
+									  console.log(selectedValues);
+									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+									  return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
+									}
+	  }
+	});
+
+  $("#collectionsReportForm").find(".collectionCenterSelector").multiselect("checkAll");
+
+  $("#collectionsReportForm").find(".collectionSiteSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+									if (numSelected == numTotal) {
+									  return "Any Site";
+									}
+									else {
+									  console.log(selectedValues);
+									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+									  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
+									}
+	  }
+	});
+
+  $("#collectionsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
+
 </script>
 
 <form:form method="GET" commandName="collectionsReportForm"
 	id="collectionsReportForm">
-	Under Construction
 	<table>
 		<thead>
 		</thead>
@@ -99,9 +143,33 @@
 					</form:select></td>
 			</tr>
 			<tr>
+				<td><form:label path="centers">Collection Centers</form:label></td>
+				<td style="padding-left: 10px;"><form:select path="centers" class="collectionCenterSelector">
+					<c:forEach var="center" items="${model.centers}">
+						<form:option value="${center.id}" label="${center.name}" />
+					</c:forEach>
+				</form:select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form:label path="sites">Collection Sites</form:label>
+				</td>
+				<td style="padding-left: 10px;">
+					<form:select path="sites" class="collectionSiteSelector">
+						<c:forEach var="site" items="${model.sites}">
+							<form:option value="${site.id}" label="${site.name}" />
+						</c:forEach>
+					</form:select>
+				</td>
+			</tr>
+			<tr>
 				<td />
 				<td><button type="button" id="generateCollectionsReportButton"
-						style="margin-left: 10px">Generate report</button></td>
+						style="margin-left: 10px">Generate report</button>
+						<button type="button" id="clearCollectionsReportButton"
+						style="margin-left: 10px">Clear report</button>
+				</td>
 			</tr>
 		</tbody>
 	</table>

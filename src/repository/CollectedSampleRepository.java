@@ -13,11 +13,9 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.collectedsample.CollectedSample;
-import model.product.Product;
 import model.testresults.TestResult;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -221,14 +219,35 @@ public class CollectedSampleRepository {
   }
 
   public Map<Long, Long> findNumberOfCollectedSamples(String dateCollectedFrom,
-      String dateCollectedTo, String aggregationCriteria) {
+      String dateCollectedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (centers != null) {
+      for (String center : centers) {
+        centerIds.add(Long.parseLong(center));
+      }
+    } else {
+      centerIds.add((long)-1);
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (sites != null) {
+      for (String site : sites) {
+        siteIds.add(Long.parseLong(site));
+      }
+    } else {
+      siteIds.add((long)-1);
+    }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(c), c.dateCollected FROM CollectedSample c WHERE "
-            + "c.dateCollected BETWEEN :dateCollectedFrom AND "
-            + ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY "
-            + "dateCollected", Object[].class);
+        "SELECT count(c), c.collectedOn FROM CollectedSample c WHERE " +
+        "c.collectionCenter.id IN (:centerIds) AND c.collectionSite.id IN (:siteIds) AND " +
+        "c.collectedOn BETWEEN :dateCollectedFrom AND " +
+        ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY " +
+        "collectedOn", Object[].class);
 
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", Boolean.FALSE);
 
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
