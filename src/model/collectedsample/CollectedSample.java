@@ -72,7 +72,7 @@ public class CollectedSample implements ModificationTracker {
   private DonorType donorType;
 
   @BloodBagTypeExists
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne
   private BloodBagType bloodBagType;
   
   @Column(length=50)

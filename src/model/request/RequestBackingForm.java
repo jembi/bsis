@@ -214,8 +214,14 @@ public class RequestBackingForm {
   }
 
   public void setBloodGroup(String bloodGroupStr) {
-    BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-    request.setBloodAbo(bloodGroup.getBloodAbo());
-    request.setBloodRhd(bloodGroup.getBloodRhd());
+
+    if (bloodGroupStr == null || bloodGroupStr.isEmpty()) {
+      request.setBloodAbo(null);
+      request.setBloodRhd(null);
+    } else {
+      BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
+      request.setBloodAbo(bloodGroup.getBloodAbo());
+      request.setBloodRhd(bloodGroup.getBloodRhd());
+    }
   }
 }

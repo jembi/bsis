@@ -179,7 +179,7 @@
 			<div>
 				<form:label path="bloodGroup">${model.requestFields.bloodGroup.displayName}</form:label>
 				<form:select path="bloodGroup" class="bloodGroup">
-					<form:option value="Unknown" label="Unknown" />
+					<form:option value="" label="" />
 					<form:option value="A+" label="A+" />
 					<form:option value="A-" label="A-" />
 					<form:option value="B+" label="B+" />
@@ -189,7 +189,7 @@
 					<form:option value="O+" label="O+" />
 					<form:option value="O-" label="O-" />
 				</form:select>
-				<form:errors class="formError" path="bloodGroup" delimiter=", "></form:errors>
+				<form:errors class="formError" path="request.bloodAbo" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.requestDate.hidden != true }">

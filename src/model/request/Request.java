@@ -64,11 +64,13 @@ public class Request implements ModificationTracker {
 
   private Boolean fulfilled;
 
+  @NotNull
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodAbo_index")
   private BloodAbo bloodAbo;
 
+  @NotNull
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodRhd_index")

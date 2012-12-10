@@ -338,7 +338,7 @@ public class RequestRepository {
         throw new Exception("Could not issue products");
       }
     }
-    if (request.getIssuedProducts().size() >= request.getRequestedQuantity()) {
+    if (request.getIssuedProducts().size() + numIssued >= request.getRequestedQuantity()) {
       request.setFulfilled(true);
     }
   }
