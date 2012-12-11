@@ -323,6 +323,8 @@ public class DonorController {
     ModelAndView modelAndView = new ModelAndView("donorsTable");
     List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName,
         lastName, bloodGroups);
+    System.out.println("donors: ");
+    System.out.println(donors);
 
     Map<String, Object> model = m.asMap();
     model.put("tableName", "findDonorResultsTable");

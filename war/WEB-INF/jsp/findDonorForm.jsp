@@ -111,6 +111,7 @@ $(document).ready(function() {
 			<div>
 				<form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
 					<form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
+						<form:option value="Unknown" label="Unknown" />
 						<form:option value="A+" label="A+" />
 						<form:option value="A-" label="A-" />
 						<form:option value="B+" label="B+" />

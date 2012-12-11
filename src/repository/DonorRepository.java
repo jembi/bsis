@@ -16,7 +16,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import model.donor.Donor;
+import model.util.BloodAbo;
 import model.util.BloodGroup;
+import model.util.BloodRhd;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
@@ -63,8 +65,10 @@ public class DonorRepository {
 
     List<Predicate> bgPredicates = new ArrayList<Predicate>();
     for (BloodGroup bg : bloodGroups) {
-      Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo());
-      Expression<Boolean> rhdExp = cb.equal(root.<String>get("bloodRhd"), bg.getBloodRhd());
+      System.out.println(bg.getBloodAbo());
+      System.out.println(bg.getBloodRhd());
+      Expression<Boolean> aboExp = cb.equal(root.<BloodAbo>get("bloodAbo"), bg.getBloodAbo());
+      Expression<Boolean> rhdExp = cb.equal(root.<BloodRhd>get("bloodRhd"), bg.getBloodRhd());
       bgPredicates.add(cb.and(aboExp, rhdExp));
     }
 
