@@ -19,6 +19,7 @@
 <c:set var="editCollectedSampleFormBloodBagTypeId">editCollectedSampleFormBloodBagType-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorTypeId">editCollectedSampleFormDonorType-${unique_page_id}</c:set>
 <c:set var="updateCollectedSampleButtonId">updateCollectedSampleButton-${unique_page_id}</c:set>
+<c:set var="cancelCollectedSampleButtonId">cancelCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleButtonId">deleteCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
 
@@ -30,6 +31,15 @@
 						// let the parent know we are done
 						$("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionSuccess");
 				}
+
+        $("#${cancelCollectedSampleButtonId}").button({
+          icons : {
+            primary : 'ui-icon-closethick'
+          }
+        }).click(
+            function() {
+              $("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionCancel");
+            });
 
         $("#${updateCollectedSampleButtonId}").button({
           icons : {
@@ -297,6 +307,9 @@
 				</button>
 				<button type="button" class="clearFormButton">
 					Clear form
+				</button>
+				<button type="button" id="${cancelCollectedSampleButtonId}">
+					Cancel
 				</button>
 			</c:if>
 			<c:if test="${model.existingCollectedSample}">
