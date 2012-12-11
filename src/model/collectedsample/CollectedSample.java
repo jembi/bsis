@@ -32,7 +32,6 @@ import model.testresults.TestResult;
 import model.user.User;
 
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class CollectedSample implements ModificationTracker {
@@ -42,7 +41,6 @@ public class CollectedSample implements ModificationTracker {
   @Column(nullable=false)
   private Long id;
 
-  @NotBlank
   @Column(length=30, nullable=false)
   @Index(name="collectedSample_collectionNumber_index")
   private String collectionNumber;

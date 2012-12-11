@@ -25,22 +25,31 @@
         var hiddenInput = $(row[2]).find('input[name="hidden"]');
         console.log(hiddenInput.is(":checked"));
 
-        var displayNameInput = $(row[3]).find('input[name="displayName"]');
+        var isRequiredInput = $(row[3]).find('input[name="isRequired"]');
+        console.log(isRequiredInput);
+        console.log(isRequiredInput.is(":checked"));
+
+        var autoGenerateInput = $(row[4]).find('input[name="autoGenerate"]');
+        console.log(autoGenerateInput.is(":checked"));
+
+        var displayNameInput = $(row[5]).find('input[name="displayName"]');
         console.log(displayNameInput.val());
 
-        var defaultValueInput = $(row[4]).find('input[name="defaultValue"]');
+        var defaultValueInput = $(row[6]).find('input[name="defaultValue"]');
         console.log(defaultValueInput.val());
 
-        var copyFromSelectInput = $(row[5]).find('select :selected');
-        console.log(copyFromSelectInput.val());
+//        var copyFromSelectInput = $(row[5]).find('select :selected');
+//        console.log(copyFromSelectInput.val());
 
         $.ajax({
           url: "configureFormFieldChange.html",
           data: {id: idInput.val(),
             		 hidden: hiddenInput.is(":checked"),
+            		 isRequired: isRequiredInput.is(":checked"),
+            		 autoGenerate: autoGenerateInput.is(":checked"),
             		 displayName: displayNameInput.val(),
             		 defaultValue: defaultValueInput.val(),
-            		 sourceField: copyFromSelectInput.val(),
+            		 //sourceField: copyFromSelectInput.val(),
             		},
           type: "POST",
           success: function() {
@@ -92,9 +101,11 @@
 				<th style="display:none" />
 				<th>Field</th>
 				<th>Hidden?</th>
+				<th>Required?</th>
+				<th>Auto Generate?</th>
 				<th>Display Name</th>
 				<th>Default Value</th>
-				<th>Copy value from Another Field</th>
+				<th>Save Changes</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -114,13 +125,29 @@
 						</c:if>
 					</td>
 					<td>
+						<c:if test="${formField.isRequired == true}">
+							<input type="checkbox" name="isRequired" checked />
+						</c:if>
+						<c:if test="${formField.isRequired == false}">
+							<input type="checkbox" name="isRequired" />
+						</c:if>
+					</td>
+					<td>
+						<c:if test="${formField.autoGenerate == true}">
+							<input type="checkbox" name="autoGenerate" checked />
+						</c:if>
+						<c:if test="${formField.autoGenerate == false}">
+							<input type="checkbox" name="autoGenerate" />
+						</c:if>
+					</td>
+					<td>
 						<input type="text" name="displayName" class="tableInputShort" value="${formField.displayName}" />
 					</td>
 					<td>
 						<input type="text" name="defaultValue" class="tableInputShort" value="${formField.defaultValue}" />
 					</td>
 					<td>
-					<div>
+					<!--div>
 						<select class="copyFormFieldFromSelect" name="copyFromSelect">
 
 							<c:if test="${formField.derived == true}">
@@ -144,7 +171,7 @@
 								</c:if>
 							</c:forEach>
 						</select>
-						</div>
+						</div-->
 						<div style="text-align: right;">
 							<button class="updateFormFieldButton">Save</button>
 						</div>

@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 @Entity
 public class FormField {
 
@@ -25,30 +23,31 @@ public class FormField {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @NotBlank
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String form;
 
-  @NotBlank
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String field;
 
   @Column(length=30)
   private String displayName;
 
-  @NotBlank
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String defaultDisplayName;
 
   @Lob
   private String defaultValue;
   
-  private Boolean hidden = Boolean.FALSE;
+  private Boolean hidden = false;
 
-  private Boolean derived = Boolean.FALSE;
+  private Boolean derived = false;
+
+  private Boolean isRequired = false;
+
+  private Boolean autoGenerate = false;
 
   // copy value from another field
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String sourceField;
 
   public Long getId() {
@@ -129,8 +128,26 @@ public class FormField {
     this.displayName = formField.displayName;
     this.defaultValue = formField.defaultValue;
     this.hidden = formField.hidden;
+    this.isRequired = formField.isRequired;
+    this.autoGenerate = formField.autoGenerate;
     this.derived = formField.derived;
     this.sourceField = formField.sourceField;
+  }
+
+  public Boolean getIsRequired() {
+    return isRequired;
+  }
+
+  public void setIsRequired(Boolean isRequired) {
+    this.isRequired = isRequired;
+  }
+
+  public Boolean getAutoGenerate() {
+    return autoGenerate;
+  }
+
+  public void setAutoGenerate(Boolean autoGenerate) {
+    this.autoGenerate = autoGenerate;
   }
 
 }

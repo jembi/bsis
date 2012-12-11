@@ -1,15 +1,11 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import model.admin.FormField;
-import model.location.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,8 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.FormFieldRepository;
 import repository.LocationRepository;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class AdminController {
@@ -77,20 +71,26 @@ public class AdminController {
       Boolean hidden = params.get("hidden").equals("true") ? true : false;
       ff.setHidden(hidden);
 
+      Boolean isRequired = params.get("isRequired").equals("true") ? true : false;
+      ff.setIsRequired(isRequired);
+
+      Boolean autoGenerate = params.get("autoGenerate").equals("true") ? true : false;
+      ff.setAutoGenerate(autoGenerate);
+
       String displayName = params.get("displayName").trim();
       ff.setDisplayName(displayName);
 
       String defaultValue = params.get("defaultValue").trim();
       ff.setDefaultValue(defaultValue);
 
-      String sourceField = params.get("sourceField").trim();
-      if (sourceField.equals("nocopy")) {
-        ff.setDerived(false);
-        ff.setSourceField("");
-      } else {
-        ff.setDerived(true);
-        ff.setSourceField(sourceField);
-      }
+//      String sourceField = params.get("sourceField").trim();
+//      if (sourceField.equals("nocopy")) {
+//        ff.setDerived(false);
+//        ff.setSourceField("");
+//      } else {
+//        ff.setDerived(true);
+//        ff.setSourceField(sourceField);
+//      }
       FormField updatedFormField = formFieldRepository.updateFormField(ff);
       if (updatedFormField == null) {
         success = false;

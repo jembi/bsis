@@ -29,7 +29,6 @@ import model.util.BloodRhd;
 
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.constraints.NotBlank;
 
 @FilterDef(name="availableProductsNotExpiredFilter", defaultCondition="isDeleted = '0' && isAvailable = '1'")
 @Entity
@@ -40,7 +39,6 @@ public class Product implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
-  @NotBlank
   @Column(nullable=false)
   private String productNumber;
 

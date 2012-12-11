@@ -10,6 +10,8 @@ public class DonorType {
   @Column(length=30, nullable=false)
   private String donorType;
 
+  private Boolean isDeleted;
+
   public String getDonorType() {
     return donorType;
   }
@@ -20,5 +22,13 @@ public class DonorType {
 
   public String toString() {
     return donorType;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

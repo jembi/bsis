@@ -13,9 +13,12 @@ import model.product.Product;
 
 @Entity
 public class ProductType {
+
   @Id
   @Column(length=30, nullable=false)
   private String productType;
+
+  private Boolean isDeleted;
 
   @Filter(name="availableProductsNotExpiredFilter")
   @OneToMany(mappedBy="productType")
@@ -40,5 +43,13 @@ public class ProductType {
 
   public void setProducts(List<Product> products) {
     this.products = products;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

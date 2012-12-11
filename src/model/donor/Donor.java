@@ -28,7 +28,6 @@ import model.util.Gender;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -39,15 +38,13 @@ public class Donor implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
 	private Long id;
 
-  @NotBlank
   @Column(length=30, nullable=false)
   @Index(name="donor_donorNumber_index")
   private String donorNumber;
 
-  @NotBlank
   @Column(length=30, nullable=false)
   @Index(name="donor_firstName_index")
-  @Length(min=1, max=30)
+  @Length(max=30)
 	private String firstName;
 
   @Length(max=30)

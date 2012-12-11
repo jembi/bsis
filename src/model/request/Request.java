@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import model.location.Location;
 import model.location.LocationExists;
@@ -31,7 +30,6 @@ import model.util.BloodAbo;
 import model.util.BloodRhd;
 
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -42,35 +40,29 @@ public class Request implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @NotBlank
   @Column(length=30, nullable=false)
   @Index(name="request_requestNumber_index")
   private String requestNumber;
 
-  @NotNull
   @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
   @Index(name="request_requestDate_index")
   private Date requestDate;
 
-  @NotNull
   @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
   @Index(name="request_requiredDate_index")
   private Date requiredDate;
 
-  @NotNull
   private Integer requestedQuantity;
 
   private Boolean fulfilled;
 
-  @NotNull
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodAbo_index")
   private BloodAbo bloodAbo;
 
-  @NotNull
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodRhd_index")

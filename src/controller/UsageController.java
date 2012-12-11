@@ -8,9 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.collectedsample.CollectedSample;
 import model.product.Product;
-import model.product.ProductBackingForm;
 import model.usage.ProductUsage;
 import model.usage.ProductUsageBackingForm;
 import model.usage.ProductUsageBackingFormValidator;

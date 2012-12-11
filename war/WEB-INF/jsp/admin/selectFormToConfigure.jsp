@@ -50,7 +50,7 @@
 			<option value="TestResult">Test Result Form</option>
 			<option value="Product">Product Form</option>
 			<option value="Request">Request Form</option>
-			<option value="ProductUsage">Usage Form</option>
+			<option value="Usage">Usage Form</option>
 		</select>
 		<button id="${selectFormToConfigureButtonId}"
 			style="margin-left: 30px;">Configure Selected Form</button>

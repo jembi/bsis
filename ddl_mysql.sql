@@ -29,6 +29,7 @@
 
     create table BloodBagType (
         bloodBagType varchar(30) not null,
+        isDeleted boolean,
         primary key (bloodBagType)
     ) ENGINE=InnoDB;
 
@@ -89,19 +90,22 @@
 
     create table DonorType (
         donorType varchar(30) not null,
+        isDeleted boolean,
         primary key (donorType)
     ) ENGINE=InnoDB;
 
     create table FormField (
         id bigint not null auto_increment,
-        defaultDisplayName varchar(30) not null,
+        autoGenerate boolean,
+        defaultDisplayName varchar(30),
         defaultValue longtext,
         derived boolean,
         displayName varchar(30),
-        field varchar(30) not null,
-        form varchar(30) not null,
+        field varchar(30),
+        form varchar(30),
         hidden boolean,
-        sourceField varchar(30) not null,
+        isRequired boolean,
+        sourceField varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -149,6 +153,7 @@
 
     create table ProductType (
         productType varchar(30) not null,
+        isDeleted boolean,
         primary key (productType)
     ) ENGINE=InnoDB;
 

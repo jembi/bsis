@@ -10,6 +10,8 @@ public class BloodBagType {
   @Column(length=30, nullable=false)
   private String bloodBagType;
 
+  private Boolean isDeleted;
+  
   public String getBloodBagType() {
     return bloodBagType;
   }
@@ -21,5 +23,13 @@ public class BloodBagType {
   @Override
   public String toString() {
     return bloodBagType;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

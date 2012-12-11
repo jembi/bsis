@@ -25,16 +25,13 @@ public class User {
   private Long id;
 
   @Length(min=1, max=30)
-  @NotBlank
   @Column(length=30, unique=true, nullable=false)
   private String username;
 
   @Length(min=1, max=255)
-  @NotBlank
   @Column(length=255, nullable=false)
   private String password;
 
-  @NotBlank
   @Length(min=1, max=30)
   @Column(length=30, nullable=false)
   private String firstName;
