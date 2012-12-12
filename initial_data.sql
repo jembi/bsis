@@ -49,8 +49,8 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
 ('Request', 'requestNumber', 'Request Number', '', '1', '0', '0', '0', ''),
-('Request', 'requestDate', 'Request Date', '', '0', '0', '0', '0', ''),
-('Request', 'requiredDate', 'Required Date', '', '0', '0', '0', '0', ''),
+('Request', 'requestDate', 'Request Date', '', '0', '1', '0', '0', ''),
+('Request', 'requiredDate', 'Required Date', '', '0', '1', '0', '0', ''),
 ('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', ''),
 ('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '1', '0', '0', ''),
 ('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', '0', '0', ''),
