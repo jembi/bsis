@@ -31,6 +31,17 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('CollectedSample', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
+('Product', 'productNumber', 'Product Number', '', '0', '1', '0', '0', ''),
+('Product', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', ''),
+('Product', 'productType', 'Product Type', '', '0', '1', '0', '0', ''),
+('Product', 'bloodGroup', 'Blood Group', '', '1', '0', '0', '0', ''),
+('Product', 'createdOn', 'Created On', '', '0', '1', '0', '0', ''),
+('Product', 'expiresOn', 'Expires On', '', '0', '1', '0', '0', ''),
+('Product', 'isQuarantined', 'Quarantined', '', '0', '0', '0', '0', ''),
+('Product', 'isAvailable', 'Available', '', '0', '0', '0', '0', ''),
+('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '');
+
+insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
 ('TestResult', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', ''),
 ('TestResult', 'bloodTest', 'Test Name', '', '0', '0', '0', '0', ''),
 ('TestResult', 'result', 'Test Result', '', '0', '0', '0', '0', ''),
@@ -38,26 +49,15 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('TestResult', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
-('Product', 'productNumber', 'Product Number', '', '0', '1', '0', '0', ''),
-('Product', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', ''),
-('Product', 'productType', 'Product Type', '', '0', '0', '0', '0', ''),
-('Product', 'bloodGroup', 'Blood Group', '', '0', '0', '0', '0', ''),
-('Product', 'createdOn', 'Created On', '', '0', '0', '0', '0', ''),
-('Product', 'expiresOn', 'Expires On', '', '0', '0', '0', '0', ''),
-('Product', 'isQuarantined', 'Quarantined', '', '0', '0', '0', '0', ''),
-('Product', 'isAvailable', 'Available', '', '0', '0', '0', '0', ''),
-('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '');
-
-insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
 ('Request', 'requestNumber', 'Request Number', '', '1', '0', '0', '0', ''),
 ('Request', 'requestDate', 'Request Date', '', '0', '0', '0', '0', ''),
 ('Request', 'requiredDate', 'Required Date', '', '0', '0', '0', '0', ''),
-('Request', 'requestSite', 'Request Site', '', '0', '0', '0', '0', ''),
-('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '0', '0', '0', ''),
+('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', ''),
+('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '1', '0', '0', ''),
 ('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', '0', '0', ''),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', ''),
-('Request', 'bloodGroup', 'Blood Group', '', '0', '0', '0', '0', ''),
-('Request', 'productType', 'Product Type', '', '0', '0', '0', '0', ''),
+('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', ''),
+('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', ''),
 ('Request', 'patientName', 'Patient Name', '', '0', '0', '0', '0', ''),
 ('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 

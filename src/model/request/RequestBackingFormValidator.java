@@ -8,15 +8,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import controller.UtilController;
+
 import viewmodel.RequestViewModel;
 
 public class RequestBackingFormValidator implements Validator {
 
   private Validator validator;
+  private UtilController utilController;
 
-  public RequestBackingFormValidator(Validator validator) {
+  public RequestBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
+    this.utilController = utilController;
   }
 
   @Override
@@ -32,17 +36,15 @@ public class RequestBackingFormValidator implements Validator {
     RequestBackingForm form = (RequestBackingForm) obj;
     String requestDate = form.getRequestDate();
     if (!CustomDateFormatter.isDateStringValid(requestDate)) {
-      System.out.println("date string not valid");
-      System.out.println(requestDate);
       errors.rejectValue("request.requestDate", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
     }
     String requiredDate = form.getRequiredDate();
     if (!CustomDateFormatter.isDateStringValid(requiredDate)) {
-      System.out.println("date string not valid");
-      System.out.println(requiredDate);
       errors.rejectValue("request.requiredDate", "dateFormat.incorrect",
             CustomDateFormatter.getErrorMessage());
     }
+
+    utilController.checkRequiredFields(form, "request", errors);
   }
 }

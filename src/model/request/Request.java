@@ -27,6 +27,7 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
 import model.user.User;
 import model.util.BloodAbo;
+import model.util.BloodGroup;
 import model.util.BloodRhd;
 
 import org.hibernate.annotations.Index;
@@ -40,7 +41,7 @@ public class Request implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   @Index(name="request_requestNumber_index")
   private String requestNumber;
 
@@ -256,5 +257,9 @@ public class Request implements ModificationTracker {
 
   public void setFulfilled(Boolean fulfilled) {
     this.fulfilled = fulfilled;
+  }
+
+  public BloodGroup getBloodGroup() {
+    return new BloodGroup(bloodAbo, bloodRhd);
   }
 }

@@ -59,7 +59,7 @@ public class RequestsController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new RequestBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new RequestBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -159,7 +159,7 @@ public class RequestsController {
       Model model,
       @RequestParam(value="requestId", required=false) Long requestId) {
 
-    RequestBackingForm form = new RequestBackingForm(true);
+    RequestBackingForm form = new RequestBackingForm();
 
     ModelAndView mv = new ModelAndView("editRequestForm");
     Map<String, Object> m = model.asMap();
@@ -173,7 +173,7 @@ public class RequestsController {
         m.put("existingRequest", true);
       }
       else {
-        form = new RequestBackingForm(true);
+        form = new RequestBackingForm();
       }
     }
     addEditSelectorOptions(m);
@@ -212,7 +212,7 @@ public class RequestsController {
         m.put("hasErrors", false);
         success = true;
         message = "Request Successfully Added";
-        form = new RequestBackingForm(true);
+        form = new RequestBackingForm();
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;

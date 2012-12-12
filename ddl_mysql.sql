@@ -46,7 +46,7 @@
     create table CollectedSample (
         id bigint not null auto_increment,
         collectedOn datetime,
-        collectionNumber varchar(30) not null,
+        collectionNumber varchar(30),
         isDeleted boolean,
         createdDate datetime,
         lastUpdated datetime,
@@ -56,7 +56,7 @@
         bloodBagType_bloodBagType varchar(30),
         collectionCenter_id bigint,
         collectionSite_id bigint,
-        donor_id bigint not null,
+        donor_id bigint,
         donorType_donorType varchar(30),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -142,7 +142,7 @@
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
-        productNumber varchar(255) not null,
+        productNumber varchar(30),
         collectedSample_id bigint,
         issuedTo_id bigint,
         createdBy_id bigint,
@@ -186,7 +186,7 @@
         notes longtext,
         patientName varchar(255),
         requestDate date,
-        requestNumber varchar(30) not null,
+        requestNumber varchar(30),
         requestedQuantity integer,
         requiredDate date,
         createdBy_id bigint,
@@ -305,6 +305,8 @@
     create index donor_bloodAbo_index on Product (bloodAbo);
 
     create index donor_bloodRhd_index on Product (bloodRhd);
+
+    create index product_productNumber_index on Product (productNumber);
 
     alter table Product 
         add index FK50C664CFA49787C4 (createdBy_id), 

@@ -34,12 +34,6 @@ public class RequestBackingForm {
     this.setRequest(request);
   }
 
-  public RequestBackingForm(boolean autoGenerate) {
-    setRequest(new Request());
-    if (autoGenerate)
-      generateRequestNumber();
-  }
-
   public Long getId() {
     return getRequest().getId();
   }
@@ -210,6 +204,8 @@ public class RequestBackingForm {
   }
 
   public String getBloodGroup() {
+    if (request.getBloodAbo() == null || request.getBloodRhd() == null)
+      return null;
     return new BloodGroup(request.getBloodAbo(), request.getBloodRhd()).toString();
   }
 

@@ -189,7 +189,7 @@
 					<form:option value="O+" label="O+" />
 					<form:option value="O-" label="O-" />
 				</form:select>
-				<form:errors class="formError" path="request.bloodAbo" delimiter=", "></form:errors>
+				<form:errors class="formError" path="request.bloodGroup" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.requestDate.hidden != true }">
