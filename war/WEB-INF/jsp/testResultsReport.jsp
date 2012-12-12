@@ -79,7 +79,11 @@
     });
   });
   
-  $("#clearTestResultsReportButton").button().click(function() {
+  $("#clearTestResultsReportButton").button({
+    icons: {
+      primary: 'ui-icon-grip-solid-horizontal'
+    }
+  }).click(function() {
     $("#testResultsReportResult").html("");
   });
 

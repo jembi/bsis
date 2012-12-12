@@ -16,7 +16,11 @@
 <script>
   $(document).ready(
       function() {
-        $("#${tabContentId}").find(".generateInventoryReportButton").button().click(function() {
+        $("#${tabContentId}").find(".generateInventoryReportButton").button({
+          icons: {
+            primary: 'ui-icon-print'
+          }
+        }).click(function() {
 
           showLoadingImage($("#${childContentId}"));
           $.ajax({
@@ -40,7 +44,11 @@
           
         });
         
-        $("#${tabContentId}").find(".clearReportButton").button().click(function() {
+        $("#${tabContentId}").find(".clearReportButton").button({
+          icons: {
+            primary: 'ui-icon-grip-solid-horizontal'
+          }
+        }).click(function() {
           $("#${childContentId}").html("");
         });
         
@@ -49,8 +57,10 @@
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}" class="reportMessage">
-		<div>
-			Click the "Generate Inventory Report" button below to generate a report of your products.
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				Click the "Generate Inventory Report" button below to generate a report of your products.
+			</p>
 		</div>
 		<div style="margin-top: 10px;">
 			<button class="generateInventoryReportButton">Generate Inventory Report</button>

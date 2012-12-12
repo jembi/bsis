@@ -44,14 +44,14 @@
 	<div id="homeLandingPageContent" class="centerContent" style="padding: 20px;">
 		<h3>Welcome to Vein-To-Vein - ${model.versionNumber}</h3>
 		<div class="infoMessage">
-			Vein-to-Vein (V2V) is a system to monitor blood inventory from the point of
-			collection, storage, testing and transfusion.
+			C4G Vein-to-Vein (V2V) is a system to monitor blood inventory from collection to transfusion.
+			<br /> 
+			A collaboration between the Computing For Good (C4G) program at Georgia Tech, the CDC and participating countries.
 			<br />
-			An initiative of Computing For Good (C4G) program at the Georgia Institute of Technology
-			in collaboration with the Centers for Disease Control and Prevention
-			(CDC). <br /> <br /> See <a
+			<br />
+			About <a
 				href="http://www.cc.gatech.edu/about/advancing/c4g/" target="_blank">
-				C4G Website </a> for more information.
+				C4G</a>.
 		</div>
 	</div>
 

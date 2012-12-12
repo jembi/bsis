@@ -68,7 +68,11 @@
     });
   });
 
-  $("#clearCollectionsReportButton").button().click(function() {
+  $("#clearCollectionsReportButton").button({
+    icons: {
+      primary: 'ui-icon-grip-solid-horizontal'
+    }
+  }).click(function() {
     $("#collectionsReportResult").html("");
   });
 
