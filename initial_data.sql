@@ -20,21 +20,20 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', '0', '1', '1', '0', ''),
-('CollectedSample', 'collectedOn', 'Collected On', '', '0', '0', '0', '0', ''),
-('CollectedSample', 'donor', 'Donor', '', '0', '0', '0', '0', ''),
-('CollectedSample', 'donorType', 'Donor Type', '', '0', '0', '0', '0', ''),
+('CollectedSample', 'collectedOn', 'Collected On', '', '0', '1', '0', '0', ''),
+('CollectedSample', 'donor', 'Donor', '', '0', '1', '0', '0', ''),
+('CollectedSample', 'donorType', 'Donor Type', '', '0', '1', '0', '0', ''),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '0', '0', '0', '1', 'collectionNumber'),
 ('CollectedSample', 'sampleNumber', 'Sample Number', '', '0', '0', '0', '1', 'collectionNumber'),
-('CollectedSample', 'collectionCenter', 'Collection Center', '', '0', '0', '0', '0', ''),
-('CollectedSample', 'bloodBagType', 'Blood Bag Type', '', '0', '0', '0', '0', ''),
-('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '0', '0', '0', ''),
+('CollectedSample', 'collectionCenter', 'Collection Center', '', '0', '1', '0', '0', ''),
+('CollectedSample', 'bloodBagType', 'Blood Bag Type', '', '0', '1', '0', '0', ''),
+('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '1', '0', '0', ''),
 ('CollectedSample', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
 ('Product', 'productNumber', 'Product Number', '', '0', '1', '0', '0', ''),
 ('Product', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', ''),
 ('Product', 'productType', 'Product Type', '', '0', '1', '0', '0', ''),
-('Product', 'bloodGroup', 'Blood Group', '', '1', '0', '0', '0', ''),
 ('Product', 'createdOn', 'Created On', '', '0', '1', '0', '0', ''),
 ('Product', 'expiresOn', 'Expires On', '', '0', '1', '0', '0', ''),
 ('Product', 'isQuarantined', 'Quarantined', '', '0', '0', '0', '0', ''),
