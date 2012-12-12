@@ -45,7 +45,7 @@ public class UsageController {
 	
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new ProductUsageBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new ProductUsageBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {

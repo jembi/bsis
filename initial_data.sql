@@ -62,11 +62,11 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
-('Usage', 'hospital', 'Hospital', '', '0', '0', '0', '0', ''),
+('Usage', 'hospital', 'Hospital', '', '0', '1', '0', '0', ''),
 ('Usage', 'patientName', 'Patient Name', '', '0', '0', '0', '0', ''),
 ('Usage', 'ward', 'Ward', '', '0', '0', '0', '0', ''),
 ('Usage', 'useIndication', 'Use Indication', '', '0', '0', '0', '0', ''),
-('Usage', 'usageDate', 'Usage Date', '', '0', '0', '0', '0', ''),
+('Usage', 'usageDate', 'Usage Date', '', '0', '1', '0', '0', ''),
 ('Usage', 'product', 'Product', '', '0', '0', '0', '0', ''),
 ('Usage', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 

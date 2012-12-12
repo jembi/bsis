@@ -31,13 +31,13 @@ public class ProductUsage implements ModificationTracker {
 
   private String hospital;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String patientName;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String ward;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String useIndication;
 
   @DateTimeFormat(pattern="mm/dd/yyyy")
@@ -188,5 +188,11 @@ public class ProductUsage implements ModificationTracker {
 
   public void setIsAvailable(Boolean isAvailable) {
     this.isAvailable = isAvailable;
+  }
+
+  public String getProductNumber() {
+    if (product == null)
+      return null;
+    return product.getProductNumber();
   }
 }
