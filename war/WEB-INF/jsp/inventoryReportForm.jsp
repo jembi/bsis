@@ -33,6 +33,7 @@
               	        generateInventoryChart({
               	          data : responseData,
               	          renderDest : "${childContentId}",
+              	          subtitle: "${model['report.inventory.productinventorychart']}"
               	        });
 
             				 },

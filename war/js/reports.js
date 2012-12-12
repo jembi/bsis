@@ -180,7 +180,7 @@ function generateInventoryChart(options) {
 
   var categories = ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"];
   var title = 'Product Inventory';
-  var subtitle = 'Available Products in Inventory by Product Type and Blood Group. Click the columns to view products by Age. Click again to return.';
+  var subtitle = options.subtitle;
 
   var data = seriesData.data;
 
