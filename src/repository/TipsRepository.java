@@ -15,14 +15,21 @@ public class TipsRepository {
   @PersistenceContext
   private EntityManager em;
 
-  TipsRepository() {
+  public TipsRepository() {
   }
 
-  Tips findTipsByKey(String key) {
+  public Tips findTipsByKey(String key) {
     return em.find(Tips.class, key);
   }
 
-  void updateTipsContent(String key, String newContent) {
+  public String getTipsContent(String key) {
+    Tips tips = em.find(Tips.class, key);
+    if (tips == null)
+      return "";
+    return tips.getTipsContent();
+  }
+
+  public void updateTipsContent(String key, String newContent) {
     Tips tips = findTipsByKey(key);
     tips.setTipsContent(newContent);
     em.merge(tips);

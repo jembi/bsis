@@ -131,6 +131,14 @@
 
 <form:form method="GET" commandName="testResultsReportForm"
 	id="testResultsReportForm">
+
+		<br/>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['report.collections.testresultsreport']}
+			</p>
+		</div>
+
 	<table>
 		<thead>
 		</thead>

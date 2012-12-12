@@ -120,6 +120,12 @@
 
 <form:form method="GET" commandName="collectionsReportForm"
 	id="collectionsReportForm">
+		<br/>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['report.collections.collectionsreport']}
+			</p>
+		</div>
 	<table>
 		<thead>
 		</thead>

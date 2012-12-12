@@ -59,7 +59,7 @@
 	<div id="${mainContentId}" class="reportMessage">
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				Click the "Generate Inventory Report" button below to generate a report of your products.
+				${model['report.inventory.generate']}
 			</p>
 		</div>
 		<div style="margin-top: 10px;">

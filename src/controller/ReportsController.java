@@ -41,6 +41,9 @@ public class ReportsController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private UtilController utilController;
   
   public static class CollectionsReportBackingForm {
 
@@ -99,6 +102,8 @@ public class ReportsController {
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView inventoryReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("inventoryReportForm");
+    utilController.addTipsToModel(model.asMap(), "report.inventory.generate");
+    utilController.addTipsToModel(model.asMap(), "report.inventory.productinventorychart");
     mv.addObject("model", model);
     return mv;
   }
@@ -120,6 +125,7 @@ public class ReportsController {
   public ModelAndView collectionsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("collectionsReport");
     Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(model.asMap(), "report.collections.collectionsreport");
     m.put("centers", locationRepository.getAllCenters());
     m.put("sites", locationRepository.getAllCollectionSites());
     mv.addObject("collectionsReportForm", new CollectionsReportBackingForm());
@@ -208,6 +214,7 @@ public class ReportsController {
     Map<String, Object> m = model.asMap();
     m.put("centers", locationRepository.getAllCenters());
     m.put("sites", locationRepository.getAllCollectionSites());
+    utilController.addTipsToModel(m, "report.collections.testresultsreport");
     mv.addObject("testResultsReportForm", new TestResultsReportBackingForm());
     mv.addObject("model", model);
     return mv;

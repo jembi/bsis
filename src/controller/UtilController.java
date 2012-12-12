@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.FormFieldRepository;
+import repository.TipsRepository;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -26,6 +27,9 @@ public class UtilController {
 
   @Autowired
   private FormFieldRepository formFieldRepository;
+
+  @Autowired
+  private TipsRepository tipsRepository;
 
   public Map<String, Object> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -93,5 +97,9 @@ public class UtilController {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+  }
+
+  public void addTipsToModel(Map<String, Object> m, String key) {
+    m.put(key, tipsRepository.getTipsContent(key));
   }
 }
