@@ -292,9 +292,14 @@ public class Donor implements ModificationTracker {
   }
 
   public String toString() {
-    if (firstName == null || firstName.isEmpty() ||
-        donorNumber == null || donorNumber.isEmpty())
-      return "";
+
+    if (id == null)
+      return null;
+
+    if ((firstName == null || firstName.isEmpty()) &&
+        (donorNumber == null || donorNumber.isEmpty())
+       )
+      return id.toString();
 
     StringBuilder builder = new StringBuilder();
     builder.append(firstName);
