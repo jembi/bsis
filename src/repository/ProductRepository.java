@@ -477,8 +477,8 @@ public class ProductRepository {
       for (Product product : productType.getProducts()) {
         String bloodGroup = getBloodGroupForProduct(product).toString();
         Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
-        DateTime expiresOn = new DateTime(product.getExpiresOn().getTime());
-        Long age = (long) Days.daysBetween(expiresOn, today).getDays();
+        DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
+        Long age = (long) Days.daysBetween(createdOn, today).getDays();
         // compute window based on age
         age = Math.abs((age / 5) * 5);
         if (age > 30)
