@@ -176,6 +176,8 @@
 				<form:label path="collectionNumber">${model.productFields.collectionNumber.displayName}</form:label>
 				<form:input path="collectionNumber" />
 				<form:errors class="formError"
+					path="product.collectionNumber" delimiter=", "></form:errors>
+				<form:errors class="formError"
 					path="product.collectedSample" delimiter=", "></form:errors>
 			</div>
 		</c:if>

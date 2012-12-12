@@ -8,15 +8,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import controller.UtilController;
+
 import viewmodel.ProductViewModel;
 
 public class ProductBackingFormValidator implements Validator {
 
   private Validator validator;
+  private UtilController utilController;
 
-  public ProductBackingFormValidator(Validator validator) {
+  public ProductBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
+    this.utilController = utilController;
   }
 
   @Override
@@ -40,5 +44,7 @@ public class ProductBackingFormValidator implements Validator {
     if (!CustomDateFormatter.isDateStringValid(expiresOn))
       errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
-}
+
+    utilController.checkRequiredFields(form, "product", errors);
+  }
 }

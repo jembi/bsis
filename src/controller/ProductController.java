@@ -56,7 +56,7 @@ public class ProductController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new ProductBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new ProductBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {

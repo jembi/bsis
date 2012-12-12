@@ -39,7 +39,8 @@ public class Product implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
-  @Column(nullable=false)
+  @Column(length=30)
+  @Index(name="product_productNumber_index")
   private String productNumber;
 
   @CollectedSampleExists
@@ -243,5 +244,11 @@ public class Product implements ModificationTracker {
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public String getCollectionNumber() {
+    if (collectedSample == null)
+      return null;
+    return collectedSample.getCollectionNumber();
   }
 }
