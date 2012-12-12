@@ -1,11 +1,16 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import model.admin.FormField;
+import model.location.Location;
+import model.tips.Tips;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import repository.FormFieldRepository;
 import repository.LocationRepository;
+import repository.TipsRepository;
 
 @Controller
 public class AdminController {
@@ -30,6 +38,9 @@ public class AdminController {
 
   @Autowired
   LocationRepository locationRepository;
+
+  @Autowired
+  TipsRepository tipsRepository;
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -159,4 +170,50 @@ public class AdminController {
     return m;
   }
 
+  @RequestMapping(value="/configureTipsFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureLocationsFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureTips");
+    Map<String, Object> m = model.asMap();
+    addAllTipsToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  private void addAllTipsToModel(Map<String, Object> m) {
+    m.put("allTips", tipsRepository.getAllTips());
+  }
+
+  @RequestMapping("/configureTips")
+  public ModelAndView configureLocations(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureTips");
+    System.out.println(paramsAsJson);
+    List<Tips> allTips = new ArrayList<Tips>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String tipsKey : params.keySet()) {
+        String tipsContent = (String) params.get(tipsKey);
+        Tips tips = new Tips();
+        tips.setTipsKey(tipsKey);
+        tips.setTipsContent(tipsContent);
+        allTips.add(tips);
+      }
+      tipsRepository.saveAllTips(allTips);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllTipsToModel(m);
+    m.put("refreshUrl", "configureTipsFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
 }

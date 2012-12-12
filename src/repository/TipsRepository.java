@@ -1,8 +1,13 @@
 package repository;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
+import model.location.Location;
 import model.tips.Tips;
 
 import org.springframework.stereotype.Repository;
@@ -34,5 +39,27 @@ public class TipsRepository {
     tips.setTipsContent(newContent);
     em.merge(tips);
     em.flush();
+  }
+
+  public void saveAllTips(List<Tips> allTips) {
+    for (Tips tips: allTips) {
+      if (tips.getTipsKey() == null) {
+        em.persist(tips);
+      }
+      else {
+        Tips existingTips = em.find(Tips.class, tips.getTipsKey());
+        if (existingTips != null) {
+          existingTips.setTipsContent(tips.getTipsContent());
+          em.merge(existingTips);
+        }
+      }
+    }
+    em.flush();
+  }
+
+  public List<Tips> getAllTips() {
+    TypedQuery<Tips> query = em
+        .createQuery("SELECT t FROM Tips t", Tips.class);
+    return query.getResultList();
   }
 }

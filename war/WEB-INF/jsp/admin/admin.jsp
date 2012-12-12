@@ -17,6 +17,8 @@
 			<a href="configureForms.html">Configure Forms</a></li>
 		<li id="locationForm">
 			<a href="configureLocationsFormGenerator.html">Centers/Sites</a></li>
+		<li id="configureTipsForm">
+			<a href="configureTipsFormGenerator.html">Tips</a></li>
 		<li id="createSampleData">
 			<a href="createSampleDataFormGenerator.html">Sample Data</a></li>
 	</ul>

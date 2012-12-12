@@ -208,7 +208,7 @@ $(document).ready(function() {
 		<br />
 
 		<div>
-			<span style="margin-left: 15px;"> Date of expiry between (optional)</span>
+			<span style="margin-left: 15px;"> Date of expiry between </span>
 		</div>
 		<div>
 			<form:input path="dateExpiresFrom" class="dateExpiresFrom" placeholder="Any Date"/>
