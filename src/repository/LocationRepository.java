@@ -46,11 +46,10 @@ public class LocationRepository {
 	}
 
 	public Location getLocation(Long selectedLocationId) {
-	  System.out.println("getLocation");
 		TypedQuery<Location> query = em.createQuery(
 			"SELECT l FROM Location l where l.id= :locationId and l.isDeleted= :isDeleted",
 			Location.class);
-		query.setParameter("isDeleted", Boolean.FALSE);
+		query.setParameter("isDeleted", false);
 		query.setParameter("locationId", selectedLocationId);
 		return query.getSingleResult();
 	}

@@ -63,7 +63,8 @@ public class CollectedSampleController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator(),
+                        utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {

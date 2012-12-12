@@ -18,16 +18,13 @@ public class DonorTypeRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public boolean isDonorTypeValid(String checkDonorType) {
-    String queryString = "SELECT dt from DonorType dt";
-    TypedQuery<DonorType> query = em.createQuery(queryString, DonorType.class);
-    for (DonorType donorType : query.getResultList()) {
-      System.out.println(donorType);
-      System.out.println(checkDonorType);
-      if (donorType.getDonorType().equals(checkDonorType))
-        return true;
-    }
-    return false;
+  public DonorType getDonorType(String checkDonorType) {
+    TypedQuery<DonorType> query;
+    query = em.createQuery("SELECT dt from DonorType dt where " +
+    		                   "donorType=:donorType and isDeleted=:isDeleted", DonorType.class);
+    query.setParameter("donorType", checkDonorType);
+    query.setParameter("isDeleted", false);
+    return query.getSingleResult();
   }
 
   public List<DonorType> getAllDonorTypes() {

@@ -144,16 +144,16 @@ public class CollectedSampleBackingForm {
 
   public String getDonorType() {
     DonorType donorType = collectedSample.getDonorType();
-    if (donorType == null)
-      return "";
+    if (donorType == null || donorType.getDonorType() == null)
+      return null;
     else
       return donorType.toString();
   }
 
   public String getBloodBagType() {
     BloodBagType bloodBagType = collectedSample.getBloodBagType();
-    if (bloodBagType == null)
-      return "";
+    if (bloodBagType == null || bloodBagType.getBloodBagType() == null)
+      return null;
     else
       return bloodBagType.toString();
   }
@@ -220,6 +220,7 @@ public class CollectedSampleBackingForm {
   }
 
   public void setCollectionCenter(String center) {
+    System.out.println("collectionCenter: " + center);
     if (center == null) {
       collectedSample.setCollectionCenter(null);
     }
@@ -241,12 +242,8 @@ public class CollectedSampleBackingForm {
     }
   }
 
-  public void setCollectedOn(Date collectedOn) {
-    collectedSample.setCollectedOn(collectedOn);
-  }
-
   public void setDonorType(String donorType) {
-    if (donorType == null) {
+    if (donorType == null || donorType.isEmpty()) {
       collectedSample.setDonorType(null);
     }
     else {
@@ -257,7 +254,8 @@ public class CollectedSampleBackingForm {
   }
 
   public void setBloodBagType(String bloodBagType) {
-    if (bloodBagType == null) {
+    System.out.println("bloodBagType: " + bloodBagType);
+    if (bloodBagType == null || bloodBagType.isEmpty()) {
       collectedSample.setBloodBagType(null);
     }
     else {

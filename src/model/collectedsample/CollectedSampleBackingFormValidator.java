@@ -8,13 +8,17 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import controller.UtilController;
+
 public class CollectedSampleBackingFormValidator implements Validator {
 
   private Validator validator;
+  private UtilController utilController;
 
-  public CollectedSampleBackingFormValidator(Validator validator) {
+  public CollectedSampleBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
+    this.utilController = utilController;
   }
 
   @Override
@@ -35,5 +39,6 @@ public class CollectedSampleBackingFormValidator implements Validator {
     if (!CustomDateFormatter.isDateStringValid(collectedOn))
       errors.rejectValue("collectedSample.collectedOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
+    utilController.checkRequiredFields(form, "collectedSample", errors);
   }
 }

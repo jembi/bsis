@@ -2,14 +2,17 @@ package controller;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import model.admin.FormField;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
 import repository.FormFieldRepository;
 
@@ -61,5 +64,34 @@ public class UtilController {
     formFieldMap.put("mirroredFields", writer.toString());
 
     return formFieldMap;
+  }
+
+  private List<String> getRequiredFields(String formName) {
+    return formFieldRepository.getRequiredFormFields(formName);
+  }
+
+  public void checkRequiredFields(Object form, String formName, Errors errors) {
+    try {
+      Map<String, Object> properties = BeanUtils.describe(form);
+      List<String> requiredFields = getRequiredFields(formName);
+      for (String requiredField : requiredFields) {
+        if (properties.containsKey(requiredField)) {
+          Object fieldValue = properties.get(requiredField);
+          if (fieldValue == null ||
+              (fieldValue instanceof String && ((String)fieldValue).isEmpty())
+             )
+            errors.rejectValue(formName + "." + requiredField, "requiredField.error", "This field is required");
+        }
+      }
+    } catch (IllegalAccessException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 }

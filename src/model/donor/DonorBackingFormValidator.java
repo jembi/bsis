@@ -9,14 +9,17 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import viewmodel.DonorViewModel;
+import controller.UtilController;
 
 public class DonorBackingFormValidator implements Validator {
 
   private Validator validator;
+  private UtilController utilController;
 
-  public DonorBackingFormValidator(Validator validator) {
+  public DonorBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
+    this.utilController = utilController;
   }
 
   @Override
@@ -37,5 +40,6 @@ public class DonorBackingFormValidator implements Validator {
       errors.rejectValue("donor.birthDate", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
     }
+    utilController.checkRequiredFields(form, "donor", errors);
   }
 }

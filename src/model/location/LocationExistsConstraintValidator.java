@@ -27,7 +27,7 @@ public class LocationExistsConstraintValidator implements
    System.out.println("here1: " + target);
 
    if (target == null)
-     return false;
+     return true;
 
    try {
     if (locationRepository.getLocation(target.getId()) != null)

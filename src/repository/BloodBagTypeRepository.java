@@ -24,14 +24,13 @@ public class BloodBagTypeRepository {
     return query.getResultList();
   }
   
-  public boolean isBloodBagTypeValid(String checkBloodBagType) {
-    String queryString = "SELECT b from BloodBagType b";
-    TypedQuery<BloodBagType> query = em.createQuery(queryString, BloodBagType.class);
-    for (BloodBagType bloodBagType : query.getResultList()) {
-      if (bloodBagType.getBloodBagType().equals(checkBloodBagType))
-        return true;
-    }
-    return false;
+  public BloodBagType getBloodBagType(String checkBloodBagType) {
+    TypedQuery<BloodBagType> query;
+    query = em.createQuery("SELECT b from BloodBagType b " +
+            "where b.bloodBagType=:bloodBagType and isDeleted=:isDeleted", BloodBagType.class);
+    query.setParameter("bloodBagType", checkBloodBagType);
+    query.setParameter("isDeleted", false);
+    return query.getSingleResult();
   }
 
   public BloodBagType fromString(String bloodBagType) {

@@ -46,7 +46,7 @@ public class DonorController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonorBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new DonorBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -131,7 +131,7 @@ public class DonorController {
   public ModelAndView editDonorFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
-    DonorBackingForm form = new DonorBackingForm(true);
+    DonorBackingForm form = new DonorBackingForm();
 
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
@@ -144,7 +144,7 @@ public class DonorController {
         m.put("existingDonor", true);
       }
       else {
-        form = new DonorBackingForm(true);
+        form = new DonorBackingForm();
         m.put("existingDonor", false);
       }
     }
@@ -181,7 +181,7 @@ public class DonorController {
         m.put("hasErrors", false);
         success = true;
         message = "Donor Successfully Added";
-        form = new DonorBackingForm(true);
+        form = new DonorBackingForm();
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;

@@ -68,4 +68,12 @@ public class FormFieldRepository {
       return Arrays.asList(new FormField[0]);
     }
   }
+
+  public List<String> getRequiredFormFields(String formName) {
+    String queryString = "SELECT f.field FROM FormField f where form=:formName and isRequired=:isRequired";
+    TypedQuery<String> query = em.createQuery(queryString, String.class);
+    query.setParameter("formName", formName);
+    query.setParameter("isRequired", true);
+    return query.getResultList();    
+  }
 }

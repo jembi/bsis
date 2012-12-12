@@ -31,7 +31,7 @@ public class DonorTypeExistsConstraintValidator implements
      return true;
 
    try {
-    if (donorTypeRepository.isDonorTypeValid(target.getDonorType()))
+    if (donorTypeRepository.getDonorType(target.getDonorType()) != null)
      return true;
    } catch (Exception e) {
     e.printStackTrace();

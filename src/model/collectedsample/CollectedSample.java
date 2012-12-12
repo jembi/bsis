@@ -41,13 +41,12 @@ public class CollectedSample implements ModificationTracker {
   @Column(nullable=false)
   private Long id;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   @Index(name="collectedSample_collectionNumber_index")
   private String collectionNumber;
 
-  @NotNull
   @DonorExists
-  @ManyToOne(optional=false, fetch=FetchType.LAZY)
+  @ManyToOne(fetch=FetchType.LAZY)
   private Donor donor;
 
   @OneToMany(mappedBy="collectedSample")
