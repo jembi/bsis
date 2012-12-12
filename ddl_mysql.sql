@@ -25,6 +25,8 @@
 
     drop table if exists TestResult;
 
+    drop table if exists Tips;
+
     drop table if exists User;
 
     create table BloodBagType (
@@ -165,10 +167,10 @@
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
-        patientName varchar(30) not null,
+        patientName varchar(30),
         usageDate date,
-        useIndication varchar(30) not null,
-        ward varchar(30) not null,
+        useIndication varchar(30),
+        ward varchar(30),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         product_id bigint,
@@ -209,6 +211,14 @@
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table Tips (
+        tipsKey varchar(255) not null,
+        isDeleted boolean,
+        tipsContent varchar(512),
+        tipsName varchar(255),
+        primary key (tipsKey)
     ) ENGINE=InnoDB;
 
     create table User (

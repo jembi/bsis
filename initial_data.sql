@@ -92,3 +92,16 @@ insert into BloodTest (name, correctResult, allowedResults, isRequired, notes) v
 ('Syphilis', 'negative', 'positive,negative', '1', ''),
 ('Blood ABO', '', 'A,B,AB,O', '1', ''),
 ('Blood Rh', '', 'POSITIVE,NEGATIVE', '1', '');
+
+insert into Tips (tipsKey, tipsName,tipsContent) values
+('report.inventory.generate', 'Generate Inventory' ,'Click the "Generate Inventory Report" button below to generate a report of your products.'),
+('testresults.find', 'Find/Edit Test Results', 'Find Test results by collection number. Optionally specify tests done between two dates.'),
+('products.find', 'Find/Edit Products', 'Find Products by collection number/product number/product type. Optionally Filter products expiring between two dates.'),
+('donors.find', 'Find/Edit Donors', 'Find Donors by donor number or part of donor first name or last name. Filter donors by Blood Group.'),
+('requests.findpending', 'Find Pending Requests', 'To issue products first find pending requests for a given site by product type. Optionally specify dates to filter requests made on or after Request date and required on or before Required date'),
+('requests.findpending.requestsummary', 'Request Summary Page', 'Click on Find Matching Products button above to find all available products that are compatible for the given request.'),
+('requests.findpending.findmatchingproducts', 'Matching Products for request', 'Select the products you want to issue from the table below and then click on Issue button.'),
+('report.inventory.productinventorychart', 'Product Inventory Report', 'Available Products in Inventory by Product Type and Blood Group. Click the columns to view products by Age. Click again to return.'),
+('report.collections.collectionsreport', 'Collections Report', 'Track number collections done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
+('report.collections.testresultsreport', 'Test Results Report', 'Track TTI numbers by collection site and collection center done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
+('usage.addusage', 'Add Usage Form', 'Record usage of a product within a hospital. Optionally specify Hospital name, ward, patient name.');

@@ -91,7 +91,8 @@
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c0",
         });
-        $("#${editTestResultFormId}").find(".testedOn").datepicker('setDate', new Date());
+        if ($("#${editTestResultFormId}").find(".testedOn").val() == "")
+        	$("#${editTestResultFormId}").find(".testedOn").datepicker('setDate', new Date());
 
         copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
 

@@ -137,16 +137,6 @@
 				<td />
 			</tr>
 			<tr>
-				<td><form:label path="aggregationCriteria"> Aggregation Criteria </form:label></td>
-				<td style="padding-left: 10px;"><form:select
-						path="aggregationCriteria"
-						id="collectionsReportFormAggregationCriteria">
-						<form:option value="daily" label="Daily" selected="selected" />
-						<form:option value="monthly" label="Monthly" selected="" />
-						<form:option value="yearly" label="Yearly" selected="" />
-					</form:select></td>
-			</tr>
-			<tr>
 				<td><form:label path="centers">Collection Centers</form:label></td>
 				<td style="padding-left: 10px;"><form:select path="centers" class="collectionCenterSelector">
 					<c:forEach var="center" items="${model.centers}">
@@ -166,6 +156,16 @@
 						</c:forEach>
 					</form:select>
 				</td>
+			</tr>
+			<tr>
+				<td><form:label path="aggregationCriteria"> Aggregation Criteria </form:label></td>
+				<td style="padding-left: 10px;"><form:select
+						path="aggregationCriteria"
+						id="collectionsReportFormAggregationCriteria">
+						<form:option value="daily" label="Daily" selected="selected" />
+						<form:option value="monthly" label="Monthly" selected="" />
+						<form:option value="yearly" label="Yearly" selected="" />
+					</form:select></td>
 			</tr>
 			<tr>
 				<td />

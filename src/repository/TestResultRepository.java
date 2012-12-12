@@ -17,7 +17,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
-import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 
 import org.springframework.stereotype.Repository;

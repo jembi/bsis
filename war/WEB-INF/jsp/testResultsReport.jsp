@@ -136,6 +136,14 @@
 		</thead>
 		<tbody>
 			<tr>
+				<td>Enter Date Range</td>
+			</tr>
+			<tr>
+				<td><form:input path="dateTestedFrom"
+						id="trreportsDateTestedFrom" placeholder="From Date" />&nbsp;to</td>
+				<td><form:input path="dateTestedTo" id="trreportsDateTestedTo" placeholder="To Date" /></td>
+			</tr>
+			<tr>
 				<td><form:label path="centers">Collection Centers</form:label></td>
 				<td style="padding-left: 10px;"><form:select path="centers" class="collectionCenterSelector">
 					<c:forEach var="center" items="${model.centers}">
@@ -155,14 +163,6 @@
 						</c:forEach>
 					</form:select>
 				</td>
-			</tr>
-			<tr>
-				<td>Enter Date Range</td>
-			</tr>
-			<tr>
-				<td><form:input path="dateTestedFrom"
-						id="trreportsDateTestedFrom" placeholder="From Date" />&nbsp;to</td>
-				<td><form:input path="dateTestedTo" id="trreportsDateTestedTo" placeholder="To Date" /></td>
 			</tr>
 			<tr>
 				<td />
