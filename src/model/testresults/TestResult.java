@@ -11,7 +11,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
@@ -26,7 +25,6 @@ public class TestResult implements ModificationTracker {
   @Column(nullable=false)
 	private Long id;
 
-	@NotNull
 	@CollectedSampleExists
 	@ManyToOne(optional=false)
 	private CollectedSample collectedSample;

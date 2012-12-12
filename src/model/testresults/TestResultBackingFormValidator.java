@@ -8,15 +8,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import controller.UtilController;
+
 import viewmodel.TestResultViewModel;
 
 public class TestResultBackingFormValidator implements Validator {
 
   private Validator validator;
+  private UtilController utilController;
 
-  public TestResultBackingFormValidator(Validator validator) {
+  public TestResultBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
+    this.utilController = utilController;
   }
 
   @Override
@@ -37,5 +41,7 @@ public class TestResultBackingFormValidator implements Validator {
     if (!CustomDateFormatter.isDateStringValid(testedOn))
       errors.rejectValue("testResult.testedOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
+
+    utilController.checkRequiredFields(form, "testResult", errors);
   }
 }

@@ -71,7 +71,7 @@ public class TestResultController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new TestResultBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new TestResultBackingFormValidator(binder.getValidator(), utilController));
   }
 
   @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
