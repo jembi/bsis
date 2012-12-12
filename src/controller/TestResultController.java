@@ -36,11 +36,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
-import repository.DonorTypeRepository;
-import repository.LocationRepository;
 import repository.TestResultRepository;
 import viewmodel.TestResultViewModel;
 
@@ -51,14 +48,6 @@ public class TestResultController {
 
   @Autowired
   private TestResultRepository testResultRepository;
-
-  @Autowired
-  private LocationRepository locationRepository;
-
-  @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
-  @Autowired
-  private DonorTypeRepository donorTypeRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -82,6 +71,7 @@ public class TestResultController {
 
     ModelAndView mv = new ModelAndView("findTestResultForm");
     Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(model.asMap(), "testResults.find");
     addEditSelectorOptions(m);
     // to ensure custom field names are displayed in the form
     m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));

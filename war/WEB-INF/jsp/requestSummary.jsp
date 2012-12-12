@@ -117,7 +117,6 @@
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}" class="formInTabPane">
-
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
 				Done
@@ -137,6 +136,13 @@
 		</div>
 
 		<br />
+		<br />
+
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['requests.findpending.requestsummary']}
+			</p>
+		</div>
 		<br />
 
 		<div id="${requestSummaryBarcodeId}"></div>

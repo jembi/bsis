@@ -72,7 +72,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/requestSummary", method = RequestMethod.GET)
-  public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
+  public ModelAndView requestSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "requestId", required = false) Long requestId) {
 
     ModelAndView mv = new ModelAndView("requestSummary");
@@ -94,6 +94,7 @@ public class RequestsController {
     RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
     m.put("request", requestViewModel);
     m.put("refreshUrl", getUrl(request));
+    utilController.addTipsToModel(model.asMap(), "request.findpending.requestsummary");
     // to ensure custom field names are displayed in the form
     m.put("requestFields", utilController.getFormFieldsForForm("request"));
     mv.addObject("model", m);
@@ -111,6 +112,7 @@ public class RequestsController {
     addEditSelectorOptions(m);
     // to ensure custom field names are displayed in the form
     m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    utilController.addTipsToModel(model.asMap(), "requests.findpending");
     m.put("refreshUrl", getUrl(request));
     mv.addObject("model", m);
     return mv;
@@ -359,6 +361,7 @@ public class RequestsController {
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
+    utilController.addTipsToModel(model.asMap(), "requests.findpending.findmatchingproducts");
     m.put("allProducts", products);
     mv.addObject("model", m);
     System.out.println(mv.getViewName());

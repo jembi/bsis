@@ -89,6 +89,7 @@ public class DonorController {
     }
 
     DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
+    utilController.addTipsToModel(model.asMap(), "donors.finddonor.donorsummary");
     m.put("donor", donorViewModel);
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
@@ -302,6 +303,7 @@ public class DonorController {
 
     ModelAndView mv = new ModelAndView("findDonorForm");
     Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(model.asMap(), "donors.finddonor");
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");

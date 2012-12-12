@@ -137,6 +137,11 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
 		<b>Find Requests</b>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['requests.findpending']}
+			</p>
+		</div>
 		<form:form method="GET" commandName="findRequestForm" id="${findRequestFormId}"
 			class="formInTabPane">
 

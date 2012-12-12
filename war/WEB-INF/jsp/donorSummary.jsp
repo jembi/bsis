@@ -151,6 +151,13 @@
 		<br />
 		<br />
 
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['donors.finddonor.donorsummary']}
+			</p>
+		</div>
+
+		<br />
 		<div id="${donorSummaryBarcodeId}"></div>
 
 		<c:if test="${model.donorFields.donorNumber.hidden != true }">

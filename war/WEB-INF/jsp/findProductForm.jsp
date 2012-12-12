@@ -169,6 +169,11 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
 	<b>Find Products</b>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['products.find']}
+			</p>
+		</div>
 	<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
 		class="formInTabPane">
 		<div>

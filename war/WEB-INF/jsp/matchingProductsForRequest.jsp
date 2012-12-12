@@ -113,7 +113,12 @@ $(document).ready(
 
 		<c:otherwise>
 
-			Select the products you want to issue from the table below and then click on Issue button.
+			<div class="tipsBox ui-state-highlight">
+				<p>
+					${model['requests.findpending.findmatchingproducts']}
+				</p>
+			</div>
+
 			<br />
 			<button class="issueSelectedProductsButton">Issue Selected Products</button>
 			<button class="cancelButton">Cancel</button>

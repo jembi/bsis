@@ -107,6 +107,11 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
 		<b>Find test results</b>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['testResults.find']}
+			</p>
+		</div>
 		<form:form method="GET" commandName="findTestResultForm" id="${findTestResultFormId}"
 			class="formInTabPane">
 	
@@ -117,7 +122,7 @@ $(document).ready(function() {
 			</div>
 	
 			<div>
-				<span style="margin-left: 15px;"> Date of testing between (optional)</span>
+				<span style="margin-left: 15px;"> Date of testing between </span>
 			</div>
 			<div>
 				<form:input path="dateTestedFrom" class="dateTestedFrom" placeholder="From"/>

@@ -29,7 +29,7 @@ import repository.ProductRepository;
 import repository.UsageRepository;
 
 @Controller
-public class UsageController {
+public class ProductUsageController {
 
 	@Autowired
 	private UsageRepository usageRepository;
@@ -40,7 +40,7 @@ public class UsageController {
 	@Autowired
 	private UtilController utilController;
 
-	public UsageController() {
+	public ProductUsageController() {
 	}
 	
   @InitBinder
@@ -83,6 +83,7 @@ public class UsageController {
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("usageFields", utilController.getFormFieldsForForm("Usage"));
+    utilController.addTipsToModel(model.asMap(), "usage.addusage");
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;

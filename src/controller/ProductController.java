@@ -106,6 +106,7 @@ public class ProductController {
     ModelAndView mv = new ModelAndView("findProductForm");
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
+    utilController.addTipsToModel(model.asMap(), "products.find");
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("product"));
     m.put("refreshUrl", getUrl(request));

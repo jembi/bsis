@@ -94,6 +94,11 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
 		<b>Find Donors</b>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['donors.finddonor']}
+			</p>
+		</div>
 		<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
 			class="formInTabPane">
 			<div>

@@ -97,6 +97,13 @@
 </script>
 
 <div id="${editUsageFormDivId}">
+
+	<div class="tipsBox ui-state-highlight">
+		<p>
+			${model['usage.addusage']}
+		</p>
+	</div>
+
 	<form:form id="${editUsageFormId}" method="POST" class="formInTabPane"
 		commandName="editUsageForm">
 		<form:hidden path="id" />
