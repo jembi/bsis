@@ -432,6 +432,27 @@ public class TestResultController {
     return m;
   }
 
+  @RequestMapping(value="/ttiWorksheet", method=RequestMethod.GET)
+  public ModelAndView getTtiWorkSheetFormGenerator(HttpServletRequest request,
+      HttpServletResponse response) {
+    ModelAndView mv = new ModelAndView("ttiWorksheetForm");
+    return mv;
+  }
+
+  @RequestMapping(value="/showTTIWorksheet", method=RequestMethod.GET)
+  public ModelAndView getTtiWorkSheetFormGenerator(HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="dateCollectedFrom", required=false) String dateCollectedFrom,
+      @RequestParam(value="dateCollectedTo", required=false) String dateCollectedTo) {
+    ModelAndView mv = new ModelAndView("ttiWorksheet");
+    List<CollectedSample> untestedCollections = testResultRepository.findUntestedCollections(dateCollectedFrom, dateCollectedTo);
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("allUntestedCollectedSamples", untestedCollections);
+    m.put("testResultFields", utilController.getFormFieldsForForm("testResults"));
+    mv.addObject("model", m);
+    return mv;
+  }
+
   private List<TestResultViewModel> getTestResultViewModels(
       List<TestResult> testResults) {
     if (testResults == null)
@@ -442,5 +463,4 @@ public class TestResultController {
     }
     return testResultViewModels;
   }
-
 }

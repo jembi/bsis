@@ -37,6 +37,12 @@ public class DonorBackingForm {
     this.donor = donor;
   }
 
+  public DonorBackingForm(boolean autoGenerate) {
+    donor = new Donor();
+    if (autoGenerate)
+      generateDonorNumber();
+  }
+
   public String getBirthDate() {
     if (birthDate != null)
       return birthDate;

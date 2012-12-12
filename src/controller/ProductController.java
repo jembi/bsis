@@ -163,7 +163,7 @@ public class ProductController {
       Model model,
       @RequestParam(value="productId", required=false) Long productId) {
 
-    ProductBackingForm form = new ProductBackingForm(true);
+    ProductBackingForm form = new ProductBackingForm();
 
     ModelAndView mv = new ModelAndView("editProductForm");
     Map<String, Object> m = model.asMap();
@@ -177,7 +177,7 @@ public class ProductController {
         m.put("existingProduct", true);
       }
       else {
-        form = new ProductBackingForm(true);
+        form = new ProductBackingForm();
       }
     }
     addEditSelectorOptions(m);
@@ -228,7 +228,7 @@ public class ProductController {
         m.put("hasErrors", false);
         success = true;
         message = "Product Successfully Added";
-        form = new ProductBackingForm(true);
+        form = new ProductBackingForm();
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;

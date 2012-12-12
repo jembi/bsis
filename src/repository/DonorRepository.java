@@ -73,7 +73,6 @@ public class DonorRepository {
     }
 
     Expression<Boolean> exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
-
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
 
     Predicate firstNameExp;
@@ -88,7 +87,14 @@ public class DonorRepository {
     else
       lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
 
-    Expression<Boolean> exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
+    Expression<Boolean> exp2;
+    if ( (donorNumber == null || donorNumber.trim().isEmpty()) && 
+         (firstName == null || firstName.trim().isEmpty()) &&
+         (lastName == null || lastName.trim().isEmpty())
+      )
+      exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
+    else
+      exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
 
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));

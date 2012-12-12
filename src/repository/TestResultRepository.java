@@ -17,6 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
+import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 
 import org.springframework.stereotype.Repository;
@@ -317,7 +318,7 @@ public class TestResultRepository {
     Date from = null;
     try {
       from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateTestedFrom);
+          .parse("11/01/2012") : dateFormat.parse(dateTestedFrom);
     } catch (ParseException ex) {
       ex.printStackTrace();
     }
@@ -352,5 +353,20 @@ public class TestResultRepository {
       em.persist(t);
     }
     em.flush();    
+  }
+
+  public List<CollectedSample> findUntestedCollections(String dateCollectedFrom,
+      String dateCollectedTo) {
+
+    Date from = getDateTestedFromOrDefault(dateCollectedFrom);
+    Date to = getDateTestedToOrDefault(dateCollectedTo);
+    TypedQuery<CollectedSample> query = em.createQuery(
+        "SELECT c from CollectedSample c where " +
+        "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
+        "c.collectionNumber NOT IN (SELECT DISTINCT(t.collectedSample.collectionNumber) from TestResult t)",
+        CollectedSample.class);
+    query.setParameter("dateCollectedFrom", from);
+    query.setParameter("dateCollectedTo", to);
+    return query.getResultList();
   }
 }
