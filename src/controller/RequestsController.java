@@ -94,7 +94,7 @@ public class RequestsController {
     RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
     m.put("request", requestViewModel);
     m.put("refreshUrl", getUrl(request));
-    utilController.addTipsToModel(model.asMap(), "request.findpending.requestsummary");
+    utilController.addTipsToModel(model.asMap(), "requests.findpending.requestsummary");
     // to ensure custom field names are displayed in the form
     m.put("requestFields", utilController.getFormFieldsForForm("request"));
     mv.addObject("model", m);

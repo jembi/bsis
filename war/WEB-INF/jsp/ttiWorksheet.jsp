@@ -56,8 +56,8 @@ $(document).ready(
 			<table id="${table_id}" class="dataTable testResultsTable">
 				<thead>
 					<tr>
-							<th>${model.testResultFields.collectionNumber.displayName}</th>
-							<th>${model.testResultFields.testedOn.displayName}</th>
+							<th>Collection Number</th>
+							<th>Tested On</th>
 							<th>Blood Group</th>
 							<th>HIV</th>
 							<th>HBV</th>

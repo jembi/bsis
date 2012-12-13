@@ -138,6 +138,7 @@ public class ProductUsageController {
       }
     }
 
+    utilController.addTipsToModel(model.asMap(), "usage.addusage");
     m.put("editUsageForm", form);
     m.put("existingUsage", false);
     m.put("success", success);

@@ -102,7 +102,7 @@
 				<th>Field</th>
 				<th>Hidden?</th>
 				<th>Required?</th>
-				<!-- th>Auto Generate?</th-->
+				<th style="display: none;">Auto Generate?</th>
 				<th>Display Name</th>
 				<th>Default Value</th>
 				<th>Save Changes</th>
@@ -132,14 +132,14 @@
 							<input type="checkbox" name="isRequired" />
 						</c:if>
 					</td>
-					<!-- td>
+					<td style="display:none;">
 						<c:if test="${formField.autoGenerate == true}">
 							<input type="checkbox" name="autoGenerate" checked />
 						</c:if>
 						<c:if test="${formField.autoGenerate == false}">
 							<input type="checkbox" name="autoGenerate" />
 						</c:if>
-					</td-->
+					</td>
 					<td>
 						<input type="text" name="displayName" class="tableInputShort" value="${formField.displayName}" />
 					</td>
