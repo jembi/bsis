@@ -48,3 +48,46 @@
 	overflow: auto;
 }
 
+.productLabel {
+	width: 500px;
+	border: solid;
+	border-width: 1px;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+.productLabelQuadrant {
+	text-align: center;
+	border: solid;
+	border-width: 1px;
+	display: inline-block;
+	width: 249px;
+	height: 50px;
+}
+
+.upperLeftQuadrant {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.upperRightQuadrant {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.lowerLeftQuadrant {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.lowerRightQuadrant {
+	position: absolute;
+	top: 0;
+	right: 0;
+}

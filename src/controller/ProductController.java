@@ -360,4 +360,18 @@ public class ProductController {
     m.put("errMsg", errMsg);
     return m;
   }
+
+  /**
+   * Redirect to ISBT 128 Label Generator
+   */
+  @RequestMapping(value="/productLabel", method = RequestMethod.GET)
+  public ModelAndView generateProductLabel(HttpServletRequest request,
+      Model model,
+      @RequestParam(value="productId", required=false) Long productId) {
+    ModelAndView mv = new ModelAndView("productLabel");
+    Map<String, Object> m = model.asMap();
+    m.put("productId", productId);
+    mv.addObject("model", m);
+    return mv;
+  }
 }

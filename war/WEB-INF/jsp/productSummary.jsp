@@ -44,6 +44,21 @@
   	        						);
         });
 
+        $("#${tabContentId}").find(".productLabelButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-contact'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("productLabelSuccess", emptyChildContent);
+
+  	        fetchContent("productLabel.html",
+              					 {productId: "${model.product.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
@@ -52,7 +67,7 @@
           $("#${mainContentId}").printArea();
         });
 
-        $("#${tabContentId}").find(".cancelButton").button({
+        $("#${tabContentId}").find(".doneButton").button({
           icons : {
             primary : 'ui-icon-check'
           }
@@ -101,11 +116,14 @@
 	<div id="${mainContentId}" class="formInTabPane">
 
 		<div class="summaryPageButtonSection" style="text-align: right;">
-			<button type="button" class="cancelButton">
+			<button type="button" class="doneButton">
 				Done
 			</button>
 			<button type="button" class="editButton">
 				Edit
+			</button>
+			<button type="button" class="productLabelButton">
+				Product Label
 			</button>
 			<button type="button" class="deleteButton">
 				Delete
