@@ -49,11 +49,10 @@
 }
 
 .productLabel {
-	width: 500px;
+	width: 700px;
 	border: solid;
 	border-width: 1px;
 	position: relative;
-	margin-left: auto;
 	margin-right: auto;
 	margin-top: 60px;
 	margin-bottom: 60px;
@@ -64,30 +63,22 @@
 	border: solid;
 	border-width: 1px;
 	display: inline-block;
-	width: 249px;
-	height: 50px;
+	min-width: 344px;
+	height: 150px;
+	margin: 0;
+	padding-left: 2px;
+	padding-top: 10px;
+	vertical-align: top;
 }
 
 .upperLeftQuadrant {
-	position: absolute;
-	bottom: 0;
-	left: 0;
 }
 
 .upperRightQuadrant {
-	position: absolute;
-	bottom: 0;
-	right: 0;
 }
 
 .lowerLeftQuadrant {
-	position: absolute;
-	top: 0;
-	left: 0;
 }
 
 .lowerRightQuadrant {
-	position: absolute;
-	top: 0;
-	right: 0;
 }

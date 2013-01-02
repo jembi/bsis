@@ -71,7 +71,12 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 
 insert into DonorType (donorType, isDeleted) values ('Voluntary', '0'), ('Family', '0'), ('Other', '0');
 
-insert into ProductType (productType, isDeleted) values ('Whole Blood', '0'), ('RCC', '0'), ('FFP', '0'), ('Platelets', '0'), ('Partial Platelets', '0');
+insert into ProductType (productType, productTypeName, description, shelfLife, shelfLifeUnits, isDeleted) values
+('Whole Blood', 'Whole Blood', '', '35', 'days', '0'),
+('RCC', 'Red Blood Cells', '', '', '', '0'),
+('FFP', 'Fresh Frozen Plasma', '', '365', 'days', '0'),
+('Platelets', '', '', '5', 'days', '0'),
+('Partial Platelets', '', '', '', '', '0');
 
 insert into BloodBagType (bloodBagType, isDeleted) values ('Single', '0'), ('Triple', '0'), ('Paedi', '0');
 

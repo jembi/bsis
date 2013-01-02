@@ -371,6 +371,7 @@ public class ProductController {
     ModelAndView mv = new ModelAndView("productLabel");
     Map<String, Object> m = model.asMap();
     m.put("productId", productId);
+    m.put("bloodGroup", productRepository.getBloodGroupForProduct(productId).toString());
     mv.addObject("model", m);
     return mv;
   }

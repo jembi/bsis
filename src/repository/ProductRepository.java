@@ -509,7 +509,7 @@ public class ProductRepository {
     return m;
   }
 
-  public BloodGroup getBloodGroupForProduct(Product product) {
+  private BloodGroup getBloodGroupForProduct(Product product) {
 
     CollectedSample c = product.getCollectedSample();
     String abo = null;
@@ -528,6 +528,11 @@ public class ProductRepository {
     }
 
     return new BloodGroup(BloodAbo.valueOf(abo), BloodRhd.valueOf(rh));
+  }
+
+  public BloodGroup getBloodGroupForProduct(Long productId) {
+    Product product = findProductById(productId);
+    return getBloodGroupForProduct(product);
   }
 
   public void addAllProducts(List<Product> products) {

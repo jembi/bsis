@@ -155,7 +155,11 @@
 
     create table ProductType (
         productType varchar(30) not null,
+        description longtext,
         isDeleted boolean,
+        productTypeName varchar(50) not null,
+        shelfLife integer,
+        shelfLifeUnits varchar(30) not null,
         primary key (productType)
     ) ENGINE=InnoDB;
 

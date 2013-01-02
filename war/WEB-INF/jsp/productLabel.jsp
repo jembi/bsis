@@ -38,6 +38,9 @@ $(document).ready(
       $("#${tabContentId}").find(".printable").printArea();
     });
 
+    var data = {"bloodGroup" : "${model.bloodGroup}"};
+    generateProductLabel("upperRight", $("#${tabContentId}").find(".upperRightQuadrant").find("div"), data);
+    
 	});
 </script>
 
@@ -59,7 +62,7 @@ $(document).ready(
 						upper left
 					</div>
 					<div class="productLabelQuadrant upperRightQuadrant">
-						upper right
+						<div></div>
 					</div>
 				</div>
 				<div>

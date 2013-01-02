@@ -44,3 +44,5 @@
 <script src="plugins/toggleradio/toggleradio.js"></script>
 <script src="plugins/Highlight/highlight.js"></script>
 <script src="plugins/jquery-bbq/jquery.ba-bbq.min.js"></script>
+
+<script type="text/javascript" src="js/isbt128/isbt128.js"></script>
