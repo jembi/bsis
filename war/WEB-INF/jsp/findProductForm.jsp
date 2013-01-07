@@ -130,9 +130,9 @@ $(document).ready(function() {
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
-    maxDate : 0,
+    maxDate : 365,
     dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
+    yearRange : "c-100:c+1",
     onSelect : function(selectedDate) {
       getDateExpiresToInput().datepicker("option", "minDate", selectedDate);
     }

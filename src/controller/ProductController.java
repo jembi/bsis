@@ -124,6 +124,7 @@ public class ProductController {
     String searchBy = form.getSearchBy();
     String dateExpiresFrom = form.getDateExpiresFrom();
     String dateExpiresTo = form.getDateExpiresTo();
+    System.out.println("here1");
     if (searchBy.equals("productNumber")) {
       products = productRepository.findProductByProductNumber(
                                           form.getProductNumber(),
@@ -133,7 +134,6 @@ public class ProductController {
           form.getCollectionNumber(),
           dateExpiresFrom, dateExpiresTo);
     } else if (searchBy.equals("productType")) {
-
       products = productRepository.findProductByProductTypes(
           form.getProductTypes(),
           dateExpiresFrom, dateExpiresTo);
@@ -142,6 +142,8 @@ public class ProductController {
 //    System.out.println("products: ");
 //    System.out.println(products);
     
+    System.out.println("searchBy");
+    System.out.println(searchBy);
     ModelAndView modelAndView = new ModelAndView("productsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findProductsTable");

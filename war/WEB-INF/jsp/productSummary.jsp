@@ -44,21 +44,6 @@
   	        						);
         });
 
-        $("#${tabContentId}").find(".productLabelButton").button(
-            {
-              icons : {
-          			primary : 'ui-icon-contact'
-        			}
-            }).click(function() {
-
-            $("#${tabContentId}").bind("productLabelSuccess", emptyChildContent);
-
-  	        fetchContent("productLabel.html",
-              					 {productId: "${model.product.id}"},
-              					 $("#${childContentId}")
-  	        						);
-        });
-
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
@@ -122,9 +107,9 @@
 			<button type="button" class="editButton">
 				Edit
 			</button>
-			<button type="button" class="productLabelButton">
+			<!-- button type="button" class="productLabelButton">
 				Product Label
-			</button>
+			</button-->
 			<button type="button" class="deleteButton">
 				Delete
 			</button>

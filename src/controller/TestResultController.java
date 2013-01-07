@@ -331,7 +331,7 @@ public class TestResultController {
 
     String dateTestedFrom = form.getDateTestedFrom();
     String dateTestedTo = form.getDateTestedTo();
-    testResults = testResultRepository.findTestResultByCollectionNumber(
+    testResults = testResultRepository.findTestResults(
                                         form.getCollectionNumber(),
                                         dateTestedFrom, dateTestedTo);
     System.out.println(testResults);

@@ -6,7 +6,8 @@
 	<persistence-unit name="v2v" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="create" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="true" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/v2v_new"/>
 			<property name="javax.persistence.jdbc.user" value="v2v"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>

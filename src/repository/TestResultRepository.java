@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -290,27 +291,43 @@ public class TestResultRepository {
     em.flush();
   }
 
-  public List<TestResult> findTestResultByCollectionNumber(
+  public List<TestResult> findTestResults(
       String collectionNumber, String dateTestedFrom, String dateTestedTo) {
 
-    TypedQuery<TestResult> query = em
-        .createQuery(
-            "SELECT t FROM TestResult t WHERE " +
-            "t.collectedSample.collectionNumber = :collectionNumber and " +
-            "((t.testedOn is NULL) or " +
-            " (t.testedOn >= :fromDate and t.testedOn <= :toDate)) and " +
-            "t.isDeleted= :isDeleted",
-            TestResult.class);
+    TypedQuery<TestResult> query = null;
+    if (collectionNumber == null || collectionNumber.isEmpty()) {
+         if ((dateTestedFrom == null || dateTestedFrom.equals("")) && 
+             (dateTestedTo == null || dateTestedTo.equals(""))
+             )
+           query = null;
+         else {
+           query = em.createQuery(
+               "SELECT t FROM TestResult t WHERE " +
+               "((t.testedOn is NULL) or " +
+               " (t.testedOn >= :fromDate and t.testedOn <= :toDate)) and " +
+               "t.isDeleted= :isDeleted",
+               TestResult.class);
 
-    Date from = getDateTestedFromOrDefault(dateTestedFrom);
-    Date to = getDateTestedToOrDefault(dateTestedTo);
+           Date from = getDateTestedFromOrDefault(dateTestedFrom);
+           Date to = getDateTestedToOrDefault(dateTestedTo);
+           query.setParameter("fromDate", from);
+           query.setParameter("toDate", to);
+           query.setParameter("isDeleted", Boolean.FALSE);
+         }
+    }
+    else {
+      query = em.createQuery("SELECT t FROM TestResult t WHERE " +
+          "t.collectedSample.collectionNumber = :collectionNumber AND " +
+          "t.isDeleted = :isDeleted",
+          TestResult.class);
+      query.setParameter("collectionNumber", collectionNumber);      
+      query.setParameter("isDeleted", Boolean.FALSE);
+    }
 
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber", collectionNumber);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    return query.getResultList();
+    if (query == null)
+      return Arrays.asList(new TestResult[0]);
+    else
+      return query.getResultList();
   }
 
   private Date getDateTestedFromOrDefault(String dateTestedFrom) {

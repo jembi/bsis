@@ -38,10 +38,18 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="${database.driver}" p:url="${database.url}"
-		p:username="${database.user}" p:password="${database.password}">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="${database.driver}" />
+        <property name="jdbcUrl" value="${database.url}" />
+        <property name="user" value="${database.user}" />
+        <property name="password" value="${database.password}" /> 
+
+        <!-- these are C3P0 properties -->
+        <property name="acquireIncrement" value="${database.acquireIncrement}" />
+        <property name="minPoolSize" value="${database.minPoolSize}" />
+        <property name="maxPoolSize" value="${database.maxPoolSize}" />
+        <property name="maxIdleTime" value="${database.maxIdleTime}" />
 	</bean>
 
 	<bean id="entityManagerFactory"

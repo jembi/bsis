@@ -95,9 +95,6 @@ $(document).ready(
 						<c:if test="${model.productFields.productNumber.hidden != true}">
 							<th>${model.productFields.productNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.collectionNumber.hidden != true}">
-							<th>${model.productFields.collectionNumber.displayName}</th>
-						</c:if>
 						<c:if test="${model.productFields.productType.hidden != true}">
 							<th>${model.productFields.productType.displayName}</th>
 						</c:if>
@@ -115,9 +112,6 @@ $(document).ready(
 							<td style="display: none">${product.id}</td>
 							<c:if test="${model.productFields.productNumber.hidden != true}">
 								<td>${product.productNumber}</td>
-							</c:if>
-							<c:if test="${model.productFields.collectionNumber.hidden != true}">
-								<td>${product.collectionNumber}</td>
 							</c:if>
 							<c:if test="${model.productFields.productType.hidden != true}">
 								<td>${product.productType}</td>

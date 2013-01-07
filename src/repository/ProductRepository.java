@@ -145,9 +145,11 @@ public class ProductRepository {
 
   public List<Product> findProductByProductTypes(
       List<String> productTypes, String dateExpiresFrom, String dateExpiresTo) {
+
+    System.out.println("here");
     TypedQuery<Product> query = em
         .createQuery(
-            "SELECT p FROM Product p WHERE " +
+            "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
             "p.productType.productType IN (:productTypes) and " +
             "((p.expiresOn is NULL) or " +
             " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
