@@ -46,7 +46,7 @@ public class DonorRepository {
   }
 
   public Donor findDonorById(Long donorId) {
-    String queryString = "SELECT d FROM Donor d WHERE d.id = :donorId and d.isDeleted = :isDeleted";
+    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
     TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.setParameter("donorId", donorId).getSingleResult();

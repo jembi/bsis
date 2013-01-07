@@ -85,7 +85,7 @@ public class Donor implements ModificationTracker {
 
 	private Boolean isDeleted;
 
-  @OneToMany(mappedBy="donor", fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="donor")
   private List<CollectedSample> collectedSamples;
   
 	public Donor() {
