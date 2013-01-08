@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
+import model.donortype.DonorType;
 import model.producttype.ProductType;
 import model.tips.Tips;
-import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
+import repository.DonorTypeRepository;
 import repository.FormFieldRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
-import viewmodel.UserViewModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,6 +50,9 @@ public class AdminController {
 
   @Autowired
   BloodBagTypeRepository bloodBagTypesRepository;
+
+  @Autowired
+  DonorTypeRepository donorTypesRepository;
 
   @Autowired
   TipsRepository tipsRepository;
@@ -211,7 +214,6 @@ public class AdminController {
     return mv;
   }
 
-
   @RequestMapping(value="/configureBloodBagTypesFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureBloodBagTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
@@ -225,10 +227,27 @@ public class AdminController {
     return mv;
   }
 
+
+  @RequestMapping(value="/configureDonorTypesFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureDonorTypesFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureDonorTypes");
+    Map<String, Object> m = model.asMap();
+    addAllDonorTypesToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  private void addAllDonorTypesToModel(Map<String, Object> m) {
+    m.put("allDonorTypes", donorTypesRepository.getAllDonorTypes());
+  }
+
   private void addAllBloodBagTypesToModel(Map<String, Object> m) {
     m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
   }
-
 
   private void addAllProductTypesToModel(Map<String, Object> m) {
     m.put("allProductTypes", productTypesRepository.getAllProductTypes());
@@ -274,7 +293,7 @@ public class AdminController {
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureProductTypes");
     System.out.println(paramsAsJson);
-    List<ProductType> allProducTypes = new ArrayList<ProductType>();
+    List<ProductType> allProductTypes = new ArrayList<ProductType>();
     try {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String productType : params.keySet()) {
@@ -283,9 +302,9 @@ public class AdminController {
         pt.setProductType(productType);
         pt.setProductTypeName(productTypeName);
         pt.setIsDeleted(false);
-        allProducTypes.add(pt);
+        allProductTypes.add(pt);
       }
-      productTypesRepository.saveAllProductTypes(allProducTypes);
+      productTypesRepository.saveAllProductTypes(allProductTypes);
       System.out.println(params);
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -329,4 +348,36 @@ public class AdminController {
     mv.addObject("model", model);
     return mv;
   }
+
+  @RequestMapping("/configureDonorTypes")
+  public ModelAndView configureDonorTypes(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureDonorTypes");
+    System.out.println(paramsAsJson);
+    List<DonorType> allDonorTypes = new ArrayList<DonorType>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String donorType : params.keySet()) {
+        String donorTypeName = (String) params.get(donorType);
+        DonorType dt = new DonorType();
+        dt.setDonorType(donorType);
+        dt.setDonorTypeName(donorTypeName);
+        dt.setIsDeleted(false);
+        allDonorTypes.add(dt);
+      }
+      donorTypesRepository.saveAllDonorTypes(allDonorTypes);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllDonorTypesToModel(m);
+    m.put("refreshUrl", "configureDonorTypesFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
+
 }

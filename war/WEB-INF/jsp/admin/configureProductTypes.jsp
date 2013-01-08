@@ -107,7 +107,7 @@ $(document).ready(function() {
 			<br />
 			<div>
 				<label>&nbsp;</label>
-				<button class="addProductTypeButton">Add new Product Type</button>
+				<button class="addProductTypeButton">Add new product type</button>
 				<button class="saveProductTypesButton">Save</button>
 				<button class="cancelButton">Cancel</button>
 			</div>

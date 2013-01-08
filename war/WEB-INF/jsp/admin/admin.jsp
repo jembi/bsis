@@ -27,6 +27,9 @@
 		<li id="bloodBagTypesForm">
 			<a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>
 		</li>
+		<li id="donorTypesForm">
+			<a href="configureDonorTypesFormGenerator.html">Donor Types</a>
+		</li>
 		<li id="configureUsersForm">
 			<a href="configureUsersFormGenerator.html">Users</a>
 		</li>

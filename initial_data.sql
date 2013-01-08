@@ -69,7 +69,10 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Usage', 'product', 'Product', '', '0', '0', '0', '0', ''),
 ('Usage', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 
-insert into DonorType (donorType, isDeleted) values ('Voluntary', '0'), ('Family', '0'), ('Other', '0');
+insert into DonorType (donorType, donorTypeName, isDeleted) values
+('Voluntary', 'Voluntary', '0'),
+('Family', 'Family', '0'),
+('Other', 'Other', '0');
 
 insert into ProductType (productType, productTypeName, description, shelfLife, shelfLifeUnits, isDeleted) values
 ('Whole Blood', 'Whole Blood', '', '35', 'days', '0'),

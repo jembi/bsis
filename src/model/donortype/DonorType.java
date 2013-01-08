@@ -10,6 +10,9 @@ public class DonorType {
   @Column(length=30, nullable=false)
   private String donorType;
 
+  @Column(length=50, nullable=false)
+  private String donorTypeName;
+
   private Boolean isDeleted;
 
   public String getDonorType() {
@@ -30,5 +33,13 @@ public class DonorType {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public String getDonorTypeName() {
+    return donorTypeName;
+  }
+
+  public void setDonorTypeName(String donorTypeName) {
+    this.donorTypeName = donorTypeName;
   }
 }

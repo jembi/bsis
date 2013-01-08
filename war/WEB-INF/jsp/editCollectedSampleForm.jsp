@@ -228,7 +228,7 @@
 					class="editCollectedSampleFormDonorType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="donorType" items="${model.donorTypes}">
-						<form:option value="${donorType}">${donorType}</form:option>
+						<form:option value="${donorType.donorType}">${donorType.donorTypeName}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="collectedSample.donorType"

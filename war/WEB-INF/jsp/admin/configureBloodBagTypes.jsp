@@ -107,7 +107,7 @@ $(document).ready(function() {
 			<br />
 			<div>
 				<label>&nbsp;</label>
-				<button class="addBloodBagTypeButton">Add new Blood Bag Type</button>
+				<button class="addBloodBagTypeButton">Add new blood bag type</button>
 				<button class="saveBloodBagTypesButton">Save</button>
 				<button class="cancelButton">Cancel</button>
 			</div>
