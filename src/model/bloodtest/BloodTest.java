@@ -20,7 +20,7 @@ public class BloodTest{
   private String allowedResults;
 
   private String correctResult;
-
+  
   @Lob
   private String notes;
 

@@ -11,11 +11,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 
 @Entity
@@ -38,17 +40,8 @@ public class TestResult implements ModificationTracker {
   @Column(length=255)
   private String result;
   
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date lastUpdated;
-
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date createdDate;
-
-  @ManyToOne
-  private User createdBy;
-
-  @ManyToOne
-  private User lastUpdatedBy;
+  @Valid
+  private RowModificationTracker modificationTracker;
 
 	@Lob
 	private String notes;
@@ -87,28 +80,28 @@ public class TestResult implements ModificationTracker {
     return result;
   }
 
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
-
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  public User getCreatedBy() {
-    return createdBy;
-  }
-
-  public User getLastUpdatedBy() {
-    return lastUpdatedBy;
-  }
-
   public String getNotes() {
     return notes;
   }
 
   public Boolean getIsDeleted() {
     return isDeleted;
+  }
+
+  public Date getLastUpdated() {
+    return modificationTracker.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
   }
 
   public void setId(Long id) {
@@ -127,22 +120,6 @@ public class TestResult implements ModificationTracker {
     this.result = result;
   }
 
-  public void setLastUpdated(Date lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public void setCreatedBy(User createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    this.lastUpdatedBy = lastUpdatedBy;
-  }
-
   public void setNotes(String notes) {
     this.notes = notes;
   }
@@ -153,5 +130,21 @@ public class TestResult implements ModificationTracker {
 
   public void setBloodTest(BloodTest bloodTest) {
     this.bloodTest = bloodTest;
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    modificationTracker.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 }

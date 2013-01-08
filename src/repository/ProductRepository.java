@@ -146,10 +146,9 @@ public class ProductRepository {
   public List<Product> findProductByProductTypes(
       List<String> productTypes, String dateExpiresFrom, String dateExpiresTo) {
 
-    System.out.println("here");
     TypedQuery<Product> query = em
         .createQuery(
-            "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+            "SELECT p FROM Product p WHERE " +
             "p.productType.productType IN (:productTypes) and " +
             "((p.expiresOn is NULL) or " +
             " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
@@ -264,7 +263,11 @@ public class ProductRepository {
   }
 
   public Product findProductById(Long productId) {
-    return em.find(Product.class, productId);
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.id = :productId AND p.isDeleted = :isDeleted";
+    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("productId", productId);
+    return query.getSingleResult();
   }
 
   public List<Product> findAnyProductMatching(String productNumber,
@@ -454,17 +457,22 @@ public class ProductRepository {
     return null;
   }
 
-  public Map<String, Object> generateInventorySummary() {
-
+  public Map<String, Object> generateInventorySummaryFast() {
     Map<String, Object> inventory = new HashMap<String, Object>();
-    Session session = em.unwrap(Session.class);
-    session.enableFilter("availableProductsNotExpiredFilter");
+    // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
+    // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
+    TypedQuery<Product> q = em.createQuery(
+                             "SELECT DISTINCT p from Product p LEFT JOIN FETCH p.collectedSample c LEFT JOIN FETCH c.testResults " +
+    		                     "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted",
+    		                     Product.class);
+    q.setParameter("isAvailable", true);
+    q.setParameter("isDeleted", false);
 
-    TypedQuery<ProductType> productTypeQuery = em.createQuery("select pt from ProductType pt", ProductType.class);
+    System.out.println(q.getResultList().get(0));
 
-    DateTime today = new DateTime();
+    TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
+
     for (ProductType productType : productTypeQuery.getResultList()) {
-
       Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
 
       inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
@@ -476,28 +484,72 @@ public class ProductRepository {
       inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
 
-      for (Product product : productType.getProducts()) {
-        String bloodGroup = getBloodGroupForProduct(product).toString();
-        Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
-        DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
-        Long age = (long) Days.daysBetween(createdOn, today).getDays();
-        // compute window based on age
-        age = Math.abs((age / 5) * 5);
-        if (age > 30)
-          age = (long) 30;
-        Long count = numDayMap.get(age);
-        System.out.println(numDayMap);
-        System.out.println(count);
-        System.out.println(age);
-        numDayMap.put(age, count+1);
-      }
-
       inventory.put(productType.getProductType(), inventoryByBloodGroup);
     }
+
+    DateTime today = new DateTime();
+    for (Product product : q.getResultList()) {
+      String productType = product.getProductType().getProductType();
+      Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
+      String bloodGroup = getBloodGroupForProduct(product).toString();
+      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
+      DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
+      Long age = (long) Days.daysBetween(createdOn, today).getDays();
+      // compute window based on age
+      age = Math.abs((age / 5) * 5);
+      if (age > 30)
+        age = (long) 30;
+      Long count = numDayMap.get(age);
+      numDayMap.put(age, count+1);
+    }
     
-    session.disableFilter("availableProductsNotExpiredFilter");
     return inventory;
   }
+
+//  public Map<String, Object> generateInventorySummary() {
+//
+//    Map<String, Object> inventory = new HashMap<String, Object>();
+//    Session session = em.unwrap(Session.class);
+//    session.enableFilter("availableProductsNotExpiredFilter");
+//
+//    TypedQuery<ProductType> productTypeQuery = em.createQuery("select pt from ProductType pt", ProductType.class);
+//
+//    DateTime today = new DateTime();
+//    for (ProductType productType : productTypeQuery.getResultList()) {
+//
+//      Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
+//
+//      inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("B+", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("AB+", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("O+", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("A-", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("B-", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
+//      inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
+//
+//      for (Product product : productType.getProducts()) {
+//        String bloodGroup = getBloodGroupForProduct(product).toString();
+//        Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
+//        DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
+//        Long age = (long) Days.daysBetween(createdOn, today).getDays();
+//        // compute window based on age
+//        age = Math.abs((age / 5) * 5);
+//        if (age > 30)
+//          age = (long) 30;
+//        Long count = numDayMap.get(age);
+//        System.out.println(numDayMap);
+//        System.out.println(count);
+//        System.out.println(age);
+//        numDayMap.put(age, count+1);
+//      }
+//
+//      inventory.put(productType.getProductType(), inventoryByBloodGroup);
+//    }
+//    
+//    session.disableFilter("availableProductsNotExpiredFilter");
+//    return inventory;
+//  }
 
   private Map<Long, Long> getMapWithNumDaysWindows() {
     Map<Long, Long> m = new HashMap<Long, Long>();

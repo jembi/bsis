@@ -44,7 +44,7 @@ public class Product implements ModificationTracker {
   private String productNumber;
 
   @CollectedSampleExists
-  @ManyToOne
+  @ManyToOne(fetch=FetchType.LAZY)
   private CollectedSample collectedSample;
 
   @ProductTypeExists

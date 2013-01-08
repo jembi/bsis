@@ -113,7 +113,7 @@ public class ReportsController {
                   HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> data = null;
     try {
-      data = productRepository.generateInventorySummary();
+      data = productRepository.generateInventorySummaryFast();
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
