@@ -22,6 +22,9 @@
 		<li id="productTypesForm">
 			<a href="configureProductTypesFormGenerator.html">Product Types</a>
 		</li>
+		<li id="bloodBagTypesForm">
+			<a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>
+		</li>
 		<li id="configureTipsForm">
 			<a href="configureTipsFormGenerator.html">Tips</a>
 		</li>

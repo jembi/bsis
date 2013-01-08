@@ -10,6 +10,9 @@ public class BloodBagType {
   @Column(length=30, nullable=false)
   private String bloodBagType;
 
+  @Column(length=50, nullable=false)
+  private String bloodBagTypeName;
+
   private Boolean isDeleted;
   
   public String getBloodBagType() {
@@ -31,5 +34,13 @@ public class BloodBagType {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public String getBloodBagTypeName() {
+    return bloodBagTypeName;
+  }
+
+  public void setBloodBagTypeName(String bloodBagTypeName) {
+    this.bloodBagTypeName = bloodBagTypeName;
   }
 }

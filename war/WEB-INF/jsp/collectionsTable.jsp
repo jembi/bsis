@@ -214,7 +214,7 @@ $(document).ready(
 								<td>${collectedSample.collectionSite}</td>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
-								<td>${collectedSample.bloodBagType}</td>
+								<td>${collectedSample.bloodBagType.bloodBagTypeName}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

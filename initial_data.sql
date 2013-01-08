@@ -78,7 +78,10 @@ insert into ProductType (productType, productTypeName, description, shelfLife, s
 ('Platelets', 'Platelets', '', '5', 'days', '0'),
 ('Partial Platelets', 'Partial Platelets', '', '', '', '0');
 
-insert into BloodBagType (bloodBagType, isDeleted) values ('Single', '0'), ('Triple', '0'), ('Paedi', '0');
+insert into BloodBagType (bloodBagType, bloodBagTypeName, isDeleted) values
+('Single', 'Single' '0'),
+('Triple', 'Triple', '0'),
+('Pedi',  'Pedi', '0');
 
 insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite, isDeleted, notes) values
 ('Lusaka', 1, 0, 0, 0, 0, ''),

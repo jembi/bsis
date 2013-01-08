@@ -271,7 +271,7 @@
 					id="${editCollectedSampleFormBloodBagTypeId}">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
-						<form:option value="${bloodBagType}">${bloodBagType}</form:option>
+						<form:option value="${bloodBagType.bloodBagType}">${bloodBagType.bloodBagTypeName}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="collectedSample.bloodBagType"

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.admin.FormField;
+import model.bloodbagtype.BloodBagType;
 import model.producttype.ProductType;
 import model.tips.Tips;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.BloodBagTypeRepository;
 import repository.FormFieldRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
@@ -42,7 +44,10 @@ public class AdminController {
 
   @Autowired
   ProductTypeRepository productTypesRepository;
-  
+
+  @Autowired
+  BloodBagTypeRepository bloodBagTypesRepository;
+
   @Autowired
   TipsRepository tipsRepository;
   
@@ -200,6 +205,25 @@ public class AdminController {
     return mv;
   }
 
+
+  @RequestMapping(value="/configureBloodBagTypesFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureBloodBagTypesFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureBloodBagTypes");
+    Map<String, Object> m = model.asMap();
+    addAllBloodBagTypesToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  private void addAllBloodBagTypesToModel(Map<String, Object> m) {
+    m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
+  }
+
+
   private void addAllProductTypesToModel(Map<String, Object> m) {
     m.put("allProductTypes", productTypesRepository.getAllProductTypes());
   }
@@ -265,6 +289,37 @@ public class AdminController {
     Map<String, Object> m = model.asMap();
     addAllProductTypesToModel(m);
     m.put("refreshUrl", "configureProductTypesFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping("/configureBloodBagTypes")
+  public ModelAndView configureBloodBagTypes(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureBloodBagTypes");
+    System.out.println(paramsAsJson);
+    List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String bloodBagType : params.keySet()) {
+        String bloodBagTypeName = (String) params.get(bloodBagType);
+        BloodBagType pt = new BloodBagType();
+        pt.setBloodBagType(bloodBagType);
+        pt.setBloodBagTypeName(bloodBagTypeName);
+        pt.setIsDeleted(false);
+        allBloodBagTypes.add(pt);
+      }
+      bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllBloodBagTypesToModel(m);
+    m.put("refreshUrl", "configureBloodBagTypesFormGenerator.html");
     mv.addObject("model", model);
     return mv;
   }
