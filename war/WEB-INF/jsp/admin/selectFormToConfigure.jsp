@@ -42,6 +42,15 @@
 </script>
 
 <div id="${selectFormToConfigureDivId}" class="">
+
+	<div class="tipsBox ui-state-highlight">
+		<p>
+			Customize the properties of data entry forms. Hide unneeded fields.
+			Select which field values must be provided in order to enter data successfully into V2V.
+			Also specify default values for some fields. 
+		</p>
+	</div>
+
 	<div>
 		<label><i>Select a Form to Configure</i></label> <select
 			id="${selectFormToConfigureSelectId}">

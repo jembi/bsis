@@ -92,6 +92,7 @@
 </c:if>
 
 <div id="${editConfigureFormDivId}" class="adminConfigureFormDiv">
+
 	<div
 		style="font-weight: bold; font-style: italic; margin-bottom: 20px; margin-top: 20px;">
 		Configure Properties for fields of ${model.formName} Form:</div>
