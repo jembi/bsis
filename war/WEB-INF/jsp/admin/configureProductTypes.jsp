@@ -89,6 +89,11 @@ $(document).ready(function() {
 		<b>Configure Product Types</b>
 		<br />
 		<br />
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				Modify names of product types. Add new product types. 
+			</p>
+		</div>
 		<form id="${configureProductTypesFormId}">
 				<c:forEach var="productType" items="${model.allProductTypes}">
 					<div class="productTypeDiv">

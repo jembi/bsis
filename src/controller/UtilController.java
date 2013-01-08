@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import model.admin.FormField;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -101,5 +103,14 @@ public class UtilController {
 
   public void addTipsToModel(Map<String, Object> m, String key) {
     m.put(key, tipsRepository.getTipsContent(key));
+  }
+
+  public String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
   }
 }

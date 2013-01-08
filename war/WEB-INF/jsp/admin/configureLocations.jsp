@@ -93,6 +93,12 @@ $(document).ready(function() {
 		<b>Configure Locations</b>
 		<br />
 		<br />
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				Edit/Create centers and sites. 
+			</p>
+		</div>
+
 		<form id="${configureLocationsFormId}">
 				<c:forEach var="location" items="${model.allLocations}">
 					<div class="locationDiv">

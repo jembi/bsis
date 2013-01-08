@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,15 +13,39 @@ import model.user.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import viewmodel.UserViewModel;
+
 @Repository
 @Transactional
 public class UserRepository {
+
   @PersistenceContext
   private EntityManager em;
 
-  public void saveUser(User user) {
-    em.persist(user);
+  public User updateUser(User user, boolean modifyPassword) {
+    User existingUser = findUserById(user.getId());
+    if (existingUser == null) {
+      return null;
+    }
+    existingUser.copy(user);
+    if (modifyPassword)
+      existingUser.setPassword(user.getPassword());
+    existingUser.setIsDeleted(false);
+    em.merge(existingUser);
     em.flush();
+    return existingUser;
+  }
+
+  public User findUserById(Long id) {
+    if (id == null)
+      return null;
+    String queryString = "SELECT u FROM User u WHERE u.id = :userId and u.isDeleted = :isDeleted";
+    TypedQuery<User> query = em.createQuery(queryString, User.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("userId", id);
+    if (query.getResultList().size() == 0)
+      return null;
+    return query.getSingleResult();
   }
 
   public void deleteUser(String username) {
@@ -44,11 +69,16 @@ public class UserRepository {
     return null;
   }
 
-  public List<User> getAllUsers() {
+  public List<UserViewModel> getAllUsers() {
     TypedQuery<User> query = em
         .createQuery("SELECT u FROM User u where u.isDeleted= :isDeleted", User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    return query.getResultList();
+    List<User> users = query.getResultList();
+    List<UserViewModel> userViewModels = new ArrayList<UserViewModel>();
+    for (User user : users) {
+      userViewModels.add(new UserViewModel(user));
+    }
+    return userViewModels;
   }
 
   public void updateLastLogin(User user) {
@@ -65,5 +95,10 @@ public class UserRepository {
        em.merge(userObj);
        em.flush();
     }
+  }
+
+  public void addUser(User user) {
+    em.persist(user);
+    em.flush();
   }
 }

@@ -89,6 +89,11 @@ $(document).ready(function() {
 		<b>Configure Blood Bag Types</b>
 		<br />
 		<br />
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				Modify names of blood bag types. Add new blood bag types. 
+			</p>
+		</div>
 		<form id="${configureBloodBagTypesFormId}">
 				<c:forEach var="bloodBagType" items="${model.allBloodBagTypes}">
 					<div class="bloodBagTypeDiv">

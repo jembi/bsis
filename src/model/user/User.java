@@ -10,8 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import model.modificationtracker.RowModificationTracker;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -24,14 +23,14 @@ public class User {
   @Column(nullable=false)
   private Long id;
 
-  @Length(min=1, max=30)
+  @NotBlank
   @Column(length=30, unique=true, nullable=false)
   private String username;
 
-  @Length(min=1, max=255)
   @Column(length=255, nullable=false)
   private String password;
 
+  @NotBlank
   @Length(min=1, max=30)
   @Column(length=30, nullable=false)
   private String firstName;
@@ -51,8 +50,6 @@ public class User {
   private Boolean isStaff;
   private Boolean isActive;
   private Boolean isAdmin;
-
-  private RowModificationTracker modificationTracker;
 
   private Boolean isDeleted;
 
@@ -154,7 +151,7 @@ public class User {
   }
 
   public void setIsSuperuser(Boolean isAdmin) {
-    this.isAdmin = isAdmin;
+    this.setIsAdmin(isAdmin);
   }
 
   public void setLastLogin(Date lastLogin) {
@@ -169,43 +166,15 @@ public class User {
     this.isDeleted = isDeleted;
   }
 
-//  @Override
-//  public Date getLastUpdated() {
-//    return modificationTracker.getLastUpdated();
-//  }
-//
-//  @Override
-//  public Date getCreatedDate() {
-//    return modificationTracker.getCreatedDate();
-//  }
-//
-//  @Override
-//  public User getCreatedBy() {
-//    return modificationTracker.getCreatedBy();
-//  }
-//
-//  @Override
-//  public User getLastUpdatedBy() {
-//    return modificationTracker.getLastUpdatedBy();
-//  }
-//
-//  @Override
-//  public void setLastUpdated(Date lastUpdated) {
-//    modificationTracker.setLastUpdated(lastUpdated);
-//  }
-//
-//  @Override
-//  public void setCreatedDate(Date createdDate) {
-//    modificationTracker.setCreatedDate(createdDate);
-//  }
-//
-//  @Override
-//  public void setCreatedBy(User createdBy) {
-//    modificationTracker.setCreatedBy(createdBy);
-//  }
-//
-//  @Override
-//  public void setLastUpdatedBy(User lastUpdatedBy) {
-//    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-//  }
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
+
+  public void copy(User user) {
+    this.username = user.getUsername();
+    this.firstName = user.getFirstName();
+    this.lastName = user.getLastName();
+    this.isAdmin = user.getIsAdmin();
+    this.isActive = user.getIsActive();
+  }
 }

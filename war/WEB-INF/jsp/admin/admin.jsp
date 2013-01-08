@@ -10,6 +10,8 @@
 
 <link type="text/css" rel="stylesheet" href="css/admin.css" />
 <script type="text/javascript" src="js/admin.js"></script>
+<script type="text/javascript" src="js/admin/users.js"></script>
+
 
 <div id="adminTab" class="leftPanel">
 	<ul>
@@ -24,6 +26,9 @@
 		</li>
 		<li id="bloodBagTypesForm">
 			<a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>
+		</li>
+		<li id="configureUsersForm">
+			<a href="configureUsersFormGenerator.html">Users</a>
 		</li>
 		<li id="configureTipsForm">
 			<a href="configureTipsFormGenerator.html">Tips</a>

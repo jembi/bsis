@@ -12,6 +12,7 @@ import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.producttype.ProductType;
 import model.tips.Tips;
+import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,8 @@ import repository.FormFieldRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
 import repository.TipsRepository;
+import repository.UserRepository;
+import viewmodel.UserViewModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,6 +53,9 @@ public class AdminController {
 
   @Autowired
   TipsRepository tipsRepository;
+
+  @Autowired
+  UserRepository userRepository;
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -323,5 +329,4 @@ public class AdminController {
     mv.addObject("model", model);
     return mv;
   }
-
 }
