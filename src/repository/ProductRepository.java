@@ -484,12 +484,12 @@ public class ProductRepository {
       inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
 
-      inventory.put(productType.getProductType(), inventoryByBloodGroup);
+      inventory.put(productType.getProductTypeName(), inventoryByBloodGroup);
     }
 
     DateTime today = new DateTime();
     for (Product product : q.getResultList()) {
-      String productType = product.getProductType().getProductType();
+      String productType = product.getProductType().getProductTypeName();
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
       String bloodGroup = getBloodGroupForProduct(product).toString();
       Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);

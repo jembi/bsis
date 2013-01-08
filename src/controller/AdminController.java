@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.admin.FormField;
-import model.location.Location;
+import model.producttype.ProductType;
 import model.tips.Tips;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import repository.FormFieldRepository;
 import repository.LocationRepository;
+import repository.ProductTypeRepository;
 import repository.TipsRepository;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class AdminController {
@@ -39,6 +40,9 @@ public class AdminController {
   @Autowired
   LocationRepository locationRepository;
 
+  @Autowired
+  ProductTypeRepository productTypesRepository;
+  
   @Autowired
   TipsRepository tipsRepository;
   
@@ -171,7 +175,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureTipsFormGenerator", method=RequestMethod.GET)
-  public ModelAndView configureLocationsFormGenerator(
+  public ModelAndView configureTipsFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
@@ -183,12 +187,29 @@ public class AdminController {
     return mv;
   }
 
+  @RequestMapping(value="/configureProductTypesFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureProductTypesFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureProductTypes");
+    Map<String, Object> m = model.asMap();
+    addAllProductTypesToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  private void addAllProductTypesToModel(Map<String, Object> m) {
+    m.put("allProductTypes", productTypesRepository.getAllProductTypes());
+  }
+
   private void addAllTipsToModel(Map<String, Object> m) {
     m.put("allTips", tipsRepository.getAllTips());
   }
 
   @RequestMapping("/configureTips")
-  public ModelAndView configureLocations(
+  public ModelAndView configureTips(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureTips");
@@ -216,4 +237,36 @@ public class AdminController {
     mv.addObject("model", model);
     return mv;
   }
+
+  @RequestMapping("/configureProductTypes")
+  public ModelAndView configureProductTypes(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureProductTypes");
+    System.out.println(paramsAsJson);
+    List<ProductType> allProducTypes = new ArrayList<ProductType>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String productType : params.keySet()) {
+        String productTypeName = (String) params.get(productType);
+        ProductType pt = new ProductType();
+        pt.setProductType(productType);
+        pt.setProductTypeName(productTypeName);
+        pt.setIsDeleted(false);
+        allProducTypes.add(pt);
+      }
+      productTypesRepository.saveAllProductTypes(allProducTypes);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllProductTypesToModel(m);
+    m.put("refreshUrl", "configureProductTypesFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
+
 }

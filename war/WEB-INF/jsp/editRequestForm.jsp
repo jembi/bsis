@@ -214,7 +214,7 @@
 				<form:select path="productType" class="productType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="productType" items="${model.productTypes}">
-						<form:option value="${productType}">${productType}</form:option>
+						<form:option value="${productType.productType}">${productType.productTypeName}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="request.productType"

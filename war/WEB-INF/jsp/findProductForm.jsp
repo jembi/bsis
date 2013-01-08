@@ -197,7 +197,7 @@ $(document).ready(function() {
 			<div class="productTypeInput hidableDiv" style="display:none">
 				<form:select path="productTypes" class="productTypeSelector">
 					<c:forEach var="productType" items="${model.productTypes}">
-						<form:option value="${productType.productType}" label="${productType.productType}" />
+						<form:option value="${productType.productType}" label="${productType.productTypeName}" />
 					</c:forEach>
 				</form:select>
 			</div>

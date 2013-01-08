@@ -20,13 +20,15 @@ public class ProductTypeRepository {
 
   public List<ProductType> getAllProductTypes() {
     TypedQuery<ProductType> query;
-    query = em.createQuery("SELECT p from ProductType p", ProductType.class);
+    query = em.createQuery("SELECT p from ProductType p where p.isDeleted=:isDeleted", ProductType.class);
+    query.setParameter("isDeleted", false);
     return query.getResultList();
   }
   
   public boolean isProductTypeValid(String checkProductType) {
-    String queryString = "SELECT p from ProductType p";
+    String queryString = "SELECT p from ProductType p where p.isDeleted=:isDeleted";
     TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
+    query.setParameter("isDeleted", false);
     for (ProductType productType : query.getResultList()) {
       if (productType.getProductType().equals(checkProductType))
         return true;
@@ -37,8 +39,28 @@ public class ProductTypeRepository {
   public ProductType fromString(String productType) {
     TypedQuery<ProductType> query;
     query = em.createQuery("SELECT p from ProductType p " +
-    		    "where b.productType=:productType", ProductType.class);
+    		    "where p.productType=:productType AND p.isDeleted=:isDeleted", ProductType.class);
+    query.setParameter("isDeleted", false);
     query.setParameter("productType", productType);
+    if (query.getResultList().size() == 0)
+      return null;
     return query.getSingleResult();
+  }
+
+  public void saveAllProductTypes(List<ProductType> allProductTypes) {
+    for (ProductType pt: allProductTypes) {
+        ProductType existingProductType = fromString(pt.getProductType());
+        if (existingProductType != null) {
+          existingProductType.setProductTypeName(pt.getProductTypeName());
+          em.merge(existingProductType);
+        }
+        else {
+          pt.setShelfLife(0);
+          pt.setShelfLifeUnits("");
+          pt.setDescription("");
+          em.persist(pt);
+        }
+    }
+    em.flush();
   }
 }

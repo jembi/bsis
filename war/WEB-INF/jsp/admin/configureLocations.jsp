@@ -18,7 +18,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="configureLocationsFormId">findDonorForm-${unique_page_id}</c:set>
+<c:set var="configureLocationsFormId">configureLocations-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {

@@ -166,7 +166,7 @@ $(document).ready(
 								<td>${product.bloodGroup}</td>
 							</c:if>
 							<c:if test="${model.productFields.productType.hidden != true}">
-								<td>${product.productType}</td>
+								<td>${product.productTypeName}</td>
 							</c:if>
 							<c:if test="${model.productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>

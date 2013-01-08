@@ -168,7 +168,7 @@
 		<c:if test="${model.requestFields.productType.hidden != true }">
 			<div>
 				<label>${model.requestFields.productType.displayName}</label>
-				<label>${model.request.productType.productType}</label>
+				<label>${model.request.productType.productTypeName}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.requestedQuantity.hidden != true }">

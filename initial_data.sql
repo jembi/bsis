@@ -75,8 +75,8 @@ insert into ProductType (productType, productTypeName, description, shelfLife, s
 ('Whole Blood', 'Whole Blood', '', '35', 'days', '0'),
 ('RCC', 'Red Blood Cells', '', '', '', '0'),
 ('FFP', 'Fresh Frozen Plasma', '', '365', 'days', '0'),
-('Platelets', '', '', '5', 'days', '0'),
-('Partial Platelets', '', '', '', '', '0');
+('Platelets', 'Platelets', '', '5', 'days', '0'),
+('Partial Platelets', 'Partial Platelets', '', '', '', '0');
 
 insert into BloodBagType (bloodBagType, isDeleted) values ('Single', '0'), ('Triple', '0'), ('Paedi', '0');
 

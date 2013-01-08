@@ -114,7 +114,7 @@ $(document).ready(
 								<td>${product.productNumber}</td>
 							</c:if>
 							<c:if test="${model.productFields.productType.hidden != true}">
-								<td>${product.productType}</td>
+								<td>${product.productType.productTypeName}</td>
 							</c:if>
 							<c:if test="${model.productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>

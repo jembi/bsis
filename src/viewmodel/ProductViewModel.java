@@ -46,7 +46,7 @@ public class ProductViewModel {
   public ProductType getProductType() {
     return product.getProductType();
   }
-
+  
   public Date getLastUpdated() {
     return product.getLastUpdated();
   }
