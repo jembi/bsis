@@ -282,6 +282,7 @@ public class AdminController {
       System.out.println(dbname);
 
       ProcessBuilder pb = new ProcessBuilder(mysqldumpPath,
+                    "--single-transaction",
                     "-u", username, "-p" + password, dbname);
 
       pb.redirectErrorStream(true); // equivalent of 2>&1
