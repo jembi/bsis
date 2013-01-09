@@ -291,14 +291,14 @@ public class AdminController {
       InputStream in = p.getInputStream();
       BufferedInputStream buf = new BufferedInputStream(in);
 
+      response.setContentType("application/zip");
+      response.addHeader("content-disposition", "attachment; filename=" + fileName + ".zip");
 
       ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
       zipOut.putNextEntry(new ZipEntry(fileName + ".sql"));
       
       IOUtils.copy(buf, zipOut);
 
-      response.setContentType("application/zip");
-      response.addHeader("Content-Disposition", "attachment; filename="+ fileName + ".zip");
       zipOut.finish();
       zipOut.close();
       p.waitFor();
