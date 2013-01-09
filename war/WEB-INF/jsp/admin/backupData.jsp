@@ -22,7 +22,7 @@
 $(document).ready(function() {
   $("#${tabContentId}").find(".backupDataButton").button().click(
       function() {
-        window.location.href = "backupData.zip";
+        window.open("backupData.zip");
       });
 });
 </script>
