@@ -31,6 +31,7 @@
 
     create table BloodBagType (
         bloodBagType varchar(30) not null,
+        bloodBagTypeName varchar(50) not null,
         isDeleted boolean,
         primary key (bloodBagType)
     ) ENGINE=InnoDB;
@@ -92,6 +93,7 @@
 
     create table DonorType (
         donorType varchar(30) not null,
+        donorTypeName varchar(50) not null,
         isDeleted boolean,
         primary key (donorType)
     ) ENGINE=InnoDB;
@@ -204,8 +206,8 @@
 
     create table TestResult (
         id bigint not null auto_increment,
-        createdDate datetime,
         isDeleted boolean,
+        createdDate datetime,
         lastUpdated datetime,
         notes longtext,
         result varchar(255),
@@ -236,13 +238,9 @@
         lastLogin datetime,
         lastName varchar(30),
         middleName varchar(30),
-        createdDate datetime,
-        lastUpdated datetime,
         notes longtext,
         password varchar(255) not null,
         username varchar(30) not null unique,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -425,17 +423,5 @@
     alter table TestResult 
         add index FKDB459F6FD0AFB367 (lastUpdatedBy_id), 
         add constraint FKDB459F6FD0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table User 
-        add index FK285FEBA49787C4 (createdBy_id), 
-        add constraint FK285FEBA49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table User 
-        add index FK285FEBD0AFB367 (lastUpdatedBy_id), 
-        add constraint FK285FEBD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);

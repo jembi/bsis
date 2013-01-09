@@ -49,6 +49,7 @@ public class TestResult implements ModificationTracker {
   private Boolean isDeleted;
 
   public TestResult() {
+    modificationTracker = new RowModificationTracker();
   }
 
   public Long getId() {
