@@ -1,10 +1,20 @@
 package controller;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +24,7 @@ import model.donortype.DonorType;
 import model.producttype.ProductType;
 import model.tips.Tips;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +70,12 @@ public class AdminController {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  ServletContext servletContext;
+
+  @Autowired
+  UtilController utilController;
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -227,7 +244,70 @@ public class AdminController {
     return mv;
   }
 
+  @RequestMapping(value="/backupDataFormGenerator", method=RequestMethod.GET)
+  public ModelAndView backupDataFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
 
+    ModelAndView mv = new ModelAndView("admin/backupData");
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping(value="/backupData", method=RequestMethod.GET)
+  public void backupData(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy_HH_mm_ss");
+
+    String currentDate = dateFormat.format(new Date());
+    String fileName = "mysql_backup_" + currentDate;
+    String fullFileName = servletContext.getRealPath("") + "/tmp/" + fileName + ".zip";
+
+    System.out.println("Writing backup to " + fullFileName);
+
+    try {
+      Properties prop = utilController.getV2VProperties();
+      String mysqldumpPath = (String) prop.get("v2v.dbbackup.mysqldumppath");
+      String username = (String) prop.get("v2v.dbbackup.username");
+      String password = (String) prop.get("v2v.dbbackup.password");
+      String dbname = (String) prop.get("v2v.dbbackup.dbname");
+
+      System.out.println(mysqldumpPath);
+      System.out.println(username);
+      System.out.println(password);
+      System.out.println(dbname);
+      
+      ProcessBuilder pb = new ProcessBuilder(mysqldumpPath,
+                    "-u", username, "-p" + password, dbname);
+
+      pb.redirectErrorStream(true); // equivalent of 2>&1
+      Process p = pb.start();
+
+      InputStream in = p.getInputStream();
+      BufferedInputStream buf = new BufferedInputStream(in);
+
+
+      ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
+      zipOut.putNextEntry(new ZipEntry(fileName + ".sql"));
+      
+      IOUtils.copy(buf, zipOut);
+
+      response.setContentType("application/zip");
+      response.addHeader("Content-Disposition", "attachment; filename="+ fileName + ".zip");
+      zipOut.finish();
+      zipOut.close();
+      p.waitFor();
+      System.out.println("Exit value: " + p.exitValue());
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
   @RequestMapping(value="/configureDonorTypesFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureDonorTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,

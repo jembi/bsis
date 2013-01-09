@@ -1,12 +1,15 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
@@ -33,6 +36,9 @@ public class UtilController {
   @Autowired
   private TipsRepository tipsRepository;
 
+  @Autowired
+  private ServletContext servletContext;
+  
   public Map<String, Object> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
     Map<String, Object> formFieldMap = new HashMap<String, Object>();
@@ -112,5 +118,12 @@ public class UtilController {
         reqUrl += "?"+queryString;
     }
     return reqUrl;
+  }
+
+  public Properties getV2VProperties() throws IOException {
+    Properties prop = new Properties();
+    InputStream stream = servletContext.getResourceAsStream("/WEB-INF/v2v.properties");
+    prop.load(stream);
+    return prop;
   }
 }

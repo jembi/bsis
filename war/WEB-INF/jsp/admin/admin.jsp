@@ -18,6 +18,9 @@
 		<li id="configureForms">
 			<a href="configureForms.html">Configure Forms</a>
 		</li>
+		<li id="backupData">
+			<a href="backupDataFormGenerator.html">Backup Data</a>
+		</li>
 		<li id="locationForm">
 			<a href="configureLocationsFormGenerator.html">Centers/Sites</a>
 		</li>
