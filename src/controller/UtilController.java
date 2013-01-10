@@ -1,7 +1,11 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -122,8 +126,18 @@ public class UtilController {
 
   public Properties getV2VProperties() throws IOException {
     Properties prop = new Properties();
-    InputStream stream = servletContext.getResourceAsStream("/WEB-INF/v2v.properties");
-    prop.load(stream);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/v2v.properties")));
+    String propertyFileContents = "";
+    String line;
+    while ((line = reader.readLine()) != null) {
+      propertyFileContents += line + "\n";
+    }
+    prop.load(new StringReader(propertyFileContents.replace("\\","\\\\")));
     return prop;
+  }
+
+  private String readPropertyFileContents() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

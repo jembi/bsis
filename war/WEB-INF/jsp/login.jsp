@@ -59,7 +59,7 @@
 							</div>
 
 							<div>
-								<button id="loginButton" class="loginButton">Sign In</button>
+								<button id="loginButton" class="loginButton">Log In</button>
 							</div>
 						</form:form>
 					</div>

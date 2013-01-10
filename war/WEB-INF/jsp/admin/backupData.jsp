@@ -29,12 +29,14 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
-		<div class="tipsBox ui-state-highlight">
+		<!-- div class="tipsBox ui-state-highlight">
 			<p>
-				Download a backup of V2V database by clicking on the button below.
+				Backup the V2V database by clicking on the button below.
 			</p>
-		</div>	
-		<button class="backupDataButton">Download Backup</button>
+		</div-->
+		<br />
+		<br />
+		<button class="backupDataButton">Backup the V2V Database</button>
 	</div>
 	<div id="${childContentId}">
 	</div>

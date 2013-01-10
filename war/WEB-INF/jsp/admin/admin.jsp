@@ -39,8 +39,8 @@
 		<li id="configureTipsForm">
 			<a href="configureTipsFormGenerator.html">Tips</a>
 		</li>
-		<li id="createSampleData">
+		<!-- li id="createSampleData">
 			<a href="createSampleDataFormGenerator.html">Sample Data</a>
-		</li>
+		</li-->
 	</ul>
 </div>

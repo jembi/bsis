@@ -82,7 +82,7 @@ insert into ProductType (productType, productTypeName, description, shelfLife, s
 ('Partial Platelets', 'Partial Platelets', '', '', '', '0');
 
 insert into BloodBagType (bloodBagType, bloodBagTypeName, isDeleted) values
-('Single', 'Single' '0'),
+('Single', 'Single', '0'),
 ('Triple', 'Triple', '0'),
 ('Pedi',  'Pedi', '0');
 

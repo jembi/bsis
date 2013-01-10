@@ -413,7 +413,7 @@ public class CreateDataController {
     List<DonorType> donorTypes = donorTypeRepository.getAllDonorTypes();
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
-    String[] bloodBagTypes = {"Paedi", "Single", "Triple"};
+    String[] bloodBagTypes = {"Pedi", "Single", "Triple"};
 		for (int i = 0; i < numCollections; i++) {
 		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm(true);
 

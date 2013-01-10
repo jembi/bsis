@@ -10,7 +10,7 @@
 <div class="headlink">
 	<p class="topPanelUsername">Logged in as ${model.user.username}</p>
 	<a href="logout.html"><span
-				class="ui-icon ui-icon-locked" style="display: inline-block;"></span>Sign out</a>
+				class="ui-icon ui-icon-locked" style="display: inline-block;"></span>Log out</a>
 </div>
 
 <div id="topPanelTabs" class="topPanelTabs tabs">

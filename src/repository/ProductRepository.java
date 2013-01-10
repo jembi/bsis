@@ -468,8 +468,6 @@ public class ProductRepository {
     q.setParameter("isAvailable", true);
     q.setParameter("isDeleted", false);
 
-    System.out.println(q.getResultList().get(0));
-
     TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
 
     for (ProductType productType : productTypeQuery.getResultList()) {
