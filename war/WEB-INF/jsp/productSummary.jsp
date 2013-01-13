@@ -165,6 +165,12 @@
 				<label>${model.product.isQuarantined ? "Yes" : "No"}</label>
 			</div>
 		</c:if>
+		<c:if test="${model.productFields.bloodGroup.hidden != true }">
+			<div>
+				<label>${model.productFields.bloodGroup.displayName}</label>
+				<label>${model.product.bloodGroup}</label>
+			</div>
+		</c:if>
 	</div>
 
 	<hr />

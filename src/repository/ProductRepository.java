@@ -48,7 +48,7 @@ public class ProductRepository {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
-  
+
   public void discardIfQuarantinedProduct(Product product) {
 
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
@@ -64,6 +64,8 @@ public class ProductRepository {
     Set<String> testResultsFound = new HashSet<String>();
     boolean quarantined = false;
     for (TestResult t : testResults) {
+      if (t.getIsDeleted())
+        continue;
       String testName = t.getBloodTest().getName();
       String testResult = t.getResult();
       if (correctTestResults.containsKey(testName)) {
@@ -82,6 +84,43 @@ public class ProductRepository {
     product.setIsQuarantined(quarantined);
   }
 
+  public void updateBloodGroup(Product product) {
+
+    CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
+
+    BloodAbo bloodAbo = product.getBloodAbo();
+    BloodRhd bloodRhd = product.getBloodRhd();
+
+    Date aboDate = new Date(0);
+    Date rhdDate = new Date(0);
+    System.out.println(aboDate);
+    System.out.println(rhdDate);
+
+    for (TestResult t : c.getTestResults()) {
+      if (t.getIsDeleted())
+        continue;
+      BloodTest bt = t.getBloodTest();
+      String testName = bt.getName();
+      String testResult = t.getResult();
+      Date testedOn = t.getTestedOn();
+
+      System.out.println(testName);
+      System.out.println(testResult);
+      System.out.println(testedOn);
+
+      if (testName != null && testName.equals("Blood ABO") && testedOn.after(aboDate)) {
+        bloodAbo = BloodAbo.valueOf(testResult);
+        aboDate = testedOn;
+      }
+      if (testName != null && testName.equals("Blood Rh") && testedOn.after(rhdDate)) {
+        bloodRhd = BloodRhd.valueOf(testResult);
+        rhdDate = testedOn;
+      }
+    }
+    product.setBloodAbo(bloodAbo);
+    product.setBloodRhd(bloodRhd);
+  }
+  
   public Product findProduct(String productNumber) {
     Product product = null;
     if (productNumber != null && productNumber.length() > 0) {
@@ -369,10 +408,11 @@ public class ProductRepository {
 
   public Product updateProduct(Product product) {
     Product existingProduct = findProductById(product.getId());
-    discardIfQuarantinedProduct(existingProduct);
     if (existingProduct == null) {
       return null;
     }
+    discardIfQuarantinedProduct(existingProduct);
+    updateBloodGroup(existingProduct);
     existingProduct.copy(product);
     em.merge(existingProduct);
     em.flush();
@@ -394,6 +434,7 @@ public class ProductRepository {
 
   public void addProduct(Product product) {
     discardIfQuarantinedProduct(product);
+    updateBloodGroup(product);
     em.persist(product);
     em.flush();
   }

@@ -38,6 +38,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Product', 'expiresOn', 'Expires On', '', '0', '1', '0', '0', ''),
 ('Product', 'isQuarantined', 'Quarantined', '', '0', '0', '0', '0', ''),
 ('Product', 'isAvailable', 'Available', '', '0', '0', '0', '0', ''),
+('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', ''),
 ('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '');
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField) values
@@ -100,8 +101,8 @@ insert into BloodTest (name, correctResult, allowedResults, isRequired, notes) v
 ('HBV', 'negative', 'positive,negative', '1', ''),
 ('HCV', 'negative', 'positive,negative', '1', ''),
 ('Syphilis', 'negative', 'positive,negative', '1', ''),
-('Blood ABO', '', 'A,B,AB,O', '1', ''),
-('Blood Rh', '', 'POSITIVE,NEGATIVE', '1', '');
+('Blood ABO', '', 'A,B,AB,O', '0', ''),
+('Blood Rh', '', 'POSITIVE,NEGATIVE', '0', '');
 
 insert into Tips (tipsKey, tipsName,tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),

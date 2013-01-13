@@ -21,6 +21,8 @@ import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.testresults.TestResult;
+import model.util.BloodAbo;
+import model.util.BloodRhd;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -40,26 +42,27 @@ public class TestResultRepository {
   @Autowired
   private ProductRepository productRepository;
 
-  public void updateQuarantineStatus(TestResult testResult) {
-//    if (testResult.getCollectedSample() == null || testResult.getCollectedSample().getId() == null)
-//      return;
+  private List<Product> getProductsToUpdate(TestResult testResult) {
+    if (testResult.getCollectedSample() == null || testResult.getCollectedSample().getId() == null)
+      return Arrays.asList(new Product[0]);
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(testResult.getCollectedSample().getId());
-//    if (c == null)
-//      return;
-    for (Product product : c.getProducts()) {
+    if (c == null)
+      return Arrays.asList(new Product[0]);
+    return c.getProducts();
+  }
+  
+  public void updateQuarantineStatus(TestResult testResult) {
+    for (Product product : getProductsToUpdate(testResult)) {
       productRepository.discardIfQuarantinedProduct(product);
       em.merge(product);
     }
   }
-  
-  public void saveTestResult(TestResult testResult) {
-    em.persist(testResult);
-    em.flush();
-  }
 
-  public void deleteAllTestResults() {
-    Query query = em.createQuery("DELETE FROM TestResult t");
-    query.executeUpdate();
+  public void updateProductBloodGroup(TestResult testResult) {
+    for (Product product : getProductsToUpdate(testResult)) {
+      productRepository.updateBloodGroup(product);
+      em.merge(product);
+    }
   }
 
   public List<TestResult> getAllTestResults() {
@@ -71,8 +74,7 @@ public class TestResultRepository {
   }
 
   public List<TestResult> getTestResults(Date fromDate, Date toDate) {
-    TypedQuery<TestResult> query = em
-        .createQuery(
+    TypedQuery<TestResult> query = em.createQuery(
             "SELECT t FROM TestResult t WHERE t.dateCollected >= :fromDate and t.dateCollected<= :toDate and t.isDeleted= :isDeleted",
             TestResult.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -87,8 +89,8 @@ public class TestResultRepository {
 
   public void deleteTestResult(Long testResultId) {
     TestResult existingTestResult = findTestResultById(testResultId);
-    updateQuarantineStatus(existingTestResult);
     existingTestResult.setIsDeleted(Boolean.TRUE);
+    updateProductsForTestResult(existingTestResult);
     em.merge(existingTestResult);
     em.flush();
   }
@@ -293,9 +295,14 @@ public class TestResultRepository {
     return em.find(TestResult.class, testResultId);
   }
 
+  public void updateProductsForTestResult(TestResult testResult) {
+    updateQuarantineStatus(testResult);
+    updateProductBloodGroup(testResult);
+  }
+
   public void addTestResult(TestResult testResult) {
     em.persist(testResult);
-    updateQuarantineStatus(testResult);
+    updateProductsForTestResult(testResult);
     em.flush();
   }
 
@@ -369,7 +376,7 @@ public class TestResultRepository {
     }
     existingTestResult.copy(testResult);
     existingTestResult = em.merge(existingTestResult);
-    updateQuarantineStatus(existingTestResult);
+    updateProductsForTestResult(existingTestResult);
     em.flush();
     return existingTestResult;
   }
@@ -377,6 +384,7 @@ public class TestResultRepository {
   public void addAllTestResults(List<TestResult> testResults) {
     for (TestResult testResult : testResults) {
       updateQuarantineStatus(testResult);
+      updateProductBloodGroup(testResult);
       em.persist(testResult);
     }
     em.flush();    

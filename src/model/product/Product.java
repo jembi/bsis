@@ -97,8 +97,6 @@ public class Product implements ModificationTracker {
     this.productType = product.productType;
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
-    this.setBloodAbo(product.getBloodAbo());
-    this.setBloodRhd(product.getBloodRhd());
     this.notes = product.notes;
   }
 

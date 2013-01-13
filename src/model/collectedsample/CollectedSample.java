@@ -30,6 +30,7 @@ import model.product.Product;
 import model.testresults.TestResult;
 import model.user.User;
 
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Index;
 
 @Entity

@@ -444,7 +444,7 @@ public class CreateDataController {
     	  List<String> allowedResults = new ArrayList<String>(b.getAllowedResults());
 
     	  if (!b.getCorrectResult().isEmpty()) {
-    	    if (Math.abs(random.nextInt(100)) > 20) {
+    	    if (Math.abs(random.nextInt(100)) > 10) {
     	      result = b.getCorrectResult();
     	    }
     	    else {
