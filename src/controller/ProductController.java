@@ -269,8 +269,6 @@ public class ProductController {
     // property will be changed
     m.put("existingProduct", true);
 
-    System.out.println("here");
-
     // IMPORTANT: Validation code just checks if the ID exists.
     // We still need to store the collected sample as part of the product.
     String collectionNumber = form.getCollectionNumber();

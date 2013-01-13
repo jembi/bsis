@@ -19,8 +19,10 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
+import model.product.Product;
 import model.testresults.TestResult;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -28,9 +30,28 @@ import org.springframework.util.CollectionUtils;
 @Repository
 @Transactional
 public class TestResultRepository {
+
   @PersistenceContext
   private EntityManager em;
 
+  @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
+  
+  @Autowired
+  private ProductRepository productRepository;
+
+  public void updateQuarantineStatus(TestResult testResult) {
+//    if (testResult.getCollectedSample() == null || testResult.getCollectedSample().getId() == null)
+//      return;
+    CollectedSample c = collectedSampleRepository.findCollectedSampleById(testResult.getCollectedSample().getId());
+//    if (c == null)
+//      return;
+    for (Product product : c.getProducts()) {
+      productRepository.discardIfQuarantinedProduct(product);
+      em.merge(product);
+    }
+  }
+  
   public void saveTestResult(TestResult testResult) {
     em.persist(testResult);
     em.flush();
@@ -66,6 +87,7 @@ public class TestResultRepository {
 
   public void deleteTestResult(Long testResultId) {
     TestResult existingTestResult = findTestResultById(testResultId);
+    updateQuarantineStatus(existingTestResult);
     existingTestResult.setIsDeleted(Boolean.TRUE);
     em.merge(existingTestResult);
     em.flush();
@@ -148,21 +170,6 @@ public class TestResultRepository {
       return null;
     }
     return testResults.get(0);
-  }
-
-  public TestResult updateOrAddTestResult(TestResult testResult) {
-    TestResult existingTestResult = findTestResultByCollectionNumber(testResult
-        .getCollectedSample().getCollectionNumber());
-    if (existingTestResult == null) {
-      testResult.setIsDeleted(false);
-      saveTestResult(testResult);
-      return testResult;
-    }
-    existingTestResult.copy(testResult);
-    existingTestResult.setIsDeleted(false);
-    em.merge(existingTestResult);
-    em.flush();
-    return existingTestResult;
   }
 
   public Map<String, Map<Long, Long>> findNumberOfPositiveTests(String dateTestedFrom,
@@ -288,6 +295,7 @@ public class TestResultRepository {
 
   public void addTestResult(TestResult testResult) {
     em.persist(testResult);
+    updateQuarantineStatus(testResult);
     em.flush();
   }
 
@@ -360,14 +368,16 @@ public class TestResultRepository {
       return null;
     }
     existingTestResult.copy(testResult);
-    em.merge(existingTestResult);
+    existingTestResult = em.merge(existingTestResult);
+    updateQuarantineStatus(existingTestResult);
     em.flush();
     return existingTestResult;
   }
 
   public void addAllTestResults(List<TestResult> testResults) {
-    for (TestResult t : testResults) {
-      em.persist(t);
+    for (TestResult testResult : testResults) {
+      updateQuarantineStatus(testResult);
+      em.persist(testResult);
     }
     em.flush();    
   }

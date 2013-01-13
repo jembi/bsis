@@ -159,6 +159,12 @@
 				<label>${model.product.isAvailable ? "Yes" : "No"}</label>
 			</div>
 		</c:if>
+		<c:if test="${model.productFields.isQuarantined.hidden != true }">
+			<div>
+				<label>${model.productFields.isQuarantined.displayName}</label>
+				<label>${model.product.isQuarantined ? "Yes" : "No"}</label>
+			</div>
+		</c:if>
 	</div>
 
 	<hr />

@@ -477,7 +477,7 @@ public class CreateDataController {
 			p.setExpiresOn(cal.getTime());
 			p.setIsAvailable(true);
 			p.setIsDeleted(false);
-			productRepository.saveProduct(p);
+			productRepository.addProduct(p);
 		}
 	}
 

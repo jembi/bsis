@@ -8,8 +8,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,9 +28,9 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 
-import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -41,9 +43,43 @@ public class ProductRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public void saveProduct(Product product) {
-    em.persist(product);
-    em.flush();
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
+
+  @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
+  
+  public void discardIfQuarantinedProduct(Product product) {
+
+    CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
+    List<TestResult> testResults = c.getTestResults();
+    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
+    Map<String, String> correctTestResults = new HashMap<String, String>();
+    for (BloodTest bt : bloodTests) {
+      if (bt.getIsRequired()) {
+        correctTestResults.put(bt.getName(), bt.getCorrectResult().toLowerCase());
+      }
+    }
+
+    Set<String> testResultsFound = new HashSet<String>();
+    boolean quarantined = false;
+    for (TestResult t : testResults) {
+      String testName = t.getBloodTest().getName();
+      String testResult = t.getResult();
+      if (correctTestResults.containsKey(testName)) {
+        if (testResult == null || !testResult.toLowerCase().equals(correctTestResults.get(testName)))
+          quarantined = true;
+          testResultsFound.add(testName);
+      }
+    }
+
+    System.out.println(testResultsFound);
+    System.out.println(correctTestResults);
+    // none of the required test results should be missing
+    if (testResultsFound.size() != correctTestResults.size())
+      quarantined = true;
+
+    product.setIsQuarantined(quarantined);
   }
 
   public Product findProduct(String productNumber) {
@@ -333,25 +369,11 @@ public class ProductRepository {
 
   public Product updateProduct(Product product) {
     Product existingProduct = findProductById(product.getId());
+    discardIfQuarantinedProduct(existingProduct);
     if (existingProduct == null) {
       return null;
     }
     existingProduct.copy(product);
-    em.merge(existingProduct);
-    em.flush();
-    return existingProduct;
-  }
-
-  public Product updateOrAddProduct(Product product) {
-    Product existingProduct = findProductByProductNumber(product
-        .getProductNumber());
-    if (existingProduct == null) {
-      product.setIsDeleted(false);
-      saveProduct(product);
-      return product;
-    }
-    existingProduct.copy(product);
-    existingProduct.setIsDeleted(false);
     em.merge(existingProduct);
     em.flush();
     return existingProduct;
@@ -366,12 +388,12 @@ public class ProductRepository {
 
   public void issueProduct(String productNumber) {
     Product existingProduct = findProductByProductNumber(productNumber);
-//    existingProduct.setIssued(Boolean.TRUE);
     em.merge(existingProduct);
     em.flush();
   }
 
   public void addProduct(Product product) {
+    discardIfQuarantinedProduct(product);
     em.persist(product);
     em.flush();
   }

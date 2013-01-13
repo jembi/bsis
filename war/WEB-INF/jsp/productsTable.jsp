@@ -104,11 +104,22 @@ $(document).ready(
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
 						</c:if>
+						<c:if test="${model.productFields.isAvailable.hidden != true}">
+							<th>${model.productFields.isAvailable.displayName}</th>
+						</c:if>
+						<c:if test="${model.productFields.isQuarantined.hidden != true}">
+							<th>${model.productFields.isQuarantined.displayName}</th>
+						</c:if>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="product" items="${model.allProducts}">
-						<tr>
+					<c:if test="${product.isQuarantined}">
+						<tr style="color: red;">
+					</c:if>
+					<c:if test="${!product.isQuarantined}">
+						<tr style="color: green;">
+					</c:if>
 							<td style="display: none">${product.id}</td>
 							<c:if test="${model.productFields.productNumber.hidden != true}">
 								<td>${product.productNumber}</td>
@@ -121,6 +132,12 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
+							</c:if>
+							<c:if test="${model.productFields.isAvailable.hidden != true}">
+								<td>${product.isAvailable ? "&#x2713" : "&#x2717"}</td>
+							</c:if>
+							<c:if test="${model.productFields.isQuarantined.hidden != true}">
+								<td>${product.isQuarantined ? "&#x2713" : "&#x2717"}</td>
 							</c:if>
 						</tr>
 					</c:forEach>
