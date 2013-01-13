@@ -485,9 +485,10 @@ public class ProductRepository {
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p LEFT JOIN FETCH p.collectedSample c LEFT JOIN FETCH c.testResults " +
-    		                     "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted",
+    		                     "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined",
     		                     Product.class);
     q.setParameter("isAvailable", true);
+    q.setParameter("isQuarantined", false);
     q.setParameter("isDeleted", false);
 
     TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
