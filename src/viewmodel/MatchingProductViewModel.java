@@ -4,26 +4,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.user.User;
-import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 public class MatchingProductViewModel {
 
 	private Product product;
-	private BloodGroup bloodGroup;
-
-	public MatchingProductViewModel(Product product, BloodGroup bloodGroup) {
-	  this.product = product;
-	  this.bloodGroup = bloodGroup;
-	}
 
 	public MatchingProductViewModel(Product product) {
 	  this.product = product;
@@ -100,7 +92,7 @@ public class MatchingProductViewModel {
   }
 
   public BloodGroup getBloodGroup() {
-    return bloodGroup;
+    return new BloodGroup(product.getBloodAbo(), product.getBloodRhd());
   }
 
   public String getCollectionNumber() {

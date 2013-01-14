@@ -356,8 +356,6 @@ public class RequestsController {
     System.out.println("Request found");
     m.put("request", productRequest);
     List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(productRequest);
-    System.out.println(products);
-    
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));

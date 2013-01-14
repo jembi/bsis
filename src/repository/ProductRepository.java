@@ -442,53 +442,26 @@ public class ProductRepository {
                  "SELECT p from Product p where p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
                  "p.isAvailable = :isAvailable AND " +
+                 "p.isQuarantined = :isQuarantined AND " +
+                 "((p.bloodAbo = :bloodAbo AND p.bloodRhd = :bloodRhd) OR " +
+                 "(p.bloodAbo = :bloodO)) AND " +
                  "p.isDeleted = :isDeleted",
                   Product.class);
     query.setParameter("productType", productRequest.getProductType());
     query.setParameter("today", today);
     query.setParameter("isAvailable", true);
+    query.setParameter("isQuarantined", false);
+    query.setParameter("bloodAbo", productRequest.getBloodAbo());
+    query.setParameter("bloodO", BloodAbo.O);
+    query.setParameter("bloodRhd", productRequest.getBloodRhd());
     query.setParameter("isDeleted", false);
 
-    List<Product> products = query.getResultList();
-    List<MatchingProductViewModel> safeProducts = new ArrayList<MatchingProductViewModel>();
-    for (Product product : products) {
-      boolean isSafe = true;
-      CollectedSample collectedSample = product.getCollectedSample();
-
-      List<TestResult> results = collectedSample.getTestResults();
-
-      String bloodAbo = "";
-      String bloodRh = "";
-
-      for (TestResult testResult : results) {
-        BloodTest bloodTest = testResult.getBloodTest();
-        String actualResult = testResult.getResult();
-
-        if (bloodTest.getName().equals("Blood Rh")) {
-          bloodRh = actualResult;
-        }
-
-        if (bloodTest.getName().equals("Blood ABO")) {
-          bloodAbo = actualResult;
-        }
-
-        String correctResult = bloodTest.getCorrectResult();
-        if (correctResult.isEmpty())
-          continue;
-        if (!correctResult.equals(actualResult)) {
-          isSafe = false;
-          break;
-        }
-      }
-
-      String requestedAbo = productRequest.getBloodAbo().toString();
-      String requestedRh = productRequest.getBloodRhd().toString(); 
-      if (isSafe && bloodCrossmatch(bloodAbo, bloodRh, requestedAbo, requestedRh)) {
-        BloodGroup bg = new BloodGroup(BloodAbo.valueOf(bloodAbo), BloodRhd.valueOf(bloodRh));
-        safeProducts.add(new MatchingProductViewModel(product, bg));
-      }
+    List<MatchingProductViewModel> products = new ArrayList<MatchingProductViewModel>();
+    for (Product product : query.getResultList()) {
+      products.add(new MatchingProductViewModel(product));
     }
-    return safeProducts;
+
+    return products;
   }
 
   private boolean bloodCrossmatch(String abo1, String rhd1, String abo2, String rhd2) {
@@ -512,8 +485,8 @@ public class ProductRepository {
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT p from Product p " +
-    		                     "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined",
-    		                     Product.class);
+                             "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined",
+                             Product.class);
     q.setParameter("isAvailable", true);
     q.setParameter("isQuarantined", false);
     q.setParameter("isDeleted", false);
