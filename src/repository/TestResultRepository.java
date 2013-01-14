@@ -14,15 +14,12 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.testresults.TestResult;
-import model.util.BloodAbo;
-import model.util.BloodRhd;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

@@ -4,6 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.producttype.ProductType;
@@ -111,5 +114,12 @@ public class ProductViewModel {
        )
       return "";
     return getProduct().getCollectedSample().getCollectionNumber();
+  }
+
+  public String getAge() {
+    DateTime today = new DateTime();
+    DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
+    Long age = (long) Days.daysBetween(createdOn, today).getDays();
+    return age + " days old";
   }
 }

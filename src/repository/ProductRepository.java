@@ -75,8 +75,6 @@ public class ProductRepository {
       }
     }
 
-    System.out.println(testResultsFound);
-    System.out.println(correctTestResults);
     // none of the required test results should be missing
     if (testResultsFound.size() != correctTestResults.size())
       quarantined = true;
@@ -93,8 +91,6 @@ public class ProductRepository {
 
     Date aboDate = new Date(0);
     Date rhdDate = new Date(0);
-    System.out.println(aboDate);
-    System.out.println(rhdDate);
 
     for (TestResult t : c.getTestResults()) {
       if (t.getIsDeleted())
@@ -103,10 +99,6 @@ public class ProductRepository {
       String testName = bt.getName();
       String testResult = t.getResult();
       Date testedOn = t.getTestedOn();
-
-      System.out.println(testName);
-      System.out.println(testResult);
-      System.out.println(testedOn);
 
       if (testName != null && testName.equals("Blood ABO") && testedOn.after(aboDate)) {
         bloodAbo = BloodAbo.valueOf(testResult);
@@ -207,8 +199,6 @@ public class ProductRepository {
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
     Date to = getDateExpiresToOrDefault(dateExpiresTo);
-    System.out.println(from);
-    System.out.println(to);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
@@ -474,10 +464,7 @@ public class ProductRepository {
         BloodTest bloodTest = testResult.getBloodTest();
         String actualResult = testResult.getResult();
 
-        System.out.println("name: " + bloodTest.getName());
-        System.out.println("result: " + actualResult);
         if (bloodTest.getName().equals("Blood Rh")) {
-          System.out.println("here");
           bloodRh = actualResult;
         }
 
@@ -505,7 +492,6 @@ public class ProductRepository {
   }
 
   private boolean bloodCrossmatch(String abo1, String rhd1, String abo2, String rhd2) {
-    System.out.println("matching " + abo1 + ", " + ", " + rhd1 + ", " + abo2 + ", " + rhd2);
     if (abo1.equals(abo2) && rhd1.equals(rhd2))
       return true;
     if (abo1.equals("O") && (rhd1.equals(rhd2) || rhd1.equals("NEGATIVE")))
@@ -525,7 +511,7 @@ public class ProductRepository {
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
-                             "SELECT DISTINCT p from Product p LEFT JOIN FETCH p.collectedSample c LEFT JOIN FETCH c.testResults " +
+                             "SELECT p from Product p " +
     		                     "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined",
     		                     Product.class);
     q.setParameter("isAvailable", true);
@@ -553,7 +539,7 @@ public class ProductRepository {
     for (Product product : q.getResultList()) {
       String productType = product.getProductType().getProductTypeName();
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
-      String bloodGroup = getBloodGroupForProduct(product).toString();
+      String bloodGroup = new BloodGroup(product.getBloodAbo(), product.getBloodRhd()).toString();
       Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
       DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
       Long age = (long) Days.daysBetween(createdOn, today).getDays();

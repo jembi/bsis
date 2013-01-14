@@ -23,7 +23,7 @@ $(document).ready(
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : 'C<"H"lfrT>t<"F"ip>T',
-        "aaSorting": [[7, "asc"]],	// sort by last column
+        "aaSorting": [[6, "desc"]],	// sort by last column
         "oTableTools" : {
           "sRowSelect" : "multi",
           "aButtons" : [ "print" ],
@@ -132,9 +132,6 @@ $(document).ready(
 						<c:if test="${model.productFields.productNumber.hidden != true}">
 							<th>${model.productFields.productNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.collectionNumber.hidden != true}">
-							<th>${model.productFields.collectionNumber.displayName}</th>
-						</c:if>
 						<c:if test="${model.productFields.bloodGroup.hidden != true}">
 							<th>${model.productFields.bloodGroup.displayName}</th>
 						</c:if>
@@ -143,6 +140,9 @@ $(document).ready(
 						</c:if>
 						<c:if test="${model.productFields.createdOn.hidden != true}">
 							<th>${model.productFields.createdOn.displayName}</th>
+						</c:if>
+						<c:if test="${model.productFields.age.hidden != true}">
+							<th>${model.productFields.age.displayName} (in days)</th>
 						</c:if>
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
@@ -159,9 +159,6 @@ $(document).ready(
 							<c:if test="${model.productFields.productNumber.hidden != true}">
 								<td>${product.productNumber}</td>
 							</c:if>
-							<c:if test="${model.productFields.collectionNumber.hidden != true}">
-								<td>${product.collectionNumber}</td>
-							</c:if>
 							<c:if test="${model.productFields.bloodGroup.hidden != true}">
 								<td>${product.bloodGroup}</td>
 							</c:if>
@@ -170,6 +167,9 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>
+							</c:if>
+							<c:if test="${model.productFields.age.hidden != true}">
+								<td>${product.age}</td>
 							</c:if>
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>

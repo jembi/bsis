@@ -171,6 +171,12 @@
 				<label>${model.product.bloodGroup}</label>
 			</div>
 		</c:if>
+		<c:if test="${model.productFields.bloodGroup.hidden != true }">
+			<div>
+				<label>${model.productFields.age.displayName}</label>
+				<label>${model.product.age}</label>
+			</div>
+		</c:if>
 	</div>
 
 	<hr />
