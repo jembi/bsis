@@ -557,12 +557,13 @@ public class ProductRepository {
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
-                             "SELECT p from Product p " +
-                             "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined",
+                             "SELECT DISTINCT p from Product p " +
+                             "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined AND p.expiresOn>=:expiresOn",
                              Product.class);
     q.setParameter("isAvailable", true);
     q.setParameter("isQuarantined", false);
     q.setParameter("isDeleted", false);
+    q.setParameter("expiresOn", new Date());
 
     TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
 
