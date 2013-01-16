@@ -11,7 +11,7 @@ public class FindProductBackingForm {
   private List<String> productTypes;
 
   private List<String> available;
-  private List<String> quarantined;
+  private List<String> safe;
   
   private String dateExpiresFrom;
   private String dateExpiresTo;
@@ -61,12 +61,12 @@ public class FindProductBackingForm {
     this.available = available;
   }
 
-  public List<String> getQuarantined() {
-    return quarantined;
+  public List<String> getSafe() {
+    return safe;
   }
 
-  public void setQuarantined(List<String> quarantined) {
-    this.quarantined = quarantined;
+  public void setSafe(List<String> safe) {
+    this.safe = safe;
   }
 
 }

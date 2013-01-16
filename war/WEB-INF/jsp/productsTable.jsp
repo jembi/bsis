@@ -107,17 +107,17 @@ $(document).ready(
 						<c:if test="${model.productFields.isAvailable.hidden != true}">
 							<th>${model.productFields.isAvailable.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.isQuarantined.hidden != true}">
-							<th>${model.productFields.isQuarantined.displayName}</th>
+						<c:if test="${model.productFields.isSafe.hidden != true}">
+							<th>${model.productFields.isSafe.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="product" items="${model.allProducts}">
-					<c:if test="${product.isQuarantined}">
+					<c:if test="${!product.isSafe}">
 						<tr style="color: red;">
 					</c:if>
-					<c:if test="${!product.isQuarantined}">
+					<c:if test="${product.isSafe}">
 						<tr style="color: green;">
 					</c:if>
 							<td style="display: none">${product.id}</td>
@@ -136,8 +136,8 @@ $(document).ready(
 							<c:if test="${model.productFields.isAvailable.hidden != true}">
 								<td>${product.isAvailable ? "&#x2713" : "&#x2717"}</td>
 							</c:if>
-							<c:if test="${model.productFields.isQuarantined.hidden != true}">
-								<td>${product.isQuarantined ? "&#x2713" : "&#x2717"}</td>
+							<c:if test="${model.productFields.isSafe.hidden != true}">
+								<td>${product.isSafe ? "&#x2713" : "&#x2717"}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

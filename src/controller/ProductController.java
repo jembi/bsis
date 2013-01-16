@@ -164,15 +164,15 @@ public class ProductController {
 
     if (searchBy.equals("productNumber")) {
       products = productRepository.findProductByProductNumber(
-                                          form.getProductNumber(), form.getAvailable(), form.getQuarantined(),
+                                          form.getProductNumber(), form.getAvailable(), form.getSafe(),
                                           dateExpiresFrom, dateExpiresTo);
     } else if (searchBy.equals("collectionNumber")) {
       products = productRepository.findProductByCollectionNumber(
-          form.getCollectionNumber(), form.getAvailable(), form.getQuarantined(),
+          form.getCollectionNumber(), form.getAvailable(), form.getSafe(),
           dateExpiresFrom, dateExpiresTo);
     } else if (searchBy.equals("productType")) {
       products = productRepository.findProductByProductTypes(
-          form.getProductTypes(), form.getAvailable(), form.getQuarantined(),
+          form.getProductTypes(), form.getAvailable(), form.getSafe(),
           dateExpiresFrom, dateExpiresTo);
     }
 

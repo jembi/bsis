@@ -175,7 +175,7 @@ public class ProductRepository {
   }
 
   public List<Product> findProductByCollectionNumber(
-      String collectionNumber, List<String> available, List<String> quarantined, String dateExpiresFrom,
+      String collectionNumber, List<String> available, List<String> safe, String dateExpiresFrom,
       String dateExpiresTo) {
 
     TypedQuery<Product> query;
@@ -188,10 +188,10 @@ public class ProductRepository {
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
-    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+    if (safe.size() == 1 && safe.contains("not_safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
     }
-    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+    if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
     }
 
@@ -203,11 +203,11 @@ public class ProductRepository {
     if (available.size() == 1 && available.contains("not_available")) {
       query.setParameter("isAvailable", false);
     }
-    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+    if (safe.size() == 1 && safe.contains("not_safe")) {
       query.setParameter("isQuarantined", true);
       query.setParameter("expiresOn", new Date());
     }
-    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+    if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
       query.setParameter("expiresOn", new Date());
@@ -225,7 +225,7 @@ public class ProductRepository {
   }
 
   public List<Product> findProductByProductTypes(
-      List<String> productTypes, List<String> available, List<String> quarantined, String dateExpiresFrom, String dateExpiresTo) {
+      List<String> productTypes, List<String> available, List<String> safe, String dateExpiresFrom, String dateExpiresTo) {
 
     TypedQuery<Product> query;
     String queryStr = "SELECT p FROM Product p WHERE " +
@@ -237,10 +237,10 @@ public class ProductRepository {
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
-    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+    if (safe.size() == 1 && safe.contains("not_safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
     }
-    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+    if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
     }
 
@@ -252,11 +252,11 @@ public class ProductRepository {
     if (available.size() == 1 && available.contains("not_available")) {
       query.setParameter("isAvailable", false);
     }
-    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+    if (safe.size() == 1 && safe.contains("not_safe")) {
       query.setParameter("isQuarantined", true);
       query.setParameter("expiresOn", new Date());
     }
-    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+    if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
       query.setParameter("expiresOn", new Date());
@@ -424,7 +424,7 @@ public class ProductRepository {
     return issued;
   }
 
-  public List<Product> findProductByProductNumber(String productNumber, List<String> available, List<String> quarantined, String dateExpiresFrom, String dateExpiresTo) {
+  public List<Product> findProductByProductNumber(String productNumber, List<String> available, List<String> safe, String dateExpiresFrom, String dateExpiresTo) {
 
     String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND p.isDeleted= :isDeleted AND" +
         "((p.expiresOn is NULL) or " +
@@ -434,10 +434,10 @@ public class ProductRepository {
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
-    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+    if (safe.size() == 1 && safe.contains("not_safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
     }
-    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+    if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
     }
 
@@ -449,11 +449,11 @@ public class ProductRepository {
     if (available.size() == 1 && available.contains("not_available")) {
       query.setParameter("isAvailable", false);
     }
-    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+    if (safe.size() == 1 && safe.contains("not_safe")) {
       query.setParameter("isQuarantined", true);
       query.setParameter("expiresOn", new Date());
     }
-    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+    if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
       query.setParameter("expiresOn", new Date());

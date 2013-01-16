@@ -131,9 +131,9 @@ $(document).ready(function() {
 	    my : 'left top',
 	    at : 'right center'
 	  },
-	  minWidth: 250,
 	  selectedList: 2,
 	  header: false,
+	  minWidth: 250,
 	  noneSelectedText: 'All Products',
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
@@ -154,8 +154,8 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  selectedList: 2,
-	  minWidth: 250,
 	  header: false,
+	  minWidth: 250,
 	  noneSelectedText: 'All Products',
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
@@ -261,10 +261,10 @@ $(document).ready(function() {
 		</div>
 
 		<div>
-				<form:label path="available">Quarantined status</form:label>
-				<form:select path="quarantined" class="quarantinedSelector">
-					<form:option value="not_quarantined" label="Not Quarantined (Safe for Use)" selected="selected" />
-					<form:option value="quarantined" label="Quarantined or Expired (Unsafe for use)" />
+				<form:label path="available">Safe for Use</form:label>
+				<form:select path="safe" class="quarantinedSelector">
+					<form:option value="safe" label="Safe" selected="selected" />
+					<form:option value="not_safe" label="Unsafe (Quarantined or Expired)" />
 				</form:select>
 		</div>
 

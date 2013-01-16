@@ -122,4 +122,8 @@ public class ProductViewModel {
     Long age = (long) Days.daysBetween(createdOn, today).getDays();
     return age + " days old";
   }
+
+  public boolean getIsSafe() {
+    return !getIsQuarantined() && !product.getExpiresOn().before(new Date());
+  }
 }
