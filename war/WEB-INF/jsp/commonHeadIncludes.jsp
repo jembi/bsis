@@ -39,8 +39,8 @@
 <link type="text/css" rel="stylesheet" href="css/common.css" media="all" />
 <link type="text/css" rel="stylesheet" href="css/topPanel.css" media="all" />
 
-<script src="plugins/jqueryui-multiselect/jquery.multiselect.js"></script>
-<script src="plugins/jqueryui-multiselect/jquery.multiselect.filter.js"></script>
+<script src="plugins/jqueryui-multiselect/jquery.multiselect.min.js"></script>
+<script src="plugins/jqueryui-multiselect/jquery.multiselect.filter.min.js"></script>
 <script src="plugins/toggleradio/toggleradio.js"></script>
 <script src="plugins/Highlight/highlight.js"></script>
 <script src="plugins/jquery-bbq/jquery.ba-bbq.min.js"></script>

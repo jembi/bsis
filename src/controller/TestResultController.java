@@ -453,7 +453,7 @@ public class TestResultController {
     return mv;
   }
 
-  private List<TestResultViewModel> getTestResultViewModels(
+  public static List<TestResultViewModel> getTestResultViewModels(
       List<TestResult> testResults) {
     if (testResults == null)
       return Arrays.asList(new TestResultViewModel[0]);

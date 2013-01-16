@@ -126,6 +126,49 @@ $(document).ready(function() {
     return $("#${findProductFormId}").find(".dateExpiresTo");  
   }
 
+ 	$("#${findProductFormId}").find(".availableSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  minWidth: 250,
+	  selectedList: 2,
+	  header: false,
+	  noneSelectedText: 'All Products',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "All Products";
+										}
+										else {
+										  console.log(selectedValues);
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'All Products';
+										}
+	  							}
+
+	});
+
+ 	$("#${findProductFormId}").find(".quarantinedSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  selectedList: 2,
+	  minWidth: 250,
+	  header: false,
+	  noneSelectedText: 'All Products',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "All Products";
+										}
+										else {
+										  console.log(selectedValues);
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'All Products';
+										}
+	  							}
+	});
+
   getDateExpiresFromInput().datepicker({
     changeMonth : true,
     changeYear : true,
@@ -195,13 +238,34 @@ $(document).ready(function() {
 			</div>
 	
 			<div class="productTypeInput hidableDiv" style="display:none">
-				<form:select path="productTypes" class="productTypeSelector">
+			<!-- Quick Fix for ID Duplication issue.
+			When ID is duplicated selecting in the Find Product form triggers a selection change in
+			Find Request form.
+			The merge pull request here https://github.com/ehynds/jquery-ui-multiselect-widget/pull/347
+			does not solve the issue. Just work around the problem for now by giving this select a unique ID.
+			-->
+				<form:select id="findProductFormProductTypes" path="productTypes" class="productTypeSelector">
 					<c:forEach var="productType" items="${model.productTypes}">
 						<form:option value="${productType.productType}" label="${productType.productTypeName}" />
 					</c:forEach>
 				</form:select>
 			</div>
+		</div>
 
+		<div>
+				<form:label path="available">Product availability</form:label>
+				<form:select path="available" class="availableSelector">
+						<form:option value="available" label="Available (In Stock)" selected="selected" />
+						<form:option value="not_available" label="Issued" />
+				</form:select>
+		</div>
+
+		<div>
+				<form:label path="available">Quarantined status</form:label>
+				<form:select path="quarantined" class="quarantinedSelector">
+					<form:option value="not_quarantined" label="Not Quarantined (Safe for Use)" selected="selected" />
+					<form:option value="quarantined" label="Quarantined (Unsafe for use)" />
+				</form:select>
 		</div>
 
 		<br />

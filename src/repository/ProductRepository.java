@@ -160,42 +160,51 @@ public class ProductRepository {
     return to;      
   }
 
-  public List<Product> findProductByProductNumber(
-      String productNumber, String dateExpiresFrom,
-      String dateExpiresTo) {
-
+  public Product findProductByProductNumber(String productNumber) {
     TypedQuery<Product> query = em
         .createQuery(
-            "SELECT p FROM Product p WHERE " +
-            "p.productNumber = :productNumber and " +
-            "((p.expiresOn is NULL) or " +
-            " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
-            "p.isDeleted= :isDeleted",
+            "SELECT p FROM Product p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted",
             Product.class);
-
-    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
-    Date to = getDateExpiresToOrDefault(dateExpiresTo);
-
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productNumber", productNumber);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    return query.getResultList();
+    List<Product> products = query.getResultList();
+    if (CollectionUtils.isEmpty(products)) {
+      return null;
+    }
+    return products.get(0);
   }
 
   public List<Product> findProductByCollectionNumber(
-      String collectionNumber, String dateExpiresFrom,
+      String collectionNumber, List<String> available, List<String> quarantined, String dateExpiresFrom,
       String dateExpiresTo) {
 
-    TypedQuery<Product> query = em
-        .createQuery(
-            "SELECT p FROM Product p WHERE " +
-            "p.collectedSample.collectionNumber = :collectionNumber and " +
-            "((p.expiresOn is NULL) or " +
-            " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
-            "p.isDeleted= :isDeleted",
-            Product.class);
+    TypedQuery<Product> query;
+    String queryStr = "SELECT p FROM Product p WHERE " +
+                      "p.collectedSample.collectionNumber = :collectionNumber and " +
+                      "((p.expiresOn is NULL) or " +
+                      " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
+                      "p.isDeleted= :isDeleted";
+
+    if (available.size() == 1) {
+      queryStr += " AND p.isAvailable=:isAvailable";
+    }
+    if (quarantined.size() == 1) {
+      queryStr += " AND p.isQuarantined=:isQuarantined";
+    }
+    query = em.createQuery(queryStr, Product.class);
+
+    if (available.size() == 1 && available.contains("available")) {
+      query.setParameter("isAvailable", true);
+    }
+    if (available.size() == 1 && available.contains("not_available")) {
+      query.setParameter("isAvailable", false);
+    }
+    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+      query.setParameter("isQuarantined", true);
+    }
+    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      query.setParameter("isQuarantined", false);
+    }
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
     Date to = getDateExpiresToOrDefault(dateExpiresTo);
@@ -209,16 +218,37 @@ public class ProductRepository {
   }
 
   public List<Product> findProductByProductTypes(
-      List<String> productTypes, String dateExpiresFrom, String dateExpiresTo) {
+      List<String> productTypes, List<String> available, List<String> quarantined, String dateExpiresFrom, String dateExpiresTo) {
 
-    TypedQuery<Product> query = em
-        .createQuery(
-            "SELECT p FROM Product p WHERE " +
-            "p.productType.productType IN (:productTypes) and " +
-            "((p.expiresOn is NULL) or " +
-            " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
-            "p.isDeleted= :isDeleted",
-            Product.class);
+    TypedQuery<Product> query;
+    String queryStr = "SELECT p FROM Product p WHERE " +
+        "p.productType.productType IN (:productTypes) and " +
+        "((p.expiresOn is NULL) or " +
+        " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
+        "p.isDeleted= :isDeleted";
+
+    if (available.size() == 1) {
+      queryStr += " AND p.isAvailable=:isAvailable";
+    }
+    if (quarantined.size() == 1) {
+      queryStr += " AND p.isQuarantined=:isQuarantined";
+    }
+
+    query = em.createQuery(queryStr, Product.class);
+
+    if (available.size() == 1 && available.contains("available")) {
+      query.setParameter("isAvailable", true);
+    }
+    if (available.size() == 1 && available.contains("not_available")) {
+      query.setParameter("isAvailable", false);
+    }
+    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+      query.setParameter("isQuarantined", true);
+    }
+    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      query.setParameter("isQuarantined", false);
+    }
+
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
     Date to = getDateExpiresToOrDefault(dateExpiresTo);
@@ -382,18 +412,42 @@ public class ProductRepository {
     return issued;
   }
 
-  public Product findProductByProductNumber(String productNumber) {
-    TypedQuery<Product> query = em
-        .createQuery(
-            "SELECT p FROM Product p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted",
-            Product.class);
+  public List<Product> findProductByProductNumber(String productNumber, List<String> available, List<String> quarantined, String dateExpiresFrom, String dateExpiresTo) {
+
+    String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND p.isDeleted= :isDeleted AND" +
+        "((p.expiresOn is NULL) or " +
+        " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate))";
+
+    TypedQuery<Product> query;
+    if (available.size() == 1) {
+      queryStr += " AND p.isAvailable=:isAvailable";
+    }
+    if (quarantined.size() == 1) {
+      queryStr += " AND p.isQuarantined=:isQuarantined";
+    }
+    query = em.createQuery(queryStr, Product.class);
+
+    if (available.size() == 1 && available.contains("available")) {
+      query.setParameter("isAvailable", true);
+    }
+    if (available.size() == 1 && available.contains("not_available")) {
+      query.setParameter("isAvailable", false);
+    }
+    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+      query.setParameter("isQuarantined", true);
+    }
+    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      query.setParameter("isQuarantined", false);
+    }
+
+    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
+    Date to = getDateExpiresToOrDefault(dateExpiresTo);
+
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productNumber", productNumber);
-    List<Product> products = query.getResultList();
-    if (CollectionUtils.isEmpty(products)) {
-      return null;
-    }
-    return products.get(0);
+    return query.getResultList();
   }
 
   public Product updateProduct(Product product) {
@@ -473,7 +527,7 @@ public class ProductRepository {
   }
   
   public Product findSingleProductByProductNumber(String productNumber) {
-    List<Product> products = findProductByProductNumber(productNumber, "", "");
+    List<Product> products = findProductByProductNumber(productNumber, Arrays.asList(new String[0]), Arrays.asList(new String[0]), "", "");
     if (products != null && products.size() == 1)
       return products.get(0);
     return null;

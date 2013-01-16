@@ -44,6 +44,21 @@
   	        						);
         });
 
+        $("#${tabContentId}").find(".testResultsForProductButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-bookmark'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("testResultsForProductSuccess", emptyChildContent);
+
+  	        fetchContent("testResultsForProduct.html",
+              					 {productId: "${model.product.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
@@ -106,6 +121,9 @@
 			</button>
 			<button type="button" class="editButton">
 				Edit
+			</button>
+			<button type="button" class="testResultsForProductButton">
+				Test results for product
 			</button>
 			<!-- button type="button" class="productLabelButton">
 				Product Label

@@ -17,6 +17,7 @@ import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.product.ProductBackingFormValidator;
+import model.testresults.TestResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
+import repository.TestResultRepository;
 import viewmodel.ProductViewModel;
 
 @Controller
@@ -48,6 +50,9 @@ public class ProductController {
   @Autowired
   private ProductTypeRepository productTypeRepository;
 
+  @Autowired
+  private TestResultRepository testResultsRepository;
+  
   @Autowired
   private UtilController utilController;
 
@@ -97,6 +102,38 @@ public class ProductController {
     return mv;
   }
 
+  @RequestMapping(value = "/testResultsForProduct", method = RequestMethod.GET)
+  public ModelAndView testResultsForProduct(HttpServletRequest request, Model model,
+      @RequestParam(value = "productId", required = false) Long productId) {
+
+    System.out.println("here");
+    ModelAndView mv = new ModelAndView("testResultsForProduct");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    Product product = null;
+    if (productId != null) {
+      product = productRepository.findProductById(productId);
+      if (product != null) {
+        m.put("existingProduct", true);
+      }
+      else {
+        m.put("existingProduct", false);
+      }
+    }
+
+    String collectionNumber = product.getCollectedSample().getCollectionNumber();
+    List<TestResult> testResults = testResultsRepository.findTestResults(collectionNumber, "", "");
+
+    m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
   public ModelAndView findProductFormGenerator(HttpServletRequest request, Model model) {
 
@@ -124,26 +161,21 @@ public class ProductController {
     String searchBy = form.getSearchBy();
     String dateExpiresFrom = form.getDateExpiresFrom();
     String dateExpiresTo = form.getDateExpiresTo();
-    System.out.println("here1");
+
     if (searchBy.equals("productNumber")) {
       products = productRepository.findProductByProductNumber(
-                                          form.getProductNumber(),
+                                          form.getProductNumber(), form.getAvailable(), form.getQuarantined(),
                                           dateExpiresFrom, dateExpiresTo);
     } else if (searchBy.equals("collectionNumber")) {
       products = productRepository.findProductByCollectionNumber(
-          form.getCollectionNumber(),
+          form.getCollectionNumber(), form.getAvailable(), form.getQuarantined(),
           dateExpiresFrom, dateExpiresTo);
     } else if (searchBy.equals("productType")) {
       products = productRepository.findProductByProductTypes(
-          form.getProductTypes(),
+          form.getProductTypes(), form.getAvailable(), form.getQuarantined(),
           dateExpiresFrom, dateExpiresTo);
     }
 
-//    System.out.println("products: ");
-//    System.out.println(products);
-    
-    System.out.println("searchBy");
-    System.out.println(searchBy);
     ModelAndView modelAndView = new ModelAndView("productsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findProductsTable");

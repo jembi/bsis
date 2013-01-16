@@ -10,6 +10,9 @@ public class FindProductBackingForm {
 
   private List<String> productTypes;
 
+  private List<String> available;
+  private List<String> quarantined;
+  
   private String dateExpiresFrom;
   private String dateExpiresTo;
 
@@ -48,6 +51,22 @@ public class FindProductBackingForm {
   }
   public void setDateExpiresTo(String dateExpiresTo) {
     this.dateExpiresTo = dateExpiresTo;
+  }
+
+  public List<String> getAvailable() {
+    return available;
+  }
+
+  public void setAvailable(List<String> available) {
+    this.available = available;
+  }
+
+  public List<String> getQuarantined() {
+    return quarantined;
+  }
+
+  public void setQuarantined(List<String> quarantined) {
+    this.quarantined = quarantined;
   }
 
 }

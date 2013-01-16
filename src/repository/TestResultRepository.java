@@ -157,18 +157,14 @@ public class TestResultRepository {
     return resultList;
   }
 
-  public TestResult findTestResultByCollectionNumber(String collectionNumber) {
+  public List<TestResult> findTestResultsByCollectionNumber(String collectionNumber) {
     TypedQuery<TestResult> query = em
         .createQuery(
             "SELECT t FROM TestResult t WHERE t.collectionNumber = :collectionNumber and t.isDeleted= :isDeleted",
             TestResult.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    List<TestResult> testResults = query.getResultList();
-    if (CollectionUtils.isEmpty(testResults)) {
-      return null;
-    }
-    return testResults.get(0);
+    return query.getResultList();
   }
 
   public Map<String, Map<Long, Long>> findNumberOfPositiveTests(String dateTestedFrom,
