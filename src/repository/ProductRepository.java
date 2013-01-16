@@ -188,9 +188,13 @@ public class ProductRepository {
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
-    if (quarantined.size() == 1) {
-      queryStr += " AND p.isQuarantined=:isQuarantined";
+    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
     }
+    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
+    }
+
     query = em.createQuery(queryStr, Product.class);
 
     if (available.size() == 1 && available.contains("available")) {
@@ -201,9 +205,12 @@ public class ProductRepository {
     }
     if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
       query.setParameter("isQuarantined", true);
+      query.setParameter("expiresOn", new Date());
     }
     if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
+      query.setParameter("expiresOn", new Date());
     }
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
@@ -230,8 +237,11 @@ public class ProductRepository {
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
-    if (quarantined.size() == 1) {
-      queryStr += " AND p.isQuarantined=:isQuarantined";
+    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
+    }
+    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
     }
 
     query = em.createQuery(queryStr, Product.class);
@@ -244,11 +254,13 @@ public class ProductRepository {
     }
     if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
       query.setParameter("isQuarantined", true);
+      query.setParameter("expiresOn", new Date());
     }
     if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
+      query.setParameter("expiresOn", new Date());
     }
-
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
     Date to = getDateExpiresToOrDefault(dateExpiresTo);
@@ -422,9 +434,13 @@ public class ProductRepository {
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
-    if (quarantined.size() == 1) {
-      queryStr += " AND p.isQuarantined=:isQuarantined";
+    if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
     }
+    if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
+    }
+
     query = em.createQuery(queryStr, Product.class);
 
     if (available.size() == 1 && available.contains("available")) {
@@ -435,9 +451,12 @@ public class ProductRepository {
     }
     if (quarantined.size() == 1 && quarantined.contains("quarantined")) {
       query.setParameter("isQuarantined", true);
+      query.setParameter("expiresOn", new Date());
     }
     if (quarantined.size() == 1 && quarantined.contains("not_quarantined")) {
+      queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
+      query.setParameter("expiresOn", new Date());
     }
 
     Date from = getDateExpiresFromOrDefault(dateExpiresFrom);

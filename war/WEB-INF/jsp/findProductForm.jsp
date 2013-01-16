@@ -264,21 +264,21 @@ $(document).ready(function() {
 				<form:label path="available">Quarantined status</form:label>
 				<form:select path="quarantined" class="quarantinedSelector">
 					<form:option value="not_quarantined" label="Not Quarantined (Safe for Use)" selected="selected" />
-					<form:option value="quarantined" label="Quarantined (Unsafe for use)" />
+					<form:option value="quarantined" label="Quarantined or Expired (Unsafe for use)" />
 				</form:select>
 		</div>
 
 		<br />
 		<br />
 
-		<div>
+		<!-- div>
 			<span style="margin-left: 15px;"> Date of expiry between </span>
 		</div>
 		<div>
 			<form:input path="dateExpiresFrom" class="dateExpiresFrom" placeholder="Any Date"/>
 				and
 			<form:input path="dateExpiresTo" class="dateExpiresTo" placeholder="Any Date"/>
-		</div>
+		</div-->
 
 		<div>
 			<label></label>
