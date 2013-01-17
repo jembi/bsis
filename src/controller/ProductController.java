@@ -73,6 +73,15 @@ public class ProductController {
     return reqUrl;
   }
 
+  public static String getNextPageUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString().replace("findProduct.html", "findProductPagination.html");
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value = "/productSummary", method = RequestMethod.GET)
   public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "productId", required = false) Long productId) {
@@ -158,10 +167,73 @@ public class ProductController {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
+    ModelAndView modelAndView = new ModelAndView("productsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findProductsTable");
+    m.put("productFields", utilController.getFormFieldsForForm("product"));
+    m.put("allProducts", getProductViewModels(products));
+    m.put("refreshUrl", getUrl(request));
+    m.put("nextPageUrl", getNextPageUrl(request));
+    addEditSelectorOptions(m);
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
+  private Map<String, Object> parsePagingParameters(HttpServletRequest request) {
+    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    int numColumns = Integer.parseInt(request.getParameter("iColumns"));
+    int sortCol = -1;
+    for (int i = 0; i < numColumns; ++i) {
+      if (request.getParameter("iSortCol_" + i) != null) {
+        sortCol = i;
+        break;
+      }
+    }
+    pagingParams.put("sortColumn", getSortingColumn(sortCol));
+    pagingParams.put("start", request.getParameter("iDisplayStart"));
+    pagingParams.put("length", request.getParameter("iDisplayLength"));
+    return pagingParams;
+  }
+
+  /**
+   * Get column name from column id, depends on sequence of columns in productsTable.jsp
+   */
+  private String getSortingColumn(int columnId) {
+    String sortColumn = null;
+    switch (columnId) {
+    case 0: sortColumn = "id";
+            break;
+    case 1: sortColumn = "productNumber";
+            break;
+    case 2: sortColumn = "productType";
+            break;
+    case 3: sortColumn = "createdOn";
+            break;
+    case 4: sortColumn = "expiresOn";
+            break;
+    case 5: sortColumn = "available";
+            break;
+    case 6: sortColumn = "safe";
+            break;
+    }
+    return sortColumn;
+  }
+  
+  @SuppressWarnings("unchecked")
+  @RequestMapping("/findProductPagination")
+  public @ResponseBody Map<String, Object> findProductPagination(HttpServletRequest request,
+      @ModelAttribute("findProductForm") FindProductBackingForm form,
+      BindingResult result, Model model) {
+
+    List<Product> products = Arrays.asList(new Product[0]);
+
     String searchBy = form.getSearchBy();
     String dateExpiresFrom = form.getDateExpiresFrom();
     String dateExpiresTo = form.getDateExpiresTo();
 
+    Map<String, Object> pagingParams = parsePagingParameters(request);
+    List<Object> results = new ArrayList<Object>();
     if (searchBy.equals("productNumber")) {
       products = productRepository.findProductByProductNumber(
                                           form.getProductNumber(), form.getAvailable(), form.getSafe(),
@@ -171,23 +243,41 @@ public class ProductController {
           form.getCollectionNumber(), form.getAvailable(), form.getSafe(),
           dateExpiresFrom, dateExpiresTo);
     } else if (searchBy.equals("productType")) {
-      products = productRepository.findProductByProductTypes(
+      results = productRepository.findProductByProductTypes(
           form.getProductTypes(), form.getAvailable(), form.getSafe(),
-          dateExpiresFrom, dateExpiresTo);
+          dateExpiresFrom, dateExpiresTo, pagingParams);
     }
 
-    ModelAndView modelAndView = new ModelAndView("productsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("tableName", "findProductsTable");
-    m.put("productFields", utilController.getFormFieldsForForm("product"));
-    m.put("allProducts", getProductViewModels(products));
-    m.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(m);
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
+    System.out.println(results.get(0).getClass());
+    System.out.println(((List<Product>) results.get(0)).size());
+    products = (List<Product>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+    return generateDatatablesMap(products, totalRecords);
   }
-
+  
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in productsTable.jsp.
+   * @param products
+   * @return
+   */
+  private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords) {
+    Map<String, Object> productsMap = new HashMap<String, Object>();
+    ArrayList<Object> productList = new ArrayList<Object>();
+    for (ProductViewModel product : getProductViewModels(products)) {
+      productList.add(Arrays.asList(product.getId().toString(), product.getProductNumber().toString(),
+                                    product.getProductType().toString(), product.getCreatedOn().toString(),
+                                    product.getExpiresOn().toString(), product.getIsAvailable().toString(),
+                                    product.getIsSafe().toString())
+                     );
+    }
+    productsMap.put("aaData", productList);
+    productsMap.put("iTotalRecords", totalRecords);
+    productsMap.put("iTotalDisplayRecords", totalRecords);
+    return productsMap;
+  }
+  
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
   }

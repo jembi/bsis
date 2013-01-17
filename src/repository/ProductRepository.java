@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -224,16 +225,19 @@ public class ProductRepository {
     return query.getResultList();
   }
 
-  public List<Product> findProductByProductTypes(
-      List<String> productTypes, List<String> available, List<String> safe, String dateExpiresFrom, String dateExpiresTo) {
+  public List<Object> findProductByProductTypes(
+      List<String> productTypes, List<String> available, List<String> safe,
+      String dateExpiresFrom, String dateExpiresTo,
+      Map<String, Object> pagingParams) {
 
-    TypedQuery<Product> query;
+    System.out.println(pagingParams);
+
     String queryStr = "SELECT p FROM Product p WHERE " +
         "p.productType.productType IN (:productTypes) and " +
         "((p.expiresOn is NULL) or " +
         " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
         "p.isDeleted= :isDeleted";
-
+    
     if (available.size() == 1) {
       queryStr += " AND p.isAvailable=:isAvailable";
     }
@@ -244,7 +248,7 @@ public class ProductRepository {
       queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
     }
 
-    query = em.createQuery(queryStr, Product.class);
+    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
 
     if (available.size() == 1 && available.contains("available")) {
       query.setParameter("isAvailable", true);
@@ -257,7 +261,6 @@ public class ProductRepository {
       query.setParameter("expiresOn", new Date());
     }
     if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND p.expiresOn <= :expiresOn";
       query.setParameter("isQuarantined", false);
       query.setParameter("expiresOn", new Date());
     }
@@ -270,7 +273,22 @@ public class ProductRepository {
     query.setParameter("fromDate", from);
     query.setParameter("toDate", to);
 
-    return query.getResultList();
+    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
+    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+
+    for (Parameter<?> parameter : query.getParameters()) {
+      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
+    }
+
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+
+    Long totalResults = countQuery.getSingleResult().longValue();
+
+    return Arrays.asList(query.getResultList(), totalResults);
   }
 
   public List<Product> getAllUnissuedProducts() {

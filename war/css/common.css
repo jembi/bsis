@@ -564,3 +564,7 @@ max-width: 840px;
 	font-weight: bold;
 	text-decoration: underline;
 }
+
+.hide_class {
+	display: none;
+}

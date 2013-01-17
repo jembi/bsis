@@ -88,8 +88,8 @@ $(document).ready(function() {
 			case "collectionNumber":   form.find(".collectionNumberInput").show();
 															 break;
 			case "productType": form.find(".productTypeInput").show();
-								  			 createProductTypeMultiSelect();
-			 									 break;
+								  			 	createProductTypeMultiSelect();
+			 									 	break;
 		}
   }
 

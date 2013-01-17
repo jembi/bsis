@@ -123,7 +123,7 @@ public class ProductViewModel {
     return age + " days old";
   }
 
-  public boolean getIsSafe() {
+  public Boolean getIsSafe() {
     return !getIsQuarantined() && !product.getExpiresOn().before(new Date());
   }
 }

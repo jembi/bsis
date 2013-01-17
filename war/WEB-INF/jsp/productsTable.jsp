@@ -17,10 +17,26 @@
 $(document).ready(
     function() {
 
+     	console.log("${model.nextPageUrl}");
       var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : 'C<"H"lrT>t<"F"ip>T',
+        "bServerSide" : true,
+        "sAjaxSource" : "${model.nextPageUrl}",
+        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}],
+        "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+          								 oSettings.jqXHR = $.ajax({
+          								   "datatype": "json",
+          								   "type": "GET",
+          								   "url": sSource,
+          								   "data": aoData,
+          								   "success": function(jsonResponse) {
+          								     						console.log(jsonResponse);
+          								     						fnCallback(jsonResponse);
+          								   						}
+          								   });
+          								 },
         "oTableTools" : {
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
@@ -41,7 +57,7 @@ $(document).ready(
          	"aiExclude": [0,1],
         }
       });
-
+      
       function createProductSummary(url, data) {
         $.ajax({
           url: url,
@@ -80,7 +96,7 @@ $(document).ready(
 
 	<c:choose>
 
-		<c:when test="${fn:length(model.allProducts) eq 0}">
+		<c:when test="${fn:length(model.allProducts) eq -1}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
