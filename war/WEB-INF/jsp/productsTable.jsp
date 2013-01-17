@@ -20,7 +20,7 @@ $(document).ready(
       var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "sDom" : 'C<"H"lrT>t<"F"ip>T',
         "oTableTools" : {
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
