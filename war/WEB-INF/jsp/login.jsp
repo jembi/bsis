@@ -11,6 +11,11 @@
 <link type="text/css" rel="stylesheet" href="css/login.css" />
 </head>
 <body>
+<!-- Prompt IE users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+<!--[if lt IE 10]>
+<p class=chromeframe>Your browser is not supported. <a href="http://browsehappy.com/" target="_blank">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true" target="_blank">install Google Chrome Frame</a> to experience this site.</p>
+<![endif]-->
 	<script>
     $(document).ready(function() {
       $('#username').val('');

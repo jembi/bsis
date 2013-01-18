@@ -10,6 +10,11 @@
 <jsp:include page="commonHeadIncludes.jsp" flush="true" />
 </head>
 <body style="margin-top: 2px;">
+<!-- Prompt IE users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+<!--[if lt IE 10]>
+<p class=chromeframe>Your browser is not supported. <a href="http://browsehappy.com/" target="_blank">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true" target="_blank">install Google Chrome Frame</a> to experience this site.</p>
+<![endif]-->
 	<div class="mainBody">
 		<div class="mainContent">
 			<jsp:include page="topPanel.jsp" flush="true" />
