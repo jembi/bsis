@@ -248,6 +248,11 @@ public class ProductRepository {
       queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
     }
 
+    if (pagingParams.containsKey("sortColumn")) {
+      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+    }
+
+    System.out.println(pagingParams.get("sortColumn"));
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
 
     if (available.size() == 1 && available.contains("available")) {

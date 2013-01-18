@@ -184,13 +184,18 @@ public class ProductController {
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     int numColumns = Integer.parseInt(request.getParameter("iColumns"));
     int sortCol = -1;
+    String sortDirection = "asc";
     for (int i = 0; i < numColumns; ++i) {
       if (request.getParameter("iSortCol_" + i) != null) {
-        sortCol = i;
+        sortCol = Integer.parseInt(request.getParameter("iSortCol_" + i));
+        if (request.getParameter("sSortDir_" + i) != null)
+          sortDirection = request.getParameter("sSortDir_" + i);
         break;
       }
     }
+
     pagingParams.put("sortColumn", getSortingColumn(sortCol));
+    pagingParams.put("sortDirection", sortDirection);
     pagingParams.put("start", request.getParameter("iDisplayStart"));
     pagingParams.put("length", request.getParameter("iDisplayLength"));
     return pagingParams;
@@ -248,8 +253,6 @@ public class ProductController {
           dateExpiresFrom, dateExpiresTo, pagingParams);
     }
 
-    System.out.println(results.get(0).getClass());
-    System.out.println(((List<Product>) results.get(0)).size());
     products = (List<Product>) results.get(0);
     Long totalRecords = (Long) results.get(1);
     return generateDatatablesMap(products, totalRecords);

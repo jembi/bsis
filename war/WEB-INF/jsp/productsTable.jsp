@@ -21,10 +21,12 @@ $(document).ready(
       var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : 'C<"H"lrT>t<"F"ip>T',
+        "sDom" : '<"H"lrT>t<"F"ip>T',
         "bServerSide" : true,
         "sAjaxSource" : "${model.nextPageUrl}",
-        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}],
+        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
+                          { "bSortable" : false, "aTargets": [5, 6]}
+        								 ],
         "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
           								 oSettings.jqXHR = $.ajax({
           								   "datatype": "json",
