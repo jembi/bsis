@@ -240,13 +240,13 @@ public class ProductController {
     Map<String, Object> pagingParams = parsePagingParameters(request);
     List<Object> results = new ArrayList<Object>();
     if (searchBy.equals("productNumber")) {
-      products = productRepository.findProductByProductNumber(
+      results = productRepository.findProductByProductNumber(
                                           form.getProductNumber(), form.getAvailable(), form.getSafe(),
-                                          dateExpiresFrom, dateExpiresTo);
+                                          dateExpiresFrom, dateExpiresTo, pagingParams);
     } else if (searchBy.equals("collectionNumber")) {
-      products = productRepository.findProductByCollectionNumber(
+      results = productRepository.findProductByCollectionNumber(
           form.getCollectionNumber(), form.getAvailable(), form.getSafe(),
-          dateExpiresFrom, dateExpiresTo);
+          dateExpiresFrom, dateExpiresTo, pagingParams);
     } else if (searchBy.equals("productType")) {
       results = productRepository.findProductByProductTypes(
           form.getProductTypes(), form.getAvailable(), form.getSafe(),

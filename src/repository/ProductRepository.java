@@ -175,9 +175,9 @@ public class ProductRepository {
     return products.get(0);
   }
 
-  public List<Product> findProductByCollectionNumber(
+  public List<Object> findProductByCollectionNumber(
       String collectionNumber, List<String> available, List<String> safe, String dateExpiresFrom,
-      String dateExpiresTo) {
+      String dateExpiresTo, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
     String queryStr = "SELECT p FROM Product p WHERE " +
@@ -194,6 +194,10 @@ public class ProductRepository {
     }
     if (safe.size() == 1 && safe.contains("safe")) {
       queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
+    }
+
+    if (pagingParams.containsKey("sortColumn")) {
+      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     query = em.createQuery(queryStr, Product.class);
@@ -222,15 +226,27 @@ public class ProductRepository {
     query.setParameter("fromDate", from);
     query.setParameter("toDate", to);
 
-    return query.getResultList();
+    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
+    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+    for (Parameter<?> parameter : query.getParameters()) {
+      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
+    }
+
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+
+    Long totalResults = countQuery.getSingleResult().longValue();
+
+    return Arrays.asList(query.getResultList(), totalResults);
   }
 
   public List<Object> findProductByProductTypes(
       List<String> productTypes, List<String> available, List<String> safe,
       String dateExpiresFrom, String dateExpiresTo,
       Map<String, Object> pagingParams) {
-
-    System.out.println(pagingParams);
 
     String queryStr = "SELECT p FROM Product p WHERE " +
         "p.productType.productType IN (:productTypes) and " +
@@ -252,7 +268,6 @@ public class ProductRepository {
       queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
-    System.out.println(pagingParams.get("sortColumn"));
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
 
     if (available.size() == 1 && available.contains("available")) {
@@ -280,7 +295,73 @@ public class ProductRepository {
 
     String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
     TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+    for (Parameter<?> parameter : query.getParameters()) {
+      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
+    }
 
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+
+    Long totalResults = countQuery.getSingleResult().longValue();
+
+    return Arrays.asList(query.getResultList(), totalResults);
+  }
+
+  public List<Object> findProductByProductNumber(
+      String productNumber, List<String> available,
+      List<String> safe, String dateExpiresFrom,
+      String dateExpiresTo, Map<String, Object> pagingParams) {
+
+    String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND p.isDeleted= :isDeleted AND" +
+        "((p.expiresOn is NULL) or " +
+        " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate))";
+
+    TypedQuery<Product> query;
+    if (available.size() == 1) {
+      queryStr += " AND p.isAvailable=:isAvailable";
+    }
+    if (safe.size() == 1 && safe.contains("not_safe")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
+    }
+    if (safe.size() == 1 && safe.contains("safe")) {
+      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
+    }
+
+    if (pagingParams.containsKey("sortColumn")) {
+      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+    }
+
+    query = em.createQuery(queryStr, Product.class);
+
+    if (available.size() == 1 && available.contains("available")) {
+      query.setParameter("isAvailable", true);
+    }
+    if (available.size() == 1 && available.contains("not_available")) {
+      query.setParameter("isAvailable", false);
+    }
+    if (safe.size() == 1 && safe.contains("not_safe")) {
+      query.setParameter("isQuarantined", true);
+      query.setParameter("expiresOn", new Date());
+    }
+    if (safe.size() == 1 && safe.contains("safe")) {
+      queryStr += " AND p.expiresOn <= :expiresOn";
+      query.setParameter("isQuarantined", false);
+      query.setParameter("expiresOn", new Date());
+    }
+
+    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
+    Date to = getDateExpiresToOrDefault(dateExpiresTo);
+
+    query.setParameter("fromDate", from);
+    query.setParameter("toDate", to);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("productNumber", productNumber);
+
+    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
+    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
@@ -447,51 +528,6 @@ public class ProductRepository {
     return issued;
   }
 
-  public List<Product> findProductByProductNumber(String productNumber, List<String> available, List<String> safe, String dateExpiresFrom, String dateExpiresTo) {
-
-    String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND p.isDeleted= :isDeleted AND" +
-        "((p.expiresOn is NULL) or " +
-        " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate))";
-
-    TypedQuery<Product> query;
-    if (available.size() == 1) {
-      queryStr += " AND p.isAvailable=:isAvailable";
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
-    }
-
-    query = em.createQuery(queryStr, Product.class);
-
-    if (available.size() == 1 && available.contains("available")) {
-      query.setParameter("isAvailable", true);
-    }
-    if (available.size() == 1 && available.contains("not_available")) {
-      query.setParameter("isAvailable", false);
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      query.setParameter("isQuarantined", true);
-      query.setParameter("expiresOn", new Date());
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND p.expiresOn <= :expiresOn";
-      query.setParameter("isQuarantined", false);
-      query.setParameter("expiresOn", new Date());
-    }
-
-    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
-    Date to = getDateExpiresToOrDefault(dateExpiresTo);
-
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productNumber", productNumber);
-    return query.getResultList();
-  }
-
   public Product updateProduct(Product product) {
     Product existingProduct = findProductById(product.getId());
     if (existingProduct == null) {
@@ -569,10 +605,8 @@ public class ProductRepository {
   }
   
   public Product findSingleProductByProductNumber(String productNumber) {
-    List<Product> products = findProductByProductNumber(productNumber, Arrays.asList(new String[0]), Arrays.asList(new String[0]), "", "");
-    if (products != null && products.size() == 1)
-      return products.get(0);
-    return null;
+    Product product = findProductByProductNumber(productNumber);
+    return product;
   }
 
   public Map<String, Object> generateInventorySummaryFast() {
