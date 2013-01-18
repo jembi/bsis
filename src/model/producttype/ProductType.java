@@ -46,7 +46,7 @@ public class ProductType {
 
   @Override
   public String toString() {
-    return productType;
+    return productTypeName;
   }
 
   public List<Product> getProducts() {

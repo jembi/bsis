@@ -28,7 +28,6 @@
             type: "GET",
             data: {},
             success: function(responseData) {
-              				 console.log(responseData);
               				 showMessage("Inventory Report successfully generated");
               	        generateInventoryChart({
               	          data : responseData,
@@ -38,7 +37,6 @@
 
             				 },
             error: 	 function(responseData) {
-              				 console.log(responseData);
               				 showErrorMessage("Something went wrong while generating inventory report");
             				 },
           });
