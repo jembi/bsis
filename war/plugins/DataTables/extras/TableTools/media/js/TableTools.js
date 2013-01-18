@@ -1694,7 +1694,7 @@ TableTools.prototype = {
 		if ( oConfig.bShowAll )
 		{
 			oSetDT._iDisplayStart = 0;
-			oSetDT._iDisplayLength = -1;
+			oSetDT._iDisplayLength = oSetDT._iRecordsTotal;
 			oSetDT.oApi._fnCalculateEnd( oSetDT );
 			oSetDT.oApi._fnDraw( oSetDT );
 		}
