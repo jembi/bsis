@@ -34,7 +34,7 @@ $(document).ready(function() {
   }).click(function() {
     var findProductFormData = $("#${findProductFormId}").serialize();
     var resultsDiv = $("#${mainContentId}").find(".findProductResults");
-    showLoadingImage(resultsDiv);
+    //showLoadingImage(resultsDiv);
     $.ajax({
       type : "GET",
       url : "findProduct.html",

@@ -12,6 +12,7 @@
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">productsTable-${unique_page_id}</c:set>
 <c:set var="productsTableEditRowDivId">productsTableEditRowDiv-${unique_page_id}</c:set>
+<c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
@@ -34,7 +35,9 @@ $(document).ready(
           								   "url": sSource,
           								   "data": aoData,
           								   "success": function(jsonResponse) {
-          								     						console.log(jsonResponse);
+          								     						if (jsonResponse.iTotalRecords == 0) {
+          								     						  $("#${tabContentId}").html($("#${noResultsFoundDivId}").html());
+          								     						}
           								     						fnCallback(jsonResponse);
           								   						}
           								   });
@@ -165,4 +168,10 @@ $(document).ready(
 		</c:otherwise>
 	</c:choose>
 
+</div>
+
+<div id="${noResultsFoundDivId}" style="display: none;">
+	<span
+		style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+		Sorry no results found matching your search request </span>
 </div>
