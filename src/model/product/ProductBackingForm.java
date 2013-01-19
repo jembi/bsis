@@ -60,11 +60,11 @@ public class ProductBackingForm {
   }
 
   public String getProductType() {
-    ProductType productType = getProduct().getProductType();
+    ProductType productType = product.getProductType();
     if (productType == null)
       return "";
     else
-      return productType.toString();
+      return productType.getProductType();
   }
 
   public Date getLastUpdated() {
