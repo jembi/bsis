@@ -12,6 +12,7 @@
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
 <c:set var="childContentId">childContentId-${unique_page_id}</c:set>
+<c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
@@ -20,7 +21,25 @@ $(document).ready(
       var selectedRowId = null;
       var donorsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "sDom" : '<"H"lrT>t<"F"ip>T',
+        "bServerSide" : true,
+        "sAjaxSource" : "${model.nextPageUrl}",
+        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}
+        								 ],
+        "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+          								 oSettings.jqXHR = $.ajax({
+          								   "datatype": "json",
+          								   "type": "GET",
+          								   "url": sSource,
+          								   "data": aoData,
+          								   "success": function(jsonResponse) {
+          								     						if (jsonResponse.iTotalRecords == 0) {
+          								     						  $("#${tabContentId}").html($("#${noResultsFoundDivId}").html());
+          								     						}
+          								     						fnCallback(jsonResponse);
+          								   						}
+          								   });
+          								 },
         "oTableTools" : {
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
@@ -36,9 +55,6 @@ $(document).ready(
           									},
           "fnRowDeselected" : function(node) {
           									},
-        },
-        "oColVis" : {
-         	"aiExclude": [0,1],
         }
       });
 
@@ -80,7 +96,7 @@ $(document).ready(
 
 	<c:choose>
 
-		<c:when test="${fn:length(model.allDonors) eq 0}">
+		<c:when test="${fn:length(model.allDonors) eq -1}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
@@ -142,4 +158,10 @@ $(document).ready(
 		</c:otherwise>
 	</c:choose>
 
+</div>
+
+<div id="${noResultsFoundDivId}" style="display: none;">
+	<span
+		style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+		Sorry no results found matching your search request </span>
 </div>

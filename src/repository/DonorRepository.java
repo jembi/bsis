@@ -3,6 +3,7 @@ package repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -56,8 +58,9 @@ public class DonorRepository {
     return findDonorById(Long.parseLong(donorId));
   }
 
-  public List<Donor> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups) {
+  @SuppressWarnings("unchecked")
+  public List<Object> findAnyDonor(String donorNumber, String firstName,
+      String lastName, List<BloodGroup> bloodGroups, Map<String, Object> pagingParams) {
 
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -98,11 +101,35 @@ public class DonorRepository {
 
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
+
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
+      List<Order> order = new ArrayList<Order>();
+      if (pagingParams.get("sortDirection").equals("asc")) {
+        for (String orderColumn : (List<String>)pagingParams.get("sortColumn"))
+          order.add(cb.asc(root.<String>get(orderColumn)));
+      } else {
+        for (String orderColumn : (List<String>)pagingParams.get("sortColumn"))
+          order.add(cb.desc(root.<String>get(orderColumn)));
+      }
+      cq.orderBy(order);
+    }
+
     TypedQuery<Donor> query = em.createQuery(cq);
-    List<Donor> donors = query.getResultList();
-    if (donors != null && donors.size() > 0)
-      return donors;
-    return new ArrayList<Donor>();
+    query.setFirstResult(start);
+    query.setMaxResults(length);   
+
+    CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
+    Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
+    countCriteriaQuery.where(cb.and(notDeleted, exp2));
+    countCriteriaQuery.select(cb.countDistinct(countRoot));
+
+    TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
+    Long totalResults = countQuery.getSingleResult().longValue();
+    return Arrays.asList(query.getResultList(), totalResults);
+
   }
 
   public List<Donor> getAllDonors() {

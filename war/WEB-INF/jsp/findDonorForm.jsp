@@ -31,7 +31,6 @@ $(document).ready(function() {
   }).click(function() {
     var findDonorFormData = $("#${findDonorFormId}").serialize();
     var resultsDiv = $("#${mainContentId}").find(".findDonorResults");
-    showLoadingImage(resultsDiv);
     $.ajax({
       type : "GET",
       url : "findDonor.html",

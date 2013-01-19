@@ -360,23 +360,24 @@ public class ProductRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productNumber", productNumber);
 
-    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
-    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
-    for (Parameter<?> parameter : query.getParameters()) {
-      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
-    }
-
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
 
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    Long totalResults = countQuery.getSingleResult().longValue();
-
-    return Arrays.asList(query.getResultList(), totalResults);
+    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
   }
 
+  private Long getResultCount(String queryStr, Query query) {
+    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
+    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+    for (Parameter<?> parameter : query.getParameters()) {
+      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
+    }
+    return countQuery.getSingleResult().longValue();
+  }
+  
   public List<Product> getAllUnissuedProducts() {
     String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);

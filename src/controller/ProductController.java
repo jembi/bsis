@@ -74,7 +74,7 @@ public class ProductController {
   }
 
   public static String getNextPageUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replace("findProduct.html", "findProductPagination.html");
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findProduct.html", "findProductPagination.html");
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
         reqUrl += "?"+queryString;
@@ -180,27 +180,6 @@ public class ProductController {
     return modelAndView;
   }
 
-  private Map<String, Object> parsePagingParameters(HttpServletRequest request) {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    int numColumns = Integer.parseInt(request.getParameter("iColumns"));
-    int sortCol = -1;
-    String sortDirection = "asc";
-    for (int i = 0; i < numColumns; ++i) {
-      if (request.getParameter("iSortCol_" + i) != null) {
-        sortCol = Integer.parseInt(request.getParameter("iSortCol_" + i));
-        if (request.getParameter("sSortDir_" + i) != null)
-          sortDirection = request.getParameter("sSortDir_" + i);
-        break;
-      }
-    }
-
-    pagingParams.put("sortColumn", getSortingColumn(sortCol));
-    pagingParams.put("sortDirection", sortDirection);
-    pagingParams.put("start", request.getParameter("iDisplayStart"));
-    pagingParams.put("length", request.getParameter("iDisplayLength"));
-    return pagingParams;
-  }
-
   /**
    * Get column name from column id, depends on sequence of columns in productsTable.jsp
    */
@@ -237,7 +216,10 @@ public class ProductController {
     String dateExpiresFrom = form.getDateExpiresFrom();
     String dateExpiresTo = form.getDateExpiresTo();
 
-    Map<String, Object> pagingParams = parsePagingParameters(request);
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId));
+
     List<Object> results = new ArrayList<Object>();
     if (searchBy.equals("productNumber")) {
       results = productRepository.findProductByProductNumber(
@@ -262,8 +244,6 @@ public class ProductController {
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in productsTable.jsp.
-   * @param products
-   * @return
    */
   private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords) {
     Map<String, Object> productsMap = new HashMap<String, Object>();

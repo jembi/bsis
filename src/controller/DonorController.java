@@ -315,7 +315,50 @@ public class DonorController {
   @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
   public ModelAndView findDonor(HttpServletRequest request,
       @ModelAttribute("findDonorForm") DonorBackingForm form,
-      BindingResult result, Model m) {
+      BindingResult result, Model model) {
+
+    ModelAndView modelAndView = new ModelAndView("donorsTable");
+
+    Map<String, Object> m = model.asMap();
+    m.put("tableName", "findDonorResultsTable");
+    m.put("requestUrl", getUrl(request));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Find Donors");
+    m.put("nextPageUrl", getNextPageUrl(request));
+    m.put("refreshUrl", getUrl(request));
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
+  /**
+   * Get column name from column id, depends on sequence of columns in productsTable.jsp
+   */
+  private List<String> getSortingColumns(int columnId) {
+    List<String> sortColumns = null;
+    switch (columnId) {
+    case 0: sortColumns = Arrays.asList("id");
+            break;
+    case 1: sortColumns = Arrays.asList("donorNumber");
+            break;
+    case 2: sortColumns = Arrays.asList("firstName");
+            break;
+    case 3: sortColumns = Arrays.asList("lastName");
+            break;
+    case 4: sortColumns = Arrays.asList("gender");
+            break;
+    case 5: sortColumns = Arrays.asList("bloodAbo", "bloodRhd");
+            break;
+    case 6: sortColumns = Arrays.asList("birthDate");
+            break;
+    }
+    return sortColumns;
+  }
+
+  @RequestMapping("/findDonorPagination")
+  public @ResponseBody Map<String, Object> findProductPagination(HttpServletRequest request,
+      @ModelAttribute("findDonorForm") DonorBackingForm form,
+      BindingResult result, Model model) {
+
 
     String donorNumber = form.getDonorNumber();
     String firstName = form.getFirstName();
@@ -323,18 +366,41 @@ public class DonorController {
     List<BloodGroup> bloodGroups = form.getBloodGroups();
 
     ModelAndView modelAndView = new ModelAndView("donorsTable");
-    List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups);
 
-    Map<String, Object> model = m.asMap();
-    model.put("tableName", "findDonorResultsTable");
-    model.put("requestUrl", getUrl(request));
-    model.put("donorFields", utilController.getFormFieldsForForm("donor"));
-    model.put("allDonors", getDonorsViewModels(donors));
-    model.put("contentLabel", "Find Donors");
-    model.put("refreshUrl", getUrl(request));
-    modelAndView.addObject("model", model);
-    return modelAndView;
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumns(sortColumnId));
+
+    List<Object> results = new ArrayList<Object>();
+    results = donorRepository.findAnyDonor(donorNumber, firstName,
+        lastName, bloodGroups, pagingParams);
+
+    Map<String, Object> m = model.asMap();
+
+    List<Donor> donors = (List<Donor>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+    return generateDatatablesMap(donors, totalRecords);
+  }
+  
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in donorsTable.jsp.
+   */
+  private Map<String, Object> generateDatatablesMap(List<Donor> donors, Long totalRecords) {
+    Map<String, Object> donorsMap = new HashMap<String, Object>();
+    ArrayList<Object> donorList = new ArrayList<Object>();
+    for (DonorViewModel donor : getDonorsViewModels(donors)) {
+      donorList.add(Arrays.asList(donor.getId().toString(), donor.getDonorNumber().toString(),
+                                    donor.getFirstName().toString(), donor.getLastName().toString(),
+                                    donor.getGender().toString(), donor.getBloodGroup().toString(),
+                                    donor.getBirthDate().toString())
+                     );
+    }
+    donorsMap.put("aaData", donorList);
+    donorsMap.put("iTotalRecords", totalRecords);
+    donorsMap.put("iTotalDisplayRecords", totalRecords);
+    return donorsMap;
   }
 
   @RequestMapping("/viewDonors")
@@ -362,4 +428,14 @@ public class DonorController {
     }
     return donorViewModels;
   }
+
+  public static String getNextPageUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findDonor.html", "findDonorPagination.html");
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
 }

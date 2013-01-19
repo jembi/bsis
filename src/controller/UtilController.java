@@ -136,8 +136,24 @@ public class UtilController {
     return prop;
   }
 
-  private String readPropertyFileContents() {
-    // TODO Auto-generated method stub
-    return null;
+  public Map<String, Object> parsePagingParameters(HttpServletRequest request) {
+    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    int numColumns = Integer.parseInt(request.getParameter("iColumns"));
+    int sortCol = -1;
+    String sortDirection = "asc";
+    for (int i = 0; i < numColumns; ++i) {
+      if (request.getParameter("iSortCol_" + i) != null) {
+        sortCol = Integer.parseInt(request.getParameter("iSortCol_" + i));
+        if (request.getParameter("sSortDir_" + i) != null)
+          sortDirection = request.getParameter("sSortDir_" + i);
+        break;
+      }
+    }
+
+    pagingParams.put("sortColumnId", sortCol);
+    pagingParams.put("sortDirection", sortDirection);
+    pagingParams.put("start", request.getParameter("iDisplayStart"));
+    pagingParams.put("length", request.getParameter("iDisplayLength"));
+    return pagingParams;
   }
 }
