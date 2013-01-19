@@ -476,3 +476,11 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+function animatedScrollTo(jqElement, interval){
+  if (interval === undefined || interval === null)
+    interval = 100;
+  $('html,body').animate({
+  scrollTop: jqElement.offset().top
+  }, 500);
+}

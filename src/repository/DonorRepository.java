@@ -68,8 +68,6 @@ public class DonorRepository {
 
     List<Predicate> bgPredicates = new ArrayList<Predicate>();
     for (BloodGroup bg : bloodGroups) {
-      System.out.println(bg.getBloodAbo());
-      System.out.println(bg.getBloodRhd());
       Expression<Boolean> aboExp = cb.equal(root.<BloodAbo>get("bloodAbo"), bg.getBloodAbo());
       Expression<Boolean> rhdExp = cb.equal(root.<BloodRhd>get("bloodRhd"), bg.getBloodRhd());
       bgPredicates.add(cb.and(aboExp, rhdExp));
@@ -129,7 +127,6 @@ public class DonorRepository {
     TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
     Long totalResults = countQuery.getSingleResult().longValue();
     return Arrays.asList(query.getResultList(), totalResults);
-
   }
 
   public List<Donor> getAllDonors() {

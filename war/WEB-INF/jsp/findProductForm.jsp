@@ -40,8 +40,8 @@ $(document).ready(function() {
       url : "findProduct.html",
       data : findProductFormData,
       success: function(data) {
+        				 animatedScrollTo(resultsDiv);
 				         resultsDiv.html(data);
-        				 window.scrollTo(0, document.body.scrollHeight);
       				 },
       error: function(data) {
 							 showErrorMessage("Something went wrong. Please try again later.");        

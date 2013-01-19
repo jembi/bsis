@@ -36,8 +36,8 @@ $(document).ready(function() {
       url : "findDonor.html",
       data : findDonorFormData,
       success : function(data) {
+        animatedScrollTo(resultsDiv);
         resultsDiv.html(data);
-        window.scrollTo(0, document.body.scrollHeight);
       }
     });
   });

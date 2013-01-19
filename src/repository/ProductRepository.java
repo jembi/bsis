@@ -549,12 +549,6 @@ public class ProductRepository {
     em.flush();
   }
 
-  public void issueProduct(String productNumber) {
-    Product existingProduct = findProductByProductNumber(productNumber);
-    em.merge(existingProduct);
-    em.flush();
-  }
-
   public void addProduct(Product product) {
     discardIfQuarantinedProduct(product);
     updateBloodGroup(product);
