@@ -81,7 +81,6 @@ function getTimeChart(options) {
 function getSeriesData(beginDate, endDate, interval, data) {
 
   seriesData = [];
-  console.log(data);
   for (var x in data) {
     seriesData.push([ parseInt(x), data[x] ]);
   }
@@ -110,10 +109,8 @@ function parseInventoryData(data) {
     var productTypeData = data[category];
     var bloodGroupData = [];
     for (var bloodGroup in bloodGroups) {
-      console.log(bloodGroup);
       var inventoryByBloodGroup = productTypeData[bloodGroup];
       var numUnits = 0;
-      console.log(inventoryByBloodGroup);
       for (var index in inventoryByBloodGroup) {
         numUnits = numUnits + inventoryByBloodGroup[index];
       }
@@ -140,7 +137,6 @@ function parseInventoryData(data) {
     result.data.push({name: category, data: bloodGroupData});
   }
 
-  console.log(result.data);
   return result;
 }
 
@@ -152,11 +148,8 @@ function setChart(chart, categories, data) {
   }
 
   for (var index = 0; index < data.length; index++) {
-    console.log("adding series: ");
-    console.log(data[index]);
     chart.addSeries({name: data[index].name, data: data[index].data}, false);
   }
-  console.log(chart.series);
   chart.redraw();
 }
 
@@ -221,15 +214,11 @@ function generateInventoryChart(options) {
             point: {
               events: {
                 click: function() {
-                         console.log(this);
-                         console.log("clicked");
-                         console.log(this.drilldown);
                          var drilldown = this.drilldown;
                          if (drilldown) {
                            setDrilldownChart(chart, drilldown.name, drilldown.categories, drilldown.data);
                          }
                          else {
-                           console.log(data);
                            setChart(chart, categories, data);
                          }
                        }
@@ -294,7 +283,6 @@ function getTestResultsChart(options) {
 function parseTestResultsData(beginDate, endDate, interval, data) {
 
   var resultData = [];
-  console.log(data);
   for (var testName in data) {
     var resultsForTest = {}
     resultsForTest.name = testName;
@@ -308,6 +296,5 @@ function parseTestResultsData(beginDate, endDate, interval, data) {
     resultData.push(resultsForTest);
   }
 
-  console.log(resultData);
   return resultData;
 }
