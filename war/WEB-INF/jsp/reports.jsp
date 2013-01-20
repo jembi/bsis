@@ -14,8 +14,7 @@
 <script type="text/javascript"
 	src="plugins/highcharts/js/modules/exporting.js"></script>
 
-<div id="reportsTab" class="leftPanel tabs
-">
+<div id="reportsTab" class="leftPanel tabs">
 	<ul>
 		<li id="inventoryReport"><a
 			href="inventoryReportFormGenerator.html">Product Inventory</a></li>
