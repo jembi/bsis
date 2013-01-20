@@ -181,12 +181,34 @@
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 
-        if ("${model.existingCollectedSample}" !== "true")
+        if ("${model.existingCollectedSample}" !== "true" && "${model.hasErrors}" !== "true") {
+          // just set the default values for the new collection  
         	$("#${editCollectedSampleFormDivId}").find('textarea[name="notes"]').html("${model.collectedSampleFields.notes.defaultValue}");
+        	setDefaultValueForSelector(getDonorTypeSelector(), "${model.collectedSampleFields.donorType.defaultValue}");
+        	setDefaultValueForSelector(getCollectionCenterSelector(), "${model.collectedSampleFields.collectionCenter.defaultValue}");
+        	setDefaultValueForSelector(getBloodBagTypeSelector(), "${model.collectedSampleFields.bloodBagType.defaultValue}");
+        	setDefaultValueForSelector(getCollectionSiteSelector(), "${model.collectedSampleFields.collectionSite.defaultValue}");
 
-        copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
+          copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
+        }
 
-      });
+        function getDonorTypeSelector() {
+          return $("#${editCollectedSampleFormDivId}").find('select[name="donorType"]').multiselect();
+        }
+
+        function getCollectionCenterSelector() {
+          return $("#${editCollectedSampleFormDivId}").find('select[name="collectionCenter"]').multiselect();
+        }
+
+        function getBloodBagTypeSelector() {
+          return $("#${editCollectedSampleFormDivId}").find('select[name="bloodBagType"]').multiselect();
+        }
+
+        function getCollectionSiteSelector() {
+          return $("#${editCollectedSampleFormDivId}").find('select[name="collectionSite"]').multiselect();
+        }
+
+		});
 </script>
 
 <div id="${editCollectedSampleFormDivId}">

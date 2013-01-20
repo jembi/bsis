@@ -106,18 +106,30 @@
           yearRange : "c-100:c0",
         });
 
-        if ("${model.existingDonor}" !== "true")
-        	$("#${editDonorFormDivId}").find('textarea[name="address"]').html("${model.donorFields.address.defaultValue}");
-        
-        if ("${model.existingDonor}" !== "true")
+        if ("${model.existingDonor}" !== "true" && "${model.hasErrors}" !== "true") {
+
+          $("#${editDonorFormDivId}").find('textarea[name="address"]').html("${model.donorFields.address.defaultValue}");
         	$("#${editDonorFormDivId}").find('textarea[name="notes"]').html("${model.donorFields.notes.defaultValue}");
-        
+
+        	setDefaultValueForSelector(getGenderSelector(), "${model.donorFields.gender.defaultValue}");
+        	setDefaultValueForSelector(getBloodGroupSelector(), "${model.donorFields.bloodGroup.defaultValue}");
+
+          copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donorFields.mirroredFields}'));
+        }
+
+        function getGenderSelector() {
+          return $("#${editDonorFormDivId}").find('select[name="gender"]').multiselect();
+        }
+
+        function getBloodGroupSelector() {
+          return $("#${editDonorFormDivId}").find('select[name="bloodGroup"]').multiselect();
+        }
+
         $("#${editDonorFormBarcodeId}").barcode(
             							  "${editDonorForm.donor.donorNumber}-${editDonorForm.donor.id}",
             								"code128",
             								{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
         
-        copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donorFields.mirroredFields}'));
       });
 </script>
 

@@ -145,15 +145,20 @@
           });
         }
 
-        if ("${model.existingProduct}" !== "true")
+        if ("${model.existingProduct}" !== "true" && "${model.hasErrors}" !== "true") {
         	$("#${editProductFormDivId}").find('textarea[name="notes"]').html("${model.productFields.notes.defaultValue}");
+        	setDefaultValueForSelector(getProductTypeSelector(), "${model.productFields.productType.defaultValue}");
+          copyMirroredFields("${editProductFormDivId}", JSON.parse('${model.productFields.mirroredFields}'));
+        }
+
+        function getProductTypeSelector() {
+          return $("#${editProductFormDivId}").find('select[name="productType"]').multiselect();
+        }
         
         $("#${editProductFormBarcodeId}").barcode(
 					  "${editProductForm.product.productNumber}-${editProductForm.product.id}",
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
-
-        copyMirroredFields("${editProductFormId}", JSON.parse('${model.productFields.mirroredFields}'));
 
       });
 </script>

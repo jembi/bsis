@@ -149,15 +149,30 @@
           });
         }
 
-        if ("${model.existingRequest}" !== "true")
+        if ("${model.existingRequest}" !== "true" && "${model.hasErrors}" !== "true") {
         	$("#${editRequestFormDivId}").find('textarea[name="notes"]').html("${model.requestFields.notes.defaultValue}");
+        	setDefaultValueForSelector(getBloodGroupSelector(), "${model.requestFields.bloodGroup.defaultValue}");
+        	setDefaultValueForSelector(getProductTypeSelector(), "${model.requestFields.productType.defaultValue}");
+        	setDefaultValueForSelector(getRequestSiteSelector(), "${model.requestFields.requestSite.defaultValue}");
+          copyMirroredFields("${editRequestFormDivId}", JSON.parse('${model.requestFields.mirroredFields}'));
+        }
 
+        function getBloodGroupSelector() {
+          return $("#${editRequestFormDivId}").find('select[name="bloodGroup"]').multiselect();
+        }
+        
+        function getProductTypeSelector() {
+          return $("#${editRequestFormDivId}").find('select[name="productType"]').multiselect();
+        }
+        
+        function getRequestSiteSelector() {
+          return $("#${editRequestFormDivId}").find('select[name="requestSite"]').multiselect();
+        }
+        
         $("#${editRequestFormBarcodeId}").barcode(
 					  "${editRequestForm.request.requestNumber}",
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
-
-        copyMirroredFields("${editRequestFormId}", JSON.parse('${model.requestFields.mirroredFields}'));
 
       });
 </script>

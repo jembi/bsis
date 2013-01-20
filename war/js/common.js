@@ -484,3 +484,10 @@ function animatedScrollTo(jqElement, interval){
   scrollTop: jqElement.offset().top
   }, 500);
 }
+
+// should be a multiselect selector object
+function setDefaultValueForSelector(selectorElement, valueToSelect) {
+  selectorElement.multiselect("widget").find(":contains(" + valueToSelect + ")").each(function() {
+    this.click();
+  }); 
+}

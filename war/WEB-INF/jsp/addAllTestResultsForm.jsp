@@ -95,7 +95,6 @@
         if ($("#${editTestResultFormId}").find(".testedOn").val() == "")
         	$("#${editTestResultFormId}").find(".testedOn").datepicker('setDate', new Date());
 
-
       	$("#${editTestResultFormDivId}").find('textarea[name="notes"]').html("${model.testResultFields.notes.defaultValue}");
 
         copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
