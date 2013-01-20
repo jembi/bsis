@@ -181,6 +181,9 @@
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 
+        if ("${model.existingCollectedSample}" !== "true")
+        	$("#${editCollectedSampleFormDivId}").find('textarea[name="notes"]').html("${model.collectedSampleFields.notes.defaultValue}");
+
         copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
 
       });
@@ -197,7 +200,7 @@
 		<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${model.collectedSampleFields.collectionNumber.displayName}</form:label>
-				<form:input path="collectionNumber" />
+				<form:input path="collectionNumber" value="${model.existingCollectedSample ? '' : model.collectedSampleFields.collectionNumber.defaultValue}" />
 				<form:errors class="formError"
 					path="collectedSample.collectionNumber" delimiter=", "></form:errors>
 			</div>
@@ -205,8 +208,7 @@
 		<c:if test="${model.collectedSampleFields.donor.hidden != true }">
 			<div>
 				<form:label path="donor">${model.collectedSampleFields.donor.displayName}</form:label>
-				<form:hidden path="donorIdHidden"
-					id="${editCollectedSampleFormDonorHiddenId}" />
+				<form:hidden path="donorIdHidden" id="${editCollectedSampleFormDonorHiddenId}" />
 				<input id="${editCollectedSampleFormDonorId}" />
 				<form:errors class="formError" path="collectedSample.donor"
 					delimiter=", "></form:errors>
@@ -215,7 +217,7 @@
 		<c:if test="${model.collectedSampleFields.collectedOn.hidden != true }">
 			<div>
 				<form:label path="collectedOn">${model.collectedSampleFields.collectedOn.displayName}</form:label>
-				<form:input path="collectedOn" class="collectedOn" />
+				<form:input path="collectedOn" class="collectedOn" value="${model.existingCollectedSample ? '' : model.collectedSampleFields.collectedOn.defaultValue}" />
 				<form:errors class="formError" path="collectedSample.collectedOn"
 					delimiter=", "></form:errors>
 			</div>
@@ -238,7 +240,7 @@
 		<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true }">
 			<div>
 				<form:label path="shippingNumber">${model.collectedSampleFields.shippingNumber.displayName}</form:label>
-				<form:input path="shippingNumber" />
+				<form:input path="shippingNumber" value="${model.existingCollectedSample ? '' : model.collectedSampleFields.shippingNumber.defaultValue}" />
 				<form:errors class="formError" path="collectedSample.shippingNumber"
 					delimiter=", "></form:errors>
 			</div>
@@ -246,7 +248,7 @@
 		<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true }">
 			<div>
 				<form:label path="sampleNumber">${model.collectedSampleFields.sampleNumber.displayName}</form:label>
-				<form:input path="sampleNumber" />
+				<form:input path="sampleNumber" value="${model.existingCollectedSample ? '' : model.collectedSampleFields.sampleNumber.defaultValue}" />
 				<form:errors class="formError" path="collectedSample.sampleNumber"
 					delimiter=", "></form:errors>
 			</div>
@@ -254,8 +256,7 @@
 		<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true }">
 			<div>
 				<form:label path="collectionCenter">${model.collectedSampleFields.collectionCenter.displayName}</form:label>
-				<form:select path="collectionCenter" id="${editCollectedSampleFormCentersId}"
-					class="editCollectedSampleFormCenters">
+				<form:select path="collectionCenter" id="${editCollectedSampleFormCentersId}" class="editCollectedSampleFormCenters">
 					<form:option value="" selected="selected">&nbsp;</form:option>
 					<c:forEach var="center" items="${model.centers}">
 						<form:option value="${center.id}">${center.name}</form:option>
@@ -294,7 +295,7 @@
 		<c:if test="${model.collectedSampleFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.collectedSampleFields.notes.displayName}</form:label>
-				<form:textarea path="notes" maxlength="255" />
+				<form:textarea path="notes" />
 				<form:errors class="formError" path="collectedSample.notes"
 					delimiter=", "></form:errors>
 			</div>

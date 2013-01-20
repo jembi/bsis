@@ -149,6 +149,9 @@
           });
         }
 
+        if ("${model.existingRequest}" !== "true")
+        	$("#${editRequestFormDivId}").find('textarea[name="notes"]').html("${model.requestFields.notes.defaultValue}");
+
         $("#${editRequestFormBarcodeId}").barcode(
 					  "${editRequestForm.request.requestNumber}",
 						"code128",
@@ -170,7 +173,7 @@
 		<c:if test="${model.requestFields.requestNumber.hidden != true }">
 			<div>
 				<form:label path="requestNumber">${model.requestFields.requestNumber.displayName}</form:label>
-				<form:input path="requestNumber" />
+				<form:input path="requestNumber" value="${model.existingRequest ? '' : model.requestFields.requestNumber.defaultValue}" />
 				<form:errors class="formError"
 					path="request.requestNumber" delimiter=", "></form:errors>
 			</div>
@@ -195,7 +198,7 @@
 		<c:if test="${model.requestFields.requestDate.hidden != true }">
 			<div>
 				<form:label path="requestDate">${model.requestFields.requestDate.displayName}</form:label>
-				<form:input path="requestDate" class="requestDate" />
+				<form:input path="requestDate" class="requestDate" value="${model.existingRequest ? '' : model.requestFields.requestDate.defaultValue}" />
 				<form:errors class="formError" path="request.requestDate"
 					delimiter=", "></form:errors>
 			</div>
@@ -203,7 +206,7 @@
 		<c:if test="${model.requestFields.requiredDate.hidden != true }">
 			<div>
 				<form:label path="requiredDate">${model.requestFields.requiredDate.displayName}</form:label>
-				<form:input path="requiredDate" class="requiredDate" />
+				<form:input path="requiredDate" class="requiredDate" value="${model.existingRequest ? '' : model.requestFields.requiredDate.defaultValue}" />
 				<form:errors class="formError" path="request.requiredDate"
 					delimiter=", "></form:errors>
 			</div>
@@ -251,7 +254,7 @@
 		<c:if test="${model.requestFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.requestFields.notes.displayName}</form:label>
-				<form:textarea path="notes" maxlength="255" />
+				<form:textarea path="notes" />
 				<form:errors class="formError" path="request.notes"
 					delimiter=", "></form:errors>
 			</div>

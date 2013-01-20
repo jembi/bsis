@@ -91,8 +91,12 @@
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c0",
         });
+
         if ($("#${editTestResultFormId}").find(".testedOn").val() == "")
         	$("#${editTestResultFormId}").find(".testedOn").datepicker('setDate', new Date());
+
+
+      	$("#${editTestResultFormDivId}").find('textarea[name="notes"]').html("${model.testResultFields.notes.defaultValue}");
 
         copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
 
@@ -112,7 +116,7 @@
 		<c:if test="${model.testResultFields.testedOn.hidden != true }">
 			<div>
 				<label for="testedOn">${model.testResultFields.testedOn.displayName}</label>
-				<input name="testedOn" class="testedOn" />
+				<input name="testedOn" class="testedOn" value="${model.testResultFields.testedOn.defaultValue}" />
 				<label class="formError" style="width: 300px;">${model.testedOnError}</label>
 			</div>
 		</c:if>

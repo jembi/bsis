@@ -92,6 +92,9 @@
           yearRange : "c-100:c0",
         });
 
+        if ("${model.existingUsage}" !== "true")
+        	$("#${editUsageFormDivId}").find('textarea[name="notes"]').html("${model.usageFields.notes.defaultValue}");
+
         copyMirroredFields("${editUsageFormId}", JSON.parse('${model.usageFields.mirroredFields}'));
       });
 </script>
@@ -156,7 +159,7 @@
 		<c:if test="${model.usageFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.usageFields.notes.displayName}</form:label>
-				<textarea name="notes">${model.existingUsage ? '' : model.usageFields.notes.defaultValue}</textarea>
+				<form:textarea path="notes" value="${model.existingUsage ? '' : model.usageFields.notes.defaultValue}" />
 				<form:errors class="formError" path="usage.notes"></form:errors>
 			</div>
 		</c:if>

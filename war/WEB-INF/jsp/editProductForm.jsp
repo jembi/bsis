@@ -145,6 +145,9 @@
           });
         }
 
+        if ("${model.existingProduct}" !== "true")
+        	$("#${editProductFormDivId}").find('textarea[name="notes"]').html("${model.productFields.notes.defaultValue}");
+        
         $("#${editProductFormBarcodeId}").barcode(
 					  "${editProductForm.product.productNumber}-${editProductForm.product.id}",
 						"code128",
@@ -166,7 +169,7 @@
 		<c:if test="${model.productFields.productNumber.hidden != true }">
 			<div>
 				<form:label path="productNumber">${model.productFields.productNumber.displayName}</form:label>
-				<form:input path="productNumber" />
+				<form:input path="productNumber" value="${model.existingProduct ? '' : model.productFields.productNumber.defaultValue}" />
 				<form:errors class="formError"
 					path="product.productNumber" delimiter=", "></form:errors>
 			</div>
@@ -174,7 +177,7 @@
 		<c:if test="${model.productFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${model.productFields.collectionNumber.displayName}</form:label>
-				<form:input path="collectionNumber" />
+				<form:input path="collectionNumber" value="${model.existingProduct ? '' : model.productFields.collectionNumber.defaultValue}" />
 				<form:errors class="formError"
 					path="product.collectionNumber" delimiter=", "></form:errors>
 				<form:errors class="formError"
@@ -184,7 +187,7 @@
 		<c:if test="${model.productFields.createdOn.hidden != true }">
 			<div>
 				<form:label path="createdOn">${model.productFields.createdOn.displayName}</form:label>
-				<form:input path="createdOn" class="createdOn" />
+				<form:input path="createdOn" class="createdOn" value="${model.existingProduct ? '' : model.productFields.createdOn.defaultValue}" />
 				<form:errors class="formError" path="product.createdOn"
 					delimiter=", "></form:errors>
 			</div>
@@ -192,7 +195,7 @@
 		<c:if test="${model.productFields.expiresOn.hidden != true }">
 			<div>
 				<form:label path="expiresOn">${model.productFields.expiresOn.displayName}</form:label>
-				<form:input path="expiresOn" class="expiresOn" />
+				<form:input path="expiresOn" class="expiresOn" value="${model.existingProduct ? '' : model.productFields.expiresOn.defaultValue}" />
 				<form:errors class="formError" path="product.expiresOn"
 					delimiter=", "></form:errors>
 			</div>
@@ -213,7 +216,7 @@
 		<c:if test="${model.productFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.productFields.notes.displayName}</form:label>
-				<form:textarea path="notes" maxlength="255" />
+				<form:textarea path="notes" />
 				<form:errors class="formError" path="product.notes"
 					delimiter=", "></form:errors>
 			</div>

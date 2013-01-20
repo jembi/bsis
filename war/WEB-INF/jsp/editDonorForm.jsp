@@ -106,6 +106,12 @@
           yearRange : "c-100:c0",
         });
 
+        if ("${model.existingDonor}" !== "true")
+        	$("#${editDonorFormDivId}").find('textarea[name="address"]').html("${model.donorFields.address.defaultValue}");
+        
+        if ("${model.existingDonor}" !== "true")
+        	$("#${editDonorFormDivId}").find('textarea[name="notes"]').html("${model.donorFields.notes.defaultValue}");
+        
         $("#${editDonorFormBarcodeId}").barcode(
             							  "${editDonorForm.donor.donorNumber}-${editDonorForm.donor.id}",
             								"code128",
@@ -190,7 +196,7 @@
 		<c:if test="${model.donorFields.address.hidden != true }">
 			<div>
 				<form:label path="address" class="labelForTextArea">${model.donorFields.address.displayName}</form:label>
-				<form:textarea path="address" value="${model.existingDonor ? '' : model.donorFields.address.defaultValue}" maxlength="255" />
+				<form:textarea path="address" />
 				<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
 			</div>
 		</c:if>
@@ -227,7 +233,7 @@
 		<c:if test="${model.donorFields.notes.hidden != true }">
 			<div>
 				<form:label path="notes" class="labelForTextArea">${model.donorFields.notes.displayName}</form:label>
-				<textarea name="notes">${model.existingDonor ? '' : model.donorFields.notes.defaultValue}</textarea>
+				<form:textarea path="notes" />
 				<form:errors class="formError" path="donor.notes"></form:errors>
 			</div>
 		</c:if>
