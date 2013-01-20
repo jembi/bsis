@@ -270,14 +270,11 @@ public class CollectedSampleRepository {
     }
 
     DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    String groupByFunc = "DAY";
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
-      groupByFunc = "MONTH";
       incrementBy = Calendar.MONTH;
       resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
     } else if (aggregationCriteria.equals("yearly")) {
-      groupByFunc = "YEAR";
       incrementBy = Calendar.YEAR;
       resultDateFormat = new SimpleDateFormat("01/01/yyyy");
     }

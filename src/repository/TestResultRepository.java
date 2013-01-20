@@ -227,14 +227,11 @@ public class TestResultRepository {
     }
 
     DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    String groupByFunc = "DAY";
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
-      groupByFunc = "MONTH";
       incrementBy = Calendar.MONTH;
       resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
     } else if (aggregationCriteria.equals("yearly")) {
-      groupByFunc = "YEAR";
       incrementBy = Calendar.YEAR;
       resultDateFormat = new SimpleDateFormat("01/01/yyyy");
     }
@@ -266,7 +263,6 @@ public class TestResultRepository {
       try {
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
-        System.out.println(result[2]);
         Map<Long, Long> m = resultMap.get(result[2]);
         if (m.containsKey(utcTime)) {
           Long newVal = m.get(utcTime) + (Long) result[0];
@@ -280,7 +276,6 @@ public class TestResultRepository {
       }
     }
 
-    System.out.println(resultMap);
     return resultMap;
   }
 
