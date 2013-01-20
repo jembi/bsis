@@ -94,6 +94,7 @@ public class AdminController {
 
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", getUrl(request));
+    m.put("refreshUrl", getUrl(request));
     m.put("formName", formToConfigure);
     m.put("formFields", formFieldRepository.getFormFields(formToConfigure));
     mv.addObject("model", m);
@@ -120,8 +121,8 @@ public class AdminController {
       Boolean isRequired = params.get("isRequired").equals("true") ? true : false;
       ff.setIsRequired(isRequired);
 
-      Boolean autoGenerate = params.get("autoGenerate").equals("true") ? true : false;
-      ff.setAutoGenerate(autoGenerate);
+//      Boolean autoGenerate = params.get("autoGenerate").equals("true") ? true : false;
+//      ff.setAutoGenerate(autoGenerate);
 
       String displayName = params.get("displayName").trim();
       ff.setDisplayName(displayName);

@@ -13,8 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import org.hibernate.annotations.FilterDef;
-
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;

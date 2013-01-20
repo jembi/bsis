@@ -10,7 +10,7 @@ public class DonorType {
   @Column(length=30, nullable=false)
   private String donorType;
 
-  @Column(length=50, nullable=false)
+  @Column(length=50)
   private String donorTypeName;
 
   private Boolean isDeleted;

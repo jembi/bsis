@@ -297,6 +297,8 @@ public class TestResultController {
       return mv;
     }
 
+    String notes = params.get("notes");
+
     for (Entry<String, String> param : params.entrySet()) {
       String name = param.getKey();
       if (!name.startsWith("Test"))
@@ -312,6 +314,7 @@ public class TestResultController {
       t.setBloodTest(bloodTest);
       t.setResult(testResult);
       t.setIsDeleted(false);
+      t.setNotes(notes);
       try {
         testResultRepository.addTestResult(t);
       } catch (Exception ex) {

@@ -19,12 +19,12 @@ public class ProductType {
   @Column(length=30, nullable=false)
   private String productType;
 
-  @Column(length=50, nullable=false)
+  @Column(length=50)
   private String productTypeName;
 
   private Integer shelfLife;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   private String shelfLifeUnits;
   
   @Lob

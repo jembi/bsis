@@ -52,7 +52,7 @@
 	</div>
 
 	<div>
-		<label><i>Select a Form to Configure</i></label> <select
+		<label>Select a Form to Configure</label> <select
 			id="${selectFormToConfigureSelectId}">
 			<option value="Donor">Donor Form</option>
 			<option value="CollectedSample">Collection Form</option>

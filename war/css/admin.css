@@ -41,3 +41,55 @@
 .tableInputShort {
 	max-width: 140px;
 }
+
+.formFieldId {
+	display: none;
+}
+
+.formFieldDiv {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+.formFieldLink {
+  padding: 5px;
+	cursor: pointer;
+	color: #132CE7;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.formFieldProperties {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 40px;
+	border: solid;
+	border-width: 1px;
+	margin: 10px;
+	width: 400px;
+	border-radius: 10px;
+}
+
+.tipsBox {
+margin: 3px;
+font-family: 'helvetica';
+background: #edea81;
+border-color: red;
+border-style: dotted;
+border-radius: 5px;
+padding-left: 8px;
+padding-right: 5px;
+padding-top: 3px;
+padding-bottom: 3px;
+margin-top: 10px;
+margin-bottom: 10px;
+max-width: 840px;
+}
+
+.userDiv {
+	padding: 5px;
+	cursor: pointer;
+	color: #132CE7;
+	font-weight: bold;
+	text-decoration: underline;
+}

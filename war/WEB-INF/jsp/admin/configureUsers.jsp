@@ -29,6 +29,7 @@ $(document).ready(function() {
 			       type: "GET",
 			       data: { userId: $(this).find("input[name=id]").val() },
 			       success: function (content) {
+			         					animatedScrollTo($("#${childContentId}"));
 			    							$("#${childContentId}").html(content);
 			       					},
 			     	 error: function(response) {
@@ -75,6 +76,7 @@ $(document).ready(function() {
       type: "GET",
       data: {},
       success: function (content) {
+        					animatedScrollTo($("#${childContentId}"));
    								$("#${childContentId}").html(content);
       					},
     	 error: function(response) {

@@ -37,11 +37,11 @@ public class Donor implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
 	private Long id;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   @Index(name="donor_donorNumber_index")
   private String donorNumber;
 
-  @Column(length=30, nullable=false)
+  @Column(length=30)
   @Index(name="donor_firstName_index")
   @Length(max=30)
 	private String firstName;

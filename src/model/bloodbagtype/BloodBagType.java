@@ -10,7 +10,7 @@ public class BloodBagType {
   @Column(length=30, nullable=false)
   private String bloodBagType;
 
-  @Column(length=50, nullable=false)
+  @Column(length=50)
   private String bloodBagTypeName;
 
   private Boolean isDeleted;
