@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.product.Product;
 import model.request.FindRequestBackingForm;
 import model.request.Request;
 import model.request.RequestBackingForm;
@@ -355,7 +356,7 @@ public class RequestsController {
 
     System.out.println("Request found");
     m.put("request", productRequest);
-    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(productRequest);
+    List<MatchingProductViewModel> products = getMatchingProductViewModels(productRepository.findMatchingProductsForRequest(productRequest));
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
@@ -364,6 +365,15 @@ public class RequestsController {
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;
+  }
+
+  private List<MatchingProductViewModel> getMatchingProductViewModels(
+      List<Product> products) {
+    List<MatchingProductViewModel> matchingProductViewModels = new ArrayList<MatchingProductViewModel>();
+    for (Product product : products) {
+      matchingProductViewModels.add(new MatchingProductViewModel(product));
+    }
+    return matchingProductViewModels;
   }
 
   @RequestMapping("/issueSelectedProducts")

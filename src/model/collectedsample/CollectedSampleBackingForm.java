@@ -147,7 +147,7 @@ public class CollectedSampleBackingForm {
     if (donorType == null || donorType.getDonorType() == null)
       return null;
     else
-      return donorType.toString();
+      return donorType.getDonorType();
   }
 
   public String getBloodBagType() {
@@ -155,7 +155,7 @@ public class CollectedSampleBackingForm {
     if (bloodBagType == null || bloodBagType.getBloodBagType() == null)
       return null;
     else
-      return bloodBagType.toString();
+      return bloodBagType.getBloodBagType();
   }
 
   public String getSampleNumber() {

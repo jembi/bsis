@@ -100,8 +100,11 @@ public class ProductViewModel {
     return product.getBloodRhd();
   }
 
-  public Boolean getIsAvailable() {
-    return product.getIsAvailable();
+  public String getIsAvailable() {
+    if (product.getIsAvailable())
+      return "&#x2713";
+    else
+      return "&#x2717";
   }
 
   public String getBloodGroup() {
@@ -123,7 +126,10 @@ public class ProductViewModel {
     return age + " days old";
   }
 
-  public Boolean getIsSafe() {
-    return !getIsQuarantined() && !product.getExpiresOn().before(new Date());
+  public String getIsSafe() {
+    if (!getIsQuarantined() && !product.getExpiresOn().before(new Date()))
+        return "&#x2713";
+      else
+        return "&#x2717";
   }
 }

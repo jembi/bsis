@@ -121,12 +121,12 @@ public class ProductBackingForm {
 
   public void setProductType(String productType) {
     if (productType == null) {
-      getProduct().setProductType(null);
+      product.setProductType(null);
     }
     else {
       ProductType pt = new ProductType();
       pt.setProductType(productType);
-      getProduct().setProductType(pt);
+      product.setProductType(pt);
     }
   }
 

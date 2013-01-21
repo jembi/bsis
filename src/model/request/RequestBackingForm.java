@@ -83,7 +83,7 @@ public class RequestBackingForm {
     if (productType == null)
       return "";
     else
-      return productType.toString();
+      return productType.getProductType();
   }
 
   public String getRequestSite() {

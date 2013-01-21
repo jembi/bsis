@@ -563,7 +563,7 @@ public class ProductRepository {
     em.flush();
   }
 
-  public List<MatchingProductViewModel> findMatchingProductsForRequest(Request productRequest) {
+  public List<Product> findMatchingProductsForRequest(Request productRequest) {
     Date today = new Date();
     TypedQuery<Product> query = em.createQuery(
                  "SELECT p from Product p where p.productType = :productType AND " +
@@ -583,9 +583,9 @@ public class ProductRepository {
     query.setParameter("bloodRhd", productRequest.getBloodRhd());
     query.setParameter("isDeleted", false);
 
-    List<MatchingProductViewModel> products = new ArrayList<MatchingProductViewModel>();
+    List<Product> products = new ArrayList<Product>();
     for (Product product : query.getResultList()) {
-      products.add(new MatchingProductViewModel(product));
+      products.add(product);
     }
 
     return products;
