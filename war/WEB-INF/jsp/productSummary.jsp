@@ -14,6 +14,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="productSummaryBarcodeId">donorSummaryBarcode-${unique_page_id}</c:set>
 <c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
+<c:set var="discardConfirmDialogId">discardConfirmDialog-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -96,6 +97,28 @@
               });
         });
 
+        $("#${tabContentId}").find(".discardButton").button({
+          icons : {
+            primary : 'ui-icon-trash'
+          }
+        }).click(function() {
+          $("#${discardConfirmDialogId}").dialog(
+              {
+                modal : true,
+                title : "Confirm Discard",
+                buttons : {
+                  "Discard" : function() {
+                    discardProduct("${model.product.id}", notifyParentDone);
+                    $(this).dialog("close");
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                }
+              });
+        });
+
+
         function editProductSuccess() {
           emptyChildContent();
           refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
@@ -128,6 +151,9 @@
 			<!-- button type="button" class="productLabelButton">
 				Product Label
 			</button-->
+			<button type="button" class="discardButton">
+				Dicard product
+			</button>
 			<button type="button" class="deleteButton">
 				Delete
 			</button>
@@ -206,3 +232,7 @@
 
 <div id="${deleteConfirmDialogId}" style="display: none;">Are
 	you sure you want to delete this Product?</div>
+
+<div id="${discardConfirmDialogId}" style="display: none;">Are
+	you sure you want to discard this Product?</div>
+	

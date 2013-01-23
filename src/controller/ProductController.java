@@ -467,6 +467,30 @@ public class ProductController {
     return m;
   }
 
+  @RequestMapping(value = "/discardProduct", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> discardProduct(
+      @RequestParam("productId") Long productId) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      productRepository.discardProduct(productId);
+    } catch (Exception ex) {
+      // TODO: Replace with logger
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+
+
   /**
    * Redirect to ISBT 128 Label Generator
    */

@@ -667,4 +667,11 @@ public class ProductRepository {
     }
     em.flush();
   }
+
+  public void discardProduct(Long productId) {
+    Product existingProduct = findProductById(productId);
+    existingProduct.setStatus(ProductStatus.DISCARDED);
+    em.merge(existingProduct);
+    em.flush();
+  }
 }

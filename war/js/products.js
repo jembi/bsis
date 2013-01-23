@@ -32,7 +32,23 @@ function deleteProduct(productId, successCallback) {
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         successCallback();
-        showMessage("Product Deleted Successfully!");
+        showMessage("Product Deleted Successfully");
+      } else {
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
+      }
+    }
+  });
+}
+
+function discardProduct(productId, successCallback) {
+  $.ajax({
+    type : "POST",
+    url : "discardProduct.html",
+    data : {productId: productId},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        successCallback();
+        showMessage("Product Discarded");
       } else {
         showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
