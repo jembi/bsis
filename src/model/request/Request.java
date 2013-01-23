@@ -104,6 +104,7 @@ public class Request implements ModificationTracker {
     this.productType = request.productType;
     this.requestDate = request.requestDate;
     this.requiredDate = request.requiredDate;
+    this.requestedQuantity = request.requestedQuantity;
     this.notes = request.notes;
   }
 
