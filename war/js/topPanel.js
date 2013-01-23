@@ -82,25 +82,25 @@ $(document).ready(
                 case 1:
                   leftPanelTabs = donorsTabs;
                   break;
-//                case 2:
-//                  leftPanelTabs = collectionsTabs;
-//                  break;
                 case 2:
-                  leftPanelTabs = testResultsTabs;
+                  leftPanelTabs = collectionsTabs;
                   break;
                 case 3:
-                  leftPanelTabs = productsTabs;
+                  leftPanelTabs = testResultsTabs;
                   break;
                 case 4:
-                  leftPanelTabs = requestsTabs;
+                  leftPanelTabs = productsTabs;
                   break;
                 case 5:
-                  leftPanelTabs = usageTabs;
+                  leftPanelTabs = requestsTabs;
                   break;
                 case 6:
-                  leftPanelTabs = reportsTabs;
+                  leftPanelTabs = usageTabs;
                   break;
                 case 7:
+                  leftPanelTabs = reportsTabs;
+                  break;
+                case 8:
                   leftPanelTabs = adminTabs;
                   break;
                 default:

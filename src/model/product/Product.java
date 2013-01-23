@@ -74,6 +74,10 @@ public class Product implements ModificationTracker {
   @ManyToOne(fetch=FetchType.LAZY)
   private Request issuedTo;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private ProductStatus status;
+
   @Lob
   private String notes;
 
@@ -82,7 +86,7 @@ public class Product implements ModificationTracker {
   private Boolean isAvailable;
 
   private Boolean isQuarantined;
-
+  
   @Valid
   private RowModificationTracker modificationTracker;
 
@@ -248,5 +252,13 @@ public class Product implements ModificationTracker {
     if (collectedSample == null)
       return null;
     return collectedSample.getCollectionNumber();
+  }
+
+  public ProductStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(ProductStatus status) {
+    this.status = status;
   }
 }

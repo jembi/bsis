@@ -202,9 +202,7 @@ public class ProductController {
             break;
     case 4: sortColumn = "expiresOn";
             break;
-    case 5: sortColumn = "available";
-            break;
-    case 6: sortColumn = "safe";
+    case 5: sortColumn = "status";
             break;
     }
     return sortColumn;
@@ -228,17 +226,15 @@ public class ProductController {
 
     List<Object> results = new ArrayList<Object>();
     if (searchBy.equals("productNumber")) {
-      results = productRepository.findProductByProductNumber(
-                                          form.getProductNumber(), form.getAvailable(), form.getSafe(),
-                                          dateExpiresFrom, dateExpiresTo, pagingParams);
+      results = productRepository.findProductByProductNumber(form.getProductNumber(), form.getStatus(),
+                                          pagingParams);
     } else if (searchBy.equals("collectionNumber")) {
       results = productRepository.findProductByCollectionNumber(
-          form.getCollectionNumber(), form.getAvailable(), form.getSafe(),
-          dateExpiresFrom, dateExpiresTo, pagingParams);
+          form.getCollectionNumber(), form.getStatus(),
+          pagingParams);
     } else if (searchBy.equals("productType")) {
       results = productRepository.findProductByProductTypes(
-          form.getProductTypes(), form.getAvailable(), form.getSafe(),
-          dateExpiresFrom, dateExpiresTo, pagingParams);
+          form.getProductTypes(), form.getStatus(), pagingParams);
     }
 
     products = (List<Product>) results.get(0);
@@ -257,8 +253,7 @@ public class ProductController {
     for (ProductViewModel product : getProductViewModels(products)) {
       productList.add(Arrays.asList(product.getId().toString(), product.getProductNumber().toString(),
                                     product.getProductType().toString(), product.getCreatedOn().toString(),
-                                    product.getExpiresOn().toString(), product.getIsAvailable().toString(),
-                                    product.getIsSafe().toString())
+                                    product.getExpiresOn().toString(), product.getStatus())
                      );
     }
     productsMap.put("aaData", productList);

@@ -22,6 +22,7 @@ import javax.persistence.TypedQuery;
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
+import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.testresults.TestResult;
@@ -48,10 +49,25 @@ public class ProductRepository {
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 
-  public void discardIfQuarantinedProduct(Product product) {
+  /**
+   * some fields like product status are cached internally.
+   * must be called whenever any changes are made to rows related to the product.
+   * eg. Test result update should update the product status.
+   * @param product
+   */
+  public void updateProductInternalFields(Product product) {
 
-    CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
+    // nothing to do if the product has been discarded
+    if (product.getStatus() != null && product.getStatus().equals(ProductStatus.DISCARDED))
+      return;
+
+    Long collectedSampleId = product.getCollectedSample().getId();
+    CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
     List<TestResult> testResults = c.getTestResults();
+
+    // all test results which have a correct value.
+    // eg. HIV test is correct if its result is negative.
+    // Blood Abo test has no correct value.
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
     Map<String, String> correctTestResults = new HashMap<String, String>();
     for (BloodTest bt : bloodTests) {
@@ -61,7 +77,7 @@ public class ProductRepository {
     }
 
     Set<String> testResultsFound = new HashSet<String>();
-    boolean quarantined = false;
+    boolean safe = true;
     for (TestResult t : testResults) {
       if (t.getIsDeleted())
         continue;
@@ -69,16 +85,20 @@ public class ProductRepository {
       String testResult = t.getResult();
       if (correctTestResults.containsKey(testName)) {
         if (testResult == null || !testResult.toLowerCase().equals(correctTestResults.get(testName)))
-          quarantined = true;
+          safe = false;
           testResultsFound.add(testName);
       }
     }
 
-    // none of the required test results should be missing
-    if (testResultsFound.size() != correctTestResults.size())
-      quarantined = true;
-
-    product.setIsQuarantined(quarantined);
+    boolean allTestsDone = (testResultsFound.size() == correctTestResults.size());
+    if (safe) {
+      if (allTestsDone)
+        product.setStatus(ProductStatus.AVAILABLE);
+      else
+        product.setStatus(ProductStatus.QUARANTINED);        
+    } else {
+      product.setStatus(ProductStatus.UNSAFE);
+    }
   }
 
   public void updateBloodGroup(Product product) {
@@ -174,61 +194,22 @@ public class ProductRepository {
   }
 
   public List<Object> findProductByCollectionNumber(
-      String collectionNumber, List<String> available, List<String> safe, String dateExpiresFrom,
-      String dateExpiresTo, Map<String, Object> pagingParams) {
+      String collectionNumber, List<String> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
     String queryStr = "SELECT p FROM Product p WHERE " +
-                      "p.collectedSample.collectionNumber = :collectionNumber and " +
-                      "((p.expiresOn is NULL) or " +
-                      " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
+                      "p.collectedSample.collectionNumber = :collectionNumber AND " +
+                      "p.status IN :status AND " +
                       "p.isDeleted= :isDeleted";
-
-    if (available.size() == 1) {
-      queryStr += " AND p.isAvailable=:isAvailable";
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
-    }
 
     if (pagingParams.containsKey("sortColumn")) {
       queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     query = em.createQuery(queryStr, Product.class);
-
-    if (available.size() == 1 && available.contains("available")) {
-      query.setParameter("isAvailable", true);
-    }
-    if (available.size() == 1 && available.contains("not_available")) {
-      query.setParameter("isAvailable", false);
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      query.setParameter("isQuarantined", true);
-      query.setParameter("expiresOn", new Date());
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND p.expiresOn <= :expiresOn";
-      query.setParameter("isQuarantined", false);
-      query.setParameter("expiresOn", new Date());
-    }
-
-    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
-    Date to = getDateExpiresToOrDefault(dateExpiresTo);
-
+    query.setParameter("status", statusStringToProductStatus(status));
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
-    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
-    for (Parameter<?> parameter : query.getParameters()) {
-      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
-    }
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -236,66 +217,34 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    Long totalResults = countQuery.getSingleResult().longValue();
-
-    return Arrays.asList(query.getResultList(), totalResults);
+    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
   }
 
+  private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
+    List<ProductStatus> productStatusList = new ArrayList<ProductStatus>();
+    for (String status : statusList) {
+      productStatusList.add(ProductStatus.lookup(status));
+    }
+    return productStatusList;
+  }
+  
   public List<Object> findProductByProductTypes(
-      List<String> productTypes, List<String> available, List<String> safe,
-      String dateExpiresFrom, String dateExpiresTo,
+      List<String> productTypes, List<String> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT p FROM Product p WHERE " +
-        "p.productType.productType IN (:productTypes) and " +
-        "((p.expiresOn is NULL) or " +
-        " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate)) and " +
+        "p.productType.productType IN (:productTypes) AND " +
+        "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
-    
-    if (available.size() == 1) {
-      queryStr += " AND p.isAvailable=:isAvailable";
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
-    }
 
     if (pagingParams.containsKey("sortColumn")) {
       queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-
-    if (available.size() == 1 && available.contains("available")) {
-      query.setParameter("isAvailable", true);
-    }
-    if (available.size() == 1 && available.contains("not_available")) {
-      query.setParameter("isAvailable", false);
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      query.setParameter("isQuarantined", true);
-      query.setParameter("expiresOn", new Date());
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      query.setParameter("isQuarantined", false);
-      query.setParameter("expiresOn", new Date());
-    }
-
-    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
-    Date to = getDateExpiresToOrDefault(dateExpiresTo);
-
+    query.setParameter("status", statusStringToProductStatus(status));
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypes", productTypes);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
-    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
-    for (Parameter<?> parameter : query.getParameters()) {
-      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
-    }
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -303,58 +252,23 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    Long totalResults = countQuery.getSingleResult().longValue();
-
-    return Arrays.asList(query.getResultList(), totalResults);
+    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
   }
 
   public List<Object> findProductByProductNumber(
-      String productNumber, List<String> available,
-      List<String> safe, String dateExpiresFrom,
-      String dateExpiresTo, Map<String, Object> pagingParams) {
+      String productNumber, List<String> status, Map<String, Object> pagingParams) {
 
-    String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND p.isDeleted= :isDeleted AND" +
-        "((p.expiresOn is NULL) or " +
-        " (p.expiresOn >= :fromDate and p.expiresOn <= :toDate))";
+    String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND " +
+                      "p.status IN :status AND " +
+    		              "p.isDeleted=:isDeleted";
 
     TypedQuery<Product> query;
-    if (available.size() == 1) {
-      queryStr += " AND p.isAvailable=:isAvailable";
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined OR p.expiresOn <= :expiresOn)";
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND (p.isQuarantined = :isQuarantined AND p.expiresOn >= :expiresOn)";
-    }
-
     if (pagingParams.containsKey("sortColumn")) {
       queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     query = em.createQuery(queryStr, Product.class);
-
-    if (available.size() == 1 && available.contains("available")) {
-      query.setParameter("isAvailable", true);
-    }
-    if (available.size() == 1 && available.contains("not_available")) {
-      query.setParameter("isAvailable", false);
-    }
-    if (safe.size() == 1 && safe.contains("not_safe")) {
-      query.setParameter("isQuarantined", true);
-      query.setParameter("expiresOn", new Date());
-    }
-    if (safe.size() == 1 && safe.contains("safe")) {
-      queryStr += " AND p.expiresOn <= :expiresOn";
-      query.setParameter("isQuarantined", false);
-      query.setParameter("expiresOn", new Date());
-    }
-
-    Date from = getDateExpiresFromOrDefault(dateExpiresFrom);
-    Date to = getDateExpiresToOrDefault(dateExpiresTo);
-
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
+    query.setParameter("status", statusStringToProductStatus(status));
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productNumber", productNumber);
 
@@ -532,7 +446,7 @@ public class ProductRepository {
     if (existingProduct == null) {
       return null;
     }
-    discardIfQuarantinedProduct(existingProduct);
+    updateProductInternalFields(existingProduct);
     updateBloodGroup(existingProduct);
     existingProduct.copy(product);
     em.merge(existingProduct);
@@ -548,7 +462,7 @@ public class ProductRepository {
   }
 
   public void addProduct(Product product) {
-    discardIfQuarantinedProduct(product);
+    updateProductInternalFields(product);
     updateBloodGroup(product);
     em.persist(product);
     em.flush();
@@ -742,13 +656,13 @@ public class ProductRepository {
   }
 
   public void updateQuarantineStatus() {
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.isQuarantined is NULL AND p.isDeleted = :isDeleted";
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.status is NULL AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Product> products = query.getResultList();
-    System.out.println("number of products: " + products.size());
+    System.out.println("number of products to update: " + products.size());
     for (Product product : products) {
-      discardIfQuarantinedProduct(product);
+      updateProductInternalFields(product);
       em.merge(product);
     }
     em.flush();

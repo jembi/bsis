@@ -148,6 +148,7 @@
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(30),
+        status varchar(30),
         collectedSample_id bigint,
         issuedTo_id bigint,
         createdBy_id bigint,

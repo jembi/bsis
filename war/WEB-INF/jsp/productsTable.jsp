@@ -25,8 +25,7 @@ $(document).ready(
         "sDom" : '<"H"lrT>t<"F"ip>T',
         "bServerSide" : true,
         "sAjaxSource" : "${model.nextPageUrl}",
-        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
-                          { "bSortable" : false, "aTargets": [5, 6]}
+        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}
         								 ],
         "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
           								 oSettings.jqXHR = $.ajax({
@@ -125,22 +124,14 @@ $(document).ready(
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.isAvailable.hidden != true}">
-							<th>${model.productFields.isAvailable.displayName}</th>
-						</c:if>
-						<c:if test="${model.productFields.isSafe.hidden != true}">
-							<th>${model.productFields.isSafe.displayName}</th>
+						<c:if test="${model.productFields.status.hidden != true}">
+							<th>${model.productFields.status.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="product" items="${model.allProducts}">
-					<c:if test="${!product.isSafe}">
-						<tr style="color: red;">
-					</c:if>
-					<c:if test="${product.isSafe}">
-						<tr style="color: green;">
-					</c:if>
+						<tr>
 							<td style="display: none">${product.id}</td>
 							<c:if test="${model.productFields.productNumber.hidden != true}">
 								<td>${product.productNumber}</td>
@@ -154,11 +145,8 @@ $(document).ready(
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
 							</c:if>
-							<c:if test="${model.productFields.isAvailable.hidden != true}">
-								<td>${product.isAvailable ? "&#x2713" : "&#x2717"}</td>
-							</c:if>
-							<c:if test="${model.productFields.isSafe.hidden != true}">
-								<td>${product.isSafe ? "&#x2713" : "&#x2717"}</td>
+							<c:if test="${model.productFields.status.hidden != true}">
+								<td>${product.status}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

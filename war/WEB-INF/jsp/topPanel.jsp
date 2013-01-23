@@ -20,9 +20,8 @@
 		<li class="topPanelTab"><a href="#donorsLandingPageContent"><span
 				class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
 
-		<!--  Hide the collections tab for now as we can create collection from the Donor Tab -->		
-		<!-- li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
-				class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li-->
+		<li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
+				class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
 
 		<li class="topPanelTab"><a href="#productsLandingPageContent"><span
 				class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
@@ -59,9 +58,9 @@
 		<jsp:include page="donors.jsp" />
 	</div>
 
-	<!-- div id="collectionsLandingPageContent">
+	<div id="collectionsLandingPageContent">
 		<jsp:include page="collections.jsp" />
-	</div-->
+	</div>
 
 	<div id="testResultsLandingPageContent">
 		<jsp:include page="testResults.jsp" />

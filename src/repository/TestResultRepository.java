@@ -50,7 +50,7 @@ public class TestResultRepository {
   
   public void updateQuarantineStatus(TestResult testResult) {
     for (Product product : getProductsToUpdate(testResult)) {
-      productRepository.discardIfQuarantinedProduct(product);
+      productRepository.updateProductInternalFields(product);
       em.merge(product);
     }
   }

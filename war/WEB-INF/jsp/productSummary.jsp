@@ -171,16 +171,10 @@
 				<label>${model.product.productType.productTypeName}</label>
 			</div>
 		</c:if>
-		<c:if test="${model.productFields.isAvailable.hidden != true }">
+		<c:if test="${model.productFields.status.hidden != true }">
 			<div>
-				<label>${model.productFields.isAvailable.displayName}</label>
-				<label>${model.product.isAvailable ? "Yes" : "No"}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.isQuarantined.hidden != true }">
-			<div>
-				<label>${model.productFields.isQuarantined.displayName}</label>
-				<label>${model.product.isQuarantined ? "Yes" : "No"}</label>
+				<label>${model.productFields.status.displayName}</label>
+				<label>${model.product.status}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.productFields.bloodGroup.hidden != true }">
@@ -193,6 +187,12 @@
 			<div>
 				<label>${model.productFields.age.displayName}</label>
 				<label>${model.product.age}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.productFields.notes.hidden != true }">
+			<div>
+				<label>${model.productFields.notes.displayName}</label>
+				<label>${model.product.notes}</label>
 			</div>
 		</c:if>
 	</div>

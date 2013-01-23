@@ -268,4 +268,16 @@ public class ProductBackingForm {
   public void setBloodGroups(List<String> bloodGroups) {
     this.bloodGroups = bloodGroups;
   }
+
+  public String getStatus() {
+    ProductStatus status = product.getStatus();
+    if (status == null)
+      return "";
+    else
+      return product.getStatus().toString();
+  }
+
+  public void setStatus(String status) {
+    product.setStatus(ProductStatus.valueOf(status));
+  }
 }

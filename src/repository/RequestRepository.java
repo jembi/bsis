@@ -16,6 +16,7 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
 import model.product.Product;
+import model.product.ProductStatus;
 import model.request.Request;
 import model.testresults.TestResult;
 
@@ -332,6 +333,7 @@ public class RequestRepository {
         product.setIsAvailable(false);
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
+        product.setStatus(ProductStatus.ISSUED);
         numIssued++;
       }
       else {

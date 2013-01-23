@@ -10,8 +10,7 @@ public class FindProductBackingForm {
 
   private List<String> productTypes;
 
-  private List<String> available;
-  private List<String> safe;
+  private List<String> status;
   
   private String dateExpiresFrom;
   private String dateExpiresTo;
@@ -53,20 +52,12 @@ public class FindProductBackingForm {
     this.dateExpiresTo = dateExpiresTo;
   }
 
-  public List<String> getAvailable() {
-    return available;
+  public List<String> getStatus() {
+    return status;
   }
 
-  public void setAvailable(List<String> available) {
-    this.available = available;
-  }
-
-  public List<String> getSafe() {
-    return safe;
-  }
-
-  public void setSafe(List<String> safe) {
-    this.safe = safe;
+  public void setStatus(List<String> status) {
+    this.status = status;
   }
 
 }

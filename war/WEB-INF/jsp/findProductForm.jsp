@@ -62,7 +62,6 @@ $(document).ready(function() {
 	  $("#${findProductFormId}").find(".searchBy").trigger("change");
   }
 
-  console.log($("#${findProductFormId}").find(".searchBy"));
   $("#${findProductFormId}").find(".searchBy").change(toggleSearchBy);
   $("#${findProductFormId}").find(".searchBy").multiselect({
     selectedList: 1,
@@ -126,12 +125,11 @@ $(document).ready(function() {
     return $("#${findProductFormId}").find(".dateExpiresTo");  
   }
 
- 	$("#${findProductFormId}").find(".availableSelector").multiselect({
+ 	$("#${findProductFormId}").find(".productStatusSelector").multiselect({
 	  position : {
 	    my : 'left top',
 	    at : 'right center'
 	  },
-	  selectedList: 2,
 	  header: false,
 	  minWidth: 250,
 	  noneSelectedText: 'All Products',
@@ -146,27 +144,6 @@ $(document).ready(function() {
 										}
 	  							}
 
-	});
-
- 	$("#${findProductFormId}").find(".quarantinedSelector").multiselect({
-	  position : {
-	    my : 'left top',
-	    at : 'right center'
-	  },
-	  selectedList: 2,
-	  header: false,
-	  minWidth: 250,
-	  noneSelectedText: 'All Products',
-	  selectedText: function(numSelected, numTotal, selectedValues) {
-										if (numSelected == numTotal) {
-										  return "All Products";
-										}
-										else {
-										  console.log(selectedValues);
-										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
-										  return checkedValues.length ? checkedValues.join(', ') : 'All Products';
-										}
-	  							}
 	});
 
   getDateExpiresFromInput().datepicker({
@@ -253,32 +230,18 @@ $(document).ready(function() {
 		</div>
 
 		<div>
-				<form:label path="available">Product availability</form:label>
-				<form:select path="available" class="availableSelector">
-						<form:option value="available" label="Available (In Stock)" selected="selected" />
-						<form:option value="not_available" label="Issued" />
-				</form:select>
-		</div>
-
-		<div>
-				<form:label path="available">Safe for Use</form:label>
-				<form:select path="safe" class="quarantinedSelector">
-					<form:option value="safe" label="Safe" selected="selected" />
-					<form:option value="not_safe" label="Unsafe (Quarantined or Expired)" />
+				<form:label path="status">Product Status</form:label>
+				<form:select path="status" class="productStatusSelector">
+					<form:option value="QUARANTINED" label="Quarantined" selected="selected" />
+					<form:option value="AVAILABLE" label="Available" selected="selected" />
+					<form:option value="UNSAFE" label="Unsafe" selected="selected" />
+					<form:option value="ISSUED" label="Issued" selected="selected" />
+					<form:option value="DISCARDED" label="Discarded" selected="selected" />
 				</form:select>
 		</div>
 
 		<br />
 		<br />
-
-		<!-- div>
-			<span style="margin-left: 15px;"> Date of expiry between </span>
-		</div>
-		<div>
-			<form:input path="dateExpiresFrom" class="dateExpiresFrom" placeholder="Any Date"/>
-				and
-			<form:input path="dateExpiresTo" class="dateExpiresTo" placeholder="Any Date"/>
-		</div-->
 
 		<div>
 			<label></label>
@@ -289,6 +252,7 @@ $(document).ready(function() {
 				Clear form
 			</button>
 		</div>
+
 	</form:form>
 	<div class="findProductResults"></div>	
 </div>

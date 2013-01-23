@@ -126,10 +126,7 @@ public class ProductViewModel {
     return age + " days old";
   }
 
-  public String getIsSafe() {
-    if (!getIsQuarantined() && !product.getExpiresOn().before(new Date()))
-        return "&#x2713";
-      else
-        return "&#x2717";
+  public String getStatus() {
+    return product.getStatus().toString();
   }
 }
