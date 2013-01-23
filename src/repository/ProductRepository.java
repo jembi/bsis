@@ -36,8 +36,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import viewmodel.MatchingProductViewModel;
-
 @Repository
 @Transactional
 public class ProductRepository {
@@ -739,6 +737,19 @@ public class ProductRepository {
   public void addAllProducts(List<Product> products) {
     for (Product p : products) {
       em.persist(p);
+    }
+    em.flush();
+  }
+
+  public void updateQuarantineStatus() {
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.isQuarantined is NULL AND p.isDeleted = :isDeleted";
+    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    List<Product> products = query.getResultList();
+    System.out.println("number of products: " + products.size());
+    for (Product product : products) {
+      discardIfQuarantinedProduct(product);
+      em.merge(product);
     }
     em.flush();
   }

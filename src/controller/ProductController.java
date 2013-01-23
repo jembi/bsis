@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,11 @@ public class ProductController {
   public ProductController() {
   }
 
+  @PostConstruct
+  public void setQuarantineStatus() {
+    productRepository.updateQuarantineStatus();
+  }
+  
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new ProductBackingFormValidator(binder.getValidator(), utilController));
