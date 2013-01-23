@@ -48,7 +48,6 @@ public class SchemaGenerator {
    */
   private void generate(Dialect dialect) {
     cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
-
     SchemaExport export = new SchemaExport(cfg);
     export.setDelimiter(";");
     export.setOutputFile("ddl_" + dialect.name().toLowerCase() + ".sql");

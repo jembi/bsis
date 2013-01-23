@@ -45,6 +45,6 @@ public class ProductBackingFormValidator implements Validator {
       errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
 
-    utilController.checkRequiredFields(form, "product", errors);
+    utilController.commonFieldChecks(form, "product", errors);
   }
 }

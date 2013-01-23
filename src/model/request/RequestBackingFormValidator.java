@@ -45,6 +45,6 @@ public class RequestBackingFormValidator implements Validator {
             CustomDateFormatter.getErrorMessage());
     }
 
-    utilController.checkRequiredFields(form, "request", errors);
+    utilController.commonFieldChecks(form, "request", errors);
   }
 }

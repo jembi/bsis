@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.admin.FormField;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -82,6 +83,46 @@ public class UtilController {
 
   private List<String> getRequiredFields(String formName) {
     return formFieldRepository.getRequiredFormFields(formName);
+  }
+
+  public void commonFieldChecks(Object form, String formName, Errors errors) {
+    checkRequiredFields(form, formName, errors);
+    checkFieldLengths(form, formName, errors);
+  }
+
+  public void checkFieldLengths(Object form, String formName, Errors errors) {
+    try {
+      Map<String, Object> properties = BeanUtils.describe(form);
+      Map<String, Integer> maxLengths = getFieldMaxLengths(formName);
+      for (String field : maxLengths.keySet()) {
+        if (properties.containsKey(field)) {
+          Object fieldValue = properties.get(field);
+          Integer maxLength = maxLengths.get(field);
+          if (fieldValue != null && maxLength > 0 &&
+              (fieldValue instanceof String && ((String)fieldValue).length() > maxLength)
+             )
+            try {
+              errors.rejectValue(formName + "." + field, "fieldLength.error", "Maximum length for this field is " + maxLength);
+            } catch (NotReadablePropertyException ex) {
+              // just ignore this error if the property is not readable
+              ex.printStackTrace();
+            }
+        }
+      }
+    } catch (IllegalAccessException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  private Map<String, Integer> getFieldMaxLengths(String formName) {
+    return formFieldRepository.getFieldMaxLengths(formName);
   }
 
   public void checkRequiredFields(Object form, String formName, Errors errors) {

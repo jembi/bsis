@@ -1,7 +1,9 @@
 package repository;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -77,4 +79,16 @@ public class FormFieldRepository {
     query.setParameter("hidden", false);
     return query.getResultList();    
   }
+
+  public Map<String, Integer> getFieldMaxLengths(String formName) {
+    String queryString = "SELECT f.field, f.maxLength FROM FormField f where form=:formName";
+    TypedQuery<Object[]> query = em.createQuery(queryString, Object[].class);
+    query.setParameter("formName", formName);
+    Map<String, Integer> maxLengths = new HashMap<String, Integer>();
+    for (Object[] obj : query.getResultList()) {
+      maxLengths.put((String)obj[0], (Integer)obj[1]);
+    }
+    return maxLengths;
+  }
+
 }

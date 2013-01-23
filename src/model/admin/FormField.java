@@ -35,9 +35,12 @@ public class FormField {
   @Column(length=30)
   private String defaultDisplayName;
 
+  @Column
+  private Integer maxLength;
+
   @Lob
   private String defaultValue;
-  
+
   private Boolean hidden = false;
 
   private Boolean derived = false;
@@ -148,6 +151,14 @@ public class FormField {
 
   public void setAutoGenerate(Boolean autoGenerate) {
     this.autoGenerate = autoGenerate;
+  }
+
+  public Integer getMaxLength() {
+    return maxLength;
+  }
+
+  public void setMaxLength(Integer maxLength) {
+    this.maxLength = maxLength;
   }
 
 }

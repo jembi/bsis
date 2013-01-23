@@ -42,6 +42,6 @@ public class TestResultBackingFormValidator implements Validator {
       errors.rejectValue("testResult.testedOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
 
-    utilController.checkRequiredFields(form, "testResult", errors);
+    utilController.commonFieldChecks(form, "testResult", errors);
   }
 }
