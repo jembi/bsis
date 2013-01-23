@@ -135,6 +135,7 @@ public class FormField {
     this.autoGenerate = formField.autoGenerate;
     this.derived = formField.derived;
     this.sourceField = formField.sourceField;
+    this.maxLength = formField.maxLength;
   }
 
   public Boolean getIsRequired() {
@@ -160,5 +161,4 @@ public class FormField {
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
   }
-
 }

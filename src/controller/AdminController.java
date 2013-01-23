@@ -130,6 +130,9 @@ public class AdminController {
       String defaultValue = params.get("defaultValue").trim();
       ff.setDefaultValue(defaultValue);
 
+      String maxLength = params.get("maxLength").trim();
+      ff.setMaxLength(Integer.parseInt(maxLength));
+
 //      String sourceField = params.get("sourceField").trim();
 //      if (sourceField.equals("nocopy")) {
 //        ff.setDerived(false);

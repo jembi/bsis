@@ -48,13 +48,17 @@
         var defaultValueInput = propertiesDiv.find('input[name="defaultValue"]');
         console.log(defaultValueInput.val());
 
+        var maxLengthInput = propertiesDiv.find('input[name="maxLength"]');
+        console.log(maxLengthInput.val());
+
         $.ajax({
           url: "configureFormFieldChange.html",
           data: {id: idInput.val(),
             		 hidden: hiddenInput.is(":checked"),
             		 isRequired: isRequiredInput.is(":checked"),
             		 displayName: displayNameInput.val(),
-            		 defaultValue: defaultValueInput.val()
+            		 defaultValue: defaultValueInput.val(),
+            		 maxLength: maxLengthInput.val()
             		},
           type: "POST",
           success: function() {
@@ -108,6 +112,10 @@
 				<div>
 					<label>Default value</label>
 					<input type="text" name="defaultValue" class="tableInputShort" value="${formField.defaultValue}" />					
+				</div>
+				<div>
+					<label>Maximum length</label>
+					<input type="text" name="maxLength" class="tableInputShort" value="${formField.maxLength}" />					
 				</div>
 				<div>
 					<button class="updateFormFieldButton">Save</button>
