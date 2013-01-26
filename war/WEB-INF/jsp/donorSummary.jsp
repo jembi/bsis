@@ -35,8 +35,9 @@
         			}
             }).click(function() {
 
-            $("#${tabContentId}").bind("editDonorSuccess", editDonorSuccess);
-            $("#${tabContentId}").bind("editDonorCancel", emptyChildContent);
+            hideMainContent();
+            $("#${tabContentId}").bind("editDonorSuccess", editDonorDone);
+            $("#${tabContentId}").bind("editDonorCancel", editDonorDone);
 
   	        fetchContent("editDonorFormGenerator.html",
               					 {donorId: "${model.donor.id}"},
@@ -57,9 +58,9 @@
             primary : 'ui-icon-disk'
           }
         }).click(function() {
-          $("#${tabContentId}").bind("editCollectionSuccess", editCollectionSuccess);
-          $("#${tabContentId}").bind("editCollectionCancel", emptyChildContent);
-
+          $("#${tabContentId}").bind("editCollectionSuccess", editCollectionDone);
+          $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
+					hideMainContent();
 	        fetchContent("addCollectionFormForDonorGenerator.html",
             					 {donorId: "${model.donor.id}"},
             					 $("#${childContentId}")
@@ -71,7 +72,8 @@
             primary : 'ui-icon-disk'
           }
         }).click(function() {
-          $("#${tabContentId}").bind("donorHistoryDone", emptyChildContent);
+          hideMainContent();
+          $("#${tabContentId}").bind("donorHistoryDone", editDonorDone);
 
 	        fetchContent("viewDonorHistory.html",
             					 {donorId: "${model.donor.id}"},
@@ -108,19 +110,23 @@
               });
         });
 
-        function editDonorSuccess() {
+        function editDonorDone() {
           emptyChildContent();
           refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
         }
 
-        function editCollectionSuccess() {
+        function editCollectionDone() {
           emptyChildContent();
+          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
         }
 
 				function emptyChildContent() {
-				  $("#${childContentId}").html("");
+				  $("#${childContentId}").remove();
 				}
 
+				function hideMainContent() {
+				  $("#${mainContentId}").remove();
+				}
       });
 </script>
 
@@ -202,9 +208,44 @@
 				<label>${model.donor.bloodGroup}</label>
 			</div>
 		</c:if>
+		<c:if test="${model.donorFields.address.hidden != true }">
+			<div>
+				<label>${model.donorFields.address.displayName}</label>
+				<label>${model.donor.address}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.city.hidden != true }">
+			<div>
+				<label>${model.donorFields.city.displayName}</label>
+				<label>${model.donor.city}</label>
+			</div>
+		</c:if>
+				<c:if test="${model.donorFields.state.hidden != true }">
+			<div>
+				<label>${model.donorFields.state.displayName}</label>
+				<label>${model.donor.state}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.country.hidden != true }">
+			<div>
+				<label>${model.donorFields.country.displayName}</label>
+				<label>${model.donor.country}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.zipcode.hidden != true }">
+			<div>
+				<label>${model.donorFields.zipcode.displayName}</label>
+				<label>${model.donor.zipcode}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.notes.hidden != true }">
+			<div>
+				<label>${model.donorFields.notes.displayName}</label>
+				<label>${model.donor.notes}</label>
+			</div>
+		</c:if>
 	</div>
 
-	<hr />
 	<br />
 	<br />
 

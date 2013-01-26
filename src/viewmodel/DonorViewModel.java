@@ -67,6 +67,22 @@ public class DonorViewModel {
     return donor.getAddress();
   }
 
+  public String getCity() {
+    return donor.getCity();
+  }
+
+  public String getState() {
+    return donor.getState();
+  }
+
+  public String getCountry() {
+    return donor.getCountry();
+  }
+
+  public String getZipcode() {
+    return donor.getZipcode();
+  }
+
   public String getNotes() {
     Object comments = donor.getNotes();
     return comments == null ? "" : comments.toString();
