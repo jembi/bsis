@@ -10,6 +10,10 @@ public class FindCollectedSampleBackingForm {
   private String sampleNumber;
 
   private List<String> centers;
+  private List<String> sites;
+
+  private List<String> bloodBagTypes;
+  
   private String dateCollectedFrom;
   private String dateCollectedTo;
 
@@ -29,7 +33,7 @@ public class FindCollectedSampleBackingForm {
     return sampleNumber;
   }
 
-  public List<String> getCenters() {
+  public List<String> getCollectionCenters() {
     return centers;
   }
 
@@ -57,7 +61,7 @@ public class FindCollectedSampleBackingForm {
     this.sampleNumber = sampleNumber;
   }
 
-  public void setCenters(List<String> centers) {
+  public void setCollectionCenters(List<String> centers) {
     this.centers = centers;
   }
 
@@ -67,6 +71,22 @@ public class FindCollectedSampleBackingForm {
 
   public void setDateCollectedTo(String dateCollectedTo) {
     this.dateCollectedTo = dateCollectedTo;
+  }
+
+  public List<String> getCollectionSites() {
+    return sites;
+  }
+
+  public void setCollectionSites(List<String> sites) {
+    this.sites = sites;
+  }
+
+  public List<String> getBloodBagTypes() {
+    return bloodBagTypes;
+  }
+
+  public void setBloodBagTypes(List<String> bloodBagTypes) {
+    this.bloodBagTypes = bloodBagTypes;
   }
 
 }

@@ -60,7 +60,7 @@
         }).click(function() {
           $("#${tabContentId}").bind("editCollectionSuccess", editCollectionDone);
           $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
-					hideMainContent();
+					//hideMainContent();
 	        fetchContent("addCollectionFormForDonorGenerator.html",
             					 {donorId: "${model.donor.id}"},
             					 $("#${childContentId}")
@@ -72,9 +72,8 @@
             primary : 'ui-icon-disk'
           }
         }).click(function() {
-          hideMainContent();
+          //hideMainContent();
           $("#${tabContentId}").bind("donorHistoryDone", editDonorDone);
-
 	        fetchContent("viewDonorHistory.html",
             					 {donorId: "${model.donor.id}"},
             					 $("#${childContentId}")
@@ -244,6 +243,7 @@
 				<label>${model.donor.notes}</label>
 			</div>
 		</c:if>
+		<hr />
 	</div>
 
 	<br />

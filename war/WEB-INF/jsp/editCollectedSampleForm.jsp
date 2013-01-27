@@ -36,7 +36,7 @@
 	        $("#${tabContentId}").parent().trigger("editCollectionCancel");
         }
 
-        $("#${cancelCollectedSampleButtonId}").button({
+        $("#${tabContentId}").find(".cancelButton").button({
           icons : {
             primary : 'ui-icon-closethick'
           }
@@ -124,8 +124,8 @@
           });
         }
 
-        if ("${model.editCollectedSampleForm.donor}" != "") {
-	        $("#${editCollectedSampleFormId}").find("").attr("readonly", "readonly");	
+        if ("${model.editCollectedSampleForm.donor}" != "" || "${model.disallowDonorChange}" == "true") {
+	        $("#${editCollectedSampleFormId}").find('input[name="donorNumber"]').attr("readonly", "readonly");	
         }
 
         $("#${editCollectedSampleFormBarcodeId}").barcode(
@@ -182,6 +182,7 @@
 		<c:if test="${model.collectedSampleFields.donor.hidden != true }">
 			<div>
 				<form:label path="donorNumber">${model.collectedSampleFields.donorNumber.displayName}</form:label>
+				<form:hidden path="donorIdHidden" />
 				<form:input path="donorNumber" class="donorNumber" value="${model.existingCollectedSample ? '' : model.collectedSampleFields.donorNumber.defaultValue}" />
 				<form:errors class="formError" path="collectedSample.donorNumber"
 					delimiter=", "></form:errors>
@@ -282,6 +283,11 @@
 				<button type="button" id="${updateCollectedSampleButtonId}" class="autoWidthButton">
 					Save
 				</button>
+				<c:if test="${model.collectionForDonor}">
+					<button type="button" class="cancelButton">
+						Cancel
+					</button>
+				</c:if>
 				<button type="button" class="clearFormButton autoWidthButton">
 					Clear form
 				</button>				
@@ -290,7 +296,7 @@
 				<button type="button" id="${updateCollectedSampleButtonId}">
 					Save
 				</button>
-				<button type="button" id="${cancelButtonId}">
+				<button type="button" class="cancelButton">
 					Cancel
 				</button>
 			</c:if>

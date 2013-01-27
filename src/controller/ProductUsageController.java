@@ -109,8 +109,11 @@ public class ProductUsageController {
         Product product = productRepository.findSingleProductByProductNumber(productNumber);
         form.setProduct(product);
       } catch (NoResultException ex) {
+        form.setProduct(null);
         ex.printStackTrace();
       }
+    } else {
+      form.setProduct(null);
     }
 
     if (result.hasErrors()) {

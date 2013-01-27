@@ -19,7 +19,6 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="tabContentId">findProductFormDiv-${unique_page_id}</c:set>
 <c:set var="findProductFormId">findProductForm-${unique_page_id}</c:set>
 <c:set var="findProductFormSearchById">findProductFormSearchBySelector-${unique_page_id}</c:set>
 <c:set var="findProductFormResultId">findProductFormResult-${unique_page_id}</c:set>
@@ -65,7 +64,8 @@ $(document).ready(function() {
   $("#${findProductFormId}").find(".searchBy").change(toggleSearchBy);
   $("#${findProductFormId}").find(".searchBy").multiselect({
     selectedList: 1,
-    multiple: false
+    multiple: false,
+    header: false
   });
   // first time trigger change event so that the input box is shown
   $("#${findProductFormId}").find(".searchBy").trigger("change");
@@ -247,7 +247,7 @@ $(document).ready(function() {
 			<div>
 				<label></label>
 				<button type="button" class="findProductButton">
-					Find product
+					Find products
 				</button>
 				<button type="button" class="clearFindFormButton">
 					Clear form

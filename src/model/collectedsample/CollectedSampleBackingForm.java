@@ -308,4 +308,30 @@ public class CollectedSampleBackingForm {
     donor.setDonorNumber(donorNumber);
     collectedSample.setDonor(donor);
   }
+
+  public String getDonorIdHidden() {
+    if (collectedSample == null)
+      return null;
+    Donor donor = collectedSample.getDonor();
+    if (donor == null || donor.getId() == null)
+      return null;
+    return donor.getId().toString();
+  }
+
+  public void setDonorIdHidden(String donorId) {
+    if (donorId == null) {
+      collectedSample.setDonor(null);
+    }
+    else {
+      
+      try {
+        Donor d = new Donor();
+        d.setId(Long.parseLong(donorId));
+        collectedSample.setDonor(d);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        collectedSample.setDonor(null);
+      }
+    }
+  }
 }

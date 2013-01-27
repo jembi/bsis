@@ -19,6 +19,7 @@ import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
 import model.location.Location;
 
+import org.apache.taglibs.standard.lang.jstl.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -85,6 +86,7 @@ public class CollectedSampleController {
     ModelAndView mv = new ModelAndView("findCollectionForm");
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
+    utilController.addTipsToModel(model.asMap(), "collectedSamples.find");
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     m.put("refreshUrl", getUrl(request));
@@ -117,8 +119,13 @@ public class CollectedSampleController {
     } else if (searchBy.equals("collectionCenter")) {
 
       List<Long> centerIds = new ArrayList<Long>();
-      for (String center : form.getCenters()) {
+      for (String center : form.getCollectionCenters()) {
         centerIds.add(Long.parseLong(center));
+      }
+
+      List<Long> siteIds = new ArrayList<Long>();
+      for (String site : form.getCollectionSites()) {
+        siteIds.add(Long.parseLong(site));
       }
 
       collectedSamples = collectedSampleRepository.findCollectedSampleByCenters(
@@ -156,11 +163,17 @@ public class CollectedSampleController {
     addEditSelectorOptions(m);
     m.put("refreshUrl", getUrl(request));
     m.put("editCollectedSampleForm", form);
+    m.put("collectionForDonor", true);
     m.put("existingCollectedSample", false);
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    if (form.getDonor() != null)
-      m.put("contentLabel", "Add Collection for Donor " + form.getDonor().getDonorNumber());
+    m.put("disallowDonorChange", true);
+    Donor donor = donorRepository.findDonorById(donorId);
+    form.setDonor(donor);
+
+    System.out.println(donor.getDonorNumber());
+    System.out.println(form.getDonorNumber());
+
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     mv.addObject("model", m);
     return mv;
@@ -212,14 +225,30 @@ public class CollectedSampleController {
 
     // IMPORTANT: Validation code just checks if the ID exists.
     // We still need to store the collected sample as part of the product.
+    String donorId = form.getDonorIdHidden();
     String donorNumber = form.getDonorNumber();
-    if (donorNumber != null && !donorNumber.isEmpty()) {
+    if (donorId != null && !donorId.isEmpty()) {
+      try {
+        Donor donor = donorRepository.findDonorById(donorId);
+        form.setDonor(donor);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+        form.setDonor(null);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        form.setDonor(null);
+      }
+    }
+    else if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
         Donor donor = donorRepository.findDonorByDonorNumber(donorNumber);
         form.setDonor(donor);
       } catch (NoResultException ex) {
         ex.printStackTrace();
+        form.setDonor(null);
       }
+    } else {
+      form.setDonor(null);
     }
 
     if (result.hasErrors()) {
@@ -274,11 +303,6 @@ public class CollectedSampleController {
     // property will be changed
     m.put("existingCollectedSample", true);
 
-    System.out.println("here");
-    System.out.println(form.getCollectionCenter());
-    System.out.println(form.getCollectionSite());
-
-
     // IMPORTANT: Validation code just checks if the ID exists.
     // We still need to store the collected sample as part of the product.
     String donorNumber = form.getDonorNumber();
@@ -287,8 +311,11 @@ public class CollectedSampleController {
         Donor donor = donorRepository.findDonorByDonorNumber(donorNumber);
         form.setDonor(donor);
       } catch (NoResultException ex) {
+        form.setDonor(null);
         ex.printStackTrace();
       }
+    } else {
+      form.setDonor(null);
     }
 
     if (result.hasErrors()) {

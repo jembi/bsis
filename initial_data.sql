@@ -109,6 +109,7 @@ insert into Tips (tipsKey, tipsName,tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),
 ('testresults.find', 'Find/Edit Test Results', 'Find Test results by collection number or find tests done between two dates.'),
 ('products.find', 'Find/Edit Products', 'Find Products by collection number/product number/product type.'),
+('collectedSamples.find', 'Find/Edit Collections', 'Find Collections by collection number/blood bag type/collection center/collection site.'),
 ('donors.finddonor', 'Find/Edit Donors', 'Find Donors by donor number or part of donor first name or last name. Filter donors by Blood Group.'),
 ('donors.finddonor.donorsummary', 'Donor Summary', 'View previous donations by this donor by selecting View Donor History. Add a new collection for this donor by selecting Add Collection.'),
 ('requests.findpending', 'Find Pending Requests', 'To issue products first find pending requests for a given site by product type. Optionally specify dates to filter requests made on or after Request date and required on or before Required date'),

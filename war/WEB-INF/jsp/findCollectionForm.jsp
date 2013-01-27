@@ -14,28 +14,32 @@
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="findCollectionFormDivId">findCollectionFormDiv-${unique_page_id}</c:set>
+
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+
 <c:set var="findCollectionFormId">findCollectionForm-${unique_page_id}</c:set>
 <c:set var="findCollectionFormSearchById">findCollectionFormSearchBySelector-${unique_page_id}</c:set>
 <c:set var="findCollectionFormResultId">findCollectionFormResult-${unique_page_id}</c:set>
-<c:set var="searchByInputDivId">searchByInputDivId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
-  $("#${findCollectionFormDivId}").find(".findCollectionButton").button({
+  $("#${tabContentId}").find(".findCollectionButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
   }).click(function() {
     var findCollectionFormData = $("#${findCollectionFormId}").serialize();
-    showLoadingImage('${findCollectionFormResultId}');
+    var resultsDiv = $("#${mainContentId}").find(".findCollectionResults");
+    //showLoadingImage(resultsDiv);
     $.ajax({
       type : "GET",
       url : "findCollection.html",
       data : findCollectionFormData,
       success: function(data) {
-      				   $('#${findCollectionFormResultId}').html(data);
-        				 window.scrollTo(0, document.body.scrollHeight);
+        				 animatedScrollTo(resultsDiv);
+				         resultsDiv.html(data);
       				 },
       error: function(data) {
 							 showErrorMessage("Something went wrong. Please try again later.");        
@@ -43,172 +47,183 @@ $(document).ready(function() {
     });
   });
 
-  $("#${findCollectionFormDivId}").find(".clearFindFormButton").button({
+  $("#${tabContentId}").find(".clearFindFormButton").button({
     icons : {
       primary : 'ui-icon-grip-solid-horizontal'
     }
   }).click(clearFindForm);
   
   function clearFindForm() {
-		$("#${findCollectionFormId}").each(function() {
-		  this.reset();
-		});
-		$("#${findCollectionFormResultId}").html("");
-		// show the appropriate input based on default search by
-	  $("#${findCollectionFormId}").find(".searchBy").trigger("change");
+    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    $("#${childContentId}").html("");
   }
 
-  $("#${findCollectionFormId}").find(".searchBy").change(toggleSearchBy);
-  $("#${findCollectionFormId}").find(".searchBy").multiselect({
-    selectedList: 1,
-    multiple: false
-  });
-  // first time trigger change event so that the input box is shown
-  $("#${findCollectionFormId}").find(".searchBy").trigger("change");
+	$("#${findCollectionFormId}").find(".bloodBagTypeSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "Any Blood Bag Type";
+										}
+										else {
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'Any Blood Bag Type';
+										}
+	  							}
+	});
+	$("#${findCollectionFormId}").find(".bloodBagTypeSelector").multiselect("checkAll");
 
-  function toggleSearchBy() {
-
-		var form = $("#${findCollectionFormId}");
-		var searchBy = form.find(".searchBy").val();
-		// jquery ui multiselect must be destroyed before hiding the select options
-		destroyCollectionCenterMultiSelect();
-		form.find(".hidableDiv").each(function() {
-		  $(this).hide();
-		});
-
-		switch(searchBy) {
-			case "collectionNumber": form.find(".collectionNumberInput").show();
-															 break;
-			case "shippingNumber":   form.find(".shippingNumberInput").show();
-															 break;
-			case "sampleNumber":     form.find(".sampleNumberInput").show();
-			 										     break;
-			case "collectionCenter": form.find(".collectionCenterInput").show();
-															 createCollectionCenterMultiSelect();
-	     												 break;
-		}
-  }
-
-  function createCollectionCenterMultiSelect() {
-		$("#${findCollectionFormId}").find(".collectionCenterInput").multiselect({
-		  position : {
-		    my : 'left top',
-		    at : 'right center'
-		  },
-		  noneSelectedText: 'None Selected',
-		  selectedText: function(numSelected, numTotal, selectedValues) {
+	$("#${findCollectionFormId}").find(".collectionCenterSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Center";
 										}
 										else {
-										  console.log(selectedValues);
 										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 										  return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
 										}
-		  							}
-		});
-  }
+	  							}
+	});
+	$("#${findCollectionFormId}").find(".collectionCenterSelector").multiselect("checkAll");
 
-  function destroyCollectionCenterMultiSelect() {
-    $("#${findCollectionFormId}").find(".collectionCenterInput").multiselect("destroy");
-  }
+	$("#${findCollectionFormId}").find(".collectionSiteSelector").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "Any Site";
+										}
+										else {
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
+										}
+	  							}
+	});
+	$("#${findCollectionFormId}").find(".collectionSiteSelector").multiselect("checkAll");
 
-  function getDateCollectedFromInput() {
+  function getDateOfCollectionFromInput() {
     return $("#${findCollectionFormId}").find(".dateCollectedFrom");  
   }
 
-  function getDateCollectedToInput() {
+  function getDateOfCollectionToInput() {
     return $("#${findCollectionFormId}").find(".dateCollectedTo");  
   }
 
-  getDateCollectedFromInput().datepicker({
+  getDateOfCollectionFromInput().datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
-    maxDate : 0,
+    maxDate : 365,
     dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
+    yearRange : "c-100:c+1",
     onSelect : function(selectedDate) {
-      getDateCollectedToInput().datepicker("option", "minDate", selectedDate);
+      getDateOfCollectionToInput().datepicker("option", "minDate", selectedDate);
     }
   });
 
-  getDateCollectedToInput().datepicker({
+  getDateOfCollectionToInput().datepicker({
     changeMonth : true,
     changeYear : true,
     minDate : -36500,
-    maxDate : 0,
+    maxDate : 365,
     dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
+    yearRange : "c-100:c+1",
     onSelect : function(selectedDate) {
-      getDateCollectedFromInput().datepicker("option", "maxDate", selectedDate);
+      getDateOfCollectionFromInput().datepicker("option", "maxDate", selectedDate);
     }
   });
 
+  // child div shows donor information. bind this div to productSummaryView event
+  $("#${tabContentId}").bind("collectionSummaryView",
+      function(event, content) {
+    		$("#${mainContentId}").hide();
+    		$("#${childContentId}").html(content);
+  		});
+
+  $("#${tabContentId}").bind("collectionSummarySuccess",
+      function(event, content) {
+    		$("#${mainContentId}").show();
+    		$("#${childContentId}").html("");
+    		$("#${tabContentId}").find(".collectionsTable").trigger("refreshResults");
+  		});
 });
 </script>
 
-<div id="${findCollectionFormDivId}" class="formDiv">
-	<b>Find Collections</b>
-	<form:form method="GET" commandName="findCollectedSampleForm" id="${findCollectionFormId}"
-		class="formInTabPane">
-		<div>
-			<form:label path="searchBy">Find Collection by </form:label>
-			<!-- need to set id searchBy selector otherwise the
-      		 search by selector in collections page will get the same id  -->
-			<form:select path="searchBy" id="${tabContentId}-findCollectionsSearchBy" class="searchBy">
-				<form:option value="collectionNumber" label="${model.collectedSampleFields.collectionNumber.displayName}" />
-				<form:option value="shippingNumber" label="${model.collectedSampleFields.shippingNumber.displayName}" />
-				<form:option value="sampleNumber" label="${model.collectedSampleFields.sampleNumber.displayName}" />
-				<form:option value="collectionCenter" label="${model.collectedSampleFields.collectionCenter.displayName}" />
-			</form:select>
-
-			<div class="collectionNumberInput hidableDiv" style="display:none">
-				<form:label path="collectionNumber"></form:label>
-				<!-- Spring supports dynamic attributes so placeholder can be added -->
-				<form:input path="collectionNumber" placeholder="Collection Number"/>
+<div id="${tabContentId}" class="formDiv">
+	<div id="${mainContentId}">
+		<b>Find Collections</b>
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['collectedSamples.find']}
+			</p>
+		</div>
+		<form:form method="GET" commandName="findCollectedSampleForm" id="${findCollectionFormId}"
+			class="formInTabPane">
+	
+			<div>
+				<form:label path="collectionNumber">Collection number</form:label>
+				<form:input path="collectionNumber" placeholder="Collection Number" />
 			</div>
 	
-			<div class="shippingNumberInput hidableDiv" style="display:none">
-				<form:input path="shippingNumber" placeholder="Shipping Number" />
-			</div>
-	
-			<div class="sampleNumberInput hidableDiv" style="display:none">
-				<form:input path="sampleNumber" placeholder="Sample Number" />
-			</div>
-	
-			<div class="collectionCenterInput hidableDiv" style="display:none">
-				<form:select path="centers" class="collectionCenterSelector">
-					<c:forEach var="center" items="${model.centers}">
-						<form:option value="${center.id}" label="${center.name}" />
+			<div>
+				<form:label path="bloodBagTypes">Blood Bag Type</form:label>
+				<form:select id="${tabContentId}-bloodBagTypes" path="bloodBagTypes" class="bloodBagTypeSelector">
+					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
+						<form:option value="${bloodBagType.bloodBagType}" label="${bloodBagType.bloodBagTypeName}" />
 					</c:forEach>
 				</form:select>
 			</div>
+	
+			<div>
+					<form:label path="collectionCenters">Collection center</form:label>
+					<form:select id="${tabContentId}-collectionCenters" path="collectionCenters" class="collectionCenterSelector">
+						<c:forEach var="center" items="${model.centers}">
+							<form:option value="${center.id}">${center.name}</form:option>
+						</c:forEach>
+					</form:select>
+			</div>
+	
+			<div>
+					<form:label path="collectionSites">Collection site</form:label>
+					<form:select id="${tabContentId}-collectionSites" path="collectionSites" class="collectionSiteSelector">
+						<c:forEach var="site" items="${model.sites}">
+							<form:option value="${site.id}">${site.name}</form:option>
+						</c:forEach>
+					</form:select>
+			</div>
 
-		</div>
-
-		<br />
-		<br />
-
-		<div>
-			<span style="margin-left: 15px; font-style: italic;"> Date of collection between (optional)</span>
-		</div>
-		<div>
-			<form:input path="dateCollectedFrom" class="dateCollectedFrom" placeholder="Any Date"/>
+			<div>
+				<label style="width: auto;">Date collected between</label>
+				<form:input path="dateCollectedFrom" class="dateCollectedFrom" placeholder="From"/>
 				and
-			<form:input path="dateCollectedTo" class="dateCollectedTo" placeholder="Any Date"/>
-		</div>
-
-		<div>
-			<label></label>
-			<button type="button" class="findCollectionButton">
-				Find collection
-			</button>
-			<button type="button" class="clearFindFormButton">
-				Clear form
-			</button>
-		</div>
-	</form:form>
+				<form:input path="dateCollectedTo" class="dateCollectedTo" placeholder="To"/>
+			</div>
+			<br />
+			<br />
+	
+			<div>
+				<label></label>
+				<button type="button" class="findCollectionButton">
+					Find collections
+				</button>
+				<button type="button" class="clearFindFormButton">
+					Clear form
+				</button>
+			</div>
+	
+		</form:form>
+	<div class="findCollectionResults"></div>	
 </div>
-
-<div id="${findCollectionFormResultId}"></div>
+	<div id="${childContentId}"></div>
+</div>

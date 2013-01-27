@@ -318,8 +318,11 @@ public class ProductController {
         CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
         form.setCollectedSample(collectedSample);
       } catch (NoResultException ex) {
+        form.setCollectedSample(null);
         ex.printStackTrace();
       }
+    } else {
+      form.setCollectedSample(null);
     }
 
     if (result.hasErrors()) {
@@ -382,8 +385,11 @@ public class ProductController {
         CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
         form.setCollectedSample(collectedSample);
       } catch (NoResultException ex) {
+        form.setCollectedSample(null);
         ex.printStackTrace();
       }
+    } else {
+      form.setCollectedSample(null);
     }
 
     if (result.hasErrors()) {
