@@ -99,7 +99,7 @@
 
         $("#${tabContentId}").find(".discardButton").button({
           icons : {
-            primary : 'ui-icon-trash'
+            primary : 'ui-icon-notice'
           }
         }).click(function() {
           $("#${discardConfirmDialogId}").dialog(

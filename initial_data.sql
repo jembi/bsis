@@ -38,8 +38,6 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Product', 'expiresOn', 'Expires On', '', '0', '1', '0', '0', '', 0),
 ('Product', 'isQuarantined', 'Quarantined', '', '0', '0', '0', '0', '', 0),
 ('Product', 'status', 'Status', '', '0', '0', '0', '0', '', 0),
-('Product', 'isSafe', 'Safe', '', '0', '0', '0', '0', '', 0),
-('Product', 'isAvailable', 'Available', '', '0', '0', '0', '0', '', 0),
 ('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '', 0),
 ('Product', 'age', 'Age', '', '0', '1', '0', '0', '', 0),
 ('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '', 0);

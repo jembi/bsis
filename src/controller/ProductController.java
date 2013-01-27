@@ -331,7 +331,6 @@ public class ProductController {
       try {
         Product product = form.getProduct();
         product.setIsDeleted(false);
-        product.setIsAvailable(true);
         productRepository.addProduct(product);
         m.put("hasErrors", false);
         success = true;

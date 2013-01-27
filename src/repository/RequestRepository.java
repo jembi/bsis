@@ -21,6 +21,7 @@ import model.request.Request;
 import model.testresults.TestResult;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -34,6 +35,9 @@ public class RequestRepository {
   @PersistenceContext
   private EntityManager em;
 
+  @Autowired
+  private ProductRepository productRepository;
+  
   public void saveRequest(Request request) {
     em.persist(request);
     em.flush();
@@ -330,7 +334,6 @@ public class RequestRepository {
       // handle the case where the product, test result has been updated
       // between the time when matching products are searched and selected
       if (canIssueProduct(product, request)) {
-        product.setIsAvailable(false);
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
         product.setStatus(ProductStatus.ISSUED);
@@ -346,6 +349,7 @@ public class RequestRepository {
   }
 
   private boolean canIssueProduct(Product product, Request request) {
+    productRepository.updateProductInternalFields(product);
     List<TestResult> testResults = product.getCollectedSample().getTestResults();
     String requestedProductType = request.getProductType().getProductType();
     String productType = product.getProductType().getProductType();
@@ -353,8 +357,8 @@ public class RequestRepository {
     if (!productType.equals(requestedProductType))
       return false;
     
-    // already issued
-    if (!product.getIsAvailable())
+    // product available or not
+    if (!product.getStatus().equals(ProductStatus.AVAILABLE))
       return false;
 
     if (product.getIsDeleted())

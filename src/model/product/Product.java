@@ -83,10 +83,6 @@ public class Product implements ModificationTracker {
 
   private Boolean isDeleted;
 
-  private Boolean isAvailable;
-
-  private Boolean isQuarantined;
-  
   @Valid
   private RowModificationTracker modificationTracker;
 
@@ -160,28 +156,12 @@ public class Product implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public void setIsQuarantined(Boolean isQuarantined) {
-    this.isQuarantined = isQuarantined;
-  }
-
   public Date getCreatedOn() {
     return createdOn;
   }
 
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
-  }
-
-  public Boolean getIsQuarantined() {
-    return isQuarantined;
-  }
-
-  public Boolean getIsAvailable() {
-    return isAvailable;
-  }
-
-  public void setIsAvailable(Boolean isAvailable) {
-    this.isAvailable = isAvailable;
   }
 
   public Request getIssuedTo() {

@@ -198,7 +198,9 @@ $(document).ready(function() {
 			class="formInTabPane">
 			<div>
 				<form:label path="searchBy">Find Product by </form:label>
-				<form:select path="searchBy" class="searchBy">
+				<!-- need to set id searchBy selector otherwise the
+				 search by selector in collections page will get the same id  -->
+				<form:select path="searchBy" id="${tabContentId}-findProductSearchBy" class="searchBy">
 					<form:option value="collectionNumber" label="${model.productFields.collectionNumber.displayName}" />
 					<form:option value="productNumber" label="${model.productFields.productNumber.displayName}" />
 					<form:option value="productType" label="${model.productFields.productType.displayName}" />

@@ -83,14 +83,6 @@ public class MatchingProductViewModel {
     return formatter.format(product.getExpiresOn());
   }
 
-  public Boolean getIsQuarantined() {
-    return product.getIsQuarantined();
-  }
-
-  public Boolean getIsAvailable() {
-    return product.getIsAvailable();
-  }
-
   public BloodGroup getBloodGroup() {
     return new BloodGroup(product.getBloodAbo(), product.getBloodRhd());
   }

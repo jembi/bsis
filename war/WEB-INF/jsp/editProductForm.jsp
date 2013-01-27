@@ -113,17 +113,6 @@
           expiresOnDatePicker.datepicker('setDate', later);
         }
 
-        // set the checkboxes if required
-        var isAvailableCheckbox = $("#${editProductFormId}").find(".isAvailable");
-        if ("${model.existingProduct}" == "false") {
-          isAvailableCheckbox.prop("checked", true);
-        }
-
-        var isQuarantinedCheckbox = $("#${editProductFormId}").find(".isQuarantined");
-        if ("${model.existingProduct}" == "false") {
-          isQuarantinedCheckbox.prop("checked", true);
-        }
-
         $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'

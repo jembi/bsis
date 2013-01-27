@@ -475,7 +475,6 @@ public class CreateDataController {
 			cal.setTime(d);
 			cal.add(Calendar.DATE, 35);
 			p.setExpiresOn(cal.getTime());
-			p.setIsAvailable(true);
 			p.setIsDeleted(false);
 			productRepository.addProduct(p);
 		}

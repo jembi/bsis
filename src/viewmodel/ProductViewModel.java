@@ -88,23 +88,12 @@ public class ProductViewModel {
     return formatter.format(product.getExpiresOn());
   }
 
-  public Boolean getIsQuarantined() {
-    return product.getIsQuarantined();
-  }
-
   public BloodAbo getBloodAbo() {
     return product.getBloodAbo();
   }
 
   public BloodRhd getBloodRhd() {
     return product.getBloodRhd();
-  }
-
-  public String getIsAvailable() {
-    if (product.getIsAvailable())
-      return "&#x2713";
-    else
-      return "&#x2717";
   }
 
   public String getBloodGroup() {

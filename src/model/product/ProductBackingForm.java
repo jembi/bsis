@@ -91,10 +91,6 @@ public class ProductBackingForm {
     return product.getIsDeleted();
   }
 
-  public Boolean getIsQuarantined() {
-    return product.getIsQuarantined();
-  }
-
   public BloodAbo getBloodAbo() {
     return product.getBloodAbo();
   }
@@ -168,10 +164,6 @@ public class ProductBackingForm {
 
   public void setIsDeleted(Boolean isDeleted) {
     product.setIsDeleted(isDeleted);
-  }
-
-  public void setIsQuarantined(Boolean isQuarantined) {
-    product.setIsQuarantined(isQuarantined);
   }
 
   public void setCreatedOn(String createdOn) {
@@ -251,14 +243,6 @@ public class ProductBackingForm {
 
   public void setProduct(Product product) {
     this.product = product;
-  }
-
-  public Boolean getIsAvailable() {
-    return product.getIsAvailable();
-  }
-
-  public void setIsAvailable(Boolean isAvailable) {
-    product.setIsAvailable(isAvailable);
   }
 
   public List<String> getBloodGroups() {

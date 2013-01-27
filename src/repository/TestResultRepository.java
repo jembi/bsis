@@ -48,7 +48,7 @@ public class TestResultRepository {
     return c.getProducts();
   }
   
-  public void updateQuarantineStatus(TestResult testResult) {
+  private void updateProductStatus(TestResult testResult) {
     for (Product product : getProductsToUpdate(testResult)) {
       productRepository.updateProductInternalFields(product);
       em.merge(product);
@@ -284,7 +284,7 @@ public class TestResultRepository {
   }
 
   public void updateProductsForTestResult(TestResult testResult) {
-    updateQuarantineStatus(testResult);
+    updateProductStatus(testResult);
     updateProductBloodGroup(testResult);
   }
 
@@ -371,7 +371,7 @@ public class TestResultRepository {
 
   public void addAllTestResults(List<TestResult> testResults) {
     for (TestResult testResult : testResults) {
-      updateQuarantineStatus(testResult);
+      updateProductStatus(testResult);
       updateProductBloodGroup(testResult);
       em.persist(testResult);
     }

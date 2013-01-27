@@ -222,8 +222,10 @@ public class ProductRepository {
 
   private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
     List<ProductStatus> productStatusList = new ArrayList<ProductStatus>();
-    for (String status : statusList) {
-      productStatusList.add(ProductStatus.lookup(status));
+    if (statusList != null) {
+      for (String status : statusList) {
+        productStatusList.add(ProductStatus.lookup(status));
+      }
     }
     return productStatusList;
   }
@@ -480,16 +482,14 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery(
                  "SELECT p from Product p where p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
-                 "p.isAvailable = :isAvailable AND " +
-                 "p.isQuarantined = :isQuarantined AND " +
+                 "p.status = :status AND " +
                  "((p.bloodAbo = :bloodAbo AND p.bloodRhd = :bloodRhd) OR " +
                  "(p.bloodAbo = :bloodO)) AND " +
                  "p.isDeleted = :isDeleted",
                   Product.class);
     query.setParameter("productType", productRequest.getProductType());
     query.setParameter("today", today);
-    query.setParameter("isAvailable", true);
-    query.setParameter("isQuarantined", false);
+    query.setParameter("status", ProductStatus.AVAILABLE);
     query.setParameter("bloodAbo", productRequest.getBloodAbo());
     query.setParameter("bloodO", BloodAbo.O);
     query.setParameter("bloodRhd", productRequest.getBloodRhd());
@@ -522,10 +522,9 @@ public class ProductRepository {
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
-                             "where p.isAvailable=:isAvailable AND p.isDeleted=:isDeleted AND p.isQuarantined=:isQuarantined AND p.expiresOn>=:expiresOn",
+                             "where p.status=:status AND p.isDeleted=:isDeleted AND p.expiresOn>=:expiresOn",
                              Product.class);
-    q.setParameter("isAvailable", true);
-    q.setParameter("isQuarantined", false);
+    q.setParameter("status", ProductStatus.AVAILABLE);
     q.setParameter("isDeleted", false);
     q.setParameter("expiresOn", new Date());
 
@@ -564,51 +563,6 @@ public class ProductRepository {
     
     return inventory;
   }
-
-//  public Map<String, Object> generateInventorySummary() {
-//
-//    Map<String, Object> inventory = new HashMap<String, Object>();
-//    Session session = em.unwrap(Session.class);
-//    session.enableFilter("availableProductsNotExpiredFilter");
-//
-//    TypedQuery<ProductType> productTypeQuery = em.createQuery("select pt from ProductType pt", ProductType.class);
-//
-//    DateTime today = new DateTime();
-//    for (ProductType productType : productTypeQuery.getResultList()) {
-//
-//      Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
-//
-//      inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("B+", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("AB+", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("O+", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("A-", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("B-", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
-//      inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
-//
-//      for (Product product : productType.getProducts()) {
-//        String bloodGroup = getBloodGroupForProduct(product).toString();
-//        Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
-//        DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
-//        Long age = (long) Days.daysBetween(createdOn, today).getDays();
-//        // compute window based on age
-//        age = Math.abs((age / 5) * 5);
-//        if (age > 30)
-//          age = (long) 30;
-//        Long count = numDayMap.get(age);
-//        System.out.println(numDayMap);
-//        System.out.println(count);
-//        System.out.println(age);
-//        numDayMap.put(age, count+1);
-//      }
-//
-//      inventory.put(productType.getProductType(), inventoryByBloodGroup);
-//    }
-//    
-//    session.disableFilter("availableProductsNotExpiredFilter");
-//    return inventory;
-//  }
 
   private Map<Long, Long> getMapWithNumDaysWindows() {
     Map<Long, Long> m = new HashMap<Long, Long>();
