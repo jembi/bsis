@@ -130,17 +130,16 @@ $(document).ready(function() {
 	    my : 'left top',
 	    at : 'right center'
 	  },
-	  header: false,
+	  header: true,
 	  minWidth: 250,
-	  noneSelectedText: 'All Products',
+	  noneSelectedText: 'None selected',
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "All Products";
 										}
 										else {
-										  console.log(selectedValues);
 										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
-										  return checkedValues.length ? checkedValues.join(', ') : 'All Products';
+										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
 										}
 	  							}
 

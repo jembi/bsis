@@ -18,11 +18,13 @@
   $(document).ready(
       function() {
 
+        // use a multiselect with just one selection to show the possible forms.
+        // the list can be long so having a filter to search for the form can be useful.
         $("#${selectFormToConfigureSelectId}").multiselect({
           multiple : false,
           selectedList : 1,
-          header : false
-        });
+          header : true
+        }).multiselectfilter();
 
         $("#${selectFormToConfigureButtonId}").button().click(
             function() {

@@ -118,4 +118,16 @@ public class ProductViewModel {
   public String getStatus() {
     return product.getStatus().toString();
   }
+
+  public String getExpiryStatus() {
+    Date today = new Date();
+    if (today.equals(product.getExpiresOn()) || today.before(product.getExpiresOn())) {
+      DateTime expiresOn = new DateTime(product.getExpiresOn().getTime());
+      Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
+      return Math.abs(age) + " days to expire";
+    }
+    else {
+      return "Already expired";
+    }
+  }
 }

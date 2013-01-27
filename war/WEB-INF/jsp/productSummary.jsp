@@ -188,7 +188,7 @@
 		<c:if test="${model.productFields.expiresOn.hidden != true }">
 			<div>
 				<label>${model.productFields.expiresOn.displayName}</label>
-				<label>${model.product.expiresOn}</label>
+				<label style="width: auto;">${model.product.expiresOn} (${product.expiryStatus})</label>
 			</div>
 		</c:if>
 		<c:if test="${model.productFields.productType.hidden != true }">
