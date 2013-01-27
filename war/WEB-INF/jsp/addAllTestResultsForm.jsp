@@ -11,7 +11,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editTestResultFormDivId">editTestResultFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editTestResultFormId">editTestResultForm-${unique_page_id}</c:set>
 <c:set var="editTestResultFormBarcodeId">editTestResultFormBarcode-${unique_page_id}</c:set>
 <c:set var="updateTestResultButtonId">updateTestResultButton-${unique_page_id}</c:set>
@@ -26,12 +26,12 @@
 
         function notifyParentSuccess() {
 					 // let the parent know we are done
-				   $("#${editTestResultFormDivId}").parent().trigger("editTestResultSuccess");
+				   $("#${tabContentId}").parent().trigger("editTestResultSuccess");
    		}
 
        function notifyParentCancel() {
 					 // let the parent know we are done
-				   $("#${editTestResultFormDivId}").parent().trigger("editTestResultCancel");
+				   $("#${tabContentId}").parent().trigger("editTestResultCancel");
 	   		}
 
         $("#${cancelButtonId}").button({
@@ -50,7 +50,7 @@
         }).click(
             function() {
               addAllTestResults($("#${editTestResultFormId}").serialize(),
-               							 "${editTestResultFormDivId}",
+               							 "${tabContentId}",
                							 notifyParentSuccess);
             });
 
@@ -62,7 +62,7 @@
           $("#${editTestResultFormId}").printArea();
         });
 
-        $("#${editTestResultFormId}").find(".clearFormButton").button({
+        $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
           }
@@ -74,7 +74,7 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${editTestResultFormDivId}").replaceWith(response);
+              			 	 $("#${tabContentId}").replaceWith(response);
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
@@ -95,14 +95,14 @@
         if ($("#${editTestResultFormId}").find(".testedOn").val() == "")
         	$("#${editTestResultFormId}").find(".testedOn").datepicker('setDate', new Date());
 
-      	$("#${editTestResultFormDivId}").find('textarea[name="notes"]').html("${model.testResultFields.notes.defaultValue}");
+      	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.testResultFields.notes.defaultValue}");
 
         copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
 
       });
 </script>
 
-<div id="${editTestResultFormDivId}">
+<div id="${tabContentId}">
 
 	<form method="POST" class="formInTabPane" id="${editTestResultFormId}">
 		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
@@ -142,18 +142,18 @@
 				<textarea name="notes" rows="10" cols="30"></textarea>
 			</div>
 		</c:if>
-
-		<div>
-			<label></label>
-			<button type="button" id="${updateTestResultButtonId}">
-				Save and add another
-			</button>
-			<button type="button" class="clearFormButton">
-				Clear form
-			</button>
-			<button type="button" id="${printButtonId}">
-				Print
-			</button>
-		</div>
 	</form>
+
+	<div style="margin-left: 200px;">
+		<button type="button" id="${updateTestResultButtonId}">
+			Save
+		</button>
+		<button type="button" class="clearFormButton">
+			Clear form
+		</button>
+		<button type="button" id="${printButtonId}">
+			Print
+		</button>
+	</div>
+
 </div>

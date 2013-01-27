@@ -9,7 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editCollectedSampleFormDivId">editCollectedSampleFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormId">editCollectedSampleForm-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormBarcodeId">editCollectedSampleFormBarcode-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormDonorId">editCollectedSampleFormDonor-${unique_page_id}</c:set>
@@ -29,11 +29,11 @@
 
         function notifyParentSuccess() {
 						// let the parent know we are done
-						$("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionSuccess");
+						$("#${tabContentId}").parent().trigger("editCollectionSuccess");
 				}
   
         function notifyParentCancel() {
-	        $("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionCancel");
+	        $("#${tabContentId}").parent().trigger("editCollectionCancel");
         }
 
         $("#${cancelCollectedSampleButtonId}").button({
@@ -50,11 +50,11 @@
             function() {
               if ("${model.existingCollectedSample}" == "true")
                 updateExistingCollection($("#${editCollectedSampleFormId}")[0],
-                  														"${editCollectedSampleFormDivId}",
+                  														"${tabContentId}",
                   														notifyParentSuccess);
               else
                 addNewCollection($("#${editCollectedSampleFormId}")[0],
-                    									"${editCollectedSampleFormDivId}", notifyParentSuccess);
+                    									"${tabContentId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -103,7 +103,7 @@
           collectedOnDatePicker.datepicker('setDate', new Date());
         }
 
-        $("#${editCollectedSampleFormId}").find(".clearFormButton").button({
+        $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
           }
@@ -115,7 +115,7 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${editCollectedSampleFormDivId}").replaceWith(response);
+              			 	 $("#${tabContentId}").replaceWith(response);
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
@@ -135,7 +135,7 @@
 
         if ("${model.existingCollectedSample}" !== "true" && "${model.hasErrors}" !== "true") {
           // just set the default values for the new collection  
-        	$("#${editCollectedSampleFormDivId}").find('textarea[name="notes"]').html("${model.collectedSampleFields.notes.defaultValue}");
+        	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.collectedSampleFields.notes.defaultValue}");
         	setDefaultValueForSelector(getDonorTypeSelector(), "${model.collectedSampleFields.donorType.defaultValue}");
         	setDefaultValueForSelector(getCollectionCenterSelector(), "${model.collectedSampleFields.collectionCenter.defaultValue}");
         	setDefaultValueForSelector(getBloodBagTypeSelector(), "${model.collectedSampleFields.bloodBagType.defaultValue}");
@@ -145,25 +145,25 @@
         }
 
         function getDonorTypeSelector() {
-          return $("#${editCollectedSampleFormDivId}").find('select[name="donorType"]').multiselect();
+          return $("#${tabContentId}").find('select[name="donorType"]').multiselect();
         }
 
         function getCollectionCenterSelector() {
-          return $("#${editCollectedSampleFormDivId}").find('select[name="collectionCenter"]').multiselect();
+          return $("#${tabContentId}").find('select[name="collectionCenter"]').multiselect();
         }
 
         function getBloodBagTypeSelector() {
-          return $("#${editCollectedSampleFormDivId}").find('select[name="bloodBagType"]').multiselect();
+          return $("#${tabContentId}").find('select[name="bloodBagType"]').multiselect();
         }
 
         function getCollectionSiteSelector() {
-          return $("#${editCollectedSampleFormDivId}").find('select[name="collectionSite"]').multiselect();
+          return $("#${tabContentId}").find('select[name="collectionSite"]').multiselect();
         }
 
 		});
 </script>
 
-<div id="${editCollectedSampleFormDivId}">
+<div id="${tabContentId}">
 
 	<form:form method="POST" commandName="editCollectedSampleForm"
 		class="formInTabPane" id="${editCollectedSampleFormId}">
@@ -275,27 +275,28 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<div>
-			<label></label>
+		</form:form>
+
+		<div style="margin-left: 200px;">
 			<c:if test="${!(model.existingCollectedSample)}">
+				<button type="button" id="${updateCollectedSampleButtonId}" class="autoWidthButton">
+					Save
+				</button>
+				<button type="button" class="clearFormButton autoWidthButton">
+					Clear form
+				</button>				
+			</c:if>
+			<c:if test="${model.existingCollectedSample}">
 				<button type="button" id="${updateCollectedSampleButtonId}">
 					Save
 				</button>
-				<button type="button" class="clearFormButton">
-					Clear form
-				</button>
-				<button type="button" id="${cancelCollectedSampleButtonId}">
+				<button type="button" id="${cancelButtonId}">
 					Cancel
 				</button>
 			</c:if>
-			<c:if test="${model.existingCollectedSample}">
-				<button type="button" id="${updateCollectedSampleButtonId}"
-								class="autoWidthButton">Save</button>
-			</c:if>
-
 			<button type="button" id="${printButtonId}">
 				Print
 			</button>
 		</div>
-	</form:form>
+
 </div>

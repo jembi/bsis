@@ -9,7 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editUsageFormDivId">editUsageFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editUsageFormBarcodeId">editUsageFormBarcode-${unique_page_id}</c:set>
 <c:set var="editUsageFormId">editUsageForm-${unique_page_id}</c:set>
 <c:set var="deleteUsageConfirmDialogId">deleteUsageConfirmDialog-${unique_page_id}</c:set>
@@ -24,12 +24,12 @@
 
         function notifyParentSuccess() {
 					 // let the parent know we are done
-				   $("#${editUsageFormDivId}").parent().trigger("editUsageSuccess");
+				   $("#${tabContentId}").parent().trigger("editUsageSuccess");
     		}
 
         function notifyParentCancel() {
 					 // let the parent know we are done
-				   $("#${editUsageFormDivId}").parent().trigger("editUsageCancel");
+				   $("#${tabContentId}").parent().trigger("editUsageCancel");
 	   		}
 
         $("#${cancelButtonId}").button({
@@ -49,9 +49,9 @@
             function() {
               if ("${model.existingUsage}" == "true")
                 updateExistingUsage($("#${editUsageFormId}")[0],
-                    								"${editUsageFormDivId}", notifyParentSuccess);
+                    								"${tabContentId}", notifyParentSuccess);
               else
-                addNewUsage($("#${editUsageFormId}")[0], "${editUsageFormDivId}", notifyParentSuccess);
+                addNewUsage($("#${editUsageFormId}")[0], "${tabContentId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -62,7 +62,7 @@
           $("#${editUsageFormId}").printArea();
         });
 
-        $("#${editUsageFormId}").find(".clearFormButton").button({
+        $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
           }
@@ -74,7 +74,7 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${editUsageFormDivId}").replaceWith(response);
+              			 	 $("#${tabContentId}").replaceWith(response);
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
@@ -93,13 +93,13 @@
         });
 
         if ("${model.existingUsage}" !== "true")
-        	$("#${editUsageFormDivId}").find('textarea[name="notes"]').html("${model.usageFields.notes.defaultValue}");
+        	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.usageFields.notes.defaultValue}");
 
         copyMirroredFields("${editUsageFormId}", JSON.parse('${model.usageFields.mirroredFields}'));
       });
 </script>
 
-<div id="${editUsageFormDivId}">
+<div id="${tabContentId}">
 
 	<div class="tipsBox ui-state-highlight">
 		<p>
@@ -163,29 +163,29 @@
 				<form:errors class="formError" path="usage.notes"></form:errors>
 			</div>
 		</c:if>
-		<div>
-			<label></label>
-			<c:if test="${!(model.existingUsage)}">
-				<button type="button" id="${updateUsageButtonId}" class="autoWidthButton">
-					Save and add another
-				</button>
-				<button type="button" class="clearFormButton autoWidthButton">
-					Clear form
-				</button>				
-			</c:if>
-			<c:if test="${model.existingUsage}">
-				<button type="button" id="${updateUsageButtonId}">
-					Save
-				</button>
-				<button type="button" id="${cancelButtonId}">
-					Cancel
-				</button>
-			</c:if>
-
-			<button type="button" id="${printButtonId}">
-				Print
-			</button>
-
-		</div>
 	</form:form>
+
+	<div style="margin-left: 200px;">
+		<label></label>
+		<c:if test="${!(model.existingUsage)}">
+			<button type="button" id="${updateUsageButtonId}" class="autoWidthButton">
+				Save and add another
+			</button>
+			<button type="button" class="clearFormButton autoWidthButton">
+				Clear form
+			</button>				
+		</c:if>
+		<c:if test="${model.existingUsage}">
+			<button type="button" id="${updateUsageButtonId}">
+				Save
+			</button>
+			<button type="button" id="${cancelButtonId}">
+				Cancel
+			</button>
+		</c:if>
+		<button type="button" id="${printButtonId}">
+			Print
+		</button>
+	</div>
+
 </div>

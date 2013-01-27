@@ -9,7 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editDonorFormDivId">editDonorFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editDonorFormBarcodeId">editDonorFormBarcode-${unique_page_id}</c:set>
 <c:set var="editDonorFormId">editDonorForm-${unique_page_id}</c:set>
 <c:set var="deleteDonorConfirmDialogId">deleteDonorConfirmDialog-${unique_page_id}</c:set>
@@ -26,12 +26,12 @@
 
         function notifyParentSuccess() {
 					 // let the parent know we are done
-				   $("#${editDonorFormDivId}").parent().trigger("editDonorSuccess");
+				   $("#${tabContentId}").parent().trigger("editDonorSuccess");
     		}
 
         function notifyParentCancel() {
 					 // let the parent know we are done
-				   $("#${editDonorFormDivId}").parent().trigger("editDonorCancel");
+				   $("#${tabContentId}").parent().trigger("editDonorCancel");
 	   		}
 
         $("#${cancelButtonId}").button({
@@ -51,9 +51,9 @@
             function() {
               if ("${model.existingDonor}" == "true")
                 updateExistingDonor($("#${editDonorFormId}")[0],
-                    								"${editDonorFormDivId}", notifyParentSuccess);
+                    								"${tabContentId}", notifyParentSuccess);
               else
-                addNewDonor($("#${editDonorFormId}")[0], "${editDonorFormDivId}", notifyParentSuccess);
+                addNewDonor($("#${editDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -64,7 +64,7 @@
           $("#${editDonorFormId}").printArea();
         });
 
-        $("#${editDonorFormId}").find(".clearFormButton").button({
+        $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
           }
@@ -76,7 +76,7 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${editDonorFormDivId}").replaceWith(response);
+              			 	 $("#${tabContentId}").replaceWith(response);
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
@@ -108,8 +108,8 @@
 
         if ("${model.existingDonor}" !== "true" && "${model.hasErrors}" !== "true") {
 
-          $("#${editDonorFormDivId}").find('textarea[name="address"]').html("${model.donorFields.address.defaultValue}");
-        	$("#${editDonorFormDivId}").find('textarea[name="notes"]').html("${model.donorFields.notes.defaultValue}");
+          $("#${tabContentId}").find('textarea[name="address"]').html("${model.donorFields.address.defaultValue}");
+        	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.donorFields.notes.defaultValue}");
 
         	setDefaultValueForSelector(getGenderSelector(), "${model.donorFields.gender.defaultValue}");
         	setDefaultValueForSelector(getBloodGroupSelector(), "${model.donorFields.bloodGroup.defaultValue}");
@@ -118,11 +118,11 @@
         }
 
         function getGenderSelector() {
-          return $("#${editDonorFormDivId}").find('select[name="gender"]').multiselect();
+          return $("#${tabContentId}").find('select[name="gender"]').multiselect();
         }
 
         function getBloodGroupSelector() {
-          return $("#${editDonorFormDivId}").find('select[name="bloodGroup"]').multiselect();
+          return $("#${tabContentId}").find('select[name="bloodGroup"]').multiselect();
         }
 
         $("#${editDonorFormBarcodeId}").barcode(
@@ -133,7 +133,7 @@
       });
 </script>
 
-<div id="${editDonorFormDivId}">
+<div id="${tabContentId}">
 	<form:form id="${editDonorFormId}" method="POST" class="formInTabPane"
 		commandName="editDonorForm">
 		<form:hidden path="id" />
@@ -249,29 +249,29 @@
 				<form:errors class="formError" path="donor.notes"></form:errors>
 			</div>
 		</c:if>
-		<div>
-			<label></label>
-			<c:if test="${!(model.existingDonor)}">
-				<button type="button" id="${updateDonorButtonId}" class="autoWidthButton">
-					Save and add another
-				</button>
-				<button type="button" class="clearFormButton autoWidthButton">
-					Clear form
-				</button>				
-			</c:if>
-			<c:if test="${model.existingDonor}">
-				<button type="button" id="${updateDonorButtonId}">
-					Save
-				</button>
-				<button type="button" id="${cancelButtonId}">
-					Cancel
-				</button>
-			</c:if>
-
-			<button type="button" id="${printButtonId}">
-				Print
-			</button>
-
-		</div>
 	</form:form>
+
+	<div style="margin-left: 200px;">
+		<label></label>
+		<c:if test="${!(model.existingDonor)}">
+			<button type="button" id="${updateDonorButtonId}" class="autoWidthButton">
+				Save
+			</button>
+			<button type="button" class="clearFormButton autoWidthButton">
+				Clear form
+			</button>				
+		</c:if>
+		<c:if test="${model.existingDonor}">
+			<button type="button" id="${updateDonorButtonId}">
+				Save
+			</button>
+			<button type="button" id="${cancelButtonId}">
+				Cancel
+			</button>
+		</c:if>
+		<button type="button" id="${printButtonId}">
+			Print
+		</button>
+	</div>
+
 </div>

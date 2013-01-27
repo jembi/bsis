@@ -9,7 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editRequestFormDivId">editRequestFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editRequestFormId">editRequestForm-${unique_page_id}</c:set>
 <c:set var="editRequestFormBarcodeId">editRequestFormBarcode-${unique_page_id}</c:set>
 <c:set var="editRequestFormDonorId">editRequestFormDonor-${unique_page_id}</c:set>
@@ -29,12 +29,12 @@
 
         function notifyParentSuccess() {
 						// let the parent know we are done
-						$("#${editRequestFormDivId}").parent().trigger("editRequestSuccess");
+						$("#${tabContentId}").parent().trigger("editRequestSuccess");
 				}
 
         function notifyParentCancel() {
 					// let the parent know we are done
-					$("#${editRequestFormDivId}").parent().trigger("editRequestCancel");
+					$("#${tabContentId}").parent().trigger("editRequestCancel");
 				}
 
         $("#${cancelButtonId}").button({
@@ -54,11 +54,11 @@
             function() {
               if ("${model.existingRequest}" == "true")
                 updateExistingRequest($("#${editRequestFormId}")[0],
-                  														"${editRequestFormDivId}",
+                  														"${tabContentId}",
                   														notifyParentSuccess);
               else
                 addNewRequest($("#${editRequestFormId}")[0],
-                    									"${editRequestFormDivId}", notifyParentSuccess);
+                    									"${tabContentId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -128,7 +128,7 @@
           isQuarantinedCheckbox.prop("checked", true);
         }
 
-        $("#${editRequestFormId}").find(".clearFormButton").button({
+        $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
           }
@@ -140,7 +140,7 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${editRequestFormDivId}").replaceWith(response);
+              			 	 $("#${tabContentId}").replaceWith(response);
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
@@ -150,23 +150,23 @@
         }
 
         if ("${model.existingRequest}" !== "true" && "${model.hasErrors}" !== "true") {
-        	$("#${editRequestFormDivId}").find('textarea[name="notes"]').html("${model.requestFields.notes.defaultValue}");
+        	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.requestFields.notes.defaultValue}");
         	setDefaultValueForSelector(getBloodGroupSelector(), "${model.requestFields.bloodGroup.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.requestFields.productType.defaultValue}");
         	setDefaultValueForSelector(getRequestSiteSelector(), "${model.requestFields.requestSite.defaultValue}");
-          copyMirroredFields("${editRequestFormDivId}", JSON.parse('${model.requestFields.mirroredFields}'));
+          copyMirroredFields("${tabContentId}", JSON.parse('${model.requestFields.mirroredFields}'));
         }
 
         function getBloodGroupSelector() {
-          return $("#${editRequestFormDivId}").find('select[name="bloodGroup"]').multiselect();
+          return $("#${tabContentId}").find('select[name="bloodGroup"]').multiselect();
         }
         
         function getProductTypeSelector() {
-          return $("#${editRequestFormDivId}").find('select[name="productType"]').multiselect();
+          return $("#${tabContentId}").find('select[name="productType"]').multiselect();
         }
         
         function getRequestSiteSelector() {
-          return $("#${editRequestFormDivId}").find('select[name="requestSite"]').multiselect();
+          return $("#${tabContentId}").find('select[name="requestSite"]').multiselect();
         }
         
         $("#${editRequestFormBarcodeId}").barcode(
@@ -177,7 +177,7 @@
       });
 </script>
 
-<div id="${editRequestFormDivId}">
+<div id="${tabContentId}">
 
 	<form:form method="POST" commandName="editRequestForm"
 		class="formInTabPane" id="${editRequestFormId}">
@@ -274,27 +274,28 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<div>
-			<label></label>
-			<c:if test="${!(model.existingRequest)}">
-				<button type="button" id="${updateRequestButtonId}">
-					Save and add another
-				</button>
-				<button type="button" class="clearFormButton">
-					Clear form
-				</button>
-			</c:if>
-			<c:if test="${model.existingRequest}">
-				<button type="button" id="${updateRequestButtonId}"
-								class="autoWidthButton">Save</button>
-				<button type="button" id="${cancelButtonId}">
-					Cancel
-				</button>
-			</c:if>
-
-			<button type="button" id="${printButtonId}">
-				Print
-			</button>
-		</div>
 	</form:form>
+
+	<div style="margin-left: 200px;">
+		<label></label>
+		<c:if test="${!(model.existingRequest)}">
+			<button type="button" id="${updateRequestButtonId}">
+				Save and add another
+			</button>
+			<button type="button" class="clearFormButton">
+				Clear form
+			</button>
+		</c:if>
+		<c:if test="${model.existingRequest}">
+			<button type="button" id="${updateRequestButtonId}"
+							class="autoWidthButton">Save</button>
+			<button type="button" id="${cancelButtonId}">
+				Cancel
+			</button>
+		</c:if>
+		<button type="button" id="${printButtonId}">
+			Print
+		</button>
+	</div>
+
 </div>

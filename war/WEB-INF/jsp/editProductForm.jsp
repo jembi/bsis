@@ -9,7 +9,7 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="editProductFormDivId">editProductFormDiv-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editProductFormId">editProductForm-${unique_page_id}</c:set>
 <c:set var="editProductFormBarcodeId">editProductFormBarcode-${unique_page_id}</c:set>
 <c:set var="editProductFormDonorId">editProductFormDonor-${unique_page_id}</c:set>
@@ -29,12 +29,12 @@
 
         function notifyParentSuccess() {
 						// let the parent know we are done
-						$("#${editProductFormDivId}").parent().trigger("editProductSuccess");
+						$("#${tabContentId}").parent().trigger("editProductSuccess");
 				}
 
         function notifyParentCancel() {
 					// let the parent know we are done
-					$("#${editProductFormDivId}").parent().trigger("editProductCancel");
+					$("#${tabContentId}").parent().trigger("editProductCancel");
 				}
 
         $("#${cancelButtonId}").button({
@@ -54,11 +54,11 @@
             function() {
               if ("${model.existingProduct}" == "true")
                 updateExistingProduct($("#${editProductFormId}")[0],
-                  														"${editProductFormDivId}",
+                  														"${tabContentId}",
                   														notifyParentSuccess);
               else
                 addNewProduct($("#${editProductFormId}")[0],
-                    									"${editProductFormDivId}", notifyParentSuccess);
+                    									"${tabContentId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -124,7 +124,7 @@
           isQuarantinedCheckbox.prop("checked", true);
         }
 
-        $("#${editProductFormId}").find(".clearFormButton").button({
+        $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
             primary : 'ui-icon-grip-solid-horizontal'
           }
@@ -136,7 +136,7 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${editProductFormDivId}").replaceWith(response);
+              			 	 $("#${tabContentId}").replaceWith(response);
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
@@ -146,13 +146,13 @@
         }
 
         if ("${model.existingProduct}" !== "true" && "${model.hasErrors}" !== "true") {
-        	$("#${editProductFormDivId}").find('textarea[name="notes"]').html("${model.productFields.notes.defaultValue}");
+        	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.productFields.notes.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.productFields.productType.defaultValue}");
-          copyMirroredFields("${editProductFormDivId}", JSON.parse('${model.productFields.mirroredFields}'));
+          copyMirroredFields("${tabContentId}", JSON.parse('${model.productFields.mirroredFields}'));
         }
 
         function getProductTypeSelector() {
-          return $("#${editProductFormDivId}").find('select[name="productType"]').multiselect();
+          return $("#${tabContentId}").find('select[name="productType"]').multiselect();
         }
         
         $("#${editProductFormBarcodeId}").barcode(
@@ -163,7 +163,7 @@
       });
 </script>
 
-<div id="${editProductFormDivId}">
+<div id="${tabContentId}">
 
 	<form:form method="POST" commandName="editProductForm"
 		class="formInTabPane" id="${editProductFormId}">
@@ -226,27 +226,28 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<div>
-			<label></label>
-			<c:if test="${!(model.existingProduct)}">
-				<button type="button" id="${updateProductButtonId}">
-					Save and add another
-				</button>
-				<button type="button" class="clearFormButton">
-					Clear form
-				</button>
-			</c:if>
-			<c:if test="${model.existingProduct}">
-				<button type="button" id="${updateProductButtonId}"
-								class="autoWidthButton">Save</button>
-				<button type="button" id="${cancelButtonId}">
-					Cancel
-				</button>
-			</c:if>
-
-			<button type="button" id="${printButtonId}">
-				Print
-			</button>
-		</div>
 	</form:form>
+
+	<div style="margin-left: 200px;">
+		<label></label>
+		<c:if test="${!(model.existingProduct)}">
+			<button type="button" id="${updateProductButtonId}">
+				Save and add another
+			</button>
+			<button type="button" class="clearFormButton">
+				Clear form
+			</button>
+		</c:if>
+		<c:if test="${model.existingProduct}">
+			<button type="button" id="${updateProductButtonId}"
+							class="autoWidthButton">Save</button>
+			<button type="button" id="${cancelButtonId}">
+				Cancel
+			</button>
+		</c:if>
+		<button type="button" id="${printButtonId}">
+			Print
+		</button>
+	</div>
+
 </div>
