@@ -106,7 +106,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
-		<b>Find test results</b>
+		<b>Find Test Results</b>
 		<div class="tipsBox ui-state-highlight">
 			<p>
 				${model['testResults.find']}

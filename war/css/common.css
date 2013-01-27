@@ -542,6 +542,7 @@ tr > td
 
 .reportMessage {
 	margin: 20px;
+	margin-top: 0;
 }
 
 .hide_class {

@@ -149,7 +149,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${findCollectionFormDivId}" class="formDiv">
-	<b><i>Find Collections</i></b>
+	<b>Find Collections</b>
 	<form:form method="GET" commandName="findCollectedSampleForm" id="${findCollectionFormId}"
 		class="formInTabPane">
 		<div>

@@ -13,7 +13,6 @@
 <script type="text/javascript" src="js/collections.js"></script>
 
 <div id="donorsTab" class="tabs">
-	<div class="breadCrumb"></div>
 	<ul>
 		<li id="findOrAddDonorsContent">
 			<a href="findDonorFormGenerator.html">

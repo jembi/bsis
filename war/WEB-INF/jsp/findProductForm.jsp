@@ -188,72 +188,72 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
-	<b>Find Products</b>
+		<b>Find Products</b>
 		<div class="tipsBox ui-state-highlight">
 			<p>
 				${model['products.find']}
 			</p>
 		</div>
-	<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
-		class="formInTabPane">
-		<div>
-			<form:label path="searchBy">Find Product by </form:label>
-			<form:select path="searchBy" class="searchBy">
-				<form:option value="collectionNumber" label="${model.productFields.collectionNumber.displayName}" />
-				<form:option value="productNumber" label="${model.productFields.productNumber.displayName}" />
-				<form:option value="productType" label="${model.productFields.productType.displayName}" />
-			</form:select>
-
-			<div class="productNumberInput hidableDiv" style="display:none">
-				<form:label path="productNumber"></form:label>
-				<!-- Spring supports dynamic attributes so placeholder can be added -->
-				<form:input path="productNumber" placeholder="Product Number"/>
+		<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
+			class="formInTabPane">
+			<div>
+				<form:label path="searchBy">Find Product by </form:label>
+				<form:select path="searchBy" class="searchBy">
+					<form:option value="collectionNumber" label="${model.productFields.collectionNumber.displayName}" />
+					<form:option value="productNumber" label="${model.productFields.productNumber.displayName}" />
+					<form:option value="productType" label="${model.productFields.productType.displayName}" />
+				</form:select>
+	
+				<div class="productNumberInput hidableDiv" style="display:none">
+					<form:label path="productNumber"></form:label>
+					<!-- Spring supports dynamic attributes so placeholder can be added -->
+					<form:input path="productNumber" placeholder="Product Number"/>
+				</div>
+		
+				<div class="collectionNumberInput hidableDiv" style="display:none">
+					<form:input path="collectionNumber" placeholder="Collection Number" />
+				</div>
+		
+				<div class="productTypeInput hidableDiv" style="display:none">
+				<!-- Quick Fix for ID Duplication issue.
+				When ID is duplicated selecting in the Find Product form triggers a selection change in
+				Find Request form.
+				The merge pull request here https://github.com/ehynds/jquery-ui-multiselect-widget/pull/347
+				does not solve the issue. Just work around the problem for now by giving this select a unique ID.
+				-->
+					<form:select id="findProductFormProductTypes" path="productTypes" class="productTypeSelector">
+						<c:forEach var="productType" items="${model.productTypes}">
+							<form:option value="${productType.productType}" label="${productType.productTypeName}" />
+						</c:forEach>
+					</form:select>
+				</div>
 			</div>
 	
-			<div class="collectionNumberInput hidableDiv" style="display:none">
-				<form:input path="collectionNumber" placeholder="Collection Number" />
+			<div>
+					<form:label path="status">Product Status</form:label>
+					<form:select path="status" class="productStatusSelector">
+						<form:option value="QUARANTINED" label="Quarantined" selected="selected" />
+						<form:option value="AVAILABLE" label="Available" selected="selected" />
+						<form:option value="UNSAFE" label="Unsafe" selected="selected" />
+						<form:option value="ISSUED" label="Issued" selected="selected" />
+						<form:option value="DISCARDED" label="Discarded" selected="selected" />
+					</form:select>
 			</div>
 	
-			<div class="productTypeInput hidableDiv" style="display:none">
-			<!-- Quick Fix for ID Duplication issue.
-			When ID is duplicated selecting in the Find Product form triggers a selection change in
-			Find Request form.
-			The merge pull request here https://github.com/ehynds/jquery-ui-multiselect-widget/pull/347
-			does not solve the issue. Just work around the problem for now by giving this select a unique ID.
-			-->
-				<form:select id="findProductFormProductTypes" path="productTypes" class="productTypeSelector">
-					<c:forEach var="productType" items="${model.productTypes}">
-						<form:option value="${productType.productType}" label="${productType.productTypeName}" />
-					</c:forEach>
-				</form:select>
+			<br />
+			<br />
+	
+			<div>
+				<label></label>
+				<button type="button" class="findProductButton">
+					Find product
+				</button>
+				<button type="button" class="clearFindFormButton">
+					Clear form
+				</button>
 			</div>
-		</div>
-
-		<div>
-				<form:label path="status">Product Status</form:label>
-				<form:select path="status" class="productStatusSelector">
-					<form:option value="QUARANTINED" label="Quarantined" selected="selected" />
-					<form:option value="AVAILABLE" label="Available" selected="selected" />
-					<form:option value="UNSAFE" label="Unsafe" selected="selected" />
-					<form:option value="ISSUED" label="Issued" selected="selected" />
-					<form:option value="DISCARDED" label="Discarded" selected="selected" />
-				</form:select>
-		</div>
-
-		<br />
-		<br />
-
-		<div>
-			<label></label>
-			<button type="button" class="findProductButton">
-				Find product
-			</button>
-			<button type="button" class="clearFindFormButton">
-				Clear form
-			</button>
-		</div>
-
-	</form:form>
+	
+		</form:form>
 	<div class="findProductResults"></div>	
 </div>
 	<div id="${childContentId}"></div>
