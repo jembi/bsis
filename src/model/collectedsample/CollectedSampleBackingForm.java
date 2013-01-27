@@ -190,15 +190,6 @@ public class CollectedSampleBackingForm {
     return collectedSample.getIsDeleted();
   }
 
-  public String getDonorIdHidden() {
-    if (collectedSample == null)
-      return null;
-    Donor donor = collectedSample.getDonor();
-    if (donor == null || donor.getId() == null)
-      return null;
-    return donor.getId().toString();
-  }
-  
   public int hashCode() {
     return collectedSample.hashCode();
   }
@@ -297,27 +288,24 @@ public class CollectedSampleBackingForm {
     collectedSample.setIsDeleted(isDeleted);
   }
 
-  public void setDonorIdHidden(String donorId) {
-    if (donorId == null) {
-      collectedSample.setDonor(null);
-    }
-    else {
-      
-      try {
-        Donor d = new Donor();
-        d.setId(Long.parseLong(donorId));
-        collectedSample.setDonor(d);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectedSample.setDonor(null);
-      }
-    }
-  }
-  
   public void generateCollectionNumber() {
     String uniqueCollectedSampleNumber;
     uniqueCollectedSampleNumber = "C-" +
                         RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
     collectedSample.setCollectionNumber(uniqueCollectedSampleNumber);
+  }
+
+  public String getDonorNumber() {
+    if (collectedSample == null || collectedSample.getDonor() == null ||
+        collectedSample.getDonor().getDonorNumber() == null
+       )
+      return "";
+    return collectedSample.getDonor().getDonorNumber();
+  }
+
+  public void setDonorNumber(String donorNumber) {
+    Donor donor = new Donor();
+    donor.setDonorNumber(donorNumber);
+    collectedSample.setDonor(donor);
   }
 }

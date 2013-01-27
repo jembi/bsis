@@ -215,4 +215,11 @@ public class DonorRepository {
     }
     em.flush();
   }
+
+  public Donor findDonorByDonorNumber(String donorNumber) {
+    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
+    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    return query.setParameter("donorNumber", donorNumber).getSingleResult();
+  }
 }

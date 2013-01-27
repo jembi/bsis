@@ -21,7 +21,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField, maxLength) values
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', '0', '1', '1', '0', '', 0),
 ('CollectedSample', 'collectedOn', 'Collected On', '', '0', '1', '0', '0', '', 0),
-('CollectedSample', 'donor', 'Donor', '', '0', '1', '0', '0', '', 0),
+('CollectedSample', 'donorNumber', 'Donor Number', '', '0', '1', '0', '0', '', 0),
 ('CollectedSample', 'donorType', 'Donor Type', '', '0', '1', '0', '0', '', 0),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '0', '0', '0', '1', 'collectionNumber', 0),
 ('CollectedSample', 'sampleNumber', 'Sample Number', '', '0', '0', '0', '1', 'collectionNumber', 0),

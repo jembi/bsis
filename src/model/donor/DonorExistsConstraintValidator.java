@@ -24,20 +24,30 @@ public class DonorExistsConstraintValidator implements
 
   public boolean isValid(Donor target, ConstraintValidatorContext context) {
 
-   System.out.println("here1 donorexists constraint validator");
-   System.out.println(target);
-   if (target == null)
-     return true;
+    if (target == null)
+      return true;
 
-   try {
-    Donor donor = donorRepository.findDonorById(target.getId());
-    if (donor != null) {
-     return true;
-    }
-   } catch (Exception e) {
-    e.printStackTrace();
-   }
-   return false;
+    try {
+
+       Donor donor = null;
+       if (target.getId() != null) {
+         donor = donorRepository.findDonorById(target.getId());
+       }
+       else if (target.getDonorNumber() != null) {
+
+         if (target.getDonorNumber().isEmpty())
+           return true;
+
+         donor = 
+           donorRepository.findDonorByDonorNumber(target.getDonorNumber());
+       }
+       if (donor != null) {
+         return true;
+       }
+     } catch (Exception e) {
+        e.printStackTrace();
+     }
+     return false;
   }
 
   public void setDonorRepository(DonorRepository donorRepository) {

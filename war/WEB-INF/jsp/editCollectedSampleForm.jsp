@@ -27,19 +27,20 @@
   $(document).ready(
       function() {
 
-        function notifyParent() {
+        function notifyParentSuccess() {
 						// let the parent know we are done
 						$("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionSuccess");
 				}
+  
+        function notifyParentCancel() {
+	        $("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionCancel");
+        }
 
         $("#${cancelCollectedSampleButtonId}").button({
           icons : {
             primary : 'ui-icon-closethick'
           }
-        }).click(
-            function() {
-              $("#${editCollectedSampleFormDivId}").parent().trigger("editCollectionCancel");
-            });
+        }).click(notifyParentCancel);
 
         $("#${updateCollectedSampleButtonId}").button({
           icons : {
@@ -50,10 +51,10 @@
               if ("${model.existingCollectedSample}" == "true")
                 updateExistingCollection($("#${editCollectedSampleFormId}")[0],
                   														"${editCollectedSampleFormDivId}",
-                  														notifyParent);
+                  														notifyParentSuccess);
               else
                 addNewCollection($("#${editCollectedSampleFormId}")[0],
-                    									"${editCollectedSampleFormDivId}", notifyParent);
+                    									"${editCollectedSampleFormDivId}", notifyParentSuccess);
             });
 
         $("#${printButtonId}").button({
@@ -98,8 +99,6 @@
         });
 
         var collectedOnDatePicker = $("#${editCollectedSampleFormId}").find(".collectedOn");
-        console.log("${model.existingCollectedSample}");
-        console.log(collectedOnDatePicker.val());
         if ("${model.existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
           collectedOnDatePicker.datepicker('setDate', new Date());
         }
@@ -125,55 +124,8 @@
           });
         }
 
-        $("#${editCollectedSampleFormDonorId}").autocomplete(
-            {
-              minLength : 3,
-              source : function(request, response) {
-                $.ajax({
-                  url : "donorTypeAhead.html",
-                  method : "GET",
-                  data : {
-                    term : request.term
-                  },
-                  success : function(jsonResponse) {
-                    var suggestions = [];
-                    if (jsonResponse.length == 0) {
-                      suggestions.push({
-                        label : "No Matching Results",
-                        id : null
-                      });
-                    }
-                    for ( var index in jsonResponse) {
-                      var donor = jsonResponse[index];
-                      suggestions.push({
-                        label : getLabelForDonor({firstName: donor.firstName,
-                          												lastName: donor.lastName,
-                          												donorNumber: donor.donorNumber,
-                          											 }),
-                        id : donor.id
-                      });
-                    }
-                    response(suggestions);
-                  }
-                });
-              },
-              select : function(event, ui) {
-                var item = ui.item;
-                $("#${editCollectedSampleFormDonorId}").val(item.label);
-                $("#${editCollectedSampleFormDonorHiddenId}").val(item.id);
-                $("#${editCollectedSampleFormDonorId}").attr("readonly",
-                    "readonly");
-              },
-            });
-
         if ("${model.editCollectedSampleForm.donor}" != "") {
-	        $("#${editCollectedSampleFormDonorId}").val(
-						getLabelForDonor({ donorNumber: "${model.editCollectedSampleForm.donor.donorNumber}",
-						  								 firstName: "${model.editCollectedSampleForm.donor.firstName}",
-						  								 lastName: "${model.editCollectedSampleForm.donor.lastName}",
-														 }));
-	        $("#${editCollectedSampleFormDonorHiddenId}").val("${model.editCollectedSampleForm.donor.id}");
-	        $("#${editCollectedSampleFormDonorId}").attr("readonly", "readonly");	
+	        $("#${editCollectedSampleFormId}").find("").attr("readonly", "readonly");	
         }
 
         $("#${editCollectedSampleFormBarcodeId}").barcode(
@@ -229,9 +181,10 @@
 		</c:if>
 		<c:if test="${model.collectedSampleFields.donor.hidden != true }">
 			<div>
-				<form:label path="donor">${model.collectedSampleFields.donor.displayName}</form:label>
-				<form:hidden path="donorIdHidden" id="${editCollectedSampleFormDonorHiddenId}" />
-				<input id="${editCollectedSampleFormDonorId}" />
+				<form:label path="donorNumber">${model.collectedSampleFields.donorNumber.displayName}</form:label>
+				<form:input path="donorNumber" class="donorNumber" value="${model.existingCollectedSample ? '' : model.collectedSampleFields.donorNumber.defaultValue}" />
+				<form:errors class="formError" path="collectedSample.donorNumber"
+					delimiter=", "></form:errors>
 				<form:errors class="formError" path="collectedSample.donor"
 					delimiter=", "></form:errors>
 			</div>

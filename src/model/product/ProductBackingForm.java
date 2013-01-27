@@ -48,15 +48,15 @@ public class ProductBackingForm {
   }
 
   public Long getId() {
-    return getProduct().getId();
+    return product.getId();
   }
 
   public String getProductNumber() {
-    return getProduct().getProductNumber();
+    return product.getProductNumber();
   }
 
   public CollectedSample getCollectedSample() {
-    return getProduct().getCollectedSample();
+    return product.getCollectedSample();
   }
 
   public String getProductType() {
@@ -68,55 +68,55 @@ public class ProductBackingForm {
   }
 
   public Date getLastUpdated() {
-    return getProduct().getLastUpdated();
+    return product.getLastUpdated();
   }
 
   public Date getCreatedDate() {
-    return getProduct().getCreatedDate();
+    return product.getCreatedDate();
   }
 
   public User getCreatedBy() {
-    return getProduct().getCreatedBy();
+    return product.getCreatedBy();
   }
 
   public User getLastUpdatedBy() {
-    return getProduct().getLastUpdatedBy();
+    return product.getLastUpdatedBy();
   }
 
   public String getNotes() {
-    return getProduct().getNotes();
+    return product.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return getProduct().getIsDeleted();
+    return product.getIsDeleted();
   }
 
   public Boolean getIsQuarantined() {
-    return getProduct().getIsQuarantined();
+    return product.getIsQuarantined();
   }
 
   public BloodAbo getBloodAbo() {
-    return getProduct().getBloodAbo();
+    return product.getBloodAbo();
   }
 
   public BloodRhd getBloodRhd() {
-    return getProduct().getBloodRhd();
+    return product.getBloodRhd();
   }
 
   public int hashCode() {
-    return getProduct().hashCode();
+    return product.hashCode();
   }
 
   public void setId(Long id) {
-    getProduct().setId(id);
+    product.setId(id);
   }
 
   public void setProductNumber(String productNumber) {
-    getProduct().setProductNumber(productNumber);
+    product.setProductNumber(productNumber);
   }
 
   public void setCollectedSample(CollectedSample collectedSample) {
-    getProduct().setCollectedSample(collectedSample);
+    product.setCollectedSample(collectedSample);
   }
 
   public void setProductType(String productType) {
@@ -135,7 +135,7 @@ public class ProductBackingForm {
       return createdOn;
     if (getProduct() == null)
       return "";
-    return CustomDateFormatter.getDateString(getProduct().getCreatedOn());
+    return CustomDateFormatter.getDateString(product.getCreatedOn());
   }
 
   public String getExpiresOn() {
@@ -143,35 +143,35 @@ public class ProductBackingForm {
       return expiresOn;
     if (getProduct() == null)
       return "";
-    return CustomDateFormatter.getDateString(getProduct().getExpiresOn());
+    return CustomDateFormatter.getDateString(product.getExpiresOn());
   }
 
   public void setLastUpdated(Date lastUpdated) {
-    getProduct().setLastUpdated(lastUpdated);
+    product.setLastUpdated(lastUpdated);
   }
 
   public void setCreatedDate(Date createdDate) {
-    getProduct().setCreatedDate(createdDate);
+    product.setCreatedDate(createdDate);
   }
 
   public void setCreatedBy(User createdBy) {
-    getProduct().setCreatedBy(createdBy);
+    product.setCreatedBy(createdBy);
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
-    getProduct().setLastUpdatedBy(lastUpdatedBy);
+    product.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public void setNotes(String notes) {
-    getProduct().setNotes(notes);
+    product.setNotes(notes);
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    getProduct().setIsDeleted(isDeleted);
+    product.setIsDeleted(isDeleted);
   }
 
   public void setIsQuarantined(Boolean isQuarantined) {
-    getProduct().setIsQuarantined(isQuarantined);
+    product.setIsQuarantined(isQuarantined);
   }
 
   public void setCreatedOn(String createdOn) {
@@ -195,15 +195,15 @@ public class ProductBackingForm {
   }
 
   public void setBloodAbo(BloodAbo bloodAbo) {
-    getProduct().setBloodAbo(bloodAbo);
+    product.setBloodAbo(bloodAbo);
   }
 
   public void setBloodRhd(BloodRhd bloodRhd) {
-    getProduct().setBloodRhd(bloodRhd);
+    product.setBloodRhd(bloodRhd);
   }
 
   public String toString() {
-    return getProduct().toString();
+    return product.toString();
   }
 
   public List<String> getProductTypes() {
@@ -218,31 +218,31 @@ public class ProductBackingForm {
     String uniqueProductNumber;
     uniqueProductNumber = "P-" +
                         RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    getProduct().setProductNumber(uniqueProductNumber);
+    product.setProductNumber(uniqueProductNumber);
   }
 
   public String getCollectionNumber() {
-    if (getProduct() == null || getProduct().getCollectedSample() == null ||
-        getProduct().getCollectedSample().getCollectionNumber() == null
+    if (product == null || product.getCollectedSample() == null ||
+        product.getCollectedSample().getCollectionNumber() == null
        )
       return "";
-    return getProduct().getCollectedSample().getCollectionNumber();
+    return product.getCollectedSample().getCollectionNumber();
   }
 
   public void setCollectionNumber(String collectionNumber) {
     CollectedSample collectedSample = new CollectedSample();
     collectedSample.setCollectionNumber(collectionNumber);
-    getProduct().setCollectedSample(collectedSample);
+    product.setCollectedSample(collectedSample);
   }
 
   public String getBloodGroup() {
-    return new BloodGroup(getProduct().getBloodAbo(), getProduct().getBloodRhd()).toString();
+    return new BloodGroup(product.getBloodAbo(), product.getBloodRhd()).toString();
   }
 
   public void setBloodGroup(String bloodGroupStr) {
     BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-    getProduct().setBloodAbo(bloodGroup.getBloodAbo());
-    getProduct().setBloodRhd(bloodGroup.getBloodRhd());
+    product.setBloodAbo(bloodGroup.getBloodAbo());
+    product.setBloodRhd(bloodGroup.getBloodRhd());
   }
 
   public Product getProduct() {

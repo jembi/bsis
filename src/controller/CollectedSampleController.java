@@ -155,11 +155,6 @@ public class CollectedSampleController {
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
     m.put("refreshUrl", getUrl(request));
-    if (donorId != null) {
-      form.setDonorIdHidden(donorId);
-      form.setDonor(donorRepository.findDonorById(donorId));
-    }
-
     m.put("editCollectedSampleForm", form);
     m.put("existingCollectedSample", false);
     // to ensure custom field names are displayed in the form
@@ -216,11 +211,11 @@ public class CollectedSampleController {
     Map<String, Object> m = model.asMap();
 
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the donor as part of the collected sample.
-    String donorId = form.getDonorIdHidden();
-    if (donorId != null && !donorId.isEmpty()) {
+    // We still need to store the collected sample as part of the product.
+    String donorNumber = form.getDonorNumber();
+    if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
-        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+        Donor donor = donorRepository.findDonorByDonorNumber(donorNumber);
         form.setDonor(donor);
       } catch (NoResultException ex) {
         ex.printStackTrace();
@@ -283,12 +278,13 @@ public class CollectedSampleController {
     System.out.println(form.getCollectionCenter());
     System.out.println(form.getCollectionSite());
 
+
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the donor as part of the collected sample.
-    String donorId = form.getDonorIdHidden();
-    if (donorId != null && !donorId.isEmpty()) {
+    // We still need to store the collected sample as part of the product.
+    String donorNumber = form.getDonorNumber();
+    if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
-        Donor donor = donorRepository.findDonorById(Long.parseLong(donorId));
+        Donor donor = donorRepository.findDonorByDonorNumber(donorNumber);
         form.setDonor(donor);
       } catch (NoResultException ex) {
         ex.printStackTrace();

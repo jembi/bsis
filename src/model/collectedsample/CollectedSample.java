@@ -248,4 +248,9 @@ public class CollectedSample implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
+  public String getDonorNumber() {
+    if (donor != null)
+      return donor.getDonorNumber();
+    return "";
+  }
 }

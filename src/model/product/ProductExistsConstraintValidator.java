@@ -31,14 +31,14 @@ public class ProductExistsConstraintValidator implements
 
       Product product = null;
 
-      System.out.println("target: " + target);
-      System.out.println(target.getId());
-      System.out.println(target.getProductNumber());
-
       if (target.getId() != null) {
         product = productRepository.findProductById(target.getId());
       }
       else if (target.getProductNumber() != null) {
+
+        if (target.getProductNumber().isEmpty())
+          return true;
+
         product = 
           productRepository.findSingleProductByProductNumber(target.getProductNumber());
       }

@@ -30,15 +30,14 @@ public class CollectedSampleExistsConstraintValidator implements
    try {
 
       CollectedSample collectedSample = null;
-
-      System.out.println("target: " + target);
-      System.out.println(target.getId());
-      System.out.println(target.getCollectionNumber());
-
       if (target.getId() != null) {
         collectedSample = collectedSampleRepository.findCollectedSampleById(target.getId());
       }
       else if (target.getCollectionNumber() != null) {
+
+        if (target.getCollectionNumber().isEmpty())
+          return true;
+
         collectedSample = 
           collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(target.getCollectionNumber());
       }
