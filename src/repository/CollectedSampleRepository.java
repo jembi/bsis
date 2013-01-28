@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -12,9 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 
@@ -47,32 +51,71 @@ public class CollectedSampleRepository {
   }
 
   public CollectedSample findCollectedSampleById(Long collectedSampleId) {
-    return em.find(CollectedSample.class, collectedSampleId);
-  }
-
-  public List<CollectedSample> findCollectedSampleByCollectionNumber(
-      String collectionNumber, String dateCollectedFrom,
-      String dateCollectedTo) {
-
-    TypedQuery<CollectedSample> query = em
-        .createQuery(
-            "SELECT c FROM CollectedSample c WHERE " +
-            "c.collectionNumber = :collectionNumber and " +
-            "((c.collectedOn is NULL) or " +
-            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
-            "c.isDeleted= :isDeleted",
-            CollectedSample.class);
-
-    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
-    Date to = getDateCollectedToOrDefault(dateCollectedTo);
-
+    String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.id = :collectedSampleId and c.isDeleted = :isDeleted";
+    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber", collectionNumber);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    return query.getResultList();
+    return query.setParameter("collectedSampleId", collectedSampleId).getSingleResult();
   }
+
+  public List<Object> findCollectedSampleByCollectionNumber(
+      String collectionNumber, List<BloodBagType> bloodBagTypes, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
+      String dateCollectedTo, Map<String, Object> pagingParams) {
+
+    String queryStr = "";
+    if (collectionNumber != null && !collectionNumber.trim().isEmpty()) {
+      queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
+      		       "c.collectionNumber = :collectionNumber AND " +
+                 "c.bloodBagType IN :bloodBagTypes AND " +
+                 "c.collectionCenter.id IN :centerIds AND " +
+                 "c.collectionSite.id IN :siteIds AND " +
+                 "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
+                 "c.isDeleted=:isDeleted";
+    } else {
+      queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
+          "c.bloodBagType IN :bloodBagTypes AND " +
+          "c.collectionCenter.id IN :centerIds AND " +
+          "c.collectionSite.id IN :siteIds AND " +
+          "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
+          "c.isDeleted=:isDeleted";
+    }
+
+    TypedQuery<CollectedSample> query;
+    if (pagingParams.containsKey("sortColumn")) {
+      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+    }
+    
+    query = em.createQuery(queryStr, CollectedSample.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+
+    if (collectionNumber != null && !collectionNumber.trim().isEmpty())
+      query.setParameter("collectionNumber", collectionNumber);
+
+    query.setParameter("bloodBagTypes", bloodBagTypes);
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
+    query.setParameter("dateCollectedFrom", getDateCollectedFromOrDefault(dateCollectedFrom));
+    query.setParameter("dateCollectedTo", getDateCollectedToOrDefault(dateCollectedTo));
+
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+
+    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
+  }
+
+  private Long getResultCount(String queryStr, Query query) {
+    String countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)");
+    // removing the join fetch is important otherwise Hibernate will complain
+    // owner of the fetched association was not present in the select list
+    countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH c.donor", "");
+    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+    for (Parameter<?> parameter : query.getParameters()) {
+      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
+    }
+    return countQuery.getSingleResult().longValue();
+  }  
 
   public List<CollectedSample> findCollectedSampleByShippingNumber(
       String shippingNumber, String dateCollectedFrom,
@@ -388,5 +431,12 @@ public class CollectedSampleRepository {
       em.persist(c);
     }
     em.flush();
+  }
+
+  public List<CollectedSample> findCollectedSampleByCollectionNumber(
+      String collectionNumber, String dateCollectedFrom,
+      String dateCollectedTo) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

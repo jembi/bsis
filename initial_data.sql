@@ -110,6 +110,7 @@ insert into Tips (tipsKey, tipsName,tipsContent) values
 ('testresults.find', 'Find/Edit Test Results', 'Find Test results by collection number or find tests done between two dates.'),
 ('products.find', 'Find/Edit Products', 'Find Products by collection number/product number/product type.'),
 ('collectedSamples.find', 'Find/Edit Collections', 'Find Collections by collection number/blood bag type/collection center/collection site.'),
+('collections.findcollection.collectionsummary', 'Collection Summary', 'Showing details of Collection below. Click on Edit to modify the details of this collection.'),
 ('donors.finddonor', 'Find/Edit Donors', 'Find Donors by donor number or part of donor first name or last name. Filter donors by Blood Group.'),
 ('donors.finddonor.donorsummary', 'Donor Summary', 'View previous donations by this donor by selecting View Donor History. Add a new collection for this donor by selecting Add Collection.'),
 ('requests.findpending', 'Find Pending Requests', 'To issue products first find pending requests for a given site by product type. Optionally specify dates to filter requests made on or after Request date and required on or before Required date'),

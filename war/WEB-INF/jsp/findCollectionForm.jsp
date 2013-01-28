@@ -64,6 +64,12 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  noneSelectedText: 'None Selected',
+	  header: false,
+	  click: function(e) {
+			 if($(this).multiselect("widget").find("input:checked").length == 0 ){
+        return false;
+			 }
+		 },
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Blood Bag Type";
@@ -82,6 +88,12 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  noneSelectedText: 'None Selected',
+	  header: false,
+	  click: function(e) {
+			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+        return false;
+			 }
+		 },
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Center";
@@ -100,6 +112,12 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  noneSelectedText: 'None Selected',
+	  header: false,
+	  click: function(e) {
+      			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+               return false;
+      			 }
+	  			 },
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Site";
@@ -144,7 +162,7 @@ $(document).ready(function() {
     }
   });
 
-  // child div shows donor information. bind this div to productSummaryView event
+  // child div shows donor information. bind this div to collectionSummaryView event
   $("#${tabContentId}").bind("collectionSummaryView",
       function(event, content) {
     		$("#${mainContentId}").hide();

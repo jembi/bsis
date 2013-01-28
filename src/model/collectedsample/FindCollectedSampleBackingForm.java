@@ -4,7 +4,6 @@ import java.util.List;
 
 public class FindCollectedSampleBackingForm {
 
-  private String searchBy;
   private String collectionNumber;
   private String shippingNumber;
   private String sampleNumber;
@@ -16,10 +15,6 @@ public class FindCollectedSampleBackingForm {
   
   private String dateCollectedFrom;
   private String dateCollectedTo;
-
-  public String getSearchBy() {
-    return searchBy;
-  }
 
   public String getCollectionNumber() {
     return collectionNumber;
@@ -43,10 +38,6 @@ public class FindCollectedSampleBackingForm {
 
   public String getDateCollectedTo() {
     return dateCollectedTo;
-  }
-
-  public void setSearchBy(String searchBy) {
-    this.searchBy = searchBy;
   }
 
   public void setCollectionNumber(String collectionNumber) {

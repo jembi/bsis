@@ -12,75 +12,70 @@
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">collectionsTable-${unique_page_id}</c:set>
 <c:set var="collectionsTableEditRowDivId">collectionsTableEditRowDiv-${unique_page_id}</c:set>
-<c:set var="deleteCollectionConfirmDialogId">deleteCollectionConfirmDialog-${unique_page_id}</c:set>
+<c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
     function() {
 
+     	console.log("${model.nextPageUrl}");
       var selectedRowId = null;
       var collectionsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "sDom" : '<"H"lrT>t<"F"ip>T',
+        "bServerSide" : true,
+        "sAjaxSource" : "${model.nextPageUrl}",
+        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
+                          { "bSortable" : false, "aTargets": [5, 6]}
+        								 ],
+        "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+          								 oSettings.jqXHR = $.ajax({
+          								   "datatype": "json",
+          								   "type": "GET",
+          								   "url": sSource,
+          								   "data": aoData,
+          								   "success": function(jsonResponse) {
+          								     						if (jsonResponse.iTotalRecords == 0) {
+          								     						  $("#${tabContentId}").html($("#${noResultsFoundDivId}").html());
+          								     						}
+          								     						fnCallback(jsonResponse);
+          								   						}
+          								   });
+          								 },
         "oTableTools" : {
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("enable");
-            					        var elements = $(node).children();
-            					        if (elements[0].getAttribute("class") === "dataTables_empty") {
-            					          return;
-            					        }
-            					        selectedRowId = elements[0].innerHTML;
-          									},
-          "fnRowDeselected" : function(node) {
-            									clearEditSection();
-            									$(".rowEditButton").button("disable");
-          									},
+															$("#${tabContentId}").parent().trigger("collectionSummaryView");
+											        var elements = $(node).children();
+											        if (elements[0].getAttribute("class") === "dataTables_empty") {
+											          return;
+											        }
+											        selectedRowId = elements[0].innerHTML;
+											        createCollectionSummary("collectionSummary.html",
+									  							{collectionId: selectedRowId});
+ 													  },
+				"fnRowDeselected" : function(node) {
+														},
         },
         "oColVis" : {
          	"aiExclude": [0,1],
         }
       });
-
-      function createEditSection(url, data) {
+      
+      function createCollectionSummary(url, data) {
         $.ajax({
           url: url,
           data: data,
           type: "GET",
           success: function(response) {
-            				 $("#${collectionsTableEditRowDivId}").html(response);
-            				 $(".editRowDiv").show();
-            				 $('html, body').animate({
-            				 		scrollTop: $("#${collectionsTableEditRowDivId}").offset().top
-            				 }, 700);
+            				 $("#${tabContentId}").trigger("collectionSummaryView", response);
             			 }
         });
       }
 
-      function clearEditSection() {
-        console.log("clear");
-        $("#${collectionsTableEditRowDivId}").html("");
-        $(".editRowDiv").hide();
-      }
-
-    	$(".closeButton").click(clearEditSection);
-
-      $("#${tabContentId}").find(".editCollection").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-pencil'
-      			}
-          }).click(function() {
-        $("#${collectionsTableEditRowDivId}").bind("editCollectionSuccess", refreshResults);
-        createEditSection("editCollectionFormGenerator.html",
-            							{collectionId: selectedRowId});
-      });
-
       function refreshResults() {
-        showLoadingImage("${tabContentId}");
+        showLoadingImage($("#${tabContentId}"));
         $.ajax({url: "${model.refreshUrl}",
           			data: {},
           			type: "GET",
@@ -90,56 +85,7 @@ $(document).ready(
         });
       }
 
-      $("#${tabContentId}").find(".refreshResults").button({
-        icons : {
-          primary : 'ui-icon-arrowrefresh-1-e'
-        }
-      }).click(refreshResults);
-
-      $("#${tabContentId}").find(".createProduct").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-circle-zoomin'
-      			}
-          }).click(function() {
-        $("#${collectionsTableEditRowDivId}").bind("editCollectionSuccess", clearEditSection);
-        createEditSection("addCollectionFormForCollectionGenerator.html",
-						{collectionId: selectedRowId});
-      });
-
-      $("#${tabContentId}").find(".viewCollectionHistory").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-info'
-      			}
-          }).click(function() {
-        console.log("view collection history clicked");
-      });
-
-      $("#${tabContentId}").find(".deleteCollection").button(
-          {
-            disabled: true,
-            icons : {
-        			primary : 'ui-icon-trash'
-      			}
-          }).click(function() {
-        $("#${deleteCollectionConfirmDialogId}").dialog(
-            {
-              modal : true,
-              title : "Confirm Delete",
-              buttons : {
-                "Delete" : function() {
-                  deleteCollection(selectedRowId, refreshResults);
-                  $(this).dialog("close");
-                },
-                "Cancel" : function() {
-                  $(this).dialog("close");
-                }
-              }
-            });
-      });
+      $("#${tabContentId}").find(".collectionsTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
@@ -155,26 +101,13 @@ $(document).ready(
 
 	<c:choose>
 
-		<c:when test="${fn:length(model.allCollectedSamples) eq 0}">
+		<c:when test="${fn:length(model.allCollections) eq -1}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
 		</c:when>
 
 		<c:otherwise>
-
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editCollection">
-				Edit Collection
-			</button>
-			<button class="rowEditButton createProduct">
-				Create Product for Collection
-			</button>
-			<button class="rowEditButton deleteCollection">
-				Delete Collection
-			</button>
 
 			<table id="${table_id}" class="dataTable collectionsTable">
 				<thead>
@@ -183,67 +116,57 @@ $(document).ready(
 						<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
 							<th>${model.collectedSampleFields.collectionNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.collectedSampleFields.donor.hidden != true}">
-							<th>${model.collectedSampleFields.donor.displayName}</th>
+						<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
+							<th>${model.collectedSampleFields.donorNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.collectedSampleFields.donorType.hidden != true}">
-							<th>${model.collectedSampleFields.donorType.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
-							<th>${model.collectedSampleFields.collectionSite.displayName}</th>
+						<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
+							<th>${model.collectedSampleFields.collectedOn.displayName}</th>
 						</c:if>
 						<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
 							<th>${model.collectedSampleFields.bloodBagType.displayName}</th>
 						</c:if>
+						<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
+							<th>${model.collectedSampleFields.collectionCenter.displayName}</th>
+						</c:if>
+						<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
+							<th>${model.collectedSampleFields.collectionSite.displayName}</th>
+						</c:if>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
+					<c:forEach var="collection" items="${model.allProducts}">
 						<tr>
-							<td style="display: none">${collectedSample.id}</td>
+							<td style="display: none">${collection.id}</td>
 							<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
-								<td>${collectedSample.collectionNumber}</td>
+								<td>${collection.collectionNumber}</td>
 							</c:if>
-							<c:if test="${model.collectedSampleFields.donor.hidden != true}">
-								<td>${collectedSample.donor}</td>
+							<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
+								<td>${collection.donorNumber}</td>
 							</c:if>
-							<c:if test="${model.collectedSampleFields.donorType.hidden != true}">
-								<td>${collectedSample.donorType}</td>
-							</c:if>
-							<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
-								<td>${collectedSample.collectionSite}</td>
+							<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
+								<td>${collection.collectedOn}</td>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
-								<td>${collectedSample.bloodBagType.bloodBagTypeName}</td>
+								<td>${collection.bloodBagType.bloodBagTypeName}</td>
+							</c:if>
+							<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
+								<td>${product.collectionCenter}</td>
+							</c:if>
+							<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
+								<td>${product.collectionSite}</td>
 							</c:if>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 
-			<button class="refreshResults">
-				Refresh
-			</button>
-			<button class="rowEditButton editCollection">
-				Edit Collection
-			</button>
-			<button class="rowEditButton createProduct">
-				Create Product for Collection
-			</button>
-			<button class="rowEditButton deleteCollection">
-				Delete Collection
-			</button>
-
 		</c:otherwise>
 	</c:choose>
 
-	<div class="editRowDiv" style="display: none;">
-		<span class="closeButton">X</span>
-		<div id="${collectionsTableEditRowDivId}">	
-		</div>
-	</div>
-
 </div>
 
-<div id="${deleteCollectionConfirmDialogId}" style="display: none;">Are
-	you sure you want to delete this Collection?</div>
+<div id="${noResultsFoundDivId}" style="display: none;">
+	<span
+		style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+		Sorry no results found matching your search request </span>
+</div>

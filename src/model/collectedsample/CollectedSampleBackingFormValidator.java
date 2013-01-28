@@ -8,6 +8,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import viewmodel.CollectedSampleViewModel;
+
 import controller.UtilController;
 
 public class CollectedSampleBackingFormValidator implements Validator {
@@ -23,7 +25,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(FindCollectedSampleBackingForm.class, CollectedSampleBackingForm.class, CollectedSample.class).contains(clazz);
+    return Arrays.asList(FindCollectedSampleBackingForm.class, CollectedSampleBackingForm.class, CollectedSample.class, CollectedSampleViewModel.class).contains(clazz);
   }
 
   @Override

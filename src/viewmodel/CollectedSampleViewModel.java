@@ -114,5 +114,9 @@ public class CollectedSampleViewModel {
     return collectedSample.toString();
   }
 
-
+  public String getDonorNumber() {
+   if (collectedSample.getDonor() == null)
+     return "";
+   return collectedSample.getDonor().getDonorNumber();
+  }
 }

@@ -124,7 +124,7 @@
           });
         }
 
-        if ("${model.editCollectedSampleForm.donor}" != "" || "${model.disallowDonorChange}" == "true") {
+        if ("${model.disallowDonorChange}" == "true") {
 	        $("#${editCollectedSampleFormId}").find('input[name="donorNumber"]').attr("readonly", "readonly");	
         }
 

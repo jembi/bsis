@@ -30,7 +30,6 @@ import model.product.Product;
 import model.testresults.TestResult;
 import model.user.User;
 
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Index;
 
 @Entity
@@ -53,11 +52,11 @@ public class CollectedSample implements ModificationTracker {
   private List<TestResult> testResults;
 
   @LocationExists
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne
   private Location collectionCenter;
 
   @LocationExists
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne
   private Location collectionSite;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -65,7 +64,7 @@ public class CollectedSample implements ModificationTracker {
   private Date collectedOn;
 
   @DonorTypeExists
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne
   private DonorType donorType;
 
   @BloodBagTypeExists

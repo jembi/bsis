@@ -12,14 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
 import model.location.Location;
+import model.product.Product;
 
-import org.apache.taglibs.standard.lang.jstl.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +40,8 @@ import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonorViewModel;
+import viewmodel.ProductViewModel;
 
 @Controller
 public class CollectedSampleController {
@@ -77,6 +80,15 @@ public class CollectedSampleController {
     return reqUrl;
   }
 
+  public static String getNextPageUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findCollection.html", "findCollectionPagination.html");
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
   public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
 
@@ -95,56 +107,116 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollection")
-  public ModelAndView findCollection(HttpServletRequest request,
-      @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
+  public ModelAndView findProduct(HttpServletRequest request,
+      @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    List<CollectedSample> collectedSamples = Arrays.asList(new CollectedSample[0]);
+    List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
 
-    String searchBy = form.getSearchBy();
-    String dateCollectedFrom = form.getDateCollectedFrom();
-    String dateCollectedTo = form.getDateCollectedTo();
-    if (searchBy.equals("collectionNumber")) {
-      collectedSamples = collectedSampleRepository.findCollectedSampleByCollectionNumber(
-                                          form.getCollectionNumber(),
-                                          dateCollectedFrom, dateCollectedTo);
-    } else if (searchBy.equals("shippingNumber")) {
-      collectedSamples = collectedSampleRepository.findCollectedSampleByShippingNumber(
-          form.getShippingNumber(),
-          dateCollectedFrom, dateCollectedTo);
-    } else if (searchBy.equals("sampleNumber")) {
-      collectedSamples = collectedSampleRepository.findCollectedSampleBySampleNumber(
-          form.getSampleNumber(),
-          dateCollectedFrom, dateCollectedTo);
-    } else if (searchBy.equals("collectionCenter")) {
-
-      List<Long> centerIds = new ArrayList<Long>();
-      for (String center : form.getCollectionCenters()) {
-        centerIds.add(Long.parseLong(center));
-      }
-
-      List<Long> siteIds = new ArrayList<Long>();
-      for (String site : form.getCollectionSites()) {
-        siteIds.add(Long.parseLong(site));
-      }
-
-      collectedSamples = collectedSampleRepository.findCollectedSampleByCenters(
-          centerIds,
-          dateCollectedFrom, dateCollectedTo);
-    }
-    
     ModelAndView modelAndView = new ModelAndView("collectionsTable");
     Map<String, Object> m = model.asMap();
-    m.put("tableName", "findCollectionResultsTable");
+    m.put("tableName", "findProductsTable");
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
+    m.put("allCollectedSamples", getCollectionViewModels(collections));
     m.put("refreshUrl", getUrl(request));
+    m.put("nextPageUrl", getNextPageUrl(request));
     addEditSelectorOptions(m);
-    addCollectionSitesToModel(m);
 
     modelAndView.addObject("model", m);
     return modelAndView;
   }
+
+  /**
+   * Get column name from column id, depends on sequence of columns in productsTable.jsp
+   */
+  private String getSortingColumn(int columnId) {
+    String sortColumn = null;
+    switch (columnId) {
+    case 0: sortColumn = "id";
+            break;
+    case 1: sortColumn = "collectionNumber";
+            break;
+    case 2: sortColumn = "donor.donorNumber";
+            break;
+    case 3: sortColumn = "collectedOn";
+            break;
+    case 4: sortColumn = "bloodBagType";
+            break;
+    }
+    return sortColumn;
+  }
+
+  @RequestMapping("/findCollectionPagination")
+  public @ResponseBody Map<String, Object> findCollection(HttpServletRequest request,
+      @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
+      BindingResult result, Model model) {
+
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId));
+
+    String collectionNumber = form.getCollectionNumber();
+    if (collectionNumber != null)
+      collectionNumber = collectionNumber.trim();
+    String dateCollectedFrom = form.getDateCollectedFrom();
+    String dateCollectedTo = form.getDateCollectedTo();
+
+    List<BloodBagType> bloodBagTypes = new ArrayList<BloodBagType>();
+    if (form.getBloodBagTypes() != null) {
+      for (String bloodBagType : form.getBloodBagTypes()) {
+        BloodBagType bt = new BloodBagType();
+        bt.setBloodBagType(bloodBagType);
+        bloodBagTypes.add(bt);
+      }
+    }
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (form.getCollectionCenters() != null) {
+      for (String center : form.getCollectionCenters()) {
+        centerIds.add(Long.parseLong(center));
+      }
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (form.getCollectionSites() != null) {
+      for (String site : form.getCollectionSites()) {
+        siteIds.add(Long.parseLong(site));
+      }
+    }
+
+    List<Object> results = collectedSampleRepository.findCollectedSampleByCollectionNumber(
+                                        form.getCollectionNumber(),
+                                        bloodBagTypes, centerIds, siteIds,
+                                        dateCollectedFrom, dateCollectedTo, pagingParams);
+
+    @SuppressWarnings("unchecked")
+    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+
+    return generateDatatablesMap(collectedSamples, totalRecords);
+  }
+
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in collectionsTable.jsp.
+   */
+  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords) {
+    Map<String, Object> collectionsMap = new HashMap<String, Object>();
+    ArrayList<Object> collectionList = new ArrayList<Object>();
+    for (CollectedSampleViewModel collection : getCollectionViewModels(collectedSamples)) {
+      collectionList.add(Arrays.asList(collection.getId().toString(), collection.getCollectionNumber().toString(),
+                                    collection.getDonorNumber().toString(), collection.getCollectedOn().toString(),
+                                    collection.getBloodBagType().toString(),  collection.getCollectionCenter().toString(),
+                                    collection.getCollectionSite().toString())
+                        );
+    }
+    collectionsMap.put("aaData", collectionList);
+    collectionsMap.put("iTotalRecords", totalRecords);
+    collectionsMap.put("iTotalDisplayRecords", totalRecords);
+    return collectionsMap;
+  }
+  
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("centers", locationRepository.getAllCenters());
@@ -396,6 +468,36 @@ public class CollectedSampleController {
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
+  }
+
+  @RequestMapping(value = "/collectionSummary", method = RequestMethod.GET)
+  public ModelAndView collectionSummaryGenerator(HttpServletRequest request, Model model,
+      @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
+
+    ModelAndView mv = new ModelAndView("collectionSummary");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    CollectedSample collectedSample = null;
+    if (collectedSampleId != null) {
+      collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+      if (collectedSample != null) {
+        m.put("existingCollectedSample", true);
+      }
+      else {
+        m.put("existingCollectedSample", false);
+      }
+    }
+
+    CollectedSampleViewModel collectionViewModel = getCollectionViewModels(Arrays.asList(collectedSample)).get(0);
+    utilController.addTipsToModel(model.asMap(), "collections.findcollection.collectionsummary");
+    m.put("collectedSample", collectionViewModel);
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    mv.addObject("model", m);
+    return mv;
   }
 
   private void addCollectionSitesToModel(Map<String, Object> model) {
