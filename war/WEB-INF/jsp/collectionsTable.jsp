@@ -18,7 +18,6 @@
 $(document).ready(
     function() {
 
-     	console.log("${model.nextPageUrl}");
       var selectedRowId = null;
       var collectionsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
@@ -94,6 +93,20 @@ $(document).ready(
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
 
+      $("#${tabContentId}").find(".generateWorksheetButton").button().click(
+          function() {
+            $.ajax({
+              url: "${model.generateWorksheetUrl}",
+              type: "GET",
+              success: function(response) {
+                				 console.log(response);
+              				 },
+              error:   function (response) {
+												 showErrorMessage("Something went wrong when trying to generate worksheet.");                
+              				 }
+            });
+          });
+      
     });
 </script>
 
@@ -108,6 +121,12 @@ $(document).ready(
 		</c:when>
 
 		<c:otherwise>
+
+			<br />
+			<div>
+				<button class="generateWorksheetButton">Generate worksheet</button>
+			</div>
+			<br />
 
 			<table id="${table_id}" class="dataTable collectionsTable">
 				<thead>

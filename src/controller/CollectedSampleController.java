@@ -18,8 +18,6 @@ import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
-import model.location.Location;
-import model.product.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,8 +38,6 @@ import repository.DonorRepository;
 import repository.DonorTypeRepository;
 import repository.LocationRepository;
 import viewmodel.CollectedSampleViewModel;
-import viewmodel.DonorViewModel;
-import viewmodel.ProductViewModel;
 
 @Controller
 public class CollectedSampleController {
@@ -80,9 +76,9 @@ public class CollectedSampleController {
     return reqUrl;
   }
 
-  public static String getNextPageUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findCollection.html", "findCollectionPagination.html");
-    String queryString = req.getQueryString();   // d=789
+  private String getNextPageUrl(HttpServletRequest request) {
+    String reqUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "findCollectionPagination.html");
+    String queryString = request.getQueryString();   // d=789
     if (queryString != null) {
         reqUrl += "?"+queryString;
     }
@@ -107,7 +103,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollection")
-  public ModelAndView findProduct(HttpServletRequest request,
+  public ModelAndView findCollection(HttpServletRequest request,
       @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
@@ -120,10 +116,20 @@ public class CollectedSampleController {
     m.put("allCollectedSamples", getCollectionViewModels(collections));
     m.put("refreshUrl", getUrl(request));
     m.put("nextPageUrl", getNextPageUrl(request));
+    m.put("generateWorksheetUrl", getWorksheetUrl(request));
     addEditSelectorOptions(m);
 
     modelAndView.addObject("model", m);
     return modelAndView;
+  }
+
+  private String getWorksheetUrl(HttpServletRequest request) {
+    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "generateWorksheet.html");
+    String queryString = request.getQueryString();   // d=789
+    if (queryString != null) {
+        worksheetUrl += "?" + queryString;
+    }
+    return worksheetUrl;
   }
 
   /**
@@ -147,7 +153,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollectionPagination")
-  public @ResponseBody Map<String, Object> findCollection(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> findCollectionPagination(HttpServletRequest request,
       @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
@@ -500,9 +506,51 @@ public class CollectedSampleController {
     return mv;
   }
 
-  private void addCollectionSitesToModel(Map<String, Object> model) {
-    List<Location> allCollectionSites =
-        locationRepository.getAllCollectionSites();
-    model.put("collectionSites", allCollectionSites);
+  @RequestMapping(value="/generateWorksheet", method = RequestMethod.GET)
+  public @ResponseBody Map<String, ? extends Object> generateWorksheet(HttpServletRequest request,
+      @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
+      BindingResult result, Model model) {
+
+    String collectionNumber = form.getCollectionNumber();
+    if (collectionNumber != null)
+      collectionNumber = collectionNumber.trim();
+    String dateCollectedFrom = form.getDateCollectedFrom();
+    String dateCollectedTo = form.getDateCollectedTo();
+
+    List<BloodBagType> bloodBagTypes = new ArrayList<BloodBagType>();
+    if (form.getBloodBagTypes() != null) {
+      for (String bloodBagType : form.getBloodBagTypes()) {
+        BloodBagType bt = new BloodBagType();
+        bt.setBloodBagType(bloodBagType);
+        bloodBagTypes.add(bt);
+      }
+    }
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (form.getCollectionCenters() != null) {
+      for (String center : form.getCollectionCenters()) {
+        centerIds.add(Long.parseLong(center));
+      }
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (form.getCollectionSites() != null) {
+      for (String site : form.getCollectionSites()) {
+        siteIds.add(Long.parseLong(site));
+      }
+    }
+
+    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    List<Object> results = collectedSampleRepository.findCollectedSampleByCollectionNumber(
+                                        form.getCollectionNumber(),
+                                        bloodBagTypes, centerIds, siteIds,
+                                        dateCollectedFrom, dateCollectedTo, pagingParams);
+
+    @SuppressWarnings("unchecked")
+    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("allCollectedSamples", getCollectionViewModels(collectedSamples).toString());
+    return m;
   }
 }
