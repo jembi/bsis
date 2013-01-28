@@ -420,7 +420,7 @@ public class CollectedSampleRepository {
 
   public CollectedSample findSingleCollectedSampleByCollectionNumber(
       String collectionNumber) {
-    List<CollectedSample> collectedSamples = findCollectedSampleByCollectionNumber(collectionNumber, "", "");
+    List<CollectedSample> collectedSamples = findCollectedSampleByCollectionNumber(collectionNumber);
     if (collectedSamples != null && collectedSamples.size() == 1)
       return collectedSamples.get(0);
     return null;
@@ -434,9 +434,11 @@ public class CollectedSampleRepository {
   }
 
   public List<CollectedSample> findCollectedSampleByCollectionNumber(
-      String collectionNumber, String dateCollectedFrom,
-      String dateCollectedTo) {
-    // TODO Auto-generated method stub
-    return null;
+      String collectionNumber) {
+    String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
+    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("collectionNumber", collectionNumber);
+    return query.getResultList();
   }
 }
