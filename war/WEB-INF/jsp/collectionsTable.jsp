@@ -9,7 +9,9 @@
 	}%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
-<c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="table_id">collectionsTable-${unique_page_id}</c:set>
 <c:set var="collectionsTableEditRowDivId">collectionsTableEditRowDiv-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
@@ -35,7 +37,7 @@ $(document).ready(
           								   "data": aoData,
           								   "success": function(jsonResponse) {
           								     						if (jsonResponse.iTotalRecords == 0) {
-          								     						  $("#${tabContentId}").html($("#${noResultsFoundDivId}").html());
+          								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
           								     						}
           								     						fnCallback(jsonResponse);
           								   						}
@@ -45,7 +47,7 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-															$("#${tabContentId}").parent().trigger("collectionSummaryView");
+															$("#${mainContentId}").parent().trigger("collectionSummaryView");
 											        var elements = $(node).children();
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
@@ -68,23 +70,23 @@ $(document).ready(
           data: data,
           type: "GET",
           success: function(response) {
-            				 $("#${tabContentId}").trigger("collectionSummaryView", response);
+            				 $("#${mainContentId}").trigger("collectionSummaryView", response);
             			 }
         });
       }
 
       function refreshResults() {
-        showLoadingImage($("#${tabContentId}"));
+        showLoadingImage($("#${mainContentId}"));
         $.ajax({url: "${model.refreshUrl}",
-          			data: {},
+          			data: {worksheetBatchId: 2043},
           			type: "GET",
           			success: function(response) {
-          			  				 $("#${tabContentId}").html(response);
+          			  				 $("#${mainContentId}").html(response);
           							 }
         });
       }
 
-      $("#${tabContentId}").find(".collectionsTable").bind("refreshResults", refreshResults);
+      $("#${mainContentId}").find(".collectionsTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
@@ -93,94 +95,139 @@ $(document).ready(
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
 
-      $("#${tabContentId}").find(".generateWorksheetButton").button().click(
+      $("#${mainContentId}").find(".saveAsWorksheetFormToggle").button({
+        icons: {
+          primary: "ui-icon-plusthick"
+        }
+      }).click(toggleSaveAsWorksheetFormDiv);
+
+      $("#${mainContentId}").find(".cancelSaveAsWorksheetButton").button().click(toggleSaveAsWorksheetFormDiv);
+
+      function toggleSaveAsWorksheetFormDiv() {
+        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").toggle("slow");
+  		}
+
+      function hideSaveAsWorksheetFormDiv() {
+        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").hide();
+  		}
+
+      function showSaveAsWorksheetFormDiv() {
+        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").show();
+  		}
+
+      $("#${mainContentId}").find(".saveAsWorksheetButton").button().click(
           function() {
+            hideSaveAsWorksheetFormDiv();
             $.ajax({
-              url: "${model.generateWorksheetUrl}",
+              url: "${model.saveAsWorksheetUrl}",
               type: "GET",
               success: function(response) {
-                				 console.log(response);
+                				 showMessage("Successfully saved collections to worksheet.");
+                				 resetForm($("#${mainContentId}").find(".saveAsWorksheetForm"));
               				 },
               error:   function (response) {
+                				 showSaveAsWorksheetFormDiv();
 												 showErrorMessage("Something went wrong when trying to generate worksheet.");                
               				 }
             });
           });
-      
+
+      // hide the save as worksheet form for the first time
+      hideSaveAsWorksheetFormDiv();
     });
 </script>
 
 <div id="${tabContentId}">
 
-	<c:choose>
-
-		<c:when test="${fn:length(model.allCollections) eq -1}">
-			<span
-				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
-				Sorry no results found matching your search request </span>
-		</c:when>
-
-		<c:otherwise>
-
-			<br />
-			<div>
-				<button class="generateWorksheetButton">Generate worksheet</button>
-			</div>
-			<br />
-
-			<table id="${table_id}" class="dataTable collectionsTable">
-				<thead>
-					<tr>
-						<th style="display: none"></th>
-						<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
-							<th>${model.collectedSampleFields.collectionNumber.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
-							<th>${model.collectedSampleFields.donorNumber.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
-							<th>${model.collectedSampleFields.collectedOn.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
-							<th>${model.collectedSampleFields.bloodBagType.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
-							<th>${model.collectedSampleFields.collectionCenter.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
-							<th>${model.collectedSampleFields.collectionSite.displayName}</th>
-						</c:if>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="collection" items="${model.allProducts}">
+	<div id="${mainContentId}">
+		<c:choose>
+	
+			<c:when test="${fn:length(model.allCollections) eq -1}">
+				<span style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+					Sorry no results found matching your search request
+				</span>
+			</c:when>
+	
+			<c:otherwise>
+	
+				<br />
+				<div>
+					<button class="saveAsWorksheetFormToggle">Save collections to worksheet</button>
+				</div>
+					<div class="saveAsWorksheetFormDiv">
+						<div class="formDiv">
+							<b>Save Collections to worksheet</b>
+							<form class="saveAsWorksheetForm">
+								<div>
+									<label> Worksheet Batch ID </label>
+									<input name="worksheetBatchId" />
+								</div>
+							</form>
+							<div>
+								<button class="saveAsWorksheetButton">Save</button>
+								<button class="cancelSaveAsWorksheetButton">Cancel</button>
+							</div>
+						</div>
+					</div>
+				<br />
+	
+				<table id="${table_id}" class="dataTable collectionsTable">
+					<thead>
 						<tr>
-							<td style="display: none">${collection.id}</td>
+							<th style="display: none"></th>
 							<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
-								<td>${collection.collectionNumber}</td>
+								<th>${model.collectedSampleFields.collectionNumber.displayName}</th>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
-								<td>${collection.donorNumber}</td>
+								<th>${model.collectedSampleFields.donorNumber.displayName}</th>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
-								<td>${collection.collectedOn}</td>
+								<th>${model.collectedSampleFields.collectedOn.displayName}</th>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
-								<td>${collection.bloodBagType.bloodBagTypeName}</td>
+								<th>${model.collectedSampleFields.bloodBagType.displayName}</th>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
-								<td>${product.collectionCenter}</td>
+								<th>${model.collectedSampleFields.collectionCenter.displayName}</th>
 							</c:if>
 							<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
-								<td>${product.collectionSite}</td>
+								<th>${model.collectedSampleFields.collectionSite.displayName}</th>
 							</c:if>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<c:forEach var="collection" items="${model.allProducts}">
+							<tr>
+								<td style="display: none">${collection.id}</td>
+								<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
+									<td>${collection.collectionNumber}</td>
+								</c:if>
+								<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
+									<td>${collection.donorNumber}</td>
+								</c:if>
+								<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
+									<td>${collection.collectedOn}</td>
+								</c:if>
+								<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
+									<td>${collection.bloodBagType.bloodBagTypeName}</td>
+								</c:if>
+								<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
+									<td>${product.collectionCenter}</td>
+								</c:if>
+								<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
+									<td>${product.collectionSite}</td>
+								</c:if>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+	
+			</c:otherwise>
+		</c:choose>
+	</div>
 
-		</c:otherwise>
-	</c:choose>
+	<div id="${childContentId}">
+	</div>
 
 </div>
 

@@ -116,7 +116,7 @@ public class CollectedSampleController {
     m.put("allCollectedSamples", getCollectionViewModels(collections));
     m.put("refreshUrl", getUrl(request));
     m.put("nextPageUrl", getNextPageUrl(request));
-    m.put("generateWorksheetUrl", getWorksheetUrl(request));
+    m.put("saveAsWorksheetUrl", getWorksheetUrl(request));
     addEditSelectorOptions(m);
 
     modelAndView.addObject("model", m);
@@ -124,7 +124,7 @@ public class CollectedSampleController {
   }
 
   private String getWorksheetUrl(HttpServletRequest request) {
-    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "generateWorksheet.html");
+    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveAsWorksheet.html");
     String queryString = request.getQueryString();   // d=789
     if (queryString != null) {
         worksheetUrl += "?" + queryString;
@@ -506,8 +506,8 @@ public class CollectedSampleController {
     return mv;
   }
 
-  @RequestMapping(value="/generateWorksheet", method = RequestMethod.GET)
-  public @ResponseBody Map<String, ? extends Object> generateWorksheet(HttpServletRequest request,
+  @RequestMapping(value="/saveAsWorksheet", method = RequestMethod.GET)
+  public @ResponseBody Map<String, ? extends Object> saveAsWorksheet(HttpServletRequest request,
       @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
 

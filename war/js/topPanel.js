@@ -5,12 +5,6 @@ $(document).ready(
       // elements.
       var tab_a_selector = 'ul.ui-tabs-nav a';
 
-//      var pushState = history.pushState;
-//      history.pushState = function() {
-//        console.log("pushState called");
-//        pushState.apply(history, arguments);
-//      };
-
       var topPanelTabs = $("#topPanelTabs").tabs({
         cache : true
       });
@@ -50,8 +44,6 @@ $(document).ready(
       // Define our own click handler for the tabs, overriding the default.
       $(".tabs").find(tab_a_selector).click(function(event, ui) {
         var t = getSelectedTabs();
-        console.log(t);
-//        console.log("pushstate called " + JSON.stringify(t));
         if (tabContent[t.topPanelSelected] == undefined)
           tabContent[t.topPanelSelected] = {};
         if (tabContent[t.topPanelSelected][t.leftPanelSelected] == undefined)
@@ -65,7 +57,6 @@ $(document).ready(
           function(event) {
             if (event === undefined || event.originalEvent == undefined
                 || event.originalEvent.state == undefined) {
-              console.log("state is null");
               return;
             }
             var state = event.originalEvent.state;
