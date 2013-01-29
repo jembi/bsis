@@ -78,7 +78,6 @@ $(document).ready(
       function refreshResults() {
         showLoadingImage($("#${mainContentId}"));
         $.ajax({url: "${model.refreshUrl}",
-          			data: {worksheetBatchId: 2043},
           			type: "GET",
           			success: function(response) {
           			  				 $("#${mainContentId}").html(response);
@@ -104,7 +103,7 @@ $(document).ready(
       $("#${mainContentId}").find(".cancelSaveAsWorksheetButton").button().click(toggleSaveAsWorksheetFormDiv);
 
       function toggleSaveAsWorksheetFormDiv() {
-        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").toggle("slow");
+        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").toggle("fast");
   		}
 
       function hideSaveAsWorksheetFormDiv() {
@@ -115,11 +114,17 @@ $(document).ready(
         $("#${mainContentId}").find(".saveAsWorksheetFormDiv").show();
   		}
 
+      function getWorksheetBatchIdInput() {
+        var worksheetForm = $("#${mainContentId}").find(".saveAsWorksheetForm");
+        return worksheetForm.find('input[name="worksheetBatchId"]').val()
+      }
+      
       $("#${mainContentId}").find(".saveAsWorksheetButton").button().click(
           function() {
             hideSaveAsWorksheetFormDiv();
             $.ajax({
               url: "${model.saveAsWorksheetUrl}",
+              data: {worksheetBatchId: getWorksheetBatchIdInput()},
               type: "GET",
               success: function(response) {
                 				 showMessage("Successfully saved collections to worksheet.");
