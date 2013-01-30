@@ -445,7 +445,7 @@ public class CollectedSampleRepository {
 
   public void saveAsWorksheet(String collectionNumber,
       List<BloodBagType> bloodBagTypes, List<Long> centerIds,
-      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, String worksheetBatchId) {
+      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, String worksheetBatchId) throws Exception {
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     List<Object> results = findCollectedSampleByCollectionNumber(collectionNumber, bloodBagTypes,

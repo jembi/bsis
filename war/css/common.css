@@ -548,3 +548,20 @@ tr > td
 .hide_class {
 	display: none;
 }
+
+.tipsBox {
+	margin: 3px;
+	font-family: 'helvetica';
+	background: #edea81;
+	border-color: red;
+	border-style: dotted;
+	border-radius: 5px;
+	padding-left: 8px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	max-width: 840px;
+}
+

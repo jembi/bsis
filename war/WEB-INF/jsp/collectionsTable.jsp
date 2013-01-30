@@ -127,11 +127,15 @@ $(document).ready(
               data: {worksheetBatchId: getWorksheetBatchIdInput()},
               type: "GET",
               success: function(response) {
+                				 showSaveAsWorksheetFormDiv();
+                				 var worksheetResult = $("#${mainContentId}").find(".saveWorksheetResult");
+                				 worksheetResult.html(response);
                 				 showMessage("Successfully saved collections to worksheet.");
-                				 resetForm($("#${mainContentId}").find(".saveAsWorksheetForm"));
               				 },
               error:   function (response) {
                 				 showSaveAsWorksheetFormDiv();
+                				 var worksheetResult = $("#${mainContentId}").find(".saveWorksheetResult");
+                				 worksheetResult.html(response.responseText);
 												 showErrorMessage("Something went wrong when trying to generate worksheet.");                
               				 }
             });
@@ -171,6 +175,8 @@ $(document).ready(
 							<div>
 								<button class="saveAsWorksheetButton">Save</button>
 								<button class="cancelSaveAsWorksheetButton">Cancel</button>
+							</div>
+							<div class="saveWorksheetResult">
 							</div>
 						</div>
 					</div>

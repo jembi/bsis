@@ -508,7 +508,8 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value="/saveAsWorksheet", method = RequestMethod.GET)
-  public @ResponseBody Map<String, ? extends Object> saveAsWorksheet(HttpServletRequest request,
+  public ModelAndView saveAsWorksheet(HttpServletRequest request,
+      HttpServletResponse response,
       @ModelAttribute("findCollectedSampleForm") CollectionsWorksheetForm form,
       BindingResult result, Model model) {
 
@@ -542,13 +543,24 @@ public class CollectedSampleController {
     }
 
     String worksheetBatchId = form.getWorksheetBatchId();
-    collectedSampleRepository.saveAsWorksheet(
+    ModelAndView mv = new ModelAndView("worksheetSaved");
+    Map<String, Object> m = model.asMap();
+    m.put("worksheetBatchId", worksheetBatchId);
+    try {
+      collectedSampleRepository.saveAsWorksheet(
                                         form.getCollectionNumber(),
                                         bloodBagTypes, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo,
                                         worksheetBatchId);
+      m.put("success", true);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      m.put("success", false);
+      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    }
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    return m;
+    mv.addObject("model", m);
+    
+    return mv;
   }
 }
