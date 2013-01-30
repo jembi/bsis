@@ -21,6 +21,7 @@ import javax.persistence.TypedQuery;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
+import model.worksheet.CollectionsWorksheet;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
@@ -440,5 +441,25 @@ public class CollectedSampleRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
     return query.getResultList();
+  }
+
+  public void saveAsWorksheet(String collectionNumber,
+      List<BloodBagType> bloodBagTypes, List<Long> centerIds,
+      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, String worksheetBatchId) {
+
+    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    List<Object> results = findCollectedSampleByCollectionNumber(collectionNumber, bloodBagTypes,
+                                          centerIds, siteIds,
+                                          dateCollectedFrom, dateCollectedTo,
+                                          pagingParams);
+    CollectionsWorksheet worksheet = new CollectionsWorksheet();
+    worksheet.setWorksheetBatchId(worksheetBatchId);
+    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+    for (CollectedSample c : collectedSamples) {
+      worksheet.getCollectedSamples().add(c);
+      c.getWorksheets().add(worksheet);
+    }
+    em.persist(worksheet);
+    em.flush();
   }
 }

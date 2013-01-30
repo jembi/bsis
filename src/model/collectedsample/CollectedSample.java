@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -29,6 +30,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.testresults.TestResult;
 import model.user.User;
+import model.worksheet.CollectionsWorksheet;
 
 import org.hibernate.annotations.Index;
 
@@ -80,9 +82,12 @@ public class CollectedSample implements ModificationTracker {
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
 
+  @ManyToMany(fetch=FetchType.LAZY)
+  private List<CollectionsWorksheet> worksheets;
+
   @Valid
   private RowModificationTracker modificationTracker;
-  
+
   @Lob
   private String notes;
 
@@ -251,5 +256,13 @@ public class CollectedSample implements ModificationTracker {
     if (donor != null)
       return donor.getDonorNumber();
     return "";
+  }
+
+  public List<CollectionsWorksheet> getWorksheets() {
+    return worksheets;
+  }
+
+  public void setWorksheets(List<CollectionsWorksheet> worksheets) {
+    this.worksheets = worksheets;
   }
 }

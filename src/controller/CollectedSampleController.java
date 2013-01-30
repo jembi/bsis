@@ -16,6 +16,7 @@ import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
+import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
 
@@ -508,7 +509,7 @@ public class CollectedSampleController {
 
   @RequestMapping(value="/saveAsWorksheet", method = RequestMethod.GET)
   public @ResponseBody Map<String, ? extends Object> saveAsWorksheet(HttpServletRequest request,
-      @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
+      @ModelAttribute("findCollectedSampleForm") CollectionsWorksheetForm form,
       BindingResult result, Model model) {
 
     String collectionNumber = form.getCollectionNumber();
@@ -540,17 +541,14 @@ public class CollectedSampleController {
       }
     }
 
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<Object> results = collectedSampleRepository.findCollectedSampleByCollectionNumber(
+    String worksheetBatchId = form.getWorksheetBatchId();
+    collectedSampleRepository.saveAsWorksheet(
                                         form.getCollectionNumber(),
                                         bloodBagTypes, centerIds, siteIds,
-                                        dateCollectedFrom, dateCollectedTo, pagingParams);
-
-    @SuppressWarnings("unchecked")
-    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+                                        dateCollectedFrom, dateCollectedTo,
+                                        worksheetBatchId);
 
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("allCollectedSamples", getCollectionViewModels(collectedSamples).toString());
     return m;
   }
 }

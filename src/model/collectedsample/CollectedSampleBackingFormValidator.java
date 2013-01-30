@@ -25,7 +25,12 @@ public class CollectedSampleBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(FindCollectedSampleBackingForm.class, CollectedSampleBackingForm.class, CollectedSample.class, CollectedSampleViewModel.class).contains(clazz);
+    return Arrays.asList(FindCollectedSampleBackingForm.class,
+                         CollectedSampleBackingForm.class,
+                         CollectedSample.class,
+                         CollectedSampleViewModel.class,
+                         CollectionsWorksheetForm.class
+                         ).contains(clazz);
   }
 
   @Override

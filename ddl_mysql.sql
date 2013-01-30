@@ -5,6 +5,10 @@
 
     drop table if exists CollectedSample;
 
+    drop table if exists CollectedSample_CollectionsWorksheet;
+
+    drop table if exists CollectionsWorksheet;
+
     drop table if exists Donor;
 
     drop table if exists DonorType;
@@ -61,6 +65,21 @@
         collectionSite_id bigint,
         donor_id bigint,
         donorType_donorType varchar(30),
+        createdBy_id bigint,
+        lastUpdatedBy_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table CollectedSample_CollectionsWorksheet (
+        collectedSamples_id bigint not null,
+        worksheets_id bigint not null
+    ) ENGINE=InnoDB;
+
+    create table CollectionsWorksheet (
+        id bigint not null auto_increment,
+        createdDate datetime,
+        lastUpdated datetime,
+        worksheetBatchId varchar(255),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         primary key (id)
@@ -287,6 +306,30 @@
     alter table CollectedSample 
         add index FKF0658A33D0AFB367 (lastUpdatedBy_id), 
         add constraint FKF0658A33D0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
+
+    alter table CollectedSample_CollectionsWorksheet 
+        add index FKB39FFD85225909B3 (worksheets_id), 
+        add constraint FKB39FFD85225909B3 
+        foreign key (worksheets_id) 
+        references CollectionsWorksheet (id);
+
+    alter table CollectedSample_CollectionsWorksheet 
+        add index FKB39FFD85C02466CD (collectedSamples_id), 
+        add constraint FKB39FFD85C02466CD 
+        foreign key (collectedSamples_id) 
+        references CollectedSample (id);
+
+    alter table CollectionsWorksheet 
+        add index FK72E3FEF9A49787C4 (createdBy_id), 
+        add constraint FK72E3FEF9A49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table CollectionsWorksheet 
+        add index FK72E3FEF9D0AFB367 (lastUpdatedBy_id), 
+        add constraint FK72E3FEF9D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
