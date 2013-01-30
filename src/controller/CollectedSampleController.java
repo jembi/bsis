@@ -563,4 +563,25 @@ public class CollectedSampleController {
     
     return mv;
   }
+
+  @RequestMapping(value="/findCollectionWorksheetFormGenerator", method=RequestMethod.GET)
+  public ModelAndView findCollectionWorksheetFormGenerator(HttpServletRequest request, Model model) {
+    ModelAndView mv = new ModelAndView("findCollectionWorksheetForm");
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping(value="/findCollectionsWorksheet", method=RequestMethod.GET)
+  public ModelAndView findCollectionsWorksheet(HttpServletRequest request, Model model,
+      @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
+    List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId);
+    ModelAndView mv = new ModelAndView("collectionsWorksheet");
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("allCollectedSamples", collectedSamples);
+    mv.addObject("model", m);
+    return mv;
+  }
+
 }

@@ -462,4 +462,12 @@ public class CollectedSampleRepository {
     em.persist(worksheet);
     em.flush();
   }
+
+  public List<CollectedSample> findCollectionsInWorksheet(String worksheetBatchId) {
+    TypedQuery<CollectionsWorksheet> query = em.createQuery("SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.collectedSamples " +
+    		                                                    "where w.worksheetBatchId = :worksheetBatchId", CollectionsWorksheet.class);
+    query.setParameter("worksheetBatchId", worksheetBatchId);
+    CollectionsWorksheet worksheet = query.getSingleResult();
+    return worksheet.getCollectedSamples();
+  }
 }

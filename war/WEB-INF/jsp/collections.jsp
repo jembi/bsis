@@ -13,9 +13,14 @@
 
 <div id="collectionsTab" class="leftPanel tabs">
 	<ul>
-		<li id="findOrAddCollectionsContent"><a
-			href="findCollectionFormGenerator.html">Find Collections</a></li>
-		<li id="addCollectionsContent"><a
-			href="editCollectionFormGenerator.html">Add Collection</a></li>
+		<li id="findOrAddCollectionsContent">
+			<a href="findCollectionFormGenerator.html">Find Collections</a>
+		</li>
+		<li id="addCollectionsContent">
+			<a href="editCollectionFormGenerator.html">Add Collection</a>
+		</li>
+		<li id="findCollectionsWorksheet">
+			<a href="findCollectionWorksheetFormGenerator.html">Find worksheet</a>
+		</li>
 	</ul>
 </div>
