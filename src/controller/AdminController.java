@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
+import model.bloodtest.BloodTest;
 import model.donortype.DonorType;
 import model.producttype.ProductType;
 import model.tips.Tips;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
+import repository.BloodTestRepository;
 import repository.DonorTypeRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
@@ -73,6 +75,9 @@ public class AdminController {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  BloodTestRepository bloodTestRepository;
 
   @Autowired
   GenericConfigRepository genericConfigRepository;
@@ -481,7 +486,9 @@ public class AdminController {
     m.put("refreshUrl", getUrl(request));
 
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
-    m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    Map<String, String> worksheetProperties = genericConfigRepository.getConfigProperties(propertyOwners);
+    m.put("worksheetConfig", worksheetProperties);    
+    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
 
     mv.addObject("model", model);
     return mv;

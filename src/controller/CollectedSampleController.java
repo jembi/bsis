@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
+import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonorRepository;
 import repository.DonorTypeRepository;
@@ -58,6 +59,9 @@ public class CollectedSampleController {
   @Autowired
   private DonorRepository donorRepository;
 
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
+  
   @Autowired
   private GenericConfigRepository genericConfigRepository;
   
@@ -592,7 +596,7 @@ public class CollectedSampleController {
     } else {
       m.put("worksheetFound", true);
       m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
-
+      m.put("bloodTests", bloodTestRepository.getAllBloodTests());
       List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
       m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     }

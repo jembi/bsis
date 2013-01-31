@@ -68,7 +68,6 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}">
-
 	<div id="${mainContentId}">
 		<div class="formDiv">
 			<b>Configure worksheet properties</b>
@@ -81,6 +80,19 @@ $(document).ready(function() {
 					<label>Column width</label>
 					<input name="columnWidth" type="number" value="${model.worksheetConfig.columnWidth}" min="10" max="600" />
 				</div>
+
+				<c:forEach var="bloodTest" items="${model.bloodTests}">
+					<div>
+						<c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+							<input name="${bloodTest.name}" type="checkbox" style="width: auto;" checked />
+						</c:if>
+						<c:if test="${model.worksheetConfig[bloodTest.name] != 'true'}">
+							<input name="${bloodTest.name}" type="checkbox" style="width: auto;" />
+						</c:if>
+						<label for="${bloodTest.name}" style="width: auto;">Show column for ${bloodTest.name}</label>
+					</div>
+				</c:forEach>
+
 			</form>
 			<div>
 				<label></label>
