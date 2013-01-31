@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -467,7 +469,18 @@ public class CollectedSampleRepository {
     TypedQuery<CollectionsWorksheet> query = em.createQuery("SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.collectedSamples " +
     		                                                    "where w.worksheetBatchId = :worksheetBatchId", CollectionsWorksheet.class);
     query.setParameter("worksheetBatchId", worksheetBatchId);
-    CollectionsWorksheet worksheet = query.getSingleResult();
-    return worksheet.getCollectedSamples();
+    CollectionsWorksheet worksheet = null;
+    try {
+       worksheet = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+
+    if (worksheet == null)
+      return null;
+
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>(worksheet.getCollectedSamples());
+    Collections.sort(collectedSamples);
+    return collectedSamples;
   }
 }

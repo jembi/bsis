@@ -565,3 +565,26 @@ tr > td
 	max-width: 840px;
 }
 
+.worksheetTable {
+	 border: 1pt solid #000000;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 font-size: 11pt;
+	 width: 100%;
+}
+
+.worksheetTable > tbody > tr > td {
+	 border: 1pt solid #000000;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 font-size: 8pt;
+	 padding: 3px;
+}
+
+.worksheetTable > thead > tr > th {
+	 border: 1pt solid #000000;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 font-size: 8pt;
+	 padding: 3px;
+}

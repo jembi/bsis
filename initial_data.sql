@@ -120,3 +120,7 @@ insert into Tips (tipsKey, tipsName,tipsContent) values
 ('report.collections.collectionsreport', 'Collections Report', 'Track number collections done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
 ('report.collections.testresultsreport', 'Test Results Report', 'Track TTI numbers by collection site and collection center done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
 ('usage.addusage', 'Add Usage Form', 'Record usage of a product within a hospital. Optionally specify Hospital name, ward, patient name.');
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("rowHeight", "30", "collectionsWorksheet"),
+("columnWidth", "100", "collectionsWorksheet");

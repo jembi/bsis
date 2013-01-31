@@ -152,7 +152,7 @@
 				Product Label
 			</button-->
 			<button type="button" class="discardButton">
-				Dicard product
+				Discard product
 			</button>
 			<button type="button" class="deleteButton">
 				Delete

@@ -39,6 +39,9 @@
 		<li id="configureTipsForm">
 			<a href="configureTipsFormGenerator.html">Tips</a>
 		</li>
+		<li id="configureWorksheet">
+			<a href="configureWorksheetsFormGenerator.html">Worksheets</a>
+		</li>
 		<li id="createSampleData">
 			<a href="createSampleDataFormGenerator.html">Sample Data</a>
 		</li>

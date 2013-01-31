@@ -44,7 +44,7 @@ $(document).ready(function() {
     });
   });
 
-  $("#${tabContentId}").find(".clearFindFormButton").button({
+  $("#${mainContentId}").find(".clearFindFormButton").button({
     icons : {
       primary : 'ui-icon-grip-solid-horizontal'
     }
@@ -65,7 +65,7 @@ $(document).ready(function() {
 			<b>Find collections worksheet</b>
 			<form class="findWorksheetForm formInTabPane" actio>
 				<div>
-					<label>Worksheet Batch ID</label>
+					<label>Worksheet ID</label>
 					<input name="worksheetBatchId" />
 				</div>
 			</form>

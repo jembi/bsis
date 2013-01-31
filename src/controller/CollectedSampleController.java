@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.admin.ConfigPropertyConstants;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
@@ -37,6 +38,7 @@ import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonorRepository;
 import repository.DonorTypeRepository;
+import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import viewmodel.CollectedSampleViewModel;
 
@@ -56,6 +58,9 @@ public class CollectedSampleController {
   @Autowired
   private DonorRepository donorRepository;
 
+  @Autowired
+  private GenericConfigRepository genericConfigRepository;
+  
   @Autowired
   private UtilController utilController;
 
@@ -576,11 +581,25 @@ public class CollectedSampleController {
   @RequestMapping(value="/findCollectionsWorksheet", method=RequestMethod.GET)
   public ModelAndView findCollectionsWorksheet(HttpServletRequest request, Model model,
       @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
+
     List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId);
+
     ModelAndView mv = new ModelAndView("collectionsWorksheet");
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("allCollectedSamples", collectedSamples);
+
+    if (collectedSamples == null) {
+      m.put("worksheetFound", false);
+    } else {
+      m.put("worksheetFound", true);
+      m.put("allCollectedSamples", collectedSamples);
+
+      List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+      m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    }
+
+    m.put("worksheetBatchId", worksheetBatchId);
     mv.addObject("model", m);
+
     return mv;
   }
 

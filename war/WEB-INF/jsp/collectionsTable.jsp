@@ -149,8 +149,9 @@ $(document).ready(
 <div id="${tabContentId}">
 
 	<div id="${mainContentId}">
+
 		<c:choose>
-	
+
 			<c:when test="${fn:length(model.allCollections) eq -1}">
 				<span style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 					Sorry no results found matching your search request

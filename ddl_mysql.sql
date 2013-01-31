@@ -15,6 +15,8 @@
 
     drop table if exists FormField;
 
+    drop table if exists GenericConfig;
+
     drop table if exists Location;
 
     drop table if exists LocationType;
@@ -130,6 +132,14 @@
         isRequired boolean,
         maxLength integer,
         sourceField varchar(30),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table GenericConfig (
+        id bigint not null auto_increment,
+        propertyName varchar(30),
+        propertyOwner varchar(30),
+        propertyValue varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 

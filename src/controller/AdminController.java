@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.donortype.DonorType;
@@ -37,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.DonorTypeRepository;
 import repository.FormFieldRepository;
+import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
 import repository.TipsRepository;
@@ -71,6 +74,9 @@ public class AdminController {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  GenericConfigRepository genericConfigRepository;
+  
   @Autowired
   ServletContext servletContext;
 
@@ -465,4 +471,41 @@ public class AdminController {
     return mv;
   }
 
+  @RequestMapping(value="/configureWorksheetsFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureWorksheetsFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureWorksheets");
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping(value="/configureWorksheets")
+  public @ResponseBody Map<String, Object> configureWorksheet(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam Map<String, String> params) {
+
+    Map<String, Object> result = new HashMap<String, Object>();
+    try {
+      Long.parseLong(params.get(ConfigPropertyConstants.COLLECTIONS_WORKSHEET_ROW_HEIGHT));
+      Long.parseLong(params.get(ConfigPropertyConstants.COLLECTIONS_WORKSHEET_COLUMN_WIDTH));
+      genericConfigRepository.updateWorksheetProperties(params);
+      result.put("success", true);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      result.put("success", false);
+    }
+
+    return result;
+  }
 }

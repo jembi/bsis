@@ -35,7 +35,7 @@ import model.worksheet.CollectionsWorksheet;
 import org.hibernate.annotations.Index;
 
 @Entity
-public class CollectedSample implements ModificationTracker {
+public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -264,5 +264,15 @@ public class CollectedSample implements ModificationTracker {
 
   public void setWorksheets(List<CollectionsWorksheet> worksheets) {
     this.worksheets = worksheets;
+  }
+
+  @Override
+  public int compareTo(CollectedSample c) {
+    Long diff = (this.id - c.id);
+    if (diff < 0)
+      return -1;
+    if (diff > 0)
+      return 1;
+    return 0;
   }
 }
