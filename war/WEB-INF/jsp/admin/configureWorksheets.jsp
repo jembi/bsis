@@ -81,13 +81,33 @@ $(document).ready(function() {
 					<input name="columnWidth" type="number" value="${model.worksheetConfig.columnWidth}" min="10" max="600" />
 				</div>
 
+				<div>
+						<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+							<input name="collectionNumber" type="checkbox" value="true" style="width: auto;" checked />
+						</c:if>
+						<c:if test="${model.worksheetConfig['collectionNumber'] != 'true'}">
+							<input name="collectionNumber" type="checkbox" value="true" style="width: auto;" />
+						</c:if>
+					<label for="collectionNumber" style="width: auto;">Show column for Collection Number</label>
+				</div>
+
+				<div>
+						<c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
+							<input name="testedOn" type="checkbox" value="true" style="width: auto;" checked />
+						</c:if>
+						<c:if test="${model.worksheetConfig['testedOn'] != 'true'}">
+							<input name="testedOn" type="checkbox" value="true" style="width: auto;" />
+						</c:if>
+					<label for="testedOn" style="width: auto;">Show column for Date of Testing</label>
+				</div>
+
 				<c:forEach var="bloodTest" items="${model.bloodTests}">
 					<div>
 						<c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
-							<input name="${bloodTest.name}" type="checkbox" style="width: auto;" checked />
+							<input name="${bloodTest.name}" type="checkbox" value="true" style="width: auto;" checked />
 						</c:if>
 						<c:if test="${model.worksheetConfig[bloodTest.name] != 'true'}">
-							<input name="${bloodTest.name}" type="checkbox" style="width: auto;" />
+							<input name="${bloodTest.name}" type="checkbox" value="true" style="width: auto;" />
 						</c:if>
 						<label for="${bloodTest.name}" style="width: auto;">Show column for ${bloodTest.name}</label>
 					</div>

@@ -124,10 +124,11 @@ insert into Tips (tipsKey, tipsName,tipsContent) values
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("rowHeight", "30", "collectionsWorksheet"),
 ("columnWidth", "100", "collectionsWorksheet"),
-("testedOn", "true", "collectionsWorksheet"),
-("Blood ABO", "true", "collectionsWorksheet"),
-("Blood Rh", "true", "collectionsWorksheet"),
-("HIV", "true", "collectionsWorksheet"),
-("HBV", "true", "collectionsWorksheet"),
-("HCV", "true", "collectionsWorksheet"),
-("Syphilis", "true", "collectionsWorksheet");
+("collectionNumber", "on", "collectionsWorksheet"),
+("testedOn", "on", "collectionsWorksheet"),
+("Blood ABO", "on", "collectionsWorksheet"),
+("Blood Rh", "on", "collectionsWorksheet"),
+("HIV", "on", "collectionsWorksheet"),
+("HBV", "on", "collectionsWorksheet"),
+("HCV", "on", "collectionsWorksheet"),
+("Syphilis", "on", "collectionsWorksheet");

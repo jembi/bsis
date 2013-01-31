@@ -54,41 +54,43 @@ $(document).ready(function() {
 				<table class="dataTable worksheetTable">
 					<thead>
 						<tr>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									Collection Number
-								</th>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									Tested On
-								</th>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									Blood Group
-								</th>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									HIV
-								</th>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									HBV
-								</th>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									HCV
-								</th>
-								<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
-									Syphilis
-								</th>
+								<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+									<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
+										Collection Number
+									</th>
+								</c:if>
+
+							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
+									<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
+										Tested On
+									</th>
+								</c:if>
+
+								<c:forEach var="bloodTest" items="${model.bloodTests}">
+								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+										<th style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
+											${bloodTest.name}
+										</th>
+									</c:if>
+								</c:forEach>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
 							<tr>
+							  <c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
 									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;">
 										${collectedSample.collectionNumber}
 									</td>
+								</c:if>
+							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
 									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
-									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
-									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
-									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
-									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
-									<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
+							  </c:if>
+								<c:forEach var="bloodTest" items="${model.bloodTests}">
+								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+										<td style="height: ${model.worksheetConfig.rowHeight}px; width: ${model.worksheetConfig.columnWidth}px;"></td>
+									</c:if>
+								</c:forEach>
 							</tr>
 						</c:forEach>
 					</tbody>

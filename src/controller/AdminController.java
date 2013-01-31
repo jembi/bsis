@@ -504,6 +504,18 @@ public class AdminController {
     try {
       Long.parseLong(params.get(ConfigPropertyConstants.COLLECTIONS_WORKSHEET_ROW_HEIGHT));
       Long.parseLong(params.get(ConfigPropertyConstants.COLLECTIONS_WORKSHEET_COLUMN_WIDTH));
+
+      if (!params.containsKey("collectionNumber"))
+        params.put("collectionNumber", "false");
+
+      if (!params.containsKey("testedOn"))
+        params.put("testedOn", "false");
+
+      for (BloodTest bt : bloodTestRepository.getAllBloodTests()) {
+        if (!params.containsKey(bt.getName()))
+          params.put(bt.getName(), "false");
+      }
+      
       genericConfigRepository.updateWorksheetProperties(params);
       result.put("success", true);
     }
