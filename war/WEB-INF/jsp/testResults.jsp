@@ -19,7 +19,8 @@
 		<li id="addTestResultsContent">
 			<a href="addAllTestResultsFormGenerator.html">Add Test Results</a>
 		</li>
-		<li id="showTTIWorksheet"><a
-			href="ttiWorksheet.html">TTI Worksheet</a></li>
+		<li id="addTestResultsForWorksheet">
+			<a href="worksheetForTestResultsFormGenerator.html">Edit Worksheet</a>
+		</li>
 	</ul>
 </div>

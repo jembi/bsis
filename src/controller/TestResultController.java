@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.CustomDateFormatter;
+import model.admin.ConfigPropertyConstants;
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
@@ -38,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
+import repository.GenericConfigRepository;
 import repository.TestResultRepository;
 import viewmodel.TestResultViewModel;
 
@@ -51,6 +53,9 @@ public class TestResultController {
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
+
+  @Autowired
+  private GenericConfigRepository genericConfigRepository; 
 
   @Autowired
   private UtilController utilController;
@@ -468,5 +473,44 @@ public class TestResultController {
       testResultViewModels.add(new TestResultViewModel(testResult));
     }
     return testResultViewModels;
+  }
+
+  @RequestMapping(value = "/worksheetForTestResultsFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findWorksheetForTestResultsFormGenerator(HttpServletRequest request, Model model) {
+
+    ModelAndView mv = new ModelAndView("worksheetForTestResults");
+    Map<String, Object> m = model.asMap();
+    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
+    m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
+    m.put("refreshUrl", getUrl(request));
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  @RequestMapping(value="/editTestResultsForWorksheet", method=RequestMethod.GET)
+  public ModelAndView editTestResultsForWorksheet(HttpServletRequest request, Model model,
+      @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
+
+    List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId);
+
+    ModelAndView mv = new ModelAndView("collectionsWorksheet");
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    if (collectedSamples == null) {
+      m.put("worksheetFound", false);
+    } else {
+      m.put("worksheetFound", true);
+      m.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(collectedSamples));
+
+      List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+      m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    }
+
+    m.put("worksheetBatchId", worksheetBatchId);
+    mv.addObject("model", m);
+
+    return mv;
   }
 }

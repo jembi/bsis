@@ -591,7 +591,7 @@ public class CollectedSampleController {
       m.put("worksheetFound", false);
     } else {
       m.put("worksheetFound", true);
-      m.put("allCollectedSamples", collectedSamples);
+      m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
 
       List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
       m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
