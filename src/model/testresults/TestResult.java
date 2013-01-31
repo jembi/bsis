@@ -19,6 +19,7 @@ import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
+import model.worksheet.CollectionsWorksheet;
 
 @Entity
 public class TestResult implements ModificationTracker {
@@ -39,7 +40,17 @@ public class TestResult implements ModificationTracker {
 
   @Column(length=255)
   private String result;
-  
+
+  /** Associate Test Result to all the corresponding worksheet.
+   *  Test results can be entered independently of the worksheets
+   *  in which case this field can be null.
+   *  However worksheets should be linked to specific test result
+   *  rows otherwise in the worksheet edit form we will not know
+   *  whether the test result already exists or not.
+   */
+  @ManyToOne(optional=true)
+  private CollectionsWorksheet worksheet;
+
   @Valid
   private RowModificationTracker modificationTracker;
 
@@ -147,5 +158,13 @@ public class TestResult implements ModificationTracker {
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public CollectionsWorksheet getWorksheet() {
+    return worksheet;
+  }
+
+  public void setWorksheet(CollectionsWorksheet worksheet) {
+    this.worksheet = worksheet;
   }
 }

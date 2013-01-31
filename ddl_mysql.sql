@@ -245,6 +245,7 @@
         collectedSample_id bigint not null,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
+        worksheet_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -466,6 +467,12 @@
         add constraint FKDB459F6F32E145A 
         foreign key (collectedSample_id) 
         references CollectedSample (id);
+
+    alter table TestResult 
+        add index FKDB459F6FE2BB696A (worksheet_id), 
+        add constraint FKDB459F6FE2BB696A 
+        foreign key (worksheet_id) 
+        references CollectionsWorksheet (id);
 
     alter table TestResult 
         add index FKDB459F6F3A6D02C3 (bloodTest_name), 
