@@ -22,6 +22,7 @@ import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.testresults.TestResultBackingFormValidator;
+import model.worksheet.CollectionsWorksheet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,7 @@ import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.TestResultRepository;
+import viewmodel.CollectedSampleViewModel;
 import viewmodel.TestResultViewModel;
 
 @Controller
@@ -478,7 +480,7 @@ public class TestResultController {
   @RequestMapping(value = "/worksheetForTestResultsFormGenerator", method = RequestMethod.GET)
   public ModelAndView findWorksheetForTestResultsFormGenerator(HttpServletRequest request, Model model) {
 
-    ModelAndView mv = new ModelAndView("worksheetForTestResults");
+    ModelAndView mv = new ModelAndView("findWorksheetForTestResults");
     Map<String, Object> m = model.asMap();
     m.put("bloodTests", bloodTestRepository.getAllBloodTests());
     m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
@@ -493,24 +495,109 @@ public class TestResultController {
   public ModelAndView editTestResultsForWorksheet(HttpServletRequest request, Model model,
       @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
 
-    List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId);
-
-    ModelAndView mv = new ModelAndView("collectionsWorksheet");
-    Map<String, Object> m = new HashMap<String, Object>();
-
-    if (collectedSamples == null) {
-      m.put("worksheetFound", false);
-    } else {
-      m.put("worksheetFound", true);
-      m.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(collectedSamples));
-
-      List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
-      m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
-    }
-
+    ModelAndView mv = new ModelAndView("worksheetForTestResults");
+    Map<String, Object> m = model.asMap();
+    m.put("worksheetFound", true);
+    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     m.put("worksheetBatchId", worksheetBatchId);
+    m.put("nextPageUrl", getNextPageUrl(request));
     mv.addObject("model", m);
 
     return mv;
+  }
+
+  @RequestMapping(value="/editTestResultsForWorksheetPagination", method=RequestMethod.GET)
+  public @ResponseBody Map<String, Object> editTestResultsForWorksheetPagination(HttpServletRequest request, Model model,
+      @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
+
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    List<Object> results = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId, pagingParams);
+
+    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+    CollectionsWorksheet worksheet = (CollectionsWorksheet) results.get(1);
+    Long totalRecords = (Long) results.get(2);
+    return generateDatatablesMap(worksheet, collectedSamples, totalRecords);
+  }
+
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in collectionsTable.jsp.
+   * @param worksheet 
+   */
+  private Map<String, Object> generateDatatablesMap(
+      CollectionsWorksheet worksheet,
+      List<CollectedSample> collectedSamples, Long totalRecords) {
+
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    Map<String, String> properties = genericConfigRepository.getConfigProperties(propertyOwners);
+    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
+
+    Map<String, Object> resultsMap = new HashMap<String, Object>();
+    ArrayList<Object> resultList = new ArrayList<Object>();
+
+    Map<Long, List<TestResult>> testResultsByCollection = new HashMap<Long, List<TestResult>>();
+    for (TestResult t : worksheet.getTestResults()) {
+      if (t.getIsDeleted())
+        continue;
+      Long collectionId = t.getCollectedSample().getId();
+      if (!testResultsByCollection.containsKey(collectionId)) {
+        testResultsByCollection.put(collectionId, new ArrayList<TestResult>());
+      }
+      List<TestResult> testResults = testResultsByCollection.get(collectionId);
+      testResults.add(t);
+    }
+
+    for (CollectedSampleViewModel collection : CollectedSampleController.getCollectionViewModels(collectedSamples)) {
+
+      List<Object> row = new ArrayList<Object>();
+      row.add(collection.getId());
+
+      if (properties.containsKey("collectionNumber") && properties.get("collectionNumber").equals("true")) {
+          row.add(collection.getCollectionNumber());
+      }
+
+      Map<String, TestResult> testResults = new HashMap<String, TestResult>();
+
+      Date testedOn = null;
+      if (testResultsByCollection.containsKey(collection.getId())) {
+        for (TestResult t : testResultsByCollection.get(collection.getId())) {
+          testedOn = t.getTestedOn();
+          testResults.put(t.getBloodTest().getName(), t);
+        }
+      }
+
+      if (properties.containsKey("testedOn") && properties.get("testedOn").equals("true")) {
+          row.add(CustomDateFormatter.getDateString(testedOn));
+      }
+
+      // now add results for existing tests related to this worksheet
+      for (BloodTest bt : bloodTests) {
+        String testName = bt.getName();
+        if (properties.containsKey(testName) && properties.get(testName).equals("true")) {
+            if (testResults.containsKey(testName))
+              row.add(testResults.get(testName).getResult());
+            else
+              row.add("");
+        }
+      }
+
+      resultList.add(row);
+    }
+    resultsMap.put("aaData", resultList);
+    resultsMap.put("iTotalRecords", totalRecords);
+    resultsMap.put("iTotalDisplayRecords", totalRecords);
+    return resultsMap;
+  }
+
+  private String getNextPageUrl(HttpServletRequest request) {
+    String reqUrl = request.getRequestURL().toString().replaceFirst("editTestResultsForWorksheet.html", "editTestResultsForWorksheetPagination.html");
+    String queryString = request.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
   }
 }

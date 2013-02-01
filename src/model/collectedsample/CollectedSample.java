@@ -82,7 +82,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
 
-  @ManyToMany(fetch=FetchType.LAZY)
+  @ManyToMany
   private List<CollectionsWorksheet> worksheets;
 
   @Valid

@@ -120,54 +120,6 @@ public class CollectedSampleRepository {
     return countQuery.getSingleResult().longValue();
   }  
 
-  public List<CollectedSample> findCollectedSampleByShippingNumber(
-      String shippingNumber, String dateCollectedFrom,
-      String dateCollectedTo) {
-
-    TypedQuery<CollectedSample> query = em
-        .createQuery(
-            "SELECT c FROM CollectedSample c WHERE " +
-            "c.shippingNumber = :shippingNumber and " +
-            "((c.collectedOn is NULL) or " +
-            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
-            "c.isDeleted= :isDeleted",
-            CollectedSample.class);
-
-    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
-    Date to = getDateCollectedToOrDefault(dateCollectedTo);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("shippingNumber", shippingNumber);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    return query.getResultList();
-  }
-
-  public List<CollectedSample> findCollectedSampleBySampleNumber(
-      String sampleNumber, String dateCollectedFrom,
-      String dateCollectedTo) {
-
-    TypedQuery<CollectedSample> query = em
-        .createQuery(
-            "SELECT c FROM CollectedSample c WHERE " +
-            "c.sampleNumber = :sampleNumber and " +
-            "((c.collectedOn is NULL) or " +
-            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
-            "c.isDeleted= :isDeleted",
-            CollectedSample.class);
-
-    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
-    Date to = getDateCollectedToOrDefault(dateCollectedTo);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("sampleNumber", sampleNumber);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    return query.getResultList();
-  }
-
   public List<CollectedSample> getAllCollectedSamples() {
     TypedQuery<CollectedSample> query = em.createQuery(
         "SELECT c FROM CollectedSample c WHERE c.isDeleted= :isDeleted",
@@ -466,8 +418,11 @@ public class CollectedSampleRepository {
   }
 
   public List<CollectedSample> findCollectionsInWorksheet(String worksheetBatchId) {
-    TypedQuery<CollectionsWorksheet> query = em.createQuery("SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.collectedSamples " +
-    		                                                    "where w.worksheetBatchId = :worksheetBatchId", CollectionsWorksheet.class);
+
+    String queryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.collectedSamples c " +
+                      "where w.worksheetBatchId = :worksheetBatchId";
+
+    TypedQuery<CollectionsWorksheet> query = em.createQuery(queryStr, CollectionsWorksheet.class);
     query.setParameter("worksheetBatchId", worksheetBatchId);
     CollectionsWorksheet worksheet = null;
     try {
@@ -479,8 +434,49 @@ public class CollectedSampleRepository {
     if (worksheet == null)
       return null;
 
-    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>(worksheet.getCollectedSamples());
+    List<CollectedSample> collectedSamples = worksheet.getCollectedSamples();
     Collections.sort(collectedSamples);
     return collectedSamples;
+  }
+
+  public List<Object> findCollectionsInWorksheet(String worksheetBatchId, Map<String, Object> pagingParams) {
+
+    String worksheetQueryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.testResults where w.worksheetBatchId = :worksheetBatchId";
+    TypedQuery<CollectionsWorksheet> worksheetQuery = em.createQuery(worksheetQueryStr, CollectionsWorksheet.class);
+    worksheetQuery.setParameter("worksheetBatchId", worksheetBatchId);
+    CollectionsWorksheet worksheet = worksheetQuery.getSingleResult();
+
+    if (worksheet == null)
+      return null;
+    
+    String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
+                      "WHERE w.worksheetBatchId = :worksheetBatchId";
+
+    if (pagingParams.containsKey("sortColumn")) {
+      collectionsQueryStr += " ORDER BY c.id ASC";
+    }
+
+    TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
+    collectionsQuery.setParameter("worksheetBatchId", worksheetBatchId);
+
+
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    collectionsQuery.setFirstResult(start);
+    collectionsQuery.setMaxResults(length);
+
+    List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
+
+    return Arrays.asList(collectedSamples, worksheet, getTotalCollectionsInWorksheet(worksheetBatchId));
+  }
+
+  private Long getTotalCollectionsInWorksheet(String worksheetBatchId) {
+    String queryStr = "SELECT COUNT(c) from CollectionsWorksheet w LEFT JOIN w.collectedSamples c " +
+        "where w.worksheetBatchId = :worksheetBatchId";
+
+    TypedQuery<Long> query = em.createQuery(queryStr, Long.class);
+    query.setParameter("worksheetBatchId", worksheetBatchId);
+    return query.getSingleResult().longValue();
   }
 }

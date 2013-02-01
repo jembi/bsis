@@ -18,67 +18,129 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
+<c:set var="noResultsFoundDivId">noResultsFoundDivId-${unique_page_id}</c:set>
+
 
 <script>
 $(document).ready(function() {
 
-  $("#${mainContentId}").find(".findWorksheetButton").button({
-    icons : {
-      primary : 'ui-icon-search'
-    }
-  }).click(function() {
-    var findWorksheetFormData = $("#${mainContentId}").find(".findWorksheetForm").serialize();
-    var resultsDiv = $("#${mainContentId}").find(".findWorksheetResults");
-    //showLoadingImage(resultsDiv);
-    $.ajax({
-      type : "GET",
-      url : "editTestResultsForWorksheet.html",
-      data : findWorksheetFormData,
-      success: function(data) {
-        				 animatedScrollTo(resultsDiv);
-				         resultsDiv.html(data);
-      				 },
-      error: function(data) {
-							 showErrorMessage("Something went wrong. Please try again later.");        
-      			 }
-    });
-  });
-
-  $("#${mainContentId}").find(".clearFindFormButton").button({
-    icons : {
-      primary : 'ui-icon-grip-solid-horizontal'
-    }
-  }).click(clearFindForm);
-
-  function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
-    $("#${childContentId}").html("");
+  function getWorksheetForTestResultsTable() {
+    return $("#${mainContentId}").find(".worksheetForTestResultsTable");
   }
+
+  console.log("${model.nextPageUrl}");
+
+  var testResultsTable = getWorksheetForTestResultsTable().dataTable({
+    "bJQueryUI" : true,
+    "sDom" : '<"H"lrT>t<"F"ip>T',
+    "bServerSide" : true,
+    "bSort" : false,
+    "sAjaxSource" : "${model.nextPageUrl}",
+    "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
+    								 ],
+    "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+      								 oSettings.jqXHR = $.ajax({
+      								   "datatype": "json",
+      								   "type": "GET",
+      								   "url": sSource,
+      								   "data": aoData,
+      								   "success": function(jsonResponse) {
+      								     						if (jsonResponse.iTotalRecords == 0) {
+      								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
+      								     						}
+      								     						fnCallback(jsonResponse);
+      								   						}
+      								   });
+      								 },
+    "oTableTools" : {
+      "sRowSelect" : "single",
+      "aButtons" : [],
+      "fnRowSelected" : function(node) {
+													$("#${mainContentId}").parent().trigger("collectionSummaryView");
+									        var elements = $(node).children();
+									        if (elements[0].getAttribute("class") === "dataTables_empty") {
+									          return;
+									        }
+									        selectedRowId = elements[0].innerHTML;
+												  },
+			"fnRowDeselected" : function(node) {
+													},
+    },
+  });
 
 });
 </script>
 
 <div id="${tabContentId}">
-
 	<div id="${mainContentId}">
-		<div class="formDiv">
-			<b>Update worksheet with test results</b>
-			<form class="findWorksheetForm formInTabPane" actio>
-				<div>
-					<label>Worksheet ID</label>
-					<input name="worksheetBatchId" />
-				</div>
-			</form>
-			<div>
-				<label></label>
-				<button class="findWorksheetButton">Find worksheet</button>
-				<button class="clearFindFormButton">Clear form</button>
+		<c:if test="${!model.worksheetFound}">
+			<span style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+					No worksheet found.
+			</span>
+		</c:if>
+		<c:if test="${model.worksheetFound}">
+		
+			<br />
+			<br />
+
+			<div class="printableArea">
+
+				<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet ID: ${model.worksheetBatchId}</div>
+			
+				<table class="dataTable worksheetForTestResultsTable">
+					<thead>
+						<tr>
+								<th style="display: none"></th>
+								<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+									<th>
+										Collection Number
+									</th>
+								</c:if>
+
+							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
+									<th>
+										Tested On
+									</th>
+								</c:if>
+
+								<c:forEach var="bloodTest" items="${model.bloodTests}">
+								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+										<th>
+											${bloodTest.name}
+										</th>
+									</c:if>
+								</c:forEach>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
+							<tr>
+								<td style="display: none">${collectedSample.id}</td>
+							  <c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+									<td>
+										${collectedSample.collectionNumber}
+									</td>
+								</c:if>
+							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
+									<td></td>
+							  </c:if>
+								<c:forEach var="bloodTest" items="${model.bloodTests}">
+								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+										<td></td>
+									</c:if>
+								</c:forEach>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
-			<div class="findWorksheetResults"></div>
-		</div>
+		</c:if>
 	</div>
+	<div id="${childContentId}"></div>
+</div>
 
-	<div id="${childContentId}">
-	</div>
-
+<div id="${noResultsFoundDivId}" style="display: none;">
+	<span
+		style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+		Sorry no results found matching your search request </span>
 </div>
