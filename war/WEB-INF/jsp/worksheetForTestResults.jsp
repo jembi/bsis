@@ -19,7 +19,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDivId-${unique_page_id}</c:set>
-
+<c:set var="editableFieldsForTableId">editableFieldsForTableId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -39,35 +39,106 @@ $(document).ready(function() {
     "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
     								 ],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+											 console.log("here");
       								 oSettings.jqXHR = $.ajax({
       								   "datatype": "json",
       								   "type": "GET",
       								   "url": sSource,
       								   "data": aoData,
       								   "success": function(jsonResponse) {
+      								     						makeRowsEditable(jsonResponse.aaData);
+      								     						fnCallback(jsonResponse);
+      								     						getWorksheetForTestResultsTable().find("tr").css("min-height", "200px");
       								     						if (jsonResponse.iTotalRecords == 0) {
       								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
       								     						}
-      								     						fnCallback(jsonResponse);
       								   						}
       								   });
       								 },
     "oTableTools" : {
       "sRowSelect" : "single",
       "aButtons" : [],
-      "fnRowSelected" : function(node) {
-													$("#${mainContentId}").parent().trigger("collectionSummaryView");
-									        var elements = $(node).children();
-									        if (elements[0].getAttribute("class") === "dataTables_empty") {
-									          return;
-									        }
-									        selectedRowId = elements[0].innerHTML;
-												  },
-			"fnRowDeselected" : function(node) {
-													},
+      "fnRowSelected" : rowSelectEdit,
+			"fnRowDeselected" : rowDeselectDisableEdit,
     },
   });
+  
+  function makeRowsEditable(data) {
+		for (var index in data) {
+		  var row = data[index];
+		  row[1] = getEditableCollectionNumber(row[1]);
+		  row[2] = getEditableTestedOn(row[2]);
+		  row[3] = getEditableBloodABOSelector(row[3]);
+		  row[4] = getEditableBloodRhSelector(row[4]);
+		}
+  }
 
+  function getEditableCollectionNumber(cell) {
+    return '<span style="width: 50px;">' + cell + '</span>';
+  }
+
+  function getEditableTestedOn(cell) {
+    var inputElement = '<input class="testedOn inlineInput" value="' + cell + '" />';
+    var rowContents = '<div class="editableField testedOnEditableField" style="display: none;">' + inputElement + '</div>' +
+    									'<div class="viewableField testedOnViewField">' + cell + '</div>';
+		return rowContents;
+  }
+
+  function getEditableBloodABOSelector(cell) {
+    var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodABOField")[0].outerHTML;
+    console.log(selectElement);
+    var rowContents = '<div class="editableField bloodABOEditableField" style="display: none;">' + selectElement + '</div>' +
+											'<div class="viewableField bloodABOViewField">' + cell + '</div>';
+		return rowContents;
+  }
+  
+  function getEditableBloodRhSelector(cell) {
+    var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodRhField")[0].outerHTML;
+    var rowContents = '<div class="editableField bloodRHEditableField" style="display: none;">' + selectElement + '</div>' +
+											'<div class="viewableField bloodRHViewField">' + cell + '</div>';
+		return rowContents;
+  }
+  
+  function rowSelectEdit(node) {
+    var elements = $(node).children();
+    if (elements[0].getAttribute("class") === "dataTables_empty")
+      return;
+    var selectedRowId = elements[0].innerHTML;
+
+    $(node).find(".viewableField").hide();
+    $(node).find(".editableField").show();
+
+    if ("${model.worksheetConfig['collectionNumber']}" == "true") {
+      console.log(elements[1]);
+    }
+    if ("${model.worksheetConfig['testedOn']}" == "true") {
+      console.log(elements[2]);
+    }
+    if ("${model.worksheetConfig['Blood ABO']}" == "true") {
+      console.log(elements[3]);
+    }
+    if ("${model.worksheetConfig['Blood Rh']}" == "true") {
+      console.log(elements[4]);
+    }
+    if ("${model.worksheetConfig['HBV']}" == "true") {
+      console.log(elements[5]);
+    }
+    if ("${model.worksheetConfig['HCV']}" == "true") {
+      console.log(elements[6]);
+    }
+    if ("${model.worksheetConfig['HIV']}" == "true") {
+      console.log(elements[7]);
+    }
+    if ("${model.worksheetConfig['Syphilis']}" == "true") {
+      console.log(elements[8]);
+    }
+  }
+
+  function rowDeselectDisableEdit(node) {
+    getWorksheetForTestResultsTable().find(".editableField").hide();
+    $(node).find(".viewableField").show();
+  }
+  
 });
 </script>
 
@@ -89,7 +160,7 @@ $(document).ready(function() {
 			
 				<table class="dataTable worksheetForTestResultsTable">
 					<thead>
-						<tr>
+						<tr style="width: 50px;">
 								<th style="display: none"></th>
 								<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
 									<th>
@@ -128,7 +199,7 @@ $(document).ready(function() {
 								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
 										<td></td>
 									</c:if>
-								</c:forEach>
+							</c:forEach>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -143,4 +214,14 @@ $(document).ready(function() {
 	<span
 		style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 		Sorry no results found matching your search request </span>
+</div>
+
+<div id="${editableFieldsForTableId}" style="display: none;">
+	<c:forEach var="bloodTest" items="${model.bloodTests}">
+		<select class="editable${fn:replace(bloodTest.name, ' ', '')}Field inlineSelect">
+			<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
+				<option value="${allowedResult}" label="${allowedResult}" />
+			</c:forEach>
+		</select>
+	</c:forEach>
 </div>

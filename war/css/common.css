@@ -127,8 +127,8 @@ select:focus {
 	border-bottom: 2px solid #ccc;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	margin-left: 100px;
-	margin-right: 100px;
+	margin-left: 50px;
+	margin-right: 50px;
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
@@ -587,4 +587,15 @@ tr > td
 	 border-spacing: 0;
 	 font-size: 8pt;
 	 padding: 3px;
+}
+
+.inlineInput {
+	margin: 0;
+	padding	0;
+	width: 100px;
+}
+
+.inlineSelect {
+	margin: 0;
+	padding	0;
 }

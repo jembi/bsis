@@ -444,7 +444,8 @@ public class CollectedSampleRepository {
     String worksheetQueryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.testResults where w.worksheetBatchId = :worksheetBatchId";
     TypedQuery<CollectionsWorksheet> worksheetQuery = em.createQuery(worksheetQueryStr, CollectionsWorksheet.class);
     worksheetQuery.setParameter("worksheetBatchId", worksheetBatchId);
-    CollectionsWorksheet worksheet = worksheetQuery.getSingleResult();
+    try {
+      CollectionsWorksheet worksheet = worksheetQuery.getSingleResult();
 
     if (worksheet == null)
       return null;
@@ -469,6 +470,9 @@ public class CollectedSampleRepository {
     List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
 
     return Arrays.asList(collectedSamples, worksheet, getTotalCollectionsInWorksheet(worksheetBatchId));
+    } catch (NoResultException ex){
+      return Arrays.asList(Arrays.asList(new CollectedSample[0]), new CollectionsWorksheet(), new Long(0));
+    }
   }
 
   private Long getTotalCollectionsInWorksheet(String worksheetBatchId) {
