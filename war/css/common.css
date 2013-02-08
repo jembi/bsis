@@ -596,10 +596,10 @@ tr > td
 }
 
 .inlineTestResultSelection {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 6px;
-	margin-right: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 1px;
+	margin-right: 1px;
 	padding	0;
 }
 
@@ -639,4 +639,9 @@ tr > td
 .dataTables_paginate {
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+
+.savedStatusText {
+	color: #75706f;
+	font-style: italic;
 }

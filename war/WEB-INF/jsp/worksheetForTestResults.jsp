@@ -51,7 +51,8 @@ $(document).ready(function() {
       								   "success": function(jsonResponse) {
       								     						makeRowsEditable(jsonResponse.aaData);
       								     						fnCallback(jsonResponse);
-      								     						getWorksheetForTestResultsTable().find("tr").css("min-height", "200px");
+      								     						getWorksheetForTestResultsTable().find(".link").click(clearRadioButtonSelection);
+      								     						registerRadioButtonCallbacks();
       								     						if (jsonResponse.iTotalRecords == 0) {
       								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
       								     						}
@@ -74,8 +75,30 @@ $(document).ready(function() {
 		}
   }
 
+  function clearRadioButtonSelection(eventObj) {
+    $(eventObj.target).parent().find('input[type="radio"]').prop('checked', false);
+  }
+
+  function getRowFromRadioButton(radioButton) {
+    return radioButton.closest("tr");
+  }
+
+  function registerRadioButtonCallbacks() {
+    getWorksheetForTestResultsTable().find('input[type="radio"]').click(
+        function(eventObj) {
+          var radioButton = $(eventObj.target);
+      		var row = getRowFromRadioButton(radioButton);
+      		var rowCells = $(row).find("td");
+      		console.log($(rowCells[0]).html());
+      		$(rowCells[1]).find(".savedStatusText").html("Unsaved");
+    		});
+  }
+
   function getEditableCollectionNumber(cell) {
-    return '<div style="height: ${model.worksheetConfig.rowHeight}px; margin: 10px; width: 75px;">' + cell + '</div>';
+    return '<div style="height: ${model.worksheetConfig.rowHeight}px; margin: 5px;">' + cell +
+    					'<br /> <br />' +
+    					'<span class="savedStatusText">Saved</span>'
+    			 '</div>';
   }
 
   function getEditableTestedOn(cell) {
@@ -86,79 +109,38 @@ $(document).ready(function() {
 
   function getEditableBloodABOSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodABOField")[0].outerHTML;
-    console.log(selectElement);
     var rowContents = '<div class="editableField bloodABOEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
   
   function getEditableBloodRhSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodRhField")[0].outerHTML;
-    console.log(selectElement);
     var rowContents = '<div class="editableField bloodABOEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
 
   function getEditableHBVSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableHBVField")[0].outerHTML;
-    console.log(selectElement);
     var rowContents = '<div class="editableField hbvEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
 
   function getEditableHCVSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableHCVField")[0].outerHTML;
-    console.log(selectElement);
     var rowContents = '<div class="editableField hcvEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
 
   function getEditableHIVSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableHIVField")[0].outerHTML;
-    console.log(selectElement);
     var rowContents = '<div class="editableField hivEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
 
   function getEditableSyphilisSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableSyphilisField")[0].outerHTML;
-    console.log(selectElement);
     var rowContents = '<div class="editableField syphilisEditableField">' + selectElement + '</div>';
 		return rowContents;
-  }
-
-  function rowSelectEdit(node) {
-    var elements = $(node).children();
-    if (elements[0].getAttribute("class") === "dataTables_empty")
-      return;
-    var selectedRowId = elements[0].innerHTML;
-
-    $(node).find(".viewableField").hide();
-    $(node).find(".editableField").show();
-
-    if ("${model.worksheetConfig['collectionNumber']}" == "true") {
-      console.log(elements[1]);
-    }
-    if ("${model.worksheetConfig['testedOn']}" == "true") {
-      console.log(elements[2]);
-    }
-    if ("${model.worksheetConfig['Blood ABO']}" == "true") {
-      console.log(elements[3]);
-    }
-    if ("${model.worksheetConfig['Blood Rh']}" == "true") {
-      console.log(elements[4]);
-    }
-    if ("${model.worksheetConfig['HBV']}" == "true") {
-      console.log(elements[5]);
-    }
-    if ("${model.worksheetConfig['HCV']}" == "true") {
-      console.log(elements[6]);
-    }
-    if ("${model.worksheetConfig['HIV']}" == "true") {
-      console.log(elements[7]);
-    }
-    if ("${model.worksheetConfig['Syphilis']}" == "true") {
-      console.log(elements[8]);
-    }
   }
 
   function rowDeselectDisableEdit(node) {
@@ -187,23 +169,23 @@ $(document).ready(function() {
 			
 				<table class="dataTable worksheetForTestResultsTable noHighlight">
 					<thead>
-						<tr style="width: 50px;">
+						<tr>
 								<th style="display: none"></th>
 								<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
-									<th>
+									<th style="width: 150px;">
 										Collection Number
 									</th>
 								</c:if>
 
 							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
-									<th>
+									<th style="width: 100px;">
 										Tested On
 									</th>
 								</c:if>
 
 								<c:forEach var="bloodTest" items="${model.bloodTests}">
 								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
-										<th>
+										<th style="width: 170px;">
 											${bloodTest.name}
 										</th>
 									</c:if>
@@ -211,7 +193,7 @@ $(document).ready(function() {
 
 						</tr>
 					</thead>
-					<tbody>
+					<tbody style="font-size: 9pt;">
 						<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
 							<tr>
 								<td style="display: none">${collectedSample.id}</td>
@@ -257,6 +239,8 @@ $(document).ready(function() {
 	 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
 			  </div>
 			</c:forEach>
+			<br />
+			<span class="link clearSelection">Clear</span>
 		</div>
 	</c:forEach>
 </div>

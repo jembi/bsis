@@ -63,7 +63,7 @@ $(document).ready(function() {
 	<div id="${mainContentId}">
 		<div class="formDiv">
 			<b>Update worksheet with test results</b>
-			<form class="findWorksheetForm formInTabPane" actio>
+			<form class="findWorksheetForm formInTabPane">
 				<div>
 					<label>Worksheet ID</label>
 					<input name="worksheetBatchId" />
@@ -72,7 +72,7 @@ $(document).ready(function() {
 			<div>
 				<label></label>
 				<button class="findWorksheetButton">Find worksheet</button>
-				<button class="clearFindFormButton">Clear form</button>
+				<!--button class="clearFindFormButton">Clear form</button-->
 			</div>
 			<div class="findWorksheetResults"></div>
 		</div>
