@@ -595,7 +595,48 @@ tr > td
 	width: 100px;
 }
 
-.inlineSelect {
-	margin: 0;
+.inlineTestResultSelection {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 6px;
+	margin-right: 3px;
 	padding	0;
+}
+
+.whiteBackgroundClass {
+	background: white;
+}
+
+.noHighlight > tbody > tr.odd {
+	background: white;
+	border: 1pt solid #000000;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.noHighlight > tbody > tr.even {
+	background: white;
+	border: 1pt solid #000000;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.noHighlight > tbody > tr.odd:hover {
+	background: white;
+	border: 1pt solid #000000;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.noHighlight > tbody > tr.even:hover {
+	background: white;
+	border: black;
+	border: 1pt solid #000000;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.dataTables_paginate {
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

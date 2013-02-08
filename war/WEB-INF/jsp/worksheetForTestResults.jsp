@@ -31,12 +31,15 @@ $(document).ready(function() {
   console.log("${model.nextPageUrl}");
 
   var testResultsTable = getWorksheetForTestResultsTable().dataTable({
-    "bJQueryUI" : true,
-    "sDom" : '<"H"lrT>t<"F"ip>T',
+    "bJQueryUI" : false,
+    "sDom" : '<rp>t<"F"ip>',
     "bServerSide" : true,
+    "iDisplayLength" : 5,
     "bSort" : false,
+    "sPaginationType" : "full_numbers",
     "sAjaxSource" : "${model.nextPageUrl}",
     "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
+                      { "sClass" : "white_bkg_class", "aTargets": [1,2,3,4,5,6]}
     								 ],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
 											 console.log("here");
@@ -54,13 +57,7 @@ $(document).ready(function() {
       								     						}
       								   						}
       								   });
-      								 },
-    "oTableTools" : {
-      "sRowSelect" : "single",
-      "aButtons" : [],
-      "fnRowSelected" : rowSelectEdit,
-			"fnRowDeselected" : rowDeselectDisableEdit,
-    },
+      								 }
   });
   
   function makeRowsEditable(data) {
@@ -70,35 +67,65 @@ $(document).ready(function() {
 		  row[2] = getEditableTestedOn(row[2]);
 		  row[3] = getEditableBloodABOSelector(row[3]);
 		  row[4] = getEditableBloodRhSelector(row[4]);
+		  row[5] = getEditableHBVSelector(row[5]);
+		  row[6] = getEditableHCVSelector(row[6]);
+		  row[7] = getEditableHIVSelector(row[7]);
+		  row[8] = getEditableSyphilisSelector(row[8]);
 		}
   }
 
   function getEditableCollectionNumber(cell) {
-    return '<span style="width: 50px;">' + cell + '</span>';
+    return '<div style="height: ${model.worksheetConfig.rowHeight}px; margin: 10px; width: 75px;">' + cell + '</div>';
   }
 
   function getEditableTestedOn(cell) {
     var inputElement = '<input class="testedOn inlineInput" value="' + cell + '" />';
-    var rowContents = '<div class="editableField testedOnEditableField" style="display: none;">' + inputElement + '</div>' +
-    									'<div class="viewableField testedOnViewField">' + cell + '</div>';
+    var rowContents = '<div class="editableField testedOnEditableField">' + inputElement + '</div>';
 		return rowContents;
   }
 
   function getEditableBloodABOSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodABOField")[0].outerHTML;
     console.log(selectElement);
-    var rowContents = '<div class="editableField bloodABOEditableField" style="display: none;">' + selectElement + '</div>' +
-											'<div class="viewableField bloodABOViewField">' + cell + '</div>';
+    var rowContents = '<div class="editableField bloodABOEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
   
   function getEditableBloodRhSelector(cell) {
     var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodRhField")[0].outerHTML;
-    var rowContents = '<div class="editableField bloodRHEditableField" style="display: none;">' + selectElement + '</div>' +
-											'<div class="viewableField bloodRHViewField">' + cell + '</div>';
+    console.log(selectElement);
+    var rowContents = '<div class="editableField bloodABOEditableField">' + selectElement + '</div>';
 		return rowContents;
   }
-  
+
+  function getEditableHBVSelector(cell) {
+    var selectElement = $("#${editableFieldsForTableId}").find(".editableHBVField")[0].outerHTML;
+    console.log(selectElement);
+    var rowContents = '<div class="editableField hbvEditableField">' + selectElement + '</div>';
+		return rowContents;
+  }
+
+  function getEditableHCVSelector(cell) {
+    var selectElement = $("#${editableFieldsForTableId}").find(".editableHCVField")[0].outerHTML;
+    console.log(selectElement);
+    var rowContents = '<div class="editableField hcvEditableField">' + selectElement + '</div>';
+		return rowContents;
+  }
+
+  function getEditableHIVSelector(cell) {
+    var selectElement = $("#${editableFieldsForTableId}").find(".editableHIVField")[0].outerHTML;
+    console.log(selectElement);
+    var rowContents = '<div class="editableField hivEditableField">' + selectElement + '</div>';
+		return rowContents;
+  }
+
+  function getEditableSyphilisSelector(cell) {
+    var selectElement = $("#${editableFieldsForTableId}").find(".editableSyphilisField")[0].outerHTML;
+    console.log(selectElement);
+    var rowContents = '<div class="editableField syphilisEditableField">' + selectElement + '</div>';
+		return rowContents;
+  }
+
   function rowSelectEdit(node) {
     var elements = $(node).children();
     if (elements[0].getAttribute("class") === "dataTables_empty")
@@ -158,7 +185,7 @@ $(document).ready(function() {
 
 				<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet ID: ${model.worksheetBatchId}</div>
 			
-				<table class="dataTable worksheetForTestResultsTable">
+				<table class="dataTable worksheetForTestResultsTable noHighlight">
 					<thead>
 						<tr style="width: 50px;">
 								<th style="display: none"></th>
@@ -181,6 +208,7 @@ $(document).ready(function() {
 										</th>
 									</c:if>
 								</c:forEach>
+
 						</tr>
 					</thead>
 					<tbody>
@@ -218,10 +246,17 @@ $(document).ready(function() {
 
 <div id="${editableFieldsForTableId}" style="display: none;">
 	<c:forEach var="bloodTest" items="${model.bloodTests}">
-		<select class="editable${fn:replace(bloodTest.name, ' ', '')}Field inlineSelect">
+		<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field inlineTestResultSelection">
 			<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
-				<option value="${allowedResult}" label="${allowedResult}" />
+				<div>
+					<input id="result-${bloodTest.name}${allowedResult}" type="radio"
+				 				 name="Test${bloodTest.name}" value="${allowedResult}"
+				 				 style="width: 20px;"></input>
+	 			  <label for="result-${bloodTest.name}${allowedResult}"
+	 			 	 		   style="width: 60px; margin-left: 0;
+	 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
+			  </div>
 			</c:forEach>
-		</select>
+		</div>
 	</c:forEach>
 </div>
