@@ -79,9 +79,11 @@ $(document).ready(function() {
   }
   
   function makeRowsEditable(data) {
-		for (var index in data) {
+		for (var index in data) { // one row at a time
 		  var row = data[index];
-		  var collectedSampleId = row[0];
+		  var collectedSampleId = row[0];	// each row has a hidden collectedsample id column
+		  // server returns the value of the cells in order but we have replace the
+		  // value by the relevant input elements. These DOM elements are generated below.
 		  row[1] = getEditableCollectionNumber(row[1], collectedSampleId);
 		  row[2] = getEditableTestedOn(row[2], collectedSampleId);
 		  row[3] = getEditableBloodABOSelector(row[3], collectedSampleId);
@@ -134,39 +136,75 @@ $(document).ready(function() {
   }
 
   function getEditableBloodABOSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodABOField")[0].outerHTML;
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
-		return rowContents;
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodABOField");
+    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = $(rowContents);
+    console.log(cell);
+    if (cell !== null && cell !== undefined && cell !== "") {
+      var radioButton = rowContents.find('input[data-testname="Blood ABO"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      radioButton.attr("checked", "checked");
+    }
+		return rowContents[0].outerHTML;
   }
   
   function getEditableBloodRhSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodRhField")[0].outerHTML;
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
-		return rowContents;
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodRhField");
+    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = $(rowContents);
+    console.log(cell);
+    if (cell !== null && cell !== undefined && cell !== "") {
+      var radioButton = rowContents.find('input[data-testname="Blood Rh"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      radioButton.attr("checked", "checked");
+    }
+		return rowContents[0].outerHTML;
   }
 
   function getEditableHBVSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableHBVField")[0].outerHTML;
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
-		return rowContents;
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableHBVField");
+    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = $(rowContents);
+    console.log(cell);
+    if (cell !== null && cell !== undefined && cell !== "") {
+      var radioButton = rowContents.find('input[data-testname="HBV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      radioButton.attr("checked", "checked");
+    }
+		return rowContents[0].outerHTML;
   }
 
   function getEditableHCVSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableHCVField")[0].outerHTML;
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
-		return rowContents;
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableHCVField");
+    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = $(rowContents);
+    console.log(cell);
+    if (cell !== null && cell !== undefined && cell !== "") {
+      var radioButton = rowContents.find('input[data-testname="HCV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      radioButton.attr("checked", "checked");
+    }
+		return rowContents[0].outerHTML;
   }
 
   function getEditableHIVSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableHIVField")[0].outerHTML;
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
-		return rowContents;
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableHIVField");
+    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = $(rowContents);
+    console.log(cell);
+    if (cell !== null && cell !== undefined && cell !== "") {
+      var radioButton = rowContents.find('input[data-testname="HIV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      radioButton.attr("checked", "checked");
+    }
+		return rowContents[0].outerHTML;
   }
 
   function getEditableSyphilisSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableSyphilisField")[0].outerHTML;
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
-		return rowContents;
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableSyphilisField");
+    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = $(rowContents);
+    console.log(cell);
+    if (cell !== null && cell !== undefined && cell !== "") {
+      var radioButton = rowContents.find('input[data-testname="Syphilis"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      radioButton.attr("checked", "checked");
+    }
+		return rowContents[0].outerHTML;
   }
 
   function rowDeselectDisableEdit(node) {
@@ -279,6 +317,8 @@ $(document).ready(function() {
 	 			 		<input type="radio"
 				 		   	   name="${uniqueInputName}" value="${allowedResult}"
 				 				   data-testname="${bloodTest.name}"
+				 				   data-allowedresult="${allowedResult}"
+				 				   data-rowid="collectedSampleId"
 				 				   style="width: 10px; margin-left: 0; margin-right: 0;" />
 	 			 			   ${allowedResult}
 	 			 	</label>
