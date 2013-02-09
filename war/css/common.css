@@ -595,35 +595,27 @@ tr > td
 	width: 100px;
 }
 
-.inlineTestResultSelection {
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-left: 1px;
-	margin-right: 1px;
-	padding	0;
-}
-
 .whiteBackgroundClass {
 	background: white;
 }
 
 .noHighlight > tbody > tr.odd {
 	background: white;
-	border: 1pt solid #000000;
+	border: 1pt solid #1075A1;
 	border-collapse: separate;
 	border-spacing: 0;
 }
 
 .noHighlight > tbody > tr.even {
 	background: white;
-	border: 1pt solid #000000;
+	border: 1pt solid #1075A1;
 	border-collapse: separate;
 	border-spacing: 0;
 }
 
 .noHighlight > tbody > tr.odd:hover {
 	background: white;
-	border: 1pt solid #000000;
+	border: 1pt solid #1075A1;
 	border-collapse: separate;
 	border-spacing: 0;
 }
@@ -631,7 +623,7 @@ tr > td
 .noHighlight > tbody > tr.even:hover {
 	background: white;
 	border: black;
-	border: 1pt solid #000000;
+	border: 1pt solid #1075A1;
 	border-collapse: separate;
 	border-spacing: 0;
 }

@@ -25,6 +25,7 @@ $(document).ready(
         "sDom" : '<"H"lrT>t<"F"ip>T',
         "bServerSide" : true,
         "sAjaxSource" : "${model.nextPageUrl}",
+        "sPaginationType" : "full_numbers",
         "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}
         								 ],
         "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {

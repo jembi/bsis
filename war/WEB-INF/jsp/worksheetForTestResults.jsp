@@ -31,9 +31,10 @@ $(document).ready(function() {
   console.log("${model.nextPageUrl}");
 
   var testResultsTable = getWorksheetForTestResultsTable().dataTable({
-    "bJQueryUI" : false,
-    "sDom" : '<rp>t<"F"ip>',
+    "bJQueryUI" : true,
+    "sDom" : '<"H"lr>t<"F"irp>',
     "bServerSide" : true,
+    "aLengthMenu": [1, 5, 10, 15, 25, 50, 100],
     "iDisplayLength" : 5,
     "bSort" : false,
     "sPaginationType" : "full_numbers",
@@ -64,19 +65,20 @@ $(document).ready(function() {
   function makeRowsEditable(data) {
 		for (var index in data) {
 		  var row = data[index];
-		  row[1] = getEditableCollectionNumber(row[1]);
-		  row[2] = getEditableTestedOn(row[2]);
-		  row[3] = getEditableBloodABOSelector(row[3]);
-		  row[4] = getEditableBloodRhSelector(row[4]);
-		  row[5] = getEditableHBVSelector(row[5]);
-		  row[6] = getEditableHCVSelector(row[6]);
-		  row[7] = getEditableHIVSelector(row[7]);
-		  row[8] = getEditableSyphilisSelector(row[8]);
+		  var collectedSampleId = row[0];
+		  row[1] = getEditableCollectionNumber(row[1], collectedSampleId);
+		  row[2] = getEditableTestedOn(row[2], collectedSampleId);
+		  row[3] = getEditableBloodABOSelector(row[3], collectedSampleId);
+		  row[4] = getEditableBloodRhSelector(row[4], collectedSampleId);
+		  row[5] = getEditableHBVSelector(row[5], collectedSampleId);
+		  row[6] = getEditableHCVSelector(row[6], collectedSampleId);
+		  row[7] = getEditableHIVSelector(row[7], collectedSampleId);
+		  row[8] = getEditableSyphilisSelector(row[8], collectedSampleId);
 		}
   }
 
   function clearRadioButtonSelection(eventObj) {
-    $(eventObj.target).parent().find('input[type="radio"]').prop('checked', false);
+    $(eventObj.target).closest('tr').find('input[type="radio"]').prop('checked', false);
   }
 
   function getRowFromRadioButton(radioButton) {
@@ -90,61 +92,61 @@ $(document).ready(function() {
       		var row = getRowFromRadioButton(radioButton);
       		var rowCells = $(row).find("td");
       		console.log($(rowCells[0]).html());
-      		$(rowCells[1]).find(".savedStatusText").html("Unsaved");
     		});
   }
 
-  function getEditableCollectionNumber(cell) {
+  function getEditableCollectionNumber(cell, collectedSampleId) {
     return '<div style="height: ${model.worksheetConfig.rowHeight}px; margin: 5px;">' + cell +
     					'<br /> <br />' +
-    					'<span class="savedStatusText">Saved</span>'
+    					'<span class="link clearSelection">Clear test results</span>' +
     			 '</div>';
   }
 
-  function getEditableTestedOn(cell) {
+  function getEditableTestedOn(cell, collectedSampleId) {
     var inputElement = '<input class="testedOn inlineInput" value="' + cell + '" />';
     var rowContents = '<div class="editableField testedOnEditableField">' + inputElement + '</div>';
 		return rowContents;
   }
 
-  function getEditableBloodABOSelector(cell) {
-    var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodABOField")[0].outerHTML;
-    var rowContents = '<div class="editableField bloodABOEditableField">' + selectElement + '</div>';
+  function getEditableBloodABOSelector(cell, collectedSampleId) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodABOField")[0].outerHTML;
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
 		return rowContents;
   }
   
-  function getEditableBloodRhSelector(cell) {
-    var selectElement = $("#${editableFieldsForTableId}").find(".editableBloodRhField")[0].outerHTML;
-    var rowContents = '<div class="editableField bloodABOEditableField">' + selectElement + '</div>';
+  function getEditableBloodRhSelector(cell, collectedSampleId) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodRhField")[0].outerHTML;
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
 		return rowContents;
   }
 
-  function getEditableHBVSelector(cell) {
-    var selectElement = $("#${editableFieldsForTableId}").find(".editableHBVField")[0].outerHTML;
-    var rowContents = '<div class="editableField hbvEditableField">' + selectElement + '</div>';
+  function getEditableHBVSelector(cell, collectedSampleId) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableHBVField")[0].outerHTML;
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
 		return rowContents;
   }
 
-  function getEditableHCVSelector(cell) {
-    var selectElement = $("#${editableFieldsForTableId}").find(".editableHCVField")[0].outerHTML;
-    var rowContents = '<div class="editableField hcvEditableField">' + selectElement + '</div>';
+  function getEditableHCVSelector(cell, collectedSampleId) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableHCVField")[0].outerHTML;
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
 		return rowContents;
   }
 
-  function getEditableHIVSelector(cell) {
-    var selectElement = $("#${editableFieldsForTableId}").find(".editableHIVField")[0].outerHTML;
-    var rowContents = '<div class="editableField hivEditableField">' + selectElement + '</div>';
+  function getEditableHIVSelector(cell, collectedSampleId) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableHIVField")[0].outerHTML;
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
 		return rowContents;
   }
 
-  function getEditableSyphilisSelector(cell) {
-    var selectElement = $("#${editableFieldsForTableId}").find(".editableSyphilisField")[0].outerHTML;
-    var rowContents = '<div class="editableField syphilisEditableField">' + selectElement + '</div>';
+  function getEditableSyphilisSelector(cell, collectedSampleId) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editableSyphilisField")[0].outerHTML;
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
 		return rowContents;
   }
 
   function rowDeselectDisableEdit(node) {
     getWorksheetForTestResultsTable().find(".editableField").hide();
+    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
     $(node).find(".viewableField").show();
   }
   
@@ -223,24 +225,30 @@ $(document).ready(function() {
 <div id="${noResultsFoundDivId}" style="display: none;">
 	<span
 		style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
-		Sorry no results found matching your search request </span>
+		No worksheet found. </span>
 </div>
 
 <div id="${editableFieldsForTableId}" style="display: none;">
-	<c:forEach var="bloodTest" items="${model.bloodTests}">
-		<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field inlineTestResultSelection">
-			<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
-				<div>
-					<input id="result-${bloodTest.name}${allowedResult}" type="radio"
-				 				 name="Test${bloodTest.name}" value="${allowedResult}"
-				 				 style="width: 20px;"></input>
-	 			  <label for="result-${bloodTest.name}${allowedResult}"
-	 			 	 		   style="width: 60px; margin-left: 0;
-	 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
-			  </div>
-			</c:forEach>
-			<br />
-			<span class="link clearSelection">Clear</span>
-		</div>
-	</c:forEach>
+	<form class="formInTabPane">
+		<c:forEach var="bloodTest" items="${model.bloodTests}">
+			<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field">
+				<c:set var="uniqueInputName" value="${fn:replace(bloodTest.name,' ','')}-collectedSampleId" />
+				<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
+					<div>
+						<!-- using collected sample id as the name should be unique across multiple inputs.
+								 otherwise selecting one radio button will change another radio button with the
+								 same name.
+						 -->
+						<input type="radio"
+					 				 name="${uniqueInputName}" value="${allowedResult}"
+					 				 style="width: 20px;" />
+		 			  <label for="${uniqueInputName}"
+		 			 	 		   style="width: 60px; margin-left: 0;
+		 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
+				  </div>
+				</c:forEach>
+				<br />
+			</div>
+		</c:forEach>
+	</form>
 </div>
