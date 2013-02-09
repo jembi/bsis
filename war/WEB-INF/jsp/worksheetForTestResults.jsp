@@ -24,11 +24,12 @@
 <script>
 $(document).ready(function() {
 
+  var modified_cells = {};
+  var original_data = {};
+
   function getWorksheetForTestResultsTable() {
     return $("#${mainContentId}").find(".worksheetForTestResultsTable");
   }
-
-  console.log("${model.nextPageUrl}");
 
   var testResultsTable = getWorksheetForTestResultsTable().dataTable({
     "bJQueryUI" : true,
@@ -43,7 +44,6 @@ $(document).ready(function() {
                       { "sClass" : "white_bkg_class", "aTargets": [1,2,3,4,5,6]}
     								 ],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
-											 console.log("here");
       								 oSettings.jqXHR = $.ajax({
       								   "datatype": "json",
       								   "type": "GET",
@@ -73,14 +73,23 @@ $(document).ready(function() {
 	      ).click(saveAndNextButtonClicked);
 	 }
 
-  var modified_cells = {};
-
   function saveAndNextButtonClicked() {
   }
   
   function makeRowsEditable(data) {
+    original_data = {};
 		for (var index in data) { // one row at a time
 		  var row = data[index];
+			original_data[row[0]] = {
+			    "collectionNumber" : row[1],
+			    "testedOn" : row[2],
+			    "Blood ABO" : row[3],
+			    "Blood Rh" : row[4],
+			    "HBV" : row[5],
+			    "HCV" : row[6],
+			    "HIV" : row[7],
+			    "Syphilis" : row[8]
+			};
 		  var collectedSampleId = row[0];	// each row has a hidden collectedsample id column
 		  // server returns the value of the cells in order but we have replace the
 		  // value by the relevant input elements. These DOM elements are generated below.
@@ -108,7 +117,6 @@ $(document).ready(function() {
         function(eventObj) {
           var radioButton = $(eventObj.target);
       		var cell = radioButton.closest("td");
-      		cell.css("background-color", "#c4d9e7");
       		var row = radioButton.closest("tr");
       		var rowCells = row.children();
       		var collectedSampleId = $(rowCells[0]).html();
@@ -117,7 +125,13 @@ $(document).ready(function() {
       		modified_cells[collectedSampleId] = modified_cells[collectedSampleId] || {};
       		var testname = cellInput.data("testname");
       		var testvalue = cellInput.val();
-      		modified_cells[collectedSampleId][testname] = testvalue;
+      		if (testvalue === original_data[collectedSampleId][testname]) {
+      		  delete modified_cells[collectedSampleId][testname];
+						cell.css("background-color", "#ffffff");
+      		} else {
+      			cell.css("background-color", "#c4d9e7");
+      			modified_cells[collectedSampleId][testname] = testvalue;
+      		}
       		console.log(modified_cells);
     		});
   }
@@ -139,7 +153,6 @@ $(document).ready(function() {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodABOField");
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
-    console.log(cell);
     if (cell !== null && cell !== undefined && cell !== "") {
       var radioButton = rowContents.find('input[data-testname="Blood ABO"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
       radioButton.attr("checked", "checked");
@@ -151,7 +164,6 @@ $(document).ready(function() {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodRhField");
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
-    console.log(cell);
     if (cell !== null && cell !== undefined && cell !== "") {
       var radioButton = rowContents.find('input[data-testname="Blood Rh"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
       radioButton.attr("checked", "checked");
@@ -163,7 +175,6 @@ $(document).ready(function() {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableHBVField");
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
-    console.log(cell);
     if (cell !== null && cell !== undefined && cell !== "") {
       var radioButton = rowContents.find('input[data-testname="HBV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
       radioButton.attr("checked", "checked");
@@ -175,7 +186,6 @@ $(document).ready(function() {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableHCVField");
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
-    console.log(cell);
     if (cell !== null && cell !== undefined && cell !== "") {
       var radioButton = rowContents.find('input[data-testname="HCV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
       radioButton.attr("checked", "checked");
@@ -187,7 +197,6 @@ $(document).ready(function() {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableHIVField");
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
-    console.log(cell);
     if (cell !== null && cell !== undefined && cell !== "") {
       var radioButton = rowContents.find('input[data-testname="HIV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
       radioButton.attr("checked", "checked");
@@ -199,7 +208,6 @@ $(document).ready(function() {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableSyphilisField");
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
-    console.log(cell);
     if (cell !== null && cell !== undefined && cell !== "") {
       var radioButton = rowContents.find('input[data-testname="Syphilis"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
       radioButton.attr("checked", "checked");
@@ -300,7 +308,7 @@ $(document).ready(function() {
 
 <div id="${editableFieldsForTableId}" style="display: none;">
 	<c:forEach var="bloodTest" items="${model.bloodTests}">
-		<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field">
+		<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field editableField">
 			<c:set var="uniqueInputName" value="${fn:replace(bloodTest.name,' ','')}-collectedSampleId" />
 			<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
 				<div>
@@ -312,7 +320,7 @@ $(document).ready(function() {
 					<!-- nesting input element inside label element allows selection of input radiobutton by clicking on the label text.
 							 this is nice from usability point of view.
 					  -->
-	 			  <label style="margin-left: 0;
+	 			  <label style="margin-left: 2px;
 	 			 			   margin-right: 0; cursor: pointer;">
 	 			 		<input type="radio"
 				 		   	   name="${uniqueInputName}" value="${allowedResult}"
