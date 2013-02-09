@@ -275,11 +275,11 @@ $(document).ready(function() {
 							 this is nice from usability point of view.
 					  -->
 	 			  <label style="width: 60px; margin-left: 0;
-	 			 			   margin-right: 10px; cursor: pointer;">
+	 			 			   margin-right: 0; cursor: pointer;">
 	 			 		<input type="radio"
 				 		   	   name="${uniqueInputName}" value="${allowedResult}"
 				 				   data-testname="${bloodTest.name}"
-				 				   style="width: 20px;" />
+				 				   style="width: 10px; margin-left: 0; margin-right: 0;" />
 	 			 			   ${allowedResult}
 	 			 	</label>
 

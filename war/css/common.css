@@ -127,10 +127,10 @@ select:focus {
 	border-bottom: 2px solid #ccc;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	/*margin-left: 1px;
-	margin-right: 1px;
-	*/
-	width: 1100px;
+	margin-left: 10px;
+	margin-right: 10px;
+
+	/*width: 1100px;*/
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
