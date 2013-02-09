@@ -59,8 +59,24 @@ $(document).ready(function() {
       								     						}
       								   						}
       								   });
-      								 }
+      								 },
+    	"fnDrawCallback" : addSaveButtonToWorksheet
   });
+
+  function addSaveButtonToWorksheet() {
+	  $("#${mainContentId}").find(".worksheetSaveAndNextButton").button(
+	      {
+	        icons : {
+	          primary: "ui-icon-disk"
+	        }
+	      }
+	      ).click(saveAndNextButtonClicked);
+	 }
+
+  var modified_cells = {};
+
+  function saveAndNextButtonClicked() {
+  }
   
   function makeRowsEditable(data) {
 		for (var index in data) {
@@ -89,9 +105,18 @@ $(document).ready(function() {
     getWorksheetForTestResultsTable().find('input[type="radio"]').click(
         function(eventObj) {
           var radioButton = $(eventObj.target);
-      		var row = getRowFromRadioButton(radioButton);
-      		var rowCells = $(row).find("td");
-      		console.log($(rowCells[0]).html());
+      		var cell = radioButton.closest("td");
+      		cell.css("background-color", "#c4d9e7");
+      		var row = radioButton.closest("tr");
+      		var rowCells = row.children();
+      		var collectedSampleId = $(rowCells[0]).html();
+      		var cellInput = cell.find("input:checked");
+      		console.log(modified_cells);
+      		modified_cells[collectedSampleId] = modified_cells[collectedSampleId] || {};
+      		var testname = cellInput.data("testname");
+      		var testvalue = cellInput.val();
+      		modified_cells[collectedSampleId][testname] = testvalue;
+      		console.log(modified_cells);
     		});
   }
 
@@ -215,6 +240,13 @@ $(document).ready(function() {
 							</tr>
 						</c:forEach>
 					</tbody>
+					<tfoot>
+						<tr>
+						<td colspan="9" align="right">
+							<button class="worksheetSaveAndNextButton">Save and continue to next page</button>
+						</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</c:if>
@@ -229,26 +261,25 @@ $(document).ready(function() {
 </div>
 
 <div id="${editableFieldsForTableId}" style="display: none;">
-	<form class="formInTabPane">
-		<c:forEach var="bloodTest" items="${model.bloodTests}">
-			<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field">
-				<c:set var="uniqueInputName" value="${fn:replace(bloodTest.name,' ','')}-collectedSampleId" />
-				<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
-					<div>
-						<!-- using collected sample id as the name should be unique across multiple inputs.
-								 otherwise selecting one radio button will change another radio button with the
-								 same name.
-						 -->
-						<input type="radio"
-					 				 name="${uniqueInputName}" value="${allowedResult}"
-					 				 style="width: 20px;" />
-		 			  <label for="${uniqueInputName}"
-		 			 	 		   style="width: 60px; margin-left: 0;
-		 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
-				  </div>
-				</c:forEach>
-				<br />
-			</div>
-		</c:forEach>
-	</form>
+	<c:forEach var="bloodTest" items="${model.bloodTests}">
+		<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field">
+			<c:set var="uniqueInputName" value="${fn:replace(bloodTest.name,' ','')}-collectedSampleId" />
+			<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
+				<div>
+					<!-- using collected sample id as the name should be unique across multiple inputs.
+							 otherwise selecting one radio button will change another radio button with the
+							 same name.
+					 -->
+					<input type="radio"
+				 				 name="${uniqueInputName}" value="${allowedResult}"
+				 				 data-testname="${bloodTest.name}"
+				 				 style="width: 20px;" />
+	 			  <label for="${uniqueInputName}"
+	 			 	 		   style="width: 60px; margin-left: 0;
+	 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
+			  </div>
+			</c:forEach>
+			<br />
+		</div>
+	</c:forEach>
 </div>
