@@ -26,6 +26,7 @@ $(document).ready(function() {
 
   var modified_cells = {};
   var original_data = {};
+  var testnames = ["Blood ABO", "Blood Rh", "HBV", "HCV", "HIV", "Syphilis"];
 
   function getWorksheetForTestResultsTable() {
     return $("#${mainContentId}").find(".worksheetForTestResultsTable");
@@ -105,9 +106,43 @@ $(document).ready(function() {
   }
 
   function clearRadioButtonSelection(eventObj) {
-    $(eventObj.target).closest('tr').find('input[type="radio"]').prop('checked', false);
+    var row = $(eventObj.target).closest('tr');
+    row.find('input[type="radio"]').prop('checked', false);
+    var collectedSampleId = $(row.find("td")[0]).html();
+
+    console.log(modified_cells);
+    for (var index in testnames) {
+      var testname = testnames[index];
+      var original_value = original_data[collectedSampleId][testname];
+
+      // just find the first radio button within the row for the test name
+		  var firstRadioButtonForTest = row.find('input[data-testname="' + testname + '"]:first');
+      // find the table cell containing this radio button
+      var tableCell = firstRadioButtonForTest.closest("td");
+
+  		if (original_value === null || original_value === "") {
+  		  // same as original, exclude from change set
+  		  if (modified_cells[collectedSampleId] !== undefined && modified_cells[collectedSampleId][testname] !== undefined)
+  		  	delete modified_cells[collectedSampleId][testname];
+  			setOriginalColor(tableCell);
+  		} else {
+  		  // value changed
+  			modified_cells[collectedSampleId] = modified_cells[collectedSampleId] || {};
+  			modified_cells[collectedSampleId][testname] = "";
+  			setModifiedColor(tableCell);
+  		}
+    }
+    console.log(modified_cells);
   }
 
+  function setModifiedColor(cell) {
+    cell.css("background-color", "#c4d9e7");
+  }
+
+  function setOriginalColor(cell) {
+    cell.css("background-color", "#ffffff");
+  }
+  
   function getRowFromRadioButton(radioButton) {
     return radioButton.closest("tr");
   }
