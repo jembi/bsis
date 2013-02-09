@@ -220,7 +220,7 @@ $(document).ready(function() {
 
 						</tr>
 					</thead>
-					<tbody style="font-size: 9pt;">
+					<tbody style="font-size: 8pt;">
 						<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
 							<tr>
 								<td style="display: none">${collectedSample.id}</td>
@@ -270,13 +270,19 @@ $(document).ready(function() {
 							 otherwise selecting one radio button will change another radio button with the
 							 same name.
 					 -->
-					<input type="radio"
-				 				 name="${uniqueInputName}" value="${allowedResult}"
-				 				 data-testname="${bloodTest.name}"
-				 				 style="width: 20px;" />
-	 			  <label for="${uniqueInputName}"
-	 			 	 		   style="width: 60px; margin-left: 0;
-	 			 			   margin-right: 10px; cursor: pointer;">${allowedResult}</label>
+
+					<!-- nesting input element inside label element allows selection of input radiobutton by clicking on the label text.
+							 this is nice from usability point of view.
+					  -->
+	 			  <label style="width: 60px; margin-left: 0;
+	 			 			   margin-right: 10px; cursor: pointer;">
+	 			 		<input type="radio"
+				 		   	   name="${uniqueInputName}" value="${allowedResult}"
+				 				   data-testname="${bloodTest.name}"
+				 				   style="width: 20px;" />
+	 			 			   ${allowedResult}
+	 			 	</label>
+
 			  </div>
 			</c:forEach>
 			<br />
