@@ -580,6 +580,7 @@ tr > td
 	 border-collapse: separate;
 	 border-spacing: 0;
 	 font-size: 8pt;
+	 margin: 1px;
 	 padding: 3px;
 }
 
@@ -587,6 +588,7 @@ tr > td
 	 border: 1pt solid #000000;
 	 border-collapse: separate;
 	 border-spacing: 0;
+	 margin: 1px;
 	 font-size: 8pt;
 	 padding: 3px;
 }
@@ -603,16 +605,18 @@ tr > td
 
 .noHighlight > tbody > tr.odd {
 	background: white;
-	border: 1pt solid #1075A1;
+	border: 1px solid #1075A1;
 	border-collapse: separate;
-	border-spacing: 0;
+	border-spacing: 1px;
+	margin: 1px;
 }
 
 .noHighlight > tbody > tr.even {
 	background: white;
-	border: 1pt solid #1075A1;
+	border: 1px solid #1075A1;
 	border-collapse: separate;
-	border-spacing: 0;
+	border-spacing: 1px;
+	margin: 1px;
 }
 
 .noHighlight > tbody > tr.odd:hover {
@@ -638,4 +642,22 @@ tr > td
 .savedStatusText {
 	color: #75706f;
 	font-style: italic;
+}
+
+.worksheetForTestResultsTable > tbody > tr {
+	 border: 1pt solid #000000;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 font-size: 9pt;
+	 margin: 1px;
+	 padding: 3px;
+}
+
+.worksheetForTestResultsTable > thead > tr > th {
+	 border: 1pt solid #000000;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 margin: 1px;
+	 font-size: 9pt;
+	 padding: 3px;
 }

@@ -34,8 +34,8 @@ $(document).ready(function() {
     "bJQueryUI" : true,
     "sDom" : '<"H"lr>t<"F"irp>',
     "bServerSide" : true,
-    "aLengthMenu": [1, 5, 10, 15, 25, 50, 100],
-    "iDisplayLength" : 5,
+    "aLengthMenu": [1, 2, 5, 10, 50, 100],
+    "iDisplayLength" : 2,
     "bSort" : false,
     "sPaginationType" : "full_numbers",
     "sAjaxSource" : "${model.nextPageUrl}",
@@ -220,7 +220,7 @@ $(document).ready(function() {
 
 						</tr>
 					</thead>
-					<tbody style="font-size: 8pt;">
+					<tbody style="font-size: 11pt;">
 						<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
 							<tr>
 								<td style="display: none">${collectedSample.id}</td>
@@ -274,7 +274,7 @@ $(document).ready(function() {
 					<!-- nesting input element inside label element allows selection of input radiobutton by clicking on the label text.
 							 this is nice from usability point of view.
 					  -->
-	 			  <label style="width: 60px; margin-left: 0;
+	 			  <label style="margin-left: 0;
 	 			 			   margin-right: 0; cursor: pointer;">
 	 			 		<input type="radio"
 				 		   	   name="${uniqueInputName}" value="${allowedResult}"
