@@ -28,6 +28,7 @@ $(document).ready(function() {
   var modified_cells = {};
   var original_data = {};
   var testnames = ["Blood ABO", "Blood Rh", "HBV", "HCV", "HIV", "Syphilis"];
+  var buttonsAlreadyAdded = false;
 
   function getWorksheetForTestResultsTable() {
     return $("#${mainContentId}").find(".worksheetForTestResultsTable");
@@ -97,14 +98,11 @@ $(document).ready(function() {
   }
 
   function addButtonsToWorksheet() {
-	  $("#${mainContentId}").find(".worksheetSaveAndNextButton").button(
-	      {
-	        icons : {
-	          primary: "ui-icon-disk"
-	        }
-	      }
-	      ).click(saveAndNextButtonClicked);
+    if (buttonsAlreadyAdded === true)
+      return;
 
+	  $("#${mainContentId}").find(".worksheetSaveAndNextButton").button(
+	      { icons : { primary: "ui-icon-disk" } }).click(saveAndNextButtonClicked);
 	  $("#${mainContentId}").find(".worksheetUndoChangesOnPageButton").button(
 	      {
 	        icons : {
@@ -112,34 +110,32 @@ $(document).ready(function() {
 	        }
 	      }
 	      ).click(undoChanges);
+	  buttonsAlreadyAdded = true;
 	 }
 
   function saveAndNextButtonClicked() {
+    if (!isWorksheetModified())
+      return;
+
+    $.ajax({
+      "url"  : "saveWorksheetTestResults.html", 
+      "data" : {params: JSON.stringify(modified_cells), worksheetBatchId : "${model.worksheetBatchId}"},
+      "type" : "POST",
+      "success" : function() {
+										showMessage("Test results saved successfully");
+										resetWorksheetCurrentPageData();
+										testResultsTable.fnStandingRedraw();
+      					  },
+    	"error" : function() {
+    	  					showErrorMessage("Something went wrong. Please try again.");
+    						}
+    });
   }
 
   function undoChanges() {
-
     modified_cells = {};
-    var table = getWorksheetForTestResultsTable();
-    table.find("td").each(
-        function(index) {
-      		setOriginalColor($(this));
-    		});
-
-    table.find('input[type="radio"]').each(
-        function(index) {
-      		$(this).prop("checked", false);
-    		});
-
-    for (var collectedSampleId in original_data) {
-      for (var testIndex in testnames) {
-        var testname = testnames[testIndex];
-        var result = original_data[collectedSampleId][testname];
-        table.find('input[data-testname="' + testname + '"][data-allowedresult="' + result + '"][data-rowid="' + collectedSampleId + '"]').prop("checked", true);
-      }
-    }
-
-   }
+		testResultsTable.fnStandingRedraw();
+  }
   
   function makeRowsEditable(data) {
     original_data = {};
@@ -214,8 +210,9 @@ $(document).ready(function() {
   function showUnsavedChangesDialog() {
     $("#${saveConfirmDialogId}").dialog({
       resizable: false,
-      height: 200,
+      height: 250,
       width: 400,
+      title: "Unsaved changes",
       modal: true,
       buttons: {
         "Close" : function() {
@@ -358,10 +355,9 @@ $(document).ready(function() {
 			<div class="printableArea">
 
 				<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet ID: ${model.worksheetBatchId}</div>
-			
-				<table class="dataTable worksheetForTestResultsTable noHighlight">
-					<thead>
-						<tr>
+					<table class="dataTable worksheetForTestResultsTable noHighlight">
+						<thead>
+							<tr>
 								<th style="display: none"></th>
 								<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
 									<th style="width: 150px;">
@@ -374,7 +370,7 @@ $(document).ready(function() {
 										Tested On
 									</th>
 								</c:if>
-
+	
 								<c:forEach var="bloodTest" items="${model.bloodTests}">
 								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
 										<th style="width: 170px;">
@@ -382,41 +378,40 @@ $(document).ready(function() {
 										</th>
 									</c:if>
 								</c:forEach>
-
-						</tr>
-					</thead>
-					<tbody style="font-size: 11pt;">
-						<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
-							<tr>
-								<td style="display: none">${collectedSample.id}</td>
-							  <c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
-									<td>
-										${collectedSample.collectionNumber}
-									</td>
-								</c:if>
-							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
-									<td></td>
-							  </c:if>
-								<c:forEach var="bloodTest" items="${model.bloodTests}">
-								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
-										<td></td>
-									</c:if>
-							</c:forEach>
 							</tr>
-						</c:forEach>
-					</tbody>
-					<tfoot>
-						<tr>
-						<td colspan="9" align="right">
-							<button class="worksheetSaveAndNextButton">Save and continue to next page</button>
-							<button class="worksheetUndoChangesOnPageButton">Undo changes on this page</button>
-						</td>
-						</tr>
-					</tfoot>
-				</table>
-			</div>
-		</c:if>
-	</div>
+						</thead>
+						<tbody style="font-size: 11pt;">
+							<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
+								<tr>
+									<td style="display: none">${collectedSample.id}</td>
+								  <c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+										<td>
+											${collectedSample.collectionNumber}
+										</td>
+									</c:if>
+								  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
+										<td></td>
+								  </c:if>
+									<c:forEach var="bloodTest" items="${model.bloodTests}">
+									  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+											<td></td>
+										</c:if>
+								</c:forEach>
+								</tr>
+							</c:forEach>
+						</tbody>
+						<tfoot>
+							<tr>
+							<td colspan="9" align="right">
+								<button class="worksheetSaveAndNextButton">Save</button>
+								<button class="worksheetUndoChangesOnPageButton">Undo changes on this page</button>
+							</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</c:if>
+		</div>
 	<div id="${childContentId}"></div>
 </div>
 
@@ -461,6 +456,6 @@ $(document).ready(function() {
 <div id="${saveConfirmDialogId}" style="display: none;">
   <p>
   	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-  	There are unsaved changes on the worksheet. Please click on save before continuing.
+  	There are unsaved changes on the worksheet. Please save this page before continuing to the next page.
   </p>
 </div>

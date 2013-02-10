@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,10 @@ import repository.GenericConfigRepository;
 import repository.TestResultRepository;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.TestResultViewModel;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class TestResultController {
@@ -600,4 +605,37 @@ public class TestResultController {
     }
     return reqUrl;
   }
+
+  @RequestMapping(value="saveWorksheetTestResults", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object>
+          saveWorksheetTestResults(HttpServletRequest request,
+              HttpServletResponse response,
+              @RequestParam(value="params") String requestParams,
+              @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
+
+    Map<String, Object> result = new HashMap<String, Object>();
+
+    System.out.println(requestParams);
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      Map<String, Map<String, String>> testResultChanges = mapper.readValue(requestParams, HashMap.class);
+      System.out.println(testResultChanges);
+      testResultRepository.saveTestResultsToWorksheet(worksheetBatchId, testResultChanges);
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return result;
+  }
+
 }

@@ -20,6 +20,7 @@ import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.testresults.TestResult;
+import model.worksheet.CollectionsWorksheet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -392,4 +393,63 @@ public class TestResultRepository {
     query.setParameter("dateCollectedTo", to);
     return query.getResultList();
   }
+
+  public void saveTestResultsToWorksheet(String worksheetBatchId,
+      Map<String, Map<String, String>> testResultChanges) {
+
+    String worksheetQueryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.testResults where w.worksheetBatchId = :worksheetBatchId";
+    TypedQuery<CollectionsWorksheet> worksheetQuery = em.createQuery(worksheetQueryStr, CollectionsWorksheet.class);
+    worksheetQuery.setParameter("worksheetBatchId", worksheetBatchId);
+    CollectionsWorksheet worksheet = worksheetQuery.getSingleResult();
+    worksheet = em.merge(worksheet);
+    if (worksheet == null)
+      return;
+
+    for (String collectionId : testResultChanges.keySet()) {
+      String queryStr = "SELECT t FROM TestResult t WHERE " +
+      		              "t.collectedSample.id = :collectionId AND " +
+      		              "t.worksheet.id = :worksheetId AND " +
+      		              "t.isDeleted = :isDeleted";
+      TypedQuery<TestResult> query = em.createQuery(queryStr, TestResult.class);
+      query.setParameter("collectionId", Long.parseLong(collectionId));
+      query.setParameter("worksheetId", worksheet.getId());
+      query.setParameter("isDeleted", false);
+      List<TestResult> testResults = query.getResultList();
+      Map<String, TestResult> testResultsMap = new HashMap<String, TestResult>();
+      for (TestResult t : testResults) {
+        testResultsMap.put(t.getBloodTest().getName(), t);
+      }
+
+      CollectedSample collectedSample;
+      collectedSample = collectedSampleRepository.findCollectedSampleById(Long.parseLong(collectionId));
+      Map<String, String> changesForCollection = testResultChanges.get(collectionId);
+      for (String testName : changesForCollection.keySet()) {
+        String result = changesForCollection.get(testName);
+        TestResult t = testResultsMap.get(testName);
+        if (t != null) {
+          if (result.trim().equals("")) {
+            t.setIsDeleted(true);
+          } else {
+            t.setResult(result);
+          }
+          em.merge(t);
+        } else {
+          t = new TestResult();
+          BloodTest bt = new BloodTest();
+          bt.setName(testName);
+          t.setBloodTest(bt);
+          t.setTestedOn(new Date());
+          t.setResult(result);
+          t.setCollectedSample(collectedSample);
+          t.setIsDeleted(false);
+          t.setNotes("");
+          t.setWorksheet(worksheet);
+          worksheet.getTestResults().add(t);
+          em.persist(t);
+        }
+      }
+    }
+    em.flush();
+  }
+
 }
