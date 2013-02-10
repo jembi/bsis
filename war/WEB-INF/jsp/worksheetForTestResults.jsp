@@ -20,6 +20,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDivId-${unique_page_id}</c:set>
 <c:set var="editableFieldsForTableId">editableFieldsForTableId-${unique_page_id}</c:set>
+<c:set var="saveConfirmDialogId">saveConfirmDialogId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -34,8 +35,8 @@ $(document).ready(function() {
 
   function isWorksheetModified() {
     console.log(modified_cells);
-    for (var collectedSampleId in modified_cells) {
-      var modifications = modified_cells[collectedSampleId];
+    for (var index in modified_cells) {
+      var modifications = modified_cells[index];
       var modified = false;
       for (var index in modifications) {
         // at least one test was modified
@@ -63,11 +64,10 @@ $(document).ready(function() {
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
 
       								 if (isWorksheetModified()) {
-      								   console.log("worksheet modified");
-      								 } else {
-      								   console.log("nothing to save. ")
+      								   showUnsavedChangesDialog();
+      								   return;
       								 }
-      
+
       								 oSettings.jqXHR = $.ajax({
       								   "datatype": "json",
       								   "type": "GET",
@@ -88,7 +88,7 @@ $(document).ready(function() {
       								   						}
       								   });
       								 },
-    	"fnDrawCallback" : addSaveButtonToWorksheet
+    	"fnDrawCallback" : addButtonsToWorksheet
   });
 
   function resetWorksheetCurrentPageData() {
@@ -96,7 +96,7 @@ $(document).ready(function() {
     original_data = {};
   }
 
-  function addSaveButtonToWorksheet() {
+  function addButtonsToWorksheet() {
 	  $("#${mainContentId}").find(".worksheetSaveAndNextButton").button(
 	      {
 	        icons : {
@@ -104,11 +104,43 @@ $(document).ready(function() {
 	        }
 	      }
 	      ).click(saveAndNextButtonClicked);
+
+	  $("#${mainContentId}").find(".worksheetUndoChangesOnPageButton").button(
+	      {
+	        icons : {
+	          primary: "ui-icon-arrowreturnthick-1-w"
+	        }
+	      }
+	      ).click(undoChanges);
 	 }
 
   function saveAndNextButtonClicked() {
   }
 
+  function undoChanges() {
+
+    modified_cells = {};
+    var table = getWorksheetForTestResultsTable();
+    table.find("td").each(
+        function(index) {
+      		setOriginalColor($(this));
+    		});
+
+    table.find('input[type="radio"]').each(
+        function(index) {
+      		$(this).prop("checked", false);
+    		});
+
+    for (var collectedSampleId in original_data) {
+      for (var testIndex in testnames) {
+        var testname = testnames[testIndex];
+        var result = original_data[collectedSampleId][testname];
+        table.find('input[data-testname="' + testname + '"][data-allowedresult="' + result + '"][data-rowid="' + collectedSampleId + '"]').prop("checked", true);
+      }
+    }
+
+   }
+  
   function makeRowsEditable(data) {
     original_data = {};
 		for (var index in data) { // one row at a time
@@ -177,6 +209,20 @@ $(document).ready(function() {
   
   function getRowFromRadioButton(radioButton) {
     return radioButton.closest("tr");
+  }
+
+  function showUnsavedChangesDialog() {
+    $("#${saveConfirmDialogId}").dialog({
+      resizable: false,
+      height: 200,
+      width: 400,
+      modal: true,
+      buttons: {
+        "Close" : function() {
+										$(this).dialog("close");          
+        					}
+      }
+    });
   }
 
   function registerRadioButtonCallbacks() {
@@ -363,6 +409,7 @@ $(document).ready(function() {
 						<tr>
 						<td colspan="9" align="right">
 							<button class="worksheetSaveAndNextButton">Save and continue to next page</button>
+							<button class="worksheetUndoChangesOnPageButton">Undo changes on this page</button>
 						</td>
 						</tr>
 					</tfoot>
@@ -409,4 +456,11 @@ $(document).ready(function() {
 			<br />
 		</div>
 	</c:forEach>
+</div>
+
+<div id="${saveConfirmDialogId}" style="display: none;">
+  <p>
+  	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+  	There are unsaved changes on the worksheet. Please click on save before continuing.
+  </p>
 </div>
