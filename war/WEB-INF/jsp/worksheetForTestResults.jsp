@@ -210,8 +210,8 @@ $(document).ready(function() {
   function showUnsavedChangesDialog() {
     $("#${saveConfirmDialogId}").dialog({
       resizable: false,
-      height: 250,
-      width: 400,
+      height: 220,
+      width: 500,
       title: "Unsaved changes",
       modal: true,
       buttons: {
