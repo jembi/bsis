@@ -32,6 +32,22 @@ $(document).ready(function() {
     return $("#${mainContentId}").find(".worksheetForTestResultsTable");
   }
 
+  function isWorksheetModified() {
+    console.log(modified_cells);
+    for (var collectedSampleId in modified_cells) {
+      var modifications = modified_cells[collectedSampleId];
+      var modified = false;
+      for (var index in modifications) {
+        // at least one test was modified
+        modified = true;
+        break;
+      }
+			if (modified)
+			  return true;
+    }
+    return false;
+  }
+  
   var testResultsTable = getWorksheetForTestResultsTable().dataTable({
     "bJQueryUI" : true,
     "sDom" : '<"H"lr>t<"F"irp>',
@@ -45,12 +61,20 @@ $(document).ready(function() {
                       { "sClass" : "white_bkg_class", "aTargets": [1,2,3,4,5,6]}
     								 ],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+
+      								 if (isWorksheetModified()) {
+      								   console.log("worksheet modified");
+      								 } else {
+      								   console.log("nothing to save. ")
+      								 }
+      
       								 oSettings.jqXHR = $.ajax({
       								   "datatype": "json",
       								   "type": "GET",
       								   "url": sSource,
       								   "data": aoData,
       								   "success": function(jsonResponse) {
+											     						resetWorksheetCurrentPageData();
       								     						makeRowsEditable(jsonResponse.aaData);
       								     						fnCallback(jsonResponse);
       								     						getWorksheetForTestResultsTable().find(".link").click(clearRadioButtonSelection);
@@ -58,11 +82,19 @@ $(document).ready(function() {
       								     						if (jsonResponse.iTotalRecords == 0) {
       								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
       								     						}
+      								   						},
+      								   	"error" : function(jsonResponse) {
+																			showErrorMessage("Something went wrong. Please try again.");      								   	  	
       								   						}
       								   });
       								 },
     	"fnDrawCallback" : addSaveButtonToWorksheet
   });
+
+  function resetWorksheetCurrentPageData() {
+    modified_cells = {};
+    original_data = {};
+  }
 
   function addSaveButtonToWorksheet() {
 	  $("#${mainContentId}").find(".worksheetSaveAndNextButton").button(
@@ -76,7 +108,7 @@ $(document).ready(function() {
 
   function saveAndNextButtonClicked() {
   }
-  
+
   function makeRowsEditable(data) {
     original_data = {};
 		for (var index in data) { // one row at a time
@@ -181,7 +213,11 @@ $(document).ready(function() {
   }
 
   function getEditableTestedOn(cell, collectedSampleId) {
-    var inputElement = '<input class="testedOn inlineInput" value="' + cell + '" />';
+    // use current date for wokrsheet by default
+    var testedOn = $.datepicker.formatDate("mm/dd/yy", new Date());
+    if (cell !== null && cell !== undefined && cell !== "")
+      testedOn = cell;
+    var inputElement = '<input class="testedOn inlineInput" value="' + testedOn + '" />';
     var rowContents = '<div class="editableField testedOnEditableField">' + inputElement + '</div>';
 		return rowContents;
   }
