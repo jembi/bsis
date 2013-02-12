@@ -251,7 +251,7 @@ $(document).ready(function() {
   function getEditableCollectionNumber(cell, collectedSampleId) {
     return '<div style="height: ${model.worksheetConfig.rowHeight}px; margin: 5px;">' + cell +
     					'<br /> <br />' +
-    					'<span class="link clearSelection">Clear test results</span>' +
+    					'<span class="link clearSelection">Clear</span>' +
     			 '</div>';
   }
 

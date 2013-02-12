@@ -45,7 +45,6 @@
         
         $("#${tabContentId}").find(".clearReportButton").button({
           icons: {
-            primary: 'ui-icon-grip-solid-horizontal'
           }
         }).click(function() {
           $("#${childContentId}").html("");
