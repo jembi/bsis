@@ -130,7 +130,7 @@
 
         $("#${tabContentId}").find(".clearFormButton").button({
           icons : {
-            primary : 'ui-icon-grip-solid-horizontal'
+            
           }
         }).click(refetchForm);
 

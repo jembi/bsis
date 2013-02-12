@@ -46,7 +46,7 @@ $(document).ready(function() {
 
   $("#${mainContentId}").find(".clearFindFormButton").button({
     icons : {
-      primary : 'ui-icon-grip-solid-horizontal'
+      
     }
   }).click(clearFindForm);
 

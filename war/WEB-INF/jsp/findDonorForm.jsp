@@ -44,7 +44,7 @@ $(document).ready(function() {
 
   $("#${tabContentId}").find(".clearFindFormButton").button({
     icons : {
-      primary : 'ui-icon-grip-solid-horizontal'
+      
     }
   }).click(clearFindForm);
   

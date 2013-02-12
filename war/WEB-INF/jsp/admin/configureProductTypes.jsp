@@ -72,7 +72,7 @@ $(document).ready(function() {
 
   $("#${tabContentId}").find(".cancelButton").button({
     icons : {
-      primary : 'ui-icon-grip-solid-horizontal'
+      
     }
   }).click(refetchForm);
   
