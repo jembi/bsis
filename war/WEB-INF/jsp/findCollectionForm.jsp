@@ -198,7 +198,7 @@ $(document).ready(function() {
 				<form:label path="bloodBagTypes">Blood Bag Type</form:label>
 				<form:select id="${tabContentId}-bloodBagTypes" path="bloodBagTypes" class="bloodBagTypeSelector">
 					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
-						<form:option value="${bloodBagType.bloodBagType}" label="${bloodBagType.bloodBagTypeName}" />
+						<form:option value="${bloodBagType.id}" label="${bloodBagType.bloodBagType}" />
 					</c:forEach>
 				</form:select>
 			</div>

@@ -60,6 +60,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '', 0),
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '', 0),
 ('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '', 0),
+('Request', 'requestType', 'Request Type', '', '0', '1', '0', '0', '', 0),
 ('Request', 'patientFirstName', 'Patient First Name', '', '0', '0', '0', '0', '', 0),
 ('Request', 'patientLastName', 'Patient Last Name', '', '0', '0', '0', '0', '', 0),
 ('Request', 'patientDiagnosis', 'Patient Diagnosis', '', '0', '0', '0', '0', '', 0),
@@ -68,7 +69,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'patientGender', 'Patient Gender', '', '0', '0', '0', '0', '', 0),
 ('Request', 'ward', 'Ward', '', '0', '0', '0', '0', '', 0),
 ('Request', 'department', 'Department', '', '0', '0', '0', '0', '', 0),
-('Request', 'hospital', 'hospital', '', '0', '0', '0', '0', '', 0),
+('Request', 'hospital', 'Hospital', '', '0', '0', '0', '0', '', 0),
 ('Request', 'requestedBy', 'Requested By', '', '0', '0', '0', '0', '', 0),
 ('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '', 0);
 
@@ -81,10 +82,10 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Usage', 'product', 'Product', '', '0', '0', '0', '0', '', 0),
 ('Usage', 'notes', 'Notes', '', '0', '0', '0', '0', '', 0);
 
-insert into DonorType (donorType, donorTypeName, isDeleted) values
-('Voluntary', 'Voluntary', '0'),
-('Family', 'Family', '0'),
-('Other', 'Other', '0');
+insert into DonorType (donorType, isDeleted) values
+('Voluntary', '0'),
+('Family', '0'),
+('Other', '0');
 
 insert into RequestType (requestType, description, isDeleted) values
 ('Emergency', '', '0'),
@@ -93,18 +94,18 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Standard', '', '0'),
 ('Urgent', '', '0');
 
-insert into ProductType (productType, productTypeName, description, shelfLife, shelfLifeUnits, isDeleted) values
-('Whole Blood', 'Whole Blood', '', '35', 'days', '0'),
-('RCC', 'Red Blood Cells', '', '', '', '0'),
-('FFP', 'Fresh Frozen Plasma', '', '365', 'days', '0'),
-('Platelets', 'Platelets', '', '5', 'days', '0'),
-('Cryoprecipitate', 'Cryoprecipitate', '', '', '', '0'),
-('Partial Platelets', 'Partial Platelets', '', '', '', '0');
+insert into ProductType (productType, description, shelfLife, shelfLifeUnits, isDeleted) values
+('Whole Blood', '', '35', 'days', '0'),
+('Red Blood Cells', '', '', '', '0'),
+('Fresh Frozen Plasma', '', '365', 'days', '0'),
+('Platelets', '', '5', 'days', '0'),
+('Cryoprecipitate', '', '', '', '0'),
+('Partial Platelets', '', '', '', '0');
 
-insert into BloodBagType (bloodBagType, bloodBagTypeName, isDeleted) values
-('Single', 'Single', '0'),
-('Triple', 'Triple', '0'),
-('Pedi',  'Pedi', '0');
+insert into BloodBagType (bloodBagType, isDeleted) values
+('Single', '0'),
+('Triple', '0'),
+('Pedi', '0');
 
 insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite, isDeleted, notes) values
 ('Lusaka', 1, 0, 0, 0, 0, ''),

@@ -149,7 +149,7 @@ $(document).ready(function() {
 				<form:label path="productTypes">Product Type</form:label>
 				<form:select path="productTypes" class="productTypeSelector">
 					<c:forEach var="productType" items="${model.productTypes}">
-						<form:option value="${productType.productType}" label="${productType.productTypeName}" />
+						<form:option value="${productType.id}" label="${productType.productType}" />
 					</c:forEach>
 				</form:select>
 			</div>

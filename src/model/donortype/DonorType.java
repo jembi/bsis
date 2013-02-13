@@ -2,25 +2,28 @@ package model.donortype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class DonorType {
+
   @Id
-  @Column(length=30, nullable=false)
-  private String donorType;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
   @Column(length=50)
-  private String donorTypeName;
+  private String donorType;
 
   private Boolean isDeleted;
 
-  public String getDonorType() {
-    return donorType;
+  public Integer getId() {
+    return id;
   }
 
-  public void setDonorType(String donorType) {
-    this.donorType = donorType;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public String toString() {
@@ -35,11 +38,11 @@ public class DonorType {
     this.isDeleted = isDeleted;
   }
 
-  public String getDonorTypeName() {
-    return donorTypeName;
+  public String getDonorType() {
+    return donorType;
   }
 
-  public void setDonorTypeName(String donorTypeName) {
-    this.donorTypeName = donorTypeName;
+  public void setDonorType(String donorType) {
+    this.donorType = donorType;
   }
 }

@@ -2,25 +2,28 @@ package model.bloodbagtype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class BloodBagType {
+
   @Id
-  @Column(length=30, nullable=false)
-  private String bloodBagType;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
   @Column(length=50)
-  private String bloodBagTypeName;
+  private String bloodBagType;
 
   private Boolean isDeleted;
   
-  public String getBloodBagType() {
-    return bloodBagType;
+  public Integer getId() {
+    return id;
   }
 
-  public void setBloodBagType(String bloodBagType) {
-    this.bloodBagType = bloodBagType;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   @Override
@@ -36,11 +39,11 @@ public class BloodBagType {
     this.isDeleted = isDeleted;
   }
 
-  public String getBloodBagTypeName() {
-    return bloodBagTypeName;
+  public String getBloodBagType() {
+    return bloodBagType;
   }
 
-  public void setBloodBagTypeName(String bloodBagTypeName) {
-    this.bloodBagTypeName = bloodBagTypeName;
+  public void setBloodBagType(String bloodBagType) {
+    this.bloodBagType = bloodBagType;
   }
 }

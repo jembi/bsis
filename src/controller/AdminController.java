@@ -392,11 +392,11 @@ public class AdminController {
     List<ProductType> allProductTypes = new ArrayList<ProductType>();
     try {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String productType : params.keySet()) {
-        String productTypeName = (String) params.get(productType);
+      for (String id : params.keySet()) {
+        String productType = (String) params.get(id);
         ProductType pt = new ProductType();
+        pt.setId(Integer.parseInt(id));
         pt.setProductType(productType);
-        pt.setProductTypeName(productTypeName);
         pt.setIsDeleted(false);
         allProductTypes.add(pt);
       }
@@ -423,11 +423,11 @@ public class AdminController {
     List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
     try {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String bloodBagType : params.keySet()) {
-        String bloodBagTypeName = (String) params.get(bloodBagType);
+      for (String id : params.keySet()) {
+        String bloodBagType = (String) params.get(id);
         BloodBagType pt = new BloodBagType();
+        pt.setId(Integer.parseInt(id));
         pt.setBloodBagType(bloodBagType);
-        pt.setBloodBagTypeName(bloodBagTypeName);
         pt.setIsDeleted(false);
         allBloodBagTypes.add(pt);
       }

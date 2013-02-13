@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.bloodbagtype.BloodBagType;
 import model.donortype.DonorType;
 import model.producttype.ProductType;
 
@@ -35,12 +36,12 @@ public class DonorTypeRepository {
     return query.getResultList();
   }
 
-  public DonorType fromString(String donorType) {
+  public DonorType getDonorTypeById(Integer donorTypeId) {
     TypedQuery<DonorType> query;
-    query = em.createQuery("SELECT dt from DonorType dt " +
-            "where dt.donorType=:donorType AND dt.isDeleted=:isDeleted", DonorType.class);
-    query.setParameter("donorType", donorType);
+    query = em.createQuery("SELECT d from DonorType d " +
+            "where d.id=:id AND d.isDeleted=:isDeleted", DonorType.class);
     query.setParameter("isDeleted", false);
+    query.setParameter("id", donorTypeId);
     if (query.getResultList().size() == 0)
       return null;
     return query.getSingleResult();
@@ -48,9 +49,9 @@ public class DonorTypeRepository {
 
   public void saveAllDonorTypes(List<DonorType> allDonorTypes) {
     for (DonorType dt: allDonorTypes) {
-      DonorType existingDonorType = fromString(dt.getDonorType());
+      DonorType existingDonorType = getDonorTypeById(dt.getId());
       if (existingDonorType != null) {
-        existingDonorType.setDonorTypeName(dt.getDonorTypeName());
+        existingDonorType.setDonorType(dt.getDonorType());
         em.merge(existingDonorType);
       }
       else {

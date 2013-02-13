@@ -32,7 +32,7 @@ $(document).ready(function() {
     var newDiv = $($(div).clone());
     console.log(newDiv);
     newDiv.find('input[name="id"]').val("");
-    newDiv.find('input[name="productTypeName"]').val("");
+    newDiv.find('input[name="productType"]').val("");
     $("#${configureProductTypesFormId}").append(newDiv);
   });
 
@@ -45,12 +45,12 @@ $(document).ready(function() {
     var productTypeDivs = $("#${configureProductTypesFormId}").find(".productTypeDiv");
     for (var index=0; index < productTypeDivs.length; index++) {
       var div = $(productTypeDivs[index]);
-      var productType = div.find('input[name="id"]').val();
-      var productTypeName = div.find('input[name="productTypeName"]').val();
+      var id = div.find('input[name="id"]').val();
+      var productType = div.find('input[name="productType"]').val();
       console.log(productType);
-      if (productType == undefined || productType == null || productType === "")
-        productType = productTypeName;
-      data[productType] = productTypeName;
+      if (id == undefined || id == null || id === "")
+        id = productType;
+      data[id] = productType;
     }
 
     console.log(JSON.stringify(data));
@@ -99,7 +99,7 @@ $(document).ready(function() {
 					<div class="productTypeDiv">
 						<div>
 							<input type="hidden" name="id" value="${productType.productType}" />
-							<input type="text" name="productTypeName" value="${productType.productTypeName}" />
+							<input type="text" name="productType" value="${productType.productType}" />
 						</div>
 					</div>
 			</c:forEach>

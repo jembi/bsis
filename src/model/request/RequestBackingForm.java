@@ -11,6 +11,7 @@ import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
+import model.requesttype.RequestType;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
@@ -89,6 +90,15 @@ public class RequestBackingForm {
       return productType.getProductType();
   }
 
+  public String getRequestType() {
+    RequestType requestType = request.getRequestType();
+    if (requestType == null)
+      return "";
+    else
+      return requestType.getRequestType();
+  }
+
+
   public String getRequestSite() {
     Location site = request.getRequestSite();
     if (site == null || site.getId() == null)
@@ -144,14 +154,25 @@ public class RequestBackingForm {
     getRequest().setNotes(notes);
   }
 
-  public void setProductType(String productType) {
-    if (productType == null) {
+  public void setProductType(String productTypeId) {
+    if (productTypeId == null) {
       request.setProductType(null);
     }
     else {
       ProductType pt = new ProductType();
-      pt.setProductType(productType);
+      pt.setId(Integer.parseInt(productTypeId));
       request.setProductType(pt);
+    }
+  }
+
+  public void setRequestType(String requestTypeId) {
+    if (requestTypeId == null) {
+      request.setRequestType(null);
+    }
+    else {
+      RequestType rt = new RequestType();
+      rt.setId(Integer.parseInt(requestTypeId));
+      request.setRequestType(rt);
     }
   }
 
@@ -324,5 +345,13 @@ public class RequestBackingForm {
 
   public void setHospital(String hospital) {
     request.setHospital(hospital);
+  }
+
+  public String getDepartment() {
+    return request.getDepartment();
+  }
+
+  public void setDepartment(String department) {
+    request.setDepartment(department);
   }
 }

@@ -227,9 +227,9 @@ $(document).ready(function() {
 				The merge pull request here https://github.com/ehynds/jquery-ui-multiselect-widget/pull/347
 				does not solve the issue. Just work around the problem for now by giving this select a unique ID.
 				-->
-					<form:select id="findProductFormProductTypes" path="productTypes" class="productTypeSelector">
+					<form:select id="findProductFormProductTypes-${uniquePageId}" path="productTypes" class="productTypeSelector">
 						<c:forEach var="productType" items="${model.productTypes}">
-							<form:option value="${productType.productType}" label="${productType.productTypeName}" />
+							<form:option value="${productType.id}" label="${productType.productType}" />
 						</c:forEach>
 					</form:select>
 				</div>

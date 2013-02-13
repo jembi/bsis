@@ -115,13 +115,13 @@ public class ProductBackingForm {
     product.setCollectedSample(collectedSample);
   }
 
-  public void setProductType(String productType) {
-    if (productType == null) {
+  public void setProductType(String productTypeId) {
+    if (productTypeId == null) {
       product.setProductType(null);
     }
     else {
       ProductType pt = new ProductType();
-      pt.setProductType(productType);
+      pt.setId(Integer.parseInt(productTypeId));
       product.setProductType(pt);
     }
   }

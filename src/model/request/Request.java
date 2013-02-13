@@ -25,6 +25,8 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
+import model.requesttype.RequestType;
+import model.requesttype.RequestTypeExists;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -121,6 +123,10 @@ public class Request implements ModificationTracker {
   @ProductTypeExists
   @ManyToOne
   private ProductType productType;
+
+  @RequestTypeExists
+  @ManyToOne
+  private RequestType requestType;
 
   @LocationExists
   @ManyToOne
@@ -397,5 +403,13 @@ public class Request implements ModificationTracker {
 
   public void setVolume(Integer volume) {
     this.volume = volume;
+  }
+
+  public RequestType getRequestType() {
+    return requestType;
+  }
+
+  public void setRequestType(RequestType requestType) {
+    this.requestType = requestType;
   }
 }

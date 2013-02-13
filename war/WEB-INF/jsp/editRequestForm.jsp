@@ -81,6 +81,12 @@
           header : false
         });
 
+        $("#${editRequestFormId}").find(".requestType").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+
         $("#${editRequestFormId}").find(".requestSites").multiselect({
           multiple : false,
           selectedList : 1,
@@ -153,6 +159,7 @@
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.requestFields.notes.defaultValue}");
         	setDefaultValueForSelector(getBloodGroupSelector(), "${model.requestFields.bloodGroup.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.requestFields.productType.defaultValue}");
+        	setDefaultValueForSelector(getRequestTypeSelector(), "${model.requestFields.requestType.defaultValue}");
         	setDefaultValueForSelector(getRequestSiteSelector(), "${model.requestFields.requestSite.defaultValue}");
           copyMirroredFields("${tabContentId}", JSON.parse('${model.requestFields.mirroredFields}'));
         }
@@ -164,7 +171,11 @@
         function getProductTypeSelector() {
           return $("#${tabContentId}").find('select[name="productType"]').multiselect();
         }
-        
+
+        function getRequestTypeSelector() {
+          return $("#${tabContentId}").find('select[name="requestType"]').multiselect();
+        }
+
         function getRequestSiteSelector() {
           return $("#${tabContentId}").find('select[name="requestSite"]').multiselect();
         }
@@ -226,13 +237,26 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
+		<c:if test="${model.requestFields.requestType.hidden != true }">
+			<div>
+				<form:label path="requestType">${model.requestFields.requestType.displayName}</form:label>
+				<form:select path="requestType" class="requestType">
+					<form:option value="">&nbsp;</form:option>
+					<c:forEach var="requestType" items="${model.requestTypes}">
+						<form:option value="${requestType.id}">${requestType.requestType}</form:option>
+					</c:forEach>
+				</form:select>
+				<form:errors class="formError" path="request.requestType"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
 		<c:if test="${model.requestFields.productType.hidden != true }">
 			<div>
 				<form:label path="productType">${model.requestFields.productType.displayName}</form:label>
 				<form:select path="productType" class="productType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="productType" items="${model.productTypes}">
-						<form:option value="${productType.productType}">${productType.productTypeName}</form:option>
+						<form:option value="${productType.id}">${productType.productType}</form:option>
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="request.productType"
@@ -259,11 +283,71 @@
 				<form:errors class="formError" path="request.requestSite" delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.requestFields.patientName.hidden != true }">
+		<c:if test="${model.requestFields.patientFirstName.hidden != true }">
 			<div>
-				<form:label path="patientName">${model.requestFields.patientName.displayName}</form:label>
-				<form:input path="patientName" value="${model.existingRequest ? '' : model.requestFields.patientName.defaultValue}" />
-				<form:errors class="formError" path="request.patientName" delimiter=", "></form:errors>
+				<form:label path="patientFirstName">${model.requestFields.patientFirstName.displayName}</form:label>
+				<form:input path="patientFirstName" value="${model.existingRequest ? '' : model.requestFields.patientFirstName.defaultValue}" />
+				<form:errors class="formError" path="request.patientFirstName" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.patientLastName.hidden != true }">
+			<div>
+				<form:label path="patientLastName">${model.requestFields.patientLastName.displayName}</form:label>
+				<form:input path="patientLastName" value="${model.existingRequest ? '' : model.requestFields.patientFirstName.defaultValue}" />
+				<form:errors class="formError" path="request.patientFirstName" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.patientBirthDate.hidden != true }">
+			<div>
+				<form:label path="patientBirthDate">${model.requestFields.patientBirthDate.displayName}</form:label>
+				<form:input path="patientBirthDate" class="patientBirthDate"
+										value="${model.existingRequest ? '' : model.requestFields.patientBirthDate.defaultValue}" />
+				<form:errors class="formError" path="request.patientBirthDate"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.patientAge.hidden != true }">
+			<div>
+				<form:label path="patientAge">${model.requestFields.patientAge.displayName}</form:label>
+				<form:input path="patientAge" value="${model.existingRequest ? '' : model.requestFields.patientAge.defaultValue}"
+									  type="number" min="0" max="120" />
+					years
+				<form:errors class="formError" path="request.patientAge" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.patientDiagnosis.hidden != true }">
+			<div>
+				<form:label path="patientDiagnosis">${model.requestFields.patientDiagnosis.displayName}</form:label>
+				<form:input path="patientDiagnosis" value="${model.existingRequest ? '' : model.requestFields.patientDiagnosis.defaultValue}" />
+				<form:errors class="formError" path="request.patientDiagnosis" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.ward.hidden != true }">
+			<div>
+				<form:label path="ward">${model.requestFields.ward.displayName}</form:label>
+				<form:input path="ward" value="${model.existingRequest ? '' : model.requestFields.ward.defaultValue}" />
+				<form:errors class="formError" path="request.ward" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.department.hidden != true }">
+			<div>
+				<form:label path="department">${model.requestFields.department.displayName}</form:label>
+				<form:input path="department" value="${model.existingRequest ? '' : model.requestFields.department.defaultValue}" />
+				<form:errors class="formError" path="request.department" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.hospital.hidden != true }">
+			<div>
+				<form:label path="hospital">${model.requestFields.hospital.displayName}</form:label>
+				<form:input path="hospital" value="${model.existingRequest ? '' : model.requestFields.hospital.defaultValue}" />
+				<form:errors class="formError" path="request.hospital" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.requestedBy.hidden != true }">
+			<div>
+				<form:label path="requestedBy">${model.requestFields.requestedBy.displayName}</form:label>
+				<form:input path="requestedBy" value="${model.existingRequest ? '' : model.requestFields.requestedBy.defaultValue}" />
+				<form:errors class="formError" path="request.requestedBy" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.notes.hidden != true }">

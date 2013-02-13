@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.bloodbagtype.BloodBagType;
+import model.requesttype.RequestType;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,26 +35,26 @@ public class BloodBagTypeRepository {
     return query.getSingleResult();
   }
 
-  public BloodBagType fromString(String bloodBagType) {
+  public BloodBagType getBloodBagTypeById(Integer bloodBagTypeId) {
     TypedQuery<BloodBagType> query;
     query = em.createQuery("SELECT b from BloodBagType b " +
-    		    "where b.bloodBagType=:bloodBagType AND b.isDeleted=:isDeleted", BloodBagType.class);
-    query.setParameter("bloodBagType", bloodBagType);
+            "where b.id=:id AND b.isDeleted=:isDeleted", BloodBagType.class);
     query.setParameter("isDeleted", false);
+    query.setParameter("id", bloodBagTypeId);
     if (query.getResultList().size() == 0)
       return null;
     return query.getSingleResult();
   }
 
   public void saveAllBloodBagTypes(List<BloodBagType> allBloodBagTypes) {
-      for (BloodBagType pt: allBloodBagTypes) {
-        BloodBagType existingBloodBagType = fromString(pt.getBloodBagType());
+      for (BloodBagType bt: allBloodBagTypes) {
+        BloodBagType existingBloodBagType = getBloodBagTypeById(bt.getId());
         if (existingBloodBagType != null) {
-          existingBloodBagType.setBloodBagTypeName(pt.getBloodBagTypeName());
+          existingBloodBagType.setBloodBagType(bt.getBloodBagType());
           em.merge(existingBloodBagType);
         }
         else {
-          em.persist(pt);
+          em.persist(bt);
         }
     }
     em.flush();

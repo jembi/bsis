@@ -51,7 +51,7 @@ public class ProductTypeRepository {
     for (ProductType pt: allProductTypes) {
         ProductType existingProductType = fromString(pt.getProductType());
         if (existingProductType != null) {
-          existingProductType.setProductTypeName(pt.getProductTypeName());
+          existingProductType.setProductType(pt.getProductType());
           em.merge(existingProductType);
         }
         else {

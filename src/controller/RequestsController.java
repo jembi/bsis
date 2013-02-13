@@ -34,6 +34,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
+import repository.RequestTypeRepository;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.RequestViewModel;
 
@@ -51,6 +52,9 @@ public class RequestsController {
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
+
+  @Autowired
+  private RequestTypeRepository requestTypeRepository;
 
   @Autowired
   private UtilController utilController;
@@ -154,6 +158,7 @@ public class RequestsController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
   }
 

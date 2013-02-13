@@ -38,10 +38,10 @@
     drop table if exists User;
 
     create table BloodBagType (
-        bloodBagType varchar(30) not null,
-        bloodBagTypeName varchar(50),
+        id integer not null auto_increment,
+        bloodBagType varchar(50),
         isDeleted boolean,
-        primary key (bloodBagType)
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table BloodTest (
@@ -64,11 +64,11 @@
         notes longtext,
         sampleNumber varchar(50),
         shippingNumber varchar(50),
-        bloodBagType_bloodBagType varchar(30),
+        bloodBagType_id integer,
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donor_id bigint,
-        donorType_donorType varchar(30),
+        donorType_id integer,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         primary key (id)
@@ -115,10 +115,10 @@
     ) ENGINE=InnoDB;
 
     create table DonorType (
-        donorType varchar(30) not null,
-        donorTypeName varchar(50),
+        id integer not null auto_increment,
+        donorType varchar(50),
         isDeleted boolean,
-        primary key (donorType)
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table FormField (
@@ -182,18 +182,18 @@
         issuedTo_id bigint,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
-        productType_productType varchar(30),
+        productType_id integer,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table ProductType (
-        productType varchar(30) not null,
+        id integer not null auto_increment,
         description longtext,
         isDeleted boolean,
-        productTypeName varchar(50),
+        productType varchar(50),
         shelfLife integer,
         shelfLifeUnits varchar(30),
-        primary key (productType)
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table ProductUsage (
@@ -241,8 +241,9 @@
         ward varchar(20),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
-        productType_productType varchar(30),
+        productType_id integer,
         requestSite_id bigint,
+        requestType_id integer,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -306,12 +307,6 @@
         references User (id);
 
     alter table CollectedSample 
-        add index FKF0658A33D10E68A8 (bloodBagType_bloodBagType), 
-        add constraint FKF0658A33D10E68A8 
-        foreign key (bloodBagType_bloodBagType) 
-        references BloodBagType (bloodBagType);
-
-    alter table CollectedSample 
         add index FKF0658A33AED1731E (collectionSite_id), 
         add constraint FKF0658A33AED1731E 
         foreign key (collectionSite_id) 
@@ -324,22 +319,28 @@
         references Location (id);
 
     alter table CollectedSample 
-        add index FKF0658A33F17A8E4E (donorType_donorType), 
-        add constraint FKF0658A33F17A8E4E 
-        foreign key (donorType_donorType) 
-        references DonorType (donorType);
-
-    alter table CollectedSample 
         add index FKF0658A3359FAB30D (donor_id), 
         add constraint FKF0658A3359FAB30D 
         foreign key (donor_id) 
         references Donor (id);
 
     alter table CollectedSample 
+        add index FKF0658A337A1B99A7 (donorType_id), 
+        add constraint FKF0658A337A1B99A7 
+        foreign key (donorType_id) 
+        references DonorType (id);
+
+    alter table CollectedSample 
         add index FKF0658A33D0AFB367 (lastUpdatedBy_id), 
         add constraint FKF0658A33D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table CollectedSample 
+        add index FKF0658A331D73927B (bloodBagType_id), 
+        add constraint FKF0658A331D73927B 
+        foreign key (bloodBagType_id) 
+        references BloodBagType (id);
 
     alter table CollectedSample_CollectionsWorksheet 
         add index FKB39FFD85225909B3 (worksheets_id), 
@@ -414,16 +415,16 @@
         references CollectedSample (id);
 
     alter table Product 
+        add index FK50C664CF73AC2B90 (productType_id), 
+        add constraint FK50C664CF73AC2B90 
+        foreign key (productType_id) 
+        references ProductType (id);
+
+    alter table Product 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 
         add constraint FK50C664CFD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
-
-    alter table Product 
-        add index FK50C664CFC5DF532 (productType_productType), 
-        add constraint FK50C664CFC5DF532 
-        foreign key (productType_productType) 
-        references ProductType (productType);
 
     alter table ProductUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 
@@ -466,16 +467,22 @@
         references Location (id);
 
     alter table Request 
+        add index FKA4878A6F73AC2B90 (productType_id), 
+        add constraint FKA4878A6F73AC2B90 
+        foreign key (productType_id) 
+        references ProductType (id);
+
+    alter table Request 
+        add index FKA4878A6F537AAD30 (requestType_id), 
+        add constraint FKA4878A6F537AAD30 
+        foreign key (requestType_id) 
+        references RequestType (id);
+
+    alter table Request 
         add index FKA4878A6FD0AFB367 (lastUpdatedBy_id), 
         add constraint FKA4878A6FD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
-
-    alter table Request 
-        add index FKA4878A6FC5DF532 (productType_productType), 
-        add constraint FKA4878A6FC5DF532 
-        foreign key (productType_productType) 
-        references ProductType (productType);
 
     alter table TestResult 
         add index FKDB459F6FA49787C4 (createdBy_id), 
