@@ -490,9 +490,9 @@ public class ProductRepository {
     query.setParameter("productType", productRequest.getProductType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
-    query.setParameter("bloodAbo", productRequest.getBloodAbo());
+    query.setParameter("bloodAbo", productRequest.getPatientBloodAbo());
     query.setParameter("bloodO", BloodAbo.O);
-    query.setParameter("bloodRhd", productRequest.getBloodRhd());
+    query.setParameter("bloodRhd", productRequest.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
     List<Product> products = new ArrayList<Product>();

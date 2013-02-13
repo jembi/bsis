@@ -40,12 +40,12 @@ public class RequestViewModel {
     return request.getRequestedQuantity();
   }
 
-  public BloodAbo getBloodAbo() {
-    return request.getBloodAbo();
+  public BloodAbo getPatientBloodAbo() {
+    return request.getPatientBloodAbo();
   }
 
-  public BloodRhd getBloodRhd() {
-    return request.getBloodRhd();
+  public BloodRhd getPatientBloodRhd() {
+    return request.getPatientBloodRhd();
   }
 
   public String getNotes() {
@@ -62,10 +62,6 @@ public class RequestViewModel {
 
   public Location getRequestSite() {
     return request.getRequestSite();
-  }
-
-  public String getPatientName() {
-    return request.getPatientName();
   }
 
   public Boolean getIsDeleted() {
@@ -85,7 +81,7 @@ public class RequestViewModel {
   }
 
   public String getBloodGroup() {
-    return new BloodGroup(request.getBloodAbo(), request.getBloodRhd()).toString();
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
   }
 
   public User getCreatedBy() {

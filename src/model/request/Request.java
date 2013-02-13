@@ -29,6 +29,7 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
+import model.util.Gender;
 
 import org.hibernate.annotations.Index;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,23 +56,61 @@ public class Request implements ModificationTracker {
   @Index(name="request_requiredDate_index")
   private Date requiredDate;
 
-  private Integer requestedQuantity;
-
   private Boolean fulfilled;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodAbo_index")
-  private BloodAbo bloodAbo;
+  private BloodAbo patientBloodAbo;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodRhd_index")
-  private BloodRhd bloodRhd;
+  private BloodRhd patientBloodRhd;
 
   // fetch type eager to check how many products issued
   @OneToMany(mappedBy="issuedTo", fetch=FetchType.EAGER)
   private List<Product> issuedProducts;
+
+  @Column(length=30)
+  private String patientNumber;
+
+  @Column(length=30)
+  private String patientFirstName;
+
+  @Column(length=30)
+  private String patientLastName;
+
+  @DateTimeFormat(pattern="mm/dd/yyyy")
+  @Temporal(TemporalType.DATE)
+  private Date patientBirthDate;
+
+  @Column
+  private Integer patientAge;
+
+  @Column
+  private Gender patientGender;
+
+  @Column(length=100)
+  private String patientDiagnosis;
+
+  @Column(length=20)
+  private String ward;
+
+  @Column(length=30)
+  private String hospital;
+
+  @Column(length=30)
+  private String department;
+
+  @Column(length=30)
+  private String requestedBy;
+
+  @Column
+  private Integer volume;
+
+  @Column
+  private Integer requestedQuantity;
 
   @Lob
   private String notes;
@@ -87,8 +126,6 @@ public class Request implements ModificationTracker {
   @ManyToOne
   private Location requestSite;
 
-  private String patientName;
-
   private Boolean isDeleted;
 
   public Request() {
@@ -97,10 +134,20 @@ public class Request implements ModificationTracker {
 
   public void copy(Request request) {
     assert (this.getId() == request.getId());
-    this.bloodAbo = request.bloodAbo;
-    this.bloodRhd = request.bloodRhd;
+    this.patientBloodAbo = request.patientBloodAbo;
+    this.patientBloodRhd = request.patientBloodRhd;
     this.requestSite = request.requestSite;
-    this.patientName = request.patientName;
+    this.patientFirstName = request.patientFirstName;
+    this.patientLastName = request.patientLastName;
+    this.patientAge = request.patientAge;
+    this.patientBirthDate = request.patientBirthDate;
+    this.department = request.department;
+    this.hospital = request.hospital;
+    this.patientDiagnosis = request.patientDiagnosis;
+    this.patientGender = request.patientGender;
+    this.ward = request.ward;
+    this.volume = request.volume;
+    this.patientNumber = request.patientNumber;
     this.productType = request.productType;
     this.requestDate = request.requestDate;
     this.requiredDate = request.requiredDate;
@@ -128,12 +175,12 @@ public class Request implements ModificationTracker {
     return requestedQuantity;
   }
 
-  public BloodAbo getBloodAbo() {
-    return bloodAbo;
+  public BloodAbo getPatientBloodAbo() {
+    return patientBloodAbo;
   }
 
-  public BloodRhd getBloodRhd() {
-    return bloodRhd;
+  public BloodRhd getPatientBloodRhd() {
+    return patientBloodRhd;
   }
 
   public String getNotes() {
@@ -150,10 +197,6 @@ public class Request implements ModificationTracker {
 
   public Location getRequestSite() {
     return requestSite;
-  }
-
-  public String getPatientName() {
-    return patientName;
   }
 
   public Boolean getIsDeleted() {
@@ -180,12 +223,12 @@ public class Request implements ModificationTracker {
     this.requestedQuantity = requestedQuantity;
   }
 
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    this.bloodAbo = bloodAbo;
+  public void setPatientBloodAbo(BloodAbo patientBloodAbo) {
+    this.patientBloodAbo = patientBloodAbo;
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
-    this.bloodRhd = bloodRhd;
+  public void setPatientBloodRhd(BloodRhd patientBloodRhd) {
+    this.patientBloodRhd = patientBloodRhd;
   }
 
   public void setNotes(String notes) {
@@ -202,10 +245,6 @@ public class Request implements ModificationTracker {
 
   public void setRequestSite(Location requestSite) {
     this.requestSite = requestSite;
-  }
-
-  public void setPatientName(String patientName) {
-    this.patientName = patientName;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -261,6 +300,102 @@ public class Request implements ModificationTracker {
   }
 
   public BloodGroup getBloodGroup() {
-    return new BloodGroup(bloodAbo, bloodRhd);
+    return new BloodGroup(patientBloodAbo, patientBloodRhd);
+  }
+
+  public String getPatientNumber() {
+    return patientNumber;
+  }
+
+  public void setPatientNumber(String patientNumber) {
+    this.patientNumber = patientNumber;
+  }
+
+  public String getPatientFirstName() {
+    return patientFirstName;
+  }
+
+  public void setPatientFirstName(String patientFirstName) {
+    this.patientFirstName = patientFirstName;
+  }
+
+  public String getPatientLastName() {
+    return patientLastName;
+  }
+
+  public void setPatientLastName(String patientLastName) {
+    this.patientLastName = patientLastName;
+  }
+
+  public Date getPatientBirthDate() {
+    return patientBirthDate;
+  }
+
+  public void setPatientBirthDate(Date patientBirthDate) {
+    this.patientBirthDate = patientBirthDate;
+  }
+
+  public Integer getPatientAge() {
+    return patientAge;
+  }
+
+  public void setPatientAge(Integer patientAge) {
+    this.patientAge = patientAge;
+  }
+
+  public Gender getPatientGender() {
+    return patientGender;
+  }
+
+  public void setPatientGender(Gender patientGender) {
+    this.patientGender = patientGender;
+  }
+
+  public String getPatientDiagnosis() {
+    return patientDiagnosis;
+  }
+
+  public void setPatientDiagnosis(String patientDiagnosis) {
+    this.patientDiagnosis = patientDiagnosis;
+  }
+
+  public String getWard() {
+    return ward;
+  }
+
+  public void setWard(String ward) {
+    this.ward = ward;
+  }
+
+  public String getHospital() {
+    return hospital;
+  }
+
+  public void setHospital(String hospital) {
+    this.hospital = hospital;
+  }
+
+  public String getDepartment() {
+    return department;
+  }
+
+  public void setDepartment(String department) {
+    this.department = department;
+  }
+
+  public String getRequestedBy() {
+    return requestedBy;
+  }
+
+  public void setRequestedBy(String requestedBy) {
+    this.requestedBy = requestedBy;
+  }
+
+  public Integer getVolume() {
+    return volume;
+  }
+
+  public void setVolume(Integer volume) {
+    this.volume = volume;
   }
 }

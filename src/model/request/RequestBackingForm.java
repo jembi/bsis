@@ -14,6 +14,7 @@ import model.producttype.ProductType;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
+import model.util.Gender;
 import repository.RequestRepository;
 
 
@@ -25,6 +26,8 @@ public class RequestBackingForm {
 
   private String requestDate;
   private String requiredDate;
+
+  private String patientBirthDate;
 
   public RequestBackingForm() {
     setRequest(new Request());
@@ -62,12 +65,12 @@ public class RequestBackingForm {
     return getRequest().getRequestedQuantity();
   }
 
-  public BloodAbo getBloodAbo() {
-    return getRequest().getBloodAbo();
+  public BloodAbo getPatientBloodAbo() {
+    return request.getPatientBloodAbo();
   }
 
-  public BloodRhd getBloodRhd() {
-    return getRequest().getBloodRhd();
+  public BloodRhd getPatientBloodRhd() {
+    return request.getPatientBloodRhd();
   }
 
   public String getNotes() {
@@ -91,10 +94,6 @@ public class RequestBackingForm {
     if (site == null || site.getId() == null)
       return null;
     return site.getId().toString();
-  }
-
-  public String getPatientName() {
-    return getRequest().getPatientName();
   }
 
   public Boolean getIsDeleted() {
@@ -133,12 +132,12 @@ public class RequestBackingForm {
     getRequest().setRequestedQuantity(requestedQuantity);
   }
 
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    getRequest().setBloodAbo(bloodAbo);
+  public void setPatientBloodAbo(BloodAbo bloodAbo) {
+    getRequest().setPatientBloodAbo(bloodAbo);
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
-    getRequest().setBloodRhd(bloodRhd);
+  public void setPatientBloodRhd(BloodRhd bloodRhd) {
+    getRequest().setPatientBloodRhd(bloodRhd);
   }
 
   public void setNotes(String notes) {
@@ -183,10 +182,6 @@ public class RequestBackingForm {
     }
   }
 
-  public void setPatientName(String patientName) {
-    getRequest().setPatientName(patientName);
-  }
-
   public void setIssuedProducts(List<Product> issuedProducts) {
     getRequest().setIssuedProducts(issuedProducts);
   }
@@ -204,20 +199,130 @@ public class RequestBackingForm {
   }
 
   public String getBloodGroup() {
-    if (request.getBloodAbo() == null || request.getBloodRhd() == null)
+    if (request.getPatientBloodAbo() == null || request.getPatientBloodRhd() == null)
       return null;
-    return new BloodGroup(request.getBloodAbo(), request.getBloodRhd()).toString();
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
   }
 
   public void setBloodGroup(String bloodGroupStr) {
 
     if (bloodGroupStr == null || bloodGroupStr.isEmpty()) {
-      request.setBloodAbo(null);
-      request.setBloodRhd(null);
+      request.setPatientBloodAbo(null);
+      request.setPatientBloodRhd(null);
     } else {
       BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-      request.setBloodAbo(bloodGroup.getBloodAbo());
-      request.setBloodRhd(bloodGroup.getBloodRhd());
+      request.setPatientBloodAbo(bloodGroup.getBloodAbo());
+      request.setPatientBloodRhd(bloodGroup.getBloodRhd());
     }
+  }
+
+  public String getPatientNumber() {
+    return request.getPatientNumber();
+  }
+
+  public void setDonorNumber(String patientNumber) {
+    request.setPatientNumber(patientNumber);
+  }
+
+  public String getPatientFirstName() {
+    return request.getPatientFirstName();
+  }
+
+  public void setPatientFirstName(String patientFirstName) {
+    request.setPatientFirstName(patientFirstName);
+  }
+
+  public String getPatientLastName() {
+    return request.getPatientLastName();
+  }
+
+  public void setPatientLastName(String patientLastName) {
+    request.setPatientLastName(patientLastName);
+  }
+
+  public String getPatientBirthDate() {
+    if (patientBirthDate != null)
+      return patientBirthDate;
+    if (request == null)
+      return "";
+    return CustomDateFormatter.getDateString(request.getPatientBirthDate());
+  }
+
+  public void setBirthDate(String patientBirthDate) {
+    this.patientBirthDate = patientBirthDate;
+    try {
+      request.setPatientBirthDate(CustomDateFormatter.getDateFromString(patientBirthDate));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      request.setPatientBirthDate(null);
+    }
+  }
+
+  public String getPatientGender() {
+    if (request == null || request.getPatientGender() == null)
+      return null;
+    return request.getPatientGender().toString();
+  }
+
+  public void setPatientGender(String patientGender) {
+    request.setPatientGender(Gender.valueOf(patientGender));
+  }
+
+  public Integer getPatientAge() {
+    return request.getPatientAge();
+  }
+
+  public void setPatientAge(Integer patientAge) {
+    request.setPatientAge(patientAge);
+  }
+
+  public void setPatientBloodGroup(String patientBloodGroupStr) {
+    BloodGroup bloodGroup = new BloodGroup(patientBloodGroupStr);
+    request.setPatientBloodAbo(bloodGroup.getBloodAbo());
+    request.setPatientBloodRhd(bloodGroup.getBloodRhd());
+  }
+
+  public String getPatientBloodGroup() {
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
+  }
+
+  public String getPatientDiagnosis() {
+    return request.getPatientDiagnosis();
+  }
+
+  public void setPatientDiagnosis(String patientDiagnosis) {
+    request.setPatientDiagnosis(patientDiagnosis);
+  }
+
+  public String getRequestedBy() {
+    return request.getRequestedBy();
+  }
+
+  public void setRequestedBy(String requestedBy) {
+    request.setRequestedBy(requestedBy);
+  }
+
+  public Integer getVolume() {
+    return request.getVolume();
+  }
+
+  public void setVolume(Integer volume) {
+    request.setVolume(volume);
+  }
+
+  public String getWard() {
+    return request.getWard();
+  }
+
+  public void setWard(String ward) {
+    request.setWard(ward);
+  }
+
+  public String getHospital() {
+    return request.getHospital();
+  }
+
+  public void setHospital(String hospital) {
+    request.setHospital(hospital);
   }
 }

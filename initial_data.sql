@@ -54,12 +54,22 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'requestDate', 'Request Date', '', '0', '1', '0', '0', '', 0),
 ('Request', 'requiredDate', 'Required Date', '', '0', '1', '0', '0', '', 0),
 ('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', '', 0),
+('Request', 'volume', 'Volume', '', '0', '1', '0', '0', '', 0),
 ('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '1', '0', '0', '', 0),
 ('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', '0', '0', '', 0),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '', 0),
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '', 0),
 ('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '', 0),
-('Request', 'patientName', 'Patient Name', '', '0', '0', '0', '0', '', 0),
+('Request', 'patientFirstName', 'Patient First Name', '', '0', '0', '0', '0', '', 0),
+('Request', 'patientLastName', 'Patient Last Name', '', '0', '0', '0', '0', '', 0),
+('Request', 'patientDiagnosis', 'Patient Diagnosis', '', '0', '0', '0', '0', '', 0),
+('Request', 'patientBirthDate', 'Patient Date of Birth', '', '0', '0', '0', '0', '', 0),
+('Request', 'patientAge', 'Patient Age', '', '0', '0', '0', '0', '', 0),
+('Request', 'patientGender', 'Patient Gender', '', '0', '0', '0', '0', '', 0),
+('Request', 'ward', 'Ward', '', '0', '0', '0', '0', '', 0),
+('Request', 'department', 'Department', '', '0', '0', '0', '0', '', 0),
+('Request', 'hospital', 'hospital', '', '0', '0', '0', '0', '', 0),
+('Request', 'requestedBy', 'Requested By', '', '0', '0', '0', '0', '', 0),
 ('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, autoGenerate, derived, sourceField, maxLength) values
@@ -76,11 +86,19 @@ insert into DonorType (donorType, donorTypeName, isDeleted) values
 ('Family', 'Family', '0'),
 ('Other', 'Other', '0');
 
+insert into RequestType (requestType, description, isDeleted) values
+('Emergency', '', '0'),
+('Group and Save', '', '0'),
+('Group and Screen', '', '0'),
+('Standard', '', '0'),
+('Urgent', '', '0');
+
 insert into ProductType (productType, productTypeName, description, shelfLife, shelfLifeUnits, isDeleted) values
 ('Whole Blood', 'Whole Blood', '', '35', 'days', '0'),
 ('RCC', 'Red Blood Cells', '', '', '', '0'),
 ('FFP', 'Fresh Frozen Plasma', '', '365', 'days', '0'),
 ('Platelets', 'Platelets', '', '5', 'days', '0'),
+('Cryoprecipitate', 'Cryoprecipitate', '', '', '', '0'),
 ('Partial Platelets', 'Partial Platelets', '', '', '', '0');
 
 insert into BloodBagType (bloodBagType, bloodBagTypeName, isDeleted) values

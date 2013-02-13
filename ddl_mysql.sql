@@ -29,6 +29,8 @@
 
     drop table if exists Request;
 
+    drop table if exists RequestType;
+
     drop table if exists TestResult;
 
     drop table if exists Tips;
@@ -214,22 +216,41 @@
 
     create table Request (
         id bigint not null auto_increment,
-        bloodAbo varchar(30),
-        bloodRhd varchar(30),
+        department varchar(30),
         fulfilled boolean,
+        hospital varchar(30),
         isDeleted boolean,
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
-        patientName varchar(255),
+        patientAge integer,
+        patientBirthDate date,
+        patientBloodAbo varchar(30),
+        patientBloodRhd varchar(30),
+        patientDiagnosis varchar(100),
+        patientFirstName varchar(30),
+        patientGender integer,
+        patientLastName varchar(30),
+        patientNumber varchar(30),
         requestDate date,
         requestNumber varchar(30),
+        requestedBy varchar(30),
         requestedQuantity integer,
         requiredDate date,
+        volume integer,
+        ward varchar(20),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         productType_productType varchar(30),
         requestSite_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table RequestType (
+        id integer not null auto_increment,
+        description longtext,
+        isDeleted boolean,
+        requestType varchar(50),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -426,11 +447,11 @@
 
     create index request_requestDate_index on Request (requestDate);
 
-    create index request_bloodRhd_index on Request (bloodRhd);
+    create index request_bloodRhd_index on Request (patientBloodRhd);
 
     create index request_requestNumber_index on Request (requestNumber);
 
-    create index request_bloodAbo_index on Request (bloodAbo);
+    create index request_bloodAbo_index on Request (patientBloodAbo);
 
     alter table Request 
         add index FKA4878A6FA49787C4 (createdBy_id), 

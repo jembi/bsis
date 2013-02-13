@@ -110,8 +110,8 @@ public class DonorBackingForm {
     return donor.getGender().toString();
   }
 
-  public BloodRhd getBloodAbo() {
-    return donor.getBloodRhd();
+  public BloodAbo getBloodAbo() {
+    return donor.getBloodAbo();
   }
 
   public BloodRhd getBloodRhd() {
