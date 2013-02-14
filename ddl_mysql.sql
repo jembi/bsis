@@ -131,6 +131,7 @@
         field varchar(30),
         form varchar(30),
         hidden boolean,
+        isAutoGeneratable boolean,
         isRequired boolean,
         maxLength integer,
         sourceField varchar(30),

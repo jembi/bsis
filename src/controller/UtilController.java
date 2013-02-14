@@ -56,8 +56,8 @@ public class UtilController {
       fieldProperties.put(FormField.SOURCE_FIELD, ff.getSourceField());
 
       formFieldMap.put(ff.getField(), fieldProperties);
-      if (ff.getDerived())
-        mirroredFields.put(ff.getField(), ff.getSourceField());
+//      if (ff.getDerived())
+//        mirroredFields.put(ff.getField(), ff.getSourceField());
     }
 
     ObjectMapper mapper = new ObjectMapper();

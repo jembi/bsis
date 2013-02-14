@@ -42,6 +42,11 @@
         console.log(isRequiredInput);
         console.log(isRequiredInput.is(":checked"));
 
+        var autoGenerate = "false";
+       	if ("${formField.isAutoGeneratable} == 'true'") {
+        	var autoGenerate = propertiesDiv.find('input[name="autoGenerate"]').is(":checked");
+       	}
+
         var displayNameInput = propertiesDiv.find('input[name="displayName"]');
         console.log(displayNameInput.val());
 
@@ -58,7 +63,8 @@
             		 isRequired: isRequiredInput.is(":checked"),
             		 displayName: displayNameInput.val(),
             		 defaultValue: defaultValueInput.val(),
-            		 maxLength: maxLengthInput.val()
+            		 maxLength: maxLengthInput.val(),
+            		 autoGenerate: autoGenerate
             		},
           type: "POST",
           success: function() {
@@ -117,6 +123,15 @@
 					<label>Maximum length</label>
 					<input type="text" name="maxLength" class="tableInputShort" value="${formField.maxLength}" />					
 				</div>
+				<c:if test="${formField.isAutoGeneratable}">
+					<label>Autogenerate field?</label>
+					<c:if test="${formField.autoGenerate == true}">
+						<input type="checkbox" name="autoGenerate" checked />
+					</c:if>
+					<c:if test="${formField.autoGenerate == false}">
+						<input type="checkbox" name="autoGenerate" />
+					</c:if>
+				</c:if>
 				<div>
 					<button class="updateFormFieldButton">Save</button>
 					<button class="cancelFormFieldButton">Cancel</button>

@@ -41,14 +41,16 @@ public class FormField {
   @Lob
   private String defaultValue;
 
-  private Boolean hidden = false;
+  private Boolean hidden;
 
-  private Boolean derived = false;
+  private Boolean derived;
 
-  private Boolean isRequired = false;
+  private Boolean isRequired;
 
-  private Boolean autoGenerate = false;
+  private Boolean autoGenerate;
 
+  private Boolean isAutoGeneratable;
+  
   // copy value from another field
   @Column(length=30)
   private String sourceField;
@@ -160,5 +162,13 @@ public class FormField {
 
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
+  }
+
+  public Boolean getIsAutoGeneratable() {
+    return isAutoGeneratable;
+  }
+
+  public void setIsAutoGeneratable(Boolean isAutoGeneratable) {
+    this.isAutoGeneratable = isAutoGeneratable;
   }
 }
