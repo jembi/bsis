@@ -54,6 +54,8 @@ public class UtilController {
       fieldProperties.put(FormField.HIDDEN, ff.getHidden());
       fieldProperties.put(FormField.DERIVED, ff.getDerived());
       fieldProperties.put(FormField.SOURCE_FIELD, ff.getSourceField());
+      fieldProperties.put(FormField.IS_AUTO_GENERATABLE, ff.getIsAutoGeneratable());
+      fieldProperties.put(FormField.AUTO_GENERATE, ff.getAutoGenerate());
 
       formFieldMap.put(ff.getField(), fieldProperties);
 //      if (ff.getDerived())

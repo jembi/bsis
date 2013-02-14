@@ -31,6 +31,8 @@
 
     drop table if exists RequestType;
 
+    drop table if exists SequenceNumberStore;
+
     drop table if exists TestResult;
 
     drop table if exists Tips;
@@ -253,6 +255,15 @@
         description longtext,
         isDeleted boolean,
         requestType varchar(50),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table SequenceNumberStore (
+        id integer not null auto_increment,
+        columnName varchar(255),
+        lastNumber bigint,
+        sequenceNumberContext varchar(255),
+        targetTable varchar(255),
         primary key (id)
     ) ENGINE=InnoDB;
 

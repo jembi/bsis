@@ -41,6 +41,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
+import repository.SequenceNumberRepository;
 import repository.TestResultRepository;
 import repository.UsageRepository;
 
@@ -64,6 +65,7 @@ public class CreateDataController {
   
 	@Autowired
 	private LocationRepository locationRepository;
+
 	@Autowired
 	private CollectedSampleRepository collectionRepository;
 
@@ -75,6 +77,9 @@ public class CreateDataController {
 
 	@Autowired
 	private UsageRepository usageRepository;
+
+	@Autowired
+	private SequenceNumberRepository sequenceNumberRepository;
 
 	Random random = new Random();
 
@@ -420,7 +425,8 @@ public class CreateDataController {
 
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
 		for (int i = 0; i < numCollections; i++) {
-		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm(true);
+		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
+      collection.setCollectionNumber(sequenceNumberRepository.getNextCollectionNumber());    
 
 		  collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
 		  collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());

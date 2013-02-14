@@ -17,6 +17,8 @@ public class FormField {
   public static final String HIDDEN = "hidden";
   public static final String DERIVED = "derived";
   public static final String SOURCE_FIELD = "sourceField";
+  public static final String IS_AUTO_GENERATABLE = "isAutoGeneratable";
+  public static final String AUTO_GENERATE = "autoGenerate";
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

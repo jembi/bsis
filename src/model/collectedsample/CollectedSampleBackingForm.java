@@ -36,12 +36,6 @@ public class CollectedSampleBackingForm {
     collectedSample = new CollectedSample();
   }
 
-  public CollectedSampleBackingForm(boolean autoGenerate) {
-    collectedSample = new CollectedSample();
-    if (autoGenerate)
-      generateCollectionNumber();
-  }
-
   public CollectedSampleBackingForm(CollectedSample collection) {
     this.collectedSample = collection;
   }
