@@ -487,7 +487,7 @@ function animatedScrollTo(jqElement, interval){
 
 // should be a multiselect selector object
 function setDefaultValueForSelector(selectorElement, valueToSelect) {
-  selectorElement.multiselect("widget").find(":contains(" + valueToSelect + ")").each(function() {
-    this.click();
-  }); 
+  var elementsToSelect = selectorElement.children().filter(function() { console.log($(this).text()); return $.trim($(this).text()) == valueToSelect });
+  elementsToSelect.attr("selected", 1);
+  selectorElement.multiselect("refresh");
 }
