@@ -48,7 +48,8 @@ public class SequenceNumberRepository {
 
     String yyStr = String.format("%02d", yy);
     String lastNumberStr = String.format("%06d", lastNumber);
-    String collectionNumber = "00000" + yyStr + lastNumberStr;
+    // may need a prefix for center where the number is generated
+    String collectionNumber = "" + yyStr + lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
