@@ -260,7 +260,7 @@ public class CollectedSampleController {
     m.put("disallowDonorChange", true);
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
-    setCollectionNumber(form, formFields);
+    setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
 
     m.put("editCollectedSampleForm", form);
 
@@ -308,7 +308,6 @@ public class CollectedSampleController {
     // to ensure custom field names are displayed in the form
     Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     m.put("collectedSampleFields", formFields);
-    System.out.println(formFields.get("collectionNumber"));
     setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
     mv.addObject("model", m);
     return mv;

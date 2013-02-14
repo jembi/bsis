@@ -85,7 +85,6 @@ function generateEditFormOnPage(formGeneratorUrl, jsonInputData,
 $.fn.serializeObject = function() {
   var o = {};
   var a = this.serializeArray();
-  console.log(a);
   $.each(a, function() {
     if (o[this.name] !== undefined) {
       if (!o[this.name].push) {
@@ -487,7 +486,7 @@ function animatedScrollTo(jqElement, interval){
 
 // should be a multiselect selector object
 function setDefaultValueForSelector(selectorElement, valueToSelect) {
-  var elementsToSelect = selectorElement.children().filter(function() { console.log($(this).text()); return $.trim($(this).text()) == valueToSelect });
+  var elementsToSelect = selectorElement.children().filter(function() { return $.trim($(this).text()) == valueToSelect });
   elementsToSelect.attr("selected", 1);
   selectorElement.multiselect("refresh");
 }

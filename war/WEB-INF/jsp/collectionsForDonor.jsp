@@ -82,8 +82,8 @@ $(document).ready(
 						<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
 							<th>${model.collectedSampleFields.bloodBagType.displayName}</th>
 						</c:if>
-						<c:if test="${model.collectedSampleFields.donor.hidden != true}">
-							<th>${model.collectedSampleFields.donor.displayName}</th>
+						<c:if test="${model.collectedSampleFields.donorType.hidden != true}">
+							<th>${model.collectedSampleFields.donorType.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
@@ -91,23 +91,23 @@ $(document).ready(
 					<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
 						<tr>
 							<td style="display: none">${collectedSample.id}</td>
-							<c:if test="${model.collectedSample.collectionNumber.hidden != true}">
+							<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
 								<td>${collectedSample.collectionNumber}</td>
 							</c:if>
-							<c:if test="${model.collectedSample.collectedOn.hidden != true}">
+							<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
 								<td>${collectedSample.collectedOn}</td>
 							</c:if>
-							<c:if test="${model.collectedSample.sampleNumber.hidden != true}">
+							<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true}">
 								<td>${collectedSample.sampleNumber}</td>
 							</c:if>
-							<c:if test="${model.collectedSample.shippingNumber.hidden != true}">
+							<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true}">
 								<td>${collectedSample.shippingNumber}</td>
 							</c:if>
-							<c:if test="${model.collectedSample.bloodBagType.hidden != true}">
+							<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
 								<td>${collectedSample.bloodBagType.bloodBagType}</td>
 							</c:if>
-							<c:if test="${model.collectedSample.donor.hidden != true}">
-								<td>${collectedSample.donor.donorNumber}</td>
+							<c:if test="${model.collectedSampleFields.donorType.hidden != true}">
+								<td>${collectedSample.donorType.donorType}</td>
 							</c:if>
 						</tr>
 					</c:forEach>
