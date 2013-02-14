@@ -233,8 +233,12 @@ public class ProductController {
           form.getCollectionNumber(), form.getStatus(),
           pagingParams);
     } else if (searchBy.equals("productType")) {
+      List<Integer> productTypeIds = new ArrayList<Integer>();
+      for (String productTypeId : form.getProductTypes()) {
+        productTypeIds.add(Integer.parseInt(productTypeId));
+      }
       results = productRepository.findProductByProductTypes(
-          form.getProductTypes(), form.getStatus(), pagingParams);
+          productTypeIds, form.getStatus(), pagingParams);
     }
 
     products = (List<Product>) results.get(0);

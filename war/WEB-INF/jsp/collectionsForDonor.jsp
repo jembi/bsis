@@ -104,7 +104,7 @@ $(document).ready(
 								<td>${collectedSample.shippingNumber}</td>
 							</c:if>
 							<c:if test="${model.collectedSample.bloodBagType.hidden != true}">
-								<td>${collectedSample.bloodBagType.bloodBagTypeName}</td>
+								<td>${collectedSample.bloodBagType.bloodBagType}</td>
 							</c:if>
 							<c:if test="${model.collectedSample.donor.hidden != true}">
 								<td>${collectedSample.donor.donorNumber}</td>

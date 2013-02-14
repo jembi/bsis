@@ -98,8 +98,8 @@ $(document).ready(function() {
 				<c:forEach var="donorType" items="${model.allDonorTypes}">
 					<div class="donorTypeDiv">
 						<div>
-							<input type="hidden" name="id" value="${donorType.donorType}" />
-							<input type="text" name="donorTypeName" value="${donorType.donorTypeName}" />
+							<input type="hidden" name="id" value="${donorType.id}" />
+							<input type="text" name="donorTypeName" value="${donorType.donorType}" />
 						</div>
 					</div>
 			</c:forEach>

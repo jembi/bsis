@@ -98,8 +98,8 @@ $(document).ready(function() {
 				<c:forEach var="bloodBagType" items="${model.allBloodBagTypes}">
 					<div class="bloodBagTypeDiv">
 						<div>
-							<input type="hidden" name="id" value="${bloodBagType.bloodBagType}" />
-							<input type="text" name="bloodBagTypeName" value="${bloodBagType.bloodBagTypeName}" />
+							<input type="hidden" name="id" value="${bloodBagType.id}" />
+							<input type="text" name="bloodBagTypeName" value="${bloodBagType.bloodBagType}" />
 						</div>
 					</div>
 			</c:forEach>

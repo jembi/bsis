@@ -24,14 +24,11 @@ public class DonorTypeExistsConstraintValidator implements
 
   public boolean isValid(DonorType target, ConstraintValidatorContext context) {
 
-   System.out.println("here");
-   System.out.println("here1");
-   System.out.println("donorType: " + target);
    if (target == null)
      return true;
 
    try {
-    if (donorTypeRepository.getDonorType(target.getDonorType()) != null)
+    if (donorTypeRepository.getDonorTypeById(target.getId()) != null)
      return true;
    } catch (Exception e) {
     e.printStackTrace();

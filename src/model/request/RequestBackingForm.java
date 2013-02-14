@@ -84,18 +84,18 @@ public class RequestBackingForm {
 
   public String getProductType() {
     ProductType productType = getRequest().getProductType();
-    if (productType == null)
+    if (productType == null || productType.getId() == null)
       return "";
     else
-      return productType.getProductType();
+      return productType.getId().toString();
   }
 
   public String getRequestType() {
     RequestType requestType = request.getRequestType();
-    if (requestType == null)
+    if (requestType == null || requestType.getId() == null)
       return "";
     else
-      return requestType.getRequestType();
+      return requestType.getId().toString();
   }
 
 

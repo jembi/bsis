@@ -6,9 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.bloodbagtype.BloodBagType;
 import model.donortype.DonorType;
-import model.producttype.ProductType;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,15 +47,17 @@ public class DonorTypeRepository {
 
   public void saveAllDonorTypes(List<DonorType> allDonorTypes) {
     for (DonorType dt: allDonorTypes) {
-      DonorType existingDonorType = getDonorTypeById(dt.getId());
-      if (existingDonorType != null) {
-        existingDonorType.setDonorType(dt.getDonorType());
-        em.merge(existingDonorType);
-      }
-      else {
+      if (dt.getId() == null)
         em.persist(dt);
+      else {
+        DonorType existingDonorType = getDonorTypeById(dt.getId());
+        if (existingDonorType != null) {
+          existingDonorType.setDonorType(dt.getDonorType());
+          em.merge(existingDonorType);
+        }
       }
+      em.flush();
     }
-    em.flush();
   }
+
 }

@@ -221,7 +221,7 @@ $(document).ready(
 									<td>${collection.collectedOn}</td>
 								</c:if>
 								<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
-									<td>${collection.bloodBagType.bloodBagTypeName}</td>
+									<td>${collection.bloodBagType.bloodBagType}</td>
 								</c:if>
 								<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
 									<td>${product.collectionCenter}</td>

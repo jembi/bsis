@@ -36,12 +36,12 @@ public class ProductTypeRepository {
     return false;
   }
 
-  public ProductType fromString(String productType) {
+  public ProductType getProductTypeById(Integer id) {
     TypedQuery<ProductType> query;
-    query = em.createQuery("SELECT p from ProductType p " +
-    		    "where p.productType=:productType AND p.isDeleted=:isDeleted", ProductType.class);
+    query = em.createQuery("SELECT pt from ProductType pt " +
+            "where pt.id=:id AND pt.isDeleted=:isDeleted", ProductType.class);
     query.setParameter("isDeleted", false);
-    query.setParameter("productType", productType);
+    query.setParameter("id", id);
     if (query.getResultList().size() == 0)
       return null;
     return query.getSingleResult();
@@ -49,7 +49,8 @@ public class ProductTypeRepository {
 
   public void saveAllProductTypes(List<ProductType> allProductTypes) {
     for (ProductType pt: allProductTypes) {
-        ProductType existingProductType = fromString(pt.getProductType());
+        ProductType existingProductType;
+        existingProductType = getProductTypeById(pt.getId());
         if (existingProductType != null) {
           existingProductType.setProductType(pt.getProductType());
           em.merge(existingProductType);

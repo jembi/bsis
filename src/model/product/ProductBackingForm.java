@@ -64,7 +64,7 @@ public class ProductBackingForm {
     if (productType == null)
       return "";
     else
-      return productType.getProductType();
+      return productType.getId().toString();
   }
 
   public Date getLastUpdated() {

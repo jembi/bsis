@@ -144,18 +144,18 @@ public class CollectedSampleBackingForm {
 
   public String getDonorType() {
     DonorType donorType = collectedSample.getDonorType();
-    if (donorType == null || donorType.getDonorType() == null)
+    if (donorType == null || donorType.getId() == null)
       return null;
     else
-      return donorType.getDonorType();
+      return donorType.getId().toString();
   }
 
   public String getBloodBagType() {
     BloodBagType bloodBagType = collectedSample.getBloodBagType();
-    if (bloodBagType == null || bloodBagType.getBloodBagType() == null)
+    if (bloodBagType == null || bloodBagType.getId() == null)
       return null;
     else
-      return bloodBagType.getBloodBagType();
+      return bloodBagType.getId().toString();
   }
 
   public String getSampleNumber() {

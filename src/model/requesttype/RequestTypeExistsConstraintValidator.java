@@ -6,7 +6,6 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
 
 @Component

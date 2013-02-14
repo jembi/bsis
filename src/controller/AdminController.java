@@ -395,7 +395,12 @@ public class AdminController {
       for (String id : params.keySet()) {
         String productType = (String) params.get(id);
         ProductType pt = new ProductType();
-        pt.setId(Integer.parseInt(id));
+        try {
+          pt.setId(Integer.parseInt(id));
+        } catch (NumberFormatException ex) {
+          ex.printStackTrace();
+          pt.setId(null);
+        }
         pt.setProductType(productType);
         pt.setIsDeleted(false);
         allProductTypes.add(pt);
@@ -425,11 +430,16 @@ public class AdminController {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         String bloodBagType = (String) params.get(id);
-        BloodBagType pt = new BloodBagType();
-        pt.setId(Integer.parseInt(id));
-        pt.setBloodBagType(bloodBagType);
-        pt.setIsDeleted(false);
-        allBloodBagTypes.add(pt);
+        BloodBagType bt = new BloodBagType();
+        try {
+          bt.setId(Integer.parseInt(id));
+        } catch (NumberFormatException ex) {
+          ex.printStackTrace();
+          bt.setId(null);
+        }
+        bt.setBloodBagType(bloodBagType);
+        bt.setIsDeleted(false);
+        allBloodBagTypes.add(bt);
       }
       bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
       System.out.println(params);
@@ -450,16 +460,21 @@ public class AdminController {
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureDonorTypes");
-    System.out.println(paramsAsJson);
     List<DonorType> allDonorTypes = new ArrayList<DonorType>();
     try {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String donorType : params.keySet()) {
-        String donorTypeName = (String) params.get(donorType);
+      for (String id : params.keySet()) {
+        String donorType = (String) params.get(id);
         DonorType dt = new DonorType();
+        try {
+          dt.setId(Integer.parseInt(id));
+        } catch (NumberFormatException ex) {
+          ex.printStackTrace();
+          dt.setId(null);
+        }
         dt.setDonorType(donorType);
-        dt.setDonorTypeName(donorTypeName);
         dt.setIsDeleted(false);
+
         allDonorTypes.add(dt);
       }
       donorTypesRepository.saveAllDonorTypes(allDonorTypes);

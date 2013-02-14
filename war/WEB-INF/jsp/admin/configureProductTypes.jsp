@@ -98,7 +98,7 @@ $(document).ready(function() {
 				<c:forEach var="productType" items="${model.allProductTypes}">
 					<div class="productTypeDiv">
 						<div>
-							<input type="hidden" name="id" value="${productType.productType}" />
+							<input type="hidden" name="id" value="${productType.id}" />
 							<input type="text" name="productType" value="${productType.productType}" />
 						</div>
 					</div>

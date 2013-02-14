@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.admin.ConfigPropertyConstants;
-import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
@@ -177,12 +176,10 @@ public class CollectedSampleController {
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
 
-    List<BloodBagType> bloodBagTypes = new ArrayList<BloodBagType>();
+    List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
     if (form.getBloodBagTypes() != null) {
-      for (String bloodBagType : form.getBloodBagTypes()) {
-        BloodBagType bt = new BloodBagType();
-        bt.setBloodBagType(bloodBagType);
-        bloodBagTypes.add(bt);
+      for (String bloodBagTypeId : form.getBloodBagTypes()) {
+        bloodBagTypeIds.add(Integer.parseInt(bloodBagTypeId));
       }
     }
 
@@ -202,7 +199,7 @@ public class CollectedSampleController {
 
     List<Object> results = collectedSampleRepository.findCollectedSampleByCollectionNumber(
                                         form.getCollectionNumber(),
-                                        bloodBagTypes, centerIds, siteIds,
+                                        bloodBagTypeIds, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo, pagingParams);
 
     @SuppressWarnings("unchecked")
@@ -259,9 +256,6 @@ public class CollectedSampleController {
     Donor donor = donorRepository.findDonorById(donorId);
     form.setDonor(donor);
 
-    System.out.println(donor.getDonorNumber());
-    System.out.println(form.getDonorNumber());
-
     ModelAndView mv = new ModelAndView("editCollectedSampleForm");
     mv.addObject("model", m);
     return mv;
@@ -295,7 +289,6 @@ public class CollectedSampleController {
     // to ensure custom field names are displayed in the form
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("model", m);
-    System.out.println(mv.getViewName());
     return mv;
   }
 
@@ -528,12 +521,10 @@ public class CollectedSampleController {
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
 
-    List<BloodBagType> bloodBagTypes = new ArrayList<BloodBagType>();
+    List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
     if (form.getBloodBagTypes() != null) {
-      for (String bloodBagType : form.getBloodBagTypes()) {
-        BloodBagType bt = new BloodBagType();
-        bt.setBloodBagType(bloodBagType);
-        bloodBagTypes.add(bt);
+      for (String bloodBagTypeId : form.getBloodBagTypes()) {
+        bloodBagTypeIds.add(Integer.parseInt(bloodBagTypeId));
       }
     }
 
@@ -558,7 +549,7 @@ public class CollectedSampleController {
     try {
       collectedSampleRepository.saveAsWorksheet(
                                         form.getCollectionNumber(),
-                                        bloodBagTypes, centerIds, siteIds,
+                                        bloodBagTypeIds, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo,
                                         worksheetBatchId);
       m.put("success", true);

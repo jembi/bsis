@@ -28,7 +28,7 @@ public class BloodBagTypeExistsConstraintValidator implements
      return true;
 
    try {
-    if (bloodBagTypeRepository.getBloodBagType(target.getBloodBagType()) != null)
+    if (bloodBagTypeRepository.getBloodBagTypeById(target.getId()) != null)
       return true;
    } catch (Exception e) {
     e.printStackTrace();

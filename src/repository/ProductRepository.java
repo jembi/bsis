@@ -231,11 +231,11 @@ public class ProductRepository {
   }
   
   public List<Object> findProductByProductTypes(
-      List<String> productTypes, List<String> status,
+      List<Integer> productTypeIds, List<String> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT p FROM Product p WHERE " +
-        "p.productType.productType IN (:productTypes) AND " +
+        "p.productType.id IN (:productTypeIds) AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
 
@@ -246,7 +246,7 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("status", statusStringToProductStatus(status));
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productTypes", productTypes);
+    query.setParameter("productTypeIds", productTypeIds);
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);

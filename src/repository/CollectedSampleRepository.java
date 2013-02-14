@@ -20,7 +20,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.worksheet.CollectionsWorksheet;
@@ -61,21 +60,21 @@ public class CollectedSampleRepository {
   }
 
   public List<Object> findCollectedSampleByCollectionNumber(
-      String collectionNumber, List<BloodBagType> bloodBagTypes, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
+      String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
       String dateCollectedTo, Map<String, Object> pagingParams) {
 
     String queryStr = "";
     if (collectionNumber != null && !collectionNumber.trim().isEmpty()) {
       queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
       		       "c.collectionNumber = :collectionNumber AND " +
-                 "c.bloodBagType IN :bloodBagTypes AND " +
+                 "c.bloodBagType.id IN :bloodBagTypeIds AND " +
                  "c.collectionCenter.id IN :centerIds AND " +
                  "c.collectionSite.id IN :siteIds AND " +
                  "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
-          "c.bloodBagType IN :bloodBagTypes AND " +
+          "c.bloodBagType.id IN :bloodBagTypeIds AND " +
           "c.collectionCenter.id IN :centerIds AND " +
           "c.collectionSite.id IN :siteIds AND " +
           "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
@@ -93,7 +92,7 @@ public class CollectedSampleRepository {
     if (collectionNumber != null && !collectionNumber.trim().isEmpty())
       query.setParameter("collectionNumber", collectionNumber);
 
-    query.setParameter("bloodBagTypes", bloodBagTypes);
+    query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
     query.setParameter("dateCollectedFrom", getDateCollectedFromOrDefault(dateCollectedFrom));
@@ -398,11 +397,11 @@ public class CollectedSampleRepository {
   }
 
   public void saveAsWorksheet(String collectionNumber,
-      List<BloodBagType> bloodBagTypes, List<Long> centerIds,
+      List<Integer> bloodBagTypeIds, List<Long> centerIds,
       List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, String worksheetBatchId) throws Exception {
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<Object> results = findCollectedSampleByCollectionNumber(collectionNumber, bloodBagTypes,
+    List<Object> results = findCollectedSampleByCollectionNumber(collectionNumber, bloodBagTypeIds,
                                           centerIds, siteIds,
                                           dateCollectedFrom, dateCollectedTo,
                                           pagingParams);

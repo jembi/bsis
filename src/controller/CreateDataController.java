@@ -11,6 +11,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 import model.CustomDateFormatter;
+import model.bloodbagtype.BloodBagType;
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonorRepository;
@@ -50,6 +52,9 @@ public class CreateDataController {
 
   @Autowired
   private DonorTypeRepository donorTypeRepository;
+
+  @Autowired
+  private BloodBagTypeRepository bloodBagTypeRepository;
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
@@ -413,11 +418,11 @@ public class CreateDataController {
     List<DonorType> donorTypes = donorTypeRepository.getAllDonorTypes();
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
-    String[] bloodBagTypes = {"Pedi", "Single", "Triple"};
+    List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
 		for (int i = 0; i < numCollections; i++) {
 		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm(true);
 
-		  collection.setBloodBagType(bloodBagTypes[Math.abs(random.nextInt()) % bloodBagTypes.length]);
+		  collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
 		  collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
 		  collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
 
@@ -425,7 +430,7 @@ public class CreateDataController {
 		  collection.setCollectedOn(collectionDate);
 		  collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
 		  collection.setNotes("notes sample " + i);
-		  collection.setDonorType(donorTypes.get(Math.abs(random.nextInt()) % donorTypes.size()).getDonorType());
+		  collection.setDonorType(donorTypes.get(Math.abs(random.nextInt()) % donorTypes.size()).getId().toString());
 		  collection.setShippingNumber(collection.getCollectionNumber());
 		  collection.setSampleNumber(collection.getCollectionNumber());
 		  collection.setIsDeleted(false);
