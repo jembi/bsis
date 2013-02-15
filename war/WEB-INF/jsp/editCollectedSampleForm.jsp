@@ -129,12 +129,13 @@
         }
 
         function updateBarcode(val) {
+          if (val === null || val === undefined || val === "")
+            val = "-";
 	        $("#${editCollectedSampleFormId}").find(".barcodeContainer").barcode(
 						  val,
 							"code128",
 							{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
         }
-
         updateBarcode("${editCollectedSampleForm.collectedSample.collectionNumber}");
 
         $("#${editCollectedSampleFormId}").find('input[name="collectionNumber"]').keyup(function() {

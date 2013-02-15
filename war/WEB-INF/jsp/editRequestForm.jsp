@@ -180,10 +180,20 @@
           return $("#${tabContentId}").find('select[name="requestSite"]').multiselect();
         }
         
-        $("#${editRequestFormBarcodeId}").barcode(
-					  "${editRequestForm.request.requestNumber}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        function updateBarcode(val) {
+          if (val === null || val === undefined || val === "")
+            val = "-";
+	        $("#${editRequestFormId}").find(".barcodeContainer").barcode(
+						  val,
+							"code128",
+							{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        }
+        updateBarcode("${editRequestForm.request.requestNumber}");
+
+        $("#${editRequestFormId}").find('input[name="requestNumber"]').keyup(function() {
+          updateBarcode($(this).val());
+        });
+        
 
       });
 </script>
@@ -192,9 +202,7 @@
 
 	<form:form method="POST" commandName="editRequestForm"
 		class="formInTabPane" id="${editRequestFormId}">
-		<c:if test="${model.existingRequest}">
-			<div id="${editRequestFormBarcodeId}"></div>
-		</c:if>
+		<div class="barcodeContainer"></div>
 		<form:hidden path="id" />
 		<c:if test="${model.requestFields.requestNumber.hidden != true }">
 			<div>
