@@ -35,6 +35,7 @@ import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
+import repository.SequenceNumberRepository;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.RequestViewModel;
 
@@ -56,6 +57,9 @@ public class RequestsController {
   @Autowired
   private RequestTypeRepository requestTypeRepository;
 
+  @Autowired
+  private SequenceNumberRepository sequenceNumberRepository;
+  
   @Autowired
   private UtilController utilController;
 
@@ -188,7 +192,9 @@ public class RequestsController {
     m.put("editRequestForm", form);
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    m.put("requestFields", utilController.getFormFieldsForForm("Request"));
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    m.put("requestFields", formFields);
+    setRequestNumber(form, (Map<String, Object>) formFields.get("requestNumber"));
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;
@@ -404,5 +410,13 @@ public class RequestsController {
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
+  }
+
+  private void setRequestNumber(RequestBackingForm form,
+      Map<String, Object> requestNumberProperties) {
+    boolean isAutoGeneratable = (Boolean) requestNumberProperties.get("isAutoGeneratable");
+    boolean autoGenerate = (Boolean) requestNumberProperties.get("autoGenerate");
+    if (isAutoGeneratable && autoGenerate)
+      form.setRequestNumber(sequenceNumberRepository.getNextRequestNumber());    
   }
 }

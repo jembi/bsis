@@ -50,7 +50,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('TestResult', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('Request', 'requestNumber', 'Request Number', '', '1', '0', '1', '1', '0', '', 0),
+('Request', 'requestNumber', 'Request Number', '', '0', '1', '1', '1', '0', '', 0),
 ('Request', 'requestDate', 'Request Date', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'requiredDate', 'Required Date', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', '0', '', 0),

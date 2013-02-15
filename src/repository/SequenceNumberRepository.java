@@ -61,4 +61,49 @@ public class SequenceNumberRepository {
     em.flush();
     return collectionNumber;
   }
+
+  synchronized public String getNextRequestNumber() {
+    String queryStr = "SELECT s from SequenceNumberStore s " +
+                      "where s.targetTable=:targetTable AND " +
+                      " s.columnName=:columnName AND " +
+                      "s.sequenceNumberContext=:sequenceNumberContext";
+    TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
+    query.setParameter("targetTable", "Request");
+    query.setParameter("columnName", "requestNumber");
+    // use last two digits of year
+    DateTime today = new DateTime();
+    Integer yy = today.yearOfCentury().get();
+    query.setParameter("sequenceNumberContext", yy.toString());
+
+    SequenceNumberStore seqNumStore = null;
+    Long lastNumber = (long)0;
+    boolean valuePresentInTable = true;
+    try {
+      seqNumStore = query.getSingleResult();
+      lastNumber = seqNumStore.getLastNumber();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      valuePresentInTable = false;
+      seqNumStore = new SequenceNumberStore();
+      seqNumStore.setTargetTable("Request");
+      seqNumStore.setColumnName("requestNumber");
+      seqNumStore.setSequenceNumberContext(yy.toString());
+    }
+
+    String yyStr = String.format("%02d", yy);
+    String lastNumberStr = String.format("%06d", lastNumber);
+    // may need a prefix for center where the number is generated
+    String collectionNumber = "" + yyStr + lastNumberStr;
+    lastNumber = lastNumber + 1;
+    seqNumStore.setLastNumber(lastNumber);
+    if (valuePresentInTable) {
+      em.merge(seqNumStore);
+    } else {
+      em.persist(seqNumStore);
+    }
+
+    em.flush();
+    return collectionNumber;
+  }
+
 }
