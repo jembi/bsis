@@ -47,7 +47,7 @@ public class RequestTypeRepository {
     return query.getSingleResult();
   }
 
-  public void saveAllProductTypes(List<RequestType> allRequestTypes) {
+  public void saveAllRequestTypes(List<RequestType> allRequestTypes) {
     for (RequestType rt: allRequestTypes) {
         RequestType existingRequestType = getRequestTypeById(rt.getId());
         if (existingRequestType != null) {

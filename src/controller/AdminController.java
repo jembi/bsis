@@ -25,6 +25,7 @@ import model.bloodbagtype.BloodBagType;
 import model.bloodtest.BloodTest;
 import model.donortype.DonorType;
 import model.producttype.ProductType;
+import model.requesttype.RequestType;
 import model.tips.Tips;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -44,6 +45,7 @@ import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
+import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
 
@@ -69,6 +71,9 @@ public class AdminController {
 
   @Autowired
   DonorTypeRepository donorTypesRepository;
+
+  @Autowired
+  RequestTypeRepository requestTypesRepository;
 
   @Autowired
   TipsRepository tipsRepository;
@@ -246,6 +251,19 @@ public class AdminController {
     return mv;
   }
 
+  @RequestMapping(value="/configureRequestTypesFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureRequestTypesFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureRequestTypes");
+    Map<String, Object> m = model.asMap();
+    addAllRequestTypesToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
   @RequestMapping(value="/configureBloodBagTypesFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureBloodBagTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
@@ -349,6 +367,10 @@ public class AdminController {
     m.put("allProductTypes", productTypesRepository.getAllProductTypes());
   }
 
+  private void addAllRequestTypesToModel(Map<String, Object> m) {
+    m.put("allRequestTypes", requestTypesRepository.getAllRequestTypes());
+  }
+
   private void addAllTipsToModel(Map<String, Object> m) {
     m.put("allTips", tipsRepository.getAllTips());
   }
@@ -415,6 +437,42 @@ public class AdminController {
     Map<String, Object> m = model.asMap();
     addAllProductTypesToModel(m);
     m.put("refreshUrl", "configureProductTypesFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping("/configureRequestTypes")
+  public ModelAndView configureRequestTypes(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureRequestTypes");
+    System.out.println(paramsAsJson);
+    List<RequestType> allRequestTypes = new ArrayList<RequestType>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String id : params.keySet()) {
+        String requestType = (String) params.get(id);
+        RequestType rt = new RequestType();
+        try {
+          rt.setId(Integer.parseInt(id));
+        } catch (NumberFormatException ex) {
+          ex.printStackTrace();
+          rt.setId(null);
+        }
+        rt.setRequestType(requestType);
+        rt.setIsDeleted(false);
+        allRequestTypes.add(rt);
+      }
+      requestTypesRepository.saveAllRequestTypes(allRequestTypes);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllRequestTypesToModel(m);
+    m.put("refreshUrl", "configureRequestTypesFormGenerator.html");
     mv.addObject("model", model);
     return mv;
   }

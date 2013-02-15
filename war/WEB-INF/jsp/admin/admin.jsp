@@ -33,6 +33,9 @@
 		<li id="donorTypesForm">
 			<a href="configureDonorTypesFormGenerator.html">Donor Types</a>
 		</li>
+		<li id="requestTypesForm">
+			<a href="configureRequestTypesFormGenerator.html">Request Types</a>
+		</li>
 		<li id="configureUsersForm">
 			<a href="configureUsersFormGenerator.html">Users</a>
 		</li>
