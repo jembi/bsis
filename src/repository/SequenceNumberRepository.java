@@ -33,23 +33,27 @@ public class SequenceNumberRepository {
 
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long)0;
+    String prefix;
     boolean valuePresentInTable = true;
     try {
       seqNumStore = query.getSingleResult();
       lastNumber = seqNumStore.getLastNumber();
+      prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
       ex.printStackTrace();
       valuePresentInTable = false;
+      prefix = "C";
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("CollectedSample");
       seqNumStore.setColumnName("collectionNumber");
+      seqNumStore.setPrefix(prefix);
       seqNumStore.setSequenceNumberContext(yy.toString());
     }
 
     String yyStr = String.format("%02d", yy);
     String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String collectionNumber = "" + yyStr + lastNumberStr;
+    String collectionNumber = prefix + yyStr + lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -77,23 +81,27 @@ public class SequenceNumberRepository {
 
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long)0;
+    String prefix;
     boolean valuePresentInTable = true;
     try {
       seqNumStore = query.getSingleResult();
       lastNumber = seqNumStore.getLastNumber();
+      prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
       ex.printStackTrace();
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Request");
       seqNumStore.setColumnName("requestNumber");
+      prefix = "R";
+      seqNumStore.setPrefix(prefix);
       seqNumStore.setSequenceNumberContext(yy.toString());
     }
 
     String yyStr = String.format("%02d", yy);
     String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String collectionNumber = "" + yyStr + lastNumberStr;
+    String collectionNumber = prefix + yyStr + lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -105,5 +113,4 @@ public class SequenceNumberRepository {
     em.flush();
     return collectionNumber;
   }
-
 }

@@ -17,6 +17,8 @@ public class SequenceNumberStore {
   private String targetTable;
   private String columnName;
 
+  private String prefix;
+
   /**
    * Sometimes sequence numbers recycle after an year
    * of use. Store this kind of context information
@@ -65,6 +67,14 @@ public class SequenceNumberStore {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public String getPrefix() {
+    return prefix;
+  }
+
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
   }
 
 }

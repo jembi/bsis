@@ -262,6 +262,7 @@
         id integer not null auto_increment,
         columnName varchar(255),
         lastNumber bigint,
+        prefix varchar(255),
         sequenceNumberContext varchar(255),
         targetTable varchar(255),
         primary key (id)
