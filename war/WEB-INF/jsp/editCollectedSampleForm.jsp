@@ -128,11 +128,19 @@
 	        $("#${editCollectedSampleFormId}").find('input[name="donorNumber"]').attr("readonly", "readonly");	
         }
 
-        $("#${editCollectedSampleFormBarcodeId}").barcode(
-					  "${editCollectedSampleForm.collectedSample.collectionNumber}-${editCollectedSampleForm.collectedSample.id}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        function updateBarcode(val) {
+	        $("#${editCollectedSampleFormId}").find(".barcodeContainer").barcode(
+						  val,
+							"code128",
+							{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        }
 
+        updateBarcode("${editCollectedSampleForm.collectedSample.collectionNumber}");
+
+        $("#${editCollectedSampleFormId}").find('input[name="collectionNumber"]').keyup(function() {
+          updateBarcode($(this).val());
+        });
+        
         if ("${model.existingCollectedSample}" !== "true" && "${model.hasErrors}" !== "true") {
           // just set the default values for the new collection  
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.collectedSampleFields.notes.defaultValue}");
@@ -167,9 +175,7 @@
 
 	<form:form method="POST" commandName="editCollectedSampleForm"
 		class="formInTabPane" id="${editCollectedSampleFormId}">
-		<c:if test="${model.existingCollectedSample}">
-			<div id="${editCollectedSampleFormBarcodeId}"></div>
-		</c:if>
+		<div class="barcodeContainer"></div>
 		<form:hidden path="id" />
 		<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
 			<div>
