@@ -30,6 +30,7 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -530,7 +531,7 @@ public class ProductRepository {
     }
     q.setParameter("status", productStatus);
     q.setParameter("isDeleted", false);
-    q.setParameter("expiresOn", new Date());
+    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
     TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
 
