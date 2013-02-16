@@ -28,7 +28,7 @@ public class ProductTypeExistsConstraintValidator implements
      return true;
 
    try {
-    if (productTypeRepository.isProductTypeValid(target.getProductType()))
+     if (productTypeRepository.getProductTypeById(target.getId()) != null)
       return true;
    } catch (Exception e) {
     e.printStackTrace();

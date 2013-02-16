@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -110,10 +111,13 @@ public class ReportsController {
 
   @RequestMapping(value="/generateInventoryReport", method=RequestMethod.GET)
   public @ResponseBody Map<String, Object> generateInventoryReport(
-                  HttpServletRequest request, HttpServletResponse response) {
+                  HttpServletRequest request, HttpServletResponse response,
+                  @RequestParam(value="status") String status
+                  ) {
+    List<String> productStatuses = Arrays.asList(status.split("\\|"));
     Map<String, Object> data = null;
     try {
-      data = productRepository.generateInventorySummaryFast();
+      data = productRepository.generateInventorySummaryFast(productStatuses);
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

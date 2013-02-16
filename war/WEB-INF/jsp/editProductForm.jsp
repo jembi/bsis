@@ -197,7 +197,7 @@
 		<c:if test="${model.productFields.productType.hidden != true }">
 			<div>
 				<form:label path="productType">${model.productFields.productType.displayName}</form:label>
-				<form:select path="productType" class="productType">
+				<form:select path="productType" id="editProductFormProductTypes-${unique_page_id}" class="productType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="productType" items="${model.productTypes}">
 						<form:option value="${productType.id}">${productType.productType}</form:option>

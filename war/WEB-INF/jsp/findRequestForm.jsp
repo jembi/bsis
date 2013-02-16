@@ -147,7 +147,7 @@ $(document).ready(function() {
 
 			<div>
 				<form:label path="productTypes">Product Type</form:label>
-				<form:select path="productTypes" class="productTypeSelector">
+				<form:select id="findRequestFormProductTypes-${unique_page_id}" path="productTypes" class="productTypeSelector">
 					<c:forEach var="productType" items="${model.productTypes}">
 						<form:option value="${productType.id}" label="${productType.productType}" />
 					</c:forEach>

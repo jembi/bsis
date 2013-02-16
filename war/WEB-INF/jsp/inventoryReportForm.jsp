@@ -16,17 +16,53 @@
 <script>
   $(document).ready(
       function() {
+
+        function getProductStatusSelector() {
+          return $("#${mainContentId}").find(".productStatusSelector");
+        }
+
+        getProductStatusSelector().multiselect({
+      	  position : {
+      	    my : 'left top',
+      	    at : 'right center'
+      	  },
+      	  header: false,
+      	  minWidth: 250,
+      	  noneSelectedText: 'None selected',
+      	  click: function(e) {
+      			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+             	 return false;
+      			 }
+      		 },
+      	  selectedText: function(numSelected, numTotal, selectedValues) {
+      										if (numSelected == numTotal) {
+      										  return "All Products";
+      										}
+      										else {
+      										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+      										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
+      										}
+      	  							}
+
+      	});
+
+        getProductStatusSelector().multiselect("checkAll");
+
         $("#${tabContentId}").find(".generateInventoryReportButton").button({
           icons: {
             primary: 'ui-icon-print'
           }
         }).click(function() {
 
+         	var status = getProductStatusSelector().multiselect("getChecked").map(function(){
+            return this.value;	
+         	}).get();
+
           showLoadingImage($("#${childContentId}"));
           $.ajax({
             url: "generateInventoryReport.html",
             type: "GET",
-            data: {},
+            data: {status: status.join("|")},
             success: function(responseData) {
               				 showMessage("Inventory Report successfully generated");
               	        generateInventoryChart({
@@ -61,6 +97,18 @@
 			</p>
 		</div>
 		<div style="margin-top: 10px;">
+		<form class="formInTabPane">
+			<div>
+					<label>Product Status</label>
+					<select class="productStatusSelector">
+						<option value="QUARANTINED">Quarantined</option>
+						<option value="AVAILABLE">Available</option>
+						<option value="UNSAFE">Unsafe</option>
+						<option value="ISSUED">Issued</option>
+						<option value="DISCARDED">Discarded</option>
+					</select>
+			</div>
+			</form>
 			<button class="generateInventoryReportButton">Generate Inventory Report</button>
 			<button class="clearReportButton">Clear Report</button>
 		</div>

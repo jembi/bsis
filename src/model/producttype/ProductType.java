@@ -98,4 +98,8 @@ public class ProductType {
   public void setShelfLife(Integer shelfLife) {
     this.shelfLife = shelfLife;
   }
+
+  public boolean equals(ProductType pt) {
+    return this.id == pt.id;
+  }
 }
