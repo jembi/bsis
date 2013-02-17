@@ -76,9 +76,9 @@ public class ProductUsageBackingForm {
   public String getUsageDate() {
     if (usageDate != null)
       return usageDate;
-    if (usageDate == null)
+    if (usage == null)
       return "";
-    return CustomDateFormatter.getDateString(usage.getUsageDate());
+    return CustomDateFormatter.getDateTimeString(usage.getUsageDate());
   }
 
   public String getNotes() {
@@ -144,7 +144,7 @@ public class ProductUsageBackingForm {
   public void setUsageDate(String usageDate) {
     this.usageDate = usageDate;
     try {
-       usage.setUsageDate(CustomDateFormatter.getDateFromString(usageDate));
+      usage.setUsageDate(CustomDateFormatter.getDateTimeFromString(usageDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
       usage.setUsageDate(null);

@@ -36,7 +36,7 @@ public class ProductUsageBackingFormValidator implements Validator {
     ProductUsageBackingForm form = (ProductUsageBackingForm) obj;
 
     String usageDate = form.getUsageDate();
-    if (!CustomDateFormatter.isDateStringValid(usageDate))
+    if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
       errors.rejectValue("usage.usageDate", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
     utilController.commonFieldChecks(form, "usage", errors);

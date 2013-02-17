@@ -83,14 +83,20 @@
           });
         }
 
-        $("#${usageDateInputId}").datepicker({
+        $("#${usageDateInputId}").datetimepicker({
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
           maxDate : 0,
           dateFormat : "mm/dd/yy",
+          timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
         });
+
+        var usageDatePicker = $("#${editUsageFormId}").find(".usageDate");
+        if ("${model.existingUsage}" == "false" && usageDatePicker.val() == "") {
+          usageDatePicker.datepicker('setDate', new Date());
+        }
 
         if ("${model.existingUsage}" !== "true")
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.usageFields.notes.defaultValue}");
@@ -151,7 +157,7 @@
 		<c:if test="${model.usageFields.usageDate.hidden != true }">
 			<div>
 				<form:label path="usageDate">${model.usageFields.usageDate.displayName}</form:label>
-				<form:input path="usageDate" id="${usageDateInputId}"
+				<form:input path="usageDate" id="${usageDateInputId}" class="usageDate"
 										value="${model.existingUsage ? '' : model.usageFields.usageDate.defaultValue}" />
 				<form:errors class="formError" path="usage.usageDate" delimiter=", "></form:errors>
 			</div>
