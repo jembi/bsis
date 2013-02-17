@@ -1,4 +1,128 @@
 
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33A49787C4;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33AED1731E;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33B29562D0;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A3359FAB30D;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A337A1B99A7;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D0AFB367;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A331D73927B;
+
+    alter table CollectedSample_CollectionsWorksheet 
+        drop 
+        foreign key FKB39FFD85225909B3;
+
+    alter table CollectedSample_CollectionsWorksheet 
+        drop 
+        foreign key FKB39FFD85C02466CD;
+
+    alter table CollectionsWorksheet 
+        drop 
+        foreign key FK72E3FEF9A49787C4;
+
+    alter table CollectionsWorksheet 
+        drop 
+        foreign key FK72E3FEF9D0AFB367;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46A49787C4;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46D0AFB367;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFA49787C4;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF994002DF;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF32E145A;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF73AC2B90;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFD0AFB367;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212A49787C4;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212A8E71476;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212D0AFB367;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6FA49787C4;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F1520E0D;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F73AC2B90;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F537AAD30;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6FD0AFB367;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FA49787C4;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F32E145A;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FE2BB696A;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F3A6D02C3;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FD0AFB367;
+
     drop table if exists BloodBagType;
 
     drop table if exists BloodTest;
@@ -26,6 +150,8 @@
     drop table if exists ProductType;
 
     drop table if exists ProductUsage;
+
+    drop table if exists ProductVolume;
 
     drop table if exists Request;
 
@@ -214,6 +340,15 @@
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         product_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductVolume (
+        id integer not null auto_increment,
+        description longtext,
+        isDeleted boolean,
+        unit varchar(6),
+        volume integer,
         primary key (id)
     ) ENGINE=InnoDB;
 

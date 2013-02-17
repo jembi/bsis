@@ -81,6 +81,12 @@
           header : false
         });
 
+        $("#${editRequestFormId}").find(".volume").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+
         $("#${editRequestFormId}").find(".requestType").multiselect({
           multiple : false,
           selectedList : 1,
@@ -269,6 +275,19 @@
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="request.productType"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.volume.hidden != true }">
+			<div>
+				<form:label path="volume">${model.requestFields.volume.displayName}</form:label>
+				<form:select path="volume" class="volume">
+					<form:option value="">&nbsp;</form:option>
+					<c:forEach var="productVolume" items="${model.productVolumes}">
+						<form:option value="${productVolume.volume}">${productVolume.volume} ${productVolume.unit}</form:option>
+					</c:forEach>
+				</form:select>
+				<form:errors class="formError" path="request.volume"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>

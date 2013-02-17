@@ -151,3 +151,7 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("HBV", "on", "collectionsWorksheet"),
 ("HCV", "on", "collectionsWorksheet"),
 ("Syphilis", "on", "collectionsWorksheet");
+
+insert into ProductVolume (volume, unit, description, isDeleted) values
+('450', 'ml', '', '0'),
+('1350', 'ml', '', '0');

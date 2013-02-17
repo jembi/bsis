@@ -169,6 +169,7 @@ public class RequestsController {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
+    m.put("productVolumes", productRepository.getAllProductVolumes());
   }
 
   @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
