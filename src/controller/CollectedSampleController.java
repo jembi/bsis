@@ -157,11 +157,9 @@ public class CollectedSampleController {
             break;
     case 1: sortColumn = "collectionNumber";
             break;
-    case 2: sortColumn = "donor.donorNumber";
+    case 2: sortColumn = "collectedOn";
             break;
-    case 3: sortColumn = "collectedOn";
-            break;
-    case 4: sortColumn = "bloodBagType";
+    case 3: sortColumn = "bloodBagType";
             break;
     }
     return sortColumn;
@@ -225,7 +223,7 @@ public class CollectedSampleController {
     ArrayList<Object> collectionList = new ArrayList<Object>();
     for (CollectedSampleViewModel collection : getCollectionViewModels(collectedSamples)) {
       collectionList.add(Arrays.asList(collection.getId().toString(), collection.getCollectionNumber().toString(),
-                                    collection.getDonorNumber().toString(), collection.getCollectedOn().toString(),
+                                    collection.getCollectedOn().toString(),
                                     collection.getBloodBagType().toString(),  collection.getCollectionCenter().toString(),
                                     collection.getCollectionSite().toString())
                         );

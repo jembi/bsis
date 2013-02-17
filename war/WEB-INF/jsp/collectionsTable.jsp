@@ -27,7 +27,7 @@ $(document).ready(
         "bServerSide" : true,
         "sAjaxSource" : "${model.nextPageUrl}",
         "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
-                          { "bSortable" : false, "aTargets": [5, 6]}
+                          { "bSortable" : false, "aTargets": [4, 5]}
         								 ],
         "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
           								 oSettings.jqXHR = $.ajax({
@@ -190,9 +190,6 @@ $(document).ready(
 							<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
 								<th>${model.collectedSampleFields.collectionNumber.displayName}</th>
 							</c:if>
-							<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
-								<th>${model.collectedSampleFields.donorNumber.displayName}</th>
-							</c:if>
 							<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
 								<th>${model.collectedSampleFields.collectedOn.displayName}</th>
 							</c:if>
@@ -213,9 +210,6 @@ $(document).ready(
 								<td style="display: none">${collection.id}</td>
 								<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
 									<td>${collection.collectionNumber}</td>
-								</c:if>
-								<c:if test="${model.collectedSampleFields.donorNumber.hidden != true}">
-									<td>${collection.donorNumber}</td>
 								</c:if>
 								<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
 									<td>${collection.collectedOn}</td>
