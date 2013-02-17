@@ -1,9 +1,8 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import model.CustomDateFormatter;
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
@@ -33,8 +32,9 @@ public class TestResultViewModel {
   }
 
   public String getTestedOn() {
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(testResult.getTestedOn());
+    if (testResult.getTestedOn() == null)
+      return ""; 
+    return CustomDateFormatter.getDateTimeString(testResult.getTestedOn());
   }
 
   public BloodTest getBloodTest() {

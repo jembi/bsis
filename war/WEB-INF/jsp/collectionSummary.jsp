@@ -136,7 +136,9 @@
 		<c:if test="${model.collectedSampleFields.donorNumber.hidden != true }">
 			<div>
 				<label>${model.collectedSampleFields.donorNumber.displayName}</label>
-				<label style="width: auto;">${model.collectedSample.donorNumber} (${model.collectedSample.donor.firstName} ${model.collectedSample.donor.lastName})</label>
+				<c:if test="${not empty model.collectedSample.donorNumber}">
+					<label style="width: auto;">${model.collectedSample.donorNumber} (${model.collectedSample.donor.firstName} ${model.collectedSample.donor.lastName})</label>
+				</c:if>
 			</div>
 		</c:if>
 		<c:if test="${model.collectedSampleFields.donorType.hidden != true }">
@@ -154,7 +156,7 @@
 		<c:if test="${model.collectedSampleFields.collectedOn.hidden != true }">
 			<div>
 				<label>${model.collectedSampleFields.collectedOn.displayName}</label>
-				<label>${model.collectedSample.collectedOn}</label>
+				<label style="width: auto;">${model.collectedSample.collectedOn}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true }">

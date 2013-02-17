@@ -182,7 +182,7 @@
 		<c:if test="${model.productFields.createdOn.hidden != true }">
 			<div>
 				<label>${model.productFields.createdOn.displayName}</label>
-				<label>${model.product.createdOn}</label>
+				<label style="width: auto;">${model.product.createdOn}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.productFields.expiresOn.hidden != true }">

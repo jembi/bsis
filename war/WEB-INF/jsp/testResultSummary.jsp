@@ -125,7 +125,7 @@
 		<c:if test="${model.testResultFields.testedOn.hidden != true }">
 			<div>
 				<label>${model.testResultFields.testedOn.displayName}</label>
-				<label>${model.testResult.testedOn}</label>
+				<label style="width: auto;">${model.testResult.testedOn}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.testResultFields.bloodTest.hidden != true }">

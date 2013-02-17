@@ -36,7 +36,7 @@ public class ProductBackingFormValidator implements Validator {
     ProductBackingForm form = (ProductBackingForm) obj;
 
     String createdOn = form.getCreatedOn();
-    if (!CustomDateFormatter.isDateStringValid(createdOn))
+    if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("product.createdOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
 

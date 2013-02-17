@@ -61,7 +61,7 @@ public class CollectedSampleBackingForm {
       return collectedOn;
     if (collectedSample == null)
       return "";
-    return CustomDateFormatter.getDateString(collectedSample.getCollectedOn());
+    return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
   }
 
   public String getCollectionNumber() {
@@ -71,7 +71,7 @@ public class CollectedSampleBackingForm {
   public void setCollectedOn(String collectedOn) {
     this.collectedOn = collectedOn;
     try {
-      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
+      collectedSample.setCollectedOn(CustomDateFormatter.getDateTimeFromString(collectedOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setCollectedOn(null);

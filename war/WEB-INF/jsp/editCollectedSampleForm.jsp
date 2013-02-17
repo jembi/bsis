@@ -89,12 +89,13 @@
           header : false
         });
 
-        $("#${editCollectedSampleFormId}").find(".collectedOn").datepicker({
+        $("#${editCollectedSampleFormId}").find(".collectedOn").datetimepicker({
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
           maxDate : 0,
           dateFormat : "mm/dd/yy",
+          timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
         });
 

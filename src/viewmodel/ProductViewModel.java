@@ -7,6 +7,7 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.producttype.ProductType;
@@ -77,8 +78,7 @@ public class ProductViewModel {
   public String getCreatedOn() {
     if (product.getCreatedOn() == null)
       return ""; 
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(product.getCreatedOn());
+    return CustomDateFormatter.getDateTimeString(product.getCreatedOn());
   }
 
   public String getExpiresOn() {

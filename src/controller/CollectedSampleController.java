@@ -308,7 +308,8 @@ public class CollectedSampleController {
     // to ensure custom field names are displayed in the form
     Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     m.put("collectedSampleFields", formFields);
-    setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
+    if (m.get("existingCollectedSample").equals(false))
+      setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
     mv.addObject("model", m);
     return mv;
   }
@@ -369,7 +370,7 @@ public class CollectedSampleController {
         form = new CollectedSampleBackingForm();
         Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
         m.put("collectedSampleFields", formFields);
-        setCollectionNumber(form, formFields);
+        setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;

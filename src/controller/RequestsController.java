@@ -194,7 +194,8 @@ public class RequestsController {
     // to ensure custom field names are displayed in the form
     Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
     m.put("requestFields", formFields);
-    setRequestNumber(form, (Map<String, Object>) formFields.get("requestNumber"));
+    if (m.get("existingRequest").equals(false))
+      setRequestNumber(form, (Map<String, Object>) formFields.get("requestNumber"));
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;

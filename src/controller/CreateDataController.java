@@ -432,7 +432,7 @@ public class CreateDataController {
 		  collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
 		  collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
 
-		  String collectionDate = CustomDateFormatter.getDateString(getRandomCollectionDate());
+		  String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
 		  collection.setCollectedOn(collectionDate);
 		  collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
 		  collection.setNotes("notes sample " + i);

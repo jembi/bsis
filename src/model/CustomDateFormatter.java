@@ -7,19 +7,33 @@ import java.util.Date;
 
 public class CustomDateFormatter {
 
-  public static final String pattern = "MM/dd/yyyy"; 
-  private static DateFormat format;
+  public static final String datePattern = "MM/dd/yy"; 
+  public static final String dateTimePattern = "MM/dd/yy hh:mm:ss a"; 
+  private static DateFormat dateFormat;
+  private static DateFormat dateTimeFormat;
 
   static {
-    format = new SimpleDateFormat(pattern);
-    format.setLenient(false);
+    dateFormat = new SimpleDateFormat(datePattern);
+    dateFormat.setLenient(true);
+    dateTimeFormat = new SimpleDateFormat(dateTimePattern);
+    dateTimeFormat.setLenient(true);
   }
 
   public static Date getDateFromString(String dateString) throws ParseException {
     Date date = null;
     if (!isDateEmpty(dateString))
-      date = format.parse(dateString);
+      date = dateFormat.parse(dateString);
     System.out.println("here");
+    System.out.println(date);
+    return date;
+  }
+
+  public static Date getDateTimeFromString(String dateTimeString) throws ParseException {
+    Date date = null;
+    System.out.println("here");
+    System.out.println(dateTimeString);
+    if (!isDateEmpty(dateTimeString))
+      date = dateTimeFormat.parse(dateTimeString);
     System.out.println(date);
     return date;
   }
@@ -34,7 +48,23 @@ public class CustomDateFormatter {
       valid = true;
     } else {
       try {
-        format.parse(dateString);
+        dateFormat.parse(dateString);
+        valid = true;
+      } catch (ParseException ex) {
+        ex.printStackTrace();
+        valid = false;
+      }
+    }
+    return valid;
+  }
+
+  public static boolean isDateTimeStringValid(String dateTimeString) {
+    boolean valid = false;
+    if (isDateEmpty(dateTimeString)) {
+      valid = true;
+    } else {
+      try {
+        dateTimeFormat.parse(dateTimeString);
         valid = true;
       } catch (ParseException ex) {
         ex.printStackTrace();
@@ -45,13 +75,20 @@ public class CustomDateFormatter {
   }
 
   public static String getErrorMessage() {
-    return "Invalid Date specified. Use " + pattern.toLowerCase();
+    return "Invalid Date specified. Use " + datePattern.toLowerCase();
   }
 
   public static String getDateString(Date date) {
     if (date == null)
       return "";
     else
-      return format.format(date);
+      return dateFormat.format(date);
+  }
+
+  public static String getDateTimeString(Date date) {
+    if (date == null)
+      return "";
+    else
+      return dateTimeFormat.format(date);
   }
 }

@@ -43,7 +43,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
     ValidationUtils.invokeValidator(validator, obj, errors);
     CollectedSampleBackingForm form = (CollectedSampleBackingForm) obj;
     String collectedOn = form.getCollectedOn();
-    if (!CustomDateFormatter.isDateStringValid(collectedOn))
+    if (!CustomDateFormatter.isDateTimeStringValid(collectedOn))
       errors.rejectValue("collectedSample.collectedOn", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
     utilController.commonFieldChecks(form, "collectedSample", errors);

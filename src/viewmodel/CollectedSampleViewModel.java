@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
@@ -30,8 +31,9 @@ public class CollectedSampleViewModel {
   }
 
   public String getCollectedOn() {
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(collectedSample.getCollectedOn());
+    if (collectedSample.getCollectedOn() == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
   }
 
   public boolean equals(Object obj) {

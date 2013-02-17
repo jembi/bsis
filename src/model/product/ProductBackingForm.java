@@ -131,7 +131,7 @@ public class ProductBackingForm {
       return createdOn;
     if (getProduct() == null)
       return "";
-    return CustomDateFormatter.getDateString(product.getCreatedOn());
+    return CustomDateFormatter.getDateTimeString(product.getCreatedOn());
   }
 
   public String getExpiresOn() {
@@ -169,7 +169,7 @@ public class ProductBackingForm {
   public void setCreatedOn(String createdOn) {
     this.createdOn = createdOn;
     try {
-      product.setCreatedOn(CustomDateFormatter.getDateFromString(createdOn));
+      product.setCreatedOn(CustomDateFormatter.getDateTimeFromString(createdOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       product.setCreatedOn(null);

@@ -43,14 +43,13 @@ public class TestResultBackingForm {
       return testedOn;
     if (testResult == null)
       return "";
-    return CustomDateFormatter.getDateString(testResult.getTestedOn());
-
+    return CustomDateFormatter.getDateTimeString(testResult.getTestedOn());
   }
 
   public void setTestedOn(String testedOn) {
     this.testedOn = testedOn;
     try {
-      testResult.setTestedOn(CustomDateFormatter.getDateFromString(testedOn));
+      testResult.setTestedOn(CustomDateFormatter.getDateTimeFromString(testedOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       testResult.setTestedOn(null);
