@@ -49,12 +49,12 @@ public class Request implements ModificationTracker {
   private String requestNumber;
 
   @DateTimeFormat(pattern="mm/dd/yyyy")
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   @Index(name="request_requestDate_index")
   private Date requestDate;
 
   @DateTimeFormat(pattern="mm/dd/yyyy")
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   @Index(name="request_requiredDate_index")
   private Date requiredDate;
 

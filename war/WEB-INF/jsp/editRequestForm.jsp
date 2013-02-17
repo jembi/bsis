@@ -93,12 +93,13 @@
           header : false
         });
 
-        $("#${editRequestFormId}").find(".requestDate").datepicker({
+        $("#${editRequestFormId}").find(".requestDate").datetimepicker({
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
           maxDate : 0,
           dateFormat : "mm/dd/yy",
+          timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
           onSelect : function(selectedDate) {
             $("#${editRequestFormId}").find(".requiredDate").datepicker("option", "minDate", selectedDate);

@@ -39,19 +39,19 @@ public class RequestBackingForm {
   }
 
   public Long getId() {
-    return getRequest().getId();
+    return request.getId();
   }
 
   public String getRequestNumber() {
-    return getRequest().getRequestNumber();
+    return request.getRequestNumber();
   }
 
   public String getRequestDate() {
     if (requestDate != null)
       return requestDate;
-    if (getRequest() == null)
+    if (request == null)
       return "";
-    return CustomDateFormatter.getDateString(getRequest().getRequestDate());
+    return CustomDateFormatter.getDateTimeString(request.getRequestDate());
   }
 
   public String getRequiredDate() {
@@ -59,11 +59,11 @@ public class RequestBackingForm {
       return requiredDate;
     if (getRequest() == null)
       return "";
-    return CustomDateFormatter.getDateString(getRequest().getRequiredDate());
+    return CustomDateFormatter.getDateString(request.getRequiredDate());
   }
 
   public Integer getRequestedQuantity() {
-    return getRequest().getRequestedQuantity();
+    return request.getRequestedQuantity();
   }
 
   public BloodAbo getPatientBloodAbo() {
@@ -75,15 +75,15 @@ public class RequestBackingForm {
   }
 
   public String getNotes() {
-    return getRequest().getNotes();
+    return request.getNotes();
   }
 
   public RowModificationTracker getModificationTracker() {
-    return getRequest().getModificationTracker();
+    return request.getModificationTracker();
   }
 
   public String getProductType() {
-    ProductType productType = getRequest().getProductType();
+    ProductType productType = request.getProductType();
     if (productType == null || productType.getId() == null)
       return "";
     else
@@ -107,51 +107,51 @@ public class RequestBackingForm {
   }
 
   public Boolean getIsDeleted() {
-    return getRequest().getIsDeleted();
+    return request.getIsDeleted();
   }
 
   public void setId(Long id) {
-    getRequest().setId(id);
+    request.setId(id);
   }
 
   public void setRequestNumber(String requestNumber) {
-    getRequest().setRequestNumber(requestNumber);
+    request.setRequestNumber(requestNumber);
   }
 
   public void setRequestDate(String requestDate) {
     this.requestDate = requestDate;
     try {
-      getRequest().setRequestDate(CustomDateFormatter.getDateFromString(requestDate));
+      request.setRequestDate(CustomDateFormatter.getDateTimeFromString(requestDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
-      getRequest().setRequestDate(null);
+      request.setRequestDate(null);
     }
   }
 
   public void setRequiredDate(String requiredDate) {
     this.requiredDate = requiredDate;
     try {
-      getRequest().setRequiredDate(CustomDateFormatter.getDateFromString(requiredDate));
+      request.setRequiredDate(CustomDateFormatter.getDateFromString(requiredDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
-      getRequest().setRequiredDate(null);
+      request.setRequiredDate(null);
     }
   }
 
   public void setRequestedQuantity(Integer requestedQuantity) {
-    getRequest().setRequestedQuantity(requestedQuantity);
+    request.setRequestedQuantity(requestedQuantity);
   }
 
   public void setPatientBloodAbo(BloodAbo bloodAbo) {
-    getRequest().setPatientBloodAbo(bloodAbo);
+    request.setPatientBloodAbo(bloodAbo);
   }
 
   public void setPatientBloodRhd(BloodRhd bloodRhd) {
-    getRequest().setPatientBloodRhd(bloodRhd);
+    request.setPatientBloodRhd(bloodRhd);
   }
 
   public void setNotes(String notes) {
-    getRequest().setNotes(notes);
+    request.setNotes(notes);
   }
 
   public void setProductType(String productTypeId) {
@@ -177,19 +177,19 @@ public class RequestBackingForm {
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    getRequest().setIsDeleted(isDeleted);
+    request.setIsDeleted(isDeleted);
   }
 
   public List<Product> getIssuedProducts() {
-    return getRequest().getIssuedProducts();
+    return request.getIssuedProducts();
   }
 
   public int hashCode() {
-    return getRequest().hashCode();
+    return request.hashCode();
   }
 
   public void setModificationTracker(RowModificationTracker modificationTracker) {
-    getRequest().setModificationTracker(modificationTracker);
+    request.setModificationTracker(modificationTracker);
   }
 
   public void setRequestSite(String requestSite) {
@@ -204,11 +204,11 @@ public class RequestBackingForm {
   }
 
   public void setIssuedProducts(List<Product> issuedProducts) {
-    getRequest().setIssuedProducts(issuedProducts);
+    request.setIssuedProducts(issuedProducts);
   }
 
   public void generateRequestNumber() {
-    getRequest().setRequestNumber(RequestRepository.generateUniqueRequestNumber());
+    request.setRequestNumber(RequestRepository.generateUniqueRequestNumber());
   }
 
   public Request getRequest() {
@@ -269,7 +269,7 @@ public class RequestBackingForm {
     return CustomDateFormatter.getDateString(request.getPatientBirthDate());
   }
 
-  public void setBirthDate(String patientBirthDate) {
+  public void setPatientBirthDate(String patientBirthDate) {
     this.patientBirthDate = patientBirthDate;
     try {
       request.setPatientBirthDate(CustomDateFormatter.getDateFromString(patientBirthDate));

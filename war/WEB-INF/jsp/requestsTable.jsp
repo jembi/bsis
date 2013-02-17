@@ -129,7 +129,7 @@ $(document).ready(
 								<td>${request.requiredDate}</td>
 							</c:if>
 							<c:if test="${model.requestFields.productType.hidden != true}">
-								<td>${request.productType.productTypeName}</td>
+								<td>${request.productType.productType}</td>
 							</c:if>
 							<c:if test="${model.requestFields.requestedQuantity.hidden != true}">
 								<td>${request.requestedQuantity}</td>

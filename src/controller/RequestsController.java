@@ -138,6 +138,11 @@ public class RequestsController {
     String requestedAfter = form.getRequestedAfter();
     String requiredBy = form.getRequiredBy();
 
+    List<Integer> productTypeIds = new ArrayList<Integer>();
+    for (String productTypeId : form.getProductTypes()) {
+      productTypeIds.add(Integer.parseInt(productTypeId));
+    }
+
     List<Long> siteIds = new ArrayList<Long>();
     // add an invalid ID so that hibernate does not throw an exception
     siteIds.add((long)-1);
@@ -147,7 +152,7 @@ public class RequestsController {
       }
     }
 
-    productRequests = requestRepository.findRequests(productTypes, siteIds, requestedAfter, requiredBy);
+    productRequests = requestRepository.findRequests(productTypeIds, siteIds, requestedAfter, requiredBy);
 
     ModelAndView modelAndView = new ModelAndView("requestsTable");
     Map<String, Object> m = model.asMap();
@@ -240,11 +245,13 @@ public class RequestsController {
     }
 
     m.put("editRequestForm", form);
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    setRequestNumber(form, (Map<String, Object>) formFields.get("requestNumber"));
     m.put("existingRequest", false);
     m.put("success", success);
     m.put("message", message);
     m.put("refreshUrl", "editRequestFormGenerator.html");
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    m.put("requestFields", formFields);
     addEditSelectorOptions(m);
 
     mv.addObject("model", m);

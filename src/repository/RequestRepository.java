@@ -280,12 +280,12 @@ public class RequestRepository {
     return to;      
   }
 
-  public List<Request> findRequests(List<String> productTypes,
+  public List<Request> findRequests(List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
       String requiredBy) {
     TypedQuery<Request> query = em.createQuery(
             "SELECT r FROM Request r WHERE " +
-            "(r.productType.productType IN (:productTypes) AND " +
+            "(r.productType.id IN (:productTypeIds) AND " +
             "r.requestSite.id IN (:requestSiteIds)) AND (r.fulfilled = :fulfilled) AND" +
             "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
             "r.isDeleted= :isDeleted",
@@ -295,7 +295,7 @@ public class RequestRepository {
     Date to = getDateRequiredByOrDefault(requiredBy);
 
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productTypes", productTypes);
+    query.setParameter("productTypeIds", productTypeIds);
     query.setParameter("requestSiteIds", requestSiteIds);
     query.setParameter("fulfilled", Boolean.FALSE);
     query.setParameter("requestedAfter", from);

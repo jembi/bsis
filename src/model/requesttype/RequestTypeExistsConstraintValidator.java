@@ -28,7 +28,7 @@ public class RequestTypeExistsConstraintValidator implements
      return true;
 
    try {
-    if (requestTypeRepository.isRequestTypeValid(target.getRequestType()))
+    if (requestTypeRepository.getRequestTypeById(target.getId()) != null)
       return true;
    } catch (Exception e) {
     e.printStackTrace();

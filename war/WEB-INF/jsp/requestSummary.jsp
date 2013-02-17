@@ -150,7 +150,7 @@
 		<c:if test="${model.requestFields.requestDate.hidden != true }">
 			<div>
 				<label>${model.requestFields.requestDate.displayName}</label>
-				<label>${model.request.requestDate}</label>
+				<label style="width: auto;">${model.request.requestDate}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.requiredDate.hidden != true }">
@@ -168,7 +168,7 @@
 		<c:if test="${model.requestFields.productType.hidden != true }">
 			<div>
 				<label>${model.requestFields.productType.displayName}</label>
-				<label>${model.request.productType.productTypeName}</label>
+				<label>${model.request.productType.productType}</label>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.requestedQuantity.hidden != true }">
@@ -189,10 +189,16 @@
 				<label>${model.request.requestSite.name}</label>
 			</div>
 		</c:if>
-		<c:if test="${model.requestFields.patientName.hidden != true }">
+		<c:if test="${model.requestFields.patientFirstName.hidden != true }">
 			<div>
-				<label>${model.requestFields.patientName.displayName}</label>
-				<label>${model.request.patientName}</label>
+				<label>${model.requestFields.patientFirstName.displayName}</label>
+				<label>${model.request.patientFirstName}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.requestFields.patientLastName.hidden != true }">
+			<div>
+				<label>${model.requestFields.patientLastName.displayName}</label>
+				<label>${model.request.patientLastName}</label>
 			</div>
 		</c:if>
 	</div>

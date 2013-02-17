@@ -1,8 +1,10 @@
 package viewmodel;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import model.CustomDateFormatter;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
@@ -12,6 +14,7 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
+import model.util.Gender;
 
 public class RequestViewModel {
 	private Request request;
@@ -28,12 +31,16 @@ public class RequestViewModel {
     return request.getRequestNumber();
   }
 
-  public Date getRequestDate() {
-    return request.getRequestDate();
+  public String getRequestDate() {
+    if (request.getRequestDate() == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(request.getRequestDate());
   }
 
-  public Date getRequiredDate() {
-    return request.getRequiredDate();
+  public String getRequiredDate() {
+    if (request.getRequiredDate() == null)
+      return "";
+    return CustomDateFormatter.getDateString(request.getRequiredDate());
   }
 
   public Integer getRequestedQuantity() {
@@ -100,5 +107,57 @@ public class RequestViewModel {
     if (request == null || request.getIssuedProducts() == null)
       return 0;
     return request.getIssuedProducts().size();
+  }
+
+  public String getPatientFirstName() {
+    return request.getPatientFirstName();
+  }
+
+  public String getPatientLastName() {
+    return request.getPatientLastName();
+  }
+
+  public String getPatientBirthDate() {
+    if (request.getPatientBirthDate() == null)
+      return ""; 
+    return CustomDateFormatter.getDateString(request.getPatientBirthDate());
+  }
+
+  public String getPatientGender() {
+    if (request == null || request.getPatientGender() == null)
+      return null;
+    return request.getPatientGender().toString();
+  }
+
+  public Integer getPatientAge() {
+    return request.getPatientAge();
+  }
+
+  public String getPatientBloodGroup() {
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
+  }
+
+  public String getPatientDiagnosis() {
+    return request.getPatientDiagnosis();
+  }
+
+  public String getRequestedBy() {
+    return request.getRequestedBy();
+  }
+
+  public Integer getVolume() {
+    return request.getVolume();
+  }
+
+  public String getWard() {
+    return request.getWard();
+  }
+
+  public String getHospital() {
+    return request.getHospital();
+  }
+
+  public String getDepartment() {
+    return request.getDepartment();
   }
 }
