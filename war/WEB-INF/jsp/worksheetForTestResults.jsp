@@ -348,7 +348,7 @@ $(document).ready(function() {
 			</span>
 		</c:if>
 		<c:if test="${model.worksheetFound}">
-		
+
 			<br />
 			<br />
 
@@ -372,8 +372,8 @@ $(document).ready(function() {
 								</c:if>
 	
 								<c:forEach var="bloodTest" items="${model.bloodTests}">
-								  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
-										<th style="width: 170px;">
+									<c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+								  	<th style="width: 170px;">
 											${bloodTest.name}
 										</th>
 									</c:if>

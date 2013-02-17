@@ -448,6 +448,9 @@ public class TestResultRepository {
           em.persist(t);
         }
       }
+      for (Product p : collectedSample.getProducts()) {
+        productRepository.updateProductInternalFields(p);
+      }
     }
     em.flush();
   }
