@@ -92,7 +92,8 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Group and Save', '', '0'),
 ('Group and Screen', '', '0'),
 ('Standard', '', '0'),
-('Urgent', '', '0');
+('Urgent', '', '0'),
+('Elective Surgery', '', '0');
 
 insert into ProductType (productType, description, shelfLife, shelfLifeUnits, isDeleted) values
 ('Whole Blood', '', '35', 'days', '0'),
