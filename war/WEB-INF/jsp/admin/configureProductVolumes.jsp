@@ -18,49 +18,49 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="configureRequestTypesFormId">configureRequestTypes-${unique_page_id}</c:set>
+<c:set var="configureProductVolumesFormId">configureProductVolumes-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
 
-  $("#${tabContentId}").find(".addRequestTypeButton").button({
+  $("#${tabContentId}").find(".addProductVolumeButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
-    var div = $("#${configureRequestTypesFormId}").find(".requestTypeDiv")[0];
+    var div = $("#${configureProductVolumesFormId}").find(".productVolumeDiv")[0];
     var newDiv = $($(div).clone());
     console.log(newDiv);
     newDiv.find('input[name="id"]').val("");
-    newDiv.find('input[name="requestType"]').val("");
-    $("#${configureRequestTypesFormId}").append(newDiv);
+    newDiv.find('input[name="productVolume"]').val("");
+    $("#${configureProductVolumesFormId}").append(newDiv);
   });
 
-  $("#${tabContentId}").find(".saveRequestTypesButton").button({
+  $("#${tabContentId}").find(".saveProductVolumesButton").button({
     icons : {
       primary : 'ui-icon-disk'
     }
   }).click(function() {
     var data = {};
-    var requestTypeDivs = $("#${configureRequestTypesFormId}").find(".requestTypeDiv");
-    for (var index=0; index < requestTypeDivs.length; index++) {
-      var div = $(requestTypeDivs[index]);
+    var productVolumeDivs = $("#${configureProductVolumesFormId}").find(".productVolumeDiv");
+    for (var index=0; index < productVolumeDivs.length; index++) {
+      var div = $(productVolumeDivs[index]);
       var id = div.find('input[name="id"]').val();
-      var requestType = div.find('input[name="requestType"]').val();
-      console.log(requestType);
+      var productVolume = div.find('input[name="productVolume"]').val();
+      console.log(productVolume);
       if (id == undefined || id == null || id === "")
-        id = requestType;
-      data[id] = requestType;
+        id = productVolume;
+      data[id] = productVolume;
     }
 
     console.log(JSON.stringify(data));
     $.ajax({
-      url: "configureRequestTypes.html",
+      url: "configureProductVolumes.html",
       data: {params: JSON.stringify(data)},
       type: "POST",
       success: function(response) {
         				 $("#${tabContentId}").replaceWith(response);
-        				 showMessage("Request Types Updated Successfully!");
+        				 showMessage("Product Volumes Updated Successfully!");
       				 },
       error: 	 function(response) {
         				 showErrorMessage("Something went wrong. Please try again later");
@@ -86,20 +86,20 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
-		<b>Configure Request Types</b>
+		<b>Configure Product Volumes</b>
 		<br />
 		<br />
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				Modify names of request types. Add new request types. 
+				Modify the list of product volumes (in ml). 
 			</p>
 		</div>
-		<form id="${configureRequestTypesFormId}">
-				<c:forEach var="requestType" items="${model.allRequestTypes}">
-					<div class="requestTypeDiv">
+		<form id="${configureProductVolumesFormId}">
+				<c:forEach var="productVolume" items="${model.allProductVolumes}">
+					<div class="productVolumeDiv">
 						<div>
-							<input type="hidden" name="id" value="${requestType.id}" />
-							<input type="text" name="requestType" value="${requestType.requestType}" />
+							<input type="hidden" name="id" value="${productVolume.id}" />
+							<input type="text" name="productVolume" value="${productVolume.volume}" />
 						</div>
 					</div>
 			</c:forEach>
@@ -107,8 +107,8 @@ $(document).ready(function() {
 			<br />
 			<div>
 				<label>&nbsp;</label>
-				<button class="addRequestTypeButton">Add new request type</button>
-				<button class="saveRequestTypesButton">Save</button>
+				<button class="addProductVolumeButton">Add new product volume</button>
+				<button class="saveProductVolumesButton">Save</button>
 				<button class="cancelButton">Cancel</button>
 			</div>
 

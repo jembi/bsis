@@ -635,10 +635,4 @@ public class ProductRepository {
     em.flush();
   }
 
-  public List<ProductVolume> getAllProductVolumes() {
-    String queryString = "SELECT v FROM ProductVolume v where v.isDeleted = :isDeleted";
-    TypedQuery<ProductVolume> query = em.createQuery(queryString, ProductVolume.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    return query.getResultList();
-  }
 }

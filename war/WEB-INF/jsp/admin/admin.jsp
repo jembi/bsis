@@ -35,6 +35,9 @@
 		<li id="requestTypesForm">
 			<a href="configureRequestTypesFormGenerator.html">Request Types</a>
 		</li>
+		<li id="productVolumesForm">
+			<a href="configureProductVolumesFormGenerator.html">Product Volumes</a>
+		</li>
 		<li id="configureUsersForm">
 			<a href="configureUsersFormGenerator.html">Users</a>
 		</li>

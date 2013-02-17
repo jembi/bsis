@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
+import repository.ProductVolumeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
@@ -56,6 +57,9 @@ public class RequestsController {
 
   @Autowired
   private RequestTypeRepository requestTypeRepository;
+
+  @Autowired
+  private ProductVolumeRepository productVolumeRepository;
 
   @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
@@ -169,7 +173,7 @@ public class RequestsController {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
-    m.put("productVolumes", productRepository.getAllProductVolumes());
+    m.put("productVolumes", productVolumeRepository.getAllProductVolumes());
   }
 
   @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
