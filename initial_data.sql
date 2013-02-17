@@ -54,7 +54,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'requestDate', 'Request Date', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'requiredDate', 'Required Date', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'volume', 'Volume', '', '0', '1', '0', '0', '0', '', 0),
+('Request', 'volume', 'Volume', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'requestedQuantity', 'Requested Quantity', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '0', '', 0),

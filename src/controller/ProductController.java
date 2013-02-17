@@ -64,6 +64,11 @@ public class ProductController {
   public void setQuarantineStatus() {
     productRepository.updateQuarantineStatus();
   }
+
+  @PostConstruct
+  public void updateExpiryStatus() {
+    productRepository.updateExpiryStatus();
+  }
   
   @InitBinder
   protected void initBinder(WebDataBinder binder) {

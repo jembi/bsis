@@ -24,7 +24,6 @@ import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
-import model.productvolume.ProductVolume;
 import model.request.Request;
 import model.testresults.TestResult;
 import model.util.BloodAbo;
@@ -635,4 +634,15 @@ public class ProductRepository {
     em.flush();
   }
 
+  public void updateExpiryStatus() {
+    String updateExpiryQuery = "UPDATE Product p SET p.status=:status WHERE " +
+    		                       "p.status=:availableStatus AND " +
+    		                       "p.expiresOn < :today";
+    Query query = em.createQuery(updateExpiryQuery);
+    query.setParameter("status", ProductStatus.EXPIRED);
+    query.setParameter("availableStatus", ProductStatus.AVAILABLE);
+    query.setParameter("today", new Date());
+    int numUpdated = query.executeUpdate();
+    System.out.println("Number of rows updated: " + numUpdated);
+  }
 }

@@ -240,6 +240,7 @@ $(document).ready(function() {
 					<form:select path="status" class="productStatusSelector">
 						<form:option value="QUARANTINED" label="Quarantined" selected="selected" />
 						<form:option value="AVAILABLE" label="Available" selected="selected" />
+						<form:option value="EXPIRED" label="Expired" selected="selected" />
 						<form:option value="UNSAFE" label="Unsafe" selected="selected" />
 						<form:option value="ISSUED" label="Issued" selected="selected" />
 						<form:option value="DISCARDED" label="Discarded" selected="selected" />
