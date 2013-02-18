@@ -219,7 +219,19 @@
 				<label>${model.donor.city}</label>
 			</div>
 		</c:if>
-				<c:if test="${model.donorFields.state.hidden != true }">
+		<c:if test="${model.donorFields.province.hidden != true }">
+			<div>
+				<label>${model.donorFields.province.displayName}</label>
+				<label>${model.donor.province}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.district.hidden != true }">
+			<div>
+				<label>${model.donorFields.district.displayName}</label>
+				<label>${model.donor.district}</label>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.state.hidden != true }">
 			<div>
 				<label>${model.donorFields.state.displayName}</label>
 				<label>${model.donor.state}</label>

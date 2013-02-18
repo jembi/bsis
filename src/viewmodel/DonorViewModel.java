@@ -71,6 +71,14 @@ public class DonorViewModel {
     return donor.getCity();
   }
 
+  public String getProvince() {
+    return donor.getProvince();
+  }
+
+  public String getDistrict() {
+    return donor.getDistrict();
+  }
+
   public String getState() {
     return donor.getState();
   }

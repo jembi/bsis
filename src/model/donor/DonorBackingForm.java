@@ -126,6 +126,14 @@ public class DonorBackingForm {
     return donor.getCity();
   }
 
+  public String getProvince() {
+    return donor.getProvince();
+  }
+
+  public String getDistrict() {
+    return donor.getDistrict();
+  }
+
   public String getState() {
     return donor.getState();
   }
@@ -204,6 +212,14 @@ public class DonorBackingForm {
 
   public void setCity(String city) {
     donor.setCity(city);
+  }
+
+  public void setProvince(String province) {
+    donor.setProvince(province);
+  }
+
+  public void setDistrict(String district) {
+    donor.setDistrict(district);
   }
 
   public void setState(String state) {

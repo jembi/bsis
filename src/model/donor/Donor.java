@@ -214,6 +214,14 @@ public class Donor implements ModificationTracker {
     return contactInformation.getAddress();
   }
 
+  public String getProvince() {
+    return contactInformation.getProvince();
+  }
+
+  public String getDistrict() {
+    return contactInformation.getDistrict();
+  }
+
   public String getCity() {
     return contactInformation.getCity();
   }
@@ -236,6 +244,14 @@ public class Donor implements ModificationTracker {
 
   public void setCity(String city) {
     contactInformation.setCity(city);
+  }
+
+  public void setProvince(String province) {
+    contactInformation.setProvince(province);
+  }
+
+  public void setDistrict(String district) {
+    contactInformation.setDistrict(district);
   }
 
   public void setState(String state) {

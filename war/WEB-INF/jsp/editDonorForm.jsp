@@ -219,6 +219,20 @@
 				<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 			</div>
 		</c:if>
+		<c:if test="${model.donorFields.province.hidden != true }">
+			<div>
+				<form:label path="province">${model.donorFields.province.displayName}</form:label>
+				<form:input path="province" value="${model.existingDonor ? '' : model.donorFields.province.defaultValue}" />
+				<form:errors class="formError" path="donor.province" delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.donorFields.district.hidden != true }">
+			<div>
+				<form:label path="district">${model.donorFields.district.displayName}</form:label>
+				<form:input path="district" value="${model.existingDonor ? '' : model.donorFields.district.defaultValue}" />
+				<form:errors class="formError" path="donor.district" delimiter=", "></form:errors>
+			</div>
+		</c:if>
 		<c:if test="${model.donorFields.state.hidden != true }">
 			<div>
 				<form:label path="state">${model.donorFields.state.displayName}</form:label>

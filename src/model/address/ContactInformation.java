@@ -18,6 +18,14 @@ public class ContactInformation {
 
   @Length(max=50)
   @Column(length=50)
+  private String province;
+
+  @Length(max=50)
+  @Column(length=50)
+  private String district;
+
+  @Length(max=50)
+  @Column(length=50)
   private String state;
 
   @Length(max=50)
@@ -70,11 +78,25 @@ public class ContactInformation {
   }
 
   public void copy(ContactInformation contactInformation) {
-    address = contactInformation.address;
-    city = contactInformation.city;
-    state = contactInformation.state;
-    country = contactInformation.country;
-    zipcode = contactInformation.zipcode;
-    phoneNumber = contactInformation.phoneNumber;
+    this.address = contactInformation.address;
+    this.city = contactInformation.city;
+    this.province = contactInformation.province;
+    this.district = contactInformation.district;
+    this.state = contactInformation.state;
+    this.country = contactInformation.country;
+    this.zipcode = contactInformation.zipcode;
+    this.phoneNumber = contactInformation.phoneNumber;
+  }
+  public String getDistrict() {
+    return district;
+  }
+  public void setDistrict(String district) {
+    this.district = district;
+  }
+  public String getProvince() {
+    return province;
+  }
+  public void setProvince(String province) {
+    this.province = province;
   }
 }
