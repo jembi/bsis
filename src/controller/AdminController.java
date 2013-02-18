@@ -23,6 +23,7 @@ import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtest.BloodTest;
+import model.crossmatch.CrossmatchType;
 import model.donortype.DonorType;
 import model.producttype.ProductType;
 import model.productvolume.ProductVolume;
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
+import repository.CrossmatchTypeRepository;
 import repository.DonorTypeRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
@@ -76,6 +78,9 @@ public class AdminController {
 
   @Autowired
   RequestTypeRepository requestTypesRepository;
+
+  @Autowired
+  CrossmatchTypeRepository crossmatchTypesRepository;
 
   @Autowired
   ProductVolumeRepository productVolumesRepository;
@@ -269,6 +274,19 @@ public class AdminController {
     return mv;
   }
 
+  @RequestMapping(value="/configureCrossmatchTypesFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureCrossmatchTypesFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureCrossmatchTypes");
+    Map<String, Object> m = model.asMap();
+    addAllCrossmatchTypesToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
+
   @RequestMapping(value="/configureProductVolumesFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureProductVolumesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
@@ -389,6 +407,10 @@ public class AdminController {
     m.put("allRequestTypes", requestTypesRepository.getAllRequestTypes());
   }
 
+  private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
+    m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
+  }
+
   private void addAllProductVolumesToModel(Map<String, Object> m) {
     m.put("allProductVolumes", productVolumesRepository.getAllProductVolumes());
   }
@@ -495,6 +517,42 @@ public class AdminController {
     Map<String, Object> m = model.asMap();
     addAllRequestTypesToModel(m);
     m.put("refreshUrl", "configureRequestTypesFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping("/configureCrossmatchTypes")
+  public ModelAndView configureCrossmatchTypes(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson, Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureCrossmatchTypes");
+    System.out.println(paramsAsJson);
+    List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
+    try {
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      for (String id : params.keySet()) {
+        String crossmatchType = (String) params.get(id);
+        CrossmatchType ct = new CrossmatchType();
+        try {
+          ct.setId(Integer.parseInt(id));
+        } catch (NumberFormatException ex) {
+          ex.printStackTrace();
+          ct.setId(null);
+        }
+        ct.setCrossmatchType(crossmatchType);
+        ct.setIsDeleted(false);
+        allCrossmatchTypes.add(ct);
+      }
+      crossmatchTypesRepository.saveAllCrossmatchTypes(allCrossmatchTypes);
+      System.out.println(params);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllCrossmatchTypesToModel(m);
+    m.put("refreshUrl", "configureCrossmatchTypesFormGenerator.html");
     mv.addObject("model", model);
     return mv;
   }

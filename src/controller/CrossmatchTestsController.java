@@ -107,6 +107,7 @@ public class CrossmatchTestsController {
     String message = "";
 
     Map<String, Object> m = model.asMap();
+
     // IMPORTANT: Validation code just checks if the ID exists.
     // We still need to store the collected sample as part of the product.
     String productNumber = form.getProductNumber();
@@ -114,6 +115,21 @@ public class CrossmatchTestsController {
       try {
         Product product = productRepository.findProductByProductNumber(productNumber);
         form.setTestedProduct(product);
+      } catch (NoResultException ex) {
+        form.setTestedProduct(null);
+        ex.printStackTrace();
+      }
+    } else {
+      form.setTestedProduct(null);
+    }
+
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the request as part of the crossmatch test.
+    String requestNumber = form.getRequestNumber();
+    if (requestNumber != null && !requestNumber.isEmpty()) {
+      try {
+        Request productRequest = requestRepository.findRequestByRequestNumber(requestNumber);
+        form.setForRequest(productRequest);
       } catch (NoResultException ex) {
         form.setTestedProduct(null);
         ex.printStackTrace();

@@ -36,6 +36,12 @@
                     									"${tabContentId}", notifyParentSuccess);
             });
 
+        $("#${mainContentId}").find(".cancelButton").button({
+          icons : {
+            primary : 'ui-icon-closethick'
+          }
+        }).click(notifyParentCancel);
+
         $("#${mainContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
@@ -98,8 +104,8 @@
               				 showMessage("Crossmatch Test updated successfully.");
             				 },
           	error: function(response) {
+										 $("#${tabContentId}").replaceWith(response.responseText);
 										 showErrorMessage("Something went wrong. Please try again.");
-										 $("#${tabContentId}").replaceWith(response);
           				 }
           });
         }
@@ -115,12 +121,15 @@
 				<label style="width: auto;"><b>Crossmatch Testing for Request Number
 				${model.editCrossmatchTestForm.crossmatchTest.forRequest.requestNumber}</b></label>
 			</div>
+			<div>
+			  <form:hidden path="requestNumber" value="${model.editCrossmatchTestForm.crossmatchTest.forRequest.requestNumber}"></form:hidden>
+			</div>
 				<c:if test="${model.crossmatchTestFields.productNumber.hidden != true }">
 					<div>
 						<form:label path="productNumber">${model.crossmatchTestFields.productNumber.displayName}</form:label>
 						<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.productNumber.defaultValue}" />
 						<form:errors class="formError"
-							path="crossmatchTest.testedProduct" delimiter=", "></form:errors>
+							path="crossmatchTest.productNumber" delimiter=", "></form:errors>
 					</div>
 				</c:if>
 				<c:if test="${model.crossmatchTestFields.crossmatchTestDate.hidden != true }">
@@ -170,6 +179,9 @@
 			<div style="margin-left: 200px;">
 				<button type="button" class="saveButton autoWidthButton">
 					Save
+				</button>
+				<button type="button" class="cancelButton autoWidthButton">
+					Cancel
 				</button>
 				<button type="button" class="clearFormButton autoWidthButton">
 					Clear form

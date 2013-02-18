@@ -38,7 +38,7 @@ public class CrossmatchTypeRepository {
 
   public CrossmatchType getCrossmatchTypeById(Integer requestTypeId) {
     TypedQuery<CrossmatchType> query;
-    query = em.createQuery("SELECT ct from CrossmatchType r " +
+    query = em.createQuery("SELECT ct from CrossmatchType ct " +
     		    "where ct.id=:id AND ct.isDeleted=:isDeleted", CrossmatchType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", requestTypeId);

@@ -83,6 +83,19 @@ public class CrossmatchTestBackingForm {
     crossmatchTest.setTestedProduct(product);
   }
 
+  public String getRequestNumber() {
+    if (crossmatchTest == null || crossmatchTest.getForRequest() == null ||
+        crossmatchTest.getForRequest().getRequestNumber() == null
+       )
+      return "";
+    return crossmatchTest.getForRequest().getRequestNumber();
+  }
+
+  public void setRequestNumber(String requestNumber) {
+    Request request = new Request();
+    request.setRequestNumber(requestNumber);
+    crossmatchTest.setForRequest(request);
+  }
 
   public Product getTestedProduct() {
     return crossmatchTest.getTestedProduct();

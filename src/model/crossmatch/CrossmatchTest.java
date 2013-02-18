@@ -176,5 +176,15 @@ public class CrossmatchTest implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
+  public String getProductNumber() {
+    if (testedProduct == null)
+      return null;
+    return testedProduct.getProductNumber();
+  }
 
+  public String getRequestNumber() {
+    if (forRequest == null)
+      return null;
+    return forRequest.getRequestNumber();
+  }
 }
