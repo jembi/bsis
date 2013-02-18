@@ -50,6 +50,12 @@
           header : false
         });
 
+        $("#${mainContentId}").find(".crossmatchType").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+
         $("#${editCrossmatchTestFormId}").find(".crossmatchTestDate").datetimepicker({
           changeMonth : true,
           changeYear : true,
@@ -72,11 +78,29 @@
             type: "GET",
             success: function (response) {
               			 	 $("#${tabContentId}").replaceWith(response);
+              			 	 notifyParentSuccess();
             				 },
             error:   function (response) {
 											 showErrorMessage("Something went wrong. Please try again.");
             				 }
             
+          });
+        }
+
+        function addCrossmatchTest() {
+          $.ajax({
+            url: "addCrossmatchTestForRequest.html",
+            data: $("#${editCrossmatchTestFormId}").serialize(),
+            type: "POST",
+            success: function(response) {
+              				 notifyParentSuccess();
+              				 $("#${tabContentId}").replaceWith(response);
+              				 showMessage("Crossmatch Test updated successfully.");
+            				 },
+          	error: function(response) {
+										 showErrorMessage("Something went wrong. Please try again.");
+										 $("#${tabContentId}").replaceWith(response);
+          				 }
           });
         }
 		});
@@ -87,37 +111,60 @@
 	<div id="${mainContentId}">
 		<form:form method="POST" commandName="editCrossmatchTestForm"
 			class="formInTabPane" id="${editCrossmatchTestFormId}">
-			<div class="barcodeContainer"></div>
-			<form:hidden path="id" />
-			<c:if test="${model.crossmatchTestFields.productNumber.hidden != true }">
-				<div>
-					<form:label path="productNumber">${model.crossmatchTestFields.productNumber.displayName}</form:label>
-					<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.productNumber.defaultValue}" />
-					<form:errors class="formError"
-						path="crossmatchTest.testedProduct" delimiter=", "></form:errors>
-				</div>
-			</c:if>
-			<c:if test="${model.crossmatchTestFields.crossmatchTestDate.hidden != true }">
-				<div>
-					<form:label path="crossmatchTestDate">${model.crossmatchTestFields.crossmatchTestDate.displayName}</form:label>
-					<form:input path="crossmatchTestDate" class="crossmatchTestDate" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.crossmatchTestDate.defaultValue}" />
-					<form:errors class="formError" path="crossmatchTest.crossmatchTestDate"
-						delimiter=", "></form:errors>
-				</div>
-			</c:if>
-			<c:if test="${model.crossmatchTestFields.compatibilityResult.hidden != true }">
-				<div>
-					<form:label path="compatibilityResult">${model.crossmatchTestFields.compatibilityResult.displayName}</form:label>
-					<form:select path="compatibilityResult"
-						class="compatibilityResult">
-						<form:option value="">&nbsp;</form:option>
-						<form:option value="COMPATIBLE">Compatible</form:option>
-						<form:option value="NOT_COMPATIBLE">Not compatible</form:option>
-					</form:select>
-					<form:errors class="formError" path="crossmatchTest.compatibilityResult"
-						delimiter=", "></form:errors>
-				</div>
-			</c:if>
+			<div>
+				<label style="width: auto;"><b>Crossmatch Testing for Request Number
+				${model.editCrossmatchTestForm.crossmatchTest.forRequest.requestNumber}</b></label>
+			</div>
+				<c:if test="${model.crossmatchTestFields.productNumber.hidden != true }">
+					<div>
+						<form:label path="productNumber">${model.crossmatchTestFields.productNumber.displayName}</form:label>
+						<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.productNumber.defaultValue}" />
+						<form:errors class="formError"
+							path="crossmatchTest.testedProduct" delimiter=", "></form:errors>
+					</div>
+				</c:if>
+				<c:if test="${model.crossmatchTestFields.crossmatchTestDate.hidden != true }">
+					<div>
+						<form:label path="crossmatchTestDate">${model.crossmatchTestFields.crossmatchTestDate.displayName}</form:label>
+						<form:input path="crossmatchTestDate" class="crossmatchTestDate" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.crossmatchTestDate.defaultValue}" />
+						<form:errors class="formError" path="crossmatchTest.crossmatchTestDate"
+							delimiter=", "></form:errors>
+					</div>
+				</c:if>
+				<c:if test="${model.crossmatchFields.crossmatchType.hidden != true }">
+					<div>
+						<form:label path="crossmatchType">${model.crossmatchTestFields.crossmatchType.displayName}</form:label>
+						<form:select path="crossmatchType" id="editCrossmatchTestFormCrossmatchTypes-${unique_page_id}" class="crossmatchType">
+							<form:option value="">&nbsp;</form:option>
+							<c:forEach var="crossmatchType" items="${model.crossmatchTypes}">
+								<form:option value="${crossmatchType.id}">${crossmatchType.crossmatchType}</form:option>
+							</c:forEach>
+						</form:select>
+						<form:errors class="formError" path="crossmatchTest.crossmatchType"
+							delimiter=", "></form:errors>
+					</div>
+				</c:if>
+				<c:if test="${model.crossmatchTestFields.compatibilityResult.hidden != true }">
+					<div>
+						<form:label path="compatibilityResult">${model.crossmatchTestFields.compatibilityResult.displayName}</form:label>
+						<form:select path="compatibilityResult"
+							class="compatibilityResult">
+							<form:option value="">&nbsp;</form:option>
+							<form:option value="COMPATIBLE">Compatible</form:option>
+							<form:option value="NOT_COMPATIBLE">Not compatible</form:option>
+						</form:select>
+						<form:errors class="formError" path="crossmatchTest.compatibilityResult"
+							delimiter=", "></form:errors>
+					</div>
+				</c:if>
+				<c:if test="${model.crossmatchTestFields.notes.hidden != true }">
+					<div>
+						<form:label path="notes" class="labelForTextArea">${model.crossmatchTestFields.notes.displayName}</form:label>
+						<form:textarea path="notes" />
+						<form:errors class="formError" path="crossmatchTest.notes"
+							delimiter=", "></form:errors>
+					</div>
+				</c:if>
 			</form:form>
 	
 			<div style="margin-left: 200px;">

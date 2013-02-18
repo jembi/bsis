@@ -52,6 +52,8 @@ public class CrossmatchTest implements ModificationTracker {
 
   private String testedBy;
 
+  private Boolean isDeleted;
+
   @Lob
   private String notes;
   
@@ -164,6 +166,14 @@ public class CrossmatchTest implements ModificationTracker {
 
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 
 

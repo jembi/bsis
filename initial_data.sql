@@ -80,7 +80,8 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('CrossmatchTest', 'crossmatchTestDate', 'Crossmatch test date', '', '0', '0', '0', '0', '0', '', 0),
 ('CrossmatchTest', 'transfusedBefore', 'Transfused before', '', '0', '0', '0', '0', '0', '', 0),
 ('CrossmatchTest', 'crossmatchType', 'Crossmatch type', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0);
+('CrossmatchTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0),
+('CrossmatchTest', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('Usage', 'hospital', 'Hospital', '', '0', '1', '0', '0', '0', '', 0),
@@ -165,3 +166,7 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 insert into ProductVolume (volume, unit, description, isDeleted) values
 ('450', 'ml', '', '0'),
 ('1350', 'ml', '', '0');
+
+insert into CrossmatchType (crossmatchType, isDeleted) values
+('Saline @ 37 degrees', '0'),
+('Anti Human Globulin', '0');

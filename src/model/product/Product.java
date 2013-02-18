@@ -93,7 +93,7 @@ public class Product implements ModificationTracker {
   @Column(length=30)
   private ProductStatus status;
 
-  @OneToMany(mappedBy="testedProduct", fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="testedProduct", fetch=FetchType.LAZY)
   private List<CrossmatchTest> crossmatchTests;
 
   @Lob

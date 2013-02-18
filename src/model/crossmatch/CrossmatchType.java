@@ -16,6 +16,8 @@ public class CrossmatchType {
 
   private String crossmatchType;
 
+  private Boolean isDeleted;
+  
   public Integer getId() {
     return id;
   }
@@ -30,5 +32,13 @@ public class CrossmatchType {
 
   public void setCrossmatchType(String crossmatchType) {
     this.crossmatchType = crossmatchType;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }
