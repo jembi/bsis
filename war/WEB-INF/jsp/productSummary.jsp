@@ -65,7 +65,7 @@
             primary : 'ui-icon-print'
           }
         }).click(function() {
-          $("#${mainContentId}").printArea();
+          $("#${mainContentId}").find(".printableArea").printArea();
         });
 
         $("#${tabContentId}").find(".doneButton").button({
@@ -136,7 +136,7 @@
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}">
 
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="doneButton">
@@ -165,65 +165,67 @@
 		<br />
 		<br />
 
-		<div id="${productSummaryBarcodeId}"></div>
-
-		<c:if test="${model.productFields.productNumber.hidden != true }">
-			<div>
-				<label>${model.productFields.productNumber.displayName}</label>
-				<label>${model.product.productNumber}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.collectionNumber.hidden != true }">
-			<div>
-				<label>${model.productFields.collectionNumber.displayName}</label>
-				<label>${model.product.collectionNumber}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.createdOn.hidden != true }">
-			<div>
-				<label>${model.productFields.createdOn.displayName}</label>
-				<label style="width: auto;">${model.product.createdOn}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.expiresOn.hidden != true }">
-			<div>
-				<label>${model.productFields.expiresOn.displayName}</label>
-				<label style="width: auto;">${model.product.expiresOn} (${product.expiryStatus})</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.productType.hidden != true }">
-			<div>
-				<label>${model.productFields.productType.displayName}</label>
-				<label>${model.product.productType.productType}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.status.hidden != true }">
-			<div>
-				<label>${model.productFields.status.displayName}</label>
-				<label>${model.product.status}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.bloodGroup.hidden != true }">
-			<div>
-				<label>${model.productFields.bloodGroup.displayName}</label>
-				<label>${model.product.bloodGroup}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.bloodGroup.hidden != true }">
-			<div>
-				<label>${model.productFields.age.displayName}</label>
-				<label>${model.product.age}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.productFields.notes.hidden != true }">
-			<div>
-				<label>${model.productFields.notes.displayName}</label>
-				<label>${model.product.notes}</label>
-			</div>
-		</c:if>
+		<div class="formInTabPane printableArea">
+			<br />
+			<div id="${productSummaryBarcodeId}"></div>
+			<c:if test="${model.productFields.productNumber.hidden != true }">
+				<div>
+					<label>${model.productFields.productNumber.displayName}</label>
+					<label>${model.product.productNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.collectionNumber.hidden != true }">
+				<div>
+					<label>${model.productFields.collectionNumber.displayName}</label>
+					<label>${model.product.collectionNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.createdOn.hidden != true }">
+				<div>
+					<label>${model.productFields.createdOn.displayName}</label>
+					<label style="width: auto;">${model.product.createdOn}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.expiresOn.hidden != true }">
+				<div>
+					<label>${model.productFields.expiresOn.displayName}</label>
+					<label style="width: auto;">${model.product.expiresOn} (${product.expiryStatus})</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.productType.hidden != true }">
+				<div>
+					<label>${model.productFields.productType.displayName}</label>
+					<label>${model.product.productType.productType}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.status.hidden != true }">
+				<div>
+					<label>${model.productFields.status.displayName}</label>
+					<label>${model.product.status}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.bloodGroup.hidden != true }">
+				<div>
+					<label>${model.productFields.bloodGroup.displayName}</label>
+					<label>${model.product.bloodGroup}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.bloodGroup.hidden != true }">
+				<div>
+					<label>${model.productFields.age.displayName}</label>
+					<label>${model.product.age}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.productFields.notes.hidden != true }">
+				<div>
+					<label>${model.productFields.notes.displayName}</label>
+					<label>${model.product.notes}</label>
+				</div>
+			</c:if>
+			<hr />
+		</div>
 	</div>
 
-	<hr />
 	<br />
 	<br />
 

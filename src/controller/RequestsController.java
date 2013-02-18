@@ -138,13 +138,15 @@ public class RequestsController {
 
     List<Request> productRequests = Arrays.asList(new Request[0]);
 
-    List<String> productTypes = form.getProductTypes();
     String requestedAfter = form.getRequestedAfter();
     String requiredBy = form.getRequiredBy();
 
     List<Integer> productTypeIds = new ArrayList<Integer>();
-    for (String productTypeId : form.getProductTypes()) {
-      productTypeIds.add(Integer.parseInt(productTypeId));
+    productTypeIds.add(-1);
+    if (form.getProductTypes() != null) {
+      for (String productTypeId : form.getProductTypes()) {
+        productTypeIds.add(Integer.parseInt(productTypeId));
+      }
     }
 
     List<Long> siteIds = new ArrayList<Long>();

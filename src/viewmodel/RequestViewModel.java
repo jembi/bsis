@@ -160,4 +160,8 @@ public class RequestViewModel {
   public String getDepartment() {
     return request.getDepartment();
   }
+
+  public String getPatientNumber() {
+    return request.getPatientNumber();
+  }
 }

@@ -83,7 +83,7 @@
             primary : 'ui-icon-print'
           }
         }).click(function() {
-          $("#${mainContentId}").printArea();
+          $("#${mainContentId}").find(".printableArea").printArea();
         });
 
         $("#${tabContentId}").find(".cancelButton").button({
@@ -138,14 +138,14 @@
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}">
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
 				Done
 			</button>
-			<button type="button" class="addCrossmatchTestButton">
+			<!-- button type="button" class="addCrossmatchTestButton">
 				Add crossmatch tests
-			</button>
+			</button-->
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products
 			</button>
@@ -168,67 +168,123 @@
 				${model['requests.findpending.requestsummary']}
 			</p>
 		</div>
-		<br />
 
-		<div id="${requestSummaryBarcodeId}"></div>
-
-		<c:if test="${model.requestFields.requestDate.hidden != true }">
-			<div>
-				<label>${model.requestFields.requestDate.displayName}</label>
-				<label style="width: auto;">${model.request.requestDate}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.requiredDate.hidden != true }">
-			<div>
-				<label>${model.requestFields.requiredDate.displayName}</label>
-				<label>${model.request.requiredDate}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.bloodGroup.hidden != true }">
-			<div>
-				<label>${model.requestFields.bloodGroup.displayName}</label>
-				<label>${model.request.bloodGroup}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.productType.hidden != true }">
-			<div>
-				<label>${model.requestFields.productType.displayName}</label>
-				<label>${model.request.productType.productType}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.requestedQuantity.hidden != true }">
-			<div>
-				<label>${model.requestFields.requestedQuantity.displayName}</label>
-				<label>${model.request.requestedQuantity}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.issuedQuantity.hidden != true }">
-			<div>
-				<label>${model.requestFields.issuedQuantity.displayName}</label>
-				<label>${model.request.issuedQuantity}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.requestSite.hidden != true }">
-			<div>
-				<label>${model.requestFields.requestSite.displayName}</label>
-				<label>${model.request.requestSite.name}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.patientFirstName.hidden != true }">
-			<div>
-				<label>${model.requestFields.patientFirstName.displayName}</label>
-				<label>${model.request.patientFirstName}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.patientLastName.hidden != true }">
-			<div>
-				<label>${model.requestFields.patientLastName.displayName}</label>
-				<label>${model.request.patientLastName}</label>
-			</div>
-		</c:if>
+		<div class="formInTabPane printableArea">
+			<br />
+			<div id="${requestSummaryBarcodeId}"></div>
+	
+			<c:if test="${model.requestFields.requestDate.hidden != true }">
+				<div>
+					<label>${model.requestFields.requestDate.displayName}</label>
+					<label style="width: auto;">${model.request.requestDate}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.requiredDate.hidden != true }">
+				<div>
+					<label>${model.requestFields.requiredDate.displayName}</label>
+					<label>${model.request.requiredDate}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.bloodGroup.hidden != true }">
+				<div>
+					<label>${model.requestFields.bloodGroup.displayName}</label>
+					<label>${model.request.bloodGroup}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.productType.hidden != true }">
+				<div>
+					<label>${model.requestFields.productType.displayName}</label>
+					<label>${model.request.productType.productType}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.requestedQuantity.hidden != true }">
+				<div>
+					<label>${model.requestFields.requestedQuantity.displayName}</label>
+					<label>${model.request.requestedQuantity}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.issuedQuantity.hidden != true }">
+				<div>
+					<label>${model.requestFields.issuedQuantity.displayName}</label>
+					<label>${model.request.issuedQuantity}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.requestSite.hidden != true }">
+				<div>
+					<label>${model.requestFields.requestSite.displayName}</label>
+					<label>${model.request.requestSite.name}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.patientNumber.hidden != true }">
+				<div>
+					<label>${model.requestFields.patientNumber.displayName}</label>
+					<label>${model.request.patientNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.patientFirstName.hidden != true }">
+				<div>
+					<label>${model.requestFields.patientFirstName.displayName}</label>
+					<label>${model.request.patientFirstName}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.patientLastName.hidden != true }">
+				<div>
+					<label>${model.requestFields.patientLastName.displayName}</label>
+					<label>${model.request.patientLastName}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.patientBirthDate.hidden != true }">
+				<div>
+					<label>${model.requestFields.patientBirthDate.displayName}</label>
+					<label>${model.request.patientBirthDate}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.patientAge.hidden != true }">
+				<div>
+					<label>${model.requestFields.patientAge.displayName}</label>
+					<label>${model.request.patientAge}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.patientDiagnosis.hidden != true }">
+				<div>
+					<label>${model.requestFields.patientDiagnosis.displayName}</label>
+					<label>${model.request.patientDiagnosis}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.ward.hidden != true }">
+				<div>
+					<label>${model.requestFields.ward.displayName}</label>
+					<label>${model.request.ward}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.department.hidden != true }">
+				<div>
+					<label>${model.requestFields.department.displayName}</label>
+					<label>${model.request.department}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.hospital.hidden != true }">
+				<div>
+					<label>${model.requestFields.hospital.displayName}</label>
+					<label>${model.request.hospital}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.requestedBy.hidden != true }">
+				<div>
+					<label>${model.requestFields.requestedBy.displayName}</label>
+					<label>${model.request.requestedBy}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.requestFields.notes.hidden != true }">
+				<div>
+					<label>${model.requestFields.notes.displayName}</label>
+					<label>${model.request.notes}</label>
+				</div>
+			</c:if>
+			<hr />
+		</div>
 	</div>
 
-	<hr />
 	<br />
 	<br />
 

@@ -50,7 +50,7 @@
             primary : 'ui-icon-print'
           }
         }).click(function() {
-          $("#${mainContentId}").printArea();
+          $("#${mainContentId}").find(".printableArea").printArea();
         });
 
         $("#${tabContentId}").find(".cancelButton").button({
@@ -98,7 +98,7 @@
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}">
 
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
@@ -124,72 +124,74 @@
 			</p>
 		</div>
 
-		<br />
-		<div id="${collectionSummaryBarcodeId}"></div>
-
-		<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.collectionNumber.displayName}</label>
-				<label>${model.collectedSample.collectionNumber}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.donorNumber.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.donorNumber.displayName}</label>
-				<c:if test="${not empty model.collectedSample.donorNumber}">
-					<label style="width: auto;">${model.collectedSample.donorNumber} (${model.collectedSample.donor.firstName} ${model.collectedSample.donor.lastName})</label>
-				</c:if>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.donorType.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.donorType.displayName}</label>
-				<label>${model.collectedSample.donorType}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.bloodBagType.displayName}</label>
-				<label>${model.collectedSample.bloodBagType}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.collectedOn.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.collectedOn.displayName}</label>
-				<label style="width: auto;">${model.collectedSample.collectedOn}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.collectionCenter.displayName}</label>
-				<label>${model.collectedSample.collectionCenter}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.collectionSite.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.collectionSite.displayName}</label>
-				<label>${model.collectedSample.collectionSite}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.sampleNumber.displayName}</label>
-				<label>${model.collectedSample.sampleNumber}</label>
-			</div>
-		</c:if>
-				<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.shippingNumber.displayName}</label>
-				<label>${model.collectedSample.shippingNumber}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.collectedSampleFields.notes.hidden != true }">
-			<div>
-				<label>${model.collectedSampleFields.notes.displayName}</label>
-				<label>${model.collectedSample.notes}</label>
-			</div>
-		</c:if>
-		<hr />
+		<div class="formInTabPane printableArea">
+			<br />
+			<div id="${collectionSummaryBarcodeId}"></div>
+	
+			<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.collectionNumber.displayName}</label>
+					<label>${model.collectedSample.collectionNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.donorNumber.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.donorNumber.displayName}</label>
+					<c:if test="${not empty model.collectedSample.donorNumber}">
+						<label style="width: auto;">${model.collectedSample.donorNumber} (${model.collectedSample.donor.firstName} ${model.collectedSample.donor.lastName})</label>
+					</c:if>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.donorType.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.donorType.displayName}</label>
+					<label>${model.collectedSample.donorType}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.bloodBagType.displayName}</label>
+					<label>${model.collectedSample.bloodBagType}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.collectedOn.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.collectedOn.displayName}</label>
+					<label style="width: auto;">${model.collectedSample.collectedOn}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.collectionCenter.displayName}</label>
+					<label>${model.collectedSample.collectionCenter}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.collectionSite.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.collectionSite.displayName}</label>
+					<label>${model.collectedSample.collectionSite}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.sampleNumber.displayName}</label>
+					<label>${model.collectedSample.sampleNumber}</label>
+				</div>
+			</c:if>
+					<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.shippingNumber.displayName}</label>
+					<label>${model.collectedSample.shippingNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.collectedSampleFields.notes.hidden != true }">
+				<div>
+					<label>${model.collectedSampleFields.notes.displayName}</label>
+					<label>${model.collectedSample.notes}</label>
+				</div>
+			</c:if>
+			<hr />
+		</div>
 	</div>
 
 	<br />
