@@ -1,5 +1,6 @@
 package controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import model.donor.DonorBackingForm;
 import model.donor.DonorBackingFormValidator;
 import model.util.BloodGroup;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -331,27 +333,32 @@ public class DonorController {
   }
 
   /**
-   * Get column name from column id, depends on sequence of columns in productsTable.jsp
+   * Get column name from column id, depends on sequence of columns in donorsTable.jsp
    */
-  private List<String> getSortingColumns(int columnId) {
-    List<String> sortColumns = null;
-    switch (columnId) {
-    case 0: sortColumns = Arrays.asList("id");
-            break;
-    case 1: sortColumns = Arrays.asList("donorNumber");
-            break;
-    case 2: sortColumns = Arrays.asList("firstName");
-            break;
-    case 3: sortColumns = Arrays.asList("lastName");
-            break;
-    case 4: sortColumns = Arrays.asList("gender");
-            break;
-    case 5: sortColumns = Arrays.asList("bloodAbo", "bloodRhd");
-            break;
-    case 6: sortColumns = Arrays.asList("birthDate");
-            break;
+  private String getSortingColumn(int columnId, Map<String, Object> formFields) {
+
+    List<String> visibleFields = new ArrayList<String>();
+    visibleFields.add("id");
+    for (String field : Arrays.asList("donorNumber", "firstName","lastName", "gender", "bloodGroup", "birthDate")) {
+      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      if (fieldProperties.get("hidden").equals(false))
+        visibleFields.add(field);
     }
-    return sortColumns;
+
+    Map<String, String> sortColumnMap = new HashMap<String, String>();
+    sortColumnMap.put("id", "id");
+    sortColumnMap.put("donorNumber", "donorNumber");
+    sortColumnMap.put("firstName", "firstName");
+    sortColumnMap.put("lastName", "lastName");
+    sortColumnMap.put("gender", "gender");
+    sortColumnMap.put("bloodGroup", "bloodAbo");
+    sortColumnMap.put("birthDate", "birthDate");
+    String sortColumn = visibleFields.get(columnId);
+
+    if (sortColumnMap.get(sortColumn) == null)
+      return "id";
+    else
+      return sortColumnMap.get(sortColumn);
   }
 
   @RequestMapping("/findDonorPagination")
@@ -365,11 +372,10 @@ public class DonorController {
     String lastName = form.getLastName();
     List<BloodGroup> bloodGroups = form.getBloodGroups();
 
-    ModelAndView modelAndView = new ModelAndView("donorsTable");
-
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumns(sortColumnId));
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
@@ -379,7 +385,7 @@ public class DonorController {
 
     List<Donor> donors = (List<Donor>) results.get(0);
     Long totalRecords = (Long) results.get(1);
-    return generateDatatablesMap(donors, totalRecords);
+    return generateDatatablesMap(donors, totalRecords, formFields);
   }
   
   /**
@@ -387,15 +393,38 @@ public class DonorController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in donorsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<Donor> donors, Long totalRecords) {
+  private Map<String, Object> generateDatatablesMap(List<Donor> donors, Long totalRecords, Map<String, Object> formFields) {
     Map<String, Object> donorsMap = new HashMap<String, Object>();
     ArrayList<Object> donorList = new ArrayList<Object>();
     for (DonorViewModel donor : getDonorsViewModels(donors)) {
-      donorList.add(Arrays.asList(donor.getId().toString(), donor.getDonorNumber().toString(),
-                                    donor.getFirstName().toString(), donor.getLastName().toString(),
-                                    donor.getGender().toString(), donor.getBloodGroup().toString(),
-                                    donor.getBirthDate().toString())
-                     );
+
+      List<Object> row = new ArrayList<Object>();
+      
+      row.add(donor.getId().toString());
+
+      for (String property : Arrays.asList("donorNumber", "firstName", "lastName", "gender", "bloodGroup", "birthDate")) {
+        if (formFields.containsKey(property)) {
+          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          if (properties.get("hidden").equals(false)) {
+            String propertyValue = property;
+            try {
+              propertyValue = BeanUtils.getProperty(donor, property);
+            } catch (IllegalAccessException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+            row.add(propertyValue.toString());
+          }
+        }
+      }
+
+      donorList.add(row);
     }
     donorsMap.put("aaData", donorList);
     donorsMap.put("iTotalRecords", totalRecords);

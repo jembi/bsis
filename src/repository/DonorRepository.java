@@ -106,11 +106,9 @@ public class DonorRepository {
     if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
       List<Order> order = new ArrayList<Order>();
       if (pagingParams.get("sortDirection").equals("asc")) {
-        for (String orderColumn : (List<String>)pagingParams.get("sortColumn"))
-          order.add(cb.asc(root.<String>get(orderColumn)));
+        order.add(cb.asc(root.<String>get((String)pagingParams.get("sortColumn"))));
       } else {
-        for (String orderColumn : (List<String>)pagingParams.get("sortColumn"))
-          order.add(cb.desc(root.<String>get(orderColumn)));
+        order.add(cb.desc(root.<String>get((String)pagingParams.get("sortColumn"))));
       }
       cq.orderBy(order);
     }

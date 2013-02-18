@@ -149,7 +149,7 @@ public class CollectedSampleController {
   }
 
   /**
-   * Get column name from column id, depends on sequence of columns in productsTable.jsp
+   * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
    */
   private String getSortingColumn(int columnId, Map<String, Object> formFields) {
 
@@ -273,7 +273,6 @@ public class CollectedSampleController {
     collectionsMap.put("iTotalDisplayRecords", totalRecords);
     return collectionsMap;
   }
-  
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("centers", locationRepository.getAllCenters());

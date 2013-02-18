@@ -132,22 +132,22 @@ $(document).ready(
 					<c:forEach var="donor" items="${model.allDonors}">
 						<tr>
 							<td style="display: none">${donor.id}</td>
-							<c:if test="${model.donor.donorNumber.hidden != true}">
+							<c:if test="${model.donorFields.donorNumber.hidden != true}">
 								<td>${donor.donorNumber}</td>
 							</c:if>
-							<c:if test="${model.donor.firstName.hidden != true}">
+							<c:if test="${model.donorFields.firstName.hidden != true}">
 								<td>${donor.firstName}</td>
 							</c:if>
-							<c:if test="${model.donor.lastName.hidden != true}">
+							<c:if test="${model.donorFields.lastName.hidden != true}">
 								<td>${donor.lastName}</td>
 							</c:if>
-							<c:if test="${model.donor.gender.hidden != true}">
+							<c:if test="${model.donorFields.gender.hidden != true}">
 								<td>${donor.gender}</td>
 							</c:if>
-							<c:if test="${model.donor.bloodGroup.hidden != true}">
+							<c:if test="${model.donorFields.bloodGroup.hidden != true}">
 								<td>${donor.bloodGroup}</td>
 							</c:if>
-							<c:if test="${model.donor.birthDate.hidden != true}">
+							<c:if test="${model.donorFields.birthDate.hidden != true}">
 								<td>${donor.birthDate}</td>
 							</c:if>
 						</tr>
