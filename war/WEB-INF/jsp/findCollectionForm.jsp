@@ -65,11 +65,13 @@ $(document).ready(function() {
 	  },
 	  noneSelectedText: 'None Selected',
 	  header: false,
-	  click: function(e) {
-			 if($(this).multiselect("widget").find("input:checked").length == 0 ){
-        return false;
-			 }
-		 },
+		 // uncomment the following if you wish to disallow selection of no options in the
+		 // selection menu
+	  //click: function(e) {
+			 //if($(this).multiselect("widget").find("input:checked").length == 0 ){
+       // return false;
+			 //}
+		 //},
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Blood Bag Type";
@@ -89,11 +91,13 @@ $(document).ready(function() {
 	  },
 	  noneSelectedText: 'None Selected',
 	  header: false,
-	  click: function(e) {
-			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
-        return false;
-			 }
-		 },
+		 // uncomment the following if you wish to disallow selection of no options in the
+		 // selection menu
+	  //click: function(e) {
+			 //if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+       // return false;
+			 //}
+		 //},
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Center";
@@ -113,11 +117,13 @@ $(document).ready(function() {
 	  },
 	  noneSelectedText: 'None Selected',
 	  header: false,
-	  click: function(e) {
-      			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
-               return false;
-      			 }
-	  			 },
+		 // uncomment the following if you wish to disallow selection of no options in the
+		 // selection menu
+	  //click: function(e) {
+      			 //if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+             //  return false;
+      			 //}
+	  			 //},
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "Any Site";

@@ -59,7 +59,7 @@ public class CollectedSampleRepository {
     return query.setParameter("collectedSampleId", collectedSampleId).getSingleResult();
   }
 
-  public List<Object> findCollectedSampleByCollectionNumber(
+  public List<Object> findCollectedSamples(
       String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
       String dateCollectedTo, Map<String, Object> pagingParams) {
 
@@ -401,7 +401,7 @@ public class CollectedSampleRepository {
       List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, String worksheetBatchId) throws Exception {
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<Object> results = findCollectedSampleByCollectionNumber(collectionNumber, bloodBagTypeIds,
+    List<Object> results = findCollectedSamples(collectionNumber, bloodBagTypeIds,
                                           centerIds, siteIds,
                                           dateCollectedFrom, dateCollectedTo,
                                           pagingParams);

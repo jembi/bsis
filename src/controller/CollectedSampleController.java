@@ -1,5 +1,6 @@
 package controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,8 +20,8 @@ import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
-import model.sequencenumber.SequenceNumberStore;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -150,19 +151,28 @@ public class CollectedSampleController {
   /**
    * Get column name from column id, depends on sequence of columns in productsTable.jsp
    */
-  private String getSortingColumn(int columnId) {
-    String sortColumn = null;
-    switch (columnId) {
-    case 0: sortColumn = "id";
-            break;
-    case 1: sortColumn = "collectionNumber";
-            break;
-    case 2: sortColumn = "collectedOn";
-            break;
-    case 3: sortColumn = "bloodBagType";
-            break;
+  private String getSortingColumn(int columnId, Map<String, Object> formFields) {
+
+    List<String> visibleFields = new ArrayList<String>();
+    visibleFields.add("id");
+    for (String field : Arrays.asList("collectionNumber", "collectedOn","bloodBagType", "collectionCenter", "collectionSite")) {
+      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      if (fieldProperties.get("hidden").equals(false))
+        visibleFields.add(field);
     }
-    return sortColumn;
+
+    Map<String, String> sortColumnMap = new HashMap<String, String>();
+    sortColumnMap.put("id", "id");
+    sortColumnMap.put("collectionNumber", "collectionNumber");
+    sortColumnMap.put("bloodBagType", "bloodBagType.bloodBagType");
+    sortColumnMap.put("collectionCenter", "collectionCenter.name");
+    sortColumnMap.put("collectionSite", "collectionSite.name");
+    String sortColumn = visibleFields.get(columnId);
+
+    if (sortColumnMap.get(sortColumn) == null)
+      return "id";
+    else
+      return sortColumnMap.get(sortColumn);
   }
 
   @RequestMapping("/findCollectionPagination")
@@ -172,7 +182,8 @@ public class CollectedSampleController {
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId));
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     String collectionNumber = form.getCollectionNumber();
     if (collectionNumber != null)
@@ -181,6 +192,7 @@ public class CollectedSampleController {
     String dateCollectedTo = form.getDateCollectedTo();
 
     List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
+    bloodBagTypeIds.add(-1);
     if (form.getBloodBagTypes() != null) {
       for (String bloodBagTypeId : form.getBloodBagTypes()) {
         bloodBagTypeIds.add(Integer.parseInt(bloodBagTypeId));
@@ -188,6 +200,7 @@ public class CollectedSampleController {
     }
 
     List<Long> centerIds = new ArrayList<Long>();
+    centerIds.add((long) -1);
     if (form.getCollectionCenters() != null) {
       for (String center : form.getCollectionCenters()) {
         centerIds.add(Long.parseLong(center));
@@ -195,13 +208,14 @@ public class CollectedSampleController {
     }
 
     List<Long> siteIds = new ArrayList<Long>();
+    siteIds.add((long) -1);
     if (form.getCollectionSites() != null) {
       for (String site : form.getCollectionSites()) {
         siteIds.add(Long.parseLong(site));
       }
     }
 
-    List<Object> results = collectedSampleRepository.findCollectedSampleByCollectionNumber(
+    List<Object> results = collectedSampleRepository.findCollectedSamples(
                                         form.getCollectionNumber(),
                                         bloodBagTypeIds, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo, pagingParams);
@@ -210,7 +224,7 @@ public class CollectedSampleController {
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
     Long totalRecords = (Long) results.get(1);
 
-    return generateDatatablesMap(collectedSamples, totalRecords);
+    return generateDatatablesMap(collectedSamples, totalRecords, formFields);
   }
 
   /**
@@ -218,15 +232,40 @@ public class CollectedSampleController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in collectionsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords) {
+  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords, Map<String, Object> formFields) {
     Map<String, Object> collectionsMap = new HashMap<String, Object>();
+
     ArrayList<Object> collectionList = new ArrayList<Object>();
+
     for (CollectedSampleViewModel collection : getCollectionViewModels(collectedSamples)) {
-      collectionList.add(Arrays.asList(collection.getId().toString(), collection.getCollectionNumber().toString(),
-                                    collection.getCollectedOn().toString(),
-                                    collection.getBloodBagType().toString(),  collection.getCollectionCenter().toString(),
-                                    collection.getCollectionSite().toString())
-                        );
+
+      List<Object> row = new ArrayList<Object>();
+      
+      row.add(collection.getId().toString());
+
+      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "collectionCenter", "collectionSite")) {
+        if (formFields.containsKey("collectionNumber")) {
+          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          if (properties.get("hidden").equals(false)) {
+            String propertyValue = property;
+            try {
+              propertyValue = BeanUtils.getProperty(collection, property);
+            } catch (IllegalAccessException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+            row.add(propertyValue.toString());
+          }
+        }
+      }
+
+      collectionList.add(row);
     }
     collectionsMap.put("aaData", collectionList);
     collectionsMap.put("iTotalRecords", totalRecords);

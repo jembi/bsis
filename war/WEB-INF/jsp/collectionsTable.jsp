@@ -26,8 +26,7 @@ $(document).ready(
         "sDom" : '<"H"lrT>t<"F"ip>T',
         "bServerSide" : true,
         "sAjaxSource" : "${model.nextPageUrl}",
-        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
-                          { "bSortable" : false, "aTargets": [4, 5]}
+        "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}
         								 ],
         "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
           								 oSettings.jqXHR = $.ajax({
