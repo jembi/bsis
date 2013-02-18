@@ -130,6 +130,8 @@
 						<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.productNumber.defaultValue}" />
 						<form:errors class="formError"
 							path="crossmatchTest.productNumber" delimiter=", "></form:errors>
+						<form:errors class="formError"
+							path="crossmatchTest.testedProduct" delimiter=", "></form:errors>
 					</div>
 				</c:if>
 				<c:if test="${model.crossmatchTestFields.crossmatchTestDate.hidden != true }">

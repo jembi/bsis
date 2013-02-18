@@ -71,9 +71,9 @@ public class CrossmatchTestsController {
   }
 
   @RequestMapping(value="/editCrossmatchTestFormGenerator", method=RequestMethod.GET)
-  public ModelAndView updateCrossmatchTestsFormGenerator(HttpServletRequest request,
+  public ModelAndView editCrossmatchTestsFormGenerator(HttpServletRequest request,
       Model model,
-      @RequestParam(value="requestId", required=true) String requestId) {
+      @RequestParam(value="requestId", required=false) String requestId) {
 
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
@@ -97,7 +97,7 @@ public class CrossmatchTestsController {
 
   @RequestMapping(value = "/addCrossmatchTestForRequest", method = RequestMethod.POST)
   public ModelAndView
-        addDonor(HttpServletRequest request,
+        addCrossmatchTest(HttpServletRequest request,
                  HttpServletResponse response,
                  @ModelAttribute("editCrossmatchTestForm") @Valid CrossmatchTestBackingForm form,
                  BindingResult result, Model model) {
