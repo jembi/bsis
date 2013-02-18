@@ -14,9 +14,9 @@ public class CustomDateFormatter {
 
   static {
     dateFormat = new SimpleDateFormat(datePattern);
-    dateFormat.setLenient(true);
+    dateFormat.setLenient(false);
     dateTimeFormat = new SimpleDateFormat(dateTimePattern);
-    dateTimeFormat.setLenient(true);
+    dateTimeFormat.setLenient(false);
   }
 
   public static Date getDateFromString(String dateString) throws ParseException {

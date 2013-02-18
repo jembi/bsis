@@ -50,7 +50,7 @@
             primary : 'ui-icon-print'
           }
         }).click(function() {
-          $("#${mainContentId}").printArea();
+          $("#${mainContentId}").find(".printableArea").printArea();
         });
 
         $("#${tabContentId}").find(".createCollectionButton").button({
@@ -130,7 +130,7 @@
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}">
 
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
@@ -162,100 +162,101 @@
 			</p>
 		</div>
 
-		<br />
-		<div id="${donorSummaryBarcodeId}"></div>
-
-		<c:if test="${model.donorFields.donorNumber.hidden != true }">
-			<div>
-				<label>${model.donorFields.donorNumber.displayName}</label>
-				<label>${model.donor.donorNumber}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.firstName.hidden != true }">
-			<div>
-				<label>${model.donorFields.firstName.displayName}</label>
-				<label>${model.donor.firstName}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.middleName.hidden != true }">
-			<div>
-				<label>${model.donorFields.middleName.displayName}</label>
-				<label>${model.donor.middleName}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.lastName.hidden != true }">
-			<div>
-				<label>${model.donorFields.lastName.displayName}</label>
-				<label>${model.donor.lastName}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.birthDate.hidden != true }">
-			<div>
-				<label>${model.donorFields.birthDate.displayName}</label>
-				<label>${model.donor.birthDate}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.gender.hidden != true }">
-			<div>
-				<label>${model.donorFields.gender.displayName}</label>
-				<label>${model.donor.gender}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.bloodGroup.hidden != true }">
-			<div>
-				<label>${model.donorFields.bloodGroup.displayName}</label>
-				<label>${model.donor.bloodGroup}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.address.hidden != true }">
-			<div>
-				<label>${model.donorFields.address.displayName}</label>
-				<label>${model.donor.address}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.city.hidden != true }">
-			<div>
-				<label>${model.donorFields.city.displayName}</label>
-				<label>${model.donor.city}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.province.hidden != true }">
-			<div>
-				<label>${model.donorFields.province.displayName}</label>
-				<label>${model.donor.province}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.district.hidden != true }">
-			<div>
-				<label>${model.donorFields.district.displayName}</label>
-				<label>${model.donor.district}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.state.hidden != true }">
-			<div>
-				<label>${model.donorFields.state.displayName}</label>
-				<label>${model.donor.state}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.country.hidden != true }">
-			<div>
-				<label>${model.donorFields.country.displayName}</label>
-				<label>${model.donor.country}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.zipcode.hidden != true }">
-			<div>
-				<label>${model.donorFields.zipcode.displayName}</label>
-				<label>${model.donor.zipcode}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.donorFields.notes.hidden != true }">
-			<div>
-				<label>${model.donorFields.notes.displayName}</label>
-				<label>${model.donor.notes}</label>
-			</div>
-		</c:if>
-		<hr />
+		<div class="formInTabPane printableArea">
+			<br />
+			<div id="${donorSummaryBarcodeId}"></div>
+			<c:if test="${model.donorFields.donorNumber.hidden != true }">
+				<div>
+					<label>${model.donorFields.donorNumber.displayName}</label>
+					<label>${model.donor.donorNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.firstName.hidden != true }">
+				<div>
+					<label>${model.donorFields.firstName.displayName}</label>
+					<label>${model.donor.firstName}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.middleName.hidden != true }">
+				<div>
+					<label>${model.donorFields.middleName.displayName}</label>
+					<label>${model.donor.middleName}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.lastName.hidden != true }">
+				<div>
+					<label>${model.donorFields.lastName.displayName}</label>
+					<label>${model.donor.lastName}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.birthDate.hidden != true }">
+				<div>
+					<label>${model.donorFields.birthDate.displayName}</label>
+					<label>${model.donor.birthDate}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.gender.hidden != true }">
+				<div>
+					<label>${model.donorFields.gender.displayName}</label>
+					<label>${model.donor.gender}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.bloodGroup.hidden != true }">
+				<div>
+					<label>${model.donorFields.bloodGroup.displayName}</label>
+					<label>${model.donor.bloodGroup}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.address.hidden != true }">
+				<div>
+					<label>${model.donorFields.address.displayName}</label>
+					<label>${model.donor.address}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.city.hidden != true }">
+				<div>
+					<label>${model.donorFields.city.displayName}</label>
+					<label>${model.donor.city}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.province.hidden != true }">
+				<div>
+					<label>${model.donorFields.province.displayName}</label>
+					<label>${model.donor.province}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.district.hidden != true }">
+				<div>
+					<label>${model.donorFields.district.displayName}</label>
+					<label>${model.donor.district}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.state.hidden != true }">
+				<div>
+					<label>${model.donorFields.state.displayName}</label>
+					<label>${model.donor.state}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.country.hidden != true }">
+				<div>
+					<label>${model.donorFields.country.displayName}</label>
+					<label>${model.donor.country}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.zipcode.hidden != true }">
+				<div>
+					<label>${model.donorFields.zipcode.displayName}</label>
+					<label>${model.donor.zipcode}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.donorFields.notes.hidden != true }">
+				<div>
+					<label>${model.donorFields.notes.displayName}</label>
+					<label>${model.donor.notes}</label>
+				</div>
+			</c:if>
+			<hr />
+		</div>
 	</div>
 
 	<br />

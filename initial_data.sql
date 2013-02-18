@@ -9,7 +9,6 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Donor', 'lastName', 'Last Name', '', '0', '0', '0', '0', '0', '', 0),
 ('Donor', 'birthDate', 'Birth Date', '', '0', '0', '0', '0', '0', '', 0),
 ('Donor', 'gender', 'Gender', '', '0', '0', '0', '0', '0', '', 0),
-('Donor', 'firstName', 'First Name', '', '0', '0', '0', '0', '0', '', 0),
 ('Donor', 'bloodGroup', 'Blood Group', '', '0', '0', '0', '0', '0', '', 0),
 ('Donor', 'address', 'Address', '', '0', '0', '0', '0', '0', '', 0),
 ('Donor', 'city', 'City', 'Lusaka', '0', '0', '0', '0', '0', '', 0),

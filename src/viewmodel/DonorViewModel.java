@@ -34,6 +34,10 @@ public class DonorViewModel {
     return donor.getFirstName();
   }
 
+  public String getMiddleName() {
+    return donor.getMiddleName();
+  }
+
   public String getLastName() {
     return donor.getLastName();
   }
