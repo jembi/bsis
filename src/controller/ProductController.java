@@ -1,5 +1,6 @@
 package controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import model.product.ProductBackingForm;
 import model.product.ProductBackingFormValidator;
 import model.testresults.TestResult;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -194,23 +196,29 @@ public class ProductController {
   /**
    * Get column name from column id, depends on sequence of columns in productsTable.jsp
    */
-  private String getSortingColumn(int columnId) {
-    String sortColumn = null;
-    switch (columnId) {
-    case 0: sortColumn = "id";
-            break;
-    case 1: sortColumn = "productNumber";
-            break;
-    case 2: sortColumn = "productType";
-            break;
-    case 3: sortColumn = "createdOn";
-            break;
-    case 4: sortColumn = "expiresOn";
-            break;
-    case 5: sortColumn = "status";
-            break;
+  private String getSortingColumn(int columnId, Map<String, Object> formFields) {
+
+    List<String> visibleFields = new ArrayList<String>();
+    visibleFields.add("id");
+    for (String field : Arrays.asList("productNumber", "productType","createdOn", "expiresOn", "status")) {
+      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      if (fieldProperties.get("hidden").equals(false))
+        visibleFields.add(field);
     }
-    return sortColumn;
+
+    Map<String, String> sortColumnMap = new HashMap<String, String>();
+    sortColumnMap.put("id", "id");
+    sortColumnMap.put("productNumber", "productNumber");
+    sortColumnMap.put("productType", "productType.productType");
+    sortColumnMap.put("createdOn", "createdOn");
+    sortColumnMap.put("expiresOn", "expiresOn");
+    sortColumnMap.put("status", "status");
+    String sortColumn = visibleFields.get(columnId);
+
+    if (sortColumnMap.get(sortColumn) == null)
+      return "id";
+    else
+      return sortColumnMap.get(sortColumn);
   }
   
   @SuppressWarnings("unchecked")
@@ -226,8 +234,9 @@ public class ProductController {
     String dateExpiresTo = form.getDateExpiresTo();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId));
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     List<Object> results = new ArrayList<Object>();
     if (searchBy.equals("productNumber")) {
@@ -248,7 +257,7 @@ public class ProductController {
 
     products = (List<Product>) results.get(0);
     Long totalRecords = (Long) results.get(1);
-    return generateDatatablesMap(products, totalRecords);
+    return generateDatatablesMap(products, totalRecords, formFields);
   }
   
   /**
@@ -256,14 +265,37 @@ public class ProductController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in productsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords) {
+  private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Object> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
     for (ProductViewModel product : getProductViewModels(products)) {
-      productList.add(Arrays.asList(product.getId().toString(), product.getProductNumber().toString(),
-                                    product.getProductType().toString(), product.getCreatedOn().toString(),
-                                    product.getExpiresOn().toString(), product.getStatus())
-                     );
+      List<Object> row = new ArrayList<Object>();
+      
+      row.add(product.getId().toString());
+
+      for (String property : Arrays.asList("productNumber", "productType", "createdOn", "expiresOn", "status")) {
+        if (formFields.containsKey(property)) {
+          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          if (properties.get("hidden").equals(false)) {
+            String propertyValue = property;
+            try {
+              propertyValue = BeanUtils.getProperty(product, property);
+            } catch (IllegalAccessException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+            row.add(propertyValue.toString());
+          }
+        }
+      }
+
+      productList.add(row);
     }
     productsMap.put("aaData", productList);
     productsMap.put("iTotalRecords", totalRecords);

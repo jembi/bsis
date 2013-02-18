@@ -164,6 +164,7 @@ public class CollectedSampleController {
     Map<String, String> sortColumnMap = new HashMap<String, String>();
     sortColumnMap.put("id", "id");
     sortColumnMap.put("collectionNumber", "collectionNumber");
+    sortColumnMap.put("collectedOn", "collectedOn");
     sortColumnMap.put("bloodBagType", "bloodBagType.bloodBagType");
     sortColumnMap.put("collectionCenter", "collectionCenter.name");
     sortColumnMap.put("collectionSite", "collectionSite.name");
@@ -244,7 +245,7 @@ public class CollectedSampleController {
       row.add(collection.getId().toString());
 
       for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "collectionCenter", "collectionSite")) {
-        if (formFields.containsKey("collectionNumber")) {
+        if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
