@@ -204,8 +204,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void copy(CollectedSample collectedSample) {
     assert (this.getId().equals(collectedSample.getId()));
     this.collectionNumber = collectedSample.collectionNumber;
+    this.shippingNumber = collectedSample.shippingNumber;
+    this.sampleNumber = collectedSample.sampleNumber;
     this.donor = collectedSample.donor;
     this.donorType = collectedSample.donorType;
+    this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
