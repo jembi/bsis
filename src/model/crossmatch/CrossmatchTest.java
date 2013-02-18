@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,7 +18,9 @@ import org.hibernate.annotations.Index;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
+import model.product.ProductExists;
 import model.request.Request;
+import model.request.RequestExists;
 import model.user.User;
 
 @Entity
@@ -28,9 +31,11 @@ public class CrossmatchTest implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
+  @RequestExists
   @ManyToOne
   private Request forRequest;
 
+  @ProductExists
   @ManyToOne
   private Product testedProduct;
 
@@ -47,8 +52,15 @@ public class CrossmatchTest implements ModificationTracker {
 
   private String testedBy;
 
+  @Lob
+  private String notes;
+  
   @Valid
   private RowModificationTracker modificationTracker;
+
+  public CrossmatchTest() {
+    modificationTracker = new RowModificationTracker();
+  }
 
   public Date getLastUpdated() {
     return modificationTracker.getLastUpdated();
@@ -144,6 +156,14 @@ public class CrossmatchTest implements ModificationTracker {
 
   public void setCrossmatchTestDate(Date crossmatchTestDate) {
     this.crossmatchTestDate = crossmatchTestDate;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
   }
 
 

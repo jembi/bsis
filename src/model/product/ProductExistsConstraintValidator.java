@@ -51,7 +51,7 @@ public class ProductExistsConstraintValidator implements
     return false;
   }
 
-  public void setDonorRepository(ProductRepository productRepository) {
+  public void setProductRepository(ProductRepository productRepository) {
     this.productRepository = productRepository;
   }
 }

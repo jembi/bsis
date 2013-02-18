@@ -68,11 +68,11 @@
         			}
             }).click(function() {
 
-            $("#${tabContentId}").bind("updateCrossmatchTestsSuccess", productIssueSuccess);
-            $("#${tabContentId}").bind("updateCrossmatchTestsCancel", emptyChildContent);
+            $("#${tabContentId}").bind("editCrossmatchTestSuccess", productIssueSuccess);
+            $("#${tabContentId}").bind("editCrossmatchTestCancel", emptyChildContent);
 
             showLoadingImage($("#${childContentId}"));
-  	        fetchContent("updateCrossmatchTestsForm.html",
+  	        fetchContent("updateCrossmatchTestsFormGenerator.html",
               					 {requestId: "${model.request.id}"},
               					 $("#${childContentId}")
   	        						);

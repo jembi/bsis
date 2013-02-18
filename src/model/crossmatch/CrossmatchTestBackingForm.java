@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import model.CustomDateFormatter;
 import model.product.Product;
-import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
 
@@ -17,6 +16,10 @@ public class CrossmatchTestBackingForm {
   private CrossmatchTest crossmatchTest;
 
   private String crossmatchTestDate;
+
+  public CrossmatchTestBackingForm() {
+    crossmatchTest = new CrossmatchTest();
+  }
 
   public Date getLastUpdated() {
     return crossmatchTest.getLastUpdated();
@@ -151,5 +154,21 @@ public class CrossmatchTestBackingForm {
       ex.printStackTrace();
       crossmatchTest.setCrossmatchTestDate(null);
     }
+  }
+
+  public String getNotes() {
+    return crossmatchTest.getNotes();
+  }
+
+  public void setNotes(String notes) {
+    crossmatchTest.setNotes(notes);
+  }
+
+  public CrossmatchTest getCrossmatchTest() {
+    return crossmatchTest;
+  }
+
+  public void setCrossmatchTest(CrossmatchTest crossmatchTest) {
+    this.crossmatchTest = crossmatchTest;
   }
 }
