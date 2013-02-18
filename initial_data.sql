@@ -74,6 +74,15 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
+('CrossmatchTest', 'productNumber', 'Product number', '', '0', '1', '0', '0', '0', '', 0),
+('CrossmatchTest', 'requestNumber', 'Request number', '', '0', '1', '0', '0', '0', '', 0),
+('CrossmatchTest', 'compatibilityResult', 'Compatibility result', '', '0', '1', '0', '0', '0', '', 0),
+('CrossmatchTest', 'crossmatchTestDate', 'Crossmatch test date', '', '0', '0', '0', '0', '0', '', 0),
+('CrossmatchTest', 'transfusedBefore', 'Transfused before', '', '0', '0', '0', '0', '0', '', 0),
+('CrossmatchTest', 'crossmatchType', 'Crossmatch type', '', '0', '0', '0', '0', '0', '', 0),
+('CrossmatchTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0);
+
+insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('Usage', 'hospital', 'Hospital', '', '0', '1', '0', '0', '0', '', 0),
 ('Usage', 'patientName', 'Patient Name', '', '0', '0', '0', '0', '0', '', 0),
 ('Usage', 'ward', 'Ward', '', '0', '0', '0', '0', '0', '', 0),

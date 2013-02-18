@@ -1,6 +1,7 @@
 package model.product;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,12 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
+import model.crossmatch.CrossmatchTest;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.producttype.ProductType;
@@ -74,9 +77,24 @@ public class Product implements ModificationTracker {
   @ManyToOne(fetch=FetchType.LAZY)
   private Request issuedTo;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date discardDate;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date returnedDate;
+
+  @Column(length=100)
+  private Date reasonDiscard;
+
+  @Column(length=100)
+  private Date reasonReturn;
+
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   private ProductStatus status;
+
+  @OneToMany(mappedBy="testedProduct", fetch=FetchType.EAGER)
+  private List<CrossmatchTest> crossmatchTests;
 
   @Lob
   private String notes;
@@ -240,5 +258,45 @@ public class Product implements ModificationTracker {
 
   public void setStatus(ProductStatus status) {
     this.status = status;
+  }
+
+  public List<CrossmatchTest> getCrossmatchTests() {
+    return crossmatchTests;
+  }
+
+  public void setCrossmatchTests(List<CrossmatchTest> crossmatchTests) {
+    this.crossmatchTests = crossmatchTests;
+  }
+
+  public Date getDiscardDate() {
+    return discardDate;
+  }
+
+  public void setDiscardDate(Date discardDate) {
+    this.discardDate = discardDate;
+  }
+
+  public Date getReturnedDate() {
+    return returnedDate;
+  }
+
+  public void setReturnedDate(Date returnedDate) {
+    this.returnedDate = returnedDate;
+  }
+
+  public Date getReasonDiscard() {
+    return reasonDiscard;
+  }
+
+  public void setReasonDiscard(Date reasonDiscard) {
+    this.reasonDiscard = reasonDiscard;
+  }
+
+  public Date getReasonReturn() {
+    return reasonReturn;
+  }
+
+  public void setReasonReturn(Date reasonReturn) {
+    this.reasonReturn = reasonReturn;
   }
 }

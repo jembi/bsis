@@ -413,6 +413,16 @@ public class RequestRepository {
       return true;
     return false;
   }
+
+  public Request findRequestById(String requestId) {
+    Request request = null;
+    try {
+      request = findRequestById(Long.parseLong(requestId));
+    } catch (NumberFormatException ex) {
+      ex.printStackTrace();
+    }
+    return request;
+  }
   
 
 }

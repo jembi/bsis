@@ -1,128 +1,4 @@
 
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33A49787C4;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33AED1731E;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33B29562D0;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A3359FAB30D;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A337A1B99A7;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33D0AFB367;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A331D73927B;
-
-    alter table CollectedSample_CollectionsWorksheet 
-        drop 
-        foreign key FKB39FFD85225909B3;
-
-    alter table CollectedSample_CollectionsWorksheet 
-        drop 
-        foreign key FKB39FFD85C02466CD;
-
-    alter table CollectionsWorksheet 
-        drop 
-        foreign key FK72E3FEF9A49787C4;
-
-    alter table CollectionsWorksheet 
-        drop 
-        foreign key FK72E3FEF9D0AFB367;
-
-    alter table Donor 
-        drop 
-        foreign key FK3F25E46A49787C4;
-
-    alter table Donor 
-        drop 
-        foreign key FK3F25E46D0AFB367;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFA49787C4;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF994002DF;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF32E145A;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF73AC2B90;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFD0AFB367;
-
-    alter table ProductUsage 
-        drop 
-        foreign key FK45B6D212A49787C4;
-
-    alter table ProductUsage 
-        drop 
-        foreign key FK45B6D212A8E71476;
-
-    alter table ProductUsage 
-        drop 
-        foreign key FK45B6D212D0AFB367;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6FA49787C4;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6F1520E0D;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6F73AC2B90;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6F537AAD30;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6FD0AFB367;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FA49787C4;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6F32E145A;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FE2BB696A;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6F3A6D02C3;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FD0AFB367;
-
     drop table if exists BloodBagType;
 
     drop table if exists BloodTest;
@@ -132,6 +8,10 @@
     drop table if exists CollectedSample_CollectionsWorksheet;
 
     drop table if exists CollectionsWorksheet;
+
+    drop table if exists CrossmatchTest;
+
+    drop table if exists CrossmatchType;
 
     drop table if exists Donor;
 
@@ -217,6 +97,28 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table CrossmatchTest (
+        id bigint not null auto_increment,
+        compatibilityResult integer,
+        crossmatchTestDate datetime,
+        createdDate datetime,
+        lastUpdated datetime,
+        testedBy varchar(255),
+        transfusedBefore boolean,
+        crossmatchType_id integer,
+        forRequest_id bigint,
+        createdBy_id bigint,
+        lastUpdatedBy_id bigint,
+        testedProduct_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table CrossmatchType (
+        id integer not null auto_increment,
+        crossmatchType varchar(255),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
     create table Donor (
         id bigint not null auto_increment,
         birthDate date,
@@ -299,6 +201,7 @@
         bloodAbo varchar(30),
         bloodRhd varchar(30),
         createdOn datetime,
+        discardDate datetime,
         expiresOn datetime,
         isDeleted boolean,
         issuedOn datetime,
@@ -306,6 +209,9 @@
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(30),
+        reasonDiscard datetime,
+        reasonReturn datetime,
+        returnedDate datetime,
         status varchar(30),
         collectedSample_id bigint,
         issuedTo_id bigint,
@@ -357,6 +263,7 @@
         department varchar(30),
         fulfilled boolean,
         hospital varchar(30),
+        indicationForUse varchar(50),
         isDeleted boolean,
         createdDate datetime,
         lastUpdated datetime,
@@ -513,6 +420,38 @@
         add constraint FK72E3FEF9D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    create index compatibilityTest_crossmatchTestDate_index on CrossmatchTest (crossmatchTestDate);
+
+    alter table CrossmatchTest 
+        add index FK6DBEA3D7A49787C4 (createdBy_id), 
+        add constraint FK6DBEA3D7A49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table CrossmatchTest 
+        add index FK6DBEA3D7D4061B9F (forRequest_id), 
+        add constraint FK6DBEA3D7D4061B9F 
+        foreign key (forRequest_id) 
+        references Request (id);
+
+    alter table CrossmatchTest 
+        add index FK6DBEA3D7EFD1FE7 (testedProduct_id), 
+        add constraint FK6DBEA3D7EFD1FE7 
+        foreign key (testedProduct_id) 
+        references Product (id);
+
+    alter table CrossmatchTest 
+        add index FK6DBEA3D7D0AFB367 (lastUpdatedBy_id), 
+        add constraint FK6DBEA3D7D0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
+
+    alter table CrossmatchTest 
+        add index FK6DBEA3D78631CA7D (crossmatchType_id), 
+        add constraint FK6DBEA3D78631CA7D 
+        foreign key (crossmatchType_id) 
+        references CrossmatchType (id);
 
     create index donor_donorNumber_index on Donor (donorNumber);
 

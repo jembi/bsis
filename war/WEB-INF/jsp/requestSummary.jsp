@@ -61,6 +61,23 @@
   	        						);
         });
 
+        $("#${tabContentId}").find(".updateCrossmatchTestsButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-document'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("updateCrossmatchTestsSuccess", productIssueSuccess);
+            $("#${tabContentId}").bind("updateCrossmatchTestsCancel", emptyChildContent);
+
+            showLoadingImage($("#${childContentId}"));
+  	        fetchContent("updateCrossmatchTestsForm.html",
+              					 {requestId: "${model.request.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
@@ -120,6 +137,9 @@
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
 				Done
+			</button>
+			<button type="button" class="updateCrossmatchTestsButton">
+				Update crossmatch tests
 			</button>
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products

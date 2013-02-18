@@ -2,6 +2,7 @@ package model.request;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.crossmatch.CrossmatchTest;
 import model.location.Location;
 import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
@@ -74,6 +76,9 @@ public class Request implements ModificationTracker {
   @OneToMany(mappedBy="issuedTo", fetch=FetchType.EAGER)
   private List<Product> issuedProducts;
 
+  @OneToMany(mappedBy="forRequest", fetch=FetchType.EAGER)
+  private Set<CrossmatchTest> crossmatchTests;
+
   @Column(length=30)
   private String patientNumber;
 
@@ -87,6 +92,9 @@ public class Request implements ModificationTracker {
   @Temporal(TemporalType.DATE)
   private Date patientBirthDate;
 
+  @Column(length=50)
+  private String indicationForUse;
+  
   @Column
   private Integer patientAge;
 
@@ -411,5 +419,21 @@ public class Request implements ModificationTracker {
 
   public void setRequestType(RequestType requestType) {
     this.requestType = requestType;
+  }
+
+  public Set<CrossmatchTest> getCrossmatchTests() {
+    return crossmatchTests;
+  }
+
+  public void setCrossmatchTests(Set<CrossmatchTest> crossmatchTests) {
+    this.crossmatchTests = crossmatchTests;
+  }
+
+  public String getIndicationForUse() {
+    return indicationForUse;
+  }
+
+  public void setIndicationForUse(String indicationForUse) {
+    this.indicationForUse = indicationForUse;
   }
 }

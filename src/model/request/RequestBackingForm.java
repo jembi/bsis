@@ -354,4 +354,12 @@ public class RequestBackingForm {
   public void setDepartment(String department) {
     request.setDepartment(department);
   }
+
+  public String getIndicationForUse() {
+    return request.getIndicationForUse();
+  }
+
+  public void setIndicationForUse(String indicationForUse) {
+    request.setIndicationForUse(indicationForUse);
+  }
 }

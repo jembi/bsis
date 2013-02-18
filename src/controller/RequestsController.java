@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.crossmatch.CrossmatchTestBackingForm;
 import model.product.Product;
 import model.request.FindRequestBackingForm;
 import model.request.Request;
@@ -431,5 +432,30 @@ public class RequestsController {
     boolean autoGenerate = (Boolean) requestNumberProperties.get("autoGenerate");
     if (isAutoGeneratable && autoGenerate)
       form.setRequestNumber(sequenceNumberRepository.getNextRequestNumber());    
+  }
+
+  @RequestMapping(value="/updateCrossmatchTestsFormGenerator", method=RequestMethod.GET)
+  public ModelAndView updateCrossmatchTestsFormGenerator(HttpServletRequest request,
+      Model model,
+      @RequestParam(value="requestId", required=true) String requestId) {
+
+    Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
+    m.put("refreshUrl", getUrl(request));
+    m.put("crossmatchForRequest", true);
+    // to ensure custom field names are displayed in the form
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("crossmatchTest");
+    m.put("crossmatchTestFields", formFields);
+
+    CrossmatchTestBackingForm form = new CrossmatchTestBackingForm();
+    m.put("crossmatchTestForm", form);
+
+    Request productRequest = requestRepository.findRequestById(requestId);
+    form.setForRequest(productRequest);
+
+    ModelAndView mv = new ModelAndView("editCrossmatchRequestForm");
+    mv.addObject("model", m);
+    return mv;
+
   }
 }
