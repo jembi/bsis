@@ -311,6 +311,13 @@
 				<form:errors class="formError" path="request.requestSite" delimiter=", "></form:errors>
 			</div>
 		</c:if>
+		<c:if test="${model.requestFields.patientNumber.hidden != true }">
+			<div>
+				<form:label path="patientNumber">${model.requestFields.patientNumber.displayName}</form:label>
+				<form:input path="patientNumber" value="${model.existingRequest ? '' : model.requestFields.patientNumber.defaultValue}" />
+				<form:errors class="formError" path="request.patientNumber" delimiter=", "></form:errors>
+			</div>
+		</c:if>
 		<c:if test="${model.requestFields.patientFirstName.hidden != true }">
 			<div>
 				<form:label path="patientFirstName">${model.requestFields.patientFirstName.displayName}</form:label>

@@ -62,6 +62,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'requestType', 'Request Type', '', '0', '1', '0', '0', '0', '', 0),
+('Request', 'patientNumber', 'Patient Number', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'patientFirstName', 'Patient First Name', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'patientLastName', 'Patient Last Name', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'patientDiagnosis', 'Patient Diagnosis', '', '0', '0', '0', '0', '0', '', 0),
