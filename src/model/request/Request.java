@@ -156,6 +156,8 @@ public class Request implements ModificationTracker {
     this.patientAge = request.patientAge;
     this.patientBirthDate = request.patientBirthDate;
     this.department = request.department;
+    this.requestType = request.requestType;
+    this.requestedBy = request.requestedBy;
     this.hospital = request.hospital;
     this.patientDiagnosis = request.patientDiagnosis;
     this.patientGender = request.patientGender;

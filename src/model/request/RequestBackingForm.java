@@ -241,7 +241,7 @@ public class RequestBackingForm {
     return request.getPatientNumber();
   }
 
-  public void setDonorNumber(String patientNumber) {
+  public void setPatientNumber(String patientNumber) {
     request.setPatientNumber(patientNumber);
   }
 

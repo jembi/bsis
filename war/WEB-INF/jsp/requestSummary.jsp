@@ -197,6 +197,12 @@
 					<label>${model.request.productType.productType}</label>
 				</div>
 			</c:if>
+			<c:if test="${model.requestFields.requestType.hidden != true }">
+				<div>
+					<label>${model.requestFields.requestType.displayName}</label>
+					<label>${model.request.requestType.requestType}</label>
+				</div>
+			</c:if>
 			<c:if test="${model.requestFields.requestedQuantity.hidden != true }">
 				<div>
 					<label>${model.requestFields.requestedQuantity.displayName}</label>

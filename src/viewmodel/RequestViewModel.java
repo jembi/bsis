@@ -10,6 +10,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
+import model.requesttype.RequestType;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -163,5 +164,9 @@ public class RequestViewModel {
 
   public String getPatientNumber() {
     return request.getPatientNumber();
+  }
+
+  public RequestType getRequestType() {
+    return request.getRequestType();
   }
 }
