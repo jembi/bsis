@@ -185,4 +185,4 @@
 	</table>
 </form:form>
 
-<div id="collectionsReportResult"></div>
+<div id="collectionsReportResult" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>

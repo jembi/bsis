@@ -198,4 +198,4 @@
 	</table>
 </form:form>
 
-<div id="testResultsReportResult"></div>
+<div id="testResultsReportResult" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>

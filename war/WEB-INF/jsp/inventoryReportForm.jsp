@@ -118,5 +118,5 @@
 	<br />
 	<br />
 
-	<div id="${childContentId}"></div>
+	<div id="${childContentId}" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>
 </div>
