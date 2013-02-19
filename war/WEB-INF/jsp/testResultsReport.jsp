@@ -9,6 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <script>
+$(document).ready(function() {
   $("#testResultReportTests").multiselect({
     position : {
       my : 'left top',
@@ -29,6 +30,11 @@
               selectedDate);
         }
       });
+
+  var firstDayOfYear = new Date();
+	firstDayOfYear.setDate(1);
+	firstDayOfYear.setMonth(0);
+  $("#trreportsDateTestedFrom").datepicker("setDate", firstDayOfYear);
 
   $("#trreportsDateTestedTo").datepicker(
       {
@@ -127,6 +133,7 @@
 
   $("#testResultsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
 
+});
 </script>
 
 <form:form method="GET" commandName="testResultsReportForm"

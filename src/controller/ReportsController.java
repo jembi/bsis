@@ -152,22 +152,23 @@ public class ReportsController {
 
     try {
 
-      Date dateFrom;
-      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
-        dateFrom = CustomDateFormatter.getDateFromString("12/31/2011");
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
-  
       Date dateTo;
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
         dateTo = new Date();
       else
         dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
       gcal.add(Calendar.DATE, 1);
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
-  
+
+      Date dateFrom;
+      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+
       Map<Long, Long> numCollections = collectionRepository
           .findNumberOfCollectedSamples(dateFrom, dateTo,
               form.getAggregationCriteria(), form.getCenters(), form.getSites());
@@ -190,6 +191,13 @@ public class ReportsController {
       ex.printStackTrace();
     }
     return m;
+  }
+
+  private Date dateSubtract(Date dateTo, int field, int amount) {
+    Calendar gcal = new GregorianCalendar();
+    gcal.setTime(dateTo);
+    gcal.add(field, -amount);
+    return gcal.getTime();
   }
 
   public static class TestResultsReportBackingForm {
@@ -258,12 +266,6 @@ public class ReportsController {
 
     try {
 
-      Date dateFrom;
-      if (dateTestedFrom == null || dateTestedFrom.equals(""))
-        dateFrom = CustomDateFormatter.getDateFromString("12/31/2011");
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
-  
       Date dateTo;
       if (dateTestedTo == null || dateTestedTo.equals(""))
         dateTo = new Date();
@@ -273,6 +275,12 @@ public class ReportsController {
       gcal.setTime(dateTo);
       gcal.add(Calendar.DATE, 1);
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+  
+      Date dateFrom;
+      if (dateTestedFrom == null || dateTestedFrom.equals(""))
+        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
   
       Map<String, Map<Long, Long>> numTestResults = testResultsRepository
           .findNumberOfPositiveTests(dateFrom, dateTo,
