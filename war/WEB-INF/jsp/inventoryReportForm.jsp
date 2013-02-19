@@ -26,14 +26,14 @@
       	    my : 'left top',
       	    at : 'right center'
       	  },
-      	  header: false,
+      	  //header: false,
       	  minWidth: 250,
       	  noneSelectedText: 'None selected',
-      	  click: function(e) {
-      			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
-             	 return false;
-      			 }
-      		 },
+      	  //click: function(e) {
+      		//	 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+          //   	 return false;
+      		//	 }
+      		// },
       	  selectedText: function(numSelected, numTotal, selectedValues) {
       										if (numSelected == numTotal) {
       										  return "All Products";
@@ -103,6 +103,7 @@
 					<select class="productStatusSelector">
 						<option value="QUARANTINED">Quarantined</option>
 						<option value="AVAILABLE">Available</option>
+						<option value="EXPIRED">Expired</option>
 						<option value="UNSAFE">Unsafe</option>
 						<option value="ISSUED">Issued</option>
 						<option value="DISCARDED">Discarded</option>

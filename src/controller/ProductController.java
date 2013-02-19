@@ -248,6 +248,7 @@ public class ProductController {
           pagingParams);
     } else if (searchBy.equals("productType")) {
       List<Integer> productTypeIds = new ArrayList<Integer>();
+      productTypeIds.add(-1);
       for (String productTypeId : form.getProductTypes()) {
         productTypeIds.add(Integer.parseInt(productTypeId));
       }

@@ -530,7 +530,7 @@ public class ProductRepository {
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
-                             "where p.status in :status AND p.isDeleted=:isDeleted AND p.expiresOn>=:expiresOn",
+                             "where p.status IN :status AND p.isDeleted=:isDeleted",
                              Product.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
     for (String s : status) {
@@ -538,7 +538,7 @@ public class ProductRepository {
     }
     q.setParameter("status", productStatus);
     q.setParameter("isDeleted", false);
-    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
+//    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
     TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
 

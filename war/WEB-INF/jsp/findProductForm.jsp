@@ -131,14 +131,14 @@ $(document).ready(function() {
 	    my : 'left top',
 	    at : 'right center'
 	  },
-	  header: false,
+//	  header: false,
 	  minWidth: 250,
 	  noneSelectedText: 'None selected',
-	  click: function(e) {
-			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
-       return false;
-			 }
-		 },
+//	  click: function(e) {
+//			 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+//       return false;
+//			 }
+//		 },
 	  selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
 										  return "All Products";
