@@ -57,7 +57,11 @@ public class ProductRepository {
    * @param product
    */
   public void updateProductInternalFields(Product product) {
+    updateProductStatus(product);
+    updateBloodGroup(product);
+  }
 
+  private void updateProductStatus(Product product) {
     // nothing to do if the product has been discarded
     if (product.getStatus() != null && product.getStatus().equals(ProductStatus.DISCARDED))
       return;
@@ -93,8 +97,12 @@ public class ProductRepository {
 
     boolean allTestsDone = (testResultsFound.size() == correctTestResults.size());
     if (safe) {
-      if (allTestsDone)
-        product.setStatus(ProductStatus.AVAILABLE);
+      if (allTestsDone) {
+        if (product.getExpiresOn().before(new Date()))
+          product.setStatus(ProductStatus.EXPIRED);
+        else
+          product.setStatus(ProductStatus.AVAILABLE);
+      }
       else
         product.setStatus(ProductStatus.QUARANTINED);        
     } else {
@@ -102,7 +110,7 @@ public class ProductRepository {
     }
   }
 
-  public void updateBloodGroup(Product product) {
+  private void updateBloodGroup(Product product) {
 
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
 
@@ -449,9 +457,8 @@ public class ProductRepository {
     if (existingProduct == null) {
       return null;
     }
-    updateProductInternalFields(existingProduct);
-    updateBloodGroup(existingProduct);
     existingProduct.copy(product);
+    updateProductInternalFields(existingProduct);
     em.merge(existingProduct);
     em.flush();
     return existingProduct;

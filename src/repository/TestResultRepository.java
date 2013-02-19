@@ -56,13 +56,6 @@ public class TestResultRepository {
     }
   }
 
-  public void updateProductBloodGroup(TestResult testResult) {
-    for (Product product : getProductsToUpdate(testResult)) {
-      productRepository.updateBloodGroup(product);
-      em.merge(product);
-    }
-  }
-
   public List<TestResult> getAllTestResults() {
     TypedQuery<TestResult> query = em.createQuery(
         "SELECT t FROM TestResult t WHERE t.isDeleted= :isDeleted",
@@ -88,7 +81,7 @@ public class TestResultRepository {
   public void deleteTestResult(Long testResultId) {
     TestResult existingTestResult = findTestResultById(testResultId);
     existingTestResult.setIsDeleted(Boolean.TRUE);
-    updateProductsForTestResult(existingTestResult);
+    updateProductStatus(existingTestResult);
     em.merge(existingTestResult);
     em.flush();
   }
@@ -284,14 +277,9 @@ public class TestResultRepository {
     return em.find(TestResult.class, testResultId);
   }
 
-  public void updateProductsForTestResult(TestResult testResult) {
-    updateProductStatus(testResult);
-    updateProductBloodGroup(testResult);
-  }
-
   public void addTestResult(TestResult testResult) {
     em.persist(testResult);
-    updateProductsForTestResult(testResult);
+    updateProductStatus(testResult);
     em.flush();
   }
 
@@ -365,7 +353,7 @@ public class TestResultRepository {
     }
     existingTestResult.copy(testResult);
     existingTestResult = em.merge(existingTestResult);
-    updateProductsForTestResult(existingTestResult);
+    updateProductStatus(existingTestResult);
     em.flush();
     return existingTestResult;
   }
@@ -373,7 +361,6 @@ public class TestResultRepository {
   public void addAllTestResults(List<TestResult> testResults) {
     for (TestResult testResult : testResults) {
       updateProductStatus(testResult);
-      updateProductBloodGroup(testResult);
       em.persist(testResult);
     }
     em.flush();    

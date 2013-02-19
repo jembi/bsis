@@ -64,7 +64,7 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  noneSelectedText: 'None Selected',
-	  header: false,
+	  //header: false,
 		 // uncomment the following if you wish to disallow selection of no options in the
 		 // selection menu
 	  //click: function(e) {
@@ -90,7 +90,7 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  noneSelectedText: 'None Selected',
-	  header: false,
+	  //header: false,
 		 // uncomment the following if you wish to disallow selection of no options in the
 		 // selection menu
 	  //click: function(e) {
@@ -116,7 +116,7 @@ $(document).ready(function() {
 	    at : 'right center'
 	  },
 	  noneSelectedText: 'None Selected',
-	  header: false,
+	  //header: false,
 		 // uncomment the following if you wish to disallow selection of no options in the
 		 // selection menu
 	  //click: function(e) {
