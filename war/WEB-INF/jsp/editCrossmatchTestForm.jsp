@@ -12,6 +12,7 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="editCrossmatchTestFormId">editCrossmatchTestForm-${unique_page_id}</c:set>
+<c:set var="editCrossmatchTestCompatibilityResultId">editCrossmatchTestCompatibilityResultId-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -159,6 +160,7 @@
 					<div>
 						<form:label path="compatibilityResult">${model.crossmatchTestFields.compatibilityResult.displayName}</form:label>
 						<form:select path="compatibilityResult"
+							id="${editCrossmatchTestCompatibilityResultId}"
 							class="compatibilityResult">
 							<form:option value="">&nbsp;</form:option>
 							<form:option value="COMPATIBLE">Compatible</form:option>

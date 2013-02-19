@@ -11,15 +11,14 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editRequestFormId">editRequestForm-${unique_page_id}</c:set>
-<c:set var="editRequestFormBarcodeId">editRequestFormBarcode-${unique_page_id}</c:set>
-<c:set var="editRequestFormDonorId">editRequestFormDonor-${unique_page_id}</c:set>
-<c:set var="editRequestFormDonorHiddenId">editRequestFormDonorHidden-${unique_page_id}</c:set>
-<c:set var="editRequestFormCentersId">editRequestFormCenters-${unique_page_id}</c:set>
-<c:set var="editRequestFormSitesId">editRequestFormSites-${unique_page_id}</c:set>
-<c:set var="editRequestFormProductTypeId">editRequestFormProductType-${unique_page_id}</c:set>
-<c:set var="editRequestFormDonorTypeId">editRequestFormDonorType-${unique_page_id}</c:set>
+
+<c:set var="editRequestFormBloodGroupSelectorId">editRequestFormBloodGroupSelectorId-${unique_page_id}</c:set>
+<c:set var="editRequestFormProductTypeSelectorId">editRequestFormProductTypeSelectorId-${unique_page_id}</c:set>
+<c:set var="editRequestFormVolumeSelectorId">editRequestFormVolumeSelectorId-${unique_page_id}</c:set>
+<c:set var="editRequestFormRequestTypeSelectorId">editRequestFormRequestTypeSelectorId-${unique_page_id}</c:set>
+<c:set var="editRequestFormRequestSiteSelectorId">editRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
+
 <c:set var="updateRequestButtonId">updateProductButton-${unique_page_id}</c:set>
-<c:set var="deleteProductButtonId">deleteProductButton-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
 <c:set var="cancelButtonId">cancelButton-${unique_page_id}</c:set>
 
@@ -222,7 +221,9 @@
 		<c:if test="${model.requestFields.bloodGroup.hidden != true }">
 			<div>
 				<form:label path="bloodGroup">${model.requestFields.bloodGroup.displayName}</form:label>
-				<form:select path="bloodGroup" class="bloodGroup">
+				<form:select path="bloodGroup"
+										 id="${editRequestFormBloodGroupSelectorId}"
+										 class="bloodGroup">
 					<form:option value="" label="" />
 					<form:option value="A+" label="A+" />
 					<form:option value="A-" label="A-" />
@@ -255,7 +256,9 @@
 		<c:if test="${model.requestFields.requestType.hidden != true }">
 			<div>
 				<form:label path="requestType">${model.requestFields.requestType.displayName}</form:label>
-				<form:select path="requestType" class="requestType">
+				<form:select path="requestType"
+										 id="${editRequestFormRequestTypeSelectorId}"
+										 class="requestType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="requestType" items="${model.requestTypes}">
 						<form:option value="${requestType.id}">${requestType.requestType}</form:option>
@@ -268,7 +271,9 @@
 		<c:if test="${model.requestFields.productType.hidden != true }">
 			<div>
 				<form:label path="productType">${model.requestFields.productType.displayName}</form:label>
-				<form:select path="productType" class="productType">
+				<form:select path="productType"
+										 id="${editRequestFormProductTypeSelectorId}"
+										 class="productType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="productType" items="${model.productTypes}">
 						<form:option value="${productType.id}">${productType.productType}</form:option>
@@ -281,7 +286,9 @@
 		<c:if test="${model.requestFields.volume.hidden != true }">
 			<div>
 				<form:label path="volume">${model.requestFields.volume.displayName}</form:label>
-				<form:select path="volume" class="volume">
+				<form:select path="volume"
+				             id="${editRequestFormVolumeSelectorId}"
+										 class="volume">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="productVolume" items="${model.productVolumes}">
 						<form:option value="${productVolume.volume}">${productVolume.volume} ${productVolume.unit}</form:option>
@@ -302,6 +309,7 @@
 			<div>
 				<form:label path="requestSite">${model.requestFields.requestSite.displayName}</form:label>
 				<form:select path="requestSite"
+					id="${editRequestFormRequestSiteSelectorId}"
 					class="requestSites">
 					<form:option value="" selected="selected">&nbsp;</form:option>
 					<c:forEach var="site" items="${model.sites}">

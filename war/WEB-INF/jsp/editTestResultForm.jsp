@@ -12,7 +12,10 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="editTestResultFormDivId">editTestResultFormDiv-${unique_page_id}</c:set>
 <c:set var="editTestResultFormId">editTestResultForm-${unique_page_id}</c:set>
-<c:set var="editTestResultFormBarcodeId">editTestResultFormBarcode-${unique_page_id}</c:set>
+
+<c:set var="editTestResultFormBloodTestSelectorId">editTestResultFormBloodTestSelectorId-${unique_page_id}</c:set>
+<c:set var="editTestResultFormResultSelectorId">editTestResultFormResultSelectorId-${unique_page_id}</c:set>
+
 <c:set var="updateTestResultButtonId">updateTestResultButton-${unique_page_id}</c:set>
 <c:set var="bloodTestResultId">bloodTestResultId-${unique_page_id}</c:set>
 <c:set var="deleteTestResultButtonId">deleteTestResultButton-${unique_page_id}</c:set>
@@ -183,7 +186,9 @@
 
 		<div>
 			<form:label path="bloodTest">${model.testResultFields.bloodTest.displayName}</form:label>
-			<form:select path="bloodTest" class="editTestNames">
+			<form:select path="bloodTest"
+									 id="${editTestResultFormBloodTestSelectorId}"
+									 class="editTestNames">
 				<form:option value="" selected="selected">&nbsp;</form:option>
 				<c:forEach var="bloodTest" items="${model.bloodTests}">
 					<form:option value="${bloodTest.name}">${bloodTest.name}</form:option>
@@ -196,7 +201,8 @@
 		<c:forEach var="bloodTest" items="${model.bloodTests}">
 			<div id="${bloodTestResultId}-${fn:replace(bloodTest.name, ' ', '')}" class="testResultsDiv" style="display: none;">
 				<form:label path="result">${model.testResultFields.result.displayName}</form:label>
-				<form:select path="result">
+				<form:select path="result"
+										 id="${editTestResultFormResultSelectorId}">
 					<!-- Auto incremented IDs begin with zero -->
 					<form:option value="-1" selected="selected">&nbsp;</form:option>
 						<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">

@@ -19,9 +19,11 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
+<c:set var="findCollectionFormBloodBagTypeSelectorId">findCollectionFormBloodBagTypeSelectorId-${unique_page_id}</c:set>
+<c:set var="findCollectionFormCollectionCentersSelectorId">findCollectionFormCollectionCentersSelectorId-${unique_page_id}</c:set>
+<c:set var="findCollectionFormCollectionSitesSelectorId">findCollectionFormCollectionSitesSelectorId-${unique_page_id}</c:set>
+
 <c:set var="findCollectionFormId">findCollectionForm-${unique_page_id}</c:set>
-<c:set var="findCollectionFormSearchById">findCollectionFormSearchBySelector-${unique_page_id}</c:set>
-<c:set var="findCollectionFormResultId">findCollectionFormResult-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -202,7 +204,9 @@ $(document).ready(function() {
 	
 			<div>
 				<form:label path="bloodBagTypes">Blood Bag Type</form:label>
-				<form:select id="${tabContentId}-bloodBagTypes" path="bloodBagTypes" class="bloodBagTypeSelector">
+				<form:select path="bloodBagTypes"
+										 id="${findCollectionFormBloodBagTypeSelectorId}"
+										 class="bloodBagTypeSelector">
 					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
 						<form:option value="${bloodBagType.id}" label="${bloodBagType.bloodBagType}" />
 					</c:forEach>
@@ -211,7 +215,9 @@ $(document).ready(function() {
 	
 			<div>
 					<form:label path="collectionCenters">Collection center</form:label>
-					<form:select id="${tabContentId}-collectionCenters" path="collectionCenters" class="collectionCenterSelector">
+					<form:select path="collectionCenters"
+											 id="${findCollectionFormCollectionCentersSelectorId}"
+											 class="collectionCenterSelector">
 						<c:forEach var="center" items="${model.centers}">
 							<form:option value="${center.id}">${center.name}</form:option>
 						</c:forEach>
@@ -220,7 +226,9 @@ $(document).ready(function() {
 	
 			<div>
 					<form:label path="collectionSites">Collection site</form:label>
-					<form:select id="${tabContentId}-collectionSites" path="collectionSites" class="collectionSiteSelector">
+					<form:select path="collectionSites"
+											 id="${findCollectionFormCollectionSitesSelectorId}"
+											 class="collectionSiteSelector">
 						<c:forEach var="site" items="${model.sites}">
 							<form:option value="${site.id}">${site.name}</form:option>
 						</c:forEach>

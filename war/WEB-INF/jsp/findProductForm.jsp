@@ -20,9 +20,10 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <c:set var="findProductFormId">findProductForm-${unique_page_id}</c:set>
-<c:set var="findProductFormSearchById">findProductFormSearchBySelector-${unique_page_id}</c:set>
-<c:set var="findProductFormResultId">findProductFormResult-${unique_page_id}</c:set>
-<c:set var="searchByInputDivId">searchByInputDivId-${unique_page_id}</c:set>
+
+<c:set var="findProductFormSearchBySelectorId">findProductFormSearchBySelectorId-${unique_page_id}</c:set>
+<c:set var="findProductFormProductTypeSelectorId">findProductFormProductTypeSelectorId-${unique_page_id}</c:set>
+<c:set var="findProductFormStatusSelectorId">findProductFormStatusSelectorId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -204,7 +205,9 @@ $(document).ready(function() {
 				<form:label path="searchBy">Find Product by </form:label>
 				<!-- need to set id searchBy selector otherwise the
 				 search by selector in collections page will get the same id  -->
-				<form:select path="searchBy" id="${tabContentId}-findProductSearchBy" class="searchBy">
+				<form:select path="searchBy"
+									   id="${findProductFormSearchBySelectorId}"
+									   class="searchBy">
 					<form:option value="collectionNumber" label="${model.productFields.collectionNumber.displayName}" />
 					<form:option value="productNumber" label="${model.productFields.productNumber.displayName}" />
 					<form:option value="productType" label="${model.productFields.productType.displayName}" />
@@ -227,7 +230,9 @@ $(document).ready(function() {
 				The merge pull request here https://github.com/ehynds/jquery-ui-multiselect-widget/pull/347
 				does not solve the issue. Just work around the problem for now by giving this select a unique ID.
 				-->
-					<form:select id="findProductFormProductTypes-${unique_page_id}" path="productTypes" class="productTypeSelector">
+					<form:select path="productTypes"
+											 id="${findProductFormProductTypeSelectorId}"
+											 class="productTypeSelector">
 						<c:forEach var="productType" items="${model.productTypes}">
 							<form:option value="${productType.id}" label="${productType.productType}" />
 						</c:forEach>
@@ -237,7 +242,9 @@ $(document).ready(function() {
 	
 			<div>
 					<form:label path="status">Product Status</form:label>
-					<form:select path="status" class="productStatusSelector">
+					<form:select path="status"
+											 id="${findProductFormStatusSelectorId}"
+										   class="productStatusSelector">
 						<form:option value="QUARANTINED" label="Quarantined" selected="selected" />
 						<form:option value="AVAILABLE" label="Available" selected="selected" />
 						<form:option value="EXPIRED" label="Expired" selected="selected" />

@@ -16,7 +16,7 @@
 <c:set var="editProductFormDonorHiddenId">editProductFormDonorHidden-${unique_page_id}</c:set>
 <c:set var="editProductFormCentersId">editProductFormCenters-${unique_page_id}</c:set>
 <c:set var="editProductFormSitesId">editProductFormSites-${unique_page_id}</c:set>
-<c:set var="editProductFormProductTypeId">editProductFormProductType-${unique_page_id}</c:set>
+<c:set var="editProductFormProductTypesId">editProductFormProductType-${unique_page_id}</c:set>
 <c:set var="editProductFormDonorTypeId">editProductFormDonorType-${unique_page_id}</c:set>
 <c:set var="updateProductButtonId">updateProductButton-${unique_page_id}</c:set>
 <c:set var="deleteProductButtonId">deleteProductButton-${unique_page_id}</c:set>
@@ -67,12 +67,6 @@
           }
         }).click(function() {
           $("#${editProductFormId}").printArea();
-        });
-
-        $("#${editProductFormId}").find(".bloodGroup").multiselect({
-          multiple : false,
-          selectedList : 1,
-          header : false
         });
 
         $("#${editProductFormId}").find(".productType").multiselect({
@@ -146,7 +140,7 @@
         }
         
         $("#${editProductFormBarcodeId}").barcode(
-					  "${editProductForm.product.productNumber}-${editProductForm.product.id}",
+					  "${editProductForm.product.productNumber}",
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 
@@ -198,7 +192,7 @@
 		<c:if test="${model.productFields.productType.hidden != true }">
 			<div>
 				<form:label path="productType">${model.productFields.productType.displayName}</form:label>
-				<form:select path="productType" id="editProductFormProductTypes-${unique_page_id}" class="productType">
+				<form:select path="productType" id="${editProductFormProductTypesId}" class="productType">
 					<form:option value="">&nbsp;</form:option>
 					<c:forEach var="productType" items="${model.productTypes}">
 						<form:option value="${productType.id}">${productType.productType}</form:option>

@@ -19,8 +19,9 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <c:set var="findRequestFormId">findRequestForm-${unique_page_id}</c:set>
-<c:set var="findRequestFormBloodGroupSelectorId">findRequestFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="findRequestFormSiteSelectorId">findRequestFormSiteSelector-${unique_page_id}</c:set>
+
+<c:set var="findRequestFormProductTypeSelectorId">findRequestFormProductTypeSelectorId-${unique_page_id}</c:set>
+<c:set var="findRequestFormRequestSiteSelectorId">findRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -147,7 +148,9 @@ $(document).ready(function() {
 
 			<div>
 				<form:label path="productTypes">Product Type</form:label>
-				<form:select id="findRequestFormProductTypes-${unique_page_id}" path="productTypes" class="productTypeSelector">
+				<form:select id="${findRequestFormProductTypeSelectorId}"
+										 path="productTypes"
+										 class="productTypeSelector">
 					<c:forEach var="productType" items="${model.productTypes}">
 						<form:option value="${productType.id}" label="${productType.productType}" />
 					</c:forEach>
@@ -156,7 +159,8 @@ $(document).ready(function() {
 
 			<div>
 				<form:label path="requestSites">Requested by site</form:label>
-				<form:select path="requestSites" class="requestSiteSelector">
+				<form:select id="${findRequestFormRequestSiteSelectorId}"
+										 path="requestSites" class="requestSiteSelector">
 					<c:forEach var="requestSite" items="${model.sites}">
 						<form:option value="${requestSite.id}" label="${requestSite.name}" />
 					</c:forEach>
