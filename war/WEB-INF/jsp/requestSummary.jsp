@@ -209,6 +209,12 @@
 					<label>${model.request.requestedQuantity}</label>
 				</div>
 			</c:if>
+			<c:if test="${model.requestFields.volume.hidden != true }">
+				<div>
+					<label>${model.requestFields.volume.displayName}</label>
+					<label>${model.request.volume} ml</label>
+				</div>
+			</c:if>
 			<c:if test="${model.requestFields.issuedQuantity.hidden != true }">
 				<div>
 					<label>${model.requestFields.issuedQuantity.displayName}</label>
