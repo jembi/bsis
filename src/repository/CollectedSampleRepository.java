@@ -215,8 +215,8 @@ public class CollectedSampleRepository {
     return null;
   }
 
-  public Map<Long, Long> findNumberOfCollectedSamples(String dateCollectedFrom,
-      String dateCollectedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
+  public Map<Long, Long> findNumberOfCollectedSamples(Date dateCollectedFrom,
+      Date dateCollectedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -247,24 +247,8 @@ public class CollectedSampleRepository {
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", Boolean.FALSE);
 
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    Date from = null;
-    Date to = null;
-    try {
-      from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("11/01/2012") : dateFormat.parse(dateCollectedFrom);
-      query.setParameter("dateCollectedFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
-      to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? dateFormat
-          .parse(dateFormat.format(new Date())) : dateFormat
-          .parse(dateCollectedTo);
-      query.setParameter("dateCollectedTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    query.setParameter("dateCollectedFrom", dateCollectedFrom);
+    query.setParameter("dateCollectedTo", dateCollectedTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -283,8 +267,8 @@ public class CollectedSampleRepository {
     Date lowerDate = null;
     Date upperDate = null;
     try {
-      lowerDate = resultDateFormat.parse(resultDateFormat.format(from));
-      upperDate = resultDateFormat.parse(resultDateFormat.format(to));
+      lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+      upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
     } catch (ParseException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();

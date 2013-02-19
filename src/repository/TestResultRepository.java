@@ -161,8 +161,8 @@ public class TestResultRepository {
     return query.getResultList();
   }
 
-  public Map<String, Map<Long, Long>> findNumberOfPositiveTests(String dateTestedFrom,
-      String dateTestedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
+  public Map<String, Map<Long, Long>> findNumberOfPositiveTests(Date dateTestedFrom,
+      Date dateTestedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
 
     TypedQuery<Object[]> query = em.createQuery("SELECT count(t), t.testedOn, t.bloodTest.name FROM TestResult t WHERE "
         + "t.result != t.bloodTest.correctResult AND "
@@ -201,24 +201,8 @@ public class TestResultRepository {
         resultMap.put(bt.getName(), new HashMap<Long, Long>());
     }
 
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    Date from = null;
-    Date to = null;
-    try {
-      from = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
-          .parse("11/01/2012") : dateFormat.parse(dateTestedFrom);
-      query.setParameter("dateTestedFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
-      to = (dateTestedTo == null || dateTestedTo.equals("")) ? dateFormat
-          .parse(dateFormat.format(new Date())) : dateFormat
-          .parse(dateTestedTo);
-      query.setParameter("dateTestedTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    query.setParameter("dateTestedFrom", dateTestedFrom);
+    query.setParameter("dateTestedTo", dateTestedTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -236,13 +220,15 @@ public class TestResultRepository {
     Date lowerDate = null;
     Date upperDate = null;
     try {
-      lowerDate = resultDateFormat.parse(resultDateFormat.format(from));
-      upperDate = resultDateFormat.parse(resultDateFormat.format(to));
+      lowerDate = resultDateFormat.parse(resultDateFormat.format(dateTestedFrom));
+      upperDate = resultDateFormat.parse(resultDateFormat.format(dateTestedTo));
     } catch (ParseException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
-    
+
+    // initialize the counter map storing (date, count) for each blood test
+    // counts should be set to 0
     for (String bloodTestName : resultMap.keySet()) {
       Map<Long, Long> m = resultMap.get(bloodTestName);
       gcal.setTime(lowerDate);
@@ -269,7 +255,6 @@ public class TestResultRepository {
         e.printStackTrace();
       }
     }
-
     return resultMap;
   }
 

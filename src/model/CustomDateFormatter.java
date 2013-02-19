@@ -23,18 +23,13 @@ public class CustomDateFormatter {
     Date date = null;
     if (!isDateEmpty(dateString))
       date = dateFormat.parse(dateString);
-    System.out.println("here");
-    System.out.println(date);
     return date;
   }
 
   public static Date getDateTimeFromString(String dateTimeString) throws ParseException {
     Date date = null;
-    System.out.println("here");
-    System.out.println(dateTimeString);
     if (!isDateEmpty(dateTimeString))
       date = dateTimeFormat.parse(dateTimeString);
-    System.out.println(date);
     return date;
   }
 

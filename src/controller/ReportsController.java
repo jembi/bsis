@@ -1,16 +1,18 @@
 package controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.CustomDateFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -145,25 +147,44 @@ public class ReportsController {
 
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
-    Map<Long, Long> numCollections = collectionRepository
-        .findNumberOfCollectedSamples(dateCollectedFrom, dateCollectedTo,
-            form.getAggregationCriteria(), form.getCenters(), form.getSites());
+
     Map<String, Object> m = new HashMap<String, Object>();
-    // TODO: potential leap year bug here
-    Long interval = (long) (24 * 3600 * 1000);
-    if (form.getAggregationCriteria().equals("monthly"))
-      interval = interval * 30;
-    else if (form.getAggregationCriteria().equals("yearly"))
-      interval = interval * 365;
-    m.put("interval", interval);
-    m.put("numCollections", numCollections);
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    Date date;
+
     try {
-      date = dateFormat.parse(dateCollectedFrom);
-      m.put("dateCollectedFromUTC", date.getTime());
-      date = dateFormat.parse(dateCollectedTo);
-      m.put("dateCollectedToUTC", date.getTime());
+
+      Date dateFrom;
+      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+        dateFrom = CustomDateFormatter.getDateFromString("12/31/2011");
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+  
+      Date dateTo;
+      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+        dateTo = new Date();
+      else
+        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+      Calendar gcal = new GregorianCalendar();
+      gcal.setTime(dateTo);
+      gcal.add(Calendar.DATE, 1);
+      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+  
+      Map<Long, Long> numCollections = collectionRepository
+          .findNumberOfCollectedSamples(dateFrom, dateTo,
+              form.getAggregationCriteria(), form.getCenters(), form.getSites());
+      // TODO: potential leap year bug here
+      Long interval = (long) (24 * 3600 * 1000);
+  
+      if (form.getAggregationCriteria().equals("monthly"))
+        interval = interval * 30;
+      else if (form.getAggregationCriteria().equals("yearly"))
+        interval = interval * 365;
+  
+      m.put("interval", interval);
+      m.put("numCollections", numCollections);
+
+      m.put("dateCollectedFromUTC", dateFrom.getTime());
+      m.put("dateCollectedToUTC", dateTo.getTime());
+
     } catch (ParseException ex) {
       // TODO Auto-generated catch block
       ex.printStackTrace();
@@ -233,28 +254,42 @@ public class ReportsController {
     String dateTestedFrom = form.getDateTestedFrom();
     String dateTestedTo = form.getDateTestedTo();
 
-    Map<String, Map<Long, Long>> numTestResults = testResultsRepository
-        .findNumberOfPositiveTests(dateTestedFrom, dateTestedTo,
-            form.getAggregationCriteria(), form.getCenters(), form.getSites());
-
     Map<String, Object> m = new HashMap<String, Object>();
-    // TODO: potential leap year bug here
-    Long interval = (long) (24 * 3600 * 1000);
-    if (form.getAggregationCriteria().equals("monthly"))
-      interval = interval * 30;
-    else if (form.getAggregationCriteria().equals("yearly"))
-      interval = interval * 365;
-    m.put("interval", interval);
-    m.put("numTestResults", numTestResults);
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    Date date;
+
     try {
-      date = (dateTestedFrom == null || dateTestedFrom.equals("")) ? dateFormat
-          .parse("12/31/2011") : dateFormat.parse(dateTestedFrom);
-      m.put("dateTestedFromUTC", date.getTime());
-      date = (dateTestedTo == null || dateTestedTo.equals("")) ? new Date()
-          : dateFormat.parse(dateTestedTo);
-      m.put("dateTestedToUTC", date.getTime());
+
+      Date dateFrom;
+      if (dateTestedFrom == null || dateTestedFrom.equals(""))
+        dateFrom = CustomDateFormatter.getDateFromString("12/31/2011");
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
+  
+      Date dateTo;
+      if (dateTestedTo == null || dateTestedTo.equals(""))
+        dateTo = new Date();
+      else
+        dateTo = CustomDateFormatter.getDateFromString(dateTestedTo);
+      Calendar gcal = new GregorianCalendar();
+      gcal.setTime(dateTo);
+      gcal.add(Calendar.DATE, 1);
+      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+  
+      Map<String, Map<Long, Long>> numTestResults = testResultsRepository
+          .findNumberOfPositiveTests(dateFrom, dateTo,
+              form.getAggregationCriteria(), form.getCenters(), form.getSites());
+  
+      // TODO: potential leap year bug here
+      Long interval = (long) (24 * 3600 * 1000);
+  
+      if (form.getAggregationCriteria().equals("monthly"))
+        interval = interval * 30;
+      else if (form.getAggregationCriteria().equals("yearly"))
+        interval = interval * 365;
+  
+      m.put("interval", interval);
+      m.put("numTestResults", numTestResults);
+      m.put("dateTestedFromUTC", dateFrom.getTime());
+      m.put("dateTestedToUTC", dateTo.getTime());
     } catch (ParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
