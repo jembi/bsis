@@ -441,11 +441,7 @@ public class CollectedSampleRepository {
       return null;
     
     String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
-                      "WHERE w.worksheetBatchId = :worksheetBatchId";
-
-    if (pagingParams.containsKey("sortColumn")) {
-      collectionsQueryStr += " ORDER BY c.id ASC";
-    }
+                      "WHERE w.worksheetBatchId = :worksheetBatchId ORDER BY c.id ASC";
 
     TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
     collectionsQuery.setParameter("worksheetBatchId", worksheetBatchId);

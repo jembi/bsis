@@ -29,7 +29,10 @@ public class SequenceNumberRepository {
     // use last two digits of year
     DateTime today = new DateTime();
     Integer yy = today.yearOfCentury().get();
-    query.setParameter("sequenceNumberContext", yy.toString());
+    Integer mm = today.monthOfYear().get();
+    String mmStr = String.format("%02d", mm);
+    String yyStr = String.format("%02d", yy);
+    query.setParameter("sequenceNumberContext", mmStr + yyStr);
 
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long)0;
@@ -47,13 +50,12 @@ public class SequenceNumberRepository {
       seqNumStore.setTargetTable("CollectedSample");
       seqNumStore.setColumnName("collectionNumber");
       seqNumStore.setPrefix(prefix);
-      seqNumStore.setSequenceNumberContext(yy.toString());
+      seqNumStore.setSequenceNumberContext(mmStr + yyStr);
     }
 
-    String yyStr = String.format("%02d", yy);
     String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String collectionNumber = prefix + yyStr + lastNumberStr;
+    String collectionNumber = prefix + mmStr + yyStr + lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -76,8 +78,12 @@ public class SequenceNumberRepository {
     query.setParameter("columnName", "requestNumber");
     // use last two digits of year
     DateTime today = new DateTime();
+    Integer mm = today.monthOfYear().get();
     Integer yy = today.yearOfCentury().get();
-    query.setParameter("sequenceNumberContext", yy.toString());
+
+    String mmStr = String.format("%02d", mm);
+    String yyStr = String.format("%02d", yy);
+    query.setParameter("sequenceNumberContext", mmStr + yyStr);
 
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long)0;
@@ -95,13 +101,12 @@ public class SequenceNumberRepository {
       seqNumStore.setColumnName("requestNumber");
       prefix = "R";
       seqNumStore.setPrefix(prefix);
-      seqNumStore.setSequenceNumberContext(yy.toString());
+      seqNumStore.setSequenceNumberContext(mmStr + yyStr);
     }
 
-    String yyStr = String.format("%02d", yy);
     String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String collectionNumber = prefix + yyStr + lastNumberStr;
+    String requestNumber = prefix + mmStr + yyStr + lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -111,6 +116,6 @@ public class SequenceNumberRepository {
     }
 
     em.flush();
-    return collectionNumber;
+    return requestNumber;
   }
 }
