@@ -159,9 +159,9 @@
 			<button type="button" class="cancelButton">
 				Done
 			</button>
-			<!-- button type="button" class="addCrossmatchTestButton">
+			<button type="button" class="addCrossmatchTestButton">
 				Add crossmatch tests
-			</button-->
+			</button>
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products
 			</button>
