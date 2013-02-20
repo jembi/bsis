@@ -402,6 +402,32 @@ public class RequestsController {
     return matchingProductViewModels;
   }
 
+  @RequestMapping("/confirmIssueProductsDialog")
+  public ModelAndView confirmIssueProductsDialog(
+      HttpServletResponse response,
+      Model model,
+      @RequestParam("requestId") Long requestId,
+      @RequestParam("productsToIssue") String productsToIssue) {
+    ModelAndView mv = new ModelAndView("confirmIssueProducts");
+    Map<String, Object> m = model.asMap();
+    List<Product> products = productRepository.getProductsFromProductIds(getProductIds(productsToIssue));
+    List<Request> productRequests = Arrays.asList(requestRepository.findRequestById(requestId));
+    List<RequestViewModel> productRequestViewModels = getRequestViewModels(productRequests);
+    m.put("request", productRequestViewModels.get(0));
+    m.put("allProducts", ProductController.getProductViewModels(products));
+    m.put("productVolumes", productVolumeRepository.getAllProductVolumes());
+    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  private String[] getProductIds(String productsToIssue) {
+    productsToIssue = productsToIssue.replaceAll("\"", "");
+    productsToIssue = productsToIssue.replaceAll("\\[", "");
+    productsToIssue = productsToIssue.replaceAll("\\]", "");
+    return productsToIssue.split(",");
+  }
+
   @RequestMapping("/issueSelectedProducts")
   public @ResponseBody Map<String, Object> issueSelectedProducts(
       HttpServletResponse response,

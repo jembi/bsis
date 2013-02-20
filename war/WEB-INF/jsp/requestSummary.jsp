@@ -231,10 +231,28 @@
 						<label>${model.request.volume} ml</label>
 					</div>
 				</c:if>
+				<c:if test="${model.requestFields.totalVolumeRequested.hidden != true }">
+					<div>
+						<label>${model.requestFields.totalVolumeRequested.displayName}</label>
+						<label>${model.request.totalVolumeRequested} ml</label>
+					</div>
+				</c:if>
 				<c:if test="${model.requestFields.issuedQuantity.hidden != true }">
 					<div>
 						<label>${model.requestFields.issuedQuantity.displayName}</label>
 						<label>${model.request.issuedQuantity}</label>
+					</div>
+				</c:if>
+				<c:if test="${model.requestFields.totalVolumeIssued.hidden != true }">
+					<div>
+						<label>${model.requestFields.totalVolumeIssued.displayName}</label>
+						<label>${model.request.totalVolumeIssued} ml</label>
+					</div>
+				</c:if>
+				<c:if test="${model.requestFields.totalVolumePending.hidden != true }">
+					<div>
+						<label>${model.requestFields.totalVolumePending.displayName}</label>
+						<label>${model.request.totalVolumePending} ml</label>
 					</div>
 				</c:if>
 				<c:if test="${model.requestFields.requestSite.hidden != true }">

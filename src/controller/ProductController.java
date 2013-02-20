@@ -230,8 +230,6 @@ public class ProductController {
     List<Product> products = Arrays.asList(new Product[0]);
 
     String searchBy = form.getSearchBy();
-    String dateExpiresFrom = form.getDateExpiresFrom();
-    String dateExpiresTo = form.getDateExpiresTo();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     Map<String, Object> formFields = utilController.getFormFieldsForForm("product");

@@ -89,6 +89,8 @@ public class Product implements ModificationTracker {
   @Column(length=100)
   private Date reasonReturn;
 
+  private Integer issuedVolume;
+  
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   private ProductStatus status;
@@ -298,5 +300,13 @@ public class Product implements ModificationTracker {
 
   public void setReasonReturn(Date reasonReturn) {
     this.reasonReturn = reasonReturn;
+  }
+
+  public Integer getIssuedVolume() {
+    return issuedVolume;
+  }
+
+  public void setIssuedVolume(Integer issuedVolume) {
+    this.issuedVolume = issuedVolume;
   }
 }

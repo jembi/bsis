@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
@@ -322,20 +326,20 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public void issueProductsToRequest(Long requestId, String productsToIssue) throws Exception {
+  public void issueProductsToRequest(Long requestId, String productIds) throws Exception {
     Request request = findRequestById(requestId);
-    productsToIssue = productsToIssue.replaceAll("\"", "");
-    productsToIssue = productsToIssue.replaceAll("\\[", "");
-    productsToIssue = productsToIssue.replaceAll("\\]", "");
-    String[] productIds = productsToIssue.split(",");
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, String> productIdToVolumeMap = mapper.readValue(productIds, HashMap.class);
     int numIssued = 0;
-    for (String productId : productIds) {
+    for (String productId : productIdToVolumeMap.keySet()) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
       // between the time when matching products are searched and selected
+      Integer issuedVolume = Integer.parseInt(productIdToVolumeMap.get(productId));
       if (canIssueProduct(product, request)) {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
+        product.setIssuedVolume(issuedVolume);
         product.setStatus(ProductStatus.ISSUED);
         numIssued++;
       }

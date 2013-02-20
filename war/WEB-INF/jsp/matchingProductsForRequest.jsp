@@ -12,11 +12,13 @@
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">productsTable-${unique_page_id}</c:set>
 <c:set var="productsTableEditRowDivId">productsTableEditRowDiv-${unique_page_id}</c:set>
+<c:set var="confirmIssueProductsDialogId">confirmIssueProductsDialog-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
     function() {
 
+			var productVolumeSelection = {};
       var selected_products = [];
       
       var selectedRowId = null;
@@ -76,11 +78,17 @@ $(document).ready(
           showMessage("You must select at least one product to issue.");
           return;
         }
+        showConfirmIssueDialog();
+      }
 
+      function confirmIssue() {
+        var data = {requestId : "${model.request.id}",
+            				productsToIssue : JSON.stringify(productVolumeSelection)
+            			 };
         $.ajax({
           url: "issueSelectedProducts.html",
           type: "POST",
-          data: {requestId: "${model.request.id}", productsToIssue: JSON.stringify(selected_products)},
+          data: data,
           success: function() {
             				 showMessage("Products Issued Successfully!");
             				 $("#${tabContentId}").parent().trigger("productIssueSuccess");
@@ -90,7 +98,31 @@ $(document).ready(
          					 }
         });
       }
-      
+
+      function showConfirmIssueDialog() {
+        $.ajax({
+          type : "GET",
+          url : "confirmIssueProductsDialog.html",
+          data : {requestId: "${model.request.id}", productsToIssue: JSON.stringify(selected_products)},
+          success : function (response) {
+					  					$("#${confirmIssueProductsDialogId}").find(".dialogContent").html(response);
+					  					$("#${confirmIssueProductsDialogId}").bind("updateProductVolumeSelection", updateProductVolumeSelection);
+					  					$("#${confirmIssueProductsDialogId}").dialog({
+            					  modal: true,
+            					  width: 800,
+            					  height: 600,
+            					  buttons: {
+            					    "Confirm Issue" : function() {	confirmIssue(); $(this).dialog("close"); },
+            					    "Cancel" : function(event, ui) { $(this).dialog("close"); }
+            					  }
+            					});
+          				  },
+          error :   function () {
+            				  showErrorMessage("Something went wrong. Please try again.");
+          				  }
+        });
+      }
+
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
         $("#${table_id}").removeHighlight();
@@ -98,6 +130,10 @@ $(document).ready(
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
 
+      function updateProductVolumeSelection(event, productVolumes) {
+        productVolumeSelection = productVolumes;
+        console.log(productVolumeSelection);
+      }
     });
 </script>
 
@@ -182,4 +218,8 @@ $(document).ready(
 		</c:otherwise>
 	</c:choose>
 
+</div>
+
+<div id="${confirmIssueProductsDialogId}" title="Confirm Issue?" style="display: none;">
+	<div class="dialogContent"></div>
 </div>

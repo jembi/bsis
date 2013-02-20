@@ -73,8 +73,6 @@ select:focus {
 }
 
 .formDiv {
-	border: 1px solid #8eb2b2;
-	border-radius: 6px;
 	padding-left: 10px;
 	padding-top: 5px;
 	padding-bottom: 50px;

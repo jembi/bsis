@@ -1,6 +1,5 @@
 package viewmodel;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
-import model.util.Gender;
 
 public class RequestViewModel {
 	private Request request;
@@ -148,6 +146,29 @@ public class RequestViewModel {
 
   public Integer getVolume() {
     return request.getVolume();
+  }
+
+  public Integer getTotalVolumeRequested() {
+    if (request.getVolume() == null || request.getRequestedQuantity() == null)
+      return 0;
+    Integer totalVolumeRequested = request.getVolume() * request.getRequestedQuantity();
+    return totalVolumeRequested;
+  }
+
+  public Integer getTotalVolumeIssued() {
+    if (request.getIssuedProducts() == null)
+      return 0;
+    Integer totalVolumeIssued = 0;
+    for (Product p : request.getIssuedProducts()) {
+      if (p.getIssuedVolume() == null)
+        continue;
+      totalVolumeIssued = totalVolumeIssued + p.getIssuedVolume();
+    }
+    return totalVolumeIssued;
+  }
+
+  public Integer getTotalVolumePending() {
+    return getTotalVolumeRequested() - getTotalVolumeIssued();
   }
 
   public String getWard() {

@@ -210,6 +210,7 @@
         expiresOn datetime,
         isDeleted boolean,
         issuedOn datetime,
+        issuedVolume integer,
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,

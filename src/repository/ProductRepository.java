@@ -652,4 +652,12 @@ public class ProductRepository {
     int numUpdated = query.executeUpdate();
     System.out.println("Number of rows updated: " + numUpdated);
   }
+
+  public List<Product> getProductsFromProductIds(String[] productIds) {
+    List<Product> products = new ArrayList<Product>();
+    for (String productId : productIds) {
+      products.add(findProductById(Long.parseLong(productId)));
+    }
+    return products;
+  }
 }
