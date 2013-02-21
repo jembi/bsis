@@ -19,10 +19,10 @@ public class RowModificationTracker implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;
 
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne
   private User createdBy;
 
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne
   private User lastUpdatedBy;
 
   public Date getLastUpdated() {

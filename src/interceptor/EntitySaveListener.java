@@ -14,12 +14,26 @@ import org.hibernate.event.spi.PreInsertEvent;
 import org.hibernate.event.spi.PreInsertEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.stereotype.Component;
 
+import filter.UserInfoAddToThreadFilter;
+
+@Component
 public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
   private static final long serialVersionUID = 1L;
 
   static final Logger logger = LoggerFactory.getLogger(EntitySaveListener.class);
+
+  @Autowired
+  private LocalEntityManagerFactoryBean entityManagerFactory;
+
+  public EntitySaveListener() {
+    System.out.println("listener created here");
+    System.out.println(entityManagerFactory);
+  }
 
   public void onPersist(PersistEvent event) throws HibernateException {
     System.out.println("onPersist");
@@ -42,6 +56,7 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
     if (event.getEntity() instanceof ModificationTracker) {
       ModificationTracker entity = (ModificationTracker) event.getEntity();
       entity.setLastUpdated(new Date());
+      entity.setLastUpdatedBy(UserInfoAddToThreadFilter.threadLocal.get());
     }
   }
 

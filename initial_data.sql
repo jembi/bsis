@@ -17,7 +17,9 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Donor', 'state', 'State', '', '1', '0', '0', '0', '0', '', 0),
 ('Donor', 'country', 'Country', 'Zambia', '0', '0', '0', '0', '0', '', 0),
 ('Donor', 'zipcode', 'Zip Code', '', '0', '0', '0', '0', '0', '', 0),
-('Donor', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('Donor', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('Donor', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('Donor', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', '0', '1', '1', '1', '0', '', 0),

@@ -255,6 +255,15 @@
 					<label>${model.donor.notes}</label>
 				</div>
 			</c:if>
+			<br />
+			<div>
+				<label>${model.donorFields.lastUpdatedTime.displayName}</label>
+				<label style="width: auto;">${model.donor.lastUpdated}</label>
+			</div>
+			<div>
+				<label>${model.donorFields.lastUpdatedBy.displayName}</label>
+				<label style="width: auto;">${model.donor.lastUpdatedBy}</label>
+			</div>
 			<hr />
 		</div>
 	</div>

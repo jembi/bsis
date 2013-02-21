@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import model.CustomDateFormatter;
 import model.donor.Donor;
+import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
@@ -98,5 +100,27 @@ public class DonorViewModel {
   public String getNotes() {
     Object comments = donor.getNotes();
     return comments == null ? "" : comments.toString();
+  }
+
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(donor.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(donor.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = donor.getCreatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = donor.getLastUpdatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
   }
 }
