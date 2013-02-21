@@ -1,6 +1,5 @@
 package viewmodel;
 
-import java.util.Date;
 import java.util.List;
 
 import model.CustomDateFormatter;
@@ -78,24 +77,8 @@ public class RequestViewModel {
     return request.getIssuedProducts();
   }
 
-  public Date getLastUpdated() {
-    return request.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return request.getCreatedDate();
-  }
-
   public String getBloodGroup() {
     return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
-  }
-
-  public User getCreatedBy() {
-    return request.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return request.getLastUpdatedBy();
   }
 
   public int hashCode() {
@@ -189,5 +172,27 @@ public class RequestViewModel {
 
   public RequestType getRequestType() {
     return request.getRequestType();
+  }
+
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(request.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(request.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = request.getCreatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = request.getLastUpdatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
   }
 }

@@ -31,7 +31,10 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('CollectedSample', 'collectionCenter', 'Collection Center', '', '0', '1', '0', '0', '0', '', 0),
 ('CollectedSample', 'bloodBagType', 'Blood Bag Type', '', '0', '1', '0', '0', '0', '', 0),
 ('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '1', '0', '0', '0', '', 0),
-('CollectedSample', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('CollectedSample', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('CollectedSample', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('CollectedSample', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
+
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('Product', 'productNumber', 'Product Number', '', '0', '1', '0', '0', '0', '', 0),
@@ -42,14 +45,18 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Product', 'status', 'Status', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Product', 'age', 'Age', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('TestResult', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', '0', '', 0),
 ('TestResult', 'bloodTest', 'Test Name', '', '0', '0', '0', '0', '0', '', 0),
 ('TestResult', 'result', 'Test Result', '', '0', '0', '0', '0', '0', '', 0),
 ('TestResult', 'testedOn', 'Tested On', '', '0', '0', '0', '0', '0', '', 0),
-('TestResult', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('TestResult', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('TestResult', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('TestResult', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('Request', 'requestNumber', 'Request Number', '', '0', '1', '1', '1', '0', '', 0),
@@ -77,7 +84,9 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'department', 'Department', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'hospital', 'Hospital', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'requestedBy', 'Requested By', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('Request', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('Request', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('CrossmatchTest', 'productNumber', 'Product number', '', '0', '1', '0', '0', '0', '', 0),
@@ -87,7 +96,10 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('CrossmatchTest', 'transfusedBefore', 'Transfused before', '', '0', '0', '0', '0', '0', '', 0),
 ('CrossmatchTest', 'crossmatchType', 'Crossmatch type', '', '0', '0', '0', '0', '0', '', 0),
 ('CrossmatchTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('CrossmatchTest', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('CrossmatchTest', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('CrossmatchTest', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
+
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('Usage', 'hospital', 'Hospital', '', '0', '1', '0', '0', '0', '', 0),
@@ -96,7 +108,9 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Usage', 'useIndication', 'Use Indication', '', '0', '0', '0', '0', '0', '', 0),
 ('Usage', 'usageDate', 'Usage Date', '', '0', '1', '0', '0', '0', '', 0),
 ('Usage', 'product', 'Product', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0);
+('Usage', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('Usage', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('Usage', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into DonorType (donorType, isDeleted) values
 ('Voluntary', '0'),

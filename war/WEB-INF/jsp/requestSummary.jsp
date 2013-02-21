@@ -329,6 +329,14 @@
 						<label>${model.request.notes}</label>
 					</div>
 				</c:if>
+				<div>
+					<label>${model.requestFields.lastUpdatedTime.displayName}</label>
+					<label style="width: auto;">${model.request.lastUpdated}</label>
+				</div>
+				<div>
+					<label>${model.requestFields.lastUpdatedBy.displayName}</label>
+					<label style="width: auto;">${model.request.lastUpdatedBy}</label>
+				</div>
 			</div>
 			<hr />
 		</div>

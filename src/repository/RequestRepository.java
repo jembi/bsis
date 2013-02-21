@@ -229,14 +229,6 @@ public class RequestRepository {
     em.flush();
   }
 
-  public Request issueRequest(String requestNumber, String status) {
-    Request existingRequest = findRequestByRequestNumber(requestNumber);
-//    existingRequest.setRequestStatus(status);
-    em.merge(existingRequest);
-    em.flush();
-    return existingRequest;
-  }
-
   public static String generateUniqueRequestNumber() {
     String uniqueRequestNumber;
     uniqueRequestNumber = "R-" + RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
@@ -341,6 +333,8 @@ public class RequestRepository {
         product.setIssuedOn(new Date());
         product.setIssuedVolume(issuedVolume);
         product.setStatus(ProductStatus.ISSUED);
+        productRepository.updateProductInternalFields(product);
+        em.merge(product);
         numIssued++;
       }
       else {

@@ -140,8 +140,15 @@
 				<label>${model.testResult.result}</label>
 			</div>
 		</c:if>
+		<div>
+			<label>${model.testResultFields.lastUpdatedTime.displayName}</label>
+			<label style="width: auto;">${model.testResult.lastUpdated}</label>
+		</div>
+		<div>
+			<label>${model.testResultFields.lastUpdatedBy.displayName}</label>
+			<label style="width: auto;">${model.testResult.lastUpdatedBy}</label>
+		</div>
 	</div>
-
 	<hr />
 	<br />
 	<br />

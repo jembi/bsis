@@ -1,8 +1,5 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import model.CustomDateFormatter;
@@ -92,22 +89,6 @@ public class CollectedSampleViewModel {
     return collectedSample.getProducts();
   }
 
-  public Date getLastUpdated() {
-    return collectedSample.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return collectedSample.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return collectedSample.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return collectedSample.getLastUpdatedBy();
-  }
-
   public int hashCode() {
     return collectedSample.hashCode();
   }
@@ -120,5 +101,27 @@ public class CollectedSampleViewModel {
    if (collectedSample.getDonor() == null)
      return "";
    return collectedSample.getDonor().getDonorNumber();
+  }
+
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(collectedSample.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(collectedSample.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = collectedSample.getCreatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = collectedSample.getLastUpdatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
   }
 }

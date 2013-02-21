@@ -190,6 +190,14 @@
 					<label>${model.collectedSample.notes}</label>
 				</div>
 			</c:if>
+			<div>
+				<label>${model.collectedSampleFields.lastUpdatedTime.displayName}</label>
+				<label style="width: auto;">${model.collectedSample.lastUpdated}</label>
+			</div>
+			<div>
+				<label>${model.collectedSampleFields.lastUpdatedBy.displayName}</label>
+				<label style="width: auto;">${model.collectedSample.lastUpdatedBy}</label>
+			</div>
 			<hr />
 		</div>
 	</div>

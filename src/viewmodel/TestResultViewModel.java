@@ -45,22 +45,6 @@ public class TestResultViewModel {
     return testResult.getResult();
   }
 
-  public Date getLastUpdated() {
-    return testResult.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return testResult.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return testResult.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return testResult.getLastUpdatedBy();
-  }
-
   public String getNotes() {
     return testResult.getNotes();
   }
@@ -119,5 +103,27 @@ public class TestResultViewModel {
 
   public String toString() {
     return testResult.toString();
+  }
+
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(testResult.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(testResult.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = testResult.getCreatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = testResult.getLastUpdatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
   }
 }

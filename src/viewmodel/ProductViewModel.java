@@ -4,9 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-
 import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
@@ -15,6 +12,9 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 public class ProductViewModel {
 
@@ -51,22 +51,6 @@ public class ProductViewModel {
     return product.getProductType();
   }
   
-  public Date getLastUpdated() {
-    return product.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return product.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return product.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return product.getLastUpdatedBy();
-  }
-
   public String getNotes() {
     return product.getNotes();
   }
@@ -129,5 +113,27 @@ public class ProductViewModel {
     else {
       return "Already expired";
     }
+  }
+
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(product.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(product.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = product.getCreatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = product.getLastUpdatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
   }
 }

@@ -30,7 +30,6 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,38 +153,6 @@ public class ProductRepository {
       }
     }
     return product;
-  }
-
-  private Date getDateExpiresFromOrDefault(String dateExpiresFrom) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    Date from = null;
-    try {
-      from = (dateExpiresFrom == null || dateExpiresFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateExpiresFrom);
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
-    return from;      
-  }
-
-  private Date getDateExpiresToOrDefault(String dateExpiresTo) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    Date to = null;
-    try {
-      if (dateExpiresTo == null || dateExpiresTo.equals("")) {
-        to = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(to);
-        cal.add(Calendar.DATE, 365);
-        to = cal.getTime();
-      }
-      else {
-        to = dateFormat.parse(dateExpiresTo);
-      }
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
-    return to;      
   }
 
   public Product findProductByProductNumber(String productNumber) {

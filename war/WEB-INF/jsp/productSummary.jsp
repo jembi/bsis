@@ -222,6 +222,14 @@
 					<label>${model.product.notes}</label>
 				</div>
 			</c:if>
+			<div>
+				<label>${model.productFields.lastUpdatedTime.displayName}</label>
+				<label style="width: auto;">${model.product.lastUpdated}</label>
+			</div>
+			<div>
+				<label>${model.productFields.lastUpdatedBy.displayName}</label>
+				<label style="width: auto;">${model.product.lastUpdatedBy}</label>
+			</div>
 			<hr />
 		</div>
 	</div>
