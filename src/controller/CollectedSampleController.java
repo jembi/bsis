@@ -640,10 +640,9 @@ public class CollectedSampleController {
       @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
 
     List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId);
-
     ModelAndView mv = new ModelAndView("collectionsWorksheet");
-    Map<String, Object> m = new HashMap<String, Object>();
 
+    Map<String, Object> m = new HashMap<String, Object>();
     if (collectedSamples == null) {
       m.put("worksheetFound", false);
     } else {

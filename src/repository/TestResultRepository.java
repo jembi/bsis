@@ -40,6 +40,9 @@ public class TestResultRepository {
   @Autowired
   private ProductRepository productRepository;
 
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
+
   private List<Product> getProductsToUpdate(TestResult testResult) {
     if (testResult.getCollectedSample() == null || testResult.getCollectedSample().getId() == null)
       return Arrays.asList(new Product[0]);
@@ -369,7 +372,7 @@ public class TestResultRepository {
   public void saveTestResultsToWorksheet(String worksheetBatchId,
       Map<String, Map<String, String>> testResultChanges) {
 
-    String worksheetQueryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.testResults where w.worksheetBatchId = :worksheetBatchId";
+    String worksheetQueryStr = "SELECT w from CollectionsWorksheet w where w.worksheetBatchId = :worksheetBatchId";
     TypedQuery<CollectionsWorksheet> worksheetQuery = em.createQuery(worksheetQueryStr, CollectionsWorksheet.class);
     worksheetQuery.setParameter("worksheetBatchId", worksheetBatchId);
     CollectionsWorksheet worksheet = worksheetQuery.getSingleResult();
@@ -378,53 +381,65 @@ public class TestResultRepository {
       return;
 
     for (String collectionId : testResultChanges.keySet()) {
-      String queryStr = "SELECT t FROM TestResult t WHERE " +
-      		              "t.collectedSample.id = :collectionId AND " +
-      		              "t.worksheet.id = :worksheetId AND " +
-      		              "t.isDeleted = :isDeleted";
-      TypedQuery<TestResult> query = em.createQuery(queryStr, TestResult.class);
-      query.setParameter("collectionId", Long.parseLong(collectionId));
-      query.setParameter("worksheetId", worksheet.getId());
-      query.setParameter("isDeleted", false);
-      List<TestResult> testResults = query.getResultList();
-      Map<String, TestResult> testResultsMap = new HashMap<String, TestResult>();
-      for (TestResult t : testResults) {
-        testResultsMap.put(t.getBloodTest().getName(), t);
-      }
 
       CollectedSample collectedSample;
       collectedSample = collectedSampleRepository.findCollectedSampleById(Long.parseLong(collectionId));
+
       Map<String, String> changesForCollection = testResultChanges.get(collectionId);
       for (String testName : changesForCollection.keySet()) {
         String result = changesForCollection.get(testName);
-        TestResult t = testResultsMap.get(testName);
-        if (t != null) {
-          if (result.trim().equals("")) {
-            t.setIsDeleted(true);
-          } else {
-            t.setResult(result);
-          }
-          em.merge(t);
-        } else {
-          t = new TestResult();
-          BloodTest bt = new BloodTest();
-          bt.setName(testName);
-          t.setBloodTest(bt);
-          t.setTestedOn(new Date());
-          t.setResult(result);
-          t.setCollectedSample(collectedSample);
-          t.setIsDeleted(false);
-          t.setNotes("");
-          t.setWorksheet(worksheet);
-          worksheet.getTestResults().add(t);
-          em.persist(t);
-        }
+        TestResult t = new TestResult();
+        BloodTest bt = new BloodTest();
+        bt.setName(testName);
+        t.setBloodTest(bt);
+        t.setTestedOn(new Date());
+        t.setResult(result);
+        t.setCollectedSample(collectedSample);
+        t.setIsDeleted(false);
+        t.setNotes("");
+        em.persist(t);
       }
+      // Must update product fields
+      // For the sake of performance some fields are cached in the products table
+      // we do not do a real time calculation of these field values
       for (Product p : collectedSample.getProducts()) {
         productRepository.updateProductInternalFields(p);
       }
     }
     em.flush();
+  }
+
+  public Map<String,TestResult> getRecentTestResultsForCollection(
+      Long collectedSampleId) {
+
+    String queryStr = "SELECT t FROM TestResult t WHERE " +
+                      "t.collectedSample.id=:collectedSampleId";
+    TypedQuery<TestResult> query = em.createQuery(queryStr, TestResult.class);
+    query.setParameter("collectedSampleId", collectedSampleId);
+    
+    List<TestResult> allTestResults = query.getResultList();
+    Map<String, TestResult> recentTestResults = new HashMap<String, TestResult>();
+
+    if (allTestResults != null) {
+      for (TestResult t : allTestResults) {
+        if (t.getIsDeleted())
+          continue;
+  
+        String testName = t.getBloodTest().getName();
+        if (recentTestResults.containsKey(testName)) {
+          TestResult existingTestResult = recentTestResults.get(testName);
+          Date existingDate = existingTestResult.getTestedOn();
+          Date newDate = t.getTestedOn();
+          // make sure the user sees only the most recent test results
+          if (newDate.after(existingDate))
+            recentTestResults.put(testName, t);
+        } else {
+          recentTestResults.put(testName, t);
+        }
+      }
+    }
+
+    return recentTestResults;
   }
 
 }

@@ -23,7 +23,6 @@ import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.testresults.TestResultBackingFormValidator;
-import model.worksheet.CollectionsWorksheet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +42,6 @@ import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.TestResultRepository;
-import viewmodel.CollectedSampleViewModel;
 import viewmodel.TestResultViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -521,20 +519,16 @@ public class TestResultController {
     List<Object> results = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId, pagingParams);
 
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
-    CollectionsWorksheet worksheet = (CollectionsWorksheet) results.get(1);
-    Long totalRecords = (Long) results.get(2);
-    return generateDatatablesMap(worksheet, collectedSamples, totalRecords);
+    Long totalRecords = (Long) results.get(1);
+    return generateDatatablesMap(collectedSamples, totalRecords);
   }
 
   /**
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in collectionsTable.jsp.
-   * @param worksheet 
    */
-  private Map<String, Object> generateDatatablesMap(
-      CollectionsWorksheet worksheet,
-      List<CollectedSample> collectedSamples, Long totalRecords) {
+  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords) {
 
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     Map<String, String> properties = genericConfigRepository.getConfigProperties(propertyOwners);
@@ -543,47 +537,24 @@ public class TestResultController {
     Map<String, Object> resultsMap = new HashMap<String, Object>();
     ArrayList<Object> resultList = new ArrayList<Object>();
 
-    Map<Long, List<TestResult>> testResultsByCollection = new HashMap<Long, List<TestResult>>();
-    for (TestResult t : worksheet.getTestResults()) {
-      if (t.getIsDeleted())
-        continue;
-      Long collectionId = t.getCollectedSample().getId();
-      if (!testResultsByCollection.containsKey(collectionId)) {
-        testResultsByCollection.put(collectionId, new ArrayList<TestResult>());
-      }
-      List<TestResult> testResults = testResultsByCollection.get(collectionId);
-      testResults.add(t);
-    }
-
-    for (CollectedSampleViewModel collection : CollectedSampleController.getCollectionViewModels(collectedSamples)) {
+    for (CollectedSample collectedSample : collectedSamples) {
 
       List<Object> row = new ArrayList<Object>();
-      row.add(collection.getId());
+      // id goes as the first column to identify the collection uniquely
+      row.add(collectedSample.getId());
 
+      // second column is collection number
       if (properties.containsKey("collectionNumber") && properties.get("collectionNumber").equals("true")) {
-          row.add(collection.getCollectionNumber());
+          row.add(collectedSample.getCollectionNumber());
       }
 
-      Map<String, TestResult> testResults = new HashMap<String, TestResult>();
-
-      Date testedOn = null;
-      if (testResultsByCollection.containsKey(collection.getId())) {
-        for (TestResult t : testResultsByCollection.get(collection.getId())) {
-          testedOn = t.getTestedOn();
-          testResults.put(t.getBloodTest().getName(), t);
-        }
-      }
-
-      if (properties.containsKey("testedOn") && properties.get("testedOn").equals("true")) {
-          row.add(CustomDateFormatter.getDateString(testedOn));
-      }
-
+      Map<String, TestResult> recentTestResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
       // now add results for existing tests related to this worksheet
       for (BloodTest bt : bloodTests) {
         String testName = bt.getName();
         if (properties.containsKey(testName) && properties.get(testName).equals("true")) {
-            if (testResults.containsKey(testName))
-              row.add(testResults.get(testName).getResult());
+            if (recentTestResults.containsKey(testName))
+              row.add(recentTestResults.get(testName).getResult());
             else
               row.add("");
         }

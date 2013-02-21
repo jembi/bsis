@@ -431,33 +431,23 @@ public class CollectedSampleRepository {
 
   public List<Object> findCollectionsInWorksheet(String worksheetBatchId, Map<String, Object> pagingParams) {
 
-    String worksheetQueryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.testResults where w.worksheetBatchId = :worksheetBatchId";
-    TypedQuery<CollectionsWorksheet> worksheetQuery = em.createQuery(worksheetQueryStr, CollectionsWorksheet.class);
-    worksheetQuery.setParameter("worksheetBatchId", worksheetBatchId);
     try {
-      CollectionsWorksheet worksheet = worksheetQuery.getSingleResult();
-
-    if (worksheet == null)
-      return null;
-    
-    String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
-                      "WHERE w.worksheetBatchId = :worksheetBatchId ORDER BY c.id ASC";
-
-    TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
-    collectionsQuery.setParameter("worksheetBatchId", worksheetBatchId);
-
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    collectionsQuery.setFirstResult(start);
-    collectionsQuery.setMaxResults(length);
-
-    List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
-
-    return Arrays.asList(collectedSamples, worksheet, getTotalCollectionsInWorksheet(worksheetBatchId));
+      String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
+                                   "WHERE w.worksheetBatchId = :worksheetBatchId ORDER BY c.id ASC";
+      TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
+      collectionsQuery.setParameter("worksheetBatchId", worksheetBatchId);
+  
+      int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+      int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+  
+      collectionsQuery.setFirstResult(start);
+      collectionsQuery.setMaxResults(length);
+  
+      List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
+  
+      return Arrays.asList(collectedSamples, getTotalCollectionsInWorksheet(worksheetBatchId));
     } catch (NoResultException ex){
-      return Arrays.asList(Arrays.asList(new CollectedSample[0]), new CollectionsWorksheet(), new Long(0));
+      return Arrays.asList(Arrays.asList(new CollectedSample[0]), new Long(0));
     }
   }
 

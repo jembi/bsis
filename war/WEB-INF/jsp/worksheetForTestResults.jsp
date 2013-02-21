@@ -143,25 +143,23 @@ $(document).ready(function() {
 		  var row = data[index];
 			original_data[row[0]] = {
 			    "collectionNumber" : row[1],
-			    "testedOn" : row[2],
-			    "Blood ABO" : row[3],
-			    "Blood Rh" : row[4],
-			    "HBV" : row[5],
-			    "HCV" : row[6],
-			    "HIV" : row[7],
-			    "Syphilis" : row[8]
+			    "Blood ABO" : row[2],
+			    "Blood Rh" : row[3],
+			    "HBV" : row[4],
+			    "HCV" : row[5],
+			    "HIV" : row[6],
+			    "Syphilis" : row[7]
 			};
 		  var collectedSampleId = row[0];	// each row has a hidden collectedsample id column
 		  // server returns the value of the cells in order but we have replace the
 		  // value by the relevant input elements. These DOM elements are generated below.
 		  row[1] = getEditableCollectionNumber(row[1], collectedSampleId);
-		  row[2] = getEditableTestedOn(row[2], collectedSampleId);
-		  row[3] = getEditableBloodABOSelector(row[3], collectedSampleId);
-		  row[4] = getEditableBloodRhSelector(row[4], collectedSampleId);
-		  row[5] = getEditableHBVSelector(row[5], collectedSampleId);
-		  row[6] = getEditableHCVSelector(row[6], collectedSampleId);
-		  row[7] = getEditableHIVSelector(row[7], collectedSampleId);
-		  row[8] = getEditableSyphilisSelector(row[8], collectedSampleId);
+		  row[2] = getEditableBloodABOSelector(row[2], collectedSampleId);
+		  row[3] = getEditableBloodRhSelector(row[3], collectedSampleId);
+		  row[4] = getEditableHBVSelector(row[4], collectedSampleId);
+		  row[5] = getEditableHCVSelector(row[5], collectedSampleId);
+		  row[6] = getEditableHIVSelector(row[6], collectedSampleId);
+		  row[7] = getEditableSyphilisSelector(row[7], collectedSampleId);
 		}
   }
 
@@ -253,16 +251,6 @@ $(document).ready(function() {
     					'<br /> <br />' +
     					'<span class="link clearSelection">Clear</span>' +
     			 '</div>';
-  }
-
-  function getEditableTestedOn(cell, collectedSampleId) {
-    // use current date for wokrsheet by default
-    var testedOn = $.datepicker.formatDate("mm/dd/yy", new Date());
-    if (cell !== null && cell !== undefined && cell !== "")
-      testedOn = cell;
-    var inputElement = '<input class="testedOn inlineInput" value="' + testedOn + '" />';
-    var rowContents = '<div class="editableField testedOnEditableField">' + inputElement + '</div>';
-		return rowContents;
   }
 
   function getEditableBloodABOSelector(cell, collectedSampleId) {
@@ -365,12 +353,6 @@ $(document).ready(function() {
 									</th>
 								</c:if>
 
-							  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
-									<th style="width: 100px;">
-										Tested On
-									</th>
-								</c:if>
-	
 								<c:forEach var="bloodTest" items="${model.bloodTests}">
 									<c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
 								  	<th style="width: 170px;">
@@ -389,9 +371,6 @@ $(document).ready(function() {
 											${collectedSample.collectionNumber}
 										</td>
 									</c:if>
-								  <c:if test="${model.worksheetConfig['testedOn'] == 'true'}">
-										<td></td>
-								  </c:if>
 									<c:forEach var="bloodTest" items="${model.bloodTests}">
 									  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
 											<td></td>
