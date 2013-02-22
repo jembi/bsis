@@ -105,6 +105,8 @@ $(document).ready(
 						<c:if test="${model.testResultFields.result.hidden != true}">
 							<th>${model.testResultFields.result.displayName}</th>
 						</c:if>
+						<th>${model.testResultFields.lastUpdatedTime.displayName}</th>
+						<th>${model.testResultFields.lastUpdatedBy.displayName}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -123,6 +125,8 @@ $(document).ready(
 							<c:if test="${model.testResultFields.result.hidden != true}">
 								<td>${testResult.result}</td>
 							</c:if>
+							<td>${testResult.lastUpdated}</td>
+							<td>${testResult.lastUpdatedBy}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

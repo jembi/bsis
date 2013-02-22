@@ -41,7 +41,9 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
     if (event.getObject() instanceof ModificationTracker) {
       ModificationTracker entity = (ModificationTracker) event.getObject();
       entity.setCreatedDate(new Date());
+      entity.setCreatedBy(UserInfoAddToThreadFilter.threadLocal.get());
       entity.setLastUpdated(new Date());
+      entity.setLastUpdatedBy(UserInfoAddToThreadFilter.threadLocal.get());
     }
   }
 
