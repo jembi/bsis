@@ -44,12 +44,27 @@
   	        						);
         });
 
+        $("#${tabContentId}").find(".viewHistoryButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-document'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("viewTestResultHistoryDone", emptyChildContent);
+
+  	        fetchContent("testResultHistory.html",
+              					 {testResultId: "${model.testResult.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
           }
         }).click(function() {
-          $("#${mainContentId}").printArea();
+          $("#${mainContentId}").find(".printableArea").printArea();
         });
 
         $("#${tabContentId}").find(".cancelButton").button({
@@ -81,9 +96,11 @@
               });
         });
 
-        function editTestResultSuccess() {
+        function editTestResultSuccess(event, refreshUrl) {
+          if (refreshUrl === undefined || refreshUrl === null)
+            refreshUrl = "${model.refreshUrl}";
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent(refreshUrl, $("#${tabContentId}"));
         }
 
 				function emptyChildContent() {
@@ -94,7 +111,7 @@
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}">
 
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
@@ -103,9 +120,12 @@
 			<button type="button" class="editButton">
 				Edit
 			</button>
-			<button type="button" class="deleteButton">
-				Delete
+			<button type="button" class="viewHistoryButton">
+				View changes to this test result
 			</button>
+			<!-- button type="button" class="deleteButton">
+				Delete
+			</button-->
 			<button type="button" class="printButton">
 				Print
 			</button>
@@ -114,42 +134,49 @@
 		<br />
 		<br />
 
-		<div id="${testResultSummaryBarcodeId}"></div>
-
-		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
+		<div class="formInTabPane printableArea">
+			<div id="${testResultSummaryBarcodeId}"></div>
+			<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
+				<div>
+					<label>${model.testResultFields.collectionNumber.displayName}</label>
+					<label>${model.testResult.collectedSample.collectionNumber}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.testResultFields.testedOn.hidden != true }">
+				<div>
+					<label>${model.testResultFields.testedOn.displayName}</label>
+					<label style="width: auto;">${model.testResult.testedOn}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.testResultFields.bloodTest.hidden != true }">
+				<div>
+					<label>${model.testResultFields.bloodTest.displayName}</label>
+					<label>${model.testResult.bloodTest.name}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.testResultFields.bloodTestResult.hidden != true }">
+				<div>
+					<label>${model.testResultFields.result.displayName}</label>
+					<label>${model.testResult.result}</label>
+				</div>
+			</c:if>
+			<c:if test="${model.testResultFields.notes.hidden != true }">
+				<div>
+					<label>${model.testResultFields.notes.displayName}</label>
+					<label>${model.testResult.notes}</label>
+				</div>
+			</c:if>
 			<div>
-				<label>${model.testResultFields.collectionNumber.displayName}</label>
-				<label>${model.testResult.collectedSample.collectionNumber}</label>
+				<label>${model.testResultFields.lastUpdatedTime.displayName}</label>
+				<label style="width: auto;">${model.testResult.lastUpdated}</label>
 			</div>
-		</c:if>
-		<c:if test="${model.testResultFields.testedOn.hidden != true }">
 			<div>
-				<label>${model.testResultFields.testedOn.displayName}</label>
-				<label style="width: auto;">${model.testResult.testedOn}</label>
+				<label>${model.testResultFields.lastUpdatedBy.displayName}</label>
+				<label style="width: auto;">${model.testResult.lastUpdatedBy}</label>
 			</div>
-		</c:if>
-		<c:if test="${model.testResultFields.bloodTest.hidden != true }">
-			<div>
-				<label>${model.testResultFields.bloodTest.displayName}</label>
-				<label>${model.testResult.bloodTest.name}</label>
-			</div>
-		</c:if>
-		<c:if test="${model.testResultFields.bloodTestResult.hidden != true }">
-			<div>
-				<label>${model.testResultFields.result.displayName}</label>
-				<label>${model.testResult.result}</label>
-			</div>
-		</c:if>
-		<div>
-			<label>${model.testResultFields.lastUpdatedTime.displayName}</label>
-			<label style="width: auto;">${model.testResult.lastUpdated}</label>
-		</div>
-		<div>
-			<label>${model.testResultFields.lastUpdatedBy.displayName}</label>
-			<label style="width: auto;">${model.testResult.lastUpdatedBy}</label>
+			<hr />
 		</div>
 	</div>
-	<hr />
 	<br />
 	<br />
 

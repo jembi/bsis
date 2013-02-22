@@ -148,4 +148,10 @@ public class TestResult implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
+
+  public String getCollectionNumber() {
+    if (collectedSample == null)
+      return null;
+    return collectedSample.getCollectionNumber();
+  }
 }

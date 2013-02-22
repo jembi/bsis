@@ -156,6 +156,7 @@ public class TestResultController {
     }
 
     addEditSelectorOptions(m);
+    m.put("allowedResults", bloodTestRepository.getBloodTestByName(form.getBloodTest()).getAllowedResults());
     m.put("editTestResultForm", form);
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
@@ -350,7 +351,23 @@ public class TestResultController {
 
     ModelAndView modelAndView = new ModelAndView("testResultsTable");
     Map<String, Object> m = model.asMap();
-    m.put("tableName", "findTestResultsTable");
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    m.put("allTestResults", getTestResultViewModels(testResults));
+    m.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(m);
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  }
+
+  @RequestMapping("/testResultHistory")
+  public ModelAndView testResultHistory(HttpServletRequest request, Model model,
+      @RequestParam(value="testResultId", required=true) Long testResultId) {
+
+    List<TestResult> testResults = testResultRepository.getTestResultHistory(testResultId);
+
+    ModelAndView modelAndView = new ModelAndView("testResultHistory");
+    Map<String, Object> m = model.asMap();
     m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
     m.put("allTestResults", getTestResultViewModels(testResults));
     m.put("refreshUrl", getUrl(request));
@@ -361,19 +378,16 @@ public class TestResultController {
   }
 
   @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
-  public ModelAndView updateTestResult(
+  public @ResponseBody Map<String, Object> updateTestResult(
       HttpServletResponse response,
       @ModelAttribute("editTestResultForm") @Valid TestResultBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editTestResultForm");
     boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
+    Map<String, Object> m = new HashMap<String, Object>();
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    m.put("existingTestResult", true);
+    String message = "";
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);
@@ -383,10 +397,9 @@ public class TestResultController {
     }
     else {
       try {
-
         form.setIsDeleted(false);
-        TestResult existingTestResult = testResultRepository.updateTestResult(form.getTestResult());
-        if (existingTestResult == null) {
+        TestResult newTestResult = testResultRepository.updateTestResult(form.getTestResult());
+        if (newTestResult == null) {
           m.put("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
@@ -395,6 +408,7 @@ public class TestResultController {
         }
         else {
           m.put("hasErrors", false);
+          m.put("refreshUrl", "testResultSummary.html?testResultId=" + newTestResult.getId());
           success = true;
           message = "Test Result Successfully Updated";
         }
@@ -411,14 +425,9 @@ public class TestResultController {
       }
    }
 
-    m.put("editTestResultForm", form);
     m.put("success", success);
     m.put("message", message);
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-
-    mv.addObject("model", m);
-
-    return mv;
+    return m;
   }
 
   @RequestMapping(value = "/deleteTestResult", method = RequestMethod.POST)

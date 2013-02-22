@@ -333,15 +333,23 @@ public class TestResultRepository {
   }
 
   public TestResult updateTestResult(TestResult testResult) {
+    // we need to maintain history of all test results so an update is just an add
     TestResult existingTestResult = findTestResultById(testResult.getId());
     if (existingTestResult == null) {
       return null;
     }
-    existingTestResult.copy(testResult);
-    existingTestResult = em.merge(existingTestResult);
-    updateProductStatus(existingTestResult);
+
+    TestResult newTestResult = new TestResult();
+    newTestResult.setCollectedSample(existingTestResult.getCollectedSample());
+    newTestResult.setBloodTest(existingTestResult.getBloodTest());
+    newTestResult.setResult(testResult.getResult());
+    newTestResult.setTestedOn(testResult.getTestedOn());
+    newTestResult.setNotes(testResult.getNotes());
+    newTestResult.setIsDeleted(false);
+    em.persist(newTestResult);
+    updateProductStatus(newTestResult);
     em.flush();
-    return existingTestResult;
+    return newTestResult;
   }
 
   public void addAllTestResults(List<TestResult> testResults) {
@@ -448,5 +456,19 @@ public class TestResultRepository {
 
     Collection<TestResult> testResults = getRecentTestResultsForCollection(collectedSamples.get(0).getId()).values();
     return new ArrayList<TestResult>(testResults);
+  }
+
+  public List<TestResult> getTestResultHistory(Long testResultId) {
+    TestResult t = findTestResultById(testResultId);
+    if (t == null)
+      return Arrays.asList(new TestResult[0]);
+
+    String queryStr = "SELECT t from TestResult t WHERE " +
+                      "t.collectedSample.id=:collectedSampleId AND " +
+                      "t.bloodTest.name=:bloodTestName ORDER BY t.testedOn DESC";
+    TypedQuery<TestResult> query = em.createQuery(queryStr, TestResult.class);
+    query.setParameter("collectedSampleId", t.getCollectedSample().getId());
+    query.setParameter("bloodTestName", t.getBloodTest().getName());
+    return query.getResultList();
   }
 }

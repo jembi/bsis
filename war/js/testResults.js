@@ -1,21 +1,12 @@
-function addNewTestResult(form, resultDivId, successCallback) {
-  updateTestResultGeneric(form, resultDivId, "addTestResult.html", successCallback);
-}
-
-function updateExistingTestResult(form, resultDivId, successCallback) {
-  updateTestResultGeneric(form, resultDivId, "updateTestResult.html", successCallback);
-}
-
-function updateTestResultGeneric(form, resultDivId, url, successCallback) {
+function updateTestResult(form, resultDivId, successCallback) {
   var testResult = $(form).serialize();
   $.ajax({
     type: "POST",
-    url: url,
+    url: "updateTestResult.html",
     data: testResult,
     success: function(jsonResponse, data, data1, data2) {
                showMessage("Test Result Updated Successfully!");
-               successCallback();
-               $("#" + resultDivId).replaceWith(jsonResponse);
+               successCallback(jsonResponse.refreshUrl);
              },
     error: function(response) {
              showErrorMessage("Something went wrong. Please fix the errors noted.");

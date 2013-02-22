@@ -52,4 +52,16 @@ public class BloodTestRepository {
   public BloodTest findBloodTestByName(String testName) {
     return em.find(BloodTest.class, testName);
   }
+
+  public BloodTest getBloodTestByName(String bloodTestName) {
+    try {
+      String queryString = "SELECT bt FROM BloodTest bt where bt.name=:bloodTestName";
+      TypedQuery<BloodTest> query = em.createQuery(queryString, BloodTest.class);
+      query.setParameter("bloodTestName", bloodTestName);
+      return query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      return null;
+    }
+  }
 }
