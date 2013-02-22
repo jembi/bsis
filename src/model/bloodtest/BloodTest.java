@@ -11,7 +11,7 @@ import javax.persistence.Lob;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
-public class BloodTest{
+public class BloodTest {
 
   @Id
   @Column(nullable=false, updatable=false, insertable=false, length=30)

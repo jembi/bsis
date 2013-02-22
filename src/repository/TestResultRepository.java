@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -39,9 +40,6 @@ public class TestResultRepository {
   
   @Autowired
   private ProductRepository productRepository;
-
-  @Autowired
-  private BloodTestRepository bloodTestRepository;
 
   private List<Product> getProductsToUpdate(TestResult testResult) {
     if (testResult.getCollectedSample() == null || testResult.getCollectedSample().getId() == null)
@@ -442,4 +440,13 @@ public class TestResultRepository {
     return recentTestResults;
   }
 
+  public List<TestResult> getRecentTestResultsForCollection(
+      String collectionNumber) {
+    List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+    if (collectedSamples == null || collectedSamples.size() != 1)
+      return null;
+
+    Collection<TestResult> testResults = getRecentTestResultsForCollection(collectedSamples.get(0).getId()).values();
+    return new ArrayList<TestResult>(testResults);
+  }
 }

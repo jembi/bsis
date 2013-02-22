@@ -345,11 +345,7 @@ public class TestResultController {
 
     List<TestResult> testResults = Arrays.asList(new TestResult[0]);
 
-    String dateTestedFrom = form.getDateTestedFrom();
-    String dateTestedTo = form.getDateTestedTo();
-    testResults = testResultRepository.findTestResults(
-                                        form.getCollectionNumber(),
-                                        dateTestedFrom, dateTestedTo);
+    testResults = testResultRepository.getRecentTestResultsForCollection(form.getCollectionNumber());
     System.out.println(testResults);
 
     ModelAndView modelAndView = new ModelAndView("testResultsTable");

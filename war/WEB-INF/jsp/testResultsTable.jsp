@@ -23,7 +23,8 @@ $(document).ready(
       var selectedRowId = null;
       var testResultsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "sDom" : 'T<"H">t<"F">',
+        "bSort" : false,
         "oTableTools" : {
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
@@ -40,9 +41,6 @@ $(document).ready(
 					"fnRowDeselected" : function(node) {
 															},
         },
-        "oColVis" : {
-         	"aiExclude": [0,1],
-        }
       });
 
       function createTestResultSummary(url, data) {

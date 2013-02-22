@@ -121,14 +121,14 @@ $(document).ready(function() {
 				<form:input path="collectionNumber" placeholder="Collection Number"/>
 			</div>
 	
-			<div>
+			<!-- div>
 				<span style="margin-left: 15px;"> Date of testing between </span>
 			</div>
 			<div>
 				<form:input path="dateTestedFrom" class="dateTestedFrom" placeholder="From"/>
 					and
 				<form:input path="dateTestedTo" class="dateTestedTo" placeholder="To"/>
-			</div>
+			</div-->
 	
 			<div>
 				<label></label>
