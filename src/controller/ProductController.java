@@ -3,6 +3,7 @@ package controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,8 +141,11 @@ public class ProductController {
       }
     }
 
-    String collectionNumber = product.getCollectedSample().getCollectionNumber();
-    List<TestResult> testResults = testResultsRepository.findTestResults(collectionNumber, "", "");
+    Long collectedSampleId = product.getCollectedSample().getId();
+    Map<String, TestResult> testResultsMap = testResultsRepository.getRecentTestResultsForCollection(collectedSampleId);
+    List<TestResult> testResults = new ArrayList<TestResult>();
+    if (testResults != null)
+      testResults.addAll(testResultsMap.values());
 
     m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
     m.put("refreshUrl", getUrl(request));
