@@ -61,6 +61,21 @@
           notifyParentDone();
         });
 
+        $("#${tabContentId}").find(".testResultsForCollectionButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-bookmark'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("testResultsHistorySuccess", emptyChildContent);
+
+  	        fetchContent("testResultsForCollection.html",
+              					 {collectedSampleId: "${model.collectedSample.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".deleteButton").button({
           icons : {
             primary : 'ui-icon-trash'
@@ -103,6 +118,9 @@
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
 				Done
+			</button>
+			<button type="button" class="testResultsForCollectionButton">
+				Test results for collection
 			</button>
 			<button type="button" class="editButton">
 				Edit

@@ -43,7 +43,7 @@ $(document).ready(
           	    			 primary: 'ui-icon-check'
           	    		 }
           	}).click(function() {
-        				$("#${tabContentId}").parent().trigger("testResultsForProductSuccess");
+        				$("#${tabContentId}").parent().trigger("testResultsHistorySuccess");
       				 });
 
     });

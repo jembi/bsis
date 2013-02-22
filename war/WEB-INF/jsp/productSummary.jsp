@@ -52,7 +52,7 @@
         			}
             }).click(function() {
 
-            $("#${tabContentId}").bind("testResultsForProductSuccess", emptyChildContent);
+            $("#${tabContentId}").bind("testResultsHistorySuccess", emptyChildContent);
 
   	        fetchContent("testResultsForProduct.html",
               					 {productId: "${model.product.id}"},

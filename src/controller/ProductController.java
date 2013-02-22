@@ -3,7 +3,6 @@ package controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,8 +123,7 @@ public class ProductController {
   public ModelAndView testResultsForProduct(HttpServletRequest request, Model model,
       @RequestParam(value = "productId", required = false) Long productId) {
 
-    System.out.println("here");
-    ModelAndView mv = new ModelAndView("testResultsForProduct");
+    ModelAndView mv = new ModelAndView("testResultsHistory");
     Map<String, Object> m = model.asMap();
 
     m.put("requestUrl", getUrl(request));

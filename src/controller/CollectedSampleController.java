@@ -20,6 +20,7 @@ import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
+import model.testresults.TestResult;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ import repository.DonorTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.SequenceNumberRepository;
+import repository.TestResultRepository;
 import viewmodel.CollectedSampleViewModel;
 
 @Controller
@@ -52,6 +54,9 @@ public class CollectedSampleController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private TestResultRepository testResultsRepository;
 
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
@@ -659,4 +664,25 @@ public class CollectedSampleController {
     return mv;
   }
 
+  @RequestMapping(value = "/testResultsForCollection", method = RequestMethod.GET)
+  public ModelAndView testResultsForCollection(HttpServletRequest request, Model model,
+      @RequestParam(value = "collectedSampleId", required = false) Long collectedSampleId) {
+
+    ModelAndView mv = new ModelAndView("testResultsHistory");
+    Map<String, Object> m = model.asMap();
+
+    m.put("requestUrl", getUrl(request));
+
+    Map<String, TestResult> testResultsMap = testResultsRepository.getRecentTestResultsForCollection(collectedSampleId);
+    List<TestResult> testResults = new ArrayList<TestResult>();
+    if (testResults != null)
+      testResults.addAll(testResultsMap.values());
+
+    m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
+    m.put("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
+    mv.addObject("model", m);
+    return mv;
+  }
 }
