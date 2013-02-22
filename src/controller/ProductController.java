@@ -58,7 +58,7 @@ public class ProductController {
   
   @Autowired
   private UtilController utilController;
-
+  
   public ProductController() {
   }
 
@@ -67,11 +67,6 @@ public class ProductController {
     productRepository.updateQuarantineStatus();
   }
 
-  @PostConstruct
-  public void updateExpiryStatus() {
-    productRepository.updateExpiryStatus();
-  }
-  
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new ProductBackingFormValidator(binder.getValidator(), utilController));
