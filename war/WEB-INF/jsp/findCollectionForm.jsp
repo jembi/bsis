@@ -241,6 +241,12 @@ $(document).ready(function() {
 				and
 				<form:input path="dateCollectedTo" class="dateCollectedTo" placeholder="To"/>
 			</div>
+
+			<div>
+				<form:label path="includeTestedCollections" style="width: auto;">Include tested collections in results</form:label>
+				<form:checkbox path="includeTestedCollections" style="width: auto; position: relative; top: 2px;"/>
+			</div>
+
 			<br />
 			<br />
 	

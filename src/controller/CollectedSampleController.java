@@ -192,6 +192,7 @@ public class CollectedSampleController {
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     String collectionNumber = form.getCollectionNumber();
+    boolean includeUntestedCollections = form.getIncludeTestedCollections();
     if (collectionNumber != null)
       collectionNumber = collectionNumber.trim();
     String dateCollectedFrom = form.getDateCollectedFrom();
@@ -224,7 +225,7 @@ public class CollectedSampleController {
     List<Object> results = collectedSampleRepository.findCollectedSamples(
                                         form.getCollectionNumber(),
                                         bloodBagTypeIds, centerIds, siteIds,
-                                        dateCollectedFrom, dateCollectedTo, pagingParams);
+                                        dateCollectedFrom, dateCollectedTo, includeUntestedCollections, pagingParams);
 
     @SuppressWarnings("unchecked")
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
@@ -618,6 +619,7 @@ public class CollectedSampleController {
                                         form.getCollectionNumber(),
                                         bloodBagTypeIds, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo,
+                                        form.getIncludeTestedCollections(),
                                         worksheetBatchId);
       m.put("success", true);
     } catch (Exception ex) {

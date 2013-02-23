@@ -124,4 +124,10 @@ public class CollectedSampleViewModel {
       return "";
     return user.getUsername();
   }
+
+  public String getTestedStatus() {
+    if (collectedSample.getTestedStatus() == null)
+      return "";
+    return collectedSample.getTestedStatus().toString();
+  }
 }

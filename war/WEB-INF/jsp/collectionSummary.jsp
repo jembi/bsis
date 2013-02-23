@@ -216,6 +216,10 @@
 				<label>${model.collectedSampleFields.lastUpdatedBy.displayName}</label>
 				<label style="width: auto;">${model.collectedSample.lastUpdatedBy}</label>
 			</div>
+			<div>
+				<label>${model.collectedSampleFields.testedStatus.displayName}</label>
+				<label style="width: auto;">${model.collectedSample.testedStatus}</label>
+			</div>
 			<hr />
 		</div>
 	</div>

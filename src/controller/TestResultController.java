@@ -300,7 +300,7 @@ public class TestResultController {
       e.printStackTrace();
     }
 
-    m.put("refreshUrl", getUrl(request));
+    m.put("refreshUrl", "addAllTestResultsFormGenerator.html");
     addEditSelectorOptions(m);
     // to ensure custom field names are displayed in the form
     m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));

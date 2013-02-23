@@ -33,7 +33,8 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('CollectedSample', 'collectionSite', 'Collection Site', '', '0', '1', '0', '0', '0', '', 0),
 ('CollectedSample', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
 ('CollectedSample', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('CollectedSample', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
+('CollectedSample', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0),
+('CollectedSample', 'testedStatus', 'Tested', '', '0', '0', '0', '0', '0', '', 0);
 
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values

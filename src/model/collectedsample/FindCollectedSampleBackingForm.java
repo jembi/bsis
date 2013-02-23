@@ -12,7 +12,9 @@ public class FindCollectedSampleBackingForm {
   private List<String> sites;
 
   private List<String> bloodBagTypes;
-  
+
+  private Boolean includeTestedCollections;
+
   private String dateCollectedFrom;
   private String dateCollectedTo;
 
@@ -80,4 +82,11 @@ public class FindCollectedSampleBackingForm {
     this.bloodBagTypes = bloodBagTypes;
   }
 
+  public Boolean getIncludeTestedCollections() {
+    return includeTestedCollections;
+  }
+
+  public void setIncludeTestedCollections(Boolean includeTestedCollections) {
+    this.includeTestedCollections = includeTestedCollections;
+  }
 }

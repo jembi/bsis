@@ -72,6 +72,7 @@
         notes longtext,
         sampleNumber varchar(50),
         shippingNumber varchar(50),
+        testedStatus varchar(20),
         bloodBagType_id integer,
         collectionCenter_id bigint,
         collectionSite_id bigint,

@@ -20,11 +20,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
+import model.testresults.TestedStatus;
 import model.worksheet.CollectionsWorksheet;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +36,15 @@ import viewmodel.TestResultViewModel;
 @Repository
 @Transactional
 public class CollectedSampleRepository {
+
   @PersistenceContext
   private EntityManager em;
+
+  @Autowired
+  private TestResultRepository testResultRepository;
+
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
 
   public void saveCollectedSample(CollectedSample collectedSample) {
     em.persist(collectedSample);
@@ -47,7 +57,8 @@ public class CollectedSampleRepository {
       return null;
     }
     existingCollectedSample.copy(collectedSample);
-    em.merge(existingCollectedSample);
+    existingCollectedSample = em.merge(existingCollectedSample);
+    updateCollectedSample(existingCollectedSample);
     em.flush();
     return existingCollectedSample;
   }
@@ -61,7 +72,7 @@ public class CollectedSampleRepository {
 
   public List<Object> findCollectedSamples(
       String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
-      String dateCollectedTo, Map<String, Object> pagingParams) {
+      String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) {
 
     String queryStr = "";
     if (collectionNumber != null && !collectionNumber.trim().isEmpty()) {
@@ -81,6 +92,9 @@ public class CollectedSampleRepository {
           "c.isDeleted=:isDeleted";
     }
 
+    if (!includeTestedCollections)
+      queryStr = queryStr + " AND c.testedStatus=:testedStatus";
+
     TypedQuery<CollectedSample> query;
     if (pagingParams.containsKey("sortColumn")) {
       queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
@@ -92,6 +106,9 @@ public class CollectedSampleRepository {
     if (collectionNumber != null && !collectionNumber.trim().isEmpty())
       query.setParameter("collectionNumber", collectionNumber);
 
+    if (!includeTestedCollections)
+      query.setParameter("testedStatus", TestedStatus.NOT_TESTED);
+    
     query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
@@ -197,22 +214,6 @@ public class CollectedSampleRepository {
       ex.printStackTrace();
     }
     return to;      
-  }
-
-  public CollectedSample updateOrAddCollectedSample(CollectedSample collectedSample) {
-//    CollectedSample existingCollectedSample =
-//        findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber());
-//    if (existingCollectedSample == null) {
-//      collectedSample.setIsDeleted(false);
-//      saveCollectedSample(collectedSample);
-//      return collectedSample;
-//    }
-//    existingCollectedSample.copy(collectedSample);
-//    existingCollectedSample.setIsDeleted(false);
-//    em.merge(existingCollectedSample);
-//    em.flush();
-//    return existingCollectedSample;
-    return null;
   }
 
   public Map<Long, Long> findNumberOfCollectedSamples(Date dateCollectedFrom,
@@ -330,6 +331,7 @@ public class CollectedSampleRepository {
   }
 
   public void addCollectedSample(CollectedSample collectedSample) {
+    collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
     em.persist(collectedSample);
     em.flush();
   }
@@ -366,6 +368,7 @@ public class CollectedSampleRepository {
 
   public void addAllCollectedSamples(List<CollectedSample> collectedSamples) {
     for (CollectedSample c : collectedSamples) {
+      c.setTestedStatus(TestedStatus.NOT_TESTED);
       em.persist(c);
     }
     em.flush();
@@ -382,12 +385,13 @@ public class CollectedSampleRepository {
 
   public void saveAsWorksheet(String collectionNumber,
       List<Integer> bloodBagTypeIds, List<Long> centerIds,
-      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, String worksheetBatchId) throws Exception {
+      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, boolean includeUntestedCollections, String worksheetBatchId) throws Exception {
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     List<Object> results = findCollectedSamples(collectionNumber, bloodBagTypeIds,
                                           centerIds, siteIds,
                                           dateCollectedFrom, dateCollectedTo,
+                                          includeUntestedCollections,
                                           pagingParams);
     CollectionsWorksheet worksheet = new CollectionsWorksheet();
     worksheet.setWorksheetBatchId(worksheetBatchId);
@@ -458,5 +462,15 @@ public class CollectedSampleRepository {
     TypedQuery<Long> query = em.createQuery(queryStr, Long.class);
     query.setParameter("worksheetBatchId", worksheetBatchId);
     return query.getSingleResult().longValue();
+  }
+
+  public void updateCollectedSampleTestedStatus(CollectedSample collectedSample) {
+    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
+    List<BloodTest> allBloodTests = bloodTestRepository.getAllBloodTests();
+    if (testResults.size() == allBloodTests.size())
+      collectedSample.setTestedStatus(TestedStatus.TESTED);
+    else
+      collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
+    em.merge(collectedSample);
   }
 }

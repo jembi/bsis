@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +31,7 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.testresults.TestResult;
+import model.testresults.TestedStatus;
 import model.user.User;
 import model.worksheet.CollectionsWorksheet;
 
@@ -90,6 +93,10 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Lob
   private String notes;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=20)
+  private TestedStatus testedStatus;
 
   private Boolean isDeleted;
 
@@ -277,5 +284,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     if (diff > 0)
       return 1;
     return 0;
+  }
+
+  public TestedStatus getTestedStatus() {
+    return testedStatus;
+  }
+
+  public void setTestedStatus(TestedStatus testedStatus) {
+    this.testedStatus = testedStatus;
   }
 }

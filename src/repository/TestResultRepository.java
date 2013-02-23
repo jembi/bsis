@@ -266,6 +266,7 @@ public class TestResultRepository {
   public void addTestResult(TestResult testResult) {
     em.persist(testResult);
     updateProductStatus(testResult);
+    collectedSampleRepository.updateCollectedSampleTestedStatus(testResult.getCollectedSample());
     em.flush();
   }
 
@@ -348,6 +349,7 @@ public class TestResultRepository {
     newTestResult.setIsDeleted(false);
     em.persist(newTestResult);
     updateProductStatus(newTestResult);
+    collectedSampleRepository.updateCollectedSampleTestedStatus(testResult.getCollectedSample());
     em.flush();
     return newTestResult;
   }
