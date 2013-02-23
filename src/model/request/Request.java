@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,12 +72,12 @@ public class Request implements ModificationTracker {
   private BloodRhd patientBloodRhd;
 
   // fetch type eager to check how many products issued
-  @OneToMany(mappedBy="issuedTo", fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="issuedTo")
   private List<Product> issuedProducts;
 
-  @OneToMany(mappedBy="forRequest", fetch=FetchType.EAGER)
+  @OneToMany(mappedBy="forRequest")
   private Set<CrossmatchTest> crossmatchTests;
-
+  
   @Column(length=30)
   private String patientNumber;
 

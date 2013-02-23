@@ -25,7 +25,7 @@ $(document).ready(
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : 'C<"H"lfrT>t<"F"ip>T',
-        "aaSorting": [[6, "desc"]],	// sort by last column
+        "aaSorting" : [],
         "oTableTools" : {
           "sRowSelect" : "multi",
           "aButtons" : [ "print" ],
@@ -163,7 +163,7 @@ $(document).ready(
 			<table id="${table_id}" class="dataTable productsTable">
 				<thead>
 					<tr>
-						<th style="display: none"></th>
+						<th style="display:none;"></th>
 						<th></th>
 						<c:if test="${model.productFields.productNumber.hidden != true}">
 							<th>${model.productFields.productNumber.displayName}</th>
@@ -183,12 +183,15 @@ $(document).ready(
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
 						</c:if>
+							<th>${model.crossmatchTestFields.compatibilityResult.displayName}</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="product" items="${model.allProducts}">
-						<tr>
-							<td style="display: none">${product.id}</td>
+						<c:set var="rowColor" value="${product.isCompatible == 'COMPATIBLE' ? 'green' : '' }" />
+						<c:set var="rowFontWeight" value="${product.isCompatible == 'COMPATIBLE' ? 'bold' : '' }" />
+						<tr style="color: ${rowColor}; font-weight: ${rowFontWeight};">
+							<td style="display: none;">${product.id}</td>
 							<td>
 								<input type="checkbox" />
 							</td>
@@ -210,6 +213,7 @@ $(document).ready(
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
 							</c:if>
+							<td>${product.isCompatible}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

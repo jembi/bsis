@@ -41,7 +41,10 @@ public class RequestRepository {
 
   @Autowired
   private ProductRepository productRepository;
-  
+
+  @Autowired
+  private TestResultRepository testResultRepository;
+
   public void saveRequest(Request request) {
     em.persist(request);
     em.flush();
@@ -70,10 +73,11 @@ public class RequestRepository {
     return request;
   }
 
-  public Request findRequest(Long requestId) {
+  public Request findRequestById(Long requestId) {
     Request request = null;
     if (requestId != null) {
-      String queryString = "SELECT p FROM Request p WHERE p.requestId = :requestId and p.isDeleted= :isDeleted";
+      String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+      		                 "r.id = :requestId and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       List<Request> requests = query.setParameter("requestId", requestId)
@@ -86,7 +90,8 @@ public class RequestRepository {
   }
 
   public ArrayList<Request> getAllRequests() {
-    String queryString = "SELECT p FROM Request p where p.isDeleted = :isDeleted order by p.dateRequested";
+    String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+                         "r.isDeleted = :isDeleted order by r.dateRequested";
     TypedQuery<Request> query = em.createQuery(queryString, Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return new ArrayList<Request>(query.getResultList());
@@ -100,7 +105,7 @@ public class RequestRepository {
   public List<Request> getRequests(Date fromDateRequested, Date toDateRequested) {
     TypedQuery<Request> query = em
         .createQuery(
-            "SELECT p FROM Request p WHERE  p.dateRequested >= :fromDate and p.dateRequested<= :toDate and p.isDeleted = :isDeleted",
+            "SELECT r FROM Request r WHERE  r.dateRequested >= :fromDate and r.dateRequested<= :toDate and r.isDeleted = :isDeleted",
             Request.class);
     query.setParameter("fromDate", fromDateRequested);
     query.setParameter("toDate", toDateRequested);
@@ -235,10 +240,6 @@ public class RequestRepository {
     return uniqueRequestNumber;
   }
 
-  public Request findRequestById(Long requestId) {
-    return em.find(Request.class, requestId);
-  }
-
   public void addRequest(Request productRequest) {
     em.persist(productRequest);
     em.flush();
@@ -280,7 +281,7 @@ public class RequestRepository {
       List<Long> requestSiteIds, String requestedAfter,
       String requiredBy) {
     TypedQuery<Request> query = em.createQuery(
-            "SELECT r FROM Request r WHERE " +
+            "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
             "(r.productType.id IN (:productTypeIds) AND " +
             "r.requestSite.id IN (:requestSiteIds)) AND (r.fulfilled = :fulfilled) AND" +
             "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
@@ -332,8 +333,8 @@ public class RequestRepository {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
         product.setIssuedVolume(issuedVolume);
-        product.setStatus(ProductStatus.ISSUED);
         productRepository.updateProductInternalFields(product);
+        product.setStatus(ProductStatus.ISSUED);
         em.merge(product);
         numIssued++;
       }
@@ -341,14 +342,30 @@ public class RequestRepository {
         throw new Exception("Could not issue products");
       }
     }
-    if (request.getIssuedProducts().size() + numIssued >= request.getRequestedQuantity()) {
+
+    em.flush();
+    Integer totalVolumeIssued = getTotalVolumeIssued(request);
+    Integer totalVolumeRequested = request.getRequestedQuantity() * request.getVolume();
+    if (totalVolumeIssued >= totalVolumeRequested) {
       request.setFulfilled(true);
+      em.merge(request);
     }
+    em.flush();
+  }
+
+  private Integer getTotalVolumeIssued(Request request) {
+    Integer totalVolumeIssued = 0;
+    for (Product product : request.getIssuedProducts()) {
+      if (product.getIssuedVolume() == null)
+        continue;
+      totalVolumeIssued = totalVolumeIssued + product.getIssuedVolume();
+    }
+    return totalVolumeIssued;
   }
 
   private boolean canIssueProduct(Product product, Request request) {
     productRepository.updateProductInternalFields(product);
-    List<TestResult> testResults = product.getCollectedSample().getTestResults();
+    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(product.getCollectedSample().getId());
     String requestedProductType = request.getProductType().getProductType();
     String productType = product.getProductType().getProductType();
 
@@ -370,12 +387,10 @@ public class RequestRepository {
     String bloodRh = "";
 
     boolean canIssue = true;
-    for (TestResult testResult : testResults) {
+    for (TestResult testResult : testResults.values()) {
       BloodTest bloodTest = testResult.getBloodTest();
       String actualResult = testResult.getResult();
 
-      System.out.println("name: " + bloodTest.getName());
-      System.out.println("result: " + actualResult);
       if (bloodTest.getName().equals("Blood Rh")) {
         System.out.println("here");
         bloodRh = actualResult;

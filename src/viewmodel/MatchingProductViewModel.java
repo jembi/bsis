@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.collectedsample.CollectedSample;
+import model.crossmatch.CompatibilityResult;
+import model.crossmatch.CrossmatchTest;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.user.User;
@@ -16,10 +18,17 @@ import org.joda.time.Days;
 public class MatchingProductViewModel {
 
 	private Product product;
+	private CrossmatchTest crossmatchTest;
 
 	public MatchingProductViewModel(Product product) {
 	  this.product = product;
 	}
+
+  public MatchingProductViewModel(Product product,
+      CrossmatchTest crossmatchTest) {
+    this.product = product;
+    this.crossmatchTest = crossmatchTest;
+  }
 
   public Product getProduct() {
     return product;
@@ -100,5 +109,11 @@ public class MatchingProductViewModel {
     DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
     Long age = (long) Days.daysBetween(createdOn, today).getDays();
     return age;
+  }
+
+  public String getIsCompatible() {
+    if (crossmatchTest == null)
+      return CompatibilityResult.NOT_KNOWN.toString();
+    return crossmatchTest.getCompatibilityResult().toString();
   }
 }

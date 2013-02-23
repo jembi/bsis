@@ -148,13 +148,13 @@ insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite
 ('Chipata', 1, 0, 0, 0, 0, ''),
 ('Chingola', 1, 1, 0, 1, 0, '');
 
-insert into BloodTest (name, correctResult, allowedResults, isRequired, notes) values
-('HIV', 'negative', 'positive,negative', '1', ''),
-('HBV', 'negative', 'positive,negative', '1', ''),
-('HCV', 'negative', 'positive,negative', '1', ''),
-('Syphilis', 'negative', 'positive,negative', '1', ''),
-('Blood ABO', '', 'A,B,AB,O', '0', ''),
-('Blood Rh', '', 'POSITIVE,NEGATIVE', '0', '');
+insert into BloodTest (name, correctResult, allowedResults, isRequired, isDeleted, notes) values
+('HIV', 'negative', 'positive,negative', '1', '0', ''),
+('HBV', 'negative', 'positive,negative', '1', '0', ''),
+('HCV', 'negative', 'positive,negative', '1', '0', ''),
+('Syphilis', 'negative', 'positive,negative', '1', '0', ''),
+('Blood ABO', '', 'A,B,AB,O', '0', '0', ''),
+('Blood Rh', '', 'POSITIVE,NEGATIVE', '0', '0', '');
 
 insert into Tips (tipsKey, tipsName,tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),

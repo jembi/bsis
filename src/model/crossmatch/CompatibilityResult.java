@@ -2,7 +2,7 @@ package model.crossmatch;
 
 public enum CompatibilityResult {
 
-  COMPATIBLE, NOT_COMPATIBLE, OTHER;
+  COMPATIBLE, NOT_COMPATIBLE, NOT_KNOWN, OTHER;
 
   public static CompatibilityResult lookup(String compatibilityResultStr) {
     CompatibilityResult compatibilityResult = null;

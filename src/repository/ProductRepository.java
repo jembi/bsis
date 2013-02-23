@@ -1,17 +1,11 @@
 package repository;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Parameter;
@@ -21,11 +15,14 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
+import model.crossmatch.CompatibilityResult;
+import model.crossmatch.CrossmatchTest;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.testresults.TestResult;
+import model.testresults.TestedStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
@@ -36,6 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import viewmodel.MatchingProductViewModel;
 
 @Repository
 @Transactional
@@ -48,6 +47,9 @@ public class ProductRepository {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
+
+  @Autowired
+  public TestResultRepository testResultRepository;
 
   /**
    * some fields like product status are cached internally.
@@ -67,7 +69,7 @@ public class ProductRepository {
 
     Long collectedSampleId = product.getCollectedSample().getId();
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    List<TestResult> testResults = c.getTestResults();
+    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(c.getId());
 
     // all test results which have a correct value.
     // eg. HIV test is correct if its result is negative.
@@ -75,26 +77,24 @@ public class ProductRepository {
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
     Map<String, String> correctTestResults = new HashMap<String, String>();
     for (BloodTest bt : bloodTests) {
-      if (bt.getIsRequired()) {
-        correctTestResults.put(bt.getName(), bt.getCorrectResult().toLowerCase());
-      }
+      if (bt.getCorrectResult() == null || bt.getCorrectResult().trim().equals(""))
+        continue;
+      correctTestResults.put(bt.getName(), bt.getCorrectResult());
     }
 
-    Set<String> testResultsFound = new HashSet<String>();
+    boolean allTestsDone = (testResults.size() == bloodTests.size());
     boolean safe = true;
-    for (TestResult t : testResults) {
-      if (t.getIsDeleted())
-        continue;
+    for (TestResult t : testResults.values()) {
       String testName = t.getBloodTest().getName();
       String testResult = t.getResult();
-      if (correctTestResults.containsKey(testName)) {
-        if (testResult == null || !testResult.toLowerCase().equals(correctTestResults.get(testName)))
-          safe = false;
-          testResultsFound.add(testName);
+      if (!correctTestResults.containsKey(testName))
+        continue;
+      if (testResult == null || !testResult.toLowerCase().equals(correctTestResults.get(testName))) {
+        safe = false;
+        break;
       }
     }
 
-    boolean allTestsDone = (testResultsFound.size() == correctTestResults.size());
     if (safe) {
       if (allTestsDone) {
         if (product.getExpiresOn().before(new Date()))
@@ -116,26 +116,18 @@ public class ProductRepository {
     BloodAbo bloodAbo = product.getBloodAbo();
     BloodRhd bloodRhd = product.getBloodRhd();
 
-    Date aboDate = new Date(0);
-    Date rhdDate = new Date(0);
+    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
 
-    for (TestResult t : c.getTestResults()) {
-      if (t.getIsDeleted())
-        continue;
-      BloodTest bt = t.getBloodTest();
-      String testName = bt.getName();
-      String testResult = t.getResult();
-      Date testedOn = t.getTestedOn();
-
-      if (testName != null && testName.equals("Blood ABO") && testedOn.after(aboDate)) {
-        bloodAbo = BloodAbo.valueOf(testResult);
-        aboDate = testedOn;
-      }
-      if (testName != null && testName.equals("Blood Rh") && testedOn.after(rhdDate)) {
-        bloodRhd = BloodRhd.valueOf(testResult);
-        rhdDate = testedOn;
-      }
+    TestResult t = testResultsMap.get("Blood ABO");
+    if (t != null && !t.getIsDeleted()) {
+      bloodAbo = BloodAbo.valueOf(t.getResult());
     }
+    
+    t = testResultsMap.get("Blood Rh");
+    if (t != null && !t.getIsDeleted()) {
+      bloodRhd = BloodRhd.valueOf(t.getResult());
+    }
+
     product.setBloodAbo(bloodAbo);
     product.setBloodRhd(bloodRhd);
   }
@@ -452,38 +444,57 @@ public class ProductRepository {
     em.flush();
   }
 
-  public List<Product> findMatchingProductsForRequest(Request productRequest) {
+  public List<MatchingProductViewModel> findMatchingProductsForRequest(Request productRequest) {
     Date today = new Date();
     TypedQuery<Product> query = em.createQuery(
                  "SELECT p from Product p where p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
                  "p.status = :status AND " +
+                 "p.collectedSample.testedStatus = :testedStatus AND " +
                  "((p.bloodAbo = :bloodAbo AND p.bloodRhd = :bloodRhd) OR " +
                  "(p.bloodAbo = :bloodO)) AND " +
-                 "p.isDeleted = :isDeleted",
+                 "p.isDeleted = :isDeleted " +
+                 "ORDER BY p.expiresOn ASC",
                   Product.class);
     query.setParameter("productType", productRequest.getProductType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
+    query.setParameter("testedStatus", TestedStatus.TESTED);
     query.setParameter("bloodAbo", productRequest.getPatientBloodAbo());
     query.setParameter("bloodO", BloodAbo.O);
     query.setParameter("bloodRhd", productRequest.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
-    List<Product> products = new ArrayList<Product>();
-    for (Product product : query.getResultList()) {
-      products.add(product);
+    TypedQuery<CrossmatchTest> crossmatchQuery = em.createQuery(
+        "SELECT ct from CrossmatchTest ct where ct.forRequest.id=:forRequestId AND " +
+        "ct.testedProduct.status = :testedProductStatus AND " +
+        "isDeleted=:isDeleted", CrossmatchTest.class);
+
+    crossmatchQuery.setParameter("forRequestId", productRequest.getId());
+    crossmatchQuery.setParameter("testedProductStatus", ProductStatus.AVAILABLE);
+    crossmatchQuery.setParameter("isDeleted", false);
+
+    List<CrossmatchTest> crossmatchTests = crossmatchQuery.getResultList();
+    List<MatchingProductViewModel> matchingProducts = new ArrayList<MatchingProductViewModel>();
+
+    Map<Long, CrossmatchTest> crossmatchTestMap = new HashMap<Long, CrossmatchTest>();
+    for (CrossmatchTest crossmatchTest : crossmatchTests) {
+      Product product = crossmatchTest.getTestedProduct();
+      if (product == null)
+        continue;
+      crossmatchTestMap.put(product.getId(), crossmatchTest);
+      if (!crossmatchTest.getCompatibilityResult().equals(CompatibilityResult.NOT_COMPATIBLE))
+        matchingProducts.add(new MatchingProductViewModel(product, crossmatchTest));
     }
 
-    return products;
-  }
+    for (Product product : query.getResultList()) {
+      Long productId = product.getId();
+      if (crossmatchTestMap.containsKey(productId))
+        continue;
+      matchingProducts.add(new MatchingProductViewModel(product));
+    }
 
-  private boolean bloodCrossmatch(String abo1, String rhd1, String abo2, String rhd2) {
-    if (abo1.equals(abo2) && rhd1.equals(rhd2))
-      return true;
-    if (abo1.equals("O") && (rhd1.equals(rhd2) || rhd1.equals("NEGATIVE")))
-      return true;
-    return false;
+    return matchingProducts;
   }
   
   public Product findSingleProductByProductNumber(String productNumber) {

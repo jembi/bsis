@@ -62,11 +62,7 @@
           $("#${editTestResultFormId}").printArea();
         });
 
-        $("#${tabContentId}").find(".clearFormButton").button({
-          icons : {
-            
-          }
-        }).click(refetchForm);
+        $("#${tabContentId}").find(".clearFormButton").button().click(refetchForm);
 
         function refetchForm() {
           $.ajax({

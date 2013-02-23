@@ -382,24 +382,16 @@ public class RequestsController {
 
     System.out.println("Request found");
     m.put("request", productRequest);
-    List<MatchingProductViewModel> products = getMatchingProductViewModels(productRepository.findMatchingProductsForRequest(productRequest));
+    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(productRequest);
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
+    m.put("crossmatchTestFields", utilController.getFormFieldsForForm("CrossmatchTest"));
     utilController.addTipsToModel(model.asMap(), "requests.findpending.findmatchingproducts");
     m.put("allProducts", products);
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;
-  }
-
-  private List<MatchingProductViewModel> getMatchingProductViewModels(
-      List<Product> products) {
-    List<MatchingProductViewModel> matchingProductViewModels = new ArrayList<MatchingProductViewModel>();
-    for (Product product : products) {
-      matchingProductViewModels.add(new MatchingProductViewModel(product));
-    }
-    return matchingProductViewModels;
   }
 
   @RequestMapping("/confirmIssueProductsDialog")

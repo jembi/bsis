@@ -264,6 +264,7 @@ public class TestResultRepository {
   }
 
   public void addTestResult(TestResult testResult) {
+    testResult.setIsDeleted(false);
     em.persist(testResult);
     updateProductStatus(testResult);
     collectedSampleRepository.updateCollectedSampleTestedStatus(testResult.getCollectedSample());
@@ -421,10 +422,11 @@ public class TestResultRepository {
       Long collectedSampleId) {
 
     String queryStr = "SELECT t FROM TestResult t WHERE " +
-                      "t.collectedSample.id=:collectedSampleId";
+                      "t.collectedSample.id=:collectedSampleId AND t.isDeleted=:isDeleted";
     TypedQuery<TestResult> query = em.createQuery(queryStr, TestResult.class);
     query.setParameter("collectedSampleId", collectedSampleId);
-    
+    query.setParameter("isDeleted", false);
+
     List<TestResult> allTestResults = query.getResultList();
     Map<String, TestResult> recentTestResults = new HashMap<String, TestResult>();
 

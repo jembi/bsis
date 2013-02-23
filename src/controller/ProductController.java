@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,11 +59,6 @@ public class ProductController {
   private UtilController utilController;
   
   public ProductController() {
-  }
-
-  @PostConstruct
-  public void setQuarantineStatus() {
-    productRepository.updateQuarantineStatus();
   }
 
   @InitBinder
