@@ -323,7 +323,7 @@ public class RequestRepository {
     Request request = findRequestById(requestId);
     ObjectMapper mapper = new ObjectMapper();
     Map<String, String> productIdToVolumeMap = mapper.readValue(productIds, HashMap.class);
-    int numIssued = 0;
+    int totalVolumeIssued = getTotalVolumeIssued(request);
     for (String productId : productIdToVolumeMap.keySet()) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
@@ -333,10 +333,10 @@ public class RequestRepository {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
         product.setIssuedVolume(issuedVolume);
+        totalVolumeIssued = totalVolumeIssued + issuedVolume;
         productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
         em.merge(product);
-        numIssued++;
       }
       else {
         throw new Exception("Could not issue products");
@@ -344,7 +344,6 @@ public class RequestRepository {
     }
 
     em.flush();
-    Integer totalVolumeIssued = getTotalVolumeIssued(request);
     Integer totalVolumeRequested = request.getRequestedQuantity() * request.getVolume();
     if (totalVolumeIssued >= totalVolumeRequested) {
       request.setFulfilled(true);

@@ -34,8 +34,7 @@ $(document).ready(
 											        createRequestSummary("requestSummary.html",
 									  							{requestId: selectedRowId});
  													  },
-				"fnRowDeselected" : function(node) {
-														},
+		  "fnRowDeselected" : function(node) {},
         },
         "oColVis" : {
          	"aiExclude": [0,1],
@@ -104,11 +103,11 @@ $(document).ready(
 						<c:if test="${model.requestFields.productType.hidden != true}">
 							<th>${model.requestFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.requestedQuantity.hidden != true}">
-							<th>${model.requestFields.requestedQuantity.displayName}</th>
+						<c:if test="${model.requestFields.totalVolumeRequested.hidden != true}">
+							<th>${model.requestFields.totalVolumeRequested.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.issuedQuantity.hidden != true}">
-							<th>${model.requestFields.issuedQuantity.displayName}</th>
+						<c:if test="${model.requestFields.totalVolumeIssued.hidden != true}">
+							<th>${model.requestFields.totalVolumeIssued.displayName}</th>
 						</c:if>
 						<c:if test="${model.requestFields.requestSite.hidden != true}">
 							<th>${model.requestFields.requestSite.displayName}</th>
@@ -131,11 +130,11 @@ $(document).ready(
 							<c:if test="${model.requestFields.productType.hidden != true}">
 								<td>${request.productType.productType}</td>
 							</c:if>
-							<c:if test="${model.requestFields.requestedQuantity.hidden != true}">
-								<td>${request.requestedQuantity}</td>
+							<c:if test="${model.requestFields.totalVolumeRequested.hidden != true}">
+								<td>${request.totalVolumeRequested} ml</td>
 							</c:if>
-							<c:if test="${model.requestFields.issuedQuantity.hidden != true}">
-								<td>${request.issuedQuantity}</td>
+							<c:if test="${model.requestFields.totalVolumeIssued.hidden != true}">
+								<td>${request.totalVolumeIssued} ml</td>
 							</c:if>
 							<c:if test="${model.requestFields.requestSite.hidden != true}">
 								<td>${request.requestSite}</td>
