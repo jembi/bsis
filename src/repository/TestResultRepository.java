@@ -407,6 +407,8 @@ public class TestResultRepository {
         t.setIsDeleted(false);
         t.setNotes("");
         em.persist(t);
+        em.flush();
+        collectedSampleRepository.updateCollectedSampleTestedStatus(t.getCollectedSample());
       }
       // Must update product fields
       // For the sake of performance some fields are cached in the products table

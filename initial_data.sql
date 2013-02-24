@@ -127,12 +127,12 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Elective Surgery', '', '0');
 
 insert into ProductType (productType, description, shelfLife, shelfLifeUnits, isDeleted) values
-('Whole Blood', '', '35', 'days', '0'),
-('Red Blood Cells', '', '', '', '0'),
-('Fresh Frozen Plasma', '', '365', 'days', '0'),
-('Platelets', '', '5', 'days', '0'),
-('Cryoprecipitate', '', '', '', '0'),
-('Partial Platelets', '', '', '', '0');
+('Whole Blood', '', 35, 'days', '0'),
+('Red Blood Cells', '', 35, 'days', '0'),
+('Fresh Frozen Plasma', '', 35, 'days', '0'),
+('Platelets', '', 5, 'days', '0'),
+('Cryoprecipitate', '', 35, 'days', '0'),
+('Partial Platelets', '', 35, 'days', '0');
 
 insert into BloodBagType (bloodBagType, isDeleted) values
 ('Single', '0'),

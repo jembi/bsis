@@ -3,7 +3,6 @@ package model.modificationtracker;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
