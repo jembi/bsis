@@ -23,8 +23,8 @@
   		}
   		$("#${tabContentId}").parent().trigger("updateProductVolumeSelection", productVolumes);
 	  }
-
 	  $("#${tabContentId}").find('input[type="radio"]').change(sendSelectionOfInputsToParentDialog);
+
 
 /*	  var radioButtonParents = $("#${tabContentId}").find(".radioButtonParent");
 	  for ( var i = 0; i < radioButtonParents.length; i++) {
