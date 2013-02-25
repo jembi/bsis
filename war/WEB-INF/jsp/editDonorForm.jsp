@@ -124,18 +124,27 @@
         function getBloodGroupSelector() {
           return $("#${tabContentId}").find('select[name="bloodGroup"]').multiselect();
         }
+        function updateBarcode(val) {
+            if (val === null || val === undefined || val === "")
+              val = "-";
+  	        $("#${editDonorFormId}").find(".barcodeContainer").barcode(
+  						  val,
+  							"code128",
+  							{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+          }
+          updateBarcode("${editDonorForm.donor.donorNumber}");
 
-        $("#${editDonorFormBarcodeId}").barcode(
-            							  "${editDonorForm.donor.donorNumber}-${editDonorForm.donor.id}",
-            								"code128",
-            								{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
-        
+          $("#${editDonorFormId}").find('input[name="donorNumber"]').keyup(function() {
+            updateBarcode($(this).val());
+          });
+
       });
 </script>
 
 <div id="${tabContentId}">
 	<form:form id="${editDonorFormId}" method="POST" class="formInTabPane"
 		commandName="editDonorForm">
+		<div class="barcodeContainer"></div>		
 		<form:hidden path="id" />
 		<c:if test="${model.donorFields.donorNumber.hidden != true }">
 			<div>
