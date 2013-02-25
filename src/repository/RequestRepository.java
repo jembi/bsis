@@ -279,22 +279,27 @@ public class RequestRepository {
 
   public List<Request> findRequests(List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy) {
-    TypedQuery<Request> query = em.createQuery(
-            "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-            "(r.productType.id IN (:productTypeIds) AND " +
-            "r.requestSite.id IN (:requestSiteIds)) AND (r.fulfilled = :fulfilled) AND" +
-            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
-            "r.isDeleted= :isDeleted",
-            Request.class);
+      String requiredBy, Boolean includeSatisfiedRequests) {
+	  String queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+	            "(r.productType.id IN (:productTypeIds) AND " +
+	            "r.requestSite.id IN (:requestSiteIds)) AND" +
+	            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
+	            "r.isDeleted= :isDeleted";
+
+	if (!includeSatisfiedRequests)
+		queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
+
+    TypedQuery<Request> query = em.createQuery(queryStr, Request.class);
 
     Date from = getDateRequestedAfterOrDefault(requestedAfter);
     Date to = getDateRequiredByOrDefault(requiredBy);
 
+    if (!includeSatisfiedRequests)
+    	query.setParameter("fulfilled", false);
+
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypeIds", productTypeIds);
     query.setParameter("requestSiteIds", requestSiteIds);
-    query.setParameter("fulfilled", Boolean.FALSE);
     query.setParameter("requestedAfter", from);
     query.setParameter("requiredBy", to);
 

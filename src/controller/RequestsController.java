@@ -141,6 +141,8 @@ public class RequestsController {
     String requestedAfter = form.getRequestedAfter();
     String requiredBy = form.getRequiredBy();
 
+    Boolean includeSatisfiedRequests = form.getIncludeSatisfiedRequests();
+
     List<Integer> productTypeIds = new ArrayList<Integer>();
     productTypeIds.add(-1);
     if (form.getProductTypes() != null) {
@@ -158,7 +160,7 @@ public class RequestsController {
       }
     }
 
-    productRequests = requestRepository.findRequests(productTypeIds, siteIds, requestedAfter, requiredBy);
+    productRequests = requestRepository.findRequests(productTypeIds, siteIds, requestedAfter, requiredBy, includeSatisfiedRequests);
 
     ModelAndView modelAndView = new ModelAndView("requestsTable");
     Map<String, Object> m = model.asMap();

@@ -11,6 +11,8 @@ public class FindRequestBackingForm {
   private String requestedAfter;
   private String requiredBy;
 
+  private Boolean includeSatisfiedRequests;
+  
   public FindRequestBackingForm() {
     requestSites = Arrays.asList(new String[0]);
     productTypes = Arrays.asList(new String[0]);
@@ -47,5 +49,13 @@ public class FindRequestBackingForm {
   public void setRequiredBy(String requiredBy) {
     this.requiredBy = requiredBy;
   }
+
+public Boolean getIncludeSatisfiedRequests() {
+	return includeSatisfiedRequests;
+}
+
+public void setIncludeSatisfiedRequests(Boolean includeSatisfiedRequests) {
+	this.includeSatisfiedRequests = includeSatisfiedRequests;
+}
 
 }

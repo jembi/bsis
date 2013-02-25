@@ -252,7 +252,8 @@
 				<c:if test="${model.requestFields.totalVolumePending.hidden != true }">
 					<div>
 						<label>${model.requestFields.totalVolumePending.displayName}</label>
-						<label>${model.request.totalVolumePending} ml</label>
+						<label>${model.request.totalVolumePending < 0 ? "" + (-model.request.totalVolumePending) : model.request.totalVolumePending} ml
+						${model.request.totalVolumePending < 0 ? " (Overissued)" : ""}</label>
 					</div>
 				</c:if>
 				<c:if test="${model.requestFields.requestSite.hidden != true }">
