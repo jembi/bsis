@@ -196,8 +196,7 @@ public class DonorController {
         success = true;
         message = "Donor Successfully Added";
         form = new DonorBackingForm();
-        if (m.get("existingDonor").equals(false))
-          setDonorNumber(form, (Map<String, Object>) formFields.get("donorNumber"));
+        setDonorNumber(form, (Map<String, Object>) formFields.get("donorNumber"));
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
