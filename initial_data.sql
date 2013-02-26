@@ -3,7 +3,7 @@ insert ignore into User (username,password,firstname,isAdmin,isStaff,isActive,is
 ('test','test','technician',0,1,1,0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('Donor', 'donorNumber', 'Donor Number', '', '0', '1', '0', '0', '0', '', 10),
+('Donor', 'donorNumber', 'Donor Number', '', '0', '1', '1', '0', '0', '', 10),
 ('Donor', 'firstName', 'First Name', '', '0', '1', '0', '0', '0', '', 0),
 ('Donor', 'middleName', 'Middle Name', '', '1', '0', '0', '0', '0', '', 0),
 ('Donor', 'lastName', 'Last Name', '', '0', '0', '0', '0', '0', '', 0),
@@ -127,12 +127,12 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Elective Surgery', '', '0');
 
 insert into ProductType (productType, description, shelfLife, shelfLifeUnits, isDeleted) values
-('Whole Blood', '', '35', 'days', '0'),
-('Red Blood Cells', '', '', '', '0'),
-('Fresh Frozen Plasma', '', '365', 'days', '0'),
-('Platelets', '', '5', 'days', '0'),
-('Cryoprecipitate', '', '', '', '0'),
-('Partial Platelets', '', '', '', '0');
+('Whole Blood', '', 35, 'days', '0'),
+('Red Blood Cells', '', 35, 'days', '0'),
+('Fresh Frozen Plasma', '', 35, 'days', '0'),
+('Platelets', '', 5, 'days', '0'),
+('Cryoprecipitate', '', 35, 'days', '0'),
+('Partial Platelets', '', 35, 'days', '0');
 
 insert into BloodBagType (bloodBagType, isDeleted) values
 ('Single', '0'),

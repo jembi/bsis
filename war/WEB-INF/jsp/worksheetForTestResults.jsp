@@ -255,6 +255,7 @@ $(document).ready(function() {
 
   function getEditableBloodABOSelector(cell, collectedSampleId) {
     var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodABOField");
+    console.log(rowContents[0]);
     rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
     rowContents = $(rowContents);
     if (cell !== null && cell !== undefined && cell !== "") {

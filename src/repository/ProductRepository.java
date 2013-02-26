@@ -120,12 +120,22 @@ public class ProductRepository {
 
     TestResult t = testResultsMap.get("Blood ABO");
     if (t != null && !t.getIsDeleted()) {
-      bloodAbo = BloodAbo.valueOf(t.getResult());
+    	try {
+    		bloodAbo = BloodAbo.valueOf(t.getResult());
+    	} catch (IllegalArgumentException ex) {
+    		ex.printStackTrace();
+    		bloodAbo = BloodAbo.Unknown;
+    	} 
     }
     
     t = testResultsMap.get("Blood Rh");
     if (t != null && !t.getIsDeleted()) {
-      bloodRhd = BloodRhd.valueOf(t.getResult());
+    	try {
+    		bloodRhd = BloodRhd.valueOf(t.getResult());
+    	} catch (IllegalArgumentException ex) {
+    		ex.printStackTrace();
+    		bloodRhd = BloodRhd.Unknown;
+    	}
     }
 
     product.setBloodAbo(bloodAbo);

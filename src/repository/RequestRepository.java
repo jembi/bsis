@@ -279,22 +279,27 @@ public class RequestRepository {
 
   public List<Request> findRequests(List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy) {
-    TypedQuery<Request> query = em.createQuery(
-            "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-            "(r.productType.id IN (:productTypeIds) AND " +
-            "r.requestSite.id IN (:requestSiteIds)) AND (r.fulfilled = :fulfilled) AND" +
-            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
-            "r.isDeleted= :isDeleted",
-            Request.class);
+      String requiredBy, Boolean includeSatisfiedRequests) {
+	  String queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+	            "(r.productType.id IN (:productTypeIds) AND " +
+	            "r.requestSite.id IN (:requestSiteIds)) AND" +
+	            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
+	            "r.isDeleted= :isDeleted";
+
+	if (!includeSatisfiedRequests)
+		queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
+
+    TypedQuery<Request> query = em.createQuery(queryStr, Request.class);
 
     Date from = getDateRequestedAfterOrDefault(requestedAfter);
     Date to = getDateRequiredByOrDefault(requiredBy);
 
+    if (!includeSatisfiedRequests)
+    	query.setParameter("fulfilled", false);
+
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypeIds", productTypeIds);
     query.setParameter("requestSiteIds", requestSiteIds);
-    query.setParameter("fulfilled", Boolean.FALSE);
     query.setParameter("requestedAfter", from);
     query.setParameter("requiredBy", to);
 
@@ -323,7 +328,7 @@ public class RequestRepository {
     Request request = findRequestById(requestId);
     ObjectMapper mapper = new ObjectMapper();
     Map<String, String> productIdToVolumeMap = mapper.readValue(productIds, HashMap.class);
-    int numIssued = 0;
+    int totalVolumeIssued = getTotalVolumeIssued(request);
     for (String productId : productIdToVolumeMap.keySet()) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
@@ -333,10 +338,10 @@ public class RequestRepository {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
         product.setIssuedVolume(issuedVolume);
+        totalVolumeIssued = totalVolumeIssued + issuedVolume;
         productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
         em.merge(product);
-        numIssued++;
       }
       else {
         throw new Exception("Could not issue products");
@@ -344,7 +349,6 @@ public class RequestRepository {
     }
 
     em.flush();
-    Integer totalVolumeIssued = getTotalVolumeIssued(request);
     Integer totalVolumeRequested = request.getRequestedQuantity() * request.getVolume();
     if (totalVolumeIssued >= totalVolumeRequested) {
       request.setFulfilled(true);

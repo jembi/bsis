@@ -467,7 +467,19 @@ public class CollectedSampleRepository {
   public void updateCollectedSampleTestedStatus(CollectedSample collectedSample) {
     Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
     List<BloodTest> allBloodTests = bloodTestRepository.getAllBloodTests();
-    if (testResults.size() == allBloodTests.size())
+    boolean tested = true;
+    for (BloodTest bt: allBloodTests) {
+    	TestResult t = testResults.get(bt.getName());
+    	if (t == null) {
+    		tested = false;
+    		break;
+    	}
+    	if (!bt.getAllowedResults().contains(t.getResult())) {
+    		tested = false;
+    		break;
+    	}
+    }
+    if (tested)
       collectedSample.setTestedStatus(TestedStatus.TESTED);
     else
       collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);

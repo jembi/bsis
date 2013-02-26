@@ -141,7 +141,6 @@ public class TestResultController {
 
     TestResultBackingForm form = new TestResultBackingForm();
 
-    System.out.println("");
     ModelAndView mv = new ModelAndView("editTestResultForm");
     Map<String, Object> m = model.asMap();
     m.put("refreshUrl", getUrl(request));

@@ -13,23 +13,27 @@
 
 <script>
 	$(document).ready(function() {
-	  $.each( $("#${tabContentId}").find(".radioButtonParent"),
-	      		function() {
-	    				$(this).find("input:first").attr('checked', true);
-	  				});
-
-	  $("#${tabContentId}").find('input[type="radio"]').change(sendSelectionOfInputsToParentDialog);
 
 	  function sendSelectionOfInputsToParentDialog() {
 	    var productVolumes = {};
-  		$.each($("#${tabContentId}").find('input[type="radio"]:checked'),
-		    	 function() {
-		  		   productVolumes[$(this).prop("name")] = $(this).val();
-					 });
+  		var checkedRadioBoxes = $("#${tabContentId}").find('input[type="radio"]:checked');
+  		for (var i = 0; i < checkedRadioBoxes.length; i++) {
+  		   var checkedRadioBox = $(checkedRadioBoxes[i]);
+ 		   productVolumes[checkedRadioBox.prop("name")] = checkedRadioBox.val();
+  		}
   		$("#${tabContentId}").parent().trigger("updateProductVolumeSelection", productVolumes);
+	  }
+	  $("#${tabContentId}").find('input[type="radio"]').change(sendSelectionOfInputsToParentDialog);
+
+
+/*	  var radioButtonParents = $("#${tabContentId}").find(".radioButtonParent");
+	  for ( var i = 0; i < radioButtonParents.length; i++) {
+		  var radioButtonParent = radioButtonParents[i];
+		  $(radioButtonParent).find("input:first").prop('checked', 'checked');
 	  }
 
 	  sendSelectionOfInputsToParentDialog();
+*/
 
 	});
 </script>
@@ -63,9 +67,9 @@
 		
 					<c:forEach var="productVolume" items="${model.productVolumes}">
 						<input type="radio"
-									 id="${product.productNumber}-${productVolume.volume}"
+									 id="${product.productNumber}-${productVolume.volume}-${unique_page_id}"
 									 name="${product.id}" value="${productVolume.volume}" style="width: auto;"/>
-						<label for="${product.productNumber}-${productVolume.volume}">${productVolume.volume} ml</label>
+						<label for="${product.productNumber}-${productVolume.volume}-${unique_page_id}">${productVolume.volume} ml</label>
 					</c:forEach>
 	
 				</div>

@@ -175,10 +175,16 @@ $(document).ready(function() {
 				<form:label path="requiredBy">Required by </form:label>
 				<form:input path="requiredBy" class="requiredBy" placeholder="Required By Date" />
 			</div>
+
+			<div>
+				<form:label path="includeSatisfiedRequests" style="width: auto;">Include satisfied requests in results</form:label>
+				<form:checkbox path="includeSatisfiedRequests" style="width: auto; position: relative; top: 2px;"/>
+			</div>
+
 			<div>
 				<label></label>
 				<button type="button" class="findRequestButton">
-					Find pending requests
+					Find requests
 				</button>
 				<button type="button" class="clearFindFormButton">
 					Clear form

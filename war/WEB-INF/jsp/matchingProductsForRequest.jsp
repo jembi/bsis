@@ -105,15 +105,15 @@ $(document).ready(
           url : "confirmIssueProductsDialog.html",
           data : {requestId: "${model.request.id}", productsToIssue: JSON.stringify(selected_products)},
           success : function (response) {
-					  					$("#${confirmIssueProductsDialogId}").find(".dialogContent").html(response);
-					  					$("#${confirmIssueProductsDialogId}").bind("updateProductVolumeSelection", updateProductVolumeSelection);
-					  					$("#${confirmIssueProductsDialogId}").dialog({
+			  					$("#${confirmIssueProductsDialogId}").find(".dialogContent").html(response);
+			  					$("#${confirmIssueProductsDialogId}").bind("updateProductVolumeSelection", updateProductVolumeSelection);
+			  					$("#${confirmIssueProductsDialogId}").dialog({
             					  modal: true,
             					  width: 800,
             					  height: 600,
             					  buttons: {
-            					    "Confirm Issue" : function() {	confirmIssue(); $(this).dialog("close"); },
-            					    "Cancel" : function(event, ui) { $(this).dialog("close"); }
+            					    "Confirm Issue" : function() {	confirmIssue(); $(this).dialog("destroy"); },
+            					    "Cancel" : function(event, ui) { $(this).dialog("destroy"); }
             					  }
             					});
           				  },

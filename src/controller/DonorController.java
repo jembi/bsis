@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.DonorRepository;
+import repository.SequenceNumberRepository;
 import viewmodel.DonorViewModel;
 
 @Controller
@@ -42,6 +43,9 @@ public class DonorController {
 
   @Autowired
   private UtilController utilController;
+
+  @Autowired
+  private SequenceNumberRepository sequenceNumberRepository;
   
   public DonorController() {
   }
@@ -139,6 +143,7 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", getUrl(request));
+    m.put("existingDonor", false);
     if (donorId != null) {
       form.setId(donorId);
       Donor donor = donorRepository.findDonorById(donorId);
@@ -153,8 +158,11 @@ public class DonorController {
     }
     m.put("editDonorForm", form);
     m.put("refreshUrl", getUrl(request));
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
     // to ensure custom field names are displayed in the form
-    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("donorFields", formFields);
+    if (m.get("existingDonor").equals(false))
+        setDonorNumber(form, (Map<String, Object>) formFields.get("donorNumber"));
     mv.addObject("model", m);
     return mv;
   }
@@ -171,6 +179,9 @@ public class DonorController {
     String message = "";
     Map<String, Object> m = model.asMap();
 
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
+    m.put("donorFields", formFields);
+
     if (result.hasErrors()) {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
@@ -185,6 +196,7 @@ public class DonorController {
         success = true;
         message = "Donor Successfully Added";
         form = new DonorBackingForm();
+        setDonorNumber(form, (Map<String, Object>) formFields.get("donorNumber"));
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
@@ -201,7 +213,6 @@ public class DonorController {
     m.put("refreshUrl", "editDonorFormGenerator.html");
     m.put("success", success);
     m.put("message", message);
-    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
 
     mv.addObject("model", m);
     return mv;
@@ -467,4 +478,11 @@ public class DonorController {
     return reqUrl;
   }
 
+  private void setDonorNumber(DonorBackingForm form,
+	      Map<String, Object> donorNumberProperties) {
+	    boolean isAutoGeneratable = (Boolean) donorNumberProperties.get("isAutoGeneratable");
+	    boolean autoGenerate = (Boolean) donorNumberProperties.get("autoGenerate");
+	    if (isAutoGeneratable && autoGenerate)
+	      form.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());    
+  }
 }
