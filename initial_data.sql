@@ -3,7 +3,7 @@ insert ignore into User (username,password,firstname,isAdmin,isStaff,isActive,is
 ('test','test','technician',0,1,1,0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('Donor', 'donorNumber', 'Donor Number', '', '0', '1', '1', '0', '0', '', 10),
+('Donor', 'donorNumber', 'Donor Number', '', '0', '1', '1', '0', '0', '', 15),
 ('Donor', 'firstName', 'First Name', '', '0', '1', '0', '0', '0', '', 0),
 ('Donor', 'middleName', 'Middle Name', '', '1', '0', '0', '0', '0', '', 0),
 ('Donor', 'lastName', 'Last Name', '', '0', '0', '0', '0', '0', '', 0),
