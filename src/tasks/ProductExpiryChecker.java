@@ -15,7 +15,7 @@ public class ProductExpiryChecker {
   public ProductExpiryChecker() {
   }
 
-  @Scheduled(fixedDelay=2*60*1000)
+  @Scheduled(fixedDelay=10*60*1000)
   public void run() {
     System.out.println("Updating Product Expiry Status");
     long t1 = System.currentTimeMillis();
