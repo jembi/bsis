@@ -533,6 +533,7 @@ public class ProductRepository {
     for (ProductType productType : productTypeQuery.getResultList()) {
       Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
 
+      inventoryByBloodGroup.put("Unknown", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("B+", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("AB+", getMapWithNumDaysWindows());
