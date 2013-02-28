@@ -45,7 +45,7 @@ public class CompatibilityTestsController {
 
   @Autowired
   private CrossmatchTypeRepository crossmatchTypeRepository;
-
+  
   @Autowired
   private UtilController utilController;
 
@@ -68,6 +68,7 @@ public class CompatibilityTestsController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("crossmatchTypes", crossmatchTypeRepository.getAllCrossmatchTypes());
+    utilController.addTipsToModel(m, "requests.addcompatibilityresult");
   }
 
   @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)

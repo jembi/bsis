@@ -136,4 +136,11 @@ public class ProductViewModel {
       return "";
     return user.getUsername();
   }
+
+  public String getProductVolume() {
+    if (product.getProductVolume() == null)
+      return "";
+    else
+      return product.getProductVolume().toString();
+  }
 }

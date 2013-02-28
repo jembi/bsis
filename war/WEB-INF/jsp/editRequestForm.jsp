@@ -166,6 +166,7 @@
         	setDefaultValueForSelector(getBloodGroupSelector(), "${model.requestFields.bloodGroup.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.requestFields.productType.defaultValue}");
         	setDefaultValueForSelector(getRequestTypeSelector(), "${model.requestFields.requestType.defaultValue}");
+        	setDefaultValueForSelector(getRequestVolumeSelector(), "${model.requestFields.volume.defaultValue}");
         	setDefaultValueForSelector(getRequestSiteSelector(), "${model.requestFields.requestSite.defaultValue}");
           copyMirroredFields("${tabContentId}", JSON.parse('${model.requestFields.mirroredFields}'));
         }
@@ -186,6 +187,10 @@
           return $("#${tabContentId}").find('select[name="requestSite"]').multiselect();
         }
         
+        function getRequestVolumeSelector() {
+          return $("#${tabContentId}").find('select[name="volume"]').multiselect();
+        }
+
         function updateBarcode(val) {
           if (val === null || val === undefined || val === "")
             val = "-";

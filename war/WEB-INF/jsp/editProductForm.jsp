@@ -12,12 +12,8 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="editProductFormId">editProductForm-${unique_page_id}</c:set>
 <c:set var="editProductFormBarcodeId">editProductFormBarcode-${unique_page_id}</c:set>
-<c:set var="editProductFormDonorId">editProductFormDonor-${unique_page_id}</c:set>
-<c:set var="editProductFormDonorHiddenId">editProductFormDonorHidden-${unique_page_id}</c:set>
-<c:set var="editProductFormCentersId">editProductFormCenters-${unique_page_id}</c:set>
-<c:set var="editProductFormSitesId">editProductFormSites-${unique_page_id}</c:set>
 <c:set var="editProductFormProductTypesId">editProductFormProductType-${unique_page_id}</c:set>
-<c:set var="editProductFormDonorTypeId">editProductFormDonorType-${unique_page_id}</c:set>
+<c:set var="editProductFormProductVolumeSelectorId">editProductFormProductVolumeSelector-${unique_page_id}</c:set>
 <c:set var="updateProductButtonId">updateProductButton-${unique_page_id}</c:set>
 <c:set var="deleteProductButtonId">deleteProductButton-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
@@ -70,6 +66,12 @@
         });
 
         $("#${editProductFormId}").find(".productType").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+
+        $("#${editProductFormId}").find(".volume").multiselect({
           multiple : false,
           selectedList : 1,
           header : false
@@ -132,11 +134,16 @@
         if ("${model.existingProduct}" !== "true" && "${model.hasErrors}" !== "true") {
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.productFields.notes.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.productFields.productType.defaultValue}");
+        	setDefaultValueForSelector(getProductVolumeSelector(), "${model.productFields.productVolume.defaultValue}");
           copyMirroredFields("${tabContentId}", JSON.parse('${model.productFields.mirroredFields}'));
         }
 
         function getProductTypeSelector() {
           return $("#${tabContentId}").find('select[name="productType"]').multiselect();
+        }
+        
+        function getProductVolumeSelector() {
+          return $("#${tabContentId}").find('select[name="productVolume"]').multiselect();
         }
         
         $("#${editProductFormBarcodeId}").barcode(
@@ -199,6 +206,21 @@
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="product.productType"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+		<c:if test="${model.productFields.productVolume.hidden != true }">
+			<div>
+				<form:label path="productVolume">${model.productFields.productVolume.displayName}</form:label>
+				<form:select path="productVolume"
+				             id="${editProductFormVolumeSelectorId}"
+										 class="volume">
+					<form:option value="">&nbsp;</form:option>
+					<c:forEach var="productVolumeOption" items="${model.productVolumes}">
+						<form:option value="${productVolumeOption.volume}">${productVolumeOption.volume} ${productVolumeOption.unit}</form:option>
+					</c:forEach>
+				</form:select>
+				<form:errors class="formError" path="product.productVolume"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>

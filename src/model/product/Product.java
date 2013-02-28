@@ -89,7 +89,7 @@ public class Product implements ModificationTracker {
   @Column(length=100)
   private Date reasonReturn;
 
-  private Integer issuedVolume;
+  private Integer productVolume;
   
   @Enumerated(EnumType.STRING)
   @Column(length=30)
@@ -117,6 +117,7 @@ public class Product implements ModificationTracker {
     this.productType = product.productType;
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
+    this.productVolume = product.productVolume;
     this.notes = product.notes;
   }
 
@@ -302,11 +303,11 @@ public class Product implements ModificationTracker {
     this.reasonReturn = reasonReturn;
   }
 
-  public Integer getIssuedVolume() {
-    return issuedVolume;
+  public Integer getProductVolume() {
+    return productVolume;
   }
 
-  public void setIssuedVolume(Integer issuedVolume) {
-    this.issuedVolume = issuedVolume;
+  public void setProductVolume(Integer productVolume) {
+    this.productVolume = productVolume;
   }
 }

@@ -211,11 +211,11 @@
         expiresOn datetime,
         isDeleted boolean,
         issuedOn datetime,
-        issuedVolume integer,
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(30),
+        productVolume integer,
         reasonDiscard datetime,
         reasonReturn datetime,
         returnedDate datetime,
@@ -454,8 +454,8 @@
         references User (id);
 
     alter table CompatibilityTest 
-        add index FK927986026C34429E (crossmatchType_id), 
-        add constraint FK927986026C34429E 
+        add index FK927986028631CA7D (crossmatchType_id), 
+        add constraint FK927986028631CA7D 
         foreign key (crossmatchType_id) 
         references CrossmatchType (id);
 

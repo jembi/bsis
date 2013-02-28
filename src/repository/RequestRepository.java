@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -324,21 +323,23 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public void issueProductsToRequest(Long requestId, String productIds) throws Exception {
+  public void issueProductsToRequest(Long requestId, String productsToIssue) throws Exception {
     Request request = findRequestById(requestId);
     ObjectMapper mapper = new ObjectMapper();
-    Map<String, String> productIdToVolumeMap = mapper.readValue(productIds, HashMap.class);
+    productsToIssue = productsToIssue.replaceAll("\"", "");
+    productsToIssue = productsToIssue.replaceAll("\\[", "");
+    productsToIssue = productsToIssue.replaceAll("\\]", "");
+    String[] productIds = productsToIssue.split(",");
     int totalVolumeIssued = getTotalVolumeIssued(request);
-    for (String productId : productIdToVolumeMap.keySet()) {
+    for (String productId : productIds) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
       // between the time when matching products are searched and selected
-      Integer issuedVolume = Integer.parseInt(productIdToVolumeMap.get(productId));
+      // for issuing
       if (canIssueProduct(product, request)) {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
-        product.setIssuedVolume(issuedVolume);
-        totalVolumeIssued = totalVolumeIssued + issuedVolume;
+        totalVolumeIssued = totalVolumeIssued + product.getProductVolume();
         productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
         em.merge(product);
@@ -360,9 +361,9 @@ public class RequestRepository {
   private Integer getTotalVolumeIssued(Request request) {
     Integer totalVolumeIssued = 0;
     for (Product product : request.getIssuedProducts()) {
-      if (product.getIssuedVolume() == null)
+      if (product.getProductVolume() == null)
         continue;
-      totalVolumeIssued = totalVolumeIssued + product.getIssuedVolume();
+      totalVolumeIssued = totalVolumeIssued + product.getProductVolume();
     }
     return totalVolumeIssued;
   }

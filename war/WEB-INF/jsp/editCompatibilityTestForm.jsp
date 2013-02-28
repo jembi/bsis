@@ -116,6 +116,11 @@
 <div id="${tabContentId}">
 
 	<div id="${mainContentId}">
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['requests.addcompatibilityresult']}
+			</p>
+		</div>
 		<form:form method="POST" commandName="editCompatibilityTestForm"
 			class="formInTabPane" id="${editCompatibilityTestFormId}">
 			<div>

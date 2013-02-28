@@ -143,9 +143,9 @@ public class RequestViewModel {
       return 0;
     Integer totalVolumeIssued = 0;
     for (Product p : request.getIssuedProducts()) {
-      if (p.getIssuedVolume() == null)
+      if (p.getProductVolume() == null)
         continue;
-      totalVolumeIssued = totalVolumeIssued + p.getIssuedVolume();
+      totalVolumeIssued = totalVolumeIssued + p.getProductVolume();
     }
     return totalVolumeIssued;
   }

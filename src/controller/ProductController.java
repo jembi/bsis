@@ -37,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
+import repository.ProductVolumeRepository;
 import repository.TestResultRepository;
 import viewmodel.ProductViewModel;
 
@@ -51,6 +52,9 @@ public class ProductController {
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
+
+  @Autowired
+  private ProductVolumeRepository productVolumeRepository;
 
   @Autowired
   private TestResultRepository testResultsRepository;
@@ -295,6 +299,7 @@ public class ProductController {
   
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("productVolumes", productVolumeRepository.getAllProductVolumes());
   }
 
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)

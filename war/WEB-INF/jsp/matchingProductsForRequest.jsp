@@ -18,7 +18,6 @@
 $(document).ready(
     function() {
 
-			var productVolumeSelection = {};
       var selected_products = [];
       
       var selectedRowId = null;
@@ -78,48 +77,20 @@ $(document).ready(
           showMessage("You must select at least one product to issue.");
           return;
         }
-        showConfirmIssueDialog();
-      }
-
-      function confirmIssue() {
         var data = {requestId : "${model.request.id}",
-            				productsToIssue : JSON.stringify(productVolumeSelection)
+            				productsToIssue : JSON.stringify(selected_products)
             			 };
         $.ajax({
           url: "issueSelectedProducts.html",
           type: "POST",
           data: data,
           success: function() {
-            				 showMessage("Products Issued Successfully!");
+            				 showMessage("Products issued successfully!");
             				 $("#${tabContentId}").parent().trigger("productIssueSuccess");
           				 },
          	error:   function() {
 										 showErrorMessage("Something went wrong while issuing your request. Please try again.");         	  
          					 }
-        });
-      }
-
-      function showConfirmIssueDialog() {
-        $.ajax({
-          type : "GET",
-          url : "confirmIssueProductsDialog.html",
-          data : {requestId: "${model.request.id}", productsToIssue: JSON.stringify(selected_products)},
-          success : function (response) {
-			  					$("#${confirmIssueProductsDialogId}").find(".dialogContent").html(response);
-			  					$("#${confirmIssueProductsDialogId}").bind("updateProductVolumeSelection", updateProductVolumeSelection);
-			  					$("#${confirmIssueProductsDialogId}").dialog({
-            					  modal: true,
-            					  width: 800,
-            					  height: 600,
-            					  buttons: {
-            					    "Confirm Issue" : function() {	confirmIssue(); $(this).dialog("destroy"); },
-            					    "Cancel" : function(event, ui) { $(this).dialog("destroy"); }
-            					  }
-            					});
-          				  },
-          error :   function () {
-            				  showErrorMessage("Something went wrong. Please try again.");
-          				  }
         });
       }
 
@@ -129,11 +100,6 @@ $(document).ready(
         if (searchBox.val() != "")
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
-
-      function updateProductVolumeSelection(event, productVolumes) {
-        productVolumeSelection = productVolumes;
-        console.log(productVolumeSelection);
-      }
     });
 </script>
 
@@ -183,7 +149,10 @@ $(document).ready(
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
 						</c:if>
-							<th>${model.crossmatchTestFields.compatibilityResult.displayName}</th>
+						<c:if test="${model.productFields.productVolume.hidden != true}">
+							<th>${model.productFields.productVolume.displayName}</th>
+						</c:if>
+						<th>${model.compatibilityTestFields.compatibilityResult.displayName}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -212,6 +181,9 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
+							</c:if>
+							<c:if test="${model.productFields.productVolume.hidden != true}">
+								<td>${product.productVolume} ml</td>
 							</c:if>
 							<td>${product.isCompatible}</td>
 						</tr>

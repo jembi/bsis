@@ -18,7 +18,7 @@ import org.joda.time.Days;
 public class MatchingProductViewModel {
 
 	private Product product;
-	private CompatibilityTest crossmatchTest;
+	private CompatibilityTest compatibilityTest;
 
 	public MatchingProductViewModel(Product product) {
 	  this.product = product;
@@ -27,7 +27,7 @@ public class MatchingProductViewModel {
   public MatchingProductViewModel(Product product,
       CompatibilityTest crossmatchTest) {
     this.product = product;
-    this.crossmatchTest = crossmatchTest;
+    this.compatibilityTest = crossmatchTest;
   }
 
   public Product getProduct() {
@@ -112,8 +112,15 @@ public class MatchingProductViewModel {
   }
 
   public String getIsCompatible() {
-    if (crossmatchTest == null)
+    if (compatibilityTest == null)
       return CompatibilityResult.NOT_KNOWN.toString();
-    return crossmatchTest.getCompatibilityResult().toString();
+    return compatibilityTest.getCompatibilityResult().toString();
+  }
+
+  public String getProductVolume() {
+    if (product.getProductVolume() == null)
+      return "";
+    else
+      return product.getProductVolume().toString();
   }
 }
