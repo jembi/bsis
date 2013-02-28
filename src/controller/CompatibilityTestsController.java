@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.crossmatch.CrossmatchTest;
-import model.crossmatch.CrossmatchTestBackingForm;
-import model.crossmatch.CrossmatchTestBackingFormValidator;
+import model.compatibility.CompatibilityTest;
+import model.compatibility.CompatibilityTestBackingForm;
+import model.compatibility.CompatibilityTestBackingFormValidator;
 import model.product.Product;
 import model.request.Request;
 
@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.CrossmatchTestRepository;
+import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
 
 @Controller
-public class CrossmatchTestsController {
+public class CompatibilityTestsController {
 
   @Autowired
   private RequestRepository requestRepository;
@@ -41,7 +41,7 @@ public class CrossmatchTestsController {
   private ProductRepository productRepository;
 
   @Autowired
-  private CrossmatchTestRepository crossmatchRepository;
+  private CompatibilityTestRepository compatibilityTestRepository;
 
   @Autowired
   private CrossmatchTypeRepository crossmatchTypeRepository;
@@ -49,12 +49,12 @@ public class CrossmatchTestsController {
   @Autowired
   private UtilController utilController;
 
-  public CrossmatchTestsController() {
+  public CompatibilityTestsController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new CrossmatchTestBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(new CompatibilityTestBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -70,8 +70,8 @@ public class CrossmatchTestsController {
     m.put("crossmatchTypes", crossmatchTypeRepository.getAllCrossmatchTypes());
   }
 
-  @RequestMapping(value="/editCrossmatchTestFormGenerator", method=RequestMethod.GET)
-  public ModelAndView editCrossmatchTestsFormGenerator(HttpServletRequest request,
+  @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)
+  public ModelAndView editCompatibilityTestsFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value="requestId", required=false) String requestId) {
 
@@ -80,29 +80,29 @@ public class CrossmatchTestsController {
     m.put("refreshUrl", getUrl(request));
     m.put("crossmatchForRequest", true);
     // to ensure custom field names are displayed in the form
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("crossmatchTest");
-    m.put("crossmatchTestFields", formFields);
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("CompatibilityTest");
+    m.put("compatibilityTestFields", formFields);
 
-    CrossmatchTestBackingForm form = new CrossmatchTestBackingForm();
-    m.put("editCrossmatchTestForm", form);
+    CompatibilityTestBackingForm form = new CompatibilityTestBackingForm();
+    m.put("editCompatibilityTestForm", form);
 
     Request productRequest = requestRepository.findRequestById(requestId);
     form.setForRequest(productRequest);
 
-    ModelAndView mv = new ModelAndView("editCrossmatchTestForm");
+    ModelAndView mv = new ModelAndView("editCompatibilityTestForm");
     mv.addObject("model", m);
     return mv;
 
   }
 
-  @RequestMapping(value = "/addCrossmatchTestForRequest", method = RequestMethod.POST)
+  @RequestMapping(value = "/addCompatibilityTestForRequest", method = RequestMethod.POST)
   public ModelAndView
-        addCrossmatchTest(HttpServletRequest request,
+        addCompatibilityTest(HttpServletRequest request,
                  HttpServletResponse response,
-                 @ModelAttribute("editCrossmatchTestForm") @Valid CrossmatchTestBackingForm form,
+                 @ModelAttribute("editCompatibilityTestForm") @Valid CompatibilityTestBackingForm form,
                  BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editCrossmatchTestForm");
+    ModelAndView mv = new ModelAndView("editCompatibilityTestForm");
     boolean success = false;
     String message = "";
 
@@ -145,17 +145,17 @@ public class CrossmatchTestsController {
       message = "Please fix the errors noted above.";
     } else {
       try {
-        CrossmatchTest crossmatchTest = form.getCrossmatchTest();
+        CompatibilityTest crossmatchTest = form.getCompatibilityTest();
         crossmatchTest.setIsDeleted(false);
-        crossmatchRepository.addCrossmatchTest(crossmatchTest);
+        compatibilityTestRepository.addCompatibilityTest(crossmatchTest);
         m.put("hasErrors", false);
         success = true;
         message = "Crossmatch test successfully added";
-        form = new CrossmatchTestBackingForm();
+        form = new CompatibilityTestBackingForm();
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
-        message = "Crossmatch Test already exists.";
+        message = "Compatibility Test already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
         success = false;
@@ -163,12 +163,12 @@ public class CrossmatchTestsController {
       }
     }
 
-    m.put("editCrossmatchTestForm", form);
-    m.put("existingCrossmatchTest", false);
-    m.put("refreshUrl", "editCrossmatchTestFormGenerator.html");
+    m.put("editCompatibilityTestForm", form);
+    m.put("existingCompatibilityTest", false);
+    m.put("refreshUrl", "editCompatibilityTestFormGenerator.html");
     m.put("success", success);
     m.put("message", message);
-    m.put("crossmatchTestFields", utilController.getFormFieldsForForm("CrossmatchTest"));
+    m.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
 
     mv.addObject("model", m);
     return mv;

@@ -15,8 +15,8 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
-import model.crossmatch.CompatibilityResult;
-import model.crossmatch.CrossmatchTest;
+import model.compatibility.CompatibilityResult;
+import model.compatibility.CompatibilityTest;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
@@ -475,20 +475,20 @@ public class ProductRepository {
     query.setParameter("bloodRhd", productRequest.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
-    TypedQuery<CrossmatchTest> crossmatchQuery = em.createQuery(
-        "SELECT ct from CrossmatchTest ct where ct.forRequest.id=:forRequestId AND " +
+    TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
+        "SELECT ct from CompatibilityTest ct where ct.forRequest.id=:forRequestId AND " +
         "ct.testedProduct.status = :testedProductStatus AND " +
-        "isDeleted=:isDeleted", CrossmatchTest.class);
+        "isDeleted=:isDeleted", CompatibilityTest.class);
 
     crossmatchQuery.setParameter("forRequestId", productRequest.getId());
     crossmatchQuery.setParameter("testedProductStatus", ProductStatus.AVAILABLE);
     crossmatchQuery.setParameter("isDeleted", false);
 
-    List<CrossmatchTest> crossmatchTests = crossmatchQuery.getResultList();
+    List<CompatibilityTest> crossmatchTests = crossmatchQuery.getResultList();
     List<MatchingProductViewModel> matchingProducts = new ArrayList<MatchingProductViewModel>();
 
-    Map<Long, CrossmatchTest> crossmatchTestMap = new HashMap<Long, CrossmatchTest>();
-    for (CrossmatchTest crossmatchTest : crossmatchTests) {
+    Map<Long, CompatibilityTest> crossmatchTestMap = new HashMap<Long, CompatibilityTest>();
+    for (CompatibilityTest crossmatchTest : crossmatchTests) {
       Product product = crossmatchTest.getTestedProduct();
       if (product == null)
         continue;

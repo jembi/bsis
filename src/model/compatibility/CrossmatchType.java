@@ -1,4 +1,4 @@
-package model.crossmatch;
+package model.compatibility;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

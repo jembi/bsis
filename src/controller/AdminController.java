@@ -23,7 +23,7 @@ import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtest.BloodTest;
-import model.crossmatch.CrossmatchType;
+import model.compatibility.CrossmatchType;
 import model.donortype.DonorType;
 import model.producttype.ProductType;
 import model.productvolume.ProductVolume;

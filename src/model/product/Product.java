@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
-import model.crossmatch.CrossmatchTest;
+import model.compatibility.CompatibilityTest;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.producttype.ProductType;
@@ -96,7 +96,7 @@ public class Product implements ModificationTracker {
   private ProductStatus status;
 
   @OneToMany(mappedBy="testedProduct", fetch=FetchType.LAZY)
-  private List<CrossmatchTest> crossmatchTests;
+  private List<CompatibilityTest> compatibilityTests;
 
   @Lob
   private String notes;
@@ -262,12 +262,12 @@ public class Product implements ModificationTracker {
     this.status = status;
   }
 
-  public List<CrossmatchTest> getCrossmatchTests() {
-    return crossmatchTests;
+  public List<CompatibilityTest> getCompatibilityTests() {
+    return compatibilityTests;
   }
 
-  public void setCrossmatchTests(List<CrossmatchTest> crossmatchTests) {
-    this.crossmatchTests = crossmatchTests;
+  public void setCompatibilityTests(List<CompatibilityTest> compatibilityTests) {
+    this.compatibilityTests = compatibilityTests;
   }
 
   public Date getDiscardDate() {

@@ -90,16 +90,16 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('CrossmatchTest', 'productNumber', 'Product number', '', '0', '1', '0', '0', '0', '', 0),
-('CrossmatchTest', 'requestNumber', 'Request number', '', '0', '1', '0', '0', '0', '', 0),
-('CrossmatchTest', 'compatibilityResult', 'Compatibility result', '', '0', '1', '0', '0', '0', '', 0),
-('CrossmatchTest', 'crossmatchTestDate', 'Crossmatch test date', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'transfusedBefore', 'Transfused before', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'crossmatchType', 'Crossmatch type', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('CrossmatchTest', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
+('CompatibilityTest', 'productNumber', 'Product number', '', '0', '1', '0', '0', '0', '', 0),
+('CompatibilityTest', 'requestNumber', 'Request number', '', '0', '1', '0', '0', '0', '', 0),
+('CompatibilityTest', 'compatibilityResult', 'Compatibility result', '', '0', '1', '0', '0', '0', '', 0),
+('CompatibilityTest', 'compatibilityTestDate', 'Compatibility test date', '', '0', '0', '0', '0', '0', '', 0),
+('CompatibilityTest', 'transfusedBefore', 'Transfused before', '', '0', '0', '0', '0', '0', '', 0),
+('CompatibilityTest', 'crossmatchType', 'Crossmatch type', '', '0', '0', '0', '0', '0', '', 0),
+('CompatibilityTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0),
+('CompatibilityTest', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('CompatibilityTest', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('CompatibilityTest', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values

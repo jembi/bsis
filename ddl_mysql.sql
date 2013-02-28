@@ -9,7 +9,7 @@
 
     drop table if exists CollectionsWorksheet;
 
-    drop table if exists CrossmatchTest;
+    drop table if exists CompatibilityTest;
 
     drop table if exists CrossmatchType;
 
@@ -98,10 +98,10 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table CrossmatchTest (
+    create table CompatibilityTest (
         id bigint not null auto_increment,
+        compatibililityTestDate datetime,
         compatibilityResult integer,
-        crossmatchTestDate datetime,
         isDeleted boolean,
         createdDate datetime,
         lastUpdated datetime,
@@ -427,35 +427,35 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    create index compatibilityTest_crossmatchTestDate_index on CrossmatchTest (crossmatchTestDate);
+    create index compatibilityTest_crossmatchTestDate_index on CompatibilityTest (compatibililityTestDate);
 
-    alter table CrossmatchTest 
-        add index FK6DBEA3D7A49787C4 (createdBy_id), 
-        add constraint FK6DBEA3D7A49787C4 
+    alter table CompatibilityTest 
+        add index FK92798602A49787C4 (createdBy_id), 
+        add constraint FK92798602A49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table CrossmatchTest 
-        add index FK6DBEA3D7D4061B9F (forRequest_id), 
-        add constraint FK6DBEA3D7D4061B9F 
+    alter table CompatibilityTest 
+        add index FK92798602D4061B9F (forRequest_id), 
+        add constraint FK92798602D4061B9F 
         foreign key (forRequest_id) 
         references Request (id);
 
-    alter table CrossmatchTest 
-        add index FK6DBEA3D7EFD1FE7 (testedProduct_id), 
-        add constraint FK6DBEA3D7EFD1FE7 
+    alter table CompatibilityTest 
+        add index FK92798602EFD1FE7 (testedProduct_id), 
+        add constraint FK92798602EFD1FE7 
         foreign key (testedProduct_id) 
         references Product (id);
 
-    alter table CrossmatchTest 
-        add index FK6DBEA3D7D0AFB367 (lastUpdatedBy_id), 
-        add constraint FK6DBEA3D7D0AFB367 
+    alter table CompatibilityTest 
+        add index FK92798602D0AFB367 (lastUpdatedBy_id), 
+        add constraint FK92798602D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table CrossmatchTest 
-        add index FK6DBEA3D76C34429E (crossmatchType_id), 
-        add constraint FK6DBEA3D76C34429E 
+    alter table CompatibilityTest 
+        add index FK927986026C34429E (crossmatchType_id), 
+        add constraint FK927986026C34429E 
         foreign key (crossmatchType_id) 
         references CrossmatchType (id);
 

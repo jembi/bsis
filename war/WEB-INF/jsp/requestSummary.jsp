@@ -61,18 +61,18 @@
   	        						);
         });
 
-        $("#${tabContentId}").find(".addCrossmatchTestButton").button(
+        $("#${tabContentId}").find(".addCompatibilityResultButton").button(
             {
               icons : {
           			primary : 'ui-icon-document'
         			}
             }).click(function() {
 
-            $("#${tabContentId}").bind("editCrossmatchTestSuccess", addCrossmatchTestSuccess);
-            $("#${tabContentId}").bind("editCrossmatchTestCancel", emptyChildContent);
+            $("#${tabContentId}").bind("editCompatibilityTestSuccess", addCompatibilityResultSuccess);
+            $("#${tabContentId}").bind("editCompatibilityTestCancel", emptyChildContent);
 
             showLoadingImage($("#${childContentId}"));
-  	        fetchContent("editCrossmatchTestFormGenerator.html",
+  	        fetchContent("editCompatibilityTestFormGenerator.html",
               					 {requestId: "${model.request.id}"},
               					 $("#${childContentId}")
   	        						);
@@ -125,7 +125,7 @@
           refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
         }
 
-        function addCrossmatchTestSuccess() {
+        function addCompatibilityResultSuccess() {
           emptyChildContent();
           refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
         }
@@ -159,9 +159,6 @@
 			<button type="button" class="cancelButton">
 				Done
 			</button>
-			<button type="button" class="addCrossmatchTestButton">
-				Add crossmatch tests
-			</button>
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products
 			</button>
@@ -173,6 +170,9 @@
 			</button>
 			<button type="button" class="printButton">
 				Print
+			</button>
+			<button type="button" class="addCompatibilityResultButton">
+				Add compatibility result
 			</button>
 		</div>
 

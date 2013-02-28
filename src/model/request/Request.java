@@ -18,7 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import model.crossmatch.CrossmatchTest;
+import model.compatibility.CompatibilityTest;
 import model.location.Location;
 import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
@@ -76,7 +76,7 @@ public class Request implements ModificationTracker {
   private List<Product> issuedProducts;
 
   @OneToMany(mappedBy="forRequest")
-  private Set<CrossmatchTest> crossmatchTests;
+  private Set<CompatibilityTest> crossmatchTests;
   
   @Column(length=30)
   private String patientNumber;
@@ -422,11 +422,11 @@ public class Request implements ModificationTracker {
     this.requestType = requestType;
   }
 
-  public Set<CrossmatchTest> getCrossmatchTests() {
+  public Set<CompatibilityTest> getCrossmatchTests() {
     return crossmatchTests;
   }
 
-  public void setCrossmatchTests(Set<CrossmatchTest> crossmatchTests) {
+  public void setCrossmatchTests(Set<CompatibilityTest> crossmatchTests) {
     this.crossmatchTests = crossmatchTests;
   }
 

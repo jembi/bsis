@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.collectedsample.CollectedSample;
-import model.crossmatch.CompatibilityResult;
-import model.crossmatch.CrossmatchTest;
+import model.compatibility.CompatibilityResult;
+import model.compatibility.CompatibilityTest;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.user.User;
@@ -18,14 +18,14 @@ import org.joda.time.Days;
 public class MatchingProductViewModel {
 
 	private Product product;
-	private CrossmatchTest crossmatchTest;
+	private CompatibilityTest crossmatchTest;
 
 	public MatchingProductViewModel(Product product) {
 	  this.product = product;
 	}
 
   public MatchingProductViewModel(Product product,
-      CrossmatchTest crossmatchTest) {
+      CompatibilityTest crossmatchTest) {
     this.product = product;
     this.crossmatchTest = crossmatchTest;
   }

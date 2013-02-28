@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.crossmatch.CrossmatchType;
+import model.compatibility.CrossmatchType;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

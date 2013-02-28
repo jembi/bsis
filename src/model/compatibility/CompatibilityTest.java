@@ -1,4 +1,4 @@
-package model.crossmatch;
+package model.compatibility;
 
 import java.util.Date;
 
@@ -24,7 +24,7 @@ import model.request.RequestExists;
 import model.user.User;
 
 @Entity
-public class CrossmatchTest implements ModificationTracker {
+public class CompatibilityTest implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,7 +41,7 @@ public class CrossmatchTest implements ModificationTracker {
 
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="compatibilityTest_crossmatchTestDate_index")
-  private Date crossmatchTestDate;
+  private Date compatibililityTestDate;
 
   private Boolean transfusedBefore;
 
@@ -60,7 +60,7 @@ public class CrossmatchTest implements ModificationTracker {
   @Valid
   private RowModificationTracker modificationTracker;
 
-  public CrossmatchTest() {
+  public CompatibilityTest() {
     modificationTracker = new RowModificationTracker();
   }
 
@@ -152,12 +152,12 @@ public class CrossmatchTest implements ModificationTracker {
     this.testedBy = testedBy;
   }
 
-  public Date getCrossmatchTestDate() {
-    return crossmatchTestDate;
+  public Date getCompatibilityTestDate() {
+    return compatibililityTestDate;
   }
 
-  public void setCrossmatchTestDate(Date crossmatchTestDate) {
-    this.crossmatchTestDate = crossmatchTestDate;
+  public void setCompatibilityTestDate(Date compatiblityTestDate) {
+    this.compatibililityTestDate = compatiblityTestDate;
   }
 
   public String getNotes() {

@@ -388,7 +388,7 @@ public class RequestsController {
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
-    m.put("crossmatchTestFields", utilController.getFormFieldsForForm("CrossmatchTest"));
+    m.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
     utilController.addTipsToModel(model.asMap(), "requests.findpending.findmatchingproducts");
     m.put("allProducts", products);
     mv.addObject("model", m);

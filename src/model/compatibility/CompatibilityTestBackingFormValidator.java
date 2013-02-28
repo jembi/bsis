@@ -1,4 +1,4 @@
-package model.crossmatch;
+package model.compatibility;
 
 import java.util.Arrays;
 
@@ -8,15 +8,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import viewmodel.CrossmatchTestViewModel;
+import viewmodel.CompatibilityTestViewModel;
 import controller.UtilController;
 
-public class CrossmatchTestBackingFormValidator implements Validator {
+public class CompatibilityTestBackingFormValidator implements Validator {
 
   private Validator validator;
   private UtilController utilController;
 
-  public CrossmatchTestBackingFormValidator(Validator validator, UtilController utilController) {
+  public CompatibilityTestBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
     this.utilController = utilController;
@@ -24,7 +24,7 @@ public class CrossmatchTestBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(CrossmatchTestBackingForm.class, CrossmatchTest.class, CrossmatchTestViewModel.class, CrossmatchTestBackingForm.class).contains(clazz);
+    return Arrays.asList(CompatibilityTestBackingForm.class, CompatibilityTest.class, CompatibilityTestViewModel.class, CompatibilityTestBackingForm.class).contains(clazz);
   }
 
   @Override
@@ -32,12 +32,12 @@ public class CrossmatchTestBackingFormValidator implements Validator {
     if (obj == null || validator == null)
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
-    CrossmatchTestBackingForm form = (CrossmatchTestBackingForm) obj;
-    String crossmatchTestDate = form.getCrossmatchTestDate();
+    CompatibilityTestBackingForm form = (CompatibilityTestBackingForm) obj;
+    String crossmatchTestDate = form.getCompatibilityTestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
-      errors.rejectValue("crossmatchTest.crossmatchTestDate", "dateFormat.incorrect",
+      errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
           CustomDateFormatter.getErrorMessage());
     }
-    utilController.commonFieldChecks(form, "crossmatchTest", errors);
+    utilController.commonFieldChecks(form, "CompatibilityTest", errors);
   }
 }

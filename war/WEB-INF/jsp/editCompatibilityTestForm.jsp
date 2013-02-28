@@ -11,8 +11,8 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
-<c:set var="editCrossmatchTestFormId">editCrossmatchTestForm-${unique_page_id}</c:set>
-<c:set var="editCrossmatchTestCompatibilityResultId">editCrossmatchTestCompatibilityResultId-${unique_page_id}</c:set>
+<c:set var="editCompatibilityTestFormId">editCompatibilityTestForm-${unique_page_id}</c:set>
+<c:set var="editCompatibilityTestCompatibilityResultId">editCompatibilityTestCompatibilityResultId-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -20,11 +20,11 @@
 
         function notifyParentSuccess() {
 						// let the parent know we are done
-						$("#${tabContentId}").parent().trigger("editCrossmatchTestSuccess");
+						$("#${tabContentId}").parent().trigger("editCompatibilityTestSuccess");
 				}
   
         function notifyParentCancel() {
-	        $("#${tabContentId}").parent().trigger("editCrossmatchTestCancel");
+	        $("#${tabContentId}").parent().trigger("editCompatibilityTestCancel");
         }
 
         $("#${mainContentId}").find(".saveButton").button({
@@ -33,7 +33,7 @@
           }
         }).click(
             function() {
-               addCrossmatchTest($("#${editCrossmatchTestFormId}")[0],
+               addCompatibilityTest($("#${editCompatibilityTestFormId}")[0],
                     									"${tabContentId}", notifyParentSuccess);
             });
 
@@ -48,7 +48,7 @@
             primary : 'ui-icon-print'
           }
         }).click(function() {
-          $("#${editCrossmatchTestFormId}").printArea();
+          $("#${editCompatibilityTestFormId}").printArea();
         });
 
         $("#${mainContentId}").find(".compatibilityResult").multiselect({
@@ -63,7 +63,7 @@
           header : false
         });
 
-        $("#${editCrossmatchTestFormId}").find(".crossmatchTestDate").datetimepicker({
+        $("#${editCompatibilityTestFormId}").find(".compatibilityTestDate").datetimepicker({
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
@@ -73,8 +73,8 @@
           yearRange : "c-100:c0",
         });
 
-        var crossmatchTestDatePicker = $("#${editCrossmatchTestFormId}").find(".crossmatchTestDate");
-        crossmatchTestDatePicker.datepicker('setDate', new Date());
+        var compatibilityTestDatePicker = $("#${editCompatibilityTestFormId}").find(".compatibilityTestDate");
+        compatibilityTestDatePicker.datepicker('setDate', new Date());
 
         $("#${tabContentId}").find(".clearFormButton").button().click(refetchForm);
 
@@ -94,10 +94,10 @@
           });
         }
 
-        function addCrossmatchTest() {
+        function addCompatibilityTest() {
           $.ajax({
-            url: "addCrossmatchTestForRequest.html",
-            data: $("#${editCrossmatchTestFormId}").serialize(),
+            url: "addCompatibilityTestForRequest.html",
+            data: $("#${editCompatibilityTestFormId}").serialize(),
             type: "POST",
             success: function(response) {
               				 notifyParentSuccess();
@@ -116,65 +116,65 @@
 <div id="${tabContentId}">
 
 	<div id="${mainContentId}">
-		<form:form method="POST" commandName="editCrossmatchTestForm"
-			class="formInTabPane" id="${editCrossmatchTestFormId}">
+		<form:form method="POST" commandName="editCompatibilityTestForm"
+			class="formInTabPane" id="${editCompatibilityTestFormId}">
 			<div>
 				<label style="width: auto;"><b>Crossmatch Testing for Request Number
-				${model.editCrossmatchTestForm.crossmatchTest.forRequest.requestNumber}</b></label>
+				${model.editCompatibilityTestForm.compatibilityTest.forRequest.requestNumber}</b></label>
 			</div>
 			<div>
-			  <form:hidden path="requestNumber" value="${model.editCrossmatchTestForm.crossmatchTest.forRequest.requestNumber}"></form:hidden>
+			  <form:hidden path="requestNumber" value="${model.editCompatibilityTestForm.compatibilityTest.forRequest.requestNumber}"></form:hidden>
 			</div>
-				<c:if test="${model.crossmatchTestFields.productNumber.hidden != true }">
+				<c:if test="${model.compatibilityTestFields.productNumber.hidden != true }">
 					<div>
-						<form:label path="productNumber">${model.crossmatchTestFields.productNumber.displayName}</form:label>
-						<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.productNumber.defaultValue}" />
+						<form:label path="productNumber">${model.compatibilityTestFields.productNumber.displayName}</form:label>
+						<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.compatibilityTestFields.productNumber.defaultValue}" />
 						<form:errors class="formError"
-							path="crossmatchTest.productNumber" delimiter=", "></form:errors>
+							path="compatibilityTest.productNumber" delimiter=", "></form:errors>
 						<form:errors class="formError"
-							path="crossmatchTest.testedProduct" delimiter=", "></form:errors>
+							path="compatibilityTest.testedProduct" delimiter=", "></form:errors>
 					</div>
 				</c:if>
-				<c:if test="${model.crossmatchTestFields.crossmatchTestDate.hidden != true }">
+				<c:if test="${model.compatibilityTestFields.compatibilityTestDate.hidden != true }">
 					<div>
-						<form:label path="crossmatchTestDate">${model.crossmatchTestFields.crossmatchTestDate.displayName}</form:label>
-						<form:input path="crossmatchTestDate" class="crossmatchTestDate" value="${model.existingCollectedSample ? '' : model.crossmatchTestFields.crossmatchTestDate.defaultValue}" />
-						<form:errors class="formError" path="crossmatchTest.crossmatchTestDate"
+						<form:label path="compatibilityTestDate">${model.compatibilityTestFields.compatibilityTestDate.displayName}</form:label>
+						<form:input path="compatibilityTestDate" class="compatibilityTestDate" value="${model.existingCollectedSample ? '' : model.compatibilityTestFields.compatibilityTestDate.defaultValue}" />
+						<form:errors class="formError" path="compatibilityTest.compatibilityTestDate"
 							delimiter=", "></form:errors>
 					</div>
 				</c:if>
 				<c:if test="${model.crossmatchFields.crossmatchType.hidden != true }">
 					<div>
-						<form:label path="crossmatchType">${model.crossmatchTestFields.crossmatchType.displayName}</form:label>
-						<form:select path="crossmatchType" id="editCrossmatchTestFormCrossmatchTypes-${unique_page_id}" class="crossmatchType">
+						<form:label path="crossmatchType">${model.compatibilityTestFields.crossmatchType.displayName}</form:label>
+						<form:select path="crossmatchType" id="editCompatibilityTestFormCrossmatchTypes-${unique_page_id}" class="crossmatchType">
 							<form:option value="">&nbsp;</form:option>
 							<c:forEach var="crossmatchType" items="${model.crossmatchTypes}">
 								<form:option value="${crossmatchType.id}">${crossmatchType.crossmatchType}</form:option>
 							</c:forEach>
 						</form:select>
-						<form:errors class="formError" path="crossmatchTest.crossmatchType"
+						<form:errors class="formError" path="compatibilityTest.crossmatchType"
 							delimiter=", "></form:errors>
 					</div>
 				</c:if>
-				<c:if test="${model.crossmatchTestFields.compatibilityResult.hidden != true }">
+				<c:if test="${model.compatibilityTestFields.compatibilityResult.hidden != true }">
 					<div>
-						<form:label path="compatibilityResult">${model.crossmatchTestFields.compatibilityResult.displayName}</form:label>
+						<form:label path="compatibilityResult">${model.compatibilityTestFields.compatibilityResult.displayName}</form:label>
 						<form:select path="compatibilityResult"
-							id="${editCrossmatchTestCompatibilityResultId}"
+							id="${editCompatibilityTestCompatibilityResultId}"
 							class="compatibilityResult">
 							<form:option value="">&nbsp;</form:option>
 							<form:option value="COMPATIBLE">Compatible</form:option>
 							<form:option value="NOT_COMPATIBLE">Not compatible</form:option>
 						</form:select>
-						<form:errors class="formError" path="crossmatchTest.compatibilityResult"
+						<form:errors class="formError" path="compatibilityTest.compatibilityResult"
 							delimiter=", "></form:errors>
 					</div>
 				</c:if>
-				<c:if test="${model.crossmatchTestFields.notes.hidden != true }">
+				<c:if test="${model.compatibilityTestFields.notes.hidden != true }">
 					<div>
-						<form:label path="notes" class="labelForTextArea">${model.crossmatchTestFields.notes.displayName}</form:label>
+						<form:label path="notes" class="labelForTextArea">${model.compatibilityTestFields.notes.displayName}</form:label>
 						<form:textarea path="notes" />
-						<form:errors class="formError" path="crossmatchTest.notes"
+						<form:errors class="formError" path="compatibilityTest.notes"
 							delimiter=", "></form:errors>
 					</div>
 				</c:if>
