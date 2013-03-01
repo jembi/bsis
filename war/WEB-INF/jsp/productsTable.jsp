@@ -11,7 +11,6 @@
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
 <c:set var="table_id">productsTable-${unique_page_id}</c:set>
-<c:set var="productsTableEditRowDivId">productsTableEditRowDiv-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
 
 <script>
@@ -86,13 +85,6 @@ $(document).ready(
       }
 
       $("#${tabContentId}").find(".productsTable").bind("refreshResults", refreshResults);
-
-      $("#${table_id}_filter").find("label").find("input").keyup(function() {
-        var searchBox = $("#${table_id}_filter").find("label").find("input");
-        $("#${table_id}").removeHighlight();
-        if (searchBox.val() != "")
-          $("#${table_id}").find("td").highlight(searchBox.val());
-      });
 
     });
 </script>

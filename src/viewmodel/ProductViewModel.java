@@ -143,4 +143,8 @@ public class ProductViewModel {
     else
       return product.getProductVolume().toString();
   }
+
+  public String getIssuedOn() {
+    return CustomDateFormatter.getDateTimeString(product.getIssuedOn());
+  }
 }

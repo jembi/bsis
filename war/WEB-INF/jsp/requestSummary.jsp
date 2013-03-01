@@ -44,6 +44,22 @@
   	        						);
         });
 
+        $("#${tabContentId}").find(".listIssuedProductsButton").button(
+            {
+              icons : {
+          			primary : 'ui-icon-document'
+        			}
+            }).click(function() {
+
+            $("#${tabContentId}").bind("listIssuedProductsDone", emptyChildContent);
+
+            showLoadingImage($("#${childContentId}"));
+  	        fetchContent("listIssuedProductsForRequest.html",
+              					 {requestId: "${model.request.id}"},
+              					 $("#${childContentId}")
+  	        						);
+        });
+
         $("#${tabContentId}").find(".findMatchingProductsButton").button(
             {
               icons : {
@@ -64,7 +80,7 @@
         $("#${tabContentId}").find(".addCompatibilityResultButton").button(
             {
               icons : {
-          			primary : 'ui-icon-document'
+          			primary : 'ui-icon-plus'
         			}
             }).click(function() {
 
@@ -158,6 +174,9 @@
 		<div class="summaryPageButtonSection" style="text-align: right;">
 			<button type="button" class="cancelButton">
 				Done
+			</button>
+			<button type="button" class="listIssuedProductsButton">
+				List issued products
 			</button>
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products

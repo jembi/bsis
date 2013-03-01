@@ -38,6 +38,7 @@ import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import viewmodel.MatchingProductViewModel;
+import viewmodel.ProductViewModel;
 import viewmodel.RequestViewModel;
 
 @Controller
@@ -267,6 +268,28 @@ public class RequestsController {
     return mv;
   }
 
+  @RequestMapping(value="/listIssuedProductsForRequest", method=RequestMethod.GET)
+  public ModelAndView listIssuedProductsForRequest(HttpServletRequest request,
+      HttpServletResponse response, Model model,
+      @RequestParam(value="requestId") Long requestId) {
+    ModelAndView mv = new ModelAndView("productsIssuedToRequest");
+    Map<String, Object> m = model.asMap();
+    System.out.println(m);
+    addEditSelectorOptions(m);
+    Request productRequest = requestRepository.findRequestById(requestId);
+    List<ProductViewModel> issuedProducts = null;
+    if (request == null) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } else {
+      issuedProducts = ProductController.getProductViewModels(productRequest.getIssuedProducts());
+    }
+
+    m.put("issuedProducts", issuedProducts);
+    m.put("productFields", utilController.getFormFieldsForForm("Product"));
+    mv.addObject("model", m);
+    return mv;
+  }
+  
   @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
   public ModelAndView updateRequest(
       HttpServletResponse response,
