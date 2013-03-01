@@ -228,7 +228,7 @@
 					<label>${model.product.notes}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.productFields.issuedTo.hidden != true && !empty model.product.issuedTo && model.product.status='ISSUED'}">
+			<c:if test="${model.productFields.issuedTo.hidden != true && !empty model.product.issuedTo && model.product.status=='ISSUED'}">
 				<div>
 					<label>${model.productFields.issuedTo.displayName}</label>
 					<label>${model.product.issuedTo.requestNumber}</label>
