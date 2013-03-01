@@ -228,6 +228,24 @@
 					<label>${model.product.notes}</label>
 				</div>
 			</c:if>
+			<c:if test="${model.productFields.issuedTo.hidden != true && !empty model.product.issuedTo && model.product.status='ISSUED'}">
+				<div>
+					<label>${model.productFields.issuedTo.displayName}</label>
+					<label>${model.product.issuedTo.requestNumber}</label>
+				</div>
+				<c:if test="${model.productFields.issuedOn.hidden != true}">
+					<div>
+						<label>${model.productFields.issuedOn.displayName}</label>
+						<label style="width: auto;">${model.product.issuedOn}</label>
+					</div>
+				</c:if>
+			</c:if>
+			<c:if test="${model.product.status == 'DISCARDED'}">
+				<div>
+					<label>${model.productFields.discardedOn.displayName}</label>
+					<label style="width: auto;">${model.product.discardedOn}</label>
+				</div>
+			</c:if>
 			<div>
 				<label>${model.productFields.lastUpdatedTime.displayName}</label>
 				<label style="width: auto;">${model.product.lastUpdated}</label>

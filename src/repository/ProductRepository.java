@@ -367,7 +367,7 @@ public class ProductRepository {
   }
 
   public Product findProductById(Long productId) {
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.id = :productId AND p.isDeleted = :isDeleted";
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productId", productId);
@@ -626,6 +626,7 @@ public class ProductRepository {
   public void discardProduct(Long productId) {
     Product existingProduct = findProductById(productId);
     existingProduct.setStatus(ProductStatus.DISCARDED);
+    existingProduct.setDiscardedOn(new Date());
     em.merge(existingProduct);
     em.flush();
   }

@@ -286,6 +286,7 @@ public class RequestsController {
 
     m.put("issuedProducts", issuedProducts);
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
+    m.put("productTypeFields", utilController.getFormFieldsForForm("ProductType"));
     mv.addObject("model", m);
     return mv;
   }

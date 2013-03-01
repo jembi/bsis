@@ -24,7 +24,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', '0', '1', '1', '1', '0', '', 0),
 ('CollectedSample', 'collectedOn', 'Collected On', '', '0', '1', '0', '0', '0', '', 0),
-('CollectedSample', 'donorNumber', 'Donor Number', '', '0', '1', '0', '0', '0', '', 0),
+('CollectedSample', 'donorNumber', 'Donor Number', '', '0', '0', '0', '0', '0', '', 0),
 ('CollectedSample', 'donorType', 'Donor Type', '', '0', '1', '0', '0', '0', '', 0),
 ('CollectedSample', 'shippingNumber', 'Shipping Number', '', '1', '0', '0', '0', '1', 'collectionNumber', 0),
 ('CollectedSample', 'sampleNumber', 'Sample Number', '', '1', '0', '0', '0', '1', 'collectionNumber', 0),
@@ -49,6 +49,10 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Product', 'age', 'Age', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'productVolume', 'Product Volume', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'issuedTo', 'Issued to request', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'issuedBy', 'Issued by', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'discardedOn', 'Discarded on', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'discardedBy', 'Discarded by', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 

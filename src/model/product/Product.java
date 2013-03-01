@@ -78,16 +78,22 @@ public class Product implements ModificationTracker {
   private Request issuedTo;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date discardDate;
+  private Date discardedOn;
 
+  @Column(length=100)
+  private String discardReason;
+
+  @Column(length=30)
+  private String discardedBy;
+  
   @Temporal(TemporalType.TIMESTAMP)
-  private Date returnedDate;
+  private Date returnedOn;
 
   @Column(length=100)
-  private Date reasonDiscard;
+  private String returnReason;
 
-  @Column(length=100)
-  private Date reasonReturn;
+  @Column(length=30)
+  private String returnedBy;
 
   private Integer productVolume;
   
@@ -271,36 +277,36 @@ public class Product implements ModificationTracker {
     this.compatibilityTests = compatibilityTests;
   }
 
-  public Date getDiscardDate() {
-    return discardDate;
+  public Date getDiscardedOn() {
+    return discardedOn;
   }
 
-  public void setDiscardDate(Date discardDate) {
-    this.discardDate = discardDate;
+  public void setDiscardedOn(Date discardedOn) {
+    this.discardedOn = discardedOn;
   }
 
-  public Date getReturnedDate() {
-    return returnedDate;
+  public Date getReturnedOn() {
+    return returnedOn;
   }
 
-  public void setReturnedDate(Date returnedDate) {
-    this.returnedDate = returnedDate;
+  public void setReturnedOn(Date returnedOn) {
+    this.returnedOn = returnedOn;
   }
 
-  public Date getReasonDiscard() {
-    return reasonDiscard;
+  public String getDiscardReason() {
+    return discardReason;
   }
 
-  public void setReasonDiscard(Date reasonDiscard) {
-    this.reasonDiscard = reasonDiscard;
+  public void setDiscardReason(String discardReason) {
+    this.discardReason = discardReason;
   }
 
-  public Date getReasonReturn() {
-    return reasonReturn;
+  public String getReturnReason() {
+    return returnReason;
   }
 
-  public void setReasonReturn(Date reasonReturn) {
-    this.reasonReturn = reasonReturn;
+  public void setReturnReason(String returnReason) {
+    this.returnReason = returnReason;
   }
 
   public Integer getProductVolume() {
@@ -309,5 +315,21 @@ public class Product implements ModificationTracker {
 
   public void setProductVolume(Integer productVolume) {
     this.productVolume = productVolume;
+  }
+
+  public String getDiscardedBy() {
+    return discardedBy;
+  }
+
+  public void setDiscardedBy(String discardedBy) {
+    this.discardedBy = discardedBy;
+  }
+
+  public String getReturnedBy() {
+    return returnedBy;
+  }
+
+  public void setReturnedBy(String returnedBy) {
+    this.returnedBy = returnedBy;
   }
 }

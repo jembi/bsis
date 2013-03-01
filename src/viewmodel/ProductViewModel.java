@@ -147,4 +147,15 @@ public class ProductViewModel {
   public String getIssuedOn() {
     return CustomDateFormatter.getDateTimeString(product.getIssuedOn());
   }
+
+  public RequestViewModel getIssuedTo() {
+    if (product.getIssuedTo() == null)
+      return null;
+    else
+      return new RequestViewModel(product.getIssuedTo());
+  }
+
+  public String getDiscardedOn() {
+    return CustomDateFormatter.getDateTimeString(product.getDiscardedOn());
+  }
 }
