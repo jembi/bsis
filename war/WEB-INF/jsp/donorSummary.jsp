@@ -140,7 +140,7 @@
 				Edit
 			</button>
 			<button type="button" class="donorHistoryButton">
-				View Donor History
+				View Donation History
 			</button>
 			<button type="button" class="createCollectionButton">
 				Add Collection

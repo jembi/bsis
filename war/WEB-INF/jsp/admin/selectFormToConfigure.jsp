@@ -61,7 +61,7 @@
 			<option value="TestResult">Test Result Form</option>
 			<option value="Product">Product Form</option>
 			<option value="Request">Request Form</option>
-			<option value="CrossmatchTest">Crossmatch Testing Form</option>
+			<option value="CompatibilityTest">Compatibility Testing Form</option>
 			<option value="Usage">Usage Form</option>
 		</select>
 		<button id="${selectFormToConfigureButtonId}"

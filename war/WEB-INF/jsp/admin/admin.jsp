@@ -14,6 +14,9 @@
 
 <div id="adminTab" class="leftPanel">
 	<ul>
+		<li id="adminWelcomePage">
+			<a href="adminWelcomePageGenerator.html">Admin Home</a>
+		</li>
 		<li id="configureForms">
 			<a href="configureForms.html">Configure Forms</a>
 		</li>

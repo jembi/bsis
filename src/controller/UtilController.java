@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class UtilController {
-  public static final String VERSION_NUMBER = "1.0";
+  public static final String VERSION_NUMBER = "1.1";
 
   @Autowired
   private FormFieldRepository formFieldRepository;

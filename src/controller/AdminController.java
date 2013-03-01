@@ -3,12 +3,19 @@ package controller;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -30,6 +37,7 @@ import model.productvolume.ProductVolume;
 import model.requesttype.RequestType;
 import model.tips.Tips;
 
+import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -715,5 +723,57 @@ public class AdminController {
     }
 
     return result;
+  }
+
+  @RequestMapping(value="/adminWelcomePageGenerator")
+  public ModelAndView adminWelcomePageGenerator(HttpServletRequest request, Model model) {
+    ModelAndView mv = new ModelAndView("admin/adminWelcomePage");
+    Map<String, Object> m = model.asMap();
+    try {
+      InetAddress ip = InetAddress.getLocalHost();
+      List<InetAddress> wirelessAddresses = getServerNetworkAddresses();
+      List<String> serverAddresses = new ArrayList<String>();
+      for (InetAddress addr : wirelessAddresses) {
+        serverAddresses.add("http://" + addr.getHostAddress() + ":" + request.getServerPort() + "/v2v");
+      }
+      m.put("serverAddresses", serverAddresses);
+    } catch (UnknownHostException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    mv.addObject("model", m);
+    return mv;
+  }
+
+  List<InetAddress> getServerNetworkAddresses() {
+    List<InetAddress> listOfServerAddresses = new ArrayList();
+    Enumeration<NetworkInterface> list;
+    try {
+        list = NetworkInterface.getNetworkInterfaces();
+
+        while(list.hasMoreElements()) {
+            NetworkInterface iface = (NetworkInterface) list.nextElement();
+
+            if(iface == null) continue;
+
+            if(!iface.isLoopback() && iface.isUp()) {
+                System.out.println("Found non-loopback, up interface:" + iface);
+
+                Iterator<InterfaceAddress> it = iface.getInterfaceAddresses().iterator();
+                while (it.hasNext()) {
+                    InterfaceAddress address = (InterfaceAddress) it.next();
+
+                    System.out.println("Found address: " + address);
+
+                    if(address == null) continue;
+                    if (InetAddressUtils.isIPv4Address(address.getAddress().getHostAddress()))
+                        listOfServerAddresses.add(address.getAddress());
+                }
+            }
+        }
+    } catch (SocketException ex) {
+        return new ArrayList<InetAddress>();
+    }
+    return listOfServerAddresses;
   }
 }
