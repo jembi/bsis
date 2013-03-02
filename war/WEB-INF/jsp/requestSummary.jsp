@@ -181,6 +181,10 @@
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products
 			</button>
+			<button type="button" class="addCompatibilityResultButton">
+				Add compatibility result
+			</button>
+			<br />
 			<button type="button" class="editButton">
 				Edit
 			</button>
@@ -190,11 +194,11 @@
 			<button type="button" class="printButton">
 				Print
 			</button>
-			<button type="button" class="addCompatibilityResultButton">
-				Add compatibility result
-			</button>
+			<br />
 		</div>
 
+		<br />
+		<br />
 		<br />
 		<br />
 

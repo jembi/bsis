@@ -8,6 +8,7 @@ function updateExistingRequest(form, resultDivId, successCallback) {
 
 function updateRequestGeneric(form, resultDivId, url, successCallback) {
   var request = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: url,

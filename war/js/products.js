@@ -8,6 +8,7 @@ function updateExistingProduct(form, resultDivId, successCallback) {
 
 function updateProductGeneric(form, resultDivId, url, successCallback) {
   var product = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: url,

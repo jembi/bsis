@@ -8,6 +8,7 @@ function updateExistingUsage(form, resultDivId, successCallback) {
 
 function updateUsageGeneric(form, resultDivId, url, successCallback) {
   var usage = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: url,

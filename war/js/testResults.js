@@ -1,5 +1,6 @@
 function updateTestResult(form, resultDivId, successCallback) {
   var testResult = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: "updateTestResult.html",
@@ -16,6 +17,7 @@ function updateTestResult(form, resultDivId, successCallback) {
 }
 
 function addAllTestResults(allTestResultsData, resultDivId, successCallback) {
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: "addAllTestResults.html",

@@ -8,6 +8,7 @@ function updateExistingCollection(form, resultDivId, successCallback) {
 
 function updateCollectionGeneric(form, resultDivId, url, successCallback) {
   var collectedSample = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: url,
