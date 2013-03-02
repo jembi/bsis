@@ -36,8 +36,8 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     String crossmatchTestDate = form.getCompatibilityTestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
       errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
-          CustomDateFormatter.getErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
     }
-    utilController.commonFieldChecks(form, "CompatibilityTest", errors);
+    utilController.commonFieldChecks(form, "compatibilityTest", errors);
   }
 }

@@ -295,7 +295,7 @@ public class TestResultController {
         testedOn = CustomDateFormatter.getDateTimeFromString(testedOnStr);
     } catch (ParseException e) {
       hasErrors = true;
-      m.put("testedOnError", CustomDateFormatter.getErrorMessage());
+      m.put("testedOnError", CustomDateFormatter.getDateErrorMessage());
       e.printStackTrace();
     }
 

@@ -40,7 +40,7 @@ public class TestResultBackingFormValidator implements Validator {
     String testedOn = form.getTestedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(testedOn))
       errors.rejectValue("testResult.testedOn", "dateFormat.incorrect",
-          CustomDateFormatter.getErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
 
     utilController.commonFieldChecks(form, "testResult", errors);
   }

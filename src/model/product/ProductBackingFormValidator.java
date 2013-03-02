@@ -38,12 +38,12 @@ public class ProductBackingFormValidator implements Validator {
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("product.createdOn", "dateFormat.incorrect",
-          CustomDateFormatter.getErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
     if (!CustomDateFormatter.isDateStringValid(expiresOn))
       errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
-          CustomDateFormatter.getErrorMessage());
+          CustomDateFormatter.getDateErrorMessage());
 
     utilController.commonFieldChecks(form, "product", errors);
   }

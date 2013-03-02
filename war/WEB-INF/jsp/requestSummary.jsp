@@ -181,10 +181,6 @@
 			<button type="button" class="findMatchingProductsButton">
 				Find matching products
 			</button>
-			<button type="button" class="addCompatibilityResultButton">
-				Add compatibility result
-			</button>
-			<br />
 			<button type="button" class="editButton">
 				Edit
 			</button>
@@ -194,11 +190,11 @@
 			<button type="button" class="printButton">
 				Print
 			</button>
-			<br />
+			<button type="button" class="addCompatibilityResultButton">
+				Add compatibility result
+			</button>
 		</div>
 
-		<br />
-		<br />
 		<br />
 		<br />
 
@@ -242,10 +238,10 @@
 						<label>${model.request.requestType.requestType}</label>
 					</div>
 				</c:if>
-				<c:if test="${model.requestFields.requestedQuantity.hidden != true }">
+				<c:if test="${model.requestFields.numUnitsRequested.hidden != true }">
 					<div>
-						<label>${model.requestFields.requestedQuantity.displayName}</label>
-						<label>${model.request.requestedQuantity}</label>
+						<label>${model.requestFields.numUnitsRequested.displayName}</label>
+						<label>${model.request.numUnitsRequested}</label>
 					</div>
 				</c:if>
 				<c:if test="${model.requestFields.volume.hidden != true }">
@@ -314,7 +310,7 @@
 				<c:if test="${model.requestFields.patientAge.hidden != true }">
 					<div>
 						<label>${model.requestFields.patientAge.displayName}</label>
-						<label>${model.request.patientAge}</label>
+						<label>${model.request.patientAge} years</label>
 					</div>
 				</c:if>
 				<c:if test="${model.requestFields.patientDiagnosis.hidden != true }">

@@ -8,7 +8,11 @@ import java.util.Date;
 public class CustomDateFormatter {
 
   public static final String datePattern = "MM/dd/yy"; 
+  public static final String datePatternHumanReadable = "MM/dd/yy"; 
+
   public static final String dateTimePattern = "MM/dd/yy hh:mm:ss a"; 
+  public static final String dateTimePatternHumanReadable = "MM/dd/yy hour:minute:second AM/PM";
+
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
 
@@ -69,8 +73,12 @@ public class CustomDateFormatter {
     return valid;
   }
 
-  public static String getErrorMessage() {
-    return "Invalid Date specified. Use " + datePattern.toLowerCase();
+  public static String getDateErrorMessage() {
+    return "Invalid Date specified. Use " + datePatternHumanReadable.toLowerCase();
+  }
+
+  public static String getDateTimeErrorMessage() {
+    return "Invalid Date specified. Use " + dateTimePatternHumanReadable.toLowerCase();
   }
 
   public static String getDateString(Date date) {

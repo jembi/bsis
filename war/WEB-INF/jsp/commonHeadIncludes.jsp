@@ -1,6 +1,9 @@
 <link type="text/css" rel="stylesheet"
 	href="css/jquery-ui-1.8.16.custom.css" media="all" />
 <link type="text/css"
+	href="plugins/DataTables/media/css/jquery.dataTables.css"
+	rel="stylesheet" media="all" />
+<link type="text/css"
 	href="plugins/DataTables/media/css/jquery.dataTables_themeroller.css"
 	rel="stylesheet" media="all" />
 <!-- link type="text/css" href="css/bootstrap/bootstrap.css"
@@ -14,6 +17,7 @@
 <script type="text/javascript"
 	src="jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>
 <script src="plugins/DataTables/media/js/jquery.dataTables.js"></script>
+
 <script src="plugins/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
 <script src="plugins/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
 <script src="plugins/slidingmessage/jquery.slidingmessage.js"></script>
@@ -32,6 +36,9 @@
 	href="plugins/jqueryui-multiselect/jquery.multiselect.filter.css"
 	rel="Stylesheet" media="all" />
 
+<link type="text/css"
+	href="plugins/DataTables/extras/TableTools/media/css/TableTools.css"
+	rel="Stylesheet" media="all" />
 <link type="text/css"
 	href="plugins/DataTables/extras/TableTools/media/css/TableTools_JUI.css"
 	rel="Stylesheet" media="all" />

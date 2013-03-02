@@ -102,12 +102,12 @@
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
-          maxDate : 0,
+          maxDate : 1,
           dateFormat : "mm/dd/yy",
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
           onSelect : function(selectedDate) {
-            $("#${editRequestFormId}").find(".requiredDate").datepicker("option", "minDate", selectedDate);
+            //$("#${editRequestFormId}").find(".requiredDate").datetimepicker("option", "minDate", selectedDate);
           },
         });
 
@@ -119,14 +119,14 @@
           dateFormat : "mm/dd/yy",
           yearRange : "c-100:c+1",
           onSelect : function(selectedDate) {
-            $("#${editRequestFormId}").find(".requestDate").datepicker("option", "maxDate", selectedDate);
+            //$("#${editRequestFormId}").find(".requestDate").datetimepicker("option", "maxDate", selectedDate);
           },
         });
 
         // second condition required for the case where the form is returned with errors
         var requestedOnDatePicker = $("#${editRequestFormId}").find(".requestDate");
         if ("${model.existingRequest}" == "false" && requestedOnDatePicker.val() == "") {
-          requestedOnDatePicker.datepicker('setDate', new Date());
+          requestedOnDatePicker.datetimepicker('setDate', new Date());
         }
 
         // set the checkboxes if required
@@ -303,11 +303,11 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.requestFields.requestedQuantity.hidden != true }">
+		<c:if test="${model.requestFields.numUnitsRequested.hidden != true }">
 			<div>
-				<form:label path="requestedQuantity">${model.requestFields.requestedQuantity.displayName}</form:label>
-				<form:input path="requestedQuantity" value="${model.existingRequest ? '' : model.requestFields.requestedQuantity.defaultValue}" />
-				<form:errors class="formError" path="request.requestedQuantity" delimiter=", "></form:errors>
+				<form:label path="numUnitsRequested">${model.requestFields.numUnitsRequested.displayName}</form:label>
+				<form:input path="numUnitsRequested" value="${model.existingRequest ? '' : model.requestFields.numUnitsRequested.defaultValue}" />
+				<form:errors class="formError" path="request.numUnitsRequested" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${model.requestFields.requestSite.hidden != true }">

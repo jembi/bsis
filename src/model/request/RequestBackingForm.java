@@ -62,8 +62,8 @@ public class RequestBackingForm {
     return CustomDateFormatter.getDateString(request.getRequiredDate());
   }
 
-  public Integer getRequestedQuantity() {
-    return request.getRequestedQuantity();
+  public Integer getNumUnitsRequested() {
+    return request.getNumUnitsRequested();
   }
 
   public BloodAbo getPatientBloodAbo() {
@@ -138,8 +138,8 @@ public class RequestBackingForm {
     }
   }
 
-  public void setRequestedQuantity(Integer requestedQuantity) {
-    request.setRequestedQuantity(requestedQuantity);
+  public void setNumUnitsRequested(Integer numUnitsRequested) {
+    request.setNumUnitsRequested(numUnitsRequested);
   }
 
   public void setPatientBloodAbo(BloodAbo bloodAbo) {

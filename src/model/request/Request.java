@@ -119,7 +119,7 @@ public class Request implements ModificationTracker {
   private Integer volume;
 
   @Column
-  private Integer requestedQuantity;
+  private Integer numUnitsRequested;
 
   @Lob
   private String notes;
@@ -166,7 +166,7 @@ public class Request implements ModificationTracker {
     this.productType = request.productType;
     this.requestDate = request.requestDate;
     this.requiredDate = request.requiredDate;
-    this.requestedQuantity = request.requestedQuantity;
+    this.numUnitsRequested = request.numUnitsRequested;
     this.notes = request.notes;
   }
 
@@ -186,8 +186,8 @@ public class Request implements ModificationTracker {
     return requiredDate;
   }
 
-  public Integer getRequestedQuantity() {
-    return requestedQuantity;
+  public Integer getNumUnitsRequested() {
+    return numUnitsRequested;
   }
 
   public BloodAbo getPatientBloodAbo() {
@@ -234,8 +234,8 @@ public class Request implements ModificationTracker {
     this.requiredDate = requiredDate;
   }
 
-  public void setRequestedQuantity(Integer requestedQuantity) {
-    this.requestedQuantity = requestedQuantity;
+  public void setNumUnitsRequested(Integer numUnitsRequested) {
+    this.numUnitsRequested = numUnitsRequested;
   }
 
   public void setPatientBloodAbo(BloodAbo patientBloodAbo) {

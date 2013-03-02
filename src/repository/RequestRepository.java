@@ -27,8 +27,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Repository
 @Transactional
 public class RequestRepository {
@@ -325,7 +323,6 @@ public class RequestRepository {
 
   public void issueProductsToRequest(Long requestId, String productsToIssue) throws Exception {
     Request request = findRequestById(requestId);
-    ObjectMapper mapper = new ObjectMapper();
     productsToIssue = productsToIssue.replaceAll("\"", "");
     productsToIssue = productsToIssue.replaceAll("\\[", "");
     productsToIssue = productsToIssue.replaceAll("\\]", "");
@@ -350,7 +347,7 @@ public class RequestRepository {
     }
 
     em.flush();
-    Integer totalVolumeRequested = request.getRequestedQuantity() * request.getVolume();
+    Integer totalVolumeRequested = request.getNumUnitsRequested() * request.getVolume();
     if (totalVolumeIssued >= totalVolumeRequested) {
       request.setFulfilled(true);
       em.merge(request);

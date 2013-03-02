@@ -27,7 +27,7 @@ $(document).ready(
         "bSort" : false,
         "oTableTools" : {
           "sRowSelect" : "single",
-          "aButtons" : [ "print" ],
+          "aButtons" : [],
           "fnRowSelected" : function(node) {
 															$("#${tabContentId}").parent().trigger("testResultSummaryView");
 											        var elements = $(node).children();

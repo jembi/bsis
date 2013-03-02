@@ -356,7 +356,7 @@ public class CreateDataController {
 			}
 			String lastName = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
 			Donor donor = new Donor();
-			donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
+			donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
 			donor.setFirstName(firstName);
 			donor.setLastName(lastName);
 			donor.setGender(gender);

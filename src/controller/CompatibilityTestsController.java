@@ -136,7 +136,7 @@ public class CompatibilityTestsController {
         ex.printStackTrace();
       }
     } else {
-      form.setTestedProduct(null);
+      form.setForRequest(null);
     }
 
     if (result.hasErrors()) {

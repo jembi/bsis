@@ -443,6 +443,7 @@ tr > td
 	width: 220px;
 	margin-left: 10px;
 	display: inline-block;
+	font-size: 0.9em;
 }
 
 .formInTabPane > div > textarea {
@@ -648,4 +649,8 @@ tr > td
 .savedStatusText {
 	color: #75706f;
 	font-style: italic;
+}
+
+.ui-button-text {
+	font-size: 0.9em;
 }

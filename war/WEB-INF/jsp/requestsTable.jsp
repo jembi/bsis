@@ -23,7 +23,7 @@ $(document).ready(
         "sDom" : 'C<"H"lfrT>t<"F"ip>T',
         "oTableTools" : {
           "sRowSelect" : "single",
-          "aButtons" : [ "print" ],
+          "aButtons" : [],
           "fnRowSelected" : function(node) {
 															$("#${tabContentId}").parent().trigger("requestSummaryView");
 											        var elements = $(node).children();
@@ -34,11 +34,9 @@ $(document).ready(
 											        createRequestSummary("requestSummary.html",
 									  							{requestId: selectedRowId});
  													  },
-		  "fnRowDeselected" : function(node) {},
+		  		"fnRowDeselected" : function(node) {},
         },
-        "oColVis" : {
-         	"aiExclude": [0,1],
-        }
+        "sPaginationType" : "full_numbers"
       });
 
       function createRequestSummary(url, data) {

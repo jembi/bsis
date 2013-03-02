@@ -41,8 +41,8 @@ public class RequestViewModel {
     return CustomDateFormatter.getDateString(request.getRequiredDate());
   }
 
-  public Integer getRequestedQuantity() {
-    return request.getRequestedQuantity();
+  public Integer getNumUnitsRequested() {
+    return request.getNumUnitsRequested();
   }
 
   public BloodAbo getPatientBloodAbo() {
@@ -132,9 +132,9 @@ public class RequestViewModel {
   }
 
   public Integer getTotalVolumeRequested() {
-    if (request.getVolume() == null || request.getRequestedQuantity() == null)
+    if (request.getVolume() == null || request.getNumUnitsRequested() == null)
       return 0;
-    Integer totalVolumeRequested = request.getVolume() * request.getRequestedQuantity();
+    Integer totalVolumeRequested = request.getVolume() * request.getNumUnitsRequested();
     return totalVolumeRequested;
   }
 

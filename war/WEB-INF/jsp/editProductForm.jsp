@@ -81,7 +81,7 @@
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
-          maxDate : 0,
+          maxDate : 1,
           dateFormat : "mm/dd/yy",
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
