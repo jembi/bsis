@@ -108,9 +108,10 @@ public class CompatibilityTestsController {
     String message = "";
 
     Map<String, Object> m = model.asMap();
+    addEditSelectorOptions(m);
 
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
+    // IMPORTANT: Validation code just checks if the ID exists
+    // We still need to store the product as part of the compatibility test
     String productNumber = form.getProductNumber();
     if (productNumber != null && !productNumber.isEmpty()) {
       try {
@@ -124,8 +125,8 @@ public class CompatibilityTestsController {
       form.setTestedProduct(null);
     }
 
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the request as part of the crossmatch test.
+    // IMPORTANT: Validation code just checks if the ID exists
+    // We still need to store the request as part of the compatibility test
     String requestNumber = form.getRequestNumber();
     if (requestNumber != null && !requestNumber.isEmpty()) {
       try {

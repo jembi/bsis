@@ -12,6 +12,7 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="editCompatibilityTestFormId">editCompatibilityTestForm-${unique_page_id}</c:set>
+<c:set var="editCompatibilityTestFormCrossmatchTypesId">editCompatibilityTestFormCrossmatchTypes-${unique_page_id}</c:set>
 <c:set var="editCompatibilityTestCompatibilityResultId">editCompatibilityTestCompatibilityResultId-${unique_page_id}</c:set>
 
 <script>
@@ -95,10 +96,11 @@
         }
 
         function addCompatibilityTest() {
+          var data = $("#${editCompatibilityTestFormId}").serialize();
           showLoadingImage($("#${tabContentId}"));
           $.ajax({
             url: "addCompatibilityTestForRequest.html",
-            data: $("#${editCompatibilityTestFormId}").serialize(),
+            data: data,
             type: "POST",
             success: function(response) {
               				 notifyParentSuccess();
@@ -134,7 +136,7 @@
 				<c:if test="${model.compatibilityTestFields.productNumber.hidden != true }">
 					<div>
 						<form:label path="productNumber">${model.compatibilityTestFields.productNumber.displayName}</form:label>
-						<form:input path="productNumber" value="${model.existingCollectedSample ? '' : model.compatibilityTestFields.productNumber.defaultValue}" />
+						<form:input path="productNumber" />
 						<form:errors class="formError"
 							path="compatibilityTest.productNumber" delimiter=", "></form:errors>
 						<form:errors class="formError"
@@ -144,7 +146,7 @@
 				<c:if test="${model.compatibilityTestFields.compatibilityTestDate.hidden != true }">
 					<div>
 						<form:label path="compatibilityTestDate">${model.compatibilityTestFields.compatibilityTestDate.displayName}</form:label>
-						<form:input path="compatibilityTestDate" class="compatibilityTestDate" value="${model.existingCollectedSample ? '' : model.compatibilityTestFields.compatibilityTestDate.defaultValue}" />
+						<form:input path="compatibilityTestDate" class="compatibilityTestDate" />
 						<form:errors class="formError" path="compatibilityTest.compatibilityTestDate"
 							delimiter=", "></form:errors>
 					</div>
@@ -152,7 +154,7 @@
 				<c:if test="${model.crossmatchFields.crossmatchType.hidden != true }">
 					<div>
 						<form:label path="crossmatchType">${model.compatibilityTestFields.crossmatchType.displayName}</form:label>
-						<form:select path="crossmatchType" id="editCompatibilityTestFormCrossmatchTypes-${unique_page_id}" class="crossmatchType">
+						<form:select path="crossmatchType" id="${editCompatibilityTestFormCrossmatchTypesId}" class="crossmatchType">
 							<form:option value="">&nbsp;</form:option>
 							<c:forEach var="crossmatchType" items="${model.crossmatchTypes}">
 								<form:option value="${crossmatchType.id}">${crossmatchType.crossmatchType}</form:option>

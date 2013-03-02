@@ -10,7 +10,7 @@ public enum CompatibilityResult {
        compatibilityResult = CompatibilityResult.valueOf(compatibilityResultStr);
     } catch (IllegalArgumentException ex) {
       ex.printStackTrace();
-      compatibilityResult = CompatibilityResult.OTHER;
+      compatibilityResult = null;
     }
     return compatibilityResult;
   }
