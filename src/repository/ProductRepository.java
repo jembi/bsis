@@ -462,7 +462,7 @@ public class ProductRepository {
                  "p.status = :status AND " +
                  "p.collectedSample.testedStatus = :testedStatus AND " +
                  "((p.bloodAbo = :bloodAbo AND p.bloodRhd = :bloodRhd) OR " +
-                 "(p.bloodAbo = :bloodO)) AND " +
+                 "(p.bloodAbo = :bloodAboO AND p.bloodRhd = :bloodRhdNeg)) AND " +
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
@@ -471,7 +471,8 @@ public class ProductRepository {
     query.setParameter("status", ProductStatus.AVAILABLE);
     query.setParameter("testedStatus", TestedStatus.TESTED);
     query.setParameter("bloodAbo", productRequest.getPatientBloodAbo());
-    query.setParameter("bloodO", BloodAbo.O);
+    query.setParameter("bloodAboO", BloodAbo.O);
+    query.setParameter("bloodRhdNeg", BloodRhd.NEGATIVE);
     query.setParameter("bloodRhd", productRequest.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
