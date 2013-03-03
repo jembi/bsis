@@ -93,11 +93,6 @@
           yearRange : "c-100:c0",
         });
 
-        var usageDatePicker = $("#${editUsageFormId}").find(".usageDate");
-        if ("${model.existingUsage}" == "false" && usageDatePicker.val() == "") {
-          usageDatePicker.datepicker('setDate', new Date());
-        }
-
         if ("${model.existingUsage}" !== "true")
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.usageFields.notes.defaultValue}");
 

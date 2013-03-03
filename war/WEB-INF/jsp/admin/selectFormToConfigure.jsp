@@ -43,7 +43,7 @@
       });
 </script>
 
-<div id="${selectFormToConfigureDivId}" class="">
+<div id="${selectFormToConfigureDivId}" class="formInTabPane">
 
 	<div class="tipsBox ui-state-highlight">
 		<p>
@@ -54,7 +54,7 @@
 	</div>
 
 	<div>
-		<label>Select a Form to Configure</label> <select
+		<label style="width: auto;">Select a Form to Configure</label> <select
 			id="${selectFormToConfigureSelectId}">
 			<option value="Donor">Donor Form</option>
 			<option value="CollectedSample">Collection Form</option>

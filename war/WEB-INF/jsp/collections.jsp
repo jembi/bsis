@@ -20,7 +20,7 @@
 			<a href="editCollectionFormGenerator.html">Add Collection</a>
 		</li>
 		<li id="findCollectionsWorksheet">
-			<a href="findCollectionWorksheetFormGenerator.html">Find worksheet</a>
+			<a href="findCollectionWorksheetFormGenerator.html">Generate worksheet</a>
 		</li>
 	</ul>
 </div>

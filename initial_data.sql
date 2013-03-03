@@ -162,7 +162,7 @@ insert into BloodTest (name, correctResult, allowedResults, isRequired, isDelete
 ('Blood ABO', '', 'A,B,AB,O', '0', '0', ''),
 ('Blood Rh', '', 'POSITIVE,NEGATIVE', '0', '0', '');
 
-insert into Tips (tipsKey, tipsName,tipsContent) values
+insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),
 ('testresults.find', 'Find/Edit Test Results', 'Find Test results by collection number or find tests done between two dates.'),
 ('products.find', 'Find/Edit Products', 'Find Products by collection number/product number/product type.'),
@@ -170,6 +170,7 @@ insert into Tips (tipsKey, tipsName,tipsContent) values
 ('collections.findcollection.collectionsummary', 'Collection Summary', 'Showing details of Collection below. Click on Edit to modify the details of this collection.'),
 ('donors.finddonor', 'Find/Edit Donors', 'Find Donors by donor number or part of donor first name or last name. Filter donors by Blood Group.'),
 ('donors.finddonor.donorsummary', 'Donor Summary', 'View previous donations by this donor by selecting View Donation History. Add a new collection for this donor by selecting Add Collection.'),
+('testresults.worksheet', 'Enter worksheet results', 'Find a generated worksheet and enter test results for collections in that worksheet'),
 ('requests.findpending', 'Find Pending Requests', 'To issue products first find pending requests for a given site by product type. Optionally specify dates to filter requests made on or after Request date and required on or before Required date'),
 ('requests.findpending.requestsummary', 'Request Summary Page', 'Click on Find Matching Products button above to find all available products that are compatible for the given request.'),
 ('requests.findpending.findmatchingproducts', 'Matching Products for request', 'Select the products you want to issue from the table below and then click on Issue button.'),

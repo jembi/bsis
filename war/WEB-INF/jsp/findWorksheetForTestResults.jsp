@@ -60,7 +60,14 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}">
+	<div id="${mainContentId}" class="formInTabPane">
+
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${model['testResults.worksheet']}
+			</p>
+		</div>
+
 		<div class="formDiv">
 			<b>Update worksheet with test results</b>
 			<form class="findWorksheetForm formInTabPane">
@@ -71,7 +78,7 @@ $(document).ready(function() {
 			</form>
 			<div>
 				<label></label>
-				<button class="findWorksheetButton">Find worksheet</button>
+				<button class="findWorksheetButton">Find generated worksheet</button>
 				<!--button class="clearFindFormButton">Clear form</button-->
 			</div>
 			<div class="findWorksheetResults"></div>

@@ -492,6 +492,7 @@ public class TestResultController {
     m.put("bloodTests", bloodTestRepository.getAllBloodTests());
     m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
     m.put("refreshUrl", getUrl(request));
+    utilController.addTipsToModel(m, "testResults.worksheet");
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     mv.addObject("model", m);

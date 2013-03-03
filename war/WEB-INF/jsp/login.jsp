@@ -31,7 +31,7 @@
 	<div class="mainBody">
 		<div class="mainContent">
 			<div id="v2vHeading">
-				<a href="/v2v">Vein-to-Vein</a>
+				<a href="/v2v">VEIN-TO-VEIN</a>
 			</div>
 			<div class="loginPanel">
 				<div class="centralContent">

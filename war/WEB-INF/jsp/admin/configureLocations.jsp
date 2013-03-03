@@ -35,6 +35,7 @@ $(document).ready(function() {
     newDiv.find('input[name="locationName"]').val("");
     newDiv.find('input[name="isCenter"]').removeAttr('checked');
     newDiv.find('input[name="isCollectionSite"]').removeAttr('checked');
+    newDiv.find('input[name="isUsageSite"]').removeAttr('checked');
     $("#${configureLocationsFormId}").append(newDiv);
   });
 
@@ -51,13 +52,14 @@ $(document).ready(function() {
       var locationName = div.find('input[name="locationName"]').val();
       var isCenter = div.find('input[name="isCenter"]').is(":checked");
       var isCollectionSite = div.find('input[name="isCollectionSite"]').is(":checked");
+      var isUsageSite = div.find('input[name="isUsageSite"]').is(":checked");
       data[locationId] = {name: locationName,
           								isCenter: isCenter,
-          								isCollectionSite: isCollectionSite
+          								isCollectionSite: isCollectionSite,
+          								isUsageSite: isUsageSite
           							 };
     }
 
-    console.log(JSON.stringify(data));
     $.ajax({
       url: "configureLocations.html",
       data: {params: JSON.stringify(data)},
@@ -74,11 +76,7 @@ $(document).ready(function() {
     return false;
   });
 
-  $("#${tabContentId}").find(".cancelButton").button({
-    icons : {
-      
-    }
-  }).click(refetchForm);
+  $("#${tabContentId}").find(".cancelButton").button().click(refetchForm);
   
   function refetchForm() {
     refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
@@ -89,7 +87,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
-	<div id="${mainContentId}">
+	<div id="${mainContentId}" class="formInTabPane">
 		<b>Configure Locations</b>
 		<br />
 		<br />
@@ -113,14 +111,23 @@ $(document).ready(function() {
 							<c:if test="${!location.isCenter}">
 								<input type="checkbox" name="isCenter" />
 							</c:if>
-				
-							<label for="isCollectionSite">Collection Site</label>
+
+							<label for="isCollectionSite" style="margin-left: 10px;">Collection Site</label>
 							<c:if test="${location.isCollectionSite}">
 								<input type="checkbox" name="isCollectionSite" checked="checked"/>
 							</c:if>
 							<c:if test="${!location.isCollectionSite}">
 								<input type="checkbox" name="isCollectionSite" />
 							</c:if>
+
+							<label for="isUsageSite" style="margin-left: 10px;">Request/Usage Site</label>
+							<c:if test="${location.isUsageSite}">
+								<input type="checkbox" name="isUsageSite" checked="checked"/>
+							</c:if>
+							<c:if test="${!location.isUsageSite}">
+								<input type="checkbox" name="isUsageSite" />
+							</c:if>
+
 						</div>
 					</div>
 			</c:forEach>

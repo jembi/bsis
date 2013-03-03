@@ -36,7 +36,7 @@ $(document).ready(function() {
 		</div-->
 		<br />
 		<br />
-		<button class="backupDataButton">Backup the V2V Database</button>
+		<button class="backupDataButton" style="margin-left: 50px;">Backup the V2V Database</button>
 	</div>
 	<div id="${childContentId}">
 	</div>

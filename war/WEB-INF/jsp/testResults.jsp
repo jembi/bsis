@@ -14,13 +14,13 @@
 <div id="testResultsTab" class="leftPanel tabs">
 	<ul>
 		<li id="findOrAddTestResultsContent">
-			<a href="findTestResultFormGenerator.html">Find/Edit Tests</a>
+			<a href="findTestResultFormGenerator.html">Find/Edit Test Results</a>
 		</li>
 		<li id="addTestResultsContent">
 			<a href="addAllTestResultsFormGenerator.html">Add Test Results</a>
 		</li>
 		<li id="addTestResultsForWorksheet">
-			<a href="worksheetForTestResultsFormGenerator.html">Edit Worksheet</a>
+			<a href="worksheetForTestResultsFormGenerator.html">Enter worksheet results</a>
 		</li>
 	</ul>
 </div>
