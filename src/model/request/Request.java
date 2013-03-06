@@ -34,6 +34,7 @@ import model.util.BloodGroup;
 import model.util.BloodRhd;
 import model.util.Gender;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -332,6 +333,8 @@ public class Request implements ModificationTracker {
   }
 
   public void setPatientFirstName(String patientFirstName) {
+    if (patientFirstName == null)
+      patientFirstName = WordUtils.capitalize(patientFirstName);
     this.patientFirstName = patientFirstName;
   }
 
@@ -340,6 +343,8 @@ public class Request implements ModificationTracker {
   }
 
   public void setPatientLastName(String patientLastName) {
+    if (patientLastName == null)
+      patientLastName = WordUtils.capitalize(patientLastName);
     this.patientLastName = patientLastName;
   }
 

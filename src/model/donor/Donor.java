@@ -25,6 +25,7 @@ import model.util.BloodAbo;
 import model.util.BloodRhd;
 import model.util.Gender;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -145,14 +146,20 @@ public class Donor implements ModificationTracker {
   }
 
   public void setFirstName(String firstName) {
+    if (firstName != null)
+      firstName = WordUtils.capitalize(firstName);
     this.firstName = firstName;
   }
 
   public void setMiddleName(String middleName) {
+    if (middleName != null)
+      middleName = WordUtils.capitalize(middleName);
     this.middleName = middleName;
   }
 
   public void setLastName(String lastName) {
+    if (lastName != null)
+      lastName = WordUtils.capitalize(lastName);
     this.lastName = lastName;
   }
 
