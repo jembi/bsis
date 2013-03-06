@@ -45,6 +45,10 @@ public class RequestViewModel {
     return request.getNumUnitsRequested();
   }
 
+  public Integer getNumUnitsIssued() {
+    return request.getNumUnitsIssued();
+  }
+
   public BloodAbo getPatientBloodAbo() {
     return request.getPatientBloodAbo();
   }
@@ -85,12 +89,6 @@ public class RequestViewModel {
     return request.hashCode();
   }
 
-  public Integer getIssuedQuantity() {
-    if (request == null || request.getIssuedProducts() == null)
-      return 0;
-    return request.getIssuedProducts().size();
-  }
-
   public String getPatientFirstName() {
     return request.getPatientFirstName();
   }
@@ -125,33 +123,6 @@ public class RequestViewModel {
 
   public String getRequestedBy() {
     return request.getRequestedBy();
-  }
-
-  public Integer getVolume() {
-    return request.getVolume();
-  }
-
-  public Integer getTotalVolumeRequested() {
-    if (request.getVolume() == null || request.getNumUnitsRequested() == null)
-      return 0;
-    Integer totalVolumeRequested = request.getVolume() * request.getNumUnitsRequested();
-    return totalVolumeRequested;
-  }
-
-  public Integer getTotalVolumeIssued() {
-    if (request.getIssuedProducts() == null)
-      return 0;
-    Integer totalVolumeIssued = 0;
-    for (Product p : request.getIssuedProducts()) {
-      if (p.getProductVolume() == null)
-        continue;
-      totalVolumeIssued = totalVolumeIssued + p.getProductVolume();
-    }
-    return totalVolumeIssued;
-  }
-
-  public Integer getTotalVolumePending() {
-    return getTotalVolumeRequested() - getTotalVolumeIssued();
   }
 
   public String getWard() {

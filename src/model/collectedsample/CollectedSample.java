@@ -1,5 +1,6 @@
 package model.collectedsample;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
+import model.donationBatch.DonationBatch;
 import model.donor.Donor;
 import model.donor.DonorExists;
 import model.donortype.DonorType;
@@ -90,6 +92,21 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Valid
   private RowModificationTracker modificationTracker;
+
+  @Column(precision=6, scale=2)
+  private BigDecimal haemoglobinCount;
+
+  @Column(precision=6, scale=2)
+  private BigDecimal bloodPressure;
+
+  @Column(precision=6, scale=2)
+  private BigDecimal donorWeight;
+
+  @ManyToOne(optional=true)
+  private User donationCreatedBy;
+
+  @ManyToOne(optional=true)
+  private DonationBatch donationBatch;
 
   @Lob
   private String notes;
@@ -292,5 +309,45 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setTestedStatus(TestedStatus testedStatus) {
     this.testedStatus = testedStatus;
+  }
+
+  public BigDecimal getHaemoglobinCount() {
+    return haemoglobinCount;
+  }
+
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+    this.haemoglobinCount = haemoglobinCount;
+  }
+
+  public BigDecimal getBloodPressure() {
+    return bloodPressure;
+  }
+
+  public void setBloodPressure(BigDecimal bloodPressure) {
+    this.bloodPressure = bloodPressure;
+  }
+
+  public BigDecimal getDonorWeight() {
+    return donorWeight;
+  }
+
+  public void setDonorWeight(BigDecimal donorWeight) {
+    this.donorWeight = donorWeight;
+  }
+
+  public DonationBatch getDonationBatch() {
+    return donationBatch;
+  }
+
+  public void setDonationBatch(DonationBatch donationBatch) {
+    this.donationBatch = donationBatch;
+  }
+
+  public User getDonationCreatedBy() {
+    return donationCreatedBy;
+  }
+
+  public void setDonationCreatedBy(User donationCreatedBy) {
+    this.donationCreatedBy = donationCreatedBy;
   }
 }

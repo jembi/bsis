@@ -47,7 +47,6 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Product', 'status', 'Status', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Product', 'age', 'Age', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'productVolume', 'Product Volume', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'issuedTo', 'Issued to request', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'issuedBy', 'Issued by', '', '0', '0', '0', '0', '0', '', 0),
@@ -72,10 +71,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'numUnitsRequested', 'No. of Units Requested', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'volume', 'Unit Volume', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'totalVolumeRequested', 'Total volume requested', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'totalVolumeIssued', 'Total volume issued', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'totalVolumePending', 'Total volume pending', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', '0', '0', '0', '', 0),
+('Request', 'numUnitsIssued', 'No. of units Issued', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
@@ -119,10 +115,11 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Usage', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
 ('Usage', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
-insert into DonorType (donorType, isDeleted) values
-('Voluntary', '0'),
-('Family', '0'),
-('Other', '0');
+insert into DonorType (donorType, isHidden, isDeleted) values
+('Voluntary', '0', '0'),
+('Family', '0', '0'),
+('Autologous', '0', '0'),
+('Other', '0', '0');
 
 insert into RequestType (requestType, description, isDeleted) values
 ('Emergency', '', '0'),
@@ -180,6 +177,10 @@ insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.collections.testresultsreport', 'Test Results Report', 'Track TTI numbers by collection site and collection center done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
 ('usage.addusage', 'Add Usage Form', 'Record usage of a product within a hospital. Optionally specify Hospital name, ward, patient name.');
 
+insert into CrossmatchType (crossmatchType, isDeleted) values
+('Saline @ 37 degrees', '0'),
+('Anti Human Globulin', '0');
+
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("rowHeight", "30", "collectionsWorksheet"),
 ("columnWidth", "100", "collectionsWorksheet"),
@@ -190,12 +191,8 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("HIV", "true", "collectionsWorksheet"),
 ("HBV", "true", "collectionsWorksheet"),
 ("HCV", "true", "collectionsWorksheet"),
-("Syphilis", "true", "collectionsWorksheet");
-
-insert into ProductVolume (volume, unit, description, isDeleted) values
-('450', 'ml', '', '0'),
-('1350', 'ml', '', '0');
-
-insert into CrossmatchType (crossmatchType, isDeleted) values
-('Saline @ 37 degrees', '0'),
-('Anti Human Globulin', '0');
+("Syphilis", "true", "collectionsWorksheet"),
+("haemoglobinUnit", "g/dL", "measurementUnit"),
+("bloodPressureUnit", "mmHg", "measurementUnit"),
+("minimumAge", "16", "donationRequirements"),
+("maximumAge", "65", "donationRequirements");

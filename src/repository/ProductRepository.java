@@ -95,6 +95,8 @@ public class ProductRepository {
       }
     }
 
+    System.out.println("safe: " + safe);
+
     if (safe) {
       if (allTestsDone) {
         if (product.getExpiresOn().before(new Date()))

@@ -33,7 +33,6 @@ import model.bloodtest.BloodTest;
 import model.compatibility.CrossmatchType;
 import model.donortype.DonorType;
 import model.producttype.ProductType;
-import model.productvolume.ProductVolume;
 import model.requesttype.RequestType;
 import model.tips.Tips;
 
@@ -56,7 +55,6 @@ import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
-import repository.ProductVolumeRepository;
 import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
@@ -89,9 +87,6 @@ public class AdminController {
 
   @Autowired
   CrossmatchTypeRepository crossmatchTypesRepository;
-
-  @Autowired
-  ProductVolumeRepository productVolumesRepository;
 
   @Autowired
   TipsRepository tipsRepository;
@@ -295,19 +290,6 @@ public class AdminController {
     return mv;
   }
 
-  @RequestMapping(value="/configureProductVolumesFormGenerator", method=RequestMethod.GET)
-  public ModelAndView configureProductVolumesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
-
-    ModelAndView mv = new ModelAndView("admin/configureProductVolumes");
-    Map<String, Object> m = model.asMap();
-    addAllProductVolumesToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
-  }
-
   @RequestMapping(value="/configureBloodBagTypesFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureBloodBagTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
@@ -417,10 +399,6 @@ public class AdminController {
 
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
     m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
-  }
-
-  private void addAllProductVolumesToModel(Map<String, Object> m) {
-    m.put("allProductVolumes", productVolumesRepository.getAllProductVolumes());
   }
 
   private void addAllTipsToModel(Map<String, Object> m) {
@@ -561,42 +539,6 @@ public class AdminController {
     Map<String, Object> m = model.asMap();
     addAllCrossmatchTypesToModel(m);
     m.put("refreshUrl", "configureCrossmatchTypesFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping("/configureProductVolumes")
-  public ModelAndView configureProductVolumes(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureProductVolumes");
-    System.out.println(paramsAsJson);
-    List<ProductVolume> allProductVolumes = new ArrayList<ProductVolume>();
-    try {
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        String productVolume = (String) params.get(id);
-        ProductVolume pv = new ProductVolume();
-        try {
-          pv.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          ex.printStackTrace();
-          pv.setId(null);
-        }
-        pv.setVolume(Integer.parseInt(productVolume));
-        pv.setIsDeleted(false);
-        allProductVolumes.add(pv);
-      }
-      productVolumesRepository.saveAllProductVolumes(allProductVolumes);
-      System.out.println(params);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
-    Map<String, Object> m = model.asMap();
-    addAllProductVolumesToModel(m);
-    m.put("refreshUrl", "configureProductVolumesFormGenerator.html");
     mv.addObject("model", model);
     return mv;
   }

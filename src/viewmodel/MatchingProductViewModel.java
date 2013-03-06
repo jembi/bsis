@@ -116,11 +116,4 @@ public class MatchingProductViewModel {
       return CompatibilityResult.NOT_KNOWN.toString();
     return compatibilityTest.getCompatibilityResult().toString();
   }
-
-  public String getProductVolume() {
-    if (product.getProductVolume() == null)
-      return "";
-    else
-      return product.getProductVolume().toString();
-  }
 }

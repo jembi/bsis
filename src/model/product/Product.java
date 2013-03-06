@@ -74,6 +74,9 @@ public class Product implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
 
+  @ManyToOne
+  private User issuedBy;
+  
   @ManyToOne(fetch=FetchType.LAZY)
   private Request issuedTo;
 
@@ -83,8 +86,8 @@ public class Product implements ModificationTracker {
   @Column(length=100)
   private String discardReason;
 
-  @Column(length=30)
-  private String discardedBy;
+  @ManyToOne
+  private User discardedBy;
   
   @Temporal(TemporalType.TIMESTAMP)
   private Date returnedOn;
@@ -94,8 +97,6 @@ public class Product implements ModificationTracker {
 
   @Column(length=30)
   private String returnedBy;
-
-  private Integer productVolume;
   
   @Enumerated(EnumType.STRING)
   @Column(length=30)
@@ -123,7 +124,6 @@ public class Product implements ModificationTracker {
     this.productType = product.productType;
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
-    this.productVolume = product.productVolume;
     this.notes = product.notes;
   }
 
@@ -309,19 +309,11 @@ public class Product implements ModificationTracker {
     this.returnReason = returnReason;
   }
 
-  public Integer getProductVolume() {
-    return productVolume;
-  }
-
-  public void setProductVolume(Integer productVolume) {
-    this.productVolume = productVolume;
-  }
-
-  public String getDiscardedBy() {
+  public User getDiscardedBy() {
     return discardedBy;
   }
 
-  public void setDiscardedBy(String discardedBy) {
+  public void setDiscardedBy(User discardedBy) {
     this.discardedBy = discardedBy;
   }
 
@@ -331,5 +323,13 @@ public class Product implements ModificationTracker {
 
   public void setReturnedBy(String returnedBy) {
     this.returnedBy = returnedBy;
+  }
+
+  public User getIssuedBy() {
+    return issuedBy;
+  }
+
+  public void setIssuedBy(User issuedBy) {
+    this.issuedBy = issuedBy;
   }
 }

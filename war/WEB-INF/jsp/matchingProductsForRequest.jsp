@@ -149,9 +149,6 @@ $(document).ready(
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.productVolume.hidden != true}">
-							<th>${model.productFields.productVolume.displayName}</th>
-						</c:if>
 						<th>${model.compatibilityTestFields.compatibilityResult.displayName}</th>
 					</tr>
 				</thead>
@@ -181,9 +178,6 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
-							</c:if>
-							<c:if test="${model.productFields.productVolume.hidden != true}">
-								<td>${product.productVolume} ml</td>
 							</c:if>
 							<td>${product.isCompatible}</td>
 						</tr>

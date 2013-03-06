@@ -58,6 +58,8 @@ public class ProductUsage implements ModificationTracker {
 
   private Boolean isAvailable;
 
+  private String usedBy;
+
   public ProductUsage() {
     modificationTracker = new RowModificationTracker();
   }
@@ -194,5 +196,13 @@ public class ProductUsage implements ModificationTracker {
     if (product == null)
       return null;
     return product.getProductNumber();
+  }
+
+  public String getUsedBy() {
+    return usedBy;
+  }
+
+  public void setUsedBy(String usedBy) {
+    this.usedBy = usedBy;
   }
 }

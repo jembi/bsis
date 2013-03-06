@@ -1,4 +1,160 @@
 
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33A49787C4;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D04A4456;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33AED1731E;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33B29562D0;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A3359FAB30D;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A337A1B99A7;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D0AFB367;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33675D568F;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A331D73927B;
+
+    alter table CollectedSample_CollectionsWorksheet 
+        drop 
+        foreign key FKB39FFD85225909B3;
+
+    alter table CollectedSample_CollectionsWorksheet 
+        drop 
+        foreign key FKB39FFD85C02466CD;
+
+    alter table CollectionsWorksheet 
+        drop 
+        foreign key FK72E3FEF9A49787C4;
+
+    alter table CollectionsWorksheet 
+        drop 
+        foreign key FK72E3FEF9D0AFB367;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602A49787C4;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602D4061B9F;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602EFD1FE7;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602D0AFB367;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK927986028631CA7D;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46A49787C4;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46D0AFB367;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFA49787C4;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF994002DF;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF32E145A;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF73AC2B90;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFFDFE9E0F;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF9F8F75E1;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFD0AFB367;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212A49787C4;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212A8E71476;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212D0AFB367;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6FA49787C4;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F1520E0D;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F73AC2B90;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F537AAD30;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6FD0AFB367;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FA49787C4;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F32E145A;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F3A6D02C3;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FD0AFB367;
+
     drop table if exists BloodBagType;
 
     drop table if exists BloodTest;
@@ -12,6 +168,8 @@
     drop table if exists CompatibilityTest;
 
     drop table if exists CrossmatchType;
+
+    drop table if exists DonationBatch;
 
     drop table if exists Donor;
 
@@ -30,8 +188,6 @@
     drop table if exists ProductType;
 
     drop table if exists ProductUsage;
-
-    drop table if exists ProductVolume;
 
     drop table if exists Request;
 
@@ -64,8 +220,11 @@
 
     create table CollectedSample (
         id bigint not null auto_increment,
+        bloodPressure decimal(6,2),
         collectedOn datetime,
         collectionNumber varchar(30),
+        donorWeight decimal(6,2),
+        haemoglobinCount decimal(6,2),
         isDeleted boolean,
         createdDate datetime,
         lastUpdated datetime,
@@ -76,6 +235,8 @@
         bloodBagType_id integer,
         collectionCenter_id bigint,
         collectionSite_id bigint,
+        donationBatch_id bigint,
+        donationCreatedBy_id bigint,
         donor_id bigint,
         donorType_id integer,
         createdBy_id bigint,
@@ -120,6 +281,15 @@
         id integer not null auto_increment,
         crossmatchType varchar(255),
         isDeleted boolean,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table DonationBatch (
+        id bigint not null auto_increment,
+        batchNumber varchar(30),
+        collectionNumberBegin varchar(30),
+        collectionNumberEnd varchar(255),
+        notes longtext,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -208,7 +378,6 @@
         bloodRhd varchar(30),
         createdOn datetime,
         discardReason varchar(100),
-        discardedBy varchar(30),
         discardedOn datetime,
         expiresOn datetime,
         isDeleted boolean,
@@ -217,12 +386,13 @@
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(30),
-        productVolume integer,
         returnReason varchar(100),
         returnedBy varchar(30),
         returnedOn datetime,
         status varchar(30),
         collectedSample_id bigint,
+        discardedBy_id bigint,
+        issuedBy_id bigint,
         issuedTo_id bigint,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -251,19 +421,11 @@
         patientName varchar(30),
         usageDate datetime,
         useIndication varchar(30),
+        usedBy varchar(255),
         ward varchar(30),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         product_id bigint,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ProductVolume (
-        id integer not null auto_increment,
-        description longtext,
-        isDeleted boolean,
-        unit varchar(6),
-        volume integer,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -277,6 +439,7 @@
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
+        numUnitsIssued integer,
         numUnitsRequested integer,
         patientAge integer,
         patientBirthDate date,
@@ -291,7 +454,6 @@
         requestNumber varchar(30),
         requestedBy varchar(30),
         requiredDate datetime,
-        volume integer,
         ward varchar(20),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -370,6 +532,12 @@
         references User (id);
 
     alter table CollectedSample 
+        add index FKF0658A33D04A4456 (donationCreatedBy_id), 
+        add constraint FKF0658A33D04A4456 
+        foreign key (donationCreatedBy_id) 
+        references User (id);
+
+    alter table CollectedSample 
         add index FKF0658A33AED1731E (collectionSite_id), 
         add constraint FKF0658A33AED1731E 
         foreign key (collectionSite_id) 
@@ -398,6 +566,12 @@
         add constraint FKF0658A33D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table CollectedSample 
+        add index FKF0658A33675D568F (donationBatch_id), 
+        add constraint FKF0658A33675D568F 
+        foreign key (donationBatch_id) 
+        references DonationBatch (id);
 
     alter table CollectedSample 
         add index FKF0658A331D73927B (bloodBagType_id), 
@@ -514,6 +688,18 @@
         add constraint FK50C664CF73AC2B90 
         foreign key (productType_id) 
         references ProductType (id);
+
+    alter table Product 
+        add index FK50C664CFFDFE9E0F (discardedBy_id), 
+        add constraint FK50C664CFFDFE9E0F 
+        foreign key (discardedBy_id) 
+        references User (id);
+
+    alter table Product 
+        add index FK50C664CF9F8F75E1 (issuedBy_id), 
+        add constraint FK50C664CF9F8F75E1 
+        foreign key (issuedBy_id) 
+        references User (id);
 
     alter table Product 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 

@@ -327,7 +327,9 @@ public class RequestRepository {
     productsToIssue = productsToIssue.replaceAll("\\[", "");
     productsToIssue = productsToIssue.replaceAll("\\]", "");
     String[] productIds = productsToIssue.split(",");
-    int totalVolumeIssued = getTotalVolumeIssued(request);
+    int numUnitsIssued = 0;
+    if (request.getNumUnitsIssued() != null)
+      numUnitsIssued = request.getNumUnitsIssued();
     for (String productId : productIds) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
@@ -336,7 +338,7 @@ public class RequestRepository {
       if (canIssueProduct(product, request)) {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
-        totalVolumeIssued = totalVolumeIssued + product.getProductVolume();
+        numUnitsIssued++;
         productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
         em.merge(product);
@@ -347,22 +349,12 @@ public class RequestRepository {
     }
 
     em.flush();
-    Integer totalVolumeRequested = request.getNumUnitsRequested() * request.getVolume();
-    if (totalVolumeIssued >= totalVolumeRequested) {
+    Integer numUnitsRequested = request.getNumUnitsRequested();
+    if (numUnitsRequested != null && numUnitsIssued >= numUnitsRequested) {
       request.setFulfilled(true);
       em.merge(request);
     }
     em.flush();
-  }
-
-  private Integer getTotalVolumeIssued(Request request) {
-    Integer totalVolumeIssued = 0;
-    for (Product product : request.getIssuedProducts()) {
-      if (product.getProductVolume() == null)
-        continue;
-      totalVolumeIssued = totalVolumeIssued + product.getProductVolume();
-    }
-    return totalVolumeIssued;
   }
 
   private boolean canIssueProduct(Product product, Request request) {

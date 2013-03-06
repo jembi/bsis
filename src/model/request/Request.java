@@ -116,10 +116,10 @@ public class Request implements ModificationTracker {
   private String requestedBy;
 
   @Column
-  private Integer volume;
+  private Integer numUnitsRequested;
 
   @Column
-  private Integer numUnitsRequested;
+  private Integer numUnitsIssued;
 
   @Lob
   private String notes;
@@ -143,6 +143,7 @@ public class Request implements ModificationTracker {
 
   public Request() {
     modificationTracker = new RowModificationTracker();
+    numUnitsIssued = 0;
   }
 
   public void copy(Request request) {
@@ -161,12 +162,12 @@ public class Request implements ModificationTracker {
     this.patientDiagnosis = request.patientDiagnosis;
     this.patientGender = request.patientGender;
     this.ward = request.ward;
-    this.volume = request.volume;
     this.patientNumber = request.patientNumber;
     this.productType = request.productType;
     this.requestDate = request.requestDate;
     this.requiredDate = request.requiredDate;
     this.numUnitsRequested = request.numUnitsRequested;
+    this.numUnitsIssued = request.numUnitsIssued;
     this.notes = request.notes;
   }
 
@@ -406,14 +407,6 @@ public class Request implements ModificationTracker {
     this.requestedBy = requestedBy;
   }
 
-  public Integer getVolume() {
-    return volume;
-  }
-
-  public void setVolume(Integer volume) {
-    this.volume = volume;
-  }
-
   public RequestType getRequestType() {
     return requestType;
   }
@@ -436,5 +429,13 @@ public class Request implements ModificationTracker {
 
   public void setIndicationForUse(String indicationForUse) {
     this.indicationForUse = indicationForUse;
+  }
+
+  public Integer getNumUnitsIssued() {
+    return numUnitsIssued;
+  }
+
+  public void setNumUnitsIssued(Integer numUnitsIssued) {
+    this.numUnitsIssued = numUnitsIssued;
   }
 }

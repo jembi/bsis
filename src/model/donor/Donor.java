@@ -75,7 +75,7 @@ public class Donor implements ModificationTracker {
 
   @Valid
   private ContactInformation contactInformation;
-  
+
   @Lob
 	private String notes;
 

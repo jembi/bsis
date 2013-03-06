@@ -14,7 +14,6 @@
 
 <c:set var="editRequestFormBloodGroupSelectorId">editRequestFormBloodGroupSelectorId-${unique_page_id}</c:set>
 <c:set var="editRequestFormProductTypeSelectorId">editRequestFormProductTypeSelectorId-${unique_page_id}</c:set>
-<c:set var="editRequestFormVolumeSelectorId">editRequestFormVolumeSelectorId-${unique_page_id}</c:set>
 <c:set var="editRequestFormRequestTypeSelectorId">editRequestFormRequestTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="editRequestFormRequestSiteSelectorId">editRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
 
@@ -75,12 +74,6 @@
         });
 
         $("#${editRequestFormId}").find(".productType").multiselect({
-          multiple : false,
-          selectedList : 1,
-          header : false
-        });
-
-        $("#${editRequestFormId}").find(".volume").multiselect({
           multiple : false,
           selectedList : 1,
           header : false
@@ -166,7 +159,6 @@
         	setDefaultValueForSelector(getBloodGroupSelector(), "${model.requestFields.bloodGroup.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.requestFields.productType.defaultValue}");
         	setDefaultValueForSelector(getRequestTypeSelector(), "${model.requestFields.requestType.defaultValue}");
-        	setDefaultValueForSelector(getRequestVolumeSelector(), "${model.requestFields.volume.defaultValue}");
         	setDefaultValueForSelector(getRequestSiteSelector(), "${model.requestFields.requestSite.defaultValue}");
           copyMirroredFields("${tabContentId}", JSON.parse('${model.requestFields.mirroredFields}'));
         }
@@ -187,10 +179,6 @@
           return $("#${tabContentId}").find('select[name="requestSite"]').multiselect();
         }
         
-        function getRequestVolumeSelector() {
-          return $("#${tabContentId}").find('select[name="volume"]').multiselect();
-        }
-
         function updateBarcode(val) {
           if (val === null || val === undefined || val === "")
             val = "-";
@@ -285,21 +273,6 @@
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="request.productType"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${model.requestFields.volume.hidden != true }">
-			<div>
-				<form:label path="volume">${model.requestFields.volume.displayName}</form:label>
-				<form:select path="volume"
-				             id="${editRequestFormVolumeSelectorId}"
-										 class="volume">
-					<form:option value="">&nbsp;</form:option>
-					<c:forEach var="productVolume" items="${model.productVolumes}">
-						<form:option value="${productVolume.volume}">${productVolume.volume} ${productVolume.unit}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="request.volume"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>

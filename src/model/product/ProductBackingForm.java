@@ -264,12 +264,4 @@ public class ProductBackingForm {
   public void setStatus(String status) {
     product.setStatus(ProductStatus.valueOf(status));
   }
-
-  public Integer getProductVolume() {
-    return product.getProductVolume();
-  }
-
-  public void setProductVolume(Integer productVolume) {
-    product.setProductVolume(productVolume);
-  }
 }

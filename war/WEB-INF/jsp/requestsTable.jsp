@@ -101,11 +101,11 @@ $(document).ready(
 						<c:if test="${model.requestFields.productType.hidden != true}">
 							<th>${model.requestFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.totalVolumeRequested.hidden != true}">
-							<th>${model.requestFields.totalVolumeRequested.displayName}</th>
+						<c:if test="${model.requestFields.numUnitsRequested.hidden != true}">
+							<th>${model.requestFields.numUnitsRequested.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.totalVolumeIssued.hidden != true}">
-							<th>${model.requestFields.totalVolumeIssued.displayName}</th>
+						<c:if test="${model.requestFields.numUnitsIssued.hidden != true}">
+							<th>${model.requestFields.numUnitsIssued.displayName}</th>
 						</c:if>
 						<c:if test="${model.requestFields.requestSite.hidden != true}">
 							<th>${model.requestFields.requestSite.displayName}</th>
@@ -128,11 +128,11 @@ $(document).ready(
 							<c:if test="${model.requestFields.productType.hidden != true}">
 								<td>${request.productType.productType}</td>
 							</c:if>
-							<c:if test="${model.requestFields.totalVolumeRequested.hidden != true}">
-								<td>${request.totalVolumeRequested} ml</td>
+							<c:if test="${model.requestFields.numUnitsRequested.hidden != true}">
+								<td>${request.numUnitsRequested} ml</td>
 							</c:if>
-							<c:if test="${model.requestFields.totalVolumeIssued.hidden != true}">
-								<td>${request.totalVolumeIssued} ml</td>
+							<c:if test="${model.requestFields.numUnitsIssued.hidden != true}">
+								<td>${request.numUnitsIssued} ml</td>
 							</c:if>
 							<c:if test="${model.requestFields.requestSite.hidden != true}">
 								<td>${request.requestSite}</td>
