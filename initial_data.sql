@@ -115,11 +115,11 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Usage', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
 ('Usage', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
-insert into DonorType (donorType, isHidden, isDeleted) values
-('Voluntary', '0', '0'),
-('Family', '0', '0'),
-('Autologous', '0', '0'),
-('Other', '0', '0');
+insert into DonorType (donorType, isDeleted) values
+('Voluntary', '0'),
+('Family', '0'),
+('Autologous', '0'),
+('Other', '0');
 
 insert into RequestType (requestType, description, isDeleted) values
 ('Emergency', '', '0'),
