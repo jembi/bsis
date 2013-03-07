@@ -172,7 +172,7 @@ function generateInventoryChart(options) {
  
   var seriesData = parseInventoryData(options.data);
 
-  var categories = ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"];
+  var categories = ["Unknown", "A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"];
   var title = 'Product Inventory';
   var subtitle = options.subtitle;
 
