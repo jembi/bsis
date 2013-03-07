@@ -12,6 +12,7 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
+<c:set var="inventoryReportCenterSelectorId">inventoryReportCenterSelector-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -21,27 +22,42 @@
           return $("#${mainContentId}").find(".productStatusSelector");
         }
 
+        function getCollectionCenterSelector() {
+          return $("#${mainContentId}").find(".collectionCenterSelector");
+        }
+
         getProductStatusSelector().multiselect({
       	  position : {
       	    my : 'left top',
       	    at : 'right center'
       	  },
-      	  //header: false,
       	  minWidth: 250,
       	  noneSelectedText: 'None selected',
-      	  //click: function(e) {
-      		//	 if( $(this).multiselect("widget").find("input:checked").length == 0 ){
-          //   	 return false;
-      		//	 }
-      		// },
       	  selectedText: function(numSelected, numTotal, selectedValues) {
      										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
      										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
       	  							}
-
       	});
 
         getProductStatusSelector().multiselect("checkAll");
+
+        getCollectionCenterSelector().multiselect({
+      	  position : {
+      	    my : 'left top',
+      	    at : 'right center'
+      	  },
+      	  minWidth: 250,
+      	  noneSelectedText: 'None selected',
+      	  selectedText: function(numSelected, numTotal, selectedValues) {
+      	    							if (numSelected == numTotal) {
+      	    							  return "All Collection Centers";
+      	    							}
+     										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+     										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
+      	  							}
+      	});
+
+        getCollectionCenterSelector().multiselect("checkAll");
 
         $("#${tabContentId}").find(".generateInventoryReportButton").button({
           icons: {
@@ -53,11 +69,19 @@
             return this.value;	
          	}).get();
 
+         	var collectionCenters = getCollectionCenterSelector().multiselect("getChecked").map(function(){
+            return this.value;	
+         	}).get();
+
+         	console.log(collectionCenters);
+
           showLoadingImage($("#${childContentId}"));
           $.ajax({
             url: "generateInventoryReport.html",
             type: "GET",
-            data: {status: status.join("|")},
+            data: {status: status.join("|"),
+              		 centers: collectionCenters.join("|")
+              		},
             success: function(responseData) {
               				 showMessage("Inventory Report successfully generated");
               	        generateInventoryChart({
@@ -98,6 +122,14 @@
 					<select class="productStatusSelector">
 						<option value="QUARANTINED">Quarantined</option>
 						<option value="AVAILABLE">Available</option>
+					</select>
+			</div>
+			<div>
+					<label>Center</label>
+					<select id="${inventoryReportCenterSelectorId}" class="collectionCenterSelector">
+					<c:forEach var="center" items="${model.centers}">
+						<option value="${center.id}">${center.name}</option>
+					</c:forEach>
 					</select>
 			</div>
 			</form>

@@ -1,6 +1,7 @@
 package controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -107,19 +108,31 @@ public class ReportsController {
     ModelAndView mv = new ModelAndView("inventoryReportForm");
     utilController.addTipsToModel(model.asMap(), "report.inventory.generate");
     utilController.addTipsToModel(model.asMap(), "report.inventory.productinventorychart");
-    mv.addObject("model", model);
+    Map<String, Object> m = model.asMap();
+    m.put("centers", locationRepository.getAllCenters());
+    mv.addObject("model", m);
     return mv;
   }
 
   @RequestMapping(value="/generateInventoryReport", method=RequestMethod.GET)
   public @ResponseBody Map<String, Object> generateInventoryReport(
                   HttpServletRequest request, HttpServletResponse response,
-                  @RequestParam(value="status") String status
+                  @RequestParam(value="status") String status,
+                  @RequestParam(value="centers") String centers
                   ) {
+
     List<String> productStatuses = Arrays.asList(status.split("\\|"));
+    List<String> centerIds = Arrays.asList(centers.split("\\|"));
+
+    List<Long> centerIdsLong = new ArrayList<Long>();
+    for (String centerId : centerIds) {
+      centerIdsLong.add(Long.parseLong(centerId));
+    }
+
     Map<String, Object> data = null;
+
     try {
-      data = productRepository.generateInventorySummaryFast(productStatuses);
+      data = productRepository.generateInventorySummaryFast(productStatuses, centerIdsLong);
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

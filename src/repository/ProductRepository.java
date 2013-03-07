@@ -532,19 +532,22 @@ public class ProductRepository {
     return product;
   }
 
-  public Map<String, Object> generateInventorySummaryFast(List<String> status) {
+  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> centerIds) {
     Map<String, Object> inventory = new HashMap<String, Object>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
-                             "where p.status IN :status AND p.isDeleted=:isDeleted",
+                             "WHERE p.status IN :status AND " +
+                             "p.collectedSample.collectionCenter.id IN (:collectionCenterIds) AND " +
+                             "p.isDeleted=:isDeleted",
                              Product.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
     for (String s : status) {
       productStatus.add(ProductStatus.lookup(s));
     }
     q.setParameter("status", productStatus);
+    q.setParameter("collectionCenterIds", centerIds);
     q.setParameter("isDeleted", false);
 //    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
