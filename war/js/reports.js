@@ -96,7 +96,8 @@ function parseInventoryData(data) {
   var result = {};
 
   result.data = [];
-  var bloodGroups = {'A+'  : 'A+',
+  var bloodGroups = {'Unknown' : 'Unknown',
+                     'A+'  : 'A+',
                      'B+'  : 'B+',
                      'AB+' : 'AB+',
                      'O+'  : 'O+',

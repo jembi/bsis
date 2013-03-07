@@ -35,13 +35,8 @@
       		//	 }
       		// },
       	  selectedText: function(numSelected, numTotal, selectedValues) {
-      										if (numSelected == numTotal) {
-      										  return "All Products";
-      										}
-      										else {
-      										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
-      										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
-      										}
+     										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+     										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
       	  							}
 
       	});
@@ -103,10 +98,6 @@
 					<select class="productStatusSelector">
 						<option value="QUARANTINED">Quarantined</option>
 						<option value="AVAILABLE">Available</option>
-						<option value="EXPIRED">Expired</option>
-						<option value="UNSAFE">Unsafe</option>
-						<option value="ISSUED">Issued</option>
-						<option value="DISCARDED">Discarded</option>
 					</select>
 			</div>
 			</form>
