@@ -40,7 +40,7 @@ import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonorRepository;
-import repository.DonorTypeRepository;
+import repository.DonationTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.SequenceNumberRepository;
@@ -62,7 +62,7 @@ public class CollectedSampleController {
   private BloodBagTypeRepository bloodBagTypeRepository;
 
   @Autowired
-  private DonorTypeRepository donorTypeRepository;
+  private DonationTypeRepository donorTypeRepository;
 
   @Autowired
   private DonorRepository donorRepository;
@@ -282,7 +282,7 @@ public class CollectedSampleController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("centers", locationRepository.getAllCenters());
-    m.put("donorTypes", donorTypeRepository.getAllDonorTypes());
+    m.put("donorTypes", donorTypeRepository.getAllDonationTypes());
     m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
     m.put("sites", locationRepository.getAllCollectionSites());
   }

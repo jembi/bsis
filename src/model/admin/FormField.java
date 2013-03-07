@@ -45,17 +45,15 @@ public class FormField {
 
   private Boolean hidden;
 
-  private Boolean derived;
+  private Boolean isHidable;
 
   private Boolean isRequired;
+
+  private Boolean canBeOptional;
 
   private Boolean autoGenerate;
 
   private Boolean isAutoGeneratable;
-  
-  // copy value from another field
-  @Column(length=30)
-  private String sourceField;
 
   public Long getId() {
     return id;
@@ -87,14 +85,6 @@ public class FormField {
     return hidden;
   }
 
-  public Boolean getDerived() {
-    return derived;
-  }
-
-  public String getSourceField() {
-    return sourceField;
-  }
-
   public void setId(Long id) {
     this.id = id;
   }
@@ -123,22 +113,15 @@ public class FormField {
     this.hidden = hidden;
   }
 
-  public void setDerived(Boolean derived) {
-    this.derived = derived;
-  }
-
-  public void setSourceField(String sourceField) {
-    this.sourceField = sourceField;
-  }
-
   public void copy(FormField formField) {
     this.displayName = formField.displayName;
     this.defaultValue = formField.defaultValue;
     this.hidden = formField.hidden;
+    this.isHidable = formField.isHidable;
     this.isRequired = formField.isRequired;
+    this.canBeOptional = formField.canBeOptional;
     this.autoGenerate = formField.autoGenerate;
-    this.derived = formField.derived;
-    this.sourceField = formField.sourceField;
+    this.isAutoGeneratable = formField.isAutoGeneratable;
     this.maxLength = formField.maxLength;
   }
 
@@ -172,5 +155,21 @@ public class FormField {
 
   public void setIsAutoGeneratable(Boolean isAutoGeneratable) {
     this.isAutoGeneratable = isAutoGeneratable;
+  }
+
+  public Boolean getIsHidable() {
+    return isHidable;
+  }
+
+  public void setIsHidable(Boolean isHidable) {
+    this.isHidable = isHidable;
+  }
+
+  public Boolean getCanBeOptional() {
+    return canBeOptional;
+  }
+
+  public void setCanBeOptional(Boolean canBeOptional) {
+    this.canBeOptional = canBeOptional;
   }
 }

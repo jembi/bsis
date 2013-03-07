@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,14 +18,26 @@ public class BloodTest {
   @Column(nullable=false, updatable=false, insertable=false, length=30)
   private String name;
 
+  private String displayName;
+
   private String allowedResults;
 
   private String correctResult;
-  
-  @Lob
-  private String notes;
 
   private Boolean isRequired;
+
+  private Boolean isConfidential;
+
+  private Boolean isFinalOutcome;
+
+  @ManyToMany
+  private List<BloodTest> bloodTestsIfCorrect;
+
+  @ManyToMany
+  private List<BloodTest> bloodTestsIfIncorrect;
+
+  @Lob
+  private String notes;
 
   private Boolean isDeleted;
 
@@ -73,5 +86,45 @@ public class BloodTest {
   public void setAllowedResults(
       List<String> allowedResults) {
     this.allowedResults = StringUtils.join(allowedResults, ",");
+  }
+
+  public Boolean getIsConfidential() {
+    return isConfidential;
+  }
+
+  public void setIsConfidential(Boolean isConfidential) {
+    this.isConfidential = isConfidential;
+  }
+
+  public Boolean getIsFinalOutcome() {
+    return isFinalOutcome;
+  }
+
+  public void setIsFinalOutcome(Boolean isFinalOutcome) {
+    this.isFinalOutcome = isFinalOutcome;
+  }
+
+  public List<BloodTest> getBloodTestsIfCorrect() {
+    return bloodTestsIfCorrect;
+  }
+
+  public void setBloodTestsIfCorrect(List<BloodTest> bloodTestsIfCorrect) {
+    this.bloodTestsIfCorrect = bloodTestsIfCorrect;
+  }
+
+  public List<BloodTest> getBloodTestsIfIncorrect() {
+    return bloodTestsIfIncorrect;
+  }
+
+  public void setBloodTestsIfIncorrect(List<BloodTest> bloodTestsIfIncorrect) {
+    this.bloodTestsIfIncorrect = bloodTestsIfIncorrect;
+  }
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 }

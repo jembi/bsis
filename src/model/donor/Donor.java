@@ -56,17 +56,21 @@ public class Donor implements ModificationTracker {
   @Column(length=30)
 	private String lastName;
 
-  @Enumerated(EnumType.STRING)
+  @Length(max=30)
   @Column(length=30)
+  private String callingName;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=15)
 	private Gender gender;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length=3)
   @Index(name="donor_bloodAbo_index")
   private BloodAbo bloodAbo;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length=3)
   @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
 
@@ -330,5 +334,13 @@ public class Donor implements ModificationTracker {
     builder.append(":").append(donorNumber);
 
     return builder.toString();
+  }
+
+  public String getCallingName() {
+    return callingName;
+  }
+
+  public void setCallingName(String callingName) {
+    this.callingName = callingName;
   }
 }

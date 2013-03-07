@@ -18,49 +18,49 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="configureDonorTypesFormId">configureDonorTypes-${unique_page_id}</c:set>
+<c:set var="configureDonationTypesFormId">configureDonationTypes-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
 
-  $("#${tabContentId}").find(".addDonorTypeButton").button({
+  $("#${tabContentId}").find(".addDonationTypeButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
-    var div = $("#${configureDonorTypesFormId}").find(".donorTypeDiv")[0];
+    var div = $("#${configureDonationTypesFormId}").find(".donationTypeDiv")[0];
     var newDiv = $($(div).clone());
     console.log(newDiv);
     newDiv.find('input[name="id"]').val("");
-    newDiv.find('input[name="donorTypeName"]').val("");
-    $("#${configureDonorTypesFormId}").append(newDiv);
+    newDiv.find('input[name="donationTypeName"]').val("");
+    $("#${configureDonationTypesFormId}").append(newDiv);
   });
 
-  $("#${tabContentId}").find(".saveDonorTypesButton").button({
+  $("#${tabContentId}").find(".saveDonationTypesButton").button({
     icons : {
       primary : 'ui-icon-disk'
     }
   }).click(function() {
     var data = {};
-    var donorTypeDivs = $("#${configureDonorTypesFormId}").find(".donorTypeDiv");
-    for (var index=0; index < donorTypeDivs.length; index++) {
-      var div = $(donorTypeDivs[index]);
-      var donorType = div.find('input[name="id"]').val();
-      var donorTypeName = div.find('input[name="donorTypeName"]').val();
-      console.log(donorType);
-      if (donorType == undefined || donorType == null || donorType === "")
-        donorType = donorTypeName;
-      data[donorType] = donorTypeName;
+    var donationTypeDivs = $("#${configureDonationTypesFormId}").find(".donationTypeDiv");
+    for (var index=0; index < donationTypeDivs.length; index++) {
+      var div = $(donationTypeDivs[index]);
+      var donationType = div.find('input[name="id"]').val();
+      var donationTypeName = div.find('input[name="donationTypeName"]').val();
+      console.log(donationType);
+      if (donationType == undefined || donationType == null || donationType === "")
+        donationType = donationTypeName;
+      data[donationType] = donationTypeName;
     }
 
     console.log(JSON.stringify(data));
     $.ajax({
-      url: "configureDonorTypes.html",
+      url: "configureDonationTypes.html",
       data: {params: JSON.stringify(data)},
       type: "POST",
       success: function(response) {
         				 $("#${tabContentId}").replaceWith(response);
-        				 showMessage("Donor Types Updated Successfully!");
+        				 showMessage("Donation Types Updated Successfully!");
       				 },
       error: 	 function(response) {
         				 showErrorMessage("Something went wrong. Please try again later");
@@ -86,20 +86,20 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
 	<div id="${mainContentId}">
-		<b>Configure Donor Types</b>
+		<b>Configure Donation Types</b>
 		<br />
 		<br />
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				Modify names of donor types. Add new donor types. 
+				Modify names of donation types. Add new donation types. 
 			</p>
 		</div>
-		<form id="${configureDonorTypesFormId}">
-				<c:forEach var="donorType" items="${model.allDonorTypes}">
-					<div class="donorTypeDiv">
+		<form id="${configureDonationTypesFormId}">
+				<c:forEach var="donationType" items="${model.allDonationTypes}">
+					<div class="donationTypeDiv">
 						<div>
-							<input type="hidden" name="id" value="${donorType.id}" />
-							<input type="text" name="donorTypeName" value="${donorType.donorType}" />
+							<input type="hidden" name="id" value="${donationType.id}" />
+							<input type="text" name="donationTypeName" value="${donationType.donationType}" />
 						</div>
 					</div>
 			</c:forEach>
@@ -107,8 +107,8 @@ $(document).ready(function() {
 			<br />
 			<div>
 				<label>&nbsp;</label>
-				<button class="addDonorTypeButton">Add new donor type</button>
-				<button class="saveDonorTypesButton">Save</button>
+				<button class="addDonationTypeButton">Add new donation type</button>
+				<button class="saveDonationTypesButton">Save</button>
 				<button class="cancelButton">Cancel</button>
 			</div>
 

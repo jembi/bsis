@@ -33,7 +33,7 @@
 			<a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>
 		</li>
 		<li id="donorTypesForm">
-			<a href="configureDonorTypesFormGenerator.html">Donor Types</a>
+			<a href="configureDonationTypesFormGenerator.html">Donation Types</a>
 		</li>
 		<li id="requestTypesForm">
 			<a href="configureRequestTypesFormGenerator.html">Request Types</a>

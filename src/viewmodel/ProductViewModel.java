@@ -7,6 +7,7 @@ import java.util.Date;
 import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
+import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.user.User;
 import model.util.BloodAbo;
@@ -142,10 +143,13 @@ public class ProductViewModel {
   }
 
   public RequestViewModel getIssuedTo() {
-    if (product.getIssuedTo() == null)
+    ProductStatus status = product.getStatus();
+    if (status == null)
+      return null;
+    else if (!status.equals(ProductStatus.ISSUED))
       return null;
     else
-      return new RequestViewModel(product.getIssuedTo());
+    return new RequestViewModel(product.getIssuedTo());
   }
 
   public String getDiscardedOn() {

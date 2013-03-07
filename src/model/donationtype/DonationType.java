@@ -1,4 +1,4 @@
-package model.donortype;
+package model.donationtype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,14 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class DonorType {
+public class DonationType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
   @Column(length=50)
-  private String donorType;
+  private String donationType;
 
   private Boolean isDeleted;
 
@@ -27,7 +27,7 @@ public class DonorType {
   }
 
   public String toString() {
-    return donorType;
+    return donationType;
   }
 
   public Boolean getIsDeleted() {
@@ -38,11 +38,11 @@ public class DonorType {
     this.isDeleted = isDeleted;
   }
 
-  public String getDonorType() {
-    return donorType;
+  public String getDonationType() {
+    return donationType;
   }
 
-  public void setDonorType(String donorType) {
-    this.donorType = donorType;
+  public void setDonationType(String donorType) {
+    this.donationType = donorType;
   }
 }

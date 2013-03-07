@@ -18,6 +18,7 @@ import javax.persistence.TypedQuery;
 import model.bloodtest.BloodTest;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductIssue;
 import model.request.Request;
 import model.testresults.TestResult;
 
@@ -26,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import filter.UserInfoAddToThreadFilter;
 
 @Repository
 @Transactional
@@ -336,11 +339,15 @@ public class RequestRepository {
       // between the time when matching products are searched and selected
       // for issuing
       if (canIssueProduct(product, request)) {
-        product.setIssuedTo(request);
-        product.setIssuedOn(new Date());
+        ProductIssue productIssue = new ProductIssue();
+        productIssue.setIssuedBy(UserInfoAddToThreadFilter.threadLocal.get());
+        productIssue.setIssuedTo(request);
+        productIssue.setIssuedOn(new Date());
+        productIssue.setProduct(product);
         numUnitsIssued++;
         productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
+        em.persist(productIssue);
         em.merge(product);
       }
       else {

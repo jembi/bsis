@@ -23,10 +23,10 @@ import javax.validation.Valid;
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
 import model.donationBatch.DonationBatch;
+import model.donationtype.DonationType;
+import model.donationtype.DonationTypeExists;
 import model.donor.Donor;
 import model.donor.DonorExists;
-import model.donortype.DonorType;
-import model.donortype.DonorTypeExists;
 import model.location.Location;
 import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
@@ -70,19 +70,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Index(name="collectedSample_collectedOn_index")
   private Date collectedOn;
 
-  @DonorTypeExists
+  @DonationTypeExists
   @ManyToOne
-  private DonorType donorType;
+  private DonationType donorType;
 
   @BloodBagTypeExists
   @ManyToOne
   private BloodBagType bloodBagType;
-  
-  @Column(length=50)
-  private String sampleNumber;
-
-  @Column(length=50)
-  private String shippingNumber;
 
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
@@ -149,20 +143,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return collectedOn;
   }
 
-  public DonorType getDonorType() {
+  public DonationType getDonorType() {
     return donorType;
   }
 
   public BloodBagType getBloodBagType() {
     return bloodBagType;
-  }
-
-  public String getSampleNumber() {
-    return sampleNumber;
-  }
-
-  public String getShippingNumber() {
-    return shippingNumber;
   }
 
   public String getNotes() {
@@ -201,20 +187,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectedOn = collectedOn;
   }
 
-  public void setDonorType(DonorType donorType) {
+  public void setDonorType(DonationType donorType) {
     this.donorType = donorType;
   }
 
   public void setBloodBagType(BloodBagType bloodBagType) {
     this.bloodBagType = bloodBagType;
-  }
-
-  public void setSampleNumber(String sampleNumber) {
-    this.sampleNumber = sampleNumber;
-  }
-
-  public void setShippingNumber(String shippingNumber) {
-    this.shippingNumber = shippingNumber;
   }
 
   public void setNotes(String notes) {
@@ -228,8 +206,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void copy(CollectedSample collectedSample) {
     assert (this.getId().equals(collectedSample.getId()));
     this.collectionNumber = collectedSample.collectionNumber;
-    this.shippingNumber = collectedSample.shippingNumber;
-    this.sampleNumber = collectedSample.sampleNumber;
     this.donor = collectedSample.donor;
     this.donorType = collectedSample.donorType;
     this.bloodBagType = collectedSample.bloodBagType;

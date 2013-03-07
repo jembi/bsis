@@ -1,4 +1,4 @@
-package model.donortype;
+package model.donationtype;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,10 +10,10 @@ import javax.validation.Payload;
 
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DonorTypeExistsConstraintValidator.class)
-public @interface DonorTypeExists {
+@Constraint(validatedBy = DonationTypeExistsConstraintValidator.class)
+public @interface DonationTypeExists {
 
-  String message() default "Invalid Donor Type Specified";
+  String message() default "Invalid Donation Type Specified";
 
   Class<?>[] groups() default {};
 

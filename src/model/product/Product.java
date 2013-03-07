@@ -72,32 +72,20 @@ public class Product implements ModificationTracker {
   private BloodRhd bloodRhd;
   
   @Temporal(TemporalType.TIMESTAMP)
-  private Date issuedOn;
-
-  @ManyToOne
-  private User issuedBy;
-  
-  @ManyToOne(fetch=FetchType.LAZY)
-  private Request issuedTo;
-
-  @Temporal(TemporalType.TIMESTAMP)
   private Date discardedOn;
 
   @Column(length=100)
   private String discardReason;
 
   @ManyToOne
-  private User discardedBy;
-  
+  private Request issuedTo;
+
   @Temporal(TemporalType.TIMESTAMP)
-  private Date returnedOn;
+  private Date issuedOn;
 
-  @Column(length=100)
-  private String returnReason;
+  @ManyToOne
+  private User discardedBy;
 
-  @Column(length=30)
-  private String returnedBy;
-  
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   private ProductStatus status;
@@ -191,22 +179,6 @@ public class Product implements ModificationTracker {
     this.createdOn = createdOn;
   }
 
-  public Request getIssuedTo() {
-    return issuedTo;
-  }
-
-  public void setIssuedTo(Request issuedTo) {
-    this.issuedTo = issuedTo;
-  }
-
-  public Date getIssuedOn() {
-    return issuedOn;
-  }
-
-  public void setIssuedOn(Date issuedOn) {
-    this.issuedOn = issuedOn;
-  }
-
   public BloodAbo getBloodAbo() {
     return bloodAbo;
   }
@@ -285,28 +257,12 @@ public class Product implements ModificationTracker {
     this.discardedOn = discardedOn;
   }
 
-  public Date getReturnedOn() {
-    return returnedOn;
-  }
-
-  public void setReturnedOn(Date returnedOn) {
-    this.returnedOn = returnedOn;
-  }
-
   public String getDiscardReason() {
     return discardReason;
   }
 
   public void setDiscardReason(String discardReason) {
     this.discardReason = discardReason;
-  }
-
-  public String getReturnReason() {
-    return returnReason;
-  }
-
-  public void setReturnReason(String returnReason) {
-    this.returnReason = returnReason;
   }
 
   public User getDiscardedBy() {
@@ -317,19 +273,19 @@ public class Product implements ModificationTracker {
     this.discardedBy = discardedBy;
   }
 
-  public String getReturnedBy() {
-    return returnedBy;
+  public Request getIssuedTo() {
+    return issuedTo;
   }
 
-  public void setReturnedBy(String returnedBy) {
-    this.returnedBy = returnedBy;
+  public void setIssuedTo(Request issuedTo) {
+    this.issuedTo = issuedTo;
   }
 
-  public User getIssuedBy() {
-    return issuedBy;
+  public Date getIssuedOn() {
+    return issuedOn;
   }
 
-  public void setIssuedBy(User issuedBy) {
-    this.issuedBy = issuedBy;
+  public void setIssuedOn(Date issuedOn) {
+    this.issuedOn = issuedOn;
   }
 }

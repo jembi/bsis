@@ -1,7 +1,201 @@
 
+    alter table BloodTest_BloodTest 
+        drop 
+        foreign key FK5EC59E995FA14D0E;
+
+    alter table BloodTest_BloodTest 
+        drop 
+        foreign key FK5EC59E993A6D02C3;
+
+    alter table BloodTest_BloodTest 
+        drop 
+        foreign key FK5EC59E99F2F53069;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33A49787C4;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D04A4456;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33AED1731E;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33B29562D0;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A3359FAB30D;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A3392C64B83;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33D0AFB367;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A33675D568F;
+
+    alter table CollectedSample 
+        drop 
+        foreign key FKF0658A331D73927B;
+
+    alter table CollectedSample_CollectionsWorksheet 
+        drop 
+        foreign key FKB39FFD85225909B3;
+
+    alter table CollectedSample_CollectionsWorksheet 
+        drop 
+        foreign key FKB39FFD85C02466CD;
+
+    alter table CollectionsWorksheet 
+        drop 
+        foreign key FK72E3FEF9A49787C4;
+
+    alter table CollectionsWorksheet 
+        drop 
+        foreign key FK72E3FEF9D0AFB367;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602A49787C4;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602D4061B9F;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602EFD1FE7;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK92798602D0AFB367;
+
+    alter table CompatibilityTest 
+        drop 
+        foreign key FK927986028631CA7D;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46A49787C4;
+
+    alter table Donor 
+        drop 
+        foreign key FK3F25E46D0AFB367;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFA49787C4;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF994002DF;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF32E145A;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CF73AC2B90;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFFDFE9E0F;
+
+    alter table Product 
+        drop 
+        foreign key FK50C664CFD0AFB367;
+
+    alter table ProductIssue 
+        drop 
+        foreign key FK450DFD4A994002DF;
+
+    alter table ProductIssue 
+        drop 
+        foreign key FK450DFD4A9F8F75E1;
+
+    alter table ProductIssue 
+        drop 
+        foreign key FK450DFD4AA8E71476;
+
+    alter table ProductReturn 
+        drop 
+        foreign key FK6B4876DF61638630;
+
+    alter table ProductReturn 
+        drop 
+        foreign key FK6B4876DFA8E71476;
+
+    alter table ProductReturn 
+        drop 
+        foreign key FK6B4876DFC1F8813D;
+
+    alter table ProductReturn 
+        drop 
+        foreign key FK6B4876DFC7A8C5;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212A49787C4;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212A8E71476;
+
+    alter table ProductUsage 
+        drop 
+        foreign key FK45B6D212D0AFB367;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6FA49787C4;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F1520E0D;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F73AC2B90;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6F537AAD30;
+
+    alter table Request 
+        drop 
+        foreign key FKA4878A6FD0AFB367;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FA49787C4;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F32E145A;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6F3A6D02C3;
+
+    alter table TestResult 
+        drop 
+        foreign key FKDB459F6FD0AFB367;
+
     drop table if exists BloodBagType;
 
     drop table if exists BloodTest;
+
+    drop table if exists BloodTest_BloodTest;
 
     drop table if exists CollectedSample;
 
@@ -15,9 +209,9 @@
 
     drop table if exists DonationBatch;
 
-    drop table if exists Donor;
+    drop table if exists DonationType;
 
-    drop table if exists DonorType;
+    drop table if exists Donor;
 
     drop table if exists FormField;
 
@@ -28,6 +222,14 @@
     drop table if exists LocationType;
 
     drop table if exists Product;
+
+    drop table if exists ProductDiscardReason;
+
+    drop table if exists ProductIssue;
+
+    drop table if exists ProductReturn;
+
+    drop table if exists ProductReturnReason;
 
     drop table if exists ProductType;
 
@@ -56,10 +258,19 @@
         name varchar(30) not null,
         allowedResults varchar(255),
         correctResult varchar(255),
+        displayName varchar(255),
+        isConfidential boolean,
         isDeleted boolean,
+        isFinalOutcome boolean,
         isRequired boolean,
         notes longtext,
         primary key (name)
+    ) ENGINE=InnoDB;
+
+    create table BloodTest_BloodTest (
+        BloodTest_name varchar(30) not null,
+        bloodTestsIfIncorrect_name varchar(30) not null,
+        bloodTestsIfCorrect_name varchar(30) not null
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -73,8 +284,6 @@
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
-        sampleNumber varchar(50),
-        shippingNumber varchar(50),
         testedStatus varchar(20),
         bloodBagType_id integer,
         collectionCenter_id bigint,
@@ -137,11 +346,19 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table DonationType (
+        id integer not null auto_increment,
+        donationType varchar(50),
+        isDeleted boolean,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
     create table Donor (
         id bigint not null auto_increment,
         birthDate date,
-        bloodAbo varchar(30),
-        bloodRhd varchar(30),
+        bloodAbo varchar(3),
+        bloodRhd varchar(3),
+        callingName varchar(30),
         address varchar(255),
         city varchar(50),
         country varchar(50),
@@ -152,7 +369,7 @@
         zipcode varchar(10),
         donorNumber varchar(30),
         firstName varchar(30),
-        gender varchar(30),
+        gender varchar(15),
         isDeleted boolean,
         lastName varchar(30),
         middleName varchar(30),
@@ -164,27 +381,20 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table DonorType (
-        id integer not null auto_increment,
-        donorType varchar(50),
-        isDeleted boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
     create table FormField (
         id bigint not null auto_increment,
         autoGenerate boolean,
+        canBeOptional boolean,
         defaultDisplayName varchar(30),
         defaultValue longtext,
-        derived boolean,
         displayName varchar(30),
         field varchar(30),
         form varchar(30),
         hidden boolean,
         isAutoGeneratable boolean,
+        isHidable boolean,
         isRequired boolean,
         maxLength integer,
-        sourceField varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -230,17 +440,47 @@
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(30),
-        returnReason varchar(100),
-        returnedBy varchar(30),
-        returnedOn datetime,
         status varchar(30),
         collectedSample_id bigint,
         discardedBy_id bigint,
-        issuedBy_id bigint,
         issuedTo_id bigint,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
         productType_id integer,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductDiscardReason (
+        id bigint not null auto_increment,
+        discardReason varchar(150),
+        notes longtext,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductIssue (
+        id bigint not null auto_increment,
+        issuedOn datetime,
+        notes longtext,
+        issuedBy_id bigint,
+        issuedTo_id bigint,
+        product_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductReturn (
+        id bigint not null auto_increment,
+        returnedOn datetime,
+        product_id bigint,
+        returnReason_id bigint,
+        returnedBy_id bigint,
+        returnedForRequest_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductReturnReason (
+        id bigint not null auto_increment,
+        reasonDetails longtext,
+        returnReason varchar(150),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -365,6 +605,24 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    alter table BloodTest_BloodTest 
+        add index FK5EC59E995FA14D0E (bloodTestsIfIncorrect_name), 
+        add constraint FK5EC59E995FA14D0E 
+        foreign key (bloodTestsIfIncorrect_name) 
+        references BloodTest (name);
+
+    alter table BloodTest_BloodTest 
+        add index FK5EC59E993A6D02C3 (BloodTest_name), 
+        add constraint FK5EC59E993A6D02C3 
+        foreign key (BloodTest_name) 
+        references BloodTest (name);
+
+    alter table BloodTest_BloodTest 
+        add index FK5EC59E99F2F53069 (bloodTestsIfCorrect_name), 
+        add constraint FK5EC59E99F2F53069 
+        foreign key (bloodTestsIfCorrect_name) 
+        references BloodTest (name);
+
     create index collectedSample_collectedOn_index on CollectedSample (collectedOn);
 
     create index collectedSample_collectionNumber_index on CollectedSample (collectionNumber);
@@ -400,10 +658,10 @@
         references Donor (id);
 
     alter table CollectedSample 
-        add index FKF0658A337A1B99A7 (donorType_id), 
-        add constraint FKF0658A337A1B99A7 
+        add index FKF0658A3392C64B83 (donorType_id), 
+        add constraint FKF0658A3392C64B83 
         foreign key (donorType_id) 
-        references DonorType (id);
+        references DonationType (id);
 
     alter table CollectedSample 
         add index FKF0658A33D0AFB367 (lastUpdatedBy_id), 
@@ -540,16 +798,52 @@
         references User (id);
 
     alter table Product 
-        add index FK50C664CF9F8F75E1 (issuedBy_id), 
-        add constraint FK50C664CF9F8F75E1 
-        foreign key (issuedBy_id) 
-        references User (id);
-
-    alter table Product 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 
         add constraint FK50C664CFD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table ProductIssue 
+        add index FK450DFD4A994002DF (issuedTo_id), 
+        add constraint FK450DFD4A994002DF 
+        foreign key (issuedTo_id) 
+        references Request (id);
+
+    alter table ProductIssue 
+        add index FK450DFD4A9F8F75E1 (issuedBy_id), 
+        add constraint FK450DFD4A9F8F75E1 
+        foreign key (issuedBy_id) 
+        references User (id);
+
+    alter table ProductIssue 
+        add index FK450DFD4AA8E71476 (product_id), 
+        add constraint FK450DFD4AA8E71476 
+        foreign key (product_id) 
+        references Product (id);
+
+    alter table ProductReturn 
+        add index FK6B4876DF61638630 (returnedForRequest_id), 
+        add constraint FK6B4876DF61638630 
+        foreign key (returnedForRequest_id) 
+        references Request (id);
+
+    alter table ProductReturn 
+        add index FK6B4876DFA8E71476 (product_id), 
+        add constraint FK6B4876DFA8E71476 
+        foreign key (product_id) 
+        references Product (id);
+
+    alter table ProductReturn 
+        add index FK6B4876DFC1F8813D (returnedBy_id), 
+        add constraint FK6B4876DFC1F8813D 
+        foreign key (returnedBy_id) 
+        references User (id);
+
+    alter table ProductReturn 
+        add index FK6B4876DFC7A8C5 (returnReason_id), 
+        add constraint FK6B4876DFC7A8C5 
+        foreign key (returnReason_id) 
+        references ProductReturnReason (id);
 
     alter table ProductUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 

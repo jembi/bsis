@@ -31,7 +31,7 @@ import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtest.BloodTest;
 import model.compatibility.CrossmatchType;
-import model.donortype.DonorType;
+import model.donationtype.DonationType;
 import model.producttype.ProductType;
 import model.requesttype.RequestType;
 import model.tips.Tips;
@@ -50,7 +50,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CrossmatchTypeRepository;
-import repository.DonorTypeRepository;
+import repository.DonationTypeRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
@@ -80,7 +80,7 @@ public class AdminController {
   BloodBagTypeRepository bloodBagTypesRepository;
 
   @Autowired
-  DonorTypeRepository donorTypesRepository;
+  DonationTypeRepository donationTypesRepository;
 
   @Autowired
   RequestTypeRepository requestTypesRepository;
@@ -368,21 +368,21 @@ public class AdminController {
       e.printStackTrace();
     }
   }
-  @RequestMapping(value="/configureDonorTypesFormGenerator", method=RequestMethod.GET)
-  public ModelAndView configureDonorTypesFormGenerator(
+  @RequestMapping(value="/configureDonationTypesFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureDonationTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
-    ModelAndView mv = new ModelAndView("admin/configureDonorTypes");
+    ModelAndView mv = new ModelAndView("admin/configureDonationTypes");
     Map<String, Object> m = model.asMap();
-    addAllDonorTypesToModel(m);
+    addAllDonationTypesToModel(m);
     m.put("refreshUrl", getUrl(request));
     mv.addObject("model", model);
     return mv;
   }
 
-  private void addAllDonorTypesToModel(Map<String, Object> m) {
-    m.put("allDonorTypes", donorTypesRepository.getAllDonorTypes());
+  private void addAllDonationTypesToModel(Map<String, Object> m) {
+    m.put("allDonationTypes", donationTypesRepository.getAllDonationTypes());
   }
 
   private void addAllBloodBagTypesToModel(Map<String, Object> m) {
@@ -579,29 +579,29 @@ public class AdminController {
     return mv;
   }
 
-  @RequestMapping("/configureDonorTypes")
-  public ModelAndView configureDonorTypes(
+  @RequestMapping("/configureDonationTypes")
+  public ModelAndView configureDonationTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureDonorTypes");
-    List<DonorType> allDonorTypes = new ArrayList<DonorType>();
+    ModelAndView mv = new ModelAndView("admin/configureDonationTypes");
+    List<DonationType> allDonationTypes = new ArrayList<DonationType>();
     try {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
-        String donorType = (String) params.get(id);
-        DonorType dt = new DonorType();
+        String donationType = (String) params.get(id);
+        DonationType dt = new DonationType();
         try {
           dt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
           ex.printStackTrace();
           dt.setId(null);
         }
-        dt.setDonorType(donorType);
+        dt.setDonationType(donationType);
         dt.setIsDeleted(false);
 
-        allDonorTypes.add(dt);
+        allDonationTypes.add(dt);
       }
-      donorTypesRepository.saveAllDonorTypes(allDonorTypes);
+      donationTypesRepository.saveAllDonationTypes(allDonationTypes);
       System.out.println(params);
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -609,8 +609,8 @@ public class AdminController {
     }
 
     Map<String, Object> m = model.asMap();
-    addAllDonorTypesToModel(m);
-    m.put("refreshUrl", "configureDonorTypesFormGenerator.html");
+    addAllDonationTypesToModel(m);
+    m.put("refreshUrl", "configureDonationTypesFormGenerator.html");
     mv.addObject("model", model);
     return mv;
   }

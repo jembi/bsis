@@ -5,8 +5,8 @@ import java.util.List;
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
+import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.donortype.DonorType;
 import model.location.Location;
 import model.product.Product;
 import model.testresults.TestResult;
@@ -61,20 +61,12 @@ public class CollectedSampleViewModel {
     return collectedSample.getCollectionSite();
   }
 
-  public DonorType getDonorType() {
+  public DonationType getDonorType() {
     return collectedSample.getDonorType();
   }
 
   public BloodBagType getBloodBagType() {
     return collectedSample.getBloodBagType();
-  }
-
-  public String getSampleNumber() {
-    return collectedSample.getSampleNumber();
-  }
-
-  public String getShippingNumber() {
-    return collectedSample.getShippingNumber();
   }
 
   public String getNotes() {

@@ -15,8 +15,8 @@ import model.bloodbagtype.BloodBagType;
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
+import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.donortype.DonorType;
 import model.location.Location;
 import model.location.LocationType;
 import model.product.Product;
@@ -36,7 +36,7 @@ import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonorRepository;
-import repository.DonorTypeRepository;
+import repository.DonationTypeRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
@@ -52,7 +52,7 @@ public class CreateDataController {
 	private DonorRepository donorRepository;
 
   @Autowired
-  private DonorTypeRepository donorTypeRepository;
+  private DonationTypeRepository donorTypeRepository;
 
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
@@ -420,7 +420,7 @@ public class CreateDataController {
 		List<Location> sites = locationRepository.getAllCollectionSites();
 		List<Location> centers = locationRepository.getAllCenters();
 		List<Donor> donors = donorRepository.getAllDonors();
-    List<DonorType> donorTypes = donorTypeRepository.getAllDonorTypes();
+    List<DonationType> donorTypes = donorTypeRepository.getAllDonationTypes();
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
@@ -437,8 +437,6 @@ public class CreateDataController {
 		  collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
 		  collection.setNotes("notes sample " + i);
 		  collection.setDonorType(donorTypes.get(Math.abs(random.nextInt()) % donorTypes.size()).getId().toString());
-		  collection.setShippingNumber(collection.getCollectionNumber());
-		  collection.setSampleNumber(collection.getCollectionNumber());
 		  collection.setIsDeleted(false);
 
 		  collectionRepository.addCollectedSample(collection.getCollectedSample());

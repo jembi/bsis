@@ -17,7 +17,7 @@
 <c:set var="editCollectedSampleFormCentersId">editCollectedSampleFormCenters-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormSitesId">editCollectedSampleFormSites-${unique_page_id}</c:set>
 <c:set var="editCollectedSampleFormBloodBagTypeId">editCollectedSampleFormBloodBagType-${unique_page_id}</c:set>
-<c:set var="editCollectedSampleFormDonorTypeId">editCollectedSampleFormDonorType-${unique_page_id}</c:set>
+<c:set var="editCollectedSampleFormDonationTypeId">editCollectedSampleFormDonationType-${unique_page_id}</c:set>
 <c:set var="updateCollectedSampleButtonId">updateCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="cancelCollectedSampleButtonId">cancelCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleButtonId">deleteCollectedSampleButton-${unique_page_id}</c:set>
@@ -83,7 +83,7 @@
           header : false
         });
 
-        $("#${editCollectedSampleFormDonorTypeId}").multiselect({
+        $("#${editCollectedSampleFormDonationTypeId}").multiselect({
           multiple : false,
           selectedList : 1,
           header : false
@@ -146,7 +146,7 @@
         if ("${model.existingCollectedSample}" !== "true" && "${model.hasErrors}" !== "true") {
           // just set the default values for the new collection  
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.collectedSampleFields.notes.defaultValue}");
-        	setDefaultValueForSelector(getDonorTypeSelector(), "${model.collectedSampleFields.donorType.defaultValue}");
+        	setDefaultValueForSelector(getDonationTypeSelector(), "${model.collectedSampleFields.donationType.defaultValue}");
         	setDefaultValueForSelector(getCollectionCenterSelector(), "${model.collectedSampleFields.collectionCenter.defaultValue}");
         	setDefaultValueForSelector(getBloodBagTypeSelector(), "${model.collectedSampleFields.bloodBagType.defaultValue}");
         	setDefaultValueForSelector(getCollectionSiteSelector(), "${model.collectedSampleFields.collectionSite.defaultValue}");
@@ -154,8 +154,8 @@
           copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
         }
 
-        function getDonorTypeSelector() {
-          return $("#${tabContentId}").find('select[name="donorType"]').multiselect();
+        function getDonationTypeSelector() {
+          return $("#${tabContentId}").find('select[name="donationType"]').multiselect();
         }
 
         function getCollectionCenterSelector() {
@@ -206,18 +206,18 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${model.collectedSampleFields.donorType.hidden != true }">
+		<c:if test="${model.collectedSampleFields.donationType.hidden != true }">
 			<div>
-				<form:label path="donorType">${model.collectedSampleFields.donorType.displayName}</form:label>
-				<form:select path="donorType"
-					id="${editCollectedSampleFormDonorTypeId}"
-					class="editCollectedSampleFormDonorType">
+				<form:label path="donationType">${model.collectedSampleFields.donationType.displayName}</form:label>
+				<form:select path="donationType"
+					id="${editCollectedSampleFormDonationTypeId}"
+					class="editCollectedSampleFormDonationType">
 					<form:option value="">&nbsp;</form:option>
-					<c:forEach var="donorType" items="${model.donorTypes}">
-						<form:option value="${donorType.id}">${donorType.donorType}</form:option>
+					<c:forEach var="donationType" items="${model.donationTypes}">
+						<form:option value="${donationType.id}">${donationType.donationType}</form:option>
 					</c:forEach>
 				</form:select>
-				<form:errors class="formError" path="collectedSample.donorType"
+				<form:errors class="formError" path="collectedSample.donationType"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>

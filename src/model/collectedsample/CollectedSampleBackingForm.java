@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
+import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.donortype.DonorType;
 import model.location.Location;
 import model.testresults.TestResult;
 import model.user.User;
@@ -137,7 +137,7 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorType() {
-    DonorType donorType = collectedSample.getDonorType();
+    DonationType donorType = collectedSample.getDonorType();
     if (donorType == null || donorType.getId() == null)
       return null;
     else
@@ -150,14 +150,6 @@ public class CollectedSampleBackingForm {
       return null;
     else
       return bloodBagType.getId().toString();
-  }
-
-  public String getSampleNumber() {
-    return collectedSample.getSampleNumber();
-  }
-
-  public String getShippingNumber() {
-    return collectedSample.getShippingNumber();
   }
 
   public Date getLastUpdated() {
@@ -231,7 +223,7 @@ public class CollectedSampleBackingForm {
       collectedSample.setDonorType(null);
     }
     else {
-      DonorType dt = new DonorType();
+      DonationType dt = new DonationType();
       dt.setId(Integer.parseInt(donorTypeId));
       collectedSample.setDonorType(dt);
     }
@@ -246,14 +238,6 @@ public class CollectedSampleBackingForm {
       bt.setId(Integer.parseInt(bloodBagTypeId));
       collectedSample.setBloodBagType(bt);
     }
-  }
-
-  public void setSampleNumber(String sampleNumber) {
-    collectedSample.setSampleNumber(sampleNumber);
-  }
-
-  public void setShippingNumber(String shippingNumber) {
-    collectedSample.setShippingNumber(shippingNumber);
   }
 
   public void setLastUpdated(Date lastUpdated) {
