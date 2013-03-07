@@ -8,6 +8,17 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+<c:set var="collectionsReportBloodGroupSelectorId">collectionsReportBloodGroupSelector-${unique_page_id}</c:set>
+
+
 <script>
 $(document).ready(function() {
   $("#creportsDateCollectedFrom").datepicker(
@@ -49,6 +60,28 @@ $(document).ready(function() {
     header : false
   });
 
+  function getBloodGroupSelector() {
+    return $("#${collectionsReportBloodGroupSelectorId}");
+  }
+
+  getBloodGroupSelector().multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  minWidth: 250,
+	  noneSelectedText: 'None selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+	    							if (numSelected == numTotal) {
+	    							  return "All Blood Groups";
+	    							}
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'None Selected';
+	  							}
+	});
+
+  getBloodGroupSelector().multiselect("checkAll");
+
   $("#generateCollectionsReportButton").button({
     icons : {
       primary : 'ui-icon-print'
@@ -60,7 +93,7 @@ $(document).ready(function() {
       url : "getCollectionsReport.html",
       data : formData,
       success : function(data) {
-        getTimeChart({
+        getCollectionsChart({
           data : data.numCollections,
           renderDest : "collectionsReportResult",
           title : "Collections Report",
@@ -178,6 +211,21 @@ $(document).ready(function() {
 						<form:option value="monthly" label="Monthly" selected="" />
 						<form:option value="yearly" label="Yearly" selected="" />
 					</form:select></td>
+			</tr>
+			<tr>
+				<td><form:label path="bloodGroups">Blood Groups</form:label></td>
+				<td style="padding-left: 10px;">
+					<form:select id="${collectionsReportBloodGroupSelectorId}" path="bloodGroups">
+						<form:option value="A+">A+</form:option>
+						<form:option value="B+">B+</form:option>
+						<form:option value="AB+">AB+</form:option>
+						<form:option value="O+">O+</form:option>
+						<form:option value="A-">A-</form:option>
+						<form:option value="B-">B-</form:option>
+						<form:option value="AB-">AB-</form:option>
+						<form:option value="O-">O-</form:option>
+					</form:select>
+				</td>
 			</tr>
 			<tr>
 				<td />

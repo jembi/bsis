@@ -62,6 +62,8 @@
 
     create table CollectedSample (
         id bigint not null auto_increment,
+        bloodAbo varchar(30),
+        bloodRhd varchar(30),
         collectedOn datetime,
         collectionNumber varchar(30),
         isDeleted boolean,
@@ -350,6 +352,10 @@
     create index collectedSample_collectedOn_index on CollectedSample (collectedOn);
 
     create index collectedSample_collectionNumber_index on CollectedSample (collectionNumber);
+
+    create index donor_bloodAbo_index on CollectedSample (bloodAbo);
+
+    create index donor_bloodRhd_index on CollectedSample (bloodRhd);
 
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 

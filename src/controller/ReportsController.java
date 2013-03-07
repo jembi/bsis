@@ -56,10 +56,12 @@ public class ReportsController {
     private String aggregationCriteria;
     private List<String> centers;
     private List<String> sites;
+    private List<String> bloodGroups;
 
     public CollectionsReportBackingForm() {
       centers = Arrays.asList(new String[0]);
       sites = Arrays.asList(new String[0]);
+      setBloodGroups(Arrays.asList(new String[0]));
     }
 
     public String getDateCollectedFrom() {
@@ -101,6 +103,14 @@ public class ReportsController {
     public void setSites(List<String> sites) {
       this.sites = sites;
     }
+
+    public List<String> getBloodGroups() {
+      return bloodGroups;
+    }
+
+    public void setBloodGroups(List<String> bloodGroups) {
+      this.bloodGroups = bloodGroups;
+    }
   }
 
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
@@ -125,7 +135,10 @@ public class ReportsController {
     List<String> centerIds = Arrays.asList(centers.split("\\|"));
 
     List<Long> centerIdsLong = new ArrayList<Long>();
+    centerIdsLong.add((long)-1);
     for (String centerId : centerIds) {
+      if (centerId.trim().equals(""))
+        continue;
       centerIdsLong.add(Long.parseLong(centerId));
     }
 
@@ -182,9 +195,9 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
 
-      Map<Long, Long> numCollections = collectionRepository
+      Map<String, Map<Long, Long>> numCollections = collectionRepository
           .findNumberOfCollectedSamples(dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getCenters(), form.getSites());
+              form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   

@@ -50,11 +50,23 @@ public class TestResultRepository {
     return c.getProducts();
   }
   
+  private void updateRelatedEntities(TestResult testResult) {
+    updateProductStatus(testResult);
+    updateCollectedSampleStatus(testResult);
+  }
+
   private void updateProductStatus(TestResult testResult) {
     for (Product product : getProductsToUpdate(testResult)) {
       productRepository.updateProductInternalFields(product);
       em.merge(product);
     }
+  }
+
+  private void updateCollectedSampleStatus(TestResult testResult) {
+    String testName = testResult.getBloodTest().getName(); 
+    CollectedSample collectedSample = testResult.getCollectedSample();
+    collectedSampleRepository.updateCollectedSampleInternalFields(collectedSample);
+    em.merge(collectedSample);
   }
 
   public List<TestResult> getAllTestResults() {
@@ -82,7 +94,7 @@ public class TestResultRepository {
   public void deleteTestResult(Long testResultId) {
     TestResult existingTestResult = findTestResultById(testResultId);
     existingTestResult.setIsDeleted(Boolean.TRUE);
-    updateProductStatus(existingTestResult);
+    updateRelatedEntities(existingTestResult);
     em.merge(existingTestResult);
     em.flush();
   }
@@ -266,8 +278,7 @@ public class TestResultRepository {
   public void addTestResult(TestResult testResult) {
     testResult.setIsDeleted(false);
     em.persist(testResult);
-    updateProductStatus(testResult);
-    collectedSampleRepository.updateCollectedSampleTestedStatus(testResult.getCollectedSample());
+    updateRelatedEntities(testResult);
     em.flush();
   }
 
@@ -349,15 +360,14 @@ public class TestResultRepository {
     newTestResult.setNotes(testResult.getNotes());
     newTestResult.setIsDeleted(false);
     em.persist(newTestResult);
-    updateProductStatus(newTestResult);
-    collectedSampleRepository.updateCollectedSampleTestedStatus(testResult.getCollectedSample());
+    updateRelatedEntities(newTestResult);
     em.flush();
     return newTestResult;
   }
 
   public void addAllTestResults(List<TestResult> testResults) {
     for (TestResult testResult : testResults) {
-      updateProductStatus(testResult);
+      updateRelatedEntities(testResult);
       em.persist(testResult);
     }
     em.flush();    

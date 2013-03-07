@@ -24,6 +24,9 @@ import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.TestResult;
 import model.testresults.TestedStatus;
+import model.util.BloodAbo;
+import model.util.BloodGroup;
+import model.util.BloodRhd;
 import model.worksheet.CollectionsWorksheet;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -46,6 +49,41 @@ public class CollectedSampleRepository {
   @Autowired
   private BloodTestRepository bloodTestRepository;
 
+  public void updateCollectedSampleInternalFields(CollectedSample c) {
+    updateCollectedSampleBloodGroup(c);
+    updateCollectedSampleTestedStatus(c);
+  }
+
+  public void updateCollectedSampleBloodGroup(CollectedSample c) {
+
+    BloodAbo bloodAbo = c.getBloodAbo();
+    BloodRhd bloodRhd = c.getBloodRhd();
+
+    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
+
+    TestResult t = testResultsMap.get("Blood ABO");
+    if (t != null && !t.getIsDeleted()) {
+      try {
+        bloodAbo = BloodAbo.valueOf(t.getResult());
+      } catch (IllegalArgumentException ex) {
+        ex.printStackTrace();
+        bloodAbo = BloodAbo.Unknown;
+      } 
+    }
+    
+    t = testResultsMap.get("Blood Rh");
+    if (t != null && !t.getIsDeleted()) {
+      try {
+        bloodRhd = BloodRhd.valueOf(t.getResult());
+      } catch (IllegalArgumentException ex) {
+        ex.printStackTrace();
+        bloodRhd = BloodRhd.Unknown;
+      }
+    }
+    c.setBloodAbo(bloodAbo);
+    c.setBloodRhd(bloodRhd);
+  }
+  
   public void saveCollectedSample(CollectedSample collectedSample) {
     em.persist(collectedSample);
     em.flush();
@@ -58,7 +96,7 @@ public class CollectedSampleRepository {
     }
     existingCollectedSample.copy(collectedSample);
     existingCollectedSample = em.merge(existingCollectedSample);
-    updateCollectedSample(existingCollectedSample);
+    updateCollectedSampleInternalFields(existingCollectedSample);
     em.flush();
     return existingCollectedSample;
   }
@@ -216,8 +254,9 @@ public class CollectedSampleRepository {
     return to;      
   }
 
-  public Map<Long, Long> findNumberOfCollectedSamples(Date dateCollectedFrom,
-      Date dateCollectedTo, String aggregationCriteria, List<String> centers, List<String> sites) {
+  public Map<String, Map<Long, Long>> findNumberOfCollectedSamples(Date dateCollectedFrom,
+      Date dateCollectedTo, String aggregationCriteria,
+      List<String> centers, List<String> sites, List<String> bloodGroups) {
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -237,12 +276,17 @@ public class CollectedSampleRepository {
       siteIds.add((long)-1);
     }
 
+    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    for (String bloodGroup : bloodGroups) {
+      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+    }
+
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(c), c.collectedOn FROM CollectedSample c WHERE " +
+        "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRhd FROM CollectedSample c WHERE " +
         "c.collectionCenter.id IN (:centerIds) AND c.collectionSite.id IN (:siteIds) AND " +
         "c.collectedOn BETWEEN :dateCollectedFrom AND " +
         ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY " +
-        "collectedOn", Object[].class);
+        "bloodAbo, bloodRhd, collectedOn", Object[].class);
 
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
@@ -263,25 +307,34 @@ public class CollectedSampleRepository {
 
     List<Object[]> resultList = query.getResultList();
 
-    Map<Long, Long> m = new HashMap<Long, Long>();
-    Calendar gcal = new GregorianCalendar();
-    Date lowerDate = null;
-    Date upperDate = null;
-    try {
-      lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-      upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
-    } catch (ParseException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }
-    gcal.setTime(lowerDate);
-    while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
-      m.put(gcal.getTime().getTime(), (long) 0);
-      gcal.add(incrementBy, 1);
+    for (String bloodGroup : bloodGroups) {
+      Map<Long, Long> m = new HashMap<Long, Long>();
+      Calendar gcal = new GregorianCalendar();
+      Date lowerDate = null;
+      Date upperDate = null;
+      try {
+        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+      } catch (ParseException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+      gcal.setTime(lowerDate);
+      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+        m.put(gcal.getTime().getTime(), (long) 0);
+        gcal.add(incrementBy, 1);
+      }
+      resultMap.put(bloodGroup, m);
     }
 
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
+      BloodAbo bloodAbo = (BloodAbo) result[2];
+      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      Map<Long, Long> m = resultMap.get(bloodGroup.toString());
+      if (m == null)
+        continue;
       try {
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
@@ -296,7 +349,9 @@ public class CollectedSampleRepository {
         e.printStackTrace();
       }
     }
-    return m;
+
+    System.out.println(resultMap);
+    return resultMap;
   }
 
   public List<TestResultViewModel> findUntestedCollectedSamples(String dateCollectedFrom,
@@ -331,6 +386,7 @@ public class CollectedSampleRepository {
   }
 
   public void addCollectedSample(CollectedSample collectedSample) {
+    updateCollectedSampleInternalFields(collectedSample);
     collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
     em.persist(collectedSample);
     em.flush();
@@ -483,6 +539,5 @@ public class CollectedSampleRepository {
       collectedSample.setTestedStatus(TestedStatus.TESTED);
     else
       collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
-    em.merge(collectedSample);
   }
 }
