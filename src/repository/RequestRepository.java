@@ -28,6 +28,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import utils.BloodTestUtils;
+
 import filter.UserInfoAddToThreadFilter;
 
 @Repository
@@ -44,6 +46,9 @@ public class RequestRepository {
 
   @Autowired
   private TestResultRepository testResultRepository;
+
+  @Autowired
+  private BloodTestUtils bloodTestUtils;
 
   public void saveRequest(Request request) {
     em.persist(request);
@@ -401,10 +406,7 @@ public class RequestRepository {
         bloodAbo = actualResult;
       }
 
-      String correctResult = bloodTest.getCorrectResult();
-      if (correctResult.isEmpty())
-        continue;
-      if (!correctResult.equals(actualResult)) {
+      if (!bloodTestUtils.isTestResultCorrect(bloodTest, actualResult)) {
         canIssue = false;
         break;
       }

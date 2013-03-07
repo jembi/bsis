@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
@@ -22,8 +23,14 @@ public class BloodTest {
 
   private String allowedResults;
 
-  private String correctResult;
+  private String resultCalculated;
 
+  private String positiveResults;
+
+  private String negativeResults;
+
+  private Boolean negativeRequiredForUse;
+  
   private Boolean isRequired;
 
   private Boolean isConfidential;
@@ -31,10 +38,12 @@ public class BloodTest {
   private Boolean isFinalOutcome;
 
   @ManyToMany
-  private List<BloodTest> bloodTestsIfCorrect;
+  @JoinTable(name="BloodTest_TestsRequiredIfPositive")
+  private List<BloodTest> testsRequiredIfPositive;
 
   @ManyToMany
-  private List<BloodTest> bloodTestsIfIncorrect;
+  @JoinTable(name="BloodTest_TestsRequiredIfNegative")
+  private List<BloodTest> testsRequiredIfNegative;
 
   @Lob
   private String notes;
@@ -43,10 +52,6 @@ public class BloodTest {
 
   public String getName() {
     return name;
-  }
-
-  public String getCorrectResult() {
-    return correctResult;
   }
 
   public String getNotes() {
@@ -104,27 +109,59 @@ public class BloodTest {
     this.isFinalOutcome = isFinalOutcome;
   }
 
-  public List<BloodTest> getBloodTestsIfCorrect() {
-    return bloodTestsIfCorrect;
-  }
-
-  public void setBloodTestsIfCorrect(List<BloodTest> bloodTestsIfCorrect) {
-    this.bloodTestsIfCorrect = bloodTestsIfCorrect;
-  }
-
-  public List<BloodTest> getBloodTestsIfIncorrect() {
-    return bloodTestsIfIncorrect;
-  }
-
-  public void setBloodTestsIfIncorrect(List<BloodTest> bloodTestsIfIncorrect) {
-    this.bloodTestsIfIncorrect = bloodTestsIfIncorrect;
-  }
-
   public String getDisplayName() {
     return displayName;
   }
 
   public void setDisplayName(String displayName) {
     this.displayName = displayName;
+  }
+
+  public String getPositiveResults() {
+    return positiveResults;
+  }
+
+  public void setPositiveResults(String positiveResults) {
+    this.positiveResults = positiveResults;
+  }
+
+  public String getNegativeResults() {
+    return negativeResults;
+  }
+
+  public void setNegativeResults(String negativeResults) {
+    this.negativeResults = negativeResults;
+  }
+
+  public Boolean getNegativeRequiredForUse() {
+    return negativeRequiredForUse;
+  }
+
+  public void setNegativeRequiredForUse(Boolean negativeRequiredForUse) {
+    this.negativeRequiredForUse = negativeRequiredForUse;
+  }
+
+  public String getResultCalculated() {
+    return resultCalculated;
+  }
+
+  public void setResultCalculated(String resultCalculated) {
+    this.resultCalculated = resultCalculated;
+  }
+
+  public List<BloodTest> getTestsRequiredIfNegative() {
+    return testsRequiredIfNegative;
+  }
+
+  public void setTestsRequiredIfNegative(List<BloodTest> testsRequiredIfNegative) {
+    this.testsRequiredIfNegative = testsRequiredIfNegative;
+  }
+
+  public List<BloodTest> getTestsRequiredIfPositive() {
+    return testsRequiredIfPositive;
+  }
+
+  public void setTestsRequiredIfPositive(List<BloodTest> testsRequiredIfPositive) {
+    this.testsRequiredIfPositive = testsRequiredIfPositive;
   }
 }

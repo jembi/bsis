@@ -1,15 +1,19 @@
 
-    alter table BloodTest_BloodTest 
+    alter table BloodTest_TestsRequiredIfNegative 
         drop 
-        foreign key FK5EC59E995FA14D0E;
+        foreign key FK22608B9FD5AABEFD;
 
-    alter table BloodTest_BloodTest 
+    alter table BloodTest_TestsRequiredIfNegative 
         drop 
-        foreign key FK5EC59E993A6D02C3;
+        foreign key FK22608B9F3A6D02C3;
 
-    alter table BloodTest_BloodTest 
+    alter table BloodTest_TestsRequiredIfPositive 
         drop 
-        foreign key FK5EC59E99F2F53069;
+        foreign key FK180C19639CA52BB9;
+
+    alter table BloodTest_TestsRequiredIfPositive 
+        drop 
+        foreign key FK180C19633A6D02C3;
 
     alter table CollectedSample 
         drop 
@@ -195,7 +199,9 @@
 
     drop table if exists BloodTest;
 
-    drop table if exists BloodTest_BloodTest;
+    drop table if exists BloodTest_TestsRequiredIfNegative;
+
+    drop table if exists BloodTest_TestsRequiredIfPositive;
 
     drop table if exists CollectedSample;
 
@@ -257,20 +263,27 @@
     create table BloodTest (
         name varchar(30) not null,
         allowedResults varchar(255),
-        correctResult varchar(255),
         displayName varchar(255),
         isConfidential boolean,
         isDeleted boolean,
         isFinalOutcome boolean,
         isRequired boolean,
+        negativeRequiredForUse boolean,
+        negativeResults varchar(255),
         notes longtext,
+        positiveResults varchar(255),
+        resultCalculated varchar(255),
         primary key (name)
     ) ENGINE=InnoDB;
 
-    create table BloodTest_BloodTest (
+    create table BloodTest_TestsRequiredIfNegative (
         BloodTest_name varchar(30) not null,
-        bloodTestsIfIncorrect_name varchar(30) not null,
-        bloodTestsIfCorrect_name varchar(30) not null
+        testsRequiredIfNegative_name varchar(30) not null
+    ) ENGINE=InnoDB;
+
+    create table BloodTest_TestsRequiredIfPositive (
+        BloodTest_name varchar(30) not null,
+        testsRequiredIfPositive_name varchar(30) not null
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -375,6 +388,7 @@
         middleName varchar(30),
         createdDate datetime,
         lastUpdated datetime,
+        nationalID varchar(15),
         notes longtext,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -605,22 +619,28 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    alter table BloodTest_BloodTest 
-        add index FK5EC59E995FA14D0E (bloodTestsIfIncorrect_name), 
-        add constraint FK5EC59E995FA14D0E 
-        foreign key (bloodTestsIfIncorrect_name) 
+    alter table BloodTest_TestsRequiredIfNegative 
+        add index FK22608B9FD5AABEFD (testsRequiredIfNegative_name), 
+        add constraint FK22608B9FD5AABEFD 
+        foreign key (testsRequiredIfNegative_name) 
         references BloodTest (name);
 
-    alter table BloodTest_BloodTest 
-        add index FK5EC59E993A6D02C3 (BloodTest_name), 
-        add constraint FK5EC59E993A6D02C3 
+    alter table BloodTest_TestsRequiredIfNegative 
+        add index FK22608B9F3A6D02C3 (BloodTest_name), 
+        add constraint FK22608B9F3A6D02C3 
         foreign key (BloodTest_name) 
         references BloodTest (name);
 
-    alter table BloodTest_BloodTest 
-        add index FK5EC59E99F2F53069 (bloodTestsIfCorrect_name), 
-        add constraint FK5EC59E99F2F53069 
-        foreign key (bloodTestsIfCorrect_name) 
+    alter table BloodTest_TestsRequiredIfPositive 
+        add index FK180C19639CA52BB9 (testsRequiredIfPositive_name), 
+        add constraint FK180C19639CA52BB9 
+        foreign key (testsRequiredIfPositive_name) 
+        references BloodTest (name);
+
+    alter table BloodTest_TestsRequiredIfPositive 
+        add index FK180C19633A6D02C3 (BloodTest_name), 
+        add constraint FK180C19633A6D02C3 
+        foreign key (BloodTest_name) 
         references BloodTest (name);
 
     create index collectedSample_collectedOn_index on CollectedSample (collectedOn);

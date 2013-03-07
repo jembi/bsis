@@ -34,11 +34,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import utils.BloodTestUtils;
 import viewmodel.MatchingProductViewModel;
 
 @Repository
 @Transactional
 public class ProductRepository {
+
   @PersistenceContext
   private EntityManager em;
 
@@ -50,6 +52,9 @@ public class ProductRepository {
 
   @Autowired
   public TestResultRepository testResultRepository;
+
+  @Autowired
+  public BloodTestUtils bloodTestUtils;
 
   /**
    * some fields like product status are cached internally.
@@ -75,21 +80,12 @@ public class ProductRepository {
     // eg. HIV test is correct if its result is negative.
     // Blood Abo test has no correct value.
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
-    Map<String, String> correctTestResults = new HashMap<String, String>();
-    for (BloodTest bt : bloodTests) {
-      if (bt.getCorrectResult() == null || bt.getCorrectResult().trim().equals(""))
-        continue;
-      correctTestResults.put(bt.getName(), bt.getCorrectResult());
-    }
 
     boolean allTestsDone = (testResults.size() == bloodTests.size());
     boolean safe = true;
     for (TestResult t : testResults.values()) {
-      String testName = t.getBloodTest().getName();
       String testResult = t.getResult();
-      if (!correctTestResults.containsKey(testName))
-        continue;
-      if (testResult == null || !testResult.toLowerCase().equals(correctTestResults.get(testName))) {
+      if (testResult == null || !bloodTestUtils.isTestResultCorrect(t.getBloodTest(), testResult)) {
         safe = false;
         break;
       }

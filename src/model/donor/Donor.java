@@ -81,6 +81,9 @@ public class Donor implements ModificationTracker {
   @Valid
   private ContactInformation contactInformation;
 
+  @Column(length=15)
+  private String nationalID;
+
   @Lob
 	private String notes;
 
@@ -342,5 +345,13 @@ public class Donor implements ModificationTracker {
 
   public void setCallingName(String callingName) {
     this.callingName = callingName;
+  }
+
+  public String getNationalID() {
+    return nationalID;
+  }
+
+  public void setNationalID(String nationalID) {
+    this.nationalID = nationalID;
   }
 }

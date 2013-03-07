@@ -37,7 +37,7 @@ public class TestResultRepository {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
-  
+
   @Autowired
   private ProductRepository productRepository;
 
@@ -198,8 +198,7 @@ public class TestResultRepository {
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
     TypedQuery<BloodTest> bloodTestQuery = em.createQuery("SELECT t FROM BloodTest t", BloodTest.class);
     for (BloodTest bt : bloodTestQuery.getResultList()) {
-      if (!bt.getCorrectResult().isEmpty())
-        resultMap.put(bt.getName(), new HashMap<Long, Long>());
+      resultMap.put(bt.getName(), new HashMap<Long, Long>());
     }
 
     query.setParameter("dateTestedFrom", dateTestedFrom);

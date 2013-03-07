@@ -452,14 +452,14 @@ public class CreateDataController {
     	  String result = null;
     	  List<String> allowedResults = new ArrayList<String>(b.getAllowedResults());
 
-    	  if (!b.getCorrectResult().isEmpty()) {
-    	    if (Math.abs(random.nextInt(100)) > 10) {
-    	      result = b.getCorrectResult();
-    	    }
-    	    else {
-    	      allowedResults.remove(b.getCorrectResult());
-    	    }
-    	  }
+//    	  if (!b.getCorrectResult().isEmpty()) {
+//    	    if (Math.abs(random.nextInt(100)) > 10) {
+//    	      result = b.getCorrectResult();
+//    	    }
+//    	    else {
+//    	      allowedResults.remove(b.getCorrectResult());
+//    	    }
+//    	  }
     	  if (result == null)
     	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
 
