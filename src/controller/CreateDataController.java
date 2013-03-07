@@ -480,7 +480,6 @@ public class CreateDataController {
 			Product p = new ProductBackingForm(true).getProduct();
 			p.setCollectedSample(c);
 			p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
-			p.setProductVolume(450);
 			Date d = c.getCollectedOn();
 			p.setCreatedOn(d);
 			Calendar cal = Calendar.getInstance();

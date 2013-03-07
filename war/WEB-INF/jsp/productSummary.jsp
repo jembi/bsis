@@ -216,12 +216,6 @@
 					<label>${model.product.age}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.productFields.productVolume.hidden != true }">
-				<div>
-					<label>${model.productFields.productVolume.displayName}</label>
-					<label>${model.product.productVolume} ml</label>
-				</div>
-			</c:if>
 			<c:if test="${model.productFields.notes.hidden != true }">
 				<div>
 					<label>${model.productFields.notes.displayName}</label>

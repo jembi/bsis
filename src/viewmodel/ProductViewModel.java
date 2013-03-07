@@ -137,13 +137,6 @@ public class ProductViewModel {
     return user.getUsername();
   }
 
-  public String getProductVolume() {
-    if (product.getProductVolume() == null)
-      return "";
-    else
-      return product.getProductVolume().toString();
-  }
-
   public String getIssuedOn() {
     return CustomDateFormatter.getDateTimeString(product.getIssuedOn());
   }

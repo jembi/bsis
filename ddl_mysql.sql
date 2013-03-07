@@ -31,8 +31,6 @@
 
     drop table if exists ProductUsage;
 
-    drop table if exists ProductVolume;
-
     drop table if exists Request;
 
     drop table if exists RequestType;
@@ -217,7 +215,6 @@
         lastUpdated datetime,
         notes longtext,
         productNumber varchar(30),
-        productVolume integer,
         returnReason varchar(100),
         returnedBy varchar(30),
         returnedOn datetime,
@@ -258,15 +255,6 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductVolume (
-        id integer not null auto_increment,
-        description longtext,
-        isDeleted boolean,
-        unit varchar(6),
-        volume integer,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
     create table Request (
         id bigint not null auto_increment,
         department varchar(30),
@@ -277,6 +265,7 @@
         createdDate datetime,
         lastUpdated datetime,
         notes longtext,
+        numUnitsIssued integer,
         numUnitsRequested integer,
         patientAge integer,
         patientBirthDate date,
@@ -291,7 +280,6 @@
         requestNumber varchar(30),
         requestedBy varchar(30),
         requiredDate datetime,
-        volume integer,
         ward varchar(20),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -327,7 +328,11 @@ public class RequestRepository {
     productsToIssue = productsToIssue.replaceAll("\\[", "");
     productsToIssue = productsToIssue.replaceAll("\\]", "");
     String[] productIds = productsToIssue.split(",");
-    int totalVolumeIssued = getTotalVolumeIssued(request);
+
+    Integer numUnitsIssued = 0;
+    if (request.getIssuedProducts() != null)
+      numUnitsIssued = request.getIssuedProducts().size();
+
     for (String productId : productIds) {
       Product product = em.find(Product.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
@@ -336,7 +341,7 @@ public class RequestRepository {
       if (canIssueProduct(product, request)) {
         product.setIssuedTo(request);
         product.setIssuedOn(new Date());
-        totalVolumeIssued = totalVolumeIssued + product.getProductVolume();
+        numUnitsIssued = numUnitsIssued + 1;
         productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
         em.merge(product);
@@ -347,22 +352,12 @@ public class RequestRepository {
     }
 
     em.flush();
-    Integer totalVolumeRequested = request.getNumUnitsRequested() * request.getVolume();
-    if (totalVolumeIssued >= totalVolumeRequested) {
+    if (numUnitsIssued >= request.getNumUnitsRequested()) {
       request.setFulfilled(true);
-      em.merge(request);
     }
+    request.setNumUnitsIssued(numUnitsIssued);
+    em.merge(request);
     em.flush();
-  }
-
-  private Integer getTotalVolumeIssued(Request request) {
-    Integer totalVolumeIssued = 0;
-    for (Product product : request.getIssuedProducts()) {
-      if (product.getProductVolume() == null)
-        continue;
-      totalVolumeIssued = totalVolumeIssued + product.getProductVolume();
-    }
-    return totalVolumeIssued;
   }
 
   private boolean canIssueProduct(Product product, Request request) {
@@ -437,5 +432,15 @@ public class RequestRepository {
       ex.printStackTrace();
     }
     return request;
+  }
+
+  public List<Product> getIssuedProductsForRequest(Long requestId) {
+    String queryString = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+                         "p.issuedTo.id = :requestId AND p.isDeleted= :isDeleted";
+    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("requestId", requestId);
+    List<Product> issuedProducts = query.getResultList();
+    return issuedProducts;
   }
 }

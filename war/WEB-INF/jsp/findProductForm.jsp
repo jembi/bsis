@@ -83,8 +83,6 @@ $(document).ready(function() {
 
 		console.log(searchBy);
 		switch(searchBy) {
-			case "productNumber": form.find(".productNumberInput").show();
-															 break;
 			case "collectionNumber":   form.find(".collectionNumberInput").show();
 															 break;
 			case "productType": form.find(".productTypeInput").show();
@@ -209,16 +207,9 @@ $(document).ready(function() {
 									   id="${findProductFormSearchBySelectorId}"
 									   class="searchBy">
 					<form:option value="collectionNumber" label="${model.productFields.collectionNumber.displayName}" />
-					<form:option value="productNumber" label="${model.productFields.productNumber.displayName}" />
 					<form:option value="productType" label="${model.productFields.productType.displayName}" />
 				</form:select>
 	
-				<div class="productNumberInput hidableDiv" style="display:none">
-					<form:label path="productNumber"></form:label>
-					<!-- Spring supports dynamic attributes so placeholder can be added -->
-					<form:input path="productNumber" placeholder="Product Number"/>
-				</div>
-		
 				<div class="collectionNumberInput hidableDiv" style="display:none">
 					<form:input path="collectionNumber" placeholder="Collection Number" />
 				</div>

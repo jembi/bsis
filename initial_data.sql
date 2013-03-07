@@ -47,7 +47,6 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Product', 'status', 'Status', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Product', 'age', 'Age', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'productVolume', 'Product Volume', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'issuedTo', 'Issued to request', '', '0', '0', '0', '0', '0', '', 0),
 ('Product', 'issuedBy', 'Issued by', '', '0', '0', '0', '0', '0', '', 0),
@@ -71,11 +70,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'requiredDate', 'Required Date', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'numUnitsRequested', 'No. of Units Requested', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'volume', 'Unit Volume', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'totalVolumeRequested', 'Total volume requested', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'totalVolumeIssued', 'Total volume issued', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'totalVolumePending', 'Total volume pending', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'issuedQuantity', 'Issued Quantity', '', '0', '0', '0', '0', '0', '', 0),
+('Request', 'numUnitsIssued', 'No. of Units Issued', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
@@ -191,10 +186,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("HBV", "true", "collectionsWorksheet"),
 ("HCV", "true", "collectionsWorksheet"),
 ("Syphilis", "true", "collectionsWorksheet");
-
-insert into ProductVolume (volume, unit, description, isDeleted) values
-('450', 'ml', '', '0'),
-('1350', 'ml', '', '0');
 
 insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Saline @ 37 degrees', '0'),

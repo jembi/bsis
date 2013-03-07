@@ -323,14 +323,6 @@ public class RequestBackingForm {
     request.setRequestedBy(requestedBy);
   }
 
-  public Integer getVolume() {
-    return request.getVolume();
-  }
-
-  public void setVolume(Integer volume) {
-    request.setVolume(volume);
-  }
-
   public String getWard() {
     return request.getWard();
   }

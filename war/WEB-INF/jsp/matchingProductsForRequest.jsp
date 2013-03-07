@@ -77,7 +77,7 @@ $(document).ready(
           showMessage("You must select at least one product to issue.");
           return;
         }
-        var data = {requestId : "${model.request.id}",
+        var data = {requestId : "${model.requestId}",
             				productsToIssue : JSON.stringify(selected_products)
             			 };
         $.ajax({
@@ -131,8 +131,8 @@ $(document).ready(
 					<tr>
 						<th style="display:none;"></th>
 						<th></th>
-						<c:if test="${model.productFields.productNumber.hidden != true}">
-							<th>${model.productFields.productNumber.displayName}</th>
+						<c:if test="${model.productFields.collectionNumber.hidden != true}">
+							<th>${model.productFields.collectionNumber.displayName}</th>
 						</c:if>
 						<c:if test="${model.productFields.bloodGroup.hidden != true}">
 							<th>${model.productFields.bloodGroup.displayName}</th>
@@ -149,9 +149,6 @@ $(document).ready(
 						<c:if test="${model.productFields.expiresOn.hidden != true}">
 							<th>${model.productFields.expiresOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.productVolume.hidden != true}">
-							<th>${model.productFields.productVolume.displayName}</th>
-						</c:if>
 						<th>${model.compatibilityTestFields.compatibilityResult.displayName}</th>
 					</tr>
 				</thead>
@@ -164,10 +161,10 @@ $(document).ready(
 							<td>
 								<input type="checkbox" />
 							</td>
-							<c:if test="${model.productFields.productNumber.hidden != true}">
-								<td>${product.productNumber}</td>
+							<c:if test="${model.productFields.collectionNumber.hidden != true}">
+								<td>${product.collectionNumber}</td>
 							</c:if>
-							<c:if test="${model.productFields.bloodGroup.hidden != true}">
+							<c:if test="${model.productFields.collectionNumber.hidden != true}">
 								<td>${product.bloodGroup}</td>
 							</c:if>
 							<c:if test="${model.productFields.productType.hidden != true}">
@@ -181,9 +178,6 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
-							</c:if>
-							<c:if test="${model.productFields.productVolume.hidden != true}">
-								<td>${product.productVolume} ml</td>
 							</c:if>
 							<td>${product.isCompatible}</td>
 						</tr>

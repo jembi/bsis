@@ -39,6 +39,7 @@ import viewmodel.MatchingProductViewModel;
 @Repository
 @Transactional
 public class ProductRepository {
+
   @PersistenceContext
   private EntityManager em;
 
@@ -50,6 +51,9 @@ public class ProductRepository {
 
   @Autowired
   public TestResultRepository testResultRepository;
+
+  @Autowired
+  public RequestRepository requestRepository;
 
   /**
    * some fields like product status are cached internally.
@@ -141,7 +145,7 @@ public class ProductRepository {
     product.setBloodAbo(bloodAbo);
     product.setBloodRhd(bloodRhd);
   }
-  
+
   public Product findProduct(String productNumber) {
     Product product = null;
     if (productNumber != null && productNumber.length() > 0) {
@@ -175,13 +179,18 @@ public class ProductRepository {
       String collectionNumber, List<String> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
-    String queryStr = "SELECT p FROM Product p WHERE " +
+    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
                       "p.collectedSample.collectionNumber = :collectionNumber AND " +
                       "p.status IN :status AND " +
                       "p.isDeleted= :isDeleted";
 
+    String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
+        "p.collectedSample.collectionNumber = :collectionNumber AND " +
+        "p.status IN :status AND " +
+        "p.isDeleted= :isDeleted";
+
     if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     query = em.createQuery(queryStr, Product.class);
@@ -195,7 +204,7 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
+    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
   }
 
   private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
@@ -212,13 +221,19 @@ public class ProductRepository {
       List<Integer> productTypeIds, List<String> status,
       Map<String, Object> pagingParams) {
 
-    String queryStr = "SELECT p FROM Product p WHERE " +
+    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
         "p.productType.id IN (:productTypeIds) AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
 
+    String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
+        "p.productType.id IN (:productTypeIds) AND " +
+        "p.status IN :status AND " +
+        "p.isDeleted= :isDeleted";
+
+
     if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
@@ -232,7 +247,7 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
+    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
   }
 
   public List<Object> findProductByProductNumber(
@@ -454,10 +469,14 @@ public class ProductRepository {
     em.flush();
   }
 
-  public List<MatchingProductViewModel> findMatchingProductsForRequest(Request productRequest) {
+  public List<MatchingProductViewModel> findMatchingProductsForRequest(Long requestId) {
     Date today = new Date();
+
+    Request request = requestRepository.findRequestById(requestId);
+    
     TypedQuery<Product> query = em.createQuery(
-                 "SELECT p from Product p where p.productType = :productType AND " +
+                 "SELECT p from Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+                 "p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
                  "p.status = :status AND " +
                  "p.collectedSample.testedStatus = :testedStatus AND " +
@@ -466,14 +485,14 @@ public class ProductRepository {
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
-    query.setParameter("productType", productRequest.getProductType());
+    query.setParameter("productType", request.getProductType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
     query.setParameter("testedStatus", TestedStatus.TESTED);
-    query.setParameter("bloodAbo", productRequest.getPatientBloodAbo());
+    query.setParameter("bloodAbo", request.getPatientBloodAbo());
     query.setParameter("bloodAboO", BloodAbo.O);
     query.setParameter("bloodRhdNeg", BloodRhd.NEGATIVE);
-    query.setParameter("bloodRhd", productRequest.getPatientBloodRhd());
+    query.setParameter("bloodRhd", request.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
     TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
@@ -481,7 +500,7 @@ public class ProductRepository {
         "ct.testedProduct.status = :testedProductStatus AND " +
         "isDeleted=:isDeleted", CompatibilityTest.class);
 
-    crossmatchQuery.setParameter("forRequestId", productRequest.getId());
+    crossmatchQuery.setParameter("forRequestId", requestId);
     crossmatchQuery.setParameter("testedProductStatus", ProductStatus.AVAILABLE);
     crossmatchQuery.setParameter("isDeleted", false);
 
