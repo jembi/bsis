@@ -350,7 +350,6 @@ public class CollectedSampleRepository {
       }
     }
 
-    System.out.println(resultMap);
     return resultMap;
   }
 

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.CustomDateFormatter;
+import model.reports.CollectionsReportBackingForm;
+import model.reports.DiscardedProductsReportBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,70 +51,6 @@ public class ReportsController {
   @Autowired
   private UtilController utilController;
   
-  public static class CollectionsReportBackingForm {
-
-    private String dateCollectedFrom;
-    private String dateCollectedTo;
-    private String aggregationCriteria;
-    private List<String> centers;
-    private List<String> sites;
-    private List<String> bloodGroups;
-
-    public CollectionsReportBackingForm() {
-      centers = Arrays.asList(new String[0]);
-      sites = Arrays.asList(new String[0]);
-      setBloodGroups(Arrays.asList(new String[0]));
-    }
-
-    public String getDateCollectedFrom() {
-      return dateCollectedFrom;
-    }
-
-    public void setDateCollectedFrom(String dateCollectedFrom) {
-      this.dateCollectedFrom = dateCollectedFrom;
-    }
-
-    public String getDateCollectedTo() {
-      return dateCollectedTo;
-    }
-
-    public void setDateCollectedTo(String dateCollectedTo) {
-      this.dateCollectedTo = dateCollectedTo;
-    }
-
-    public String getAggregationCriteria() {
-      return aggregationCriteria;
-    }
-
-    public void setAggregationCriteria(String aggregationCriteria) {
-      this.aggregationCriteria = aggregationCriteria;
-    }
-
-    public List<String> getCenters() {
-      return centers;
-    }
-
-    public void setCenters(List<String> centers) {
-      this.centers = centers;
-    }
-
-    public List<String> getSites() {
-      return sites;
-    }
-
-    public void setSites(List<String> sites) {
-      this.sites = sites;
-    }
-
-    public List<String> getBloodGroups() {
-      return bloodGroups;
-    }
-
-    public void setBloodGroups(List<String> bloodGroups) {
-      this.bloodGroups = bloodGroups;
-    }
-  }
-
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView inventoryReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("inventoryReportForm");
@@ -165,6 +103,18 @@ public class ReportsController {
     return mv;
   }
 
+  @RequestMapping(value = "/discardedProductsReportFormGenerator", method = RequestMethod.GET)
+  public ModelAndView discardedProductsReportFormGenerator(Model model) {
+    ModelAndView mv = new ModelAndView("discardedProductsReport");
+    Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(m, "report.products.discardedproductsreport");
+    m.put("centers", locationRepository.getAllCenters());
+    m.put("sites", locationRepository.getAllCollectionSites());
+    mv.addObject("discardedProductsReportForm", new DiscardedProductsReportBackingForm());
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping("/getCollectionsReport")
   public @ResponseBody
   Map<String, Object> getCollectionsReport(
@@ -208,6 +158,60 @@ public class ReportsController {
   
       m.put("interval", interval);
       m.put("numCollections", numCollections);
+
+      m.put("dateCollectedFromUTC", dateFrom.getTime());
+      m.put("dateCollectedToUTC", dateTo.getTime());
+
+    } catch (ParseException ex) {
+      // TODO Auto-generated catch block
+      ex.printStackTrace();
+    }
+    return m;
+  }
+
+  @RequestMapping("/getDiscardedProductsReport")
+  public @ResponseBody
+  Map<String, Object> getDiscardedProductsReport(
+      @ModelAttribute("discardedProductsReportForm") DiscardedProductsReportBackingForm form,
+      BindingResult result, Model model) {
+
+    String dateCollectedFrom = form.getDateCollectedFrom();
+    String dateCollectedTo = form.getDateCollectedTo();
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    try {
+
+      Date dateTo;
+      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+        dateTo = new Date();
+      else
+        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+
+      Calendar gcal = new GregorianCalendar();
+      gcal.setTime(dateTo);
+      gcal.add(Calendar.DATE, 1);
+      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+
+      Date dateFrom;
+      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+
+      Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
+          .findNumberOfDiscardedProducts(dateFrom, dateTo,
+              form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
+      // TODO: potential leap year bug here
+      Long interval = (long) (24 * 3600 * 1000);
+  
+      if (form.getAggregationCriteria().equals("monthly"))
+        interval = interval * 30;
+      else if (form.getAggregationCriteria().equals("yearly"))
+        interval = interval * 365;
+  
+      m.put("interval", interval);
+      m.put("numCollections", numDiscardedProducts);
 
       m.put("dateCollectedFromUTC", dateFrom.getTime());
       m.put("dateCollectedToUTC", dateTo.getTime());
