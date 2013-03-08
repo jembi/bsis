@@ -22,6 +22,9 @@ import model.location.LocationType;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.producttype.ProductType;
+import model.request.Request;
+import model.request.RequestBackingForm;
+import model.requesttype.RequestType;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.util.BloodGroup;
@@ -42,6 +45,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
+import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.TestResultRepository;
 import repository.UsageRepository;
@@ -60,6 +64,9 @@ public class CreateDataController {
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
+
+  @Autowired
+  private RequestTypeRepository requestTypeRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -506,27 +513,38 @@ public class CreateDataController {
 		}
 	}
 
-	private void createRequests(int requestNumber) {
-		String[] status = new String[] { "pending", "partiallyFulfilled",
-				"fulfilled" };
+	public void createRequests(int numRequests) {
 
-		List<Location> sites = locationRepository.getAllCollectionSites();
+	  String[] bloodGroups = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
 
-		for (int i = 0; i < requestNumber; i++) {
-//			Date requestDate = getRandomCollectionDate();
-//			Date requiredDate = new DateTime(requestDate).plusDays(15).toDate();
-//			String productType = productTypes[r.nextInt(productTypes.length)];
-//			productType = productType.equals("partialPlatelets") ? "platelets"
-//					: productType;
-//			Request request = new Request(new Integer(i + 1).toString(),
-//					requestDate, requiredDate, sites.get(
-//							r.nextInt(sites.size())).getLocationId(),
-//					productType, bloodTypes[r.nextInt(bloodTypes.length)],
-//					rhd[r.nextInt(rhd.length)], r.nextInt(20),
-//					status[r.nextInt(status.length)], Boolean.FALSE, "comment_"
-//							+ i);
-//			requestRepository.saveRequest(request);
+		List<Location> sites = locationRepository.getAllUsageSites();
+    List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+    List<RequestType> requestTypes = requestTypeRepository.getAllRequestTypes();
+
+    List<String> requestNumbers = sequenceNumberRepository.getBatchRequestNumbers(numRequests);
+
+    List<Request> requests = new ArrayList<Request>();
+		for (int i = 0; i < numRequests; i++) {
+			Date requestDate = getRandomCollectionDate();
+			Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt() % 21).toDate();
+			RequestBackingForm form = new RequestBackingForm();
+			form.setRequestNumber(requestNumbers.get(i));
+			form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
+			form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
+      form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
+      form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
+      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());
+      form.setNumUnitsRequested(1 + Math.abs(random.nextInt()) % 20);
+      form.setIsDeleted(false);
+      form.setFulfilled(false);
+
+      String bloodGroupStr = bloodGroups[random.nextInt(bloodGroups.length)];
+      BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
+      form.setPatientBloodAbo(bloodGroup.getBloodAbo());
+      form.setPatientBloodRhd(bloodGroup.getBloodRhd());
+      requests.add(form.getRequest());
 		}
+		requestRepository.addAllRequests(requests);
 	}
 
 	private String getRandomTestResult() {

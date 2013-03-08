@@ -21,7 +21,7 @@
 
 <script>
 $(document).ready(function() {
-  $("#issuedProductsReportsDateCollectedFrom").datepicker(
+  $("#issuedProductsReportsDateIssuedFrom").datepicker(
       {
         changeMonth : true,
         changeYear : true,
@@ -30,16 +30,16 @@ $(document).ready(function() {
         dateFormat : "mm/dd/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
-          $("#issuedProductsReportsDateCollectedTo").datepicker("option", "minDate",
+          $("#issuedProductsReportsDateIssuedTo").datepicker("option", "minDate",
               selectedDate);
         }
       });
 
   var lastYear = new Date();
   lastYear.setFullYear(lastYear.getFullYear()-1);
-  $("#issuedProductsReportsDateCollectedFrom").datepicker("setDate", lastYear);
+  $("#issuedProductsReportsDateIssuedFrom").datepicker("setDate", lastYear);
 
-  $("#issuedProductsReportsDateCollectedTo").datepicker(
+  $("#issuedProductsReportsDateIssuedTo").datepicker(
       {
         changeMonth : true,
         changeYear : true,
@@ -48,7 +48,7 @@ $(document).ready(function() {
         dateFormat : "mm/dd/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
-          $("#issuedProductsReportsDateCollectedFrom").datepicker("option", "maxDate",
+          $("#issuedProductsReportsDateIssuedFrom").datepicker("option", "maxDate",
               selectedDate);
         }
       });
@@ -93,13 +93,13 @@ $(document).ready(function() {
       data : formData,
       success : function(data) {
         getIssuedProductsChart({
-          data : data.numCollections,
+          data : data.numIssuedProducts,
           renderDest : "issuedProductsReportResult",
           title : "Issued Products Report",
           hoverText : "Products",
           yAxisTitle : "No. of Issued/Unsafe/Expired Products",
-          startTime : data.dateCollectedFromUTC,
-          endTime : data.dateCollectedToUTC,
+          startTime : data.dateIssuedFromUTC,
+          endTime : data.dateIssuedToUTC,
           interval : data.interval
         });
       }
@@ -172,10 +172,10 @@ $(document).ready(function() {
 				<td>Enter Date Range</td>
 			</tr>
 			<tr>
-				<td><form:input path="dateCollectedFrom"
-						id="issuedProductsReportsDateCollectedFrom" placeholder="From Date" />&nbsp;to</td>
-				<td><form:input path="dateCollectedTo"
-						id="issuedProductsReportsDateCollectedTo" placeholder="To Date" /></td>
+				<td><form:input path="dateIssuedFrom"
+						id="issuedProductsReportsDateIssuedFrom" placeholder="From Date" />&nbsp;to</td>
+				<td><form:input path="dateIssuedTo"
+						id="issuedProductsReportsDateIssuedTo" placeholder="To Date" /></td>
 			</tr>
 			<tr>
 				<td />

@@ -17,6 +17,7 @@ import model.CustomDateFormatter;
 import model.reports.CollectionsReportBackingForm;
 import model.reports.DiscardedProductsReportBackingForm;
 import model.reports.IssuedProductsReportBackingForm;
+import model.reports.RequestsReportBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
+import repository.RequestRepository;
 import repository.TestResultRepository;
 
 @Controller
@@ -48,6 +50,9 @@ public class ReportsController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private RequestRepository requestRepository;
 
   @Autowired
   private UtilController utilController;
@@ -100,6 +105,17 @@ public class ReportsController {
     m.put("centers", locationRepository.getAllCenters());
     m.put("sites", locationRepository.getAllCollectionSites());
     mv.addObject("collectionsReportForm", new CollectionsReportBackingForm());
+    mv.addObject("model", model);
+    return mv;
+  }
+
+  @RequestMapping(value = "/requestsReportFormGenerator", method = RequestMethod.GET)
+  public ModelAndView requestsReportFormGenerator(Model model) {
+    ModelAndView mv = new ModelAndView("requestsReport");
+    Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(model.asMap(), "report.requests.requests");
+    m.put("sites", locationRepository.getAllUsageSites());
+    mv.addObject("requestsReportForm", new RequestsReportBackingForm());
     mv.addObject("model", model);
     return mv;
   }
@@ -182,6 +198,60 @@ public class ReportsController {
     return m;
   }
 
+  @RequestMapping("/getRequestsReport")
+  public @ResponseBody
+  Map<String, Object> getRequestsReport(
+      @ModelAttribute("requestsReportForm") RequestsReportBackingForm form,
+      BindingResult result, Model model) {
+
+    String dateCollectedFrom = form.getDateRequestedFrom();
+    String dateCollectedTo = form.getDateRequestedTo();
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    try {
+
+      Date dateTo;
+      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+        dateTo = new Date();
+      else
+        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+
+      Calendar gcal = new GregorianCalendar();
+      gcal.setTime(dateTo);
+      gcal.add(Calendar.DATE, 1);
+      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+
+      Date dateFrom;
+      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+
+      Map<String, Map<Long, Long>> numRequests = requestRepository
+          .findNumberOfRequests(dateFrom, dateTo,
+              form.getAggregationCriteria(), form.getSites(), form.getBloodGroups());
+      // TODO: potential leap year bug here
+      Long interval = (long) (24 * 3600 * 1000);
+  
+      if (form.getAggregationCriteria().equals("monthly"))
+        interval = interval * 30;
+      else if (form.getAggregationCriteria().equals("yearly"))
+        interval = interval * 365;
+  
+      m.put("interval", interval);
+      m.put("numRequests", numRequests);
+
+      m.put("dateRequestedFromUTC", dateFrom.getTime());
+      m.put("dateRequestedToUTC", dateTo.getTime());
+
+    } catch (ParseException ex) {
+      // TODO Auto-generated catch block
+      ex.printStackTrace();
+    }
+    return m;
+  }
+
   @RequestMapping("/getDiscardedProductsReport")
   public @ResponseBody
   Map<String, Object> getDiscardedProductsReport(
@@ -224,7 +294,7 @@ public class ReportsController {
         interval = interval * 365;
   
       m.put("interval", interval);
-      m.put("numCollections", numDiscardedProducts);
+      m.put("numDiscardedProducts", numDiscardedProducts);
 
       m.put("dateCollectedFromUTC", dateFrom.getTime());
       m.put("dateCollectedToUTC", dateTo.getTime());
@@ -242,8 +312,8 @@ public class ReportsController {
       @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form,
       BindingResult result, Model model) {
 
-    String dateCollectedFrom = form.getDateCollectedFrom();
-    String dateCollectedTo = form.getDateCollectedTo();
+    String dateCollectedFrom = form.getDateIssuedFrom();
+    String dateCollectedTo = form.getDateIssuedTo();
 
     Map<String, Object> m = new HashMap<String, Object>();
 
@@ -266,7 +336,7 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
 
-      Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
+      Map<String, Map<Long, Long>> numIssuedProducts = productRepository
           .findNumberOfIssuedProducts(dateFrom, dateTo,
               form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
       // TODO: potential leap year bug here
@@ -278,10 +348,10 @@ public class ReportsController {
         interval = interval * 365;
   
       m.put("interval", interval);
-      m.put("numCollections", numDiscardedProducts);
+      m.put("numIssuedProducts", numIssuedProducts);
 
-      m.put("dateCollectedFromUTC", dateFrom.getTime());
-      m.put("dateCollectedToUTC", dateTo.getTime());
+      m.put("dateIssuedFromUTC", dateFrom.getTime());
+      m.put("dateIssuedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
       // TODO Auto-generated catch block

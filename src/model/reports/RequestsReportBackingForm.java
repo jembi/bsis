@@ -3,35 +3,33 @@ package model.reports;
 import java.util.Arrays;
 import java.util.List;
 
-public class IssuedProductsReportBackingForm {
+public class RequestsReportBackingForm {
 
-  private String dateIssuedFrom;
-  private String dateIssuedTo;
+  private String dateRequestedFrom;
+  private String dateRequestedTo;
   private String aggregationCriteria;
-  private List<String> centers;
   private List<String> sites;
   private List<String> bloodGroups;
 
-  public IssuedProductsReportBackingForm() {
-    centers = Arrays.asList(new String[0]);
+  public RequestsReportBackingForm() {
     sites = Arrays.asList(new String[0]);
     setBloodGroups(Arrays.asList(new String[0]));
   }
 
-  public String getDateIssuedFrom() {
-    return dateIssuedFrom;
+  public String getDateRequestedFrom() {
+    return dateRequestedFrom;
   }
 
-  public void setDateIssuedFrom(String dateIssuedFrom) {
-    this.dateIssuedFrom = dateIssuedFrom;
+  public void setDateRequestedFrom(String dateRequestedFrom) {
+    this.dateRequestedFrom = dateRequestedFrom;
   }
 
-  public String getDateIssuedTo() {
-    return dateIssuedTo;
+  public String getDateRequestedTo() {
+    return dateRequestedTo;
   }
 
-  public void setDateIssuedTo(String dateIssuedTo) {
-    this.dateIssuedTo = dateIssuedTo;
+  public void setDateRequestedTo(String dateRequestedTo) {
+    this.dateRequestedTo = dateRequestedTo;
   }
 
   public String getAggregationCriteria() {
@@ -40,14 +38,6 @@ public class IssuedProductsReportBackingForm {
 
   public void setAggregationCriteria(String aggregationCriteria) {
     this.aggregationCriteria = aggregationCriteria;
-  }
-
-  public List<String> getCenters() {
-    return centers;
-  }
-
-  public void setCenters(List<String> centers) {
-    this.centers = centers;
   }
 
   public List<String> getSites() {
@@ -66,4 +56,3 @@ public class IssuedProductsReportBackingForm {
     this.bloodGroups = bloodGroups;
   }
 }
-

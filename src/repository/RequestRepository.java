@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,9 @@ import model.product.Product;
 import model.product.ProductStatus;
 import model.request.Request;
 import model.testresults.TestResult;
+import model.util.BloodAbo;
+import model.util.BloodGroup;
+import model.util.BloodRhd;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -442,5 +446,100 @@ public class RequestRepository {
     query.setParameter("requestId", requestId);
     List<Product> issuedProducts = query.getResultList();
     return issuedProducts;
+  }
+
+  public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,
+      Date dateRequestedTo, String aggregationCriteria,
+      List<String> sites, List<String> bloodGroups) {
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (sites != null) {
+      for (String site : sites) {
+        siteIds.add(Long.parseLong(site));
+      }
+    } else {
+      siteIds.add((long)-1);
+    }
+
+    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    for (String bloodGroup : bloodGroups) {
+      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+    }
+
+    TypedQuery<Object[]> query = em.createQuery(
+        "SELECT count(r), r.requestDate, r.patientBloodAbo, r.patientBloodRhd FROM Request r WHERE " +
+        "r.requestSite.id IN (:siteIds) AND " +
+        "r.requestDate BETWEEN :dateRequestedFrom AND " +
+        ":dateRequestedTo AND (r.isDeleted= :isDeleted) GROUP BY " +
+        "patientBloodAbo, patientBloodRhd, requestDate", Object[].class);
+
+    query.setParameter("siteIds", siteIds);
+    query.setParameter("isDeleted", Boolean.FALSE);
+
+    query.setParameter("dateRequestedFrom", dateRequestedFrom);
+    query.setParameter("dateRequestedTo", dateRequestedTo);
+
+    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    int incrementBy = Calendar.DAY_OF_YEAR;
+    if (aggregationCriteria.equals("monthly")) {
+      incrementBy = Calendar.MONTH;
+      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+    } else if (aggregationCriteria.equals("yearly")) {
+      incrementBy = Calendar.YEAR;
+      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
+    }
+
+    List<Object[]> resultList = query.getResultList();
+
+    for (String bloodGroup : bloodGroups) {
+      Map<Long, Long> m = new HashMap<Long, Long>();
+      Calendar gcal = new GregorianCalendar();
+      Date lowerDate = null;
+      Date upperDate = null;
+      try {
+        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
+        upperDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
+      } catch (ParseException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+      gcal.setTime(lowerDate);
+      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+        m.put(gcal.getTime().getTime(), (long) 0);
+        gcal.add(incrementBy, 1);
+      }
+      resultMap.put(bloodGroup, m);
+    }
+
+    for (Object[] result : resultList) {
+      Date d = (Date) result[1];
+      BloodAbo bloodAbo = (BloodAbo) result[2];
+      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      Map<Long, Long> m = resultMap.get(bloodGroup.toString());
+      if (m == null)
+        continue;
+      try {
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Long utcTime = formattedDate.getTime();
+        if (m.containsKey(utcTime)) {
+          Long newVal = m.get(utcTime) + (Long) result[0];
+          m.put(utcTime, newVal);
+        } else {
+          m.put(utcTime, (Long) result[0]);
+        }
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    return resultMap;
+  }
+
+  public void addAllRequests(List<Request> requests) {
+    for (Request request : requests) {
+      em.persist(request);
+    }
+    em.flush();
   }
 }

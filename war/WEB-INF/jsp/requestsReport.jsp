@@ -16,12 +16,11 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="discardedProductsReportBloodGroupSelectorId">discardedProductsReportBloodGroupSelector-${unique_page_id}</c:set>
-
+<c:set var="requestsReportBloodGroupSelectorId">requestsReportBloodGroupSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
-  $("#discardedProductsReportsDateCollectedFrom").datepicker(
+  $("#requestreportsDateRequestedFrom").datepicker(
       {
         changeMonth : true,
         changeYear : true,
@@ -30,16 +29,16 @@ $(document).ready(function() {
         dateFormat : "mm/dd/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
-          $("#discardedProductsReportsDateCollectedTo").datepicker("option", "minDate",
+          $("#requestreportsDateRequestedTo").datepicker("option", "minDate",
               selectedDate);
         }
       });
 
   var lastYear = new Date();
   lastYear.setFullYear(lastYear.getFullYear()-1);
-  $("#discardedProductsReportsDateCollectedFrom").datepicker("setDate", lastYear);
+  $("#requestreportsDateRequestedFrom").datepicker("setDate", lastYear);
   
-  $("#discardedProductsReportsDateCollectedTo").datepicker(
+  $("#requestreportsDateRequestedTo").datepicker(
       {
         changeMonth : true,
         changeYear : true,
@@ -48,19 +47,19 @@ $(document).ready(function() {
         dateFormat : "mm/dd/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
-          $("#discardedProductsReportsDateCollectedFrom").datepicker("option", "maxDate",
+          $("#requestreportsDateRequestedFrom").datepicker("option", "maxDate",
               selectedDate);
         }
       });
 
-  $("#discardedProductsReportFormAggregationCriteria").multiselect({
+  $("#requestsReportFormAggregationCriteria").multiselect({
     multiple : false,
     selectedList : 1,
     header : false
   });
 
   function getBloodGroupSelector() {
-    return $("#${discardedProductsReportBloodGroupSelectorId}");
+    return $("#${requestsReportBloodGroupSelectorId}");
   }
 
   getBloodGroupSelector().multiselect({
@@ -81,40 +80,40 @@ $(document).ready(function() {
 
   getBloodGroupSelector().multiselect("checkAll");
 
-  $("#generateDiscardedProductsReportButton").button({
+  $("#generateRequestsReportButton").button({
     icons : {
       primary : 'ui-icon-print'
     }
   }).click(function() {
-    var formData = $("#discardedProductsReportForm").serialize();
+    var formData = $("#requestsReportForm").serialize();
     $.ajax({
       type : "GET",
-      url : "getDiscardedProductsReport.html",
+      url : "getRequestsReport.html",
       data : formData,
       success : function(data) {
-        getDiscardedProductsChart({
-          data : data.numDiscardedProducts,
-          renderDest : "discardedProductsReportResult",
-          title : "Discarded Products Report",
-          hoverText : "Products",
-          yAxisTitle : "No. of Discarded/Unsafe/Expired Products",
-          startTime : data.dateCollectedFromUTC,
-          endTime : data.dateCollectedToUTC,
+        getRequestsChart({
+          data : data.numRequests,
+          renderDest : "requestsReportResult",
+          title : "Requests Report",
+          hoverText : "Requests",
+          yAxisTitle : "No. of Requests",
+          startTime : data.dateRequestedFromUTC,
+          endTime : data.dateRequestedToUTC,
           interval : data.interval
         });
       }
     });
   });
 
-  $("#clearDiscardedProductsReportButton").button({
+  $("#clearRequestsReportButton").button({
     icons: {
       primary: 'ui-icon-grip-solid-horizontal'
     }
   }).click(function() {
-    $("#discardedProductsReportResult").html("");
+    $("#requestsReportResult").html("");
   });
 
-  $("#discardedProductsReportForm").find(".collectionCenterSelector").multiselect({
+  $("#requestsReportForm").find(".collectionCenterSelector").multiselect({
 	  position : {
 	    my : 'left top',
 	    at : 'right center'
@@ -132,9 +131,9 @@ $(document).ready(function() {
 	  }
 	});
 
-  $("#discardedProductsReportForm").find(".collectionCenterSelector").multiselect("checkAll");
+  $("#requestsReportForm").find(".collectionCenterSelector").multiselect("checkAll");
 
-  $("#discardedProductsReportForm").find(".collectionSiteSelector").multiselect({
+  $("#requestsReportForm").find(".collectionSiteSelector").multiselect({
 	  position : {
 	    my : 'left top',
 	    at : 'right center'
@@ -152,16 +151,16 @@ $(document).ready(function() {
 	  }
 	});
 
-  $("#discardedProductsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
+  $("#requestsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
 });
 </script>
 
-<form:form method="GET" commandName="discardedProductsReportForm"
-	id="discardedProductsReportForm">
+<form:form method="GET" commandName="requestsReportForm"
+	id="requestsReportForm">
 		<br/>
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['report.products.discardedproductsreport']}
+				${model['report.requests.requestsreport']}
 			</p>
 		</div>
 	<table>
@@ -172,26 +171,17 @@ $(document).ready(function() {
 				<td>Enter Date Range</td>
 			</tr>
 			<tr>
-				<td><form:input path="dateCollectedFrom"
-						id="discardedProductsReportsDateCollectedFrom" placeholder="From Date" />&nbsp;to</td>
-				<td><form:input path="dateCollectedTo"
-						id="discardedProductsReportsDateCollectedTo" placeholder="To Date" /></td>
+				<td><form:input path="dateRequestedFrom"
+						id="requestreportsDateRequestedFrom" placeholder="From Date" />&nbsp;to</td>
+				<td><form:input path="dateRequestedTo"
+						id="requestreportsDateRequestedTo" placeholder="To Date" /></td>
 			</tr>
 			<tr>
 				<td />
 			</tr>
 			<tr>
-				<td><form:label path="centers">Collection Centers</form:label></td>
-				<td style="padding-left: 10px;"><form:select path="centers" class="collectionCenterSelector">
-					<c:forEach var="center" items="${model.centers}">
-						<form:option value="${center.id}" label="${center.name}" />
-					</c:forEach>
-				</form:select>
-				</td>
-			</tr>
-			<tr>
 				<td>
-					<form:label path="sites">Collection Sites</form:label>
+					<form:label path="sites">Request Sites</form:label>
 				</td>
 				<td style="padding-left: 10px;">
 					<form:select path="sites" class="collectionSiteSelector">
@@ -205,7 +195,7 @@ $(document).ready(function() {
 				<td><form:label path="aggregationCriteria"> Aggregation Criteria </form:label></td>
 				<td style="padding-left: 10px;"><form:select
 						path="aggregationCriteria"
-						id="discardedProductsReportFormAggregationCriteria">
+						id="requestsReportFormAggregationCriteria">
 						<form:option value="daily" label="Daily" selected="" />
 						<form:option value="monthly" label="Monthly" selected="selected" />
 						<form:option value="yearly" label="Yearly" selected="" />
@@ -214,7 +204,7 @@ $(document).ready(function() {
 			<tr>
 				<td><form:label path="bloodGroups">Blood Groups</form:label></td>
 				<td style="padding-left: 10px;">
-					<form:select id="${discardedProductsReportBloodGroupSelectorId}" path="bloodGroups">
+					<form:select id="${requestsReportBloodGroupSelectorId}" path="bloodGroups">
 						<form:option value="A+">A+</form:option>
 						<form:option value="B+">B+</form:option>
 						<form:option value="AB+">AB+</form:option>
@@ -228,9 +218,9 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td />
-				<td><button type="button" id="generateDiscardedProductsReportButton"
+				<td><button type="button" id="generateRequestsReportButton"
 						style="margin-left: 10px">Generate report</button>
-						<button type="button" id="clearDiscardedProductsReportButton"
+						<button type="button" id="clearRequestsReportButton"
 						style="margin-left: 10px">Clear report</button>
 				</td>
 			</tr>
@@ -238,4 +228,4 @@ $(document).ready(function() {
 	</table>
 </form:form>
 
-<div id="discardedProductsReportResult" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>
+<div id="requestsReportResult" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>

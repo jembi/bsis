@@ -37,6 +37,46 @@ function getCollectionsChart(options) {
   return chart;
 }
 
+function getRequestsChart(options) {
+
+  var seriesData = parseRequestsData(options.startTime, options.endTime,
+      options.interval, options.data);
+  console.log(seriesData);
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'No. of Requests by Blood Group'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
+          },
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'No. of Requests'
+          }
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
+
+  var chart = new Highcharts.Chart(options);
+
+  return chart;
+}
+
 function getDiscardedProductsChart(options) {
 
   var seriesData = parseDiscardedProductsData(options.startTime, options.endTime,
@@ -326,6 +366,26 @@ function parseTestResultsData(beginDate, endDate, interval, data) {
 
 function parseCollectionsData(beginDate, endDate, interval, data) {
 
+  var resultData = [];
+  for (var bloodGroup in data) {
+    var resultsForBloodGroup = {}
+    resultsForBloodGroup.name = bloodGroup;
+    resultsForBloodGroup.data = [];
+    for (var x in data[bloodGroup]) {
+      resultsForBloodGroup.data.push([ parseInt(x), data[bloodGroup][x] ]);
+    }
+    resultsForBloodGroup.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForBloodGroup);
+  }
+
+  return resultData;
+}
+
+function parseRequestsData(beginDate, endDate, interval, data) {
+
+  console.log(data);
   var resultData = [];
   for (var bloodGroup in data) {
     var resultsForBloodGroup = {}
