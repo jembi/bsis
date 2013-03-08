@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.CustomDateFormatter;
 import model.reports.CollectionsReportBackingForm;
 import model.reports.DiscardedProductsReportBackingForm;
+import model.reports.IssuedProductsReportBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -115,6 +116,18 @@ public class ReportsController {
     return mv;
   }
 
+  @RequestMapping(value = "/issuedProductsReportFormGenerator", method = RequestMethod.GET)
+  public ModelAndView issuedProductsReportFormGenerator(Model model) {
+    ModelAndView mv = new ModelAndView("issuedProductsReport");
+    Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(m, "report.products.issuedproductsreport");
+    m.put("centers", locationRepository.getAllCenters());
+    m.put("sites", locationRepository.getAllCollectionSites());
+    mv.addObject("issuedProductsReportForm", new IssuedProductsReportBackingForm());
+    mv.addObject("model", m);
+    return mv;
+  }
+
   @RequestMapping("/getCollectionsReport")
   public @ResponseBody
   Map<String, Object> getCollectionsReport(
@@ -201,6 +214,60 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
           .findNumberOfDiscardedProducts(dateFrom, dateTo,
+              form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
+      // TODO: potential leap year bug here
+      Long interval = (long) (24 * 3600 * 1000);
+  
+      if (form.getAggregationCriteria().equals("monthly"))
+        interval = interval * 30;
+      else if (form.getAggregationCriteria().equals("yearly"))
+        interval = interval * 365;
+  
+      m.put("interval", interval);
+      m.put("numCollections", numDiscardedProducts);
+
+      m.put("dateCollectedFromUTC", dateFrom.getTime());
+      m.put("dateCollectedToUTC", dateTo.getTime());
+
+    } catch (ParseException ex) {
+      // TODO Auto-generated catch block
+      ex.printStackTrace();
+    }
+    return m;
+  }
+
+  @RequestMapping("/getIssuedProductsReport")
+  public @ResponseBody
+  Map<String, Object> getIssuedProductsReport(
+      @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form,
+      BindingResult result, Model model) {
+
+    String dateCollectedFrom = form.getDateCollectedFrom();
+    String dateCollectedTo = form.getDateCollectedTo();
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    try {
+
+      Date dateTo;
+      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+        dateTo = new Date();
+      else
+        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+
+      Calendar gcal = new GregorianCalendar();
+      gcal.setTime(dateTo);
+      gcal.add(Calendar.DATE, 1);
+      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+
+      Date dateFrom;
+      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+      else
+        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+
+      Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
+          .findNumberOfIssuedProducts(dateFrom, dateTo,
               form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);

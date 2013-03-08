@@ -76,6 +76,45 @@ function getDiscardedProductsChart(options) {
   return chart;
 }
 
+function getIssuedProductsChart(options) {
+
+  var seriesData = parseIssuedProductsData(options.startTime, options.endTime,
+      options.interval, options.data);
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'No. of Products Issued by Blood Group'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
+          },
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'No. of Products Issued'
+          }
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
+
+  var chart = new Highcharts.Chart(options);
+
+  return chart;
+}
+
 function parseInventoryData(data) {
 
   var result = {};
@@ -323,15 +362,21 @@ function parseDiscardedProductsData(beginDate, endDate, interval, data) {
   return resultData;
 }
 
-function getSeriesData(beginDate, endDate, interval, data) {
+function parseIssuedProductsData(beginDate, endDate, interval, data) {
 
-  seriesData = [];
-  for (var x in data) {
-    seriesData.push([ parseInt(x), data[x] ]);
+  var resultData = [];
+  for (var bloodGroup in data) {
+    var resultsForBloodGroup = {}
+    resultsForBloodGroup.name = bloodGroup;
+    resultsForBloodGroup.data = [];
+    for (var x in data[bloodGroup]) {
+      resultsForBloodGroup.data.push([ parseInt(x), data[bloodGroup][x] ]);
+    }
+    resultsForBloodGroup.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForBloodGroup);
   }
 
-  seriesData.sort(function(a, b) {
-    return a[0] - b[0];
-  });
-  return seriesData;
+  return resultData;
 }

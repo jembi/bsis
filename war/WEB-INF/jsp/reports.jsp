@@ -22,6 +22,9 @@
 		<li id="discardedProductsReport">
 			<a href="discardedProductsReportFormGenerator.html">Discarded products</a>
 		</li>
+		<li id="issuedProductsReport">
+			<a href="issuedProductsReportFormGenerator.html">Issued products</a>
+		</li>
 		<li id="collectionsReport">
 			<a href="collectionsReportFormGenerator.html">Collections</a>
 		</li>
