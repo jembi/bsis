@@ -22,6 +22,7 @@ import model.location.LocationType;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.producttype.ProductType;
+import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.util.BloodGroup;
 import model.util.Gender;
@@ -395,7 +396,12 @@ public class CreateDataController {
 		cal.setTime(toDate);
 		long decTo = cal.getTimeInMillis();
 		long diff = decTo - decFrom;
-		long randomOffset = random.nextLong() % diff;
+		long randomOffset = 0;
+		while (true) {
+		  randomOffset = random.nextLong() % diff;
+		  if (randomOffset > diff/2 && random.nextBoolean())
+		    break;
+		}
 		Date date = new Date(decFrom + randomOffset);
 		return date;
 	}
@@ -412,8 +418,8 @@ public class CreateDataController {
 	private Date getRandomCollectionDate() {
 		// Date twoYearsAgo = new DateTime().minusYears(2).toDate();
 		// return getRandomDate(twoYearsAgo, new Date());
-		Date thrityfiveDaysAgo = new DateTime().minusDays(35).toDate();
-		return getRandomDate(thrityfiveDaysAgo, new Date());
+		Date twoYearsAgo = new DateTime().minusDays(1000).toDate();
+		return getRandomDate(twoYearsAgo, new Date());
 	}
 
 	void createCollectionsWithTestResults(int numCollections) {
@@ -423,10 +429,13 @@ public class CreateDataController {
     List<DonorType> donorTypes = donorTypeRepository.getAllDonorTypes();
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
+
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
+    List<String> collectionNumbers = sequenceNumberRepository.getBatchCollectionNumbers(numCollections);
 		for (int i = 0; i < numCollections; i++) {
 		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
-      collection.setCollectionNumber(sequenceNumberRepository.getNextCollectionNumber());    
+      collection.setCollectionNumber(collectionNumbers.get(i));    
 
 		  collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
 		  collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
@@ -441,13 +450,19 @@ public class CreateDataController {
 		  collection.setSampleNumber(collection.getCollectionNumber());
 		  collection.setIsDeleted(false);
 
-		  collectionRepository.addCollectedSample(collection.getCollectedSample());
+		  collectedSamples.add(collection.getCollectedSample());
+		}
 
+		collectionRepository.addAllCollectedSamples(collectedSamples);
+
+		List<TestResult> testResults = new ArrayList<TestResult>();
+		for (CollectedSample collectedSample : collectedSamples) {
+		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber()).get(0);
 		  for (BloodTest b : bloodTests) {
 
     	  TestResultBackingForm t = new TestResultBackingForm();
-    	  t.setCollectedSample(collection.getCollectedSample());
-    	  t.setTestedOn(collectionDate);
+    	  t.setCollectedSample(collectedSample);
+    	  t.setTestedOn(CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn()));
     	  t.setIsDeleted(false);
     	  t.getTestResult().setBloodTest(b);
 
@@ -466,10 +481,10 @@ public class CreateDataController {
     	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
 
     	  t.setResult(result);
-    	  testResultRepository.addTestResult(t.getTestResult());
+    	  testResults.add(t.getTestResult());
 		  }
-
 		}
+    testResultRepository.addAllTestResults(testResults);
 	}
 
 	public void createProducts(int numProducts) {

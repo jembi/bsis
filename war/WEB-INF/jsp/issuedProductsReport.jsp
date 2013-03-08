@@ -35,11 +35,10 @@ $(document).ready(function() {
         }
       });
 
-  var firstDayOfYear = new Date();
-	firstDayOfYear.setDate(1);
-	firstDayOfYear.setMonth(0);
-  $("#issuedProductsReportsDateCollectedFrom").datepicker("setDate", firstDayOfYear);
-  
+  var lastYear = new Date();
+  lastYear.setFullYear(lastYear.getFullYear()-1);
+  $("#issuedProductsReportsDateCollectedFrom").datepicker("setDate", lastYear);
+
   $("#issuedProductsReportsDateCollectedTo").datepicker(
       {
         changeMonth : true,
@@ -207,8 +206,8 @@ $(document).ready(function() {
 				<td style="padding-left: 10px;"><form:select
 						path="aggregationCriteria"
 						id="issuedProductsReportFormAggregationCriteria">
-						<form:option value="daily" label="Daily" selected="selected" />
-						<form:option value="monthly" label="Monthly" selected="" />
+						<form:option value="daily" label="Daily" selected="" />
+						<form:option value="monthly" label="Monthly" selected="selected" />
 						<form:option value="yearly" label="Yearly" selected="" />
 					</form:select></td>
 			</tr>

@@ -45,12 +45,12 @@ public class TestResultRepository {
     if (testResult.getCollectedSample() == null || testResult.getCollectedSample().getId() == null)
       return Arrays.asList(new Product[0]);
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(testResult.getCollectedSample().getId());
-    if (c == null)
+    if (c == null || c.getProducts() == null)
       return Arrays.asList(new Product[0]);
     return c.getProducts();
   }
   
-  private void updateRelatedEntities(TestResult testResult) {
+  public void updateRelatedEntities(TestResult testResult) {
     updateProductStatus(testResult);
     updateCollectedSampleStatus(testResult);
   }
@@ -367,8 +367,8 @@ public class TestResultRepository {
 
   public void addAllTestResults(List<TestResult> testResults) {
     for (TestResult testResult : testResults) {
-      updateRelatedEntities(testResult);
       em.persist(testResult);
+      updateRelatedEntities(testResult);
     }
     em.flush();    
   }
