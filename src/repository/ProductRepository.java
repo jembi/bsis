@@ -633,6 +633,7 @@ public class ProductRepository {
 
   public void addAllProducts(List<Product> products) {
     for (Product p : products) {
+      updateProductInternalFields(p);
       em.persist(p);
     }
     em.flush();

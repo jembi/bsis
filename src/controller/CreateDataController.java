@@ -497,6 +497,7 @@ public class CreateDataController {
 	public void createProducts(int numProducts) {
 		List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
 		List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+		List<Product> products = new ArrayList<Product>();
 		for (int i = 0; i < numProducts; i++) {
 		  CollectedSample c = collections.get(random.nextInt(collections.size()));
 			Product p = new ProductBackingForm(true).getProduct();
@@ -509,8 +510,9 @@ public class CreateDataController {
 			cal.add(Calendar.DATE, 35);
 			p.setExpiresOn(cal.getTime());
 			p.setIsDeleted(false);
-			productRepository.addProduct(p);
+			products.add(p);
 		}
+    productRepository.addAllProducts(products);
 	}
 
 	public void createRequests(int numRequests) {
