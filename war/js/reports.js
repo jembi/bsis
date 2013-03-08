@@ -328,7 +328,7 @@ function getTestResultsChart(options) {
       },
       yAxis: {
           title: {
-              text: 'Number of Test Results Found Negative'
+              text: 'Number of Test Results Found Positive'
           }
       },
       credits: {
