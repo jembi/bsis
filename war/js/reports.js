@@ -1,94 +1,158 @@
-function getTimeChart(options) {
+function getCollectionsChart(options) {
 
-  var seriesData = getSeriesData(options.startTime, options.endTime,
+  var seriesData = parseCollectionsData(options.startTime, options.endTime,
       options.interval, options.data);
-
-  var chart = new Highcharts.Chart(
-      {
-        chart : {
-          renderTo : options.renderDest,
-          zoomType : 'x',
-          spacingRight : 20
-        },
-        title : {
-          text : options.title
-        },
-        subtitle : {
-          text : document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in'
-              : 'Drag your finger over the plot to zoom in'
-        },
-        xAxis : {
-          type : "datetime",
-          maxZoom : 7 * 24 * 3600000, // seven days
-          title : {
-            text : null
-          }
-        },
-        yAxis : {
-          title : {
-            text : options.yAxisTitle
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'No. of Collections by Blood Group'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
           },
-          startOnTick : false,
-          showFirstLabel : false
-        },
-        tooltip : {
-          shared : true
-        },
-        legend : {
-          enabled : false
-        },
-        plotOptions : {
-          area : {
-            fillColor : {
-              linearGradient : {
-                x1 : 0,
-                y1 : 0,
-                x2 : 0,
-                y2 : 1
-              },
-              stops : [ [ 0, Highcharts.getOptions().colors[0] ],
-                  [ 1, 'rgba(2,0,0,0)' ] ]
-            },
-            lineWidth : 1,
-            marker : {
-              enabled : false,
-              states : {
-                hover : {
-                  enabled : true,
-                  radius : 5
-                }
-              }
-            },
-            shadow : false,
-            states : {
-              hover : {
-                lineWidth : 1
-              }
-            }
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'No. of Collections'
           }
-        },
-        series : [ {
-          type : 'line',
-          name : options.hoverText,
-          pointStart : options.startTime,
-          data : seriesData
-        } ]
-      });
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
+
+  var chart = new Highcharts.Chart(options);
 
   return chart;
 }
 
-function getSeriesData(beginDate, endDate, interval, data) {
+function getRequestsChart(options) {
 
-  seriesData = [];
-  for (var x in data) {
-    seriesData.push([ parseInt(x), data[x] ]);
-  }
+  var seriesData = parseRequestsData(options.startTime, options.endTime,
+      options.interval, options.data);
+  console.log(seriesData);
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'No. of Requests by Blood Group'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
+          },
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'No. of Requests'
+          }
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
 
-  seriesData.sort(function(a, b) {
-    return a[0] - b[0];
-  });
-  return seriesData;
+  var chart = new Highcharts.Chart(options);
+
+  return chart;
+}
+
+function getDiscardedProductsChart(options) {
+
+  var seriesData = parseDiscardedProductsData(options.startTime, options.endTime,
+      options.interval, options.data);
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'No. of Discarded Products by Blood Group'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
+          },
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'No. of Discarded Products'
+          }
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
+
+  var chart = new Highcharts.Chart(options);
+
+  return chart;
+}
+
+function getIssuedProductsChart(options) {
+
+  var seriesData = parseIssuedProductsData(options.startTime, options.endTime,
+      options.interval, options.data);
+  var options = {
+      chart: {
+          renderTo: options.renderDest,
+          zoomType: 'x',
+          spacingRight: 20,
+          type: 'line'
+      },
+      title: {
+          text: 'No. of Products Issued by Blood Group'
+      },
+      xAxis: {
+          title: {
+              text: 'Date'
+          },
+          type: 'datetime'
+      },
+      yAxis: {
+          title: {
+              text: 'No. of Products Issued'
+          }
+      },
+      credits: {
+          enabled: false
+      },
+      
+      plotOptions: {
+      },
+      series: seriesData
+  };
+
+  var chart = new Highcharts.Chart(options);
+
+  return chart;
 }
 
 function parseInventoryData(data) {
@@ -96,7 +160,8 @@ function parseInventoryData(data) {
   var result = {};
 
   result.data = [];
-  var bloodGroups = {'A+'  : 'A+',
+  var bloodGroups = {'Unknown' : 'Unknown',
+                     'A+'  : 'A+',
                      'B+'  : 'B+',
                      'AB+' : 'AB+',
                      'O+'  : 'O+',
@@ -171,7 +236,7 @@ function generateInventoryChart(options) {
  
   var seriesData = parseInventoryData(options.data);
 
-  var categories = ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"];
+  var categories = ["Unknown", "A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"];
   var title = 'Product Inventory';
   var subtitle = options.subtitle;
 
@@ -263,7 +328,7 @@ function getTestResultsChart(options) {
       },
       yAxis: {
           title: {
-              text: 'Number of Test Results Found Negative'
+              text: 'Number of Test Results Found Positive'
           }
       },
       credits: {
@@ -294,6 +359,83 @@ function parseTestResultsData(beginDate, endDate, interval, data) {
       return a[0] - b[0];
     });
     resultData.push(resultsForTest);
+  }
+
+  return resultData;
+}
+
+function parseCollectionsData(beginDate, endDate, interval, data) {
+
+  var resultData = [];
+  for (var bloodGroup in data) {
+    var resultsForBloodGroup = {}
+    resultsForBloodGroup.name = bloodGroup;
+    resultsForBloodGroup.data = [];
+    for (var x in data[bloodGroup]) {
+      resultsForBloodGroup.data.push([ parseInt(x), data[bloodGroup][x] ]);
+    }
+    resultsForBloodGroup.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForBloodGroup);
+  }
+
+  return resultData;
+}
+
+function parseRequestsData(beginDate, endDate, interval, data) {
+
+  console.log(data);
+  var resultData = [];
+  for (var bloodGroup in data) {
+    var resultsForBloodGroup = {}
+    resultsForBloodGroup.name = bloodGroup;
+    resultsForBloodGroup.data = [];
+    for (var x in data[bloodGroup]) {
+      resultsForBloodGroup.data.push([ parseInt(x), data[bloodGroup][x] ]);
+    }
+    resultsForBloodGroup.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForBloodGroup);
+  }
+
+  return resultData;
+}
+
+function parseDiscardedProductsData(beginDate, endDate, interval, data) {
+
+  var resultData = [];
+  for (var bloodGroup in data) {
+    var resultsForBloodGroup = {}
+    resultsForBloodGroup.name = bloodGroup;
+    resultsForBloodGroup.data = [];
+    for (var x in data[bloodGroup]) {
+      resultsForBloodGroup.data.push([ parseInt(x), data[bloodGroup][x] ]);
+    }
+    resultsForBloodGroup.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForBloodGroup);
+  }
+
+  return resultData;
+}
+
+function parseIssuedProductsData(beginDate, endDate, interval, data) {
+
+  var resultData = [];
+  for (var bloodGroup in data) {
+    var resultsForBloodGroup = {}
+    resultsForBloodGroup.name = bloodGroup;
+    resultsForBloodGroup.data = [];
+    for (var x in data[bloodGroup]) {
+      resultsForBloodGroup.data.push([ parseInt(x), data[bloodGroup][x] ]);
+    }
+    resultsForBloodGroup.data.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    resultData.push(resultsForBloodGroup);
   }
 
   return resultData;

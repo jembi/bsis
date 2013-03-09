@@ -16,12 +16,12 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="collectionsReportBloodGroupSelectorId">collectionsReportBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="discardedProductsReportBloodGroupSelectorId">discardedProductsReportBloodGroupSelector-${unique_page_id}</c:set>
 
 
 <script>
 $(document).ready(function() {
-  $("#creportsDateCollectedFrom").datepicker(
+  $("#discardedProductsReportsDateCollectedFrom").datepicker(
       {
         changeMonth : true,
         changeYear : true,
@@ -30,16 +30,16 @@ $(document).ready(function() {
         dateFormat : "mm/dd/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
-          $("#creportsDateCollectedTo").datepicker("option", "minDate",
+          $("#discardedProductsReportsDateCollectedTo").datepicker("option", "minDate",
               selectedDate);
         }
       });
 
   var lastYear = new Date();
   lastYear.setFullYear(lastYear.getFullYear()-1);
-  $("#creportsDateCollectedFrom").datepicker("setDate", lastYear);
+  $("#discardedProductsReportsDateCollectedFrom").datepicker("setDate", lastYear);
   
-  $("#creportsDateCollectedTo").datepicker(
+  $("#discardedProductsReportsDateCollectedTo").datepicker(
       {
         changeMonth : true,
         changeYear : true,
@@ -48,19 +48,19 @@ $(document).ready(function() {
         dateFormat : "mm/dd/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
-          $("#creportsDateCollectedFrom").datepicker("option", "maxDate",
+          $("#discardedProductsReportsDateCollectedFrom").datepicker("option", "maxDate",
               selectedDate);
         }
       });
 
-  $("#collectionsReportFormAggregationCriteria").multiselect({
+  $("#discardedProductsReportFormAggregationCriteria").multiselect({
     multiple : false,
     selectedList : 1,
     header : false
   });
 
   function getBloodGroupSelector() {
-    return $("#${collectionsReportBloodGroupSelectorId}");
+    return $("#${discardedProductsReportBloodGroupSelectorId}");
   }
 
   getBloodGroupSelector().multiselect({
@@ -81,23 +81,23 @@ $(document).ready(function() {
 
   getBloodGroupSelector().multiselect("checkAll");
 
-  $("#generateCollectionsReportButton").button({
+  $("#generateDiscardedProductsReportButton").button({
     icons : {
       primary : 'ui-icon-print'
     }
   }).click(function() {
-    var formData = $("#collectionsReportForm").serialize();
+    var formData = $("#discardedProductsReportForm").serialize();
     $.ajax({
       type : "GET",
-      url : "getCollectionsReport.html",
+      url : "getDiscardedProductsReport.html",
       data : formData,
       success : function(data) {
-        getCollectionsChart({
-          data : data.numCollections,
-          renderDest : "collectionsReportResult",
-          title : "Collections Report",
-          hoverText : "Collections",
-          yAxisTitle : "No. of Collections",
+        getDiscardedProductsChart({
+          data : data.numDiscardedProducts,
+          renderDest : "discardedProductsReportResult",
+          title : "Discarded Products Report",
+          hoverText : "Products",
+          yAxisTitle : "No. of Discarded/Unsafe/Expired Products",
           startTime : data.dateCollectedFromUTC,
           endTime : data.dateCollectedToUTC,
           interval : data.interval
@@ -106,15 +106,15 @@ $(document).ready(function() {
     });
   });
 
-  $("#clearCollectionsReportButton").button({
+  $("#clearDiscardedProductsReportButton").button({
     icons: {
       primary: 'ui-icon-grip-solid-horizontal'
     }
   }).click(function() {
-    $("#collectionsReportResult").html("");
+    $("#discardedProductsReportResult").html("");
   });
 
-  $("#collectionsReportForm").find(".collectionCenterSelector").multiselect({
+  $("#discardedProductsReportForm").find(".collectionCenterSelector").multiselect({
 	  position : {
 	    my : 'left top',
 	    at : 'right center'
@@ -132,9 +132,9 @@ $(document).ready(function() {
 	  }
 	});
 
-  $("#collectionsReportForm").find(".collectionCenterSelector").multiselect("checkAll");
+  $("#discardedProductsReportForm").find(".collectionCenterSelector").multiselect("checkAll");
 
-  $("#collectionsReportForm").find(".collectionSiteSelector").multiselect({
+  $("#discardedProductsReportForm").find(".collectionSiteSelector").multiselect({
 	  position : {
 	    my : 'left top',
 	    at : 'right center'
@@ -152,16 +152,16 @@ $(document).ready(function() {
 	  }
 	});
 
-  $("#collectionsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
+  $("#discardedProductsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
 });
 </script>
 
-<form:form method="GET" commandName="collectionsReportForm"
-	id="collectionsReportForm">
+<form:form method="GET" commandName="discardedProductsReportForm"
+	id="discardedProductsReportForm">
 		<br/>
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['report.collections.collectionsreport']}
+				${model['report.products.discardedproductsreport']}
 			</p>
 		</div>
 	<table>
@@ -173,9 +173,9 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td><form:input path="dateCollectedFrom"
-						id="creportsDateCollectedFrom" placeholder="From Date" />&nbsp;to</td>
+						id="discardedProductsReportsDateCollectedFrom" placeholder="From Date" />&nbsp;to</td>
 				<td><form:input path="dateCollectedTo"
-						id="creportsDateCollectedTo" placeholder="To Date" /></td>
+						id="discardedProductsReportsDateCollectedTo" placeholder="To Date" /></td>
 			</tr>
 			<tr>
 				<td />
@@ -205,7 +205,7 @@ $(document).ready(function() {
 				<td><form:label path="aggregationCriteria"> Aggregation Criteria </form:label></td>
 				<td style="padding-left: 10px;"><form:select
 						path="aggregationCriteria"
-						id="collectionsReportFormAggregationCriteria">
+						id="discardedProductsReportFormAggregationCriteria">
 						<form:option value="daily" label="Daily" selected="" />
 						<form:option value="monthly" label="Monthly" selected="selected" />
 						<form:option value="yearly" label="Yearly" selected="" />
@@ -214,7 +214,7 @@ $(document).ready(function() {
 			<tr>
 				<td><form:label path="bloodGroups">Blood Groups</form:label></td>
 				<td style="padding-left: 10px;">
-					<form:select id="${collectionsReportBloodGroupSelectorId}" path="bloodGroups">
+					<form:select id="${discardedProductsReportBloodGroupSelectorId}" path="bloodGroups">
 						<form:option value="A+">A+</form:option>
 						<form:option value="B+">B+</form:option>
 						<form:option value="AB+">AB+</form:option>
@@ -228,9 +228,9 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td />
-				<td><button type="button" id="generateCollectionsReportButton"
+				<td><button type="button" id="generateDiscardedProductsReportButton"
 						style="margin-left: 10px">Generate report</button>
-						<button type="button" id="clearCollectionsReportButton"
+						<button type="button" id="clearDiscardedProductsReportButton"
 						style="margin-left: 10px">Clear report</button>
 				</td>
 			</tr>
@@ -238,4 +238,4 @@ $(document).ready(function() {
 	</table>
 </form:form>
 
-<div id="collectionsReportResult" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>
+<div id="discardedProductsReportResult" style="margin-right: 10px; margin-left: 10px; width: 90%;"></div>

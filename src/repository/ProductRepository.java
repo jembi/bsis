@@ -1,8 +1,13 @@
 package repository;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +60,9 @@ public class ProductRepository {
 
   @Autowired
   public BloodTestUtils bloodTestUtils;
+
+  @Autowired
+  public RequestRepository requestRepository;
 
   /**
    * some fields like product status are cached internally.
@@ -139,7 +147,7 @@ public class ProductRepository {
     product.setBloodAbo(bloodAbo);
     product.setBloodRhd(bloodRhd);
   }
-  
+
   public Product findProduct(String productNumber) {
     Product product = null;
     if (productNumber != null && productNumber.length() > 0) {
@@ -173,13 +181,18 @@ public class ProductRepository {
       String collectionNumber, List<String> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
-    String queryStr = "SELECT p FROM Product p WHERE " +
+    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
                       "p.collectedSample.collectionNumber = :collectionNumber AND " +
                       "p.status IN :status AND " +
                       "p.isDeleted= :isDeleted";
 
+    String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
+        "p.collectedSample.collectionNumber = :collectionNumber AND " +
+        "p.status IN :status AND " +
+        "p.isDeleted= :isDeleted";
+
     if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     query = em.createQuery(queryStr, Product.class);
@@ -193,7 +206,7 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
+    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
   }
 
   private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
@@ -210,13 +223,19 @@ public class ProductRepository {
       List<Integer> productTypeIds, List<String> status,
       Map<String, Object> pagingParams) {
 
-    String queryStr = "SELECT p FROM Product p WHERE " +
+    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
         "p.productType.id IN (:productTypeIds) AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
 
+    String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
+        "p.productType.id IN (:productTypeIds) AND " +
+        "p.status IN :status AND " +
+        "p.isDeleted= :isDeleted";
+
+
     if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
@@ -230,7 +249,7 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
+    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
   }
 
   public List<Object> findProductByProductNumber(
@@ -452,10 +471,14 @@ public class ProductRepository {
     em.flush();
   }
 
-  public List<MatchingProductViewModel> findMatchingProductsForRequest(Request productRequest) {
+  public List<MatchingProductViewModel> findMatchingProductsForRequest(Long requestId) {
     Date today = new Date();
+
+    Request request = requestRepository.findRequestById(requestId);
+    
     TypedQuery<Product> query = em.createQuery(
-                 "SELECT p from Product p where p.productType = :productType AND " +
+                 "SELECT p from Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+                 "p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
                  "p.status = :status AND " +
                  "p.collectedSample.testedStatus = :testedStatus AND " +
@@ -464,14 +487,14 @@ public class ProductRepository {
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
-    query.setParameter("productType", productRequest.getProductType());
+    query.setParameter("productType", request.getProductType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
     query.setParameter("testedStatus", TestedStatus.TESTED);
-    query.setParameter("bloodAbo", productRequest.getPatientBloodAbo());
+    query.setParameter("bloodAbo", request.getPatientBloodAbo());
     query.setParameter("bloodAboO", BloodAbo.O);
     query.setParameter("bloodRhdNeg", BloodRhd.NEGATIVE);
-    query.setParameter("bloodRhd", productRequest.getPatientBloodRhd());
+    query.setParameter("bloodRhd", request.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
     TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
@@ -479,7 +502,7 @@ public class ProductRepository {
         "ct.testedProduct.status = :testedProductStatus AND " +
         "isDeleted=:isDeleted", CompatibilityTest.class);
 
-    crossmatchQuery.setParameter("forRequestId", productRequest.getId());
+    crossmatchQuery.setParameter("forRequestId", requestId);
     crossmatchQuery.setParameter("testedProductStatus", ProductStatus.AVAILABLE);
     crossmatchQuery.setParameter("isDeleted", false);
 
@@ -511,19 +534,22 @@ public class ProductRepository {
     return product;
   }
 
-  public Map<String, Object> generateInventorySummaryFast(List<String> status) {
+  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> centerIds) {
     Map<String, Object> inventory = new HashMap<String, Object>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
-                             "where p.status IN :status AND p.isDeleted=:isDeleted",
+                             "WHERE p.status IN :status AND " +
+                             "p.collectedSample.collectionCenter.id IN (:collectionCenterIds) AND " +
+                             "p.isDeleted=:isDeleted",
                              Product.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
     for (String s : status) {
       productStatus.add(ProductStatus.lookup(s));
     }
     q.setParameter("status", productStatus);
+    q.setParameter("collectionCenterIds", centerIds);
     q.setParameter("isDeleted", false);
 //    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
@@ -604,6 +630,7 @@ public class ProductRepository {
 
   public void addAllProducts(List<Product> products) {
     for (Product p : products) {
+      updateProductInternalFields(p);
       em.persist(p);
     }
     em.flush();
@@ -648,5 +675,214 @@ public class ProductRepository {
       products.add(findProductById(Long.parseLong(productId)));
     }
     return products;
+  }
+
+  public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
+      Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
+      List<String> centers, List<String> sites, List<String> bloodGroups) {
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (centers != null) {
+      for (String center : centers) {
+        centerIds.add(Long.parseLong(center));
+      }
+    } else {
+      centerIds.add((long)-1);
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (sites != null) {
+      for (String site : sites) {
+        siteIds.add(Long.parseLong(site));
+      }
+    } else {
+      siteIds.add((long)-1);
+    }
+
+    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    for (String bloodGroup : bloodGroups) {
+      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+    }
+
+    TypedQuery<Object[]> query = em.createQuery(
+        "SELECT count(p), p.collectedSample.collectedOn, p.collectedSample.bloodAbo, " +
+        "p.collectedSample.bloodRhd FROM Product p WHERE " +
+        "p.collectedSample.collectionCenter.id IN (:centerIds) AND " +
+        "p.collectedSample.collectionSite.id IN (:siteIds) AND " +
+        "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "p.status IN (:discardedStatuses) AND " +
+        "(p.isDeleted= :isDeleted) " +
+        "GROUP BY bloodAbo, bloodRhd, collectedOn", Object[].class);
+
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("discardedStatuses",
+                       Arrays.asList(ProductStatus.DISCARDED,
+                                     ProductStatus.UNSAFE,
+                                     ProductStatus.EXPIRED));
+
+    query.setParameter("dateCollectedFrom", dateCollectedFrom);
+    query.setParameter("dateCollectedTo", dateCollectedTo);
+
+    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    int incrementBy = Calendar.DAY_OF_YEAR;
+    if (aggregationCriteria.equals("monthly")) {
+      incrementBy = Calendar.MONTH;
+      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+    } else if (aggregationCriteria.equals("yearly")) {
+      incrementBy = Calendar.YEAR;
+      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
+    }
+
+    List<Object[]> resultList = query.getResultList();
+
+    for (String bloodGroup : bloodGroups) {
+      Map<Long, Long> m = new HashMap<Long, Long>();
+      Calendar gcal = new GregorianCalendar();
+      Date lowerDate = null;
+      Date upperDate = null;
+      try {
+        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+      } catch (ParseException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+      gcal.setTime(lowerDate);
+      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+        m.put(gcal.getTime().getTime(), (long) 0);
+        gcal.add(incrementBy, 1);
+      }
+      resultMap.put(bloodGroup, m);
+    }
+
+    for (Object[] result : resultList) {
+      Date d = (Date) result[1];
+      BloodAbo bloodAbo = (BloodAbo) result[2];
+      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      Map<Long, Long> m = resultMap.get(bloodGroup.toString());
+      if (m == null)
+        continue;
+      try {
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Long utcTime = formattedDate.getTime();
+        if (m.containsKey(utcTime)) {
+          Long newVal = m.get(utcTime) + (Long) result[0];
+          m.put(utcTime, newVal);
+        } else {
+          m.put(utcTime, (Long) result[0]);
+        }
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+
+    return resultMap;
+  }
+
+  public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
+      Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
+      List<String> centers, List<String> sites, List<String> bloodGroups) {
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (centers != null) {
+      for (String center : centers) {
+        centerIds.add(Long.parseLong(center));
+      }
+    } else {
+      centerIds.add((long)-1);
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (sites != null) {
+      for (String site : sites) {
+        siteIds.add(Long.parseLong(site));
+      }
+    } else {
+      siteIds.add((long)-1);
+    }
+
+    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    for (String bloodGroup : bloodGroups) {
+      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+    }
+
+    TypedQuery<Object[]> query = em.createQuery(
+        "SELECT count(p), p.issuedOn, p.collectedSample.bloodAbo, " +
+        "p.collectedSample.bloodRhd FROM Product p WHERE " +
+        "p.collectedSample.collectionCenter.id IN (:centerIds) AND " +
+        "p.collectedSample.collectionSite.id IN (:siteIds) AND " +
+        "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "p.status=:issuedStatus AND " +
+        "(p.isDeleted= :isDeleted) " +
+        "GROUP BY bloodAbo, bloodRhd, collectedOn", Object[].class);
+
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("issuedStatus", ProductStatus.ISSUED);
+
+    query.setParameter("dateCollectedFrom", dateCollectedFrom);
+    query.setParameter("dateCollectedTo", dateCollectedTo);
+
+    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    int incrementBy = Calendar.DAY_OF_YEAR;
+    if (aggregationCriteria.equals("monthly")) {
+      incrementBy = Calendar.MONTH;
+      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+    } else if (aggregationCriteria.equals("yearly")) {
+      incrementBy = Calendar.YEAR;
+      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
+    }
+
+    List<Object[]> resultList = query.getResultList();
+
+    for (String bloodGroup : bloodGroups) {
+      Map<Long, Long> m = new HashMap<Long, Long>();
+      Calendar gcal = new GregorianCalendar();
+      Date lowerDate = null;
+      Date upperDate = null;
+      try {
+        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+      } catch (ParseException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+      gcal.setTime(lowerDate);
+      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+        m.put(gcal.getTime().getTime(), (long) 0);
+        gcal.add(incrementBy, 1);
+      }
+      resultMap.put(bloodGroup, m);
+    }
+
+    for (Object[] result : resultList) {
+      Date d = (Date) result[1];
+      BloodAbo bloodAbo = (BloodAbo) result[2];
+      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      Map<Long, Long> m = resultMap.get(bloodGroup.toString());
+      if (m == null)
+        continue;
+      try {
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Long utcTime = formattedDate.getTime();
+        if (m.containsKey(utcTime)) {
+          Long newVal = m.get(utcTime) + (Long) result[0];
+          m.put(utcTime, newVal);
+        } else {
+          m.put(utcTime, (Long) result[0]);
+        }
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+
+    return resultMap;
   }
 }

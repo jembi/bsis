@@ -35,6 +35,8 @@ import model.product.Product;
 import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.user.User;
+import model.util.BloodAbo;
+import model.util.BloodRhd;
 import model.worksheet.CollectionsWorksheet;
 
 import org.hibernate.annotations.Index;
@@ -81,6 +83,16 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  @Index(name="donor_bloodAbo_index")
+  private BloodAbo bloodAbo;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  @Index(name="donor_bloodRhd_index")
+  private BloodRhd bloodRhd;
+  
   @ManyToMany
   private List<CollectionsWorksheet> worksheets;
 
@@ -325,5 +337,21 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setDonationCreatedBy(User donationCreatedBy) {
     this.donationCreatedBy = donationCreatedBy;
+  }
+
+  public BloodAbo getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(BloodAbo bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public BloodRhd getBloodRhd() {
+    return bloodRhd;
+  }
+
+  public void setBloodRhd(BloodRhd bloodRhd) {
+    this.bloodRhd = bloodRhd;
   }
 }

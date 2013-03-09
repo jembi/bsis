@@ -354,4 +354,8 @@ public class RequestBackingForm {
   public void setIndicationForUse(String indicationForUse) {
     request.setIndicationForUse(indicationForUse);
   }
+
+  public void setFulfilled(boolean fulfilled) {
+    request.setFulfilled(fulfilled);
+  }
 }

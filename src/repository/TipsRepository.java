@@ -1,13 +1,11 @@
 package repository;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.location.Location;
 import model.tips.Tips;
 
 import org.springframework.stereotype.Repository;

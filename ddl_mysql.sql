@@ -1,200 +1,4 @@
 
-    alter table BloodTest_TestsRequiredIfNegative 
-        drop 
-        foreign key FK22608B9FD5AABEFD;
-
-    alter table BloodTest_TestsRequiredIfNegative 
-        drop 
-        foreign key FK22608B9F3A6D02C3;
-
-    alter table BloodTest_TestsRequiredIfPositive 
-        drop 
-        foreign key FK180C19639CA52BB9;
-
-    alter table BloodTest_TestsRequiredIfPositive 
-        drop 
-        foreign key FK180C19633A6D02C3;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33A49787C4;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33D04A4456;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33AED1731E;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33B29562D0;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A3359FAB30D;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A3392C64B83;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33D0AFB367;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A33675D568F;
-
-    alter table CollectedSample 
-        drop 
-        foreign key FKF0658A331D73927B;
-
-    alter table CollectedSample_CollectionsWorksheet 
-        drop 
-        foreign key FKB39FFD85225909B3;
-
-    alter table CollectedSample_CollectionsWorksheet 
-        drop 
-        foreign key FKB39FFD85C02466CD;
-
-    alter table CollectionsWorksheet 
-        drop 
-        foreign key FK72E3FEF9A49787C4;
-
-    alter table CollectionsWorksheet 
-        drop 
-        foreign key FK72E3FEF9D0AFB367;
-
-    alter table CompatibilityTest 
-        drop 
-        foreign key FK92798602A49787C4;
-
-    alter table CompatibilityTest 
-        drop 
-        foreign key FK92798602D4061B9F;
-
-    alter table CompatibilityTest 
-        drop 
-        foreign key FK92798602EFD1FE7;
-
-    alter table CompatibilityTest 
-        drop 
-        foreign key FK92798602D0AFB367;
-
-    alter table CompatibilityTest 
-        drop 
-        foreign key FK927986028631CA7D;
-
-    alter table Donor 
-        drop 
-        foreign key FK3F25E46A49787C4;
-
-    alter table Donor 
-        drop 
-        foreign key FK3F25E46D0AFB367;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFA49787C4;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF994002DF;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF32E145A;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CF73AC2B90;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFFDFE9E0F;
-
-    alter table Product 
-        drop 
-        foreign key FK50C664CFD0AFB367;
-
-    alter table ProductIssue 
-        drop 
-        foreign key FK450DFD4A994002DF;
-
-    alter table ProductIssue 
-        drop 
-        foreign key FK450DFD4A9F8F75E1;
-
-    alter table ProductIssue 
-        drop 
-        foreign key FK450DFD4AA8E71476;
-
-    alter table ProductReturn 
-        drop 
-        foreign key FK6B4876DF61638630;
-
-    alter table ProductReturn 
-        drop 
-        foreign key FK6B4876DFA8E71476;
-
-    alter table ProductReturn 
-        drop 
-        foreign key FK6B4876DFC1F8813D;
-
-    alter table ProductReturn 
-        drop 
-        foreign key FK6B4876DFC7A8C5;
-
-    alter table ProductUsage 
-        drop 
-        foreign key FK45B6D212A49787C4;
-
-    alter table ProductUsage 
-        drop 
-        foreign key FK45B6D212A8E71476;
-
-    alter table ProductUsage 
-        drop 
-        foreign key FK45B6D212D0AFB367;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6FA49787C4;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6F1520E0D;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6F73AC2B90;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6F537AAD30;
-
-    alter table Request 
-        drop 
-        foreign key FKA4878A6FD0AFB367;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FA49787C4;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6F32E145A;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6F3A6D02C3;
-
-    alter table TestResult 
-        drop 
-        foreign key FKDB459F6FD0AFB367;
-
     drop table if exists BloodBagType;
 
     drop table if exists BloodTest;
@@ -288,7 +92,9 @@
 
     create table CollectedSample (
         id bigint not null auto_increment,
+        bloodAbo varchar(30),
         bloodPressure decimal(6,2),
+        bloodRhd varchar(30),
         collectedOn datetime,
         collectionNumber varchar(30),
         donorWeight decimal(6,2),
@@ -456,7 +262,6 @@
         productNumber varchar(30),
         status varchar(30),
         collectedSample_id bigint,
-        discardedBy_id bigint,
         issuedTo_id bigint,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -647,6 +452,10 @@
 
     create index collectedSample_collectionNumber_index on CollectedSample (collectionNumber);
 
+    create index donor_bloodAbo_index on CollectedSample (bloodAbo);
+
+    create index donor_bloodRhd_index on CollectedSample (bloodRhd);
+
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 
         add constraint FKF0658A33A49787C4 
@@ -810,12 +619,6 @@
         add constraint FK50C664CF73AC2B90 
         foreign key (productType_id) 
         references ProductType (id);
-
-    alter table Product 
-        add index FK50C664CFFDFE9E0F (discardedBy_id), 
-        add constraint FK50C664CFFDFE9E0F 
-        foreign key (discardedBy_id) 
-        references User (id);
 
     alter table Product 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 

@@ -83,9 +83,6 @@ public class Product implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
 
-  @ManyToOne
-  private User discardedBy;
-
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   private ProductStatus status;
@@ -263,14 +260,6 @@ public class Product implements ModificationTracker {
 
   public void setDiscardReason(String discardReason) {
     this.discardReason = discardReason;
-  }
-
-  public User getDiscardedBy() {
-    return discardedBy;
-  }
-
-  public void setDiscardedBy(User discardedBy) {
-    this.discardedBy = discardedBy;
   }
 
   public Request getIssuedTo() {

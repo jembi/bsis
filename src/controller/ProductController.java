@@ -191,7 +191,7 @@ public class ProductController {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
-    for (String field : Arrays.asList("productNumber", "productType","createdOn", "expiresOn", "status")) {
+    for (String field : Arrays.asList("collectionNumber", "productType","createdOn", "expiresOn", "status")) {
       Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
@@ -199,7 +199,7 @@ public class ProductController {
 
     Map<String, String> sortColumnMap = new HashMap<String, String>();
     sortColumnMap.put("id", "id");
-    sortColumnMap.put("productNumber", "productNumber");
+    sortColumnMap.put("collectionNumber", "collectedSample.collectionNumber");
     sortColumnMap.put("productType", "productType.productType");
     sortColumnMap.put("createdOn", "createdOn");
     sortColumnMap.put("expiresOn", "expiresOn");
@@ -263,7 +263,7 @@ public class ProductController {
       
       row.add(product.getId().toString());
 
-      for (String property : Arrays.asList("productNumber", "productType", "createdOn", "expiresOn", "status")) {
+      for (String property : Arrays.asList("collectionNumber", "productType", "createdOn", "expiresOn", "status")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {

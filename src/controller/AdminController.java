@@ -225,6 +225,7 @@ public class AdminController {
       createDataController.createDonors(numDonors);
       createDataController.createCollectionsWithTestResults(numCollections);
       createDataController.createProducts(numProducts);
+      createDataController.createRequests(numRequests);
     }
     catch (Exception ex) {
       ex.printStackTrace();

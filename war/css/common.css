@@ -563,7 +563,7 @@ tr > td
 	padding-bottom: 3px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	max-width: 840px;
+	width: 80%;
 }
 
 .worksheetTable {

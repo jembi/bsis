@@ -271,15 +271,15 @@ public class RequestsController {
     Map<String, Object> m = model.asMap();
     System.out.println(m);
     addEditSelectorOptions(m);
-    Request productRequest = requestRepository.findRequestById(requestId);
-    List<ProductViewModel> issuedProducts = null;
+    List<Product> issuedProducts = requestRepository.getIssuedProductsForRequest(requestId);
+    List<ProductViewModel> issuedProductViewModels = null;
     if (request == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     } else {
-      issuedProducts = ProductController.getProductViewModels(productRequest.getIssuedProducts());
+      issuedProductViewModels = ProductController.getProductViewModels(issuedProducts);
     }
 
-    m.put("issuedProducts", issuedProducts);
+    m.put("issuedProducts", issuedProductViewModels);
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
     m.put("productTypeFields", utilController.getFormFieldsForForm("ProductType"));
     mv.addObject("model", m);
@@ -395,15 +395,8 @@ public class RequestsController {
     m.put("refreshUrl", getUrl(request));
     m.put("existingRequest", false);
 
-    Request productRequest = requestRepository.findRequestById(requestId);
-    if (productRequest == null) {
-      m.put("invalidRequest", true);
-      return mv;
-    }
-
-    System.out.println("Request found");
-    m.put("request", productRequest);
-    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(productRequest);
+    m.put("requestId", requestId);
+    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(requestId);
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("productFields", utilController.getFormFieldsForForm("Product"));
@@ -413,31 +406,6 @@ public class RequestsController {
     mv.addObject("model", m);
     System.out.println(mv.getViewName());
     return mv;
-  }
-
-  @RequestMapping("/confirmIssueProductsDialog")
-  public ModelAndView confirmIssueProductsDialog(
-      HttpServletResponse response,
-      Model model,
-      @RequestParam("requestId") Long requestId,
-      @RequestParam("productsToIssue") String productsToIssue) {
-    ModelAndView mv = new ModelAndView("confirmIssueProducts");
-    Map<String, Object> m = model.asMap();
-    List<Product> products = productRepository.getProductsFromProductIds(getProductIds(productsToIssue));
-    List<Request> productRequests = Arrays.asList(requestRepository.findRequestById(requestId));
-    List<RequestViewModel> productRequestViewModels = getRequestViewModels(productRequests);
-    m.put("request", productRequestViewModels.get(0));
-    m.put("allProducts", ProductController.getProductViewModels(products));
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-    mv.addObject("model", m);
-    return mv;
-  }
-
-  private String[] getProductIds(String productsToIssue) {
-    productsToIssue = productsToIssue.replaceAll("\"", "");
-    productsToIssue = productsToIssue.replaceAll("\\[", "");
-    productsToIssue = productsToIssue.replaceAll("\\]", "");
-    return productsToIssue.split(",");
   }
 
   @RequestMapping("/issueSelectedProducts")

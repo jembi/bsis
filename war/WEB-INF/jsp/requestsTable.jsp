@@ -129,10 +129,10 @@ $(document).ready(
 								<td>${request.productType.productType}</td>
 							</c:if>
 							<c:if test="${model.requestFields.numUnitsRequested.hidden != true}">
-								<td>${request.numUnitsRequested} ml</td>
+								<td>${request.numUnitsRequested}</td>
 							</c:if>
 							<c:if test="${model.requestFields.numUnitsIssued.hidden != true}">
-								<td>${request.numUnitsIssued} ml</td>
+								<td>${request.numUnitsIssued}</td>
 							</c:if>
 							<c:if test="${model.requestFields.requestSite.hidden != true}">
 								<td>${request.requestSite}</td>

@@ -213,6 +213,24 @@ insert into FormField
 '0', '0');
 
 insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
+('Product', 'productNumber', 'Product Number', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'createdOn', 'Created On', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'issuedOn', 'Issued On', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'expiresOn', 'Expires On', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'status', 'Status', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
+('Product', 'age', 'Age', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'issuedTo', 'Issued to request', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'issuedBy', 'Issued by', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'discardedOn', 'Discarded on', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'discardedBy', 'Discarded by', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
+('Product', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
+
+insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
 ('TestResult', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', '0', '', 0),
 ('TestResult', 'bloodTest', 'Test Name', '', '0', '0', '0', '0', '0', '', 0),
 ('TestResult', 'result', 'Test Result', '', '0', '0', '0', '0', '0', '', 0),
@@ -229,6 +247,7 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Request', 'numUnitsRequested', 'No. of Units Requested', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'volume', 'Unit Volume', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'numUnitsIssued', 'No. of units Issued', '', '0', '0', '0', '0', '0', '', 0),
+('Request', 'numUnitsIssued', 'No. of Units Issued', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '0', '', 0),
 ('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
 ('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
@@ -330,6 +349,8 @@ insert into Tips (tipsKey, tipsName, tipsContent) values
 ('requests.findpending.findmatchingproducts', 'Matching Products for request', 'Select the products you want to issue from the table below and then click on Issue button.'),
 ('requests.addcompatibilityresult', 'Add compatibility tests for request', 'Record if a given product is compatible or not with the patient blood sample for the given request.'),
 ('report.inventory.productinventorychart', 'Product Inventory Report', 'Products in Inventory by Product Type and Blood Group. Click the columns to view products by Age. Click again to return.'),
+('report.products.discardedproductsreport', 'Discarded Products Over Time', 'Number of products discarded over time categorized by blood group'),
+('report.products.issuedproductsreport', 'Products Issued Over Time', 'Number of products issued over time categorized by blood group'),
 ('report.collections.collectionsreport', 'Collections Report', 'Track number collections done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
 ('report.collections.testresultsreport', 'Test Results Report', 'Track TTI numbers by collection site and collection center done within a given date range for specific centers and sites. View daily, monthly, yearly numbers.'),
 ('usage.addusage', 'Add Usage Form', 'Record usage of a product within a hospital. Optionally specify Hospital name, ward, patient name.');
@@ -353,3 +374,8 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("bloodPressureUnit", "mmHg", "measurementUnit"),
 ("minimumAge", "16", "donationRequirements"),
 ("maximumAge", "65", "donationRequirements");
+("Syphilis", "true", "collectionsWorksheet");
+
+insert into CrossmatchType (crossmatchType, isDeleted) values
+('Saline @ 37 degrees', '0'),
+('Anti Human Globulin', '0');

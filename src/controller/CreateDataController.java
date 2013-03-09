@@ -22,6 +22,10 @@ import model.location.LocationType;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.producttype.ProductType;
+import model.request.Request;
+import model.request.RequestBackingForm;
+import model.requesttype.RequestType;
+import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.util.BloodGroup;
 import model.util.Gender;
@@ -41,6 +45,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
+import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.TestResultRepository;
 import repository.UsageRepository;
@@ -59,6 +64,9 @@ public class CreateDataController {
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
+
+  @Autowired
+  private RequestTypeRepository requestTypeRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -395,7 +403,12 @@ public class CreateDataController {
 		cal.setTime(toDate);
 		long decTo = cal.getTimeInMillis();
 		long diff = decTo - decFrom;
-		long randomOffset = random.nextLong() % diff;
+		long randomOffset = 0;
+		while (true) {
+		  randomOffset = random.nextLong() % diff;
+		  if (randomOffset > diff/2 && random.nextBoolean())
+		    break;
+		}
 		Date date = new Date(decFrom + randomOffset);
 		return date;
 	}
@@ -412,8 +425,8 @@ public class CreateDataController {
 	private Date getRandomCollectionDate() {
 		// Date twoYearsAgo = new DateTime().minusYears(2).toDate();
 		// return getRandomDate(twoYearsAgo, new Date());
-		Date thrityfiveDaysAgo = new DateTime().minusDays(35).toDate();
-		return getRandomDate(thrityfiveDaysAgo, new Date());
+		Date twoYearsAgo = new DateTime().minusDays(1000).toDate();
+		return getRandomDate(twoYearsAgo, new Date());
 	}
 
 	void createCollectionsWithTestResults(int numCollections) {
@@ -423,10 +436,13 @@ public class CreateDataController {
     List<DonationType> donorTypes = donorTypeRepository.getAllDonationTypes();
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
+
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
+    List<String> collectionNumbers = sequenceNumberRepository.getBatchCollectionNumbers(numCollections);
 		for (int i = 0; i < numCollections; i++) {
 		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
-      collection.setCollectionNumber(sequenceNumberRepository.getNextCollectionNumber());    
+      collection.setCollectionNumber(collectionNumbers.get(i));    
 
 		  collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
 		  collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
@@ -439,13 +455,19 @@ public class CreateDataController {
 		  collection.setDonorType(donorTypes.get(Math.abs(random.nextInt()) % donorTypes.size()).getId().toString());
 		  collection.setIsDeleted(false);
 
-		  collectionRepository.addCollectedSample(collection.getCollectedSample());
+		  collectedSamples.add(collection.getCollectedSample());
+		}
 
+		collectionRepository.addAllCollectedSamples(collectedSamples);
+
+		List<TestResult> testResults = new ArrayList<TestResult>();
+		for (CollectedSample collectedSample : collectedSamples) {
+		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber()).get(0);
 		  for (BloodTest b : bloodTests) {
 
     	  TestResultBackingForm t = new TestResultBackingForm();
-    	  t.setCollectedSample(collection.getCollectedSample());
-    	  t.setTestedOn(collectionDate);
+    	  t.setCollectedSample(collectedSample);
+    	  t.setTestedOn(CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn()));
     	  t.setIsDeleted(false);
     	  t.getTestResult().setBloodTest(b);
 
@@ -464,15 +486,16 @@ public class CreateDataController {
     	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
 
     	  t.setResult(result);
-    	  testResultRepository.addTestResult(t.getTestResult());
+    	  testResults.add(t.getTestResult());
 		  }
-
 		}
+    testResultRepository.addAllTestResults(testResults);
 	}
 
 	public void createProducts(int numProducts) {
 		List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
 		List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+		List<Product> products = new ArrayList<Product>();
 		for (int i = 0; i < numProducts; i++) {
 		  CollectedSample c = collections.get(random.nextInt(collections.size()));
 			Product p = new ProductBackingForm(true).getProduct();
@@ -485,31 +508,43 @@ public class CreateDataController {
 			cal.add(Calendar.DATE, 35);
 			p.setExpiresOn(cal.getTime());
 			p.setIsDeleted(false);
-			productRepository.addProduct(p);
+			products.add(p);
 		}
+    productRepository.addAllProducts(products);
 	}
 
-	private void createRequests(int requestNumber) {
-		String[] status = new String[] { "pending", "partiallyFulfilled",
-				"fulfilled" };
+	public void createRequests(int numRequests) {
 
-		List<Location> sites = locationRepository.getAllCollectionSites();
+	  String[] bloodGroups = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
 
-		for (int i = 0; i < requestNumber; i++) {
-//			Date requestDate = getRandomCollectionDate();
-//			Date requiredDate = new DateTime(requestDate).plusDays(15).toDate();
-//			String productType = productTypes[r.nextInt(productTypes.length)];
-//			productType = productType.equals("partialPlatelets") ? "platelets"
-//					: productType;
-//			Request request = new Request(new Integer(i + 1).toString(),
-//					requestDate, requiredDate, sites.get(
-//							r.nextInt(sites.size())).getLocationId(),
-//					productType, bloodTypes[r.nextInt(bloodTypes.length)],
-//					rhd[r.nextInt(rhd.length)], r.nextInt(20),
-//					status[r.nextInt(status.length)], Boolean.FALSE, "comment_"
-//							+ i);
-//			requestRepository.saveRequest(request);
+		List<Location> sites = locationRepository.getAllUsageSites();
+    List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+    List<RequestType> requestTypes = requestTypeRepository.getAllRequestTypes();
+
+    List<String> requestNumbers = sequenceNumberRepository.getBatchRequestNumbers(numRequests);
+
+    List<Request> requests = new ArrayList<Request>();
+		for (int i = 0; i < numRequests; i++) {
+			Date requestDate = getRandomCollectionDate();
+			Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt() % 21).toDate();
+			RequestBackingForm form = new RequestBackingForm();
+			form.setRequestNumber(requestNumbers.get(i));
+			form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
+			form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
+      form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
+      form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
+      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());
+      form.setNumUnitsRequested(1 + Math.abs(random.nextInt()) % 20);
+      form.setIsDeleted(false);
+      form.setFulfilled(false);
+
+      String bloodGroupStr = bloodGroups[random.nextInt(bloodGroups.length)];
+      BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
+      form.setPatientBloodAbo(bloodGroup.getBloodAbo());
+      form.setPatientBloodRhd(bloodGroup.getBloodRhd());
+      requests.add(form.getRequest());
 		}
+		requestRepository.addAllRequests(requests);
 	}
 
 	private String getRandomTestResult() {
