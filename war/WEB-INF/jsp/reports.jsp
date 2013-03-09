@@ -19,20 +19,20 @@
 		<li id="inventoryReport">
 			<a href="inventoryReportFormGenerator.html">Product Inventory</a>
 		</li>
-		<li id="discardedProductsReport">
-			<a href="discardedProductsReportFormGenerator.html">Discarded products</a>
-		</li>
-		<li id="issuedProductsReport">
-			<a href="issuedProductsReportFormGenerator.html">Issued products</a>
-		</li>
 		<li id="collectionsReport">
 			<a href="collectionsReportFormGenerator.html">Collections</a>
+		</li>
+		<li id="testResultsReport">
+			<a href="testResultsReportFormGenerator.html">Test Results</a>
 		</li>
 		<li id="requestsReport">
 			<a href="requestsReportFormGenerator.html">Requests</a>
 		</li>
-		<li id="testResultsReport">
-			<a href="testResultsReportFormGenerator.html">Test Results</a>
+		<li id="issuedProductsReport">
+			<a href="issuedProductsReportFormGenerator.html">Issued products</a>
+		</li>
+		<li id="discardedProductsReport">
+			<a href="discardedProductsReportFormGenerator.html">Discarded products</a>
 		</li>
 	</ul>
 </div>
