@@ -20,9 +20,13 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
 /**
+ * Auto generate schema using hibernate hbm2ddl tool. This will prepare the full
+ * schema for a fresh installation of v2v.
+ * The schema changes for the update need to be worked out manually.
  * Source:
- * http://jandrewthompson.blogspot.com/2009/10/how-to-generate-ddl-scripts
- * -from.html
+ * http://jandrewthompson.blogspot.com/2009/10/how-to-generate-ddl-scripts-from.html
+ * More information:
+ * http://stackoverflow.com/questions/438146/hibernate-hbm2ddl-auto-possible-values-and-what-they-do
  */
 public class SchemaGenerator {
 
@@ -31,8 +35,7 @@ public class SchemaGenerator {
   public SchemaGenerator(String packageName) throws Exception {
     cfg = new Configuration();
     cfg.setProperty("hibernate.show_sql", "true");
-    cfg.setProperty("hibernate.hbm2ddl.import_files", "initial_data.sql");
-    cfg.setProperty("hibernate.hbm2ddl.auto", "none");
+    cfg.setProperty("hibernate.hbm2ddl.auto", "validate");
 
     for (Class<?> clazz : findAllClasses(packageName)) {
       System.out.println("Class: " + clazz);
@@ -51,7 +54,7 @@ public class SchemaGenerator {
     SchemaExport export = new SchemaExport(cfg);
     export.setDelimiter(";");
     export.setOutputFile("ddl_" + dialect.name().toLowerCase() + ".sql");
-    export.execute(true, false, false, false);
+    export.execute(true, false, false, true);
   }
 
   /**
@@ -132,7 +135,6 @@ public class SchemaGenerator {
       String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
                                  resolveBasePackage(basePackage) + "/" + "**/*.class";
       Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-      System.out.println("here: " + resources.length);
       for (Resource resource : resources) {
           if (resource.isReadable()) {
               MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
