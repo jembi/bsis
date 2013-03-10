@@ -94,8 +94,6 @@
 
       	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.testResultFields.notes.defaultValue}");
 
-        copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
-
       });
 </script>
 

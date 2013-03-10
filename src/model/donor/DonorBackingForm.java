@@ -1,13 +1,11 @@
 package model.donor;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.StringUtils;
 
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
@@ -21,13 +19,12 @@ import viewmodel.DonorViewModel;
 
 public class DonorBackingForm {
 
-  @NotNull
   @Valid
   private Donor donor;
-  private List<BloodGroup> bloodGroups;
 
   // store a local copy of birthdate string as validation may have failed
-  String birthDate;
+  private String birthDate;
+  private String age;
   
   public DonorBackingForm() {
     donor = new Donor();
@@ -52,17 +49,6 @@ public class DonorBackingForm {
     } catch (ParseException ex) {
       ex.printStackTrace();
       donor.setBirthDate(null);
-    }
-  }
-
-  public List<BloodGroup> getBloodGroups() {
-    return (bloodGroups == null) ? Arrays.asList(new BloodGroup[0]) : bloodGroups;
-  }
-
-  public void setBloodGroups(List<String> bloodGroups) {
-    this.bloodGroups = new ArrayList<BloodGroup>();
-    for (String bg : bloodGroups) {
-      this.bloodGroups.add(new BloodGroup(bg));
     }
   }
 
@@ -96,6 +82,10 @@ public class DonorBackingForm {
 
   public String getLastName() {
     return donor.getLastName();
+  }
+
+  public String getCallingName() {
+    return donor.getCallingName();
   }
 
   public String getGender() {
@@ -186,6 +176,10 @@ public class DonorBackingForm {
 
   public void setLastName(String lastName) {
     donor.setLastName(lastName);
+  }
+
+  public void setCallingName(String callingName) {
+    donor.setCallingName(callingName);
   }
 
   public void setGender(String gender) {
@@ -284,5 +278,23 @@ public class DonorBackingForm {
 
   public void generateDonorNumber() {
     donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
+  }
+
+  public String getAge() {
+    return age;
+  }
+
+  public void setAge(String age) {
+    if (age == null || StringUtils.isBlank(age)) {
+      age = null;
+      return;
+    }
+    try {
+      donor.setAge(Integer.parseInt(age));
+      donor.setAgeUpdatedOn(new Date());
+      this.age = age;
+    } catch (NumberFormatException ex) {
+      this.age = "INVALID";
+    }
   }
 }

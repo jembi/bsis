@@ -14,9 +14,13 @@ public class FormField {
   public static final String DISPLAY_NAME = "displayName";
   public static final String DEFAULT_DISPLAY_NAME = "defaultDisplayName";
   public static final String DEFAULT_VALUE = "defaultValue";
+
+  public static final String ALLOW_CHANGE_HIDDEN = "allowChangeHidden";
   public static final String HIDDEN = "hidden";
-  public static final String DERIVED = "derived";
-  public static final String SOURCE_FIELD = "sourceField";
+
+  public static final String ALLOW_CHANGE_REQUIRED = "allowChangeRequired";
+  public static final String REQUIRED = "required";
+
   public static final String IS_AUTO_GENERATABLE = "isAutoGeneratable";
   public static final String AUTO_GENERATE = "autoGenerate";
 

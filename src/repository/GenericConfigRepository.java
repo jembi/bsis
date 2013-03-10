@@ -48,4 +48,15 @@ public class GenericConfigRepository {
   public void updateWorksheetProperties(Map<String, String> params) {
     updateConfigProperties(ConfigPropertyConstants.COLLECTIONS_WORKSHEET, params);
   }
+
+  public Map<String, String> getConfigProperties(String propertyOwner) {
+    Map<String, String> configProperties = new HashMap<String, String>();
+    String queryStr = "SELECT c FROM GenericConfig c WHERE c.propertyOwner = :propertyOwner";
+    TypedQuery<GenericConfig> query = em.createQuery(queryStr, GenericConfig.class);
+    query.setParameter("propertyOwner", propertyOwner);
+    for (GenericConfig gc : query.getResultList()) {
+      configProperties.put(gc.getPropertyName(), gc.getPropertyValue());
+    }
+    return configProperties;
+  }
 }

@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import model.donor.Donor;
 import model.donor.DonorBackingForm;
 import model.donor.DonorBackingFormValidator;
+import model.donor.FindDonorBackingForm;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -374,7 +375,7 @@ public class DonorController {
 
   @RequestMapping("/findDonorPagination")
   public @ResponseBody Map<String, Object> findProductPagination(HttpServletRequest request,
-      @ModelAttribute("findDonorForm") DonorBackingForm form,
+      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
       BindingResult result, Model model) {
 
 

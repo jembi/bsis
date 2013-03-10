@@ -150,8 +150,6 @@
         	setDefaultValueForSelector(getCollectionCenterSelector(), "${model.collectedSampleFields.collectionCenter.defaultValue}");
         	setDefaultValueForSelector(getBloodBagTypeSelector(), "${model.collectedSampleFields.bloodBagType.defaultValue}");
         	setDefaultValueForSelector(getCollectionSiteSelector(), "${model.collectedSampleFields.collectionSite.defaultValue}");
-
-          copyMirroredFields("${editCollectedSampleFormId}", JSON.parse('${model.collectedSampleFields.mirroredFields}'));
         }
 
         function getDonationTypeSelector() {

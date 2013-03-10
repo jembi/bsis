@@ -372,9 +372,10 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("Syphilis", "true", "collectionsWorksheet"),
 ("haemoglobinUnit", "g/dL", "measurementUnit"),
 ("bloodPressureUnit", "mmHg", "measurementUnit"),
+("ageLimitsEnabled", "true", "donationRequirements"),
 ("minimumAge", "16", "donationRequirements"),
-("maximumAge", "65", "donationRequirements");
-("Syphilis", "true", "collectionsWorksheet");
+("maximumAge", "65", "donationRequirements"),
+("daysBetweenConsecutiveDonations", "90", "donationRequirements");
 
 insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Saline @ 37 degrees', '0'),

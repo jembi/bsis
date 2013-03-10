@@ -95,8 +95,6 @@
 
         if ("${model.existingUsage}" !== "true")
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.usageFields.notes.defaultValue}");
-
-        copyMirroredFields("${editUsageFormId}", JSON.parse('${model.usageFields.mirroredFields}'));
       });
 </script>
 

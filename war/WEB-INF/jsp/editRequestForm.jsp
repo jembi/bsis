@@ -160,7 +160,6 @@
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.requestFields.productType.defaultValue}");
         	setDefaultValueForSelector(getRequestTypeSelector(), "${model.requestFields.requestType.defaultValue}");
         	setDefaultValueForSelector(getRequestSiteSelector(), "${model.requestFields.requestSite.defaultValue}");
-          copyMirroredFields("${tabContentId}", JSON.parse('${model.requestFields.mirroredFields}'));
         }
 
         function getBloodGroupSelector() {

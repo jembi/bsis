@@ -28,7 +28,6 @@ import model.util.Gender;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Donor implements ModificationTracker {
@@ -74,12 +73,18 @@ public class Donor implements ModificationTracker {
   @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
 
-  @DateTimeFormat(pattern="mm/dd/yyyy")
   @Temporal(TemporalType.DATE)
 	private Date birthDate;
 
+  private Integer age;
+
+  private Date ageUpdatedOn;
+
   @Valid
   private ContactInformation contactInformation;
+
+  @Temporal(TemporalType.DATE)
+  private Date dateOfLastDonation;
 
   @Column(length=15)
   private String nationalID;
@@ -353,5 +358,29 @@ public class Donor implements ModificationTracker {
 
   public void setNationalID(String nationalID) {
     this.nationalID = nationalID;
+  }
+
+  public Date getDateOfLastDonation() {
+    return dateOfLastDonation;
+  }
+
+  public void setDateOfLastDonation(Date dateOfLastDonation) {
+    this.dateOfLastDonation = dateOfLastDonation;
+  }
+
+  public Integer getAge() {
+    return age;
+  }
+
+  public void setAge(Integer age) {
+    this.age = age;
+  }
+
+  public Date getAgeUpdatedOn() {
+    return ageUpdatedOn;
+  }
+
+  public void setAgeUpdatedOn(Date ageUpdatedOn) {
+    this.ageUpdatedOn = ageUpdatedOn;
   }
 }

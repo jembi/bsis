@@ -113,8 +113,6 @@
 
         	setDefaultValueForSelector(getGenderSelector(), "${model.donorFields.gender.defaultValue}");
         	setDefaultValueForSelector(getBloodGroupSelector(), "${model.donorFields.bloodGroup.defaultValue}");
-
-          copyMirroredFields("${editDonorFormId}", JSON.parse('${model.donorFields.mirroredFields}'));
         }
 
         function getGenderSelector() {

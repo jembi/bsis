@@ -127,7 +127,6 @@
         if ("${model.existingProduct}" !== "true" && "${model.hasErrors}" !== "true") {
         	$("#${tabContentId}").find('textarea[name="notes"]').html("${model.productFields.notes.defaultValue}");
         	setDefaultValueForSelector(getProductTypeSelector(), "${model.productFields.productType.defaultValue}");
-          copyMirroredFields("${tabContentId}", JSON.parse('${model.productFields.mirroredFields}'));
         }
 
         function getProductTypeSelector() {

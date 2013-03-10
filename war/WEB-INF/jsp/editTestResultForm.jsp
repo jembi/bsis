@@ -109,8 +109,6 @@
           header : false
         });          
 
-        copyMirroredFields("${editTestResultFormId}", JSON.parse('${model.testResultFields.mirroredFields}'));
-
       });
 </script>
 

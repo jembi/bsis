@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
@@ -16,9 +18,14 @@ import org.apache.commons.lang3.StringUtils;
 public class BloodTest {
 
   @Id
-  @Column(nullable=false, updatable=false, insertable=false, length=30)
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable=false, updatable=false, insertable=false)
+  private Long id;
+
+  @Column(length=30)
   private String name;
 
+  @Column(length=30)
   private String displayName;
 
   private String allowedResults;
@@ -36,7 +43,7 @@ public class BloodTest {
   private Boolean isConfidential;
 
   private Boolean isFinalOutcome;
-
+  
   @ManyToMany
   @JoinTable(name="BloodTest_TestsRequiredIfPositive")
   private List<BloodTest> testsRequiredIfPositive;
@@ -163,5 +170,13 @@ public class BloodTest {
 
   public void setTestsRequiredIfPositive(List<BloodTest> testsRequiredIfPositive) {
     this.testsRequiredIfPositive = testsRequiredIfPositive;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 }

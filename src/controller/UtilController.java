@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.FormFieldRepository;
+import repository.GenericConfigRepository;
 import repository.TipsRepository;
 
 @Component
@@ -36,6 +37,9 @@ public class UtilController {
 
   @Autowired
   private ServletContext servletContext;
+
+  @Autowired
+  private GenericConfigRepository genericConfigRepository;
   
   public Map<String, Object> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -167,5 +171,9 @@ public class UtilController {
     pagingParams.put("start", request.getParameter("iDisplayStart"));
     pagingParams.put("length", request.getParameter("iDisplayLength"));
     return pagingParams;
+  }
+
+  public Map<String, String> getConfigProperty(String propertyOwner) {
+    return genericConfigRepository.getConfigProperties(propertyOwner);
   }
 }
