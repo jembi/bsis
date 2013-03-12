@@ -23,9 +23,10 @@ import model.collectedsample.CollectedSampleExists;
 import model.compatibility.CompatibilityTest;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+import model.productmovement.ProductStatusChange;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
-import model.reasons.ProductDiscardReason;
+import model.reasons.ProductStatusChangeReason;
 import model.request.Request;
 import model.user.User;
 import model.util.BloodAbo;
@@ -71,13 +72,13 @@ public class Product implements ModificationTracker {
   @Column(length=30)
   @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
-  
+
   @Temporal(TemporalType.TIMESTAMP)
   @Column(columnDefinition="DATETIME")
   private Date discardedOn;
 
   @ManyToOne
-  private ProductDiscardReason discardReason;
+  private ProductStatusChangeReason discardReason;
 
   @ManyToOne
   private Request issuedTo;
@@ -92,6 +93,9 @@ public class Product implements ModificationTracker {
   @OneToMany(mappedBy="testedProduct", fetch=FetchType.LAZY)
   private List<CompatibilityTest> compatibilityTests;
 
+  @OneToMany(mappedBy="product", fetch=FetchType.LAZY)
+  private List<ProductStatusChange> statusChanges;
+  
   @Lob
   private String notes;
 
@@ -256,14 +260,6 @@ public class Product implements ModificationTracker {
     this.discardedOn = discardedOn;
   }
 
-  public String getDiscardReason() {
-    return discardReason;
-  }
-
-  public void setDiscardReason(String discardReason) {
-    this.discardReason = discardReason;
-  }
-
   public Request getIssuedTo() {
     return issuedTo;
   }
@@ -278,5 +274,21 @@ public class Product implements ModificationTracker {
 
   public void setIssuedOn(Date issuedOn) {
     this.issuedOn = issuedOn;
+  }
+
+  public ProductStatusChangeReason getDiscardReason() {
+    return discardReason;
+  }
+
+  public void setDiscardReason(ProductStatusChangeReason discardReason) {
+    this.discardReason = discardReason;
+  }
+
+  public List<ProductStatusChange> getStatusChanges() {
+    return statusChanges;
+  }
+
+  public void setStatusChanges(List<ProductStatusChange> statusChanges) {
+    this.statusChanges = statusChanges;
   }
 }

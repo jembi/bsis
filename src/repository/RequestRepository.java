@@ -20,7 +20,7 @@ import javax.persistence.TypedQuery;
 import model.bloodtest.BloodTest;
 import model.product.Product;
 import model.product.ProductStatus;
-import model.productmovement.ProductIssue;
+import model.productmovement.ProductStatusChange;
 import model.request.Request;
 import model.testresults.TestResult;
 import model.util.BloodAbo;
@@ -349,7 +349,7 @@ public class RequestRepository {
       // between the time when matching products are searched and selected
       // for issuing
       if (canIssueProduct(product, request)) {
-        ProductIssue productIssue = new ProductIssue();
+        ProductStatusChange productIssue = new ProductStatusChange();
         productIssue.setIssuedBy(UserInfoAddToThreadFilter.threadLocal.get());
         productIssue.setIssuedTo(request);
         productIssue.setIssuedOn(new Date());

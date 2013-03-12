@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,12 +16,13 @@ import javax.persistence.TemporalType;
 
 import model.product.Product;
 import model.product.ProductExists;
+import model.product.ProductStatus;
 import model.request.Request;
 import model.request.RequestExists;
 import model.user.User;
 
 @Entity
-public class ProductIssue {
+public class ProductStatusChange {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,19 +34,23 @@ public class ProductIssue {
   private Product product;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date issuedOn;
+  private Date statusChangedOn;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private ProductStatus newStatus;
 
   @RequestExists
   @ManyToOne
   private Request issuedTo;
 
   @ManyToOne
-  private User issuedBy;
+  private User changedBy;
 
   @Lob
   private String notes;
 
-  public ProductIssue() {
+  public ProductStatusChange() {
   }
 
   public Long getId() {
@@ -62,12 +69,20 @@ public class ProductIssue {
     this.product = product;
   }
 
-  public Date getIssuedOn() {
-    return issuedOn;
+  public Date getStatusChangedOn() {
+    return statusChangedOn;
   }
 
-  public void setIssuedOn(Date issuedOn) {
-    this.issuedOn = issuedOn;
+  public void setStatusChangedOn(Date statusChangedOn) {
+    this.statusChangedOn = statusChangedOn;
+  }
+
+  public ProductStatus getNewStatus() {
+    return newStatus;
+  }
+
+  public void setNewStatus(ProductStatus newStatus) {
+    this.newStatus = newStatus;
   }
 
   public Request getIssuedTo() {
@@ -78,12 +93,12 @@ public class ProductIssue {
     this.issuedTo = issuedTo;
   }
 
-  public User getIssuedBy() {
-    return issuedBy;
+  public User getChangedBy() {
+    return changedBy;
   }
 
-  public void setIssuedBy(User issuedBy) {
-    this.issuedBy = issuedBy;
+  public void setChangedBy(User changedBy) {
+    this.changedBy = changedBy;
   }
 
   public String getNotes() {

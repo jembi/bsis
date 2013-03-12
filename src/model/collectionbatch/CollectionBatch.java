@@ -1,4 +1,4 @@
-package model.donationBatch;
+package model.collectionbatch;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 @Entity
-public class DonationBatch {
+public class CollectionBatch {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

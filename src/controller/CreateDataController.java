@@ -433,7 +433,7 @@ public class CreateDataController {
 		List<Location> sites = locationRepository.getAllCollectionSites();
 		List<Location> centers = locationRepository.getAllCenters();
 		List<Donor> donors = donorRepository.getAllDonors();
-    List<DonationType> donorTypes = donorTypeRepository.getAllDonationTypes();
+    List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
     List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
@@ -452,7 +452,7 @@ public class CreateDataController {
 		  collection.setCollectedOn(collectionDate);
 		  collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
 		  collection.setNotes("notes sample " + i);
-		  collection.setDonorType(donorTypes.get(Math.abs(random.nextInt()) % donorTypes.size()).getId().toString());
+		  collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()).getId().toString());
 		  collection.setIsDeleted(false);
 
 		  collectedSamples.add(collection.getCollectedSample());

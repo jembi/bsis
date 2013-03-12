@@ -136,12 +136,12 @@ public class CollectedSampleBackingForm {
     return site.getId().toString();
   }
 
-  public String getDonorType() {
-    DonationType donorType = collectedSample.getDonorType();
-    if (donorType == null || donorType.getId() == null)
+  public String getDonationType() {
+    DonationType donationType = collectedSample.getDonationType();
+    if (donationType == null || donationType.getId() == null)
       return null;
     else
-      return donorType.getId().toString();
+      return donationType.getId().toString();
   }
 
   public String getBloodBagType() {
@@ -218,14 +218,14 @@ public class CollectedSampleBackingForm {
     }
   }
 
-  public void setDonorType(String donorTypeId) {
-    if (donorTypeId == null || donorTypeId.isEmpty()) {
-      collectedSample.setDonorType(null);
+  public void setDonationType(String donationTypeId) {
+    if (donationTypeId == null || donationTypeId.isEmpty()) {
+      collectedSample.setDonationType(null);
     }
     else {
       DonationType dt = new DonationType();
-      dt.setId(Integer.parseInt(donorTypeId));
-      collectedSample.setDonorType(dt);
+      dt.setId(Integer.parseInt(donationTypeId));
+      collectedSample.setDonationType(dt);
     }
   }
 

@@ -22,7 +22,7 @@ import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
-import model.donationBatch.DonationBatch;
+import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
 import model.donationtype.DonationTypeExists;
 import model.donor.Donor;
@@ -74,7 +74,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @DonationTypeExists
   @ManyToOne
-  private DonationType donorType;
+  private DonationType donationType;
 
   @BloodBagTypeExists
   @ManyToOne
@@ -112,7 +112,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private User donationCreatedBy;
 
   @ManyToOne(optional=true)
-  private DonationBatch donationBatch;
+  private CollectionBatch collectionBatch;
 
   @Lob
   private String notes;
@@ -155,10 +155,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return collectedOn;
   }
 
-  public DonationType getDonorType() {
-    return donorType;
-  }
-
   public BloodBagType getBloodBagType() {
     return bloodBagType;
   }
@@ -199,10 +195,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectedOn = collectedOn;
   }
 
-  public void setDonorType(DonationType donorType) {
-    this.donorType = donorType;
-  }
-
   public void setBloodBagType(BloodBagType bloodBagType) {
     this.bloodBagType = bloodBagType;
   }
@@ -219,7 +211,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     assert (this.getId().equals(collectedSample.getId()));
     this.collectionNumber = collectedSample.collectionNumber;
     this.donor = collectedSample.donor;
-    this.donorType = collectedSample.donorType;
+    this.setDonationType(collectedSample.getDonationType());
     this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
     this.collectionCenter = collectedSample.collectionCenter;
@@ -323,14 +315,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donorWeight = donorWeight;
   }
 
-  public DonationBatch getDonationBatch() {
-    return donationBatch;
-  }
-
-  public void setDonationBatch(DonationBatch donationBatch) {
-    this.donationBatch = donationBatch;
-  }
-
   public User getDonationCreatedBy() {
     return donationCreatedBy;
   }
@@ -353,5 +337,21 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setBloodRhd(BloodRhd bloodRhd) {
     this.bloodRhd = bloodRhd;
+  }
+
+  public CollectionBatch getCollectionBatch() {
+    return collectionBatch;
+  }
+
+  public void setCollectionBatch(CollectionBatch collectionBatch) {
+    this.collectionBatch = collectionBatch;
+  }
+
+  public DonationType getDonationType() {
+    return donationType;
+  }
+
+  public void setDonationType(DonationType donationType) {
+    this.donationType = donationType;
   }
 }
