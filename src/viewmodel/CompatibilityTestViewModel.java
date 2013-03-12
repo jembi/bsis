@@ -44,14 +44,6 @@ public class CompatibilityTestViewModel {
     return compatibilityTest.getForRequest();
   }
 
-  public String getProductNumber() {
-    if (compatibilityTest == null || compatibilityTest.getTestedProduct() == null ||
-        compatibilityTest.getTestedProduct().getProductNumber() == null
-       )
-      return "";
-    return compatibilityTest.getTestedProduct().getProductNumber();
-  }
-
   public Product getTestedProduct() {
     return compatibilityTest.getTestedProduct();
   }

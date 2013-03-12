@@ -108,4 +108,20 @@ public class ProductStatusChange {
   public void setNotes(String notes) {
     this.notes = notes;
   }
+
+  public User getIssuedBy() {
+    return this.changedBy;
+  }
+
+  public void setIssuedBy(User issuedBy) {
+    this.changedBy = issuedBy;
+  }
+
+  public Date getIssuedOn() {
+    return this.statusChangedOn;
+  }
+
+  public void setIssuedOn(Date issuedOn) {
+    this.statusChangedOn = issuedOn;
+  }
 }

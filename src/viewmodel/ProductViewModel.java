@@ -40,10 +40,6 @@ public class ProductViewModel {
     return product.getId();
   }
 
-  public String getProductNumber() {
-    return product.getProductNumber();
-  }
-
   public CollectedSample getCollectedSample() {
     return product.getCollectedSample();
   }
