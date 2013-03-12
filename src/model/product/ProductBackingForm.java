@@ -39,8 +39,6 @@ public class ProductBackingForm {
 
   public ProductBackingForm(boolean autoGenerate) {
     setProduct(new Product());
-    if (autoGenerate)
-      generateProductNumber();
   }
 
   public ProductBackingForm(Product product) {
@@ -49,10 +47,6 @@ public class ProductBackingForm {
 
   public Long getId() {
     return product.getId();
-  }
-
-  public String getProductNumber() {
-    return product.getProductNumber();
   }
 
   public CollectedSample getCollectedSample() {
@@ -105,10 +99,6 @@ public class ProductBackingForm {
 
   public void setId(Long id) {
     product.setId(id);
-  }
-
-  public void setProductNumber(String productNumber) {
-    product.setProductNumber(productNumber);
   }
 
   public void setCollectedSample(CollectedSample collectedSample) {
@@ -204,13 +194,6 @@ public class ProductBackingForm {
 
   public void setProductTypes(List<String> productTypes) {
     this.productTypes = productTypes;
-  }
-
-  public void generateProductNumber() {
-    String uniqueProductNumber;
-    uniqueProductNumber = "P-" +
-                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    product.setProductNumber(uniqueProductNumber);
   }
 
   public String getCollectionNumber() {

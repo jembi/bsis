@@ -32,10 +32,8 @@ import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodRhd;
 
-import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.Index;
 
-@FilterDef(name="availableProductsNotExpiredFilter", defaultCondition="isDeleted = '0' && isAvailable = '1'")
 @Entity
 public class Product implements ModificationTracker {
 
@@ -44,13 +42,17 @@ public class Product implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
-  @Column(length=30)
-  @Index(name="product_productNumber_index")
-  private String productNumber;
-
+  // A product may not have a corresponding sample. Some products may be
+  // imported from another location. In such a case the corresponding collection
+  // field is allowed to be null.
   @CollectedSampleExists
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne(optional=true, fetch=FetchType.LAZY)
   private CollectedSample collectedSample;
+
+  // not all products are subdivided into small packs. Just store the
+  // extra information about subdivided products in a separate table. 
+  @OneToMany(mappedBy="parentProduct")
+  private List<SubdividedProduct> subdividedProducts;
 
   @ProductTypeExists
   @ManyToOne
@@ -95,7 +97,7 @@ public class Product implements ModificationTracker {
 
   @OneToMany(mappedBy="product", fetch=FetchType.LAZY)
   private List<ProductStatusChange> statusChanges;
-  
+
   @Lob
   private String notes;
 
@@ -110,7 +112,6 @@ public class Product implements ModificationTracker {
 
   public void copy(Product product) {
     assert (this.getId().equals(product.getId()));
-    this.productNumber = product.productNumber;
     this.collectedSample = product.collectedSample;
     this.productType = product.productType;
     this.createdOn = product.createdOn;
@@ -120,10 +121,6 @@ public class Product implements ModificationTracker {
 
   public Long getId() {
     return id;
-  }
-
-  public String getProductNumber() {
-    return productNumber;
   }
 
   public CollectedSample getCollectedSample() {
@@ -148,10 +145,6 @@ public class Product implements ModificationTracker {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public void setProductNumber(String productNumber) {
-    this.productNumber = productNumber;
   }
 
   public void setCollectedSample(CollectedSample collectedSample) {
@@ -290,5 +283,13 @@ public class Product implements ModificationTracker {
 
   public void setStatusChanges(List<ProductStatusChange> statusChanges) {
     this.statusChanges = statusChanges;
+  }
+
+  public List<SubdividedProduct> getSubdividedProducts() {
+    return subdividedProducts;
+  }
+
+  public void setSubdividedProducts(List<SubdividedProduct> subdividedProducts) {
+    this.subdividedProducts = subdividedProducts;
   }
 }

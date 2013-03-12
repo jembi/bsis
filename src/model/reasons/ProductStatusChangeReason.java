@@ -20,7 +20,9 @@ public class ProductStatusChangeReason {
   private String statusChangeReason;
 
   @Column(length=20)
-  private ProductStatusChangeReasonCategory category; 
+  private ProductStatusChangeReasonCategory category;
+
+  private Boolean isDeleted;
 
   public ProductStatusChangeReason() {
   }
@@ -47,5 +49,13 @@ public class ProductStatusChangeReason {
 
   public void setCategory(ProductStatusChangeReasonCategory category) {
     this.category = category;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

@@ -291,11 +291,21 @@ insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isR
 ('Usage', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
 ('Usage', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
 
-insert into DonorType (donorType, isDeleted) values
+insert into DonationType (donationType, isDeleted) values
 ('Voluntary', '0'),
 ('Family', '0'),
 ('Autologous', '0'),
 ('Other', '0');
+
+insert into ProductStatusChangeReasonCategory (category, isDeleted) values
+('Discarded' , '0'),
+('Returned', '0'),
+('Other', '0');
+
+insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) values
+('Discarded', 'Discarded', '0'),
+('Returned as expired', 'Returned', '0'),
+('Other', 'Other', '0');
 
 insert into RequestType (requestType, description, isDeleted) values
 ('Emergency', '', '0'),
@@ -380,7 +390,10 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("daysBetweenConsecutiveDonations", "90", "donationRequirements"),
 ("donorDeferralCheckRequired", "true", "donationRequirements"),
 ("donorBloodGroupMatchRequired", "true", "donationRequirements"),
-("donorHistoryCheckRequired", "true", "donationRequirements");
+("donorHistoryCheckRequired", "true", "donationRequirements"),
+("donorRecordRequired", "true", "productReleaseRequirements"),
+("allowProductsWithoutCollection", "true", "productCreationRequirements"),
+("allowImportedProducts", "true", "productCreationRequirements");
 
 insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Saline @ 37 degrees', '0'),

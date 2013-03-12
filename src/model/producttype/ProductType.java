@@ -28,6 +28,9 @@ public class ProductType {
 
   @Column(length=30)
   private String shelfLifeUnits;
+
+  @Column
+  private Boolean isSubdivided;
   
   @Lob
   private String description;
@@ -101,5 +104,13 @@ public class ProductType {
 
   public boolean equals(ProductType pt) {
     return this.id == pt.id;
+  }
+
+  public Boolean getIsSubdivided() {
+    return isSubdivided;
+  }
+
+  public void setIsSubdivided(Boolean isSubdivided) {
+    this.isSubdivided = isSubdivided;
   }
 }
