@@ -360,6 +360,8 @@ insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Anti Human Globulin', '0');
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("dateFormat", "MM/dd/yy", "page"),
+("dateTimeFormat", "MM/dd/yy hh:mm:ss a", "page"),
 ("rowHeight", "30", "collectionsWorksheet"),
 ("columnWidth", "100", "collectionsWorksheet"),
 ("collectionNumber", "true", "collectionsWorksheet"),
@@ -375,7 +377,10 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("ageLimitsEnabled", "true", "donationRequirements"),
 ("minimumAge", "16", "donationRequirements"),
 ("maximumAge", "65", "donationRequirements"),
-("daysBetweenConsecutiveDonations", "90", "donationRequirements");
+("daysBetweenConsecutiveDonations", "90", "donationRequirements"),
+("donorDeferralCheckRequired", "true", "donationRequirements"),
+("donorBloodGroupMatchRequired", "true", "donationRequirements"),
+("donorHistoryCheckRequired", "true", "donationRequirements");
 
 insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Saline @ 37 degrees', '0'),

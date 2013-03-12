@@ -7,29 +7,30 @@
     ) ENGINE=InnoDB;
 
     create table BloodTest (
-        name varchar(30) not null,
+        id bigint not null auto_increment,
         allowedResults varchar(255),
-        displayName varchar(255),
+        displayName varchar(30),
         isConfidential boolean,
         isDeleted boolean,
         isFinalOutcome boolean,
         isRequired boolean,
+        name varchar(30),
         negativeRequiredForUse boolean,
         negativeResults varchar(255),
         notes longtext,
         positiveResults varchar(255),
         resultCalculated varchar(255),
-        primary key (name)
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table BloodTest_TestsRequiredIfNegative (
-        BloodTest_name varchar(30) not null,
-        testsRequiredIfNegative_name varchar(30) not null
+        BloodTest_id bigint not null,
+        testsRequiredIfNegative_id bigint not null
     ) ENGINE=InnoDB;
 
     create table BloodTest_TestsRequiredIfPositive (
-        BloodTest_name varchar(30) not null,
-        testsRequiredIfPositive_name varchar(30) not null
+        BloodTest_id bigint not null,
+        testsRequiredIfPositive_id bigint not null
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -42,8 +43,8 @@
         donorWeight decimal(6,2),
         haemoglobinCount decimal(6,2),
         isDeleted boolean,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
         bloodBagType_id integer,
@@ -65,8 +66,8 @@
 
     create table CollectionsWorksheet (
         id bigint not null auto_increment,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         worksheetBatchId varchar(255),
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -78,8 +79,8 @@
         compatibililityTestDate datetime,
         compatibilityResult integer,
         isDeleted boolean,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         testedBy varchar(255),
         transfusedBefore boolean,
@@ -95,6 +96,13 @@
         id integer not null auto_increment,
         crossmatchType varchar(255),
         isDeleted boolean,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table DeferralReason (
+        id bigint not null auto_increment,
+        details varchar(255),
+        reason varchar(50),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -116,30 +124,43 @@
 
     create table Donor (
         id bigint not null auto_increment,
+        age TINYINT,
+        ageSpecified boolean,
         birthDate date,
-        bloodAbo varchar(3),
-        bloodRhd varchar(3),
-        callingName varchar(30),
-        address varchar(255),
-        city varchar(50),
-        country varchar(50),
-        district varchar(50),
-        phoneNumber varchar(50),
-        province varchar(50),
-        state varchar(50),
+        bloodAbo varchar(10),
+        bloodRhd varchar(10),
+        callingName varchar(20),
+        address varchar(100),
+        city varchar(25),
+        country varchar(25),
+        district varchar(25),
+        otherPhoneNumber varchar(20),
+        phoneNumber varchar(20),
+        province varchar(25),
+        state varchar(25),
         zipcode varchar(10),
-        donorNumber varchar(30),
-        firstName varchar(30),
+        donorNumber varchar(15),
+        firstName varchar(20),
         gender varchar(15),
         isDeleted boolean,
-        lastName varchar(30),
-        middleName varchar(30),
-        createdDate datetime,
-        lastUpdated datetime,
+        lastName varchar(20),
+        middleName varchar(20),
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         nationalID varchar(15),
         notes longtext,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table DonorDeferral (
+        id bigint not null auto_increment,
+        deferredOn date,
+        deferredUntil date,
+        deferralReason_id bigint,
+        deferredBy_id bigint,
+        deferredDonor_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -198,8 +219,8 @@
         expiresOn datetime,
         isDeleted boolean,
         issuedOn datetime,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         productNumber varchar(30),
         status varchar(30),
@@ -260,8 +281,8 @@
         hospital varchar(255),
         isAvailable boolean,
         isDeleted boolean,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         patientName varchar(30),
         usageDate datetime,
@@ -281,8 +302,8 @@
         hospital varchar(30),
         indicationForUse varchar(50),
         isDeleted boolean,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         numUnitsIssued integer,
         numUnitsRequested integer,
@@ -329,12 +350,12 @@
     create table TestResult (
         id bigint not null auto_increment,
         isDeleted boolean,
-        createdDate datetime,
-        lastUpdated datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         result varchar(255),
         testedOn datetime,
-        bloodTest_name varchar(30),
+        bloodTest_id bigint,
         collectedSample_id bigint not null,
         createdBy_id bigint,
         lastUpdatedBy_id bigint,
@@ -367,28 +388,28 @@
     ) ENGINE=InnoDB;
 
     alter table BloodTest_TestsRequiredIfNegative 
-        add index FK22608B9FD5AABEFD (testsRequiredIfNegative_name), 
-        add constraint FK22608B9FD5AABEFD 
-        foreign key (testsRequiredIfNegative_name) 
-        references BloodTest (name);
+        add index FK22608B9F21F9B0CD (testsRequiredIfNegative_id), 
+        add constraint FK22608B9F21F9B0CD 
+        foreign key (testsRequiredIfNegative_id) 
+        references BloodTest (id);
 
     alter table BloodTest_TestsRequiredIfNegative 
-        add index FK22608B9F3A6D02C3 (BloodTest_name), 
-        add constraint FK22608B9F3A6D02C3 
-        foreign key (BloodTest_name) 
-        references BloodTest (name);
+        add index FK22608B9F4FE62E13 (BloodTest_id), 
+        add constraint FK22608B9F4FE62E13 
+        foreign key (BloodTest_id) 
+        references BloodTest (id);
 
     alter table BloodTest_TestsRequiredIfPositive 
-        add index FK180C19639CA52BB9 (testsRequiredIfPositive_name), 
-        add constraint FK180C19639CA52BB9 
-        foreign key (testsRequiredIfPositive_name) 
-        references BloodTest (name);
+        add index FK180C19638E01C89 (testsRequiredIfPositive_id), 
+        add constraint FK180C19638E01C89 
+        foreign key (testsRequiredIfPositive_id) 
+        references BloodTest (id);
 
     alter table BloodTest_TestsRequiredIfPositive 
-        add index FK180C19633A6D02C3 (BloodTest_name), 
-        add constraint FK180C19633A6D02C3 
-        foreign key (BloodTest_name) 
-        references BloodTest (name);
+        add index FK180C19634FE62E13 (BloodTest_id), 
+        add constraint FK180C19634FE62E13 
+        foreign key (BloodTest_id) 
+        references BloodTest (id);
 
     create index collectedSample_collectedOn_index on CollectedSample (collectedOn);
 
@@ -529,6 +550,24 @@
         add constraint FK3F25E46D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table DonorDeferral 
+        add index FKC7E323D193E6BEC (deferredDonor_id), 
+        add constraint FKC7E323D193E6BEC 
+        foreign key (deferredDonor_id) 
+        references Donor (id);
+
+    alter table DonorDeferral 
+        add index FKC7E323D1ED3A012D (deferredBy_id), 
+        add constraint FKC7E323D1ED3A012D 
+        foreign key (deferredBy_id) 
+        references User (id);
+
+    alter table DonorDeferral 
+        add index FKC7E323D1C9CCBBFC (deferralReason_id), 
+        add constraint FKC7E323D1C9CCBBFC 
+        foreign key (deferralReason_id) 
+        references DeferralReason (id);
 
     create index product_expiresOn_index on Product (expiresOn);
 
@@ -681,13 +720,13 @@
         references CollectedSample (id);
 
     alter table TestResult 
-        add index FKDB459F6F3A6D02C3 (bloodTest_name), 
-        add constraint FKDB459F6F3A6D02C3 
-        foreign key (bloodTest_name) 
-        references BloodTest (name);
-
-    alter table TestResult 
         add index FKDB459F6FD0AFB367 (lastUpdatedBy_id), 
         add constraint FKDB459F6FD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table TestResult 
+        add index FKDB459F6F4FE62E13 (bloodTest_id), 
+        add constraint FKDB459F6F4FE62E13 
+        foreign key (bloodTest_id) 
+        references BloodTest (id);

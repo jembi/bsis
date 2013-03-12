@@ -4,7 +4,7 @@ package model.util;
  * ISO/IEC 5218
  * 0 = not known, 1 = male, 2 = female, 9 = not applicable
  * NOTE: Try to use valueOf() method to convert enum constants
- * to strings wherever possible.
+ * to strings wherever possible. Do not store numbers as this makes the database less readable.
  * Also it is generally preferrable to use the string value as the value
  * that goes in the database as it is text and more readable than numbers.
  * See javax.persistence.EnumType.

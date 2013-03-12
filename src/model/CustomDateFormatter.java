@@ -7,19 +7,19 @@ import java.util.Date;
 
 public class CustomDateFormatter {
 
-  public static final String datePattern = "MM/dd/yy"; 
-  public static final String datePatternHumanReadable = "MM/dd/yy"; 
+  private static String datePattern = "MM/dd/yy"; 
+  private static String datePatternHumanReadable = "MM/dd/yy"; 
 
-  public static final String dateTimePattern = "MM/dd/yy hh:mm:ss a"; 
-  public static final String dateTimePatternHumanReadable = "MM/dd/yy hour:minute:second AM/PM";
+  private static String dateTimePattern = "MM/dd/yy hh:mm:ss a"; 
+  private static String dateTimePatternHumanReadable = "MM/dd/yy hour:minute:second AM/PM";
 
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
 
   static {
-    dateFormat = new SimpleDateFormat(datePattern);
+    dateFormat = new SimpleDateFormat(getDatePattern());
     dateFormat.setLenient(false);
-    dateTimeFormat = new SimpleDateFormat(dateTimePattern);
+    dateTimeFormat = new SimpleDateFormat(getDatetimepattern());
     dateTimeFormat.setLenient(false);
   }
 
@@ -74,11 +74,11 @@ public class CustomDateFormatter {
   }
 
   public static String getDateErrorMessage() {
-    return "Invalid Date specified. Use " + datePatternHumanReadable.toLowerCase();
+    return "Invalid Date specified. Use " + getDatePatternHumanReadable().toLowerCase();
   }
 
   public static String getDateTimeErrorMessage() {
-    return "Invalid Date specified. Use " + dateTimePatternHumanReadable.toLowerCase();
+    return "Invalid Date specified. Use " + getDatetimepatternhumanreadable().toLowerCase();
   }
 
   public static String getDateString(Date date) {
@@ -93,5 +93,30 @@ public class CustomDateFormatter {
       return "";
     else
       return dateTimeFormat.format(date);
+  }
+
+  public static String getDatePattern() {
+    return datePattern;
+  }
+
+  public static void setDatePattern(String datePattern) {
+    CustomDateFormatter.datePattern = datePattern;
+  }
+
+  public static String getDatePatternHumanReadable() {
+    return datePatternHumanReadable;
+  }
+
+  public static void setDatePatternHumanReadable(
+      String datePatternHumanReadable) {
+    CustomDateFormatter.datePatternHumanReadable = datePatternHumanReadable;
+  }
+
+  public static String getDatetimepattern() {
+    return dateTimePattern;
+  }
+
+  public static String getDatetimepatternhumanreadable() {
+    return dateTimePatternHumanReadable;
   }
 }

@@ -1,11 +1,13 @@
 package model.donor;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
@@ -284,15 +286,23 @@ public class DonorBackingForm {
     return age;
   }
 
-  public void setAge(String age) {
+  public void setAge(String ageStr) {
     if (age == null || StringUtils.isBlank(age)) {
       age = null;
       return;
     }
     try {
-      donor.setAge(Integer.parseInt(age));
-      donor.setAgeUpdatedOn(new Date());
-      this.age = age;
+      int age = Integer.parseInt(ageStr);
+      donor.setAge(age);
+      DateTime dt = new DateTime(new Date());
+      Calendar c = Calendar.getInstance();
+      c.setTime(dt.toDateMidnight().toDate());
+      c.set(Calendar.MONTH, Calendar.JANUARY);
+      c.set(Calendar.DATE, 1);
+      c.add(Calendar.YEAR, -age);
+      donor.setBirthDate(c.getTime());
+      donor.setAgeSpecified(true);
+      this.age = ageStr;
     } catch (NumberFormatException ex) {
       this.age = "INVALID";
     }

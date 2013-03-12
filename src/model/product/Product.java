@@ -25,6 +25,7 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
+import model.reasons.ProductDiscardReason;
 import model.request.Request;
 import model.user.User;
 import model.util.BloodAbo;
@@ -72,10 +73,11 @@ public class Product implements ModificationTracker {
   private BloodRhd bloodRhd;
   
   @Temporal(TemporalType.TIMESTAMP)
+  @Column(columnDefinition="DATETIME")
   private Date discardedOn;
 
-  @Column(length=100)
-  private String discardReason;
+  @ManyToOne
+  private ProductDiscardReason discardReason;
 
   @ManyToOne
   private Request issuedTo;

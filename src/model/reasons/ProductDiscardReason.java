@@ -15,11 +15,11 @@ public class ProductDiscardReason {
   @Column(nullable = false)
   private Long id;
 
-  @Column(length=150)
+  @Column(length=100)
   private String discardReason;
 
-  @Lob
-  private String notes;
+  @Column(length=200)
+  private String discardReasonDetails;
 
   public ProductDiscardReason() {
   }
@@ -40,11 +40,11 @@ public class ProductDiscardReason {
     this.discardReason = discardReason;
   }
 
-  public String getNotes() {
-    return notes;
+  public String getDiscardReasonDetails() {
+    return discardReasonDetails;
   }
 
-  public void setNotes(String notes) {
-    this.notes = notes;
+  public void setDiscardReasonDetails(String discardReasonDetails) {
+    this.discardReasonDetails = discardReasonDetails;
   }
 }

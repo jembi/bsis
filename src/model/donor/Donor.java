@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -37,26 +38,27 @@ public class Donor implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
 	private Long id;
 
-  @Column(length=30)
+  @Column(length=15)
   @Index(name="donor_donorNumber_index")
+  @Length(max=15)
   private String donorNumber;
 
-  @Column(length=30)
+  @Column(length=20)
   @Index(name="donor_firstName_index")
-  @Length(max=30)
+  @Length(max=20)
 	private String firstName;
 
-  @Length(max=30)
-  @Column(length=30)
+  @Length(max=20)
+  @Column(length=20)
   private String middleName;
 
-  @Length(max=30)
+  @Length(max=20)
   @Index(name="donor_lastName_index")
-  @Column(length=30)
+  @Column(length=20)
 	private String lastName;
 
-  @Length(max=30)
-  @Column(length=30)
+  @Length(max=20)
+  @Column(length=20)
   private String callingName;
 
   @Enumerated(EnumType.STRING)
@@ -64,30 +66,29 @@ public class Donor implements ModificationTracker {
 	private Gender gender;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=3)
+  @Column(length=10)
   @Index(name="donor_bloodAbo_index")
   private BloodAbo bloodAbo;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=3)
+  @Column(length=10)
   @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
 
   @Temporal(TemporalType.DATE)
 	private Date birthDate;
 
+  @Column(columnDefinition="TINYINT")
   private Integer age;
-
-  private Date ageUpdatedOn;
-
-  @Valid
-  private ContactInformation contactInformation;
-
-  @Temporal(TemporalType.DATE)
-  private Date dateOfLastDonation;
 
   @Column(length=15)
   private String nationalID;
+
+  private Boolean ageSpecified;
+
+  @Embedded
+  @Valid
+  private ContactInformation contactInformation;
 
   @Lob
 	private String notes;
@@ -360,14 +361,6 @@ public class Donor implements ModificationTracker {
     this.nationalID = nationalID;
   }
 
-  public Date getDateOfLastDonation() {
-    return dateOfLastDonation;
-  }
-
-  public void setDateOfLastDonation(Date dateOfLastDonation) {
-    this.dateOfLastDonation = dateOfLastDonation;
-  }
-
   public Integer getAge() {
     return age;
   }
@@ -376,11 +369,11 @@ public class Donor implements ModificationTracker {
     this.age = age;
   }
 
-  public Date getAgeUpdatedOn() {
-    return ageUpdatedOn;
+  public Boolean getAgeSpecified() {
+    return ageSpecified;
   }
 
-  public void setAgeUpdatedOn(Date ageUpdatedOn) {
-    this.ageUpdatedOn = ageUpdatedOn;
+  public void setAgeSpecified(Boolean ageSpecified) {
+    this.ageSpecified = ageSpecified;
   }
 }

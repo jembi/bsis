@@ -2,6 +2,7 @@ package model.modificationtracker;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -13,9 +14,11 @@ import model.user.User;
 public class RowModificationTracker implements ModificationTracker {
 
   @Temporal(TemporalType.TIMESTAMP)
+  @Column(columnDefinition="TIMESTAMP")
   private Date lastUpdated;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @Column(columnDefinition="TIMESTAMP")
   private Date createdDate;
 
   @ManyToOne

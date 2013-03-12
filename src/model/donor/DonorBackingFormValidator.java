@@ -55,12 +55,12 @@ public class DonorBackingFormValidator implements Validator {
     if (age.equals("INVALID"))
       errors.rejectValue("donor.age", "ageFormat.incorrect", "Age should be number of years.");
 
-    boolean birthDateSpecified = StringUtils.isNotBlank(birthDate);
-    boolean ageSpecified = StringUtils.isNotBlank(age);
-    if (birthDateSpecified && ageSpecified) {
-      errors.rejectValue("donor.birthDate", "birthdate.ambiguous", "Both birth date and age specified.");
-      errors.rejectValue("donor.age", "age.ambiguous", "Both birth date and age specified.");
-    }
+//    boolean birthDateSpecified = StringUtils.isNotBlank(birthDate);
+//    boolean ageSpecified = StringUtils.isNotBlank(age);
+//    if (birthDateSpecified && ageSpecified) {
+//      errors.rejectValue("donor.birthDate", "birthdate.ambiguous", "Both birth date and age specified.");
+//      errors.rejectValue("donor.age", "age.ambiguous", "Both birth date and age specified.");
+//    }
 
     Map<String, String> config = utilController.getConfigProperty("donationRequirements");
     if (config.get("ageLimitsEnabled").equals("true")) {
