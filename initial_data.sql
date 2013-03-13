@@ -212,100 +212,21 @@ insert into FormField
 '0', '0',
 '0', '0');
 
-insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('Product', 'productNumber', 'Product Number', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'createdOn', 'Created On', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'issuedOn', 'Issued On', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'expiresOn', 'Expires On', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'status', 'Status', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
-('Product', 'age', 'Age', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'issuedTo', 'Issued to request', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'issuedBy', 'Issued by', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'discardedOn', 'Discarded on', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'discardedBy', 'Discarded by', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('Product', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
-
-insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('TestResult', 'collectionNumber', 'Collection Number', '', '0', '1', '0', '0', '0', '', 0),
-('TestResult', 'bloodTest', 'Test Name', '', '0', '0', '0', '0', '0', '', 0),
-('TestResult', 'result', 'Test Result', '', '0', '0', '0', '0', '0', '', 0),
-('TestResult', 'testedOn', 'Tested On', '', '0', '0', '0', '0', '0', '', 0),
-('TestResult', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
-('TestResult', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('TestResult', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
-
-insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('Request', 'requestNumber', 'Request Number', '', '0', '1', '1', '1', '0', '', 0),
-('Request', 'requestDate', 'Request Date', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'requiredDate', 'Required Date', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'requestSite', 'Request Site', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'numUnitsRequested', 'No. of Units Requested', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'volume', 'Unit Volume', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'numUnitsIssued', 'No. of units Issued', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'numUnitsIssued', 'No. of Units Issued', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'requestStatus', 'Request Status', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'bloodGroup', 'Blood Group', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'productType', 'Product Type', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'requestType', 'Request Type', '', '0', '1', '0', '0', '0', '', 0),
-('Request', 'patientNumber', 'Patient Number', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'patientFirstName', 'Patient First Name', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'patientLastName', 'Patient Last Name', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'patientDiagnosis', 'Patient Diagnosis', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'patientBirthDate', 'Patient Date of Birth', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'patientAge', 'Patient Age', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'patientGender', 'Patient Gender', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'ward', 'Ward', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'department', 'Department', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'hospital', 'Hospital', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'requestedBy', 'Requested By', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('Request', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
-
-insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('CompatibilityTest', 'productNumber', 'Product number', '', '0', '1', '0', '0', '0', '', 0),
-('CompatibilityTest', 'requestNumber', 'Request number', '', '0', '1', '0', '0', '0', '', 0),
-('CompatibilityTest', 'compatibilityResult', 'Compatibility result', '', '0', '1', '0', '0', '0', '', 0),
-('CompatibilityTest', 'compatibilityTestDate', 'Compatibility test date', '', '0', '0', '0', '0', '0', '', 0),
-('CompatibilityTest', 'transfusedBefore', 'Transfused before', '', '0', '0', '0', '0', '0', '', 0),
-('CompatibilityTest', 'crossmatchType', 'Crossmatch type', '', '0', '0', '0', '0', '0', '', 0),
-('CompatibilityTest', 'testedBy', 'Tested by', '', '0', '0', '0', '0', '0', '', 0),
-('CompatibilityTest', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
-('CompatibilityTest', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('CompatibilityTest', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
-
-
-insert into FormField(form, field, defaultDisplayName, defaultValue, hidden, isRequired, isAutoGeneratable, autoGenerate, derived, sourceField, maxLength) values
-('Usage', 'hospital', 'Hospital', '', '0', '1', '0', '0', '0', '', 0),
-('Usage', 'patientName', 'Patient Name', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'ward', 'Ward', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'useIndication', 'Use Indication', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'usageDate', 'Usage Date', '', '0', '1', '0', '0', '0', '', 0),
-('Usage', 'product', 'Product', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'notes', 'Notes', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'lastUpdatedTime', 'Last Modified On', '', '0', '0', '0', '0', '0', '', 0),
-('Usage', 'lastUpdatedBy', 'Last Modified By', '', '0', '0', '0', '0', '0', '', 0);
-
 insert into DonationType (donationType, isDeleted) values
 ('Voluntary', '0'),
 ('Family', '0'),
 ('Autologous', '0'),
 ('Other', '0');
 
-insert into ProductStatusChangeReasonCategory (category, isDeleted) values
-('Discarded' , '0'),
-('Returned', '0'),
-('Other', '0');
+insert into ProductStatusChangeReasonCategory (id, category, isDeleted) values
+(1, 'Discarded' , '0'),
+(2, 'Returned', '0'),
+(3, 'Other', '0');
 
-insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) values
-('Discarded', 'Discarded', '0'),
-('Returned as expired', 'Returned', '0'),
-('Other', 'Other', '0');
+insert into ProductStatusChangeReason (statusChangeReason, category_id, isDeleted) values
+('Discarded', '1', '0'),
+('Returned as expired', '2', '0'),
+('Other', '3', '0');
 
 insert into RequestType (requestType, description, isDeleted) values
 ('Emergency', '', '0'),
@@ -336,14 +257,6 @@ insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite
 ('Kasama', 1, 1, 0, 1, 0, ''),
 ('Chipata', 1, 0, 0, 0, 0, ''),
 ('Chingola', 1, 1, 0, 1, 0, '');
-
-insert into BloodTest (name, correctResult, allowedResults, isRequired, isDeleted, notes) values
-('HIV', 'negative', 'positive,negative', '1', '0', ''),
-('HBV', 'negative', 'positive,negative', '1', '0', ''),
-('HCV', 'negative', 'positive,negative', '1', '0', ''),
-('Syphilis', 'negative', 'positive,negative', '1', '0', ''),
-('Blood ABO', '', 'A,B,AB,O', '0', '0', ''),
-('Blood Rh', '', 'POSITIVE,NEGATIVE', '0', '0', '');
 
 insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),

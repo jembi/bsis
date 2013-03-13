@@ -113,9 +113,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany
   private List<CollectionsWorksheet> worksheets;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Column(precision=6, scale=2)
   private BigDecimal haemoglobinCount;
 
@@ -123,7 +120,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private BigDecimal bloodPressure;
 
   /**
-   * Limit the number of bytes required to store 
+   * Limit the number of bytes required to store.
    */
   @Column(precision=6, scale=2)
   private BigDecimal donorWeight;
@@ -139,6 +136,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Lob
   private String notes;
+
+  @Valid
+  private RowModificationTracker modificationTracker;
 
   @Enumerated(EnumType.STRING)
   @Column(length=20)

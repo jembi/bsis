@@ -14,8 +14,8 @@ public class ProductStatusChangeReason {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false)
-  private Long id;
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  private Integer id;
 
   @Column(length=100)
   private String statusChangeReason;
@@ -28,11 +28,11 @@ public class ProductStatusChangeReason {
   public ProductStatusChangeReason() {
   }
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

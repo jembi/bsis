@@ -52,7 +52,7 @@ public class ProductStatusChange {
   private String notes;
 
   @ManyToOne
-  private ProductStatusChangeReason discardReason;
+  private ProductStatusChangeReason statusChangeReason;
 
   public ProductStatusChange() {
   }
@@ -129,11 +129,11 @@ public class ProductStatusChange {
     this.statusChangedOn = issuedOn;
   }
 
-  public ProductStatusChangeReason getDiscardReason() {
-    return discardReason;
+  public ProductStatusChangeReason getStatusChangeReason() {
+    return statusChangeReason;
   }
 
-  public void setDiscardReason(ProductStatusChangeReason discardReason) {
-    this.discardReason = discardReason;
+  public void setStatusChangeReason(ProductStatusChangeReason discardReason) {
+    this.statusChangeReason = discardReason;
   }
 }

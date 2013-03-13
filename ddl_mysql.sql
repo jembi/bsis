@@ -224,7 +224,7 @@
         notes longtext,
         status varchar(30),
         collectedSample_id bigint,
-        discardReason_id bigint,
+        discardReason_id SMALLINT,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -245,23 +245,25 @@
         notes longtext,
         statusChangedOn datetime,
         changedBy_id SMALLINT,
-        discardReason_id bigint,
         issuedTo_id bigint,
         product_id bigint,
+        statusChangeReason_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table ProductStatusChangeReason (
-        id bigint not null auto_increment,
+        id SMALLINT not null auto_increment,
         isDeleted boolean,
         statusChangeReason varchar(100),
-        category_category varchar(20),
+        category_id TINYINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table ProductStatusChangeReasonCategory (
+        id TINYINT not null,
         category varchar(20) not null,
-        primary key (category)
+        isDeleted boolean,
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table ProductType (
@@ -621,9 +623,9 @@
         references Request (id);
 
     alter table ProductStatusChange 
-        add index FKCCE48CB1F00A1C69 (discardReason_id), 
-        add constraint FKCCE48CB1F00A1C69 
-        foreign key (discardReason_id) 
+        add index FKCCE48CB1E8B67365 (statusChangeReason_id), 
+        add constraint FKCCE48CB1E8B67365 
+        foreign key (statusChangeReason_id) 
         references ProductStatusChangeReason (id);
 
     alter table ProductStatusChange 
@@ -639,10 +641,10 @@
         references User (id);
 
     alter table ProductStatusChangeReason 
-        add index FK9F2502554C6A4ABD (category_category), 
-        add constraint FK9F2502554C6A4ABD 
-        foreign key (category_category) 
-        references ProductStatusChangeReasonCategory (category);
+        add index FK9F250255107C079A (category_id), 
+        add constraint FK9F250255107C079A 
+        foreign key (category_id) 
+        references ProductStatusChangeReasonCategory (id);
 
     alter table ProductUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 
