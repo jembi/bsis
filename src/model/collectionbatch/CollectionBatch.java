@@ -1,11 +1,16 @@
 package model.collectionbatch;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+
+import model.collectedsample.CollectedSample;
 
 @Entity
 public class CollectionBatch {
@@ -18,10 +23,8 @@ public class CollectionBatch {
   @Column(length=30)
   private String batchNumber;
 
-  @Column(length=30)
-  private String collectionNumberBegin;
-
-  private String collectionNumberEnd;
+  @OneToMany(mappedBy="batch")
+  private List<CollectedSample> collectionsInBatch;
   
   @Lob
   private String notes;
@@ -50,19 +53,11 @@ public class CollectionBatch {
     this.notes = notes;
   }
 
-  public String getCollectionNumberBegin() {
-    return collectionNumberBegin;
+  public List<CollectedSample> getCollectionsInBatch() {
+    return collectionsInBatch;
   }
 
-  public void setCollectionNumberBegin(String collectionNumberBegin) {
-    this.collectionNumberBegin = collectionNumberBegin;
-  }
-
-  public String getCollectionNumberEnd() {
-    return collectionNumberEnd;
-  }
-
-  public void setCollectionNumberEnd(String collectionNumberEnd) {
-    this.collectionNumberEnd = collectionNumberEnd;
+  public void setCollectionsInBatch(List<CollectedSample> collectionsInBatch) {
+    this.collectionsInBatch = collectionsInBatch;
   }
 }

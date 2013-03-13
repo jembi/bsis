@@ -75,12 +75,12 @@ public class Product implements ModificationTracker {
   @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
 
+  @ManyToOne
+  private ProductStatusChangeReason discardReason;
+  
   @Temporal(TemporalType.TIMESTAMP)
   @Column(columnDefinition="DATETIME")
   private Date discardedOn;
-
-  @ManyToOne
-  private ProductStatusChangeReason discardReason;
 
   @ManyToOne
   private Request issuedTo;
@@ -269,14 +269,6 @@ public class Product implements ModificationTracker {
     this.issuedOn = issuedOn;
   }
 
-  public ProductStatusChangeReason getDiscardReason() {
-    return discardReason;
-  }
-
-  public void setDiscardReason(ProductStatusChangeReason discardReason) {
-    this.discardReason = discardReason;
-  }
-
   public List<ProductStatusChange> getStatusChanges() {
     return statusChanges;
   }
@@ -291,5 +283,13 @@ public class Product implements ModificationTracker {
 
   public void setSubdividedProducts(List<SubdividedProduct> subdividedProducts) {
     this.subdividedProducts = subdividedProducts;
+  }
+
+  public ProductStatusChangeReason getDiscardReason() {
+    return discardReason;
+  }
+
+  public void setDiscardReason(ProductStatusChangeReason discardReason) {
+    this.discardReason = discardReason;
   }
 }

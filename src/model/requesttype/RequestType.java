@@ -12,12 +12,13 @@ public class RequestType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="TINYINT")
   private Integer id;
 
-  @Column(length=50)
+  @Column(length=30)
   private String requestType;
 
-  @Lob
+  @Column(length=100)
   private String description;
 
   private Boolean isDeleted;

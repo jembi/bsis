@@ -36,7 +36,7 @@ public class UserRepository {
     return existingUser;
   }
 
-  public User findUserById(Long id) {
+  public User findUserById(Integer id) {
     if (id == null)
       return null;
     String queryString = "SELECT u FROM User u WHERE u.id = :userId and u.isDeleted = :isDeleted";

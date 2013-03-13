@@ -38,11 +38,19 @@ public class Donor implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
 	private Long id;
 
+  /** Donor Number column should be indexed. It has high selectivity.
+   *  Search by donor number is very common usecase. VARCHAR(15) should
+   *  be sufficient. Smaller index keys are better. In most cases, this field
+   *  will be auto-generated.
+   */
   @Column(length=15)
   @Index(name="donor_donorNumber_index")
   @Length(max=15)
   private String donorNumber;
 
+  /**
+   * Find donor by first few characters of first name can be made faster with this index.
+   */
   @Column(length=20)
   @Index(name="donor_firstName_index")
   @Length(max=20)
@@ -52,39 +60,63 @@ public class Donor implements ModificationTracker {
   @Column(length=20)
   private String middleName;
 
+  /**
+   * Find donor by first few characters of last name can be made faster with this index.
+   */
   @Length(max=20)
   @Index(name="donor_lastName_index")
   @Column(length=20)
 	private String lastName;
 
+  /**
+   * Some people prefer to be called by a different name. If required this field can be used.
+   */
   @Length(max=20)
   @Column(length=20)
   private String callingName;
 
+  /**
+   * Just store the string for the gender. Low selectivity column. No need to index it.
+   */
   @Enumerated(EnumType.STRING)
   @Column(length=15)
 	private Gender gender;
 
+  /**
+   * TODO: Not sure if an index will help here.
+   */
   @Enumerated(EnumType.STRING)
   @Column(length=10)
-  @Index(name="donor_bloodAbo_index")
   private BloodAbo bloodAbo;
 
   @Enumerated(EnumType.STRING)
   @Column(length=10)
-  @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
 
+  /**
+   * Do not see a need to search by birthdate so need not add an index here.
+   */
   @Temporal(TemporalType.DATE)
 	private Date birthDate;
 
+  /**
+   * Age may be provided if birthdate not known.
+   */
   @Column(columnDefinition="TINYINT")
   private Integer age;
 
+  /**
+   * If age is specified and not the date of birth then we store the
+   * date of birth with Jan 1 as the date.
+   */
+  private Boolean ageSpecified;
+
+  /**
+   * If the blood center wishes to store a unique id for the donor.
+   * Can help in deduplication.
+   */
   @Column(length=15)
   private String nationalID;
-
-  private Boolean ageSpecified;
 
   @Embedded
   @Valid
@@ -96,11 +128,20 @@ public class Donor implements ModificationTracker {
   @Valid
   private RowModificationTracker modificationTracker;
 
+  /**
+   * Never delete the rows. Just mark them as deleted.
+   */
 	private Boolean isDeleted;
 
   @OneToMany(mappedBy="donor")
   private List<CollectedSample> collectedSamples;
-  
+
+  /**
+   * If a donor has been deferred then we can disallow him to donate the next time.
+   */
+  @OneToMany(mappedBy="deferredDonor")
+  private List<DonorDeferral> deferrals;
+
 	public Donor() {
 	  contactInformation = new ContactInformation();
 	  modificationTracker = new RowModificationTracker();
@@ -375,5 +416,13 @@ public class Donor implements ModificationTracker {
 
   public void setAgeSpecified(Boolean ageSpecified) {
     this.ageSpecified = ageSpecified;
+  }
+
+  public List<DonorDeferral> getDeferrals() {
+    return deferrals;
+  }
+
+  public void setDeferrals(List<DonorDeferral> deferrals) {
+    this.deferrals = deferrals;
   }
 }

@@ -1,24 +1,18 @@
 package model.producttype;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.Filter;
-
-import model.product.Product;
 
 @Entity
 public class ProductType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="TINYINT")
   private Integer id;
 
   @Column(length=50)
@@ -36,10 +30,6 @@ public class ProductType {
   private String description;
   
   private Boolean isDeleted;
-
-  @Filter(name="availableProductsNotExpiredFilter")
-  @OneToMany(mappedBy="productType")
-  private List<Product> products;
   
   public Integer getId() {
     return id;
@@ -52,14 +42,6 @@ public class ProductType {
   @Override
   public String toString() {
     return productType;
-  }
-
-  public List<Product> getProducts() {
-    return products;
-  }
-
-  public void setProducts(List<Product> products) {
-    this.products = products;
   }
 
   public Boolean getIsDeleted() {

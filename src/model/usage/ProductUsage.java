@@ -192,12 +192,6 @@ public class ProductUsage implements ModificationTracker {
     this.isAvailable = isAvailable;
   }
 
-  public String getProductNumber() {
-    if (product == null)
-      return null;
-    return product.getProductNumber();
-  }
-
   public String getUsedBy() {
     return usedBy;
   }

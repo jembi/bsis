@@ -11,10 +11,15 @@ public class BloodBagType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="TINYINT")
   private Integer id;
 
   @Column(length=50)
   private String bloodBagType;
+
+  private Boolean canSplit;
+
+  private Boolean canPool;
 
   private Boolean isDeleted;
   
@@ -45,5 +50,21 @@ public class BloodBagType {
 
   public void setBloodBagType(String bloodBagType) {
     this.bloodBagType = bloodBagType;
+  }
+
+  public Boolean getCanPool() {
+    return canPool;
+  }
+
+  public void setCanPool(Boolean canPool) {
+    this.canPool = canPool;
+  }
+
+  public Boolean getCanSplit() {
+    return canSplit;
+  }
+
+  public void setCanSplit(Boolean canSplit) {
+    this.canSplit = canSplit;
   }
 }

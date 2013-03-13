@@ -10,7 +10,7 @@ public class UserViewModel {
     this.user = user;
   }
 
-  public Long getId() {
+  public Integer getId() {
     return user.getId();
   }
 

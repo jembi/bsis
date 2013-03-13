@@ -35,7 +35,7 @@ public class SchemaGenerator {
   public SchemaGenerator(String packageName) throws Exception {
     cfg = new Configuration();
     cfg.setProperty("hibernate.show_sql", "true");
-    cfg.setProperty("hibernate.hbm2ddl.auto", "validate");
+    cfg.setProperty("hibernate.hbm2ddl.auto", "none");
 
     for (Class<?> clazz : findAllClasses(packageName)) {
       System.out.println("Class: " + clazz);

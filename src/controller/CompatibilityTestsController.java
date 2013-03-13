@@ -112,18 +112,18 @@ public class CompatibilityTestsController {
 
     // IMPORTANT: Validation code just checks if the ID exists
     // We still need to store the product as part of the compatibility test
-    String productNumber = form.getProductNumber();
-    if (productNumber != null && !productNumber.isEmpty()) {
-      try {
-        Product product = productRepository.findProductByProductNumber(productNumber);
-        form.setTestedProduct(product);
-      } catch (NoResultException ex) {
-        form.setTestedProduct(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setTestedProduct(null);
-    }
+//    String productNumber = form.getProductNumber();
+//    if (productNumber != null && !productNumber.isEmpty()) {
+//      try {
+//        Product product = productRepository.findProductByProductNumber(productNumber);
+//        form.setTestedProduct(product);
+//      } catch (NoResultException ex) {
+//        form.setTestedProduct(null);
+//        ex.printStackTrace();
+//      }
+//    } else {
+//      form.setTestedProduct(null);
+//    }
 
     // IMPORTANT: Validation code just checks if the ID exists
     // We still need to store the request as part of the compatibility test

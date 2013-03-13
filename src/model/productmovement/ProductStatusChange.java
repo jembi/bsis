@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 import model.product.Product;
 import model.product.ProductExists;
 import model.product.ProductStatus;
+import model.reasons.ProductStatusChangeReason;
 import model.request.Request;
 import model.request.RequestExists;
 import model.user.User;
@@ -49,6 +50,9 @@ public class ProductStatusChange {
 
   @Lob
   private String notes;
+
+  @ManyToOne
+  private ProductStatusChangeReason discardReason;
 
   public ProductStatusChange() {
   }
@@ -123,5 +127,13 @@ public class ProductStatusChange {
 
   public void setIssuedOn(Date issuedOn) {
     this.statusChangedOn = issuedOn;
+  }
+
+  public ProductStatusChangeReason getDiscardReason() {
+    return discardReason;
+  }
+
+  public void setDiscardReason(ProductStatusChangeReason discardReason) {
+    this.discardReason = discardReason;
   }
 }

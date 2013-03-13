@@ -49,7 +49,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Column(nullable=false)
   private Long id;
 
-  @Column(length=30)
+  /**
+   * Very common usecase to search for collection by collection number.
+   * In most cases the collection numbers will be preprinted labels.
+   */
+  @Column(length=20)
   @Index(name="collectedSample_collectionNumber_index")
   private String collectionNumber;
 
@@ -57,17 +61,29 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToOne(fetch=FetchType.LAZY)
   private Donor donor;
 
+  /**
+   * Final test outcomes mapped to this collection.
+   */
   @OneToMany(mappedBy="collectedSample")
   private List<TestResult> testResults;
 
+  /**
+   * Which center the collection comes to.
+   */
   @LocationExists
   @ManyToOne
   private Location collectionCenter;
 
+  /**
+   * Where was it actually collected.
+   */
   @LocationExists
   @ManyToOne
   private Location collectionSite;
 
+  /**
+   * Index to find collections done between date ranges.
+   */
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="collectedSample_collectedOn_index")
   private Date collectedOn;
@@ -80,19 +96,20 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToOne
   private BloodBagType bloodBagType;
 
+  /**
+   * List of products created from this collection.
+   */
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  @Index(name="donor_bloodAbo_index")
   private BloodAbo bloodAbo;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  @Index(name="donor_bloodRhd_index")
   private BloodRhd bloodRhd;
-  
+
   @ManyToMany
   private List<CollectionsWorksheet> worksheets;
 
@@ -105,6 +122,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Column(precision=6, scale=2)
   private BigDecimal bloodPressure;
 
+  /**
+   * Limit the number of bytes required to store 
+   */
   @Column(precision=6, scale=2)
   private BigDecimal donorWeight;
 
@@ -113,6 +133,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @ManyToOne(optional=true)
   private CollectionBatch collectionBatch;
+
+  @ManyToOne
+  private CollectionBatch batch;
 
   @Lob
   private String notes;
@@ -353,5 +376,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setDonationType(DonationType donationType) {
     this.donationType = donationType;
+  }
+
+  public CollectionBatch getBatch() {
+    return batch;
+  }
+
+  public void setBatch(CollectionBatch batch) {
+    this.batch = batch;
   }
 }

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.donor.DonorBackingFormValidator;
 import model.user.User;
 import model.user.UserBackingForm;
 import model.user.UserBackingFormValidator;
@@ -62,7 +61,7 @@ public class UserController {
 
   @RequestMapping(value = "/editUserFormGenerator", method = RequestMethod.GET)
   public ModelAndView editUserFormGenerator(HttpServletRequest request, Model model,
-      @RequestParam(value = "userId", required = false) Long userId) {
+      @RequestParam(value = "userId", required = false) Integer userId) {
 
     UserBackingForm form = new UserBackingForm();
     ModelAndView mv = new ModelAndView("admin/editUserForm");

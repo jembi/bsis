@@ -1,7 +1,9 @@
 
     create table BloodBagType (
-        id integer not null auto_increment,
+        id TINYINT not null auto_increment,
         bloodBagType varchar(50),
+        canPool boolean,
+        canSplit boolean,
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -39,7 +41,7 @@
         bloodPressure decimal(6,2),
         bloodRhd varchar(30),
         collectedOn datetime,
-        collectionNumber varchar(30),
+        collectionNumber varchar(20),
         donorWeight decimal(6,2),
         haemoglobinCount decimal(6,2),
         isDeleted boolean,
@@ -47,15 +49,16 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        bloodBagType_id integer,
+        batch_id bigint,
+        bloodBagType_id TINYINT,
+        collectionBatch_id bigint,
         collectionCenter_id bigint,
         collectionSite_id bigint,
-        donationBatch_id bigint,
-        donationCreatedBy_id bigint,
+        donationCreatedBy_id SMALLINT,
+        donationType_id TINYINT,
         donor_id bigint,
-        donorType_id integer,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -64,13 +67,20 @@
         worksheets_id bigint not null
     ) ENGINE=InnoDB;
 
+    create table CollectionBatch (
+        id bigint not null auto_increment,
+        batchNumber varchar(30),
+        notes longtext,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
     create table CollectionsWorksheet (
         id bigint not null auto_increment,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         worksheetBatchId varchar(255),
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -84,39 +94,30 @@
         notes longtext,
         testedBy varchar(255),
         transfusedBefore boolean,
-        crossmatchType_id integer,
+        crossmatchType_id TINYINT,
         forRequest_id bigint,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         testedProduct_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table CrossmatchType (
-        id integer not null auto_increment,
+        id TINYINT not null auto_increment,
         crossmatchType varchar(255),
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table DeferralReason (
-        id bigint not null auto_increment,
+        id SMALLINT not null auto_increment,
         details varchar(255),
         reason varchar(50),
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table DonationBatch (
-        id bigint not null auto_increment,
-        batchNumber varchar(30),
-        collectionNumberBegin varchar(30),
-        collectionNumberEnd varchar(255),
-        notes longtext,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
     create table DonationType (
-        id integer not null auto_increment,
+        id TINYINT not null auto_increment,
         donationType varchar(50),
         isDeleted boolean,
         primary key (id)
@@ -149,8 +150,8 @@
         lastUpdated TIMESTAMP,
         nationalID varchar(15),
         notes longtext,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -158,8 +159,8 @@
         id bigint not null auto_increment,
         deferredOn date,
         deferredUntil date,
-        deferralReason_id bigint,
-        deferredBy_id bigint,
+        deferralReason_id SMALLINT,
+        deferredBy_id SMALLINT,
         deferredDonor_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -214,48 +215,20 @@
         bloodAbo varchar(30),
         bloodRhd varchar(30),
         createdOn datetime,
-        discardReason varchar(100),
-        discardedOn datetime,
+        discardedOn DATETIME,
         expiresOn datetime,
         isDeleted boolean,
         issuedOn datetime,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        productNumber varchar(30),
         status varchar(30),
         collectedSample_id bigint,
+        discardReason_id bigint,
         issuedTo_id bigint,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
-        productType_id integer,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ProductDiscardReason (
-        id bigint not null auto_increment,
-        discardReason varchar(150),
-        notes longtext,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ProductIssue (
-        id bigint not null auto_increment,
-        issuedOn datetime,
-        notes longtext,
-        issuedBy_id bigint,
-        issuedTo_id bigint,
-        product_id bigint,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ProductReturn (
-        id bigint not null auto_increment,
-        returnedOn datetime,
-        product_id bigint,
-        returnReason_id bigint,
-        returnedBy_id bigint,
-        returnedForRequest_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        productType_id TINYINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -266,10 +239,36 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table ProductStatusChange (
+        id bigint not null auto_increment,
+        newStatus varchar(30),
+        notes longtext,
+        statusChangedOn datetime,
+        changedBy_id SMALLINT,
+        discardReason_id bigint,
+        issuedTo_id bigint,
+        product_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductStatusChangeReason (
+        id bigint not null auto_increment,
+        isDeleted boolean,
+        statusChangeReason varchar(100),
+        category_category varchar(20),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductStatusChangeReasonCategory (
+        category varchar(20) not null,
+        primary key (category)
+    ) ENGINE=InnoDB;
+
     create table ProductType (
-        id integer not null auto_increment,
+        id TINYINT not null auto_increment,
         description longtext,
         isDeleted boolean,
+        isSubdivided boolean,
         productType varchar(50),
         shelfLife integer,
         shelfLifeUnits varchar(30),
@@ -289,8 +288,8 @@
         useIndication varchar(30),
         usedBy varchar(255),
         ward varchar(30),
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         product_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -321,19 +320,19 @@
         requestedBy varchar(30),
         requiredDate datetime,
         ward varchar(20),
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
-        productType_id integer,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        productType_id TINYINT,
         requestSite_id bigint,
-        requestType_id integer,
+        requestType_id TINYINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table RequestType (
-        id integer not null auto_increment,
-        description longtext,
+        id TINYINT not null auto_increment,
+        description varchar(100),
         isDeleted boolean,
-        requestType varchar(50),
+        requestType varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -347,6 +346,13 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table SubdividedProduct (
+        id bigint not null auto_increment,
+        divisionCode varchar(5),
+        parentProduct_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
     create table TestResult (
         id bigint not null auto_increment,
         isDeleted boolean,
@@ -357,8 +363,8 @@
         testedOn datetime,
         bloodTest_id bigint,
         collectedSample_id bigint not null,
-        createdBy_id bigint,
-        lastUpdatedBy_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -371,16 +377,15 @@
     ) ENGINE=InnoDB;
 
     create table User (
-        id bigint not null auto_increment,
+        id SMALLINT not null auto_increment,
         emailId varchar(255),
-        firstName varchar(30) not null,
+        firstName varchar(15) not null,
         isActive boolean,
         isAdmin boolean,
         isDeleted boolean,
         isStaff boolean,
         lastLogin datetime,
-        lastName varchar(30),
-        middleName varchar(30),
+        lastName varchar(15),
         notes longtext,
         password varchar(255) not null,
         username varchar(30) not null unique,
@@ -415,15 +420,17 @@
 
     create index collectedSample_collectionNumber_index on CollectedSample (collectionNumber);
 
-    create index donor_bloodAbo_index on CollectedSample (bloodAbo);
-
-    create index donor_bloodRhd_index on CollectedSample (bloodRhd);
-
     alter table CollectedSample 
         add index FKF0658A33A49787C4 (createdBy_id), 
         add constraint FKF0658A33A49787C4 
         foreign key (createdBy_id) 
         references User (id);
+
+    alter table CollectedSample 
+        add index FKF0658A334CF0CE05 (batch_id), 
+        add constraint FKF0658A334CF0CE05 
+        foreign key (batch_id) 
+        references CollectionBatch (id);
 
     alter table CollectedSample 
         add index FKF0658A33D04A4456 (donationCreatedBy_id), 
@@ -444,15 +451,21 @@
         references Location (id);
 
     alter table CollectedSample 
+        add index FKF0658A33E5D4FEA3 (collectionBatch_id), 
+        add constraint FKF0658A33E5D4FEA3 
+        foreign key (collectionBatch_id) 
+        references CollectionBatch (id);
+
+    alter table CollectedSample 
         add index FKF0658A3359FAB30D (donor_id), 
         add constraint FKF0658A3359FAB30D 
         foreign key (donor_id) 
         references Donor (id);
 
     alter table CollectedSample 
-        add index FKF0658A3392C64B83 (donorType_id), 
-        add constraint FKF0658A3392C64B83 
-        foreign key (donorType_id) 
+        add index FKF0658A338461A8D7 (donationType_id), 
+        add constraint FKF0658A338461A8D7 
+        foreign key (donationType_id) 
         references DonationType (id);
 
     alter table CollectedSample 
@@ -460,12 +473,6 @@
         add constraint FKF0658A33D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
-
-    alter table CollectedSample 
-        add index FKF0658A33675D568F (donationBatch_id), 
-        add constraint FKF0658A33675D568F 
-        foreign key (donationBatch_id) 
-        references DonationBatch (id);
 
     alter table CollectedSample 
         add index FKF0658A331D73927B (bloodBagType_id), 
@@ -531,11 +538,7 @@
 
     create index donor_donorNumber_index on Donor (donorNumber);
 
-    create index donor_bloodAbo_index on Donor (bloodAbo);
-
     create index donor_lastName_index on Donor (lastName);
-
-    create index donor_bloodRhd_index on Donor (bloodRhd);
 
     create index donor_firstName_index on Donor (firstName);
 
@@ -575,8 +578,6 @@
 
     create index donor_bloodRhd_index on Product (bloodRhd);
 
-    create index product_productNumber_index on Product (productNumber);
-
     alter table Product 
         add index FK50C664CFA49787C4 (createdBy_id), 
         add constraint FK50C664CFA49787C4 
@@ -596,6 +597,12 @@
         references CollectedSample (id);
 
     alter table Product 
+        add index FK50C664CFF00A1C69 (discardReason_id), 
+        add constraint FK50C664CFF00A1C69 
+        foreign key (discardReason_id) 
+        references ProductStatusChangeReason (id);
+
+    alter table Product 
         add index FK50C664CF73AC2B90 (productType_id), 
         add constraint FK50C664CF73AC2B90 
         foreign key (productType_id) 
@@ -607,47 +614,35 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table ProductIssue 
-        add index FK450DFD4A994002DF (issuedTo_id), 
-        add constraint FK450DFD4A994002DF 
+    alter table ProductStatusChange 
+        add index FKCCE48CB1994002DF (issuedTo_id), 
+        add constraint FKCCE48CB1994002DF 
         foreign key (issuedTo_id) 
         references Request (id);
 
-    alter table ProductIssue 
-        add index FK450DFD4A9F8F75E1 (issuedBy_id), 
-        add constraint FK450DFD4A9F8F75E1 
-        foreign key (issuedBy_id) 
-        references User (id);
+    alter table ProductStatusChange 
+        add index FKCCE48CB1F00A1C69 (discardReason_id), 
+        add constraint FKCCE48CB1F00A1C69 
+        foreign key (discardReason_id) 
+        references ProductStatusChangeReason (id);
 
-    alter table ProductIssue 
-        add index FK450DFD4AA8E71476 (product_id), 
-        add constraint FK450DFD4AA8E71476 
+    alter table ProductStatusChange 
+        add index FKCCE48CB1A8E71476 (product_id), 
+        add constraint FKCCE48CB1A8E71476 
         foreign key (product_id) 
         references Product (id);
 
-    alter table ProductReturn 
-        add index FK6B4876DF61638630 (returnedForRequest_id), 
-        add constraint FK6B4876DF61638630 
-        foreign key (returnedForRequest_id) 
-        references Request (id);
-
-    alter table ProductReturn 
-        add index FK6B4876DFA8E71476 (product_id), 
-        add constraint FK6B4876DFA8E71476 
-        foreign key (product_id) 
-        references Product (id);
-
-    alter table ProductReturn 
-        add index FK6B4876DFC1F8813D (returnedBy_id), 
-        add constraint FK6B4876DFC1F8813D 
-        foreign key (returnedBy_id) 
+    alter table ProductStatusChange 
+        add index FKCCE48CB1438D2378 (changedBy_id), 
+        add constraint FKCCE48CB1438D2378 
+        foreign key (changedBy_id) 
         references User (id);
 
-    alter table ProductReturn 
-        add index FK6B4876DFC7A8C5 (returnReason_id), 
-        add constraint FK6B4876DFC7A8C5 
-        foreign key (returnReason_id) 
-        references ProductReturnReason (id);
+    alter table ProductStatusChangeReason 
+        add index FK9F2502554C6A4ABD (category_category), 
+        add constraint FK9F2502554C6A4ABD 
+        foreign key (category_category) 
+        references ProductStatusChangeReasonCategory (category);
 
     alter table ProductUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 
@@ -706,6 +701,12 @@
         add constraint FKA4878A6FD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table SubdividedProduct 
+        add index FK2137ED84D946D0A0 (parentProduct_id), 
+        add constraint FK2137ED84D946D0A0 
+        foreign key (parentProduct_id) 
+        references Product (id);
 
     alter table TestResult 
         add index FKDB459F6FA49787C4 (createdBy_id), 

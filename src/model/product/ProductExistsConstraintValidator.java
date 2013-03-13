@@ -34,14 +34,6 @@ public class ProductExistsConstraintValidator implements
       if (target.getId() != null) {
         product = productRepository.findProductById(target.getId());
       }
-      else if (target.getProductNumber() != null) {
-
-        if (target.getProductNumber().isEmpty())
-          return true;
-
-        product = 
-          productRepository.findSingleProductByProductNumber(target.getProductNumber());
-      }
       if (product != null) {
         return true;
       }

@@ -69,20 +69,6 @@ public class CompatibilityTestBackingForm {
     compatibilityTest.setForRequest(forRequest);
   }
 
-  public String getProductNumber() {
-    if (compatibilityTest == null || compatibilityTest.getTestedProduct() == null ||
-        compatibilityTest.getTestedProduct().getProductNumber() == null
-       )
-      return "";
-    return compatibilityTest.getTestedProduct().getProductNumber();
-  }
-
-  public void setProductNumber(String productNumber) {
-    Product product = new Product();
-    product.setProductNumber(productNumber);
-    compatibilityTest.setTestedProduct(product);
-  }
-
   public String getRequestNumber() {
     if (compatibilityTest == null || compatibilityTest.getForRequest() == null ||
         compatibilityTest.getForRequest().getRequestNumber() == null

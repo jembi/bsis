@@ -11,8 +11,8 @@ public class DeferralReason {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+  @Column(nullable=false, updatable=false, insertable=false, columnDefinition="SMALLINT")
+  private Integer id;
 
   @Column(length=50)
   private String reason;
@@ -20,11 +20,11 @@ public class DeferralReason {
   @Column(length=255)
   private String details;
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import model.productmovement.ProductStatusChangeReasonCategory;
 
@@ -19,7 +20,7 @@ public class ProductStatusChangeReason {
   @Column(length=100)
   private String statusChangeReason;
 
-  @Column(length=20)
+  @ManyToOne
   private ProductStatusChangeReasonCategory category;
 
   private Boolean isDeleted;

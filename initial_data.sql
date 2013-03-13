@@ -387,13 +387,16 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("ageLimitsEnabled", "true", "donationRequirements"),
 ("minimumAge", "16", "donationRequirements"),
 ("maximumAge", "65", "donationRequirements"),
+("minimumWeight", "65", "donationRequirements"),
+("donorWeightUnit", "Kg.", "donation"),
 ("daysBetweenConsecutiveDonations", "90", "donationRequirements"),
 ("donorDeferralCheckRequired", "true", "donationRequirements"),
 ("donorBloodGroupMatchRequired", "true", "donationRequirements"),
 ("donorHistoryCheckRequired", "true", "donationRequirements"),
 ("donorRecordRequired", "true", "productReleaseRequirements"),
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
-("allowImportedProducts", "true", "productCreationRequirements");
+("allowImportedProducts", "true", "productCreationRequirements"),
+("collectionNumberLength", "10", "collection");
 
 insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Saline @ 37 degrees', '0'),

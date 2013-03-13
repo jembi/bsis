@@ -103,18 +103,18 @@ public class ProductUsageController {
 
     // IMPORTANT: Validation code just checks if the ID exists.
     // We still need to store the product as part of the Usage
-    String productNumber = form.getProductNumber();
-    if (productNumber != null && !productNumber.isEmpty()) {
-      try {
-        Product product = productRepository.findSingleProductByProductNumber(productNumber);
-        form.setProduct(product);
-      } catch (NoResultException ex) {
-        form.setProduct(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setProduct(null);
-    }
+//    String productNumber = form.getProductNumber();
+//    if (productNumber != null && !productNumber.isEmpty()) {
+//      try {
+//        Product product = productRepository.findSingleProductByProductNumber(productNumber);
+//        form.setProduct(product);
+//      } catch (NoResultException ex) {
+//        form.setProduct(null);
+//        ex.printStackTrace();
+//      }
+//    } else {
+//      form.setProduct(null);
+//    }
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);

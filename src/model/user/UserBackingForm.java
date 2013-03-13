@@ -23,7 +23,7 @@ public class UserBackingForm {
     return getUser().equals(obj);
   }
 
-  public Long getId() {
+  public Integer getId() {
     return getUser().getId();
   }
 
@@ -37,10 +37,6 @@ public class UserBackingForm {
 
   public String getFirstName() {
     return getUser().getFirstName();
-  }
-
-  public String getMiddleName() {
-    return getUser().getMiddleName();
   }
 
   public String getLastName() {
@@ -79,7 +75,7 @@ public class UserBackingForm {
     return getUser().hashCode();
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     getUser().setId(id);
   }
 
@@ -93,10 +89,6 @@ public class UserBackingForm {
 
   public void setFirstName(String firstName) {
     getUser().setFirstName(firstName);
-  }
-
-  public void setMiddleName(String middleName) {
-    getUser().setMiddleName(middleName);
   }
 
   public void setLastName(String lastName) {

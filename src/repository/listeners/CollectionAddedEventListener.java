@@ -29,7 +29,7 @@ public class CollectionAddedEventListener implements ApplicationListener<Collect
     Donor donor = c.getDonor();
     if (donor == null)
       return;
-    donor.setDateOfLastDonation(c.getCollectedOn());
+//    donor.setDateOfLastDonation(c.getCollectedOn());
     em.merge(donor);
   }
 

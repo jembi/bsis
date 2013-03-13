@@ -170,19 +170,4 @@ public class ProductUsageBackingForm {
   public void setIsAvailable(Boolean isAvailable) {
     usage.setIsAvailable(isAvailable);
   }
-
-  public String getProductNumber() {
-    if (getUsage() == null || getUsage().getProduct() == null ||
-        getUsage().getProduct().getProductNumber() == null
-       )
-      return "";
-    return getUsage().getProduct().getProductNumber();
-  }
-
-  public void setProductNumber(String productNumber) {
-    Product product = new Product();
-    product.setProductNumber(productNumber);
-    getUsage().setProduct(product);
-  }
-
 }

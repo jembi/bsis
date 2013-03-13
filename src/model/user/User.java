@@ -12,34 +12,24 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false)
-  private Long id;
+  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  private Integer id;
 
-  @NotBlank
   @Column(length=30, unique=true, nullable=false)
   private String username;
 
   @Column(length=255, nullable=false)
   private String password;
 
-  @NotBlank
-  @Length(min=1, max=30)
-  @Column(length=30, nullable=false)
+  @Column(length=15, nullable=false)
   private String firstName;
-
-  @Length(max=30)
-  @Column(length=30)
-  private String middleName;
-
-  @Length(max=30)
-  @Column(length=30)
+  @Column(length=15)
   private String lastName;
 
   @Length(max=255)
@@ -61,7 +51,7 @@ public class User {
   public User() {
   }
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -75,10 +65,6 @@ public class User {
 
   public String getFirstName() {
     return firstName;
-  }
-
-  public String getMiddleName() {
-    return middleName;
   }
 
   public String getLastName() {
@@ -113,7 +99,7 @@ public class User {
     return isDeleted;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -127,10 +113,6 @@ public class User {
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
-  }
-
-  public void setMiddleName(String middleName) {
-    this.middleName = middleName;
   }
 
   public void setLastName(String lastName) {
