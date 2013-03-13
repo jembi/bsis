@@ -59,6 +59,19 @@ public class FormFieldRepository {
     return existingFormField;
   }
 
+  public FormField getFormField(String formName, String fieldName) {
+    try {
+      String queryString = "SELECT f FROM FormField f where form=:formName AND field=:fieldName";
+      TypedQuery<FormField> query = em.createQuery(queryString, FormField.class);
+      query.setParameter("formName", formName);
+      query.setParameter("fieldName", fieldName);
+      return query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      return null;
+    }
+  }
+  
   public List<FormField> getFormFields(String formName) {
     try {
       String queryString = "SELECT f FROM FormField f where form=:formName";

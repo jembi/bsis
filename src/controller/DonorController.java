@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -135,35 +136,20 @@ public class DonorController {
     return mv;
   }
 
-  @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editDonorFormGenerator(HttpServletRequest request, Model model,
-      @RequestParam(value = "donorId", required = false) Long donorId) {
+  @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView addNewDonorFormGenerator(HttpServletRequest request, Model model) {
 
     DonorBackingForm form = new DonorBackingForm();
 
     ModelAndView mv = new ModelAndView("editDonorForm");
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", getUrl(request));
-    m.put("existingDonor", false);
-    if (donorId != null) {
-      form.setId(donorId);
-      Donor donor = donorRepository.findDonorById(donorId);
-      if (donor != null) {
-        form = new DonorBackingForm(donor);
-        m.put("existingDonor", true);
-      }
-      else {
-        form = new DonorBackingForm();
-        m.put("existingDonor", false);
-      }
-    }
-    m.put("editDonorForm", form);
+    m.put("firstTimeRender", true);
+    m.put("addDonorForm", form);
     m.put("refreshUrl", getUrl(request));
     Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
     // to ensure custom field names are displayed in the form
     m.put("donorFields", formFields);
-    if (m.get("existingDonor").equals(false))
-        setDonorNumber(form, (Map<String, Object>) formFields.get("donorNumber"));
     mv.addObject("model", m);
     return mv;
   }
@@ -172,7 +158,7 @@ public class DonorController {
   public ModelAndView
         addDonor(HttpServletRequest request,
                  HttpServletResponse response,
-                 @ModelAttribute("editDonorForm") @Valid DonorBackingForm form,
+                 @ModelAttribute("addDonorForm") @Valid DonorBackingForm form,
                  BindingResult result, Model model) {
 
     ModelAndView mv = new ModelAndView("editDonorForm");
@@ -184,6 +170,10 @@ public class DonorController {
     m.put("donorFields", formFields);
 
     if (result.hasErrors()) {
+      System.out.println("form has errors");
+      for (ObjectError error : result.getAllErrors()) {
+        System.out.println(error.getObjectName());
+      }
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
       success = false;
@@ -197,7 +187,7 @@ public class DonorController {
         success = true;
         message = "Donor Successfully Added";
         form = new DonorBackingForm();
-        setDonorNumber(form, (Map<String, Object>) formFields.get("donorNumber"));
+        m.put("firstTimeRender", true);
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
@@ -209,9 +199,9 @@ public class DonorController {
       }
     }
 
-    m.put("editDonorForm", form);
-    m.put("existingDonor", false);
-    m.put("refreshUrl", "editDonorFormGenerator.html");
+    m.put("addDonorForm", form);
+    m.put("firstTimeRender", false);
+    m.put("refreshUrl", "addDonorFormGenerator.html");
     m.put("success", success);
     m.put("message", message);
 
@@ -312,7 +302,7 @@ public class DonorController {
   @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView findDonorFormGenerator(HttpServletRequest request, Model model) {
 
-    DonorBackingForm form = new DonorBackingForm();
+    FindDonorBackingForm form = new FindDonorBackingForm();
     model.addAttribute("findDonorForm", form);
 
     ModelAndView mv = new ModelAndView("findDonorForm");

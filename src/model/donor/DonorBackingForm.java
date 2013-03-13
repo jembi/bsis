@@ -293,16 +293,13 @@ public class DonorBackingForm {
     }
     try {
       int age = Integer.parseInt(ageStr);
-      donor.setAge(age);
       DateTime dt = new DateTime(new Date());
       Calendar c = Calendar.getInstance();
       c.setTime(dt.toDateMidnight().toDate());
       c.set(Calendar.MONTH, Calendar.JANUARY);
       c.set(Calendar.DATE, 1);
       c.add(Calendar.YEAR, -age);
-      donor.setBirthDate(c.getTime());
-      donor.setAgeSpecified(true);
-      this.age = ageStr;
+      donor.setBirthDateInferred(c.getTime());
     } catch (NumberFormatException ex) {
       this.age = "INVALID";
     }

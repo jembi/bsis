@@ -99,17 +99,8 @@ public class Donor implements ModificationTracker {
   @Temporal(TemporalType.DATE)
 	private Date birthDate;
 
-  /**
-   * Age may be provided if birthdate not known.
-   */
-  @Column(columnDefinition="TINYINT")
-  private Integer age;
-
-  /**
-   * If age is specified and not the date of birth then we store the
-   * date of birth with Jan 1 as the date.
-   */
-  private Boolean ageSpecified;
+  @Temporal(TemporalType.DATE)
+  private Date birthDateInferred;
 
   /**
    * If the blood center wishes to store a unique id for the donor.
@@ -402,27 +393,19 @@ public class Donor implements ModificationTracker {
     this.nationalID = nationalID;
   }
 
-  public Integer getAge() {
-    return age;
-  }
-
-  public void setAge(Integer age) {
-    this.age = age;
-  }
-
-  public Boolean getAgeSpecified() {
-    return ageSpecified;
-  }
-
-  public void setAgeSpecified(Boolean ageSpecified) {
-    this.ageSpecified = ageSpecified;
-  }
-
   public List<DonorDeferral> getDeferrals() {
     return deferrals;
   }
 
   public void setDeferrals(List<DonorDeferral> deferrals) {
     this.deferrals = deferrals;
+  }
+
+  public Date getBirthDateInferred() {
+    return birthDateInferred;
+  }
+
+  public void setBirthDateInferred(Date birthDateInferred) {
+    this.birthDateInferred = birthDateInferred;
   }
 }

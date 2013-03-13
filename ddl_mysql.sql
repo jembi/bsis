@@ -125,9 +125,8 @@
 
     create table Donor (
         id bigint not null auto_increment,
-        age TINYINT,
-        ageSpecified boolean,
         birthDate date,
+        birthDateInferred date,
         bloodAbo varchar(10),
         bloodRhd varchar(10),
         callingName varchar(20),
