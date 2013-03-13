@@ -12,12 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.Valid;
 
+import org.hibernate.envers.Audited;
+
 import model.collectedsample.CollectedSample;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 
 @Entity
+@Audited
 public class CollectionsWorksheet implements ModificationTracker {
 
   @Id

@@ -12,7 +12,7 @@
 			<property name="javax.persistence.jdbc.user" value="v2v"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-		</properties>
+  	</properties>
 	</persistence-unit>
 
 </persistence>

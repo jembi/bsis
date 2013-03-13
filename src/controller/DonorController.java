@@ -3,6 +3,7 @@ package controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -80,7 +80,7 @@ public class DonorController {
   public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
-    ModelAndView mv = new ModelAndView("donorSummary");
+    ModelAndView mv = new ModelAndView("donors/donorSummary");
     Map<String, Object> m = model.asMap();
 
     m.put("requestUrl", getUrl(request));
@@ -136,21 +136,27 @@ public class DonorController {
     return mv;
   }
 
+  @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
+  public void editDonorFormGenerator(HttpServletRequest request, Model model) {
+
+    Donor donor = donorRepository.findDonorById((long) 2);
+    donor.setLastName("value:" + (int)(Math.random()*100));
+    donorRepository.updateDonor(donor);
+  }
+
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
-  public ModelAndView addNewDonorFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView addDonorFormGenerator(HttpServletRequest request, Model model) {
 
     DonorBackingForm form = new DonorBackingForm();
 
-    ModelAndView mv = new ModelAndView("editDonorForm");
-    Map<String, Object> m = model.asMap();
-    m.put("requestUrl", getUrl(request));
-    m.put("firstTimeRender", true);
-    m.put("addDonorForm", form);
-    m.put("refreshUrl", getUrl(request));
+    ModelAndView mv = new ModelAndView("donors/addDonorForm");
+    mv.addObject("requestUrl", getUrl(request));
+    mv.addObject("firstTimeRender", true);
+    mv.addObject("addDonorForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
     Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
     // to ensure custom field names are displayed in the form
-    m.put("donorFields", formFields);
-    mv.addObject("model", m);
+    mv.addObject("donorFields", formFields);
     return mv;
   }
 
@@ -161,51 +167,43 @@ public class DonorController {
                  @ModelAttribute("addDonorForm") @Valid DonorBackingForm form,
                  BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editDonorForm");
+    ModelAndView mv = new ModelAndView();
     boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
 
     Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
-    m.put("donorFields", formFields);
+    mv.addObject("donorFields", formFields);
 
     if (result.hasErrors()) {
-      System.out.println("form has errors");
-      for (ObjectError error : result.getAllErrors()) {
-        System.out.println(error.getObjectName());
-      }
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      mv.addObject("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above.";
     } else {
       try {
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);
         donorRepository.addDonor(donor);
-        m.put("hasErrors", false);
+        mv.addObject("hasErrors", false);
         success = true;
-        message = "Donor Successfully Added";
         form = new DonorBackingForm();
-        m.put("firstTimeRender", true);
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
-        message = "Donor Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
         success = false;
-        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
-    m.put("addDonorForm", form);
-    m.put("firstTimeRender", false);
-    m.put("refreshUrl", "addDonorFormGenerator.html");
-    m.put("success", success);
-    m.put("message", message);
+    if (success) {
+      mv.setViewName("donors/addDonorSuccess");
+    } else {
+      mv.addObject("firstTimeRender", false);
+      mv.addObject("addDonorForm", form);
+      mv.addObject("refreshUrl", "addDonorFormGenerator.html");
+      mv.setViewName("donors/addDonorError");
+    }
 
-    mv.addObject("model", m);
+    mv.addObject("success", success);
     return mv;
   }
 
@@ -305,7 +303,7 @@ public class DonorController {
     FindDonorBackingForm form = new FindDonorBackingForm();
     model.addAttribute("findDonorForm", form);
 
-    ModelAndView mv = new ModelAndView("findDonorForm");
+    ModelAndView mv = new ModelAndView("donors/findDonorForm");
     Map<String, Object> m = model.asMap();
     utilController.addTipsToModel(model.asMap(), "donors.finddonor");
     // to ensure custom field names are displayed in the form
@@ -321,7 +319,7 @@ public class DonorController {
       @ModelAttribute("findDonorForm") DonorBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView modelAndView = new ModelAndView("donorsTable");
+    ModelAndView modelAndView = new ModelAndView("donors/donorsTable");
 
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findDonorResultsTable");
@@ -364,7 +362,7 @@ public class DonorController {
   }
 
   @RequestMapping("/findDonorPagination")
-  public @ResponseBody Map<String, Object> findProductPagination(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> findDonorPagination(HttpServletRequest request,
       @ModelAttribute("findDonorForm") FindDonorBackingForm form,
       BindingResult result, Model model) {
 
@@ -383,9 +381,8 @@ public class DonorController {
     results = donorRepository.findAnyDonor(donorNumber, firstName,
         lastName, bloodGroups, pagingParams);
 
-    Map<String, Object> m = model.asMap();
-
     List<Donor> donors = (List<Donor>) results.get(0);
+    System.out.println(donors);
     Long totalRecords = (Long) results.get(1);
     return generateDatatablesMap(donors, totalRecords, formFields);
   }

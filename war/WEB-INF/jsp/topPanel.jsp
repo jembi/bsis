@@ -55,7 +55,7 @@
 	</div>
 
 	<div id="donorsLandingPageContent">
-		<jsp:include page="donors.jsp" />
+		<jsp:include page="donors/donors.jsp" />
 	</div>
 
 	<div id="collectionsLandingPageContent">

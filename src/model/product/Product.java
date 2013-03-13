@@ -33,8 +33,10 @@ import model.util.BloodAbo;
 import model.util.BloodRhd;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 public class Product implements ModificationTracker {
 
   @Id

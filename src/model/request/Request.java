@@ -36,9 +36,11 @@ import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+@Audited
 public class Request implements ModificationTracker {
 
   @Id

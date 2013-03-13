@@ -8,6 +8,17 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table BloodBagType_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        bloodBagType varchar(50),
+        canPool boolean,
+        canSplit boolean,
+        isDeleted boolean,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table BloodTest (
         id bigint not null auto_increment,
         allowedResults varchar(255),
@@ -25,14 +36,49 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table BloodTest_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        allowedResults varchar(255),
+        displayName varchar(30),
+        isConfidential boolean,
+        isDeleted boolean,
+        isFinalOutcome boolean,
+        isRequired boolean,
+        name varchar(30),
+        negativeRequiredForUse boolean,
+        negativeResults varchar(255),
+        notes longtext,
+        positiveResults varchar(255),
+        resultCalculated varchar(255),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table BloodTest_TestsRequiredIfNegative (
         BloodTest_id bigint not null,
         testsRequiredIfNegative_id bigint not null
     ) ENGINE=InnoDB;
 
+    create table BloodTest_TestsRequiredIfNegative_AUD (
+        REV integer not null,
+        BloodTest_id bigint not null,
+        testsRequiredIfNegative_id bigint not null,
+        REVTYPE tinyint,
+        primary key (REV, BloodTest_id, testsRequiredIfNegative_id)
+    ) ENGINE=InnoDB;
+
     create table BloodTest_TestsRequiredIfPositive (
         BloodTest_id bigint not null,
         testsRequiredIfPositive_id bigint not null
+    ) ENGINE=InnoDB;
+
+    create table BloodTest_TestsRequiredIfPositive_AUD (
+        REV integer not null,
+        BloodTest_id bigint not null,
+        testsRequiredIfPositive_id bigint not null,
+        REVTYPE tinyint,
+        primary key (REV, BloodTest_id, testsRequiredIfPositive_id)
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -62,9 +108,46 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table CollectedSample_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        bloodAbo varchar(30),
+        bloodPressure decimal(6,2),
+        bloodRhd varchar(30),
+        collectedOn datetime,
+        collectionNumber varchar(20),
+        donorWeight decimal(6,2),
+        haemoglobinCount decimal(6,2),
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        testedStatus varchar(20),
+        batch_id bigint,
+        bloodBagType_id TINYINT,
+        collectionBatch_id bigint,
+        collectionCenter_id bigint,
+        collectionSite_id bigint,
+        donationCreatedBy_id SMALLINT,
+        donationType_id TINYINT,
+        donor_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table CollectedSample_CollectionsWorksheet (
         collectedSamples_id bigint not null,
         worksheets_id bigint not null
+    ) ENGINE=InnoDB;
+
+    create table CollectedSample_CollectionsWorksheet_AUD (
+        REV integer not null,
+        collectedSamples_id bigint not null,
+        worksheets_id bigint not null,
+        REVTYPE tinyint,
+        primary key (REV, collectedSamples_id, worksheets_id)
     ) ENGINE=InnoDB;
 
     create table CollectionBatch (
@@ -72,6 +155,15 @@
         batchNumber varchar(30),
         notes longtext,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table CollectionBatch_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        batchNumber varchar(30),
+        notes longtext,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table CollectionsWorksheet (
@@ -82,6 +174,18 @@
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table CollectionsWorksheet_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        worksheetBatchId varchar(255),
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table CompatibilityTest (
@@ -102,11 +206,40 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table CompatibilityTest_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        compatibililityTestDate datetime,
+        compatibilityResult integer,
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        testedBy varchar(255),
+        transfusedBefore boolean,
+        crossmatchType_id TINYINT,
+        forRequest_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        testedProduct_id bigint,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table CrossmatchType (
         id TINYINT not null auto_increment,
         crossmatchType varchar(255),
         isDeleted boolean,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table CrossmatchType_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        crossmatchType varchar(255),
+        isDeleted boolean,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table DeferralReason (
@@ -116,11 +249,29 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table DeferralReason_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        details varchar(255),
+        reason varchar(50),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table DonationType (
         id TINYINT not null auto_increment,
         donationType varchar(50),
         isDeleted boolean,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table DonationType_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        donationType varchar(50),
+        isDeleted boolean,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table Donor (
@@ -162,6 +313,51 @@
         deferredBy_id SMALLINT,
         deferredDonor_id bigint,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table DonorDeferral_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        deferredOn date,
+        deferredUntil date,
+        deferralReason_id SMALLINT,
+        deferredBy_id SMALLINT,
+        deferredDonor_id bigint,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table Donor_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        birthDate date,
+        birthDateInferred date,
+        bloodAbo varchar(10),
+        bloodRhd varchar(10),
+        callingName varchar(20),
+        address varchar(100),
+        city varchar(25),
+        country varchar(25),
+        district varchar(25),
+        otherPhoneNumber varchar(20),
+        phoneNumber varchar(20),
+        province varchar(25),
+        state varchar(25),
+        zipcode varchar(10),
+        donorNumber varchar(15),
+        firstName varchar(20),
+        gender varchar(15),
+        isDeleted boolean,
+        lastName varchar(20),
+        middleName varchar(20),
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        nationalID varchar(15),
+        notes longtext,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table FormField (
@@ -207,6 +403,20 @@
         name varchar(255),
         notes varchar(255),
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table Location_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isCenter boolean,
+        isCollectionSite boolean,
+        isDeleted boolean,
+        isMobileSite boolean,
+        isUsageSite boolean,
+        name varchar(255),
+        notes longtext,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table Product (
@@ -265,6 +475,39 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table ProductStatusChangeReasonCategory_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        category varchar(20),
+        isDeleted boolean,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table ProductStatusChangeReason_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isDeleted boolean,
+        statusChangeReason varchar(100),
+        category_id TINYINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table ProductStatusChange_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        newStatus varchar(30),
+        notes longtext,
+        statusChangedOn datetime,
+        changedBy_id SMALLINT,
+        issuedTo_id bigint,
+        product_id bigint,
+        statusChangeReason_id SMALLINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table ProductType (
         id TINYINT not null auto_increment,
         description longtext,
@@ -274,6 +517,19 @@
         shelfLife integer,
         shelfLifeUnits varchar(30),
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductType_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        description longtext,
+        isDeleted boolean,
+        isSubdivided boolean,
+        productType varchar(50),
+        shelfLife integer,
+        shelfLifeUnits varchar(30),
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table ProductUsage (
@@ -293,6 +549,57 @@
         lastUpdatedBy_id SMALLINT,
         product_id bigint,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductUsage_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        hospital varchar(255),
+        isAvailable boolean,
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        patientName varchar(30),
+        usageDate datetime,
+        useIndication varchar(30),
+        usedBy varchar(255),
+        ward varchar(30),
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        product_id bigint,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table Product_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        bloodAbo varchar(30),
+        bloodRhd varchar(30),
+        createdOn datetime,
+        discardedOn DATETIME,
+        expiresOn datetime,
+        isDeleted boolean,
+        issuedOn datetime,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        status varchar(30),
+        collectedSample_id bigint,
+        discardReason_id SMALLINT,
+        issuedTo_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        productType_id TINYINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table REVINFO (
+        REV integer not null auto_increment,
+        REVTSTMP bigint,
+        primary key (REV)
     ) ENGINE=InnoDB;
 
     create table Request (
@@ -337,6 +644,52 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table RequestType_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        description varchar(100),
+        isDeleted boolean,
+        requestType varchar(30),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table Request_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        department varchar(30),
+        fulfilled boolean,
+        hospital varchar(30),
+        indicationForUse varchar(50),
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        numUnitsIssued integer,
+        numUnitsRequested integer,
+        patientAge integer,
+        patientBirthDate date,
+        patientBloodAbo varchar(30),
+        patientBloodRhd varchar(30),
+        patientDiagnosis varchar(100),
+        patientFirstName varchar(30),
+        patientGender integer,
+        patientLastName varchar(30),
+        patientNumber varchar(30),
+        requestDate datetime,
+        requestNumber varchar(30),
+        requestedBy varchar(30),
+        requiredDate datetime,
+        ward varchar(20),
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        productType_id TINYINT,
+        requestSite_id bigint,
+        requestType_id TINYINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table SequenceNumberStore (
         id integer not null auto_increment,
         columnName varchar(255),
@@ -354,6 +707,15 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table SubdividedProduct_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        divisionCode varchar(5),
+        parentProduct_id bigint,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table TestResult (
         id bigint not null auto_increment,
         isDeleted boolean,
@@ -367,6 +729,23 @@
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table TestResult_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        result varchar(255),
+        testedOn datetime,
+        bloodTest_id bigint,
+        collectedSample_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table Tips (
@@ -393,6 +772,36 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table User_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        emailId varchar(255),
+        firstName varchar(15),
+        isActive boolean,
+        isAdmin boolean,
+        isDeleted boolean,
+        isStaff boolean,
+        lastLogin datetime,
+        lastName varchar(15),
+        notes longtext,
+        password varchar(255),
+        username varchar(30),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    alter table BloodBagType_AUD 
+        add index FKE16C6DF9DF74E053 (REV), 
+        add constraint FKE16C6DF9DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table BloodTest_AUD 
+        add index FKE1FA995DDF74E053 (REV), 
+        add constraint FKE1FA995DDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table BloodTest_TestsRequiredIfNegative 
         add index FK22608B9F21F9B0CD (testsRequiredIfNegative_id), 
         add constraint FK22608B9F21F9B0CD 
@@ -405,6 +814,12 @@
         foreign key (BloodTest_id) 
         references BloodTest (id);
 
+    alter table BloodTest_TestsRequiredIfNegative_AUD 
+        add index FKA20FD1F0DF74E053 (REV), 
+        add constraint FKA20FD1F0DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table BloodTest_TestsRequiredIfPositive 
         add index FK180C19638E01C89 (testsRequiredIfPositive_id), 
         add constraint FK180C19638E01C89 
@@ -416,6 +831,12 @@
         add constraint FK180C19634FE62E13 
         foreign key (BloodTest_id) 
         references BloodTest (id);
+
+    alter table BloodTest_TestsRequiredIfPositive_AUD 
+        add index FK97F6DDB4DF74E053 (REV), 
+        add constraint FK97F6DDB4DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
 
     create index collectedSample_collectedOn_index on CollectedSample (collectedOn);
 
@@ -481,6 +902,12 @@
         foreign key (bloodBagType_id) 
         references BloodBagType (id);
 
+    alter table CollectedSample_AUD 
+        add index FKD18B6684DF74E053 (REV), 
+        add constraint FKD18B6684DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table CollectedSample_CollectionsWorksheet 
         add index FKB39FFD85225909B3 (worksheets_id), 
         add constraint FKB39FFD85225909B3 
@@ -493,6 +920,18 @@
         foreign key (collectedSamples_id) 
         references CollectedSample (id);
 
+    alter table CollectedSample_CollectionsWorksheet_AUD 
+        add index FKC0D7E0D6DF74E053 (REV), 
+        add constraint FKC0D7E0D6DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table CollectionBatch_AUD 
+        add index FKB74A2EDDF74E053 (REV), 
+        add constraint FKB74A2EDDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table CollectionsWorksheet 
         add index FK72E3FEF9A49787C4 (createdBy_id), 
         add constraint FK72E3FEF9A49787C4 
@@ -504,6 +943,12 @@
         add constraint FK72E3FEF9D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table CollectionsWorksheet_AUD 
+        add index FK5296084ADF74E053 (REV), 
+        add constraint FK5296084ADF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
 
     create index compatibilityTest_crossmatchTestDate_index on CompatibilityTest (compatibililityTestDate);
 
@@ -536,6 +981,30 @@
         add constraint FK927986028631CA7D 
         foreign key (crossmatchType_id) 
         references CrossmatchType (id);
+
+    alter table CompatibilityTest_AUD 
+        add index FKE8EE2D3DF74E053 (REV), 
+        add constraint FKE8EE2D3DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table CrossmatchType_AUD 
+        add index FK7FC1C4D0DF74E053 (REV), 
+        add constraint FK7FC1C4D0DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table DeferralReason_AUD 
+        add index FK85449400DF74E053 (REV), 
+        add constraint FK85449400DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table DonationType_AUD 
+        add index FK58EF0DDDDF74E053 (REV), 
+        add constraint FK58EF0DDDDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
 
     create index donor_donorNumber_index on Donor (donorNumber);
 
@@ -572,6 +1041,24 @@
         add constraint FKC7E323D1C9CCBBFC 
         foreign key (deferralReason_id) 
         references DeferralReason (id);
+
+    alter table DonorDeferral_AUD 
+        add index FK17470122DF74E053 (REV), 
+        add constraint FK17470122DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Donor_AUD 
+        add index FKEB99F917DF74E053 (REV), 
+        add constraint FKEB99F917DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Location_AUD 
+        add index FK6563F26DF74E053 (REV), 
+        add constraint FK6563F26DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
 
     create index product_expiresOn_index on Product (expiresOn);
 
@@ -645,6 +1132,30 @@
         foreign key (category_id) 
         references ProductStatusChangeReasonCategory (id);
 
+    alter table ProductStatusChangeReasonCategory_AUD 
+        add index FK6A6ABAC4DF74E053 (REV), 
+        add constraint FK6A6ABAC4DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table ProductStatusChangeReason_AUD 
+        add index FKA5ADFDA6DF74E053 (REV), 
+        add constraint FKA5ADFDA6DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table ProductStatusChange_AUD 
+        add index FK79A8FA02DF74E053 (REV), 
+        add constraint FK79A8FA02DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table ProductType_AUD 
+        add index FKA50719FADF74E053 (REV), 
+        add constraint FKA50719FADF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table ProductUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 
         add constraint FK45B6D212A49787C4 
@@ -662,6 +1173,18 @@
         add constraint FK45B6D212D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
+
+    alter table ProductUsage_AUD 
+        add index FKB27A6E3DF74E053 (REV), 
+        add constraint FKB27A6E3DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Product_AUD 
+        add index FKA859320DF74E053 (REV), 
+        add constraint FKA859320DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
 
     create index request_requiredDate_index on Request (requiredDate);
 
@@ -703,11 +1226,29 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
+    alter table RequestType_AUD 
+        add index FK36989F9ADF74E053 (REV), 
+        add constraint FK36989F9ADF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Request_AUD 
+        add index FKA7FAE8C0DF74E053 (REV), 
+        add constraint FKA7FAE8C0DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table SubdividedProduct 
         add index FK2137ED84D946D0A0 (parentProduct_id), 
         add constraint FK2137ED84D946D0A0 
         foreign key (parentProduct_id) 
         references Product (id);
+
+    alter table SubdividedProduct_AUD 
+        add index FKC0E9B955DF74E053 (REV), 
+        add constraint FKC0E9B955DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
 
     alter table TestResult 
         add index FKDB459F6FA49787C4 (createdBy_id), 
@@ -732,3 +1273,15 @@
         add constraint FKDB459F6F4FE62E13 
         foreign key (bloodTest_id) 
         references BloodTest (id);
+
+    alter table TestResult_AUD 
+        add index FK77A67DC0DF74E053 (REV), 
+        add constraint FK77A67DC0DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table User_AUD 
+        add index FKF3FCA03CDF74E053 (REV), 
+        add constraint FKF3FCA03CDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);

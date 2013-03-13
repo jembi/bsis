@@ -40,8 +40,10 @@ import model.util.BloodRhd;
 import model.worksheet.CollectionsWorksheet;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
 
   @Id

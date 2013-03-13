@@ -6,6 +6,9 @@ public class UserViewModel {
 
   private User user;
 
+  public UserViewModel() {
+  }
+
   public UserViewModel(User user) {
     this.user = user;
   }

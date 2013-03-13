@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import org.hibernate.envers.Audited;
+
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
@@ -21,6 +23,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 
 @Entity
+@Audited
 public class TestResult implements ModificationTracker {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -7,7 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 public class ProductType {
 
   @Id

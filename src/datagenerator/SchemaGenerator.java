@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.Entity;
 
 import org.hibernate.cfg.Configuration;
+import org.hibernate.envers.configuration.AuditConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -36,11 +37,24 @@ public class SchemaGenerator {
     cfg = new Configuration();
     cfg.setProperty("hibernate.show_sql", "true");
     cfg.setProperty("hibernate.hbm2ddl.auto", "none");
-
+    cfg.setProperty("hibernate.ejb.event.post-insert",
+        "org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener");
+    cfg.setProperty("hibernate.ejb.event.post-update",
+        "org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener");
+    cfg.setProperty("hibernate.ejb.event.post-delete",
+        "org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener");
+    cfg.setProperty("hibernate.ejb.event.pre-collection-update",
+        "org.hibernate.envers.event.AuditEventListener");
+    cfg.setProperty("hibernate.ejb.event.pre-collection-remove",
+        "org.hibernate.envers.event.AuditEventListener");
+    cfg.setProperty("hibernate.ejb.event.post-collection-recreate",
+        "org.hibernate.envers.event.AuditEventListener");
     for (Class<?> clazz : findAllClasses(packageName)) {
       System.out.println("Class: " + clazz);
       cfg.addAnnotatedClass(clazz);
     }
+    cfg.buildMappings();
+    AuditConfiguration.getFor(cfg);
   }
 
   /**

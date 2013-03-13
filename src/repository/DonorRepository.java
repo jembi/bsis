@@ -135,6 +135,8 @@ public class DonorRepository {
   }
 
   public void addDonor(Donor donor) {
+    donor.setBloodAbo(BloodAbo.Unknown);
+    donor.setBloodRhd(BloodRhd.Unknown);
     em.persist(donor);
     em.flush();
   }

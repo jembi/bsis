@@ -13,8 +13,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 public class BloodTest {
 
   @Id

@@ -19,9 +19,11 @@ import model.product.Product;
 import model.product.ProductExists;
 import model.user.User;
 
+import org.hibernate.envers.Audited;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+@Audited
 public class ProductUsage implements ModificationTracker {
 
   @Id

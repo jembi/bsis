@@ -11,10 +11,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.envers.Audited;
+
 import model.donordeferral.DeferralReason;
 import model.user.User;
 
 @Entity
+@Audited
 public class DonorDeferral {
 
   @Id

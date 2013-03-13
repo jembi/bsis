@@ -14,6 +14,7 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
 
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -24,6 +25,7 @@ import model.request.RequestExists;
 import model.user.User;
 
 @Entity
+@Audited
 public class CompatibilityTest implements ModificationTracker {
 
   @Id

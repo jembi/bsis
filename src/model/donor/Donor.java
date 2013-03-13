@@ -28,9 +28,11 @@ import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
+@Audited
 public class Donor implements ModificationTracker {
 
   @Id
