@@ -39,10 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
-import repository.DonorRepository;
 import repository.DonationTypeRepository;
+import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
+import repository.PreDonationTestRepository;
 import repository.SequenceNumberRepository;
 import repository.TestResultRepository;
 import viewmodel.CollectedSampleViewModel;
@@ -75,7 +76,10 @@ public class CollectedSampleController {
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
-  
+
+  @Autowired
+  private PreDonationTestRepository preDonationTestRepository;
+
   @Autowired
   private UtilController utilController;
 
@@ -112,14 +116,14 @@ public class CollectedSampleController {
     FindCollectedSampleBackingForm form = new FindCollectedSampleBackingForm();
     model.addAttribute("findCollectedSampleForm", form);
 
-    ModelAndView mv = new ModelAndView("findCollectionForm");
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
-    utilController.addTipsToModel(model.asMap(), "collectedSamples.find");
+    ModelAndView mv = new ModelAndView("collections/findCollectionForm");
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "collectedSamples.find");
+    mv.addObject("tips", tips);
     // to ensure custom field names are displayed in the form
-    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", m);
+    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -130,7 +134,7 @@ public class CollectedSampleController {
 
     List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
 
-    ModelAndView modelAndView = new ModelAndView("collectionsTable");
+    ModelAndView modelAndView = new ModelAndView("collections/collectionsTable");
     Map<String, Object> m = model.asMap();
     m.put("tableName", "findProductsTable");
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
@@ -188,7 +192,7 @@ public class CollectedSampleController {
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collection");
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     String collectionNumber = form.getCollectionNumber();
@@ -282,7 +286,7 @@ public class CollectedSampleController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("centers", locationRepository.getAllCenters());
-    m.put("donorTypes", donorTypeRepository.getAllDonationTypes());
+    m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
     m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
     m.put("sites", locationRepository.getAllCollectionSites());
   }
@@ -323,51 +327,37 @@ public class CollectedSampleController {
       form.setCollectionNumber(sequenceNumberRepository.getNextCollectionNumber());    
   }
 
-  @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
-      Model model,
-      @RequestParam(value="collectionId", required=false) Long collectionId) {
+  @RequestMapping(value = "/addCollectionFormGenerator", method = RequestMethod.GET)
+  public ModelAndView addCollectionFormGenerator(HttpServletRequest request,
+      Model model) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
 
-    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    m.put("existingCollectedSample", false);
-    if (collectionId != null) {
-      form.setId(collectionId);
-      CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-      if (collectedSample != null) {
-        form = new CollectedSampleBackingForm(collectedSample);
-        m.put("existingCollectedSample", true);
-      }
-      else {
-        form = new CollectedSampleBackingForm();
-      }
-    }
-    addEditSelectorOptions(m);
-    m.put("editCollectedSampleForm", form);
-    m.put("refreshUrl", getUrl(request));
+    ModelAndView mv = new ModelAndView("collections/addCollectionForm");
+    mv.addObject("requestUrl", getUrl(request));
+    mv.addObject("firstTimeRender", true);
+    mv.addObject("addCollectionForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collection");
     // to ensure custom field names are displayed in the form
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
-    m.put("collectedSampleFields", formFields);
-    if (m.get("existingCollectedSample").equals(false))
-      setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
-    mv.addObject("model", m);
+    mv.addObject("collectionFields", formFields);
+    mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
     return mv;
   }
 
-  @RequestMapping(value = "/addCollectedSample", method = RequestMethod.POST)
-  public ModelAndView addCollectedSample(
+  @RequestMapping(value = "/addCollection", method = RequestMethod.POST)
+  public ModelAndView addCollection(
       HttpServletRequest request,
       HttpServletResponse response,
-      @ModelAttribute("editCollectedSampleForm") @Valid CollectedSampleBackingForm form,
+      @ModelAttribute("addCollectionForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
+    ModelAndView mv = new ModelAndView();
     boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
+
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collection");
+    mv.addObject("collectionFields", formFields);
 
     // IMPORTANT: Validation code just checks if the ID exists.
     // We still need to store the collected sample as part of the product.
@@ -397,44 +387,49 @@ public class CollectedSampleController {
       form.setDonor(null);
     }
 
+
+    CollectedSample savedCollection = null;
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      mv.addObject("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above.";
     } else {
       try {
         CollectedSample collectedSample = form.getCollectedSample();
         collectedSample.setIsDeleted(false);
-        collectedSampleRepository.addCollectedSample(collectedSample);
-        m.put("hasErrors", false);
+        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
+        mv.addObject("hasErrors", false);
         success = true;
-        message = "Collection Successfully Added";
         form = new CollectedSampleBackingForm();
-        Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
-        m.put("collectedSampleFields", formFields);
-        setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
-        message = "Collection Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
         success = false;
-        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
-    m.put("editCollectedSampleForm", form);
-    m.put("existingCollectedSample", false);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("refreshUrl", "editCollectionFormGenerator.html");
-    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    addEditSelectorOptions(m);
+    if (success) {
+      mv.addObject("collectionId", savedCollection.getId());
+      mv.addObject("collection", getCollectionViewModel(savedCollection));
+      mv.addObject("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
+      mv.setViewName("collections/addCollectionSuccess");
+    } else {
+      mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
+      mv.addObject("firstTimeRender", false);
+      mv.addObject("addCollectionForm", form);
+      mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
+      mv.setViewName("collections/addCollectionError");
+    }
 
-    mv.addObject("model", m);
+    mv.addObject("success", success);
     return mv;
+  }
+
+  private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
+    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
+    return collectionViewModel;
   }
 
   @RequestMapping(value = "/updateCollectedSample", method = RequestMethod.POST)
@@ -551,29 +546,31 @@ public class CollectedSampleController {
   public ModelAndView collectionSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
 
-    ModelAndView mv = new ModelAndView("collectionSummary");
-    Map<String, Object> m = model.asMap();
+    ModelAndView mv = new ModelAndView("collections/collectionSummary");
 
-    m.put("requestUrl", getUrl(request));
+    mv.addObject("requestUrl", getUrl(request));
 
     CollectedSample collectedSample = null;
     if (collectedSampleId != null) {
       collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
       if (collectedSample != null) {
-        m.put("existingCollectedSample", true);
+        mv.addObject("existingCollectedSample", true);
       }
       else {
-        m.put("existingCollectedSample", false);
+        mv.addObject("existingCollectedSample", false);
       }
     }
 
-    CollectedSampleViewModel collectionViewModel = getCollectionViewModels(Arrays.asList(collectedSample)).get(0);
-    utilController.addTipsToModel(model.asMap(), "collections.findcollection.collectionsummary");
-    m.put("collectedSample", collectionViewModel);
-    m.put("refreshUrl", getUrl(request));
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "collections.findcollection.collectionsummary");
+    mv.addObject("tips", tips);
+
+    CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
+    mv.addObject("collectedSample", collectionViewModel);
+
+    mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    mv.addObject("model", m);
+    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     return mv;
   }
 

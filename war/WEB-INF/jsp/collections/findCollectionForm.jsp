@@ -56,7 +56,7 @@ $(document).ready(function() {
   }).click(clearFindForm);
   
   function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    refetchContent("${refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
   }
 
@@ -191,7 +191,7 @@ $(document).ready(function() {
 		<b>Find Collections</b>
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['collectedSamples.find']}
+				${tips['collectedSamples.find']}
 			</p>
 		</div>
 		<form:form method="GET" commandName="findCollectedSampleForm" id="${findCollectionFormId}"
@@ -207,7 +207,7 @@ $(document).ready(function() {
 				<form:select path="bloodBagTypes"
 										 id="${findCollectionFormBloodBagTypeSelectorId}"
 										 class="bloodBagTypeSelector">
-					<c:forEach var="bloodBagType" items="${model.bloodBagTypes}">
+					<c:forEach var="bloodBagType" items="${bloodBagTypes}">
 						<form:option value="${bloodBagType.id}" label="${bloodBagType.bloodBagType}" />
 					</c:forEach>
 				</form:select>
@@ -218,7 +218,7 @@ $(document).ready(function() {
 					<form:select path="collectionCenters"
 											 id="${findCollectionFormCollectionCentersSelectorId}"
 											 class="collectionCenterSelector">
-						<c:forEach var="center" items="${model.centers}">
+						<c:forEach var="center" items="${centers}">
 							<form:option value="${center.id}">${center.name}</form:option>
 						</c:forEach>
 					</form:select>
@@ -229,7 +229,7 @@ $(document).ready(function() {
 					<form:select path="collectionSites"
 											 id="${findCollectionFormCollectionSitesSelectorId}"
 											 class="collectionSiteSelector">
-						<c:forEach var="site" items="${model.sites}">
+						<c:forEach var="site" items="${sites}">
 							<form:option value="${site.id}">${site.name}</form:option>
 						</c:forEach>
 					</form:select>

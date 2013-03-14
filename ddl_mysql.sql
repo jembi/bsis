@@ -226,6 +226,38 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table ConfiguredPreDonationTest (
+        id SMALLINT not null auto_increment,
+        acceptableResults varchar(500),
+        allowedResults varchar(500),
+        enabled boolean,
+        lowerLimit varchar(30),
+        negateResult boolean,
+        resultDataType integer,
+        testName varchar(30),
+        testType varchar(15),
+        units varchar(10),
+        upperLimit varchar(30),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ConfiguredPreDonationTest_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        acceptableResults varchar(500),
+        allowedResults varchar(500),
+        enabled boolean,
+        lowerLimit varchar(30),
+        negateResult boolean,
+        resultDataType integer,
+        testName varchar(30),
+        testType varchar(15),
+        units varchar(10),
+        upperLimit varchar(30),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table CrossmatchType (
         id TINYINT not null auto_increment,
         crossmatchType varchar(255),
@@ -416,6 +448,22 @@
         isUsageSite boolean,
         name varchar(255),
         notes longtext,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table PreDonationTest (
+        id bigint not null auto_increment,
+        testResult varchar(30),
+        configuredPreDonationTest_id SMALLINT not null,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table PreDonationTest_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        testResult varchar(30),
+        configuredPreDonationTest_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -988,6 +1036,12 @@
         foreign key (REV) 
         references REVINFO (REV);
 
+    alter table ConfiguredPreDonationTest_AUD 
+        add index FK564E4C9ADF74E053 (REV), 
+        add constraint FK564E4C9ADF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table CrossmatchType_AUD 
         add index FK7FC1C4D0DF74E053 (REV), 
         add constraint FK7FC1C4D0DF74E053 
@@ -1057,6 +1111,18 @@
     alter table Location_AUD 
         add index FK6563F26DF74E053 (REV), 
         add constraint FK6563F26DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table PreDonationTest 
+        add index FKAF309676903E59D (configuredPreDonationTest_id), 
+        add constraint FKAF309676903E59D 
+        foreign key (configuredPreDonationTest_id) 
+        references ConfiguredPreDonationTest (id);
+
+    alter table PreDonationTest_AUD 
+        add index FKDE1E2BB8DF74E053 (REV), 
+        add constraint FKDE1E2BB8DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

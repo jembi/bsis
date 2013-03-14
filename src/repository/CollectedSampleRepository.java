@@ -384,11 +384,12 @@ public class CollectedSampleRepository {
     return testResults;
   }
 
-  public void addCollectedSample(CollectedSample collectedSample) {
+  public CollectedSample addCollectedSample(CollectedSample collectedSample) {
     updateCollectedSampleInternalFields(collectedSample);
     collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
     em.persist(collectedSample);
     em.flush();
+    return collectedSample;
   }
 
   public List<CollectedSample> findCollectedSampleByCenters(

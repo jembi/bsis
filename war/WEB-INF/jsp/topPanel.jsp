@@ -59,7 +59,7 @@
 	</div>
 
 	<div id="collectionsLandingPageContent">
-		<jsp:include page="collections.jsp" />
+		<jsp:include page="collections/collections.jsp" />
 	</div>
 
 	<div id="testResultsLandingPageContent">

@@ -12,17 +12,14 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="collectionSummaryBarcodeId">collectionSummaryBarcode-${unique_page_id}</c:set>
 <c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
 
-        $("#${collectionSummaryBarcodeId}").barcode(
-					  "${model.collectedSample.collectionNumber}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        showBarcode($("#${mainContentId}").find(".collectionBarcode"),
+            			  "${collectedSample.collectionNumber}");
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("collectionSummarySuccess");
@@ -40,7 +37,7 @@
             $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
 
   	        fetchContent("editCollectionFormGenerator.html",
-              					 {collectionId: "${model.collectedSample.id}"},
+              					 {collectionId: "${collectedSample.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -71,7 +68,7 @@
             $("#${tabContentId}").bind("testResultsHistorySuccess", emptyChildContent);
 
   	        fetchContent("testResultsForCollection.html",
-              					 {collectedSampleId: "${model.collectedSample.id}"},
+              					 {collectedSampleId: "${collectedSample.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -87,7 +84,7 @@
                 title : "Confirm Delete",
                 buttons : {
                   "Delete" : function() {
-                    deleteCollection("${model.collectedSample.id}", notifyParentDone);
+                    deleteCollection("${collectedSample.id}", notifyParentDone);
                     $(this).dialog("close");
                   },
                   "Cancel" : function() {
@@ -99,7 +96,7 @@
 
         function editCollectionDone() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
 				function emptyChildContent() {
@@ -138,90 +135,12 @@
 
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['collections.findcollection.collectionsummary']}
+				${tips['collections.findcollection.collectionsummary']}
 			</p>
 		</div>
 
-		<div class="formInTabPane printableArea">
-			<br />
-			<div id="${collectionSummaryBarcodeId}"></div>
-	
-			<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.collectionNumber.displayName}</label>
-					<label>${model.collectedSample.collectionNumber}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.donorNumber.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.donorNumber.displayName}</label>
-					<c:if test="${not empty model.collectedSample.donorNumber}">
-						<label style="width: auto;">${model.collectedSample.donorNumber} (${model.collectedSample.donor.firstName} ${model.collectedSample.donor.lastName})</label>
-					</c:if>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.donorType.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.donorType.displayName}</label>
-					<label>${model.collectedSample.donorType}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.bloodBagType.displayName}</label>
-					<label>${model.collectedSample.bloodBagType}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.collectedOn.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.collectedOn.displayName}</label>
-					<label style="width: auto;">${model.collectedSample.collectedOn}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.collectionCenter.displayName}</label>
-					<label>${model.collectedSample.collectionCenter}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.collectionSite.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.collectionSite.displayName}</label>
-					<label>${model.collectedSample.collectionSite}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.sampleNumber.displayName}</label>
-					<label>${model.collectedSample.sampleNumber}</label>
-				</div>
-			</c:if>
-					<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.shippingNumber.displayName}</label>
-					<label>${model.collectedSample.shippingNumber}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.collectedSampleFields.notes.hidden != true }">
-				<div>
-					<label>${model.collectedSampleFields.notes.displayName}</label>
-					<label>${model.collectedSample.notes}</label>
-				</div>
-			</c:if>
-			<div>
-				<label>${model.collectedSampleFields.lastUpdatedTime.displayName}</label>
-				<label style="width: auto;">${model.collectedSample.lastUpdated}</label>
-			</div>
-			<div>
-				<label>${model.collectedSampleFields.lastUpdatedBy.displayName}</label>
-				<label style="width: auto;">${model.collectedSample.lastUpdatedBy}</label>
-			</div>
-			<div>
-				<label>${model.collectedSampleFields.testedStatus.displayName}</label>
-				<label style="width: auto;">${model.collectedSample.testedStatus}</label>
-			</div>
-			<hr />
-		</div>
+		<jsp:include page="collectionDetail.jsp" />
+
 	</div>
 
 	<br />

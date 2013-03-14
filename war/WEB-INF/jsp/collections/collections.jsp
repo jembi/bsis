@@ -17,7 +17,7 @@
 			<a href="findCollectionFormGenerator.html">Find Collections</a>
 		</li>
 		<li id="addCollectionsContent">
-			<a href="editCollectionFormGenerator.html">Add Collection</a>
+			<a href="addCollectionFormGenerator.html">Add Collection</a>
 		</li>
 		<li id="findCollectionsWorksheet">
 			<a href="findCollectionWorksheetFormGenerator.html">Generate worksheet</a>

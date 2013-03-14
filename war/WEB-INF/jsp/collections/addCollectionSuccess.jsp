@@ -15,7 +15,7 @@
 
 <script>
 $(document).ready(function() {
-  showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+  showBarcode($("#${tabContentId}").find(".collectionBarcode"), "${donor.donorNumber}");
 
   $("#${tabContentId}").find(".printButton").button({
     icons : {
@@ -25,26 +25,12 @@ $(document).ready(function() {
     $("#${mainContentId}").find(".printableArea").printArea();
   });
 
-  $("#${tabContentId}").find(".addAnotherDonorButton").button({
+  $("#${tabContentId}").find(".addAnotherCollectionButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
-    refetchContent("${addAnotherDonorUrl}", $("#${tabContentId}"));
-  });
-
-  $("#${tabContentId}").find(".createCollectionButton").button({
-    icons : {
-      primary : 'ui-icon-disk'
-    }
-  }).click(function() {
-    $("#${tabContentId}").bind("editCollectionSuccess", editCollectionDone);
-    $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
-		//hideMainContent();
-    fetchContent("addCollectionFormForDonorGenerator.html",
-      					 {donorId: "${donor.id}"},
-      					 $("#${childContentId}")
-    						);
+    refetchContent("${addAnotherCollectionUrl}", $("#${tabContentId}"));
   });
 
   function editCollectionDone() {
@@ -61,25 +47,22 @@ $(document).ready(function() {
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
-				Donor record added Successfully.
+				Collection record added Successfully.
 				<br />
 				You can view the details below and print donor card. Click "Add another donor" to add another donor.
 			</span>
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">
-				<button type="button" class="addAnotherDonorButton">
-					Add another donor
-				</button>
-				<button type="button" class="createCollectionButton">
-					Add collection for this donor
+				<button type="button" class="addAnotherCollectionButton">
+					Add another collection
 				</button>
 				<button type="button" class="printButton">
 					Print
 				</button>
 			</div>
 	
-			<jsp:include page="donorDetails.jsp" />
+			<jsp:include page="collectionDetail.jsp" />
 		</div>
 	</div>
 

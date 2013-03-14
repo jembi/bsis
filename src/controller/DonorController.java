@@ -86,8 +86,10 @@ public class DonorController {
     if (donorId != null) {
       donor = donorRepository.findDonorById(donorId);
     }
-    DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
+
+    DonorViewModel donorViewModel = getDonorsViewModel(donor);
     mv.addObject("donor", donorViewModel);
+
     mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
