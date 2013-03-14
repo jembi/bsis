@@ -189,6 +189,8 @@ public class DonorController {
 
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
+      mv.addObject("donor", getDonorsViewModel(savedDonor));
+      mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
       mv.setViewName("donors/addDonorSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating donor. Please fix the errors noted below.");
@@ -200,6 +202,11 @@ public class DonorController {
 
     mv.addObject("success", success);
     return mv;
+  }
+
+  private DonorViewModel getDonorsViewModel(Donor donor) {
+    DonorViewModel donorViewModel = new DonorViewModel(donor);
+    return donorViewModel;
   }
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)

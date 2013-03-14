@@ -490,3 +490,7 @@ function setDefaultValueForSelector(selectorElement, valueToSelect) {
   elementsToSelect.attr("selected", 1);
   selectorElement.multiselect("refresh");
 }
+
+function showBarcode(element, barcodeValue) {
+  element.barcode(barcodeValue, "code128", {barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+}

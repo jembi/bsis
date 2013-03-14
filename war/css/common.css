@@ -530,11 +530,6 @@ tr > td
 }
 
 .summaryPageButtonSection {
-	position: absolute;
-	right: 3px;
-	top: 3px;
-	cursor: pointer;
-	z-index: 100;
 }
 
 .hidableDiv {
@@ -699,7 +694,6 @@ tr > td
 .successText {
 	display: inline-block;
 	position: relative;
-	bottom: 8px;
-	left: 10px;
+	left: 15px;
 	font-size: 16px; 
 }

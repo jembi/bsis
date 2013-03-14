@@ -12,17 +12,13 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="donorSummaryBarcodeId">donorSummaryBarcode-${unique_page_id}</c:set>
 <c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
 
-        $("#${donorSummaryBarcodeId}").barcode(
-					  "${donor.donorNumber}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("donorSummarySuccess");
@@ -80,7 +76,7 @@
 	        						);
         });
 
-        $("#${tabContentId}").find(".cancelButton").button({
+        $("#${tabContentId}").find(".doneButton").button({
           icons : {
             primary : 'ui-icon-check'
           }
@@ -133,7 +129,7 @@
 	<div id="${mainContentId}">
 
 		<div class="summaryPageButtonSection" style="text-align: right;">
-			<button type="button" class="cancelButton">
+			<button type="button" class="doneButton">
 				Done
 			</button>
 			<button type="button" class="editButton">
@@ -162,110 +158,8 @@
 			</p>
 		</div>
 
-		<div class="formInTabPane printableArea">
-			<br />
-			<div id="${donorSummaryBarcodeId}"></div>
-			<c:if test="${donorFields.donorNumber.hidden != true }">
-				<div>
-					<label>${donorFields.donorNumber.displayName}</label>
-					<label>${donor.donorNumber}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.firstName.hidden != true }">
-				<div>
-					<label>${donorFields.firstName.displayName}</label>
-					<label>${donor.firstName}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.middleName.hidden != true }">
-				<div>
-					<label>${donorFields.middleName.displayName}</label>
-					<label>${donor.middleName}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.lastName.hidden != true }">
-				<div>
-					<label>${donorFields.lastName.displayName}</label>
-					<label>${donor.lastName}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.birthDate.hidden != true }">
-				<div>
-					<label>${donorFields.birthDate.displayName}</label>
-					<label>${donor.birthDate}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.gender.hidden != true }">
-				<div>
-					<label>${donorFields.gender.displayName}</label>
-					<label>${donor.gender}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.bloodGroup.hidden != true }">
-				<div>
-					<label>${donorFields.bloodGroup.displayName}</label>
-					<label>${donor.bloodGroup}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.address.hidden != true }">
-				<div>
-					<label>${donorFields.address.displayName}</label>
-					<label>${donor.address}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.city.hidden != true }">
-				<div>
-					<label>${donorFields.city.displayName}</label>
-					<label>${donor.city}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.province.hidden != true }">
-				<div>
-					<label>${donorFields.province.displayName}</label>
-					<label>${donor.province}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.district.hidden != true }">
-				<div>
-					<label>${donorFields.district.displayName}</label>
-					<label>${donor.district}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.state.hidden != true }">
-				<div>
-					<label>${donorFields.state.displayName}</label>
-					<label>${donor.state}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.country.hidden != true }">
-				<div>
-					<label>${donorFields.country.displayName}</label>
-					<label>${donor.country}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.zipcode.hidden != true }">
-				<div>
-					<label>${donorFields.zipcode.displayName}</label>
-					<label>${donor.zipcode}</label>
-				</div>
-			</c:if>
-			<c:if test="${donorFields.notes.hidden != true }">
-				<div>
-					<label>${donorFields.notes.displayName}</label>
-					<label>${donor.notes}</label>
-				</div>
-			</c:if>
-			<br />
-			<div>
-				<label>${donorFields.lastUpdatedTime.displayName}</label>
-				<label style="width: auto;">${donor.lastUpdated}</label>
-			</div>
-			<div>
-				<label>${donorFields.lastUpdatedBy.displayName}</label>
-				<label style="width: auto;">${donor.lastUpdatedBy}</label>
-			</div>
-			<hr />
-		</div>
+		<jsp:include page="donorDetails.jsp" />
+
 	</div>
 
 	<br />

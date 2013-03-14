@@ -15,28 +15,75 @@
 
 <script>
 $(document).ready(function() {
-  $.ajax({
-    url: "donorSummary.html",
-    data: {donorId : "${donorId}"},
-    type: "GET",
-    success : function (response) {
-      					$("#${tabContentId}").find(".donorSummaryContainer").html(response);
-    					}
+  showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+
+  $("#${tabContentId}").find(".printButton").button({
+    icons : {
+      primary : 'ui-icon-print'
+    }
+  }).click(function() {
+    $("#${mainContentId}").find(".printableArea").printArea();
   });
+
+  $("#${tabContentId}").find(".addAnotherDonorButton").button({
+    icons : {
+      primary : 'ui-icon-plusthick'
+    }
+  }).click(function() {
+    refetchContent("${addAnotherDonorUrl}", $("#${tabContentId}"));
+  });
+
+  $("#${tabContentId}").find(".createCollectionButton").button({
+    icons : {
+      primary : 'ui-icon-disk'
+    }
+  }).click(function() {
+    $("#${tabContentId}").bind("editCollectionSuccess", editCollectionDone);
+    $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
+		//hideMainContent();
+    fetchContent("addCollectionFormForDonorGenerator.html",
+      					 {donorId: "${donor.id}"},
+      					 $("#${childContentId}")
+    						);
+  });
+
+  function editCollectionDone() {
+    refetchContent("${refreshUrl}", $("#${tabContentId}"));
+  }
+
 });
 </script>
 
 <div id="${tabContentId}">
 
-	<div class="successBox ui-state-highlight">
-		<img src="images/check_icon.png" style="height: 30px;" />
-		<span class="successText">
-			Donor record added Successfully.
-			<br />
-			You can view the details below and print donor card. Click "Add another donor" to add another donor.
-		</span>
+	<div id="${mainContentId}">
+		<div class="successBox ui-state-highlight">
+			<img src="images/check_icon.png"
+					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
+			<span class="successText">
+				Donor record added Successfully.
+				<br />
+				You can view the details below and print donor card. Click "Add another donor" to add another donor.
+			</span>
+		</div>
+		<div class="donorSummaryContainer">
+			<div class="summaryPageButtonSection" style="text-align: right;">
+				<button type="button" class="addAnotherDonorButton">
+					Add another donor
+				</button>
+				<button type="button" class="createCollectionButton">
+					Add collection for this donor
+				</button>
+				<button type="button" class="printButton">
+					Print
+				</button>
+			</div>
+	
+			<jsp:include page="donorDetails.jsp" />
+		</div>
 	</div>
 
-	<div class="donorSummaryContainer">
+	<div id="${childContentId}">
 	</div>
+
 </div>

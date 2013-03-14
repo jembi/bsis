@@ -6,7 +6,7 @@
 
 <div class="formInTabPane printableArea">
 	<br />
-	<div id="${donorSummaryBarcodeId}"></div>
+	<div class="donorBarcode"></div>
 	<c:if test="${donorFields.donorNumber.hidden != true }">
 		<div>
 			<label>${donorFields.donorNumber.displayName}</label>
