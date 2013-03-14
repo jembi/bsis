@@ -328,6 +328,14 @@ public class Donor implements ModificationTracker {
     contactInformation.setPhoneNumber(phoneNumber);
   }
 
+  public String getOtherPhoneNumber() {
+    return contactInformation.getOtherPhoneNumber();
+  }
+
+  public void setOtherPhoneNumber(String otherPhoneNumber) {
+    contactInformation.setOtherPhoneNumber(otherPhoneNumber);
+  }
+
   public Date getLastUpdated() {
     return modificationTracker.getLastUpdated();
   }

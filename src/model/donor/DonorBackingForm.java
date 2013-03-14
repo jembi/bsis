@@ -16,7 +16,6 @@ import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.Years;
 
 import repository.DonorRepository;
 import viewmodel.DonorViewModel;
@@ -315,5 +314,21 @@ public class DonorBackingForm {
 
   public Boolean isAgeFormatCorrect() {
     return ageFormatCorrect;
+  }
+
+  public String getNationalID() {
+    return donor.getNationalID();
+  }
+
+  public void setNationalID(String nationalID) {
+    donor.setNationalID(nationalID);
+  }
+
+  public String getOtherPhoneNumber() {
+    return donor.getOtherPhoneNumber();
+  }
+
+  public void setOtherPhoneNumber(String otherPhoneNumber) {
+    donor.setOtherPhoneNumber(otherPhoneNumber);
   }
 }
