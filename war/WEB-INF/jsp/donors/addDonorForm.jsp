@@ -121,7 +121,7 @@
 				<c:if test="${donorFields.donorNumber.hidden != true }">
 					<div>
 						<form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
-						<form:input path="donorNumber" value="${donorFields.donorNumber.defaultValue}" />
+						<form:input path="donorNumber" value="${firstTimeRender ? donorFields.donorNumber.defaultValue : ''}" />
 						<form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
 					</div>
 				</c:if>
@@ -129,14 +129,14 @@
 			<c:if test="${donorFields.firstName.hidden != true }">
 				<div>
 					<form:label path="firstName">${donorFields.firstName.displayName}</form:label>
-					<form:input path="firstName" value="${donorFields.firstName.defaultValue}" />
+					<form:input path="firstName" value="${firstTimeRender ? donorFields.firstName.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.firstName" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.middleName.hidden != true }">
 				<div>
 					<form:label path="middleName">${donorFields.middleName.displayName}</form:label>
-					<form:input path="middleName" value="${donorFields.middleName.defaultValue}" />
+					<form:input path="middleName" value="${firstTimeRender ? donorFields.middleName.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.middleName"
 						delimiter=", "></form:errors>
 				</div>
@@ -144,7 +144,7 @@
 			<c:if test="${donorFields.lastName.hidden != true }">
 				<div>
 					<form:label path="lastName">${donorFields.lastName.displayName}</form:label>
-					<form:input path="lastName" value="${donorFields.lastName.defaultValue}" />
+					<form:input path="lastName" value="${firstTimeRender ? donorFields.lastName.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.lastName" delimiter=", "></form:errors>
 				</div>
 			</c:if>
@@ -152,7 +152,7 @@
 				<div>
 					<form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
 					<form:input path="birthDate" class="birthDate"
-											value="${donorFields.birthDate.defaultValue}" />
+											value="${firstTimeRender ? donorFields.birthDate.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
 				</div>
 			</c:if>
@@ -160,8 +160,8 @@
 				<div>
 					<form:label path="age">${donorFields.age.displayName}</form:label>
 					<form:input path="age"
-											value="${donorFields.age.defaultValue}" />
-					<form:errors class="formError" path="donor.birthDateInferred" delimiter=", "></form:errors>
+											value="${firstTimeRender ? donorFields.age.defaultValue : ''}" /> years
+					<form:errors class="formError" path="age" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.gender.hidden != true }">
@@ -186,42 +186,42 @@
 			<c:if test="${donorFields.city.hidden != true }">
 				<div>
 					<form:label path="city">${donorFields.city.displayName}</form:label>
-					<form:input path="city" value="${donorFields.city.defaultValue}" />
+					<form:input path="city" value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.province.hidden != true }">
 				<div>
 					<form:label path="province">${donorFields.province.displayName}</form:label>
-					<form:input path="province" value="${donorFields.province.defaultValue}" />
+					<form:input path="province" value="${firstTimeRender ? donorFields.province.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.province" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.district.hidden != true }">
 				<div>
 					<form:label path="district">${donorFields.district.displayName}</form:label>
-					<form:input path="district" value="${donorFields.district.defaultValue}" />
+					<form:input path="district" value="${firstTimeRender ? donorFields.district.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.district" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.state.hidden != true }">
 				<div>
 					<form:label path="state">${donorFields.state.displayName}</form:label>
-					<form:input path="state" value="${donorFields.state.defaultValue}" />
+					<form:input path="state" value="${firstTimeRender ? donorFields.state.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.country.hidden != true }">
 				<div>
 					<form:label path="country">${donorFields.country.displayName}</form:label>
-					<form:input path="country" value="${donorFields.country.defaultValue}" />
+					<form:input path="country" value="${firstTimeRender ? donorFields.country.defaultValue : ''}" />
 					<form:errors class="formError" path="donor.country" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.zipcode.hidden != true }">
 				<div>
 					<form:label path="zipcode">${donorFields.zipcode.displayName}</form:label>
-					<form:input path="zipcode" value="${donorFields.zipcode.defaultValue}" />
+					<form:input path="zipcode" value="${firstTimeRender ? donorFields.zipcode.defaultValue : ''}" />
 					<ul>
 						<form:errors class="formError" path="donor.zipcode" delimiter=", "></form:errors>
 					</ul>

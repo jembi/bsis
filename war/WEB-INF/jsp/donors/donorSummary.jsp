@@ -20,7 +20,7 @@
       function() {
 
         $("#${donorSummaryBarcodeId}").barcode(
-					  "${model.donor.donorNumber}",
+					  "${donor.donorNumber}",
 						"code128",
 						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 
@@ -40,7 +40,7 @@
             $("#${tabContentId}").bind("editDonorCancel", editDonorDone);
 
   	        fetchContent("editDonorFormGenerator.html",
-              					 {donorId: "${model.donor.id}"},
+              					 {donorId: "${donor.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -62,7 +62,7 @@
           $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
 					//hideMainContent();
 	        fetchContent("addCollectionFormForDonorGenerator.html",
-            					 {donorId: "${model.donor.id}"},
+            					 {donorId: "${donor.id}"},
             					 $("#${childContentId}")
 	        						);
         });
@@ -75,7 +75,7 @@
           //hideMainContent();
           $("#${tabContentId}").bind("donorHistoryDone", editDonorDone);
 	        fetchContent("viewDonorHistory.html",
-            					 {donorId: "${model.donor.id}"},
+            					 {donorId: "${donor.id}"},
             					 $("#${childContentId}")
 	        						);
         });
@@ -99,7 +99,7 @@
                 title : "Confirm Delete",
                 buttons : {
                   "Delete" : function() {
-                    deleteDonor("${model.donor.id}", notifyParentDone);
+                    deleteDonor("${donor.id}", notifyParentDone);
                     $(this).dialog("close");
                   },
                   "Cancel" : function() {
@@ -111,12 +111,12 @@
 
         function editDonorDone() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
         function editCollectionDone() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
 				function emptyChildContent() {
@@ -158,111 +158,111 @@
 
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['donors.finddonor.donorsummary']}
+				${tips['donors.finddonor.donorsummary']}
 			</p>
 		</div>
 
 		<div class="formInTabPane printableArea">
 			<br />
 			<div id="${donorSummaryBarcodeId}"></div>
-			<c:if test="${model.donorFields.donorNumber.hidden != true }">
+			<c:if test="${donorFields.donorNumber.hidden != true }">
 				<div>
-					<label>${model.donorFields.donorNumber.displayName}</label>
-					<label>${model.donor.donorNumber}</label>
+					<label>${donorFields.donorNumber.displayName}</label>
+					<label>${donor.donorNumber}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.firstName.hidden != true }">
+			<c:if test="${donorFields.firstName.hidden != true }">
 				<div>
-					<label>${model.donorFields.firstName.displayName}</label>
-					<label>${model.donor.firstName}</label>
+					<label>${donorFields.firstName.displayName}</label>
+					<label>${donor.firstName}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.middleName.hidden != true }">
+			<c:if test="${donorFields.middleName.hidden != true }">
 				<div>
-					<label>${model.donorFields.middleName.displayName}</label>
-					<label>${model.donor.middleName}</label>
+					<label>${donorFields.middleName.displayName}</label>
+					<label>${donor.middleName}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.lastName.hidden != true }">
+			<c:if test="${donorFields.lastName.hidden != true }">
 				<div>
-					<label>${model.donorFields.lastName.displayName}</label>
-					<label>${model.donor.lastName}</label>
+					<label>${donorFields.lastName.displayName}</label>
+					<label>${donor.lastName}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.birthDate.hidden != true }">
+			<c:if test="${donorFields.birthDate.hidden != true }">
 				<div>
-					<label>${model.donorFields.birthDate.displayName}</label>
-					<label>${model.donor.birthDate}</label>
+					<label>${donorFields.birthDate.displayName}</label>
+					<label>${donor.birthDate}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.gender.hidden != true }">
+			<c:if test="${donorFields.gender.hidden != true }">
 				<div>
-					<label>${model.donorFields.gender.displayName}</label>
-					<label>${model.donor.gender}</label>
+					<label>${donorFields.gender.displayName}</label>
+					<label>${donor.gender}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.bloodGroup.hidden != true }">
+			<c:if test="${donorFields.bloodGroup.hidden != true }">
 				<div>
-					<label>${model.donorFields.bloodGroup.displayName}</label>
-					<label>${model.donor.bloodGroup}</label>
+					<label>${donorFields.bloodGroup.displayName}</label>
+					<label>${donor.bloodGroup}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.address.hidden != true }">
+			<c:if test="${donorFields.address.hidden != true }">
 				<div>
-					<label>${model.donorFields.address.displayName}</label>
-					<label>${model.donor.address}</label>
+					<label>${donorFields.address.displayName}</label>
+					<label>${donor.address}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.city.hidden != true }">
+			<c:if test="${donorFields.city.hidden != true }">
 				<div>
-					<label>${model.donorFields.city.displayName}</label>
-					<label>${model.donor.city}</label>
+					<label>${donorFields.city.displayName}</label>
+					<label>${donor.city}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.province.hidden != true }">
+			<c:if test="${donorFields.province.hidden != true }">
 				<div>
-					<label>${model.donorFields.province.displayName}</label>
-					<label>${model.donor.province}</label>
+					<label>${donorFields.province.displayName}</label>
+					<label>${donor.province}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.district.hidden != true }">
+			<c:if test="${donorFields.district.hidden != true }">
 				<div>
-					<label>${model.donorFields.district.displayName}</label>
-					<label>${model.donor.district}</label>
+					<label>${donorFields.district.displayName}</label>
+					<label>${donor.district}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.state.hidden != true }">
+			<c:if test="${donorFields.state.hidden != true }">
 				<div>
-					<label>${model.donorFields.state.displayName}</label>
-					<label>${model.donor.state}</label>
+					<label>${donorFields.state.displayName}</label>
+					<label>${donor.state}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.country.hidden != true }">
+			<c:if test="${donorFields.country.hidden != true }">
 				<div>
-					<label>${model.donorFields.country.displayName}</label>
-					<label>${model.donor.country}</label>
+					<label>${donorFields.country.displayName}</label>
+					<label>${donor.country}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.zipcode.hidden != true }">
+			<c:if test="${donorFields.zipcode.hidden != true }">
 				<div>
-					<label>${model.donorFields.zipcode.displayName}</label>
-					<label>${model.donor.zipcode}</label>
+					<label>${donorFields.zipcode.displayName}</label>
+					<label>${donor.zipcode}</label>
 				</div>
 			</c:if>
-			<c:if test="${model.donorFields.notes.hidden != true }">
+			<c:if test="${donorFields.notes.hidden != true }">
 				<div>
-					<label>${model.donorFields.notes.displayName}</label>
-					<label>${model.donor.notes}</label>
+					<label>${donorFields.notes.displayName}</label>
+					<label>${donor.notes}</label>
 				</div>
 			</c:if>
 			<br />
 			<div>
-				<label>${model.donorFields.lastUpdatedTime.displayName}</label>
-				<label style="width: auto;">${model.donor.lastUpdated}</label>
+				<label>${donorFields.lastUpdatedTime.displayName}</label>
+				<label style="width: auto;">${donor.lastUpdated}</label>
 			</div>
 			<div>
-				<label>${model.donorFields.lastUpdatedBy.displayName}</label>
-				<label style="width: auto;">${model.donor.lastUpdatedBy}</label>
+				<label>${donorFields.lastUpdatedBy.displayName}</label>
+				<label style="width: auto;">${donor.lastUpdatedBy}</label>
 			</div>
 			<hr />
 		</div>

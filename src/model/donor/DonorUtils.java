@@ -10,7 +10,8 @@ public class DonorUtils {
   public static Integer computeDonorAge(Donor donor) {
     Date birthDate = donor.getBirthDate();
     Date birthDateInferred = donor.getBirthDateInferred();
-    if (birthDate != null && birthDateInferred == null)
+
+    if (birthDate == null && birthDateInferred == null)
       return null;
 
     Date birthDateToUse = birthDate;

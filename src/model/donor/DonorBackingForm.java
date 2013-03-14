@@ -6,9 +6,6 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
 import model.user.User;
@@ -16,6 +13,11 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 import model.util.Gender;
+
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Years;
+
 import repository.DonorRepository;
 import viewmodel.DonorViewModel;
 
@@ -26,10 +28,14 @@ public class DonorBackingForm {
 
   // store a local copy of birthdate string as validation may have failed
   private String birthDate;
-  private String age;
-  
+
+  private Boolean ageFormatCorrect;
+
+  private String ageSpecified;
+
   public DonorBackingForm() {
     donor = new Donor();
+    ageFormatCorrect = null;
   }
 
   public DonorBackingForm(Donor donor) {
@@ -283,12 +289,12 @@ public class DonorBackingForm {
   }
 
   public String getAge() {
-    return age;
+    return ageSpecified;
   }
 
   public void setAge(String ageStr) {
-    if (age == null || StringUtils.isBlank(age)) {
-      age = null;
+    ageSpecified = ageStr;
+    if (ageStr == null || StringUtils.isBlank(ageStr)) {
       return;
     }
     try {
@@ -300,8 +306,14 @@ public class DonorBackingForm {
       c.set(Calendar.DATE, 1);
       c.add(Calendar.YEAR, -age);
       donor.setBirthDateInferred(c.getTime());
+      ageFormatCorrect = true;
     } catch (NumberFormatException ex) {
-      this.age = "INVALID";
+      ageFormatCorrect = false;
+      donor.setBirthDate(null);
     }
+  }
+
+  public Boolean isAgeFormatCorrect() {
+    return ageFormatCorrect;
   }
 }

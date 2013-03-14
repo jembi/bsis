@@ -80,28 +80,21 @@ public class DonorController {
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
     ModelAndView mv = new ModelAndView("donors/donorSummary");
-    Map<String, Object> m = model.asMap();
 
-    m.put("requestUrl", getUrl(request));
-
+    mv.addObject("requestUrl", getUrl(request));
     Donor donor = null;
     if (donorId != null) {
       donor = donorRepository.findDonorById(donorId);
-      if (donor != null) {
-        m.put("existingDonor", true);
-      }
-      else {
-        m.put("existingDonor", false);
-      }
     }
-
     DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
-    utilController.addTipsToModel(model.asMap(), "donors.finddonor.donorsummary");
-    m.put("donor", donorViewModel);
-    m.put("refreshUrl", getUrl(request));
+    mv.addObject("donor", donorViewModel);
+    mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
-    mv.addObject("model", m);
+    mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
+
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
+    mv.addObject("tips", tips);
     return mv;
   }
 
@@ -172,6 +165,7 @@ public class DonorController {
     Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
+    Donor savedDonor = null;
     if (result.hasErrors()) {
       mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -180,7 +174,7 @@ public class DonorController {
       try {
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);
-        donorRepository.addDonor(donor);
+        savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
         form = new DonorBackingForm();
@@ -194,6 +188,7 @@ public class DonorController {
     }
 
     if (success) {
+      mv.addObject("donorId", savedDonor.getId());
       mv.setViewName("donors/addDonorSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating donor. Please fix the errors noted below.");

@@ -134,11 +134,12 @@ public class DonorRepository {
     return query.getResultList();
   }
 
-  public void addDonor(Donor donor) {
+  public Donor addDonor(Donor donor) {
     donor.setBloodAbo(BloodAbo.Unknown);
     donor.setBloodRhd(BloodRhd.Unknown);
     em.persist(donor);
     em.flush();
+    return donor;
   }
 
   public Donor updateDonor(Donor donor) {

@@ -679,3 +679,27 @@ tr > td
 	color: #C20000;
 	font-size: 16px; 
 }
+
+.successBox {
+	margin: 6px;
+	font-family: 'helvetica';
+	background: #edea81;
+	border-color: red;
+	border-style: dotted;
+	border-radius: 5px;
+	padding-left: 8px;
+	padding-right: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 80%;
+}
+
+.successText {
+	display: inline-block;
+	position: relative;
+	bottom: 8px;
+	left: 10px;
+	font-size: 16px; 
+}

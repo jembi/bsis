@@ -61,9 +61,11 @@ public class DonorBackingFormValidator implements Validator {
           CustomDateFormatter.getDateErrorMessage());
     }
 
-    String age = form.getAge();
-    if (age != null && age.equals("INVALID"))
-      errors.rejectValue("donor.age", "ageFormat.incorrect", "Age should be number of years.");
+    Boolean isAgeFormatCorrect = form.isAgeFormatCorrect();
+    if (isAgeFormatCorrect != null && !isAgeFormatCorrect) {
+      errors.rejectValue("age", "ageFormat.incorrect", "Age should be number of years.");
+      return;
+    }
 
 //    boolean birthDateSpecified = StringUtils.isNotBlank(birthDate);
 //    boolean ageSpecified = StringUtils.isNotBlank(age);
@@ -78,13 +80,14 @@ public class DonorBackingFormValidator implements Validator {
         Integer minAge = Integer.parseInt(config.get("minimumAge"));
         Integer maxAge = Integer.parseInt(config.get("maximumAge"));
         Integer donorAge = DonorUtils.computeDonorAge(form.getDonor());
+        System.out.println("donor age: " + donorAge);
         if (donorAge == null) {
-          errors.rejectValue("donor.birthDateInferred", "donorage.missing", "One of donor Date of Birth or Age must be specified");
+          errors.rejectValue("age", "donorage.missing", "One of donor Date of Birth or Age must be specified");
         }
         else {
-          if (donorAge < minAge && donorAge > maxAge) {
-            errors.rejectValue("donor.birthDateInferred", "donorage.outofrange",
-              "Donor age is " + donorAge + " years." +
+          if (donorAge < minAge || donorAge > maxAge) {
+            errors.rejectValue("age", "donorage.outofrange",
+              "Donor age is " + donorAge + " years. " +
               "Donor age must be between " + minAge + " and " + maxAge + " years.");
           }
         }
