@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.admin.FormField;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -114,7 +115,7 @@ public class UtilController {
         if (properties.containsKey(requiredField)) {
           Object fieldValue = properties.get(requiredField);
           if (fieldValue == null ||
-              (fieldValue instanceof String && ((String)fieldValue).isEmpty())
+              (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))
              )
             errors.rejectValue(formName + "." + requiredField, "requiredField.error", "This field is required");
         }
@@ -190,5 +191,9 @@ public class UtilController {
 
   public String getNextDonorNumber() {
     return sequenceNumberRepository.getNextDonorNumber();
+  }
+
+  public String getNextCollectionNumber() {
+    return sequenceNumberRepository.getNextCollectionNumber();
   }
 }

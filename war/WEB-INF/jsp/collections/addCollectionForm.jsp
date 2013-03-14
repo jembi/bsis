@@ -170,15 +170,17 @@
 
 	<form:form method="POST" commandName="addCollectionForm"
 		class="formInTabPane" id="${addCollectionFormId}">
-		<div class="barcodeContainer"></div>
 		<form:hidden path="id" />
-		<c:if test="${collectionFields.collectionNumber.hidden != true }">
-			<div>
-				<form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
-				<form:input path="collectionNumber" value="${firstTimeRender ? collectionFields.collectionNumber.defaultValue : ''}" />
-				<form:errors class="formError"
-					path="collectedSample.collectionNumber" delimiter=", "></form:errors>
-			</div>
+		<c:if test="${!collectionFields.collectionNumber.autoGenerate}">
+			<c:if test="${collectionFields.collectionNumber.hidden != true }">
+				<div class="barcodeContainer"></div>
+				<div>
+					<form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
+					<form:input path="collectionNumber" value="${firstTimeRender ? collectionFields.collectionNumber.defaultValue : ''}" />
+					<form:errors class="formError"
+						path="collectedSample.collectionNumber" delimiter=", "></form:errors>
+				</div>
+			</c:if>
 		</c:if>
 		<c:if test="${collectionFields.donor.hidden != true }">
 			<div>

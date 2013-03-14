@@ -52,18 +52,6 @@
 			<label>${collectedSample.collectionSite}</label>
 		</div>
 	</c:if>
-	<c:if test="${collectedSampleFields.sampleNumber.hidden != true }">
-		<div>
-			<label>${collectedSampleFields.sampleNumber.displayName}</label>
-			<label>${collectedSample.sampleNumber}</label>
-		</div>
-	</c:if>
-			<c:if test="${collectedSampleFields.shippingNumber.hidden != true }">
-		<div>
-			<label>${collectedSampleFields.shippingNumber.displayName}</label>
-			<label>${collectedSample.shippingNumber}</label>
-		</div>
-	</c:if>
 	<c:if test="${collectedSampleFields.notes.hidden != true }">
 		<div>
 			<label>${collectedSampleFields.notes.displayName}</label>

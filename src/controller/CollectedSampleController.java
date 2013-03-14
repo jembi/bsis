@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -192,7 +193,7 @@ public class CollectedSampleController {
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collection");
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     String collectionNumber = form.getCollectionNumber();
@@ -339,7 +340,7 @@ public class CollectedSampleController {
     mv.addObject("addCollectionForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collection");
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionFields", formFields);
     mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
@@ -356,7 +357,7 @@ public class CollectedSampleController {
     ModelAndView mv = new ModelAndView();
     boolean success = false;
 
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collection");
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     mv.addObject("collectionFields", formFields);
 
     // IMPORTANT: Validation code just checks if the ID exists.
@@ -387,9 +388,11 @@ public class CollectedSampleController {
       form.setDonor(null);
     }
 
-
     CollectedSample savedCollection = null;
     if (result.hasErrors()) {
+      for (ObjectError error : result.getAllErrors()) {
+        System.out.println(error.getObjectName() + " " + error.getDefaultMessage());
+      }
       mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
@@ -419,6 +422,7 @@ public class CollectedSampleController {
       mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
       mv.addObject("firstTimeRender", false);
       mv.addObject("addCollectionForm", form);
+      addEditSelectorOptions(mv.getModelMap());
       mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
       mv.setViewName("collections/addCollectionError");
     }

@@ -117,8 +117,8 @@
 			commandName="addDonorForm">
 			<form:hidden path="id" />
 			<c:if test="${!donorFields.donorNumber.autoGenerate}">
-				<div class="barcodeContainer"></div>
 				<c:if test="${donorFields.donorNumber.hidden != true }">
+					<div class="barcodeContainer"></div>
 					<div>
 						<form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
 						<form:input path="donorNumber" value="${firstTimeRender ? donorFields.donorNumber.defaultValue : ''}" />

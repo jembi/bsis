@@ -1,5 +1,5 @@
 function addNewCollection(form, resultDivId, successCallback) {
-  updateCollectionGeneric(form, resultDivId, "addCollectedSample.html", successCallback);
+  updateCollectionGeneric(form, resultDivId, "addCollection.html", successCallback);
 }
 
 function updateExistingCollection(form, resultDivId, successCallback) {
@@ -14,12 +14,10 @@ function updateCollectionGeneric(form, resultDivId, url, successCallback) {
     url: url,
     data: collectedSample,
     success: function(jsonResponse, data, data1, data2) {
-               showMessage("Collection Updated Successfully!");
                successCallback();
                $("#" + resultDivId).replaceWith(jsonResponse);
              },
     error: function(response) {
-             showErrorMessage("Something went wrong. Please fix the errors noted.");
              $("#" + resultDivId).replaceWith(response.responseText);
            }
   });

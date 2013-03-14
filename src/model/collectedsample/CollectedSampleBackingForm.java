@@ -16,6 +16,7 @@ import model.testresults.TestResult;
 import model.user.User;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class CollectedSampleBackingForm {
 
@@ -197,46 +198,66 @@ public class CollectedSampleBackingForm {
   }
 
   public void setCollectionCenter(String center) {
-    if (center == null) {
+    if (StringUtils.isBlank(center)) {
       collectedSample.setCollectionCenter(null);
     }
     else {
       Location l = new Location();
-      l.setId(Long.parseLong(center));
-      collectedSample.setCollectionCenter(l);
+      try {
+        l.setId(Long.parseLong(center));
+        collectedSample.setCollectionCenter(l);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        collectedSample.setCollectionCenter(null);
+      }
     }
   }
 
   public void setCollectionSite(String collectionSite) {
-    if (collectionSite == null) {
+    if (StringUtils.isBlank(collectionSite)) {
       collectedSample.setCollectionSite(null);
     }
     else {
       Location l = new Location();
-      l.setId(Long.parseLong(collectionSite));
-      collectedSample.setCollectionSite(l);
+      try {
+        l.setId(Long.parseLong(collectionSite));
+        collectedSample.setCollectionSite(l);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        collectedSample.setCollectionSite(null);
+      }
     }
   }
 
   public void setDonationType(String donationTypeId) {
-    if (donationTypeId == null || donationTypeId.isEmpty()) {
+    if (StringUtils.isBlank(donationTypeId)) {
       collectedSample.setDonationType(null);
     }
     else {
       DonationType dt = new DonationType();
-      dt.setId(Integer.parseInt(donationTypeId));
-      collectedSample.setDonationType(dt);
+      try {
+        dt.setId(Integer.parseInt(donationTypeId));
+        collectedSample.setDonationType(dt);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        collectedSample.setDonationType(null);
+      }
     }
   }
 
   public void setBloodBagType(String bloodBagTypeId) {
-    if (bloodBagTypeId == null || bloodBagTypeId.isEmpty()) {
+    if (StringUtils.isBlank(bloodBagTypeId)) {
       collectedSample.setBloodBagType(null);
     }
     else {
       BloodBagType bt = new BloodBagType();
-      bt.setId(Integer.parseInt(bloodBagTypeId));
-      collectedSample.setBloodBagType(bt);
+      try {
+        bt.setId(Integer.parseInt(bloodBagTypeId));
+        collectedSample.setBloodBagType(bt);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        collectedSample.setBloodBagType(null);
+      }
     }
   }
 
