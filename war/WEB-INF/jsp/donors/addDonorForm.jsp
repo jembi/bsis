@@ -104,12 +104,15 @@
 </script>
 
 <div id="${tabContentId}">
+
 	<div id="${mainContentId}">
+
 		<c:if test="${!empty success && !success}">
-			<div class="errorBox ui-state-highlight">
-				<jsp:include page="../common/errorIcon.jsp"/> Error adding donor. Please fix the errors noted below.
-			</div>
+				<jsp:include page="../common/errorBox.jsp">
+					<jsp:param name="errorMessage" value="${errorMessage}" />
+				</jsp:include>
 		</c:if>
+
 		<form:form id="${addDonorFormId}" method="POST" class="formInTabPane"
 			commandName="addDonorForm">
 			<form:hidden path="id" />

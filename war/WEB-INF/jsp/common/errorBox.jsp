@@ -4,5 +4,9 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<span class="ui-icon ui-icon-notice"
-	style="display: inline-block; color: red; font-size: 10px;"></span>
+<div class="errorBox ui-state-highlight">
+	<img src="images/error_icon.png" style="height: 30px;" />
+	<span class="errorText">
+		${param.errorMessage}
+	</span>
+</div>

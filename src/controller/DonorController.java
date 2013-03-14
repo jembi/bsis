@@ -3,7 +3,6 @@ package controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +196,7 @@ public class DonorController {
     if (success) {
       mv.setViewName("donors/addDonorSuccess");
     } else {
+      mv.addObject("errorMessage", "Error creating donor. Please fix the errors noted below.");
       mv.addObject("firstTimeRender", false);
       mv.addObject("addDonorForm", form);
       mv.addObject("refreshUrl", "addDonorFormGenerator.html");

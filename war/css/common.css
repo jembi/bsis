@@ -670,3 +670,12 @@ tr > td
 	margin-bottom: 10px;
 	width: 80%;
 }
+
+.errorText {
+	display:inline-block;
+	position: relative;
+	bottom: 8px;
+	left: 10px;
+	color: #C20000;
+	font-size: 16px; 
+}
