@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
+import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -300,10 +301,24 @@ public class CollectedSampleBackingForm {
     return collectedSample.getDonor().getDonorNumber();
   }
 
+  public String getCollectionBatchNumber() {
+    if (collectedSample == null || collectedSample.getCollectionBatch() == null ||
+        collectedSample.getCollectionBatch().getBatchNumber() == null
+       )
+      return "";
+    return collectedSample.getCollectionBatch().getBatchNumber();
+  }
+
   public void setDonorNumber(String donorNumber) {
     Donor donor = new Donor();
     donor.setDonorNumber(donorNumber);
     collectedSample.setDonor(donor);
+  }
+
+  public void setCollectionBatchNumber(String collectionBatchNumber) {
+    CollectionBatch collectionBatch = new CollectionBatch();
+    collectionBatch.setBatchNumber(collectionBatchNumber);
+    collectedSample.setCollectionBatch(collectionBatch);
   }
 
   public String getDonorIdHidden() {
@@ -330,5 +345,13 @@ public class CollectedSampleBackingForm {
         collectedSample.setDonor(null);
       }
     }
+  }
+
+  public CollectionBatch getCollectionBatch() {
+    return collectedSample.getCollectionBatch();
+  }
+
+  public void setCollectionBatch(CollectionBatch collectionBatch) {
+    collectedSample.setCollectionBatch(collectionBatch);
   }
 }

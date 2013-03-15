@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
 import model.collectionbatch.CollectionBatch;
+import model.collectionbatch.CollectionBatchExists;
 import model.donationtype.DonationType;
 import model.donationtype.DonationTypeExists;
 import model.donor.Donor;
@@ -129,11 +130,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToOne(optional=true)
   private User donationCreatedBy;
 
+  @CollectionBatchExists
   @ManyToOne(optional=true)
   private CollectionBatch collectionBatch;
-
-  @ManyToOne
-  private CollectionBatch batch;
 
   @Lob
   private String notes;
@@ -283,12 +282,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public String getDonorNumber() {
-    if (donor != null)
-      return donor.getDonorNumber();
-    return "";
-  }
-
   public List<CollectionsWorksheet> getWorksheets() {
     return worksheets;
   }
@@ -379,11 +372,15 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donationType = donationType;
   }
 
-  public CollectionBatch getBatch() {
-    return batch;
+  public String getDonorNumber() {
+    if (donor != null)
+      return donor.getDonorNumber();
+    return "";
   }
 
-  public void setBatch(CollectionBatch batch) {
-    this.batch = batch;
+  public String getCollectionBatchNumber() {
+    if (collectionBatch != null)
+      return collectionBatch.getBatchNumber();
+    return "";
   }
 }

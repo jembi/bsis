@@ -122,4 +122,10 @@ public class CollectedSampleViewModel {
       return "";
     return collectedSample.getTestedStatus().toString();
   }
+
+  public String getCollectionBatchNumber() {
+    if (collectedSample.getCollectionBatch() == null)
+      return "";
+    return collectedSample.getCollectionBatch().getBatchNumber();
+  }
 }

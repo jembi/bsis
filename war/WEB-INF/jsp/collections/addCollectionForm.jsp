@@ -169,9 +169,9 @@
 <div id="${tabContentId}">
 
 	<c:if test="${!empty success && !success}">
-			<jsp:include page="../common/errorBox.jsp">
-				<jsp:param name="errorMessage" value="${errorMessage}" />
-			</jsp:include>
+		<jsp:include page="../common/errorBox.jsp">
+			<jsp:param name="errorMessage" value="${errorMessage}" />
+		</jsp:include>
 	</c:if>
 
 	<form:form method="POST" commandName="addCollectionForm"
@@ -188,6 +188,16 @@
 				</div>
 			</c:if>
 		</c:if>
+		<c:if test="${collectionFields.batchNumber.hidden != true }">
+			<div>
+				<form:label path="collectionBatchNumber">${collectionFields.collectionBatchNumber.displayName}</form:label>
+				<form:input path="collectionBatchNumber" value="${firstTimeRender ? collectionFields.collectionBatchNumber.defaultValue : ''}" />
+				<form:errors class="formError"
+					path="collectedSample.collectionBatch" delimiter=", "></form:errors>
+				<form:errors class="formError"
+					path="collectedSample.collectionBatchNumber" delimiter=", "></form:errors>
+			</div>
+			</c:if>
 		<c:if test="${collectionFields.donor.hidden != true }">
 			<div>
 				<form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>

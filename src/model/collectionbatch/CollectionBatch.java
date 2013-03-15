@@ -46,7 +46,7 @@ public class CollectionBatch implements ModificationTracker {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="batch")
+  @OneToMany(mappedBy="collectionBatch")
   private List<CollectedSample> collectionsInBatch;
 
   private boolean isDeleted;

@@ -113,7 +113,7 @@ insert into FormField
  '0', '0',
  '1', '0',
  '1', '1'),
-('CollectedSample', 'batchNumber', 'Batch number', '', 0,
+('CollectedSample', 'collectionBatchNumber', 'Batch number', '', 0,
  '0', '1',
  '0', '1',
  '0', '0'),

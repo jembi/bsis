@@ -19,6 +19,7 @@ import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
+import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.testresults.TestResult;
 
@@ -40,6 +41,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
+import repository.CollectionBatchRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
@@ -68,6 +70,9 @@ public class CollectedSampleController {
 
   @Autowired
   private DonorRepository donorRepository;
+
+  @Autowired
+  private CollectionBatchRepository collectionBatchRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -387,6 +392,19 @@ public class CollectedSampleController {
       }
     } else {
       form.setDonor(null);
+    }
+
+    String batchNumber = form.getCollectionBatchNumber();
+    if (batchNumber != null && !batchNumber.isEmpty()) {
+      try {
+        CollectionBatch collectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumber(batchNumber);
+        form.setCollectionBatch(collectionBatch);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+        form.setCollectionBatch(null);
+      }
+    } else {
+      form.setCollectionBatch(null);
     }
 
     CollectedSample savedCollection = null;
