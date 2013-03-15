@@ -30,6 +30,7 @@ import model.util.BloodRhd;
 import model.worksheet.CollectionsWorksheet;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,7 +114,7 @@ public class CollectedSampleRepository {
       String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) {
 
     String queryStr = "";
-    if (collectionNumber != null && !collectionNumber.trim().isEmpty()) {
+    if (StringUtils.isNotBlank(collectionNumber)) {
       queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
       		       "c.collectionNumber = :collectionNumber AND " +
                  "c.bloodBagType.id IN :bloodBagTypeIds AND " +
@@ -141,7 +142,7 @@ public class CollectedSampleRepository {
     query = em.createQuery(queryStr, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
 
-    if (collectionNumber != null && !collectionNumber.trim().isEmpty())
+    if (StringUtils.isNotBlank(collectionNumber))
       query.setParameter("collectionNumber", collectionNumber);
 
     if (!includeTestedCollections)

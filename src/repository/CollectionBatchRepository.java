@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 
 import model.collectionbatch.CollectionBatch;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +56,27 @@ public class CollectionBatchRepository {
 
   public List<CollectionBatch> findCollectionBatches(String batchNumber,
       List<Long> centerIds, List<Long> siteIds) {
-    // TODO Auto-generated method stub
-    return null;
+    String queryStr = "";
+    if (StringUtils.isNotBlank(batchNumber)) {
+      queryStr = "SELECT b from CollectionBatch b " +
+                   "WHERE b.batchNumber=:batchNumber AND " +
+                   "b.collectionCenter.id IN (:centerIds) AND " +
+                   "b.collectionSite.id IN (:siteIds) AND " +
+                   "b.isDeleted=:isDeleted";
+    }
+    else {
+      queryStr = "SELECT b from CollectionBatch b " +
+                 "WHERE b.collectionCenter.id IN (:centerIds) AND " +
+                 "b.collectionSite.id IN (:siteIds) AND " +
+                 "b.isDeleted=:isDeleted";
+    }
+    
+    TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
+    if (StringUtils.isNotBlank(batchNumber))
+      query.setParameter("batchNumber", batchNumber);
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
   }
 }

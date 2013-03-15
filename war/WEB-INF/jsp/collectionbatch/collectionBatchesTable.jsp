@@ -119,10 +119,10 @@ $(document).ready(
 									<td>${collectionBatch.batchNumber}</td>
 								</c:if>
 								<c:if test="${collectionBatchFields.collectionCenter.hidden != true}">
-									<td>${product.collectionCenter}</td>
+									<td>${collectionBatch.collectionCenter}</td>
 								</c:if>
 								<c:if test="${collectionBatchFields.collectionSite.hidden != true}">
-									<td>${product.collectionSite}</td>
+									<td>${collectionBatch.collectionSite}</td>
 								</c:if>
 							</tr>
 						</c:forEach>
