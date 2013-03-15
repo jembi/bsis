@@ -47,6 +47,16 @@ public class FormField {
   @Lob
   private String defaultValue;
 
+  /**
+   * Fields can be hidden by setting this parameter to false.
+   * We could also have a shown field instead of hidden field which would store
+   * true for any field that is visible on the form. But that would not have made any difference.
+   * Right now we check if the field value is not true. In this case I prefer hidden field instead
+   * of shown field because by some programming mistake if we ended up storing NULL in the hidden
+   * field then the field would still show up in the UI (a somewhat tolerable mistake from a user's
+   * point of view) rather than not show up at all (very annoying for users).
+   * Of course in the first place such an error should be allowed in the code.   
+   */
   private Boolean hidden;
 
   private Boolean isHidable;

@@ -132,12 +132,6 @@
         function getProductTypeSelector() {
           return $("#${tabContentId}").find('select[name="productType"]').multiselect();
         }
-        
-        $("#${editProductFormBarcodeId}").barcode(
-					  "${editProductForm.product.productNumber}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
-
       });
 </script>
 
@@ -149,14 +143,6 @@
 			<div id="${editProductFormBarcodeId}"></div>
 		</c:if>
 		<form:hidden path="id" />
-		<c:if test="${model.productFields.productNumber.hidden != true }">
-			<div>
-				<form:label path="productNumber">${model.productFields.productNumber.displayName}</form:label>
-				<form:input path="productNumber" value="${model.existingProduct ? '' : model.productFields.productNumber.defaultValue}" />
-				<form:errors class="formError"
-					path="product.productNumber" delimiter=", "></form:errors>
-			</div>
-		</c:if>
 		<c:if test="${model.productFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${model.productFields.collectionNumber.displayName}</form:label>

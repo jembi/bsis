@@ -18,6 +18,8 @@
 <c:set var="addCollectionFormSitesId">addCollectionFormSites-${unique_page_id}</c:set>
 <c:set var="addCollectionFormBloodBagTypeId">addCollectionFormBloodBagType-${unique_page_id}</c:set>
 <c:set var="addCollectionFormDonationTypeId">addCollectionFormDonationType-${unique_page_id}</c:set>
+<c:set var="addCollectionFormUseBatchCheckboxId">addCollectionFormUseBatchCheckbox-${unique_page_id}</c:set>
+
 <c:set var="updateCollectedSampleButtonId">updateCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="cancelCollectedSampleButtonId">cancelCollectedSampleButton-${unique_page_id}</c:set>
 <c:set var="deleteCollectedSampleButtonId">deleteCollectedSampleButton-${unique_page_id}</c:set>
@@ -163,6 +165,21 @@
           return $("#${tabContentId}").find('select[name="collectionSite"]').multiselect();
         }
 
+        function toggleCheckboxDisabledState() {
+          var isChecked = $("#${addCollectionFormUseBatchCheckboxId}").is(":checked");
+          if (isChecked) {
+            $("#${addCollectionFormCentersId}").closest("div").hide();
+            $("#${addCollectionFormSitesId}").closest("div").hide();
+          } else {
+            $("#${addCollectionFormCentersId}").closest("div").show();
+            $("#${addCollectionFormSitesId}").closest("div").show();
+          }
+        }
+
+       	toggleCheckboxDisabledState();
+
+       	$("#${addCollectionFormUseBatchCheckboxId}").change(toggleCheckboxDisabledState);
+
 		});
 </script>
 
@@ -188,7 +205,7 @@
 				</div>
 			</c:if>
 		</c:if>
-		<c:if test="${collectionFields.batchNumber.hidden != true }">
+		<c:if test="${collectionFields.collectionBatchNumber.hidden != true }">
 			<div>
 				<form:label path="collectionBatchNumber">${collectionFields.collectionBatchNumber.displayName}</form:label>
 				<form:input path="collectionBatchNumber" value="${firstTimeRender ? collectionFields.collectionBatchNumber.defaultValue : ''}" />
@@ -197,7 +214,7 @@
 				<form:errors class="formError"
 					path="collectedSample.collectionBatchNumber" delimiter=", "></form:errors>
 			</div>
-			</c:if>
+		</c:if>
 		<c:if test="${collectionFields.donor.hidden != true }">
 			<div>
 				<form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
@@ -232,18 +249,6 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${collectionFields.collectionCenter.hidden != true }">
-			<div>
-				<form:label path="collectionCenter">${collectionFields.collectionCenter.displayName}</form:label>
-				<form:select path="collectionCenter" id="${addCollectionFormCentersId}" class="addCollectionFormCenters">
-					<form:option value="" selected="selected">&nbsp;</form:option>
-					<c:forEach var="center" items="${centers}">
-						<form:option value="${center.id}">${center.name}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
-			</div>
-		</c:if>
 		<c:if test="${collectionFields.bloodBagType.hidden != true }">
 			<div>
 				<form:label path="bloodBagType">${collectionFields.bloodBagType.displayName}</form:label>
@@ -256,6 +261,51 @@
 				</form:select>
 				<form:errors class="formError" path="collectedSample.bloodBagType"
 					delimiter=", "></form:errors>
+			</div>
+		</c:if>
+
+		<c:if test="${collectionFields.useParametersFromBatch.hidden != true }">
+
+			<div>
+
+				<c:if test="${firstTimeRender}">
+					<c:if test="${collectionFields.useParametersFromBatch.defaultValue == 'true'}">
+						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
+					</c:if>
+					<c:if test="${collectionFields.useParametersFromBatch.defaultValue != 'true'}">
+						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
+					</c:if>
+				</c:if>
+
+				<c:if test="${!firstTimeRender}">
+					<c:if test="${addCollectionForm.useParametersFromBatch == true}">
+						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
+					</c:if>
+					<c:if test="${addCollectionForm.useParametersFromBatch != true}">
+						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
+					</c:if>
+				</c:if>
+
+				<form:label path="useParametersFromBatch" for="${addCollectionFormUseBatchCheckboxId}" style="width: auto;">
+					${collectionFields.useParametersFromBatch.displayName}
+				</form:label>
+
+				<form:errors class="formError"
+					path="useParametersFromBatch" delimiter=", "></form:errors>
+			</div>
+
+		</c:if>
+
+		<c:if test="${collectionFields.collectionCenter.hidden != true }">
+			<div>
+				<form:label path="collectionCenter">${collectionFields.collectionCenter.displayName}</form:label>
+				<form:select path="collectionCenter" id="${addCollectionFormCentersId}" class="addCollectionFormCenters">
+					<form:option value="" selected="selected">&nbsp;</form:option>
+					<c:forEach var="center" items="${centers}">
+						<form:option value="${center.id}">${center.name}</form:option>
+					</c:forEach>
+				</form:select>
+				<form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
 			</div>
 		</c:if>
 		<c:if test="${collectionFields.collectionSite.hidden != true }">

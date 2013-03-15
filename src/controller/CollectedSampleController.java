@@ -19,7 +19,6 @@ import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
-import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.testresults.TestResult;
 
@@ -41,7 +40,6 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
-import repository.CollectionBatchRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
@@ -70,9 +68,6 @@ public class CollectedSampleController {
 
   @Autowired
   private DonorRepository donorRepository;
-
-  @Autowired
-  private CollectionBatchRepository collectionBatchRepository;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -366,52 +361,8 @@ public class CollectedSampleController {
     Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     mv.addObject("collectionFields", formFields);
 
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
-    String donorId = form.getDonorIdHidden();
-    String donorNumber = form.getDonorNumber();
-    if (donorId != null && !donorId.isEmpty()) {
-      try {
-        Donor donor = donorRepository.findDonorById(donorId);
-        form.setDonor(donor);
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-        form.setDonor(null);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        form.setDonor(null);
-      }
-    }
-    else if (donorNumber != null && !donorNumber.isEmpty()) {
-      try {
-        Donor donor = donorRepository.findDonorByDonorNumber(donorNumber);
-        form.setDonor(donor);
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-        form.setDonor(null);
-      }
-    } else {
-      form.setDonor(null);
-    }
-
-    String batchNumber = form.getCollectionBatchNumber();
-    if (batchNumber != null && !batchNumber.isEmpty()) {
-      try {
-        CollectionBatch collectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumber(batchNumber);
-        form.setCollectionBatch(collectionBatch);
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-        form.setCollectionBatch(null);
-      }
-    } else {
-      form.setCollectionBatch(null);
-    }
-
     CollectedSample savedCollection = null;
     if (result.hasErrors()) {
-      for (ObjectError error : result.getAllErrors()) {
-        System.out.println(error.getObjectName() + " " + error.getDefaultMessage());
-      }
       mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;

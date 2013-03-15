@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.persistence.NoResultException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
+import model.collectionbatch.CollectionBatch;
+import model.donor.Donor;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import repository.CollectionBatchRepository;
+import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.SequenceNumberRepository;
@@ -33,6 +38,12 @@ public class UtilController {
 
   @Autowired
   private FormFieldRepository formFieldRepository;
+
+  @Autowired
+  private DonorRepository donorRepository;
+
+  @Autowired
+  private CollectionBatchRepository collectionBatchRepository;
 
   @Autowired
   private TipsRepository tipsRepository;
@@ -195,5 +206,52 @@ public class UtilController {
 
   public String getNextCollectionNumber() {
     return sequenceNumberRepository.getNextCollectionNumber();
+  }
+
+  public Donor findDonorInForm(Map<String, Object> bean) {
+    // IMPORTANT: Validation code just checks if the ID exists.
+    // We still need to store the collected sample as part of the product.
+    String donorId = null;
+    if (bean.containsKey("donorIdHidden"))
+      donorId = (String) bean.get("donorIdHidden");
+
+    String donorNumber = null;
+    if (bean.containsKey("donorNumber"))
+      donorNumber = (String) bean.get("donorNumber");
+
+    Donor donor = null;
+    if (donorId != null && !donorId.isEmpty()) {
+      try {
+        donor = donorRepository.findDonorById(donorId);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+      }
+    }
+    else if (donorNumber != null && !donorNumber.isEmpty()) {
+      try {
+        donor = donorRepository.findDonorByDonorNumber(donorNumber);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return donor;
+  }
+
+  public CollectionBatch findCollectionBatchInForm(Map<String, Object> bean) {
+
+    CollectionBatch collectionBatch = null;
+    String batchNumber = null;
+    if (batchNumber == null)
+      batchNumber = (String) bean.get("collectionBatchNumber");
+    if (StringUtils.isNotBlank(batchNumber)) {
+      try {
+        collectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumber(batchNumber);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return collectionBatch;
   }
 }

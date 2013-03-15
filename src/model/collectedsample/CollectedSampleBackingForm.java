@@ -34,6 +34,8 @@ public class CollectedSampleBackingForm {
 
   private String collectedOn;
 
+  private Boolean useParametersFromBatch;
+
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
   }
@@ -353,5 +355,13 @@ public class CollectedSampleBackingForm {
 
   public void setCollectionBatch(CollectionBatch collectionBatch) {
     collectedSample.setCollectionBatch(collectionBatch);
+  }
+
+  public Boolean getUseParametersFromBatch() {
+    return useParametersFromBatch;
+  }
+
+  public void setUseParametersFromBatch(Boolean useParametersFromBatch) {
+    this.useParametersFromBatch = useParametersFromBatch;
   }
 }
