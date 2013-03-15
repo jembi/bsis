@@ -29,6 +29,8 @@ import model.util.Gender;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
@@ -126,6 +128,8 @@ public class Donor implements ModificationTracker {
    */
 	private Boolean isDeleted;
 
+	@NotAudited
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donor")
   private List<CollectedSample> collectedSamples;
 

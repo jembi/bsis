@@ -389,6 +389,7 @@ public class CollectedSampleRepository {
     collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
     em.persist(collectedSample);
     em.flush();
+    em.refresh(collectedSample);
     return collectedSample;
   }
 

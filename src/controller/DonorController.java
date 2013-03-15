@@ -133,7 +133,7 @@ public class DonorController {
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
   public void editDonorFormGenerator(HttpServletRequest request, Model model) {
 
-    Donor donor = donorRepository.findDonorById((long) 2);
+    Donor donor = donorRepository.findDonorById((long) 1);
     donor.setLastName("value:" + (int)(Math.random()*100));
     donorRepository.updateDonor(donor);
   }

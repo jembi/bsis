@@ -15,7 +15,6 @@
 
 <script>
 $(document).ready(function() {
-  showBarcode($("#${tabContentId}").find(".collectionBarcode"), "${collectedSample.collectionNumber}");
 
   $("#${tabContentId}").find(".printButton").button({
     icons : {
@@ -25,12 +24,12 @@ $(document).ready(function() {
     $("#${mainContentId}").find(".printableArea").printArea();
   });
 
-  $("#${tabContentId}").find(".addAnotherCollectionButton").button({
+  $("#${tabContentId}").find(".addAnotherCollectionBatchButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
-    refetchContent("${addAnotherCollectionUrl}", $("#${tabContentId}"));
+    refetchContent("${addAnotherCollectionBatchUrl}", $("#${tabContentId}"));
   });
 
   function editCollectionDone() {
@@ -47,22 +46,22 @@ $(document).ready(function() {
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
-				Collection record added Successfully.
+				Collection batch added successfully.
 				<br />
-				You can view the details below and print donor card. Click "Add another donor" to add another donor.
+				You can view the details below. Click "Add another collection batch" to add another collection batch.
 			</span>
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">
-				<button type="button" class="addAnotherCollectionButton">
-					Add another collection
+				<button type="button" class="addAnotherCollectionBatchButton">
+					Add another collection batch
 				</button>
 				<button type="button" class="printButton">
 					Print
 				</button>
 			</div>
 	
-			<jsp:include page="collectionDetail.jsp" />
+			<jsp:include page="collectionBatchDetail.jsp" />
 		</div>
 	</div>
 

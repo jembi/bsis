@@ -19,6 +19,12 @@
 		<li id="addCollectionsContent">
 			<a href="addCollectionFormGenerator.html">Add Collection</a>
 		</li>
+		<li id="findCollectionBatchContent">
+			<a href="findCollectionBatchFormGenerator.html">Find Collection Batch</a>
+		</li>
+		<li id="createCollectionBatch">
+			<a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
+		</li>
 		<li id="findCollectionsWorksheet">
 			<a href="findCollectionWorksheetFormGenerator.html">Generate worksheet</a>
 		</li>

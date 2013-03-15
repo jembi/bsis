@@ -43,3 +43,25 @@ function getLabelForDonor(donor) {
   return donor.firstName + " " + donor.lastName + ": "
          + donor.donorNumber;
 }
+
+function addNewCollectionBatch(form, resultDivId, successCallback) {
+  updateCollectionBatchGeneric(form, resultDivId, "addCollectionBatch.html", successCallback);  
+}
+
+function updateCollectionBatchGeneric(form, resultDivId, url, successCallback) {
+  var collectionBatch = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: collectionBatch,
+    success: function(jsonResponse, data, data1, data2) {
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
+  });
+}
+

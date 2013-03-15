@@ -242,7 +242,7 @@
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
-		<c:if test="${collectionFields.site.hidden != true }">
+		<c:if test="${collectionFields.collectionSite.hidden != true }">
 			<div>
 				<form:label path="collectionSite">${collectionFields.collectionSite.displayName}</form:label>
 				<form:select path="collectionSite" id="${addCollectionFormSitesId}"

@@ -357,6 +357,7 @@ public class CollectedSampleController {
     ModelAndView mv = new ModelAndView();
     boolean success = false;
 
+    addEditSelectorOptions(mv.getModelMap());
     Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
     mv.addObject("collectionFields", formFields);
 
@@ -415,14 +416,13 @@ public class CollectedSampleController {
 
     if (success) {
       mv.addObject("collectionId", savedCollection.getId());
-      mv.addObject("collection", getCollectionViewModel(savedCollection));
+      mv.addObject("collectedSample", getCollectionViewModel(savedCollection));
       mv.addObject("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
       mv.setViewName("collections/addCollectionSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
       mv.addObject("firstTimeRender", false);
       mv.addObject("addCollectionForm", form);
-      addEditSelectorOptions(mv.getModelMap());
       mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
       mv.setViewName("collections/addCollectionError");
     }
@@ -574,7 +574,7 @@ public class CollectedSampleController {
 
     mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
     return mv;
   }
 

@@ -95,9 +95,9 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        batch_id bigint,
+        batch_id TINYINT(4),
         bloodBagType_id TINYINT,
-        collectionBatch_id bigint,
+        collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
@@ -124,9 +124,9 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        batch_id bigint,
+        batch_id TINYINT(4),
         bloodBagType_id TINYINT,
-        collectionBatch_id bigint,
+        collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
@@ -151,18 +151,32 @@
     ) ENGINE=InnoDB;
 
     create table CollectionBatch (
-        id bigint not null auto_increment,
+        id TINYINT(4) not null auto_increment,
         batchNumber varchar(30),
+        isDeleted boolean not null,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
+        collectionCenter_id bigint,
+        collectionSite_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table CollectionBatch_AUD (
-        id bigint not null,
+        id TINYINT(4) not null,
         REV integer not null,
         REVTYPE tinyint,
         batchNumber varchar(30),
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
+        collectionCenter_id bigint,
+        collectionSite_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -973,6 +987,30 @@
         add constraint FKC0D7E0D6DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
+
+    alter table CollectionBatch 
+        add index FK227631CA49787C4 (createdBy_id), 
+        add constraint FK227631CA49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table CollectionBatch 
+        add index FK227631CAED1731E (collectionSite_id), 
+        add constraint FK227631CAED1731E 
+        foreign key (collectionSite_id) 
+        references Location (id);
+
+    alter table CollectionBatch 
+        add index FK227631CB29562D0 (collectionCenter_id), 
+        add constraint FK227631CB29562D0 
+        foreign key (collectionCenter_id) 
+        references Location (id);
+
+    alter table CollectionBatch 
+        add index FK227631CD0AFB367 (lastUpdatedBy_id), 
+        add constraint FK227631CD0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
 
     alter table CollectionBatch_AUD 
         add index FKB74A2EDDF74E053 (REV), 
