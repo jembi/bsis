@@ -149,9 +149,6 @@
 			</button>
 		</div>
 
-		<br />
-		<br />
-
 		<div class="tipsBox ui-state-highlight">
 			<p>
 				${tips['donors.finddonor.donorsummary']}

@@ -168,6 +168,12 @@
 
 <div id="${tabContentId}">
 
+	<c:if test="${!empty success && !success}">
+			<jsp:include page="../common/errorBox.jsp">
+				<jsp:param name="errorMessage" value="${errorMessage}" />
+			</jsp:include>
+	</c:if>
+
 	<form:form method="POST" commandName="addCollectionForm"
 		class="formInTabPane" id="${addCollectionFormId}">
 		<form:hidden path="id" />

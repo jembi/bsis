@@ -27,7 +27,6 @@ public class CollectionBatchRepository {
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     CollectionBatch b = query.setParameter("batchId", batchId).getSingleResult();
-    System.out.println(b.getCollectionCenter());
     return b;
   }
 

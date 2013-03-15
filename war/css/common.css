@@ -530,6 +530,10 @@ tr > td
 }
 
 .summaryPageButtonSection {
+	right: 3px;
+	top: 3px;
+	cursor: pointer;
+	z-index: 100;
 }
 
 .hidableDiv {

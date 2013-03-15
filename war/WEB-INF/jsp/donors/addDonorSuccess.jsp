@@ -25,6 +25,14 @@ $(document).ready(function() {
     $("#${mainContentId}").find(".printableArea").printArea();
   });
 
+  $("#${tabContentId}").find(".doneButton").button({
+    icons : {
+      primary : 'ui-icon-check'
+    }
+  }).click(function() {
+    refetchContent("${addAnotherDonorUrl}", $("#${tabContentId}"));
+  });
+
   $("#${tabContentId}").find(".addAnotherDonorButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
@@ -61,13 +69,16 @@ $(document).ready(function() {
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
-				Donor record added Successfully.
+				Donor added Successfully.
 				<br />
 				You can view the details below and print donor card. Click "Add another donor" to add another donor.
 			</span>
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">
+				<button type="button" class="doneButton">
+					Done
+				</button>
 				<button type="button" class="addAnotherDonorButton">
 					Add another donor
 				</button>

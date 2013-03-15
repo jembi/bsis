@@ -22,10 +22,10 @@
 			</c:if>
 		</div>
 	</c:if>
-	<c:if test="${collectionFields.donorType.hidden != true }">
+	<c:if test="${collectionFields.donationType.hidden != true }">
 		<div>
-			<label>${collectionFields.donorType.displayName}</label>
-			<label>${collectedSample.donorType}</label>
+			<label>${collectionFields.donationType.displayName}</label>
+			<label>${collectedSample.donationType}</label>
 		</div>
 	</c:if>
 	<c:if test="${collectionFields.bloodBagType.hidden != true }">

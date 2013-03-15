@@ -61,7 +61,7 @@ public class CollectedSampleViewModel {
     return collectedSample.getCollectionSite();
   }
 
-  public DonationType getDonorType() {
+  public DonationType getDonationType() {
     return collectedSample.getDonationType();
   }
 

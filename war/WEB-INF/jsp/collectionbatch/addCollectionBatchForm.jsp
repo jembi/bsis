@@ -104,6 +104,12 @@
 
 <div id="${tabContentId}">
 
+	<c:if test="${!empty success && !success}">
+			<jsp:include page="../common/errorBox.jsp">
+				<jsp:param name="errorMessage" value="${errorMessage}" />
+			</jsp:include>
+	</c:if>
+
 	<form:form method="POST" commandName="addCollectionBatchForm"
 		class="formInTabPane" id="${addCollectionBatchFormId}">
 		<form:hidden path="id" />

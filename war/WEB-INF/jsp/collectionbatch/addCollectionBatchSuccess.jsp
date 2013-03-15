@@ -24,6 +24,14 @@ $(document).ready(function() {
     $("#${mainContentId}").find(".printableArea").printArea();
   });
 
+  $("#${tabContentId}").find(".doneButton").button({
+    icons : {
+      primary : 'ui-icon-check'
+    }
+  }).click(function() {
+    refetchContent("${addAnotherCollectionBatchUrl}", $("#${tabContentId}"));
+  });
+
   $("#${tabContentId}").find(".addAnotherCollectionBatchButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
@@ -53,6 +61,9 @@ $(document).ready(function() {
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">
+				<button type="button" class="doneButton">
+					Done
+				</button>
 				<button type="button" class="addAnotherCollectionBatchButton">
 					Add another collection batch
 				</button>

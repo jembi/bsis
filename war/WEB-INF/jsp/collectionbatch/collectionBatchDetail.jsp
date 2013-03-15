@@ -7,9 +7,6 @@
 <div class="formInTabPane printableArea">
 	<br />
 
-	${collectionBatch.collectionCenter}
-	${collectionBatch.collectionCenter.id}
-	${collectionBatch.collectionCenter.name}
 	<c:if test="${collectionBatchFields.batchNumber.hidden != true }">
 		<div>
 			<label>${collectionBatchFields.batchNumber.displayName}</label>

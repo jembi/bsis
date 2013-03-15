@@ -25,6 +25,14 @@ $(document).ready(function() {
     $("#${mainContentId}").find(".printableArea").printArea();
   });
 
+  $("#${tabContentId}").find(".doneButton").button({
+    icons : {
+      primary : 'ui-icon-check'
+    }
+  }).click(function() {
+    refetchContent("${addAnotherCollectionUrl}", $("#${tabContentId}"));
+  });
+
   $("#${tabContentId}").find(".addAnotherCollectionButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
@@ -47,13 +55,16 @@ $(document).ready(function() {
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
-				Collection record added Successfully.
+				Collection added Successfully.
 				<br />
-				You can view the details below and print donor card. Click "Add another donor" to add another donor.
+				You can view the details below. Click "Add another collection" to add another collection.
 			</span>
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">
+				<button type="button" class="doneButton">
+					Done
+				</button>
 				<button type="button" class="addAnotherCollectionButton">
 					Add another collection
 				</button>

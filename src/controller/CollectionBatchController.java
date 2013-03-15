@@ -175,8 +175,6 @@ public class CollectionBatchController {
 
     if (success) {
       mv.addObject("collectionBatchId", savedCollectionBatch.getId());
-      System.out.println(savedCollectionBatch.getCollectionCenter());
-      System.out.println(savedCollectionBatch.getCollectionCenter().getName());
       mv.addObject("collectionBatch", getCollectionBatchViewModel(savedCollectionBatch));
       mv.addObject("addAnotherCollectionBatchUrl", "addCollectionBatchFormGenerator.html");
       mv.setViewName("collectionbatch/addCollectionBatchSuccess");

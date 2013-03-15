@@ -130,9 +130,6 @@
 			</button>
 		</div>
 
-		<br />
-		<br />
-
 		<div class="tipsBox ui-state-highlight">
 			<p>
 				${tips['collections.findcollection.collectionsummary']}
