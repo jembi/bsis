@@ -200,7 +200,7 @@ public class TestResultController {
     String collectionNumber = form.getCollectionNumber();
     if (collectionNumber != null && !collectionNumber.isEmpty()) {
       try {
-        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
         form.setCollectedSample(collectedSample);
       } catch (NoResultException ex) {
         form.setCollectedSample(null);
@@ -277,7 +277,7 @@ public class TestResultController {
     }
     else {
       try {
-        collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
         if (collectedSample == null) {
           hasErrors = true;
           m.put("collectionNumberError", "Collection does not exist");

@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -88,28 +89,27 @@ public class ProductController {
   public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "productId", required = false) Long productId) {
 
-    ModelAndView mv = new ModelAndView("productSummary");
-    Map<String, Object> m = model.asMap();
-
-    m.put("requestUrl", getUrl(request));
-
+    ModelAndView mv = new ModelAndView("products/productSummary");
+    mv.addObject("requestUrl", getUrl(request));
     Product product = null;
     if (productId != null) {
       product = productRepository.findProductById(productId);
       if (product != null) {
-        m.put("existingProduct", true);
+        mv.addObject("existingProduct", true);
       }
       else {
-        m.put("existingProduct", false);
+        mv.addObject("existingProduct", false);
       }
     }
-
     ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
-    m.put("product", productViewModel);
-    m.put("refreshUrl", getUrl(request));
+    Map<String, Object> tips = new HashMap<String, Object>();
+    addEditSelectorOptions(mv.getModelMap());
+    utilController.addTipsToModel(tips, "products.findproduct.productsummary");
+    mv.addObject("tips", tips);
+    mv.addObject("product", productViewModel);
+    mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-    mv.addObject("model", m);
+    mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
     return mv;
   }
 
@@ -148,19 +148,19 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findProductFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView findProductFormGenerator(HttpServletRequest request) {
 
     FindProductBackingForm form = new FindProductBackingForm();
-    model.addAttribute("findProductForm", form);
+    ModelAndView mv = new ModelAndView("products/findProductForm");
+    mv.addObject("findProductForm", form);
 
-    ModelAndView mv = new ModelAndView("findProductForm");
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
-    utilController.addTipsToModel(model.asMap(), "products.find");
+    Map<String, Object> tips = new HashMap<String, Object>();
+    addEditSelectorOptions(mv.getModelMap());
+    utilController.addTipsToModel(tips, "products.find");
+    mv.addObject("tips", tips);
     // to ensure custom field names are displayed in the form
-    m.put("productFields", utilController.getFormFieldsForForm("product"));
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", m);
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -171,17 +171,15 @@ public class ProductController {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
-    ModelAndView modelAndView = new ModelAndView("productsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("tableName", "findProductsTable");
-    m.put("productFields", utilController.getFormFieldsForForm("product"));
-    m.put("allProducts", getProductViewModels(products));
-    m.put("refreshUrl", getUrl(request));
-    m.put("nextPageUrl", getNextPageUrl(request));
-    addEditSelectorOptions(m);
+    ModelAndView mv = new ModelAndView("products/productsTable");
+    mv.addObject("tableName", "findProductsTable");
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    mv.addObject("allProducts", getProductViewModels(products));
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("nextPageUrl", getNextPageUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
 
-    modelAndView.addObject("model", m);
-    return modelAndView;
+    return mv;
   }
 
   /**
@@ -297,35 +295,21 @@ public class ProductController {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
   }
 
-  @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editProductFormGenerator(HttpServletRequest request,
-      Model model,
-      @RequestParam(value="productId", required=false) Long productId) {
+  @RequestMapping(value = "/addProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView addProductFormGenerator(HttpServletRequest request,
+      Model model) {
 
     ProductBackingForm form = new ProductBackingForm();
 
-    ModelAndView mv = new ModelAndView("editProductForm");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    m.put("existingProduct", false);
-    if (productId != null) {
-      form.setId(productId);
-      Product product = productRepository.findProductById(productId);
-      if (product != null) {
-        form = new ProductBackingForm(product);
-        m.put("existingProduct", true);
-      }
-      else {
-        form = new ProductBackingForm();
-      }
-    }
-    addEditSelectorOptions(m);
-    m.put("editProductForm", form);
-    m.put("refreshUrl", getUrl(request));
+    ModelAndView mv = new ModelAndView("products/addProductForm");
+    mv.addObject("requestUrl", getUrl(request));
+    mv.addObject("firstTimeRender", true);
+    mv.addObject("addProductForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
-    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-    mv.addObject("model", m);
-    System.out.println(mv.getViewName());
+    mv.addObject("productFields", formFields);
     return mv;
   }
 
@@ -333,64 +317,61 @@ public class ProductController {
   public ModelAndView addProduct(
       HttpServletRequest request,
       HttpServletResponse response,
-      @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
+      @ModelAttribute("addProductForm") @Valid ProductBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editProductForm");
+    ModelAndView mv = new ModelAndView();
     boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
 
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
-    String collectionNumber = form.getCollectionNumber();
-    if (collectionNumber != null && !collectionNumber.isEmpty()) {
-      try {
-        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
-        form.setCollectedSample(collectedSample);
-      } catch (NoResultException ex) {
-        form.setCollectedSample(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setCollectedSample(null);
-    }
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    mv.addObject("productFields", formFields);
 
+    Product savedProduct = null;
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      for (ObjectError error : result.getAllErrors()) {
+        System.out.println(error.getObjectName());
+        System.out.println(error.getDefaultMessage());
+      }
+      mv.addObject("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above.";
     } else {
       try {
         Product product = form.getProduct();
         product.setIsDeleted(false);
-        productRepository.addProduct(product);
-        m.put("hasErrors", false);
+        savedProduct = productRepository.addProduct(product);
+        mv.addObject("hasErrors", false);
         success = true;
-        message = "Product Successfully Added";
         form = new ProductBackingForm();
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
-        message = "Product Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
         success = false;
-        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
-    m.put("editProductForm", form);
-    m.put("existingProduct", false);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("refreshUrl", "editProductFormGenerator.html");
-    m.put("productFields", utilController.getFormFieldsForForm("product"));
-    addEditSelectorOptions(m);
+    if (success) {
+      mv.addObject("collectionId", savedProduct.getId());
+      mv.addObject("product", getProductViewModel(savedProduct));
+      mv.addObject("addAnotherProductUrl", "addProductFormGenerator.html");
+      mv.setViewName("products/addProductSuccess");
+    } else {
+      mv.addObject("errorMessage", "Error creating product. Please fix the errors noted below.");
+      mv.addObject("firstTimeRender", false);
+      mv.addObject("addProductForm", form);
+      mv.addObject("refreshUrl", "addProductFormGenerator.html");
+      mv.setViewName("products/addProductError");
+    }
 
-    mv.addObject("model", m);
+    mv.addObject("success", success);
     return mv;
+  }
+
+  private ProductViewModel getProductViewModel(Product product) {
+    return new ProductViewModel(product);
   }
 
   @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
@@ -413,7 +394,7 @@ public class ProductController {
     String collectionNumber = form.getCollectionNumber();
     if (collectionNumber != null && !collectionNumber.isEmpty()) {
       try {
-        CollectedSample collectedSample = collectedSampleRepository.findSingleCollectedSampleByCollectionNumber(collectionNumber);
+        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
         form.setCollectedSample(collectedSample);
       } catch (NoResultException ex) {
         form.setCollectedSample(null);

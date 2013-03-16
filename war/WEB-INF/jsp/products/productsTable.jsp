@@ -17,13 +17,13 @@
 $(document).ready(
     function() {
 
-     	console.log("${model.nextPageUrl}");
+     	console.log("${nextPageUrl}");
       var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : '<"H"lrT>t<"F"ip>T',
         "bServerSide" : true,
-        "sAjaxSource" : "${model.nextPageUrl}",
+        "sAjaxSource" : "${nextPageUrl}",
         "sPaginationType" : "full_numbers",
         "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}
         								 ],
@@ -75,7 +75,7 @@ $(document).ready(
 
       function refreshResults() {
         showLoadingImage($("#${tabContentId}"));
-        $.ajax({url: "${model.refreshUrl}",
+        $.ajax({url: "${refreshUrl}",
           			data: {},
           			type: "GET",
           			success: function(response) {
@@ -93,7 +93,7 @@ $(document).ready(
 
 	<c:choose>
 
-		<c:when test="${fn:length(model.allProducts) eq -1}">
+		<c:when test="${fn:length(allProducts) eq -1}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
@@ -105,40 +105,40 @@ $(document).ready(
 				<thead>
 					<tr>
 						<th style="display: none"></th>
-						<c:if test="${model.productFields.collectionNumber.hidden != true}">
-							<th>${model.productFields.collectionNumber.displayName}</th>
+						<c:if test="${productFields.collectionNumber.hidden != true}">
+							<th>${productFields.collectionNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.productType.hidden != true}">
-							<th>${model.productFields.productType.displayName}</th>
+						<c:if test="${productFields.productType.hidden != true}">
+							<th>${productFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.createdOn.hidden != true}">
-							<th>${model.productFields.createdOn.displayName}</th>
+						<c:if test="${productFields.createdOn.hidden != true}">
+							<th>${productFields.createdOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.expiresOn.hidden != true}">
-							<th>${model.productFields.expiresOn.displayName}</th>
+						<c:if test="${productFields.expiresOn.hidden != true}">
+							<th>${productFields.expiresOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.status.hidden != true}">
-							<th>${model.productFields.status.displayName}</th>
+						<c:if test="${productFields.status.hidden != true}">
+							<th>${productFields.status.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="product" items="${model.allProducts}">
+					<c:forEach var="product" items="${allProducts}">
 						<tr>
 							<td style="display: none">${product.id}</td>
-							<c:if test="${model.productFields.collectionNumber.hidden != true}">
+							<c:if test="${productFields.collectionNumber.hidden != true}">
 								<td>${product.collectionNumber}</td>
 							</c:if>
-							<c:if test="${model.productFields.productType.hidden != true}">
+							<c:if test="${productFields.productType.hidden != true}">
 								<td>${product.productType.productTypeName}</td>
 							</c:if>
-							<c:if test="${model.productFields.createdOn.hidden != true}">
+							<c:if test="${productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>
 							</c:if>
-							<c:if test="${model.productFields.expiresOn.hidden != true}">
+							<c:if test="${productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
 							</c:if>
-							<c:if test="${model.productFields.status.hidden != true}">
+							<c:if test="${productFields.status.hidden != true}">
 								<td>${product.status}</td>
 							</c:if>
 						</tr>

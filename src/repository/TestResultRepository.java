@@ -465,11 +465,8 @@ public class TestResultRepository {
 
   public List<TestResult> getRecentTestResultsForCollection(
       String collectionNumber) {
-    List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
-    if (collectedSamples == null || collectedSamples.size() != 1)
-      return null;
-
-    Collection<TestResult> testResults = getRecentTestResultsForCollection(collectedSamples.get(0).getId()).values();
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+    Collection<TestResult> testResults = getRecentTestResultsForCollection(collectedSample.getId()).values();
     return new ArrayList<TestResult>(testResults);
   }
 

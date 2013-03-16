@@ -67,7 +67,7 @@
 	</div>
 
 	<div id="productsLandingPageContent">
-		<jsp:include page="products.jsp" />
+		<jsp:include page="products/products.jsp" />
 	</div>
 
 	<div id="requestsLandingPageContent">

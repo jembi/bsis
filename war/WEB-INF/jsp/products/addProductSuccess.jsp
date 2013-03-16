@@ -15,7 +15,6 @@
 
 <script>
 $(document).ready(function() {
-  showBarcode($("#${tabContentId}").find(".collectionBarcode"), "${collectedSample.collectionNumber}");
 
   $("#${tabContentId}").find(".printButton").button({
     icons : {
@@ -30,15 +29,15 @@ $(document).ready(function() {
       primary : 'ui-icon-check'
     }
   }).click(function() {
-    refetchContent("${addAnotherCollectionUrl}", $("#${tabContentId}"));
+    refetchContent("${addAnotherProductUrl}", $("#${tabContentId}"));
   });
 
-  $("#${tabContentId}").find(".addAnotherCollectionButton").button({
+  $("#${tabContentId}").find(".addAnotherProductButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
-    refetchContent("${addAnotherCollectionUrl}", $("#${tabContentId}"));
+    refetchContent("${addAnotherProductUrl}", $("#${tabContentId}"));
   });
 
 });
@@ -51,9 +50,9 @@ $(document).ready(function() {
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
-				Collection added Successfully.
+				Product added Successfully.
 				<br />
-				You can view the details below. Click "Add another collection" to add another collection.
+				You can view the details below. Click "Add another product" to add another product.
 			</span>
 		</div>
 		<div>
@@ -61,15 +60,15 @@ $(document).ready(function() {
 				<button type="button" class="doneButton">
 					Done
 				</button>
-				<button type="button" class="addAnotherCollectionButton">
-					Add another collection
+				<button type="button" class="addAnotherProductButton">
+					Add another product
 				</button>
 				<button type="button" class="printButton">
 					Print
 				</button>
 			</div>
 	
-			<jsp:include page="collectionDetail.jsp" />
+			<jsp:include page="productDetail.jsp" />
 		</div>
 	</div>
 

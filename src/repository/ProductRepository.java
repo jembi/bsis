@@ -80,6 +80,8 @@ public class ProductRepository {
     if (product.getStatus() != null && product.getStatus().equals(ProductStatus.DISCARDED))
       return;
 
+    if (product.getCollectedSample() == null)
+      return;
     Long collectedSampleId = product.getCollectedSample().getId();
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
     Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(c.getId());
@@ -457,11 +459,13 @@ public class ProductRepository {
     em.flush();
   }
 
-  public void addProduct(Product product) {
+  public Product addProduct(Product product) {
     updateProductInternalFields(product);
     updateBloodGroup(product);
     em.persist(product);
     em.flush();
+    em.refresh(product);
+    return product;
   }
 
   public void deleteProduct(Long productId) {

@@ -15,7 +15,7 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRhd;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class ProductBackingForm {
 
@@ -106,13 +106,18 @@ public class ProductBackingForm {
   }
 
   public void setProductType(String productTypeId) {
-    if (productTypeId == null) {
+    if (StringUtils.isBlank(productTypeId)) {
       product.setProductType(null);
     }
     else {
       ProductType pt = new ProductType();
-      pt.setId(Integer.parseInt(productTypeId));
-      product.setProductType(pt);
+      try {
+        pt.setId(Integer.parseInt(productTypeId));
+        product.setProductType(pt);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        product.setProductType(null);
+      }
     }
   }
 
@@ -169,7 +174,7 @@ public class ProductBackingForm {
   public void setExpiresOn(String expiresOn) {
     this.expiresOn = expiresOn;
     try {
-      product.setExpiresOn(CustomDateFormatter.getDateFromString(expiresOn));
+      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiresOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       product.setExpiresOn(null);

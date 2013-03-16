@@ -12,18 +12,12 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="productSummaryBarcodeId">donorSummaryBarcode-${unique_page_id}</c:set>
 <c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
 <c:set var="discardConfirmDialogId">discardConfirmDialog-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
-
-        $("#${productSummaryBarcodeId}").barcode(
-					  "${model.product.productNumber}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("productSummarySuccess");
@@ -40,7 +34,7 @@
             $("#${tabContentId}").bind("editProductCancel", emptyChildContent);
 
   	        fetchContent("editProductFormGenerator.html",
-              					 {productId: "${model.product.id}"},
+              					 {productId: "${product.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -55,7 +49,7 @@
             $("#${tabContentId}").bind("testResultsHistorySuccess", emptyChildContent);
 
   	        fetchContent("testResultsForProduct.html",
-              					 {productId: "${model.product.id}"},
+              					 {productId: "${product.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -87,7 +81,7 @@
                 title : "Confirm Delete",
                 buttons : {
                   "Delete" : function() {
-                    deleteProduct("${model.product.id}", notifyParentDone);
+                    deleteProduct("${product.id}", notifyParentDone);
                     $(this).dialog("close");
                   },
                   "Cancel" : function() {
@@ -108,7 +102,7 @@
                 title : "Confirm Discard",
                 buttons : {
                   "Discard" : function() {
-                    discardProduct("${model.product.id}", notifyParentDone);
+                    discardProduct("${product.id}", notifyParentDone);
                     $(this).dialog("close");
                   },
                   "Cancel" : function() {
@@ -121,7 +115,7 @@
 
         function editProductSuccess() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
         function editCollectionSuccess() {
@@ -162,94 +156,14 @@
 			</button>
 		</div>
 
-		<br />
-		<br />
-
-		<div class="formInTabPane printableArea">
-			<br />
-			<div id="${productSummaryBarcodeId}"></div>
-			<c:if test="${model.productFields.productNumber.hidden != true }">
-				<div>
-					<label>${model.productFields.productNumber.displayName}</label>
-					<label>${model.product.productNumber}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.collectionNumber.hidden != true }">
-				<div>
-					<label>${model.productFields.collectionNumber.displayName}</label>
-					<label>${model.product.collectionNumber}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.createdOn.hidden != true }">
-				<div>
-					<label>${model.productFields.createdOn.displayName}</label>
-					<label style="width: auto;">${model.product.createdOn}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.expiresOn.hidden != true }">
-				<div>
-					<label>${model.productFields.expiresOn.displayName}</label>
-					<label style="width: auto;">${model.product.expiresOn} (${product.expiryStatus})</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.productType.hidden != true }">
-				<div>
-					<label>${model.productFields.productType.displayName}</label>
-					<label>${model.product.productType.productType}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.status.hidden != true }">
-				<div>
-					<label>${model.productFields.status.displayName}</label>
-					<label>${model.product.status}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.bloodGroup.hidden != true }">
-				<div>
-					<label>${model.productFields.bloodGroup.displayName}</label>
-					<label>${model.product.bloodGroup}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.bloodGroup.hidden != true }">
-				<div>
-					<label>${model.productFields.age.displayName}</label>
-					<label>${model.product.age}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.notes.hidden != true }">
-				<div>
-					<label>${model.productFields.notes.displayName}</label>
-					<label>${model.product.notes}</label>
-				</div>
-			</c:if>
-			<c:if test="${model.productFields.issuedTo.hidden != true && !empty model.product.issuedTo && model.product.status=='ISSUED'}">
-				<div>
-					<label>${model.productFields.issuedTo.displayName}</label>
-					<label>${model.product.issuedTo.requestNumber}</label>
-				</div>
-				<c:if test="${model.productFields.issuedOn.hidden != true}">
-					<div>
-						<label>${model.productFields.issuedOn.displayName}</label>
-						<label style="width: auto;">${model.product.issuedOn}</label>
-					</div>
-				</c:if>
-			</c:if>
-			<c:if test="${model.product.status == 'DISCARDED'}">
-				<div>
-					<label>${model.productFields.discardedOn.displayName}</label>
-					<label style="width: auto;">${model.product.discardedOn}</label>
-				</div>
-			</c:if>
-			<div>
-				<label>${model.productFields.lastUpdatedTime.displayName}</label>
-				<label style="width: auto;">${model.product.lastUpdated}</label>
-			</div>
-			<div>
-				<label>${model.productFields.lastUpdatedBy.displayName}</label>
-				<label style="width: auto;">${model.product.lastUpdatedBy}</label>
-			</div>
-			<hr />
+		<div class="tipsBox ui-state-highlight">
+			<p>
+				${tips['products.findproduct.productsummary']}
+			</p>
 		</div>
+
+		<jsp:include page="productDetail.jsp" />
+
 	</div>
 
 	<br />

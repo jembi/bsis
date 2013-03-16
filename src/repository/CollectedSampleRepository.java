@@ -416,14 +416,6 @@ public class CollectedSampleRepository {
     return query.getResultList();
   }
 
-  public CollectedSample findSingleCollectedSampleByCollectionNumber(
-      String collectionNumber) {
-    List<CollectedSample> collectedSamples = findCollectedSampleByCollectionNumber(collectionNumber);
-    if (collectedSamples != null && collectedSamples.size() == 1)
-      return collectedSamples.get(0);
-    return null;
-  }
-
   public void addAllCollectedSamples(List<CollectedSample> collectedSamples) {
     for (CollectedSample c : collectedSamples) {
       c.setTestedStatus(TestedStatus.NOT_TESTED);
@@ -432,13 +424,13 @@ public class CollectedSampleRepository {
     em.flush();
   }
 
-  public List<CollectedSample> findCollectedSampleByCollectionNumber(
+  public CollectedSample findCollectedSampleByCollectionNumber(
       String collectionNumber) {
     String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    return query.getResultList();
+    return query.getSingleResult();
   }
 
   public void saveAsWorksheet(String collectionNumber,

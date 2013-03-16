@@ -1,16 +1,19 @@
 package model.product;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Map;
 
 import model.CustomDateFormatter;
+import model.collectedsample.CollectedSample;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import controller.UtilController;
-
 import viewmodel.ProductViewModel;
+import controller.UtilController;
 
 public class ProductBackingFormValidator implements Validator {
 
@@ -45,6 +48,27 @@ public class ProductBackingFormValidator implements Validator {
       errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
           CustomDateFormatter.getDateErrorMessage());
 
+    updateRelatedEntities(form);
     utilController.commonFieldChecks(form, "product", errors);
   }
+
+  @SuppressWarnings("unchecked")
+  private void updateRelatedEntities(ProductBackingForm form) {
+    Map<String, Object> bean = null;
+    try {
+      bean = BeanUtils.describe(form);
+      CollectedSample collectedSample = utilController.findCollectionInForm(bean);
+      form.setCollectedSample(collectedSample);
+    } catch (IllegalAccessException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
 }

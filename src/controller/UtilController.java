@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
+import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import repository.CollectedSampleRepository;
 import repository.CollectionBatchRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
@@ -41,6 +43,9 @@ public class UtilController {
 
   @Autowired
   private DonorRepository donorRepository;
+
+  @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
   private CollectionBatchRepository collectionBatchRepository;
@@ -253,5 +258,20 @@ public class UtilController {
       }
     }
     return collectionBatch;
+  }
+
+  public CollectedSample findCollectionInForm(Map<String, Object> bean) {
+    CollectedSample collectedSample = null;
+    String collectionNumber = null;
+    if (collectionNumber == null)
+      collectionNumber = (String) bean.get("collectionNumber");
+    if (StringUtils.isNotBlank(collectionNumber)) {
+      try {
+        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return collectedSample;
   }
 }

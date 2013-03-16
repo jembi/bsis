@@ -56,7 +56,7 @@ $(document).ready(function() {
   }).click(clearFindForm);
   
   function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    refetchContent("${refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
 		// show the appropriate input based on default search by
 	  $("#${findProductFormId}").find(".searchBy").trigger("change");
@@ -194,7 +194,7 @@ $(document).ready(function() {
 		<b>Find Products</b>
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['products.find']}
+				${tips['products.find']}
 			</p>
 		</div>
 		<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
@@ -206,8 +206,8 @@ $(document).ready(function() {
 				<form:select path="searchBy"
 									   id="${findProductFormSearchBySelectorId}"
 									   class="searchBy">
-					<form:option value="collectionNumber" label="${model.productFields.collectionNumber.displayName}" />
-					<form:option value="productType" label="${model.productFields.productType.displayName}" />
+					<form:option value="collectionNumber" label="${productFields.collectionNumber.displayName}" />
+					<form:option value="productType" label="${productFields.productType.displayName}" />
 				</form:select>
 	
 				<div class="collectionNumberInput hidableDiv" style="display:none">
@@ -224,7 +224,7 @@ $(document).ready(function() {
 					<form:select path="productTypes"
 											 id="${findProductFormProductTypeSelectorId}"
 											 class="productTypeSelector">
-						<c:forEach var="productType" items="${model.productTypes}">
+						<c:forEach var="productType" items="${productTypes}">
 							<form:option value="${productType.id}" label="${productType.productType}" />
 						</c:forEach>
 					</form:select>

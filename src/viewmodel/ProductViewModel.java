@@ -1,7 +1,5 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.CustomDateFormatter;
@@ -65,8 +63,7 @@ public class ProductViewModel {
   public String getExpiresOn() {
     if (product.getExpiresOn() == null)
       return "";
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    return formatter.format(product.getExpiresOn());
+    return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
   }
 
   public BloodAbo getBloodAbo() {

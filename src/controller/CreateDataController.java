@@ -39,8 +39,8 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
-import repository.DonorRepository;
 import repository.DonationTypeRepository;
+import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
@@ -462,7 +462,7 @@ public class CreateDataController {
 
 		List<TestResult> testResults = new ArrayList<TestResult>();
 		for (CollectedSample collectedSample : collectedSamples) {
-		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber()).get(0);
+		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber());
 		  for (BloodTest b : bloodTests) {
 
     	  TestResultBackingForm t = new TestResultBackingForm();

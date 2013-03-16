@@ -14,12 +14,10 @@ function updateProductGeneric(form, resultDivId, url, successCallback) {
     url: url,
     data: product,
     success: function(jsonResponse, data, data1, data2) {
-               showMessage("Product Updated Successfully!");
                successCallback();
                $("#" + resultDivId).replaceWith(jsonResponse);
              },
     error: function(response) {
-             showErrorMessage("Something went wrong. Please fix the errors noted.");
              $("#" + resultDivId).replaceWith(response.responseText);
            }
   });
