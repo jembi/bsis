@@ -56,8 +56,6 @@ public class ProductTypeRepository {
           em.merge(existingProductType);
         }
         else {
-          pt.setShelfLife(0);
-          pt.setShelfLifeUnits("");
           pt.setDescription("");
           em.persist(pt);
         }

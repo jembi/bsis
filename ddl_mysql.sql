@@ -95,7 +95,6 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        batch_id TINYINT(4),
         bloodBagType_id TINYINT,
         collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
@@ -124,7 +123,6 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        batch_id TINYINT(4),
         bloodBagType_id TINYINT,
         collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
@@ -572,12 +570,15 @@
 
     create table ProductType (
         id TINYINT not null auto_increment,
+        canPool boolean,
+        canSubdivide boolean,
         description longtext,
+        expiresAfter integer,
+        expiresAfterUnits varchar(30),
+        hasBloodGroup boolean,
         isDeleted boolean,
-        isSubdivided boolean,
         productType varchar(50),
-        shelfLife integer,
-        shelfLifeUnits varchar(30),
+        productTypeShortName varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -585,12 +586,15 @@
         id TINYINT not null,
         REV integer not null,
         REVTYPE tinyint,
+        canPool boolean,
+        canSubdivide boolean,
         description longtext,
+        expiresAfter integer,
+        expiresAfterUnits varchar(30),
+        hasBloodGroup boolean,
         isDeleted boolean,
-        isSubdivided boolean,
         productType varchar(50),
-        shelfLife integer,
-        shelfLifeUnits varchar(30),
+        productTypeShortName varchar(30),
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -909,12 +913,6 @@
         add constraint FKF0658A33A49787C4 
         foreign key (createdBy_id) 
         references User (id);
-
-    alter table CollectedSample 
-        add index FKF0658A334CF0CE05 (batch_id), 
-        add constraint FKF0658A334CF0CE05 
-        foreign key (batch_id) 
-        references CollectionBatch (id);
 
     alter table CollectedSample 
         add index FKF0658A33D04A4456 (donationCreatedBy_id), 

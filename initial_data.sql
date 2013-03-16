@@ -294,13 +294,17 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Urgent', '', '0'),
 ('Elective Surgery', '', '0');
 
-insert into ProductType (productType, description, shelfLife, shelfLifeUnits, isDeleted) values
-('Whole Blood', '', 35, 'days', '0'),
-('Red Blood Cells', '', 35, 'days', '0'),
-('Fresh Frozen Plasma', '', 35, 'days', '0'),
-('Platelets', '', 5, 'days', '0'),
-('Cryoprecipitate', '', 35, 'days', '0'),
-('Partial Platelets', '', 35, 'days', '0');
+insert into ProductType (productTypeShortName, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
+('Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', '1', '0', '0'),
+('RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
+('FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),
+('Platelets', 'Platelets', '', 5, 'DAYS', '1', '1', '0', '0'),
+('Cryo', 'Cryoprecipitate', '', 35, 'DAYS', '0', '1', '0', '0'),
+('Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
+('RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
+('FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 1, 'YEARS', '1', '1', '0', '0'),
+('Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', '1', '0', '0'),
+('Cryo Pedi', 'Cryoprecipitate Pedi', '', 35, 'DAYS', '0', '1', '0', '0');
 
 insert into BloodBagType (bloodBagType, isDeleted) values
 ('Single', '0'),
@@ -375,6 +379,10 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("donorDeferralCheckRequired", "true", "donationRequirements"),
 ("donorBloodGroupMatchRequired", "true", "donationRequirements"),
 ("donorHistoryCheckRequired", "true", "donationRequirements"),
+
+("useShortNameForProductTypes", "true" ,"products"),
+
+("allowPediComponentsFromFirstTimeDonors", "true", "componentSplit"),
 
 ("donorRecordRequired", "true", "productReleaseRequirements"),
 

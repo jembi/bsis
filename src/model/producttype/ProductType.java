@@ -2,6 +2,8 @@ package model.producttype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,17 +20,24 @@ public class ProductType {
   @Column(nullable = false, insertable=false, updatable=false, columnDefinition="TINYINT")
   private Integer id;
 
+  @Column(length=30)
+  private String productTypeShortName;
+
   @Column(length=50)
   private String productType;
 
-  private Integer shelfLife;
+  private Integer expiresAfter;
 
+  @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private String shelfLifeUnits;
+  private ProductTypeTimeUnits expiresAfterUnits;
 
-  @Column
-  private Boolean isSubdivided;
-  
+  private Boolean hasBloodGroup;
+
+  private Boolean canSubdivide;
+
+  private Boolean canPool;
+
   @Lob
   private String description;
   
@@ -71,31 +80,55 @@ public class ProductType {
     this.description = description;
   }
 
-  public String getShelfLifeUnits() {
-    return shelfLifeUnits;
-  }
-
-  public void setShelfLifeUnits(String shelfLifeUnits) {
-    this.shelfLifeUnits = shelfLifeUnits;
-  }
-
-  public Integer getShelfLife() {
-    return shelfLife;
-  }
-
-  public void setShelfLife(Integer shelfLife) {
-    this.shelfLife = shelfLife;
-  }
-
   public boolean equals(ProductType pt) {
     return this.id == pt.id;
   }
 
-  public Boolean getIsSubdivided() {
-    return isSubdivided;
+  public String getProductTypeShortName() {
+    return productTypeShortName;
   }
 
-  public void setIsSubdivided(Boolean isSubdivided) {
-    this.isSubdivided = isSubdivided;
+  public void setProductTypeShortName(String productTypeShortName) {
+    this.productTypeShortName = productTypeShortName;
+  }
+
+  public ProductTypeTimeUnits getExpiresAfterUnits() {
+    return expiresAfterUnits;
+  }
+
+  public void setExpiresAfterUnits(ProductTypeTimeUnits expiresAfterUnits) {
+    this.expiresAfterUnits = expiresAfterUnits;
+  }
+
+  public Integer getExpiresAfter() {
+    return expiresAfter;
+  }
+
+  public void setExpiresAfter(Integer expiresAfter) {
+    this.expiresAfter = expiresAfter;
+  }
+
+  public Boolean getHasBloodGroup() {
+    return hasBloodGroup;
+  }
+
+  public void setHasBloodGroup(Boolean hasBloodGroup) {
+    this.hasBloodGroup = hasBloodGroup;
+  }
+
+  public Boolean getCanSubdivide() {
+    return canSubdivide;
+  }
+
+  public void setCanSubdivide(Boolean canSubdivide) {
+    this.canSubdivide = canSubdivide;
+  }
+
+  public Boolean getCanPool() {
+    return canPool;
+  }
+
+  public void setCanPool(Boolean canPool) {
+    this.canPool = canPool;
   }
 }
