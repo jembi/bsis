@@ -430,7 +430,13 @@ public class CollectedSampleRepository {
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    return query.getSingleResult();
+    CollectedSample c = null;
+    try {
+       c = query.getSingleResult();
+    } catch (NoResultException ex) {
+      System.out.println("Collection number not found: " + collectionNumber);
+    }
+    return c;
   }
 
   public void saveAsWorksheet(String collectionNumber,
@@ -533,5 +539,24 @@ public class CollectedSampleRepository {
       collectedSample.setTestedStatus(TestedStatus.TESTED);
     else
       collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
+  }
+
+  public Map<Integer, CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
+    Map<Integer, CollectedSample> collections = new HashMap<Integer, CollectedSample>();
+    int i = 1;
+    for (String collectionNumber : collectionNumbers) {
+      if (StringUtils.isBlank(collectionNumber))
+        continue;
+      CollectedSample collectedSample = new CollectedSample();
+      collectedSample.setCollectionNumber(collectionNumber);
+      collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
+      if (collectedSample != null) {
+        collections.put(i, collectedSample);
+      } else {
+        collections.put(i, null);
+      }
+      i++;
+    }
+    return collections;
   }
 }

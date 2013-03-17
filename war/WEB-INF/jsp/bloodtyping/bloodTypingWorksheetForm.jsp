@@ -22,7 +22,7 @@ $(document).ready(function() {
 	          var collectionNumbers = [];
 	          for (var index = 0; index < inputs.length; index++) {
 	            var val = $(inputs[index]).val();
-	            collectionNumbers.push(parseInt(val));
+	            collectionNumbers.push(val);
 	          }
 	          console.log(collectionNumbers);
 	          showLoadingImage($("#${tabContentId}"));
@@ -56,16 +56,40 @@ $(document).ready(function() {
 					Enter a maximum of ${plate.numColumns} collection numbers in the order they are placed on the plate
 				</label>
 			</div>
-			<c:forEach var="columnNumber" begin="1" end="${plate.numColumns}">
-				<div>
-					<label>Column ${columnNumber}</label>
-					<input name="collectionNumber_${columnNumber}"
-								 value="${columnNumber}"
-								 placeholder="Collection Number"
-								 class="collectionNumberInput"
-								 />
-				</div>
-			</c:forEach>
+
+			${collections}
+			${collections[1]}
+			${collections['1']}
+			<c:if test="${not empty success && !success}">
+				<c:forEach var="columnNumber" begin="1" end="${plate.numColumns}">
+					<c:set var="collection" value="${collections[columnNumber]}" />
+					<div>
+						<label>Column ${columnNumber}</label>
+						<input name="collectionNumber_${columnNumber}"
+									 value="${not empty collection ? collection.collectionNumber : ''}"
+									 placeholder="Collection Number"
+									 class="collectionNumberInput"
+									 />
+						<c:if test="${empty collection}">
+							<label class="formError" style="width: auto;">Collection does not exist</label>
+						</c:if>
+					</div>
+				</c:forEach>
+			</c:if>
+
+			<c:if test="${empty success || success}">
+				<c:forEach var="columnNumber" begin="1" end="${plate.numColumns}">
+					<div>
+						<label>Column ${columnNumber}</label>
+						<input name="collectionNumber_${columnNumber}"
+									 value="${columnNumber}"
+									 placeholder="Collection Number"
+									 class="collectionNumberInput"
+									 />
+					</div>
+				</c:forEach>
+			</c:if>
+
 		</form>
 
 		<div style="margin-left: 200px;">
