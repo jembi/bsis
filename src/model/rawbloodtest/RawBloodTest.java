@@ -13,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import model.bloodtest.BloodTest;
 import model.microtiterplate.MicrotiterPlate;
 
 @Entity
@@ -34,27 +33,27 @@ public class RawBloodTest {
   @Column(length=10)
   private RawBloodTestDataType dataType;
 
-  private String allowedResults;
-
-  private String positiveResults;
+  private String validResults;
 
   private String negativeResults;
 
   private Boolean negativeRequiredForUse;
 
+  private Integer rankOnPlate;
+  
   @ManyToOne
   private MicrotiterPlate plateUsedForTesting;
 
-  @ManyToOne
-  private RawBloodTestGroup rawBloodTestGroup;
+  @ManyToMany(mappedBy="bloodTestsInGroup")
+  private List<RawBloodTestGroup> rawBloodTestGroups;
 
   @ManyToMany
   @JoinTable(name="RawBloodTest_TestsRequiredIfPositive")
-  private List<BloodTest> testsRequiredIfPositive;
+  private List<RawBloodTest> testsRequiredIfPositive;
 
   @ManyToMany
   @JoinTable(name="RawBloodTest_TestsRequiredIfNegative")
-  private List<BloodTest> testsRequiredIfNegative;
+  private List<RawBloodTest> testsRequiredIfNegative;
 
   private Boolean isConfidential;
 
@@ -76,12 +75,8 @@ public class RawBloodTest {
     return dataType;
   }
 
-  public String getAllowedResults() {
-    return allowedResults;
-  }
-
-  public String getPositiveResults() {
-    return positiveResults;
+  public String getValidResults() {
+    return validResults;
   }
 
   public String getNegativeResults() {
@@ -96,15 +91,15 @@ public class RawBloodTest {
     return plateUsedForTesting;
   }
 
-  public RawBloodTestGroup getRawBloodTestGroup() {
-    return rawBloodTestGroup;
+  public List<RawBloodTestGroup> getRawBloodTestGroups() {
+    return rawBloodTestGroups;
   }
 
-  public List<BloodTest> getTestsRequiredIfPositive() {
+  public List<RawBloodTest> getTestsRequiredIfPositive() {
     return testsRequiredIfPositive;
   }
 
-  public List<BloodTest> getTestsRequiredIfNegative() {
+  public List<RawBloodTest> getTestsRequiredIfNegative() {
     return testsRequiredIfNegative;
   }
 
@@ -132,12 +127,8 @@ public class RawBloodTest {
     this.dataType = dataType;
   }
 
-  public void setAllowedResults(String allowedResults) {
-    this.allowedResults = allowedResults;
-  }
-
-  public void setPositiveResults(String positiveResults) {
-    this.positiveResults = positiveResults;
+  public void setValidResults(String validResults) {
+    this.validResults = validResults;
   }
 
   public void setNegativeResults(String negativeResults) {
@@ -152,15 +143,15 @@ public class RawBloodTest {
     this.plateUsedForTesting = plateUsedForTesting;
   }
 
-  public void setRawBloodTestGroup(RawBloodTestGroup rawBloodTestGroup) {
-    this.rawBloodTestGroup = rawBloodTestGroup;
+  public void setRawBloodTestGroup(List<RawBloodTestGroup> rawBloodTestGroups) {
+    this.rawBloodTestGroups = rawBloodTestGroups;
   }
 
-  public void setTestsRequiredIfPositive(List<BloodTest> testsRequiredIfPositive) {
+  public void setTestsRequiredIfPositive(List<RawBloodTest> testsRequiredIfPositive) {
     this.testsRequiredIfPositive = testsRequiredIfPositive;
   }
 
-  public void setTestsRequiredIfNegative(List<BloodTest> testsRequiredIfNegative) {
+  public void setTestsRequiredIfNegative(List<RawBloodTest> testsRequiredIfNegative) {
     this.testsRequiredIfNegative = testsRequiredIfNegative;
   }
 
@@ -170,6 +161,14 @@ public class RawBloodTest {
 
   public void setIsActive(Boolean isActive) {
     this.isActive = isActive;
+  }
+
+  public Integer getRankOnPlate() {
+    return rankOnPlate;
+  }
+
+  public void setRankOnPlate(Integer rankOnPlate) {
+    this.rankOnPlate = rankOnPlate;
   }
 
 }

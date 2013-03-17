@@ -16,6 +16,9 @@
 		<li id="findOrAddTestResultsContent">
 			<a href="findTestResultFormGenerator.html">Find/Edit Test Results</a>
 		</li>
+		<li id="bloodTypingTestResults">
+			<a href="bloodTypingWorksheetGenerator.html">Blood Typing</a>
+		</li>
 		<li id="addTestResultsContent">
 			<a href="addAllTestResultsFormGenerator.html">Add Test Results</a>
 		</li>

@@ -18,6 +18,9 @@ public class MicrotiterPlate {
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="TINYINT")
   private Integer id;
 
+  @Column(length=15, unique=true)
+  private String plateKey;
+  
   @Column(length=20)
   private String plateName;
 
@@ -27,11 +30,13 @@ public class MicrotiterPlate {
   @Column(columnDefinition="SMALLINT")
   private Integer numColumns;
 
-  @OneToMany
+  @OneToMany(mappedBy="plateForContent")
   private List<PlateContent> specialContents;
 
   @Lob
   private String notes;
+
+  private Boolean isDeleted;
 
   public Integer getId() {
     return id;
@@ -79,5 +84,21 @@ public class MicrotiterPlate {
 
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  public String getPlateKey() {
+    return plateKey;
+  }
+
+  public void setPlateKey(String plateKey) {
+    this.plateKey = plateKey;
   }
 }

@@ -32,6 +32,8 @@ public class RawTestResult implements ModificationTracker {
   @Embedded
   private RowModificationTracker modificationTracker;
 
+  private Boolean isDeleted;
+
   public RawTestResult() {
     modificationTracker = new RowModificationTracker();
   }
@@ -98,5 +100,13 @@ public class RawTestResult implements ModificationTracker {
   @Override
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

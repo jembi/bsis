@@ -50,6 +50,7 @@ import viewmodel.CollectedSampleViewModel;
 
 @Controller
 public class CollectedSampleController {
+
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 

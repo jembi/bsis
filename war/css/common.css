@@ -701,3 +701,9 @@ tr > td
 	left: 15px;
 	font-size: 16px; 
 }
+
+.titerPlateWell {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+}

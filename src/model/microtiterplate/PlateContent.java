@@ -7,6 +7,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import model.rawbloodtest.RawBloodTest;
 
 @Entity
 public class PlateContent {
@@ -29,6 +32,14 @@ public class PlateContent {
   @Enumerated(EnumType.STRING)
   @Column(length=15)
   private PlateContentType contentType;
+
+  @ManyToOne
+  private RawBloodTest rawBloodTest;
+  
+  @ManyToOne
+  private MicrotiterPlate plateForContent;
+
+  private Boolean isDeleted;
 
   public Integer getId() {
     return id;
@@ -68,5 +79,29 @@ public class PlateContent {
 
   public void setContentType(PlateContentType contentType) {
     this.contentType = contentType;
+  }
+
+  public MicrotiterPlate getPlateForContent() {
+    return plateForContent;
+  }
+
+  public void setPlateForContent(MicrotiterPlate plateForContent) {
+    this.plateForContent = plateForContent;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  public RawBloodTest getRawBloodTest() {
+    return rawBloodTest;
+  }
+
+  public void setRawBloodTest(RawBloodTest rawBloodTest) {
+    this.rawBloodTest = rawBloodTest;
   }
 }

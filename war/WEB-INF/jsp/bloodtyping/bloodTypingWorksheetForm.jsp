@@ -1,0 +1,78 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+
+<script>
+$(document).ready(function() {
+	$("#${mainContentId}").find(".addCollectionsToPlate").
+			button({icons : {primary: 'ui-icon-plusthick'}}).click(
+	        function() {
+	          var inputs = $("#${mainContentId}").find('input[class="collectionNumberInput"]');
+	          var collectionNumbers = [];
+	          for (var index = 0; index < inputs.length; index++) {
+	            var val = $(inputs[index]).val();
+	            collectionNumbers.push(parseInt(val));
+	          }
+	          console.log(collectionNumbers);
+	          showLoadingImage($("#${tabContentId}"));
+	          $.ajax({
+	            url: "addCollectionsToBloodTypingPlate.html",
+	            data: $.param({collectionNumbers: collectionNumbers}),
+	            type: "POST",
+	            success: function(response) {
+	              				 $("#${tabContentId}").replaceWith(response);
+	  					         },
+	  					error: function() {
+											 console.log("error");	  					  
+	  								 }
+	          });
+	        });
+});
+</script>
+
+<div id="${tabContentId}">
+	<div id="${mainContentId}">
+		<form class="formInTabPane">
+			<b>Enter blood typing results</b>
+			<div class="tipsBox ui-state-highlight">
+				<p>
+					${tips['bloodtyping.plate.step1']}
+				</p>
+			</div>
+	
+			<div>
+				<label style="width: auto;">
+					Enter a maximum of ${plate.numColumns} collection numbers in the order they are placed on the plate
+				</label>
+			</div>
+			<c:forEach var="columnNumber" begin="1" end="${plate.numColumns}">
+				<div>
+					<label>Column ${columnNumber}</label>
+					<input name="collectionNumber_${columnNumber}"
+								 value="${columnNumber}"
+								 placeholder="Collection Number"
+								 class="collectionNumberInput"
+								 />
+				</div>
+			</c:forEach>
+		</form>
+
+		<div style="margin-left: 200px;">
+			<button class="addCollectionsToPlate">
+				Proceed to enter test results
+			</button>
+		</div>
+
+	</div>
+</div>

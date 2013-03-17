@@ -429,17 +429,13 @@
 
     create table MicrotiterPlate (
         id TINYINT not null auto_increment,
+        isDeleted boolean,
         notes longtext,
         numColumns SMALLINT,
         numRows SMALLINT,
+        plateKey varchar(15) unique,
         plateName varchar(20),
         primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table MicrotiterPlate_PlateContent (
-        MicrotiterPlate_id TINYINT not null,
-        specialContents_id TINYINT not null,
-        unique (specialContents_id)
     ) ENGINE=InnoDB;
 
     create table PlateContent (
@@ -447,7 +443,10 @@
         colNumber SMALLINT,
         contentType varchar(15),
         coverage varchar(15),
+        isDeleted boolean,
         rowNumber SMALLINT,
+        plateForContent_id TINYINT,
+        rawBloodTest_id TINYINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -658,44 +657,44 @@
 
     create table RawBloodTest (
         id TINYINT not null auto_increment,
-        allowedResults varchar(255),
         dataType varchar(10),
         isActive boolean,
         isConfidential boolean,
         negativeRequiredForUse boolean,
         negativeResults varchar(255),
-        positiveResults varchar(255),
+        rankOnPlate integer,
         testName varchar(30),
         testNameShort varchar(15),
+        validResults varchar(255),
         plateUsedForTesting_id TINYINT,
-        rawBloodTestGroup_id TINYINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table RawBloodTestGroup (
         id TINYINT not null auto_increment,
+        isDeleted boolean,
         testGroupName varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table RawBloodTestGroup_RawBloodTest (
-        RawBloodTestGroup_id TINYINT not null,
-        bloodTestsInGroup_id TINYINT not null,
-        unique (bloodTestsInGroup_id)
+        rawBloodTestGroups_id TINYINT not null,
+        bloodTestsInGroup_id TINYINT not null
     ) ENGINE=InnoDB;
 
     create table RawBloodTest_TestsRequiredIfNegative (
         RawBloodTest_id TINYINT not null,
-        testsRequiredIfNegative_id bigint not null
+        testsRequiredIfNegative_id TINYINT not null
     ) ENGINE=InnoDB;
 
     create table RawBloodTest_TestsRequiredIfPositive (
         RawBloodTest_id TINYINT not null,
-        testsRequiredIfPositive_id bigint not null
+        testsRequiredIfPositive_id TINYINT not null
     ) ENGINE=InnoDB;
 
     create table RawTestResult (
         id TINYINT not null auto_increment,
+        isDeleted boolean,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         rawTestResult varchar(10),
@@ -1151,16 +1150,16 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table MicrotiterPlate_PlateContent 
-        add index FK16620EB45C4ABA6F (specialContents_id), 
-        add constraint FK16620EB45C4ABA6F 
-        foreign key (specialContents_id) 
-        references PlateContent (id);
+    alter table PlateContent 
+        add index FK8E9BC0A3E203241F (rawBloodTest_id), 
+        add constraint FK8E9BC0A3E203241F 
+        foreign key (rawBloodTest_id) 
+        references RawBloodTest (id);
 
-    alter table MicrotiterPlate_PlateContent 
-        add index FK16620EB47E621CD5 (MicrotiterPlate_id), 
-        add constraint FK16620EB47E621CD5 
-        foreign key (MicrotiterPlate_id) 
+    alter table PlateContent 
+        add index FK8E9BC0A3DC9AD7D (plateForContent_id), 
+        add constraint FK8E9BC0A3DC9AD7D 
+        foreign key (plateForContent_id) 
         references MicrotiterPlate (id);
 
     alter table PreDonationTest 
@@ -1302,28 +1301,22 @@
         references REVINFO (REV);
 
     alter table RawBloodTest 
-        add index FK2F3C5A84C3E381F5 (rawBloodTestGroup_id), 
-        add constraint FK2F3C5A84C3E381F5 
-        foreign key (rawBloodTestGroup_id) 
-        references RawBloodTestGroup (id);
-
-    alter table RawBloodTest 
         add index FK2F3C5A84C4FD9EE9 (plateUsedForTesting_id), 
         add constraint FK2F3C5A84C4FD9EE9 
         foreign key (plateUsedForTesting_id) 
         references MicrotiterPlate (id);
 
     alter table RawBloodTestGroup_RawBloodTest 
-        add index FK1CF991E8C3E381F5 (RawBloodTestGroup_id), 
-        add constraint FK1CF991E8C3E381F5 
-        foreign key (RawBloodTestGroup_id) 
-        references RawBloodTestGroup (id);
-
-    alter table RawBloodTestGroup_RawBloodTest 
         add index FK1CF991E852A09DF0 (bloodTestsInGroup_id), 
         add constraint FK1CF991E852A09DF0 
         foreign key (bloodTestsInGroup_id) 
         references RawBloodTest (id);
+
+    alter table RawBloodTestGroup_RawBloodTest 
+        add index FK1CF991E889CA9238 (rawBloodTestGroups_id), 
+        add constraint FK1CF991E889CA9238 
+        foreign key (rawBloodTestGroups_id) 
+        references RawBloodTestGroup (id);
 
     alter table RawBloodTest_TestsRequiredIfNegative 
         add index FKC0856C97E203241F (RawBloodTest_id), 
@@ -1332,16 +1325,16 @@
         references RawBloodTest (id);
 
     alter table RawBloodTest_TestsRequiredIfNegative 
-        add index FKC0856C9721F9B0CD (testsRequiredIfNegative_id), 
-        add constraint FKC0856C9721F9B0CD 
+        add index FKC0856C973C6FEAB1 (testsRequiredIfNegative_id), 
+        add constraint FKC0856C973C6FEAB1 
         foreign key (testsRequiredIfNegative_id) 
-        references BloodTest (id);
+        references RawBloodTest (id);
 
     alter table RawBloodTest_TestsRequiredIfPositive 
-        add index FKB630FA5B8E01C89 (testsRequiredIfPositive_id), 
-        add constraint FKB630FA5B8E01C89 
+        add index FKB630FA5B2356566D (testsRequiredIfPositive_id), 
+        add constraint FKB630FA5B2356566D 
         foreign key (testsRequiredIfPositive_id) 
-        references BloodTest (id);
+        references RawBloodTest (id);
 
     alter table RawBloodTest_TestsRequiredIfPositive 
         add index FKB630FA5BE203241F (RawBloodTest_id), 
