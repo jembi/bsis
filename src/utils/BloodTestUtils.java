@@ -20,13 +20,14 @@ public class BloodTestUtils {
   }
 
   public List<String> getCorrectResults(BloodTest bt) {
-    String[] correctResults;
-    if (bt.getNegativeRequiredForUse()) {
-      correctResults = bt.getNegativeResults().split(",");
-    } else {
-      correctResults = bt.getPositiveResults().split(",");
-    }
-    return Arrays.asList(correctResults);
+//    String[] correctResults;
+//    if (bt.getNegativeRequiredForUse()) {
+//      correctResults = bt.getNegativeResults().split(",");
+//    } else {
+//      correctResults = bt.getPositiveResults().split(",");
+//    }
+//    return Arrays.asList(correctResults);
+    return Arrays.asList(new String[0]);
   }
 
   public boolean isTestResultCorrect(BloodTest bt, String t) {

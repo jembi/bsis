@@ -8,9 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.Audited;
@@ -32,27 +30,10 @@ public class BloodTest {
 
   private String allowedResults;
 
-  private String resultCalculated;
+  @Column(length=10)
+  private String correctResult;
 
-  private String positiveResults;
-
-  private String negativeResults;
-
-  private Boolean negativeRequiredForUse;
-  
   private Boolean isRequired;
-
-  private Boolean isConfidential;
-
-  private Boolean isFinalOutcome;
-  
-  @ManyToMany
-  @JoinTable(name="BloodTest_TestsRequiredIfPositive")
-  private List<BloodTest> testsRequiredIfPositive;
-
-  @ManyToMany
-  @JoinTable(name="BloodTest_TestsRequiredIfNegative")
-  private List<BloodTest> testsRequiredIfNegative;
 
   @Lob
   private String notes;
@@ -102,22 +83,6 @@ public class BloodTest {
     this.allowedResults = StringUtils.join(allowedResults, ",");
   }
 
-  public Boolean getIsConfidential() {
-    return isConfidential;
-  }
-
-  public void setIsConfidential(Boolean isConfidential) {
-    this.isConfidential = isConfidential;
-  }
-
-  public Boolean getIsFinalOutcome() {
-    return isFinalOutcome;
-  }
-
-  public void setIsFinalOutcome(Boolean isFinalOutcome) {
-    this.isFinalOutcome = isFinalOutcome;
-  }
-
   public String getDisplayName() {
     return displayName;
   }
@@ -126,59 +91,19 @@ public class BloodTest {
     this.displayName = displayName;
   }
 
-  public String getPositiveResults() {
-    return positiveResults;
-  }
-
-  public void setPositiveResults(String positiveResults) {
-    this.positiveResults = positiveResults;
-  }
-
-  public String getNegativeResults() {
-    return negativeResults;
-  }
-
-  public void setNegativeResults(String negativeResults) {
-    this.negativeResults = negativeResults;
-  }
-
-  public Boolean getNegativeRequiredForUse() {
-    return negativeRequiredForUse;
-  }
-
-  public void setNegativeRequiredForUse(Boolean negativeRequiredForUse) {
-    this.negativeRequiredForUse = negativeRequiredForUse;
-  }
-
-  public String getResultCalculated() {
-    return resultCalculated;
-  }
-
-  public void setResultCalculated(String resultCalculated) {
-    this.resultCalculated = resultCalculated;
-  }
-
-  public List<BloodTest> getTestsRequiredIfNegative() {
-    return testsRequiredIfNegative;
-  }
-
-  public void setTestsRequiredIfNegative(List<BloodTest> testsRequiredIfNegative) {
-    this.testsRequiredIfNegative = testsRequiredIfNegative;
-  }
-
-  public List<BloodTest> getTestsRequiredIfPositive() {
-    return testsRequiredIfPositive;
-  }
-
-  public void setTestsRequiredIfPositive(List<BloodTest> testsRequiredIfPositive) {
-    this.testsRequiredIfPositive = testsRequiredIfPositive;
-  }
-
   public Long getId() {
     return id;
   }
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getCorrectResult() {
+    return correctResult;
+  }
+
+  public void setCorrectResult(String correctResult) {
+    this.correctResult = correctResult;
   }
 }
