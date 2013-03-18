@@ -3,6 +3,7 @@ package repository.rawbloodtests;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -42,5 +43,11 @@ public class RawBloodTestRepository {
       }
     });
     return bloodTests;
+  }
+
+  public Map<String, List<RawBloodTest>> saveBloodTypingResults(
+      String rawBloodTests) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

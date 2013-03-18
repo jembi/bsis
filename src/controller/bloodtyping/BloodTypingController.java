@@ -113,4 +113,16 @@ public class BloodTypingController {
     }
     return tests;
   }
+
+  @RequestMapping(value="/saveRawBloodTests", method=RequestMethod.POST)
+  public ModelAndView saveRawBloodTests(HttpServletRequest request,
+      HttpServletResponse response, @RequestParam(value="rawBloodTests") String rawBloodTests) {
+
+    ModelAndView mv = new ModelAndView();
+
+    Map<String, List<RawBloodTest>> resultStatus = rawBloodTestRepository.saveBloodTypingResults(rawBloodTests);
+
+    return mv;
+  }
+
 }

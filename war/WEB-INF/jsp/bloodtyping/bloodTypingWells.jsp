@@ -49,10 +49,33 @@ $(document).ready(function() {
   });
 
 	$("#${mainContentId}").find(".saveButton").
-	button({icons : {primary: 'ui-icon-plusthick'}}).click(
-      function() {
-        console.log("save clicked");
-      });
+	button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
+
+	function saveTestResults() {
+	  var inputs = $("#${mainContentId}").find(".wellInput");
+	  var data = {};
+	  for (var index = 0; index < inputs.length; index++) {
+			var input = inputs[index];
+			var collectionId = $(input).data("collectionid");
+			var testId = $(input).data("testid");
+			if (data[collectionId] === undefined) {
+			  data[collectionId] = {};
+			}
+			data[collectionId][testId] = $(input).val();
+	  }
+    showLoadingImage($("#${tabContentId}"));
+	  $.ajax({
+	    url: "saveRawBloodTests.html",
+	    data: {rawBloodTests: JSON.stringify(data)},
+	    type: "POST",
+	    success: function(response) {
+	      				 $("#${tabContentId}").replaceWith(response);
+	    			   },
+	   	error: function(response) {
+							 $("#${tabContentId}").replaceWith(response.responseText);	   	  
+	   				 }
+	  });
+	}
 
 	$("#${mainContentId}").find(".clearFormButton").
 	button().click(refetchForm);
@@ -145,8 +168,10 @@ $(document).ready(function() {
 												 text-align: center;
 												 padding: 0;
 												 "
-									title="${not empty collection ? collection.collectionNumber: ''}"
+									title="${collection.collectionNumber}"
 									data-validresults="${bloodTestsOnPlate[rowNum-1].validResults}"
+									data-collectionid="${collection.id}"
+									data-testid="${bloodTestsOnPlate[rowNum-1].id}"
 									class="wellInput" />
 							</c:if>
 					 </div>

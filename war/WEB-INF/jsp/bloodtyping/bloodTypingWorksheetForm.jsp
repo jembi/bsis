@@ -24,7 +24,6 @@ $(document).ready(function() {
 	            var val = $(inputs[index]).val();
 	            collectionNumbers.push(val);
 	          }
-	          console.log(collectionNumbers);
 	          showLoadingImage($("#${tabContentId}"));
 	          $.ajax({
 	            url: "addCollectionsToBloodTypingPlate.html",
