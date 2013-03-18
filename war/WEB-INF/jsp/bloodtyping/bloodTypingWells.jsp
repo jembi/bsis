@@ -31,6 +31,22 @@ $(document).ready(function() {
     }
   });
 
+  $.each( $("#${mainContentId}").find(".wellInput"),
+      function(index, value) {
+    		var validResults = $(value).data("validresults").split(",");
+    		var validResultsStr = [];
+    		for (var i = 0; i < validResults.length; ++i) {
+    		  validResultsStr.push("" + validResults[i]);
+    		}
+    		$(value).autocomplete({
+      		source: validResultsStr,
+    			minLength: 0,
+    			delay: 0
+  			}).focus(function() {
+          	 if (this.value == "")
+              $(this).autocomplete('search', '');
+           });
+  });
 
 	$("#${mainContentId}").find(".saveButton").
 	button({icons : {primary: 'ui-icon-plusthick'}}).click(
@@ -119,7 +135,7 @@ $(document).ready(function() {
 											 text-align: center;
 											 padding: 0;
 											 "
-								class="wellInput" disabled="disabled"/>
+								disabled="disabled"/>
 							</c:if>
 							<c:if test="${not empty collection}">
 								<input
@@ -130,6 +146,7 @@ $(document).ready(function() {
 												 padding: 0;
 												 "
 									title="${not empty collection ? collection.collectionNumber: ''}"
+									data-validresults="${bloodTestsOnPlate[rowNum-1].validResults}"
 									class="wellInput" />
 							</c:if>
 					 </div>

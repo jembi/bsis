@@ -1,5 +1,6 @@
 package controller.bloodtyping;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.collectedsample.CollectedSample;
+import model.rawbloodtest.RawBloodTest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.rawbloodtests.RawBloodTestRepository;
+import viewmodel.RawBloodTestViewModel;
 import controller.UtilController;
 
 @Controller
@@ -95,11 +98,19 @@ public class BloodTypingController {
       mv.addObject("refreshUrl", getUrl(request));
       mv.addObject("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
       utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
-      mv.addObject("bloodTestsOnPlate", rawBloodTestRepository.getRawBloodTestsForPlate("bloodtyping"));
+      mv.addObject("bloodTestsOnPlate", getBloodTestsOnPlate());
       mv.addObject("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
     }
 
     mv.addObject("tips", tips);
     return mv;
+  }
+
+  public List<RawBloodTestViewModel> getBloodTestsOnPlate() {
+    List<RawBloodTestViewModel> tests = new ArrayList<RawBloodTestViewModel>();
+    for (RawBloodTest rawBloodTest : rawBloodTestRepository.getRawBloodTestsForPlate("bloodtyping")) {
+      tests.add(new RawBloodTestViewModel(rawBloodTest));
+    }
+    return tests;
   }
 }
