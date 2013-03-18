@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import model.collectedsample.CollectedSample;
 
@@ -38,6 +39,15 @@ public class BloodTypingController {
   public BloodTypingController() {
   }
 
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
   @RequestMapping(value="/bloodTypingWorksheetGenerator", method=RequestMethod.GET)
   public ModelAndView getBloodTypingWorksheet(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("bloodtyping/bloodTypingWorksheetForm");
@@ -46,12 +56,14 @@ public class BloodTypingController {
     utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
     mv.addObject("tips", tips);
     mv.addObject("plate", rawBloodTestRepository.getPlate("bloodtyping"));
+    mv.addObject("refreshUrl", "bloodTypingWorksheetGenerator.html");
 
     return mv;
   }
 
-  @RequestMapping(value="/addCollectionsToBloodTypingPlate", method=RequestMethod.POST)
+  @RequestMapping(value="/addCollectionsToBloodTypingPlate")
   public ModelAndView addCollectionsToBloodTypingPlate(HttpServletRequest request,
+          HttpServletResponse response,
           @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers) {
 
     Map<Integer, CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
@@ -65,7 +77,6 @@ public class BloodTypingController {
         numValid++;
     }
 
-    System.out.println(collections);
     ModelAndView mv = new ModelAndView();
     mv.addObject("collections", collections);
     mv.addObject("plate", rawBloodTestRepository.getPlate("bloodtyping"));
@@ -74,10 +85,15 @@ public class BloodTypingController {
     if (numErrors > 0 || numValid == 0) {
       mv.addObject("success", false);
       mv.setViewName("bloodtyping/bloodTypingWorksheetForm");
+      mv.addObject("refreshUrl", "bloodTypingWorksheetGenerator.html");
       utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      mv.addObject("errorMessage", "Please fix the errors noted. Some collections do not exist.");
     } else {
       mv.addObject("success", true);
       mv.setViewName("bloodtyping/bloodTypingWells");
+      mv.addObject("refreshUrl", getUrl(request));
+      mv.addObject("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
       utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       mv.addObject("bloodTestsOnPlate", rawBloodTestRepository.getRawBloodTestsForPlate("bloodtyping"));
       mv.addObject("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));

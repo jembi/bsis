@@ -29,15 +29,34 @@ $(document).ready(function() {
 	          $.ajax({
 	            url: "addCollectionsToBloodTypingPlate.html",
 	            data: $.param({collectionNumbers: collectionNumbers}),
-	            type: "POST",
+	            type: "GET",
 	            success: function(response) {
 	              				 $("#${tabContentId}").replaceWith(response);
 	  					         },
-	  					error: function() {
-											 console.log("error");	  					  
+	  					error: function(response) {
+	  					  				$("#${tabContentId}").replaceWith(response.responseText);
 	  								 }
 	          });
 	        });
+
+	$("#${mainContentId}").find(".clearFormButton").
+	button().click(refetchForm);
+
+	function refetchForm() {
+    $.ajax({
+      url: "${refreshUrl}",
+      data: {},
+      type: "GET",
+      success: function (response) {
+        			 	 $("#${tabContentId}").replaceWith(response);
+      				 },
+      error:   function (response) {
+								 showErrorMessage("Something went wrong. Please try again.");
+      				 }
+      
+    });
+  }
+
 });
 </script>
 
@@ -50,16 +69,19 @@ $(document).ready(function() {
 					${tips['bloodtyping.plate.step1']}
 				</p>
 			</div>
-	
+
+			<c:if test="${!empty success && !success}">
+				<jsp:include page="../common/errorBox.jsp">
+					<jsp:param name="errorMessage" value="${errorMessage}" />
+				</jsp:include>
+			</c:if>
+
 			<div>
 				<label style="width: auto;">
 					Enter a maximum of ${plate.numColumns} collection numbers in the order they are placed on the plate
 				</label>
 			</div>
 
-			${collections}
-			${collections[1]}
-			${collections['1']}
 			<c:if test="${not empty success && !success}">
 				<c:forEach var="columnNumber" begin="1" end="${plate.numColumns}">
 					<c:set var="collection" value="${collections[columnNumber]}" />
@@ -82,7 +104,6 @@ $(document).ready(function() {
 					<div>
 						<label>Column ${columnNumber}</label>
 						<input name="collectionNumber_${columnNumber}"
-									 value="${columnNumber}"
 									 placeholder="Collection Number"
 									 class="collectionNumberInput"
 									 />
@@ -95,6 +116,9 @@ $(document).ready(function() {
 		<div style="margin-left: 200px;">
 			<button class="addCollectionsToPlate">
 				Proceed to enter test results
+			</button>
+			<button class="clearFormButton">
+				Clear form
 			</button>
 		</div>
 

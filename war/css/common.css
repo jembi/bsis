@@ -707,3 +707,16 @@ tr > td
 	height: 50px;
 	border-radius: 25px;
 }
+
+.wellBox {
+	display: inline-block;
+	background: rgba(240, 218, 255, 0.6);
+	margin-bottom: 3px;
+}
+
+.wellBoxHeader {
+	display: inline-block;
+	background: white;
+	border: none;
+	margin-bottom: 3px;
+}

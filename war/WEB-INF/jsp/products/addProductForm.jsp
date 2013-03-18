@@ -104,7 +104,6 @@
 		</jsp:include>
 	</c:if>
 
-	${product.collectedSample}
 	<form:form method="POST" commandName="addProductForm"
 		class="formInTabPane" id="${addProductFormId}">
 		<form:hidden path="id" />
