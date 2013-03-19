@@ -1,6 +1,7 @@
 package model.testresults;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -20,6 +22,7 @@ import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+import model.rawtestresult.RawTestResult;
 import model.user.User;
 
 @Entity
@@ -42,6 +45,9 @@ public class TestResult implements ModificationTracker {
 
   @Column(length=255)
   private String result;
+
+  @OneToMany(mappedBy="inferredTestResult")
+  private List<RawTestResult> inferredFromTestResults;
 
   @Valid
   private RowModificationTracker modificationTracker;
@@ -156,5 +162,13 @@ public class TestResult implements ModificationTracker {
     if (collectedSample == null)
       return null;
     return collectedSample.getCollectionNumber();
+  }
+
+  public List<RawTestResult> getInferredFromTestResults() {
+    return inferredFromTestResults;
+  }
+
+  public void setInferredFromTestResults(List<RawTestResult> inferredFromTestResults) {
+    this.inferredFromTestResults = inferredFromTestResults;
   }
 }

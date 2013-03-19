@@ -10,12 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.envers.Audited;
+
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.rawbloodtest.RawBloodTest;
+import model.testresults.TestResult;
 import model.user.User;
 
 @Entity
+@Audited
 public class RawTestResult implements ModificationTracker {
 
   @Id
@@ -25,6 +29,9 @@ public class RawTestResult implements ModificationTracker {
 
   @ManyToOne
   private RawBloodTest rawBloodTest;
+
+  @ManyToOne
+  private TestResult inferredTestResult;
 
   @Column(length=10)
   private String rawTestResult;
@@ -108,5 +115,13 @@ public class RawTestResult implements ModificationTracker {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public TestResult getInferredTestResult() {
+    return inferredTestResult;
+  }
+
+  public void setInferredTestResult(TestResult inferredTestResult) {
+    this.inferredTestResult = inferredTestResult;
   }
 }

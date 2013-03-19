@@ -9,9 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.envers.Audited;
+
 import model.rawbloodtest.RawBloodTest;
 
 @Entity
+@Audited
 public class PlateContent {
 
   @Id

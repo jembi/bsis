@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+
+import model.rawbloodtest.RawBloodTest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.Audited;
@@ -28,12 +31,15 @@ public class BloodTest {
   @Column(length=30)
   private String displayName;
 
-  private String allowedResults;
+  private String validResults;
 
   @Column(length=10)
   private String correctResult;
 
   private Boolean isRequired;
+
+  @OneToMany(mappedBy="affectsBloodTest")
+  private List<RawBloodTest> dependsOnTests;
 
   @Lob
   private String notes;
@@ -57,9 +63,9 @@ public class BloodTest {
   }
 
   public List<String> getAllowedResults() {
-    if (allowedResults == null)
+    if (validResults == null)
       return null;
-    return Arrays.asList(allowedResults.split(","));
+    return Arrays.asList(validResults.split(","));
   }
 
   public void setName(String name) {
@@ -80,7 +86,7 @@ public class BloodTest {
 
   public void setAllowedResults(
       List<String> allowedResults) {
-    this.allowedResults = StringUtils.join(allowedResults, ",");
+    this.validResults = StringUtils.join(allowedResults, ",");
   }
 
   public String getDisplayName() {
@@ -105,5 +111,13 @@ public class BloodTest {
 
   public void setCorrectResult(String correctResult) {
     this.correctResult = correctResult;
+  }
+
+  public List<RawBloodTest> getDependsOnTests() {
+    return dependsOnTests;
+  }
+
+  public void setDependsOnTests(List<RawBloodTest> dependsOnTests) {
+    this.dependsOnTests = dependsOnTests;
   }
 }

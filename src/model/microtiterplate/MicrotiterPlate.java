@@ -10,7 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 public class MicrotiterPlate {
 
   @Id

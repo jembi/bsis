@@ -13,9 +13,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import model.bloodtest.BloodTest;
 import model.microtiterplate.MicrotiterPlate;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 public class RawBloodTest {
 
   @Id
@@ -39,8 +43,8 @@ public class RawBloodTest {
 
   private Boolean negativeRequiredForUse;
 
-  private Integer rankOnPlate;
-  
+  private Integer rank;
+
   @ManyToOne
   private MicrotiterPlate plateUsedForTesting;
 
@@ -54,6 +58,9 @@ public class RawBloodTest {
   @ManyToMany
   @JoinTable(name="RawBloodTest_TestsRequiredIfNegative")
   private List<RawBloodTest> testsRequiredIfNegative;
+
+  @ManyToOne
+  private BloodTest affectsBloodTest;
 
   private Boolean isConfidential;
 
@@ -164,11 +171,19 @@ public class RawBloodTest {
   }
 
   public Integer getRankOnPlate() {
-    return rankOnPlate;
+    return rank;
   }
 
   public void setRankOnPlate(Integer rankOnPlate) {
-    this.rankOnPlate = rankOnPlate;
+    this.rank = rankOnPlate;
+  }
+
+  public BloodTest getAffectsBloodTest() {
+    return affectsBloodTest;
+  }
+
+  public void setAffectsBloodTest(BloodTest affectsBloodTest) {
+    this.affectsBloodTest = affectsBloodTest;
   }
 
 }
