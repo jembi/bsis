@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
-import model.rawbloodtest.RawBloodTest;
+import model.bloodtyping.BloodTypingTest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.Audited;
@@ -37,9 +37,6 @@ public class BloodTest {
   private String correctResult;
 
   private Boolean isRequired;
-
-  @OneToMany(mappedBy="affectsBloodTest")
-  private List<RawBloodTest> dependsOnTests;
 
   @Lob
   private String notes;
@@ -111,13 +108,5 @@ public class BloodTest {
 
   public void setCorrectResult(String correctResult) {
     this.correctResult = correctResult;
-  }
-
-  public List<RawBloodTest> getDependsOnTests() {
-    return dependsOnTests;
-  }
-
-  public void setDependsOnTests(List<RawBloodTest> dependsOnTests) {
-    this.dependsOnTests = dependsOnTests;
   }
 }

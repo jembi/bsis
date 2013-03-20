@@ -12,9 +12,9 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
 
+import model.bloodtyping.BloodTypingTest;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.rawbloodtest.RawBloodTest;
 import model.testresults.TestResult;
 import model.user.User;
 
@@ -28,7 +28,7 @@ public class RawTestResult implements ModificationTracker {
   private Integer id;
 
   @ManyToOne
-  private RawBloodTest rawBloodTest;
+  private BloodTypingTest rawBloodTest;
 
   @ManyToOne
   private TestResult inferredTestResult;
@@ -49,7 +49,7 @@ public class RawTestResult implements ModificationTracker {
     return id;
   }
 
-  public RawBloodTest getRawBloodTest() {
+  public BloodTypingTest getRawBloodTest() {
     return rawBloodTest;
   }
 
@@ -61,7 +61,7 @@ public class RawTestResult implements ModificationTracker {
     this.id = id;
   }
 
-  public void setRawBloodTest(RawBloodTest rawBloodTest) {
+  public void setRawBloodTest(BloodTypingTest rawBloodTest) {
     this.rawBloodTest = rawBloodTest;
   }
 

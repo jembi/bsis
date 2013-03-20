@@ -8,8 +8,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.bloodtyping.BloodTypingTest;
+import model.bloodtyping.BloodTypingTestType;
 import model.collectedsample.CollectedSample;
-import model.rawbloodtest.RawBloodTest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
-import repository.rawbloodtests.RawBloodTestRepository;
-import viewmodel.RawBloodTestViewModel;
+import repository.bloodtyping.BloodTypingRepository;
+import viewmodel.BloodTypingTestViewModel;
 import controller.UtilController;
 
 @Controller
@@ -37,7 +38,7 @@ public class BloodTypingController {
   private GenericConfigRepository genericConfigRepository;
 
   @Autowired
-  private RawBloodTestRepository rawBloodTestRepository;
+  private BloodTypingRepository rawBloodTestRepository;
 
   public BloodTypingController() {
   }
@@ -106,21 +107,21 @@ public class BloodTypingController {
     return mv;
   }
 
-  public List<RawBloodTestViewModel> getBloodTestsOnPlate() {
-    List<RawBloodTestViewModel> tests = new ArrayList<RawBloodTestViewModel>();
-    for (RawBloodTest rawBloodTest : rawBloodTestRepository.getRawBloodTestsForPlate("bloodtyping")) {
-      tests.add(new RawBloodTestViewModel(rawBloodTest));
+  public List<BloodTypingTestViewModel> getBloodTestsOnPlate() {
+    List<BloodTypingTestViewModel> tests = new ArrayList<BloodTypingTestViewModel>();
+    for (BloodTypingTest rawBloodTest : rawBloodTestRepository.getBloodTypingTestsOfType(BloodTypingTestType.BASIC)) {
+      tests.add(new BloodTypingTestViewModel(rawBloodTest));
     }
     return tests;
   }
 
-  @RequestMapping(value="/saveRawBloodTests", method=RequestMethod.POST)
-  public ModelAndView saveRawBloodTests(HttpServletRequest request,
+  @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
+  public ModelAndView saveBloodTypingTests(HttpServletRequest request,
       HttpServletResponse response, @RequestParam(value="rawBloodTests") String rawBloodTests) {
 
     ModelAndView mv = new ModelAndView();
 
-    Map<String, List<RawBloodTest>> resultStatus = rawBloodTestRepository.saveBloodTypingResults(rawBloodTests);
+    Map<String, List<BloodTypingTest>> resultStatus = rawBloodTestRepository.saveBloodTypingResults(rawBloodTests);
 
     return mv;
   }

@@ -43,9 +43,12 @@ public class TestResult implements ModificationTracker {
   @ManyToOne
 	private BloodTest bloodTest;
 
-  @Column(length=255)
+  @Column(length=30)
   private String result;
 
+  @Column (length=150)
+  private String extraInformation;
+  
   @OneToMany(mappedBy="inferredTestResult")
   private List<RawTestResult> inferredFromTestResults;
 
@@ -170,5 +173,13 @@ public class TestResult implements ModificationTracker {
 
   public void setInferredFromTestResults(List<RawTestResult> inferredFromTestResults) {
     this.inferredFromTestResults = inferredFromTestResults;
+  }
+
+  public String getExtraInformation() {
+    return extraInformation;
+  }
+
+  public void setExtraInformation(String extraInformation) {
+    this.extraInformation = extraInformation;
   }
 }

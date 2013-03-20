@@ -58,6 +58,7 @@ import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
+import repository.bloodtyping.BloodTypingRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -87,6 +88,9 @@ public class AdminController {
 
   @Autowired
   CrossmatchTypeRepository crossmatchTypesRepository;
+
+  @Autowired
+  BloodTypingRepository bloodTypingRepository;
 
   @Autowired
   TipsRepository tipsRepository;
@@ -186,6 +190,14 @@ public class AdminController {
     m.put("errMsg", errMsg);
     return m;
   }
+
+  @RequestMapping("/bloodTypingTests")
+  public ModelAndView bloodTypingTests(HttpServletRequest request) {
+    ModelAndView mv = new ModelAndView("admin/bloodTypingTests");
+    mv.addObject("bloodTypingTests", bloodTypingRepository.getBloodTypingTests());
+    return mv;
+  }
+
   
   @RequestMapping("/configureForms")
   public ModelAndView configureForms(HttpServletRequest request,

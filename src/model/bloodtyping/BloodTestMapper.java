@@ -1,4 +1,4 @@
-package model.rawbloodtest;
+package model.bloodtyping;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

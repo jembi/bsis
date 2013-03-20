@@ -10,8 +10,6 @@ import org.springframework.validation.Validator;
 
 import controller.UtilController;
 
-import viewmodel.UsageViewModel;
-
 public class ProductUsageBackingFormValidator implements Validator {
 
   private Validator validator;
@@ -25,7 +23,7 @@ public class ProductUsageBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(ProductUsageBackingForm.class, UsageViewModel.class).contains(clazz);
+    return Arrays.asList(ProductUsageBackingForm.class).contains(clazz);
   }
 
   @Override

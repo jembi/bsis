@@ -1,8 +1,7 @@
-package repository.rawbloodtests;
+package repository.bloodtyping;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +10,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.bloodtyping.BloodTypingTest;
+import model.bloodtyping.BloodTypingTestType;
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MicrotiterPlate;
-import model.rawbloodtest.RawBloodTest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
-public class RawBloodTestRepository {
+public class BloodTypingRepository {
 
   @PersistenceContext
   EntityManager em;
@@ -43,21 +43,30 @@ public class RawBloodTestRepository {
     return query.getSingleResult();
   }
 
-  public List<RawBloodTest> getRawBloodTestsForPlate(String plateKey) {
-    String queryStr = "SELECT b from RawBloodTest b WHERE " +
-        "b.plateUsedForTesting.plateKey=:plateKey";
-    TypedQuery<RawBloodTest> query = em.createQuery(queryStr, RawBloodTest.class);
-    query.setParameter("plateKey", plateKey);
-    List<RawBloodTest> bloodTests = query.getResultList();
-    Collections.sort(bloodTests, new Comparator<RawBloodTest>() {
-      public int compare(RawBloodTest b1, RawBloodTest b2) {
-        return b1.getRankOnPlate() - b2.getRankOnPlate();
-      }
-    });
+  public List<BloodTypingTest> getBloodTypingTests() {
+    String queryStr = "SELECT b FROM BloodTypingTest b WHERE b.isActive=:isActive";
+    TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
+    query.setParameter("isActive", true);
+    List<BloodTypingTest> bloodTests = query.getResultList();
     return bloodTests;
   }
 
-  public Map<String, List<RawBloodTest>> saveBloodTypingResults(
+  public List<BloodTypingTest> getBloodTypingTestsOfType(BloodTypingTestType type) {
+    return getBloodTypingTestsOfTypes(Arrays.asList(type));
+  }
+
+  public List<BloodTypingTest> getBloodTypingTestsOfTypes(List<BloodTypingTestType> types) {
+    String queryStr = "SELECT b FROM BloodTypingTest b WHERE " +
+        "b.type IN (:types) AND " +
+    		"b.isActive=:isActive";
+    TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
+    query.setParameter("types", types);
+    query.setParameter("isActive", true);
+    List<BloodTypingTest> bloodTests = query.getResultList();
+    return bloodTests;
+  }
+
+  public Map<String, List<BloodTypingTest>> saveBloodTypingResults(
       String rawBloodTests) {
 
     ObjectMapper mapper = new ObjectMapper(); 
@@ -69,7 +78,7 @@ public class RawBloodTestRepository {
         Map<Integer, String> rawBloodTestResults = rawBloodTestMap.get(collectionId);
         CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
         for (Integer rawBloodTestId : rawBloodTestResults.keySet()) {
-          RawBloodTest rawBloodTest = findRawBloodTestById(rawBloodTestId);
+          BloodTypingTest rawBloodTest = findRawBloodTestById(rawBloodTestId);
         }
       }
       System.out.println(rawBloodTestMap);
@@ -89,9 +98,9 @@ public class RawBloodTestRepository {
     return null;
   }
 
-  private RawBloodTest findRawBloodTestById(Integer rawBloodTestId) {
+  private BloodTypingTest findRawBloodTestById(Integer rawBloodTestId) {
     String queryStr = "SELECT r FROM RawBloodTest r WHERE r.id=:rawBloodTestId and r.isActive=:isActive";
-    TypedQuery<RawBloodTest> query = em.createQuery(queryStr, RawBloodTest.class);
+    TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
     query.setParameter("rawBloodTestId", rawBloodTestId);
     query.setParameter("isActive", false);
     return query.getSingleResult();

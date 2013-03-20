@@ -17,6 +17,12 @@
 		<li id="adminWelcomePage">
 			<a href="adminWelcomePageGenerator.html">Admin Home</a>
 		</li>
+		<li id="bloodTypingTests">
+			<a href="bloodTypingTests.html">Blood typing tests</a>
+		</li>
+		<li id="bloodTypingRules">
+			<a href="bloodTypingRules.html">Blood typing rules</a>
+		</li>
 		<li id="configureForms">
 			<a href="configureForms.html">Configure Forms</a>
 		</li>

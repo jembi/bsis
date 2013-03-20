@@ -1,4 +1,4 @@
-package model.rawbloodtest;
+package model.bloodtyping;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class RawBloodTestGroup {
   private String testGroupName;
 
   @ManyToMany
-  private List<RawBloodTest> bloodTestsInGroup;
+  private List<BloodTypingTest> bloodTestsInGroup;
 
   private Boolean isDeleted;
 
@@ -36,7 +36,7 @@ public class RawBloodTestGroup {
     return testGroupName;
   }
 
-  public List<RawBloodTest> getBloodTestsInGroup() {
+  public List<BloodTypingTest> getBloodTestsInGroup() {
     return bloodTestsInGroup;
   }
 
@@ -48,7 +48,7 @@ public class RawBloodTestGroup {
     this.testGroupName = testGroupName;
   }
 
-  public void setBloodTestsInGroup(List<RawBloodTest> bloodTestsInGroup) {
+  public void setBloodTestsInGroup(List<BloodTypingTest> bloodTestsInGroup) {
     this.bloodTestsInGroup = bloodTestsInGroup;
   }
 
