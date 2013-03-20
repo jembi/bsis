@@ -35,6 +35,9 @@ public class BloodTypingRepository {
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 
+  @Autowired
+  private BloodTypingRuleEngine ruleEngine;
+
   public MicrotiterPlate getPlate(String plateKey) {
     String queryStr = "SELECT p from MicrotiterPlate p " +
     		"WHERE p.plateKey=:plateKey";
@@ -57,7 +60,7 @@ public class BloodTypingRepository {
 
   public List<BloodTypingTest> getBloodTypingTestsOfTypes(List<BloodTypingTestType> types) {
     String queryStr = "SELECT b FROM BloodTypingTest b WHERE " +
-        "b.type IN (:types) AND " +
+        "b.bloodTypingTestType IN (:types) AND " +
     		"b.isActive=:isActive";
     TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
     query.setParameter("types", types);
@@ -69,19 +72,19 @@ public class BloodTypingRepository {
   public Map<String, List<BloodTypingTest>> saveBloodTypingResults(
       String rawBloodTests) {
 
-    ObjectMapper mapper = new ObjectMapper(); 
+    ObjectMapper mapper = new ObjectMapper();
     try {
       System.out.println(rawBloodTests);
       @SuppressWarnings("unchecked")
-      Map<Long, Map<Integer, String>> rawBloodTestMap = mapper.readValue(rawBloodTests, HashMap.class);
-      for (Long collectionId : rawBloodTestMap.keySet()) {
-        Map<Integer, String> rawBloodTestResults = rawBloodTestMap.get(collectionId);
-        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-        for (Integer rawBloodTestId : rawBloodTestResults.keySet()) {
-          BloodTypingTest rawBloodTest = findRawBloodTestById(rawBloodTestId);
-        }
+      Map<String, Map<String, String>> bloodTypingTestMap = mapper.readValue(rawBloodTests, HashMap.class);
+      System.out.println(bloodTypingTestMap);
+      for (String collectionId : bloodTypingTestMap.keySet()) {
+        Long collectionIdLong = Long.parseLong(collectionId);
+        Map<String, String> bloodTypingTestResults = bloodTypingTestMap.get(collectionId);
+        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionIdLong);
+        ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
       }
-      System.out.println(rawBloodTestMap);
+      System.out.println(bloodTypingTestMap);
     } catch (JsonParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

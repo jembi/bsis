@@ -73,17 +73,11 @@ $(document).ready(
 						<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
 							<th>${model.collectedSampleFields.collectedOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true}">
-							<th>${model.collectedSampleFields.sampleNumber.displayName}</th>
-						</c:if>
-						<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true}">
-							<th>${model.collectedSampleFields.shippingNumber.displayName}</th>
-						</c:if>
 						<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
 							<th>${model.collectedSampleFields.bloodBagType.displayName}</th>
 						</c:if>
-						<c:if test="${model.collectedSampleFields.donorType.hidden != true}">
-							<th>${model.collectedSampleFields.donorType.displayName}</th>
+						<c:if test="${model.collectedSampleFields.donationType.hidden != true}">
+							<th>${model.collectedSampleFields.donationType.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
@@ -97,17 +91,11 @@ $(document).ready(
 							<c:if test="${model.collectedSampleFields.collectedOn.hidden != true}">
 								<td>${collectedSample.collectedOn}</td>
 							</c:if>
-							<c:if test="${model.collectedSampleFields.sampleNumber.hidden != true}">
-								<td>${collectedSample.sampleNumber}</td>
-							</c:if>
-							<c:if test="${model.collectedSampleFields.shippingNumber.hidden != true}">
-								<td>${collectedSample.shippingNumber}</td>
-							</c:if>
 							<c:if test="${model.collectedSampleFields.bloodBagType.hidden != true}">
 								<td>${collectedSample.bloodBagType.bloodBagType}</td>
 							</c:if>
-							<c:if test="${model.collectedSampleFields.donorType.hidden != true}">
-								<td>${collectedSample.donorType.donorType}</td>
+							<c:if test="${model.collectedSampleFields.donationType.hidden != true}">
+								<td>${collectedSample.donationType.donationType}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

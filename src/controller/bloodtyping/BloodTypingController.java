@@ -38,7 +38,7 @@ public class BloodTypingController {
   private GenericConfigRepository genericConfigRepository;
 
   @Autowired
-  private BloodTypingRepository rawBloodTestRepository;
+  private BloodTypingRepository bloodTypingRepository;
 
   public BloodTypingController() {
   }
@@ -59,7 +59,7 @@ public class BloodTypingController {
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
     mv.addObject("tips", tips);
-    mv.addObject("plate", rawBloodTestRepository.getPlate("bloodtyping"));
+    mv.addObject("plate", bloodTypingRepository.getPlate("bloodtyping"));
     mv.addObject("refreshUrl", "bloodTypingWorksheetGenerator.html");
 
     return mv;
@@ -83,7 +83,7 @@ public class BloodTypingController {
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("collections", collections);
-    mv.addObject("plate", rawBloodTestRepository.getPlate("bloodtyping"));
+    mv.addObject("plate", bloodTypingRepository.getPlate("bloodtyping"));
 
     Map<String, Object> tips = new HashMap<String, Object>();
     if (numErrors > 0 || numValid == 0) {
@@ -109,7 +109,7 @@ public class BloodTypingController {
 
   public List<BloodTypingTestViewModel> getBloodTestsOnPlate() {
     List<BloodTypingTestViewModel> tests = new ArrayList<BloodTypingTestViewModel>();
-    for (BloodTypingTest rawBloodTest : rawBloodTestRepository.getBloodTypingTestsOfType(BloodTypingTestType.BASIC)) {
+    for (BloodTypingTest rawBloodTest : bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.BASIC)) {
       tests.add(new BloodTypingTestViewModel(rawBloodTest));
     }
     return tests;
@@ -121,7 +121,7 @@ public class BloodTypingController {
 
     ModelAndView mv = new ModelAndView();
 
-    Map<String, List<BloodTypingTest>> resultStatus = rawBloodTestRepository.saveBloodTypingResults(rawBloodTests);
+    Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(rawBloodTests);
 
     return mv;
   }

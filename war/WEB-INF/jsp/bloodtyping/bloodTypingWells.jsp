@@ -31,23 +31,6 @@ $(document).ready(function() {
     }
   });
 
-  $.each( $("#${mainContentId}").find(".wellInput"),
-      function(index, value) {
-    		var validResults = $(value).data("validresults").split(",");
-    		var validResultsStr = [];
-    		for (var i = 0; i < validResults.length; ++i) {
-    		  validResultsStr.push("" + validResults[i]);
-    		}
-    		$(value).autocomplete({
-      		source: validResultsStr,
-    			minLength: 0,
-    			delay: 0
-  			}).focus(function() {
-          	 if (this.value == "")
-              $(this).autocomplete('search', '');
-           });
-  });
-
 	$("#${mainContentId}").find(".saveButton").
 	button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
 
@@ -65,7 +48,7 @@ $(document).ready(function() {
 	  }
     showLoadingImage($("#${tabContentId}"));
 	  $.ajax({
-	    url: "saveRawBloodTests.html",
+	    url: "saveBloodTypingTests.html",
 	    data: {rawBloodTests: JSON.stringify(data)},
 	    type: "POST",
 	    success: function(response) {

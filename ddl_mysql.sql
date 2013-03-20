@@ -96,6 +96,26 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table BloodTypingTestResult (
+        id TINYINT not null auto_increment,
+        notes longtext,
+        result varchar(10),
+        bloodTypingTest_id TINYINT,
+        collectedSample_id bigint,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table BloodTypingTestResult_AUD (
+        id TINYINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        notes longtext,
+        result varchar(10),
+        bloodTypingTest_id TINYINT,
+        collectedSample_id bigint,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table BloodTypingTest_AUD (
         id TINYINT not null,
         REV integer not null,
@@ -1017,6 +1037,24 @@
     alter table BloodTypingRule_AUD 
         add index FKEDC605DEDF74E053 (REV), 
         add constraint FKEDC605DEDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table BloodTypingTestResult 
+        add index FK1528622032E145A (collectedSample_id), 
+        add constraint FK1528622032E145A 
+        foreign key (collectedSample_id) 
+        references CollectedSample (id);
+
+    alter table BloodTypingTestResult 
+        add index FK152862201C1D41B8 (bloodTypingTest_id), 
+        add constraint FK152862201C1D41B8 
+        foreign key (bloodTypingTest_id) 
+        references BloodTypingTest (id);
+
+    alter table BloodTypingTestResult_AUD 
+        add index FKA8167FF1DF74E053 (REV), 
+        add constraint FKA8167FF1DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

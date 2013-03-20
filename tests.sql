@@ -103,7 +103,7 @@ insert into BloodTypingRule
  '', '0', '1'
  ),
 ('6', '+',
- 'BLOODRH', '-', '',
+ 'BLOODRH', '+', '',
  '', '0', '1'
  ),
 ('6', '-',

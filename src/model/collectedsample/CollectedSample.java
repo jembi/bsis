@@ -21,6 +21,7 @@ import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
+import model.bloodtyping.BloodTypingTestResult;
 import model.collectionbatch.CollectionBatch;
 import model.collectionbatch.CollectionBatchExists;
 import model.donationtype.DonationType;
@@ -68,6 +69,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
    */
   @OneToMany(mappedBy="collectedSample")
   private List<TestResult> testResults;
+
+  @OneToMany(mappedBy="collectedSample")
+  private List<BloodTypingTestResult> bloodTypingTestResults;
 
   /**
    * Which center the collection comes to.
@@ -382,5 +386,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     if (collectionBatch != null)
       return collectionBatch.getBatchNumber();
     return "";
+  }
+
+  public List<BloodTypingTestResult> getBloodTypingTestResults() {
+    return bloodTypingTestResults;
+  }
+
+  public void setBloodTypingTestResults(List<BloodTypingTestResult> bloodTypingTestResults) {
+    this.bloodTypingTestResults = bloodTypingTestResults;
   }
 }
