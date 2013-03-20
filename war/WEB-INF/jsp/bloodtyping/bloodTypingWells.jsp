@@ -19,15 +19,13 @@
 $(document).ready(function() {
   $("#${mainContentId}").find(".wellInput").focusout(function() {
     if ($(this).val().length > 0) {
-    	$(this).css("background", "rgb(137, 230, 178)");
-    	$(this).css("border-color", "transparent");
+    	$(this).addClass("wellWithData");
     }
   });
 
   $("#${mainContentId}").find(".wellInput").focus(function() {
     if ($(this).val().length > 0) {
-    	$(this).css("background", "");
-    	$(this).css("border-color", "");
+    	$(this).removeClass("wellWithData");
     }
   });
 
@@ -49,7 +47,7 @@ $(document).ready(function() {
     showLoadingImage($("#${tabContentId}"));
 	  $.ajax({
 	    url: "saveBloodTypingTests.html",
-	    data: {rawBloodTests: JSON.stringify(data)},
+	    data: {bloodTypingTests: JSON.stringify(data)},
 	    type: "POST",
 	    success: function(response) {
 	      				 $("#${tabContentId}").replaceWith(response);
@@ -99,6 +97,13 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}" class="formInTabPane">
+
+		<c:if test="${!empty success && !success}">
+			<jsp:include page="../common/errorBox.jsp">
+				<jsp:param name="errorMessage" value="${errorMessage}" />
+			</jsp:include>
+		</c:if>
+
 		<div class="bloodTypingPlate">
 
 				<input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
@@ -137,7 +142,7 @@ $(document).ready(function() {
 								style="width: ${bloodTypingConfig['titerWellRadius']}px; 
 											 height: ${bloodTypingConfig['titerWellRadius']}px;
 											 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
-											 background: rgb(228, 228, 228);
+											 background: rgb(175, 175, 175);
 											 text-align: center;
 											 padding: 0;
 											 "

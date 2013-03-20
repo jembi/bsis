@@ -710,7 +710,7 @@ tr > td
 
 .wellBox {
 	display: inline-block;
-	background: rgba(240, 218, 255, 0.6);
+	background: rgb(241, 219, 255);
 	margin-bottom: 3px;
 }
 
@@ -719,4 +719,10 @@ tr > td
 	background: white;
 	border: none;
 	margin-bottom: 3px;
+}
+
+.wellWithData {
+	background-color: rgb(0, 100, 44);
+	border-color: transparent;
+	color: white;
 }

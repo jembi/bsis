@@ -41,6 +41,8 @@ public class BloodTypingTest {
   @Column(length=12)
   private BloodTypingTestType bloodTypingTestType;
 
+  private Boolean isEmptyAllowed;
+
   private Boolean isActive;
 
   public Integer getId() {
@@ -121,5 +123,13 @@ public class BloodTypingTest {
 
   public void setBloodTypingTestType(BloodTypingTestType bloodTypingTestType) {
     this.bloodTypingTestType = bloodTypingTestType;
+  }
+
+  public Boolean getIsEmptyAllowed() {
+    return isEmptyAllowed;
+  }
+
+  public void setIsEmptyAllowed(Boolean isEmptyAllowed) {
+    this.isEmptyAllowed = isEmptyAllowed;
   }
 }

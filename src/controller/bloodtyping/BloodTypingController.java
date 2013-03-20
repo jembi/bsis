@@ -117,11 +117,31 @@ public class BloodTypingController {
 
   @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
   public ModelAndView saveBloodTypingTests(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam(value="rawBloodTests") String rawBloodTests) {
+      HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests) {
 
     ModelAndView mv = new ModelAndView();
 
-    Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(rawBloodTests);
+    Map<String, Map<String, String>> errorMap = bloodTypingRepository.validateValuesInWells(bloodTypingTests);
+    Map<String, Object> tips = new HashMap<String, Object>();
+    System.out.println(errorMap);
+    if (errorMap != null && errorMap.size() > 0) {
+      // errors found
+      mv.addObject("errorMap", errorMap);
+      mv.addObject("bloodTypingTests", bloodTypingTests);
+      mv.addObject("success", false);
+      mv.addObject("refreshUrl", getUrl(request));
+      mv.addObject("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
+      utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
+      mv.addObject("bloodTestsOnPlate", getBloodTestsOnPlate());
+      mv.addObject("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
+      mv.addObject("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
+      mv.setViewName("bloodtyping/bloodTypingWellsError");
+    }
+    else {
+      Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(bloodTypingTests);
+      mv.addObject("success", true);
+      mv.setViewName("bloodtyping/bloodTypingWellsSuccess");
+    }
 
     return mv;
   }
