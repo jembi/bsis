@@ -1,5 +1,6 @@
 package controller.bloodtyping;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,11 @@ import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtyping.BloodTypingRepository;
 import viewmodel.BloodTypingTestViewModel;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import controller.UtilController;
 
 @Controller
@@ -125,14 +131,18 @@ public class BloodTypingController {
 
     ModelAndView mv = new ModelAndView();
     Map<Integer, CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
+    mv.addObject("collectionNumbers", StringUtils.join(collectionNumbers, ","));
+    mv.addObject("collections", collections);
 
-    Map<String, Map<String, String>> errorMap = bloodTypingRepository.validateValuesInWells(bloodTypingTests);
+    Map<Long, Map<Long, String>> bloodTypingTestResults = parseBloodTypingTestResults(bloodTypingTests);
+
+    mv.addObject("bloodTypingTestResults", bloodTypingTestResults);
+
+    Map<Long, Map<Long, String>> errorMap = bloodTypingRepository.validateValuesInWells(bloodTypingTestResults);
     Map<String, Object> tips = new HashMap<String, Object>();
     System.out.println(errorMap);
     if (errorMap != null && errorMap.size() > 0) {
       // errors found
-      mv.addObject("collections", collections);
-      mv.addObject("collectionNumbers", StringUtils.join(collectionNumbers, ","));
       mv.addObject("plate", bloodTypingRepository.getPlate("bloodtyping"));
       mv.addObject("errorMap", errorMap);
       mv.addObject("bloodTypingTests", bloodTypingTests);
@@ -147,11 +157,39 @@ public class BloodTypingController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
     else {
-      Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(bloodTypingTests);
+      Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResults);
       mv.addObject("success", true);
       mv.setViewName("bloodtyping/bloodTypingWellsSuccess");
     }
 
     return mv;
+  }
+
+  private Map<Long, Map<Long, String>> parseBloodTypingTestResults(
+      String bloodTypingTests) {
+    ObjectMapper mapper = new ObjectMapper();
+    System.out.println(bloodTypingTests);
+    Map<Long, Map<Long, String>> bloodTypingTestMap = new HashMap<Long, Map<Long,String>>();
+    try {
+      Map<String, Map<String, String>> generatedMap = mapper.readValue(bloodTypingTests, HashMap.class);
+      for (String collectionId : generatedMap.keySet()) {
+        Map<Long, String> testResults = new HashMap<Long, String>();
+        bloodTypingTestMap.put(Long.parseLong(collectionId), testResults);
+        for (String testId : generatedMap.get(collectionId).keySet()) {
+          testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
+        }
+      } 
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    System.out.println(bloodTypingTestMap);
+    return bloodTypingTestMap;
   }
 }

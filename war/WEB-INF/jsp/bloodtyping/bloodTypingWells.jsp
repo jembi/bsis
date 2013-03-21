@@ -17,17 +17,21 @@
 
 <script>
 $(document).ready(function() {
-  $("#${mainContentId}").find(".wellInput").focusout(function() {
+  $("#${mainContentId}").find(".wellInput").focusout(focusOutOfWell);
+  
+  function focusOutOfWell() {
     if ($(this).val().length > 0) {
     	$(this).addClass("wellWithData");
     }
-  });
+  }
 
   $("#${mainContentId}").find(".wellInput").focus(function() {
     if ($(this).val().length > 0) {
     	$(this).removeClass("wellWithData");
     }
   });
+
+  $.each($("#${mainContentId}").find(".wellInput"), focusOutOfWell);
 
 	$("#${mainContentId}").find(".saveButton").
 	button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
@@ -110,7 +114,6 @@ $(document).ready(function() {
 		</c:if>
 
 		<div class="bloodTypingPlate">
-
 				<input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
 									 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
 									 text-align: center;
@@ -139,7 +142,7 @@ $(document).ready(function() {
 										 background: rgb(255, 208, 165);
 										 color: black;
 										 padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
-				<c:forEach var="colNum" begin="1" end="${plate.numColumns}">
+				<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
 					<c:set var="collection" value="${collections[colNum]}" />
 					<div class="wellBox">
 						<c:if test="${empty collection}">
@@ -154,6 +157,8 @@ $(document).ready(function() {
 								disabled="disabled"/>
 							</c:if>
 							<c:if test="${not empty collection}">
+							<c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
+						  <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
 								<input
 									style="width: ${bloodTypingConfig['titerWellRadius']}px; 
 												 height: ${bloodTypingConfig['titerWellRadius']}px;
@@ -165,6 +170,7 @@ $(document).ready(function() {
 									data-validresults="${bloodTestsOnPlate[rowNum-1].validResults}"
 									data-collectionid="${collection.id}"
 									data-testid="${bloodTestsOnPlate[rowNum-1].id}"
+									value="${testResultValue}"
 									class="wellInput" />
 							</c:if>
 					 </div>

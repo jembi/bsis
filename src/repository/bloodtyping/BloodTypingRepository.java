@@ -1,12 +1,9 @@
 package repository.bloodtyping;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,10 +20,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
@@ -73,77 +66,31 @@ public class BloodTypingRepository {
   }
 
   public Map<String, List<BloodTypingTest>> saveBloodTypingResults(
-      String bloodTypingTests) {
+      Map<Long, Map<Long, String>> bloodTypingTestResultsMap) {
 
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      System.out.println(bloodTypingTests);
-      @SuppressWarnings("unchecked")
-      Map<String, Map<String, String>> bloodTypingTestMap = mapper.readValue(bloodTypingTests, HashMap.class);
-      System.out.println(bloodTypingTestMap);
-      for (String collectionId : bloodTypingTestMap.keySet()) {
-        Long collectionIdLong = Long.parseLong(collectionId);
-        Map<String, String> bloodTypingTestResults = bloodTypingTestMap.get(collectionId);
-        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionIdLong);
-        Map<String, Object> result = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
-        System.out.println("Collection: " + collectedSample.getCollectionNumber());
-        System.out.println("Blood Typing Result: " + result);
-      }
-      System.out.println(bloodTypingTestMap);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch(NumberFormatException e) {
-      e.printStackTrace();
+    for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
+      Map<Long, String> bloodTypingTestResults = bloodTypingTestResultsMap.get(collectionId);
+      CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
+      Map<String, Object> result = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
+      System.out.println("Collection: " + collectedSample.getCollectionNumber());
+      System.out.println("Blood Typing Result: " + result);
     }
 
     return null;
   }
 
-  private BloodTypingTest findRawBloodTestById(Integer rawBloodTestId) {
-    String queryStr = "SELECT r FROM RawBloodTest r WHERE r.id=:rawBloodTestId and r.isActive=:isActive";
-    TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
-    query.setParameter("rawBloodTestId", rawBloodTestId);
-    query.setParameter("isActive", false);
-    return query.getSingleResult();
-  }
-
-  public Map<String, Map<String, String>> validateValuesInWells(String bloodTypingTests) {
+  public Map<Long, Map<Long, String>> validateValuesInWells(Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
     Map<String, BloodTypingTest> allBloodTypingTestsMap = new HashMap<String, BloodTypingTest>(); 
     for (BloodTypingTest bloodTypingTest : getBloodTypingTests()) {
       allBloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
 
-    ObjectMapper mapper = new ObjectMapper();
-    System.out.println(bloodTypingTests);
-    @SuppressWarnings("unchecked")
-    Map<String, Map<String, String>> bloodTypingTestMap = null;
-    try {
-      bloodTypingTestMap = mapper.readValue(bloodTypingTests, HashMap.class);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    System.out.println(bloodTypingTestMap);
+    Map<Long, Map<Long,String>> errorMap = new HashMap<Long, Map<Long,String>>();
 
-    Map<String, Map<String,String>> errorMap = new HashMap<String, Map<String,String>>();
-
-    for (String collectionId : bloodTypingTestMap.keySet()) {
-      Map<String, String> testsForCollection = bloodTypingTestMap.get(collectionId);
-      for (String testId : testsForCollection.keySet()) {
+    for (Long collectionId : bloodTypingTestResults.keySet()) {
+      Map<Long, String> testsForCollection = bloodTypingTestResults.get(collectionId);
+      for (Long testId : testsForCollection.keySet()) {
         String result = testsForCollection.get(testId);
         BloodTypingTest test = allBloodTypingTestsMap.get(testId);
         if (test == null) {
@@ -163,11 +110,11 @@ public class BloodTypingRepository {
     return errorMap;
   }
 
-  private void addErrorToMap(Map<String, Map<String, String>> errorMap,
-      String collectionId, String testId, String errorMessage) {
-    Map<String, String> errorsForCollection = errorMap.get(collectionId);
+  private void addErrorToMap(Map<Long, Map<Long, String>> errorMap,
+      Long collectionId, Long testId, String errorMessage) {
+    Map<Long, String> errorsForCollection = errorMap.get(collectionId);
     if (errorsForCollection == null) {
-      errorsForCollection = new HashMap<String, String>();
+      errorsForCollection = new HashMap<Long, String>();
       errorMap.put(collectionId, errorsForCollection);
     }
     errorsForCollection.put(testId, errorMessage);

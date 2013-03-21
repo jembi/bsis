@@ -27,7 +27,7 @@ public class BloodTypingRuleEngine {
   @PersistenceContext
   private EntityManager em;
 
-  public Map<String, Object> applyBloodTypingTests(CollectedSample collectedSample, Map<String, String> bloodTypingTestResults) {
+  public Map<String, Object> applyBloodTypingTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
 
     String queryStr = "SELECT r FROM BloodTypingRule r WHERE isActive=:isActive";
     TypedQuery<BloodTypingRule> query = em.createQuery(queryStr, BloodTypingRule.class);
@@ -43,9 +43,9 @@ public class BloodTypingRuleEngine {
 
     Map<String, String> availableTests = new HashMap<String, String>();
     availableTests.putAll(storedTestResults);
-    for (String extraTestId : bloodTypingTestResults.keySet()) {
+    for (Long extraTestId : bloodTypingTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results
-      availableTests.put(extraTestId, bloodTypingTestResults.get(extraTestId));
+      availableTests.put(extraTestId.toString(), bloodTypingTestResults.get(extraTestId));
     }
 
     Set<String> bloodAboChanges = new HashSet<String>();
