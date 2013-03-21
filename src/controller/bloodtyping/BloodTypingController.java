@@ -12,6 +12,7 @@ import model.bloodtyping.BloodTypingTest;
 import model.bloodtyping.BloodTypingTestType;
 import model.collectedsample.CollectedSample;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,6 +84,7 @@ public class BloodTypingController {
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("collections", collections);
+    mv.addObject("collectionNumbers", StringUtils.join(collectionNumbers,","));
     mv.addObject("plate", bloodTypingRepository.getPlate("bloodtyping"));
 
     Map<String, Object> tips = new HashMap<String, Object>();
@@ -117,25 +119,32 @@ public class BloodTypingController {
 
   @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
   public ModelAndView saveBloodTypingTests(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests) {
+      HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests,
+      @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
+      @RequestParam(value="refreshUrl") String refreshUrl) {
 
     ModelAndView mv = new ModelAndView();
+    Map<Integer, CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
 
     Map<String, Map<String, String>> errorMap = bloodTypingRepository.validateValuesInWells(bloodTypingTests);
     Map<String, Object> tips = new HashMap<String, Object>();
     System.out.println(errorMap);
     if (errorMap != null && errorMap.size() > 0) {
       // errors found
+      mv.addObject("collections", collections);
+      mv.addObject("collectionNumbers", StringUtils.join(collectionNumbers, ","));
+      mv.addObject("plate", bloodTypingRepository.getPlate("bloodtyping"));
       mv.addObject("errorMap", errorMap);
       mv.addObject("bloodTypingTests", bloodTypingTests);
       mv.addObject("success", false);
-      mv.addObject("refreshUrl", getUrl(request));
+      mv.addObject("refreshUrl", refreshUrl);
       mv.addObject("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
       utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       mv.addObject("bloodTestsOnPlate", getBloodTestsOnPlate());
       mv.addObject("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       mv.addObject("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
       mv.setViewName("bloodtyping/bloodTypingWellsError");
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
     else {
       Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(bloodTypingTests);
@@ -145,5 +154,4 @@ public class BloodTypingController {
 
     return mv;
   }
-
 }

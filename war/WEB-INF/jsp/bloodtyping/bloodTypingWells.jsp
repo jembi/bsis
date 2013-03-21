@@ -44,10 +44,15 @@ $(document).ready(function() {
 			}
 			data[collectionId][testId] = $(input).val();
 	  }
+    var collectionNumbers = [];
+    var collectionNumberStrs = "${collectionNumbers}".split(",");
+    for (var index = 0; index < collectionNumberStrs.length; index++) {
+      collectionNumbers.push(collectionNumberStrs[index]);
+    }
     showLoadingImage($("#${tabContentId}"));
 	  $.ajax({
 	    url: "saveBloodTypingTests.html",
-	    data: {bloodTypingTests: JSON.stringify(data)},
+	    data: {bloodTypingTests: JSON.stringify(data), collectionNumbers : collectionNumbers, refreshUrl: "${refreshUrl}"},
 	    type: "POST",
 	    success: function(response) {
 	      				 $("#${tabContentId}").replaceWith(response);
@@ -70,7 +75,7 @@ $(document).ready(function() {
 		    			 	 $("#${tabContentId}").replaceWith(response);
 		  				 },
 		  error:   function (response) {
-								 showErrorMessage("Something went wrong. Please try again.");
+		    				 $("#${tabContentId}").replaceWith(response);
 		  				 }
 		  
 		});
