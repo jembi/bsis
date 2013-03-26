@@ -92,7 +92,7 @@ public class BloodTypingRepository {
       Map<Long, String> testsForCollection = bloodTypingTestResults.get(collectionId);
       for (Long testId : testsForCollection.keySet()) {
         String result = testsForCollection.get(testId);
-        BloodTypingTest test = allBloodTypingTestsMap.get(testId);
+        BloodTypingTest test = allBloodTypingTestsMap.get(testId.toString());
         if (test == null) {
           addErrorToMap(errorMap, collectionId, testId, "Invalid test");
           continue;

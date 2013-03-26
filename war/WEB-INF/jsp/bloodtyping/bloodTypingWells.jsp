@@ -69,7 +69,7 @@ $(document).ready(function() {
 
 	$("#${mainContentId}").find(".clearFormButton").
 	button().click(refetchForm);
-	
+
 	function refetchForm() {
 		$.ajax({
 		  url: "${refreshUrl}",
@@ -136,45 +136,58 @@ $(document).ready(function() {
 			<br />
 
 			<c:forEach var="rowNum" begin="1" end="${plate.numRows}">
+					<!-- Top row style similar to input wells -->
 					<input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
 										 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
 										 text-align: center;
 										 background: rgb(255, 208, 165);
 										 color: black;
 										 padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
+
 				<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
 					<c:set var="collection" value="${collections[colNum]}" />
-					<div class="wellBox">
-						<c:if test="${empty collection}">
-							<input
-								style="width: ${bloodTypingConfig['titerWellRadius']}px; 
-											 height: ${bloodTypingConfig['titerWellRadius']}px;
-											 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
-											 background: rgb(175, 175, 175);
-											 text-align: center;
-											 padding: 0;
-											 "
-								disabled="disabled"/>
-							</c:if>
-							<c:if test="${not empty collection}">
-							<c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
-						  <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
+
+						<div class="wellBox">
+							<!-- square around the well -->
+							<c:if test="${empty collection}">
+								<!-- show empty wells with disabled input -->
 								<input
 									style="width: ${bloodTypingConfig['titerWellRadius']}px; 
 												 height: ${bloodTypingConfig['titerWellRadius']}px;
 												 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
+												 background: rgb(175, 175, 175);
 												 text-align: center;
 												 padding: 0;
 												 "
-									title="${collection.collectionNumber}"
-									data-validresults="${bloodTestsOnPlate[rowNum-1].validResults}"
-									data-collectionid="${collection.id}"
-									data-testid="${bloodTestsOnPlate[rowNum-1].id}"
-									value="${testResultValue}"
-									class="wellInput" />
+									disabled="disabled"/>
 							</c:if>
-					 </div>
-				</c:forEach>
+							<c:if test="${not empty collection}">
+								<!-- non-empty wells -->
+								<c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
+							  <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
+							  <c:if test="${not empty errorMap[collection.id][testId]}">
+							  	<c:set var="wellBorderColor" value="red" />
+						  	</c:if>
+							  <c:if test="${empty errorMap[collection.id][testId]}">
+							  	<c:set var="wellBorderColor" value="" />
+						  	</c:if>
+									<input
+										style="width: ${bloodTypingConfig['titerWellRadius']}px; 
+													 height: ${bloodTypingConfig['titerWellRadius']}px;
+													 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
+													 text-align: center;
+													 border-color: ${wellBorderColor};
+													 padding: 0;
+													 "
+										title="${collection.collectionNumber}"
+										data-validresults="${bloodTestsOnPlate[rowNum-1].validResults}"
+										data-collectionid="${collection.id}"
+										data-testid="${bloodTestsOnPlate[rowNum-1].id}"
+										value="${testResultValue}"
+										class="wellInput" />
+							</c:if>
+					 	</div>
+					</c:forEach>
 				<label style="width: 70px;">${bloodTestsOnPlate[rowNum-1].testNameShort}</label>
 				<br />
 			</c:forEach>
