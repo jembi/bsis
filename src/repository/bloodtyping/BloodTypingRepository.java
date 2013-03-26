@@ -65,18 +65,32 @@ public class BloodTypingRepository {
     return bloodTests;
   }
 
-  public Map<String, List<BloodTypingTest>> saveBloodTypingResults(
+  public Map<String, Object> saveBloodTypingResults(
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap) {
 
+    Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
+    Map<Long, Map<String, Object>> bloodTypingResultsForCollections = new HashMap<Long, Map<String,Object>>(); 
+
+    Map<Long, Map<Long, String>> errorMap = validateValuesInWells(bloodTypingTestResultsMap);
     for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
       Map<Long, String> bloodTypingTestResults = bloodTypingTestResultsMap.get(collectionId);
       CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
       Map<String, Object> result = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
+      collectedSamplesMap.put(collectedSample.getId(), collectedSample);
+      BloodTypingStatus status = BloodTypingStatus.fromObject(result.get("bloodTypingStatus"));
+      if (status.equals(BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH))
+        addErrorToMap(errorMap, collectionId, (long)-1,
+              "No Match found for collection number: " + collectedSample.getCollectionNumber());
       System.out.println("Collection: " + collectedSample.getCollectionNumber());
       System.out.println("Blood Typing Result: " + result);
+      bloodTypingResultsForCollections.put(collectedSample.getId(), result);
     }
 
-    return null;
+    Map<String, Object> results = new HashMap<String, Object>();
+    results.put("collections", collectedSamplesMap);
+    results.put("bloodTypingResults", bloodTypingResultsForCollections);
+    results.put("errors", errorMap);
+    return results;
   }
 
   public Map<Long, Map<Long, String>> validateValuesInWells(Map<Long, Map<Long, String>> bloodTypingTestResults) {

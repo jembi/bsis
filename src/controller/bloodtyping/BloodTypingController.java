@@ -123,6 +123,7 @@ public class BloodTypingController {
     return tests;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
   public ModelAndView saveBloodTypingTests(HttpServletRequest request,
       HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests,
@@ -138,7 +139,8 @@ public class BloodTypingController {
 
     mv.addObject("bloodTypingTestResults", bloodTypingTestResults);
 
-    Map<Long, Map<Long, String>> errorMap = bloodTypingRepository.validateValuesInWells(bloodTypingTestResults);
+    Map<String, Object> results = bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResults);
+    Map<Long, Map<Long, String>> errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     Map<String, Object> tips = new HashMap<String, Object>();
     System.out.println(errorMap);
     if (errorMap != null && errorMap.size() > 0) {
@@ -157,7 +159,8 @@ public class BloodTypingController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
     else {
-      Map<String, List<BloodTypingTest>> resultStatus = bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResults);
+      mv.addObject("collections", results.get("collections"));
+      mv.addObject("bloodTypingResults", results.get("bloodTypingResults"));
       mv.addObject("success", true);
       mv.setViewName("bloodtyping/bloodTypingWellsSuccess");
     }
@@ -171,6 +174,7 @@ public class BloodTypingController {
     System.out.println(bloodTypingTests);
     Map<Long, Map<Long, String>> bloodTypingTestMap = new HashMap<Long, Map<Long,String>>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Map<String, String>> generatedMap = mapper.readValue(bloodTypingTests, HashMap.class);
       for (String collectionId : generatedMap.keySet()) {
         Map<Long, String> testResults = new HashMap<Long, String>();

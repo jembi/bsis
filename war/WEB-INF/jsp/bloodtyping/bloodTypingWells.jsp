@@ -111,6 +111,11 @@ $(document).ready(function() {
 			<jsp:include page="../common/errorBox.jsp">
 				<jsp:param name="errorMessage" value="${errorMessage}" />
 			</jsp:include>
+			<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
+					<c:set var="collection" value="${collections[colNum]}" />
+						${collection.collectionNumber} : ${errorMap[collection.id]}
+						<br />
+			</c:forEach>
 		</c:if>
 
 		<div class="bloodTypingPlate">
@@ -191,6 +196,9 @@ $(document).ready(function() {
 				<label style="width: 70px;">${bloodTestsOnPlate[rowNum-1].testNameShort}</label>
 				<br />
 			</c:forEach>
+
+			<c:if test="${not empty success and !success}">
+			</c:if>
 		</div>
 
 		<div style="margin-left: 200px;">

@@ -14,5 +14,17 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <div id="${tabContentId}">
-	success
+
+	<div id="${mainContentId}">
+		<div class="successBox ui-state-highlight">
+			<img src="images/check_icon.png"
+					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
+			<span class="successText">
+				Blood Typing tests added successfully for collections.
+				<br />
+				Please review results below. Perform confirmatory tests for collections as indicated.
+			</span>
+		</div>
+	</div>
+
 </div>

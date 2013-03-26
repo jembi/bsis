@@ -27,6 +27,25 @@ public class BloodTypingRuleEngine {
   @PersistenceContext
   private EntityManager em;
 
+  /**
+   * Apply blood typing rules to blood typing tests (combination of what is present in the database and
+   * those passed as parameter.
+   * @param collectedSample Blood Typing results for which collection
+   * @param bloodTypingTestResults map of blood typing test id to result. Only character allowed in the result.
+   *                               multiple characters should be mapped to negative/positive (TODO)
+   *                               Assume validation of results already done.
+   * @return Result of applying the rules. The following values should be present in the map
+   *         bloodAbo (what changes should be made to blood abo after applying these rules),\
+   *         bloodRh (what changes should be made to blood rh),
+   *         extra (extra information that should be added to the blood type like weak A),
+   *         pendingTests (comma separated list of blood typing tests that must be done to
+   *                       determine the blood type),
+   *         testResults (map of blood typing test id to blood typing test either stored or
+   *                      those passed to this function or those already stored in the database),
+   *         bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is available),
+   *         storedTestResults (what blood typing results are actually stored in the database,
+   *                            a subset of testResults)
+   */
   public Map<String, Object> applyBloodTypingTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
 
     String queryStr = "SELECT r FROM BloodTypingRule r WHERE isActive=:isActive";
@@ -51,7 +70,8 @@ public class BloodTypingRuleEngine {
     Set<String> bloodAboChanges = new HashSet<String>();
     Set<String> bloodRhChanges = new HashSet<String>();
     Set<String> extraInformation = new HashSet<String>();
-    List<String> pendingTestIds = new ArrayList<String>();
+    List<String> pendingAboTestIds = new ArrayList<String>();
+    List<String> pendingRhTestIds = new ArrayList<String>();
 
     for (BloodTypingRule rule : rules) {
 
@@ -105,10 +125,20 @@ public class BloodTypingRuleEngine {
         if (StringUtils.isNotBlank(rule.getExtraInformation())) 
           extraInformation.add(rule.getExtraInformation());
 
-        if (StringUtils.isNotBlank(rule.getExtraTestsIds())) {
-          for (String extraTestId : rule.getExtraTestsIds().split(",")) {
+        // find extra tests for ABO
+        if (StringUtils.isNotBlank(rule.getExtraTestsABOIds())) {
+          for (String extraTestId : rule.getExtraTestsABOIds().split(",")) {
             if (!availableTests.containsKey(extraTestId)) {
-              pendingTestIds.add(extraTestId);
+              pendingAboTestIds.add(extraTestId);
+            }
+          }
+        }
+
+        // find extra tests for Rh
+        if (StringUtils.isNotBlank(rule.getExtraTestsRhIds())) {
+          for (String extraTestId : rule.getExtraTestsRhIds().split(",")) {
+            if (!availableTests.containsKey(extraTestId)) {
+              pendingRhTestIds.add(extraTestId);
             }
           }
         }
@@ -124,11 +154,19 @@ public class BloodTypingRuleEngine {
 
     BloodTypingStatus status = BloodTypingStatus.INCOMPLETE_INFORMATION;
     if (bloodAboChanges.size() > 1 || bloodRhChanges.size() > 1) {
-      status = BloodTypingStatus.AMBIGUOUS;
+      status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
     }
-    if (bloodAboChanges.isEmpty() || bloodRhChanges.isEmpty()) {
-      if (pendingTestIds.size() > 0)
-        status = BloodTypingStatus.PENDING_TESTS;
+    if (bloodAboChanges.isEmpty()) {
+      if (pendingAboTestIds.size() > 0)
+        status = BloodTypingStatus.PENDING_TESTS_ABO;
+      else
+        status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
+    }
+    if (bloodRhChanges.isEmpty()) {
+      if (pendingRhTestIds.size() > 0)
+        status = BloodTypingStatus.PENDING_TESTS_RH;
+      else
+        status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
     }
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
       status = BloodTypingStatus.COMPLETE;
@@ -138,7 +176,7 @@ public class BloodTypingRuleEngine {
     result.put("bloodAbo", bloodAboChanges);
     result.put("bloodRh", bloodRhChanges);
     result.put("extra", extraInformation);
-    result.put("pendingTests", pendingTestIds);
+    result.put("pendingTests", pendingAboTestIds);
     result.put("testResults", availableTests);
     result.put("bloodTypingStatus", status);
     result.put("storedTestResults", storedTestResults);
