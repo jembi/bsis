@@ -23,7 +23,7 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 import model.util.BloodAbo;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -95,7 +95,7 @@ public class Donor implements ModificationTracker {
 
   @Enumerated(EnumType.STRING)
   @Column(length=10)
-  private BloodRhd bloodRhd;
+  private BloodRh bloodRhd;
 
   /**
    * Do not see a need to search by birthdate so need not add an index here.
@@ -172,7 +172,7 @@ public class Donor implements ModificationTracker {
     return bloodAbo;
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return bloodRhd;
   }
 
@@ -222,7 +222,7 @@ public class Donor implements ModificationTracker {
     this.bloodAbo = bloodAbo;
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
+  public void setBloodRhd(BloodRh bloodRhd) {
     this.bloodRhd = bloodRhd;
   }
 

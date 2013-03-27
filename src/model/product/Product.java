@@ -30,7 +30,7 @@ import model.reasons.ProductStatusChangeReason;
 import model.request.Request;
 import model.user.User;
 import model.util.BloodAbo;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
@@ -75,7 +75,7 @@ public class Product implements ModificationTracker {
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="donor_bloodRhd_index")
-  private BloodRhd bloodRhd;
+  private BloodRh bloodRhd;
 
   @ManyToOne
   private ProductStatusChangeReason discardReason;
@@ -185,11 +185,11 @@ public class Product implements ModificationTracker {
     this.bloodAbo = bloodAbo;
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return bloodRhd;
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
+  public void setBloodRhd(BloodRh bloodRhd) {
     this.bloodRhd = bloodRhd;
   }
 

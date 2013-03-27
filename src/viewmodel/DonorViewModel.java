@@ -9,7 +9,7 @@ import model.donor.Donor;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.springframework.stereotype.Component;
 
@@ -52,7 +52,7 @@ public class DonorViewModel {
     return donor.getBloodAbo();
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return donor.getBloodRhd();
   }
 

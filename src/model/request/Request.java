@@ -31,7 +31,7 @@ import model.requesttype.RequestTypeExists;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -72,7 +72,7 @@ public class Request implements ModificationTracker {
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodRhd_index")
-  private BloodRhd patientBloodRhd;
+  private BloodRh patientBloodRhd;
 
   // fetch type eager to check how many products issued
   @OneToMany(mappedBy="issuedTo")
@@ -198,7 +198,7 @@ public class Request implements ModificationTracker {
     return patientBloodAbo;
   }
 
-  public BloodRhd getPatientBloodRhd() {
+  public BloodRh getPatientBloodRhd() {
     return patientBloodRhd;
   }
 
@@ -246,7 +246,7 @@ public class Request implements ModificationTracker {
     this.patientBloodAbo = patientBloodAbo;
   }
 
-  public void setPatientBloodRhd(BloodRhd patientBloodRhd) {
+  public void setPatientBloodRhd(BloodRh patientBloodRhd) {
     this.patientBloodRhd = patientBloodRhd;
   }
 

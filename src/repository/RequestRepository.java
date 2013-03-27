@@ -25,7 +25,7 @@ import model.request.Request;
 import model.testresults.TestResult;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -522,7 +522,7 @@ public class RequestRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodRh bloodRhd = (BloodRh) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)

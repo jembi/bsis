@@ -141,21 +141,31 @@ public class BloodTypingRuleEngine {
       }
     }
 
-    BloodTypingStatus status = BloodTypingStatus.INCOMPLETE_INFORMATION;
+    String bloodAbo = "";
+    String bloodRh = "";
+    BloodTypingStatus status = BloodTypingStatus.NO_MATCH;
     if (bloodAboChanges.size() > 1 || bloodRhChanges.size() > 1) {
-      status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
+      status = BloodTypingStatus.AMBIGUOUS;
+    }
+    else {
+      if (bloodAboChanges.size() == 1)
+        bloodAbo = bloodAboChanges.iterator().next();
+      if (bloodRhChanges.size() == 1)
+        bloodRh = bloodRhChanges.iterator().next();
     }
     if (bloodAboChanges.isEmpty() || bloodRhChanges.isEmpty()) {
       if (pendingTestsIds.size() > 0)
-        status = BloodTypingStatus.PENDING_TESTS_ABO;
+        status = BloodTypingStatus.PENDING_TESTS;
     }
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
       status = BloodTypingStatus.COMPLETE;
     }
 
     Map<String, Object> result = new HashMap<String, Object>();
-    result.put("bloodAbo", bloodAboChanges);
-    result.put("bloodRh", bloodRhChanges);
+    result.put("allBloodAbo", bloodAboChanges);
+    result.put("allBloodRh", bloodRhChanges);
+    result.put("bloodAbo", bloodAbo);
+    result.put("bloodRh", bloodRh);
     result.put("extra", extraInformation);
     result.put("pendingTests", pendingTestsIds);
     result.put("testResults", availableTests);

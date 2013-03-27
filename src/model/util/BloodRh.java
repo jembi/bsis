@@ -1,5 +1,5 @@
 package model.util;
 
-public enum BloodRhd {
+public enum BloodRh {
   POSITIVE, NEGATIVE, Unknown
 }

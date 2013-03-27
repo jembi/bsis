@@ -30,7 +30,7 @@ import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -122,7 +122,7 @@ public class ProductRepository {
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
 
     BloodAbo bloodAbo = product.getBloodAbo();
-    BloodRhd bloodRhd = product.getBloodRhd();
+    BloodRh bloodRhd = product.getBloodRhd();
 
     Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
 
@@ -139,10 +139,10 @@ public class ProductRepository {
     t = testResultsMap.get("Blood Rh");
     if (t != null && !t.getIsDeleted()) {
     	try {
-    		bloodRhd = BloodRhd.valueOf(t.getResult());
+    		bloodRhd = BloodRh.valueOf(t.getResult());
     	} catch (IllegalArgumentException ex) {
     		ex.printStackTrace();
-    		bloodRhd = BloodRhd.Unknown;
+    		bloodRhd = BloodRh.Unknown;
     	}
     }
 
@@ -398,11 +398,11 @@ public class ProductRepository {
 
     return findAnyProductMatching(productNumber, collectionNumber,
         Arrays.asList(BloodAbo.A, BloodAbo.B, BloodAbo.O, BloodAbo.AB),
-        Arrays.asList(BloodRhd.POSITIVE, BloodRhd.NEGATIVE), types, availability);
+        Arrays.asList(BloodRh.POSITIVE, BloodRh.NEGATIVE), types, availability);
   }
 
   public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<BloodAbo> bloodAbo, List<BloodRhd> bloodRhd,
+      String collectionNumber, List<BloodAbo> bloodAbo, List<BloodRh> bloodRhd,
       List<ProductType> types, List<String> availability) {
 
     TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
@@ -497,7 +497,7 @@ public class ProductRepository {
     query.setParameter("testedStatus", TestedStatus.TESTED);
     query.setParameter("bloodAbo", request.getPatientBloodAbo());
     query.setParameter("bloodAboO", BloodAbo.O);
-    query.setParameter("bloodRhdNeg", BloodRhd.NEGATIVE);
+    query.setParameter("bloodRhdNeg", BloodRh.NEGATIVE);
     query.setParameter("bloodRhd", request.getPatientBloodRhd());
     query.setParameter("isDeleted", false);
 
@@ -621,10 +621,10 @@ public class ProductRepository {
     }
 
     if (abo == null || rh == null) {
-      return new BloodGroup(BloodAbo.Unknown, BloodRhd.Unknown);
+      return new BloodGroup(BloodAbo.Unknown, BloodRh.Unknown);
     }
 
-    return new BloodGroup(BloodAbo.valueOf(abo), BloodRhd.valueOf(rh));
+    return new BloodGroup(BloodAbo.valueOf(abo), BloodRh.valueOf(rh));
   }
 
   public BloodGroup getBloodGroupForProduct(Long productId) {
@@ -764,7 +764,7 @@ public class ProductRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodRh bloodRhd = (BloodRh) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
@@ -867,7 +867,7 @@ public class ProductRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodRh bloodRhd = (BloodRh) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)

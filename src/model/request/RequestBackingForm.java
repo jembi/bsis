@@ -14,7 +14,7 @@ import model.producttype.ProductType;
 import model.requesttype.RequestType;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 import model.util.Gender;
 import repository.RequestRepository;
 
@@ -70,7 +70,7 @@ public class RequestBackingForm {
     return request.getPatientBloodAbo();
   }
 
-  public BloodRhd getPatientBloodRhd() {
+  public BloodRh getPatientBloodRhd() {
     return request.getPatientBloodRhd();
   }
 
@@ -146,7 +146,7 @@ public class RequestBackingForm {
     request.setPatientBloodAbo(bloodAbo);
   }
 
-  public void setPatientBloodRhd(BloodRhd bloodRhd) {
+  public void setPatientBloodRhd(BloodRh bloodRhd) {
     request.setPatientBloodRhd(bloodRhd);
   }
 

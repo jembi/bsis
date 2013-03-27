@@ -12,7 +12,7 @@ import model.requesttype.RequestType;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 public class RequestViewModel {
 	private Request request;
@@ -53,7 +53,7 @@ public class RequestViewModel {
     return request.getPatientBloodAbo();
   }
 
-  public BloodRhd getPatientBloodRhd() {
+  public BloodRh getPatientBloodRhd() {
     return request.getPatientBloodRhd();
   }
 

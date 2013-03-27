@@ -11,7 +11,7 @@ import model.address.ContactInformation;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
@@ -105,7 +105,7 @@ public class DonorBackingForm {
     return donor.getBloodAbo();
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return donor.getBloodRhd();
   }
 
@@ -197,7 +197,7 @@ public class DonorBackingForm {
     donor.setBloodAbo(bloodAbo);
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
+  public void setBloodRhd(BloodRh bloodRhd) {
     donor.setBloodRhd(bloodRhd);
   }
 

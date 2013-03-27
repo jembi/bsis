@@ -37,7 +37,7 @@ import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.user.User;
 import model.util.BloodAbo;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 import model.worksheet.CollectionsWorksheet;
 
 import org.hibernate.annotations.Index;
@@ -114,7 +114,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private BloodRhd bloodRhd;
+  private BloodRh bloodRhd;
 
   @ManyToMany
   private List<CollectionsWorksheet> worksheets;
@@ -352,11 +352,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodAbo = bloodAbo;
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return bloodRhd;
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
+  public void setBloodRhd(BloodRh bloodRhd) {
     this.bloodRhd = bloodRhd;
   }
 

@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 import model.donor.Donor;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
@@ -69,7 +69,7 @@ public class DonorRepository {
     List<Predicate> bgPredicates = new ArrayList<Predicate>();
     for (BloodGroup bg : bloodGroups) {
       Expression<Boolean> aboExp = cb.equal(root.<BloodAbo>get("bloodAbo"), bg.getBloodAbo());
-      Expression<Boolean> rhdExp = cb.equal(root.<BloodRhd>get("bloodRhd"), bg.getBloodRhd());
+      Expression<Boolean> rhdExp = cb.equal(root.<BloodRh>get("bloodRhd"), bg.getBloodRhd());
       bgPredicates.add(cb.and(aboExp, rhdExp));
     }
 
@@ -136,7 +136,7 @@ public class DonorRepository {
 
   public Donor addDonor(Donor donor) {
     donor.setBloodAbo(BloodAbo.Unknown);
-    donor.setBloodRhd(BloodRhd.Unknown);
+    donor.setBloodRhd(BloodRh.Unknown);
     em.persist(donor);
     em.flush();
     return donor;

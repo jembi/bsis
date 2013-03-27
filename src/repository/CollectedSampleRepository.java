@@ -26,7 +26,7 @@ import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 import model.worksheet.CollectionsWorksheet;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -58,7 +58,7 @@ public class CollectedSampleRepository {
   public void updateCollectedSampleBloodGroup(CollectedSample c) {
 
     BloodAbo bloodAbo = c.getBloodAbo();
-    BloodRhd bloodRhd = c.getBloodRhd();
+    BloodRh bloodRhd = c.getBloodRhd();
 
     Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
 
@@ -75,10 +75,10 @@ public class CollectedSampleRepository {
     t = testResultsMap.get("Blood Rh");
     if (t != null && !t.getIsDeleted()) {
       try {
-        bloodRhd = BloodRhd.valueOf(t.getResult());
+        bloodRhd = BloodRh.valueOf(t.getResult());
       } catch (IllegalArgumentException ex) {
         ex.printStackTrace();
-        bloodRhd = BloodRhd.Unknown;
+        bloodRhd = BloodRh.Unknown;
       }
     }
     c.setBloodAbo(bloodAbo);
@@ -331,7 +331,7 @@ public class CollectedSampleRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRhd bloodRhd = (BloodRhd) result[3];
+      BloodRh bloodRhd = (BloodRh) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)

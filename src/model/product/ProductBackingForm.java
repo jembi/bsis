@@ -13,7 +13,7 @@ import model.producttype.ProductType;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -89,7 +89,7 @@ public class ProductBackingForm {
     return product.getBloodAbo();
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return product.getBloodRhd();
   }
 
@@ -185,7 +185,7 @@ public class ProductBackingForm {
     product.setBloodAbo(bloodAbo);
   }
 
-  public void setBloodRhd(BloodRhd bloodRhd) {
+  public void setBloodRhd(BloodRh bloodRhd) {
     product.setBloodRhd(bloodRhd);
   }
 

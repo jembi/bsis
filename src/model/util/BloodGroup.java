@@ -6,31 +6,31 @@ import java.util.Map;
 public class BloodGroup {
 
   private BloodAbo abo;
-  private BloodRhd rhd;
+  private BloodRh rhd;
 
   static final private Map<String, BloodGroup> bloodgroups = new HashMap<String, BloodGroup>();
   
   static {
-    bloodgroups.put("a+", new BloodGroup(BloodAbo.A, BloodRhd.POSITIVE));
-    bloodgroups.put("b+", new BloodGroup(BloodAbo.B, BloodRhd.POSITIVE));
-    bloodgroups.put("ab+", new BloodGroup(BloodAbo.AB, BloodRhd.POSITIVE));
-    bloodgroups.put("o+", new BloodGroup(BloodAbo.O, BloodRhd.POSITIVE));
-    bloodgroups.put("a-", new BloodGroup(BloodAbo.A, BloodRhd.NEGATIVE));
-    bloodgroups.put("b-", new BloodGroup(BloodAbo.B, BloodRhd.NEGATIVE));
-    bloodgroups.put("ab-", new BloodGroup(BloodAbo.AB, BloodRhd.NEGATIVE));
-    bloodgroups.put("o-", new BloodGroup(BloodAbo.O, BloodRhd.NEGATIVE));
+    bloodgroups.put("a+", new BloodGroup(BloodAbo.A, BloodRh.POSITIVE));
+    bloodgroups.put("b+", new BloodGroup(BloodAbo.B, BloodRh.POSITIVE));
+    bloodgroups.put("ab+", new BloodGroup(BloodAbo.AB, BloodRh.POSITIVE));
+    bloodgroups.put("o+", new BloodGroup(BloodAbo.O, BloodRh.POSITIVE));
+    bloodgroups.put("a-", new BloodGroup(BloodAbo.A, BloodRh.NEGATIVE));
+    bloodgroups.put("b-", new BloodGroup(BloodAbo.B, BloodRh.NEGATIVE));
+    bloodgroups.put("ab-", new BloodGroup(BloodAbo.AB, BloodRh.NEGATIVE));
+    bloodgroups.put("o-", new BloodGroup(BloodAbo.O, BloodRh.NEGATIVE));
   }
 
   public BloodGroup() {
     abo = BloodAbo.Unknown;
-    rhd = BloodRhd.Unknown;
+    rhd = BloodRh.Unknown;
   }
 
   public BloodGroup(String bloodGroup) {
     BloodGroup bg = bloodgroups.get(bloodGroup.toLowerCase());
     if (bg == null) {
       abo = BloodAbo.Unknown;
-      rhd = BloodRhd.Unknown;
+      rhd = BloodRh.Unknown;
     }
     else {
       abo = bg.abo;
@@ -38,7 +38,7 @@ public class BloodGroup {
     }
   }
 
-  public BloodGroup(BloodAbo abo, BloodRhd rhd) {
+  public BloodGroup(BloodAbo abo, BloodRh rhd) {
     this.abo = abo;
     this.rhd = rhd;
   }
@@ -72,7 +72,7 @@ public class BloodGroup {
     return abo;
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return rhd;
   }
 }

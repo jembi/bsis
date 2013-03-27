@@ -10,7 +10,7 @@ import model.producttype.ProductType;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRhd;
+import model.util.BloodRh;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -70,7 +70,7 @@ public class ProductViewModel {
     return product.getBloodAbo();
   }
 
-  public BloodRhd getBloodRhd() {
+  public BloodRh getBloodRhd() {
     return product.getBloodRhd();
   }
 
