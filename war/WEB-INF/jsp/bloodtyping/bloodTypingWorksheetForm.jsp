@@ -12,6 +12,8 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
+<c:set var="enterPrimaryResultsRadioButtonId">enterPrimaryResultsRadioButton-${unique_page_id}</c:set>
+<c:set var="enterSecondaryResultsRadioButtonId">enterSecondaryResultsRadioButton-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -75,9 +77,24 @@ $(document).ready(function() {
 				</jsp:include>
 			</c:if>
 
+			<!-- input should be auto-width. Primary results shows the basic test results table. -->
+			<div>
+				<input type="radio" name="resultStage"
+							 id="${enterPrimaryResultsRadioButtonId}"
+							 style="width: auto;" checked="checked" />
+				<label for="${enterPrimaryResultsRadioButtonId}" style="width: auto;">
+							 Enter primary results
+				</label>
+				<input type="radio" name="resultStage"
+							 id="${enterSecondaryResultsRadioButtonId}"
+							 style="width: auto;" />
+				<label for="${enterSecondaryResultsRadioButtonId}" style="width: auto;">Enter secondary results</label>
+			</div>
+
+			<!-- this div is necessary to align the following message with the rest of the labels -->
 			<div>
 				<label style="width: auto;">
-					Enter a maximum of ${plate.numColumns} collection numbers in the order they are placed on the plate
+					Scan or enter collection numbers (maximum ${plate.numColumns})
 				</label>
 			</div>
 

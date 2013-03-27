@@ -16,56 +16,26 @@
 
 <script>
 $(document).ready(function() {
-	$("#${mainContentId}").find(".showHideButton")
-										    .button({icons: {primary : 'ui-icon-plusthick'}})
-										    .click(showHideToggle);
-
-	function showHideToggle() {
-	  var showHideButton = $(this);
-	  var parentSection = showHideButton.closest(".moreTestsSection");
-	  var showHideSection = parentSection.find(".showHideTestsSection");
-	  var currentlyVisible = showHideSection.is(":visible");
-	  if (currentlyVisible) {
-	    showHideButton.button("option", "label", "Show more tests");
-	    showHideButton.button("option", "icons", {primary : "ui-icon-plusthick"});
-	    showHideSection.hide();
-	  }
-	  else {
-	    showHideButton.button("option", "label", "Show fewer tests");
-	    showHideButton.button("option", "icons", {primary : "ui-icon-minusthick"});
-	    showHideSection.show();
-	  }
-	}
-
-	$("#${mainContentId}").find(".showHideButton")
-										   	.each(showHideToggle);
-
-	$("#${mainContentId}").find(".saveMoreTestsButton")
-												.button({icons: {primary : 'ui-icon-plusthick'}})
-												.click(saveTests);
-
-	$("#${mainContentId}").find(".cancelMoreTestsButton")
-												.button()
-												.click(cancelTestsInput);
-
-	function saveTests() {
-	  console.log("save tests button clicked");
-	}
-
-	function cancelTestsInput() {
-	  var cancelButton = $(this);
-	  var parentSection = cancelButton.closest(".moreTestsSection");
-	  parentSection.find("input").each(function() {
-	    															   $(this).val(this.defaultValue);
-	    															 });
-	}
-
+	$("#${mainContentId}").find(".bloodTypingPrimaryTestsDoneSummaryTable")
+												.dataTable({
+									        "bJQueryUI" : true,
+									        "sDom" : '<"H"T>t<"F"ip>T',
+									        "oTableTools" : {
+									          "sRowSelect" : "single",
+									          "aButtons" : [ "print" ],
+									          "fnRowSelected" : function(node) {
+									 													  },
+													"fnRowDeselected" : function(node) {
+																							}
+													}
+									       });
 });
 </script>
 
 <div id="${tabContentId}">
 
 	<div id="${mainContentId}">
+
 		<div class="successBox ui-state-highlight">
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
@@ -75,98 +45,49 @@ $(document).ready(function() {
 				Please review results below. Perform confirmatory tests for collections as indicated.
 			</span>
 		</div>
-		<c:forEach var="collection" items="${collections}">
-			<c:set var="bloodTypingOutputForCollection" value="${bloodTypingOutput[collection.key]}" />
-			<c:set var="bloodTypingTestResultsForCollection" value="${bloodTypingOutputForCollection['testResults']}" />
-			<c:set var="pendingTests" value="${bloodTypingOutputForCollection['pendingTests']}" />
-			<div class="bloodTypingForCollectionSection formInTabPane">
-				<div>
-					<label>${collectionFields.collectionNumber.displayName}</label>
-					<label>${collection.value.collectionNumber}</label>
-				</div>
-	
-				<div>
-					<label>Blood Typing Status</label>
-					<label>${bloodTypingOutputForCollection['bloodTypingStatus']}</label>
-				</div>
-	
-				<div>
-					<label>Blood ABO</label>
-					<label>${bloodTypingOutputForCollection['bloodAbo']}</label>
-				</div>
-	
-				<div>
-					<label>Blood Rh</label>
-					<label>${bloodTypingOutputForCollection['bloodRh']}</label>
-				</div>
-	
-	
-				<div class="moreTestsSection">
-					<div class="formInTabPane" style="margin-left: 0px;">
-						<c:if test="${fn:length(pendingTests) gt 0}">
-							<div>
-								<label>
-									<b>More tests required</b>
-								</label>
-							</div>
-							<c:forEach var="pendingTestId" items="${pendingTests}">
-								<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
-								<div>
-									<label>${pendingTest.testName}</label>
-									<input name="pendingTest" />
-								</div>
-							</c:forEach>
-						</c:if>
-					</div>
 
-					<div class="showHideTestsSection formInTabPane" style="margin-left: 0px;">
-						<!-- Show other tests to the user -->
-						<c:forEach var="advancedTest" items="${advancedBloodTypingTests}">
-			
-							<c:set var="isPendingTest" value="${false}" />
-							<c:forEach var="pendingTestId" items="${pendingTests}">
-								<c:if test="${pendingTestId eq advancedTest.key}">
-									<c:set var="isPendingTest" value="${true}" />
-								</c:if>
-							</c:forEach>
-			
-							<c:if test="${!isPendingTest}">
-								<div>
-									<label>${advancedTest.value.testName}</label>
-									<input name="advancedTest" />
-								</div>
-							</c:if>
-						</c:forEach>
+		<table class="bloodTypingPrimaryTestsDoneSummaryTable">
+			<thead>
+				<tr>
+					<th>${collectionFields.collectionNumber.displayName}</th>
+					<th>Blood Typing Status</th>
+					<th>Pending tests</th>
+					<th>Blood ABO determined</th>
+					<th>Blood Rh determined</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="collectionEntry" items="${collections}">
+					<c:set var="collection" value="${collectionEntry.value}" />
+					<c:set var="bloodTypingOutputForCollection" value="${bloodTypingOutput[collection.id]}" />
+					<tr>
+						<td style="width: 140px;">
+							${collection.collectionNumber}
+						</td>
+						<td style="text-align: center; width: 140px;">
+							${bloodTypingOutputForCollection['bloodTypingStatus']}
+						</td>
+						<td style="width: auto;">
+							<ul>
+								<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection['pendingTests']}">
+									<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
+									<li>
+										${pendingTest.testName}
+									</li>
+								</c:forEach>
+							</ul>
+						</td>
+						<td style="text-align: center; width: 140px;">
+							${bloodTypingOutputForCollection['bloodAbo']}
+						</td>
+						<td style="text-align: center; width: 140px;">
+							${bloodTypingOutputForCollection['bloodRh']}
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
 
-						<!-- Save/Cancel button should be hidable if no pending tests -->
-						<c:if test="${fn:length(pendingTests) eq 0}">
-							<div>
-								<button class="saveMoreTestsButton">Save</button>
-								<button class="cancelMoreTestsButton">Cancel</button>
-							</div>
-						</c:if>
-
-					</div>
-
-					<!-- Save/Cancel button should always be displayed if there are pending tests -->
-					<c:if test="${fn:length(pendingTests) gt 0}">
-						<div>
-							<button class="saveMoreTestsButton">Save</button>
-							<button class="cancelMoreTestsButton">Cancel</button>
-						</div>
-					</c:if>
-
-					<br />
-
-					<div>
-						<button class="showHideButton">
-						</button>
-					</div>
-
-				</div>
-	
-			</div>
-		</c:forEach>
 	</div>
 
 </div>
