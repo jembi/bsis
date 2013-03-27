@@ -29,6 +29,27 @@ $(document).ready(function() {
 																							}
 													}
 									       });
+
+	$("#${mainContentId}").find(".enterTestResultsForCollectionsButton")
+												.button({icons: {primary :  'ui-icon-plusthick'}})
+												.click(fetchBloodTypingForm);
+
+	function fetchBloodTypingForm() {
+	  showLoadingImage($("#${tabContentId}"));
+    $.ajax({
+      url: "bloodTypingWorksheetGenerator.html",
+      data: {},
+      type: "GET",
+      success: function (response) {
+        			 	 $("#${tabContentId}").replaceWith(response);
+      				 },
+      error:   function (response) {
+								 showErrorMessage("Something went wrong. Please try again.");
+      				 }
+      
+    });
+	}
+
 });
 </script>
 
@@ -43,8 +64,20 @@ $(document).ready(function() {
 				Blood Typing tests added successfully for collections.
 				<br />
 				Please review results below. Perform confirmatory tests for collections as indicated.
+				You may click the collections in the table below to enter secondary test results now.
 			</span>
 		</div>
+
+		<br />
+		<br />
+
+		<button class="enterTestResultsForCollectionsButton">
+			Enter blood typing tests for more collections
+		</button>
+
+		<br />
+		<br />
+		<br />
 
 		<table class="bloodTypingPrimaryTestsDoneSummaryTable">
 			<thead>
