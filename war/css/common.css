@@ -726,3 +726,7 @@ tr > td
 	border-color: transparent;
 	color: white;
 }
+
+.bloodTypingForCollectionSection {
+	background-color: rgb(212, 228, 227);
+}

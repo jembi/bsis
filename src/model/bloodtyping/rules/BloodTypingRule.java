@@ -38,10 +38,7 @@ public class BloodTypingRule {
   private String extraInformation;
 
   @Column(length=30)
-  private String extraTestsABOIds;
-
-  @Column(length=30)
-  private String extraTestsRhIds;
+  private String extraTestsIds;
 
   private Boolean markSampleAsUnsafe;
 
@@ -61,10 +58,6 @@ public class BloodTypingRule {
 
   public BloodGroupPart getPart() {
     return partOfBloodGroupChanged;
-  }
-
-  public String getExtraTestsABOIds() {
-    return extraTestsABOIds;
   }
 
   public Boolean getMarkSampleAsUnsafe() {
@@ -91,10 +84,6 @@ public class BloodTypingRule {
     this.partOfBloodGroupChanged = part;
   }
 
-  public void setExtraTestsABOIds(String extraTestsABOIds) {
-    this.extraTestsABOIds = extraTestsABOIds;
-  }
-
   public void setMarkSampleAsUnsafe(Boolean markSampleAsUnsafe) {
     this.markSampleAsUnsafe = markSampleAsUnsafe;
   }
@@ -119,11 +108,11 @@ public class BloodTypingRule {
     this.extraInformation = extraInformation;
   }
 
-  public String getExtraTestsRhIds() {
-    return extraTestsRhIds;
+  public String getExtraTestsIds() {
+    return extraTestsIds;
   }
 
-  public void setExtraTestsRhIds(String extraTestsRhIds) {
-    this.extraTestsRhIds = extraTestsRhIds;
+  public void setExtraTestsIds(String extraTestsIds) {
+    this.extraTestsIds = extraTestsIds;
   }
 }

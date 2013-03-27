@@ -77,10 +77,6 @@ public class BloodTypingRepository {
       CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
       Map<String, Object> result = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
       collectedSamplesMap.put(collectedSample.getId(), collectedSample);
-      BloodTypingStatus status = BloodTypingStatus.fromObject(result.get("bloodTypingStatus"));
-      if (status.equals(BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH))
-        addErrorToMap(errorMap, collectionId, (long)-1,
-              "No Match found for collection number: " + collectedSample.getCollectionNumber());
       System.out.println("Collection: " + collectedSample.getCollectionNumber());
       System.out.println("Blood Typing Result: " + result);
       bloodTypingResultsForCollections.put(collectedSample.getId(), result);

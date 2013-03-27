@@ -159,8 +159,15 @@ public class BloodTypingController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
     else {
+      List<BloodTypingTest> advancedTests = bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.ADVANCED);
+      Map<String, BloodTypingTest> advancedTestsMap = new HashMap<String, BloodTypingTest>();
+      for (BloodTypingTest advancedTest : advancedTests) {
+        advancedTestsMap.put(advancedTest.getId().toString(), advancedTest);
+      }
+      mv.addObject("advancedBloodTypingTests", advancedTestsMap);
+      mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
       mv.addObject("collections", results.get("collections"));
-      mv.addObject("bloodTypingResults", results.get("bloodTypingResults"));
+      mv.addObject("bloodTypingOutput", results.get("bloodTypingResults"));
       mv.addObject("success", true);
       mv.setViewName("bloodtyping/bloodTypingWellsSuccess");
     }

@@ -70,8 +70,7 @@ public class BloodTypingRuleEngine {
     Set<String> bloodAboChanges = new HashSet<String>();
     Set<String> bloodRhChanges = new HashSet<String>();
     Set<String> extraInformation = new HashSet<String>();
-    List<String> pendingAboTestIds = new ArrayList<String>();
-    List<String> pendingRhTestIds = new ArrayList<String>();
+    List<String> pendingTestsIds = new ArrayList<String>();
 
     for (BloodTypingRule rule : rules) {
 
@@ -126,23 +125,13 @@ public class BloodTypingRuleEngine {
           extraInformation.add(rule.getExtraInformation());
 
         // find extra tests for ABO
-        if (StringUtils.isNotBlank(rule.getExtraTestsABOIds())) {
-          for (String extraTestId : rule.getExtraTestsABOIds().split(",")) {
+        if (StringUtils.isNotBlank(rule.getExtraTestsIds())) {
+          for (String extraTestId : rule.getExtraTestsIds().split(",")) {
             if (!availableTests.containsKey(extraTestId)) {
-              pendingAboTestIds.add(extraTestId);
+              pendingTestsIds.add(extraTestId);
             }
           }
         }
-
-        // find extra tests for Rh
-        if (StringUtils.isNotBlank(rule.getExtraTestsRhIds())) {
-          for (String extraTestId : rule.getExtraTestsRhIds().split(",")) {
-            if (!availableTests.containsKey(extraTestId)) {
-              pendingRhTestIds.add(extraTestId);
-            }
-          }
-        }
-
       } else {
 //        System.out.println("Pattern did not match");
 //        System.out.println("test ids: " + rule.getBloodTypingTestIds() + ", " +
@@ -156,17 +145,9 @@ public class BloodTypingRuleEngine {
     if (bloodAboChanges.size() > 1 || bloodRhChanges.size() > 1) {
       status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
     }
-    if (bloodAboChanges.isEmpty()) {
-      if (pendingAboTestIds.size() > 0)
+    if (bloodAboChanges.isEmpty() || bloodRhChanges.isEmpty()) {
+      if (pendingTestsIds.size() > 0)
         status = BloodTypingStatus.PENDING_TESTS_ABO;
-      else
-        status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
-    }
-    if (bloodRhChanges.isEmpty()) {
-      if (pendingRhTestIds.size() > 0)
-        status = BloodTypingStatus.PENDING_TESTS_RH;
-      else
-        status = BloodTypingStatus.AMBIGUOUS_OR_NO_MATCH;
     }
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
       status = BloodTypingStatus.COMPLETE;
@@ -176,7 +157,7 @@ public class BloodTypingRuleEngine {
     result.put("bloodAbo", bloodAboChanges);
     result.put("bloodRh", bloodRhChanges);
     result.put("extra", extraInformation);
-    result.put("pendingTests", pendingAboTestIds);
+    result.put("pendingTests", pendingTestsIds);
     result.put("testResults", availableTests);
     result.put("bloodTypingStatus", status);
     result.put("storedTestResults", storedTestResults);
