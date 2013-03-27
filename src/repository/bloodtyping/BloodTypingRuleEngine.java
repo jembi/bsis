@@ -20,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import viewmodel.BloodTypingRuleResult;
+
 @Repository
 @Transactional
 public class BloodTypingRuleEngine {
@@ -46,7 +48,7 @@ public class BloodTypingRuleEngine {
    *         storedTestResults (what blood typing results are actually stored in the database,
    *                            a subset of testResults)
    */
-  public Map<String, Object> applyBloodTypingTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
+  public BloodTypingRuleResult applyBloodTypingTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
 
     String queryStr = "SELECT r FROM BloodTypingRule r WHERE isActive=:isActive";
     TypedQuery<BloodTypingRule> query = em.createQuery(queryStr, BloodTypingRule.class);
@@ -60,11 +62,11 @@ public class BloodTypingRuleEngine {
       storedTestResults.put(t.getId().toString(), t.getResult());
     }
 
-    Map<String, String> availableTests = new HashMap<String, String>();
-    availableTests.putAll(storedTestResults);
+    Map<String, String> availableTestResults = new HashMap<String, String>();
+    availableTestResults.putAll(storedTestResults);
     for (Long extraTestId : bloodTypingTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results
-      availableTests.put(extraTestId.toString(), bloodTypingTestResults.get(extraTestId));
+      availableTestResults.put(extraTestId.toString(), bloodTypingTestResults.get(extraTestId));
     }
 
     Set<String> bloodAboChanges = new HashSet<String>();
@@ -84,7 +86,7 @@ public class BloodTypingRuleEngine {
       String inputPattern = "";
       for (String testId : testIds) {
         indexInPattern = indexInPattern+1;
-        String actualResult = availableTests.get(testId); 
+        String actualResult = availableTestResults.get(testId); 
         if (actualResult == null) {
           missingTestIdsForRule.add(testId);
           inputPattern += "?";
@@ -127,7 +129,7 @@ public class BloodTypingRuleEngine {
         // find extra tests for ABO
         if (StringUtils.isNotBlank(rule.getExtraTestsIds())) {
           for (String extraTestId : rule.getExtraTestsIds().split(",")) {
-            if (!availableTests.containsKey(extraTestId)) {
+            if (!availableTestResults.containsKey(extraTestId)) {
               pendingTestsIds.add(extraTestId);
             }
           }
@@ -143,9 +145,9 @@ public class BloodTypingRuleEngine {
 
     String bloodAbo = "";
     String bloodRh = "";
-    BloodTypingStatus status = BloodTypingStatus.NO_MATCH;
+    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NO_MATCH;
     if (bloodAboChanges.size() > 1 || bloodRhChanges.size() > 1) {
-      status = BloodTypingStatus.AMBIGUOUS;
+      bloodTypingStatus = BloodTypingStatus.AMBIGUOUS;
     }
     else {
       if (bloodAboChanges.size() == 1)
@@ -155,23 +157,23 @@ public class BloodTypingRuleEngine {
     }
     if (bloodAboChanges.isEmpty() || bloodRhChanges.isEmpty()) {
       if (pendingTestsIds.size() > 0)
-        status = BloodTypingStatus.PENDING_TESTS;
+        bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
     }
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
-      status = BloodTypingStatus.COMPLETE;
+      bloodTypingStatus = BloodTypingStatus.COMPLETE;
     }
 
-    Map<String, Object> result = new HashMap<String, Object>();
-    result.put("allBloodAbo", bloodAboChanges);
-    result.put("allBloodRh", bloodRhChanges);
-    result.put("bloodAbo", bloodAbo);
-    result.put("bloodRh", bloodRh);
-    result.put("extra", extraInformation);
-    result.put("pendingTests", pendingTestsIds);
-    result.put("testResults", availableTests);
-    result.put("bloodTypingStatus", status);
-    result.put("storedTestResults", storedTestResults);
-    return result;
+    BloodTypingRuleResult ruleResult = new BloodTypingRuleResult();
+    ruleResult.setAllBloodAboChanges(bloodAboChanges);
+    ruleResult.setAllBloodRhChanges(bloodRhChanges);
+    ruleResult.setBloodAbo(bloodAbo);
+    ruleResult.setBloodRh(bloodRh);
+    ruleResult.setExtraInformation(extraInformation);
+    ruleResult.setPendingTestsIds(pendingTestsIds);
+    ruleResult.setAvailableTestResults(availableTestResults);
+    ruleResult.setBloodTypingStatus(bloodTypingStatus);
+    ruleResult.setStoredTestResults(storedTestResults);
+    return ruleResult;
   }
 
 }

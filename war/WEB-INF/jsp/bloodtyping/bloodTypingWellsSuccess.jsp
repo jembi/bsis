@@ -65,11 +65,11 @@ $(document).ready(function() {
 							${collection.collectionNumber}
 						</td>
 						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection['bloodTypingStatus']}
+							${bloodTypingOutputForCollection.bloodTypingStatus}
 						</td>
 						<td style="width: auto;">
 							<ul>
-								<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection['pendingTests']}">
+								<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingTestsIds}">
 									<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
 									<li>
 										${pendingTest.testName}
@@ -78,10 +78,10 @@ $(document).ready(function() {
 							</ul>
 						</td>
 						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection['bloodAbo']}
+							${bloodTypingOutputForCollection.bloodAbo}
 						</td>
 						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection['bloodRh']}
+							${bloodTypingOutputForCollection.bloodRh}
 						</td>
 					</tr>
 				</c:forEach>

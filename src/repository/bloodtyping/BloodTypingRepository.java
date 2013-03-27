@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
+import viewmodel.BloodTypingRuleResult;
 
 @Repository
 @Transactional
@@ -69,17 +70,15 @@ public class BloodTypingRepository {
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap) {
 
     Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
-    Map<Long, Map<String, Object>> bloodTypingResultsForCollections = new HashMap<Long, Map<String,Object>>(); 
+    Map<Long, BloodTypingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTypingRuleResult>(); 
 
     Map<Long, Map<Long, String>> errorMap = validateValuesInWells(bloodTypingTestResultsMap);
     for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
       Map<Long, String> bloodTypingTestResults = bloodTypingTestResultsMap.get(collectionId);
       CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-      Map<String, Object> result = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
+      BloodTypingRuleResult ruleResult = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
       collectedSamplesMap.put(collectedSample.getId(), collectedSample);
-      System.out.println("Collection: " + collectedSample.getCollectionNumber());
-      System.out.println("Blood Typing Result: " + result);
-      bloodTypingResultsForCollections.put(collectedSample.getId(), result);
+      bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
     }
 
     Map<String, Object> results = new HashMap<String, Object>();
