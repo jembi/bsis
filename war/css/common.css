@@ -696,9 +696,7 @@ tr > td
 }
 
 .successText {
-	display: inline-block;
 	position: relative;
-	left: 15px;
 	font-size: 16px; 
 }
 

@@ -19,10 +19,11 @@ $(document).ready(function() {
 	$("#${mainContentId}").find(".bloodTypingPrimaryTestsDoneSummaryTable")
 												.dataTable({
 									        "bJQueryUI" : true,
-									        "sDom" : '<"H"T>t<"F"ip>T',
+									        "sDom" : '<"H"T>t<"F"i>',
+									        "bPaginate" : false,
 									        "oTableTools" : {
 									          "sRowSelect" : "single",
-									          "aButtons" : [ "print" ],
+									          "aButtons" : [],
 									          "fnRowSelected" : function(node) {
 									 													  },
 													"fnRowDeselected" : function(node) {
@@ -55,17 +56,17 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}">
+	<div id="${mainContentId}" style="margin: 10px;">
 
 		<div class="successBox ui-state-highlight">
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
-			<span class="successText">
-				Blood Typing tests added successfully for collections.
-				<br />
-				Please review results below. Perform confirmatory tests for collections as indicated.
-				You may click the collections in the table below to enter secondary test results now.
-			</span>
+				<span class="successText">
+					Blood Typing tests added successfully for collections.
+					<br />
+					Please review results below. Perform confirmatory tests for collections as indicated.
+					You may click the collections in the table below to enter secondary test results now.
+				</span>
 		</div>
 
 		<br />
