@@ -20,7 +20,6 @@ $(document).ready(
 
       var selected_products = [];
       
-      var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : 'C<"H"lfrT>t<"F"ip>T',
@@ -33,7 +32,7 @@ $(document).ready(
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
 											        }
-											        selectedRowId = elements[0].innerHTML;
+											        var selectedRowId = elements[0].innerHTML;
 											        var checkbox = $(node).find(":checkbox");
 										        	selected_products.push(selectedRowId);
 										        	checkbox.attr("checked", true);
@@ -44,7 +43,7 @@ $(document).ready(
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
 											        }
-											        selectedRowId = elements[0].innerHTML;
+											        var selectedRowId = elements[0].innerHTML;
 											        var checkbox = $(node).find(":checkbox");
 											        selected_products.splice(selected_products.indexOf(selectedRowId), 1);
 											        checkbox.attr('checked', false);

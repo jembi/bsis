@@ -550,9 +550,8 @@ public class CollectedSampleRepository {
       collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
   }
 
-  public Map<Integer, CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
-    Map<Integer, CollectedSample> collections = new HashMap<Integer, CollectedSample>();
-    int i = 1;
+  public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
+    List<CollectedSample> collections = new ArrayList<CollectedSample>();
     for (String collectionNumber : collectionNumbers) {
       if (StringUtils.isBlank(collectionNumber))
         continue;
@@ -560,11 +559,10 @@ public class CollectedSampleRepository {
       collectedSample.setCollectionNumber(collectionNumber);
       collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
       if (collectedSample != null) {
-        collections.put(i, collectedSample);
+        collections.add(collectedSample);
       } else {
-        collections.put(i, null);
+        collections.add(null);
       }
-      i++;
     }
     return collections;
   }

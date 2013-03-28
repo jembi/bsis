@@ -1,6 +1,7 @@
 package repository.bloodtyping;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class BloodTypingRepository {
 
     Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
     Map<Long, BloodTypingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTypingRuleResult>(); 
-
+    Date testedOn = new Date();
     Map<Long, Map<Long, String>> errorMap = validateValuesInWells(bloodTypingTestResultsMap);
     if (errorMap.isEmpty()) {
       for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
@@ -96,8 +97,9 @@ public class BloodTypingRepository {
           btResult.setBloodTypingTest(bloodTypingTest);
           // not updating the inverse relation which means the
           // collectedSample.getBloodTypingResults() will not
-          // contain this result 
+          // contain this result
           btResult.setCollectedSample(collectedSample);
+          btResult.setTestedOn(testedOn);
           btResult.setNotes("");
           btResult.setResult(bloodTypingResultsForCollection.get(testId));
           em.persist(btResult);

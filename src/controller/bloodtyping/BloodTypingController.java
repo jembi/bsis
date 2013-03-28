@@ -27,6 +27,7 @@ import repository.GenericConfigRepository;
 import repository.bloodtyping.BloodTypingRepository;
 import viewmodel.BloodTypingRuleResult;
 import viewmodel.BloodTypingTestViewModel;
+import viewmodel.CollectedSampleViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -82,11 +83,11 @@ public class BloodTypingController {
     // here the key of the map corresponds to the index of the
     // collection number in the parameter collectionNumbers
     // corresponding to the collected sample in the value of the map
-    Map<Integer, CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
+    List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
 
     int numErrors = 0;
     int numValid = 0;
-    for (CollectedSample c : collections.values()) {
+    for (CollectedSample c : collections) {
       if (c == null)
         numErrors++;
       else
@@ -110,14 +111,14 @@ public class BloodTypingController {
 
       // this is a map with id of the collected sample as the key
       Map<Long, CollectedSample> collectionMap = new HashMap<Long, CollectedSample>();
-      for (CollectedSample c : collections.values()) {
+      for (CollectedSample c : collections) {
         collectionMap.put(c.getId(), c);
       }
       mv.addObject("collectionMap", collectionMap);
 
       // no errors but the user should be warned if there are any collections for which testing partly done
       Map<Long, BloodTypingRuleResult> collectionsWithBloodTypingTests = 
-          collectedSampleRepository.filterCollectionsWithBloodTypingResults(collections.values());
+          collectedSampleRepository.filterCollectionsWithBloodTypingResults(collections);
       mv.addObject("collectionsWithBloodTypingTests", collectionsWithBloodTypingTests);
 
       Map<String, BloodTypingTest> bloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
@@ -155,7 +156,7 @@ public class BloodTypingController {
       @RequestParam(value="refreshUrl") String refreshUrl) {
 
     ModelAndView mv = new ModelAndView();
-    Map<Integer, CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
+    List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
     mv.addObject("collectionNumbers", StringUtils.join(collectionNumbers, ","));
     mv.addObject("collections", collections);
 
@@ -185,7 +186,13 @@ public class BloodTypingController {
       mv.addObject("advancedBloodTypingTests", advancedTestsMap);
       mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
       mv.addObject("collections", results.get("collections"));
-      mv.addObject("collectionIds", StringUtils.join(collections.keySet(), ","));
+
+      List<String> collectionIds = new ArrayList<String>();
+      for (CollectedSample collection : collections) {
+        collectionIds.add(collection.getId().toString());
+      }
+      mv.addObject("collectionIds", StringUtils.join(collectionIds, ","));
+
       mv.addObject("bloodTypingOutput", results.get("bloodTypingResults"));
       mv.addObject("success", success);
       mv.setViewName("bloodtyping/bloodTypingWellsSuccess");
@@ -198,6 +205,7 @@ public class BloodTypingController {
       mv.addObject("success", success);
       mv.addObject("refreshUrl", refreshUrl);
       mv.addObject("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
+
       utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       mv.addObject("bloodTestsOnPlate", getBloodTestsOnPlate());
       mv.addObject("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
@@ -261,4 +269,36 @@ public class BloodTypingController {
     return mv;
   }
 
+  @RequestMapping(value="/showBloodTypingResultsForCollection", method=RequestMethod.GET)
+  public ModelAndView showBloodTypingResultsForCollection(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="collectionId") String collectionId) {
+    ModelAndView mv = new ModelAndView();
+    collectionId = collectionId.trim();
+    Long collectedSampleId = Long.parseLong(collectionId);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    BloodTypingRuleResult ruleResult = bloodTypingRepository.getBloodTypingTestStatus(collectedSampleId);
+    mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
+    mv.addObject("bloodTypingOutputForCollection", ruleResult);
+    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+
+    List<BloodTypingTest> bloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+    Map<String, BloodTypingTest> bloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
+    for (BloodTypingTest bloodTypingTest : bloodTypingTests) {
+      bloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
+    }
+    mv.addObject("allBloodTypingTests", bloodTypingTestsMap);
+
+    List<BloodTypingTest> advancedTests = bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.ADVANCED);
+    Map<String, BloodTypingTest> advancedTestsMap = new HashMap<String, BloodTypingTest>();
+    for (BloodTypingTest advancedTest : advancedTests) {
+      advancedTestsMap.put(advancedTest.getId().toString(), advancedTest);
+    }
+    mv.addObject("advancedBloodTypingTests", advancedTestsMap);
+
+    mv.setViewName("bloodtyping/bloodTypingSummaryCollection");
+
+    return mv;
+  }
 }

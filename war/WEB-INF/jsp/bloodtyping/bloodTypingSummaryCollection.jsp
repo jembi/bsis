@@ -59,6 +59,16 @@ $(document).ready(function() {
 									   $(this).val(this.defaultValue);
 									 });
 	}
+
+	$("#${mainContentId}").find(".doneButton")
+												.button({icons: {primary: 'ui-icon-check'}})
+												.click(doneButtonClicked);
+
+	function doneButtonClicked() {
+	  $("#${tabContentId}").trigger("collectionBloodTypingUpdated");
+		$("#${tabContentId}").remove();
+	}
+
 });
 </script>
 
@@ -66,8 +76,8 @@ $(document).ready(function() {
 
 	<div id="${mainContentId}">
 
-		<c:set var="bloodTypingTestResultsForCollection" value="${bloodTypingOutputForCollection['testResults']}" />
-		<c:set var="pendingTests" value="${bloodTypingOutputForCollection['pendingTests']}" />
+		<c:set var="bloodTypingTestResultsForCollection" value="${bloodTypingOutputForCollection.availableTestResults}" />
+		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingTestsIds}" />
 
 		<div class="bloodTypingForCollectionSection formInTabPane">
 			<div>
@@ -77,17 +87,17 @@ $(document).ready(function() {
 
 			<div>
 				<label>Blood Typing Status</label>
-				<label>${bloodTypingOutputForCollection['bloodTypingStatus']}</label>
+				<label>${bloodTypingOutputForCollection.bloodTypingStatus}</label>
 			</div>
 
 			<div>
 				<label>Blood ABO</label>
-				<label>${bloodTypingOutputForCollection['bloodAbo']}</label>
+				<label>${bloodTypingOutputForCollection.bloodAbo}</label>
 			</div>
 
 			<div>
 				<label>Blood Rh</label>
-				<label>${bloodTypingOutputForCollection['bloodRh']}</label>
+				<label>${bloodTypingOutputForCollection.bloodRh}</label>
 			</div>
 
 
@@ -154,7 +164,12 @@ $(document).ready(function() {
 				</div>
 
 			</div>
-
 		</div>
+
+		<div>
+			<button class="doneButton" style="margin-left: 20px;">Done</button>
+		</div>
+
 	</div>
+
 </div>

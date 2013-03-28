@@ -17,8 +17,6 @@
 $(document).ready(
     function() {
 
-     	console.log("${nextPageUrl}");
-      var selectedRowId = null;
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : '<"H"lrT>t<"F"ip>T',
@@ -50,7 +48,7 @@ $(document).ready(
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
 											        }
-											        selectedRowId = elements[0].innerHTML;
+											        var selectedRowId = elements[0].innerHTML;
 											        createProductSummary("productSummary.html",
 									  							{productId: selectedRowId});
  													  },

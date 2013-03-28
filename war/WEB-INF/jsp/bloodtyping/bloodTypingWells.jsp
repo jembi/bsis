@@ -114,6 +114,7 @@ $(document).ready(function() {
 			</jsp:include>
 		</c:if>
 
+		<!-- Show warning section when blood typing tests already added for some collections -->
 		<c:if test="${!empty collectionsWithBloodTypingTests && fn:length(collectionsWithBloodTypingTests) gt 0}">
 		<div class="warningBox ui-state-highlight">
 			<img src="images/warning_icon.png" style="height: 50px;" />
@@ -140,9 +141,9 @@ $(document).ready(function() {
 						<c:set var="bloodTypingRuleResult" value="${collectionWithTest.value}" />
 						<tr>
 							<td>${collectionMap[collectionId].collectionNumber}</td>
-							<td>${bloodTypingRuleResult.bloodTypingStatus}</td>
-							<td>${bloodTypingRuleResult.bloodAbo}</td>
-							<td>${bloodTypingRuleResult.bloodRh}</td>
+							<td>${collectionMap[collectionId].bloodTypingStatus}</td>
+							<td>${collectionMap[collectionId].bloodAbo}</td>
+							<td>${collectionMap[collectionId].bloodRh}</td>
 							<td>
 								<c:forEach var="pendingTestId" items="${bloodTypingRuleResult.pendingTestsIds}">
 									<c:set var="pendingTest" value="${bloodTypingTests[pendingTestId]}" />
@@ -164,19 +165,20 @@ $(document).ready(function() {
 									 text-align: center;
 									 background: white;
 									 border: none;
-									 padding: 0;" value="${colNum}" disabled="disabled" />
+									 padding: 0;" disabled="disabled" />
 
-				<c:forEach var="colNum" begin="1" end="${plate.numColumns}">
-					<c:set var="collection" value="${collections[colNum]}" />
+				<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
+					<c:set var="collection" value="${collections[colNum-1]}" />
 					<div class="wellBoxHeader">
-						<input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
-											 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
-											 text-align: center;
-											 background: rgb(255, 208, 165);
-											 color: black;
-											 padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
-				 	</div>
+							<input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
+												 border-radius: ${bloodTypingConfig['titerWellRadius']}px;
+												 text-align: center;
+												 background: rgb(255, 208, 165);
+												 color: black;
+												 padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
+					 	</div>
 				</c:forEach>
+
 
 			<br />
 
@@ -189,9 +191,8 @@ $(document).ready(function() {
 										 color: black;
 										 padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
 
-				<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
-					<c:set var="collection" value="${collections[colNum]}" />
-
+					<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
+						<c:set var="collection" value="${collections[colNum-1]}" />
 						<div class="wellBox">
 							<!-- square around the well -->
 							<c:if test="${empty collection}">

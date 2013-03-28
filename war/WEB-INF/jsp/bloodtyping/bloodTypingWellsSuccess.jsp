@@ -50,6 +50,9 @@ $(document).ready(function() {
 		});
 	}
 
+	// reload table when any blood typing results of any collection are updated
+	$("#${childContentId}").bind("collectionBloodTypingUpdated", loadCollectionsStatusTable);
+
 	loadCollectionsStatusTable();
 });
 </script>
@@ -63,10 +66,11 @@ $(document).ready(function() {
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 				<span class="successText">
 					Blood Typing tests added successfully for collections.
-					<br />
+				</span>
+				<div style="margin-left: 55px;">
 					Please review results below. Perform confirmatory tests for collections as indicated.
 					You may click the collections in the table below to enter secondary test results now.
-				</span>
+				</div>
 		</div>
 
 		<br />

@@ -722,6 +722,7 @@ tr > td
 
 .successText {
 	position: relative;
+	bottom: 10px;
 	font-size: 16px; 
 }
 

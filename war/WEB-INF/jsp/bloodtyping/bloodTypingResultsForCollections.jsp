@@ -26,11 +26,33 @@ $(document).ready(function() {
 											      "sRowSelect" : "single",
 											      "aButtons" : [],
 											      "fnRowSelected" : function(node) {
+																				        var elements = $(node).children();
+																				        if (elements[0].getAttribute("class") === "dataTables_empty") {
+																				          return;
+																				        }
+																				        var collectionId = elements[0].innerHTML;
+																				        showBloodTypingResultsForCollection(collectionId);
 																							},
 							 							"fnRowDeselected" : function(node) {
-																							}
+																								}
 													}
 											   });
+
+	function showBloodTypingResultsForCollection(collectionId) {
+		$.ajax({
+		  url: "showBloodTypingResultsForCollection.html",
+		  type: "GET",
+		  data: {collectionId : collectionId},
+		  success: function(response) {
+		    				 $("#${childContentId}").html(response);
+		    				 $("#${mainContentId}").html("");
+		  				 },
+		  error:   function (response) {
+		    				 showErrorMessage("Something went wrong.");
+		  				 }
+		});
+	}
+
 });
 </script>
 
@@ -39,11 +61,12 @@ $(document).ready(function() {
 		<table class="bloodTypingPrimaryTestsDoneSummaryTable">
 			<thead>
 				<tr>
+					<th style="display: none;"/>
 					<th>${collectionFields.collectionNumber.displayName}</th>
 					<th>Blood Typing Status</th>
-					<th>Pending tests</th>
 					<th>Blood ABO determined</th>
 					<th>Blood Rh determined</th>
+					<th>Pending tests</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -51,11 +74,20 @@ $(document).ready(function() {
 					<c:set var="collection" value="${collectionEntry.value}" />
 					<c:set var="bloodTypingOutputForCollection" value="${bloodTypingOutput[collection.id]}" />
 					<tr>
+						<td style="display: none;">
+							${collection.id}
+						</td>
 						<td style="width: 140px;">
 							${collection.collectionNumber}
 						</td>
 						<td style="text-align: center; width: 140px;">
 							${bloodTypingOutputForCollection.bloodTypingStatus}
+						</td>
+						<td style="text-align: center; width: 140px;">
+							${bloodTypingOutputForCollection.bloodAbo}
+						</td>
+						<td style="text-align: center; width: 140px;">
+							${bloodTypingOutputForCollection.bloodRh}
 						</td>
 						<td style="width: auto;">
 							<ul>
@@ -67,15 +99,11 @@ $(document).ready(function() {
 								</c:forEach>
 							</ul>
 						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodAbo}
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodRh}
-						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
+
+	<div id="${childContentId}"></div>
 </div>
