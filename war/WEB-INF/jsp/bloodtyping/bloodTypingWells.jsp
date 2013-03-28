@@ -86,21 +86,23 @@ $(document).ready(function() {
 		});
 	}
 
-	$("#${mainContentId}").find(".changeCollectionsButton").button().
-	click(function() {
-		$.ajax({
-		  url: "${changeCollectionsUrl}",
-		  data: {},
-		  type: "GET",
-		  success: function (response) {
-		    			 	 $("#${tabContentId}").replaceWith(response);
-		  				 },
-		  error:   function (response) {
-								 showErrorMessage("Something went wrong. Please try again.");
-		  				 }
-		  
-		});	  
-	});
+	$("#${mainContentId}").find(".changeCollectionsButton")
+												.button()
+												.click(
+							function() {
+								$.ajax({
+								  url: "${changeCollectionsUrl}",
+								  data: {},
+								  type: "GET",
+								  success: function (response) {
+								    			 	 $("#${tabContentId}").replaceWith(response);
+								  				 },
+								  error:   function (response) {
+														 showErrorMessage("Something went wrong. Please try again.");
+								  				 }
+								  
+			  				});	  
+							});
 
 });
 </script>
@@ -117,6 +119,7 @@ $(document).ready(function() {
 		<!-- Show warning section when blood typing tests already added for some collections -->
 		<c:if test="${!empty collectionsWithBloodTypingTests && fn:length(collectionsWithBloodTypingTests) gt 0}">
 		<div class="warningBox ui-state-highlight">
+			<br />
 			<img src="images/warning_icon.png" style="height: 50px;" />
 			<span class="warningText">
 				<b>Warning</b>
@@ -125,6 +128,15 @@ $(document).ready(function() {
 				<br />
 				Previous data will be overwritten.
 			</span>
+
+			<br />
+			<br />
+			<div>
+				<button class="changeCollectionsButton">Go back and change collections</button>
+			</div>
+			<br />
+			<br />
+
 			<table class="simpleTable">
 				<thead>
 					<tr>
@@ -140,10 +152,10 @@ $(document).ready(function() {
 						<c:set var="collectionId" value="${collectionWithTest.key}" />
 						<c:set var="bloodTypingRuleResult" value="${collectionWithTest.value}" />
 						<tr>
-							<td>${collectionMap[collectionId].collectionNumber}</td>
-							<td>${collectionMap[collectionId].bloodTypingStatus}</td>
-							<td>${collectionMap[collectionId].bloodAbo}</td>
-							<td>${collectionMap[collectionId].bloodRh}</td>
+							<td style="text-align: center;">${collectionMap[collectionId].collectionNumber}</td>
+							<td style="text-align: center;">${collectionMap[collectionId].bloodTypingStatus}</td>
+							<td style="text-align: center;">${collectionMap[collectionId].bloodAbo}</td>
+							<td style="text-align: center;">${collectionMap[collectionId].bloodRh}</td>
 							<td>
 								<c:forEach var="pendingTestId" items="${bloodTypingRuleResult.pendingTestsIds}">
 									<c:set var="pendingTest" value="${bloodTypingTests[pendingTestId]}" />
@@ -156,6 +168,10 @@ $(document).ready(function() {
 					</c:forEach>
 				</tbody>
 			</table>
+
+			<br />
+			<br />
+
 			</div>
 		</c:if>
 
@@ -237,9 +253,6 @@ $(document).ready(function() {
 				<label style="width: 70px;">${bloodTestsOnPlate[rowNum-1].testNameShort}</label>
 				<br />
 			</c:forEach>
-
-			<c:if test="${not empty success and !success}">
-			</c:if>
 		</div>
 
 		<div style="margin-left: 200px;">
@@ -254,6 +267,37 @@ $(document).ready(function() {
 				Clear form
 			</button>
 		</div>
+
+
+		<br />
+		<span style="font-size: 15pt; font-weight: bold;">List of collection numbers by column in titer plate</span>
+		<br />
+		<br />
+		<table style="width: 40%" class="simpleTable">
+			<thead>
+				<tr>
+					<th>Column number</th>
+					<th>Collection Number in Column</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
+					<c:set var="collection" value="${collections[colNum-1]}" />
+					<tr>
+						<td style="text-align: center;">${colNum}</td>
+						<td style="text-align: center;">
+							<c:if test="${empty collection}">
+								EMPTY
+							</c:if>
+							<c:if test="${not empty collection}">
+								${collection.collectionNumber}
+							</c:if>
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+
 
 	</div>
 </div>
