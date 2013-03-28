@@ -1,5 +1,6 @@
 package repository.bloodtyping;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.bloodtyping.BloodTypingTest;
+import model.bloodtyping.BloodTypingTestResult;
 import model.bloodtyping.BloodTypingTestType;
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MicrotiterPlate;
@@ -73,12 +75,41 @@ public class BloodTypingRepository {
     Map<Long, BloodTypingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTypingRuleResult>(); 
 
     Map<Long, Map<Long, String>> errorMap = validateValuesInWells(bloodTypingTestResultsMap);
-    for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
-      Map<Long, String> bloodTypingTestResults = bloodTypingTestResultsMap.get(collectionId);
-      CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-      BloodTypingRuleResult ruleResult = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingTestResults);
-      collectedSamplesMap.put(collectedSample.getId(), collectedSample);
-      bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
+    if (errorMap.isEmpty()) {
+      for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
+        Map<Long, String> bloodTypingResultsForCollection = bloodTypingTestResultsMap.get(collectionId);
+        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
+        BloodTypingRuleResult ruleResult = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingResultsForCollection);
+        collectedSamplesMap.put(collectedSample.getId(), collectedSample);
+        bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
+
+        for (Long testId : bloodTypingResultsForCollection.keySet()) {
+          BloodTypingTestResult btResult = new BloodTypingTestResult();
+
+          BloodTypingTest bloodTypingTest = new BloodTypingTest();
+          // the only reason we are using Long in the parameter is that
+          // jsp uses Long for all numbers. Using an integer makes it difficult
+          // to compare Integer and Long values in the jsp conditionals
+          // specially when iterating through the list of results
+          bloodTypingTest.setId(testId.intValue());
+
+          btResult.setBloodTypingTest(bloodTypingTest);
+
+          List<BloodTypingTestResult> existingResults = collectedSample.getBloodTypingTestResults();
+          if (existingResults == null)
+            existingResults = new ArrayList<BloodTypingTestResult>();
+          existingResults.add(btResult);
+          collectedSample.setBloodTypingTestResults(existingResults);
+
+          btResult.setCollectedSample(collectedSample);
+          btResult.setNotes("");
+          btResult.setResult(bloodTypingResultsForCollection.get(testId));
+
+          em.persist(btResult);
+        }
+        em.merge(collectedSample);
+      }
+      em.flush();
     }
 
     Map<String, Object> results = new HashMap<String, Object>();
@@ -128,4 +159,23 @@ public class BloodTypingRepository {
     }
     errorsForCollection.put(testId, errorMessage);
   }
+
+  public Map<String, Object> getBloodTypingTestStatus(List<String> collectionIds) {
+    Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
+    Map<Long, BloodTypingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTypingRuleResult>(); 
+
+    for (String collectionIdStr : collectionIds) {
+      Long collectionId = Long.parseLong(collectionIdStr);
+      CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
+      BloodTypingRuleResult ruleResult = ruleEngine.applyBloodTypingTests(collectedSample, new HashMap<Long, String>());
+      collectedSamplesMap.put(collectedSample.getId(), collectedSample);
+      bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
+    }
+
+    Map<String, Object> results = new HashMap<String, Object>();
+    results.put("collections", collectedSamplesMap);
+    results.put("bloodTypingResults", bloodTypingResultsForCollections);
+    return results;
+  }
+
 }

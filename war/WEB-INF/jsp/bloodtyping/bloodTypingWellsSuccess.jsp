@@ -16,21 +16,6 @@
 
 <script>
 $(document).ready(function() {
-	$("#${mainContentId}").find(".bloodTypingPrimaryTestsDoneSummaryTable")
-												.dataTable({
-									        "bJQueryUI" : true,
-									        "sDom" : '<"H"T>t<"F"i>',
-									        "bPaginate" : false,
-									        "oTableTools" : {
-									          "sRowSelect" : "single",
-									          "aButtons" : [],
-									          "fnRowSelected" : function(node) {
-									 													  },
-													"fnRowDeselected" : function(node) {
-																							}
-													}
-									       });
-
 	$("#${mainContentId}").find(".enterTestResultsForCollectionsButton")
 												.button({icons: {primary :  'ui-icon-plusthick'}})
 												.click(fetchBloodTypingForm);
@@ -51,6 +36,21 @@ $(document).ready(function() {
     });
 	}
 
+	function loadCollectionsStatusTable() {
+		$.ajax({
+		  url : "getBloodTypingStatusForCollections.html",
+		  type : "GET",
+		  data :  {collectionIds : "${collectionIds}"},
+		  success : function(response) {
+									$("#${childContentId}").html(response);	    
+		  					},
+		  error :   function(response) {
+		    				  showErrorMessage("Something went wrong when trying to fetch collection status.");
+		  				  }
+		});
+	}
+
+	loadCollectionsStatusTable();
 });
 </script>
 
@@ -79,49 +79,9 @@ $(document).ready(function() {
 		<br />
 		<br />
 		<br />
+	</div>
 
-		<table class="bloodTypingPrimaryTestsDoneSummaryTable">
-			<thead>
-				<tr>
-					<th>${collectionFields.collectionNumber.displayName}</th>
-					<th>Blood Typing Status</th>
-					<th>Pending tests</th>
-					<th>Blood ABO determined</th>
-					<th>Blood Rh determined</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="collectionEntry" items="${collections}">
-					<c:set var="collection" value="${collectionEntry.value}" />
-					<c:set var="bloodTypingOutputForCollection" value="${bloodTypingOutput[collection.id]}" />
-					<tr>
-						<td style="width: 140px;">
-							${collection.collectionNumber}
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodTypingStatus}
-						</td>
-						<td style="width: auto;">
-							<ul>
-								<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingTestsIds}">
-									<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
-									<li>
-										${pendingTest.testName}
-									</li>
-								</c:forEach>
-							</ul>
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodAbo}
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodRh}
-						</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-
+	<div id="${childContentId}">
 	</div>
 
 </div>

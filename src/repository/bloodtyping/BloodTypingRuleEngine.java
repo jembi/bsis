@@ -59,7 +59,7 @@ public class BloodTypingRuleEngine {
     Map<String, String> storedTestResults = new HashMap<String, String>();
 
     for (BloodTypingTestResult t : collectedSample.getBloodTypingTestResults()) {
-      storedTestResults.put(t.getId().toString(), t.getResult());
+      storedTestResults.put(t.getBloodTypingTest().getId().toString(), t.getResult());
     }
 
     Map<String, String> availableTestResults = new HashMap<String, String>();
@@ -68,6 +68,8 @@ public class BloodTypingRuleEngine {
       // for rule comparison we are overwriting existing test results with new test results
       availableTestResults.put(extraTestId.toString(), bloodTypingTestResults.get(extraTestId));
     }
+
+    System.out.println("available test results:" + availableTestResults);
 
     Set<String> bloodAboChanges = new HashSet<String>();
     Set<String> bloodRhChanges = new HashSet<String>();
