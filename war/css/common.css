@@ -679,6 +679,31 @@ tr > td
 	font-size: 16px; 
 }
 
+.warningBox {
+	margin: 6px;
+	font-family: 'helvetica';
+	background: #edea81;
+	border-color: red;
+	border-style: dotted;
+	border-radius: 5px;
+	padding-left: 8px;
+	padding-right: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 80%;
+}
+
+.warningText {
+	display:inline-block;
+	position: relative;
+	bottom: 8px;
+	left: 10px;
+	color: #C20000;
+	font-size: 16px; 
+}
+
 .successBox {
 	margin: 6px;
 	font-family: 'helvetica';
@@ -732,3 +757,30 @@ tr > td
 	padding: 10px;
 	border: solid 2px rgb(53, 99, 105);
 }
+
+.simpleTable {
+	 border: 1px solid #8B8B8B;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 font-size: 11pt;
+	 width: 100%;
+}
+
+.simpleTable > tbody > tr > td {
+	 border: 1px solid #8B8B8B;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 font-size: 8pt;
+	 margin: 1px;
+	 padding: 3px;
+}
+
+.simpleTable > thead > tr > th {
+	 border: 1px solid #8B8B8B;
+	 border-collapse: separate;
+	 border-spacing: 0;
+	 margin: 1px;
+	 font-size: 8pt;
+	 padding: 3px;
+}
+

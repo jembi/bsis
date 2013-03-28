@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtyping.BloodTypingRepository;
+import viewmodel.BloodTypingRuleResult;
 import viewmodel.BloodTypingTestViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -78,6 +79,9 @@ public class BloodTypingController {
           HttpServletResponse response,
           @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers) {
 
+    // here the key of the map corresponds to the index of the
+    // collection number in the parameter collectionNumbers
+    // corresponding to the collected sample in the value of the map
     Map<Integer, CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
 
     int numErrors = 0;
@@ -103,6 +107,25 @@ public class BloodTypingController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       mv.addObject("errorMessage", "Please fix the errors noted. Some collections do not exist.");
     } else {
+
+      // this is a map with id of the collected sample as the key
+      Map<Long, CollectedSample> collectionMap = new HashMap<Long, CollectedSample>();
+      for (CollectedSample c : collections.values()) {
+        collectionMap.put(c.getId(), c);
+      }
+      mv.addObject("collectionMap", collectionMap);
+
+      // no errors but the user should be warned if there are any collections for which testing partly done
+      Map<Long, BloodTypingRuleResult> collectionsWithBloodTypingTests = 
+          collectedSampleRepository.filterCollectionsWithBloodTypingResults(collections.values());
+      mv.addObject("collectionsWithBloodTypingTests", collectionsWithBloodTypingTests);
+
+      Map<String, BloodTypingTest> bloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
+      for (BloodTypingTest bloodTypingTest : bloodTypingRepository.getBloodTypingTests()) {
+        bloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
+      }
+      mv.addObject("bloodTypingTests", bloodTypingTestsMap);
+
       mv.addObject("success", true);
       mv.setViewName("bloodtyping/bloodTypingWells");
       mv.addObject("refreshUrl", getUrl(request));

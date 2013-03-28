@@ -36,13 +36,20 @@ import model.product.Product;
 import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodRh;
 import model.worksheet.CollectionsWorksheet;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
+import repository.bloodtyping.BloodTypingStatus;
+
+/**
+ * A donation or a collection as it is in the UI.
+ * Not naming the class as Collection to avoid confusion with java.util.Collection.
+ * @author iamrohitbanga
+ */
 @Entity
 @Audited
 public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
@@ -64,12 +71,25 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToOne
   private Donor donor;
 
+  @Column(length=50)
+  private String bloodAbo;
+
+  @Column(length=50)
+  private String bloodRh;
+
+  @Column(length=150)
+  private String extraBloodTypeInformation;
+
   /**
    * Final test outcomes mapped to this collection.
    */
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectedSample")
   private List<TestResult> testResults;
 
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectedSample")
   private List<BloodTypingTestResult> bloodTypingTestResults;
 
@@ -108,14 +128,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length=30)
-  private BloodAbo bloodAbo;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length=30)
-  private BloodRh bloodRhd;
-
   @ManyToMany
   private List<CollectionsWorksheet> worksheets;
 
@@ -143,6 +155,10 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Valid
   private RowModificationTracker modificationTracker;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=20)
+  private BloodTypingStatus bloodTypingStatus;
 
   @Enumerated(EnumType.STRING)
   @Column(length=20)
@@ -344,22 +360,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donationCreatedBy = donationCreatedBy;
   }
 
-  public BloodAbo getBloodAbo() {
-    return bloodAbo;
-  }
-
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public BloodRh getBloodRhd() {
-    return bloodRhd;
-  }
-
-  public void setBloodRhd(BloodRh bloodRhd) {
-    this.bloodRhd = bloodRhd;
-  }
-
   public CollectionBatch getCollectionBatch() {
     return collectionBatch;
   }
@@ -394,5 +394,37 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setBloodTypingTestResults(List<BloodTypingTestResult> bloodTypingTestResults) {
     this.bloodTypingTestResults = bloodTypingTestResults;
+  }
+
+  public BloodTypingStatus getBloodTypingStatus() {
+    return bloodTypingStatus;
+  }
+
+  public void setBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
+    this.bloodTypingStatus = bloodTypingStatus;
+  }
+
+  public String getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public String getBloodRh() {
+    return bloodRh;
+  }
+
+  public void setBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
+  }
+
+  public String getExtraBloodTypeInformation() {
+    return extraBloodTypeInformation;
+  }
+
+  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+    this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
 }

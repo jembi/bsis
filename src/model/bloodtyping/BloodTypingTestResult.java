@@ -1,5 +1,7 @@
 package model.bloodtyping;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,13 +9,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import model.collectedsample.CollectedSample;
 
-import org.hibernate.envers.Audited;
-
+/**
+ * Stores the result of one blood typing test for one collection.
+ * No need to audit this table. NEVER update the entities of this table.
+ * Always insert a new row. Use testedOn to find the latest test result.
+ * @author iamrohitbanga
+ */
 @Entity
-@Audited
 public class BloodTypingTestResult {
 
   @Id
@@ -29,6 +36,9 @@ public class BloodTypingTestResult {
 
   @Column(length=10)
   private String result;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date testedOn;
 
   @Lob
   private String notes;
@@ -74,5 +84,13 @@ public class BloodTypingTestResult {
 
   public void setCollectedSample(CollectedSample collectedSample) {
     this.collectedSample = collectedSample;
+  }
+
+  public Date getTestedOn() {
+    return testedOn;
+  }
+
+  public void setTestedOn(Date testedOn) {
+    this.testedOn = testedOn;
   }
 }

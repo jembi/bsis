@@ -4,12 +4,12 @@ insert into MicrotiterPlate (id, plateKey, plateName, numRows, numColumns, notes
 
 insert into BloodTest
 (id, name, displayName, validResults, correctResult, isRequired, isDeleted, notes) values
-(1, 'Blood ABO', 'Blood ABO', 'A,B,AB,O', '', '1', '0', ''),
-(2, 'Blood Rh', 'Blood Rh', '+,-', '', '1', '0', ''),
-(3, 'HIV', 'HIV', '+,-', '-', '1', '0', ''),
-(4, 'HBV', 'HBV', '+,-', '-', '1', '0', ''),
-(5, 'HCV', 'HCV', '+,-', '-', '1', '0', ''),
-(6, 'Syphilis', 'Syphilis', '+,-', '-', '1', '0', '');
+(1, 'bloodabo', 'Blood ABO', 'A,B,AB,O', '', '1', '0', ''),
+(2, 'bloodrh', 'Blood Rh', '+,-', '', '1', '0', ''),
+(3, 'hiv', 'HIV', '+,-', '-', '1', '0', ''),
+(4, 'hbv', 'HBV', '+,-', '-', '1', '0', ''),
+(5, 'hcv', 'HCV', '+,-', '-', '1', '0', ''),
+(6, 'syphilis', 'Syphilis', '+,-', '-', '1', '0', '');
 
 insert into BloodTypingTest
 (id, testNameShort, testName, dataType,

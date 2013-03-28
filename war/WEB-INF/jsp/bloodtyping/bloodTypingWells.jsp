@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -111,6 +112,50 @@ $(document).ready(function() {
 			<jsp:include page="../common/errorBox.jsp">
 				<jsp:param name="errorMessage" value="${errorMessage}" />
 			</jsp:include>
+		</c:if>
+
+		<c:if test="${!empty collectionsWithBloodTypingTests && fn:length(collectionsWithBloodTypingTests) gt 0}">
+		<div class="warningBox ui-state-highlight">
+			<img src="images/warning_icon.png" style="height: 50px;" />
+			<span class="warningText">
+				<b>Warning</b>
+				<br />
+				The following collections already have blood typing results. Are you sure you want to add blood typing results again?
+				<br />
+				Previous data will be overwritten.
+			</span>
+			<table class="simpleTable">
+				<thead>
+					<tr>
+						<th>Collection number</th>
+						<th>Blood typing status</th>
+						<th>Blood ABO</th>
+						<th>Blood Rh</th>
+						<th>Pending Tests</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="collectionWithTest" items="${collectionsWithBloodTypingTests}">
+						<c:set var="collectionId" value="${collectionWithTest.key}" />
+						<c:set var="bloodTypingRuleResult" value="${collectionWithTest.value}" />
+						<tr>
+							<td>${collectionMap[collectionId].collectionNumber}</td>
+							<td>${bloodTypingRuleResult.bloodTypingStatus}</td>
+							<td>${bloodTypingRuleResult.bloodAbo}</td>
+							<td>${bloodTypingRuleResult.bloodRh}</td>
+							<td>
+								<c:forEach var="pendingTestId" items="${bloodTypingRuleResult.pendingTestsIds}">
+									<c:set var="pendingTest" value="${bloodTypingTests[pendingTestId]}" />
+											<li>
+												${pendingTest.testName}
+											</li>
+								</c:forEach>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			</div>
 		</c:if>
 
 		<div class="bloodTypingPlate">

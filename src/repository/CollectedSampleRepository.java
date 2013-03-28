@@ -6,10 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import repository.bloodtyping.BloodTypingRepository;
+import repository.bloodtyping.BloodTypingStatus;
+
+import viewmodel.BloodTypingRuleResult;
 import viewmodel.TestResultViewModel;
 
 @Repository
@@ -50,39 +56,42 @@ public class CollectedSampleRepository {
   @Autowired
   private BloodTestRepository bloodTestRepository;
 
+  @Autowired
+  private BloodTypingRepository bloodTypingRepository;
+
   public void updateCollectedSampleInternalFields(CollectedSample c) {
     updateCollectedSampleBloodGroup(c);
     updateCollectedSampleTestedStatus(c);
   }
 
   public void updateCollectedSampleBloodGroup(CollectedSample c) {
-
-    BloodAbo bloodAbo = c.getBloodAbo();
-    BloodRh bloodRhd = c.getBloodRhd();
-
-    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
-
-    TestResult t = testResultsMap.get("Blood ABO");
-    if (t != null && !t.getIsDeleted()) {
-      try {
-        bloodAbo = BloodAbo.valueOf(t.getResult());
-      } catch (IllegalArgumentException ex) {
-        ex.printStackTrace();
-        bloodAbo = BloodAbo.Unknown;
-      } 
-    }
-    
-    t = testResultsMap.get("Blood Rh");
-    if (t != null && !t.getIsDeleted()) {
-      try {
-        bloodRhd = BloodRh.valueOf(t.getResult());
-      } catch (IllegalArgumentException ex) {
-        ex.printStackTrace();
-        bloodRhd = BloodRh.Unknown;
-      }
-    }
-    c.setBloodAbo(bloodAbo);
-    c.setBloodRhd(bloodRhd);
+//
+//    BloodAbo bloodAbo = c.getBloodAbo();
+//    BloodRh bloodRhd = c.getBloodRhd();
+//
+//    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
+//
+//    TestResult t = testResultsMap.get("Blood ABO");
+//    if (t != null && !t.getIsDeleted()) {
+//      try {
+//        bloodAbo = BloodAbo.valueOf(t.getResult());
+//      } catch (IllegalArgumentException ex) {
+//        ex.printStackTrace();
+//        bloodAbo = BloodAbo.Unknown;
+//      } 
+//    }
+//    
+//    t = testResultsMap.get("Blood Rh");
+//    if (t != null && !t.getIsDeleted()) {
+//      try {
+//        bloodRhd = BloodRh.valueOf(t.getResult());
+//      } catch (IllegalArgumentException ex) {
+//        ex.printStackTrace();
+//        bloodRhd = BloodRh.Unknown;
+//      }
+//    }
+//    c.setBloodAbo(bloodAbo);
+//    c.setBloodRhd(bloodRhd);
   }
   
   public void saveCollectedSample(CollectedSample collectedSample) {
@@ -558,5 +567,19 @@ public class CollectedSampleRepository {
       i++;
     }
     return collections;
+  }
+
+  public Map<Long, BloodTypingRuleResult> filterCollectionsWithBloodTypingResults(
+      Collection<CollectedSample> collectedSamples) {
+    Iterator<CollectedSample> iter = collectedSamples.iterator();
+    Map<Long, BloodTypingRuleResult> statusMap = new HashMap<Long, BloodTypingRuleResult>();
+    while (iter.hasNext()) {
+      CollectedSample c = iter.next();
+      BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
+      if (bloodTypingStatus != null) {
+        statusMap.put(c.getId(), bloodTypingRepository.getBloodTypingTestStatus(c.getId()));
+      }
+    }
+    return statusMap;
   }
 }

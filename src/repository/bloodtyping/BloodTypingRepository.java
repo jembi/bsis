@@ -1,10 +1,10 @@
 package repository.bloodtyping;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -83,31 +83,25 @@ public class BloodTypingRepository {
         collectedSamplesMap.put(collectedSample.getId(), collectedSample);
         bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
 
+        collectedSample = updateCollectionBloodType(collectedSample, ruleResult);
+
         for (Long testId : bloodTypingResultsForCollection.keySet()) {
           BloodTypingTestResult btResult = new BloodTypingTestResult();
-
           BloodTypingTest bloodTypingTest = new BloodTypingTest();
           // the only reason we are using Long in the parameter is that
           // jsp uses Long for all numbers. Using an integer makes it difficult
           // to compare Integer and Long values in the jsp conditionals
           // specially when iterating through the list of results
           bloodTypingTest.setId(testId.intValue());
-
           btResult.setBloodTypingTest(bloodTypingTest);
-
-//          List<BloodTypingTestResult> existingResults = collectedSample.getBloodTypingTestResults();
-//          if (existingResults == null)
-//            existingResults = new ArrayList<BloodTypingTestResult>();
-//          existingResults.add(btResult);
-//          collectedSample.setBloodTypingTestResults(existingResults);
-
+          // not updating the inverse relation which means the
+          // collectedSample.getBloodTypingResults() will not
+          // contain this result 
           btResult.setCollectedSample(collectedSample);
           btResult.setNotes("");
           btResult.setResult(bloodTypingResultsForCollection.get(testId));
-
           em.persist(btResult);
         }
-        em.merge(collectedSample);
       }
       em.flush();
     }
@@ -117,6 +111,28 @@ public class BloodTypingRepository {
     results.put("bloodTypingResults", bloodTypingResultsForCollections);
     results.put("errors", errorMap);
     return results;
+  }
+
+  private CollectedSample updateCollectionBloodType(
+      CollectedSample collection, BloodTypingRuleResult ruleResult) {
+
+    String bloodAboNew = ruleResult.getBloodAbo();
+    String bloodRhNew = ruleResult.getBloodRh();
+    Set<String> extraInformationNew = ruleResult.getExtraInformation();
+
+    String extraInformation = collection.getExtraBloodTypeInformation();
+    if (StringUtils.isNotBlank(extraInformation))
+      collection.setExtraBloodTypeInformation(extraInformation + StringUtils.join(extraInformationNew, ","));
+    else
+      collection.setExtraBloodTypeInformation(StringUtils.join(extraInformationNew, ","));
+
+    collection.setBloodAbo(bloodAboNew);
+    collection.setBloodRh(bloodRhNew);
+    collection.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
+
+    collection = em.merge(collection);
+
+    return collection;
   }
 
   public Map<Long, Map<Long, String>> validateValuesInWells(Map<Long, Map<Long, String>> bloodTypingTestResults) {
@@ -178,4 +194,8 @@ public class BloodTypingRepository {
     return results;
   }
 
+  public BloodTypingRuleResult getBloodTypingTestStatus(Long collectionId) {
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
+    return ruleEngine.applyBloodTypingTests(collectedSample, new HashMap<Long, String>());
+  }
 }

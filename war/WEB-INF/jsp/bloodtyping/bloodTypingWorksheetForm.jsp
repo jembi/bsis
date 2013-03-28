@@ -40,8 +40,9 @@ $(document).ready(function() {
 	          });
 	        });
 
-	$("#${mainContentId}").find(".clearFormButton").
-	button().click(refetchForm);
+	$("#${mainContentId}").find(".clearFormButton")
+												.button()
+												.click(refetchForm);
 
 	function refetchForm() {
 	  showLoadingImage($("#${tabContentId}"));
