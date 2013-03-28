@@ -44,7 +44,7 @@ $(document).ready(function() {
 	button().click(refetchForm);
 
 	function refetchForm() {
-	  showLoadingImage("#${tabContentId}");
+	  showLoadingImage($("#${tabContentId}"));
     $.ajax({
       url: "${refreshUrl}",
       data: {},

@@ -137,17 +137,18 @@ public class BloodTypingController {
     mv.addObject("collections", collections);
 
     Map<Long, Map<Long, String>> bloodTypingTestResults = parseBloodTypingTestResults(bloodTypingTests);
-
+    Map<Long, Map<Long, String>> errorMap = null;
     mv.addObject("bloodTypingTestResults", bloodTypingTestResults);
     boolean success = true;
     Map<String, Object> results = null;
     try {
       results = bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResults);
+      if (results != null)
+        errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     } catch (Exception ex) {
       ex.printStackTrace();
       success = false;
     }
-    Map<Long, Map<Long, String>> errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     if (errorMap != null && !errorMap.isEmpty())
       success = false;
     Map<String, Object> tips = new HashMap<String, Object>();

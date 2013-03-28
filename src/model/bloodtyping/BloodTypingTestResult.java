@@ -18,8 +18,8 @@ public class BloodTypingTestResult {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="TINYINT")
-  private Integer id;
+  @Column(nullable = false, insertable=false, updatable=false)
+  private Long id;
 
   @ManyToOne
   private CollectedSample collectedSample;
@@ -36,7 +36,7 @@ public class BloodTypingTestResult {
   public BloodTypingTestResult() {
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -52,7 +52,7 @@ public class BloodTypingTestResult {
     return notes;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

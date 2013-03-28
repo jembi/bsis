@@ -95,11 +95,11 @@ public class BloodTypingRepository {
 
           btResult.setBloodTypingTest(bloodTypingTest);
 
-          List<BloodTypingTestResult> existingResults = collectedSample.getBloodTypingTestResults();
-          if (existingResults == null)
-            existingResults = new ArrayList<BloodTypingTestResult>();
-          existingResults.add(btResult);
-          collectedSample.setBloodTypingTestResults(existingResults);
+//          List<BloodTypingTestResult> existingResults = collectedSample.getBloodTypingTestResults();
+//          if (existingResults == null)
+//            existingResults = new ArrayList<BloodTypingTestResult>();
+//          existingResults.add(btResult);
+//          collectedSample.setBloodTypingTestResults(existingResults);
 
           btResult.setCollectedSample(collectedSample);
           btResult.setNotes("");

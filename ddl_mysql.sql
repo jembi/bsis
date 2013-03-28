@@ -1,6 +1,6 @@
 
     create table BloodBagType (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         bloodBagType varchar(50),
         canPool boolean,
         canSplit boolean,
@@ -9,7 +9,7 @@
     ) ENGINE=InnoDB;
 
     create table BloodBagType_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         bloodBagType varchar(50),
@@ -55,7 +55,7 @@
     ) ENGINE=InnoDB;
 
     create table BloodTypingRule (
-        id TINYINT not null auto_increment,
+        id MEDIUMINT not null auto_increment,
         bloodTypingTestIds varchar(200),
         extraInformation varchar(30),
         extraTestsIds varchar(30),
@@ -68,7 +68,7 @@
     ) ENGINE=InnoDB;
 
     create table BloodTypingRule_AUD (
-        id TINYINT not null,
+        id MEDIUMINT not null,
         REV integer not null,
         REVTYPE tinyint,
         bloodTypingTestIds varchar(200),
@@ -83,7 +83,7 @@
     ) ENGINE=InnoDB;
 
     create table BloodTypingTest (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         bloodTypingTestType varchar(12),
         dataType varchar(10),
         isActive boolean,
@@ -98,27 +98,27 @@
     ) ENGINE=InnoDB;
 
     create table BloodTypingTestResult (
-        id TINYINT not null auto_increment,
+        id bigint not null auto_increment,
         notes longtext,
         result varchar(10),
-        bloodTypingTest_id TINYINT,
+        bloodTypingTest_id SMALLINT,
         collectedSample_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table BloodTypingTestResult_AUD (
-        id TINYINT not null,
+        id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
         notes longtext,
         result varchar(10),
-        bloodTypingTest_id TINYINT,
+        bloodTypingTest_id SMALLINT,
         collectedSample_id bigint,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table BloodTypingTest_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         bloodTypingTestType varchar(12),
@@ -148,12 +148,12 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        bloodBagType_id TINYINT,
+        bloodBagType_id SMALLINT,
         collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
-        donationType_id TINYINT,
+        donationType_id SMALLINT,
         donor_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -176,12 +176,12 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         testedStatus varchar(20),
-        bloodBagType_id TINYINT,
+        bloodBagType_id SMALLINT,
         collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
-        donationType_id TINYINT,
+        donationType_id SMALLINT,
         donor_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -356,14 +356,14 @@
     ) ENGINE=InnoDB;
 
     create table DonationType (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         donationType varchar(50),
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table DonationType_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         donationType varchar(50),
@@ -548,7 +548,7 @@
         isDeleted boolean,
         rowNumber SMALLINT,
         plateForContent_id TINYINT,
-        rawBloodTest_id TINYINT,
+        rawBloodTest_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -562,7 +562,7 @@
         isDeleted boolean,
         rowNumber SMALLINT,
         plateForContent_id TINYINT,
-        rawBloodTest_id TINYINT,
+        rawBloodTest_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -600,7 +600,7 @@
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id TINYINT,
+        productType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -672,7 +672,7 @@
     ) ENGINE=InnoDB;
 
     create table ProductType (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         canPool boolean,
         canSubdivide boolean,
         description longtext,
@@ -686,7 +686,7 @@
     ) ENGINE=InnoDB;
 
     create table ProductType_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         canPool boolean,
@@ -761,7 +761,7 @@
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id TINYINT,
+        productType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -789,13 +789,13 @@
 
     create table RawBloodTestGroup_BloodTypingTest (
         RawBloodTestGroup_id TINYINT not null,
-        bloodTestsInGroup_id TINYINT not null
+        bloodTestsInGroup_id SMALLINT not null
     ) ENGINE=InnoDB;
 
     create table RawBloodTestGroup_BloodTypingTest_AUD (
         REV integer not null,
         RawBloodTestGroup_id TINYINT not null,
-        bloodTestsInGroup_id TINYINT not null,
+        bloodTestsInGroup_id SMALLINT not null,
         REVTYPE tinyint,
         primary key (REV, RawBloodTestGroup_id, bloodTestsInGroup_id)
     ) ENGINE=InnoDB;
@@ -809,7 +809,7 @@
         inferredTestResult_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        rawBloodTest_id TINYINT,
+        rawBloodTest_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -824,7 +824,7 @@
         inferredTestResult_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        rawBloodTest_id TINYINT,
+        rawBloodTest_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -856,14 +856,14 @@
         ward varchar(20),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id TINYINT,
+        productType_id SMALLINT,
         requestSite_id bigint,
-        requestType_id TINYINT,
+        requestType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table RequestType (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         description varchar(100),
         isDeleted boolean,
         requestType varchar(30),
@@ -871,7 +871,7 @@
     ) ENGINE=InnoDB;
 
     create table RequestType_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         description varchar(100),
@@ -910,9 +910,9 @@
         ward varchar(20),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id TINYINT,
+        productType_id SMALLINT,
         requestSite_id bigint,
-        requestType_id TINYINT,
+        requestType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 

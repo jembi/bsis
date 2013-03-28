@@ -20,7 +20,8 @@ $(document).ready(function() {
 												.dataTable({
 											    "bJQueryUI" : true,
 											    "sDom" : '<"H"T>t<"F"i>',
-											    "bPaginate" : false,
+											    "bSort" : false,	// disable sorting of columns as user should see collections in the same order as on the plate
+											    "bPaginate" : false,	// not many collections on a plate so no need for pagination
 											    "oTableTools" : {
 											      "sRowSelect" : "single",
 											      "aButtons" : [],
