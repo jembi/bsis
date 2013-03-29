@@ -117,14 +117,14 @@ public class RequestsController {
     FindRequestBackingForm form = new FindRequestBackingForm();
     model.addAttribute("findRequestForm", form);
 
-    ModelAndView mv = new ModelAndView("findRequestForm");
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
+    ModelAndView mv = new ModelAndView("requests/findRequestForm");
+    addEditSelectorOptions(mv.getModelMap());
     // to ensure custom field names are displayed in the form
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-    utilController.addTipsToModel(model.asMap(), "requests.findpending");
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", m);
+    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "requests.findpending");
+    mv.addObject("tips", tips);
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -176,38 +176,21 @@ public class RequestsController {
     m.put("sites", locationRepository.getAllUsageSites());
   }
 
-  @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
-  public ModelAndView editRequestFormGenerator(HttpServletRequest request,
-      Model model,
-      @RequestParam(value="requestId", required=false) Long requestId) {
+  @RequestMapping(value = "/addRequestFormGenerator", method = RequestMethod.GET)
+  public ModelAndView addRequestFormGenerator(HttpServletRequest request,
+      Model model) {
 
     RequestBackingForm form = new RequestBackingForm();
 
-    ModelAndView mv = new ModelAndView("editRequestForm");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    m.put("existingRequest", false);
-    if (requestId != null) {
-      form.setId(requestId);
-      Request productRequest = requestRepository.findRequestById(requestId);
-      if (productRequest != null) {
-        form = new RequestBackingForm(productRequest);
-        m.put("existingRequest", true);
-      }
-      else {
-        form = new RequestBackingForm();
-      }
-    }
-    addEditSelectorOptions(m);
-    m.put("editRequestForm", form);
-    m.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
+    ModelAndView mv = new ModelAndView("requests/addRequestForm");
+    mv.addObject("requestUrl", getUrl(request));
+    mv.addObject("firstTimeRender", true);
+    mv.addObject("addRequestForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
     Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
-    m.put("requestFields", formFields);
-    if (m.get("existingRequest").equals(false))
-      setRequestNumber(form, (Map<String, Object>) formFields.get("requestNumber"));
-    mv.addObject("model", m);
-    System.out.println(mv.getViewName());
+    // to ensure custom field names are displayed in the form
+    mv.addObject("requestFields", formFields);
     return mv;
   }
 
@@ -215,51 +198,52 @@ public class RequestsController {
   public ModelAndView addRequest(
       HttpServletRequest request,
       HttpServletResponse response,
-      @ModelAttribute("editRequestForm") @Valid RequestBackingForm form,
+      @ModelAttribute("addRequestForm") @Valid RequestBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editRequestForm");
+    ModelAndView mv = new ModelAndView();
     boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
 
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    mv.addObject("requestFields", formFields);
+
+    Request savedRequest = null;
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
+      mv.addObject("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above.";
     } else {
       try {
         Request productRequest = form.getRequest();
         productRequest.setIsDeleted(false);
-        productRequest.setFulfilled(false);
-        requestRepository.addRequest(productRequest);
-        m.put("hasErrors", false);
+        savedRequest = requestRepository.addRequest(productRequest);
+        mv.addObject("hasErrors", false);
         success = true;
-        message = "Request Successfully Added";
         form = new RequestBackingForm();
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
         success = false;
-        message = "Request Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
         success = false;
-        message = "Internal Error. Please try again or report a Problem.";
       }
     }
 
-    m.put("editRequestForm", form);
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
-    setRequestNumber(form, (Map<String, Object>) formFields.get("requestNumber"));
-    m.put("existingRequest", false);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("refreshUrl", "editRequestFormGenerator.html");
-    m.put("requestFields", formFields);
-    addEditSelectorOptions(m);
+    if (success) {
+      mv.addObject("requestId", savedRequest.getId());
+      mv.addObject("request",  new RequestViewModel(savedRequest));
+      mv.addObject("addAnotherRequestUrl", "addRequestFormGenerator.html");
+      mv.setViewName("requests/addRequestSuccess");
+    } else {
+      mv.addObject("errorMessage", "Error creating request. Please fix the errors noted below.");
+      mv.addObject("firstTimeRender", false);
+      mv.addObject("addRequestForm", form);
+      mv.addObject("refreshUrl", "addRequestFormGenerator.html");
+      mv.setViewName("requests/addRequestError");
+    }
 
-    mv.addObject("model", m);
+    mv.addObject("success", success);
     return mv;
   }
 

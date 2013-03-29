@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.CustomDateFormatter;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
@@ -155,7 +157,7 @@ public class RequestBackingForm {
   }
 
   public void setProductType(String productTypeId) {
-    if (productTypeId == null) {
+    if (StringUtils.isBlank(productTypeId)) {
       request.setProductType(null);
     }
     else {
@@ -166,7 +168,7 @@ public class RequestBackingForm {
   }
 
   public void setRequestType(String requestTypeId) {
-    if (requestTypeId == null) {
+    if (StringUtils.isBlank(requestTypeId)) {
       request.setRequestType(null);
     }
     else {

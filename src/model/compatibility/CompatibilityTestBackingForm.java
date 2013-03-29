@@ -15,6 +15,8 @@ public class CompatibilityTestBackingForm {
   @Valid
   private CompatibilityTest compatibilityTest;
 
+  private String collectionNumber;
+
   private String compatiblityTestDate;
 
   public CompatibilityTestBackingForm() {
@@ -169,5 +171,13 @@ public class CompatibilityTestBackingForm {
 
   public void setCompatibilityTest(CompatibilityTest crossmatchTest) {
     this.compatibilityTest = crossmatchTest;
+  }
+
+  public void setCollectionNumber(String collectionNumber) {
+    this.collectionNumber = collectionNumber;
+  }
+
+  public String getCollectionNumber() {
+    return collectionNumber;
   }
 }

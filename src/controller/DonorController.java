@@ -469,12 +469,4 @@ public class DonorController {
     }
     return reqUrl;
   }
-
-  private void setDonorNumber(DonorBackingForm form,
-	      Map<String, Object> donorNumberProperties) {
-	    boolean isAutoGeneratable = (Boolean) donorNumberProperties.get("isAutoGeneratable");
-	    boolean autoGenerate = (Boolean) donorNumberProperties.get("autoGenerate");
-	    if (isAutoGeneratable && autoGenerate)
-	      form.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());    
-  }
 }

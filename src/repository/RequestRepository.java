@@ -250,9 +250,11 @@ public class RequestRepository {
     return uniqueRequestNumber;
   }
 
-  public void addRequest(Request productRequest) {
+  public Request addRequest(Request productRequest) {
     em.persist(productRequest);
     em.flush();
+    em.refresh(productRequest);
+    return productRequest;
   }
 
   private Date getDateRequestedAfterOrDefault(String requestedAfter) {

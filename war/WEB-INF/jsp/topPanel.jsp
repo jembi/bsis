@@ -71,7 +71,7 @@
 	</div>
 
 	<div id="requestsLandingPageContent">
-		<jsp:include page="requests.jsp" />
+		<jsp:include page="requests/requests.jsp" />
 	</div>
 
 	<div id="usageLandingPageContent">

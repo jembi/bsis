@@ -12,17 +12,13 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="requestSummaryBarcodeId">donorSummaryBarcode-${unique_page_id}</c:set>
 <c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
       function() {
 
-        $("#${requestSummaryBarcodeId}").barcode(
-					  "${model.request.requestNumber}",
-						"code128",
-						{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+        showBarcode($("#${tabContentId}").find(".requestBarcode"), "${request.requestNumber}");
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("requestSummarySuccess");
@@ -39,7 +35,7 @@
             $("#${tabContentId}").bind("editRequestCancel", emptyChildContent);
 
   	        fetchContent("editRequestFormGenerator.html",
-              					 {requestId: "${model.request.id}"},
+              					 {requestId: "${request.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -55,7 +51,7 @@
 
             showLoadingImage($("#${childContentId}"));
   	        fetchContent("listIssuedProductsForRequest.html",
-              					 {requestId: "${model.request.id}"},
+              					 {requestId: "${request.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -72,7 +68,7 @@
 
             showLoadingImage($("#${childContentId}"));
   	        fetchContent("findMatchingProductsForRequest.html",
-              					 {requestId: "${model.request.id}"},
+              					 {requestId: "${request.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -89,7 +85,7 @@
 
             showLoadingImage($("#${childContentId}"));
   	        fetchContent("editCompatibilityTestFormGenerator.html",
-              					 {requestId: "${model.request.id}"},
+              					 {requestId: "${request.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -121,7 +117,7 @@
                 title : "Confirm Delete",
                 buttons : {
                   "Delete" : function() {
-                    deleteRequest("${model.request.id}", notifyParentDone);
+                    deleteRequest("${request.id}", notifyParentDone);
                     $(this).dialog("close");
                   },
                   "Cancel" : function() {
@@ -133,17 +129,17 @@
 
         function editRequestSuccess() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
         function productIssueSuccess() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
         function addCompatibilityResultSuccess() {
           emptyChildContent();
-          refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
 				function emptyChildContent() {
@@ -200,144 +196,11 @@
 
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['requests.findpending.requestsummary']}
+				${tips['requests.findpending.requestsummary']}
 			</p>
 		</div>
 
-		<div class="printableArea">
-			<br />
-			<div class="formInTabPane">
-				<div id="${requestSummaryBarcodeId}"></div>	
-				<c:if test="${model.requestFields.requestDate.hidden != true }">
-					<div>
-						<label>${model.requestFields.requestDate.displayName}</label>
-						<label style="width: auto;">${model.request.requestDate}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.requiredDate.hidden != true }">
-					<div>
-						<label>${model.requestFields.requiredDate.displayName}</label>
-						<label>${model.request.requiredDate}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.bloodGroup.hidden != true }">
-					<div>
-						<label>${model.requestFields.bloodGroup.displayName}</label>
-						<label>${model.request.bloodGroup}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.productType.hidden != true }">
-					<div>
-						<label>${model.requestFields.productType.displayName}</label>
-						<label>${model.request.productType.productType}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.requestType.hidden != true }">
-					<div>
-						<label>${model.requestFields.requestType.displayName}</label>
-						<label>${model.request.requestType.requestType}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.numUnitsRequested.hidden != true }">
-					<div>
-						<label>${model.requestFields.numUnitsRequested.displayName}</label>
-						<label>${model.request.numUnitsRequested}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.numUnitsIssued.hidden != true }">
-					<div>
-						<label>${model.requestFields.numUnitsIssued.displayName}</label>
-						<label>${model.request.numUnitsIssued}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.requestSite.hidden != true }">
-					<div>
-						<label>${model.requestFields.requestSite.displayName}</label>
-						<label>${model.request.requestSite.name}</label>
-					</div>
-				</c:if>
-			</div>
-			<div class="formInTabPane showMoreSection">
-				<c:if test="${model.requestFields.patientNumber.hidden != true }">
-					<div>
-						<label>${model.requestFields.patientNumber.displayName}</label>
-						<label>${model.request.patientNumber}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.patientFirstName.hidden != true }">
-					<div>
-						<label>${model.requestFields.patientFirstName.displayName}</label>
-						<label>${model.request.patientFirstName}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.patientLastName.hidden != true }">
-					<div>
-						<label>${model.requestFields.patientLastName.displayName}</label>
-						<label>${model.request.patientLastName}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.patientBirthDate.hidden != true }">
-					<div>
-						<label>${model.requestFields.patientBirthDate.displayName}</label>
-						<label>${model.request.patientBirthDate}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.patientAge.hidden != true }">
-					<div>
-						<label>${model.requestFields.patientAge.displayName}</label>
-						<label>${model.request.patientAge} years</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.patientDiagnosis.hidden != true }">
-					<div>
-						<label>${model.requestFields.patientDiagnosis.displayName}</label>
-						<label>${model.request.patientDiagnosis}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.ward.hidden != true }">
-					<div>
-						<label>${model.requestFields.ward.displayName}</label>
-						<label>${model.request.ward}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.department.hidden != true }">
-					<div>
-						<label>${model.requestFields.department.displayName}</label>
-						<label>${model.request.department}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.hospital.hidden != true }">
-					<div>
-						<label>${model.requestFields.hospital.displayName}</label>
-						<label>${model.request.hospital}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.requestedBy.hidden != true }">
-					<div>
-						<label>${model.requestFields.requestedBy.displayName}</label>
-						<label>${model.request.requestedBy}</label>
-					</div>
-				</c:if>
-				<c:if test="${model.requestFields.notes.hidden != true }">
-					<div>
-						<label>${model.requestFields.notes.displayName}</label>
-						<label>${model.request.notes}</label>
-					</div>
-				</c:if>
-				<div>
-					<label>${model.requestFields.lastUpdatedTime.displayName}</label>
-					<label style="width: auto;">${model.request.lastUpdated}</label>
-				</div>
-				<div>
-					<label>${model.requestFields.lastUpdatedBy.displayName}</label>
-					<label style="width: auto;">${model.request.lastUpdatedBy}</label>
-				</div>
-			</div>
-			<hr />
-		</div>
-
-		<button class="showMoreButton">Show more</button>
-		<button class="showLessButton">Show less</button>
+		<jsp:include page="requestDetails.jsp" />
 
 	</div>
 

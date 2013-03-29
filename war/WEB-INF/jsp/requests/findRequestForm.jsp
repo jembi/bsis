@@ -52,7 +52,7 @@ $(document).ready(function() {
   }).click(clearFindForm);
   
   function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    refetchContent("${refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
   }
 
@@ -140,7 +140,7 @@ $(document).ready(function() {
 		<b>Find Requests</b>
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['requests.findpending']}
+				${tips['requests.findpending']}
 			</p>
 		</div>
 		<form:form method="GET" commandName="findRequestForm" id="${findRequestFormId}"
@@ -151,7 +151,7 @@ $(document).ready(function() {
 				<form:select id="${findRequestFormProductTypeSelectorId}"
 										 path="productTypes"
 										 class="productTypeSelector">
-					<c:forEach var="productType" items="${model.productTypes}">
+					<c:forEach var="productType" items="${productTypes}">
 						<form:option value="${productType.id}" label="${productType.productType}" />
 					</c:forEach>
 				</form:select>
@@ -161,7 +161,7 @@ $(document).ready(function() {
 				<form:label path="requestSites">Requested by site</form:label>
 				<form:select id="${findRequestFormRequestSiteSelectorId}"
 										 path="requestSites" class="requestSiteSelector">
-					<c:forEach var="requestSite" items="${model.sites}">
+					<c:forEach var="requestSite" items="${sites}">
 						<form:option value="${requestSite.id}" label="${requestSite.name}" />
 					</c:forEach>
 				</form:select>

@@ -16,7 +16,7 @@
 		<li id="findOrAddRequestsContent"><a
 			href="findRequestFormGenerator.html">Issue Products</a></li>
 		<li id="addRequestsContent"><a
-			href="editRequestFormGenerator.html">Add Request</a></li>
+			href="addRequestFormGenerator.html">Add Request</a></li>
 		<!-- li id="PendingRequestsContent"><a
 			href="pendingRequests.html">Pending Requests</a></li-->
 	</ul>

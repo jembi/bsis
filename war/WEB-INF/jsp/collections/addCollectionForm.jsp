@@ -20,11 +20,6 @@
 <c:set var="addCollectionFormDonationTypeId">addCollectionFormDonationType-${unique_page_id}</c:set>
 <c:set var="addCollectionFormUseBatchCheckboxId">addCollectionFormUseBatchCheckbox-${unique_page_id}</c:set>
 
-<c:set var="updateCollectedSampleButtonId">updateCollectedSampleButton-${unique_page_id}</c:set>
-<c:set var="cancelCollectedSampleButtonId">cancelCollectedSampleButton-${unique_page_id}</c:set>
-<c:set var="deleteCollectedSampleButtonId">deleteCollectedSampleButton-${unique_page_id}</c:set>
-<c:set var="printButtonId">printButton-${unique_page_id}</c:set>
-
 <script>
   $(document).ready(
       function() {
@@ -38,13 +33,13 @@
 	        $("#${tabContentId}").parent().trigger("editCollectionCancel");
         }
 
-        $("#${tabContentId}").find(".cancelButton").button({
+        $("#${mainContentId}").find(".addDonorButton")..button({
           icons : {
             primary : 'ui-icon-closethick'
           }
         }).click(notifyParentCancel);
 
-        $("#${updateCollectedSampleButtonId}").button({
+        $("#${mainContentId}").find(".addCollectionButton").button({
           icons : {
             primary : 'ui-icon-plusthick'
           }
@@ -53,14 +48,6 @@
                 addNewCollection($("#${addCollectionFormId}")[0],
                     									"${tabContentId}", notifyParentSuccess);
             });
-
-        $("#${printButtonId}").button({
-          icons : {
-            primary : 'ui-icon-print'
-          }
-        }).click(function() {
-          $("#${addCollectionFormId}").printArea();
-        });
 
         $("#${addCollectionFormCentersId}").multiselect({
           multiple : false,
@@ -101,7 +88,7 @@
 //          collectedOnDatePicker.datepicker('setDate', new Date());
 //        }
 
-        $("#${tabContentId}").find(".clearFormButton").button({
+        $("#${mainContentId}").find(".clearFormButton")..button({
           icons : {
             
           }
@@ -332,30 +319,13 @@
 		</form:form>
 
 		<div style="margin-left: 200px;">
-			<c:if test="${!(existingCollectedSample)}">
-				<button type="button" id="${updateCollectedSampleButtonId}" class="autoWidthButton">
-					Save
-				</button>
-				<c:if test="${collectionForDonor}">
-					<button type="button" class="cancelButton">
-						Cancel
-					</button>
-				</c:if>
-				<button type="button" class="clearFormButton autoWidthButton">
-					Clear form
-				</button>				
-			</c:if>
-			<c:if test="${existingCollectedSample}">
-				<button type="button" id="${updateCollectedSampleButtonId}">
-					Save
-				</button>
-				<button type="button" class="cancelButton">
-					Cancel
-				</button>
-			</c:if>
-			<button type="button" id="${printButtonId}">
-				Print
+			<label></label>
+			<button type="button" class="addCollectionButton autoWidthButton">
+				Add Collection
 			</button>
+			<button type="button" class="clearFormButton autoWidthButton">
+				Clear form
+			</button>				
 		</div>
 
 </div>

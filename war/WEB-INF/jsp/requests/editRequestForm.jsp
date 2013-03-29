@@ -256,6 +256,8 @@
 						<form:option value="${requestType.id}">${requestType.requestType}</form:option>
 					</c:forEach>
 				</form:select>
+				<form:errors class="formError" path="requestType"
+					delimiter=", "></form:errors>
 				<form:errors class="formError" path="request.requestType"
 					delimiter=", "></form:errors>
 			</div>
@@ -272,6 +274,8 @@
 					</c:forEach>
 				</form:select>
 				<form:errors class="formError" path="request.productType"
+					delimiter=", "></form:errors>
+				<form:errors class="formError" path="productType"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
