@@ -14,7 +14,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CollectionBatchExists {
 
-  String message() default "Donor does not exist";
+  String message() default "Collection batch does not exist";
 
   Class<?>[] groups() default {};
 

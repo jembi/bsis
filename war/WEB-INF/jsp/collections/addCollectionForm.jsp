@@ -10,6 +10,7 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="addCollectionFormId">addCollectionForm-${unique_page_id}</c:set>
 <c:set var="addCollectionFormBarcodeId">addCollectionFormBarcode-${unique_page_id}</c:set>
 <c:set var="addCollectionFormDonorId">addCollectionFormDonor-${unique_page_id}</c:set>
@@ -32,12 +33,6 @@
         function notifyParentCancel() {
 	        $("#${tabContentId}").parent().trigger("editCollectionCancel");
         }
-
-        $("#${mainContentId}").find(".addDonorButton")..button({
-          icons : {
-            primary : 'ui-icon-closethick'
-          }
-        }).click(notifyParentCancel);
 
         $("#${mainContentId}").find(".addCollectionButton").button({
           icons : {
@@ -88,7 +83,7 @@
 //          collectedOnDatePicker.datepicker('setDate', new Date());
 //        }
 
-        $("#${mainContentId}").find(".clearFormButton")..button({
+        $("#${mainContentId}").find(".clearFormButton").button({
           icons : {
             
           }
@@ -172,160 +167,162 @@
 
 <div id="${tabContentId}">
 
-	<c:if test="${!empty success && !success}">
-		<jsp:include page="../common/errorBox.jsp">
-			<jsp:param name="errorMessage" value="${errorMessage}" />
-		</jsp:include>
-	</c:if>
-
-	<form:form method="POST" commandName="addCollectionForm"
-		class="formInTabPane" id="${addCollectionFormId}">
-		<form:hidden path="id" />
-		<c:if test="${!collectionFields.collectionNumber.autoGenerate}">
-			<c:if test="${collectionFields.collectionNumber.hidden != true }">
-				<div class="barcodeContainer"></div>
+	<div id="${mainContentId}">
+		<c:if test="${!empty success && !success}">
+			<jsp:include page="../common/errorBox.jsp">
+				<jsp:param name="errorMessage" value="${errorMessage}" />
+			</jsp:include>
+		</c:if>
+	
+		<form:form method="POST" commandName="addCollectionForm"
+			class="formInTabPane" id="${addCollectionFormId}">
+			<form:hidden path="id" />
+			<c:if test="${!collectionFields.collectionNumber.autoGenerate}">
+				<c:if test="${collectionFields.collectionNumber.hidden != true }">
+					<div class="barcodeContainer"></div>
+					<div>
+						<form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
+						<form:input path="collectionNumber" value="${firstTimeRender ? collectionFields.collectionNumber.defaultValue : ''}" />
+						<form:errors class="formError"
+							path="collectedSample.collectionNumber" delimiter=", "></form:errors>
+					</div>
+				</c:if>
+			</c:if>
+			<c:if test="${collectionFields.collectionBatchNumber.hidden != true }">
 				<div>
-					<form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
-					<form:input path="collectionNumber" value="${firstTimeRender ? collectionFields.collectionNumber.defaultValue : ''}" />
+					<form:label path="collectionBatchNumber">${collectionFields.collectionBatchNumber.displayName}</form:label>
+					<form:input path="collectionBatchNumber" value="${firstTimeRender ? collectionFields.collectionBatchNumber.defaultValue : ''}" />
 					<form:errors class="formError"
-						path="collectedSample.collectionNumber" delimiter=", "></form:errors>
+						path="collectedSample.collectionBatch" delimiter=", "></form:errors>
+					<form:errors class="formError"
+						path="collectedSample.collectionBatchNumber" delimiter=", "></form:errors>
 				</div>
 			</c:if>
-		</c:if>
-		<c:if test="${collectionFields.collectionBatchNumber.hidden != true }">
-			<div>
-				<form:label path="collectionBatchNumber">${collectionFields.collectionBatchNumber.displayName}</form:label>
-				<form:input path="collectionBatchNumber" value="${firstTimeRender ? collectionFields.collectionBatchNumber.defaultValue : ''}" />
-				<form:errors class="formError"
-					path="collectedSample.collectionBatch" delimiter=", "></form:errors>
-				<form:errors class="formError"
-					path="collectedSample.collectionBatchNumber" delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${collectionFields.donor.hidden != true }">
-			<div>
-				<form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
-				<form:hidden path="donorIdHidden" />
-				<form:input path="donorNumber" class="donorNumber" value="${firstTimeRender ? collectionFields.donorNumber.defaultValue : ''}" />
-				<form:errors class="formError" path="collectedSample.donorNumber"
-					delimiter=", "></form:errors>
-				<form:errors class="formError" path="collectedSample.donor"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${collectionFields.collectedOn.hidden != true }">
-			<div>
-				<form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
-				<form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
-				<form:errors class="formError" path="collectedSample.collectedOn"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${collectionFields.donationType.hidden != true }">
-			<div>
-				<form:label path="donationType">${collectionFields.donationType.displayName}</form:label>
-				<form:select path="donationType"
-					id="${addCollectionFormDonationTypeId}"
-					class="addCollectionFormDonationType">
-					<form:option value="">&nbsp;</form:option>
-					<c:forEach var="donationType" items="${donationTypes}">
-						<form:option value="${donationType.id}">${donationType.donationType}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="collectedSample.donationType"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${collectionFields.bloodBagType.hidden != true }">
-			<div>
-				<form:label path="bloodBagType">${collectionFields.bloodBagType.displayName}</form:label>
-				<form:select path="bloodBagType"
-					id="${addCollectionFormBloodBagTypeId}">
-					<form:option value="">&nbsp;</form:option>
-					<c:forEach var="bloodBagType" items="${bloodBagTypes}">
-						<form:option value="${bloodBagType.id}">${bloodBagType.bloodBagType}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="collectedSample.bloodBagType"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-
-		<c:if test="${collectionFields.useParametersFromBatch.hidden != true }">
-
-			<div>
-
-				<c:if test="${firstTimeRender}">
-					<c:if test="${collectionFields.useParametersFromBatch.defaultValue == 'true'}">
-						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
+			<c:if test="${collectionFields.donor.hidden != true }">
+				<div>
+					<form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
+					<form:hidden path="donorIdHidden" />
+					<form:input path="donorNumber" class="donorNumber" value="${firstTimeRender ? collectionFields.donorNumber.defaultValue : ''}" />
+					<form:errors class="formError" path="collectedSample.donorNumber"
+						delimiter=", "></form:errors>
+					<form:errors class="formError" path="collectedSample.donor"
+						delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${collectionFields.collectedOn.hidden != true }">
+				<div>
+					<form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
+					<form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
+					<form:errors class="formError" path="collectedSample.collectedOn"
+						delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${collectionFields.donationType.hidden != true }">
+				<div>
+					<form:label path="donationType">${collectionFields.donationType.displayName}</form:label>
+					<form:select path="donationType"
+						id="${addCollectionFormDonationTypeId}"
+						class="addCollectionFormDonationType">
+						<form:option value="">&nbsp;</form:option>
+						<c:forEach var="donationType" items="${donationTypes}">
+							<form:option value="${donationType.id}">${donationType.donationType}</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors class="formError" path="collectedSample.donationType"
+						delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${collectionFields.bloodBagType.hidden != true }">
+				<div>
+					<form:label path="bloodBagType">${collectionFields.bloodBagType.displayName}</form:label>
+					<form:select path="bloodBagType"
+						id="${addCollectionFormBloodBagTypeId}">
+						<form:option value="">&nbsp;</form:option>
+						<c:forEach var="bloodBagType" items="${bloodBagTypes}">
+							<form:option value="${bloodBagType.id}">${bloodBagType.bloodBagType}</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors class="formError" path="collectedSample.bloodBagType"
+						delimiter=", "></form:errors>
+				</div>
+			</c:if>
+	
+			<c:if test="${collectionFields.useParametersFromBatch.hidden != true }">
+	
+				<div>
+	
+					<c:if test="${firstTimeRender}">
+						<c:if test="${collectionFields.useParametersFromBatch.defaultValue == 'true'}">
+							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
+						</c:if>
+						<c:if test="${collectionFields.useParametersFromBatch.defaultValue != 'true'}">
+							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
+						</c:if>
 					</c:if>
-					<c:if test="${collectionFields.useParametersFromBatch.defaultValue != 'true'}">
-						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
+	
+					<c:if test="${!firstTimeRender}">
+						<c:if test="${addCollectionForm.useParametersFromBatch == true}">
+							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
+						</c:if>
+						<c:if test="${addCollectionForm.useParametersFromBatch != true}">
+							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
+						</c:if>
 					</c:if>
-				</c:if>
-
-				<c:if test="${!firstTimeRender}">
-					<c:if test="${addCollectionForm.useParametersFromBatch == true}">
-						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
-					</c:if>
-					<c:if test="${addCollectionForm.useParametersFromBatch != true}">
-						<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
-					</c:if>
-				</c:if>
-
-				<form:label path="useParametersFromBatch" for="${addCollectionFormUseBatchCheckboxId}" style="width: auto;">
-					${collectionFields.useParametersFromBatch.displayName}
-				</form:label>
-
-				<form:errors class="formError"
-					path="useParametersFromBatch" delimiter=", "></form:errors>
+	
+					<form:label path="useParametersFromBatch" for="${addCollectionFormUseBatchCheckboxId}" style="width: auto;">
+						${collectionFields.useParametersFromBatch.displayName}
+					</form:label>
+	
+					<form:errors class="formError"
+						path="useParametersFromBatch" delimiter=", "></form:errors>
+				</div>
+	
+			</c:if>
+	
+			<c:if test="${collectionFields.collectionCenter.hidden != true }">
+				<div>
+					<form:label path="collectionCenter">${collectionFields.collectionCenter.displayName}</form:label>
+					<form:select path="collectionCenter" id="${addCollectionFormCentersId}" class="addCollectionFormCenters">
+						<form:option value="" selected="selected">&nbsp;</form:option>
+						<c:forEach var="center" items="${centers}">
+							<form:option value="${center.id}">${center.name}</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${collectionFields.collectionSite.hidden != true }">
+				<div>
+					<form:label path="collectionSite">${collectionFields.collectionSite.displayName}</form:label>
+					<form:select path="collectionSite" id="${addCollectionFormSitesId}"
+						class="addCollectionFormSites">
+						<form:option value="" selected="selected">&nbsp;</form:option>
+						<c:forEach var="site" items="${sites}">
+							<form:option value="${site.id}">${site.name}</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${collectionFields.notes.hidden != true }">
+				<div>
+					<form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
+					<form:textarea path="notes" />
+					<form:errors class="formError" path="collectedSample.notes"
+						delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			</form:form>
+	
+			<div style="margin-left: 200px;">
+				<label></label>
+				<button type="button" class="addCollectionButton autoWidthButton">
+					Add Collection
+				</button>
+				<button type="button" class="clearFormButton autoWidthButton">
+					Clear form
+				</button>				
 			</div>
-
-		</c:if>
-
-		<c:if test="${collectionFields.collectionCenter.hidden != true }">
-			<div>
-				<form:label path="collectionCenter">${collectionFields.collectionCenter.displayName}</form:label>
-				<form:select path="collectionCenter" id="${addCollectionFormCentersId}" class="addCollectionFormCenters">
-					<form:option value="" selected="selected">&nbsp;</form:option>
-					<c:forEach var="center" items="${centers}">
-						<form:option value="${center.id}">${center.name}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${collectionFields.collectionSite.hidden != true }">
-			<div>
-				<form:label path="collectionSite">${collectionFields.collectionSite.displayName}</form:label>
-				<form:select path="collectionSite" id="${addCollectionFormSitesId}"
-					class="addCollectionFormSites">
-					<form:option value="" selected="selected">&nbsp;</form:option>
-					<c:forEach var="site" items="${sites}">
-						<form:option value="${site.id}">${site.name}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${collectionFields.notes.hidden != true }">
-			<div>
-				<form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
-				<form:textarea path="notes" />
-				<form:errors class="formError" path="collectedSample.notes"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		</form:form>
-
-		<div style="margin-left: 200px;">
-			<label></label>
-			<button type="button" class="addCollectionButton autoWidthButton">
-				Add Collection
-			</button>
-			<button type="button" class="clearFormButton autoWidthButton">
-				Clear form
-			</button>				
-		</div>
-
+	</div>
+	
 </div>
