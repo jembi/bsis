@@ -391,6 +391,7 @@
         lastUpdated TIMESTAMP,
         nationalID varchar(15),
         notes longtext,
+        donorPanel_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id)
@@ -446,6 +447,7 @@
         lastUpdated TIMESTAMP,
         nationalID varchar(15),
         notes longtext,
+        donorPanel_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
@@ -478,9 +480,10 @@
 
     create table Location (
         id bigint not null auto_increment,
-        isCenter boolean,
+        isCollectionCenter boolean,
         isCollectionSite boolean,
         isDeleted boolean,
+        isDonorPanel boolean,
         isMobileSite boolean,
         isUsageSite boolean,
         name varchar(255),
@@ -500,9 +503,10 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        isCenter boolean,
+        isCollectionCenter boolean,
         isCollectionSite boolean,
         isDeleted boolean,
+        isDonorPanel boolean,
         isMobileSite boolean,
         isUsageSite boolean,
         name varchar(255),
@@ -1229,6 +1233,12 @@
         add constraint FK3F25E46A49787C4 
         foreign key (createdBy_id) 
         references User (id);
+
+    alter table Donor 
+        add index FK3F25E463043805 (donorPanel_id), 
+        add constraint FK3F25E463043805 
+        foreign key (donorPanel_id) 
+        references Location (id);
 
     alter table Donor 
         add index FK3F25E46D0AFB367 (lastUpdatedBy_id), 

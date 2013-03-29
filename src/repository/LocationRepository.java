@@ -73,7 +73,7 @@ public class LocationRepository {
     List<Location> locations = getAllCenters();
     List<String> locationNames = new ArrayList<String>();
     for (Location l : locations) {
-      if (l.getIsCenter())
+      if (l.getIsCollectionCenter())
         locationNames.add(l.getName());
     }
     return locationNames;
@@ -127,8 +127,8 @@ public class LocationRepository {
 
   public List<Location> getAllCenters() {
     TypedQuery<Location> query = em
-        .createQuery("SELECT l FROM Location l where l.isCenter=:isCenter and l.isDeleted= :isDeleted", Location.class);
-    query.setParameter("isCenter", true);
+        .createQuery("SELECT l FROM Location l where l.isCollectionCenter=:isCollectionCenter and l.isDeleted= :isDeleted", Location.class);
+    query.setParameter("isCollectionCenter", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
@@ -151,4 +151,12 @@ public class LocationRepository {
     em.flush();
   }
 
+  public List<Location> getAllDonorPanels() {
+    TypedQuery<Location> query = em.createQuery(
+        "SELECT l from Location l where l.isDonorPanel=:isDonorPanel and l.isDeleted=:isDeleted",
+        Location.class);
+    query.setParameter("isDonorPanel", true);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
+  }
 }

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,6 +20,8 @@ import javax.validation.Valid;
 
 import model.address.ContactInformation;
 import model.collectedsample.CollectedSample;
+import model.location.Location;
+import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -116,6 +119,13 @@ public class Donor implements ModificationTracker {
   @Embedded
   @Valid
   private ContactInformation contactInformation;
+
+  /**
+   * Which panel the donor is registered to
+   */
+  @LocationExists
+  @ManyToOne
+  private Location donorPanel;
 
   @Lob
 	private String notes;
@@ -421,5 +431,13 @@ public class Donor implements ModificationTracker {
 
   public void setBirthDateInferred(Date birthDateInferred) {
     this.birthDateInferred = birthDateInferred;
+  }
+
+  public Location getDonorPanel() {
+    return donorPanel;
+  }
+
+  public void setDonorPanel(Location donorPanel) {
+    this.donorPanel = donorPanel;
   }
 }

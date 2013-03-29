@@ -91,6 +91,12 @@
 			<label>${donor.zipcode}</label>
 		</div>
 	</c:if>
+	<c:if test="${donorFields.donorPanel.hidden != true }">
+		<div>
+			<label>${donorFields.donorPanel.displayName}</label>
+			<label>${donor.donorPanel}</label>
+		</div>
+	</c:if>
 	<c:if test="${donorFields.notes.hidden != true }">
 		<div>
 			<label>${donorFields.notes.displayName}</label>

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import model.CustomDateFormatter;
 import model.donor.Donor;
+import model.location.Location;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -122,5 +123,9 @@ public class DonorViewModel {
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();
+  }
+
+  public Location getDonorPanel() {
+    return donor.getDonorPanel();
   }
 }

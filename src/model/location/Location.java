@@ -16,13 +16,15 @@ public class Location {
 	private Long id;
 	private String name;
 
-	private Boolean isCenter;
+	private Boolean isCollectionCenter;
 
 	private Boolean isCollectionSite;
 
 	private Boolean isUsageSite;
 
 	private Boolean isMobileSite;
+
+	private Boolean isDonorPanel;
 
 	private Boolean isDeleted;
 
@@ -34,7 +36,7 @@ public class Location {
 
 	public void copy(Location location) {
 		this.name = location.name;
-		this.isCenter = location.isCenter;
+		this.isCollectionCenter = location.isCollectionCenter;
 		this.isCollectionSite = location.isCollectionSite;
 		this.isUsageSite = location.isUsageSite;
 		this.notes = location.notes;
@@ -44,8 +46,8 @@ public class Location {
     return name;
   }
 
-	public Boolean getIsCenter() {
-		return isCenter;
+	public Boolean getIsCollectionCenter() {
+		return isCollectionCenter;
 	}
 
 	public Boolean getIsCollectionSite() {
@@ -80,8 +82,8 @@ public class Location {
     this.name = name;
   }
 
-	public void setIsCenter(Boolean center) {
-		isCenter = center;
+	public void setIsCollectionCenter(Boolean isCollectionCenter) {
+		this.isCollectionCenter = isCollectionCenter;
 	}
 
 	public void setIsCollectionSite(Boolean collectionSite) {
@@ -106,5 +108,13 @@ public class Location {
 
   public String toString() {
     return name;
+  }
+
+  public Boolean getIsDonorPanel() {
+    return isDonorPanel;
+  }
+
+  public void setIsDonorPanel(Boolean isDonorPanel) {
+    this.isDonorPanel = isDonorPanel;
   }
 }

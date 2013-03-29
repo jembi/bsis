@@ -3,7 +3,8 @@ package viewmodel;
 import model.location.Location;
 
 public class LocationViewModel {
-	private Location location;
+
+  private Location location;
 
 	public LocationViewModel(Location location) {
 		this.location = location;
@@ -17,8 +18,8 @@ public class LocationViewModel {
 		return location.getName();
 	}
 
-	public String getIsCenter() {
-		return location.getIsCenter().toString();
+	public String getIsCollectionCenter() {
+		return location.getIsCollectionCenter().toString();
 	}
 
 	public String getIsCollectionSite() {
@@ -31,5 +32,9 @@ public class LocationViewModel {
 
 	public String getIsMobileSite() {
 		return location.getIsMobileSite().toString();
+	}
+
+	public String getIsDonorPanel() {
+	  return location.getIsDonorPanel().toString();
 	}
 }

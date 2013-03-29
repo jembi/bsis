@@ -83,6 +83,10 @@ insert into FormField
 '1', '1',
 '0', '1',
 '0', '0'),
+('Donor', 'donorPanel', 'Donor Panel', '', 0,
+'0', '1',
+'0', '1',
+'0', '0'),
 ('Donor', 'notes', 'Notes', '', 0,
 '0', '1',
 '0', '1',
@@ -505,18 +509,18 @@ insert into BloodBagType (bloodBagType, isDeleted) values
 ('Triple', '0'),
 ('Pedi', '0');
 
-insert into Location(name, isCenter, isCollectionSite, isMobileSite, isUsageSite, isDeleted, notes) values
-('Lusaka', 1, 0, 0, 0, 0, ''),
-('Ndola', 1, 1, 0, 1, 0, ''),
-('Livingstone', 1, 1, 0, 1, 0, ''),
-('Luanshya', 1, 0, 0, 0, 0, ''),
-('Kasama', 1, 1, 0, 1, 0, ''),
-('Chipata', 1, 0, 0, 0, 0, ''),
-('Chingola', 1, 1, 0, 1, 0, '');
+insert into Location(name, isCollectionCenter, isCollectionSite, isMobileSite, isUsageSite, isDonorPanel, isDeleted, notes) values
+('Lusaka', 1, 0, 0, 0, 0, 0, ''),
+('Ndola', 1, 1, 0, 1, 0, 0, ''),
+('Livingstone', 1, 1, 0, 1, 1, 0, ''),
+('Luanshya', 1, 0, 0, 0, 1, 0, ''),
+('Kasama', 1, 1, 0, 1, 0, 0, ''),
+('Chipata', 1, 0, 0, 0, 0, 0, ''),
+('Chingola', 1, 1, 0, 1, 1, 0, '');
 
 insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),
-('testresults.find', 'Find/Edit Test Results', 'Find Test results by collection number or find tests done between two dates.'),
+('testresults.find', 'Find/Edit Test Results', 'Find blood typing and TTI results by collection number'),
 ('products.find', 'Find/Edit Products', 'Find Products by collection number/product number/product type.'),
 ('products.findproduct.productsummary', 'Product Summary Page', 'Product details shown below. Discard, split or pool this product using the buttons above.'),
 ('collectedSamples.find', 'Find/Edit Collections', 'Find Collections by collection number/blood bag type/collection center/collection site.'),

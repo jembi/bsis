@@ -16,6 +16,7 @@
 <c:set var="addDonorFormId">addDonorForm-${unique_page_id}</c:set>
 
 <c:set var="genderSelectorId">genderSelector-${unique_page_id}</c:set>
+<c:set var="addDonorFormDonorPanelsId">addDonorFormDonorPanels-${uniquePageId}</c:set>
 
 <script>
   $(document).ready(
@@ -45,6 +46,13 @@
             
           }
         }).click(refetchForm);
+
+        $("#${addDonorFormDonorPanelsId}").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+
 
         function refetchForm() {
           $.ajax({
@@ -76,9 +84,14 @@
           yearRange : "c-100:c0",
         });
 
+        function getDonorPanelSelector() {
+          return $("#${tabContentId}").find('select[name="donorPanel"]').multiselect();
+        }
+
         if ("${firstTimeRender}" == "true") {
           $("#${mainContentId}").find('textarea[name="address"]').html("${donorFields.address.defaultValue}");
         	$("#${mainContentId}").find('textarea[name="notes"]').html("${donorFields.notes.defaultValue}");
+        	setDefaultValueForSelector(getDonorPanelSelector(), "${donorFields.donorPanel.defaultValue}");
         	setDefaultValueForSelector(getGenderSelector(), "${donorFields.gender.defaultValue}");
         }
 
@@ -259,6 +272,20 @@
 					</ul>
 				</div>
 			</c:if>
+
+			<c:if test="${donorFields.donorPanel.hidden != true }">
+				<div>
+					<form:label path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
+					<form:select path="donorPanel" id="${addDonorFormDonorPanelsId}" class="addDonorFormDonorPanels">
+						<form:option value="" selected="selected">&nbsp;</form:option>
+						<c:forEach var="donorPanel" items="${donorPanels}">
+							<form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors class="formError" path="donor.donorPanel" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+
 			<c:if test="${donorFields.notes.hidden != true }">
 				<div>
 					<form:label path="notes" class="labelForTextArea">${donorFields.notes.displayName}</form:label>

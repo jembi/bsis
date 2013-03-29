@@ -33,7 +33,7 @@ $(document).ready(function() {
     console.log(newDiv);
     newDiv.find('input[name="id"]').val("newLocation-" + new Date().getTime());
     newDiv.find('input[name="locationName"]').val("");
-    newDiv.find('input[name="isCenter"]').removeAttr('checked');
+    newDiv.find('input[name="isCollectionCenter"]').removeAttr('checked');
     newDiv.find('input[name="isCollectionSite"]').removeAttr('checked');
     newDiv.find('input[name="isUsageSite"]').removeAttr('checked');
     $("#${configureLocationsFormId}").append(newDiv);
@@ -50,13 +50,15 @@ $(document).ready(function() {
       var div = $(locationDivs[index]);
       var locationId = div.find('input[name="id"]').val();
       var locationName = div.find('input[name="locationName"]').val();
-      var isCenter = div.find('input[name="isCenter"]').is(":checked");
+      var isCollectionCenter = div.find('input[name="isCollectionCenter"]').is(":checked");
       var isCollectionSite = div.find('input[name="isCollectionSite"]').is(":checked");
       var isUsageSite = div.find('input[name="isUsageSite"]').is(":checked");
+      var isDonorPanel = div.find('input[name="isDonorPanel"]').is(":checked");
       data[locationId] = {name: locationName,
-          								isCenter: isCenter,
+          								isCollectionCenter: isCollectionCenter,
           								isCollectionSite: isCollectionSite,
-          								isUsageSite: isUsageSite
+          								isUsageSite: isUsageSite,
+          								isDonorPanel: isDonorPanel
           							 };
     }
 
@@ -99,17 +101,18 @@ $(document).ready(function() {
 
 		<form id="${configureLocationsFormId}">
 				<c:forEach var="location" items="${model.allLocations}">
+
 					<div class="locationDiv">
 						<div>
 							<input type="hidden" name="id" value="${location.id}" />
 							<input type="text" name="locationName" value="${location.name}" />
 				
-							<label for="isCenter">Center</label>
-							<c:if test="${location.isCenter}">
-								<input type="checkbox" name="isCenter" checked="checked"/>
+							<label for="isCollectionCenter">Center</label>
+							<c:if test="${location.isCollectionCenter}">
+								<input type="checkbox" name="isCollectionCenter" checked="checked"/>
 							</c:if>
-							<c:if test="${!location.isCenter}">
-								<input type="checkbox" name="isCenter" />
+							<c:if test="${!location.isCollectionCenter}">
+								<input type="checkbox" name="isCollectionCenter" />
 							</c:if>
 
 							<label for="isCollectionSite" style="margin-left: 10px;">Collection Site</label>
@@ -128,8 +131,16 @@ $(document).ready(function() {
 								<input type="checkbox" name="isUsageSite" />
 							</c:if>
 
+							<label for="isDonorPanel" style="margin-left: 10px;">Donor Panel</label>
+							<c:if test="${location.isDonorPanel}">
+								<input type="checkbox" name="isDonorPanel" checked="checked"/>
+							</c:if>
+							<c:if test="${!location.isDonorPanel}">
+								<input type="checkbox" name="isDonorPanel" />
+							</c:if>
 						</div>
 					</div>
+
 			</c:forEach>
 		</form>
 			<br />

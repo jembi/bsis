@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.DonorRepository;
-import repository.SequenceNumberRepository;
+import repository.LocationRepository;
 import viewmodel.DonorViewModel;
 
 @Controller
@@ -46,7 +46,7 @@ public class DonorController {
   private UtilController utilController;
 
   @Autowired
-  private SequenceNumberRepository sequenceNumberRepository;
+  private LocationRepository locationRepository;
   
   public DonorController() {
   }
@@ -148,6 +148,7 @@ public class DonorController {
     mv.addObject("firstTimeRender", true);
     mv.addObject("addDonorForm", form);
     mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
     Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
     // to ensure custom field names are displayed in the form
     mv.addObject("donorFields", formFields);
@@ -314,6 +315,7 @@ public class DonorController {
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorFormGenerator.html");
+    addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
     return mv;
   }
@@ -332,8 +334,13 @@ public class DonorController {
     m.put("contentLabel", "Find Donors");
     m.put("nextPageUrl", getNextPageUrl(request));
     m.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
+  }
+
+  private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("donorPanels", locationRepository.getAllDonorPanels());
   }
 
   /**

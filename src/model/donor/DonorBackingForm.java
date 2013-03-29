@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
+import model.location.Location;
 import model.user.User;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -330,5 +331,28 @@ public class DonorBackingForm {
 
   public void setOtherPhoneNumber(String otherPhoneNumber) {
     donor.setOtherPhoneNumber(otherPhoneNumber);
+  }
+
+  public String getDonorPanel() {
+    Location donorPanel = donor.getDonorPanel();
+    if (donorPanel == null || donorPanel.getId() == null)
+      return null;
+    return donorPanel.getId().toString();
+  }
+
+  public void setDonorPanel(String donorPanel) {
+    if (StringUtils.isBlank(donorPanel)) {
+      donor.setDonorPanel(null);
+    }
+    else {
+      Location l = new Location();
+      try {
+        l.setId(Long.parseLong(donorPanel));
+        donor.setDonorPanel(l);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+        donor.setDonorPanel(null);
+      }
+    }
   }
 }

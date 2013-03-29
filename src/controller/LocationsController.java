@@ -70,7 +70,7 @@ public class LocationsController {
           location.setId(Long.parseLong(id));
 
         location.setName((String) paramValue.get("name"));
-        location.setIsCenter((Boolean) paramValue.get("isCenter"));
+        location.setIsCollectionCenter((Boolean) paramValue.get("isCenter"));
         location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
         location.setIsUsageSite((Boolean) paramValue.get("isUsageSite"));
 
