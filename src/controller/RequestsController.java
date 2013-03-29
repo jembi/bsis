@@ -82,32 +82,32 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/requestSummary", method = RequestMethod.GET)
-  public ModelAndView requestSummaryGenerator(HttpServletRequest request, Model model,
+  public ModelAndView requestSummaryGenerator(HttpServletRequest request,
       @RequestParam(value = "requestId", required = false) Long requestId) {
 
-    ModelAndView mv = new ModelAndView("requestSummary");
-    Map<String, Object> m = model.asMap();
+    ModelAndView mv = new ModelAndView("requests/requestSummary");
 
-    m.put("requestUrl", getUrl(request));
+    mv.addObject("requestUrl", getUrl(request));
 
     Request productRequest = null;
     if (requestId != null) {
       productRequest = requestRepository.findRequestById(requestId);
       if (productRequest != null) {
-        m.put("existingRequest", true);
+        mv.addObject("existingRequest", true);
       }
       else {
-        m.put("existingRequest", false);
+        mv.addObject("existingRequest", false);
       }
     }
 
     RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
-    m.put("request", requestViewModel);
-    m.put("refreshUrl", getUrl(request));
-    utilController.addTipsToModel(model.asMap(), "requests.findpending.requestsummary");
+    mv.addObject("request", requestViewModel);
+    mv.addObject("refreshUrl", getUrl(request));
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "requests.findpending.requestsummary");
+    mv.addObject("tips", tips);
     // to ensure custom field names are displayed in the form
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-    mv.addObject("model", m);
+    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
     return mv;
   }
 
@@ -131,7 +131,7 @@ public class RequestsController {
   @RequestMapping("/findRequest")
   public ModelAndView findRequest(HttpServletRequest request,
       @ModelAttribute("findRequestForm") FindRequestBackingForm form,
-      BindingResult result, Model model) {
+      BindingResult result) {
 
     List<Request> productRequests = Arrays.asList(new Request[0]);
 
@@ -157,17 +157,18 @@ public class RequestsController {
       }
     }
 
-    productRequests = requestRepository.findRequests(productTypeIds, siteIds, requestedAfter, requiredBy, includeSatisfiedRequests);
+    productRequests = requestRepository.findRequests(
+                        productTypeIds, siteIds,
+                        requestedAfter, requiredBy,
+                        includeSatisfiedRequests);
 
-    ModelAndView modelAndView = new ModelAndView("requestsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-    m.put("allRequests", getRequestViewModels(productRequests));
-    m.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(m);
+    ModelAndView mv = new ModelAndView("requests/requestsTable");
+    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
+    mv.addObject("allRequests", getRequestViewModels(productRequests));
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
 
-    modelAndView.addObject("model", m);
-    return modelAndView;
+    return mv;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {

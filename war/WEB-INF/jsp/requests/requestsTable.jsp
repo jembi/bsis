@@ -51,7 +51,7 @@ $(document).ready(
 
       function refreshResults() {
         showLoadingImage($("#${tabContentId}"));
-        $.ajax({url: "${model.refreshUrl}",
+        $.ajax({url: "${refreshUrl}",
           			data: {},
           			type: "GET",
           			success: function(response) {
@@ -76,7 +76,7 @@ $(document).ready(
 
 	<c:choose>
 
-		<c:when test="${fn:length(model.allRequests) eq 0}">
+		<c:when test="${fn:length(allRequests) eq 0}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
@@ -88,52 +88,52 @@ $(document).ready(
 				<thead>
 					<tr>
 						<th style="display: none"></th>
-						<c:if test="${model.requestFields.bloodGroup.hidden != true}">
-							<th>${model.requestFields.bloodGroup.displayName}</th>
+						<c:if test="${requestFields.bloodGroup.hidden != true}">
+							<th>${requestFields.bloodGroup.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.requestDate.hidden != true}">
-							<th>${model.requestFields.requestDate.displayName}</th>
+						<c:if test="${requestFields.requestDate.hidden != true}">
+							<th>${requestFields.requestDate.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.requiredDate.hidden != true}">
-							<th>${model.requestFields.requiredDate.displayName}</th>
+						<c:if test="${requestFields.requiredDate.hidden != true}">
+							<th>${requestFields.requiredDate.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.productType.hidden != true}">
-							<th>${model.requestFields.productType.displayName}</th>
+						<c:if test="${requestFields.productType.hidden != true}">
+							<th>${requestFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.numUnitsRequested.hidden != true}">
-							<th>${model.requestFields.numUnitsRequested.displayName}</th>
+						<c:if test="${requestFields.numUnitsRequested.hidden != true}">
+							<th>${requestFields.numUnitsRequested.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.numUnitsIssued.hidden != true}">
-							<th>${model.requestFields.numUnitsIssued.displayName}</th>
+						<c:if test="${requestFields.numUnitsIssued.hidden != true}">
+							<th>${requestFields.numUnitsIssued.displayName}</th>
 						</c:if>
-						<c:if test="${model.requestFields.requestSite.hidden != true}">
-							<th>${model.requestFields.requestSite.displayName}</th>
+						<c:if test="${requestFields.requestSite.hidden != true}">
+							<th>${requestFields.requestSite.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="request" items="${model.allRequests}">
+					<c:forEach var="request" items="${allRequests}">
 						<tr>
 							<td style="display: none">${request.id}</td>
-							<c:if test="${model.requestFields.bloodGroup.hidden != true}">
+							<c:if test="${requestFields.bloodGroup.hidden != true}">
 								<td>${request.bloodGroup}</td>
 							</c:if>
-							<c:if test="${model.requestFields.requestDate.hidden != true}">
+							<c:if test="${requestFields.requestDate.hidden != true}">
 								<td>${request.requestDate}</td>
 							</c:if>
-							<c:if test="${model.requestFields.requiredDate.hidden != true}">
+							<c:if test="${requestFields.requiredDate.hidden != true}">
 								<td>${request.requiredDate}</td>
 							</c:if>
-							<c:if test="${model.requestFields.productType.hidden != true}">
+							<c:if test="${requestFields.productType.hidden != true}">
 								<td>${request.productType.productType}</td>
 							</c:if>
-							<c:if test="${model.requestFields.numUnitsRequested.hidden != true}">
+							<c:if test="${requestFields.numUnitsRequested.hidden != true}">
 								<td>${request.numUnitsRequested}</td>
 							</c:if>
-							<c:if test="${model.requestFields.numUnitsIssued.hidden != true}">
+							<c:if test="${requestFields.numUnitsIssued.hidden != true}">
 								<td>${request.numUnitsIssued}</td>
 							</c:if>
-							<c:if test="${model.requestFields.requestSite.hidden != true}">
+							<c:if test="${requestFields.requestSite.hidden != true}">
 								<td>${request.requestSite}</td>
 							</c:if>
 						</tr>
