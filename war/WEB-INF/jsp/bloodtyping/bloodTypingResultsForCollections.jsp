@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}">
-		<div style="width: 80%; margin-left: 20px;">
+		<div style="width: 87%; margin-left: 20px;">
 			<table class="bloodTypingPrimaryTestsDoneSummaryTable">
 				<thead>
 					<tr>
@@ -97,7 +97,7 @@ $(document).ready(function() {
 							<td style="width: auto;">
 								<ul>
 									<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingTestsIds}">
-										<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
+										<c:set var="pendingTest" value="${allBloodTypingTests[pendingTestId]}" />
 										<li>
 											${pendingTest.testName}
 										</li>

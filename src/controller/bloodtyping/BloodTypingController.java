@@ -179,14 +179,16 @@ public class BloodTypingController {
     if (errorMap != null && !errorMap.isEmpty())
       success = false;
     Map<String, Object> tips = new HashMap<String, Object>();
+
     System.out.println(errorMap);
+
     if (success) {
-      List<BloodTypingTest> advancedTests = bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.ADVANCED);
-      Map<String, BloodTypingTest> advancedTestsMap = new HashMap<String, BloodTypingTest>();
-      for (BloodTypingTest advancedTest : advancedTests) {
-        advancedTestsMap.put(advancedTest.getId().toString(), advancedTest);
+      List<BloodTypingTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+      Map<String, BloodTypingTest> allBloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
+      for (BloodTypingTest allBloodTypingTest : allBloodTypingTests) {
+        allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
       }
-      mv.addObject("advancedBloodTypingTests", advancedTestsMap);
+      mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
       mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
       mv.addObject("collections", results.get("collections"));
 
@@ -258,12 +260,12 @@ public class BloodTypingController {
     ModelAndView mv = new ModelAndView();
     String[] collectionIds = collectionIdsParam.split(",");
     Map<String, Object> results = bloodTypingRepository.getBloodTypingTestStatus(Arrays.asList(collectionIds));
-    List<BloodTypingTest> advancedTests = bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.ADVANCED);
-    Map<String, BloodTypingTest> advancedTestsMap = new HashMap<String, BloodTypingTest>();
-    for (BloodTypingTest advancedTest : advancedTests) {
-      advancedTestsMap.put(advancedTest.getId().toString(), advancedTest);
+    List<BloodTypingTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+    Map<String, BloodTypingTest> allBloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
+    for (BloodTypingTest allBloodTypingTest : allBloodTypingTests) {
+      allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
     }
-    mv.addObject("advancedBloodTypingTests", advancedTestsMap);
+    mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("collections", results.get("collections"));
     mv.addObject("bloodTypingOutput", results.get("bloodTypingResults"));
@@ -295,12 +297,12 @@ public class BloodTypingController {
     }
     mv.addObject("allBloodTypingTests", bloodTypingTestsMap);
 
-    List<BloodTypingTest> advancedTests = bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.ADVANCED);
-    Map<String, BloodTypingTest> advancedTestsMap = new TreeMap<String, BloodTypingTest>();
-    for (BloodTypingTest advancedTest : advancedTests) {
-      advancedTestsMap.put(advancedTest.getId().toString(), advancedTest);
+    List<BloodTypingTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+    Map<String, BloodTypingTest> allBloodTypingTestsMap = new TreeMap<String, BloodTypingTest>();
+    for (BloodTypingTest allBloodTypingTest : allBloodTypingTests) {
+      allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
     }
-    mv.addObject("advancedBloodTypingTests", advancedTestsMap);
+    mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
 
     mv.setViewName("bloodtyping/bloodTypingSummaryCollection");
     mv.addObject("showDoneButton", showDoneButton);

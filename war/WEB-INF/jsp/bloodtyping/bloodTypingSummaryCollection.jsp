@@ -26,6 +26,14 @@ $(document).ready(function() {
 		var showHideSection = parentSection.find(".showHideTestsSection");
 		var currentlyVisible = showHideSection.is(":visible");
 		if (currentlyVisible) {
+			 $("#${mainContentId}").find(".availableTestResultInput")
+			   										 .each(function() {
+		     			                       $(this).prop("type", "hidden");
+		    		                       });
+			$("#${mainContentId}").find(".availableTestResultLabel")
+				                    .each(function() {
+				   			                    $(this).show();
+				   		                    });
 			showHideButton.button("option", "label", "Show more tests");
 			showHideButton.button("option", "icons", {primary : "ui-icon-plusthick"});
 			showHideSection.hide();
@@ -36,7 +44,17 @@ $(document).ready(function() {
 			showHideSection.show();
 		}
 	}
-	
+
+	function unhideShowHideSection() {
+		var showHideButton = $("#${mainContentId}").find(".showHideButton")
+																							 .button();
+		var parentSection = showHideButton.closest(".moreTestsSection");
+		var showHideSection = parentSection.find(".showHideTestsSection");
+		showHideButton.button("option", "label", "Show fewer tests");
+		showHideButton.button("option", "icons", {primary : "ui-icon-minusthick"});
+		showHideSection.show();
+	}
+
 	$("#${mainContentId}").find(".showHideButton")
 	 											.each(showHideToggle);
 
@@ -55,6 +73,8 @@ $(document).ready(function() {
 
 		for (var index = 0; index < inputs.length; index++) {
 	    var input = $(inputs[index]);
+	    if (input.is(":hidden"))
+	      continue;
 	    var testId = input.data("testid");
 	    var val = input.val();
 	    if (val !== undefined && val.length > 0 && testId !== undefined) {
@@ -92,6 +112,14 @@ $(document).ready(function() {
 		parentSection.find("input").each(function() {
 									   $(this).val(this.defaultValue);
 									 });
+		 $("#${mainContentId}").find(".availableTestResultInput")
+		   										 .each(function() {
+	     			 											 $(this).prop("type", "hidden");
+	    		 											 });
+		 $("#${mainContentId}").find(".availableTestResultLabel")
+			 										 .each(function() {
+			   			 										 $(this).show();
+			   		 										 });
 	}
 
 	$("#${mainContentId}").find(".doneButton")
@@ -103,6 +131,19 @@ $(document).ready(function() {
 		$("#${tabContentId}").remove();
 	}
 
+	$("#${mainContentId}").find(".availableTestEdit")
+											  .click(function() {
+											    			 $("#${mainContentId}").find(".availableTestResultInput")
+	  															 									   .each(function() {
+	  																								     			 $(this).prop("type", "text");
+	  																								    		 });
+	  														 $("#${mainContentId}").find(".availableTestResultLabel")
+	  															 										 .each(function() {
+	  															 										   			 $(this).hide();
+	  															 										   		 });
+	  														 unhideShowHideSection();
+															 });
+
 });
 </script>
 
@@ -113,7 +154,7 @@ $(document).ready(function() {
 		<c:set var="availableTestResults" value="${bloodTypingOutputForCollection.availableTestResults}" />
 		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingTestsIds}" />
 
-		<div class="bloodTypingForCollectionSection formInTabPane">
+		<div class="bloodTypingForCollectionSection formInTabPane" style="width: 40%;">
 			<div>
 				<label>${collectionFields.collectionNumber.displayName}</label>
 				<label>${collection.collectionNumber}</label>
@@ -142,9 +183,12 @@ $(document).ready(function() {
 			<div class="testsPerformed">
 				<div class="formInTabPane" style="margin-left: 0px;">
 					<c:if test="${fn:length(availableTestResults) gt 0}">
-						<div>
-							<label style="width: auto;">
+						<div style="position: relative; height: 30px;">
+							<label style="width: auto; position: absolute;">
 								<b>Available Blood Typing test results</b>
+							</label>
+							<label style="width: auto; position: absolute; right: 10px;">
+								<span class="link availableTestEdit">Edit</span>
 							</label>
 						</div>
 						<!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
@@ -152,7 +196,12 @@ $(document).ready(function() {
 							<c:if test="${not empty availableTestResults[bloodTypingTest.key]}">
 								<div>
 									<label>${bloodTypingTest.value.testName}</label>
-									<label>${availableTestResults[bloodTypingTest.key]}</label>
+									<label class="availableTestResultLabel">${availableTestResults[bloodTypingTest.key]}</label>
+									<input name="bloodTypingTest-${bloodTypingTest.key}" class="bloodTypingTestInput availableTestResultInput"
+												 value="${availableTestResults[bloodTypingTest.key]}"
+											   data-testid="${bloodTypingTest.value.id}"
+											   data-available="true"
+											   type="hidden" />
 								</div>
 							</c:if>
 						</c:forEach>
@@ -169,7 +218,7 @@ $(document).ready(function() {
 							</label>
 						</div>
 						<c:forEach var="pendingTestId" items="${pendingTests}">
-							<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
+							<c:set var="pendingTest" value="${allBloodTypingTests[pendingTestId]}" />
 							<div>
 								<label>${pendingTest.testName}</label>
 								<input name="pendingTest-${pendingTestId}" class="bloodTypingTestInput" data-testid="${pendingTestId}" />
@@ -179,20 +228,25 @@ $(document).ready(function() {
 				</div>
 
 				<div class="showHideTestsSection formInTabPane" style="margin-left: 0px;">
+					<div>
+						<label>
+							<b>Other tests</b>
+						</label>
+					</div>
 					<!-- Show other tests to the user -->
-					<c:forEach var="advancedTest" items="${advancedBloodTypingTests}">
+					<c:forEach var="bloodTypingTest" items="${allBloodTypingTests}">
 		
 						<c:set var="isPendingTest" value="${false}" />
 						<c:forEach var="pendingTestId" items="${pendingTests}">
-							<c:if test="${pendingTestId eq advancedTest.key}">
+							<c:if test="${pendingTestId eq bloodTypingTest.key}">
 								<c:set var="isPendingTest" value="${true}" />
 							</c:if>
 						</c:forEach>
 		
-						<c:if test="${!isPendingTest}">
+						<c:if test="${!isPendingTest && empty availableTestResults[bloodTypingTest.key]}">
 							<div>
-								<label>${advancedTest.value.testName}</label>
-								<input name="advancedTest-${advancedTest.value.id}" class="bloodTypingTestInput" data-testid="${advancedTest.value.id}" />
+								<label>${bloodTypingTest.value.testName}</label>
+								<input name="bloodTypingTest-${bloodTypingTest.value.id}" class="bloodTypingTestInput" data-testid="${bloodTypingTest.value.id}" />
 							</div>
 						</c:if>
 					</c:forEach>

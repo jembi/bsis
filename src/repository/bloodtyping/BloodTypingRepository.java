@@ -126,15 +126,16 @@ public class BloodTypingRepository {
     String extraInformation = collection.getExtraBloodTypeInformation();
 
     Set<String> extraInformationOld = new HashSet<String>();
-    extraInformationOld.addAll(Arrays.asList(extraInformation.split(",")));
-    // extra information is a field to which we add more information
-    // do not store duplicate information in this field
-    extraInformationNew.removeAll(extraInformationOld);
-
-    if (StringUtils.isNotBlank(extraInformation))
+    if (StringUtils.isNotBlank(extraInformation)) {
+      extraInformationOld.addAll(Arrays.asList(extraInformation.split(",")));
+      // extra information is a field to which we add more information
+      // do not store duplicate information in this field
+      extraInformationNew.removeAll(extraInformationOld);
       collection.setExtraBloodTypeInformation(extraInformation + StringUtils.join(extraInformationNew, ","));
-    else
+    }
+    else {
       collection.setExtraBloodTypeInformation(StringUtils.join(extraInformationNew, ","));
+    }
 
     collection.setBloodAbo(bloodAboNew);
     collection.setBloodRh(bloodRhNew);
