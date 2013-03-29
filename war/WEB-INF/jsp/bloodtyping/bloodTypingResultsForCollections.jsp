@@ -58,51 +58,57 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}">
-		<table class="bloodTypingPrimaryTestsDoneSummaryTable">
-			<thead>
-				<tr>
-					<th style="display: none;"/>
-					<th>${collectionFields.collectionNumber.displayName}</th>
-					<th>Blood Typing Status</th>
-					<th>Blood ABO determined</th>
-					<th>Blood Rh determined</th>
-					<th>Pending tests</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="collectionEntry" items="${collections}">
-					<c:set var="collection" value="${collectionEntry.value}" />
-					<c:set var="bloodTypingOutputForCollection" value="${bloodTypingOutput[collection.id]}" />
+		<div style="width: 80%; margin-left: 20px;">
+			<table class="bloodTypingPrimaryTestsDoneSummaryTable">
+				<thead>
 					<tr>
-						<td style="display: none;">
-							${collection.id}
-						</td>
-						<td style="width: 140px;">
-							${collection.collectionNumber}
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodTypingStatus}
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodAbo}
-						</td>
-						<td style="text-align: center; width: 140px;">
-							${bloodTypingOutputForCollection.bloodRh}
-						</td>
-						<td style="width: auto;">
-							<ul>
-								<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingTestsIds}">
-									<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
-									<li>
-										${pendingTest.testName}
-									</li>
-								</c:forEach>
-							</ul>
-						</td>
+						<th style="display: none;"/>
+						<th>${collectionFields.collectionNumber.displayName}</th>
+						<th>Blood Typing Status</th>
+						<th>Blood ABO determined</th>
+						<th>Blood Rh determined</th>
+						<th>Extra information</th>
+						<th>Pending tests</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<c:forEach var="collectionEntry" items="${collections}">
+						<c:set var="collection" value="${collectionEntry.value}" />
+						<c:set var="bloodTypingOutputForCollection" value="${bloodTypingOutput[collection.id]}" />
+						<tr>
+							<td style="display: none;">
+								${collection.id}
+							</td>
+							<td style="width: 140px;">
+								${collection.collectionNumber}
+							</td>
+							<td style="text-align: center; width: 140px;">
+								${collection.bloodTypingStatus}
+							</td>
+							<td style="text-align: center; width: 140px;">
+								${collection.bloodAbo}
+							</td>
+							<td style="text-align: center; width: 140px;">
+								${collection.bloodRh}
+							</td>
+							<td>
+								${collection.extraBloodTypeInformation}
+							</td>
+							<td style="width: auto;">
+								<ul>
+									<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingTestsIds}">
+										<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
+										<li>
+											${pendingTest.testName}
+										</li>
+									</c:forEach>
+								</ul>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	<div id="${childContentId}"></div>

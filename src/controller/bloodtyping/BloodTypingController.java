@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
@@ -273,32 +276,65 @@ public class BloodTypingController {
   public ModelAndView showBloodTypingResultsForCollection(
       HttpServletRequest request,
       HttpServletResponse response,
-      @RequestParam(value="collectionId") String collectionId) {
+      @RequestParam(value="collectionId") String collectionId,
+      @RequestParam(value="showDoneButton", required=false) Boolean showDoneButton) {
     ModelAndView mv = new ModelAndView();
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
     BloodTypingRuleResult ruleResult = bloodTypingRepository.getBloodTypingTestStatus(collectedSampleId);
     mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
+    mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("bloodTypingOutputForCollection", ruleResult);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
     List<BloodTypingTest> bloodTypingTests = bloodTypingRepository.getBloodTypingTests();
-    Map<String, BloodTypingTest> bloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
+    Map<String, BloodTypingTest> bloodTypingTestsMap = new LinkedHashMap<String, BloodTypingTest>();
     for (BloodTypingTest bloodTypingTest : bloodTypingTests) {
       bloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
     mv.addObject("allBloodTypingTests", bloodTypingTestsMap);
 
     List<BloodTypingTest> advancedTests = bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.ADVANCED);
-    Map<String, BloodTypingTest> advancedTestsMap = new HashMap<String, BloodTypingTest>();
+    Map<String, BloodTypingTest> advancedTestsMap = new TreeMap<String, BloodTypingTest>();
     for (BloodTypingTest advancedTest : advancedTests) {
       advancedTestsMap.put(advancedTest.getId().toString(), advancedTest);
     }
     mv.addObject("advancedBloodTypingTests", advancedTestsMap);
 
     mv.setViewName("bloodtyping/bloodTypingSummaryCollection");
+    mv.addObject("showDoneButton", showDoneButton);
+
+    mv.addObject("refreshUrl", getUrl(request));
 
     return mv;
   }
+
+  @RequestMapping(value="/saveAdditionalBloodTypingTests", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> saveAdditionalBloodTypingTests(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="collectionId") String collectionId,
+      @RequestParam(value="saveTestsData") String saveTestsDataStr) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    try {
+      Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
+      Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+      ObjectMapper mapper = new ObjectMapper();
+      Map<String, String> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
+      for (String testIdStr : saveTestsData.keySet()) {
+        saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
+      }
+      bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
+      bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResultsMap);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return m;
+  }
+
 }

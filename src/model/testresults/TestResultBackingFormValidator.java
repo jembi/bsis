@@ -23,9 +23,10 @@ public class TestResultBackingFormValidator implements Validator {
     this.utilController = utilController;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(TestResultBackingForm.class, TestResult.class, TestResultViewModel.class).contains(clazz);
+    return Arrays.asList(FindTestResultBackingForm.class, TestResultBackingForm.class, TestResult.class, TestResultViewModel.class).contains(clazz);
   }
 
   @Override

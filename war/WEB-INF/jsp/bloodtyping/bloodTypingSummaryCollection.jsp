@@ -40,16 +40,50 @@ $(document).ready(function() {
 	$("#${mainContentId}").find(".showHideButton")
 	 											.each(showHideToggle);
 
-	$("#${mainContentId}").find(".saveMoreTestsButton")
+	$("#${mainContentId}").find(".saveTestsButton")
 												.button({icons: {primary : 'ui-icon-plusthick'}})
 												.click(saveTests);
 
-	$("#${mainContentId}").find(".cancelMoreTestsButton")
+	$("#${mainContentId}").find(".cancelTestsButton")
 												.button()
 												.click(cancelTestsInput);
 
 	function saveTests() {
-		console.log("save tests button clicked");
+
+	  var inputs = $("#${mainContentId}").find(".bloodTypingTestInput");
+	  var saveTestsData = {};
+
+		for (var index = 0; index < inputs.length; index++) {
+	    var input = $(inputs[index]);
+	    var testId = input.data("testid");
+	    var val = input.val();
+	    if (val !== undefined && val.length > 0 && testId !== undefined) {
+	      saveTestsData[testId] = val;
+	    }
+	  }
+
+	  showLoadingImage($("#${tabContentId}"));
+	  $.ajax({
+	    url: "saveAdditionalBloodTypingTests.html",
+	    type: "POST",
+	    data: {saveTestsData : JSON.stringify(saveTestsData), collectionId: "${collectionId}"},
+	    success: function () {
+	      				 reloadBloodTypingSummaryForCollection();
+	    				 },
+	    error:   function() {
+	      				 showErrorMessage("Something went wrong");
+	    	 			 }
+	  });
+	}
+
+	function reloadBloodTypingSummaryForCollection() {
+	  $.ajax({
+	    url: "${refreshUrl}",
+	    type: "GET",
+	    success: function(response) {
+								 $("#${tabContentId}").replaceWith(response);
+	    				 }
+	  });
 	}
 
 	function cancelTestsInput() {
@@ -76,7 +110,7 @@ $(document).ready(function() {
 
 	<div id="${mainContentId}">
 
-		<c:set var="bloodTypingTestResultsForCollection" value="${bloodTypingOutputForCollection.availableTestResults}" />
+		<c:set var="availableTestResults" value="${bloodTypingOutputForCollection.availableTestResults}" />
 		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingTestsIds}" />
 
 		<div class="bloodTypingForCollectionSection formInTabPane">
@@ -87,33 +121,58 @@ $(document).ready(function() {
 
 			<div>
 				<label>Blood Typing Status</label>
-				<label>${bloodTypingOutputForCollection.bloodTypingStatus}</label>
+				<label>${collection.bloodTypingStatus}</label>
 			</div>
 
 			<div>
 				<label>Blood ABO</label>
-				<label>${bloodTypingOutputForCollection.bloodAbo}</label>
+				<label>${collection.bloodAbo}</label>
 			</div>
 
 			<div>
 				<label>Blood Rh</label>
-				<label>${bloodTypingOutputForCollection.bloodRh}</label>
+				<label>${collection.bloodRh}</label>
 			</div>
 
+			<div>
+				<label>Extra information</label>
+				<label>${collection.extraBloodTypeInformation}</label>
+			</div>
+
+			<div class="testsPerformed">
+				<div class="formInTabPane" style="margin-left: 0px;">
+					<c:if test="${fn:length(availableTestResults) gt 0}">
+						<div>
+							<label style="width: auto;">
+								<b>Available Blood Typing test results</b>
+							</label>
+						</div>
+						<!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
+						<c:forEach var="bloodTypingTest" items="${allBloodTypingTests}">
+							<c:if test="${not empty availableTestResults[bloodTypingTest.key]}">
+								<div>
+									<label>${bloodTypingTest.value.testName}</label>
+									<label>${availableTestResults[bloodTypingTest.key]}</label>
+								</div>
+							</c:if>
+						</c:forEach>
+					</c:if>
+				</div>
+			</div>
 
 			<div class="moreTestsSection">
 				<div class="formInTabPane" style="margin-left: 0px;">
 					<c:if test="${fn:length(pendingTests) gt 0}">
 						<div>
 							<label>
-								<b>More tests required</b>
+								<b>Pending tests</b>
 							</label>
 						</div>
 						<c:forEach var="pendingTestId" items="${pendingTests}">
 							<c:set var="pendingTest" value="${advancedBloodTypingTests[pendingTestId]}" />
 							<div>
 								<label>${pendingTest.testName}</label>
-								<input name="pendingTest" />
+								<input name="pendingTest-${pendingTestId}" class="bloodTypingTestInput" data-testid="${pendingTestId}" />
 							</div>
 						</c:forEach>
 					</c:if>
@@ -133,7 +192,7 @@ $(document).ready(function() {
 						<c:if test="${!isPendingTest}">
 							<div>
 								<label>${advancedTest.value.testName}</label>
-								<input name="advancedTest" />
+								<input name="advancedTest-${advancedTest.value.id}" class="bloodTypingTestInput" data-testid="${advancedTest.value.id}" />
 							</div>
 						</c:if>
 					</c:forEach>
@@ -141,8 +200,8 @@ $(document).ready(function() {
 					<!-- Save/Cancel button should be hidable if no pending tests -->
 					<c:if test="${fn:length(pendingTests) eq 0}">
 						<div>
-							<button class="saveMoreTestsButton">Save</button>
-							<button class="cancelMoreTestsButton">Cancel</button>
+							<button class="saveTestsButton">Save</button>
+							<button class="cancelTestsButton">Cancel</button>
 						</div>
 					</c:if>
 
@@ -151,8 +210,8 @@ $(document).ready(function() {
 				<!-- Save/Cancel button should always be displayed if there are pending tests -->
 				<c:if test="${fn:length(pendingTests) gt 0}">
 					<div>
-						<button class="saveMoreTestsButton">Save</button>
-						<button class="cancelMoreTestsButton">Cancel</button>
+						<button class="saveTestsButton">Save</button>
+						<button class="cancelTestsButton">Cancel</button>
 					</div>
 				</c:if>
 
@@ -166,9 +225,11 @@ $(document).ready(function() {
 			</div>
 		</div>
 
-		<div>
-			<button class="doneButton" style="margin-left: 20px;">Done</button>
-		</div>
+		<c:if test="${empty showDoneButton or showDoneButton}">
+			<div>
+				<button class="doneButton" style="margin-left: 20px;">Done</button>
+			</div>
+		</c:if>
 
 	</div>
 

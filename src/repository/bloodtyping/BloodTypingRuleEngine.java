@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -56,13 +57,13 @@ public class BloodTypingRuleEngine {
     query.setParameter("isActive", true);
     List<BloodTypingRule> rules = query.getResultList();
 
-    Map<String, String> storedTestResults = new HashMap<String, String>();
+    Map<String, String> storedTestResults = new TreeMap<String, String>();
 
     for (BloodTypingTestResult t : collectedSample.getBloodTypingTestResults()) {
       storedTestResults.put(t.getBloodTypingTest().getId().toString(), t.getResult());
     }
 
-    Map<String, String> availableTestResults = new HashMap<String, String>();
+    Map<String, String> availableTestResults = new TreeMap<String, String>();
     availableTestResults.putAll(storedTestResults);
     for (Long extraTestId : bloodTypingTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results

@@ -76,7 +76,7 @@ $(document).ready(function() {
 		<br />
 		<br />
 
-		<button class="enterTestResultsForCollectionsButton">
+		<button class="enterTestResultsForCollectionsButton" style="margin:10px;">
 			Enter blood typing tests for more collections
 		</button>
 

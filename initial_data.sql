@@ -270,6 +270,40 @@ insert into FormField
 '0', '0',
 '0', '0');
 
+insert into FormField
+(form, field, defaultDisplayName, defaultValue, maxLength,
+ hidden, isHidable,
+ isRequired, canBeOptional,
+ autoGenerate, isAutoGeneratable) values
+('TestResult', 'collectionNumber', 'Collection Number', '', 0,
+ '0', '1',
+ '1', '0',
+ '0', '0'),
+('TestResult', 'discardedBy', 'Discarded by', '', 0,
+ '0', '0',
+ '0', '1',
+ '0', '0'),
+('TestResult', 'notes', 'Notes', '', 0,
+ '0', '0',
+ '0', '1',
+ '0', '0'),
+('TestResult', 'createdDate', 'Created on', '', 0,
+'0', '0',
+'0', '0',
+'0', '0'),
+('TestResult', 'createdBy', 'Created by', '', 0,
+'0', '0',
+'0', '0',
+'0', '0'),
+('TestResult', 'lastUpdatedTime', 'Last modified on', '', 0,
+'0', '0',
+'0', '0',
+'0', '0'),
+('TestResult', 'lastUpdatedBy', 'Last modified by', '', 0,
+'0', '0',
+'0', '0',
+'0', '0');
+
 insert into DonationType (donationType, isDeleted) values
 ('Voluntary', '0'),
 ('Family', '0'),

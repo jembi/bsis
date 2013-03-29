@@ -117,7 +117,7 @@
 
 		<c:forEach var="bloodTest" items="${model.bloodTests}">
 			<div>
-				<label for="bloodTest">${bloodTest.name}</label>
+				<label for="bloodTest">${bloodTest.displayName}</label>
 				<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
 					<input id="result-${bloodTest.name}${allowedResult}" type="radio"
 								 name="Test${bloodTest.name}" value="${allowedResult}"

@@ -22,27 +22,27 @@
 
 <script>
 $(document).ready(function() {
-  $("#${tabContentId}").find(".findTestResultButton").button({
-    icons : {
-      primary : 'ui-icon-search'
-    }
-  }).click(function() {
-    var findTestResultFormData = $("#${findTestResultFormId}").serialize();
-    var resultsDiv = $("#${mainContentId}").find(".findTestResults");
-    showLoadingImage(resultsDiv);
-    $.ajax({
-      type : "GET",
-      url : "findTestResult.html",
-      data : findTestResultFormData,
-      success: function(data) {
-				         resultsDiv.html(data);
-        				 window.scrollTo(0, document.body.scrollHeight);
-      				 },
-      error: function(data) {
-							 showErrorMessage("Something went wrong. Please try again later.");        
-      			 }
-    });
-  });
+
+  $("#${tabContentId}").find(".findTestResultButton")
+  										 .button({ icons : {primary : 'ui-icon-search'}})
+  										 .click(
+  									      function() {
+												    var findTestResultFormData = $("#${findTestResultFormId}").serialize();
+												    var resultsDiv = $("#${mainContentId}").find(".findTestResults");
+												    showLoadingImage(resultsDiv);
+												    $.ajax({
+												      type : "GET",
+												      url : "findTestResult.html",
+												      data : findTestResultFormData,
+												      success : function(data) {
+																         resultsDiv.html(data);
+												        				 window.scrollTo(0, document.body.scrollHeight);
+												      				  },
+												      error : function(data) {
+																			 showErrorMessage("Something went wrong. Please try again later.");        
+												      			  }
+    											  });
+  												});
 
   $("#${tabContentId}").find(".clearFindFormButton").button({
     icons : {
@@ -51,55 +51,9 @@ $(document).ready(function() {
   }).click(clearFindForm);
   
   function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    refetchContent("${refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
   }
-
-  function getDateTestedFromInput() {
-    return $("#${findTestResultFormId}").find(".dateTestedFrom");  
-  }
-
-  function getDateTestedToInput() {
-    return $("#${findTestResultFormId}").find(".dateTestedTo");  
-  }
-
-  getDateTestedFromInput().datepicker({
-    changeMonth : true,
-    changeYear : true,
-    minDate : -36500,
-    maxDate : 0,
-    dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
-    onSelect : function(selectedDate) {
-      getDateTestedToInput().datepicker("option", "minDate", selectedDate);
-    }
-  });
-
-  getDateTestedToInput().datepicker({
-    changeMonth : true,
-    changeYear : true,
-    minDate : -36500,
-    maxDate : 0,
-    dateFormat : "mm/dd/yy",
-    yearRange : "c-100:c0",
-    onSelect : function(selectedDate) {
-      getDateTestedFromInput().datepicker("option", "maxDate", selectedDate);
-    }
-  });
-
-  // child div shows donor information. bind this div to testResultSummaryView event
-  $("#${tabContentId}").bind("testResultSummaryView",
-      function(event, content) {
-    		$("#${mainContentId}").hide();
-    		$("#${childContentId}").html(content);
-  		});
-
-  $("#${tabContentId}").bind("testResultSummarySuccess",
-      function(event, content) {
-    		$("#${mainContentId}").show();
-    		$("#${childContentId}").html("");
-    		$("#${tabContentId}").find(".testResultsTable").trigger("refreshResults");
-  		});
 
 });
 </script>
@@ -109,27 +63,20 @@ $(document).ready(function() {
 		<b>Find Test Results</b>
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['testResults.find']}
+				${tips['testResults.find']}
 			</p>
 		</div>
 		<form:form method="GET" commandName="findTestResultForm" id="${findTestResultFormId}"
 			class="formInTabPane">
 	
 			<div class="collectionNumberInput">
-				<form:label path="collectionNumber">${model.testResultFields.collectionNumber.displayName}</form:label>
-				<!-- Spring supports dynamic attributes so placeholder can be added -->
+				<form:label path="collectionNumber">${testResultFields.collectionNumber.displayName}</form:label>
+				<!-- Spring supports dynamic attributes so placeholder can be added
+						 http://stackoverflow.com/questions/4232983/adding-html5-placeholder-attribute-to-spring-3-0-form-input-elements
+				 -->
 				<form:input path="collectionNumber" placeholder="Collection Number"/>
 			</div>
-	
-			<!-- div>
-				<span style="margin-left: 15px;"> Date of testing between </span>
-			</div>
-			<div>
-				<form:input path="dateTestedFrom" class="dateTestedFrom" placeholder="From"/>
-					and
-				<form:input path="dateTestedTo" class="dateTestedTo" placeholder="To"/>
-			</div-->
-	
+
 			<div>
 				<label></label>
 				<button type="button" class="findTestResultButton">

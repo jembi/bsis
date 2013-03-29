@@ -14,7 +14,7 @@
 <div id="testResultsTab" class="leftPanel tabs">
 	<ul>
 		<li id="findOrAddTestResultsContent">
-			<a href="findTestResultFormGenerator.html">Find/Edit Test Results</a>
+			<a href="findTestResultFormGenerator.html">Find Test Results</a>
 		</li>
 		<li id="bloodTypingTestResults">
 			<a href="bloodTypingWorksheetGenerator.html">Blood Typing</a>

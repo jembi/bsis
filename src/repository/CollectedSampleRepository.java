@@ -33,6 +33,7 @@ import model.worksheet.CollectionsWorksheet;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.NonUniqueObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -396,6 +397,7 @@ public class CollectedSampleRepository {
 
   public CollectedSample addCollectedSample(CollectedSample collectedSample) {
     updateCollectedSampleInternalFields(collectedSample);
+    collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
     em.persist(collectedSample);
     em.flush();
@@ -427,6 +429,7 @@ public class CollectedSampleRepository {
 
   public void addAllCollectedSamples(List<CollectedSample> collectedSamples) {
     for (CollectedSample c : collectedSamples) {
+      c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       c.setTestedStatus(TestedStatus.NOT_TESTED);
       em.persist(c);
     }
@@ -443,7 +446,11 @@ public class CollectedSampleRepository {
     try {
        c = query.getSingleResult();
     } catch (NoResultException ex) {
+      ex.printStackTrace();
       System.out.println("Collection number not found: " + collectionNumber);
+    } catch (NonUniqueObjectException ex) {
+      ex.printStackTrace();
+      System.out.println("Multiple collections for collection: " + collectionNumber);
     }
     return c;
   }
@@ -574,7 +581,7 @@ public class CollectedSampleRepository {
     while (iter.hasNext()) {
       CollectedSample c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
-      if (bloodTypingStatus != null) {
+      if (bloodTypingStatus != null && !bloodTypingStatus.equals(BloodTypingStatus.NOT_DONE)) {
         statusMap.put(c.getId(), bloodTypingRepository.getBloodTypingTestStatus(c.getId()));
       }
     }

@@ -20,6 +20,7 @@ import model.CustomDateFormatter;
 import model.admin.ConfigPropertyConstants;
 import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
+import model.testresults.FindTestResultBackingForm;
 import model.testresults.TestResult;
 import model.testresults.TestResultBackingForm;
 import model.testresults.TestResultBackingFormValidator;
@@ -50,6 +51,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class TestResultController {
+
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 
@@ -74,19 +76,21 @@ public class TestResultController {
   }
 
   @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
-  public ModelAndView findTestResultFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView findTestResultFormGenerator(HttpServletRequest request) {
 
-    TestResultBackingForm form = new TestResultBackingForm();
-    model.addAttribute("findTestResultForm", form);
+    FindTestResultBackingForm form = new FindTestResultBackingForm();
 
     ModelAndView mv = new ModelAndView("findTestResultForm");
-    Map<String, Object> m = model.asMap();
-    utilController.addTipsToModel(model.asMap(), "testResults.find");
-    addEditSelectorOptions(m);
+    mv.addObject("findTestResultForm", form);
+
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "testResults.find");
+    mv.addObject("tips", tips);
+
+    addEditSelectorOptions(mv.getModelMap());
     // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", m);
+    mv.addObject("testResultFields", utilController.getFormFieldsForForm("testResult"));
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -340,23 +344,21 @@ public class TestResultController {
 
   @RequestMapping("/findTestResult")
   public ModelAndView findTestResult(HttpServletRequest request,
-      @ModelAttribute("findTestResultForm") TestResultBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("findTestResultForm") FindTestResultBackingForm form) {
 
-    List<TestResult> testResults = Arrays.asList(new TestResult[0]);
+    ModelAndView mv = new ModelAndView("testresults/testResultsForCollection");
 
-    testResults = testResultRepository.getRecentTestResultsForCollection(form.getCollectionNumber());
-    System.out.println(testResults);
-
-    ModelAndView modelAndView = new ModelAndView("testResultsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    m.put("allTestResults", getTestResultViewModels(testResults));
-    m.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(m);
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
+    String collectionNumber = form.getCollectionNumber();
+    CollectedSample c = null;
+    c = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+    if (c == null) {
+      mv.addObject("collectionFound", false);
+    }
+    else {
+      mv.addObject("collectionFound", true);
+      mv.addObject("collectionId", c.getId());
+    }
+    return mv;
   }
 
   @RequestMapping("/testResultHistory")

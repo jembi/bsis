@@ -128,4 +128,28 @@ public class CollectedSampleViewModel {
       return "";
     return collectedSample.getCollectionBatch().getBatchNumber();
   }
+
+  public String getBloodTypingStatus() {
+    if (collectedSample.getBloodTypingStatus() == null)
+      return "";
+    return collectedSample.getBloodTypingStatus().toString();
+  }
+
+  public String getBloodAbo() {
+    if (collectedSample.getBloodAbo() == null)
+      return "";
+    return collectedSample.getBloodAbo().toString();
+  }
+
+  public String getBloodRh() {
+    if (collectedSample.getBloodRh() == null)
+      return "";
+    return collectedSample.getBloodRh().toString();
+  }
+
+  public String getExtraBloodTypeInformation() {
+    if (collectedSample.getExtraBloodTypeInformation() == null)
+      return "";
+    return collectedSample.getExtraBloodTypeInformation();
+  }
 }

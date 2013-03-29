@@ -3,6 +3,7 @@ package repository.bloodtyping;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -123,6 +124,13 @@ public class BloodTypingRepository {
     Set<String> extraInformationNew = ruleResult.getExtraInformation();
 
     String extraInformation = collection.getExtraBloodTypeInformation();
+
+    Set<String> extraInformationOld = new HashSet<String>();
+    extraInformationOld.addAll(Arrays.asList(extraInformation.split(",")));
+    // extra information is a field to which we add more information
+    // do not store duplicate information in this field
+    extraInformationNew.removeAll(extraInformationOld);
+
     if (StringUtils.isNotBlank(extraInformation))
       collection.setExtraBloodTypeInformation(extraInformation + StringUtils.join(extraInformationNew, ","));
     else
