@@ -19,37 +19,10 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table BloodTypingRule (
-        id MEDIUMINT not null auto_increment,
-        bloodTypingTestIds varchar(200),
-        extraInformation varchar(30),
-        extraTestsIds varchar(30),
-        isActive boolean,
-        markSampleAsUnsafe boolean,
-        newInformation varchar(30),
-        partOfBloodGroupChanged varchar(12),
-        pattern varchar(50),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTypingRule_AUD (
-        id MEDIUMINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        bloodTypingTestIds varchar(200),
-        extraInformation varchar(30),
-        extraTestsIds varchar(30),
-        isActive boolean,
-        markSampleAsUnsafe boolean,
-        newInformation varchar(30),
-        partOfBloodGroupChanged varchar(12),
-        pattern varchar(50),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table BloodTypingTest (
+    create table BloodTest (
         id SMALLINT not null auto_increment,
-        bloodTypingTestType varchar(12),
+        bloodTestType varchar(30),
+        category integer,
         dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
@@ -62,21 +35,50 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table BloodTypingTestResult (
+    create table BloodTestResult (
         id bigint not null auto_increment,
         notes longtext,
         result varchar(10),
         testedOn datetime,
-        bloodTypingTest_id SMALLINT,
+        bloodTest_id SMALLINT,
         collectedSample_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table BloodTypingTest_AUD (
+    create table BloodTestRule (
+        id MEDIUMINT not null auto_increment,
+        bloodTestsIds varchar(200),
+        collectionFieldChanged varchar(12),
+        extraInformation varchar(30),
+        extraTestsIds varchar(30),
+        isActive boolean,
+        markSampleAsUnsafe boolean,
+        newInformation varchar(30),
+        pattern varchar(50),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table BloodTestRule_AUD (
+        id MEDIUMINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        bloodTestsIds varchar(200),
+        collectionFieldChanged varchar(12),
+        extraInformation varchar(30),
+        extraTestsIds varchar(30),
+        isActive boolean,
+        markSampleAsUnsafe boolean,
+        newInformation varchar(30),
+        pattern varchar(50),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table BloodTest_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
-        bloodTypingTestType varchar(12),
+        bloodTestType varchar(30),
+        category integer,
         dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
@@ -104,7 +106,7 @@
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        testedStatus varchar(20),
+        ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
         collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
@@ -134,7 +136,7 @@
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        testedStatus varchar(20),
+        ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
         collectionBatch_id TINYINT(4),
         collectionCenter_id bigint,
@@ -850,20 +852,6 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table TTITest (
-        id SMALLINT not null auto_increment,
-        testName varchar(30),
-        testNameShort varchar(15),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table TTITestResult (
-        id bigint not null auto_increment,
-        testedOn datetime,
-        collectedSample_id bigint not null,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
     create table Tips (
         tipsKey varchar(255) not null,
         isDeleted boolean,
@@ -912,27 +900,27 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table BloodTypingRule_AUD 
-        add index FKEDC605DEDF74E053 (REV), 
-        add constraint FKEDC605DEDF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table BloodTypingTestResult 
-        add index FK1528622032E145A (collectedSample_id), 
-        add constraint FK1528622032E145A 
+    alter table BloodTestResult 
+        add index FK39946CC932E145A (collectedSample_id), 
+        add constraint FK39946CC932E145A 
         foreign key (collectedSample_id) 
         references CollectedSample (id);
 
-    alter table BloodTypingTestResult 
-        add index FK152862201C1D41B8 (bloodTypingTest_id), 
-        add constraint FK152862201C1D41B8 
-        foreign key (bloodTypingTest_id) 
-        references BloodTypingTest (id);
+    alter table BloodTestResult 
+        add index FK39946CC945027987 (bloodTest_id), 
+        add constraint FK39946CC945027987 
+        foreign key (bloodTest_id) 
+        references BloodTest (id);
 
-    alter table BloodTypingTest_AUD 
-        add index FK7BE9F874DF74E053 (REV), 
-        add constraint FK7BE9F874DF74E053 
+    alter table BloodTestRule_AUD 
+        add index FK67B61079DF74E053 (REV), 
+        add constraint FK67B61079DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table BloodTest_AUD 
+        add index FKE1FA995DDF74E053 (REV), 
+        add constraint FKE1FA995DDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
@@ -1195,10 +1183,10 @@
         references REVINFO (REV);
 
     alter table PlateContent 
-        add index FK8E9BC0A34BAEB3B7 (rawBloodTest_id), 
-        add constraint FK8E9BC0A34BAEB3B7 
+        add index FK8E9BC0A3BCA935AF (rawBloodTest_id), 
+        add constraint FK8E9BC0A3BCA935AF 
         foreign key (rawBloodTest_id) 
-        references BloodTypingTest (id);
+        references BloodTest (id);
 
     alter table PlateContent 
         add index FK8E9BC0A3DC9AD7D (plateForContent_id), 
@@ -1419,12 +1407,6 @@
         add constraint FKC0E9B955DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
-
-    alter table TTITestResult 
-        add index FK19C4FDF832E145A (collectedSample_id), 
-        add constraint FK19C4FDF832E145A 
-        foreign key (collectedSample_id) 
-        references CollectedSample (id);
 
     alter table User_AUD 
         add index FKF3FCA03CDF74E053 (REV), 

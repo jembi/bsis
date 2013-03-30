@@ -58,6 +58,14 @@
 			<label>${collectedSample.collectionSite}</label>
 		</div>
 	</c:if>
+	<div>
+		<label>${collectionFields.bloodTypingStatus.displayName}</label>
+		<label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
+	</div>
+	<div>
+		<label>${collectionFields.ttiStatus.displayName}</label>
+		<label style="width: auto;">${collectedSample.TTIStatus}</label>
+	</div>
 	<c:if test="${collectionFields.notes.hidden != true }">
 		<div>
 			<label>${collectionFields.notes.displayName}</label>
@@ -71,10 +79,6 @@
 	<div>
 		<label>${collectionFields.lastUpdatedBy.displayName}</label>
 		<label style="width: auto;">${collectedSample.lastUpdatedBy}</label>
-	</div>
-	<div>
-		<label>${collectionFields.testedStatus.displayName}</label>
-		<label style="width: auto;">${collectedSample.testedStatus}</label>
 	</div>
 	<hr />
 </div>

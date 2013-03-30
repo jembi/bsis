@@ -112,10 +112,10 @@ public class CollectedSampleViewModel {
     return user.getUsername();
   }
 
-  public String getTestedStatus() {
-    if (collectedSample.getTestedStatus() == null)
+  public String getTTIStatus() {
+    if (collectedSample.getTTIStatus() == null)
       return "";
-    return collectedSample.getTestedStatus().toString();
+    return collectedSample.getTTIStatus().toString();
   }
 
   public String getCollectionBatchNumber() {

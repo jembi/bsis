@@ -56,7 +56,7 @@ import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
-import repository.bloodtyping.BloodTypingRepository;
+import repository.bloodtyping.BloodTestingRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -88,7 +88,7 @@ public class AdminController {
   CrossmatchTypeRepository crossmatchTypesRepository;
 
   @Autowired
-  BloodTypingRepository bloodTypingRepository;
+  BloodTestingRepository bloodTypingRepository;
 
   @Autowired
   TipsRepository tipsRepository;

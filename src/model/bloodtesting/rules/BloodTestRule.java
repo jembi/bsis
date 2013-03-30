@@ -1,4 +1,4 @@
-package model.bloodtyping.rules;
+package model.bloodtesting.rules;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,13 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import model.bloodtyping.BloodGroupPart;
+import model.bloodtesting.CollectionField;
 
 import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class BloodTypingRule {
+public class BloodTestRule {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,14 +22,14 @@ public class BloodTypingRule {
   private Integer id;
 
   @Column(length=200)
-  private String bloodTypingTestIds;
+  private String bloodTestsIds;
 
   @Column(length=50)
   private String pattern;
 
   @Enumerated(EnumType.STRING)
   @Column(length=12)
-  private BloodGroupPart partOfBloodGroupChanged;
+  private CollectionField collectionFieldChanged;
 
   @Column(length=30)
   private String newInformation;
@@ -48,16 +48,16 @@ public class BloodTypingRule {
     return id;
   }
 
-  public String getBloodTypingTestIds() {
-    return bloodTypingTestIds;
+  public String getBloodTestsIds() {
+    return bloodTestsIds;
   }
 
   public String getPattern() {
     return pattern;
   }
 
-  public BloodGroupPart getPart() {
-    return partOfBloodGroupChanged;
+  public CollectionField getCollectionFieldChanged() {
+    return collectionFieldChanged;
   }
 
   public Boolean getMarkSampleAsUnsafe() {
@@ -72,16 +72,16 @@ public class BloodTypingRule {
     this.id = id;
   }
 
-  public void setBloodTypingTestIds(String bloodTypingTestIds) {
-    this.bloodTypingTestIds = bloodTypingTestIds;
+  public void setBloodTestsIds(String bloodTestsIds) {
+    this.bloodTestsIds = bloodTestsIds;
   }
 
   public void setPattern(String pattern) {
     this.pattern = pattern;
   }
 
-  public void setPart(BloodGroupPart part) {
-    this.partOfBloodGroupChanged = part;
+  public void setPart(CollectionField part) {
+    this.collectionFieldChanged = part;
   }
 
   public void setMarkSampleAsUnsafe(Boolean markSampleAsUnsafe) {

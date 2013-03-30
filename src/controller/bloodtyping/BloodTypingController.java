@@ -12,8 +12,8 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.bloodtyping.BloodTypingTest;
-import model.bloodtyping.BloodTypingTestType;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestType;
 import model.collectedsample.CollectedSample;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,8 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
-import repository.bloodtyping.BloodTypingRepository;
-import viewmodel.BloodTypingRuleResult;
+import repository.bloodtyping.BloodTestingRepository;
+import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTypingTestViewModel;
 import viewmodel.CollectedSampleViewModel;
 
@@ -51,7 +51,7 @@ public class BloodTypingController {
   private GenericConfigRepository genericConfigRepository;
 
   @Autowired
-  private BloodTypingRepository bloodTypingRepository;
+  private BloodTestingRepository bloodTypingRepository;
 
   public BloodTypingController() {
   }
@@ -120,12 +120,12 @@ public class BloodTypingController {
       mv.addObject("collectionMap", collectionMap);
 
       // no errors but the user should be warned if there are any collections for which testing partly done
-      Map<Long, BloodTypingRuleResult> collectionsWithBloodTypingTests = 
+      Map<Long, BloodTestingRuleResult> collectionsWithBloodTypingTests = 
           collectedSampleRepository.filterCollectionsWithBloodTypingResults(collections);
       mv.addObject("collectionsWithBloodTypingTests", collectionsWithBloodTypingTests);
 
-      Map<String, BloodTypingTest> bloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
-      for (BloodTypingTest bloodTypingTest : bloodTypingRepository.getBloodTypingTests()) {
+      Map<String, BloodTest> bloodTypingTestsMap = new HashMap<String, BloodTest>();
+      for (BloodTest bloodTypingTest : bloodTypingRepository.getBloodTypingTests()) {
         bloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
       }
       mv.addObject("bloodTypingTests", bloodTypingTestsMap);
@@ -145,7 +145,7 @@ public class BloodTypingController {
 
   public List<BloodTypingTestViewModel> getBloodTestsOnPlate() {
     List<BloodTypingTestViewModel> tests = new ArrayList<BloodTypingTestViewModel>();
-    for (BloodTypingTest rawBloodTest : bloodTypingRepository.getBloodTypingTestsOfType(BloodTypingTestType.BASIC)) {
+    for (BloodTest rawBloodTest : bloodTypingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       tests.add(new BloodTypingTestViewModel(rawBloodTest));
     }
     return tests;
@@ -163,13 +163,13 @@ public class BloodTypingController {
     mv.addObject("collectionNumbers", StringUtils.join(collectionNumbers, ","));
     mv.addObject("collections", collections);
 
-    Map<Long, Map<Long, String>> bloodTypingTestResults = parseBloodTypingTestResults(bloodTypingTests);
+    Map<Long, Map<Long, String>> bloodTypingTestResults = parseBloodTestResults(bloodTypingTests);
     Map<Long, Map<Long, String>> errorMap = null;
     mv.addObject("bloodTypingTestResults", bloodTypingTestResults);
     boolean success = true;
     Map<String, Object> results = null;
     try {
-      results = bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResults);
+      results = bloodTypingRepository.saveBloodTestingResults(bloodTypingTestResults);
       if (results != null)
         errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     } catch (Exception ex) {
@@ -183,9 +183,9 @@ public class BloodTypingController {
     System.out.println(errorMap);
 
     if (success) {
-      List<BloodTypingTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
-      Map<String, BloodTypingTest> allBloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
-      for (BloodTypingTest allBloodTypingTest : allBloodTypingTests) {
+      List<BloodTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+      Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
+      for (BloodTest allBloodTypingTest : allBloodTypingTests) {
         allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
       }
       mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
@@ -198,7 +198,7 @@ public class BloodTypingController {
       }
       mv.addObject("collectionIds", StringUtils.join(collectionIds, ","));
 
-      mv.addObject("bloodTypingOutput", results.get("bloodTypingResults"));
+      mv.addObject("bloodTypingOutput", results.get("bloodTestingResults"));
       mv.addObject("success", success);
       mv.setViewName("bloodtyping/bloodTypingWellsSuccess");
     }
@@ -222,17 +222,17 @@ public class BloodTypingController {
     return mv;
   }
 
-  private Map<Long, Map<Long, String>> parseBloodTypingTestResults(
-      String bloodTypingTests) {
+  private Map<Long, Map<Long, String>> parseBloodTestResults(
+      String bloodTestingResults) {
     ObjectMapper mapper = new ObjectMapper();
-    System.out.println(bloodTypingTests);
-    Map<Long, Map<Long, String>> bloodTypingTestMap = new HashMap<Long, Map<Long,String>>();
+    System.out.println(bloodTestingResults);
+    Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long,String>>();
     try {
       @SuppressWarnings("unchecked")
-      Map<String, Map<String, String>> generatedMap = mapper.readValue(bloodTypingTests, HashMap.class);
+      Map<String, Map<String, String>> generatedMap = mapper.readValue(bloodTestingResults, HashMap.class);
       for (String collectionId : generatedMap.keySet()) {
         Map<Long, String> testResults = new HashMap<Long, String>();
-        bloodTypingTestMap.put(Long.parseLong(collectionId), testResults);
+        bloodTestResultsMap.put(Long.parseLong(collectionId), testResults);
         for (String testId : generatedMap.get(collectionId).keySet()) {
           testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
         }
@@ -247,8 +247,8 @@ public class BloodTypingController {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    System.out.println(bloodTypingTestMap);
-    return bloodTypingTestMap;
+    System.out.println(bloodTestResultsMap);
+    return bloodTestResultsMap;
   }
 
   @RequestMapping(value="/getBloodTypingStatusForCollections", method=RequestMethod.GET)
@@ -260,15 +260,15 @@ public class BloodTypingController {
     ModelAndView mv = new ModelAndView();
     String[] collectionIds = collectionIdsParam.split(",");
     Map<String, Object> results = bloodTypingRepository.getBloodTypingTestStatus(Arrays.asList(collectionIds));
-    List<BloodTypingTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
-    Map<String, BloodTypingTest> allBloodTypingTestsMap = new HashMap<String, BloodTypingTest>();
-    for (BloodTypingTest allBloodTypingTest : allBloodTypingTests) {
+    List<BloodTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+    Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
+    for (BloodTest allBloodTypingTest : allBloodTypingTests) {
       allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
     }
     mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("collections", results.get("collections"));
-    mv.addObject("bloodTypingOutput", results.get("bloodTypingResults"));
+    mv.addObject("bloodTypingOutput", results.get("bloodTestingResults"));
     mv.addObject("success", true);
     mv.setViewName("bloodtyping/bloodTypingResultsForCollections");
     return mv;
@@ -284,22 +284,22 @@ public class BloodTypingController {
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    BloodTypingRuleResult ruleResult = bloodTypingRepository.getBloodTypingTestStatus(collectedSampleId);
+    BloodTestingRuleResult ruleResult = bloodTypingRepository.getBloodTypingTestStatus(collectedSampleId);
     mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
     mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("bloodTypingOutputForCollection", ruleResult);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-    List<BloodTypingTest> bloodTypingTests = bloodTypingRepository.getBloodTypingTests();
-    Map<String, BloodTypingTest> bloodTypingTestsMap = new LinkedHashMap<String, BloodTypingTest>();
-    for (BloodTypingTest bloodTypingTest : bloodTypingTests) {
+    List<BloodTest> bloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+    Map<String, BloodTest> bloodTypingTestsMap = new LinkedHashMap<String, BloodTest>();
+    for (BloodTest bloodTypingTest : bloodTypingTests) {
       bloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
     mv.addObject("allBloodTypingTests", bloodTypingTestsMap);
 
-    List<BloodTypingTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
-    Map<String, BloodTypingTest> allBloodTypingTestsMap = new TreeMap<String, BloodTypingTest>();
-    for (BloodTypingTest allBloodTypingTest : allBloodTypingTests) {
+    List<BloodTest> allBloodTypingTests = bloodTypingRepository.getBloodTypingTests();
+    Map<String, BloodTest> allBloodTypingTestsMap = new TreeMap<String, BloodTest>();
+    for (BloodTest allBloodTypingTest : allBloodTypingTests) {
       allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
     }
     mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
@@ -330,7 +330,7 @@ public class BloodTypingController {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
       bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
-      bloodTypingRepository.saveBloodTypingResults(bloodTypingTestResultsMap);
+      bloodTypingRepository.saveBloodTestingResults(bloodTypingTestResultsMap);
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

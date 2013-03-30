@@ -2,7 +2,6 @@ package repository.bloodtyping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,19 +12,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.bloodtyping.BloodTypingTestResult;
-import model.bloodtyping.rules.BloodTypingRule;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.rules.BloodTestRule;
 import model.collectedsample.CollectedSample;
+import model.testresults.TTIStatus;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import viewmodel.BloodTypingRuleResult;
+import viewmodel.BloodTestingRuleResult;
 
 @Repository
 @Transactional
-public class BloodTypingRuleEngine {
+public class BloodTestingRuleEngine {
 
   @PersistenceContext
   private EntityManager em;
@@ -49,18 +49,18 @@ public class BloodTypingRuleEngine {
    *         storedTestResults (what blood typing results are actually stored in the database,
    *                            a subset of testResults)
    */
-  public BloodTypingRuleResult applyBloodTypingTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
+  public BloodTestingRuleResult applyBloodTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
 
-    String queryStr = "SELECT r FROM BloodTypingRule r WHERE isActive=:isActive";
-    TypedQuery<BloodTypingRule> query = em.createQuery(queryStr, BloodTypingRule.class);
+    String queryStr = "SELECT r FROM BloodTestRule r WHERE isActive=:isActive";
+    TypedQuery<BloodTestRule> query = em.createQuery(queryStr, BloodTestRule.class);
 
     query.setParameter("isActive", true);
-    List<BloodTypingRule> rules = query.getResultList();
+    List<BloodTestRule> rules = query.getResultList();
 
     Map<String, String> storedTestResults = new TreeMap<String, String>();
 
-    for (BloodTypingTestResult t : collectedSample.getBloodTypingTestResults()) {
-      storedTestResults.put(t.getBloodTypingTest().getId().toString(), t.getResult());
+    for (BloodTestResult t : collectedSample.getBloodTestResults()) {
+      storedTestResults.put(t.getBloodTest().getId().toString(), t.getResult());
     }
 
     Map<String, String> availableTestResults = new TreeMap<String, String>();
@@ -74,17 +74,18 @@ public class BloodTypingRuleEngine {
 
     Set<String> bloodAboChanges = new HashSet<String>();
     Set<String> bloodRhChanges = new HashSet<String>();
+    Set<String> ttiStatusChanges = new HashSet<String>();
     Set<String> extraInformation = new HashSet<String>();
     List<String> pendingTestsIds = new ArrayList<String>();
 
-    for (BloodTypingRule rule : rules) {
+    for (BloodTestRule rule : rules) {
 
       String pattern = rule.getPattern();
       boolean patternMatch = true;
       int indexInPattern = 0;
 
       List<String> missingTestIdsForRule = new ArrayList<String>();
-      List<String> testIds = Arrays.asList(rule.getBloodTypingTestIds().split(","));
+      List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
 
       String inputPattern = "";
       for (String testId : testIds) {
@@ -114,13 +115,15 @@ public class BloodTypingRuleEngine {
 //                            rule.getPart() + ", " + rule.getNewInformation() + ", " +
 //                            rule.getExtraInformation() + ", " + rule.getMarkSampleAsUnsafe());
 //
-        switch (rule.getPart()) {
+        switch (rule.getCollectionFieldChanged()) {
           case BLOODABO:
             bloodAboChanges.add(rule.getNewInformation());
             break;
           case BLOODRH:
             bloodRhChanges.add(rule.getNewInformation());
             break;
+          case TTI_STATUS:
+            ttiStatusChanges.add(rule.getNewInformation());
           case EXTRA:
             extraInformation.add(rule.getNewInformation());
             break;
@@ -166,7 +169,18 @@ public class BloodTypingRuleEngine {
       bloodTypingStatus = BloodTypingStatus.COMPLETE;
     }
 
-    BloodTypingRuleResult ruleResult = new BloodTypingRuleResult();
+    TTIStatus ttiStatus = TTIStatus.NOT_DONE;
+    if (!ttiStatusChanges.isEmpty()) {
+      if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE)) {
+        ttiStatus = TTIStatus.TTI_UNSAFE;
+      }
+      else if (ttiStatusChanges.size() == 1 &&
+               ttiStatusChanges.iterator().next().equals(TTIStatus.TTI_SAFE)) {
+        ttiStatus = TTIStatus.TTI_SAFE;
+      }
+    }
+
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setAllBloodAboChanges(bloodAboChanges);
     ruleResult.setAllBloodRhChanges(bloodRhChanges);
     ruleResult.setBloodAbo(bloodAbo);
@@ -176,6 +190,10 @@ public class BloodTypingRuleEngine {
     ruleResult.setAvailableTestResults(availableTestResults);
     ruleResult.setBloodTypingStatus(bloodTypingStatus);
     ruleResult.setStoredTestResults(storedTestResults);
+
+    ruleResult.setTTIStatusChanges(ttiStatusChanges);
+    ruleResult.setTTIStatus(ttiStatus);
+
     return ruleResult;
   }
 

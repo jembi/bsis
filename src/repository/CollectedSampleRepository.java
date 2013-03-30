@@ -23,7 +23,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.collectedsample.CollectedSample;
-import model.testresults.TestedStatus;
+import model.testresults.TTIStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
@@ -36,9 +36,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.bloodtyping.BloodTypingRepository;
+import repository.bloodtyping.BloodTestingRepository;
 import repository.bloodtyping.BloodTypingStatus;
-import viewmodel.BloodTypingRuleResult;
+import viewmodel.BloodTestingRuleResult;
 
 @Repository
 @Transactional
@@ -48,7 +48,7 @@ public class CollectedSampleRepository {
   private EntityManager em;
 
   @Autowired
-  private BloodTypingRepository bloodTypingRepository;
+  private BloodTestingRepository bloodTypingRepository;
 
   public void updateCollectedSampleInternalFields(CollectedSample c) {
     updateCollectedSampleBloodGroup(c);
@@ -132,7 +132,7 @@ public class CollectedSampleRepository {
     }
 
     if (!includeTestedCollections)
-      queryStr = queryStr + " AND c.testedStatus=:testedStatus";
+      queryStr = queryStr + " AND (c.bloodTypingStatus=:bloodTypingStatus OR c.ttiStatus=:ttiStatus)";
 
     TypedQuery<CollectedSample> query;
     if (pagingParams.containsKey("sortColumn")) {
@@ -145,8 +145,10 @@ public class CollectedSampleRepository {
     if (StringUtils.isNotBlank(collectionNumber))
       query.setParameter("collectionNumber", collectionNumber);
 
-    if (!includeTestedCollections)
-      query.setParameter("testedStatus", TestedStatus.NOT_TESTED);
+    if (!includeTestedCollections) {
+      query.setParameter("bloodTypingStatus", BloodTypingStatus.NOT_DONE);
+      query.setParameter("ttiStatus", TTIStatus.NOT_DONE);
+    }
     
     query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
     query.setParameter("centerIds", centerIds);
@@ -388,7 +390,7 @@ public class CollectedSampleRepository {
   public CollectedSample addCollectedSample(CollectedSample collectedSample) {
     updateCollectedSampleInternalFields(collectedSample);
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-    collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
+    collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     em.persist(collectedSample);
     em.flush();
     em.refresh(collectedSample);
@@ -420,7 +422,7 @@ public class CollectedSampleRepository {
   public void addAllCollectedSamples(List<CollectedSample> collectedSamples) {
     for (CollectedSample c : collectedSamples) {
       c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-      c.setTestedStatus(TestedStatus.NOT_TESTED);
+      c.setTTIStatus(TTIStatus.NOT_DONE);
       em.persist(c);
     }
     em.flush();
@@ -545,7 +547,7 @@ public class CollectedSampleRepository {
 //      collectedSample.setTestedStatus(TestedStatus.TESTED);
 //    else
 //      collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
-    collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
+    collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
   }
 
   public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
@@ -565,10 +567,10 @@ public class CollectedSampleRepository {
     return collections;
   }
 
-  public Map<Long, BloodTypingRuleResult> filterCollectionsWithBloodTypingResults(
+  public Map<Long, BloodTestingRuleResult> filterCollectionsWithBloodTypingResults(
       Collection<CollectedSample> collectedSamples) {
     Iterator<CollectedSample> iter = collectedSamples.iterator();
-    Map<Long, BloodTypingRuleResult> statusMap = new HashMap<Long, BloodTypingRuleResult>();
+    Map<Long, BloodTestingRuleResult> statusMap = new HashMap<Long, BloodTestingRuleResult>();
     while (iter.hasNext()) {
       CollectedSample c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();

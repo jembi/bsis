@@ -1,21 +1,21 @@
 package viewmodel;
 
-import model.bloodtyping.BloodTestDataType;
-import model.bloodtyping.BloodTypingTest;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestDataType;
 
 public class BloodTypingTestViewModel {
 
-  private BloodTypingTest rawBloodTest;
+  private BloodTest rawBloodTest;
 
-  public BloodTypingTestViewModel(BloodTypingTest rawBloodTest) {
+  public BloodTypingTestViewModel(BloodTest rawBloodTest) {
     this.rawBloodTest = rawBloodTest;
   }
 
-  public BloodTypingTest getRawBloodTest() {
+  public BloodTest getRawBloodTest() {
     return rawBloodTest;
   }
 
-  public void setRawBloodTest(BloodTypingTest rawBloodTest) {
+  public void setRawBloodTest(BloodTest rawBloodTest) {
     this.rawBloodTest = rawBloodTest;
   }
 

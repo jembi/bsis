@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import model.testresults.TTIStatus;
+
 import repository.bloodtyping.BloodTypingStatus;
 
-public class BloodTypingRuleResult {
+public class BloodTestingRuleResult {
 
   private Set<String> allBloodAboChanges;
 
@@ -26,7 +28,14 @@ public class BloodTypingRuleResult {
 
   private Map<String, String> storedTestResults;
 
-  public BloodTypingRuleResult() {
+  // Read about Bean Naming convention in Java
+  // http://stackoverflow.com/a/5599478/161628
+  // http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html
+  private Set<String> ttiStatusChanges;
+
+  private TTIStatus ttiStatus;
+
+  public BloodTestingRuleResult() {
   }
   
   public Set<String> getAllBloodAboChanges() {
@@ -99,5 +108,21 @@ public class BloodTypingRuleResult {
 
   public void setStoredTestResults(Map<String, String> storedTestResults) {
     this.storedTestResults = storedTestResults;
+  }
+
+  public Set<String> getTTIStatusChanges() {
+    return ttiStatusChanges;
+  }
+
+  public void setTTIStatusChanges(Set<String> ttiStatusChanges) {
+    this.ttiStatusChanges = ttiStatusChanges;
+  }
+
+  public TTIStatus getTTIStatus() {
+    return ttiStatus;
+  }
+
+  public void setTTIStatus(TTIStatus ttiStatus) {
+    this.ttiStatus = ttiStatus;
   }
 }

@@ -26,7 +26,7 @@ import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
-import model.testresults.TestedStatus;
+import model.testresults.TTIStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
@@ -484,7 +484,7 @@ public class ProductRepository {
     query.setParameter("productType", request.getProductType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
-    query.setParameter("testedStatus", TestedStatus.TESTED);
+    query.setParameter("ttiStatus", TTIStatus.TTI_SAFE);
     query.setParameter("bloodAbo", request.getPatientBloodAbo());
     query.setParameter("bloodAboO", BloodAbo.O);
     query.setParameter("bloodRhdNeg", BloodRh.NEGATIVE);

@@ -12,9 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.bloodtyping.BloodTypingTest;
-import model.bloodtyping.BloodTypingTestResult;
-import model.bloodtyping.BloodTypingTestType;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestCategory;
+import model.bloodtesting.BloodTestType;
+import model.bloodtesting.BloodTestResult;
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MicrotiterPlate;
 
@@ -24,11 +25,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
-import viewmodel.BloodTypingRuleResult;
+import viewmodel.BloodTestingRuleResult;
 
 @Repository
 @Transactional
-public class BloodTypingRepository {
+public class BloodTestingRepository {
 
   @PersistenceContext
   EntityManager em;
@@ -37,7 +38,7 @@ public class BloodTypingRepository {
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private BloodTypingRuleEngine ruleEngine;
+  private BloodTestingRuleEngine ruleEngine;
 
   public MicrotiterPlate getPlate(String plateKey) {
     String queryStr = "SELECT p from MicrotiterPlate p " +
@@ -47,62 +48,72 @@ public class BloodTypingRepository {
     return query.getSingleResult();
   }
 
-  public List<BloodTypingTest> getBloodTypingTests() {
-    String queryStr = "SELECT b FROM BloodTypingTest b WHERE b.isActive=:isActive";
-    TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
+  public List<BloodTest> getBloodTypingTests() {
+    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     query.setParameter("isActive", true);
-    List<BloodTypingTest> bloodTests = query.getResultList();
+    query.setParameter("category", BloodTestCategory.BLOODTYPING);
+    List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
   }
 
-  public List<BloodTypingTest> getBloodTypingTestsOfType(BloodTypingTestType type) {
-    return getBloodTypingTestsOfTypes(Arrays.asList(type));
+  public List<BloodTest> getBloodTTITests() {
+    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("isActive", true);
+    query.setParameter("category", BloodTestCategory.TTI);
+    List<BloodTest> bloodTests = query.getResultList();
+    return bloodTests;
   }
 
-  public List<BloodTypingTest> getBloodTypingTestsOfTypes(List<BloodTypingTestType> types) {
-    String queryStr = "SELECT b FROM BloodTypingTest b WHERE " +
-        "b.bloodTypingTestType IN (:types) AND " +
+  public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
+    return getBloodTestsOfTypes(Arrays.asList(type));
+  }
+
+  public List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
+    String queryStr = "SELECT b FROM BloodTest b WHERE " +
+        "b.bloodTestType IN (:types) AND " +
     		"b.isActive=:isActive";
-    TypedQuery<BloodTypingTest> query = em.createQuery(queryStr, BloodTypingTest.class);
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     query.setParameter("types", types);
     query.setParameter("isActive", true);
-    List<BloodTypingTest> bloodTests = query.getResultList();
+    List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
   }
 
-  public Map<String, Object> saveBloodTypingResults(
-      Map<Long, Map<Long, String>> bloodTypingTestResultsMap) {
+  public Map<String, Object> saveBloodTestingResults(
+      Map<Long, Map<Long, String>> bloodTestResultsMap) {
 
     Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
-    Map<Long, BloodTypingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTypingRuleResult>(); 
+    Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>(); 
     Date testedOn = new Date();
-    Map<Long, Map<Long, String>> errorMap = validateValuesInWells(bloodTypingTestResultsMap);
+    Map<Long, Map<Long, String>> errorMap = validateValuesInBloodTypingWells(bloodTestResultsMap);
     if (errorMap.isEmpty()) {
-      for (Long collectionId : bloodTypingTestResultsMap.keySet()) {
-        Map<Long, String> bloodTypingResultsForCollection = bloodTypingTestResultsMap.get(collectionId);
+      for (Long collectionId : bloodTestResultsMap.keySet()) {
+        Map<Long, String> bloodTestResultsForCollection = bloodTestResultsMap.get(collectionId);
         CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-        BloodTypingRuleResult ruleResult = ruleEngine.applyBloodTypingTests(collectedSample, bloodTypingResultsForCollection);
+        BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(collectedSample, bloodTestResultsForCollection);
         collectedSamplesMap.put(collectedSample.getId(), collectedSample);
-        bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
+        bloodTestRuleResultsForCollections.put(collectedSample.getId(), ruleResult);
 
         collectedSample = updateCollectionBloodType(collectedSample, ruleResult);
 
-        for (Long testId : bloodTypingResultsForCollection.keySet()) {
-          BloodTypingTestResult btResult = new BloodTypingTestResult();
-          BloodTypingTest bloodTypingTest = new BloodTypingTest();
+        for (Long testId : bloodTestResultsForCollection.keySet()) {
+          BloodTestResult btResult = new BloodTestResult();
+          BloodTest bloodTest = new BloodTest();
           // the only reason we are using Long in the parameter is that
           // jsp uses Long for all numbers. Using an integer makes it difficult
           // to compare Integer and Long values in the jsp conditionals
           // specially when iterating through the list of results
-          bloodTypingTest.setId(testId.intValue());
-          btResult.setBloodTypingTest(bloodTypingTest);
+          bloodTest.setId(testId.intValue());
+          btResult.setBloodTest(bloodTest);
           // not updating the inverse relation which means the
           // collectedSample.getBloodTypingResults() will not
           // contain this result
           btResult.setCollectedSample(collectedSample);
           btResult.setTestedOn(testedOn);
           btResult.setNotes("");
-          btResult.setResult(bloodTypingResultsForCollection.get(testId));
+          btResult.setResult(bloodTestResultsForCollection.get(testId));
           em.persist(btResult);
         }
       }
@@ -111,13 +122,13 @@ public class BloodTypingRepository {
 
     Map<String, Object> results = new HashMap<String, Object>();
     results.put("collections", collectedSamplesMap);
-    results.put("bloodTypingResults", bloodTypingResultsForCollections);
+    results.put("bloodTestingResults", bloodTestRuleResultsForCollections);
     results.put("errors", errorMap);
     return results;
   }
 
   private CollectedSample updateCollectionBloodType(
-      CollectedSample collection, BloodTypingRuleResult ruleResult) {
+      CollectedSample collection, BloodTestingRuleResult ruleResult) {
 
     String bloodAboNew = ruleResult.getBloodAbo();
     String bloodRhNew = ruleResult.getBloodRh();
@@ -146,10 +157,10 @@ public class BloodTypingRepository {
     return collection;
   }
 
-  public Map<Long, Map<Long, String>> validateValuesInWells(Map<Long, Map<Long, String>> bloodTypingTestResults) {
+  public Map<Long, Map<Long, String>> validateValuesInBloodTypingWells(Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
-    Map<String, BloodTypingTest> allBloodTypingTestsMap = new HashMap<String, BloodTypingTest>(); 
-    for (BloodTypingTest bloodTypingTest : getBloodTypingTests()) {
+    Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>(); 
+    for (BloodTest bloodTypingTest : getBloodTypingTests()) {
       allBloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
 
@@ -159,7 +170,7 @@ public class BloodTypingRepository {
       Map<Long, String> testsForCollection = bloodTypingTestResults.get(collectionId);
       for (Long testId : testsForCollection.keySet()) {
         String result = testsForCollection.get(testId);
-        BloodTypingTest test = allBloodTypingTestsMap.get(testId.toString());
+        BloodTest test = allBloodTypingTestsMap.get(testId.toString());
         if (test == null) {
           addErrorToMap(errorMap, collectionId, testId, "Invalid test");
           continue;
@@ -189,24 +200,24 @@ public class BloodTypingRepository {
 
   public Map<String, Object> getBloodTypingTestStatus(List<String> collectionIds) {
     Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
-    Map<Long, BloodTypingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTypingRuleResult>(); 
+    Map<Long, BloodTestingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTestingRuleResult>(); 
 
     for (String collectionIdStr : collectionIds) {
       Long collectionId = Long.parseLong(collectionIdStr);
       CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-      BloodTypingRuleResult ruleResult = ruleEngine.applyBloodTypingTests(collectedSample, new HashMap<Long, String>());
+      BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
       collectedSamplesMap.put(collectedSample.getId(), collectedSample);
       bloodTypingResultsForCollections.put(collectedSample.getId(), ruleResult);
     }
 
     Map<String, Object> results = new HashMap<String, Object>();
     results.put("collections", collectedSamplesMap);
-    results.put("bloodTypingResults", bloodTypingResultsForCollections);
+    results.put("bloodTestingResults", bloodTypingResultsForCollections);
     return results;
   }
 
-  public BloodTypingRuleResult getBloodTypingTestStatus(Long collectionId) {
+  public BloodTestingRuleResult getBloodTypingTestStatus(Long collectionId) {
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-    return ruleEngine.applyBloodTypingTests(collectedSample, new HashMap<Long, String>());
+    return ruleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
   }
 }

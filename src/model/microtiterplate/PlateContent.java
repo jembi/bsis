@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
 
-import model.bloodtyping.BloodTypingTest;
+import model.bloodtesting.BloodTest;
 
 @Entity
 @Audited
@@ -37,7 +37,7 @@ public class PlateContent {
   private PlateContentType contentType;
 
   @ManyToOne
-  private BloodTypingTest rawBloodTest;
+  private BloodTest rawBloodTest;
   
   @ManyToOne
   private MicrotiterPlate plateForContent;
@@ -100,11 +100,11 @@ public class PlateContent {
     this.isDeleted = isDeleted;
   }
 
-  public BloodTypingTest getRawBloodTest() {
+  public BloodTest getRawBloodTest() {
     return rawBloodTest;
   }
 
-  public void setRawBloodTest(BloodTypingTest rawBloodTest) {
+  public void setRawBloodTest(BloodTest rawBloodTest) {
     this.rawBloodTest = rawBloodTest;
   }
 }

@@ -1,4 +1,4 @@
-package model.bloodtyping;
+package model.bloodtesting;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class BloodTypingTest {
+public class BloodTest {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,8 +38,10 @@ public class BloodTypingTest {
   private Integer rankInCategory;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=12)
-  private BloodTypingTestType bloodTypingTestType;
+  @Column(length=30)
+  private BloodTestType bloodTestType;
+
+  private BloodTestCategory category;
 
   private Boolean isEmptyAllowed;
 
@@ -117,12 +119,12 @@ public class BloodTypingTest {
     this.positiveResults = positiveResults;
   }
 
-  public BloodTypingTestType getBloodTypingTestType() {
-    return bloodTypingTestType;
+  public BloodTestType getBloodTestType() {
+    return bloodTestType;
   }
 
-  public void setBloodTypingTestType(BloodTypingTestType bloodTypingTestType) {
-    this.bloodTypingTestType = bloodTypingTestType;
+  public void setBloodTestType(BloodTestType bloodTypingTestType) {
+    this.bloodTestType = bloodTypingTestType;
   }
 
   public Boolean getIsEmptyAllowed() {
@@ -131,5 +133,13 @@ public class BloodTypingTest {
 
   public void setIsEmptyAllowed(Boolean isEmptyAllowed) {
     this.isEmptyAllowed = isEmptyAllowed;
+  }
+
+  public BloodTestCategory getCategory() {
+    return category;
+  }
+
+  public void setCategory(BloodTestCategory category) {
+    this.category = category;
   }
 }

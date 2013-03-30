@@ -1,4 +1,4 @@
-package model.bloodtyping;
+package model.bloodtesting;
 
 import java.util.Date;
 
@@ -21,7 +21,7 @@ import model.collectedsample.CollectedSample;
  * @author iamrohitbanga
  */
 @Entity
-public class BloodTypingTestResult {
+public class BloodTestResult {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +32,7 @@ public class BloodTypingTestResult {
   private CollectedSample collectedSample;
 
   @ManyToOne
-  private BloodTypingTest bloodTypingTest;
+  private BloodTest bloodTest;
 
   @Column(length=10)
   private String result;
@@ -43,15 +43,15 @@ public class BloodTypingTestResult {
   @Lob
   private String notes;
 
-  public BloodTypingTestResult() {
+  public BloodTestResult() {
   }
 
   public Long getId() {
     return id;
   }
 
-  public BloodTypingTest getBloodTypingTest() {
-    return bloodTypingTest;
+  public BloodTest getBloodTest() {
+    return bloodTest;
   }
 
   public String getResult() {
@@ -66,8 +66,8 @@ public class BloodTypingTestResult {
     this.id = id;
   }
 
-  public void setBloodTypingTest(BloodTypingTest bloodTypingTest) {
-    this.bloodTypingTest = bloodTypingTest;
+  public void setBloodTest(BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
   }
 
   public void setResult(String result) {

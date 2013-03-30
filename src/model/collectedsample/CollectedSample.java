@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
 import model.bloodbagtype.BloodBagTypeExists;
-import model.bloodtyping.BloodTypingTestResult;
+import model.bloodtesting.BloodTestResult;
 import model.collectionbatch.CollectionBatch;
 import model.collectionbatch.CollectionBatchExists;
 import model.donationtype.DonationType;
@@ -33,7 +33,7 @@ import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
-import model.testresults.TestedStatus;
+import model.testresults.TTIStatus;
 import model.user.User;
 import model.worksheet.CollectionsWorksheet;
 
@@ -82,7 +82,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectedSample")
-  private List<BloodTypingTestResult> bloodTypingTestResults;
+  private List<BloodTestResult> bloodTestResults;
 
   /**
    * Which center the collection comes to.
@@ -153,7 +153,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Enumerated(EnumType.STRING)
   @Column(length=20)
-  private TestedStatus testedStatus;
+  private TTIStatus ttiStatus;
 
   private Boolean isDeleted;
 
@@ -303,12 +303,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return 0;
   }
 
-  public TestedStatus getTestedStatus() {
-    return testedStatus;
+  public TTIStatus getTTIStatus() {
+    return ttiStatus;
   }
 
-  public void setTestedStatus(TestedStatus testedStatus) {
-    this.testedStatus = testedStatus;
+  public void setTTIStatus(TTIStatus testedStatus) {
+    this.ttiStatus = testedStatus;
   }
 
   public BigDecimal getHaemoglobinCount() {
@@ -371,12 +371,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return "";
   }
 
-  public List<BloodTypingTestResult> getBloodTypingTestResults() {
-    return bloodTypingTestResults;
+  public List<BloodTestResult> getBloodTestResults() {
+    return bloodTestResults;
   }
 
-  public void setBloodTypingTestResults(List<BloodTypingTestResult> bloodTypingTestResults) {
-    this.bloodTypingTestResults = bloodTypingTestResults;
+  public void setBloodTestResults(List<BloodTestResult> bloodTestResults) {
+    this.bloodTestResults = bloodTestResults;
   }
 
   public BloodTypingStatus getBloodTypingStatus() {
