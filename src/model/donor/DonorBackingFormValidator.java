@@ -1,7 +1,6 @@
 package model.donor;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import model.CustomDateFormatter;
 
@@ -67,37 +66,11 @@ public class DonorBackingFormValidator implements Validator {
       return;
     }
 
-//    boolean birthDateSpecified = StringUtils.isNotBlank(birthDate);
-//    boolean ageSpecified = StringUtils.isNotBlank(age);
-//    if (birthDateSpecified && ageSpecified) {
-//      errors.rejectValue("donor.birthDate", "birthdate.ambiguous", "Both birth date and age specified.");
-//      errors.rejectValue("donor.age", "age.ambiguous", "Both birth date and age specified.");
-//    }
-    
-    Map<String, String> config = utilController.getConfigProperty("donationRequirements");
-    if (config.get("ageLimitsEnabled").equals("true")) {
-      try {
-        Integer minAge = Integer.parseInt(config.get("minimumAge"));
-        Integer maxAge = Integer.parseInt(config.get("maximumAge"));
-        Integer donorAge = DonorUtils.computeDonorAge(form.getDonor());
-        System.out.println("donor age: " + donorAge);
-        if (donorAge == null) {
-          errors.rejectValue("age", "donorage.missing", "One of donor Date of Birth or Age must be specified");
-        }
-        else {
-          if (donorAge < minAge || donorAge > maxAge) {
-            errors.rejectValue("age", "donorage.outofrange",
-              "Donor age is " + donorAge + " years. " +
-              "Donor age must be between " + minAge + " and " + maxAge + " years.");
-          }
-        }
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-      }
-    }
+    String errorMessage = utilController.verifyDonorAge(form.getDonor());
+    if (StringUtils.isNotBlank(errorMessage))
+      errors.rejectValue("age", "donor.age", errorMessage);
   }
 
   private void validateDonorHistory(DonorBackingForm form, Errors errors) {
   }
-
 }

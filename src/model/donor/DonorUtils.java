@@ -4,9 +4,11 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.Years;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DonorUtils {
-
+  
   public static Integer computeDonorAge(Donor donor) {
     Date birthDate = donor.getBirthDate();
     Date birthDateInferred = donor.getBirthDateInferred();
@@ -22,4 +24,6 @@ public class DonorUtils {
     DateTime t2 = new DateTime(new Date());
     return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
   }
+
+
 }

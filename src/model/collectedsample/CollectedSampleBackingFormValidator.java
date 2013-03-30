@@ -57,6 +57,12 @@ public class CollectedSampleBackingFormValidator implements Validator {
 
     updateRelatedEntities(form);
     inheritParametersFromCollectionBatch(form);
+    Donor donor = form.getDonor();
+    if (donor != null) {
+      String errorMessage = utilController.verifyDonorAge(donor);
+      if (StringUtils.isNotBlank(errorMessage))
+        errors.rejectValue("collectedSample.donor", "donor.age", errorMessage);
+    }
 
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }

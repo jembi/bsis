@@ -18,6 +18,7 @@ import model.admin.FormField;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
+import model.donor.DonorUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -273,5 +274,29 @@ public class UtilController {
       }
     }
     return collectedSample;
+  }
+
+  public String verifyDonorAge(Donor donor) {
+    Map<String, String> config = getConfigProperty("donationRequirements");
+    String errorMessage = "";
+    if (config.get("ageLimitsEnabled").equals("true")) {
+      try {
+        Integer minAge = Integer.parseInt(config.get("minimumAge"));
+        Integer maxAge = Integer.parseInt(config.get("maximumAge"));
+        Integer donorAge = DonorUtils.computeDonorAge(donor);
+        System.out.println("donor age: " + donorAge);
+        if (donorAge == null) {
+          errorMessage = "One of donor Date of Birth or Age must be specified";
+        }
+        else {
+          if (donorAge < minAge || donorAge > maxAge) {
+            errorMessage = "Donor age must be between " + minAge + " and " + maxAge + " years.";
+          }
+        }
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return errorMessage;
   }
 }
