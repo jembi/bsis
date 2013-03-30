@@ -10,26 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import model.CustomDateFormatter;
 import model.admin.ConfigPropertyConstants;
-import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.testresults.FindTestResultBackingForm;
-import model.testresults.TestResult;
-import model.testresults.TestResultBackingForm;
-import model.testresults.TestResultBackingFormValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,11 +31,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
-import repository.TestResultRepository;
-import viewmodel.TestResultViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -56,12 +45,6 @@ public class TestResultController {
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private TestResultRepository testResultRepository;
-
-  @Autowired
-  private BloodTestRepository bloodTestRepository;
-
-  @Autowired
   private GenericConfigRepository genericConfigRepository; 
 
   @Autowired
@@ -72,7 +55,7 @@ public class TestResultController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new TestResultBackingFormValidator(binder.getValidator(), utilController));
+//    binder.setValidator(new TestResultBackingFormValidator(binder.getValidator(), utilController));
   }
 
   @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
@@ -94,35 +77,6 @@ public class TestResultController {
     return mv;
   }
 
-  @RequestMapping(value = "/testResultSummary", method = RequestMethod.GET)
-  public ModelAndView testResultSummaryGenerator(HttpServletRequest request, Model model,
-      @RequestParam(value = "testResultId", required = false) Long testResultId) {
-
-    ModelAndView mv = new ModelAndView("testResultSummary");
-    Map<String, Object> m = model.asMap();
-
-    m.put("requestUrl", getUrl(request));
-
-    TestResult testResult = null;
-    if (testResultId != null) {
-      testResult = testResultRepository.findTestResultById(testResultId);
-      if (testResult != null) {
-        m.put("existingTestResult", true);
-      }
-      else {
-        m.put("existingTestResult", false);
-      }
-    }
-
-    TestResultViewModel testResultViewModel = getTestResultViewModels(Arrays.asList(testResult)).get(0);
-    m.put("testResult", testResultViewModel);
-    m.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    mv.addObject("model", m);
-    return mv;
-  }
-
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
@@ -133,42 +87,7 @@ public class TestResultController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
-  }
-
-  @RequestMapping(value = "/editTestResultFormGenerator", method = RequestMethod.GET, 
-      headers = "X-Requested-With=XMLHttpRequest")
-  public ModelAndView editTestResultFormGenerator(HttpServletRequest request,
-      Model model,
-      //@RequestParam(value="collectionNumber", required=false) Long collectionNumber,
-      @RequestParam(value="testResultId", required=false) Long testResultId) {
-
-    TestResultBackingForm form = new TestResultBackingForm();
-
-    ModelAndView mv = new ModelAndView("editTestResultForm");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    m.put("existingTestResult", false);
-    if (testResultId != null) {
-      form.setId(testResultId);
-      TestResult testResult = testResultRepository.findTestResultById(testResultId);
-      if (testResult != null) {
-        form = new TestResultBackingForm(testResult);
-        m.put("existingTestResult", true);
-      }
-    }
-
-    addEditSelectorOptions(m);
-    m.put("allowedResults", bloodTestRepository.getBloodTestByName(form.getBloodTest()).getAllowedResults());
-    m.put("editTestResultForm", form);
-    m.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    System.out.println(m);
-    mv.addObject("model", m);
-    System.out.println(mv);
-    System.out.println(mv.getView());
-    return mv;
+//    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
   }
 
   @RequestMapping(value = "/addAllTestResultsFormGenerator", method = RequestMethod.GET, 
@@ -183,78 +102,6 @@ public class TestResultController {
     addEditSelectorOptions(m);
     // to ensure custom field names are displayed in the form
     m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    mv.addObject("model", m);
-    return mv;
-  }
-
-  @RequestMapping(value = "/addTestResult", method = RequestMethod.POST)
-  public ModelAndView addTestResult(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("editTestResultForm") @Valid TestResultBackingForm form,
-      BindingResult result, Model model) {
-
-    ModelAndView mv = new ModelAndView("editTestResultForm");
-    boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
-
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
-    String collectionNumber = form.getCollectionNumber();
-    if (collectionNumber != null && !collectionNumber.isEmpty()) {
-      try {
-        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
-        form.setCollectedSample(collectedSample);
-      } catch (NoResultException ex) {
-        form.setCollectedSample(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setCollectedSample(null);
-    }
-
-    if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
-      success = false;
-      message = "Please fix the errors noted above.";
-      System.out.println("there are errors");
-      for (ObjectError error : result.getAllErrors()) {
-        System.out.println(error.getObjectName());
-        System.out.println(error.getCode());
-        System.out.println(form.getTestResult());
-        System.out.println(error.toString());
-        System.out.println(error.getDefaultMessage());
-      }
-    } else {
-      try {
-        TestResult testResult = form.getTestResult();
-        testResult.setIsDeleted(false);
-        testResultRepository.addTestResult(testResult);
-        m.put("hasErrors", false);
-        success = true;
-        message = "Test Result Successfully Added";
-        form = new TestResultBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "Test Result Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
-    }
-
-    m.put("editTestResultForm", form);
-    m.put("existingTestResult", false);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("refreshUrl", "editTestResultFormGenerator.html");
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    addEditSelectorOptions(m);
-
     mv.addObject("model", m);
     return mv;
   }
@@ -324,19 +171,19 @@ public class TestResultController {
       String testName = name.substring(4);
       String testResult = param.getValue();
 
-      BloodTest bloodTest = bloodTestRepository.findBloodTestByName(testName);
-      TestResult t = new TestResult();
-      t.setCollectedSample(collectedSample);
-      t.setTestedOn(testedOn);
-      t.setBloodTest(bloodTest);
-      t.setResult(testResult);
-      t.setIsDeleted(false);
-      t.setNotes(notes);
-      try {
-        testResultRepository.addTestResult(t);
-      } catch (Exception ex) {
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      }
+//      BloodTest bloodTest = bloodTestRepository.findBloodTestByName(testName);
+//      TestResult t = new TestResult();
+//      t.setCollectedSample(collectedSample);
+//      t.setTestedOn(testedOn);
+//      t.setBloodTest(bloodTest);
+//      t.setResult(testResult);
+//      t.setIsDeleted(false);
+//      t.setNotes(notes);
+//      try {
+//        testResultRepository.addTestResult(t);
+//      } catch (Exception ex) {
+//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//      }
     }
 
     return mv;
@@ -360,100 +207,6 @@ public class TestResultController {
     }
     return mv;
   }
-
-  @RequestMapping("/testResultHistory")
-  public ModelAndView testResultHistory(HttpServletRequest request, Model model,
-      @RequestParam(value="testResultId", required=true) Long testResultId) {
-
-    List<TestResult> testResults = testResultRepository.getTestResultHistory(testResultId);
-
-    ModelAndView modelAndView = new ModelAndView("testResultHistory");
-    Map<String, Object> m = model.asMap();
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    m.put("allTestResults", getTestResultViewModels(testResults));
-    m.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(m);
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
-  }
-
-  @RequestMapping(value = "/updateTestResult", method = RequestMethod.POST)
-  public @ResponseBody Map<String, Object> updateTestResult(
-      HttpServletResponse response,
-      @ModelAttribute("editTestResultForm") @Valid TestResultBackingForm form,
-      BindingResult result, Model model) {
-
-    boolean success = false;
-    Map<String, Object> m = new HashMap<String, Object>();
-    // only when the collection is correctly added the existingCollectedSample
-    // property will be changed
-    String message = "";
-
-    if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-      message = "Please fix the errors noted above now!";
-    }
-    else {
-      try {
-        form.setIsDeleted(false);
-        TestResult newTestResult = testResultRepository.updateTestResult(form.getTestResult());
-        if (newTestResult == null) {
-          m.put("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-          success = false;
-          m.put("existingTestResult", false);
-          message = "Test Result does not already exist.";
-        }
-        else {
-          m.put("hasErrors", false);
-          m.put("refreshUrl", "testResultSummary.html?testResultId=" + newTestResult.getId());
-          success = true;
-          message = "Test Result Successfully Updated";
-        }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Test Result Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
-   }
-
-    m.put("success", success);
-    m.put("message", message);
-    return m;
-  }
-
-  @RequestMapping(value = "/deleteTestResult", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> deleteTestResult(
-      @RequestParam("testResultId") Long testResultId) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      testResultRepository.deleteTestResult(testResultId);
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
-  }
-
   @RequestMapping(value="/ttiWorksheet", method=RequestMethod.GET)
   public ModelAndView getTtiWorkSheetFormGenerator(HttpServletRequest request,
       HttpServletResponse response) {
@@ -461,37 +214,12 @@ public class TestResultController {
     return mv;
   }
 
-  @RequestMapping(value="/showTTIWorksheet", method=RequestMethod.GET)
-  public ModelAndView getTtiWorkSheetFormGenerator(HttpServletRequest request,
-      HttpServletResponse response,
-      @RequestParam(value="dateCollectedFrom", required=false) String dateCollectedFrom,
-      @RequestParam(value="dateCollectedTo", required=false) String dateCollectedTo) {
-    ModelAndView mv = new ModelAndView("ttiWorksheet");
-    List<CollectedSample> untestedCollections = testResultRepository.findUntestedCollections(dateCollectedFrom, dateCollectedTo);
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("allUntestedCollectedSamples", untestedCollections);
-    m.put("testResultFields", utilController.getFormFieldsForForm("testResults"));
-    mv.addObject("model", m);
-    return mv;
-  }
-
-  public static List<TestResultViewModel> getTestResultViewModels(
-      List<TestResult> testResults) {
-    if (testResults == null)
-      return Arrays.asList(new TestResultViewModel[0]);
-    List<TestResultViewModel> testResultViewModels = new ArrayList<TestResultViewModel>();
-    for (TestResult testResult : testResults) {
-      testResultViewModels.add(new TestResultViewModel(testResult));
-    }
-    return testResultViewModels;
-  }
-
   @RequestMapping(value = "/worksheetForTestResultsFormGenerator", method = RequestMethod.GET)
   public ModelAndView findWorksheetForTestResultsFormGenerator(HttpServletRequest request, Model model) {
 
     ModelAndView mv = new ModelAndView("findWorksheetForTestResults");
     Map<String, Object> m = model.asMap();
-    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
+//    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
     m.put("testResultFields", utilController.getFormFieldsForForm("testResult"));
     m.put("refreshUrl", getUrl(request));
     utilController.addTipsToModel(m, "testResults.worksheet");
@@ -508,7 +236,6 @@ public class TestResultController {
     ModelAndView mv = new ModelAndView("worksheetForTestResults");
     Map<String, Object> m = model.asMap();
     m.put("worksheetFound", true);
-    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     m.put("worksheetBatchId", worksheetBatchId);
@@ -539,7 +266,6 @@ public class TestResultController {
 
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     Map<String, String> properties = genericConfigRepository.getConfigProperties(propertyOwners);
-    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
     Map<String, Object> resultsMap = new HashMap<String, Object>();
     ArrayList<Object> resultList = new ArrayList<Object>();
@@ -555,17 +281,17 @@ public class TestResultController {
           row.add(collectedSample.getCollectionNumber());
       }
 
-      Map<String, TestResult> recentTestResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
-      // now add results for existing tests related to this worksheet
-      for (BloodTest bt : bloodTests) {
-        String testName = bt.getName();
-        if (properties.containsKey(testName) && properties.get(testName).equals("true")) {
-            if (recentTestResults.containsKey(testName))
-              row.add(recentTestResults.get(testName).getResult());
-            else
-              row.add("");
-        }
-      }
+//      Map<String, TestResult> recentTestResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
+//      // now add results for existing tests related to this worksheet
+//      for (BloodTest bt : bloodTests) {
+//        String testName = bt.getName();
+//        if (properties.containsKey(testName) && properties.get(testName).equals("true")) {
+//            if (recentTestResults.containsKey(testName))
+//              row.add(recentTestResults.get(testName).getResult());
+//            else
+//              row.add("");
+//        }
+//      }
 
       resultList.add(row);
     }
@@ -598,7 +324,7 @@ public class TestResultController {
     try {
       Map<String, Map<String, String>> testResultChanges = mapper.readValue(requestParams, HashMap.class);
       System.out.println(testResultChanges);
-      testResultRepository.saveTestResultsToWorksheet(worksheetBatchId, testResultChanges);
+//      testResultRepository.saveTestResultsToWorksheet(worksheetBatchId, testResultChanges);
     } catch (JsonParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

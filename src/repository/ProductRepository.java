@@ -19,7 +19,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
@@ -27,7 +26,6 @@ import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
-import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -40,7 +38,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import utils.BloodTestUtils;
 import viewmodel.MatchingProductViewModel;
 
 @Repository
@@ -51,16 +48,7 @@ public class ProductRepository {
   private EntityManager em;
 
   @Autowired
-  private BloodTestRepository bloodTestRepository;
-
-  @Autowired
   private CollectedSampleRepository collectedSampleRepository;
-
-  @Autowired
-  public TestResultRepository testResultRepository;
-
-  @Autowired
-  public BloodTestUtils bloodTestUtils;
 
   @Autowired
   public RequestRepository requestRepository;
@@ -85,34 +73,35 @@ public class ProductRepository {
       return;
     Long collectedSampleId = product.getCollectedSample().getId();
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(c.getId());
-
-    // all test results which have a correct value.
-    // eg. HIV test is correct if its result is negative.
-    // Blood Abo test has no correct value.
-    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
-
-    boolean allTestsDone = (testResults.size() == bloodTests.size());
+//    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(c.getId());
+//
+//    // all test results which have a correct value.
+//    // eg. HIV test is correct if its result is negative.
+//    // Blood Abo test has no correct value.
+//    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
+//
+//    boolean allTestsDone = (testResults.size() == bloodTests.size());
     boolean safe = true;
-    for (TestResult t : testResults.values()) {
-      String testResult = t.getResult();
-      if (testResult == null || !bloodTestUtils.isTestResultCorrect(t.getBloodTest(), testResult)) {
-        safe = false;
-        break;
-      }
-    }
+//    for (TestResult t : testResults.values()) {
+//      String testResult = t.getResult();
+//      if (testResult == null || !bloodTestUtils.isTestResultCorrect(t.getBloodTest(), testResult)) {
+//        safe = false;
+//        break;
+//      }
+//    }
 
     System.out.println("safe: " + safe);
 
     if (safe) {
-      if (allTestsDone) {
-        if (product.getExpiresOn().before(new Date()))
-          product.setStatus(ProductStatus.EXPIRED);
-        else
-          product.setStatus(ProductStatus.AVAILABLE);
-      }
-      else
-        product.setStatus(ProductStatus.QUARANTINED);        
+//      if (allTestsDone) {
+//        if (product.getExpiresOn().before(new Date()))
+//          product.setStatus(ProductStatus.EXPIRED);
+//        else
+//          product.setStatus(ProductStatus.AVAILABLE);
+//      }
+//      else
+//        product.setStatus(ProductStatus.QUARANTINED);        
+      product.setStatus(ProductStatus.QUARANTINED);        
     } else {
       product.setStatus(ProductStatus.UNSAFE);
     }
@@ -125,27 +114,27 @@ public class ProductRepository {
     BloodAbo bloodAbo = product.getBloodAbo();
     BloodRh bloodRhd = product.getBloodRhd();
 
-    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
-
-    TestResult t = testResultsMap.get("Blood ABO");
-    if (t != null && !t.getIsDeleted()) {
-    	try {
-    		bloodAbo = BloodAbo.valueOf(t.getResult());
-    	} catch (IllegalArgumentException ex) {
-    		ex.printStackTrace();
-    		bloodAbo = BloodAbo.Unknown;
-    	} 
-    }
-    
-    t = testResultsMap.get("Blood Rh");
-    if (t != null && !t.getIsDeleted()) {
-    	try {
-    		bloodRhd = BloodRh.valueOf(t.getResult());
-    	} catch (IllegalArgumentException ex) {
-    		ex.printStackTrace();
-    		bloodRhd = BloodRh.Unknown;
-    	}
-    }
+//    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
+//
+//    TestResult t = testResultsMap.get("Blood ABO");
+//    if (t != null && !t.getIsDeleted()) {
+//    	try {
+//    		bloodAbo = BloodAbo.valueOf(t.getResult());
+//    	} catch (IllegalArgumentException ex) {
+//    		ex.printStackTrace();
+//    		bloodAbo = BloodAbo.Unknown;
+//    	} 
+//    }
+//    
+//    t = testResultsMap.get("Blood Rh");
+//    if (t != null && !t.getIsDeleted()) {
+//    	try {
+//    		bloodRhd = BloodRh.valueOf(t.getResult());
+//    	} catch (IllegalArgumentException ex) {
+//    		ex.printStackTrace();
+//    		bloodRhd = BloodRh.Unknown;
+//    	}
+//    }
 
     product.setBloodAbo(bloodAbo);
     product.setBloodRhd(bloodRhd);
@@ -613,14 +602,14 @@ public class ProductRepository {
     String abo = null;
     String rh = null;
 
-    for (TestResult t : c.getTestResults()) {
-      String testName = t.getBloodTest().getName();
-      if (testName.equals("Blood ABO"))
-        abo = t.getResult();
-      else if (testName.equals("Blood Rh"))
-        rh = t.getResult();
-    }
-
+//    for (TestResult t : c.getTestResults()) {
+//      String testName = t.getBloodTest().getName();
+//      if (testName.equals("Blood ABO"))
+//        abo = t.getResult();
+//      else if (testName.equals("Blood Rh"))
+//        rh = t.getResult();
+//    }
+//
     if (abo == null || rh == null) {
       return new BloodGroup(BloodAbo.Unknown, BloodRh.Unknown);
     }

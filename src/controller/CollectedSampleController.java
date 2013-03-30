@@ -20,7 +20,6 @@ import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
-import model.testresults.TestResult;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
-import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
@@ -45,7 +43,6 @@ import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.PreDonationTestRepository;
 import repository.SequenceNumberRepository;
-import repository.TestResultRepository;
 import viewmodel.CollectedSampleViewModel;
 
 @Controller
@@ -58,9 +55,6 @@ public class CollectedSampleController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private TestResultRepository testResultsRepository;
-
-  @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
 
   @Autowired
@@ -68,9 +62,6 @@ public class CollectedSampleController {
 
   @Autowired
   private DonorRepository donorRepository;
-
-  @Autowired
-  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
@@ -625,7 +616,7 @@ public class CollectedSampleController {
     } else {
       m.put("worksheetFound", true);
       m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
-      m.put("bloodTests", bloodTestRepository.getAllBloodTests());
+//      m.put("bloodTests", bloodTestRepository.getAllBloodTests());
       List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
       m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     }
@@ -633,28 +624,6 @@ public class CollectedSampleController {
     m.put("worksheetBatchId", worksheetBatchId);
     mv.addObject("model", m);
 
-    return mv;
-  }
-
-  @RequestMapping(value = "/testResultsForCollection", method = RequestMethod.GET)
-  public ModelAndView testResultsForCollection(HttpServletRequest request, Model model,
-      @RequestParam(value = "collectedSampleId", required = false) Long collectedSampleId) {
-
-    ModelAndView mv = new ModelAndView("testResultsHistory");
-    Map<String, Object> m = model.asMap();
-
-    m.put("requestUrl", getUrl(request));
-
-    Map<String, TestResult> testResultsMap = testResultsRepository.getRecentTestResultsForCollection(collectedSampleId);
-    List<TestResult> testResults = new ArrayList<TestResult>();
-    if (testResults != null)
-      testResults.addAll(testResultsMap.values());
-
-    m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
-    m.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    mv.addObject("model", m);
     return mv;
   }
 }

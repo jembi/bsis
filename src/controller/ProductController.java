@@ -18,7 +18,6 @@ import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.product.ProductBackingFormValidator;
-import model.testresults.TestResult;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
-import repository.TestResultRepository;
 import viewmodel.ProductViewModel;
 
 @Controller
@@ -52,9 +50,6 @@ public class ProductController {
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
-
-  @Autowired
-  private TestResultRepository testResultsRepository;
   
   @Autowired
   private UtilController utilController;
@@ -134,12 +129,12 @@ public class ProductController {
     }
 
     Long collectedSampleId = product.getCollectedSample().getId();
-    Map<String, TestResult> testResultsMap = testResultsRepository.getRecentTestResultsForCollection(collectedSampleId);
-    List<TestResult> testResults = new ArrayList<TestResult>();
-    if (testResults != null)
-      testResults.addAll(testResultsMap.values());
-
-    m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
+//    Map<String, TestResult> testResultsMap = testResultsRepository.getRecentTestResultsForCollection(collectedSampleId);
+//    List<TestResult> testResults = new ArrayList<TestResult>();
+//    if (testResults != null)
+//      testResults.addAll(testResultsMap.values());
+//
+//    m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
     m.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));

@@ -34,16 +34,12 @@ import repository.CollectedSampleRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
-import repository.TestResultRepository;
 
 @Controller
 public class ReportsController {
 
   @Autowired
   private CollectedSampleRepository collectionRepository;
-
-  @Autowired
-  private TestResultRepository testResultsRepository;
 
   @Autowired
   private ProductRepository productRepository;
@@ -449,9 +445,9 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
   
-      Map<String, Map<Long, Long>> numTestResults = testResultsRepository
-          .findNumberOfPositiveTests(dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getCenters(), form.getSites());
+//      Map<String, Map<Long, Long>> numTestResults = testResultsRepository
+//          .findNumberOfPositiveTests(dateFrom, dateTo,
+//              form.getAggregationCriteria(), form.getCenters(), form.getSites());
   
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
@@ -462,7 +458,7 @@ public class ReportsController {
         interval = interval * 365;
   
       m.put("interval", interval);
-      m.put("numTestResults", numTestResults);
+//      m.put("numTestResults", numTestResults);
       m.put("dateTestedFromUTC", dateFrom.getTime());
       m.put("dateTestedToUTC", dateTo.getTime());
     } catch (ParseException e) {

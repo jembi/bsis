@@ -13,7 +13,6 @@ import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
-import model.testresults.TestResult;
 import model.user.User;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -122,10 +121,6 @@ public class CollectedSampleBackingForm {
     return collectedSample.getDonor();
   }
 
-  public List<TestResult> getTestResults() {
-    return collectedSample.getTestResults();
-  }
-
   public String getCollectionCenter() {
     Location center = collectedSample.getCollectionCenter();
     if (center == null || center.getId() == null)
@@ -194,10 +189,6 @@ public class CollectedSampleBackingForm {
 
   public void setDonor(Donor donor) {
     collectedSample.setDonor(donor);
-  }
-
-  public void setTestResults(List<TestResult> testResults) {
-    collectedSample.setTestResults(testResults);
   }
 
   public void setCollectionCenter(String center) {

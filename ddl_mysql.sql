@@ -19,41 +19,6 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table BloodTest (
-        id bigint not null auto_increment,
-        correctResult varchar(10),
-        displayName varchar(30),
-        isDeleted boolean,
-        isRequired boolean,
-        name varchar(30),
-        notes longtext,
-        validResults varchar(255),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTestMapper (
-        id TINYINT not null auto_increment,
-        name varchar(20),
-        pattern varchar(20),
-        result varchar(30),
-        bloodTest_id bigint not null,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTest_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        correctResult varchar(10),
-        displayName varchar(30),
-        isDeleted boolean,
-        isRequired boolean,
-        name varchar(30),
-        notes longtext,
-        validResults varchar(255),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
     create table BloodTypingRule (
         id MEDIUMINT not null auto_increment,
         bloodTypingTestIds varchar(200),
@@ -771,35 +736,6 @@
         primary key (REV)
     ) ENGINE=InnoDB;
 
-    create table RawBloodTestGroup (
-        id TINYINT not null auto_increment,
-        isDeleted boolean,
-        testGroupName varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table RawBloodTestGroup_AUD (
-        id TINYINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        testGroupName varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table RawBloodTestGroup_BloodTypingTest (
-        RawBloodTestGroup_id TINYINT not null,
-        bloodTestsInGroup_id SMALLINT not null
-    ) ENGINE=InnoDB;
-
-    create table RawBloodTestGroup_BloodTypingTest_AUD (
-        REV integer not null,
-        RawBloodTestGroup_id TINYINT not null,
-        bloodTestsInGroup_id SMALLINT not null,
-        REVTYPE tinyint,
-        primary key (REV, RawBloodTestGroup_id, bloodTestsInGroup_id)
-    ) ENGINE=InnoDB;
-
     create table Request (
         id bigint not null auto_increment,
         department varchar(30),
@@ -914,38 +850,18 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table TestResult (
-        id bigint not null auto_increment,
-        extraInformation varchar(150),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        result varchar(30),
-        testedOn datetime,
-        bloodTest_id bigint,
-        collectedSample_id bigint not null,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
+    create table TTITest (
+        id SMALLINT not null auto_increment,
+        testName varchar(30),
+        testNameShort varchar(15),
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table TestResult_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        extraInformation varchar(150),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        result varchar(30),
+    create table TTITestResult (
+        id bigint not null auto_increment,
         testedOn datetime,
-        bloodTest_id bigint,
-        collectedSample_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
+        collectedSample_id bigint not null,
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table Tips (
@@ -993,18 +909,6 @@
     alter table BloodBagType_AUD 
         add index FKE16C6DF9DF74E053 (REV), 
         add constraint FKE16C6DF9DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table BloodTestMapper 
-        add index FK30D262ED4FE62E13 (bloodTest_id), 
-        add constraint FK30D262ED4FE62E13 
-        foreign key (bloodTest_id) 
-        references BloodTest (id);
-
-    alter table BloodTest_AUD 
-        add index FKE1FA995DDF74E053 (REV), 
-        add constraint FKE1FA995DDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
@@ -1452,30 +1356,6 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table RawBloodTestGroup_AUD 
-        add index FK1AF926ACDF74E053 (REV), 
-        add constraint FK1AF926ACDF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table RawBloodTestGroup_BloodTypingTest 
-        add index FK778B723FF67F16D8 (RawBloodTestGroup_id), 
-        add constraint FK778B723FF67F16D8 
-        foreign key (RawBloodTestGroup_id) 
-        references RawBloodTestGroup (id);
-
-    alter table RawBloodTestGroup_BloodTypingTest 
-        add index FK778B723FBC4C2D88 (bloodTestsInGroup_id), 
-        add constraint FK778B723FBC4C2D88 
-        foreign key (bloodTestsInGroup_id) 
-        references BloodTypingTest (id);
-
-    alter table RawBloodTestGroup_BloodTypingTest_AUD 
-        add index FK4266890DF74E053 (REV), 
-        add constraint FK4266890DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
     create index request_requiredDate_index on Request (requiredDate);
 
     create index request_requestDate_index on Request (requestDate);
@@ -1540,35 +1420,11 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table TestResult 
-        add index FKDB459F6FA49787C4 (createdBy_id), 
-        add constraint FKDB459F6FA49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table TestResult 
-        add index FKDB459F6F32E145A (collectedSample_id), 
-        add constraint FKDB459F6F32E145A 
+    alter table TTITestResult 
+        add index FK19C4FDF832E145A (collectedSample_id), 
+        add constraint FK19C4FDF832E145A 
         foreign key (collectedSample_id) 
         references CollectedSample (id);
-
-    alter table TestResult 
-        add index FKDB459F6FD0AFB367 (lastUpdatedBy_id), 
-        add constraint FKDB459F6FD0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table TestResult 
-        add index FKDB459F6F4FE62E13 (bloodTest_id), 
-        add constraint FKDB459F6F4FE62E13 
-        foreign key (bloodTest_id) 
-        references BloodTest (id);
-
-    alter table TestResult_AUD 
-        add index FK77A67DC0DF74E053 (REV), 
-        add constraint FK77A67DC0DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
 
     alter table User_AUD 
         add index FKF3FCA03CDF74E053 (REV), 

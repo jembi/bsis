@@ -2,15 +2,6 @@ insert into MicrotiterPlate (id, plateKey, plateName, numRows, numColumns, notes
 (1, 'bloodtyping', 'Blood Typing Plate', 8, 12, '', '0'),
 (2, 'tti', 'Elisa Plate', 8, 12, '', '0');
 
-insert into BloodTest
-(id, name, displayName, validResults, correctResult, isRequired, isDeleted, notes) values
-(1, 'bloodabo', 'Blood ABO', 'A,B,AB,O', '', '1', '0', ''),
-(2, 'bloodrh', 'Blood Rh', '+,-', '', '1', '0', ''),
-(3, 'hiv', 'HIV', '+,-', '-', '1', '0', ''),
-(4, 'hbv', 'HBV', '+,-', '-', '1', '0', ''),
-(5, 'hcv', 'HCV', '+,-', '-', '1', '0', ''),
-(6, 'syphilis', 'Syphilis', '+,-', '-', '1', '0', '');
-
 insert into BloodTypingTest
 (id, testNameShort, testName, dataType,
 validResults, negativeResults, positiveResults,

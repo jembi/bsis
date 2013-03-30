@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
-import model.bloodtest.BloodTest;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
 import model.producttype.ProductType;
@@ -48,7 +47,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
-import repository.BloodTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
 import repository.FormFieldRepository;
@@ -97,9 +95,6 @@ public class AdminController {
 
   @Autowired
   UserRepository userRepository;
-
-  @Autowired
-  BloodTestRepository bloodTestRepository;
 
   @Autowired
   GenericConfigRepository genericConfigRepository;
@@ -640,7 +635,7 @@ public class AdminController {
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     Map<String, String> worksheetProperties = genericConfigRepository.getConfigProperties(propertyOwners);
     m.put("worksheetConfig", worksheetProperties);    
-    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
+//    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
 
     mv.addObject("model", model);
     return mv;
@@ -663,11 +658,11 @@ public class AdminController {
       if (!params.containsKey("testedOn"))
         params.put("testedOn", "false");
 
-      for (BloodTest bt : bloodTestRepository.getAllBloodTests()) {
-        if (!params.containsKey(bt.getName()))
-          params.put(bt.getName(), "false");
-      }
-      
+//      for (BloodTest bt : bloodTestRepository.getAllBloodTests()) {
+//        if (!params.containsKey(bt.getName()))
+//          params.put(bt.getName(), "false");
+//      }
+
       genericConfigRepository.updateWorksheetProperties(params);
       result.put("success", true);
     }

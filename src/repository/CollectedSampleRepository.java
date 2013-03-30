@@ -22,9 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
-import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -40,9 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtyping.BloodTypingRepository;
 import repository.bloodtyping.BloodTypingStatus;
-
 import viewmodel.BloodTypingRuleResult;
-import viewmodel.TestResultViewModel;
 
 @Repository
 @Transactional
@@ -50,12 +46,6 @@ public class CollectedSampleRepository {
 
   @PersistenceContext
   private EntityManager em;
-
-  @Autowired
-  private TestResultRepository testResultRepository;
-
-  @Autowired
-  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private BloodTypingRepository bloodTypingRepository;
@@ -364,36 +354,36 @@ public class CollectedSampleRepository {
     return resultMap;
   }
 
-  public List<TestResultViewModel> findUntestedCollectedSamples(String dateCollectedFrom,
-      String dateCollectedTo) {
-
-    TypedQuery<CollectedSample> query = em
-        .createQuery(
-            "SELECT c FROM CollectedSample c WHERE c.dateCollected >= :fromDate "
-                + "AND c.dateCollected<= :toDate AND c.isDeleted= :isDeleted AND "
-                + "c.collectionNumber NOT IN (SELECT t.collectionNumber FROM TestResult t)",
-            CollectedSample.class);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    try {
-      query.setParameter("fromDate", formatter.parse(dateCollectedFrom));
-      query.setParameter("toDate", formatter.parse(dateCollectedTo));
-    } catch (ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
-    List<TestResultViewModel> testResults = new ArrayList<TestResultViewModel>();
-    for (CollectedSample collectedSample : query.getResultList()) {
-      TestResult testResult = new TestResult();
-      testResult.setCollectedSample(collectedSample);
-//      testResults.add(testResult);
-    }
-
-    return testResults;
-  }
+//  public List<TestResultViewModel> findUntestedCollectedSamples(String dateCollectedFrom,
+//      String dateCollectedTo) {
+//
+//    TypedQuery<CollectedSample> query = em
+//        .createQuery(
+//            "SELECT c FROM CollectedSample c WHERE c.dateCollected >= :fromDate "
+//                + "AND c.dateCollected<= :toDate AND c.isDeleted= :isDeleted AND "
+//                + "c.collectionNumber NOT IN (SELECT t.collectionNumber FROM TestResult t)",
+//            CollectedSample.class);
+//
+//    query.setParameter("isDeleted", Boolean.FALSE);
+//    
+//    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+//    try {
+//      query.setParameter("fromDate", formatter.parse(dateCollectedFrom));
+//      query.setParameter("toDate", formatter.parse(dateCollectedTo));
+//    } catch (ParseException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
+//
+////    List<TestResultViewModel> testResults = new ArrayList<TestResultViewModel>();
+////    for (CollectedSample collectedSample : query.getResultList()) {
+////      TestResult testResult = new TestResult();
+////      testResult.setCollectedSample(collectedSample);
+//////      testResults.add(testResult);
+////    }
+//
+//    return testResults;
+//  }
 
   public CollectedSample addCollectedSample(CollectedSample collectedSample) {
     updateCollectedSampleInternalFields(collectedSample);
@@ -537,24 +527,25 @@ public class CollectedSampleRepository {
   }
 
   public void updateCollectedSampleTestedStatus(CollectedSample collectedSample) {
-    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
-    List<BloodTest> allBloodTests = bloodTestRepository.getAllBloodTests();
-    boolean tested = true;
-    for (BloodTest bt: allBloodTests) {
-    	TestResult t = testResults.get(bt.getName());
-    	if (t == null) {
-    		tested = false;
-    		break;
-    	}
-    	if (!bt.getAllowedResults().contains(t.getResult())) {
-    		tested = false;
-    		break;
-    	}
-    }
-    if (tested)
-      collectedSample.setTestedStatus(TestedStatus.TESTED);
-    else
-      collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
+//    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
+//    List<BloodTest> allBloodTests = bloodTestRepository.getAllBloodTests();
+//    boolean tested = true;
+//    for (BloodTest bt: allBloodTests) {
+//    	TestResult t = testResults.get(bt.getName());
+//    	if (t == null) {
+//    		tested = false;
+//    		break;
+//    	}
+//    	if (!bt.getAllowedResults().contains(t.getResult())) {
+//    		tested = false;
+//    		break;
+//    	}
+//    }
+//    if (tested)
+//      collectedSample.setTestedStatus(TestedStatus.TESTED);
+//    else
+//      collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
+    collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
   }
 
   public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {

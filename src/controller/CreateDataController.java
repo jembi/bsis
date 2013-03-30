@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
-import model.bloodtest.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.donationtype.DonationType;
@@ -25,8 +24,6 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.request.RequestBackingForm;
 import model.requesttype.RequestType;
-import model.testresults.TestResult;
-import model.testresults.TestResultBackingForm;
 import model.util.BloodGroup;
 import model.util.Gender;
 
@@ -37,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
-import repository.BloodTestRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
@@ -47,7 +43,6 @@ import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
-import repository.TestResultRepository;
 import repository.UsageRepository;
 
 @Controller
@@ -67,18 +62,12 @@ public class CreateDataController {
 
   @Autowired
   private RequestTypeRepository requestTypeRepository;
-
-  @Autowired
-  private BloodTestRepository bloodTestRepository;
   
 	@Autowired
 	private LocationRepository locationRepository;
 
 	@Autowired
 	private CollectedSampleRepository collectionRepository;
-
-	@Autowired
-	private TestResultRepository testResultRepository;
 
 	@Autowired
 	private RequestRepository requestRepository;
@@ -434,7 +423,7 @@ public class CreateDataController {
 		List<Location> centers = locationRepository.getAllCenters();
 		List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
-    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
+//    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
 
     List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
 
@@ -460,36 +449,36 @@ public class CreateDataController {
 
 		collectionRepository.addAllCollectedSamples(collectedSamples);
 
-		List<TestResult> testResults = new ArrayList<TestResult>();
-		for (CollectedSample collectedSample : collectedSamples) {
-		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber());
-		  for (BloodTest b : bloodTests) {
-
-    	  TestResultBackingForm t = new TestResultBackingForm();
-    	  t.setCollectedSample(collectedSample);
-    	  t.setTestedOn(CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn()));
-    	  t.setIsDeleted(false);
-    	  t.getTestResult().setBloodTest(b);
-
-    	  String result = null;
-    	  List<String> allowedResults = new ArrayList<String>(b.getAllowedResults());
-
-//    	  if (!b.getCorrectResult().isEmpty()) {
-//    	    if (Math.abs(random.nextInt(100)) > 10) {
-//    	      result = b.getCorrectResult();
-//    	    }
-//    	    else {
-//    	      allowedResults.remove(b.getCorrectResult());
-//    	    }
-//    	  }
-    	  if (result == null)
-    	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
-
-    	  t.setResult(result);
-    	  testResults.add(t.getTestResult());
-		  }
-		}
-    testResultRepository.addAllTestResults(testResults);
+//		List<TestResult> testResults = new ArrayList<TestResult>();
+//		for (CollectedSample collectedSample : collectedSamples) {
+//		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber());
+//		  for (BloodTest b : bloodTests) {
+//
+//    	  TestResultBackingForm t = new TestResultBackingForm();
+//    	  t.setCollectedSample(collectedSample);
+//    	  t.setTestedOn(CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn()));
+//    	  t.setIsDeleted(false);
+//    	  t.getTestResult().setBloodTest(b);
+//
+//    	  String result = null;
+//    	  List<String> allowedResults = new ArrayList<String>(b.getAllowedResults());
+//
+////    	  if (!b.getCorrectResult().isEmpty()) {
+////    	    if (Math.abs(random.nextInt(100)) > 10) {
+////    	      result = b.getCorrectResult();
+////    	    }
+////    	    else {
+////    	      allowedResults.remove(b.getCorrectResult());
+////    	    }
+////    	  }
+//    	  if (result == null)
+//    	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
+//
+//    	  t.setResult(result);
+//    	  testResults.add(t.getTestResult());
+//		  }
+//		}
+//    testResultRepository.addAllTestResults(testResults);
 	}
 
 	public void createProducts(int numProducts) {

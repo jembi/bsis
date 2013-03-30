@@ -17,12 +17,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodtest.BloodTest;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.request.Request;
-import model.testresults.TestResult;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
@@ -32,8 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import utils.BloodTestUtils;
 
 import filter.UserInfoAddToThreadFilter;
 
@@ -48,12 +44,6 @@ public class RequestRepository {
 
   @Autowired
   private ProductRepository productRepository;
-
-  @Autowired
-  private TestResultRepository testResultRepository;
-
-  @Autowired
-  private BloodTestUtils bloodTestUtils;
 
   public void saveRequest(Request request) {
     em.persist(request);
@@ -379,7 +369,7 @@ public class RequestRepository {
 
   private boolean canIssueProduct(Product product, Request request) {
     productRepository.updateProductInternalFields(product);
-    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(product.getCollectedSample().getId());
+//    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(product.getCollectedSample().getId());
     String requestedProductType = request.getProductType().getProductType();
     String productType = product.getProductType().getProductType();
 
@@ -401,24 +391,24 @@ public class RequestRepository {
     String bloodRh = "";
 
     boolean canIssue = true;
-    for (TestResult testResult : testResults.values()) {
-      BloodTest bloodTest = testResult.getBloodTest();
-      String actualResult = testResult.getResult();
-
-      if (bloodTest.getName().equals("Blood Rh")) {
-        System.out.println("here");
-        bloodRh = actualResult;
-      }
-
-      if (bloodTest.getName().equals("Blood ABO")) {
-        bloodAbo = actualResult;
-      }
-
-      if (!bloodTestUtils.isTestResultCorrect(bloodTest, actualResult)) {
-        canIssue = false;
-        break;
-      }
-    }
+//    for (TestResult testResult : testResults.values()) {
+//      BloodTest bloodTest = testResult.getBloodTest();
+//      String actualResult = testResult.getResult();
+//
+//      if (bloodTest.getName().equals("Blood Rh")) {
+//        System.out.println("here");
+//        bloodRh = actualResult;
+//      }
+//
+//      if (bloodTest.getName().equals("Blood ABO")) {
+//        bloodAbo = actualResult;
+//      }
+//
+//      if (!bloodTestUtils.isTestResultCorrect(bloodTest, actualResult)) {
+//        canIssue = false;
+//        break;
+//      }
+//    }
 
     String requestedAbo = request.getPatientBloodAbo().toString();
     String requestedRh = request.getPatientBloodRhd().toString(); 

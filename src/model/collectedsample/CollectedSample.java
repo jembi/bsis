@@ -33,7 +33,6 @@ import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
-import model.testresults.TestResult;
 import model.testresults.TestedStatus;
 import model.user.User;
 import model.worksheet.CollectionsWorksheet;
@@ -79,14 +78,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Column(length=150)
   private String extraBloodTypeInformation;
-
-  /**
-   * Final test outcomes mapped to this collection.
-   */
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="collectedSample")
-  private List<TestResult> testResults;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -182,10 +173,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return donor;
   }
 
-  public List<TestResult> getTestResults() {
-    return testResults;
-  }
-
   public Location getCollectionCenter() {
     return collectionCenter;
   }
@@ -220,10 +207,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setDonor(Donor donor) {
     this.donor = donor;
-  }
-
-  public void setTestResults(List<TestResult> testResults) {
-    this.testResults = testResults;
   }
 
   public void setCollectionCenter(Location collectionCenter) {

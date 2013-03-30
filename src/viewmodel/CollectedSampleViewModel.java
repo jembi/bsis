@@ -9,7 +9,6 @@ import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.product.Product;
-import model.testresults.TestResult;
 import model.user.User;
 
 public class CollectedSampleViewModel {
@@ -47,10 +46,6 @@ public class CollectedSampleViewModel {
 
   public Donor getDonor() {
     return collectedSample.getDonor();
-  }
-
-  public List<TestResult> getTestResults() {
-    return collectedSample.getTestResults();
   }
 
   public Location getCollectionCenter() {
