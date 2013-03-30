@@ -139,7 +139,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
-  public ModelAndView addDonorFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView addDonorFormGenerator(HttpServletRequest request) {
 
     DonorBackingForm form = new DonorBackingForm();
 
@@ -210,6 +210,35 @@ public class DonorController {
   private DonorViewModel getDonorsViewModel(Donor donor) {
     DonorViewModel donorViewModel = new DonorViewModel(donor);
     return donorViewModel;
+  }
+
+  @RequestMapping(value = "/deferDonorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView deferDonorFormGenerator(HttpServletRequest request,
+      @RequestParam("donorId") String donorId) {
+    ModelAndView mv = new ModelAndView("donors/deferDonorForm");
+    mv.addObject("donorId", donorId);
+    mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
+    return mv;
+  }
+
+  @RequestMapping(value="/deferDonor", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> deferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorId") String donorId,
+         @RequestParam("deferUntil") String deferUntil,
+         @RequestParam("deferralReasonId") String deferralReasonId,
+         @RequestParam("deferralReasonText") String deferralReasonText) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.deferDonor(donorId, deferUntil, deferralReasonId, deferralReasonText);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
   }
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)

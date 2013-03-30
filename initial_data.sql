@@ -621,3 +621,9 @@ negateResult, enabled) values
  "", "",
  "0", "1"
 );
+
+insert into DeferralReason (reason, isDeleted) values
+("Other", 0),
+("Symptoms of cold", 0),
+("Travel to malarial region", 0),
+("On medication", 0);

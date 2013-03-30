@@ -1,7 +1,9 @@
 package repository;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,10 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import model.CustomDateFormatter;
 import model.donor.Donor;
+import model.donor.DonorDeferral;
+import model.donordeferral.DeferralReason;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
@@ -34,7 +39,7 @@ public class DonorRepository {
 
   @PersistenceContext
   private EntityManager em;
-
+  
   public void saveDonor(Donor donor) {
     em.persist(donor);
     em.flush();
@@ -222,5 +227,34 @@ public class DonorRepository {
     TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.setParameter("donorNumber", donorNumber).getSingleResult();
+  }
+
+  public List<DeferralReason> getDeferralReasons() {
+    String queryString = "SELECT d from DeferralReason d WHERE d.isDeleted=:isDeleted";
+    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
+  }
+
+  public void deferDonor(String donorId, String deferUntil,
+      String deferralReasonId, String deferralReasonText) throws ParseException {
+    DonorDeferral donorDeferral = new DonorDeferral();
+    Donor donor = findDonorById(donorId);
+    donorDeferral.setDeferredOn(new Date());
+    donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
+    donorDeferral.setDeferredDonor(donor);
+    DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
+    donorDeferral.setDeferralReason(deferralReason);
+    donorDeferral.setDeferralReasonText(deferralReasonText);
+    em.persist(donorDeferral);
+  }
+
+  private DeferralReason findDeferralReasonById(String deferralReasonId) {
+    String queryString = "SELECT d FROM DeferralReason d WHERE " +
+    		"d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
+    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
+    query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
+    query.setParameter("isDeleted", false);
+    return query.getSingleResult();
   }
 }

@@ -335,8 +335,8 @@
 
     create table DeferralReason (
         id SMALLINT not null auto_increment,
-        details varchar(255),
-        reason varchar(50),
+        isDeleted boolean,
+        reason varchar(100),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -344,8 +344,8 @@
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
-        details varchar(255),
-        reason varchar(50),
+        isDeleted boolean,
+        reason varchar(100),
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -399,6 +399,7 @@
 
     create table DonorDeferral (
         id bigint not null auto_increment,
+        deferralReasonText longtext,
         deferredOn date,
         deferredUntil date,
         deferralReason_id SMALLINT,
@@ -411,6 +412,7 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
+        deferralReasonText longtext,
         deferredOn date,
         deferredUntil date,
         deferralReason_id SMALLINT,

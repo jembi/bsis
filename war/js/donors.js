@@ -13,7 +13,7 @@ function updateDonorGeneric(form, resultDivId, url, successCallback) {
     type: "POST",
     url: url,
     data: donor,
-    success: function(jsonResponse, data, data1, data2) {
+    success: function(jsonResponse) {
                 successCallback();
                 $("#" + resultDivId).replaceWith(jsonResponse);
              },
@@ -36,5 +36,21 @@ function deleteDonor(donorId, successCallback) {
         showErrorMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
     }
+  });
+}
+
+function deferDonor(form, successCallback) {
+  var donorDeferralFormData = $(form).serialize();
+  $.ajax({
+    type: "POST",
+    url:  "deferDonor.html",
+    data: donorDeferralFormData,
+    success: function(jsonResponse) {
+               successCallback();
+               showMessage("Donor deferred");
+             },
+    error:   function(jsonResponse) {
+               showErrorMessage("Something went wrong when trying to defer donor.");
+             }
   });
 }

@@ -17,12 +17,11 @@ public class DeferralReason {
   @Column(nullable=false, updatable=false, insertable=false, columnDefinition="SMALLINT")
   private Integer id;
 
-  @Column(length=50)
+  @Column(length=100)
   private String reason;
 
-  @Column(length=255)
-  private String details;
-
+  private Boolean isDeleted;
+  
   public Integer getId() {
     return id;
   }
@@ -39,11 +38,11 @@ public class DeferralReason {
     this.reason = reason;
   }
 
-  public String getDetails() {
-    return details;
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
-  public void setDetails(String details) {
-    this.details = details;
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }
