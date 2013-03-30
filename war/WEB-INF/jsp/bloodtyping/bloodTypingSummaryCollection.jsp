@@ -122,14 +122,6 @@ $(document).ready(function() {
 			   		 										 });
 	}
 
-	$("#${mainContentId}").find(".doneButton")
-												.button({icons: {primary: 'ui-icon-check'}})
-												.click(doneButtonClicked);
-
-	function doneButtonClicked() {
-	  $("#${tabContentId}").trigger("collectionBloodTypingUpdated");
-		$("#${tabContentId}").remove();
-	}
 
 	$("#${mainContentId}").find(".availableTestEdit")
 											  .click(function() {
@@ -154,31 +146,7 @@ $(document).ready(function() {
 		<c:set var="availableTestResults" value="${bloodTypingOutputForCollection.availableTestResults}" />
 		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingTestsIds}" />
 
-		<div class="bloodTypingForCollectionSection formInTabPane" style="width: 40%;">
-			<div>
-				<label>${collectionFields.collectionNumber.displayName}</label>
-				<label>${collection.collectionNumber}</label>
-			</div>
-
-			<div>
-				<label>Blood Typing Status</label>
-				<label>${collection.bloodTypingStatus}</label>
-			</div>
-
-			<div>
-				<label>Blood ABO</label>
-				<label>${collection.bloodAbo}</label>
-			</div>
-
-			<div>
-				<label>Blood Rh</label>
-				<label>${collection.bloodRh}</label>
-			</div>
-
-			<div>
-				<label>Extra information</label>
-				<label>${collection.extraBloodTypeInformation}</label>
-			</div>
+		<div class="bloodTypingForCollectionSection formInTabPane">
 
 			<div class="testsPerformed">
 				<div class="formInTabPane" style="margin-left: 0px;">
@@ -279,11 +247,6 @@ $(document).ready(function() {
 			</div>
 		</div>
 
-		<c:if test="${empty showDoneButton or showDoneButton}">
-			<div>
-				<button class="doneButton" style="margin-left: 20px;">Done</button>
-			</div>
-		</c:if>
 
 	</div>
 

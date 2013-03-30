@@ -22,22 +22,20 @@ $(document).ready(function() {
   }
 
   function fetchBloodTypingResults() {
-	  $.ajax({
-	    url: "showBloodTypingResultsForCollection.html",
-	    type: "GET",
-	    data: {collectionId : "${collectionId}", showDoneButton: false},
-	    success: function(response) {
-	      				 getBloodTypingSection().html(response);
-	    				 },
-	    error:   function() {
-	      			   showErrorMessage("Something went wrong")
-	    			   }
-	  });
+    getBloodTypingSection().load("showBloodTypingResultsForCollection.html?" +
+        $.param({collectionId : "${collectionId}"}));
+    getCollectionSummaryForTestingSection().load("showCollectionSummaryForTesting.html?" +
+        $.param({collectionId : "${collectionId}"}));
   }
 
   function getBloodTypingSection() {
     return $("#${mainContentId}").find(".bloodTypingSection");
   }
+
+  function getCollectionSummaryForTestingSection() {
+    return $("#${mainContentId}").find(".collectionSummarySection");
+  }
+
 });
 </script>
 
@@ -50,6 +48,8 @@ $(document).ready(function() {
 		</c:if>
 
 		<c:if test="${collectionFound}">
+			<div class="collectionSummarySection">
+			</div>
 
 			<br />
 			<span style="margin-left: 31px; font-weight: bold;">Blood typing results for collection</span>

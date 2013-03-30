@@ -30,29 +30,33 @@ $(document).ready(function() {
 																				        if (elements[0].getAttribute("class") === "dataTables_empty") {
 																				          return;
 																				        }
+																				        $("#${tabContentId}").find(".doneButton")
+																				        										 .show();
 																				        var collectionId = elements[0].innerHTML;
-																				        showBloodTypingResultsForCollection(collectionId);
+																				        $("#${mainContentId}").html("");
+																				        var collectionSummaryUrl = "showCollectionSummaryForTesting.html?" + $.param({collectionId : collectionId});
+																				        $("#${childContentId}").find(".collectionSummarySection")
+																				        											 .load(collectionSummaryUrl);
+																				        var bloodTypingUrl = "showBloodTypingResultsForCollection.html?" + $.param({collectionId : collectionId});
+																				        $("#${childContentId}").find(".bloodTypingSection")
+																				        											 .load(bloodTypingUrl);
 																							},
 							 							"fnRowDeselected" : function(node) {
 																								}
 													}
 											   });
 
-	function showBloodTypingResultsForCollection(collectionId) {
-		$.ajax({
-		  url: "showBloodTypingResultsForCollection.html",
-		  type: "GET",
-		  data: {collectionId : collectionId},
-		  success: function(response) {
-		    				 $("#${childContentId}").html(response);
-		    				 $("#${mainContentId}").html("");
-		  				 },
-		  error:   function (response) {
-		    				 showErrorMessage("Something went wrong.");
-		  				 }
-		});
+	$("#${tabContentId}").find(".doneButton")
+												.button({icons: {primary: 'ui-icon-check'}})
+												.click(doneButtonClicked);
+
+	function doneButtonClicked() {
+	  $("#${tabContentId}").trigger("collectionBloodTypingUpdated");
+		$("#${tabContentId}").remove();
 	}
 
+	$("#${tabContentId}").find(".doneButton")
+											 .hide();
 });
 </script>
 
@@ -111,5 +115,14 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-	<div id="${childContentId}"></div>
+	<div id="${childContentId}">
+		<div class="collectionSummarySection">
+		</div>
+		<div class="bloodTypingSection">
+		</div>
+	</div>
+
+	<div>
+		<button class="doneButton" style="margin-left: 20px;">Done</button>
+	</div>
 </div>

@@ -267,6 +267,8 @@ public class BloodTypingController {
     }
     mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+    // depend on the getBloodTypingTestStatus() method to return collections, blood typing output as
+    // a linked hashmap so that iteration is done in the same order as the collections in the well
     mv.addObject("collections", results.get("collections"));
     mv.addObject("bloodTypingOutput", results.get("bloodTestingResults"));
     mv.addObject("success", true);
@@ -278,8 +280,7 @@ public class BloodTypingController {
   public ModelAndView showBloodTypingResultsForCollection(
       HttpServletRequest request,
       HttpServletResponse response,
-      @RequestParam(value="collectionId") String collectionId,
-      @RequestParam(value="showDoneButton", required=false) Boolean showDoneButton) {
+      @RequestParam(value="collectionId") String collectionId) {
     ModelAndView mv = new ModelAndView();
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
@@ -305,7 +306,27 @@ public class BloodTypingController {
     mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
 
     mv.setViewName("bloodtyping/bloodTypingSummaryCollection");
-    mv.addObject("showDoneButton", showDoneButton);
+
+    mv.addObject("refreshUrl", getUrl(request));
+
+    return mv;
+  }
+
+  @RequestMapping(value="/showCollectionSummaryForTesting", method=RequestMethod.GET)
+  public ModelAndView showCollectionSummaryForTesting(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="collectionId") String collectionId,
+      @RequestParam(value="showDoneButton", required=false) Boolean showDoneButton) {
+    ModelAndView mv = new ModelAndView();
+    collectionId = collectionId.trim();
+    Long collectedSampleId = Long.parseLong(collectionId);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
+    mv.addObject("collectionId", collectedSample.getId());
+    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+
+    mv.setViewName("bloodtyping/collectionSummaryForBloodTesting");
 
     mv.addObject("refreshUrl", getUrl(request));
 

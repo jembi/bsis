@@ -757,6 +757,16 @@ tr > td
 	margin: 30px;
 	padding: 10px;
 	border: solid 2px rgb(53, 99, 105);
+	width: 40%;
+}
+
+.collectionSummaryForTestingSection {
+	background-color: rgb(212, 228, 227);
+	border-radius: 10px;
+	margin: 30px;
+	padding: 10px;
+	border: solid 2px rgb(53, 99, 105);
+	width: 40%;
 }
 
 .simpleTable {

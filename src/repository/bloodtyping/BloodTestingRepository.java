@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -199,8 +200,9 @@ public class BloodTestingRepository {
   }
 
   public Map<String, Object> getBloodTypingTestStatus(List<String> collectionIds) {
-    Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
-    Map<Long, BloodTestingRuleResult> bloodTypingResultsForCollections = new HashMap<Long, BloodTestingRuleResult>(); 
+    // linked hashmap is required to ensure that results are returned in the same order as inserted
+    Map<Long, CollectedSample> collectedSamplesMap = new LinkedHashMap<Long, CollectedSample>();
+    Map<Long, BloodTestingRuleResult> bloodTypingResultsForCollections = new LinkedHashMap<Long, BloodTestingRuleResult>(); 
 
     for (String collectionIdStr : collectionIds) {
       Long collectionId = Long.parseLong(collectionIdStr);
