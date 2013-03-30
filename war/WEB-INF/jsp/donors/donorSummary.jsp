@@ -67,7 +67,7 @@
 
         $("#${tabContentId}").find(".donorHistoryButton").button({
           icons : {
-            primary : 'ui-icon-disk'
+            primary : 'ui-icon-document'
           }
         }).click(function() {
           //hideMainContent();
@@ -154,6 +154,19 @@
 				function deferDonorDone() {
 				  refetchContent("${refreshUrl}", $("#${tabContentId}"));
 				}
+
+				$("#${mainContentId}").find(".donorDeferralsButton")
+															.button({icons : {primary : 'ui-icon-document'}})
+															.click(showDonorDeferrals);
+
+				function showDonorDeferrals() {
+          $("#${tabContentId}").bind("donorDeferralsDone", editDonorDone);
+	        fetchContent("viewDonorDeferrals.html",
+            					 {donorId: "${donor.id}"},
+            					 $("#${childContentId}")
+	        						);
+				}
+
       });
 </script>
 
@@ -166,6 +179,9 @@
 			</button>
 			<button class="editButton">
 				Edit
+			</button>
+			<button class="donorDeferralsButton">
+				Show all deferrals
 			</button>
 			<button class="donorHistoryButton">
 				View Donation History

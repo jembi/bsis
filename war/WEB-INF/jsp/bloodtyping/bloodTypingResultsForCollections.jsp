@@ -65,8 +65,8 @@ $(document).ready(function() {
 						<th style="display: none;"/>
 						<th>${collectionFields.collectionNumber.displayName}</th>
 						<th>Blood Typing Status</th>
-						<th>Blood ABO determined</th>
-						<th>Blood Rh determined</th>
+						<th>Blood ABO</th>
+						<th>Blood Rh</th>
 						<th>Extra information</th>
 						<th>Pending tests</th>
 					</tr>

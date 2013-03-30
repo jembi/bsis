@@ -160,4 +160,9 @@ public class User {
     this.isAdmin = user.getIsAdmin();
     this.isActive = user.getIsActive();
   }
+
+  @Override
+  public String toString() {
+    return this.username;
+  }
 }

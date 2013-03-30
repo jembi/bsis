@@ -31,6 +31,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import filter.UserInfoAddToThreadFilter;
+
 @Repository
 @Transactional
 public class DonorRepository {
@@ -243,6 +245,7 @@ public class DonorRepository {
     donorDeferral.setDeferredOn(new Date());
     donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
     donorDeferral.setDeferredDonor(donor);
+    donorDeferral.setDeferredBy(UserInfoAddToThreadFilter.threadLocal.get());
     DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setDeferralReasonText(deferralReasonText);
@@ -256,5 +259,13 @@ public class DonorRepository {
     query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
     query.setParameter("isDeleted", false);
     return query.getSingleResult();
+  }
+
+  public List<DonorDeferral> getDonorDeferrals(Long donorId) {
+    String queryString = "SELECT d from DonorDeferral d WHERE " +
+    		                 " d.deferredDonor.id=:donorId";
+    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
+    query.setParameter("donorId", donorId);
+    return query.getResultList();
   }
 }

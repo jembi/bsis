@@ -10,25 +10,22 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
-<c:set var="table_id">collectionsTable-${unique_page_id}</c:set>
+<c:set var="table_id">donorDeferralsTable-${unique_page_id}</c:set>
 <c:set var="childContentId">childContentId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
     function() {
 
-      var collectionsTable = $("#${table_id}").dataTable({
+      var donorDeferralsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : 'C<"H"lfrT>t<"F"ip>',
+        "sDom" : '<"H"lfrT>t<"F"ip>',
         "oTableTools" : {
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
           									},
           "fnRowDeselected" : function(node) {
           									},
-        },
-        "oColVis" : {
-         	"aiExclude": [0,1],
         },
         "bPaginate" : false
       });
@@ -38,7 +35,7 @@ $(document).ready(
           primary : 'ui-icon-check'
         }
       }).click(function() {
-        $("#${tabContentId}").parent().trigger("donorHistoryDone");
+        $("#${tabContentId}").parent().trigger("donorDeferralsDone");
       });
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
@@ -58,7 +55,7 @@ $(document).ready(
 	<br />
 	<c:choose>
 
-		<c:when test="${fn:length(allCollectedSamples) eq 0}">
+		<c:when test="${fn:length(allDonorDeferrals) eq 0}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no results found matching your search request </span>
@@ -66,39 +63,45 @@ $(document).ready(
 
 		<c:otherwise>
 
-			<table id="${table_id}" class="dataTable collectionsTable">
+			<table id="${table_id}" class="dataTable donorDeferralsTable">
 				<thead>
 					<tr>
 						<th style="display: none"></th>
-						<c:if test="${collectedSampleFields.collectionNumber.hidden != true}">
-							<th>${collectedSampleFields.collectionNumber.displayName}</th>
+						<c:if test="${donorDeferralFields.deferredOn.hidden != true}">
+							<th>${donorDeferralFields.deferredOn.displayName}</th>
 						</c:if>
-						<c:if test="${collectedSampleFields.collectedOn.hidden != true}">
-							<th>${collectedSampleFields.collectedOn.displayName}</th>
+						<c:if test="${donorDeferralFields.deferredUntil.hidden != true}">
+							<th>${donorDeferralFields.deferredUntil.displayName}</th>
 						</c:if>
-						<c:if test="${collectedSampleFields.bloodBagType.hidden != true}">
-							<th>${collectedSampleFields.bloodBagType.displayName}</th>
+						<c:if test="${donorDeferralFields.deferredBy.hidden != true}">
+							<th>${donorDeferralFields.deferredBy.displayName}</th>
 						</c:if>
-						<c:if test="${collectedSampleFields.donationType.hidden != true}">
-							<th>${collectedSampleFields.donationType.displayName}</th>
+						<c:if test="${donorDeferralFields.deferralReason.hidden != true}">
+							<th>${donorDeferralFields.deferralReason.displayName}</th>
+						</c:if>
+						<c:if test="${donorDeferralFields.deferralReasonText.hidden != true}">
+							<th>${donorDeferralFields.deferralReasonText.displayName}</th>
 						</c:if>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="collectedSample" items="${allCollectedSamples}">
+					<c:forEach var="donorDeferral" items="${allDonorDeferrals}">
 						<tr>
-							<td style="display: none">${collectedSample.id}</td>
-							<c:if test="${collectedSampleFields.collectionNumber.hidden != true}">
-								<td>${collectedSample.collectionNumber}</td>
+							<td style="display: none">${donorDeferral.id}</td>
+							<c:if test="${donorDeferralFields.deferredOn.hidden != true}">
+								<td>${donorDeferral.deferredOn}</td>
 							</c:if>
-							<c:if test="${collectedSampleFields.collectedOn.hidden != true}">
-								<td>${collectedSample.collectedOn}</td>
+							<c:if test="${donorDeferralFields.deferredUntil.hidden != true}">
+								<td>${donorDeferral.deferredUntil}</td>
 							</c:if>
-							<c:if test="${collectedSampleFields.bloodBagType.hidden != true}">
-								<td>${collectedSample.bloodBagType.bloodBagType}</td>
+							<c:if test="${donorDeferralFields.deferredBy.hidden != true}">
+								<td>${donorDeferral.deferredBy}</td>
 							</c:if>
-							<c:if test="${collectedSampleFields.donationType.hidden != true}">
-								<td>${collectedSample.donationType.donationType}</td>
+							<c:if test="${donorDeferralFields.deferralReason.hidden != true}">
+								<td>${donorDeferral.deferralReason.reason}</td>
+							</c:if>
+							<c:if test="${donorDeferralFields.deferralReasonText.hidden != true}">
+								<td>${donorDeferral.deferralReasonText}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

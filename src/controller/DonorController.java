@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import model.donor.Donor;
 import model.donor.DonorBackingForm;
 import model.donor.DonorBackingFormValidator;
+import model.donor.DonorDeferral;
 import model.donor.FindDonorBackingForm;
 import model.util.BloodGroup;
 
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.DonorRepository;
 import repository.LocationRepository;
+import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
 
 @Controller
@@ -105,29 +107,53 @@ public class DonorController {
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
     ModelAndView mv = new ModelAndView("collectionsForDonor");
-    Map<String, Object> m = model.asMap();
-
-    m.put("requestUrl", getUrl(request));
 
     Donor donor = null;
     if (donorId != null) {
       donor = donorRepository.findDonorById(donorId);
       if (donor != null) {
-        m.put("existingDonor", true);
+        mv.addObject("existingDonor", true);
       }
       else {
-        m.put("existingDonor", false);
+        mv.addObject("existingDonor", false);
       }
     }
 
     DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
-    m.put("donor", donorViewModel);
-    m.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
-    m.put("refreshUrl", getUrl(request));
+    mv.addObject("donor", donorViewModel);
+    mv.addObject("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
+    mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    mv.addObject("model", m);
+    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     return mv;
+  }
+
+  @RequestMapping(value = "/viewDonorDeferrals", method = RequestMethod.GET)
+  public ModelAndView viewDonorDeferrals(HttpServletRequest request, Model model,
+      @RequestParam(value = "donorId", required = false) Long donorId) {
+
+    ModelAndView mv = new ModelAndView("donors/deferralsForDonor");
+    List<DonorDeferralViewModel> donorDeferrals;
+    try {
+      donorDeferrals = getDonorDeferralViewModels(donorRepository.getDonorDeferrals(donorId));
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      donorDeferrals = Arrays.asList(new DonorDeferralViewModel[0]);
+    }
+
+    mv.addObject("allDonorDeferrals", donorDeferrals);
+    mv.addObject("refreshUrl", getUrl(request));
+    // to ensure custom field names are displayed in the form
+    mv.addObject("donorDeferralFields", utilController.getFormFieldsForForm("donorDeferral"));
+    return mv;
+  }
+
+  private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
+    List<DonorDeferralViewModel> donorDeferralViewModels = new ArrayList<DonorDeferralViewModel>();
+    for (DonorDeferral donorDeferral : donorDeferrals) {
+      donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
+    }
+    return donorDeferralViewModels;
   }
 
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)

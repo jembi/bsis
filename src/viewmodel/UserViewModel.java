@@ -32,4 +32,9 @@ public class UserViewModel {
   public Boolean getIsAdmin() {
     return user.getIsAdmin();
   }
+
+  @Override
+  public String toString() {
+    return user.getUsername();
+  }
 }

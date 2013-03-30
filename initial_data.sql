@@ -113,6 +113,32 @@ insert into FormField
  hidden, isHidable,
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable) values
+('DonorDeferral', 'deferredOn', 'Deferred on', '', 15,
+ '0', '0',
+ '1', '0',
+ '0', '0'),
+('DonorDeferral', 'deferredUntil', 'Deferred until', '', 15,
+ '0', '0',
+ '1', '0',
+ '0', '0'),
+('DonorDeferral', 'deferredBy', 'Deferred by', '', 15,
+ '0', '0',
+ '1', '0',
+ '0', '0'),
+('DonorDeferral', 'deferralReason', 'Deferral Reason', '', 15,
+ '0', '0',
+ '1', '0',
+ '0', '0'),
+('DonorDeferral', 'deferralReasonText', 'Other details', '', 15,
+ '0', '0',
+ '0', '1',
+ '0', '0');
+
+insert into FormField
+(form, field, defaultDisplayName, defaultValue, maxLength,
+ hidden, isHidable,
+ isRequired, canBeOptional,
+ autoGenerate, isAutoGeneratable) values
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', 0,
  '0', '0',
  '1', '0',
