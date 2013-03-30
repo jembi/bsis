@@ -20,6 +20,7 @@ import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.donor.DonorDeferral;
 import model.donor.DonorUtils;
+import model.product.Product;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,7 @@ import repository.CollectionBatchRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
+import repository.ProductRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 
@@ -49,6 +51,9 @@ public class UtilController {
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 
+  @Autowired
+  private ProductRepository productRepository;
+  
   @Autowired
   private CollectionBatchRepository collectionBatchRepository;
 
@@ -307,5 +312,9 @@ public class UtilController {
     if (donorRepository.isCurrentlyDeferred(donorDeferrals))
       errorMessage = "Donor is currently deferred from donations";
     return errorMessage;
+  }
+
+  public Product findProduct(String collectionNumber, String productType) {
+    return productRepository.findProduct(collectionNumber, productType);
   }
 }

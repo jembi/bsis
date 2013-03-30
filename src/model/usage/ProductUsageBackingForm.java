@@ -9,7 +9,10 @@ import javax.validation.constraints.NotNull;
 import model.CustomDateFormatter;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
+import model.producttype.ProductType;
 import model.user.User;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class ProductUsageBackingForm {
 
@@ -18,6 +21,8 @@ public class ProductUsageBackingForm {
   @NotNull
   @Valid
   private ProductUsage usage;
+
+  private String collectionNumber;
 
   private String usageDate;
 
@@ -97,10 +102,6 @@ public class ProductUsageBackingForm {
     return usage.getIsDeleted();
   }
 
-  public Boolean getIsAvailable() {
-    return usage.getIsAvailable();
-  }
-
   public int hashCode() {
     return usage.hashCode();
   }
@@ -167,7 +168,36 @@ public class ProductUsageBackingForm {
     usage.setIsDeleted(isDeleted);
   }
 
-  public void setIsAvailable(Boolean isAvailable) {
-    usage.setIsAvailable(isAvailable);
+  public String getCollectionNumber() {
+    return collectionNumber;
   }
+
+  public void setCollectionNumber(String collectionNumber) {
+    this.collectionNumber = collectionNumber;
+  }
+
+  public String getProductType() {
+    ProductType productType = usage.getProductType();
+    if (productType == null)
+      return "";
+    else
+      return productType.getId().toString();
+  }
+
+  public void setProductType(String productTypeId) {
+    if (StringUtils.isBlank(productTypeId)) {
+      usage.setProductType(null);
+    }
+    else {
+      ProductType pt = new ProductType();
+      try {
+        pt.setId(Integer.parseInt(productTypeId));
+        usage.setProductType(pt);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        usage.setProductType(null);
+      }
+    }
+  }
+
 }

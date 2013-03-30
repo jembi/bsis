@@ -110,8 +110,10 @@ public class UsageRepository {
     return em.find(ProductUsage.class, usageId);
   }
 
-  public void addUsage(ProductUsage usage) {
+  public ProductUsage addUsage(ProductUsage usage) {
     em.persist(usage);
     em.flush();
+    em.refresh(usage);
+    return usage;
   }
 }

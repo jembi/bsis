@@ -22,6 +22,7 @@ $(document).ready(
         "bJQueryUI" : true,
         "sDom" : '<"H"lrT>t<"F"ip>T',
         "bServerSide" : true,
+        "sPaginationType" : "full_numbers",
         "sAjaxSource" : "${model.nextPageUrl}",
         "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}
         								 ],

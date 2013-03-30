@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,6 +18,8 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.product.ProductExists;
+import model.producttype.ProductType;
+import model.producttype.ProductTypeExists;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
@@ -30,6 +33,14 @@ public class ProductUsage implements ModificationTracker {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
+
+  @ProductExists
+  @OneToOne
+  private Product product;
+  
+  @ProductTypeExists
+  @ManyToOne
+  private ProductType productType;
 
   private String hospital;
 
@@ -49,16 +60,10 @@ public class ProductUsage implements ModificationTracker {
   @Lob
   private String notes;
 
-  @ProductExists
-  @OneToOne
-  private Product product;
-  
   @Valid
   private RowModificationTracker modificationTracker;
 
   private Boolean isDeleted;
-
-  private Boolean isAvailable;
 
   private String usedBy;
 
@@ -146,10 +151,6 @@ public class ProductUsage implements ModificationTracker {
     return isDeleted;
   }
 
-  public Boolean getIsAvailable() {
-    return isAvailable;
-  }
-
   public void setId(Long id) {
     this.id = id;
   }
@@ -190,15 +191,25 @@ public class ProductUsage implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public void setIsAvailable(Boolean isAvailable) {
-    this.isAvailable = isAvailable;
-  }
-
   public String getUsedBy() {
     return usedBy;
   }
 
   public void setUsedBy(String usedBy) {
     this.usedBy = usedBy;
+  }
+
+  public ProductType getProductType() {
+    return productType;
+  }
+
+  public void setProductType(ProductType productType) {
+    this.productType = productType;
+  }
+
+  public String getCollectionNumber() {
+    if (product == null || product.getCollectedSample() == null || product.getCollectionNumber() == null)
+      return "";
+    return product.getCollectionNumber();
   }
 }

@@ -1,12 +1,21 @@
 package model.usage;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Map;
 
 import model.CustomDateFormatter;
+import model.collectedsample.CollectedSampleBackingForm;
+import model.collectionbatch.CollectionBatch;
+import model.donor.Donor;
+import model.product.Product;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+import viewmodel.ProductUsageViewModel;
 
 import controller.UtilController;
 
@@ -23,7 +32,7 @@ public class ProductUsageBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(ProductUsageBackingForm.class).contains(clazz);
+    return Arrays.asList(ProductUsageBackingForm.class, ProductUsageViewModel.class).contains(clazz);
   }
 
   @Override
@@ -37,6 +46,15 @@ public class ProductUsageBackingFormValidator implements Validator {
     if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
       errors.rejectValue("usage.usageDate", "dateFormat.incorrect",
           CustomDateFormatter.getDateTimeErrorMessage());
+
+    updateRelatedEntities(form);
+
     utilController.commonFieldChecks(form, "usage", errors);
   }
+
+  private void updateRelatedEntities(ProductUsageBackingForm form) {
+    Product product = utilController.findProduct(form.getCollectionNumber(), form.getProductType());
+    form.setProduct(product);
+  }
 }
+

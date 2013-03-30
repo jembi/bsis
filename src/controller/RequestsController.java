@@ -178,8 +178,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/addRequestFormGenerator", method = RequestMethod.GET)
-  public ModelAndView addRequestFormGenerator(HttpServletRequest request,
-      Model model) {
+  public ModelAndView addRequestFormGenerator(HttpServletRequest request) {
 
     RequestBackingForm form = new RequestBackingForm();
 

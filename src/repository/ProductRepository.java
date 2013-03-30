@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -888,5 +889,21 @@ public class ProductRepository {
     }
 
     return resultMap;
+  }
+
+  public Product findProduct(String collectionNumber, String productTypeId) {
+    String queryStr = "SELECT p from Product p WHERE " +
+    		              "p.collectedSample.collectionNumber = :collectionNumber AND " +
+    		              "p.productType.id = :productTypeId";
+    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
+    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("productTypeId", Integer.parseInt(productTypeId));
+    Product product = null;
+    try {
+      product = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return product;
   }
 }

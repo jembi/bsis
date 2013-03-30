@@ -15,7 +15,6 @@
 
 <script>
 $(document).ready(function() {
-  showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
 
   $("#${tabContentId}").find(".printButton").button({
     icons : {
@@ -30,15 +29,15 @@ $(document).ready(function() {
       primary : 'ui-icon-check'
     }
   }).click(function() {
-    refetchContent("${addAnotherDonorUrl}", $("#${tabContentId}"));
+    refetchContent("${addAnotherUsageUrl}", $("#${tabContentId}"));
   });
 
-  $("#${tabContentId}").find(".addAnotherDonorButton").button({
+  $("#${tabContentId}").find(".addAnotherUsageButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
-    refetchContent("${addAnotherDonorUrl}", $("#${tabContentId}"));
+    refetchContent("${addAnotherUsageUrl}", $("#${tabContentId}"));
   });
 
 });
@@ -51,9 +50,9 @@ $(document).ready(function() {
 			<img src="images/check_icon.png"
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
-				Donor added Successfully.
+				Usage added Successfully.
 				<br />
-				You can view the details below. Click "Add another donor" to add another donor.
+				You can view the details below. Click "Add another usage" to add another usage.
 			</span>
 		</div>
 		<div>
@@ -61,15 +60,15 @@ $(document).ready(function() {
 				<button type="button" class="doneButton">
 					Done
 				</button>
-				<button type="button" class="addAnotherDonorButton">
-					Add another donor
+				<button type="button" class="addAnotherUsageButton">
+					Add another usage
 				</button>
 				<button type="button" class="printButton">
 					Print
 				</button>
 			</div>
 	
-			<jsp:include page="donorDetails.jsp" />
+			<jsp:include page="usageDetails.jsp" />
 		</div>
 	</div>
 
