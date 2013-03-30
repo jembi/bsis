@@ -19,6 +19,9 @@
 		<li id="bloodTypingTestResults">
 			<a href="bloodTypingWorksheetGenerator.html">Blood Typing</a>
 		</li>
+		<li id="ttiResults">
+			<a href="ttiFormGenerator.html">TTI Results</a>
+		</li>
 		<li id="addTestResultsContent">
 			<a href="addAllTestResultsFormGenerator.html">Add Test Results</a>
 		</li>

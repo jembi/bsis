@@ -222,4 +222,13 @@ public class BloodTestingRepository {
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     return ruleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
   }
+
+  public List<BloodTest> getTTITests() {
+    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("isActive", true);
+    query.setParameter("category", BloodTestCategory.TTI);
+    List<BloodTest> bloodTests = query.getResultList();
+    return bloodTests;
+  }
 }

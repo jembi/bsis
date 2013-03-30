@@ -3,11 +3,11 @@ package viewmodel;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestDataType;
 
-public class BloodTypingTestViewModel {
+public class BloodTestViewModel {
 
   private BloodTest rawBloodTest;
 
-  public BloodTypingTestViewModel(BloodTest rawBloodTest) {
+  public BloodTestViewModel(BloodTest rawBloodTest) {
     this.rawBloodTest = rawBloodTest;
   }
 

@@ -313,6 +313,16 @@ insert into FormField
  hidden, isHidable,
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable) values
+('TTIForm', 'collectionNumber', 'Collection Number', '', 0,
+ '0', '0',
+ '1', '0',
+ '0', '0');
+
+insert into FormField
+(form, field, defaultDisplayName, defaultValue, maxLength,
+ hidden, isHidable,
+ isRequired, canBeOptional,
+ autoGenerate, isAutoGeneratable) values
 ('TestResult', 'collectionNumber', 'Collection Number', '', 0,
  '0', '1',
  '1', '0',

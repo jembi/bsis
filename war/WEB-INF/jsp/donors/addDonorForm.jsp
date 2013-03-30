@@ -41,11 +41,9 @@
                 addNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
             });
 
-        $("#${mainContentId}").find(".clearFormButton").button({
-          icons : {
-            
-          }
-        }).click(refetchForm);
+        $("#${mainContentId}").find(".clearFormButton")
+        										  .button()
+        										  .click(refetchForm);
 
         $("#${addDonorFormDonorPanelsId}").multiselect({
           multiple : false,
