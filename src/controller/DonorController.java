@@ -133,15 +133,18 @@ public class DonorController {
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
     ModelAndView mv = new ModelAndView("donors/deferralsForDonor");
-    List<DonorDeferralViewModel> donorDeferrals;
+    List<DonorDeferral> donorDeferrals = null;
+    List<DonorDeferralViewModel> donorDeferralViewModels;
     try {
-      donorDeferrals = getDonorDeferralViewModels(donorRepository.getDonorDeferrals(donorId));
+      donorDeferrals = donorRepository.getDonorDeferrals(donorId);
+      donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
     } catch (Exception ex) {
       ex.printStackTrace();
-      donorDeferrals = Arrays.asList(new DonorDeferralViewModel[0]);
+      donorDeferralViewModels = Arrays.asList(new DonorDeferralViewModel[0]);
     }
 
-    mv.addObject("allDonorDeferrals", donorDeferrals);
+    mv.addObject("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
+    mv.addObject("allDonorDeferrals", donorDeferralViewModels);
     mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     mv.addObject("donorDeferralFields", utilController.getFormFieldsForForm("donorDeferral"));

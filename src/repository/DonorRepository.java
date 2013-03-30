@@ -28,6 +28,7 @@ import model.util.BloodGroup;
 import model.util.BloodRh;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -268,4 +269,35 @@ public class DonorRepository {
     query.setParameter("donorId", donorId);
     return query.getResultList();
   }
+
+  public boolean isCurrentlyDeferred(List<DonorDeferral> donorDeferrals) {
+
+    if (donorDeferrals == null)
+      return false;
+
+    boolean currentlyDeferred = false;
+
+    DateTime dt = new DateTime().toDateMidnight().toDateTime();
+    Date today =  new Date(dt.getMillis());
+
+    for (DonorDeferral donorDeferral : donorDeferrals) {
+      Date deferredOn = donorDeferral.getDeferredOn();
+      Date deferredUntil = donorDeferral.getDeferredUntil();
+      if (deferredOn == null || deferredUntil == null) {
+        currentlyDeferred = true;
+        break;
+      }
+      if (today.after(deferredOn) && today.before(deferredUntil)) {
+        currentlyDeferred = true;
+        break;
+      }
+      if (today.equals(deferredOn) || today.equals(deferredUntil)) {
+        currentlyDeferred = true;
+        break;
+      }
+    }
+
+    return currentlyDeferred;
+  }
+
 }

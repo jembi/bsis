@@ -63,6 +63,17 @@ $(document).ready(
 
 		<c:otherwise>
 
+			<c:if test="${isDonorCurrentlyDeferred}">
+		  	<div class="tipsBox ui-state-highlight" style="font-size: 18px; color: #a12020;">
+		  		Donor is currently deferred and cannot donate blood.
+		  	</div>
+		  </c:if>
+		  <c:if test="${!isDonorCurrentlyDeferred}">
+		  	<div class="tipsBox ui-state-highlight" style="font-size: 18px">
+		  		Donor is not deferred currently.
+		  	</div>
+		  </c:if>
+
 			<table id="${table_id}" class="dataTable donorDeferralsTable">
 				<thead>
 					<tr>
