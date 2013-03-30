@@ -18,6 +18,7 @@ import model.admin.FormField;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
+import model.donor.DonorDeferral;
 import model.donor.DonorUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -297,6 +298,14 @@ public class UtilController {
         ex.printStackTrace();
       }
     }
+    return errorMessage;
+  }
+
+  public String isDonorDeferred(Donor donor) {
+    List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donor.getId());
+    String errorMessage = "";
+    if (donorRepository.isCurrentlyDeferred(donorDeferrals))
+      errorMessage = "Donor is currently deferred from donations";
     return errorMessage;
   }
 }
