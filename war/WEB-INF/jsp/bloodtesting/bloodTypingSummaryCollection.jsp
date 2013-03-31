@@ -92,6 +92,7 @@ $(document).ready(function() {
 	    				 },
 	    error:   function() {
 	      				 showErrorMessage("Something went wrong");
+	      				 $("#${tabContentId}").trigger("testResultsUpdated");
 	    	 			 }
 	  });
 	}

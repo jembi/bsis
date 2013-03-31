@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
@@ -225,5 +226,36 @@ public class TTIController {
 
     return mv;
   }
+
+  @RequestMapping(value="/saveAdditionalTTITests", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> saveAdditionalTTITests(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="collectionId") String collectionId,
+      @RequestParam(value="saveTestsData") String saveTestsDataStr) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    try {
+      Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long,String>>();
+      Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+      ObjectMapper mapper = new ObjectMapper();
+      Map<String, String> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
+      for (String testIdStr : saveTestsData.keySet()) {
+        saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
+      }
+      ttiTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap);
+      Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
+      if (errorMap != null && !errorMap.isEmpty())
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return m;
+  }
+
 
 }

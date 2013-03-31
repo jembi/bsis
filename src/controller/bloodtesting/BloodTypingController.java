@@ -351,7 +351,11 @@ public class BloodTypingController {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
       bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
-      bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap);
+      Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
+      if (errorMap != null && !errorMap.isEmpty())
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

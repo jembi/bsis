@@ -88,10 +88,11 @@ $(document).ready(function() {
 	    type: "POST",
 	    data: {saveTestsData : JSON.stringify(saveTestsData), collectionId: "${collectionId}"},
 	    success: function () {
-	      				 reloadTTISummaryForCollection();
+	      					$("#${tabContentId}").trigger("testResultsUpdated");
 	    				 },
 	    error:   function() {
 	      				 showErrorMessage("Something went wrong");
+	      				 $("#${tabContentId}").trigger("testResultsUpdated");
 	    	 			 }
 	  });
 	}
