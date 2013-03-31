@@ -139,8 +139,14 @@ public class TTIController {
       // errors found
       mv.addObject("errorMap", errorMap);
       mv.addObject("success", success);
-      mv.addObject("errorMessage", "There were errors adding tests. Please verify the values of all tests.");      
+      errorMessage = "There were errors adding tests. Please verify the values of all tests.";      
       mv.setViewName("bloodtesting/addTTIFormError");
+      mv.addObject("ttiFormFields", utilController.getFormFieldsForForm("TTIForm"));
+      mv.addObject("firstTimeRender", false);
+
+      List<BloodTestViewModel> ttiTests = getBasicTTITests();
+      mv.addObject("allTTITests", ttiTests);
+
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 

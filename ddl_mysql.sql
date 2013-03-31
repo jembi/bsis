@@ -22,7 +22,7 @@
     create table BloodTest (
         id SMALLINT not null auto_increment,
         bloodTestType varchar(30),
-        category integer,
+        category varchar(30),
         dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
@@ -78,7 +78,7 @@
         REV integer not null,
         REVTYPE tinyint,
         bloodTestType varchar(30),
-        category integer,
+        category varchar(30),
         dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,

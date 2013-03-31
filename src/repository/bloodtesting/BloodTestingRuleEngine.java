@@ -2,7 +2,6 @@ package repository.bloodtesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
-import model.bloodtesting.BloodTestType;
 import model.bloodtesting.rules.BloodTestRule;
 import model.collectedsample.CollectedSample;
 import model.testresults.TTIStatus;
@@ -76,10 +74,6 @@ public class BloodTestingRuleEngine {
       // for rule comparison we are overwriting existing test results with new test results
       availableTestResults.put(extraTestId.toString(), bloodTestResults.get(extraTestId));
     }
-
-    List<BloodTest> basicTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI);
-
-    Map<Integer, TTIStatus> ttiStatusMap = new HashMap<Integer, TTIStatus>();
 
     System.out.println("available test results:" + availableTestResults);
 
@@ -163,7 +157,20 @@ public class BloodTestingRuleEngine {
 
     String bloodAbo = "";
     String bloodRh = "";
-    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NO_MATCH;
+
+    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
+
+    int numBloodTypingTests = 0;
+    for (BloodTest bt : bloodTestingRepository.getBloodTypingTests()) {
+      if (availableTestResults.containsKey((bt.getId().toString())))
+          numBloodTypingTests++;
+    }
+
+    // if even one blood typing test is done then we cannot say
+    // blood typing status is NOT_DONE
+    if (numBloodTypingTests > 0)
+      bloodTypingStatus = BloodTypingStatus.NO_MATCH;
+
     if (bloodAboChanges.size() > 1 || bloodRhChanges.size() > 1) {
       bloodTypingStatus = BloodTypingStatus.AMBIGUOUS;
     }

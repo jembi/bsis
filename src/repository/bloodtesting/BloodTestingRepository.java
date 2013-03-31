@@ -88,7 +88,7 @@ public class BloodTestingRepository {
     Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
     Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>(); 
     Date testedOn = new Date();
-    Map<Long, Map<Long, String>> errorMap = validateValuesInBloodTypingWells(bloodTestResultsMap);
+    Map<Long, Map<Long, String>> errorMap = validateTestResultValues(bloodTestResultsMap);
     if (errorMap.isEmpty()) {
       for (Long collectionId : bloodTestResultsMap.keySet()) {
         Map<Long, String> bloodTestResultsForCollection = bloodTestResultsMap.get(collectionId);
@@ -161,11 +161,11 @@ public class BloodTestingRepository {
     return collection;
   }
 
-  public Map<Long, Map<Long, String>> validateValuesInBloodTypingWells(Map<Long, Map<Long, String>> bloodTypingTestResults) {
+  public Map<Long, Map<Long, String>> validateTestResultValues(Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
-    Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>(); 
-    for (BloodTest bloodTypingTest : getBloodTypingTests()) {
-      allBloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
+    Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>(); 
+    for (BloodTest bloodTypingTest : getAllBloodTests()) {
+      allBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
 
     Map<Long, Map<Long,String>> errorMap = new HashMap<Long, Map<Long,String>>();
@@ -174,7 +174,7 @@ public class BloodTestingRepository {
       Map<Long, String> testsForCollection = bloodTypingTestResults.get(collectionId);
       for (Long testId : testsForCollection.keySet()) {
         String result = testsForCollection.get(testId);
-        BloodTest test = allBloodTypingTestsMap.get(testId.toString());
+        BloodTest test = allBloodTestsMap.get(testId.toString());
         if (test == null) {
           addErrorToMap(errorMap, collectionId, testId, "Invalid test");
           continue;
@@ -190,6 +190,14 @@ public class BloodTestingRepository {
     }
 
     return errorMap;
+  }
+
+  private List<BloodTest> getAllBloodTests() {
+    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("isActive", true);
+    List<BloodTest> bloodTests = query.getResultList();
+    return bloodTests;
   }
 
   private void addErrorToMap(Map<Long, Map<Long, String>> errorMap,

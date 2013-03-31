@@ -150,18 +150,22 @@ $(document).ready(function() {
 
 			<div class="testsPerformed">
 				<div class="formInTabPane" style="margin-left: 0px;">
+
+					<div style="position: relative; height: 30px;">
+						<label style="width: auto; position: absolute;">
+							<b>Available Blood Typing test results</b>
+						</label>
+						<label style="width: auto; position: absolute; right: 10px;">
+							<span class="link availableTestEdit">Edit</span>
+						</label>
+					</div>
+
+					<c:set var="availableTestResultCount" value="${0}" />
 					<c:if test="${fn:length(availableTestResults) gt 0}">
-						<div style="position: relative; height: 30px;">
-							<label style="width: auto; position: absolute;">
-								<b>Available Blood Typing test results</b>
-							</label>
-							<label style="width: auto; position: absolute; right: 10px;">
-								<span class="link availableTestEdit">Edit</span>
-							</label>
-						</div>
 						<!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
 						<c:forEach var="bloodTypingTest" items="${allBloodTypingTests}">
-							<c:if test="${not empty availableTestResults[bloodTypingTest.key]}">
+							<c:set var="testCategory" value="${bloodTypingTest.value.category}" />
+							<c:if test="${not empty availableTestResults[bloodTypingTest.key] and testCategory eq 'BLOODTYPING'}">
 								<div>
 									<label>${bloodTypingTest.value.testName}</label>
 									<label class="availableTestResultLabel">${availableTestResults[bloodTypingTest.key]}</label>
@@ -171,9 +175,19 @@ $(document).ready(function() {
 											   data-available="true"
 											   type="hidden" />
 								</div>
+								<c:set var="availableTestResultCount" value="${availableTestResultCount + 1}" />
 							</c:if>
 						</c:forEach>
 					</c:if>
+
+					<c:if test="${availableTestResultCount eq 0}">
+						<div>
+							<label>
+								<span style="font-style: italic;">None available</span>
+							</label>
+						</div>
+					</c:if>
+
 				</div>
 			</div>
 

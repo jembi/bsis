@@ -41,6 +41,8 @@ public class BloodTest {
   @Column(length=30)
   private BloodTestType bloodTestType;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
   private BloodTestCategory category;
 
   private Boolean isEmptyAllowed;

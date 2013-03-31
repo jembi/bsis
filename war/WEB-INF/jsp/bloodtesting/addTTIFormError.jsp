@@ -14,5 +14,6 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <div id="${tabContentId}">
+${errorMap}
 	<jsp:include page="addTTIForm.jsp" />
 </div>
