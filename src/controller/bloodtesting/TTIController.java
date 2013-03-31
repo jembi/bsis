@@ -24,6 +24,7 @@ import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.BloodTestViewModel;
+import viewmodel.BloodTestingRuleResult;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -132,7 +133,10 @@ public class TTIController {
       mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
       mv.addObject("collections", results.get("collections"));
 
-      mv.addObject("bloodTypingOutput", results.get("bloodTestingResults"));
+      Map<Long, BloodTestingRuleResult> ruleResultsForCollections;
+      ruleResultsForCollections = (Map<Long, BloodTestingRuleResult>) results.get("bloodTestingResults");
+      mv.addObject("collectionId", collectedSample.getId());
+      mv.addObject("ttiOutputForCollection", ruleResultsForCollections.get(collectedSample.getId()));
       mv.addObject("success", success);
       mv.setViewName("bloodtesting/addTTIFormSuccess");
     } else {

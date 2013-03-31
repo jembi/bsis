@@ -20,7 +20,9 @@ public class BloodTestingRuleResult {
 
   private Set<String> extraInformation;
 
-  private List<String> pendingTestsIds;
+  private List<String> pendingBloodTypingTestsIds;
+
+  private List<String> pendingTTITestsIds;
 
   private Map<String, String> availableTestResults;
 
@@ -78,12 +80,12 @@ public class BloodTestingRuleResult {
     this.extraInformation = extraInformation;
   }
 
-  public List<String> getPendingTestsIds() {
-    return pendingTestsIds;
+  public List<String> getPendingBloodTypingTestsIds() {
+    return pendingBloodTypingTestsIds;
   }
 
-  public void setPendingTestsIds(List<String> pendingTestsIds) {
-    this.pendingTestsIds = pendingTestsIds;
+  public void setPendingBloodTypingTestsIds(List<String> pendingBloodTypingTestsIds) {
+    this.pendingBloodTypingTestsIds = pendingBloodTypingTestsIds;
   }
 
   public Map<String, String> getAvailableTestResults() {
@@ -124,5 +126,13 @@ public class BloodTestingRuleResult {
 
   public void setTTIStatus(TTIStatus ttiStatus) {
     this.ttiStatus = ttiStatus;
+  }
+
+  public List<String> getPendingTTITestsIds() {
+    return pendingTTITestsIds;
+  }
+
+  public void setPendingTTITestsIds(List<String> pendingTTITestsIds) {
+    this.pendingTTITestsIds = pendingTTITestsIds;
   }
 }

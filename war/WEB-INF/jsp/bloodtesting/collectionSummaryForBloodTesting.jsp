@@ -39,4 +39,10 @@
 		<label>Extra information</label>
 		<label>${collection.extraBloodTypeInformation}</label>
 	</div>
+
+	<div>
+		<label>TTI Testing Status</label>
+		<label>${collection.TTIStatus}</label>
+	</div>
+
 </div>

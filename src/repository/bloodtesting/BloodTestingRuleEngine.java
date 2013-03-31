@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.CollectionField;
 import model.bloodtesting.rules.BloodTestRule;
 import model.collectedsample.CollectedSample;
 import model.testresults.TTIStatus;
@@ -81,7 +82,8 @@ public class BloodTestingRuleEngine {
     Set<String> bloodRhChanges = new HashSet<String>();
     Set<String> ttiStatusChanges = new HashSet<String>();
     Set<String> extraInformation = new HashSet<String>();
-    List<String> pendingTestsIds = new ArrayList<String>();
+    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
+    List<String> pendingTTITestsIds = new ArrayList<String>();
 
     for (BloodTestRule rule : rules) {
 
@@ -120,7 +122,8 @@ public class BloodTestingRuleEngine {
 //                            rule.getPart() + ", " + rule.getNewInformation() + ", " +
 //                            rule.getExtraInformation() + ", " + rule.getMarkSampleAsUnsafe());
 //
-        switch (rule.getCollectionFieldChanged()) {
+        CollectionField collectionFieldChanged = rule.getCollectionFieldChanged();
+        switch (collectionFieldChanged) {
           case BLOODABO:
             bloodAboChanges.add(rule.getNewInformation());
             break;
@@ -142,7 +145,10 @@ public class BloodTestingRuleEngine {
         if (StringUtils.isNotBlank(rule.getExtraTestsIds())) {
           for (String extraTestId : rule.getExtraTestsIds().split(",")) {
             if (!availableTestResults.containsKey(extraTestId)) {
-              pendingTestsIds.add(extraTestId);
+              if (collectionFieldChanged.equals(CollectionField.TTISTATUS))
+                pendingTTITestsIds.add(extraTestId);
+              else
+                pendingBloodTypingTestsIds.add(extraTestId);
             }
           }
         }
@@ -181,7 +187,7 @@ public class BloodTestingRuleEngine {
         bloodRh = bloodRhChanges.iterator().next();
     }
     if (bloodAboChanges.isEmpty() || bloodRhChanges.isEmpty()) {
-      if (pendingTestsIds.size() > 0)
+      if (pendingBloodTypingTestsIds.size() > 0)
         bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
     }
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
@@ -206,7 +212,8 @@ public class BloodTestingRuleEngine {
     ruleResult.setBloodAbo(bloodAbo);
     ruleResult.setBloodRh(bloodRh);
     ruleResult.setExtraInformation(extraInformation);
-    ruleResult.setPendingTestsIds(pendingTestsIds);
+    ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
+    ruleResult.setPendingTTITestsIds(pendingTTITestsIds);
     ruleResult.setAvailableTestResults(availableTestResults);
     ruleResult.setBloodTypingStatus(bloodTypingStatus);
     ruleResult.setStoredTestResults(storedTestResults);

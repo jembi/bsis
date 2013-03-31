@@ -40,6 +40,10 @@ $(document).ready(function() {
     refetchContent("${addAnotherTTIUrl}", $("#${tabContentId}"));
   });
 
+  $("#${mainContentId}").find(".collectionSummarySection")
+  											.load("showCollectionSummaryForTesting.html?" +
+  											    	$.param({collectionId : "${collectionId}"}));
+
 });
 </script>
 
@@ -68,6 +72,7 @@ $(document).ready(function() {
 				</button>
 			</div>
 	
+			<div class="collectionSummarySection"></div>
 			<jsp:include page="ttiSummaryCollection.jsp" />
 		</div>
 	</div>

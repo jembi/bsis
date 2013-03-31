@@ -36,6 +36,8 @@ $(document).ready(function() {
     return $("#${mainContentId}").find(".collectionSummarySection");
   }
 
+  $("#${mainContentId}").bind("testResultsUpdated", fetchBloodTypingResults);
+
 });
 </script>
 

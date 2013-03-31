@@ -144,36 +144,53 @@ $(document).ready(function() {
 	<div id="${mainContentId}">
 
 		<c:set var="availableTestResults" value="${ttiOutputForCollection.availableTestResults}" />
-		<c:set var="pendingTests" value="${ttiOutputForCollection.pendingTestsIds}" />
+		<c:set var="pendingTests" value="${ttiOutputForCollection.pendingTTITestsIds}" />
 
 		<div class="ttiForCollectionSection formInTabPane">
 
 			<div class="testsPerformed">
 				<div class="formInTabPane" style="margin-left: 0px;">
+
+					<div style="position: relative; height: 30px;">
+						<label style="width: auto; position: absolute;">
+							<b>Available TTI test results</b>
+						</label>
+						<label style="width: auto; position: absolute; right: 10px;">
+							<span class="link availableTestEdit">Edit</span>
+						</label>
+					</div>
+
+					<c:set var="availableTestResultCount" value="${0}" />
 					<c:if test="${fn:length(availableTestResults) gt 0}">
-						<div style="position: relative; height: 30px;">
-							<label style="width: auto; position: absolute;">
-								<b>Available TTI test results</b>
-							</label>
-							<label style="width: auto; position: absolute; right: 10px;">
-								<span class="link availableTestEdit">Edit</span>
-							</label>
-						</div>
 						<!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
 						<c:forEach var="ttiTest" items="${allTTITests}">
-							<c:if test="${not empty availableTestResults[ttiTest.key]}">
+							<c:set var="testCategory" value="${ttiTest.value.category}" />
+							<c:if test="${not empty availableTestResults[ttiTest.key] and testCategory eq 'TTI'}">
 								<div>
 									<label>${ttiTest.value.testName}</label>
-									<label class="availableTestResultLabel">${availableTestResults[ttiTest.key]}</label>
+									<label class="availableTestResultLabel"
+									 		   style="font-size: 1.5em; vertical-align: middle;">
+											${availableTestResults[ttiTest.key]}
+									</label>
 									<input name="ttiTest-${ttiTest.key}" class="ttiTestInput availableTestResultInput"
 												 value="${availableTestResults[ttiTest.key]}"
 											   data-testid="${ttiTest.value.id}"
 											   data-available="true"
 											   type="hidden" />
 								</div>
+								<c:set var="availableTestResultCount" value="${availableTestResultCount + 1}" />
 							</c:if>
 						</c:forEach>
 					</c:if>
+
+					<c:if test="${availableTestResultCount eq 0}">
+						<div>
+							<label>
+								<span style="font-style: italic;">None available</span>
+							</label>
+						</div>
+					</c:if>
+
 				</div>
 			</div>
 

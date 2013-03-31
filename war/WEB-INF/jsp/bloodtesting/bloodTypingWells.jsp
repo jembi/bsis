@@ -157,7 +157,7 @@ $(document).ready(function() {
 							<td style="text-align: center;">${collectionMap[collectionId].bloodAbo}</td>
 							<td style="text-align: center;">${collectionMap[collectionId].bloodRh}</td>
 							<td>
-								<c:forEach var="pendingTestId" items="${bloodTypingRuleResult.pendingTestsIds}">
+								<c:forEach var="pendingTestId" items="${bloodTypingRuleResult.pendingBloodTypingTestsIds}">
 									<c:set var="pendingTest" value="${bloodTypingTests[pendingTestId]}" />
 											<li>
 												${pendingTest.testName}

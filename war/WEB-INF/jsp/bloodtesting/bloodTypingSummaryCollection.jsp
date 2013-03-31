@@ -88,7 +88,7 @@ $(document).ready(function() {
 	    type: "POST",
 	    data: {saveTestsData : JSON.stringify(saveTestsData), collectionId: "${collectionId}"},
 	    success: function () {
-	      				 reloadBloodTypingSummaryForCollection();
+								 $("#${tabContentId}").trigger("testResultsUpdated");
 	    				 },
 	    error:   function() {
 	      				 showErrorMessage("Something went wrong");
@@ -144,7 +144,7 @@ $(document).ready(function() {
 	<div id="${mainContentId}">
 
 		<c:set var="availableTestResults" value="${bloodTypingOutputForCollection.availableTestResults}" />
-		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingTestsIds}" />
+		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingBloodTypingTestsIds}" />
 
 		<div class="bloodTypingForCollectionSection formInTabPane">
 

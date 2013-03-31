@@ -16,6 +16,7 @@
 
 <script>
 $(document).ready(function() {
+  var selectedCollectionId;
 	$("#${mainContentId}").find(".bloodTypingPrimaryTestsDoneSummaryTable")
 												.dataTable({
 											    "bJQueryUI" : true,
@@ -33,6 +34,7 @@ $(document).ready(function() {
 																				        $("#${tabContentId}").find(".doneButton")
 																				        										 .show();
 																				        var collectionId = elements[0].innerHTML;
+																				        selectedCollectionId = collectionId;
 																				        $("#${mainContentId}").html("");
 																				        var collectionSummaryUrl = "showCollectionSummaryForTesting.html?" + $.param({collectionId : collectionId});
 																				        $("#${childContentId}").find(".collectionSummarySection")
@@ -47,8 +49,8 @@ $(document).ready(function() {
 											   });
 
 	$("#${tabContentId}").find(".doneButton")
-												.button({icons: {primary: 'ui-icon-check'}})
-												.click(doneButtonClicked);
+											 .button({icons: {primary: 'ui-icon-check'}})
+											 .click(doneButtonClicked);
 
 	function doneButtonClicked() {
 	  $("#${tabContentId}").trigger("collectionBloodTypingUpdated");
@@ -57,6 +59,15 @@ $(document).ready(function() {
 
 	$("#${tabContentId}").find(".doneButton")
 											 .hide();
+
+	$("#${childContentId}").bind("testResultsUpdated", function() {
+    var collectionSummaryUrl = "showCollectionSummaryForTesting.html?" + $.param({collectionId : selectedCollectionId});
+    $("#${childContentId}").find(".collectionSummarySection")
+    											 .load(collectionSummaryUrl);
+    var bloodTypingUrl = "showBloodTypingResultsForCollection.html?" + $.param({collectionId : selectedCollectionId});
+    $("#${childContentId}").find(".bloodTypingSection")
+    											 .load(bloodTypingUrl);
+	});
 });
 </script>
 
@@ -100,7 +111,7 @@ $(document).ready(function() {
 							</td>
 							<td style="width: auto;">
 								<ul>
-									<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingTestsIds}">
+									<c:forEach var="pendingTestId" items="${bloodTypingOutputForCollection.pendingBloodTypingTestsIds}">
 										<c:set var="pendingTest" value="${allBloodTypingTests[pendingTestId]}" />
 										<li>
 											${pendingTest.testName}
