@@ -281,4 +281,59 @@ public class SequenceNumberRepository {
     em.flush();
     return requestNumbers;
   }
+
+  private String getNextNumber(String targetTable, String columnName, String numberPrefix) {
+    String queryStr = "SELECT s from SequenceNumberStore s "
+        + "where s.targetTable=:targetTable AND "
+        + " s.columnName=:columnName AND "
+        + "s.sequenceNumberContext=:sequenceNumberContext";
+    TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr,
+        SequenceNumberStore.class);
+    query.setParameter("targetTable", targetTable);
+    query.setParameter("columnName", columnName);
+    // use last two digits of year
+    DateTime today = new DateTime();
+    Integer yy = today.yearOfCentury().get();
+    Integer mm = today.monthOfYear().get();
+    String mmStr = String.format("%02d", mm);
+    String yyStr = String.format("%02d", yy);
+    query.setParameter("sequenceNumberContext", mmStr + yyStr);
+
+    SequenceNumberStore seqNumStore = null;
+    Long lastNumber = (long) 0;
+    String prefix;
+    boolean valuePresentInTable = true;
+    try {
+      seqNumStore = query.getSingleResult();
+      lastNumber = seqNumStore.getLastNumber();
+      prefix = seqNumStore.getPrefix();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      valuePresentInTable = false;
+      prefix = numberPrefix;
+      seqNumStore = new SequenceNumberStore();
+      seqNumStore.setTargetTable(targetTable);
+      seqNumStore.setColumnName(columnName);
+      seqNumStore.setPrefix(prefix);
+      seqNumStore.setSequenceNumberContext(mmStr + yyStr);
+    }
+
+    String lastNumberStr = String.format("%06d", lastNumber);
+    // may need a prefix for center where the number is generated
+    String nextNumber = prefix + mmStr + yyStr + lastNumberStr;
+    lastNumber = lastNumber + 1;
+    seqNumStore.setLastNumber(lastNumber);
+    if (valuePresentInTable) {
+      em.merge(seqNumStore);
+    } else {
+      em.persist(seqNumStore);
+    }
+
+    em.flush();
+    return nextNumber;
+  }
+
+  synchronized public String getNextWorksheetBatchNumber() {
+    return getNextNumber("worksheet", "worksheetBatchNumber", "W");
+  }
 }

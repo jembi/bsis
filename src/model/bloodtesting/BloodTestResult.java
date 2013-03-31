@@ -11,8 +11,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
+import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
+import model.user.User;
 
 /**
  * Stores the result of one blood typing test for one collection.
@@ -21,7 +25,7 @@ import model.collectedsample.CollectedSample;
  * @author iamrohitbanga
  */
 @Entity
-public class BloodTestResult {
+public class BloodTestResult implements ModificationTracker{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,10 +44,14 @@ public class BloodTestResult {
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
 
+  @Valid
+  private RowModificationTracker modificationTracker;
+
   @Lob
   private String notes;
 
   public BloodTestResult() {
+    modificationTracker = new RowModificationTracker();
   }
 
   public Long getId() {
@@ -92,5 +100,37 @@ public class BloodTestResult {
 
   public void setTestedOn(Date testedOn) {
     this.testedOn = testedOn;
+  }
+
+  public Date getLastUpdated() {
+    return modificationTracker.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    modificationTracker.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 }

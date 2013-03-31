@@ -9,10 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import model.collectedsample.CollectedSample;
 import model.modificationtracker.ModificationTracker;
@@ -21,22 +24,32 @@ import model.user.User;
 
 @Entity
 @Audited
-public class CollectionsWorksheet implements ModificationTracker {
+public class Worksheet implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  private String worksheetBatchId;
+  @Column(length=20)
+  private String worksheetNumber;
 
+  @ManyToOne
+  private WorksheetType worksheetType;
+
+  @NotAudited
   @ManyToMany(mappedBy="worksheets")
   private List<CollectedSample> collectedSamples;
+
+  private Boolean isDeleted;
 
   @Valid
   private RowModificationTracker modificationTracker;
 
-  public CollectionsWorksheet() {
+  @Lob
+  private String notes;
+
+  public Worksheet() {
     modificationTracker = new RowModificationTracker();
     collectedSamples = new ArrayList<CollectedSample>();
   }
@@ -49,12 +62,12 @@ public class CollectionsWorksheet implements ModificationTracker {
     this.id = id;
   }
 
-  public String getWorksheetBatchId() {
-    return worksheetBatchId;
+  public String getWorksheetNumber() {
+    return worksheetNumber;
   }
 
-  public void setWorksheetBatchId(String worksheetBatchId) {
-    this.worksheetBatchId = worksheetBatchId;
+  public void setWorksheetNumber(String worksheetNumber) {
+    this.worksheetNumber = worksheetNumber;
   }
 
   public Date getLastUpdated() {
@@ -95,5 +108,29 @@ public class CollectionsWorksheet implements ModificationTracker {
 
   public void setCollectedSamples(List<CollectedSample> collectedSamples) {
     this.collectedSamples = collectedSamples;
+  }
+
+  public WorksheetType getWorksheetType() {
+    return worksheetType;
+  }
+
+  public void setWorksheetType(WorksheetType worksheetType) {
+    this.worksheetType = worksheetType;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

@@ -65,3 +65,27 @@ function updateCollectionBatchGeneric(form, resultDivId, url, successCallback) {
   });
 }
 
+function addNewWorksheet(form, resultDivId, successCallback) {
+  updateWorksheetGeneric(form, resultDivId, "addWorksheet.html", successCallback);
+}
+
+function updateExistingWorksheet(form, resultDivId, successCallback) {
+  updateWorksheetGeneric(form, resultDivId, "updateWorksheet.html", successCallback);
+}
+
+function updateWorksheetGeneric(form, resultDivId, url, successCallback) {
+  var worksheet = $(form).serialize();
+  showLoadingImage($("#" + resultDivId));
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: worksheet,
+    success: function(jsonResponse, data, data1, data2) {
+               successCallback();
+               $("#" + resultDivId).replaceWith(jsonResponse);
+             },
+    error: function(response) {
+             $("#" + resultDivId).replaceWith(response.responseText);
+           }
+  });
+}

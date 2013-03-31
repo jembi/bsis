@@ -35,7 +35,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.testresults.TTIStatus;
 import model.user.User;
-import model.worksheet.CollectionsWorksheet;
+import model.worksheet.Worksheet;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
@@ -120,7 +120,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private List<Product> products;
 
   @ManyToMany
-  private List<CollectionsWorksheet> worksheets;
+  private List<Worksheet> worksheets;
 
   @Column(precision=6, scale=2)
   private BigDecimal haemoglobinCount;
@@ -285,11 +285,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public List<CollectionsWorksheet> getWorksheets() {
+  public List<Worksheet> getWorksheets() {
     return worksheets;
   }
 
-  public void setWorksheets(List<CollectionsWorksheet> worksheets) {
+  public void setWorksheets(List<Worksheet> worksheets) {
     this.worksheets = worksheets;
   }
 

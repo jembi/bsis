@@ -17,9 +17,9 @@ import model.admin.ConfigPropertyConstants;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
-import model.collectedsample.CollectionsWorksheetForm;
 import model.collectedsample.FindCollectedSampleBackingForm;
 import model.donor.Donor;
+import model.worksheet.WorksheetBackingForm;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,6 @@ import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.PreDonationTestRepository;
-import repository.SequenceNumberRepository;
 import viewmodel.CollectedSampleViewModel;
 
 @Controller
@@ -62,9 +61,6 @@ public class CollectedSampleController {
 
   @Autowired
   private DonorRepository donorRepository;
-
-  @Autowired
-  private SequenceNumberRepository sequenceNumberRepository;
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
@@ -281,42 +277,6 @@ public class CollectedSampleController {
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
     m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
     m.put("sites", locationRepository.getAllCollectionSites());
-  }
-
-  @RequestMapping(value = "/addCollectionFormForDonorGenerator", method = RequestMethod.GET)
-  public ModelAndView addCollectionFormForDonorGenerator(HttpServletRequest request,
-      Model model,
-      @RequestParam(value="donorId", required=true) String donorId) {
-
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
-    m.put("refreshUrl", getUrl(request));
-    m.put("collectionForDonor", true);
-    m.put("existingCollectedSample", false);
-    // to ensure custom field names are displayed in the form
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
-    m.put("collectedSampleFields", formFields);
-    m.put("disallowDonorChange", true);
-
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
-    setCollectionNumber(form, (Map<String, Object>) formFields.get("collectionNumber"));
-
-    m.put("editCollectedSampleForm", form);
-
-    Donor donor = donorRepository.findDonorById(donorId);
-    form.setDonor(donor);
-
-    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
-    mv.addObject("model", m);
-    return mv;
-  }
-
-  private void setCollectionNumber(CollectedSampleBackingForm form,
-      Map<String, Object> collectionNumberProperties) {
-    boolean isAutoGeneratable = (Boolean) collectionNumberProperties.get("isAutoGeneratable");
-    boolean autoGenerate = (Boolean) collectionNumberProperties.get("autoGenerate");
-    if (isAutoGeneratable && autoGenerate)
-      form.setCollectionNumber(sequenceNumberRepository.getNextCollectionNumber());    
   }
 
   @RequestMapping(value = "/addCollectionFormGenerator", method = RequestMethod.GET)
@@ -541,7 +501,7 @@ public class CollectedSampleController {
   @RequestMapping(value="/saveAsWorksheet", method = RequestMethod.GET)
   public ModelAndView saveAsWorksheet(HttpServletRequest request,
       HttpServletResponse response,
-      @ModelAttribute("findCollectedSampleForm") CollectionsWorksheetForm form,
+      @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form,
       BindingResult result, Model model) {
 
     String collectionNumber = form.getCollectionNumber();
@@ -571,17 +531,17 @@ public class CollectedSampleController {
       }
     }
 
-    String worksheetBatchId = form.getWorksheetBatchId();
+    String worksheetBatchNumber = form.getWorksheetNumber();
     ModelAndView mv = new ModelAndView("worksheetSaved");
     Map<String, Object> m = model.asMap();
-    m.put("worksheetBatchId", worksheetBatchId);
+    m.put("worksheetBatchId", worksheetBatchNumber);
     try {
       collectedSampleRepository.saveAsWorksheet(
                                         form.getCollectionNumber(),
                                         bloodBagTypeIds, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo,
                                         form.getIncludeTestedCollections(),
-                                        worksheetBatchId);
+                                        worksheetBatchNumber);
       m.put("success", true);
     } catch (Exception ex) {
       ex.printStackTrace();

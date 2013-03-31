@@ -27,7 +27,7 @@ import model.testresults.TTIStatus;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
-import model.worksheet.CollectionsWorksheet;
+import model.worksheet.Worksheet;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -449,7 +449,8 @@ public class CollectedSampleRepository {
 
   public void saveAsWorksheet(String collectionNumber,
       List<Integer> bloodBagTypeIds, List<Long> centerIds,
-      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo, boolean includeUntestedCollections, String worksheetBatchId) throws Exception {
+      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo,
+      boolean includeUntestedCollections, String worksheetBatchNumber) throws Exception {
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     List<Object> results = findCollectedSamples(collectionNumber, bloodBagTypeIds,
@@ -457,8 +458,8 @@ public class CollectedSampleRepository {
                                           dateCollectedFrom, dateCollectedTo,
                                           includeUntestedCollections,
                                           pagingParams);
-    CollectionsWorksheet worksheet = new CollectionsWorksheet();
-    worksheet.setWorksheetBatchId(worksheetBatchId);
+    Worksheet worksheet = new Worksheet();
+    worksheet.setWorksheetNumber(worksheetBatchNumber);
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
     for (CollectedSample c : collectedSamples) {
       worksheet.getCollectedSamples().add(c);
@@ -468,13 +469,13 @@ public class CollectedSampleRepository {
     em.flush();
   }
 
-  public CollectionsWorksheet findWorksheet(String worksheetBatchId) {
+  public Worksheet findWorksheet(String worksheetBatchId) {
     String queryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.collectedSamples c " +
         "where w.worksheetBatchId = :worksheetBatchId";
 
-    TypedQuery<CollectionsWorksheet> query = em.createQuery(queryStr, CollectionsWorksheet.class);
+    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
     query.setParameter("worksheetBatchId", worksheetBatchId);
-    CollectionsWorksheet worksheet = null;
+    Worksheet worksheet = null;
     try {
     worksheet = query.getSingleResult();
     } catch (NoResultException ex) {
@@ -488,7 +489,7 @@ public class CollectedSampleRepository {
 
   public List<CollectedSample> findCollectionsInWorksheet(String worksheetBatchId) {
 
-    CollectionsWorksheet worksheet = findWorksheet(worksheetBatchId);
+    Worksheet worksheet = findWorksheet(worksheetBatchId);
     if (worksheet == null)
       return null;
 

@@ -324,3 +324,46 @@ insert into Tips(tipsKey, tipsName, tipsContent) values
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("horizontalentry", "true", "bloodtyping"),
 ("titerWellRadius", "25", "bloodTyping");
+
+insert into WorksheetType
+(id, worksheetType, isDeleted) values
+(1, 'Blood Typing', '0'),
+(2, 'Full Blood Typing', '0'),
+(3, 'TTI', '0'),
+(4, 'Full TTI', '0');
+
+insert into BloodTest_WorksheetType
+(bloodTests_id, worksheetTypes_id) values
+(1,1),
+(2,1),
+(3,1),
+(4,1),
+(5,1),
+(6,1),
+(1,2),
+(2,2),
+(3,2),
+(4,2),
+(5,2),
+(6,2),
+(9,2),
+(10,2),
+(11,2),
+(12,2),
+(13,2),
+(17,3),
+(20,3),
+(23,3),
+(26,3),
+(17,4),
+(18,4),
+(19,4),
+(20,4),
+(21,4),
+(22,4),
+(23,4),
+(24,4),
+(25,4),
+(26,4),
+(27,4),
+(28,4);

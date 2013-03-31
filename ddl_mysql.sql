@@ -37,11 +37,15 @@
 
     create table BloodTestResult (
         id bigint not null auto_increment,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
         notes longtext,
         result varchar(10),
         testedOn datetime,
         bloodTest_id SMALLINT,
         collectedSample_id bigint,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -89,6 +93,19 @@
         testNameShort varchar(15),
         validResults varchar(255),
         primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table BloodTest_WorksheetType (
+        bloodTests_id SMALLINT not null,
+        worksheetTypes_id SMALLINT not null
+    ) ENGINE=InnoDB;
+
+    create table BloodTest_WorksheetType_AUD (
+        REV integer not null,
+        bloodTests_id SMALLINT not null,
+        worksheetTypes_id SMALLINT not null,
+        REVTYPE tinyint,
+        primary key (REV, bloodTests_id, worksheetTypes_id)
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -149,12 +166,12 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table CollectedSample_CollectionsWorksheet (
+    create table CollectedSample_Worksheet (
         collectedSamples_id bigint not null,
         worksheets_id bigint not null
     ) ENGINE=InnoDB;
 
-    create table CollectedSample_CollectionsWorksheet_AUD (
+    create table CollectedSample_Worksheet_AUD (
         REV integer not null,
         collectedSamples_id bigint not null,
         worksheets_id bigint not null,
@@ -187,28 +204,6 @@
         notes longtext,
         collectionCenter_id bigint,
         collectionSite_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table CollectionsWorksheet (
-        id bigint not null auto_increment,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        worksheetBatchId varchar(255),
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table CollectionsWorksheet_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        worksheetBatchId varchar(255),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
@@ -894,6 +889,50 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table Worksheet (
+        id bigint not null auto_increment,
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        worksheetNumber varchar(20),
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        worksheetType_id SMALLINT,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table WorksheetType (
+        id SMALLINT not null auto_increment,
+        isDeleted boolean,
+        worksheetType varchar(30),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table WorksheetType_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isDeleted boolean,
+        worksheetType varchar(30),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table Worksheet_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isDeleted boolean,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        notes longtext,
+        worksheetNumber varchar(20),
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        worksheetType_id SMALLINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     alter table BloodBagType_AUD 
         add index FKE16C6DF9DF74E053 (REV), 
         add constraint FKE16C6DF9DF74E053 
@@ -901,10 +940,22 @@
         references REVINFO (REV);
 
     alter table BloodTestResult 
+        add index FK39946CC9A49787C4 (createdBy_id), 
+        add constraint FK39946CC9A49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table BloodTestResult 
         add index FK39946CC932E145A (collectedSample_id), 
         add constraint FK39946CC932E145A 
         foreign key (collectedSample_id) 
         references CollectedSample (id);
+
+    alter table BloodTestResult 
+        add index FK39946CC9D0AFB367 (lastUpdatedBy_id), 
+        add constraint FK39946CC9D0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
 
     alter table BloodTestResult 
         add index FK39946CC945027987 (bloodTest_id), 
@@ -921,6 +972,24 @@
     alter table BloodTest_AUD 
         add index FKE1FA995DDF74E053 (REV), 
         add constraint FKE1FA995DDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table BloodTest_WorksheetType 
+        add index FK7A6DA3B518CB61F2 (worksheetTypes_id), 
+        add constraint FK7A6DA3B518CB61F2 
+        foreign key (worksheetTypes_id) 
+        references WorksheetType (id);
+
+    alter table BloodTest_WorksheetType 
+        add index FK7A6DA3B5BC5F90CC (bloodTests_id), 
+        add constraint FK7A6DA3B5BC5F90CC 
+        foreign key (bloodTests_id) 
+        references BloodTest (id);
+
+    alter table BloodTest_WorksheetType_AUD 
+        add index FK7F06EF06DF74E053 (REV), 
+        add constraint FK7F06EF06DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
@@ -988,21 +1057,21 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table CollectedSample_CollectionsWorksheet 
-        add index FKB39FFD85225909B3 (worksheets_id), 
-        add constraint FKB39FFD85225909B3 
+    alter table CollectedSample_Worksheet 
+        add index FKC8D819C2EA518FDE (worksheets_id), 
+        add constraint FKC8D819C2EA518FDE 
         foreign key (worksheets_id) 
-        references CollectionsWorksheet (id);
+        references Worksheet (id);
 
-    alter table CollectedSample_CollectionsWorksheet 
-        add index FKB39FFD85C02466CD (collectedSamples_id), 
-        add constraint FKB39FFD85C02466CD 
+    alter table CollectedSample_Worksheet 
+        add index FKC8D819C2C02466CD (collectedSamples_id), 
+        add constraint FKC8D819C2C02466CD 
         foreign key (collectedSamples_id) 
         references CollectedSample (id);
 
-    alter table CollectedSample_CollectionsWorksheet_AUD 
-        add index FKC0D7E0D6DF74E053 (REV), 
-        add constraint FKC0D7E0D6DF74E053 
+    alter table CollectedSample_Worksheet_AUD 
+        add index FK7FD9693DF74E053 (REV), 
+        add constraint FK7FD9693DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
@@ -1033,24 +1102,6 @@
     alter table CollectionBatch_AUD 
         add index FKB74A2EDDF74E053 (REV), 
         add constraint FKB74A2EDDF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table CollectionsWorksheet 
-        add index FK72E3FEF9A49787C4 (createdBy_id), 
-        add constraint FK72E3FEF9A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table CollectionsWorksheet 
-        add index FK72E3FEF9D0AFB367 (lastUpdatedBy_id), 
-        add constraint FK72E3FEF9D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table CollectionsWorksheet_AUD 
-        add index FK5296084ADF74E053 (REV), 
-        add constraint FK5296084ADF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
@@ -1411,5 +1462,35 @@
     alter table User_AUD 
         add index FKF3FCA03CDF74E053 (REV), 
         add constraint FKF3FCA03CDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Worksheet 
+        add index FKB98678CEA49787C4 (createdBy_id), 
+        add constraint FKB98678CEA49787C4 
+        foreign key (createdBy_id) 
+        references User (id);
+
+    alter table Worksheet 
+        add index FKB98678CEBC88FBF5 (worksheetType_id), 
+        add constraint FKB98678CEBC88FBF5 
+        foreign key (worksheetType_id) 
+        references WorksheetType (id);
+
+    alter table Worksheet 
+        add index FKB98678CED0AFB367 (lastUpdatedBy_id), 
+        add constraint FKB98678CED0AFB367 
+        foreign key (lastUpdatedBy_id) 
+        references User (id);
+
+    alter table WorksheetType_AUD 
+        add index FK122EBEF9DF74E053 (REV), 
+        add constraint FK122EBEF9DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Worksheet_AUD 
+        add index FK2D0D8F9FDF74E053 (REV), 
+        add constraint FK2D0D8F9FDF74E053 
         foreign key (REV) 
         references REVINFO (REV);

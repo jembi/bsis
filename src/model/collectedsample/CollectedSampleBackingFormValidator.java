@@ -8,6 +8,7 @@ import model.CustomDateFormatter;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.location.Location;
+import model.worksheet.WorksheetBackingForm;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +37,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
                          CollectedSampleBackingForm.class,
                          CollectedSample.class,
                          CollectedSampleViewModel.class,
-                         CollectionsWorksheetForm.class
+                         WorksheetBackingForm.class
                          ).contains(clazz);
   }
 

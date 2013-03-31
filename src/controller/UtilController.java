@@ -317,4 +317,8 @@ public class UtilController {
   public Product findProduct(String collectionNumber, String productType) {
     return productRepository.findProduct(collectionNumber, productType);
   }
+
+  public String getNextWorksheetNumber() {
+    return sequenceNumberRepository.getNextWorksheetBatchNumber();
+  }
 }

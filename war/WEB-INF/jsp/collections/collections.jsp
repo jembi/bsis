@@ -25,6 +25,9 @@
 		<li id="createCollectionBatch">
 			<a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
 		</li>
+		<li id="addWorksheet">
+			<a href="addWorksheetFormGenerator.html">Add worksheet</a>
+		</li>
 		<li id="findCollectionsWorksheet">
 			<a href="findCollectionWorksheetFormGenerator.html">Generate worksheet</a>
 		</li>

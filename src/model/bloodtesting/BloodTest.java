@@ -1,5 +1,7 @@
 package model.bloodtesting;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +9,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import model.worksheet.Worksheet;
+import model.worksheet.WorksheetType;
 
 import org.hibernate.envers.Audited;
 
@@ -44,6 +50,9 @@ public class BloodTest {
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   private BloodTestCategory category;
+
+  @ManyToMany
+  private List<WorksheetType> worksheetTypes;
 
   private Boolean isEmptyAllowed;
 
@@ -143,5 +152,13 @@ public class BloodTest {
 
   public void setCategory(BloodTestCategory category) {
     this.category = category;
+  }
+
+  public List<WorksheetType> getWorksheetTypes() {
+    return worksheetTypes;
+  }
+
+  public void setWorksheetTypes(List<WorksheetType> worksheetTypes) {
+    this.worksheetTypes = worksheetTypes;
   }
 }
