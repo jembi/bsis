@@ -3,8 +3,10 @@ package controller.bloodtesting;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
+import viewmodel.CollectedSampleViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -186,4 +189,41 @@ public class TTIController {
     }
     return ttiInputMap;
   }
+
+  @RequestMapping(value="/showTTIResultsForCollection", method=RequestMethod.GET)
+  public ModelAndView showTTIResultsForCollection(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="collectionId") String collectionId) {
+    ModelAndView mv = new ModelAndView();
+    collectionId = collectionId.trim();
+    Long collectedSampleId = Long.parseLong(collectionId);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getTTITestStatus(collectedSampleId);
+    mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
+    mv.addObject("collectionId", collectedSample.getId());
+    mv.addObject("ttiOutputForCollection", ruleResult);
+    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+
+    List<BloodTest> ttiTests = bloodTestingRepository.getTTITests();
+    Map<String, BloodTest> ttiTestsMap = new LinkedHashMap<String, BloodTest>();
+    for (BloodTest ttiTest : ttiTests) {
+      ttiTestsMap.put(ttiTest.getId().toString(), ttiTest);
+    }
+    mv.addObject("allTTITests", ttiTestsMap);
+
+    List<BloodTest> allTTITests = bloodTestingRepository.getTTITests();
+    Map<String, BloodTest> allTTITestsMap = new TreeMap<String, BloodTest>();
+    for (BloodTest ttiTest : allTTITests) {
+      allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
+    }
+    mv.addObject("allTTITests", allTTITestsMap);
+
+    mv.setViewName("bloodtesting/ttiSummaryCollection");
+
+    mv.addObject("refreshUrl", getUrl(request));
+
+    return mv;
+  }
+
 }

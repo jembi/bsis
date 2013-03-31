@@ -229,7 +229,7 @@ public class BloodTestingRepository {
     return results;
   }
 
-  public BloodTestingRuleResult getBloodTypingTestStatus(Long collectionId) {
+  public BloodTestingRuleResult getTTITestStatus(Long collectionId) {
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     return ruleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
   }

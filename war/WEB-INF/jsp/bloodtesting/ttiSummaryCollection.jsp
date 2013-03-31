@@ -146,7 +146,7 @@ $(document).ready(function() {
 		<c:set var="availableTestResults" value="${ttiOutputForCollection.availableTestResults}" />
 		<c:set var="pendingTests" value="${ttiOutputForCollection.pendingTTITestsIds}" />
 
-		<div class="ttiForCollectionSection formInTabPane">
+		<div class="ttiForCollectionSection formInTabPane" style="margin: 0;">
 
 			<div class="testsPerformed">
 				<div class="formInTabPane" style="margin-left: 0px;">
@@ -169,13 +169,14 @@ $(document).ready(function() {
 								<div>
 									<label>${ttiTest.value.testName}</label>
 									<label class="availableTestResultLabel"
-									 		   style="font-size: 1.5em; vertical-align: middle;">
+									 		   style="font-size: 1.5em; vertical-align: middle; width: 80px;">
 											${availableTestResults[ttiTest.key]}
 									</label>
 									<input name="ttiTest-${ttiTest.key}" class="ttiTestInput availableTestResultInput"
 												 value="${availableTestResults[ttiTest.key]}"
 											   data-testid="${ttiTest.value.id}"
 											   data-available="true"
+											   style="width: 80px;"
 											   type="hidden" />
 								</div>
 								<c:set var="availableTestResultCount" value="${availableTestResultCount + 1}" />
@@ -206,7 +207,10 @@ $(document).ready(function() {
 							<c:set var="pendingTest" value="${allTTITests[pendingTestId]}" />
 							<div>
 								<label>${pendingTest.testName}</label>
-								<input name="pendingTest-${pendingTestId}" class="ttiTestInput" data-testid="${pendingTestId}" />
+								<input name="pendingTest-${pendingTestId}"
+											 class="ttiTestInput"
+											 style="width: 80px;"
+											 data-testid="${pendingTestId}" />
 							</div>
 						</c:forEach>
 					</c:if>
@@ -231,7 +235,10 @@ $(document).ready(function() {
 						<c:if test="${!isPendingTest && empty availableTestResults[ttiTest.key]}">
 							<div>
 								<label>${ttiTest.value.testName}</label>
-								<input name="ttiTest-${ttiTest.value.id}" class="ttiTestInput" data-testid="${ttiTest.value.id}" />
+								<input name="ttiTest-${ttiTest.value.id}"
+											 class="ttiTestInput"
+											 style="width: 80px;"
+											 data-testid="${ttiTest.value.id}" />
 							</div>
 						</c:if>
 					</c:forEach>

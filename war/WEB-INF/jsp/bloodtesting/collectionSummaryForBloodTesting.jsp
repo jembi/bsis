@@ -14,7 +14,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<div id="${tabContentId}" class="collectionSummaryForTestingSection formInTabPane">
+<div id="${tabContentId}" class="collectionSummaryForTestingSection formInTabPane" style="margin-left: 5px;">
 	<div>
 		<label>${collectionFields.collectionNumber.displayName}</label>
 		<label>${collection.collectionNumber}</label>

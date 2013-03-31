@@ -24,6 +24,8 @@ $(document).ready(function() {
   function fetchBloodTypingResults() {
     getBloodTypingSection().load("showBloodTypingResultsForCollection.html?" +
         $.param({collectionId : "${collectionId}"}));
+    getTTISection().load("showTTIResultsForCollection.html?" +
+        $.param({collectionId : "${collectionId}"}));
     getCollectionSummaryForTestingSection().load("showCollectionSummaryForTesting.html?" +
         $.param({collectionId : "${collectionId}"}));
   }
@@ -34,6 +36,10 @@ $(document).ready(function() {
 
   function getCollectionSummaryForTestingSection() {
     return $("#${mainContentId}").find(".collectionSummarySection");
+  }
+
+  function getTTISection() {
+    return $("#${mainContentId}").find(".ttiSection");
   }
 
   $("#${mainContentId}").bind("testResultsUpdated", fetchBloodTypingResults);
@@ -50,14 +56,23 @@ $(document).ready(function() {
 		</c:if>
 
 		<c:if test="${collectionFound}">
-			<div class="collectionSummarySection">
+			<div class="collectionSummarySection" style="width: 70%;">
 			</div>
 
 			<br />
-			<span style="margin-left: 31px; font-weight: bold;">Blood typing results for collection</span>
-			<div class="bloodTypingSection">
+			<div style="position: relative; height: 100%;">
+				<div style="display: inline-block; width: 380px; vertical-align: top; margin-right: 5px;">
+					<span style="font-weight: bold;">Blood typing results for collection</span>
+					<div class="bloodTypingSection">
+					</div>
+				</div>
+			
+				<div style="display: inline-block; width: 380px; vertical-align: top; margin-left: 5px;">
+					<span style="font-weight: bold;">TTI results for collection</span>
+					<div class="ttiSection">
+					</div>
+				</div>
 			</div>
-
 		</c:if>
 
 	</div>

@@ -757,7 +757,6 @@ tr > td
 	margin: 30px;
 	padding: 10px;
 	border: solid 2px rgb(53, 99, 105);
-	width: 40%;
 }
 
 .collectionSummaryForTestingSection {
@@ -766,7 +765,6 @@ tr > td
 	margin: 30px;
 	padding: 10px;
 	border: solid 2px rgb(53, 99, 105);
-	width: 40%;
 }
 
 .ttiForCollectionSection {
@@ -775,7 +773,6 @@ tr > td
 	margin: 30px;
 	padding: 10px;
 	border: solid 2px rgb(53, 99, 105);
-	width: 40%;
 }
 
 .simpleTable {

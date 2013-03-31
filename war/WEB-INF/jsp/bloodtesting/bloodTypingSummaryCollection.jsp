@@ -146,14 +146,14 @@ $(document).ready(function() {
 		<c:set var="availableTestResults" value="${bloodTypingOutputForCollection.availableTestResults}" />
 		<c:set var="pendingTests" value="${bloodTypingOutputForCollection.pendingBloodTypingTestsIds}" />
 
-		<div class="bloodTypingForCollectionSection formInTabPane">
+		<div class="bloodTypingForCollectionSection formInTabPane" style="margin: 0;">
 
 			<div class="testsPerformed">
 				<div class="formInTabPane" style="margin-left: 0px;">
 
 					<div style="position: relative; height: 30px;">
 						<label style="width: auto; position: absolute;">
-							<b>Available Blood Typing test results</b>
+							<b>Available test results</b>
 						</label>
 						<label style="width: auto; position: absolute; right: 10px;">
 							<span class="link availableTestEdit">Edit</span>
@@ -168,11 +168,12 @@ $(document).ready(function() {
 							<c:if test="${not empty availableTestResults[bloodTypingTest.key] and testCategory eq 'BLOODTYPING'}">
 								<div>
 									<label>${bloodTypingTest.value.testName}</label>
-									<label class="availableTestResultLabel">${availableTestResults[bloodTypingTest.key]}</label>
+									<label class="availableTestResultLabel" style="font-size: 1.5em; vertical-align: middle; width: 80px;">${availableTestResults[bloodTypingTest.key]}</label>
 									<input name="bloodTypingTest-${bloodTypingTest.key}" class="bloodTypingTestInput availableTestResultInput"
 												 value="${availableTestResults[bloodTypingTest.key]}"
 											   data-testid="${bloodTypingTest.value.id}"
 											   data-available="true"
+											   style="width: 80px;"
 											   type="hidden" />
 								</div>
 								<c:set var="availableTestResultCount" value="${availableTestResultCount + 1}" />
@@ -203,7 +204,10 @@ $(document).ready(function() {
 							<c:set var="pendingTest" value="${allBloodTypingTests[pendingTestId]}" />
 							<div>
 								<label>${pendingTest.testName}</label>
-								<input name="pendingTest-${pendingTestId}" class="bloodTypingTestInput" data-testid="${pendingTestId}" />
+								<input name="pendingTest-${pendingTestId}"
+											 class="bloodTypingTestInput"
+											 style="width: 80px;"
+											 data-testid="${pendingTestId}" />
 							</div>
 						</c:forEach>
 					</c:if>
@@ -228,7 +232,10 @@ $(document).ready(function() {
 						<c:if test="${!isPendingTest && empty availableTestResults[bloodTypingTest.key]}">
 							<div>
 								<label>${bloodTypingTest.value.testName}</label>
-								<input name="bloodTypingTest-${bloodTypingTest.value.id}" class="bloodTypingTestInput" data-testid="${bloodTypingTest.value.id}" />
+								<input name="bloodTypingTest-${bloodTypingTest.value.id}"
+											 class="bloodTypingTestInput"
+											 style="width: 80px;"
+											 data-testid="${bloodTypingTest.value.id}" />
 							</div>
 						</c:if>
 					</c:forEach>

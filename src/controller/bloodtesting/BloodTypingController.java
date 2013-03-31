@@ -285,7 +285,7 @@ public class BloodTypingController {
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getBloodTypingTestStatus(collectedSampleId);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getTTITestStatus(collectedSampleId);
     mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
     mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("bloodTypingOutputForCollection", ruleResult);
@@ -300,8 +300,8 @@ public class BloodTypingController {
 
     List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     Map<String, BloodTest> allBloodTypingTestsMap = new TreeMap<String, BloodTest>();
-    for (BloodTest allBloodTypingTest : allBloodTypingTests) {
-      allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
+    for (BloodTest bloodTypingTest : allBloodTypingTests) {
+      allBloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
     mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
 
