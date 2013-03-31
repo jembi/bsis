@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.collectedsample.CollectedSample;
 import model.worksheet.Worksheet;
 import model.worksheet.WorksheetBackingForm;
 import model.worksheet.WorksheetBackingFormValidator;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.WorksheetRepository;
 import repository.WorksheetTypeRepository;
@@ -29,6 +34,9 @@ import viewmodel.WorksheetViewModel;
 
 @Controller
 public class WorksheetController {
+
+  @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
   private WorksheetTypeRepository worksheetTypeRepository;
@@ -139,4 +147,49 @@ public class WorksheetController {
     return new WorksheetViewModel(savedWorksheet);
   }
 
+  @RequestMapping(value="/addCollectionsToWorksheet", method=RequestMethod.POST)
+  public ModelAndView addCollectionsToBloodTypingPlate(HttpServletRequest request,
+          HttpServletResponse response,
+          @RequestParam(value="worksheetId") String worksheetId,
+          @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers) {
+
+    // here the key of the map corresponds to the index of the
+    // collection number in the parameter collectionNumbers
+    // corresponding to the collected sample in the value of the map
+    List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
+
+    int numErrors = 0;
+    int numValid = 0;
+    Map<String, String> invalidCollectionNumbers = new HashMap<String, String>();
+    int index = 0;
+    for (CollectedSample c : collections) {
+      if (c == null) {
+        String invalidCollectionNumber = collectionNumbers.get(index);
+        invalidCollectionNumbers.put(invalidCollectionNumber, invalidCollectionNumber);
+        numErrors++;
+      } else {
+        numValid++;
+      }
+      index++;
+    }
+
+    Worksheet worksheet = worksheetRepository.findWorksheetById(Long.parseLong(worksheetId));
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("worksheet", worksheet);
+    mv.addObject("worksheetId", worksheet.getId());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("worksheet");
+    mv.addObject("worksheetFields", formFields);
+
+    if (numErrors > 0) {
+      mv.addObject("invalidCollectionNumbers", invalidCollectionNumbers);
+      mv.addObject("enteredCollectionNumbers", collectionNumbers);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } else if (numValid > 0) {
+      worksheetRepository.addCollectionsToWorksheet(Long.parseLong(worksheetId), collectionNumbers);
+    }
+
+    mv.setViewName("worksheets/worksheetDetail");
+
+    return mv;
+  }
 }
