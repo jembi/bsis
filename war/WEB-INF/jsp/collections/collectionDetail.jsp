@@ -18,7 +18,7 @@
 		<div>
 			<label>${collectionFields.donorNumber.displayName}</label>
 			<c:if test="${not empty collectedSample.donorNumber}">
-				<label style="width: auto;">${collectedSample.donorNumber} (${collectedSample.donor.firstName} ${collectedSample.donor.lastName})</label>
+				<label style="width: auto;">${collectedSample.donorNumber}</label>
 			</c:if>
 		</div>
 	</c:if>

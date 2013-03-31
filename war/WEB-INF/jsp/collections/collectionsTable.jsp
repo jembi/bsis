@@ -22,7 +22,7 @@ $(document).ready(
 
       var collectionsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : '<"H"lrT>t<"F"ip>T',
+        "sDom" : '<"H"lrT>t<"F"ip>',
         "bServerSide" : true,
         "sAjaxSource" : "${model.nextPageUrl}",
         "sPaginationType" : "full_numbers",

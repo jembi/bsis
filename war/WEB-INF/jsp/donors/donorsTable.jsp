@@ -20,7 +20,7 @@ $(document).ready(
 
       var donorsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
-        "sDom" : '<"H"lrT>t<"F"ip>T',
+        "sDom" : '<"H"lrT>t<"F"ip>',
         "bServerSide" : true,
         "sPaginationType" : "full_numbers",
         "sAjaxSource" : "${model.nextPageUrl}",
