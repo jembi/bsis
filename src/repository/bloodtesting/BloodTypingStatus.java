@@ -1,4 +1,4 @@
-package repository.bloodtyping;
+package repository.bloodtesting;
 
 public enum BloodTypingStatus {
   COMPLETE, PENDING_TESTS, AMBIGUOUS, NO_MATCH, NOT_DONE;

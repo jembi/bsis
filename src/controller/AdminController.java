@@ -56,7 +56,7 @@ import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
-import repository.bloodtyping.BloodTestingRepository;
+import repository.bloodtesting.BloodTestingRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

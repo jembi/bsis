@@ -1,7 +1,8 @@
-package repository.bloodtyping;
+package repository.bloodtesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
 import model.bloodtesting.rules.BloodTestRule;
 import model.collectedsample.CollectedSample;
 import model.testresults.TTIStatus;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +34,14 @@ public class BloodTestingRuleEngine {
   @PersistenceContext
   private EntityManager em;
 
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
+  
   /**
    * Apply blood typing rules to blood typing tests (combination of what is present in the database and
    * those passed as parameter.
    * @param collectedSample Blood Typing results for which collection
-   * @param bloodTypingTestResults map of blood typing test id to result. Only character allowed in the result.
+   * @param bloodTestResults map of blood typing test id to result. Only character allowed in the result.
    *                               multiple characters should be mapped to negative/positive (TODO)
    *                               Assume validation of results already done.
    * @return Result of applying the rules. The following values should be present in the map
@@ -49,7 +56,7 @@ public class BloodTestingRuleEngine {
    *         storedTestResults (what blood typing results are actually stored in the database,
    *                            a subset of testResults)
    */
-  public BloodTestingRuleResult applyBloodTests(CollectedSample collectedSample, Map<Long, String> bloodTypingTestResults) {
+  public BloodTestingRuleResult applyBloodTests(CollectedSample collectedSample, Map<Long, String> bloodTestResults) {
 
     String queryStr = "SELECT r FROM BloodTestRule r WHERE isActive=:isActive";
     TypedQuery<BloodTestRule> query = em.createQuery(queryStr, BloodTestRule.class);
@@ -65,10 +72,14 @@ public class BloodTestingRuleEngine {
 
     Map<String, String> availableTestResults = new TreeMap<String, String>();
     availableTestResults.putAll(storedTestResults);
-    for (Long extraTestId : bloodTypingTestResults.keySet()) {
+    for (Long extraTestId : bloodTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results
-      availableTestResults.put(extraTestId.toString(), bloodTypingTestResults.get(extraTestId));
+      availableTestResults.put(extraTestId.toString(), bloodTestResults.get(extraTestId));
     }
+
+    List<BloodTest> basicTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI);
+
+    Map<Integer, TTIStatus> ttiStatusMap = new HashMap<Integer, TTIStatus>();
 
     System.out.println("available test results:" + availableTestResults);
 
@@ -122,8 +133,9 @@ public class BloodTestingRuleEngine {
           case BLOODRH:
             bloodRhChanges.add(rule.getNewInformation());
             break;
-          case TTI_STATUS:
+          case TTISTATUS:
             ttiStatusChanges.add(rule.getNewInformation());
+            break;
           case EXTRA:
             extraInformation.add(rule.getNewInformation());
             break;
@@ -169,13 +181,14 @@ public class BloodTestingRuleEngine {
       bloodTypingStatus = BloodTypingStatus.COMPLETE;
     }
 
+    System.out.println(ttiStatusChanges);
     TTIStatus ttiStatus = TTIStatus.NOT_DONE;
     if (!ttiStatusChanges.isEmpty()) {
-      if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE)) {
+      if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE.toString())) {
         ttiStatus = TTIStatus.TTI_UNSAFE;
       }
       else if (ttiStatusChanges.size() == 1 &&
-               ttiStatusChanges.iterator().next().equals(TTIStatus.TTI_SAFE)) {
+               ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString())) {
         ttiStatus = TTIStatus.TTI_SAFE;
       }
     }

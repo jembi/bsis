@@ -25,6 +25,41 @@ $(document).ready(function() {
   											.click(refetchForm);
 
   function addTTITests() {
+
+    var collectionNumberInput = $("#${mainContentId}").find('input[name="collectionNumber"]');
+    var collectionNumber = collectionNumberInput.val();
+
+    if (collectionNumber == undefined || collectionNumber.length == 0) {
+		  showErrorMessage("Collection number should be specified");
+		  return;
+		}
+
+    var saveTestsData = {collectionNumber : collectionNumber};
+    var ttiInput = {};
+    var inputs = $("#${mainContentId}").find(".ttiInput:checked");
+    for (var i = 0; i < inputs.length; ++i) {
+      var input = $(inputs[i]);
+      var testid = input.data("testid");
+      var value = input.val();
+      ttiInput[testid] = value;
+    }
+    saveTestsData.ttiInput = JSON.stringify(ttiInput);
+    console.log(saveTestsData);
+    saveTTITests(saveTestsData);
+  }
+
+  function saveTTITests(saveTestsData) {
+    $.ajax({
+      url: "saveTTITests.html",
+      type: "POST",
+      data: saveTestsData,
+      success: function(response) {
+        				 $("#${tabContentId}").replaceWith(response);
+      				 },
+      error: function(response) {
+        				$("#${tabContentId}").replaceWith(response.responseText);
+      			 }
+    });
   }
 
   function refetchForm() {
@@ -47,7 +82,7 @@ $(document).ready(function() {
 		<form class="addTTIFrom formInTabPane">
 			<div>
 				<label>${ttiFormFields.collectionNumber.displayName}</label>
-				<input type="text" placeholder="Collection Number" value="${firstTimeRender ? '' : collectionNumber}"/>
+				<input type="text" name="collectionNumber" placeholder="Collection Number" value="${firstTimeRender ? '' : collectionNumber}"/>
 			</div>
 
 			<c:forEach var="ttiTest" items="${allTTITests}">
@@ -57,7 +92,7 @@ $(document).ready(function() {
 						<input id="result-${ttiTest.id}-${validResult}"
 									 name="${ttiTest.testNameShort}-${ttiTest.id}"
 									 value="${validResult}"
-									 class="testInputRadioButton"
+									 class="ttiInput"
 									 data-testid="${ttiTest.id}"
 									 type="radio"
 									 style="width: auto; height: 30px; vertical-align: middle;"

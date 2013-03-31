@@ -1,4 +1,4 @@
-package repository.bloodtyping;
+package repository.bloodtesting;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -97,7 +97,7 @@ public class BloodTestingRepository {
         collectedSamplesMap.put(collectedSample.getId(), collectedSample);
         bloodTestRuleResultsForCollections.put(collectedSample.getId(), ruleResult);
 
-        collectedSample = updateCollectionBloodType(collectedSample, ruleResult);
+        collectedSample = updateCollectionStatus(collectedSample, ruleResult);
 
         for (Long testId : bloodTestResultsForCollection.keySet()) {
           BloodTestResult btResult = new BloodTestResult();
@@ -128,7 +128,7 @@ public class BloodTestingRepository {
     return results;
   }
 
-  private CollectedSample updateCollectionBloodType(
+  private CollectedSample updateCollectionStatus(
       CollectedSample collection, BloodTestingRuleResult ruleResult) {
 
     String bloodAboNew = ruleResult.getBloodAbo();
@@ -151,6 +151,9 @@ public class BloodTestingRepository {
 
     collection.setBloodAbo(bloodAboNew);
     collection.setBloodRh(bloodRhNew);
+
+    collection.setTTIStatus(ruleResult.getTTIStatus());
+
     collection.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
 
     collection = em.merge(collection);

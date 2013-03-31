@@ -1,4 +1,4 @@
-package controller.bloodtyping;
+package controller.bloodtesting;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
-import repository.bloodtyping.BloodTestingRepository;
+import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTestViewModel;
 import viewmodel.CollectedSampleViewModel;

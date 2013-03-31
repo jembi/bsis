@@ -42,7 +42,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import repository.bloodtyping.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingStatus;
 
 /**
  * A donation or a collection as it is in the UI.

@@ -188,6 +188,136 @@ isEmptyAllowed, isActive) values
 '1', 'CONFIRMATORY_TTI', 'TTI',
 '0', '1');
 
+insert into BloodTestRule
+(bloodTestsIds, pattern,
+ collectionFieldChanged, newInformation, extraInformation,
+ extraTestsIds, markSampleAsUnsafe, isActive
+) values
+('17,20,23,26', '----',
+ 'TTISTATUS', 'TTI_SAFE', '',
+ '', '0', '1'
+ ),
+('17', '+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '18,19', '0', '1'
+ ),
+ ('17,18,19', '-+-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19', '--+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19', '+--',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19', '++-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19', '-++',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19', '+-+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19', '---',
+ 'TTISTATUS', 'TTI_SAFE', '',
+ '', '0', '1'
+ ),
+('20', '+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '21,22', '0', '1'
+ ),
+ ('20,21,22', '-+-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('20,21,22', '--+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('20,21,22', '+--',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('20,21,22', '++-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('20,21,22', '-++',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('20,21,22', '+-+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+('23', '+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '24,25', '0', '1'
+ ),
+ ('23,24,25', '-+-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('23,24,25', '--+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('23,24,25', '+--',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('23,24,25', '++-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('23,24,25', '-++',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('23,24,25', '+-+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+('26', '+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '27,28', '0', '1'
+ ),
+ ('26,27,28', '-+-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('26,27,28', '--+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('26,27,28', '+--',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('26,27,28', '++-',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('26,27,28', '-++',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('26,27,28', '+-+',
+ 'TTISTATUS', 'TTI_UNSAFE', '',
+ '', '0', '1'
+ ),
+ ('17,18,19,20,21,22,23,24,25,26,27,28', '------------',
+ 'TTISTATUS', 'TTI_SAFE', '',
+ '', '0', '1'
+ );
+
 insert into Tips(tipsKey, tipsName, tipsContent) values
 ('bloodtyping.plate.step1', 'Step 1 of Blood Typing', 'Scan/type collection numbers for all columns on microtiter plate');
 

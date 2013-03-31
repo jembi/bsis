@@ -6,7 +6,7 @@ import java.util.Set;
 
 import model.testresults.TTIStatus;
 
-import repository.bloodtyping.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingStatus;
 
 public class BloodTestingRuleResult {
 
