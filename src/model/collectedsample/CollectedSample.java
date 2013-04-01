@@ -293,6 +293,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.worksheets = worksheets;
   }
 
+  /**
+   * Must implement this method because the collections
+   * in worksheet must be sorted in the same order every time.
+   * This method allows invoking Collections.sort on the collections.
+   */
   @Override
   public int compareTo(CollectedSample c) {
     Long diff = (this.id - c.id);

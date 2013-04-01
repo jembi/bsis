@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -227,7 +228,7 @@ public class WorksheetController {
     ModelAndView mv = new ModelAndView();
     Worksheet worksheet = worksheetRepository.findWorksheetFullInformation(worksheetId);
     mv.addObject("worksheet", getWorksheetViewModel(worksheet));
-    mv.addObject("allCollectedSamples", worksheet.getCollectedSamples());
+    mv.addObject("allCollectedSamples", sortCollectionsInWorksheet(worksheet));
     mv.addObject("bloodTests", worksheetTypeRepository.getBloodTestsInWorksheet(worksheet.getWorksheetType().getId()));
     mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("worksheetId", worksheet.getId());
@@ -267,5 +268,13 @@ public class WorksheetController {
       worksheetViewModels.add(new WorksheetViewModel(worksheet));
     }
     return worksheetViewModels;
+  }
+
+  private List<CollectedSample> sortCollectionsInWorksheet(Worksheet w) {
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
+    for (CollectedSample c : w.getCollectedSamples())
+      collectedSamples.add(c);
+    Collections.sort(collectedSamples);
+    return collectedSamples;
   }
 }
