@@ -106,5 +106,12 @@ public class WorksheetRepository {
     em.flush();
   }
 
-
+  public Worksheet findWorksheetFullInformation(Long worksheetId) {
+    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+        "w.id=:worksheetId AND w.isDeleted=:isDeleted";
+    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
+    query.setParameter("worksheetId", worksheetId);
+    query.setParameter("isDeleted", false);
+    return query.getSingleResult();
+  }
 }

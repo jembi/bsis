@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.admin.ConfigPropertyConstants;
 import model.collectedsample.CollectedSample;
 import model.worksheet.FindWorksheetBackingForm;
 import model.worksheet.Worksheet;
@@ -224,11 +225,16 @@ public class WorksheetController {
       HttpServletRequest request,
       @RequestParam("worksheetId") Long worksheetId) {
     ModelAndView mv = new ModelAndView();
-    Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);
+    Worksheet worksheet = worksheetRepository.findWorksheetFullInformation(worksheetId);
     mv.addObject("worksheet", getWorksheetViewModel(worksheet));
+    mv.addObject("allCollectedSamples", worksheet.getCollectedSamples());
+    mv.addObject("bloodTests", worksheetTypeRepository.getBloodTestsInWorksheet(worksheet.getWorksheetType().getId()));
     mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("worksheetId", worksheet.getId());
     mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
+
+    mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(ConfigPropertyConstants.COLLECTIONS_WORKSHEET));
+
     mv.setViewName("worksheets/worksheetSummary");
     return mv;
   }

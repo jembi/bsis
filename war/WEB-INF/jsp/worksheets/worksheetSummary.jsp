@@ -112,6 +112,12 @@
 			<jsp:include page="worksheetDetail.jsp" />
 		</div>
 		<button class="showHideButton">Add collections</button>
+
+		<div class="worksheetSection">
+			<jsp:include page="printableWorksheet.jsp" />
+		</div>
+
+
 	</div>
 
 	<div id="${childContentId}"></div>
