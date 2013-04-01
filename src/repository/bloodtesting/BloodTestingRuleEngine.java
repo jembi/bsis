@@ -65,8 +65,11 @@ public class BloodTestingRuleEngine {
 
     Map<String, String> storedTestResults = new TreeMap<String, String>();
 
-    for (BloodTestResult t : collectedSample.getBloodTestResults()) {
-      storedTestResults.put(t.getBloodTest().getId().toString(), t.getResult());
+    Map<Integer, BloodTestResult> recentTestResults = 
+        bloodTestingRepository.getRecentTestResultsForCollection(collectedSample.getId());
+    for (Integer testId : recentTestResults.keySet()) {
+      BloodTestResult testResult = recentTestResults.get(testId); 
+      storedTestResults.put(testId.toString(), testResult.getResult());
     }
 
     Map<String, String> availableTestResults = new TreeMap<String, String>();

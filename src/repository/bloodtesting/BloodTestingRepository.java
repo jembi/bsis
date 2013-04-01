@@ -210,7 +210,7 @@ public class BloodTestingRepository {
     errorsForCollection.put(testId, errorMessage);
   }
 
-  public Map<String, Object> getBloodTypingTestStatus(List<String> collectionIds) {
+  public Map<String, Object> getAllTestsStatusForCollections(List<String> collectionIds) {
     // linked hashmap is required to ensure that results are returned in the same order as inserted
     Map<Long, CollectedSample> collectedSamplesMap = new LinkedHashMap<Long, CollectedSample>();
     Map<Long, BloodTestingRuleResult> bloodTypingResultsForCollections = new LinkedHashMap<Long, BloodTestingRuleResult>(); 
@@ -229,7 +229,7 @@ public class BloodTestingRepository {
     return results;
   }
 
-  public BloodTestingRuleResult getTTITestStatus(Long collectionId) {
+  public BloodTestingRuleResult getAllTestsStatusForCollection(Long collectionId) {
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     return ruleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
   }
@@ -256,6 +256,7 @@ public class BloodTestingRepository {
       if (existingBloodTestResult == null) {
         recentBloodTestResults.put(bloodTestId, bt);
       } else if (existingBloodTestResult.getTestedOn().before(bt.getTestedOn())) {
+        // before is very important here
           recentBloodTestResults.put(bloodTestId, bt);
       }
     }

@@ -64,7 +64,7 @@ public class TTIController {
   }
 
   @RequestMapping(value="/ttiFormGenerator", method=RequestMethod.GET)
-  public ModelAndView getBloodTypingWorksheet(HttpServletRequest request) {
+  public ModelAndView getTTIForm(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("bloodtesting/addTTIForm");
     mv.addObject("refreshUrl", "ttiFormGenerator.html");
     mv.addObject("ttiFormFields", utilController.getFormFieldsForForm("TTIForm"));
@@ -200,7 +200,7 @@ public class TTIController {
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getTTITestStatus(collectedSampleId);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(collectedSampleId);
     mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
     mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("ttiOutputForCollection", ruleResult);

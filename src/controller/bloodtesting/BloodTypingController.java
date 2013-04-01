@@ -259,7 +259,7 @@ public class BloodTypingController {
                         ) {
     ModelAndView mv = new ModelAndView();
     String[] collectionIds = collectionIdsParam.split(",");
-    Map<String, Object> results = bloodTestingRepository.getBloodTypingTestStatus(Arrays.asList(collectionIds));
+    Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForCollections(Arrays.asList(collectionIds));
     List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
     for (BloodTest allBloodTypingTest : allBloodTypingTests) {
@@ -285,7 +285,7 @@ public class BloodTypingController {
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getTTITestStatus(collectedSampleId);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(collectedSampleId);
     mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
     mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("bloodTypingOutputForCollection", ruleResult);

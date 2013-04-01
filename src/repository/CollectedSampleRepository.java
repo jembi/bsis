@@ -584,7 +584,7 @@ public class CollectedSampleRepository {
       CollectedSample c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
       if (bloodTypingStatus != null && !bloodTypingStatus.equals(BloodTypingStatus.NOT_DONE)) {
-        statusMap.put(c.getId(), bloodTypingRepository.getTTITestStatus(c.getId()));
+        statusMap.put(c.getId(), bloodTypingRepository.getAllTestsStatusForCollection(c.getId()));
       }
     }
     return statusMap;
