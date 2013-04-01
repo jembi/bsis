@@ -50,6 +50,10 @@ public class CollectedSampleRepository {
   @Autowired
   private BloodTestingRepository bloodTypingRepository;
 
+  @Autowired
+  private WorksheetRepository worksheetRepository;
+
+
   public void updateCollectedSampleInternalFields(CollectedSample c) {
     updateCollectedSampleBloodGroup(c);
     updateCollectedSampleTestedStatus(c);
@@ -447,10 +451,10 @@ public class CollectedSampleRepository {
     return c;
   }
 
-  public void saveAsWorksheet(String collectionNumber,
+  public void saveToWorksheet(String collectionNumber,
       List<Integer> bloodBagTypeIds, List<Long> centerIds,
       List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo,
-      boolean includeUntestedCollections, String worksheetBatchNumber) throws Exception {
+      boolean includeUntestedCollections, String worksheetNumber) throws Exception {
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     List<Object> results = findCollectedSamples(collectionNumber, bloodBagTypeIds,
@@ -458,13 +462,17 @@ public class CollectedSampleRepository {
                                           dateCollectedFrom, dateCollectedTo,
                                           includeUntestedCollections,
                                           pagingParams);
-    Worksheet worksheet = new Worksheet();
-    worksheet.setWorksheetNumber(worksheetBatchNumber);
+
+    Worksheet worksheet = worksheetRepository.findWorksheetFullInformation(worksheetNumber);
+    
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+    List<String> collectionNumbers = new ArrayList<String>();
     for (CollectedSample c : collectedSamples) {
-      worksheet.getCollectedSamples().add(c);
-      c.getWorksheets().add(worksheet);
+      collectionNumbers.add(c.getCollectionNumber());
     }
+
+    worksheetRepository.addCollectionsToWorksheet(worksheet.getId(), collectionNumbers);
+
     em.persist(worksheet);
     em.flush();
   }

@@ -129,7 +129,7 @@ public class CollectedSampleController {
     m.put("allCollectedSamples", getCollectionViewModels(collections));
     m.put("refreshUrl", getUrl(request));
     m.put("nextPageUrl", getNextPageUrl(request));
-    m.put("saveAsWorksheetUrl", getWorksheetUrl(request));
+    m.put("saveToWorksheetUrl", getWorksheetUrl(request));
     addEditSelectorOptions(m);
 
     modelAndView.addObject("model", m);
@@ -137,7 +137,7 @@ public class CollectedSampleController {
   }
 
   private String getWorksheetUrl(HttpServletRequest request) {
-    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveAsWorksheet.html");
+    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveFindCollectionsResultsToWorksheet.html");
     String queryString = request.getQueryString();   // d=789
     if (queryString != null) {
         worksheetUrl += "?" + queryString;
@@ -498,8 +498,8 @@ public class CollectedSampleController {
     return mv;
   }
 
-  @RequestMapping(value="/saveAsWorksheet", method = RequestMethod.GET)
-  public ModelAndView saveAsWorksheet(HttpServletRequest request,
+  @RequestMapping(value="/saveFindCollectionsResultsToWorksheet", method = RequestMethod.GET)
+  public ModelAndView saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form,
       BindingResult result, Model model) {
@@ -531,17 +531,18 @@ public class CollectedSampleController {
       }
     }
 
-    String worksheetBatchNumber = form.getWorksheetNumber();
+    String worksheetNumber = form.getWorksheetNumber();
+    System.out.println(worksheetNumber);
     ModelAndView mv = new ModelAndView("worksheetSaved");
     Map<String, Object> m = model.asMap();
-    m.put("worksheetBatchId", worksheetBatchNumber);
+    m.put("worksheetBatchId", worksheetNumber);
     try {
-      collectedSampleRepository.saveAsWorksheet(
+      collectedSampleRepository.saveToWorksheet(
                                         form.getCollectionNumber(),
                                         bloodBagTypeIds, centerIds, siteIds,
                                         dateCollectedFrom, dateCollectedTo,
                                         form.getIncludeTestedCollections(),
-                                        worksheetBatchNumber);
+                                        worksheetNumber);
       m.put("success", true);
     } catch (Exception ex) {
       ex.printStackTrace();

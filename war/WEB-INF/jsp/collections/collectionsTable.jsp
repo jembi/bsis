@@ -93,46 +93,46 @@ $(document).ready(
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
 
-      $("#${mainContentId}").find(".saveAsWorksheetFormToggle").button({
+      $("#${mainContentId}").find(".saveToWorksheetFormToggle").button({
         icons: {
           primary: "ui-icon-plusthick"
         }
-      }).click(toggleSaveAsWorksheetFormDiv);
+      }).click(toggleSaveToWorksheetFormDiv);
 
-      $("#${mainContentId}").find(".cancelSaveAsWorksheetButton").button().click(toggleSaveAsWorksheetFormDiv);
+      $("#${mainContentId}").find(".cancelSaveToWorksheetButton").button().click(toggleSaveToWorksheetFormDiv);
 
-      function toggleSaveAsWorksheetFormDiv() {
-        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").toggle("fast");
+      function toggleSaveToWorksheetFormDiv() {
+        $("#${mainContentId}").find(".saveToWorksheetFormDiv").toggle("fast");
   		}
 
-      function hideSaveAsWorksheetFormDiv() {
-        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").hide();
+      function hideSaveToWorksheetFormDiv() {
+        $("#${mainContentId}").find(".saveToWorksheetFormDiv").hide();
   		}
 
-      function showSaveAsWorksheetFormDiv() {
-        $("#${mainContentId}").find(".saveAsWorksheetFormDiv").show();
+      function showSaveToWorksheetFormDiv() {
+        $("#${mainContentId}").find(".saveToWorksheetFormDiv").show();
   		}
 
       function getWorksheetBatchIdInput() {
-        var worksheetForm = $("#${mainContentId}").find(".saveAsWorksheetForm");
-        return worksheetForm.find('input[name="worksheetBatchId"]').val()
+        var worksheetForm = $("#${mainContentId}").find(".saveToWorksheetForm");
+        return worksheetForm.find('input[name="worksheetNumber"]').val()
       }
       
-      $("#${mainContentId}").find(".saveAsWorksheetButton").button().click(
+      $("#${mainContentId}").find(".saveToWorksheetButton").button().click(
           function() {
-            hideSaveAsWorksheetFormDiv();
+            hideSaveToWorksheetFormDiv();
             $.ajax({
-              url: "${model.saveAsWorksheetUrl}",
-              data: {worksheetBatchId: getWorksheetBatchIdInput()},
+              url: "${model.saveToWorksheetUrl}",
+              data: {worksheetNumber: getWorksheetBatchIdInput()},
               type: "GET",
               success: function(response) {
-                				 showSaveAsWorksheetFormDiv();
+                				 showSaveToWorksheetFormDiv();
                 				 var worksheetResult = $("#${mainContentId}").find(".saveWorksheetResult");
                 				 worksheetResult.html(response);
                 				 showMessage("Successfully saved collections to worksheet.");
               				 },
               error:   function (response) {
-                				 showSaveAsWorksheetFormDiv();
+                				 showSaveToWorksheetFormDiv();
                 				 var worksheetResult = $("#${mainContentId}").find(".saveWorksheetResult");
                 				 worksheetResult.html(response.responseText);
 												 showErrorMessage("Something went wrong when trying to generate worksheet.");                
@@ -141,7 +141,7 @@ $(document).ready(
           });
 
       // hide the save as worksheet form for the first time
-      hideSaveAsWorksheetFormDiv();
+      hideSaveToWorksheetFormDiv();
     });
 </script>
 
@@ -161,20 +161,20 @@ $(document).ready(
 	
 				<br />
 				<div>
-					<button class="saveAsWorksheetFormToggle">Save collections to worksheet</button>
+					<button class="saveToWorksheetFormToggle">Save collections to worksheet</button>
 				</div>
-					<div class="saveAsWorksheetFormDiv">
+					<div class="saveToWorksheetFormDiv">
 						<div class="formDiv">
 							<b>Save Collections to worksheet</b>
-							<form class="saveAsWorksheetForm">
+							<form class="saveToWorksheetForm">
 								<div>
-									<label> Worksheet Batch ID </label>
-									<input name="worksheetBatchId" />
+									<label> Worksheet Number </label>
+									<input name="worksheetNumber" />
 								</div>
 							</form>
 							<div>
-								<button class="saveAsWorksheetButton">Save</button>
-								<button class="cancelSaveAsWorksheetButton">Cancel</button>
+								<button class="saveToWorksheetButton">Save</button>
+								<button class="cancelSaveToWorksheetButton">Cancel</button>
 							</div>
 							<div class="saveWorksheetResult">
 							</div>
