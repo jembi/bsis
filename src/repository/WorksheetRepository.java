@@ -10,10 +10,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.bloodtesting.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ public class WorksheetRepository {
 
   @PersistenceContext
   private EntityManager em;
+
+  @Autowired
+  private WorksheetTypeRepository worksheetTypeRepository;
 
   public Worksheet addWorksheet(Worksheet worksheet) {
     em.persist(worksheet);
@@ -122,5 +127,24 @@ public class WorksheetRepository {
     query.setParameter("worksheetNumber", worksheetNumber);
     query.setParameter("isDeleted", false);
     return query.getSingleResult();
+  }
+
+  public Worksheet findWorksheetByWorksheetNumber(String worksheetNumber) {
+    String queryStr = "SELECT w from Worksheet w WHERE " +
+        "w.worksheetNumber=:worksheetNumber AND w.isDeleted=:isDeleted";
+    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
+    query.setParameter("worksheetNumber", worksheetNumber);
+    query.setParameter("isDeleted", false);
+    return query.getSingleResult();
+  }
+
+  public List<BloodTest> findTestsInWorksheet(String worksheetNumber) {
+    String queryStr = "SELECT w from Worksheet w WHERE " +
+        "w.worksheetNumber=:worksheetNumber AND w.isDeleted=:isDeleted";
+    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
+    query.setParameter("worksheetNumber", worksheetNumber);
+    query.setParameter("isDeleted", false);
+    Worksheet worksheet = query.getSingleResult();
+    return worksheetTypeRepository.getBloodTestsInWorksheet(worksheet.getWorksheetType().getId());
   }
 }

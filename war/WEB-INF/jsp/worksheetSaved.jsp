@@ -25,10 +25,10 @@ $(document).ready(function() {
 		<div class="tipsBox ui-state-highlight">
 			<p>
 			  <c:if test="${model.success}">
-					All collections saved to worksheet. Worksheet batch id is ${model.worksheetBatchId}.
+					All collections saved to worksheet. Worksheet Number is ${model.worksheetNumber}.
 				</c:if>
 				<c:if test="${!model.success}">
-					<span style="color: red">Error saving collections to worksheet with batch id ${model.worksheetBatchId}.</span>
+					<span style="color: red">Error saving collections to worksheet with Worksheet Number ${model.worksheetNumber}.</span>
 				</c:if>
 			</p>
 		</div>

@@ -51,7 +51,7 @@ $(document).ready(function() {
   }).click(clearFindForm);
 
   function clearFindForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
+    refetchContent("${refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
   }
 
@@ -64,7 +64,7 @@ $(document).ready(function() {
 
 		<div class="tipsBox ui-state-highlight">
 			<p>
-				${model['testResults.worksheet']}
+				${tips['testResults.worksheet']}
 			</p>
 		</div>
 
@@ -72,8 +72,8 @@ $(document).ready(function() {
 			<b>Update worksheet with test results</b>
 			<form class="findWorksheetForm formInTabPane">
 				<div>
-					<label>Worksheet ID</label>
-					<input name="worksheetBatchId" />
+					<label>Worksheet Number</label>
+					<input name="worksheetNumber" />
 				</div>
 			</form>
 			<div>

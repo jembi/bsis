@@ -257,5 +257,40 @@ public class TTIController {
     return m;
   }
 
+  @RequestMapping(value="/saveAllTestResults", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> saveAllTestResults(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="saveTestsData") String saveTestsDataStr) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+
+    try {
+
+      Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long,String>>();
+      ObjectMapper mapper = new ObjectMapper();
+      Map<String, Map<String, String>> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
+      for (String collectionIdStr : saveTestsData.keySet()) {
+        Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+        Map<String, String> testsForCollection = saveTestsData.get(collectionIdStr);
+        for (String testIdStr : testsForCollection.keySet()) {
+          saveTestsDataWithLong.put(Long.parseLong(testIdStr), testsForCollection.get(testIdStr));
+        }
+        ttiTestResultsMap.put(Long.parseLong(collectionIdStr), saveTestsDataWithLong);
+      }
+
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap);
+      Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
+
+      if (errorMap != null && !errorMap.isEmpty())
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return m;
+  }
+
 
 }

@@ -27,7 +27,7 @@ $(document).ready(function() {
 
   var modified_cells = {};
   var original_data = {};
-  var testnames = ["Blood ABO", "Blood Rh", "HBV", "HCV", "HIV", "Syphilis"];
+  var testids = "${testIdsCommaSeparated}".split(",");
   var buttonsAlreadyAdded = false;
 
   function getWorksheetForTestResultsTable() {
@@ -54,17 +54,18 @@ $(document).ready(function() {
     "bJQueryUI" : true,
     "sDom" : '<"H"lr>t<"F"irp>',
     "bServerSide" : true,
-    "aLengthMenu": [1, 2, 5, 10, 50, 100],
+    "aLengthMenu": [1, 2, 5, 10, 50, 100],	// number of collections on each page
     "iDisplayLength" : 2,
     "bSort" : false,
     "sPaginationType" : "full_numbers",
-    "sAjaxSource" : "${model.nextPageUrl}",
+    "sAjaxSource" : "${nextPageUrl}",
     "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
                       { "sClass" : "white_bkg_class", "aTargets": [1,2,3,4,5,6]}
     								 ],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
 
       								 if (isWorksheetModified()) {
+      								   // if unsaved changes then prompt user to save changes
       								   showUnsavedChangesDialog();
       								   return;
       								 }
@@ -80,6 +81,7 @@ $(document).ready(function() {
       								     						fnCallback(jsonResponse);
       								     						getWorksheetForTestResultsTable().find(".link").click(clearRadioButtonSelection);
       								     						registerRadioButtonCallbacks();
+      								     						setOriginalColorForAllInputs();
       								     						if (jsonResponse.iTotalRecords == 0) {
       								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
       								     						}
@@ -118,8 +120,8 @@ $(document).ready(function() {
       return;
 
     $.ajax({
-      "url"  : "saveWorksheetTestResults.html", 
-      "data" : {params: JSON.stringify(modified_cells), worksheetBatchId : "${model.worksheetBatchId}"},
+      "url"  : "saveAllTestResults.html", 
+      "data" : {saveTestsData: JSON.stringify(modified_cells)},
       "type" : "POST",
       "success" : function() {
 										showMessage("Test results saved successfully");
@@ -127,7 +129,7 @@ $(document).ready(function() {
 										testResultsTable.fnStandingRedraw();
       					  },
     	"error" : function() {
-    	  					showErrorMessage("Something went wrong. Please try again.");
+    	  					showErrorMessage("Something went wrong. Please verify test result values.");
     						}
     });
   }
@@ -136,57 +138,62 @@ $(document).ready(function() {
     modified_cells = {};
 		testResultsTable.fnStandingRedraw();
   }
-  
+
+  // modify the text data passed by the server to show cells with input radio buttons
   function makeRowsEditable(data) {
     original_data = {};
-		for (var index in data) { // one row at a time
+    for (var index in data) { // one row at a time
 		  var row = data[index];
-			original_data[row[0]] = {
-			    "collectionNumber" : row[1],
-			    "Blood ABO" : row[2],
-			    "Blood Rh" : row[3],
-			    "HBV" : row[4],
-			    "HCV" : row[5],
-			    "HIV" : row[6],
-			    "Syphilis" : row[7]
+			var collectionId = row[0];	// each row has a hidden collectedsample id column
+
+			original_data[collectionId] = {
+			    "collectionNumber" : row[1]
 			};
-		  var collectedSampleId = row[0];	// each row has a hidden collectedsample id column
+
+			for (var testidIndex = 0; testidIndex < testids.length; ++testidIndex) {
+		    var testid = testids[testidIndex];
+		 		// first two columns skipped for collection id and collection number
+		    original_data[collectionId][testid] = row[testidIndex+2];
+		  }
+
+		  row[1] = getEditableCollectionNumber(row[1], collectionId);
 		  // server returns the value of the cells in order but we have replace the
 		  // value by the relevant input elements. These DOM elements are generated below.
-		  row[1] = getEditableCollectionNumber(row[1], collectedSampleId);
-		  row[2] = getEditableBloodABOSelector(row[2], collectedSampleId);
-		  row[3] = getEditableBloodRhSelector(row[3], collectedSampleId);
-		  row[4] = getEditableHBVSelector(row[4], collectedSampleId);
-		  row[5] = getEditableHCVSelector(row[5], collectedSampleId);
-		  row[6] = getEditableHIVSelector(row[6], collectedSampleId);
-		  row[7] = getEditableSyphilisSelector(row[7], collectedSampleId);
+		  for (var testidIndex = 0; testidIndex < testids.length; ++testidIndex) {
+		    var testid = testids[testidIndex];
+		    // first two columns skipped for collection id and collection number
+			  row[testidIndex+2] = getEditableTestSelector(row[testidIndex+2], collectionId, testid);
+		  }
 		}
   }
 
   function clearRadioButtonSelection(eventObj) {
+    // uncheck all radio buttons in the same row
     var row = $(eventObj.target).closest('tr');
     row.find('input[type="radio"]').prop('checked', false);
-    var collectedSampleId = $(row.find("td")[0]).html();
 
+    var collectionId = $(row.find("td")[0]).html();
     console.log(modified_cells);
-    for (var index in testnames) {
-      var testname = testnames[index];
-      var original_value = original_data[collectedSampleId][testname];
+    // recolor all cells in the row to make sure modified cells
+    // are distinguishable from the original ones
+    for (var index in testids) {
+      var testid = testids[index];
+      var original_value = original_data[collectionId][testid];
 
       // just find the first radio button within the row for the test name
-		  var firstRadioButtonForTest = row.find('input[data-testname="' + testname + '"]:first');
+		  var firstRadioButtonForTest = row.find('input[data-testid="' + testid + '"]:first');
       // find the table cell containing this radio button
       var tableCell = firstRadioButtonForTest.closest("td");
 
-  		if (original_value === null || original_value === "") {
+  		if (original_value === undefined || original_value === "") {
   		  // same as original, exclude from change set
-  		  if (modified_cells[collectedSampleId] !== undefined && modified_cells[collectedSampleId][testname] !== undefined)
-  		  	delete modified_cells[collectedSampleId][testname];
-  			setOriginalColor(tableCell);
+  		  if (modified_cells[collectionId] !== undefined && modified_cells[collectionId][testid] !== undefined)
+  		  	delete modified_cells[collectionId][testid];
+  			setOriginalColor(collectionId, testid, tableCell);
   		} else {
   		  // value changed
-  			modified_cells[collectedSampleId] = modified_cells[collectedSampleId] || {};
-  			modified_cells[collectedSampleId][testname] = "";
+  			modified_cells[collectionId] = modified_cells[collectionId] || {};
+  			modified_cells[collectionId][testid] = "";
   			setModifiedColor(tableCell);
   		}
     }
@@ -195,10 +202,18 @@ $(document).ready(function() {
 
   function setModifiedColor(cell) {
     cell.css("background-color", "#c4d9e7");
+    cell.css("color", "black");
   }
 
-  function setOriginalColor(cell) {
-    cell.css("background-color", "#ffffff");
+  function setOriginalColor(collectionId, testId, cell) {
+    if (original_data[collectionId][testId] !== "") {
+      cell.css("background", "#00642C");
+      cell.css("color", "white");
+    }
+    else {
+    	cell.css("background", "#ffffff");
+    	cell.css("color", "black");
+    }
   }
   
   function getRowFromRadioButton(radioButton) {
@@ -227,153 +242,109 @@ $(document).ready(function() {
       		var cell = radioButton.closest("td");
       		var row = radioButton.closest("tr");
       		var rowCells = row.children();
-      		var collectedSampleId = $(rowCells[0]).html();
+      		// collection id modified
+      		var collectionId = $(rowCells[0]).html();
       		var cellInput = cell.find("input:checked");
       		console.log(modified_cells);
-      		modified_cells[collectedSampleId] = modified_cells[collectedSampleId] || {};
-      		var testname = cellInput.data("testname");
+      		modified_cells[collectionId] = modified_cells[collectionId] || {};
+      		var testid = cellInput.data("testid");
       		var testvalue = cellInput.val();
-      		if (testvalue === original_data[collectedSampleId][testname]) {
+      		if (testvalue === original_data[collectionId][testid]) {
       		  // same as original, exclude from change set
-      		  delete modified_cells[collectedSampleId][testname];
-						cell.css("background-color", "#ffffff");
+      		  // this is how a modified cell can go to unmodified state
+      		  delete modified_cells[collectionId][testid];
+						setOriginalColor(collectionId, testid, cell);
       		} else {
       		  // value changed
+      		  // mark cell as modified
       			cell.css("background-color", "#c4d9e7");
-      			modified_cells[collectedSampleId][testname] = testvalue;
+      		  cell.css("color", "black");
+      			modified_cells[collectionId][testid] = testvalue;
       		}
       		console.log(modified_cells);
     		});
   }
 
-  function getEditableCollectionNumber(cell, collectedSampleId) {
-    return '<div style="height: ${model.worksheetConfig.rowHeight}px; margin: 5px;">' + cell +
+  function setOriginalColorForAllInputs() {
+    getWorksheetForTestResultsTable().find('input[type="radio"]')
+    																 .each(function() {
+    																   setOriginalColor($(this).data("rowid"), $(this).data("testid"), $(this).closest("td"));
+    																 });
+  }
+
+  function getEditableCollectionNumber(cell, collectionId) {
+    return '<div style="height: ${worksheetConfig.rowHeight}px; margin-left: 2px; font-size: 1.2em;">' + cell +
     					'<br /> <br />' +
     					'<span class="link clearSelection">Clear</span>' +
     			 '</div>';
   }
 
-  function getEditableBloodABOSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodABOField");
+  function getEditableTestSelector(cell, collectionId, testid) {
+    var rowContents = $("#${editableFieldsForTableId}").find(".editable" + testid + "Field");
     console.log(rowContents[0]);
-    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = rowContents[0].outerHTML.replace(/collectionId/g, collectionId);
     rowContents = $(rowContents);
     if (cell !== null && cell !== undefined && cell !== "") {
-      var radioButton = rowContents.find('input[data-testname="Blood ABO"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
+      // check the appropriate radio button if the test result is already available
+      var radioButton = rowContents.find('input[data-testid="' + testid + '"]' +
+          '[data-rowid="' + collectionId + '"]' +
+          '[data-validresult="' + cell + '"]');
       radioButton.attr("checked", "checked");
     }
 		return rowContents[0].outerHTML;
   }
   
-  function getEditableBloodRhSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableBloodRhField");
-    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
-    rowContents = $(rowContents);
-    if (cell !== null && cell !== undefined && cell !== "") {
-      var radioButton = rowContents.find('input[data-testname="Blood Rh"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
-      radioButton.attr("checked", "checked");
-    }
-		return rowContents[0].outerHTML;
-  }
-
-  function getEditableHBVSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableHBVField");
-    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
-    rowContents = $(rowContents);
-    if (cell !== null && cell !== undefined && cell !== "") {
-      var radioButton = rowContents.find('input[data-testname="HBV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
-      radioButton.attr("checked", "checked");
-    }
-		return rowContents[0].outerHTML;
-  }
-
-  function getEditableHCVSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableHCVField");
-    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
-    rowContents = $(rowContents);
-    if (cell !== null && cell !== undefined && cell !== "") {
-      var radioButton = rowContents.find('input[data-testname="HCV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
-      radioButton.attr("checked", "checked");
-    }
-		return rowContents[0].outerHTML;
-  }
-
-  function getEditableHIVSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableHIVField");
-    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
-    rowContents = $(rowContents);
-    if (cell !== null && cell !== undefined && cell !== "") {
-      var radioButton = rowContents.find('input[data-testname="HIV"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
-      radioButton.attr("checked", "checked");
-    }
-		return rowContents[0].outerHTML;
-  }
-
-  function getEditableSyphilisSelector(cell, collectedSampleId) {
-    var rowContents = $("#${editableFieldsForTableId}").find(".editableSyphilisField");
-    rowContents = rowContents[0].outerHTML.replace(/collectedSampleId/g, collectedSampleId);
-    rowContents = $(rowContents);
-    if (cell !== null && cell !== undefined && cell !== "") {
-      var radioButton = rowContents.find('input[data-testname="Syphilis"][data-rowid="' + collectedSampleId + '"][data-allowedresult=' + cell + ']');
-      radioButton.attr("checked", "checked");
-    }
-		return rowContents[0].outerHTML;
-  }
-
   function rowDeselectDisableEdit(node) {
     getWorksheetForTestResultsTable().find(".editableField").hide();
-    rowContents = rowContents.replace(/collectedSampleId/g, collectedSampleId);
+    rowContents = rowContents.replace(/collectionId/g, collectionId);
     $(node).find(".viewableField").show();
   }
-  
 });
 </script>
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}">
-		<c:if test="${!model.worksheetFound}">
+		<c:if test="${!worksheetFound}">
 			<span style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 					No worksheet found.
 			</span>
 		</c:if>
-		<c:if test="${model.worksheetFound}">
+		<c:if test="${worksheetFound}">
 
 			<br />
 			<br />
 
 			<div class="printableArea">
 
-				<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet ID: ${model.worksheetBatchId}</div>
+				<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet ID: ${worksheetBatchId}</div>
 					<table class="dataTable worksheetForTestResultsTable noHighlight">
 						<thead>
 							<tr>
 								<th style="display: none"></th>
-								<c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+								<c:if test="${worksheetConfig['collectionNumber'] == 'true'}">
 									<th style="width: 150px;">
 										Collection Number
 									</th>
 								</c:if>
 
-								<c:forEach var="bloodTest" items="${model.bloodTests}">
-									<c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
-								  	<th style="width: 170px;">
-											${bloodTest.name}
-										</th>
-									</c:if>
+								<c:forEach var="bloodTest" items="${bloodTests}">
+									<th style="width: 170px;">
+										${bloodTest.testNameShort}
+									</th>
 								</c:forEach>
 							</tr>
 						</thead>
 						<tbody style="font-size: 11pt;">
-							<c:forEach var="collectedSample" items="${model.allCollectedSamples}">
+							<c:forEach var="collectedSample" items="${allCollectedSamples}">
 								<tr>
 									<td style="display: none">${collectedSample.id}</td>
-								  <c:if test="${model.worksheetConfig['collectionNumber'] == 'true'}">
+								  <c:if test="${worksheetConfig['collectionNumber'] == 'true'}">
 										<td>
 											${collectedSample.collectionNumber}
 										</td>
 									</c:if>
-									<c:forEach var="bloodTest" items="${model.bloodTests}">
-									  <c:if test="${model.worksheetConfig[bloodTest.name] == 'true'}">
+									<c:forEach var="bloodTest" items="${bloodTests}">
+									  <c:if test="${worksheetConfig[bloodTest.name] == 'true'}">
 											<td></td>
 										</c:if>
 								</c:forEach>
@@ -382,7 +353,8 @@ $(document).ready(function() {
 						</tbody>
 						<tfoot>
 							<tr>
-							<td colspan="9" align="right">
+							<!-- colspan must be set in order for buttons to appear at the appropriate position -->
+							<td colspan="${fn:length(bloodTests) + 2}" align="right">
 								<button class="worksheetSaveAndNextButton">Save</button>
 								<button class="worksheetUndoChangesOnPageButton">Undo changes on this page</button>
 							</td>
@@ -402,10 +374,10 @@ $(document).ready(function() {
 </div>
 
 <div id="${editableFieldsForTableId}" style="display: none;">
-	<c:forEach var="bloodTest" items="${model.bloodTests}">
-		<div class="editable${fn:replace(bloodTest.name, ' ', '')}Field editableField">
-			<c:set var="uniqueInputName" value="${fn:replace(bloodTest.name,' ','')}-collectedSampleId" />
-			<c:forEach var="allowedResult" items="${bloodTest.allowedResults}">
+	<c:forEach var="bloodTest" items="${bloodTests}">
+		<div class="editable${fn:replace(bloodTest.id, ' ', '')}Field editableField">
+			<c:set var="uniqueInputName" value="${fn:replace(bloodTest.testNameShort,' ','')}-collectionId" />
+			<c:forEach var="validResult" items="${bloodTest.validResults}">
 				<div>
 					<!-- using collected sample id as the name should be unique across multiple inputs.
 							 otherwise selecting one radio button will change another radio button with the
@@ -416,14 +388,15 @@ $(document).ready(function() {
 							 this is nice from usability point of view.
 					  -->
 	 			  <label style="margin-left: 2px;
-	 			 			   margin-right: 0; cursor: pointer;">
+	 			 			   margin-right: 0; cursor: pointer; font-size: 20px;">
 	 			 		<input type="radio"
-				 		   	   name="${uniqueInputName}" value="${allowedResult}"
-				 				   data-testname="${bloodTest.name}"
-				 				   data-allowedresult="${allowedResult}"
-				 				   data-rowid="collectedSampleId"
-				 				   style="width: 10px; margin-left: 0; margin-right: 0;" />
-	 			 			   ${allowedResult}
+				 		   	   name="${uniqueInputName}" value="${validResult}"
+				 				   data-testname="${bloodTest.testNameShort}"
+				 				   data-testid="${bloodTest.id}"
+				 				   data-validresult="${validResult}"
+				 				   data-rowid="collectionId"
+				 				   style="width: 15px; margin-left: 0; margin-right: 0;" />
+	 			 			   ${validResult}
 	 			 	</label>
 
 			  </div>
@@ -439,3 +412,4 @@ $(document).ready(function() {
   	There are unsaved changes on the worksheet. Please save this page before continuing to the next page.
   </p>
 </div>
+

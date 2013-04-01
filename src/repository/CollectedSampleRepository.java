@@ -477,12 +477,12 @@ public class CollectedSampleRepository {
     em.flush();
   }
 
-  public Worksheet findWorksheet(String worksheetBatchId) {
-    String queryStr = "SELECT w from CollectionsWorksheet w LEFT JOIN FETCH w.collectedSamples c " +
-        "where w.worksheetBatchId = :worksheetBatchId";
+  public Worksheet findWorksheet(String worksheetNumber) {
+    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples c " +
+        "where w.worksheetNumber = :worksheetNumber";
 
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
-    query.setParameter("worksheetBatchId", worksheetBatchId);
+    query.setParameter("worksheetNumber", worksheetNumber);
     Worksheet worksheet = null;
     try {
     worksheet = query.getSingleResult();
@@ -495,9 +495,9 @@ public class CollectedSampleRepository {
     return worksheet;
   }
 
-  public List<CollectedSample> findCollectionsInWorksheet(String worksheetBatchId) {
+  public List<CollectedSample> findCollectionsInWorksheet(String worksheetNumber) {
 
-    Worksheet worksheet = findWorksheet(worksheetBatchId);
+    Worksheet worksheet = findWorksheet(worksheetNumber);
     if (worksheet == null)
       return null;
 
@@ -506,13 +506,13 @@ public class CollectedSampleRepository {
     return collectedSamples;
   }
 
-  public List<Object> findCollectionsInWorksheet(String worksheetBatchId, Map<String, Object> pagingParams) {
+  public List<Object> findCollectionsInWorksheet(String worksheetNumber, Map<String, Object> pagingParams) {
 
     try {
       String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
-                                   "WHERE w.worksheetBatchId = :worksheetBatchId ORDER BY c.id ASC";
+                                   "WHERE w.worksheetNumber = :worksheetNumber ORDER BY c.id ASC";
       TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
-      collectionsQuery.setParameter("worksheetBatchId", worksheetBatchId);
+      collectionsQuery.setParameter("worksheetNumber", worksheetNumber);
   
       int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
       int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -522,18 +522,18 @@ public class CollectedSampleRepository {
   
       List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
   
-      return Arrays.asList(collectedSamples, getTotalCollectionsInWorksheet(worksheetBatchId));
+      return Arrays.asList(collectedSamples, getTotalCollectionsInWorksheet(worksheetNumber));
     } catch (NoResultException ex){
       return Arrays.asList(Arrays.asList(new CollectedSample[0]), new Long(0));
     }
   }
 
-  private Long getTotalCollectionsInWorksheet(String worksheetBatchId) {
-    String queryStr = "SELECT COUNT(c) from CollectionsWorksheet w LEFT JOIN w.collectedSamples c " +
-        "where w.worksheetBatchId = :worksheetBatchId";
+  private Long getTotalCollectionsInWorksheet(String worksheetNumber) {
+    String queryStr = "SELECT COUNT(c) from Worksheet w LEFT JOIN w.collectedSamples c " +
+        "where w.worksheetNumber = :worksheetNumber";
 
     TypedQuery<Long> query = em.createQuery(queryStr, Long.class);
-    query.setParameter("worksheetBatchId", worksheetBatchId);
+    query.setParameter("worksheetNumber", worksheetNumber);
     return query.getSingleResult().longValue();
   }
 

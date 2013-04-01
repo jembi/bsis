@@ -1,6 +1,8 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.admin.ConfigPropertyConstants;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestResult;
 import model.collectedsample.CollectedSample;
 import model.worksheet.FindWorksheetBackingForm;
 import model.worksheet.Worksheet;
 import model.worksheet.WorksheetBackingForm;
 import model.worksheet.WorksheetBackingFormValidator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +36,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.WorksheetRepository;
 import repository.WorksheetTypeRepository;
+import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.WorksheetViewModel;
 
 @Controller
@@ -51,6 +61,9 @@ public class WorksheetController {
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
+
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   private UtilController utilController;
@@ -277,4 +290,142 @@ public class WorksheetController {
     Collections.sort(collectedSamples);
     return collectedSamples;
   }
+
+  @RequestMapping(value = "/worksheetForTestResultsFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findWorksheetForTestResultsFormGenerator(HttpServletRequest request) {
+
+    ModelAndView mv = new ModelAndView("worksheets/findWorksheetForTestResults");
+    mv.addObject("refreshUrl", getUrl(request));
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "testResults.worksheet");
+    mv.addObject("tips", tips);
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    return mv;
+  }
+
+  @RequestMapping(value="/editTestResultsForWorksheet", method=RequestMethod.GET)
+  public ModelAndView editTestResultsForWorksheet(HttpServletRequest request,
+      @RequestParam(value="worksheetNumber") String worksheetNumber) {
+
+    ModelAndView mv = new ModelAndView("worksheets/worksheetForTestResults");
+    mv.addObject("worksheetFound", true);
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    
+    List<BloodTest> bloodTests = worksheetRepository.findTestsInWorksheet(worksheetNumber);
+    mv.addObject("bloodTests", bloodTests);
+
+    List<String> testIds = new ArrayList<String>();
+    for (BloodTest bt : bloodTests) {
+      testIds.add(bt.getId().toString());
+    }
+
+    mv.addObject("testIdsCommaSeparated", StringUtils.join(testIds, ","));
+
+    mv.addObject("worksheetNumber", worksheetNumber);
+    mv.addObject("nextPageUrl", getNextPageUrl(request));
+    return mv;
+  }
+
+  @RequestMapping(value="/editTestResultsForWorksheetPagination", method=RequestMethod.GET)
+  public @ResponseBody Map<String, Object> editTestResultsForWorksheetPagination(HttpServletRequest request, Model model,
+      @RequestParam(value="worksheetNumber") String worksheetNumber) {
+
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    List<Object> results = collectedSampleRepository.findCollectionsInWorksheet(worksheetNumber, pagingParams);
+
+    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+    List<BloodTest> bloodTests = worksheetRepository.findTestsInWorksheet(worksheetNumber);
+    return generateDatatablesMap(collectedSamples, bloodTests, totalRecords);
+  }
+
+
+  private String getNextPageUrl(HttpServletRequest request) {
+    String reqUrl = request.getRequestURL().toString().replaceFirst("editTestResultsForWorksheet.html", "editTestResultsForWorksheetPagination.html");
+    String queryString = request.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in collectionsTable.jsp.
+   * @param bloodTests 
+   */
+  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, List<BloodTest> bloodTests, Long totalRecords) {
+
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    Map<String, String> properties = genericConfigRepository.getConfigProperties(propertyOwners);
+
+    Map<String, Object> resultsMap = new HashMap<String, Object>();
+    ArrayList<Object> resultList = new ArrayList<Object>();
+
+    for (CollectedSample collectedSample : collectedSamples) {
+
+      List<Object> row = new ArrayList<Object>();
+      // id goes as the first column to identify the collection uniquely
+      row.add(collectedSample.getId());
+
+      // second column is collection number
+      if (properties.containsKey("collectionNumber") && properties.get("collectionNumber").equals("true")) {
+          row.add(collectedSample.getCollectionNumber());
+      }
+
+      Map<Integer, BloodTestResult> recentTestResults = bloodTestingRepository.getRecentTestResultsForCollection(collectedSample.getId());
+      System.out.println(recentTestResults);
+      // now add results for existing tests related to this worksheet
+      for (BloodTest bt : bloodTests) {
+        
+        if (recentTestResults.containsKey(bt.getId()))
+          row.add(recentTestResults.get(bt.getId()).getResult());
+        else
+          row.add("");
+      }
+      System.out.println(row);
+      resultList.add(row);
+    }
+
+    resultsMap.put("aaData", resultList);
+    resultsMap.put("iTotalRecords", totalRecords);
+    resultsMap.put("iTotalDisplayRecords", totalRecords);
+    return resultsMap;
+  }
+
+  @RequestMapping(value="saveWorksheetTestResults", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object>
+          saveWorksheetTestResults(HttpServletRequest request,
+              HttpServletResponse response,
+              @RequestParam(value="params") String requestParams,
+              @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
+
+    Map<String, Object> result = new HashMap<String, Object>();
+
+    System.out.println(requestParams);
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      Map<String, Map<String, String>> testResultChanges = mapper.readValue(requestParams, HashMap.class);
+      System.out.println(testResultChanges);
+//      testResultRepository.saveTestResultsToWorksheet(worksheetBatchId, testResultChanges);
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return result;
+  }
+
 }

@@ -25,7 +25,7 @@ import model.user.User;
  * @author iamrohitbanga
  */
 @Entity
-public class BloodTestResult implements ModificationTracker{
+public class BloodTestResult implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
