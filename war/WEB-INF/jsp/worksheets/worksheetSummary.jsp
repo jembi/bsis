@@ -64,6 +64,36 @@
 				  $("#${childContentId}").html("");
 				}
 
+      	$("#${mainContentId}").find(".showHideButton")
+															.button({icons: {primary : 'ui-icon-plusthick'}})
+															.click(showHideToggle);
+
+				function showHideToggle() {
+					var showHideButton = $(this);
+					var showHideSection = $("#${mainContentId}").find(".worksheetDetails")
+																											.find(".inputCollectionsSection");
+					var currentlyVisible = showHideSection.is(":visible");
+					if (currentlyVisible) {
+						$("#${mainContentId}").find(".availableTestResultInput")
+											 					  .each(function() {
+					                                $(this).prop("type", "hidden");
+					                              });
+						$("#${mainContentId}").find(".availableTestResultLabel")
+					                        .each(function() {
+						                              $(this).show();
+					                              });
+						showHideButton.button("option", "label", "Add collections");
+						showHideButton.button("option", "icons", {primary : "ui-icon-plusthick"});
+						showHideSection.hide();
+					}
+					else {
+						showHideButton.button("option", "label", "Show less");
+						showHideButton.button("option", "icons", {primary : "ui-icon-minusthick"});
+						showHideSection.show();
+					}
+				}
+
+				showHideToggle();
       });
 </script>
 
@@ -78,7 +108,10 @@
 				Delete
 			</button>
 		</div>
-		<jsp:include page="worksheetDetail.jsp" />
+		<div class="worksheetDetails">
+			<jsp:include page="worksheetDetail.jsp" />
+		</div>
+		<button class="showHideButton">Add collections</button>
 	</div>
 
 	<div id="${childContentId}"></div>

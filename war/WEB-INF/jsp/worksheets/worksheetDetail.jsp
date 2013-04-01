@@ -83,38 +83,40 @@ $(document).ready(function() {
 		</div>
 		<hr />
 
-		<div>
-			<label style="width: auto;"><b>Add collections to worksheet</b></label>
-		</div>
-		<div>
-			<label style="width: auto;">Scan/type collection numbers and then click the button below to add collections to the worksheet</label>
-		</div>
-
-		<div>
-			<button class="addCollectionsToWorksheetButton">Click here to add collections to worksheet</button>
-		</div>
-
-		<c:forEach var="counter" begin="${1}" end="${12}">
+		<div class="inputCollectionsSection">
 			<div>
-				<label>Collection ${counter}</label>
-				<c:if test="${not empty enteredCollectionNumbers and not empty enteredCollectionNumbers[counter-1]}">
-					<c:set var="collectionNumber" value="${enteredCollectionNumbers[counter-1]}" />
-					<input class="collectionNumberForWorksheetInput"
-								 name="collectionNumber-${counter}"
-								 value="${collectionNumber}" />
-					<c:if test="${not empty invalidCollectionNumbers[collectionNumber]}">
-						<label class="formError" style="width: auto;">Invalid collection number</label>
-					</c:if>
-				</c:if>
-				<c:if test="${empty enteredCollectionNumbers or empty enteredCollectionNumbers[counter-1]}">
-					<input class="collectionNumberForWorksheetInput" name="collectionNumber-${counter}" />
-				</c:if> 
-				
+				<label style="width: auto;"><b>Add collections to worksheet</b></label>
 			</div>
-		</c:forEach>
-
-		<div>
-			<button class="addCollectionsToWorksheetButton">Click here to add collections to worksheet</button>
+			<div>
+				<label style="width: auto;">Scan/type collection numbers and then click the button below to add collections to the worksheet</label>
+			</div>
+	
+			<div>
+				<button class="addCollectionsToWorksheetButton">Click here to add collections to worksheet</button>
+			</div>
+	
+			<c:forEach var="counter" begin="${1}" end="${12}">
+				<div>
+					<label>Collection ${counter}</label>
+					<c:if test="${not empty enteredCollectionNumbers and not empty enteredCollectionNumbers[counter-1]}">
+						<c:set var="collectionNumber" value="${enteredCollectionNumbers[counter-1]}" />
+						<input class="collectionNumberForWorksheetInput"
+									 name="collectionNumber-${counter}"
+									 value="${collectionNumber}" />
+						<c:if test="${not empty invalidCollectionNumbers[collectionNumber]}">
+							<label class="formError" style="width: auto;">Invalid collection number</label>
+						</c:if>
+					</c:if>
+					<c:if test="${empty enteredCollectionNumbers or empty enteredCollectionNumbers[counter-1]}">
+						<input class="collectionNumberForWorksheetInput" name="collectionNumber-${counter}" />
+					</c:if> 
+					
+				</div>
+			</c:forEach>
+	
+			<div>
+				<button class="addCollectionsToWorksheetButton">Click here to add collections to worksheet</button>
+			</div>
 		</div>
 	</div>
 </div>
