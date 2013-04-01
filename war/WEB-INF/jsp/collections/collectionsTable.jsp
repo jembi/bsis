@@ -204,7 +204,7 @@ $(document).ready(
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="collection" items="${model.allProducts}">
+						<c:forEach var="collection" items="${model.allCollections}">
 							<tr>
 								<td style="display: none">${collection.id}</td>
 								<c:if test="${model.collectedSampleFields.collectionNumber.hidden != true}">
@@ -217,10 +217,10 @@ $(document).ready(
 									<td>${collection.bloodBagType.bloodBagType}</td>
 								</c:if>
 								<c:if test="${model.collectedSampleFields.collectionCenter.hidden != true}">
-									<td>${product.collectionCenter}</td>
+									<td>${collection.collectionCenter}</td>
 								</c:if>
 								<c:if test="${model.collectedSampleFields.collectionSite.hidden != true}">
-									<td>${product.collectionSite}</td>
+									<td>${collection.collectionSite}</td>
 								</c:if>
 							</tr>
 						</c:forEach>

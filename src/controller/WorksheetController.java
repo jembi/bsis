@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
+import model.worksheet.FindWorksheetBackingForm;
 import model.worksheet.Worksheet;
 import model.worksheet.WorksheetBackingForm;
 import model.worksheet.WorksheetBackingFormValidator;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
@@ -177,8 +180,7 @@ public class WorksheetController {
     ModelAndView mv = new ModelAndView();
     mv.addObject("worksheet", worksheet);
     mv.addObject("worksheetId", worksheet.getId());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("worksheet");
-    mv.addObject("worksheetFields", formFields);
+    mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
 
     if (numErrors > 0) {
       mv.addObject("invalidCollectionNumbers", invalidCollectionNumbers);
@@ -191,5 +193,73 @@ public class WorksheetController {
     mv.setViewName("worksheets/worksheetDetail");
 
     return mv;
+  }
+
+  @RequestMapping(value="/findWorksheetFormGenerator", method=RequestMethod.GET)
+  public ModelAndView findCollectionWorksheetFormGenerator(HttpServletRequest request, Model model) {
+    ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
+    Map<String, Object> m = model.asMap();
+    m.put("refreshUrl", getUrl(request));
+    FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
+    mv.addObject("findWorksheetForm", findWorksheetForm);
+    mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
+    return mv;
+  }
+
+  @RequestMapping(value="/findWorksheet", method=RequestMethod.GET)
+  public ModelAndView findWorksheet(HttpServletRequest request,
+        HttpServletResponse response, @ModelAttribute(value="findWorksheetForm") FindWorksheetBackingForm form) {
+
+    ModelAndView mv = new ModelAndView();
+    List<Worksheet> worksheets = worksheetRepository.findWorksheets(form.getWorksheetNumber(), form.getWorksheetTypes());
+    mv.addObject("allWorksheets", getWorksheetViewModels(worksheets));
+    mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.setViewName("worksheets/worksheetsTable");
+    return mv;
+  }
+
+  @RequestMapping(value = "/worksheetSummary", method = RequestMethod.GET)
+  public ModelAndView worksheetSummary(
+      HttpServletRequest request,
+      @RequestParam("worksheetId") Long worksheetId) {
+    ModelAndView mv = new ModelAndView();
+    Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);
+    mv.addObject("worksheet", getWorksheetViewModel(worksheet));
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("worksheetId", worksheet.getId());
+    mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
+    mv.setViewName("worksheets/worksheetSummary");
+    return mv;
+  }
+
+  @RequestMapping(value = "/deleteWorksheet", method = RequestMethod.POST)
+  public @ResponseBody
+  Map<String, ? extends Object> deleteCollection(
+      @RequestParam("worksheetId") Long worksheetId) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      worksheetRepository.deleteWorksheet(worksheetId);
+    } catch (Exception ex) {
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
+
+  private Object getWorksheetViewModels(List<Worksheet> worksheets) {
+    List<WorksheetViewModel> worksheetViewModels = new ArrayList<WorksheetViewModel>();
+    for (Worksheet worksheet : worksheets) {
+      worksheetViewModels.add(new WorksheetViewModel(worksheet));
+    }
+    return worksheetViewModels;
   }
 }

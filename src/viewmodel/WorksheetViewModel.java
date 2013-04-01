@@ -3,6 +3,7 @@ package viewmodel;
 import java.util.Date;
 import java.util.List;
 
+import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.user.User;
 import model.worksheet.Worksheet;
@@ -26,10 +27,6 @@ public class WorksheetViewModel {
 
   public Date getLastUpdated() {
     return worksheet.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return worksheet.getCreatedDate();
   }
 
   public User getCreatedBy() {
@@ -56,4 +53,7 @@ public class WorksheetViewModel {
     return worksheet.getIsDeleted();
   }
 
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(worksheet.getCreatedDate());
+  }
 }

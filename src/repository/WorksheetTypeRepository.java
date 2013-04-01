@@ -35,5 +35,4 @@ public class WorksheetTypeRepository {
       return null;
     return query.getSingleResult();
   }
-
 }

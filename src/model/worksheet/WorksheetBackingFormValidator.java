@@ -27,7 +27,8 @@ public class WorksheetBackingFormValidator implements Validator {
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(WorksheetViewModel.class,
                          Worksheet.class,
-                         WorksheetBackingForm.class).contains(clazz);
+                         WorksheetBackingForm.class,
+                         FindWorksheetBackingForm.class).contains(clazz);
   }
 
   @Override

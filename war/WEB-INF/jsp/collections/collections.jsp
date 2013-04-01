@@ -29,7 +29,7 @@
 			<a href="addWorksheetFormGenerator.html">Add worksheet</a>
 		</li>
 		<li id="findCollectionsWorksheet">
-			<a href="findCollectionWorksheetFormGenerator.html">Generate worksheet</a>
+			<a href="findWorksheetFormGenerator.html">Find/Print worksheet</a>
 		</li>
 	</ul>
 </div>

@@ -28,15 +28,17 @@ $(document).ready(function() {
 		    collectionNumbers.push(value);
 		  }
 		}
-		console.log(collectionNumbers);
+		if (collectionNumbers.length == 0)
+		  return;
 		showLoadingImage($("#${tabContentId}"));
 		$.ajax({
 		  url: "addCollectionsToWorksheet.html",
 		  type: "POST",
 		  data: {worksheetId: ${worksheet.id}, collectionNumbers: collectionNumbers},
 		  success: function(response) {
-								 $("#${tabContentId}").replaceWith(response);
-								 showMessage("Collections added successfully to worksheet");
+		    							$("#${tabContentId}").trigger("refreshWorksheet");
+				 							$("#${tabContentId}").replaceWith(response);
+								 			showMessage("Collections added successfully to worksheet");
 		  				 },
 		  error: function(response) {
 							 $("#${tabContentId}").replaceWith(response.responseText);
@@ -85,7 +87,7 @@ $(document).ready(function() {
 			<label style="width: auto;"><b>Add collections to worksheet</b></label>
 		</div>
 		<div>
-			<label style="width: auto;">Scan/type collection numbers</label>
+			<label style="width: auto;">Scan/type collection numbers and then click the button below to add collections to the worksheet</label>
 		</div>
 
 		<div>
@@ -114,6 +116,5 @@ $(document).ready(function() {
 		<div>
 			<button class="addCollectionsToWorksheetButton">Click here to add collections to worksheet</button>
 		</div>
-
 	</div>
 </div>

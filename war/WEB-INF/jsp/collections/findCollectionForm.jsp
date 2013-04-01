@@ -49,11 +49,9 @@ $(document).ready(function() {
     });
   });
 
-  $("#${tabContentId}").find(".clearFindFormButton").button({
-    icons : {
-      
-    }
-  }).click(clearFindForm);
+  $("#${tabContentId}").find(".clearFindFormButton")
+  										 .button()
+  										 .click(clearFindForm);
   
   function clearFindForm() {
     refetchContent("${refreshUrl}", $("#${tabContentId}"));

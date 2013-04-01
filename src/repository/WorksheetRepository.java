@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +13,7 @@ import javax.persistence.TypedQuery;
 import model.collectedsample.CollectedSample;
 import model.worksheet.Worksheet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,5 +71,40 @@ public class WorksheetRepository {
     em.merge(worksheet);
     em.flush();
   }
+
+  public List<Worksheet> findWorksheets(String worksheetNumber, List<String> worksheetTypes) {
+
+    List<Integer> worksheetTypeIds = new ArrayList<Integer>();
+    for (String worksheetTypeIdStr : worksheetTypes) {
+      worksheetTypeIds.add(Integer.parseInt(worksheetTypeIdStr));
+    }
+
+    worksheetTypeIds.add(-1);
+    TypedQuery<Worksheet> query = null;
+    if (StringUtils.isBlank(worksheetNumber)) {
+      String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+      		"w.worksheetType.id IN (:worksheetTypeIds) AND w.isDeleted=:isDeleted";
+      query = em.createQuery(queryStr, Worksheet.class);
+      query.setParameter("worksheetTypeIds", worksheetTypeIds);
+      query.setParameter("isDeleted", false);
+    } else {
+      String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+      		"w.worksheetNumber = :worksheetNumber AND w.isDeleted=:isDeleted";
+      query = em.createQuery(queryStr, Worksheet.class);
+      query.setParameter("worksheetNumber", worksheetNumber);
+      query.setParameter("isDeleted", false);
+    }
+    if (query == null)
+      return Arrays.asList(new Worksheet[0]);
+    return query.getResultList();
+  }
+
+  public void deleteWorksheet(Long worksheetId) {
+    Worksheet existingWorksheet = findWorksheetById(worksheetId);
+    existingWorksheet.setIsDeleted(Boolean.TRUE);
+    em.merge(existingWorksheet);
+    em.flush();
+  }
+
 
 }

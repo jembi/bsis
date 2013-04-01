@@ -89,3 +89,19 @@ function updateWorksheetGeneric(form, resultDivId, url, successCallback) {
            }
   });
 }
+
+function deleteWorksheet(worksheetId, successCallback) {
+  $.ajax({
+    type : "POST",
+    url : "deleteWorksheet.html",
+    data : {worksheetId: worksheetId},
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        successCallback();
+        showMessage("Worksheet Deleted Successfully!");
+      } else {
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
+      }
+    }
+  });
+}
