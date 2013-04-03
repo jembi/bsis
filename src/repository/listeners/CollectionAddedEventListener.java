@@ -21,6 +21,9 @@ public class CollectionAddedEventListener implements ApplicationListener<Collect
   
   @Override
   public void onApplicationEvent(CollectionAddedEvent event) {
+    System.out.println("collection added event listener called");
+    System.out.println("event ID: " + event.getEventId());
+    System.out.println("event context: " + event.getEventContext());
     updateDonor(event);
   }
 

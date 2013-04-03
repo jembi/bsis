@@ -2,8 +2,7 @@ package model.product;
 
 public enum ProductStatus {
 
-  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, USED, UNSAFE,
-  SUBDIVIDED, DISCARDED, RETURNED, IMPORTED, OTHER;
+  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, USED, UNSAFE, DISCARDED;
 
   public static ProductStatus lookup(String statusStr) {
     ProductStatus status = null;
@@ -11,7 +10,7 @@ public enum ProductStatus {
        status = ProductStatus.valueOf(statusStr);
     } catch (IllegalArgumentException ex) {
       ex.printStackTrace();
-      status = ProductStatus.OTHER;
+      status = ProductStatus.QUARANTINED;
     }
     return status;
   }

@@ -33,11 +33,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.NonUniqueObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
+import repository.events.ApplicationContextProvider;
+import repository.events.CollectionAddedEvent;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -360,43 +363,14 @@ public class CollectedSampleRepository {
     return resultMap;
   }
 
-//  public List<TestResultViewModel> findUntestedCollectedSamples(String dateCollectedFrom,
-//      String dateCollectedTo) {
-//
-//    TypedQuery<CollectedSample> query = em
-//        .createQuery(
-//            "SELECT c FROM CollectedSample c WHERE c.dateCollected >= :fromDate "
-//                + "AND c.dateCollected<= :toDate AND c.isDeleted= :isDeleted AND "
-//                + "c.collectionNumber NOT IN (SELECT t.collectionNumber FROM TestResult t)",
-//            CollectedSample.class);
-//
-//    query.setParameter("isDeleted", Boolean.FALSE);
-//    
-//    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-//    try {
-//      query.setParameter("fromDate", formatter.parse(dateCollectedFrom));
-//      query.setParameter("toDate", formatter.parse(dateCollectedTo));
-//    } catch (ParseException e) {
-//      // TODO Auto-generated catch block
-//      e.printStackTrace();
-//    }
-//
-////    List<TestResultViewModel> testResults = new ArrayList<TestResultViewModel>();
-////    for (CollectedSample collectedSample : query.getResultList()) {
-////      TestResult testResult = new TestResult();
-////      testResult.setCollectedSample(collectedSample);
-//////      testResults.add(testResult);
-////    }
-//
-//    return testResults;
-//  }
-
   public CollectedSample addCollectedSample(CollectedSample collectedSample) {
     updateCollectedSampleInternalFields(collectedSample);
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     em.persist(collectedSample);
     em.flush();
+    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+    applicationContext.publishEvent(new CollectionAddedEvent("10", collectedSample));
     em.refresh(collectedSample);
     return collectedSample;
   }

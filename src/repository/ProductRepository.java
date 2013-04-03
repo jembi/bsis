@@ -38,6 +38,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.MatchingProductViewModel;
 
 @Repository
@@ -65,46 +66,57 @@ public class ProductRepository {
   }
 
   private void updateProductStatus(Product product) {
-    // nothing to do if the product has been discarded
-    if (product.getStatus() != null && product.getStatus().equals(ProductStatus.DISCARDED))
+
+    // if a product has been explicitly discarded maintain that status.
+    // if the product has been issued do not change its status.
+    // suppose a product from a collection tested as safe was issued
+    // then some additional tests were done for some reason and it was
+    // discovered that the product was actually unsafe and it should not
+    // have been issued then it should be easy to track down all products
+    // created from that sample which were issued. By maintaining the status as
+    // issued even if the product is unsafe we can search for all products created
+    // from that collection and then look at which ones were already issued.
+    // Conclusion is do not change the product status once it is marked as issued.
+    // Similar reasoning for not changing USED status for a product. It should be
+    // easy to track which used products were made from unsafe collected samples.
+    // of course if the test results are not available or the collection is known
+    // to be unsafe it should not have been issued in the first place.
+    // In exceptional cases an admin can always delete this product and create a new one
+    // if he wants to change the status to a new one.
+    List<ProductStatus> statusNotToBeChanged =
+        Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
+            ProductStatus.USED);
+    
+    // nothing to do if the product has any of these statuses
+    if (product.getStatus() != null && statusNotToBeChanged.contains(product.getStatus()))
       return;
 
     if (product.getCollectedSample() == null)
       return;
     Long collectedSampleId = product.getCollectedSample().getId();
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-//    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(c.getId());
-//
-//    // all test results which have a correct value.
-//    // eg. HIV test is correct if its result is negative.
-//    // Blood Abo test has no correct value.
-//    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
-//
-//    boolean allTestsDone = (testResults.size() == bloodTests.size());
-    boolean safe = true;
-//    for (TestResult t : testResults.values()) {
-//      String testResult = t.getResult();
-//      if (testResult == null || !bloodTestUtils.isTestResultCorrect(t.getBloodTest(), testResult)) {
-//        safe = false;
-//        break;
-//      }
-//    }
+    BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
+    TTIStatus ttiStatus = c.getTTIStatus();
 
-    System.out.println("safe: " + safe);
-
-    if (safe) {
-//      if (allTestsDone) {
-//        if (product.getExpiresOn().before(new Date()))
-//          product.setStatus(ProductStatus.EXPIRED);
-//        else
-//          product.setStatus(ProductStatus.AVAILABLE);
-//      }
-//      else
-//        product.setStatus(ProductStatus.QUARANTINED);        
-      product.setStatus(ProductStatus.QUARANTINED);        
-    } else {
-      product.setStatus(ProductStatus.UNSAFE);
+    boolean safe = false;
+    if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
+        ttiStatus.equals(TTIStatus.TTI_SAFE)) {
+      safe = true;
     }
+
+    ProductStatus productStatus = ProductStatus.QUARANTINED;
+    if (!safe) {
+      productStatus = ProductStatus.UNSAFE;
+    } else {
+      if (product.getExpiresOn().before(new Date())) {
+        productStatus = ProductStatus.EXPIRED;
+      }
+      else {
+        productStatus = ProductStatus.AVAILABLE;
+      }
+    }
+
+    product.setStatus(productStatus);
   }
 
   private void updateBloodGroup(Product product) {

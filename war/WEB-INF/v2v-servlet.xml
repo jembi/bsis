@@ -72,6 +72,8 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
+	<bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
+
 	<mvc:interceptors>
 		<bean id="loginInterceptor" class="interceptor.LoginInterceptor" />
 		<bean id="userInterceptor" class="interceptor.UserInterceptor" />
