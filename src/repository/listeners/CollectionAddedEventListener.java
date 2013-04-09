@@ -1,5 +1,7 @@
 package repository.listeners;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -28,11 +30,15 @@ public class CollectionAddedEventListener implements ApplicationListener<Collect
   }
 
   private void updateDonor(CollectionAddedEvent event) {
+    System.out.println("Updating donor date of last donation");
     CollectedSample c = (CollectedSample) event.getEventContext();
     Donor donor = c.getDonor();
     if (donor == null)
       return;
-//    donor.setDateOfLastDonation(c.getCollectedOn());
+    Date dateOfLastDonation = donor.getDateOfLastDonation();
+    if (dateOfLastDonation == null || c.getCollectedOn().after(dateOfLastDonation)) {
+      donor.setDateOfLastDonation(c.getCollectedOn());
+    }
     em.merge(donor);
   }
 

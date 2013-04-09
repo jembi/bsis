@@ -128,4 +128,9 @@ public class DonorViewModel {
   public Location getDonorPanel() {
     return donor.getDonorPanel();
   }
+
+  public String getDateOfLastDonation() {
+    Date dateOfLastDonation = donor.getDateOfLastDonation();
+    return CustomDateFormatter.getDateString(dateOfLastDonation);
+  }
 }

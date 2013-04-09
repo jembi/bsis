@@ -97,6 +97,12 @@
 			<label>${donor.donorPanel}</label>
 		</div>
 	</c:if>
+	<c:if test="${donorFields.dateOfLastDonation.hidden != true }">
+		<div>
+			<label>${donorFields.dateOfLastDonation.displayName}</label>
+			<label>${donor.dateOfLastDonation}</label>
+		</div>
+	</c:if>
 	<c:if test="${donorFields.notes.hidden != true }">
 		<div>
 			<label>${donorFields.notes.displayName}</label>

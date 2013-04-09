@@ -126,6 +126,9 @@ $(document).ready(
 						<c:if test="${model.donorFields.birthDate.hidden != true}">
 							<th>${model.donorFields.birthDate.displayName}</th>
 						</c:if>
+						<c:if test="${model.donorFields.dateOfLastDonation.hidden != true}">
+							<th>${model.donorFields.dateOfLastDonation.displayName}</th>
+						</c:if>
 					</tr>
 				</thead>
 				<tbody>
@@ -149,6 +152,9 @@ $(document).ready(
 							</c:if>
 							<c:if test="${model.donorFields.birthDate.hidden != true}">
 								<td>${donor.birthDate}</td>
+							</c:if>
+							<c:if test="${model.donorFields.dateOfLastDonation.hidden != true}">
+								<td>${donor.dateOfLastDonation}</td>
 							</c:if>
 						</tr>
 					</c:forEach>

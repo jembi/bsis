@@ -133,6 +133,9 @@ public class Donor implements ModificationTracker {
   @Valid
   private RowModificationTracker modificationTracker;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date dateOfLastDonation;
+  
   /**
    * Never delete the rows. Just mark them as deleted.
    */
@@ -439,5 +442,13 @@ public class Donor implements ModificationTracker {
 
   public void setDonorPanel(Location donorPanel) {
     this.donorPanel = donorPanel;
+  }
+
+  public Date getDateOfLastDonation() {
+    return dateOfLastDonation;
+  }
+
+  public void setDateOfLastDonation(Date dateOfLastDonation) {
+    this.dateOfLastDonation = dateOfLastDonation;
   }
 }
