@@ -411,7 +411,7 @@ public class RequestRepository {
 //    }
 
     String requestedAbo = request.getPatientBloodAbo().toString();
-    String requestedRh = request.getPatientBloodRhd().toString(); 
+    String requestedRh = request.getPatientBloodRh().toString(); 
     if (canIssue && bloodCrossmatch(bloodAbo, bloodRh, requestedAbo, requestedRh)) {
       return true;
     }

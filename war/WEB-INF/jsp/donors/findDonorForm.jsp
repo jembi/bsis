@@ -61,9 +61,13 @@ $(document).ready(function() {
     noneSelectedText: 'None Selected',
     selectedText: function(numSelected, numTotal, selectedValues) {
 										if (numSelected == numTotal) {
+										  $("#${findDonorFormId}").find(".anyBloodGroupInput")
+										  												.val("true");
 										  return "Any Blood Group";
 										}
 										else {
+										  $("#${findDonorFormId}").find(".anyBloodGroupInput")
+																							.val("false");
 										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 										  return checkedValues.length ? checkedValues.join(', ') : 'Any Blood Group';
 										}
@@ -114,6 +118,7 @@ $(document).ready(function() {
 			</div>
 			<div>
 				<form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
+				<form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
 				<form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
 					<form:option value="Unknown" label="Unknown" />
 					<form:option value="A+" label="A+" />

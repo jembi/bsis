@@ -10,9 +10,6 @@ import model.CustomDateFormatter;
 import model.address.ContactInformation;
 import model.location.Location;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodGroup;
-import model.util.BloodRh;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
@@ -102,14 +99,6 @@ public class DonorBackingForm {
     return donor.getGender().toString();
   }
 
-  public BloodAbo getBloodAbo() {
-    return donor.getBloodAbo();
-  }
-
-  public BloodRh getBloodRhd() {
-    return donor.getBloodRhd();
-  }
-
   public String getAddress() {
     return donor.getAddress();
   }
@@ -194,14 +183,6 @@ public class DonorBackingForm {
     donor.setGender(Gender.valueOf(gender));
   }
 
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    donor.setBloodAbo(bloodAbo);
-  }
-
-  public void setBloodRhd(BloodRh bloodRhd) {
-    donor.setBloodRhd(bloodRhd);
-  }
-
   public void setAddress(String address) {
     donor.setAddress(address);
   }
@@ -272,16 +253,6 @@ public class DonorBackingForm {
 
   public void setZipcode(String zipcode) {
     donor.setZipcode(zipcode);
-  }
-
-  public String getBloodGroup() {
-    return new BloodGroup(donor.getBloodAbo(), donor.getBloodRhd()).toString();
-  }
-
-  public void setBloodGroup(String bloodGroupStr) {
-    BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-    donor.setBloodAbo(bloodGroup.getBloodAbo());
-    donor.setBloodRhd(bloodGroup.getBloodRhd());
   }
 
   public void generateDonorNumber() {

@@ -12,6 +12,8 @@ public class FindDonorBackingForm {
   private String lastName;
   private List<BloodGroup> bloodGroups;
 
+  private String anyBloodGroup;
+
   public String getDonorNumber() {
     return donorNumber;
   }
@@ -45,5 +47,13 @@ public class FindDonorBackingForm {
     for (String bg : bloodGroups) {
       this.bloodGroups.add(new BloodGroup(bg));
     }
+  }
+
+  public void setAnyBloodGroup(String anyBloodGroup) {
+    this.anyBloodGroup = anyBloodGroup;
+  }
+
+  public String getAnyBloodGroup() {
+    return anyBloodGroup;
   }
 }

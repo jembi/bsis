@@ -332,7 +332,7 @@
         birthDate date,
         birthDateInferred date,
         bloodAbo varchar(10),
-        bloodRhd varchar(10),
+        bloodRh varchar(10),
         callingName varchar(20),
         address varchar(100),
         city varchar(25),
@@ -345,6 +345,7 @@
         zipcode varchar(10),
         dateOfLastDonation datetime,
         donorNumber varchar(15),
+        donorStatus varchar(20),
         firstName varchar(20),
         gender varchar(15),
         isDeleted boolean,
@@ -391,7 +392,7 @@
         birthDate date,
         birthDateInferred date,
         bloodAbo varchar(10),
-        bloodRhd varchar(10),
+        bloodRh varchar(10),
         callingName varchar(20),
         address varchar(100),
         city varchar(25),
@@ -404,6 +405,7 @@
         zipcode varchar(10),
         dateOfLastDonation datetime,
         donorNumber varchar(15),
+        donorStatus varchar(20),
         firstName varchar(20),
         gender varchar(15),
         isDeleted boolean,
@@ -548,8 +550,6 @@
 
     create table Product (
         id bigint not null auto_increment,
-        bloodAbo varchar(30),
-        bloodRhd varchar(30),
         createdOn datetime,
         discardedOn DATETIME,
         expiresOn datetime,
@@ -709,8 +709,6 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        bloodAbo varchar(30),
-        bloodRhd varchar(30),
         createdOn datetime,
         discardedOn DATETIME,
         expiresOn datetime,
@@ -750,7 +748,7 @@
         patientAge integer,
         patientBirthDate date,
         patientBloodAbo varchar(30),
-        patientBloodRhd varchar(30),
+        patientBloodRh varchar(30),
         patientDiagnosis varchar(100),
         patientFirstName varchar(30),
         patientGender integer,
@@ -804,7 +802,7 @@
         patientAge integer,
         patientBirthDate date,
         patientBloodAbo varchar(30),
-        patientBloodRhd varchar(30),
+        patientBloodRh varchar(30),
         patientDiagnosis varchar(100),
         patientFirstName varchar(30),
         patientGender integer,
@@ -1267,10 +1265,6 @@
 
     create index product_expiresOn_index on Product (expiresOn);
 
-    create index donor_bloodAbo_index on Product (bloodAbo);
-
-    create index donor_bloodRhd_index on Product (bloodRhd);
-
     alter table Product 
         add index FK50C664CFA49787C4 (createdBy_id), 
         add constraint FK50C664CFA49787C4 
@@ -1401,7 +1395,7 @@
 
     create index request_requestDate_index on Request (requestDate);
 
-    create index request_bloodRhd_index on Request (patientBloodRhd);
+    create index request_bloodRhd_index on Request (patientBloodRh);
 
     create index request_requestNumber_index on Request (requestNumber);
 

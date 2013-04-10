@@ -49,6 +49,12 @@
 			<label>${donor.bloodGroup}</label>
 		</div>
 	</c:if>
+	<c:if test="${donorFields.donorStatus.hidden != true }">
+		<div>
+			<label>${donorFields.donorStatus.displayName}</label>
+			<label>${donor.donorStatus}</label>
+		</div>
+	</c:if>
 	<c:if test="${donorFields.address.hidden != true }">
 		<div>
 			<label>${donorFields.address.displayName}</label>

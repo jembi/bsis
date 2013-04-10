@@ -25,8 +25,6 @@ import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodRh;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -92,14 +90,16 @@ public class Donor implements ModificationTracker {
   /**
    * TODO: Not sure if an index will help here.
    */
-  @Enumerated(EnumType.STRING)
   @Column(length=10)
-  private BloodAbo bloodAbo;
+  private String bloodAbo;
+
+  @Column(length=10)
+  private String bloodRh;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=10)
-  private BloodRh bloodRhd;
-
+  @Column(length=20)
+  private DonorStatus donorStatus;
+  
   /**
    * Do not see a need to search by birthdate so need not add an index here.
    */
@@ -181,14 +181,6 @@ public class Donor implements ModificationTracker {
     return gender;
   }
 
-  public BloodAbo getBloodAbo() {
-    return bloodAbo;
-  }
-
-  public BloodRh getBloodRhd() {
-    return bloodRhd;
-  }
-
   public Date getBirthDate() {
     return birthDate;
   }
@@ -231,14 +223,6 @@ public class Donor implements ModificationTracker {
     this.gender = gender;
   }
 
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public void setBloodRhd(BloodRh bloodRhd) {
-    this.bloodRhd = bloodRhd;
-  }
-
   public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
@@ -259,8 +243,6 @@ public class Donor implements ModificationTracker {
     setLastName(donor.getLastName());
     contactInformation.copy(donor.getContactInformation());
     setBirthDate(donor.getBirthDate());
-    setBloodAbo(donor.getBloodAbo());
-    setBloodRhd(donor.getBloodRhd());
     setNotes(donor.getNotes());
     setGender(donor.getGender());
   }
@@ -450,5 +432,29 @@ public class Donor implements ModificationTracker {
 
   public void setDateOfLastDonation(Date dateOfLastDonation) {
     this.dateOfLastDonation = dateOfLastDonation;
+  }
+
+  public String getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public String getBloodRh() {
+    return bloodRh;
+  }
+
+  public void setBloodRh(String bloodRhd) {
+    this.bloodRh = bloodRhd;
+  }
+
+  public DonorStatus getDonorStatus() {
+    return donorStatus;
+  }
+
+  public void setDonorStatus(DonorStatus donorStatus) {
+    this.donorStatus = donorStatus;
   }
 }

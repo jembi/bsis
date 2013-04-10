@@ -10,7 +10,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.product.Product;
+import model.testresults.TTIStatus;
+import model.util.BloodAbo;
+import model.util.BloodRh;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.ProductRepository;
+import repository.bloodtesting.BloodTypingStatus;
 import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
 
@@ -38,12 +44,65 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     System.out.println("event ID: " + event.getEventId());
     System.out.println("event context: " + event.getEventContext());
     updateCollectionStatus(event);
+    updateDonorStatus(event);
+  }
+
+  private void updateDonorStatus(BloodTestsUpdatedEvent event) {
+    CollectedSample collectedSample = event.getCollectedSample();
+    Donor donor = collectedSample.getDonor();
+    DonorStatus donorStatus = donor.getDonorStatus();
+    if (donorStatus == null)
+      donorStatus = DonorStatus.NORMAL;
+
+    String queryStr = "SELECT c FROM CollectedSample c WHERE " +
+    		"c.donor.id=:donorId AND c.isDeleted=:isDeleted";
+    TypedQuery<CollectedSample> query = em.createQuery(queryStr, CollectedSample.class);
+
+    query.setParameter("donorId", donor.getId());
+    query.setParameter("isDeleted", false);
+
+    List<CollectedSample> collectedSamples = query.getResultList();
+
+    String bloodAbo = BloodAbo.Unknown.toString();
+    String bloodRh = BloodRh.Unknown.toString();
+    if (collectedSamples.size() > 0) {
+      bloodAbo = collectedSamples.get(0).getBloodAbo();
+      bloodRh = collectedSamples.get(0).getBloodRh();
+      for (int i = 1; i < collectedSamples.size(); i++) {
+        CollectedSample c = collectedSamples.get(i);
+        BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
+        // blood typing should be done otherwise we will not compare
+        if (!bloodTypingStatus.equals(BloodTypingStatus.COMPLETE))
+          continue;
+        if (!bloodAbo.equals(c.getBloodAbo()) ||
+            !bloodRh.equals(c.getBloodRh())) {
+          donorStatus = DonorStatus.BLOOD_GROUP_MISMATCH;
+          break;
+        }
+      }
+      if (!donorStatus.equals(DonorStatus.BLOOD_GROUP_MISMATCH)) {
+        donor.setBloodAbo(bloodAbo);
+        donor.setBloodRh(bloodRh);
+      }
+    } else {
+      donor.setBloodAbo(bloodAbo);
+      donor.setBloodRh(bloodRh);
+    }
+
+    // If TTI is unsafe then this status should override existing status
+    if (collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)) {
+      donorStatus = DonorStatus.POSITIVE_TTI;
+    }
+    donor.setDonorStatus(donorStatus);
+    em.merge(donor);
   }
 
   private void updateProductStatus(CollectedSample collectedSample) {
-    String queryStr = "SELECT p FROM Product p WHERE p.collectedSample.id=:collectedSampleId";
+    String queryStr = "SELECT p FROM Product p WHERE " +
+    		"p.collectedSample.id=:collectedSampleId AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("collectedSampleId", collectedSample.getId());
+    query.setParameter("isDeleted", false);
     List<Product> products = query.getResultList();
     for (Product product : products) {
       productRepository.updateProductInternalFields(product);

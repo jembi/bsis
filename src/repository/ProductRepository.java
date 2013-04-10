@@ -372,14 +372,14 @@ public class ProductRepository {
   }
 
   public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<BloodAbo> bloodAbo, List<BloodRh> bloodRhd,
+      String collectionNumber, List<BloodAbo> bloodAbo, List<BloodRh> bloodRh,
       List<ProductType> types, List<String> availability) {
 
     TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
         + "(p.productNumber = :productNumber OR "
         + "p.collectionNumber = :collectionNumber "
         + "OR p.type IN (:types)) AND (p.isIssued IN (:isIssued)) AND "
-        + "p.abo IN (:bloodAbo) AND p.rhd IN (:bloodRhd) AND "
+        + "p.abo IN (:bloodAbo) AND p.rhd IN (:bloodRh) AND "
         + "(p.isDeleted= :isDeleted)", Product.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -388,7 +388,7 @@ public class ProductRepository {
     String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
     query.setParameter("collectionNumber", collectionNo);
     query.setParameter("bloodAbo", bloodAbo);
-    query.setParameter("bloodRhd", bloodRhd);
+    query.setParameter("bloodRh", bloodRh);
     query.setParameter("types", types);
     query.setParameter("isIssued", getIssuedListFromAvailability(availability));
 
@@ -455,8 +455,8 @@ public class ProductRepository {
                  "p.expiresOn >= :today AND " +
                  "p.status = :status AND " +
                  "p.collectedSample.testedStatus = :testedStatus AND " +
-                 "((p.bloodAbo = :bloodAbo AND p.bloodRhd = :bloodRhd) OR " +
-                 "(p.bloodAbo = :bloodAboO AND p.bloodRhd = :bloodRhdNeg)) AND " +
+                 "((p.bloodAbo = :bloodAbo AND p.bloodRh = :bloodRh) OR " +
+                 "(p.bloodAbo = :bloodAboO AND p.bloodRh = :bloodRhNeg)) AND " +
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
@@ -466,8 +466,8 @@ public class ProductRepository {
     query.setParameter("ttiStatus", TTIStatus.TTI_SAFE);
     query.setParameter("bloodAbo", request.getPatientBloodAbo());
     query.setParameter("bloodAboO", BloodAbo.O);
-    query.setParameter("bloodRhdNeg", BloodRh.NEGATIVE);
-    query.setParameter("bloodRhd", request.getPatientBloodRhd());
+    query.setParameter("bloodRhNeg", BloodRh.NEGATIVE);
+    query.setParameter("bloodRh", request.getPatientBloodRh());
     query.setParameter("isDeleted", false);
 
     TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
@@ -680,13 +680,13 @@ public class ProductRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(p), p.collectedSample.collectedOn, p.collectedSample.bloodAbo, " +
-        "p.collectedSample.bloodRhd FROM Product p WHERE " +
+        "p.collectedSample.bloodRh FROM Product p WHERE " +
         "p.collectedSample.collectionCenter.id IN (:centerIds) AND " +
         "p.collectedSample.collectionSite.id IN (:siteIds) AND " +
         "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
         "p.status IN (:discardedStatuses) AND " +
         "(p.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRhd, collectedOn", Object[].class);
+        "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
 
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
@@ -734,8 +734,8 @@ public class ProductRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRh bloodRhd = (BloodRh) result[3];
-      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      BloodRh bloodRh = (BloodRh) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRh);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
@@ -786,13 +786,13 @@ public class ProductRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(p), p.issuedOn, p.collectedSample.bloodAbo, " +
-        "p.collectedSample.bloodRhd FROM Product p WHERE " +
+        "p.collectedSample.bloodRh FROM Product p WHERE " +
         "p.collectedSample.collectionCenter.id IN (:centerIds) AND " +
         "p.collectedSample.collectionSite.id IN (:siteIds) AND " +
         "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
         "p.status=:issuedStatus AND " +
         "(p.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRhd, collectedOn", Object[].class);
+        "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
 
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
@@ -837,8 +837,8 @@ public class ProductRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRh bloodRhd = (BloodRh) result[3];
-      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      BloodRh bloodRh = (BloodRh) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRh);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;

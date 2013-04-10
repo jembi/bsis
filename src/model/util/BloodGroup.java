@@ -6,7 +6,7 @@ import java.util.Map;
 public class BloodGroup {
 
   private BloodAbo abo;
-  private BloodRh rhd;
+  private BloodRh rh;
 
   static final private Map<String, BloodGroup> bloodgroups = new HashMap<String, BloodGroup>();
   
@@ -23,24 +23,29 @@ public class BloodGroup {
 
   public BloodGroup() {
     abo = BloodAbo.Unknown;
-    rhd = BloodRh.Unknown;
+    rh = BloodRh.Unknown;
   }
 
   public BloodGroup(String bloodGroup) {
     BloodGroup bg = bloodgroups.get(bloodGroup.toLowerCase());
     if (bg == null) {
       abo = BloodAbo.Unknown;
-      rhd = BloodRh.Unknown;
+      rh = BloodRh.Unknown;
     }
     else {
       abo = bg.abo;
-      rhd = bg.rhd;
+      rh = bg.rh;
     }
   }
 
-  public BloodGroup(BloodAbo abo, BloodRh rhd) {
+  public BloodGroup(BloodAbo abo, BloodRh rh) {
     this.abo = abo;
-    this.rhd = rhd;
+    this.rh = rh;
+  }
+
+  public BloodGroup(String abo, String rh) {
+    this.abo = BloodAbo.valueOf(BloodAbo.class, abo);
+    this.rh = BloodRh.valueOf(rh);
   }
 
   public BloodGroup toBloodGroup(String bloodGroup) {
@@ -55,7 +60,7 @@ public class BloodGroup {
     }
     else {
       strBuilder.append(abo.toString());
-      switch (rhd) {
+      switch (rh) {
         case POSITIVE: strBuilder.append("+");
                        break;
         case NEGATIVE: strBuilder.append("-");
@@ -68,11 +73,11 @@ public class BloodGroup {
     return strBuilder.toString();
   }
 
-  public BloodAbo getBloodAbo() {
-    return abo;
+  public String getBloodAbo() {
+    return abo.toString();
   }
 
-  public BloodRh getBloodRhd() {
-    return rhd;
+  public String getBloodRh() {
+    return rh.toString();
   }
 }

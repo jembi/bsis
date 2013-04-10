@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,9 +27,6 @@ import model.producttype.ProductTypeExists;
 import model.requesttype.RequestType;
 import model.requesttype.RequestTypeExists;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodGroup;
-import model.util.BloodRh;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -64,15 +59,13 @@ public class Request implements ModificationTracker {
 
   private Boolean fulfilled;
 
-  @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodAbo_index")
-  private BloodAbo patientBloodAbo;
+  private String patientBloodAbo;
 
-  @Enumerated(EnumType.STRING)
   @Column(length=30)
   @Index(name="request_bloodRhd_index")
-  private BloodRh patientBloodRhd;
+  private String patientBloodRh;
 
   // fetch type eager to check how many products issued
   @OneToMany(mappedBy="issuedTo")
@@ -152,7 +145,7 @@ public class Request implements ModificationTracker {
   public void copy(Request request) {
     assert (this.getId() == request.getId());
     this.patientBloodAbo = request.patientBloodAbo;
-    this.patientBloodRhd = request.patientBloodRhd;
+    this.patientBloodRh = request.patientBloodRh;
     this.requestSite = request.requestSite;
     this.patientFirstName = request.patientFirstName;
     this.patientLastName = request.patientLastName;
@@ -194,12 +187,12 @@ public class Request implements ModificationTracker {
     return numUnitsRequested;
   }
 
-  public BloodAbo getPatientBloodAbo() {
+  public String getPatientBloodAbo() {
     return patientBloodAbo;
   }
 
-  public BloodRh getPatientBloodRhd() {
-    return patientBloodRhd;
+  public String getPatientBloodRh() {
+    return patientBloodRh;
   }
 
   public String getNotes() {
@@ -242,12 +235,12 @@ public class Request implements ModificationTracker {
     this.numUnitsRequested = numUnitsRequested;
   }
 
-  public void setPatientBloodAbo(BloodAbo patientBloodAbo) {
+  public void setPatientBloodAbo(String patientBloodAbo) {
     this.patientBloodAbo = patientBloodAbo;
   }
 
-  public void setPatientBloodRhd(BloodRh patientBloodRhd) {
-    this.patientBloodRhd = patientBloodRhd;
+  public void setPatientBloodRh(String patientBloodRhd) {
+    this.patientBloodRh = patientBloodRhd;
   }
 
   public void setNotes(String notes) {
@@ -316,10 +309,6 @@ public class Request implements ModificationTracker {
 
   public void setFulfilled(Boolean fulfilled) {
     this.fulfilled = fulfilled;
-  }
-
-  public BloodGroup getBloodGroup() {
-    return new BloodGroup(patientBloodAbo, patientBloodRhd);
   }
 
   public String getPatientNumber() {

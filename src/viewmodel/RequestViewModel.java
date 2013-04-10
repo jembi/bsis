@@ -10,9 +10,7 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.user.User;
-import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRh;
 
 public class RequestViewModel {
 	private Request request;
@@ -49,12 +47,12 @@ public class RequestViewModel {
     return request.getNumUnitsIssued();
   }
 
-  public BloodAbo getPatientBloodAbo() {
+  public String getPatientBloodAbo() {
     return request.getPatientBloodAbo();
   }
 
-  public BloodRh getPatientBloodRhd() {
-    return request.getPatientBloodRhd();
+  public String getPatientBloodRhd() {
+    return request.getPatientBloodRh();
   }
 
   public String getNotes() {
@@ -82,7 +80,7 @@ public class RequestViewModel {
   }
 
   public String getBloodGroup() {
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
   }
 
   public int hashCode() {
@@ -114,7 +112,7 @@ public class RequestViewModel {
   }
 
   public String getPatientBloodGroup() {
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
   }
 
   public String getPatientDiagnosis() {

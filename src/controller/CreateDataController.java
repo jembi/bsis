@@ -338,7 +338,6 @@ public class CreateDataController {
 
 	public void createDonors(int numDonors) {
 
-	  String[] bloodGroups = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
 	  List<Donor> donors = new ArrayList<Donor>();
 
 		for (int i = 0; i < numDonors; i++) {
@@ -358,10 +357,6 @@ public class CreateDataController {
 			donor.setLastName(lastName);
 			donor.setGender(gender);
 			donor.setBirthDate(getRandomBirthDate());
-			String bloodGroupStr = bloodGroups[random.nextInt(bloodGroups.length)];
-			BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-			donor.setBloodAbo(bloodGroup.getBloodAbo());
-			donor.setBloodRhd(bloodGroup.getBloodRhd());
 			donor.setAddress("address " + i);
 			donor.setCity(cities[random.nextInt(cities.length)]);
 			donor.setCountry("Zambia");
@@ -529,8 +524,8 @@ public class CreateDataController {
 
       String bloodGroupStr = bloodGroups[random.nextInt(bloodGroups.length)];
       BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-      form.setPatientBloodAbo(bloodGroup.getBloodAbo());
-      form.setPatientBloodRhd(bloodGroup.getBloodRhd());
+      form.setPatientBloodAbo(bloodGroup.getBloodAbo().toString());
+      form.setPatientBloodRh(bloodGroup.getBloodRh().toString());
       requests.add(form.getRequest());
 		}
 		requestRepository.addAllRequests(requests);

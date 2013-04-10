@@ -6,18 +6,17 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
-
 import model.CustomDateFormatter;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.requesttype.RequestType;
-import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRh;
 import model.util.Gender;
+
+import org.apache.commons.lang3.StringUtils;
+
 import repository.RequestRepository;
 
 
@@ -68,12 +67,12 @@ public class RequestBackingForm {
     return request.getNumUnitsRequested();
   }
 
-  public BloodAbo getPatientBloodAbo() {
+  public String getPatientBloodAbo() {
     return request.getPatientBloodAbo();
   }
 
-  public BloodRh getPatientBloodRhd() {
-    return request.getPatientBloodRhd();
+  public String getPatientBloodRh() {
+    return request.getPatientBloodRh();
   }
 
   public String getNotes() {
@@ -144,12 +143,12 @@ public class RequestBackingForm {
     request.setNumUnitsRequested(numUnitsRequested);
   }
 
-  public void setPatientBloodAbo(BloodAbo bloodAbo) {
+  public void setPatientBloodAbo(String bloodAbo) {
     request.setPatientBloodAbo(bloodAbo);
   }
 
-  public void setPatientBloodRhd(BloodRh bloodRhd) {
-    request.setPatientBloodRhd(bloodRhd);
+  public void setPatientBloodRh(String bloodRh) {
+    request.setPatientBloodRh(bloodRh);
   }
 
   public void setNotes(String notes) {
@@ -222,20 +221,19 @@ public class RequestBackingForm {
   }
 
   public String getBloodGroup() {
-    if (request.getPatientBloodAbo() == null || request.getPatientBloodRhd() == null)
+    if (request.getPatientBloodAbo() == null || request.getPatientBloodRh() == null)
       return null;
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
   }
 
   public void setBloodGroup(String bloodGroupStr) {
-
     if (bloodGroupStr == null || bloodGroupStr.isEmpty()) {
       request.setPatientBloodAbo(null);
-      request.setPatientBloodRhd(null);
+      request.setPatientBloodRh(null);
     } else {
       BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
       request.setPatientBloodAbo(bloodGroup.getBloodAbo());
-      request.setPatientBloodRhd(bloodGroup.getBloodRhd());
+      request.setPatientBloodRh(bloodGroup.getBloodRh());
     }
   }
 
@@ -302,11 +300,11 @@ public class RequestBackingForm {
   public void setPatientBloodGroup(String patientBloodGroupStr) {
     BloodGroup bloodGroup = new BloodGroup(patientBloodGroupStr);
     request.setPatientBloodAbo(bloodGroup.getBloodAbo());
-    request.setPatientBloodRhd(bloodGroup.getBloodRhd());
+    request.setPatientBloodRh(bloodGroup.getBloodRh());
   }
 
   public String getPatientBloodGroup() {
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRhd()).toString();
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
   }
 
   public String getPatientDiagnosis() {

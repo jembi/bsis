@@ -6,12 +6,11 @@ import java.util.Date;
 
 import model.CustomDateFormatter;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.location.Location;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodGroup;
-import model.util.BloodRh;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,16 +48,19 @@ public class DonorViewModel {
     return donor.getGender().name();
   }
 
-  public BloodAbo getBloodAbo() {
+  public String getBloodAbo() {
     return donor.getBloodAbo();
   }
 
-  public BloodRh getBloodRhd() {
-    return donor.getBloodRhd();
+  public String getBloodRh() {
+    return donor.getBloodRh();
   }
 
   public String getBloodGroup() {
-    return new BloodGroup(donor.getBloodAbo(), donor.getBloodRhd()).toString();
+    if (StringUtils.isBlank(donor.getBloodAbo()) || StringUtils.isBlank(donor.getBloodRh()))
+      return "";
+    else
+      return donor.getBloodAbo() + donor.getBloodRh();
   }
 
   public String getBirthDate() {
@@ -132,5 +134,9 @@ public class DonorViewModel {
   public String getDateOfLastDonation() {
     Date dateOfLastDonation = donor.getDateOfLastDonation();
     return CustomDateFormatter.getDateString(dateOfLastDonation);
+  }
+
+  public DonorStatus getDonorStatus() {
+    return donor.getDonorStatus();
   }
 }

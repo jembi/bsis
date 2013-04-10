@@ -22,12 +22,14 @@ import javax.persistence.criteria.Root;
 import model.CustomDateFormatter;
 import model.donor.Donor;
 import model.donor.DonorDeferral;
+import model.donor.DonorStatus;
 import model.donordeferral.DeferralReason;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,22 +68,27 @@ public class DonorRepository {
     return findDonorById(Long.parseLong(donorId));
   }
 
-  @SuppressWarnings("unchecked")
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, Map<String, Object> pagingParams) {
+      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams) {
 
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
 
-    List<Predicate> bgPredicates = new ArrayList<Predicate>();
-    for (BloodGroup bg : bloodGroups) {
-      Expression<Boolean> aboExp = cb.equal(root.<BloodAbo>get("bloodAbo"), bg.getBloodAbo());
-      Expression<Boolean> rhdExp = cb.equal(root.<BloodRh>get("bloodRhd"), bg.getBloodRhd());
-      bgPredicates.add(cb.and(aboExp, rhdExp));
+    Expression<Boolean> exp1;
+    if (anyBloodGroup.equals("true")) {
+      exp1 = cb.not(cb.disjunction());
+    }
+    else {
+      List<Predicate> bgPredicates = new ArrayList<Predicate>();
+      for (BloodGroup bg : bloodGroups) {
+        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
+        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
+        bgPredicates.add(cb.and(aboExp, rhExp));
+      }
+      exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
     }
 
-    Expression<Boolean> exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
 
     Predicate firstNameExp;
@@ -97,10 +104,9 @@ public class DonorRepository {
       lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
 
     Expression<Boolean> exp2;
-    if ( (donorNumber == null || donorNumber.trim().isEmpty()) && 
-         (firstName == null || firstName.trim().isEmpty()) &&
-         (lastName == null || lastName.trim().isEmpty())
-      )
+    if (StringUtils.isBlank(donorNumber) && 
+        StringUtils.isBlank(firstName) &&
+        StringUtils.isBlank(lastName))
       exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
     else
       exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
@@ -143,8 +149,7 @@ public class DonorRepository {
   }
 
   public Donor addDonor(Donor donor) {
-    donor.setBloodAbo(BloodAbo.Unknown);
-    donor.setBloodRhd(BloodRh.Unknown);
+    updateDonorAutomaticFields(donor);
     em.persist(donor);
     em.flush();
     return donor;
@@ -220,9 +225,19 @@ public class DonorRepository {
 
   public void addAllDonors(List<Donor> donors) {
     for (Donor donor : donors) {
+      updateDonorAutomaticFields(donor);
       em.persist(donor);
     }
     em.flush();
+  }
+
+  private void updateDonorAutomaticFields(Donor donor) {
+    if (donor.getDonorStatus() == null)
+      donor.setDonorStatus(DonorStatus.NORMAL);
+    if (donor.getBloodAbo() == null)
+      donor.setBloodAbo("");
+    if (donor.getBloodRh() == null)
+      donor.setBloodRh("");
   }
 
   public Donor findDonorByDonorNumber(String donorNumber) {
