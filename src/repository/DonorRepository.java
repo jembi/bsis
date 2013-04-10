@@ -24,9 +24,7 @@ import model.donor.Donor;
 import model.donor.DonorDeferral;
 import model.donor.DonorStatus;
 import model.donordeferral.DeferralReason;
-import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRh;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
