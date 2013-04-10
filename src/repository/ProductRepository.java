@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
+import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 
 @Repository
@@ -62,7 +63,6 @@ public class ProductRepository {
    */
   public void updateProductInternalFields(Product product) {
     updateProductStatus(product);
-    updateBloodGroup(product);
   }
 
   private void updateProductStatus(Product product) {
@@ -98,58 +98,26 @@ public class ProductRepository {
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
 
-    boolean safe = false;
+    ProductStatus productStatus = ProductStatus.QUARANTINED;
     if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
         ttiStatus.equals(TTIStatus.TTI_SAFE)) {
-      safe = true;
+      productStatus = ProductStatus.AVAILABLE;
     }
 
-    ProductStatus productStatus = ProductStatus.QUARANTINED;
-    if (!safe) {
-      productStatus = ProductStatus.UNSAFE;
-    } else {
-      if (product.getExpiresOn().before(new Date())) {
-        productStatus = ProductStatus.EXPIRED;
-      }
-      else {
-        productStatus = ProductStatus.AVAILABLE;
-      }
+    // just mark it as expired or unsafe
+    // note that expired or unsafe status should override
+    // available, quarantined status hence this check is done
+    // later in the code
+    if (product.getExpiresOn().before(new Date())) {
+      productStatus = ProductStatus.EXPIRED;
     }
+
+    if (ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
+      productStatus = ProductStatus.UNSAFE;
+    }
+
 
     product.setStatus(productStatus);
-  }
-
-  private void updateBloodGroup(Product product) {
-
-    CollectedSample c = collectedSampleRepository.findCollectedSampleById(product.getCollectedSample().getId());
-
-    BloodAbo bloodAbo = product.getBloodAbo();
-    BloodRh bloodRhd = product.getBloodRhd();
-
-//    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
-//
-//    TestResult t = testResultsMap.get("Blood ABO");
-//    if (t != null && !t.getIsDeleted()) {
-//    	try {
-//    		bloodAbo = BloodAbo.valueOf(t.getResult());
-//    	} catch (IllegalArgumentException ex) {
-//    		ex.printStackTrace();
-//    		bloodAbo = BloodAbo.Unknown;
-//    	} 
-//    }
-//    
-//    t = testResultsMap.get("Blood Rh");
-//    if (t != null && !t.getIsDeleted()) {
-//    	try {
-//    		bloodRhd = BloodRh.valueOf(t.getResult());
-//    	} catch (IllegalArgumentException ex) {
-//    		ex.printStackTrace();
-//    		bloodRhd = BloodRh.Unknown;
-//    	}
-//    }
-
-    product.setBloodAbo(bloodAbo);
-    product.setBloodRhd(bloodRhd);
   }
 
   public Product findProduct(String productNumber) {
@@ -463,7 +431,6 @@ public class ProductRepository {
 
   public Product addProduct(Product product) {
     updateProductInternalFields(product);
-    updateBloodGroup(product);
     em.persist(product);
     em.flush();
     em.refresh(product);
@@ -581,8 +548,9 @@ public class ProductRepository {
     for (Product product : q.getResultList()) {
       String productType = product.getProductType().getProductType();
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
-      String bloodGroup = new BloodGroup(product.getBloodAbo(), product.getBloodRhd()).toString();
-      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(bloodGroup);
+      CollectedSampleViewModel collectedSample;
+      collectedSample = new CollectedSampleViewModel(product.getCollectedSample());
+      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(collectedSample.getBloodGroup());
       DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
       Long age = (long) Days.daysBetween(createdOn, today).getDays();
       // compute window based on age

@@ -8,9 +8,6 @@ import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodGroup;
-import model.util.BloodRh;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -64,18 +61,6 @@ public class ProductViewModel {
     if (product.getExpiresOn() == null)
       return "";
     return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
-  }
-
-  public BloodAbo getBloodAbo() {
-    return product.getBloodAbo();
-  }
-
-  public BloodRh getBloodRhd() {
-    return product.getBloodRhd();
-  }
-
-  public String getBloodGroup() {
-    return new BloodGroup(product.getBloodAbo(), product.getBloodRhd()).toString();
   }
 
   public String getCollectionNumber() {
@@ -147,5 +132,14 @@ public class ProductViewModel {
 
   public String getDiscardedOn() {
     return CustomDateFormatter.getDateTimeString(product.getDiscardedOn());
+  }
+
+  public String getBloodGroup() {
+    if (product == null || product.getCollectedSample() == null ||
+        product.getCollectedSample().getCollectionNumber() == null
+       )
+      return "";
+    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(product.getCollectedSample());
+    return collectionViewModel.getBloodGroup();
   }
 }

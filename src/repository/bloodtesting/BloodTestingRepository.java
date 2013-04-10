@@ -3,11 +3,9 @@ package repository.bloodtesting;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,17 +13,20 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
-import model.bloodtesting.BloodTestType;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MicrotiterPlate;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
+import repository.events.ApplicationContextProvider;
+import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -97,8 +98,6 @@ public class BloodTestingRepository {
         collectedSamplesMap.put(collectedSample.getId(), collectedSample);
         bloodTestRuleResultsForCollections.put(collectedSample.getId(), ruleResult);
 
-        collectedSample = updateCollectionStatus(collectedSample, ruleResult);
-
         for (Long testId : bloodTestResultsForCollection.keySet()) {
           BloodTestResult btResult = new BloodTestResult();
           BloodTest bloodTest = new BloodTest();
@@ -117,6 +116,13 @@ public class BloodTestingRepository {
           btResult.setResult(bloodTestResultsForCollection.get(testId));
           em.persist(btResult);
         }
+
+        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+        BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
+        bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10", Arrays.asList(collectedSample, ruleResult));
+        bloodTestsUpdatedEvent.setCollectedSample(collectedSample);
+        bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
+        applicationContext.publishEvent(bloodTestsUpdatedEvent);
       }
       em.flush();
     }
@@ -125,40 +131,8 @@ public class BloodTestingRepository {
     results.put("collections", collectedSamplesMap);
     results.put("bloodTestingResults", bloodTestRuleResultsForCollections);
     results.put("errors", errorMap);
+
     return results;
-  }
-
-  private CollectedSample updateCollectionStatus(
-      CollectedSample collection, BloodTestingRuleResult ruleResult) {
-
-    String bloodAboNew = ruleResult.getBloodAbo();
-    String bloodRhNew = ruleResult.getBloodRh();
-    Set<String> extraInformationNew = ruleResult.getExtraInformation();
-
-    String extraInformation = collection.getExtraBloodTypeInformation();
-
-    Set<String> extraInformationOld = new HashSet<String>();
-    if (StringUtils.isNotBlank(extraInformation)) {
-      extraInformationOld.addAll(Arrays.asList(extraInformation.split(",")));
-      // extra information is a field to which we add more information
-      // do not store duplicate information in this field
-      extraInformationNew.removeAll(extraInformationOld);
-      collection.setExtraBloodTypeInformation(extraInformation + StringUtils.join(extraInformationNew, ","));
-    }
-    else {
-      collection.setExtraBloodTypeInformation(StringUtils.join(extraInformationNew, ","));
-    }
-
-    collection.setBloodAbo(bloodAboNew);
-    collection.setBloodRh(bloodRhNew);
-
-    collection.setTTIStatus(ruleResult.getTTIStatus());
-
-    collection.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
-
-    collection = em.merge(collection);
-
-    return collection;
   }
 
   public Map<Long, Map<Long, String>> validateTestResultValues(Map<Long, Map<Long, String>> bloodTypingTestResults) {

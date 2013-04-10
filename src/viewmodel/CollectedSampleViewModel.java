@@ -147,4 +147,8 @@ public class CollectedSampleViewModel {
       return "";
     return collectedSample.getExtraBloodTypeInformation();
   }
+
+  public String getBloodGroup() {
+    return getBloodAbo() + getBloodRh();
+  }
 }

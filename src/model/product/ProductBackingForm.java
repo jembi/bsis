@@ -11,9 +11,6 @@ import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.producttype.ProductType;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodGroup;
-import model.util.BloodRh;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -83,14 +80,6 @@ public class ProductBackingForm {
 
   public Boolean getIsDeleted() {
     return product.getIsDeleted();
-  }
-
-  public BloodAbo getBloodAbo() {
-    return product.getBloodAbo();
-  }
-
-  public BloodRh getBloodRhd() {
-    return product.getBloodRhd();
   }
 
   public int hashCode() {
@@ -181,14 +170,6 @@ public class ProductBackingForm {
     }
   }
 
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    product.setBloodAbo(bloodAbo);
-  }
-
-  public void setBloodRhd(BloodRh bloodRhd) {
-    product.setBloodRhd(bloodRhd);
-  }
-
   public String toString() {
     return product.toString();
   }
@@ -213,16 +194,6 @@ public class ProductBackingForm {
     CollectedSample collectedSample = new CollectedSample();
     collectedSample.setCollectionNumber(collectionNumber);
     product.setCollectedSample(collectedSample);
-  }
-
-  public String getBloodGroup() {
-    return new BloodGroup(product.getBloodAbo(), product.getBloodRhd()).toString();
-  }
-
-  public void setBloodGroup(String bloodGroupStr) {
-    BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-    product.setBloodAbo(bloodGroup.getBloodAbo());
-    product.setBloodRhd(bloodGroup.getBloodRhd());
   }
 
   public Product getProduct() {

@@ -67,16 +67,6 @@ public class Product implements ModificationTracker {
   @Index(name="product_expiresOn_index")
   private Date expiresOn;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length=30)
-  @Index(name="donor_bloodAbo_index")
-  private BloodAbo bloodAbo;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length=30)
-  @Index(name="donor_bloodRhd_index")
-  private BloodRh bloodRhd;
-
   @ManyToOne
   private ProductStatusChangeReason discardReason;
   
@@ -175,22 +165,6 @@ public class Product implements ModificationTracker {
 
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
-  }
-
-  public BloodAbo getBloodAbo() {
-    return bloodAbo;
-  }
-
-  public void setBloodAbo(BloodAbo bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public BloodRh getBloodRhd() {
-    return bloodRhd;
-  }
-
-  public void setBloodRhd(BloodRh bloodRhd) {
-    this.bloodRhd = bloodRhd;
   }
 
   public Date getLastUpdated() {

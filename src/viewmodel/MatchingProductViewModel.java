@@ -10,7 +10,6 @@ import model.compatibility.CompatibilityTest;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.user.User;
-import model.util.BloodGroup;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -86,10 +85,6 @@ public class MatchingProductViewModel {
       return "";
     DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     return formatter.format(product.getExpiresOn());
-  }
-
-  public BloodGroup getBloodGroup() {
-    return new BloodGroup(product.getBloodAbo(), product.getBloodRhd());
   }
 
   public String getCollectionNumber() {

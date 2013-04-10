@@ -139,9 +139,9 @@
 			<button type="button" class="editButton">
 				Edit
 			</button>
-			<button type="button" class="testResultsForProductButton">
+			<!-- button type="button" class="testResultsForProductButton">
 				Test results for product
-			</button>
+			</button-->
 			<!-- button type="button" class="productLabelButton">
 				Product Label
 			</button-->
