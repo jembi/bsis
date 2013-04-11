@@ -321,4 +321,8 @@ public class UtilController {
   public String getNextWorksheetNumber() {
     return sequenceNumberRepository.getNextWorksheetBatchNumber();
   }
+
+  public String getNextRequestNumber() {
+    return sequenceNumberRepository.getNextRequestNumber();
+  }
 }

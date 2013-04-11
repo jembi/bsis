@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
+import model.productmovement.ProductStatusChangeType;
 import model.request.Request;
 import model.util.BloodAbo;
 import model.util.BloodGroup;
@@ -342,14 +343,18 @@ public class RequestRepository {
       // between the time when matching products are searched and selected
       // for issuing
       if (canIssueProduct(product, request)) {
+        Date today = new Date();
         ProductStatusChange productIssue = new ProductStatusChange();
-        productIssue.setIssuedBy(UserInfoAddToThreadFilter.threadLocal.get());
+        productIssue.setNewStatus(ProductStatus.ISSUED);
+        productIssue.setStatusChangedOn(today);
+        productIssue.setStatusChangeType(ProductStatusChangeType.ISSUED);
+        productIssue.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
         productIssue.setIssuedTo(request);
-        productIssue.setIssuedOn(new Date());
         productIssue.setProduct(product);
         numUnitsIssued++;
-        productRepository.updateProductInternalFields(product);
         product.setStatus(ProductStatus.ISSUED);
+        product.setIssuedOn(today);
+        product.setIssuedTo(request);
         em.persist(productIssue);
         em.merge(product);
       }
@@ -369,8 +374,10 @@ public class RequestRepository {
   }
 
   private boolean canIssueProduct(Product product, Request request) {
+    // first make sure the product is up-to-date
+    // the product may have expired so this update is required
+    // we update the expiry date of a product periodically
     productRepository.updateProductInternalFields(product);
-//    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(product.getCollectedSample().getId());
     String requestedProductType = request.getProductType().getProductType();
     String productType = product.getProductType().getProductType();
 
@@ -388,31 +395,13 @@ public class RequestRepository {
     if (product.getExpiresOn().before(today))
       return false;
     
-    String bloodAbo = "";
-    String bloodRh = "";
+    String bloodAbo = product.getCollectedSample().getBloodAbo();
+    String bloodRh = product.getCollectedSample().getBloodRh();
 
     boolean canIssue = true;
-//    for (TestResult testResult : testResults.values()) {
-//      BloodTest bloodTest = testResult.getBloodTest();
-//      String actualResult = testResult.getResult();
-//
-//      if (bloodTest.getName().equals("Blood Rh")) {
-//        System.out.println("here");
-//        bloodRh = actualResult;
-//      }
-//
-//      if (bloodTest.getName().equals("Blood ABO")) {
-//        bloodAbo = actualResult;
-//      }
-//
-//      if (!bloodTestUtils.isTestResultCorrect(bloodTest, actualResult)) {
-//        canIssue = false;
-//        break;
-//      }
-//    }
 
-    String requestedAbo = request.getPatientBloodAbo().toString();
-    String requestedRh = request.getPatientBloodRh().toString(); 
+    String requestedAbo = request.getPatientBloodAbo();
+    String requestedRh = request.getPatientBloodRh(); 
     if (canIssue && bloodCrossmatch(bloodAbo, bloodRh, requestedAbo, requestedRh)) {
       return true;
     }
@@ -420,11 +409,11 @@ public class RequestRepository {
     return false;
   }
 
-  private boolean bloodCrossmatch(String abo1, String rhd1, String abo2, String rhd2) {
-    System.out.println("matching " + abo1 + ", " + ", " + rhd1 + ", " + abo2 + ", " + rhd2);
-    if (abo1.equals(abo2) && rhd1.equals(rhd2))
+  private boolean bloodCrossmatch(String abo1, String rh1, String abo2, String rh2) {
+    System.out.println("matching " + abo1 + ", " + ", " + rh1 + ", " + abo2 + ", " + rh2);
+    if (abo1.equals(abo2) && rh1.equals(rh2))
       return true;
-    if (abo1.equals("O") && (rhd1.equals(rhd2) || rhd1.equals("NEGATIVE")))
+    if (abo1.equals("O") && (rh1.equals(rh2) || rh1.equals("-")))
       return true;
     return false;
   }
