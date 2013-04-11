@@ -437,7 +437,7 @@ insert into FormField
  '0', '0'),
 ('Request', 'numUnitsRequested', 'No. of units requested', '', 0,
  '0', '0',
- '0', '1',
+ '1', '0',
  '0', '0'),
 ('Request', 'numUnitsIssued', 'No. of units issued', '', 0,
  '0', '0',

@@ -17,6 +17,7 @@
 <c:set var="addRequestFormProductTypeSelectorId">addRequestFormProductTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormRequestTypeSelectorId">addRequestFormRequestTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormRequestSiteSelectorId">addRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
+<c:set var="addRequestFormPatientGenderSelectorId">addRequestFormPatientGenderSelectorId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
@@ -121,12 +122,23 @@ $(document).ready(
         });
       }
 
+      getGenderSelector().multiselect({
+        multiple : false,
+        selectedList : 1,
+        header : false
+      });
+
       if ("${firstTimeRender}" == "true") {
       	$("#${tabContentId}").find('textarea[name="notes"]').html("${requestFields.notes.defaultValue}");
       	setDefaultValueForSelector(getBloodGroupSelector(), "${requestFields.bloodGroup.defaultValue}");
       	setDefaultValueForSelector(getProductTypeSelector(), "${requestFields.productType.defaultValue}");
       	setDefaultValueForSelector(getRequestTypeSelector(), "${requestFields.requestType.defaultValue}");
       	setDefaultValueForSelector(getRequestSiteSelector(), "${requestFields.requestSite.defaultValue}");
+      	setDefaultValueForSelector(getGenderSelector(), "${requestFields.patientGender.defaultValue}");
+      }
+
+      function getGenderSelector() {
+        return $("#${mainContentId}").find('select[name="patientGender"]').multiselect();
       }
 
       function getBloodGroupSelector() {
@@ -202,6 +214,18 @@ $(document).ready(
 						<form:option value="O-" label="O-" />
 					</form:select>
 					<form:errors class="formError" path="request.bloodGroup" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${requestFields.patientGender.hidden != true}">
+				<div>
+					<form:label path="patientGender">${requestFields.patientGender.displayName}</form:label>
+					<form:select path="patientGender" id="${addRequestFormPatientGenderSelectorId}">
+						<form:option value="not_known" label="Not Known" />
+						<form:option value="male" label="Male" />
+						<form:option value="female" label="Female" />
+						<form:option value="not_applicable" label="Not Applicable" />
+					</form:select>
+					<form:errors class="formError" path="request.patientGender" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${requestFields.requestDate.hidden != true }">
