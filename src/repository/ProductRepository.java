@@ -26,6 +26,7 @@ import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
+import model.productmovement.ProductStatusChangeType;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.testresults.TTIStatus;
@@ -633,6 +634,7 @@ public class ProductRepository {
     existingProduct.setStatus(ProductStatus.DISCARDED);
     existingProduct.setDiscardedOn(new Date());
     ProductStatusChange statusChange = new ProductStatusChange();
+    statusChange.setStatusChangeType(ProductStatusChangeType.DISCARDED);
     statusChange.setNewStatus(ProductStatus.DISCARDED);
     statusChange.setStatusChangedOn(new Date());
     statusChange.setStatusChangeReason(discardReason);
@@ -898,6 +900,7 @@ public class ProductRepository {
     updateProductStatus(existingProduct);
     ProductStatusChange statusChange = new ProductStatusChange();
     statusChange.setStatusChangedOn(new Date());
+    statusChange.setStatusChangeType(ProductStatusChangeType.RETURNED);
     statusChange.setStatusChangeReason(returnReason);
     statusChange.setNewStatus(existingProduct.getStatus());
     statusChange.setStatusChangeReasonText(returnReasonText);
@@ -909,5 +912,14 @@ public class ProductRepository {
     em.persist(statusChange);
     em.merge(existingProduct);
     em.flush();
+  }
+
+  public List<ProductStatusChange> getProductStatusChanges(Product product) {
+    String queryStr = "SELECT p FROM ProductStatusChange p WHERE " +
+    		"p.product.id=:productId";
+    TypedQuery<ProductStatusChange> query = em.createQuery(queryStr, ProductStatusChange.class);
+    query.setParameter("productId", product.getId());
+    List<ProductStatusChange> statusChanges = query.getResultList();
+    return statusChanges;
   }
 }

@@ -41,6 +41,10 @@ public class ProductStatusChange {
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
+  private ProductStatusChangeType statusChangeType;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
   private ProductStatus newStatus;
 
   @RequestExists
@@ -137,5 +141,13 @@ public class ProductStatusChange {
 
   public void setStatusChangeReason(ProductStatusChangeReason discardReason) {
     this.statusChangeReason = discardReason;
+  }
+
+  public ProductStatusChangeType getStatusChangeType() {
+    return statusChangeType;
+  }
+
+  public void setStatusChangeType(ProductStatusChangeType statusChangeType) {
+    this.statusChangeType = statusChangeType;
   }
 }

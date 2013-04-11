@@ -52,7 +52,7 @@ public class ProductController {
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private ProductStatusChangeReasonRepository productStatusChangeRepository;
+  private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
   
   @Autowired
   private ProductTypeRepository productTypeRepository;
@@ -110,7 +110,7 @@ public class ProductController {
     mv.addObject("product", productViewModel);
     mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("productStatusChangeReasons",
-        productStatusChangeRepository.getAllProductStatusChangeReasonsAsMap());
+        productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
     // to ensure custom field names are displayed in the form
     mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
     return mv;
@@ -493,7 +493,7 @@ public class ProductController {
     ModelAndView mv = new ModelAndView("products/discardProductForm");
     mv.addObject("productId", productId);
     List<ProductStatusChangeReason> statusChangeReasons =
-        productStatusChangeRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
+        productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
     mv.addObject("discardReasons", statusChangeReasons);
     return mv;
   }
@@ -530,11 +530,36 @@ public class ProductController {
     ModelAndView mv = new ModelAndView("products/returnProductForm");
     mv.addObject("productId", productId);
     List<ProductStatusChangeReason> statusChangeReasons =
-        productStatusChangeRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
+        productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
     mv.addObject("returnReasons", statusChangeReasons);
     return mv;
   }
 
+  @RequestMapping(value = "/viewProductHistory", method = RequestMethod.GET)
+  public ModelAndView viewProductHistory(HttpServletRequest request, Model model,
+      @RequestParam(value = "productId", required = false) Long productId) {
+
+    ModelAndView mv = new ModelAndView("products/productMovements");
+
+    Product product = null;
+    if (productId != null) {
+      product = productRepository.findProductById(productId);
+      if (product != null) {
+        mv.addObject("existingProduct", true);
+      }
+      else {
+        mv.addObject("existingProduct", false);
+      }
+    }
+
+    ProductViewModel productViewModel = getProductViewModel(product);
+    mv.addObject("product", productViewModel);
+    mv.addObject("allProductMovements", productRepository.getProductStatusChanges(product));
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    // to ensure custom field names are displayed in the form
+    return mv;
+  }
 
   @RequestMapping(value = "/returnProduct", method = RequestMethod.POST)
   public @ResponseBody Map<String, Object> returnProduct(

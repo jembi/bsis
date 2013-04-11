@@ -91,6 +91,18 @@
               });
         });
 
+        $("#${mainContentId}").find(".productHistoryButton")
+        										  .button({icons: {primary : 'ui-icon-document'}})
+        											.click(showProductHistory);
+
+       	function showProductHistory() {
+          $("#${tabContentId}").bind("productHistoryDone", productHistoryDone);
+	        fetchContent("viewProductHistory.html",
+            					 {productId: "${product.id}"},
+            					 $("#${childContentId}")
+	        						);
+       	}
+        
         $("#${mainContentId}").find(".discardButton")
                               .button({icons: {primary : 'ui-icon-closethick'}})
 									            .click(generateDiscardProductDialog);
@@ -124,7 +136,7 @@
         }
 
         $("#${mainContentId}").find(".returnButton")
-											        .button({icons: {primary : 'ui-icon-closethick'}})
+											        .button({icons: {primary : 'ui-icon-arrowreturnthick-1-w'}})
         											.click(generateReturnProductDialog);
 
 				function generateReturnProductDialog() {
@@ -160,6 +172,11 @@
         }
 
         function returnProductDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
+
+        function productHistoryDone() {
+          emptyChildContent();
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
@@ -200,6 +217,9 @@
 			</button>
 			<button type="button" class="returnButton">
 				Return product
+			</button>
+			<button type="button" class="productHistoryButton">
+				Show product movement details
 			</button>
 			<button type="button" class="deleteButton">
 				Delete
