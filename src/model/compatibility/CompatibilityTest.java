@@ -183,4 +183,8 @@ public class CompatibilityTest implements ModificationTracker {
       return null;
     return forRequest.getRequestNumber();
   }
+
+  public String getCollectionNumber() {
+    return "";
+  }
 }

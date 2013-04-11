@@ -924,4 +924,13 @@ public class ProductRepository {
     List<ProductStatusChange> statusChanges = query.getResultList();
     return statusChanges;
   }
+
+  public List<Product> findProductsByCollectionNumber(String collectionNumber) {
+    String queryStr = "SELECT p from Product p WHERE " +
+    		"p.collectedSample.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
+    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
+    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
+  }
 }

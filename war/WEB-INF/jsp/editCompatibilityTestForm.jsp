@@ -133,12 +133,12 @@
 			<div>
 			  <form:hidden path="requestNumber" value="${model.editCompatibilityTestForm.compatibilityTest.forRequest.requestNumber}"></form:hidden>
 			</div>
-				<c:if test="${model.compatibilityTestFields.productNumber.hidden != true }">
+				<c:if test="${model.compatibilityTestFields.collectionNumber.hidden != true }">
 					<div>
-						<form:label path="productNumber">${model.compatibilityTestFields.productNumber.displayName}</form:label>
-						<form:input path="productNumber" />
+						<form:label path="collectionNumber">${model.compatibilityTestFields.collectionNumber.displayName}</form:label>
+						<form:input path="collectionNumber" />
 						<form:errors class="formError"
-							path="compatibilityTest.productNumber" delimiter=", "></form:errors>
+							path="compatibilityTest.collectionNumber" delimiter=", "></form:errors>
 						<form:errors class="formError"
 							path="compatibilityTest.testedProduct" delimiter=", "></form:errors>
 					</div>

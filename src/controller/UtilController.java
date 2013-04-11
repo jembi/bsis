@@ -21,6 +21,8 @@ import model.donor.Donor;
 import model.donor.DonorDeferral;
 import model.donor.DonorUtils;
 import model.product.Product;
+import model.producttype.ProductType;
+import model.request.Request;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +37,7 @@ import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.ProductRepository;
+import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 
@@ -53,7 +56,10 @@ public class UtilController {
 
   @Autowired
   private ProductRepository productRepository;
-  
+
+  @Autowired
+  private RequestRepository requestRepository;
+
   @Autowired
   private CollectionBatchRepository collectionBatchRepository;
 
@@ -324,5 +330,25 @@ public class UtilController {
 
   public String getNextRequestNumber() {
     return sequenceNumberRepository.getNextRequestNumber();
+  }
+
+  public Request findRequestByRequestNumber(String requestNumber) {
+    return requestRepository.findRequestByRequestNumber(requestNumber);
+  }
+
+  public Product findProduct(String collectionNumber, ProductType productType) {
+    List<Product> products = productRepository.findProductsByCollectionNumber(collectionNumber);
+    Product matchingProduct = null; 
+    for (Product product : products) {
+      if (product.getProductType().equals(productType)) {
+        if (matchingProduct != null) {
+          // multiple products have the same product type
+          // cannot identify uniquely
+          return null;
+        }
+        matchingProduct = product;
+      }
+    }
+    return matchingProduct;
   }
 }

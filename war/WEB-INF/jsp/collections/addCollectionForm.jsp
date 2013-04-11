@@ -252,11 +252,11 @@
 				<div>
 	
 					<c:if test="${firstTimeRender}">
-						<c:if test="${collectionFields.useParametersFromBatch.defaultValue == 'true'}">
-							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
-						</c:if>
 						<c:if test="${collectionFields.useParametersFromBatch.defaultValue != 'true'}">
 							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
+						</c:if>
+						<c:if test="${collectionFields.useParametersFromBatch.defaultValue == 'true'}">
+							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" checked="checked"/>
 						</c:if>
 					</c:if>
 	

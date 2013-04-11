@@ -171,7 +171,7 @@ insert into FormField
  '0', '1',
  '1', '1',
  '0', '0'),
-('CollectedSample', 'useParametersFromBatch', 'Use collection center and site as entered in collection batch', '', 0,
+('CollectedSample', 'useParametersFromBatch', 'Use Collection center/site from batch?', '', 0,
  '0', '1',
  '0', '1',
  '0', '0'),
@@ -529,7 +529,7 @@ insert into FormField
  hidden, isHidable,
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable) values
-('CompatibilityTest', 'productNumber', 'Product number', '', 0,
+('CompatibilityTest', 'collectionNumber', 'Collection number', '', 0,
  '0', '0',
  '1', '0',
  '0', '0'),
@@ -555,11 +555,11 @@ insert into FormField
  '0', '0'),
  ('CompatibilityTest', 'testedBy', 'Tested by', '', 0,
  '0', '1',
- '1', '0',
+ '0', '0',
  '0', '0'),
  ('CompatibilityTest', 'notes', 'Notes', '', 0,
  '0', '1',
- '1', '0',
+ '0', '1',
  '0', '0'),
  ('CompatibilityTest', 'createdDate', 'Created on', '', 0,
 	'0', '0',
@@ -748,10 +748,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
-
-insert into CrossmatchType (crossmatchType, isDeleted) values
-('Saline @ 37 degrees', '0'),
-('Anti Human Globulin', '0');
 
 insert into ConfiguredPreDonationTest (
 testName, testType, resultDataType,

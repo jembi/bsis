@@ -74,7 +74,7 @@ public class CompatibilityTestsController {
   @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)
   public ModelAndView editCompatibilityTestsFormGenerator(HttpServletRequest request,
       Model model,
-      @RequestParam(value="requestId", required=false) String requestId) {
+      @RequestParam(value="requestId") String requestId) {
 
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
@@ -109,36 +109,6 @@ public class CompatibilityTestsController {
 
     Map<String, Object> m = model.asMap();
     addEditSelectorOptions(m);
-
-    // IMPORTANT: Validation code just checks if the ID exists
-    // We still need to store the product as part of the compatibility test
-//    String productNumber = form.getProductNumber();
-//    if (productNumber != null && !productNumber.isEmpty()) {
-//      try {
-//        Product product = productRepository.findProductByProductNumber(productNumber);
-//        form.setTestedProduct(product);
-//      } catch (NoResultException ex) {
-//        form.setTestedProduct(null);
-//        ex.printStackTrace();
-//      }
-//    } else {
-//      form.setTestedProduct(null);
-//    }
-
-    // IMPORTANT: Validation code just checks if the ID exists
-    // We still need to store the request as part of the compatibility test
-    String requestNumber = form.getRequestNumber();
-    if (requestNumber != null && !requestNumber.isEmpty()) {
-      try {
-        Request productRequest = requestRepository.findRequestByRequestNumber(requestNumber);
-        form.setForRequest(productRequest);
-      } catch (NoResultException ex) {
-        form.setTestedProduct(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setForRequest(null);
-    }
 
     if (result.hasErrors()) {
       m.put("hasErrors", true);

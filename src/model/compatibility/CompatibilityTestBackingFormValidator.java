@@ -2,8 +2,13 @@ package model.compatibility;
 
 import java.util.Arrays;
 
-import model.CustomDateFormatter;
+import javax.persistence.NoResultException;
 
+import model.CustomDateFormatter;
+import model.product.Product;
+import model.request.Request;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -38,6 +43,37 @@ public class CompatibilityTestBackingFormValidator implements Validator {
       errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
           CustomDateFormatter.getDateTimeErrorMessage());
     }
+
+    String requestNumber = form.getRequestNumber();
+    Request productRequest = null;
+    if (requestNumber != null && !requestNumber.isEmpty()) {
+      try {
+        productRequest = utilController.findRequestByRequestNumber(requestNumber);
+        form.setForRequest(productRequest);
+      } catch (NoResultException ex) {
+        form.setForRequest(null);
+        ex.printStackTrace();
+      }
+    } else {
+      form.setForRequest(null);
+    }
+
+    String collectionNumber = form.getCollectionNumber();
+    if (StringUtils.isNotBlank(collectionNumber) && productRequest != null) {
+      try {
+        Product testedProduct = utilController.findProduct(collectionNumber, productRequest.getProductType());
+        if (testedProduct == null)
+          errors.rejectValue("compatibilityTest.testedProduct", "compatibilitytest.testedProduct.notFound",
+              "Product with this collection number and product type not found");
+        form.setTestedProduct(testedProduct);
+      } catch (NoResultException ex) {
+        form.setTestedProduct(null);
+        ex.printStackTrace();
+      }
+    } else {
+      form.setTestedProduct(null);
+    }
+
     utilController.commonFieldChecks(form, "compatibilityTest", errors);
   }
 }
