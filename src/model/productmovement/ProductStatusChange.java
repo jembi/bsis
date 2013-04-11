@@ -19,7 +19,6 @@ import org.hibernate.envers.Audited;
 import model.product.Product;
 import model.product.ProductExists;
 import model.product.ProductStatus;
-import model.reasons.ProductStatusChangeReason;
 import model.request.Request;
 import model.request.RequestExists;
 import model.user.User;
@@ -52,7 +51,7 @@ public class ProductStatusChange {
   private User changedBy;
 
   @Lob
-  private String notes;
+  private String statusChangeReasonText;
 
   @ManyToOne
   private ProductStatusChangeReason statusChangeReason;
@@ -108,12 +107,12 @@ public class ProductStatusChange {
     this.changedBy = changedBy;
   }
 
-  public String getNotes() {
-    return notes;
+  public String getStatusChangeReasonText() {
+    return statusChangeReasonText;
   }
 
-  public void setNotes(String notes) {
-    this.notes = notes;
+  public void setStatusChangeReasonText(String statusChangeReasonText) {
+    this.statusChangeReasonText = statusChangeReasonText;
   }
 
   public User getIssuedBy() {

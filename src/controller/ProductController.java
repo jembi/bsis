@@ -18,6 +18,8 @@ import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.product.ProductBackingFormValidator;
+import model.productmovement.ProductStatusChangeReason;
+import model.productmovement.ProductStatusChangeReasonCategory;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
 import repository.ProductRepository;
+import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import viewmodel.ProductViewModel;
 
@@ -48,6 +51,9 @@ public class ProductController {
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 
+  @Autowired
+  private ProductStatusChangeReasonRepository productStatusChangeRepository;
+  
   @Autowired
   private ProductTypeRepository productTypeRepository;
   
@@ -103,6 +109,8 @@ public class ProductController {
     mv.addObject("tips", tips);
     mv.addObject("product", productViewModel);
     mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("productStatusChangeReasons",
+        productStatusChangeRepository.getAllProductStatusChangeReasonsAsMap());
     // to ensure custom field names are displayed in the form
     mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
     return mv;
@@ -479,17 +487,31 @@ public class ProductController {
     return m;
   }
 
+  @RequestMapping(value = "/discardProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView discardProductFormGenerator(HttpServletRequest request,
+      @RequestParam("productId") String productId) {
+    ModelAndView mv = new ModelAndView("products/discardProductForm");
+    mv.addObject("productId", productId);
+    List<ProductStatusChangeReason> statusChangeReasons =
+        productStatusChangeRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
+    mv.addObject("discardReasons", statusChangeReasons);
+    return mv;
+  }
+
+
   @RequestMapping(value = "/discardProduct", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> discardProduct(
-      @RequestParam("productId") Long productId) {
+  public @ResponseBody Map<String, Object> discardProduct(
+      @RequestParam("productId") Long productId,
+      @RequestParam("discardReasonId") Integer discardReasonId,
+      @RequestParam("discardReasonText") String discardReasonText) {
 
     boolean success = true;
     String errMsg = "";
     try {
-      productRepository.discardProduct(productId);
+      ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
+      statusChangeReason.setId(discardReasonId);
+      productRepository.discardProduct(productId, statusChangeReason, discardReasonText);
     } catch (Exception ex) {
-      // TODO: Replace with logger
       System.err.println("Internal Exception");
       System.err.println(ex.getMessage());
       success = false;
@@ -502,6 +524,42 @@ public class ProductController {
     return m;
   }
 
+  @RequestMapping(value = "/returnProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView returnProductFormGenerator(HttpServletRequest request,
+      @RequestParam("productId") String productId) {
+    ModelAndView mv = new ModelAndView("products/returnProductForm");
+    mv.addObject("productId", productId);
+    List<ProductStatusChangeReason> statusChangeReasons =
+        productStatusChangeRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
+    mv.addObject("returnReasons", statusChangeReasons);
+    return mv;
+  }
+
+
+  @RequestMapping(value = "/returnProduct", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> returnProduct(
+      @RequestParam("productId") Long productId,
+      @RequestParam("returnReasonId") Integer returnReasonId,
+      @RequestParam("returnReasonText") String returnReasonText) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
+      statusChangeReason.setId(returnReasonId);
+      productRepository.returnProduct(productId, statusChangeReason, returnReasonText);
+    } catch (Exception ex) {
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
+  }
 
   /**
    * Redirect to ISBT 128 Label Generator

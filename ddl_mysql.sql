@@ -560,7 +560,6 @@
         notes longtext,
         status varchar(30),
         collectedSample_id bigint,
-        discardReason_id SMALLINT,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -568,17 +567,10 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductReturnReason (
-        id bigint not null auto_increment,
-        reasonDetails longtext,
-        returnReason varchar(150),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
     create table ProductStatusChange (
         id bigint not null auto_increment,
         newStatus varchar(30),
-        notes longtext,
+        statusChangeReasonText longtext,
         statusChangedOn datetime,
         changedBy_id SMALLINT,
         issuedTo_id bigint,
@@ -589,35 +581,19 @@
 
     create table ProductStatusChangeReason (
         id SMALLINT not null auto_increment,
+        category varchar(30),
         isDeleted boolean,
         statusChangeReason varchar(100),
-        category_id TINYINT,
         primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ProductStatusChangeReasonCategory (
-        id TINYINT not null,
-        category varchar(20) not null,
-        isDeleted boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ProductStatusChangeReasonCategory_AUD (
-        id TINYINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        category varchar(20),
-        isDeleted boolean,
-        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table ProductStatusChangeReason_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
+        category varchar(30),
         isDeleted boolean,
         statusChangeReason varchar(100),
-        category_id TINYINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -626,7 +602,7 @@
         REV integer not null,
         REVTYPE tinyint,
         newStatus varchar(30),
-        notes longtext,
+        statusChangeReasonText longtext,
         statusChangedOn datetime,
         changedBy_id SMALLINT,
         issuedTo_id bigint,
@@ -719,7 +695,6 @@
         notes longtext,
         status varchar(30),
         collectedSample_id bigint,
-        discardReason_id SMALLINT,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -1284,12 +1259,6 @@
         references CollectedSample (id);
 
     alter table Product 
-        add index FK50C664CFF00A1C69 (discardReason_id), 
-        add constraint FK50C664CFF00A1C69 
-        foreign key (discardReason_id) 
-        references ProductStatusChangeReason (id);
-
-    alter table Product 
         add index FK50C664CF73AC2B90 (productType_id), 
         add constraint FK50C664CF73AC2B90 
         foreign key (productType_id) 
@@ -1308,8 +1277,8 @@
         references Request (id);
 
     alter table ProductStatusChange 
-        add index FKCCE48CB1E8B67365 (statusChangeReason_id), 
-        add constraint FKCCE48CB1E8B67365 
+        add index FKCCE48CB18BFC6394 (statusChangeReason_id), 
+        add constraint FKCCE48CB18BFC6394 
         foreign key (statusChangeReason_id) 
         references ProductStatusChangeReason (id);
 
@@ -1324,18 +1293,6 @@
         add constraint FKCCE48CB1438D2378 
         foreign key (changedBy_id) 
         references User (id);
-
-    alter table ProductStatusChangeReason 
-        add index FK9F250255107C079A (category_id), 
-        add constraint FK9F250255107C079A 
-        foreign key (category_id) 
-        references ProductStatusChangeReasonCategory (id);
-
-    alter table ProductStatusChangeReasonCategory_AUD 
-        add index FK6A6ABAC4DF74E053 (REV), 
-        add constraint FK6A6ABAC4DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
 
     alter table ProductStatusChangeReason_AUD 
         add index FKA5ADFDA6DF74E053 (REV), 

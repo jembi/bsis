@@ -24,6 +24,8 @@ import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductStatusChange;
+import model.productmovement.ProductStatusChangeReason;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.testresults.TTIStatus;
@@ -41,6 +43,7 @@ import org.springframework.util.CollectionUtils;
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
+import filter.UserInfoAddToThreadFilter;
 
 @Repository
 @Transactional
@@ -623,10 +626,23 @@ public class ProductRepository {
     em.flush();
   }
 
-  public void discardProduct(Long productId) {
+  public void discardProduct(Long productId,
+      ProductStatusChangeReason discardReason,
+      String discardReasonText) {
     Product existingProduct = findProductById(productId);
     existingProduct.setStatus(ProductStatus.DISCARDED);
     existingProduct.setDiscardedOn(new Date());
+    ProductStatusChange statusChange = new ProductStatusChange();
+    statusChange.setNewStatus(ProductStatus.DISCARDED);
+    statusChange.setStatusChangedOn(new Date());
+    statusChange.setStatusChangeReason(discardReason);
+    statusChange.setStatusChangeReasonText(discardReasonText);
+    statusChange.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    if (existingProduct.getStatusChanges() == null)
+      existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
+    existingProduct.getStatusChanges().add(statusChange);
+    statusChange.setProduct(existingProduct);
+    em.persist(statusChange);
     em.merge(existingProduct);
     em.flush();
   }
@@ -874,5 +890,24 @@ public class ProductRepository {
       ex.printStackTrace();
     }
     return product;
+  }
+
+  public void returnProduct(Long productId,
+      ProductStatusChangeReason returnReason, String returnReasonText) {
+    Product existingProduct = findProductById(productId);
+    updateProductStatus(existingProduct);
+    ProductStatusChange statusChange = new ProductStatusChange();
+    statusChange.setStatusChangedOn(new Date());
+    statusChange.setStatusChangeReason(returnReason);
+    statusChange.setNewStatus(existingProduct.getStatus());
+    statusChange.setStatusChangeReasonText(returnReasonText);
+    statusChange.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    if (existingProduct.getStatusChanges() == null)
+      existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
+    existingProduct.getStatusChanges().add(statusChange);
+    statusChange.setProduct(existingProduct);
+    em.persist(statusChange);
+    em.merge(existingProduct);
+    em.flush();
   }
 }

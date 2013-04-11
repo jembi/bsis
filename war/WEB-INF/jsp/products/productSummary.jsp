@@ -91,27 +91,77 @@
               });
         });
 
-        $("#${tabContentId}").find(".discardButton").button({
-          icons : {
-            primary : 'ui-icon-notice'
-          }
-        }).click(function() {
-          $("#${discardConfirmDialogId}").dialog(
-              {
+        $("#${mainContentId}").find(".discardButton")
+                              .button({icons: {primary : 'ui-icon-closethick'}})
+									            .click(generateDiscardProductDialog);
+
+
+  			function generateDiscardProductDialog() {
+          $("<div>").dialog({
+            modal : true,
+            open : function() {
+              // extra parameters passed as string otherwise POST request sent
+              $(this).load("discardProductFormGenerator.html?" + $.param({
+                productId : "${product.id}"
+              }));
+            },
+            close : function(event, ui) {
+              $(this).remove();
+            },
+            title : "Discard Product",
+            height : 400,
+            width : 600,
+            buttons : {
+              "Discard Product" : function() {
+                $(this).dialog("close");
+                discardProduct($(this).find(".discardProductForm"), discardProductDone);
+              },
+              "Cancel" : function() {
+                $(this).dialog("close");
+              }
+            }
+          });
+        }
+
+        $("#${mainContentId}").find(".returnButton")
+											        .button({icons: {primary : 'ui-icon-closethick'}})
+        											.click(generateReturnProductDialog);
+
+				function generateReturnProductDialog() {
+					$("<div>").dialog({
                 modal : true,
-                title : "Confirm Discard",
+                open : function() {
+                  // extra parameters passed as string otherwise POST request sent
+                  $(this).load("returnProductFormGenerator.html?" + $.param({
+                    productId : "${product.id}"
+                  }));
+                },
+                close : function(event, ui) {
+                  $(this).remove();
+                },
+                title : "Return Product",
+                height : 400,
+                width : 600,
                 buttons : {
-                  "Discard" : function() {
-                    discardProduct("${product.id}", notifyParentDone);
+                  "Return Product" : function() {
                     $(this).dialog("close");
+                    returnProduct($(this).find(".returnProductForm"),
+                        returnProductDone);
                   },
                   "Cancel" : function() {
                     $(this).dialog("close");
                   }
                 }
               });
-        });
+        }
 
+        function discardProductDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
+
+        function returnProductDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
 
         function editProductSuccess() {
           emptyChildContent();
@@ -122,9 +172,9 @@
           emptyChildContent();
         }
 
-				function emptyChildContent() {
-				  $("#${childContentId}").html("");
-				}
+        function emptyChildContent() {
+          $("#${childContentId}").html("");
+        }
 
       });
 </script>
@@ -147,6 +197,9 @@
 			</button-->
 			<button type="button" class="discardButton">
 				Discard product
+			</button>
+			<button type="button" class="returnButton">
+				Return product
 			</button>
 			<button type="button" class="deleteButton">
 				Delete
@@ -174,7 +227,3 @@
 
 <div id="${deleteConfirmDialogId}" style="display: none;">Are
 	you sure you want to delete this Product?</div>
-
-<div id="${discardConfirmDialogId}" style="display: none;">Are
-	you sure you want to discard this Product?</div>
-	

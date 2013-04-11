@@ -26,11 +26,8 @@ import model.modificationtracker.RowModificationTracker;
 import model.productmovement.ProductStatusChange;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
-import model.reasons.ProductStatusChangeReason;
 import model.request.Request;
 import model.user.User;
-import model.util.BloodAbo;
-import model.util.BloodRh;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
@@ -51,11 +48,6 @@ public class Product implements ModificationTracker {
   @ManyToOne(optional=true, fetch=FetchType.LAZY)
   private CollectedSample collectedSample;
 
-  // not all products are subdivided into small packs. Just store the
-  // extra information about subdivided products in a separate table. 
-  @OneToMany(mappedBy="parentProduct")
-  private List<SubdividedProduct> subdividedProducts;
-
   @ProductTypeExists
   @ManyToOne
   private ProductType productType;
@@ -67,9 +59,6 @@ public class Product implements ModificationTracker {
   @Index(name="product_expiresOn_index")
   private Date expiresOn;
 
-  @ManyToOne
-  private ProductStatusChangeReason discardReason;
-  
   @Temporal(TemporalType.TIMESTAMP)
   @Column(columnDefinition="DATETIME")
   private Date discardedOn;
@@ -89,6 +78,11 @@ public class Product implements ModificationTracker {
 
   @OneToMany(mappedBy="product", fetch=FetchType.LAZY)
   private List<ProductStatusChange> statusChanges;
+
+  // not all products are subdivided into small packs. Just store the
+  // extra information about subdivided products in a separate table. 
+  @OneToMany(mappedBy="parentProduct")
+  private List<SubdividedProduct> subdividedProducts;
 
   @Lob
   private String notes;
@@ -259,13 +253,5 @@ public class Product implements ModificationTracker {
 
   public void setSubdividedProducts(List<SubdividedProduct> subdividedProducts) {
     this.subdividedProducts = subdividedProducts;
-  }
-
-  public ProductStatusChangeReason getDiscardReason() {
-    return discardReason;
-  }
-
-  public void setDiscardReason(ProductStatusChangeReason discardReason) {
-    this.discardReason = discardReason;
   }
 }

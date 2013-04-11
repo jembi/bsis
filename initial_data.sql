@@ -560,11 +560,6 @@ insert into FormField
 ('Autologous', '0'),
 ('Other', '0');
 
-insert into ProductStatusChangeReasonCategory (id, category, isDeleted) values
-(1, 'Discarded' , '0'),
-(2, 'Returned', '0'),
-(3, 'Other', '0');
-
 insert into FormField
 (form, field, defaultDisplayName, defaultValue, maxLength,
  hidden, isHidable,
@@ -626,11 +621,6 @@ insert into FormField
  '0', '0',
  '0', '0',
  '0', '0');
-
-insert into ProductStatusChangeReason (statusChangeReason, category_id, isDeleted) values
-('Discarded', '1', '0'),
-('Returned as expired', '2', '0'),
-('Other', '3', '0');
 
 insert into RequestType (requestType, description, isDeleted) values
 ('Emergency', '', '0'),
@@ -775,3 +765,11 @@ insert into DeferralReason (reason, isDeleted) values
 ("Symptoms of cold", 0),
 ("Travel to malarial region", 0),
 ("On medication", 0);
+
+insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) values
+("Other", "DISCARDED", 0),
+("Positive TTI", "DISCARDED", 0),
+("Expired", "DISCARDED", 0),
+("Other",   "RETURNED", 0),
+("Expired", "RETURNED", 0),
+("Expired", "RETURNED", 0);

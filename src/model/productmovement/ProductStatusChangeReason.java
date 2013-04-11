@@ -1,15 +1,15 @@
-package model.reasons;
+package model.productmovement;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
 
-import model.productmovement.ProductStatusChangeReasonCategory;
 
 @Entity
 @Audited
@@ -23,7 +23,8 @@ public class ProductStatusChangeReason {
   @Column(length=100)
   private String statusChangeReason;
 
-  @ManyToOne
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
   private ProductStatusChangeReasonCategory category;
 
   private Boolean isDeleted;

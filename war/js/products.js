@@ -39,15 +39,33 @@ function deleteProduct(productId, successCallback) {
   });
 }
 
-function discardProduct(productId, successCallback) {
+function discardProduct(form, successCallback) {
+  var discardProductFormData = $(form).serialize();
   $.ajax({
     type : "POST",
     url : "discardProduct.html",
-    data : {productId: productId},
+    data : discardProductFormData,
     success : function(jsonResponse) {
       if (jsonResponse["success"] === true) {
         successCallback();
-        showMessage("Product Discarded");
+        showMessage("Product discarded");
+      } else {
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
+      }
+    }
+  });
+}
+
+function returnProduct(form, successCallback) {
+  var returnProductFormData = $(form).serialize();
+  $.ajax({
+    type : "POST",
+    url : "returnProduct.html",
+    data : returnProductFormData,
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        successCallback();
+        showMessage("Product returned");
       } else {
         showMessage("Something went wrong." + jsonResponse["errMsg"]);
       }
