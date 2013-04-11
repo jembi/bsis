@@ -370,24 +370,23 @@ public class RequestsController {
 
   @RequestMapping("/findMatchingProductsForRequest")
   public ModelAndView findMatchingProductsForRequest(HttpServletRequest request,
-      Model model,
       @RequestParam(value="requestId", required=false) Long requestId) {
 
-    ModelAndView mv = new ModelAndView("matchingProductsForRequest");
+    ModelAndView mv = new ModelAndView("requests/matchingProductsForRequest");
 
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    m.put("existingRequest", false);
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("existingRequest", false);
 
-    m.put("requestId", requestId);
+    mv.addObject("requestId", requestId);
     List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(requestId);
-    m.put("refreshUrl", getUrl(request));
+    mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-    m.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
-    utilController.addTipsToModel(model.asMap(), "requests.findpending.findmatchingproducts");
-    m.put("allProducts", products);
-    mv.addObject("model", m);
+    mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
+    mv.addObject("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "requests.findpending.findmatchingproducts");
+    mv.addObject("tips", tips);
+    mv.addObject("allProducts", products);
     System.out.println(mv.getViewName());
     return mv;
   }

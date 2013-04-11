@@ -76,7 +76,7 @@ $(document).ready(
           showMessage("You must select at least one product to issue.");
           return;
         }
-        var data = {requestId : "${model.requestId}",
+        var data = {requestId : "${requestId}",
             				productsToIssue : JSON.stringify(selected_products)
             			 };
         $.ajax({
@@ -106,7 +106,7 @@ $(document).ready(
 
 	<c:choose>
 
-		<c:when test="${fn:length(model.allProducts) eq 0}">
+		<c:when test="${fn:length(allProducts) eq 0}">
 			<span
 				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
 				Sorry no matching products found for this request </span>
@@ -116,7 +116,7 @@ $(document).ready(
 
 			<div class="tipsBox ui-state-highlight">
 				<p>
-					${model['requests.findpending.findmatchingproducts']}
+					${tips['requests.findpending.findmatchingproducts']}
 				</p>
 			</div>
 
@@ -130,29 +130,29 @@ $(document).ready(
 					<tr>
 						<th style="display:none;"></th>
 						<th></th>
-						<c:if test="${model.productFields.collectionNumber.hidden != true}">
-							<th>${model.productFields.collectionNumber.displayName}</th>
+						<c:if test="${productFields.collectionNumber.hidden != true}">
+							<th>${productFields.collectionNumber.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.bloodGroup.hidden != true}">
-							<th>${model.productFields.bloodGroup.displayName}</th>
+						<c:if test="${productFields.bloodGroup.hidden != true}">
+							<th>${productFields.bloodGroup.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.productType.hidden != true}">
-							<th>${model.productFields.productType.displayName}</th>
+						<c:if test="${productFields.productType.hidden != true}">
+							<th>${productFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.createdOn.hidden != true}">
-							<th>${model.productFields.createdOn.displayName}</th>
+						<c:if test="${productFields.createdOn.hidden != true}">
+							<th>${productFields.createdOn.displayName}</th>
 						</c:if>
-						<c:if test="${model.productFields.age.hidden != true}">
-							<th>${model.productFields.age.displayName} (in days)</th>
+						<c:if test="${productFields.age.hidden != true}">
+							<th>${productFields.age.displayName} (in days)</th>
 						</c:if>
-						<c:if test="${model.productFields.expiresOn.hidden != true}">
-							<th>${model.productFields.expiresOn.displayName}</th>
+						<c:if test="${productFields.expiresOn.hidden != true}">
+							<th>${productFields.expiresOn.displayName}</th>
 						</c:if>
-						<th>${model.compatibilityTestFields.compatibilityResult.displayName}</th>
+						<th>${compatibilityTestFields.compatibilityResult.displayName}</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="product" items="${model.allProducts}">
+					<c:forEach var="product" items="${allProducts}">
 						<c:set var="rowColor" value="${product.isCompatible == 'COMPATIBLE' ? 'green' : '' }" />
 						<c:set var="rowFontWeight" value="${product.isCompatible == 'COMPATIBLE' ? 'bold' : '' }" />
 						<tr style="color: ${rowColor}; font-weight: ${rowFontWeight};">
@@ -160,22 +160,22 @@ $(document).ready(
 							<td>
 								<input type="checkbox" />
 							</td>
-							<c:if test="${model.productFields.collectionNumber.hidden != true}">
+							<c:if test="${productFields.collectionNumber.hidden != true}">
 								<td>${product.collectionNumber}</td>
 							</c:if>
-							<c:if test="${model.productFields.collectionNumber.hidden != true}">
+							<c:if test="${productFields.collectionNumber.hidden != true}">
 								<td>${product.bloodGroup}</td>
 							</c:if>
-							<c:if test="${model.productFields.productType.hidden != true}">
+							<c:if test="${productFields.productType.hidden != true}">
 								<td>${product.productType.productType}</td>
 							</c:if>
-							<c:if test="${model.productFields.createdOn.hidden != true}">
+							<c:if test="${productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>
 							</c:if>
-							<c:if test="${model.productFields.age.hidden != true}">
+							<c:if test="${productFields.age.hidden != true}">
 								<td>${product.age}</td>
 							</c:if>
-							<c:if test="${model.productFields.expiresOn.hidden != true}">
+							<c:if test="${productFields.expiresOn.hidden != true}">
 								<td>${product.expiresOn}</td>
 							</c:if>
 							<td>${product.isCompatible}</td>

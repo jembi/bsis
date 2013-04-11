@@ -19,10 +19,16 @@
 				<label>${request.requiredDate}</label>
 			</div>
 		</c:if>
-		<c:if test="${requestFields.bloodGroup.hidden != true }">
+		<c:if test="${requestFields.patientBloodAbo.hidden != true }">
 			<div>
-				<label>${requestFields.bloodGroup.displayName}</label>
-				<label>${request.bloodGroup}</label>
+				<label>${requestFields.patientBloodAbo.displayName}</label>
+				<label>${request.patientBloodAbo}</label>
+			</div>
+		</c:if>
+		<c:if test="${requestFields.patientBloodRh.hidden != true }">
+			<div>
+				<label>${requestFields.patientBloodRh.displayName}</label>
+				<label>${request.patientBloodRh}</label>
 			</div>
 		</c:if>
 		<c:if test="${requestFields.productType.hidden != true }">

@@ -51,7 +51,7 @@ public class RequestViewModel {
     return request.getPatientBloodAbo();
   }
 
-  public String getPatientBloodRhd() {
+  public String getPatientBloodRh() {
     return request.getPatientBloodRh();
   }
 
@@ -77,10 +77,6 @@ public class RequestViewModel {
 
   public List<Product> getIssuedProducts() {
     return request.getIssuedProducts();
-  }
-
-  public String getBloodGroup() {
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
   }
 
   public int hashCode() {

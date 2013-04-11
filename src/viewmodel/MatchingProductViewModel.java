@@ -107,4 +107,13 @@ public class MatchingProductViewModel {
       return CompatibilityResult.NOT_KNOWN.toString();
     return compatibilityTest.getCompatibilityResult().toString();
   }
+
+  public String getBloodGroup() {
+    if (product == null || product.getCollectedSample() == null ||
+        product.getCollectedSample().getCollectionNumber() == null
+       )
+      return "";
+    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(product.getCollectedSample());
+    return collectionViewModel.getBloodGroup();
+  }
 }

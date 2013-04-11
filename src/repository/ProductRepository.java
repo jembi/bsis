@@ -449,29 +449,30 @@ public class ProductRepository {
   }
 
   public List<MatchingProductViewModel> findMatchingProductsForRequest(Long requestId) {
-    Date today = new Date();
 
+    Date today = new Date();
     Request request = requestRepository.findRequestById(requestId);
     
     TypedQuery<Product> query = em.createQuery(
                  "SELECT p from Product p LEFT JOIN FETCH p.collectedSample WHERE " +
                  "p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
-                 "p.status = :status AND " +
-                 "p.collectedSample.testedStatus = :testedStatus AND " +
-                 "((p.bloodAbo = :bloodAbo AND p.bloodRh = :bloodRh) OR " +
-                 "(p.bloodAbo = :bloodAboO AND p.bloodRh = :bloodRhNeg)) AND " +
+                 "p.status = :status AND " + 
+                 "p.collectedSample.ttiStatus = :ttiStatus AND " +
+                 "((p.collectedSample.bloodAbo = :bloodAbo AND p.collectedSample.bloodRh = :bloodRh) OR " +
+                 "(p.collectedSample.bloodAbo = :bloodAboO AND p.collectedSample.bloodRh = :bloodRhNeg)) AND " +
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
+
     query.setParameter("productType", request.getProductType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
     query.setParameter("ttiStatus", TTIStatus.TTI_SAFE);
     query.setParameter("bloodAbo", request.getPatientBloodAbo());
-    query.setParameter("bloodAboO", BloodAbo.O);
-    query.setParameter("bloodRhNeg", BloodRh.NEGATIVE);
     query.setParameter("bloodRh", request.getPatientBloodRh());
+    query.setParameter("bloodAboO", "O");
+    query.setParameter("bloodRhNeg", "-");
     query.setParameter("isDeleted", false);
 
     TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
@@ -497,6 +498,7 @@ public class ProductRepository {
     }
 
     for (Product product : query.getResultList()) {
+      System.out.println("here");
       Long productId = product.getId();
       if (crossmatchTestMap.containsKey(productId))
         continue;

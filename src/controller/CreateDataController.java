@@ -24,7 +24,6 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.request.RequestBackingForm;
 import model.requesttype.RequestType;
-import model.util.BloodGroup;
 import model.util.Gender;
 
 import org.joda.time.DateTime;
@@ -499,7 +498,8 @@ public class CreateDataController {
 
 	public void createRequests(int numRequests) {
 
-	  String[] bloodGroups = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
+	  String[] bloodAbos = { "A", "B", "AB", "O"};
+	  String[] bloodRhs = { "+", "-"};
 
 		List<Location> sites = locationRepository.getAllUsageSites();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
@@ -522,10 +522,10 @@ public class CreateDataController {
       form.setIsDeleted(false);
       form.setFulfilled(false);
 
-      String bloodGroupStr = bloodGroups[random.nextInt(bloodGroups.length)];
-      BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-      form.setPatientBloodAbo(bloodGroup.getBloodAbo().toString());
-      form.setPatientBloodRh(bloodGroup.getBloodRh().toString());
+      String bloodAboStr = bloodAbos[random.nextInt(bloodAbos.length)];
+      String bloodRhStr = bloodRhs[random.nextInt(bloodRhs.length)];
+      form.setPatientBloodAbo(bloodAboStr);
+      form.setPatientBloodRh(bloodRhStr);
       requests.add(form.getRequest());
 		}
 		requestRepository.addAllRequests(requests);
@@ -535,3 +535,4 @@ public class CreateDataController {
 		return random.nextBoolean() == true ? "reactive" : "negative";
 	}
 }
+

@@ -88,8 +88,11 @@ $(document).ready(
 				<thead>
 					<tr>
 						<th style="display: none"></th>
-						<c:if test="${requestFields.bloodGroup.hidden != true}">
-							<th>${requestFields.bloodGroup.displayName}</th>
+						<c:if test="${requestFields.bloodAbo.hidden != true}">
+							<th>${requestFields.bloodAbo.displayName}</th>
+						</c:if>
+						<c:if test="${requestFields.bloodRh.hidden != true}">
+							<th>${requestFields.bloodRh.displayName}</th>
 						</c:if>
 						<c:if test="${requestFields.requestDate.hidden != true}">
 							<th>${requestFields.requestDate.displayName}</th>
@@ -115,8 +118,11 @@ $(document).ready(
 					<c:forEach var="request" items="${allRequests}">
 						<tr>
 							<td style="display: none">${request.id}</td>
-							<c:if test="${requestFields.bloodGroup.hidden != true}">
-								<td>${request.bloodGroup}</td>
+							<c:if test="${requestFields.patientBloodAbo.hidden != true}">
+								<td>${request.patientBloodAbo}</td>
+							</c:if>
+							<c:if test="${requestFields.patientBloodRh.hidden != true}">
+								<td>${request.patientBloodRh}</td>
 							</c:if>
 							<c:if test="${requestFields.requestDate.hidden != true}">
 								<td>${request.requestDate}</td>

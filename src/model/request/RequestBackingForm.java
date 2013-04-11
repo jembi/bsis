@@ -220,23 +220,6 @@ public class RequestBackingForm {
     this.request = request;
   }
 
-  public String getBloodGroup() {
-    if (request.getPatientBloodAbo() == null || request.getPatientBloodRh() == null)
-      return null;
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
-  }
-
-  public void setBloodGroup(String bloodGroupStr) {
-    if (bloodGroupStr == null || bloodGroupStr.isEmpty()) {
-      request.setPatientBloodAbo(null);
-      request.setPatientBloodRh(null);
-    } else {
-      BloodGroup bloodGroup = new BloodGroup(bloodGroupStr);
-      request.setPatientBloodAbo(bloodGroup.getBloodAbo());
-      request.setPatientBloodRh(bloodGroup.getBloodRh());
-    }
-  }
-
   public String getPatientNumber() {
     return request.getPatientNumber();
   }

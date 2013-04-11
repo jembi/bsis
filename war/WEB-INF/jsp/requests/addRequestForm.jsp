@@ -13,7 +13,8 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="addRequestFormId">addRequestForm-${unique_page_id}</c:set>
 
-<c:set var="addRequestFormBloodGroupSelectorId">addRequestFormBloodGroupSelectorId-${unique_page_id}</c:set>
+<c:set var="addRequestFormBloodAboSelectorId">addRequestFormBloodAboSelectorId-${unique_page_id}</c:set>
+<c:set var="addRequestFormBloodRhSelectorId">addRequestFormBloodRhSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormProductTypeSelectorId">addRequestFormProductTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormRequestTypeSelectorId">addRequestFormRequestTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormRequestSiteSelectorId">addRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
@@ -26,12 +27,12 @@ $(document).ready(
       function notifyParentSuccess() {
 				// let the parent know we are done
 				$("#${tabContentId}").parent().trigger("editRequestSuccess");
-		}
+			}
 
       function notifyParentCancel() {
 			// let the parent know we are done
 			$("#${tabContentId}").parent().trigger("editRequestCancel");
-		}
+			}
 
       $("#${cancelButtonId}").button({
         icons : {
@@ -52,7 +53,13 @@ $(document).ready(
             								 "${tabContentId}", notifyParentSuccess);
           });
 
-      $("#${addRequestFormId}").find(".bloodGroup").multiselect({
+      $("#${addRequestFormId}").find(".bloodAbo").multiselect({
+        multiple : false,
+        selectedList : 1,
+        header : false
+      });
+
+      $("#${addRequestFormId}").find(".bloodRh").multiselect({
         multiple : false,
         selectedList : 1,
         header : false
@@ -130,7 +137,8 @@ $(document).ready(
 
       if ("${firstTimeRender}" == "true") {
       	$("#${tabContentId}").find('textarea[name="notes"]').html("${requestFields.notes.defaultValue}");
-      	setDefaultValueForSelector(getBloodGroupSelector(), "${requestFields.bloodGroup.defaultValue}");
+      	setDefaultValueForSelector(getBloodAboSelector(), "${requestFields.patientBloodAbo.defaultValue}");
+      	setDefaultValueForSelector(getBloodRhSelector(), "${requestFields.patientBloodRh.defaultValue}");
       	setDefaultValueForSelector(getProductTypeSelector(), "${requestFields.productType.defaultValue}");
       	setDefaultValueForSelector(getRequestTypeSelector(), "${requestFields.requestType.defaultValue}");
       	setDefaultValueForSelector(getRequestSiteSelector(), "${requestFields.requestSite.defaultValue}");
@@ -141,8 +149,12 @@ $(document).ready(
         return $("#${mainContentId}").find('select[name="patientGender"]').multiselect();
       }
 
-      function getBloodGroupSelector() {
-        return $("#${tabContentId}").find('select[name="bloodGroup"]').multiselect();
+      function getBloodAboSelector() {
+        return $("#${tabContentId}").find('select[name="bloodAbo"]').multiselect();
+      }
+      
+      function getBloodRhSelector() {
+        return $("#${tabContentId}").find('select[name="bloodRh"]').multiselect();
       }
       
       function getProductTypeSelector() {
@@ -197,23 +209,32 @@ $(document).ready(
 					</div>
 				</c:if>
 			</c:if>
-			<c:if test="${requestFields.bloodGroup.hidden != true }">
+			<c:if test="${requestFields.patientBloodAbo.hidden != true }">
 				<div>
-					<form:label path="bloodGroup">${requestFields.bloodGroup.displayName}</form:label>
-					<form:select path="bloodGroup"
-											 id="${addRequestFormBloodGroupSelectorId}"
-											 class="bloodGroup">
+					<form:label path="patientBloodAbo">${requestFields.patientBloodAbo.displayName}</form:label>
+					<form:select path="patientBloodAbo"
+											 id="${addRequestFormBloodAboSelectorId}"
+											 class="bloodAbo">
 						<form:option value="" label="" />
-						<form:option value="A+" label="A+" />
-						<form:option value="A-" label="A-" />
-						<form:option value="B+" label="B+" />
-						<form:option value="B-" label="B-" />
-						<form:option value="AB+" label="AB+" />
-						<form:option value="AB-" label="AB-" />
-						<form:option value="O+" label="O+" />
-						<form:option value="O-" label="O-" />
+						<form:option value="A" label="A" />
+						<form:option value="B" label="B" />
+						<form:option value="AB" label="AB" />
+						<form:option value="O" label="O" />
 					</form:select>
-					<form:errors class="formError" path="request.bloodGroup" delimiter=", "></form:errors>
+					<form:errors class="formError" path="request.patientBloodAbo" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${requestFields.patientBloodRh.hidden != true }">
+				<div>
+					<form:label path="patientBloodRh">${requestFields.patientBloodRh.displayName}</form:label>
+					<form:select path="patientBloodRh"
+											 id="${addRequestFormBloodRhSelectorId}"
+											 class="bloodRh">
+						<form:option value="" label="" />
+						<form:option value="+" label="+" />
+						<form:option value="-" label="-" />
+					</form:select>
+					<form:errors class="formError" path="request.patientBloodRh" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${requestFields.patientGender.hidden != true}">
