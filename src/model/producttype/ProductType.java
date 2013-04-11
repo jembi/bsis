@@ -131,4 +131,17 @@ public class ProductType {
   public void setCanPool(Boolean canPool) {
     this.canPool = canPool;
   }
+
+  public int getExpiryIntervalMinutes() {
+    int factor = 1;
+    switch (expiresAfterUnits) {
+    case HOURS: factor = 60;
+                break;
+    case DAYS:  factor = 24 * 60;
+                break;
+    case YEARS: factor = 365 * 24 * 60;
+                break;
+    }
+    return expiresAfter * factor;
+  }
 }

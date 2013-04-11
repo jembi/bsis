@@ -44,6 +44,23 @@
           header : false
         });
 
+        $("#${addProductFormId}").find(".productType").change(function() {
+          console.log("changed");
+          var selectedValue = getProductTypeSelector().val();
+          var selectedOption = $(this).find('option[value="' + selectedValue + '"]');
+          var createdOn = $("#${addProductFormId}").find(".createdOn");
+          if (createdOn.val() === undefined ||
+              createdOn.val().trim() === "") {
+            createdOn.datetimepicker("setDate", new Date());
+          }
+          var createdOnVal = createdOn.datetimepicker("getDate");
+          console.log(selectedOption.data("expiryintervalminutes")*60*1000);
+          var expiryDate = new Date(createdOnVal.getTime() + selectedOption.data("expiryintervalminutes")*60*1000);
+          console.log(expiryDate);
+          $("#${addProductFormId}").find(".expiresOn")
+          												 .datetimepicker('setDate', expiryDate);
+        });
+
         $("#${addProductFormId}").find(".createdOn").datetimepicker({
           changeMonth : true,
           changeYear : true,
@@ -64,11 +81,9 @@
           yearRange : "c-100:c+1",
         });
 
-        $("#${tabContentId}").find(".clearFormButton").button({
-          icons : {
-            
-          }
-        }).click(refetchForm);
+        $("#${tabContentId}").find(".clearFormButton")
+        										 .button()
+        										 .click(refetchForm);
 
         function refetchForm() {
           $.ajax({
@@ -117,6 +132,22 @@
 					path="product.collectedSample" delimiter=", "></form:errors>
 			</div>
 		</c:if>
+		<c:if test="${productFields.productType.hidden != true }">
+			<div>
+				<form:label path="productType">${productFields.productType.displayName}</form:label>
+				<form:select path="productType" id="${addProductFormProductTypesId}" class="productType">
+					<form:option value="">&nbsp;</form:option>
+					<c:forEach var="productType" items="${productTypes}">
+						<form:option value="${productType.id}"
+							data-expiryintervalminutes="${productType.expiryIntervalMinutes}">
+							${productType.productType}
+						</form:option>
+					</c:forEach>
+				</form:select>
+				<form:errors class="formError" path="product.productType"
+					delimiter=", "></form:errors>
+			</div>
+		</c:if>
 		<c:if test="${productFields.createdOn.hidden != true }">
 			<div>
 				<form:label path="createdOn">${productFields.createdOn.displayName}</form:label>
@@ -130,19 +161,6 @@
 				<form:label path="expiresOn">${productFields.expiresOn.displayName}</form:label>
 				<form:input path="expiresOn" class="expiresOn" value="${firstTimeRender ? productFields.expiresOn.defaultValue : ''}" />
 				<form:errors class="formError" path="product.expiresOn"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${productFields.productType.hidden != true }">
-			<div>
-				<form:label path="productType">${productFields.productType.displayName}</form:label>
-				<form:select path="productType" id="${addProductFormProductTypesId}" class="productType">
-					<form:option value="">&nbsp;</form:option>
-					<c:forEach var="productType" items="${productTypes}">
-						<form:option value="${productType.id}">${productType.productType}</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="product.productType"
 					delimiter=", "></form:errors>
 			</div>
 		</c:if>
