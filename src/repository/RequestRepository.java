@@ -241,6 +241,7 @@ public class RequestRepository {
   }
 
   public Request addRequest(Request productRequest) {
+    updateNewRequestFields(productRequest);
     em.persist(productRequest);
     em.flush();
     em.refresh(productRequest);
@@ -538,8 +539,18 @@ public class RequestRepository {
 
   public void addAllRequests(List<Request> requests) {
     for (Request request : requests) {
+      updateNewRequestFields(request);
       em.persist(request);
     }
     em.flush();
+  }
+
+  public void updateNewRequestFields(Request request) {
+    if (request.getNumUnitsIssued() == null)
+      request.setNumUnitsIssued(0);
+    if (request.getNumUnitsIssued() < request.getNumUnitsRequested())
+      request.setFulfilled(false);
+    else
+      request.setFulfilled(true);
   }
 }

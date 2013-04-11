@@ -434,4 +434,8 @@ public class Request implements ModificationTracker {
   public void setNumUnitsIssued(Integer numUnitsIssued) {
     this.numUnitsIssued = numUnitsIssued;
   }
+
+  public String getBloodGroup() {
+    return this.patientBloodAbo +  " " + this.patientBloodRh;
+  }
 }

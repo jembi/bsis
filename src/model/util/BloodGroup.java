@@ -44,6 +44,11 @@ public class BloodGroup {
   }
 
   public BloodGroup(String abo, String rh) {
+    if (abo == null || rh == null) {
+      this.abo = null;
+      this.rh = null;
+      return;
+    }
     this.abo = BloodAbo.valueOf(BloodAbo.class, abo);
     this.rh = BloodRh.valueOf(rh);
   }
