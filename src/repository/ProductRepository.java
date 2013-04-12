@@ -537,7 +537,7 @@ public class ProductRepository {
     for (ProductType productType : productTypeQuery.getResultList()) {
       Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
 
-      inventoryByBloodGroup.put("Unknown", getMapWithNumDaysWindows());
+      inventoryByBloodGroup.put("", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("B+", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("AB+", getMapWithNumDaysWindows());
@@ -563,6 +563,7 @@ public class ProductRepository {
       age = Math.abs((age / 5) * 5);
       if (age > 30)
         age = (long) 30;
+      System.out.println(age);
       Long count = numDayMap.get(age);
       numDayMap.put(age, count+1);
     }

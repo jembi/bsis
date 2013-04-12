@@ -655,12 +655,7 @@ insert into ProductType (productTypeShortName, productType, description, expires
 ('RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
 ('FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),
 ('Platelets', 'Platelets', '', 5, 'DAYS', '1', '1', '0', '0'),
-('Cryo', 'Cryoprecipitate', '', 35, 'DAYS', '0', '1', '0', '0'),
-('Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
-('RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
-('FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 1, 'YEARS', '1', '1', '0', '0'),
-('Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', '1', '0', '0'),
-('Cryo Pedi', 'Cryoprecipitate Pedi', '', 35, 'DAYS', '0', '1', '0', '0');
+('Cryo', 'Cryoprecipitate', '', 35, 'DAYS', '0', '1', '0', '0');
 
 insert into BloodBagType (bloodBagType, isDeleted) values
 ('Single', '0'),

@@ -455,11 +455,11 @@ public class RequestRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(r), r.requestDate, r.patientBloodAbo, r.patientBloodRhd FROM Request r WHERE " +
+        "SELECT count(r), r.requestDate, r.patientBloodAbo, r.patientBloodRh FROM Request r WHERE " +
         "r.requestSite.id IN (:siteIds) AND " +
         "r.requestDate BETWEEN :dateRequestedFrom AND " +
         ":dateRequestedTo AND (r.isDeleted= :isDeleted) GROUP BY " +
-        "patientBloodAbo, patientBloodRhd, requestDate", Object[].class);
+        "patientBloodAbo, patientBloodRh, requestDate", Object[].class);
 
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", Boolean.FALSE);

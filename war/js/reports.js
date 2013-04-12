@@ -160,7 +160,7 @@ function parseInventoryData(data) {
   var result = {};
 
   result.data = [];
-  var bloodGroups = {'Unknown' : 'Unknown',
+  var bloodGroups = {'' : '',
                      'A+'  : 'A+',
                      'B+'  : 'B+',
                      'AB+' : 'AB+',
@@ -175,6 +175,7 @@ function parseInventoryData(data) {
     var bloodGroupData = [];
     for (var bloodGroup in bloodGroups) {
       var inventoryByBloodGroup = productTypeData[bloodGroup];
+      console.log(inventoryByBloodGroup);
       var numUnits = 0;
       for (var index in inventoryByBloodGroup) {
         numUnits = numUnits + inventoryByBloodGroup[index];

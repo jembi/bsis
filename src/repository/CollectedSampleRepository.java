@@ -24,9 +24,7 @@ import javax.persistence.TypedQuery;
 
 import model.collectedsample.CollectedSample;
 import model.testresults.TTIStatus;
-import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRh;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -292,11 +290,11 @@ public class CollectedSampleRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRhd FROM CollectedSample c WHERE " +
+        "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRh FROM CollectedSample c WHERE " +
         "c.collectionCenter.id IN (:centerIds) AND c.collectionSite.id IN (:siteIds) AND " +
         "c.collectedOn BETWEEN :dateCollectedFrom AND " +
         ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY " +
-        "bloodAbo, bloodRhd, collectedOn", Object[].class);
+        "bloodAbo, bloodRh, collectedOn", Object[].class);
 
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
@@ -340,8 +338,8 @@ public class CollectedSampleRepository {
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
       String bloodAbo = (String) result[2];
-      String bloodRhd = (String) result[3];
-      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
+      String bloodRh = (String) result[3];
+      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRh);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;

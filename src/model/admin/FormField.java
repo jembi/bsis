@@ -35,10 +35,10 @@ public class FormField {
   @Column(length=30)
   private String field;
 
-  @Column(length=30)
+  @Column(length=60)
   private String displayName;
 
-  @Column(length=30)
+  @Column(length=60)
   private String defaultDisplayName;
 
   @Column

@@ -55,7 +55,7 @@ public class BloodGroup {
   @Override
   public String toString() {
     StringBuilder strBuilder = new StringBuilder();
-    if (abo == null || abo.equals(BloodAbo.Unknown)) {
+    if (abo == null) {
       strBuilder.append("Unknown");
     }
     else {

@@ -72,8 +72,10 @@ $(document).ready(function() {
 				</button>
 			</div>
 	
-			<div class="collectionSummarySection"></div>
-			<jsp:include page="ttiSummaryCollection.jsp" />
+			<div class="collectionSummarySection" style="width: 520px; margin-left: 10px;"></div>
+			<div style="width:490px; margin-left: 10px;">
+				<jsp:include page="ttiSummaryCollection.jsp" />
+			</div>
 		</div>
 	</div>
 

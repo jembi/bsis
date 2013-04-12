@@ -33,7 +33,7 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
         permissions.put(perm.getName(), "allowed");
       }
     }
-    mv.addObject("permissions", permissions);
+    if (mv != null)
+      mv.addObject("permissions", permissions);
   }
 }
-

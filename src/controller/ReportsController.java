@@ -34,6 +34,7 @@ import repository.CollectedSampleRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
+import repository.bloodtesting.BloodTestingRepository;
 
 @Controller
 public class ReportsController {
@@ -52,6 +53,9 @@ public class ReportsController {
 
   @Autowired
   private UtilController utilController;
+
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
   
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView inventoryReportFormGenerator(Model model) {
@@ -445,7 +449,7 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
   
-//      Map<String, Map<Long, Long>> numTestResults = testResultsRepository
+//      Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
 //          .findNumberOfPositiveTests(dateFrom, dateTo,
 //              form.getAggregationCriteria(), form.getCenters(), form.getSites());
   

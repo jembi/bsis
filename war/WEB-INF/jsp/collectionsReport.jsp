@@ -215,6 +215,7 @@ $(document).ready(function() {
 				<td><form:label path="bloodGroups">Blood Groups</form:label></td>
 				<td style="padding-left: 10px;">
 					<form:select id="${collectionsReportBloodGroupSelectorId}" path="bloodGroups">
+						<form:option value="Unknown">Unknown</form:option>
 						<form:option value="A+">A+</form:option>
 						<form:option value="B+">B+</form:option>
 						<form:option value="AB+">AB+</form:option>
