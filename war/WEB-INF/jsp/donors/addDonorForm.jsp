@@ -112,7 +112,6 @@
 
 		<form:form id="${addDonorFormId}" method="POST" class="formInTabPane"
 			commandName="addDonorForm">
-			<form:hidden path="id" />
 			<c:if test="${!donorFields.donorNumber.autoGenerate}">
 				<c:if test="${donorFields.donorNumber.hidden != true }">
 					<div class="barcodeContainer"></div>

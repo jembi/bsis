@@ -295,9 +295,9 @@
 			<button type="button" class="saveDonorButton autoWidthButton">
 				Save Donor
 			</button>
-			<button type="button" class="clearFormButton autoWidthButton">
+			<!-- button type="button" class="clearFormButton autoWidthButton">
 				Clear form
-			</button>				
+			</button-->				
 			<button type="button" class="cancelButton autoWidthButton">
 				Cancel
 			</button>				

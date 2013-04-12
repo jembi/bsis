@@ -3,7 +3,7 @@ function addNewCollection(form, resultDivId, successCallback) {
 }
 
 function updateExistingCollection(form, resultDivId, successCallback) {
-  updateCollectionGeneric(form, resultDivId, "updateCollectedSample.html", successCallback);
+  updateCollectionGeneric(form, resultDivId, "updateCollection.html", successCallback);
 }
 
 function updateCollectionGeneric(form, resultDivId, url, successCallback) {

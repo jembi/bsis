@@ -89,10 +89,10 @@ $(document).ready(
 					<tr>
 						<th style="display: none"></th>
 						<c:if test="${requestFields.bloodAbo.hidden != true}">
-							<th>${requestFields.bloodAbo.displayName}</th>
+							<th>${requestFields.patientBloodAbo.displayName}</th>
 						</c:if>
 						<c:if test="${requestFields.bloodRh.hidden != true}">
-							<th>${requestFields.bloodRh.displayName}</th>
+							<th>${requestFields.patientBloodRh.displayName}</th>
 						</c:if>
 						<c:if test="${requestFields.requestDate.hidden != true}">
 							<th>${requestFields.requestDate.displayName}</th>

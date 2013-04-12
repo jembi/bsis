@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -18,7 +17,6 @@ import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.collectedsample.CollectedSampleBackingFormValidator;
 import model.collectedsample.FindCollectedSampleBackingForm;
-import model.donor.Donor;
 import model.worksheet.WorksheetBackingForm;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -298,6 +296,24 @@ public class CollectedSampleController {
     return mv;
   }
 
+  @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
+      @RequestParam(value="collectionId") Long collectionId) {
+
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
+
+    ModelAndView mv = new ModelAndView("collections/editCollectionForm");
+    mv.addObject("editCollectionForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    // to ensure custom field names are displayed in the form
+    mv.addObject("collectionFields", formFields);
+    mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
+    return mv;
+  }
+
   @RequestMapping(value = "/addCollection", method = RequestMethod.POST)
   public ModelAndView addCollection(
       HttpServletRequest request,
@@ -356,56 +372,40 @@ public class CollectedSampleController {
     return collectionViewModel;
   }
 
-  @RequestMapping(value = "/updateCollectedSample", method = RequestMethod.POST)
+  @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
   public ModelAndView updateCollectedSample(
       HttpServletResponse response,
-      @ModelAttribute("editCollectedSampleForm") @Valid CollectedSampleBackingForm form,
+      @ModelAttribute("editCollectionForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editCollectedSampleForm");
+    ModelAndView mv = new ModelAndView("collections/editCollectionForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
+    addEditSelectorOptions(mv.getModelMap());
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    m.put("existingCollectedSample", true);
-
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
-    String donorNumber = form.getDonorNumber();
-    if (donorNumber != null && !donorNumber.isEmpty()) {
-      try {
-        Donor donor = donorRepository.findDonorByDonorNumber(donorNumber);
-        form.setDonor(donor);
-      } catch (NoResultException ex) {
-        form.setDonor(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setDonor(null);
-    }
+    mv.addObject("existingCollectedSample", true);
 
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
+      mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above now!";
+      message = "Please fix the errors noted";
     }
     else {
       try {
-
         form.setIsDeleted(false);
-        CollectedSample existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+        CollectedSample existingCollectedSample;
+        existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {
-          m.put("hasErrors", true);
+          mv.addObject("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          m.put("existingCollectedSample", false);
+          mv.addObject("existingCollectedSample", false);
           message = "Collection does not already exist.";
         }
         else {
-          m.put("hasErrors", false);
+          mv.addObject("hasErrors", false);
           success = true;
           message = "Collection Successfully Updated";
         }
@@ -422,12 +422,10 @@ public class CollectedSampleController {
       }
    }
 
-    m.put("editCollectedSampleForm", form);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-
-    mv.addObject("model", m);
+    mv.addObject("editCollectedSampleForm", form);
+    mv.addObject("success", success);
+    mv.addObject("errorMessage", message);
+    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
     return mv;
   }

@@ -194,6 +194,23 @@ public class RequestsController {
     return mv;
   }
 
+  @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editRequestFormGenerator(HttpServletRequest request,
+      @RequestParam(value="requestId") Long requestId) {
+
+    Request productRequest = requestRepository.findRequestById(requestId);
+    RequestBackingForm form = new RequestBackingForm(productRequest);
+
+    ModelAndView mv = new ModelAndView("requests/editRequestForm");
+    mv.addObject("editRequestForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    // to ensure custom field names are displayed in the form
+    mv.addObject("requestFields", formFields);
+    return mv;
+  }
+
   @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
   public ModelAndView addRequest(
       HttpServletRequest request,
@@ -274,24 +291,21 @@ public class RequestsController {
   public ModelAndView updateRequest(
       HttpServletResponse response,
       @ModelAttribute("editRequestForm") @Valid RequestBackingForm form,
-      BindingResult result, Model model) {
+      BindingResult result) {
 
-    ModelAndView mv = new ModelAndView("editRequestForm");
+    ModelAndView mv = new ModelAndView("requests/editRequestForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
+    addEditSelectorOptions(mv.getModelMap());
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    m.put("existingRequest", true);
-
-    System.out.println("here");
+    mv.addObject("existingRequest", true);
 
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
+      mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above now!";
+      message = "Please fix the errors noted";
     }
     else {
       try {
@@ -299,14 +313,14 @@ public class RequestsController {
         form.setIsDeleted(false);
         Request existingRequest = requestRepository.updateRequest(form.getRequest());
         if (existingRequest == null) {
-          m.put("hasErrors", true);
+          mv.addObject("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          m.put("existingRequest", false);
+          mv.addObject("existingRequest", false);
           message = "Request does not already exist.";
         }
         else {
-          m.put("hasErrors", false);
+          mv.addObject("hasErrors", false);
           success = true;
           message = "Request Successfully Updated";
         }
@@ -323,12 +337,10 @@ public class RequestsController {
       }
    }
 
-    m.put("editRequestForm", form);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-
-    mv.addObject("model", m);
+    mv.addObject("editRequestForm", form);
+    mv.addObject("success", success);
+    mv.addObject("errorMessage", message);
+    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
 
     return mv;
   }

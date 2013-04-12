@@ -112,7 +112,6 @@
 
 	<form:form method="POST" commandName="addCollectionBatchForm"
 		class="formInTabPane" id="${addCollectionBatchFormId}">
-		<form:hidden path="id" />
 		<c:if test="${!collectionBatchFields.batchNumber.autoGenerate}">
 			<c:if test="${collectionBatchFields.batchNumber.hidden != true }">
 				<div>

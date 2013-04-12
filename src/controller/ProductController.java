@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.collectedsample.CollectedSample;
 import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
@@ -316,6 +314,24 @@ public class ProductController {
     return mv;
   }
 
+  @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editProductFormGenerator(HttpServletRequest request,
+      @RequestParam(value="productId") Long productId) {
+
+    Product product = productRepository.findProductById(productId);
+    ProductBackingForm form = new ProductBackingForm(product);
+
+    ModelAndView mv = new ModelAndView("products/editProductForm");
+    mv.addObject("requestUrl", getUrl(request));
+    mv.addObject("editProductForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    // to ensure custom field names are displayed in the form
+    mv.addObject("productFields", formFields);
+    return mv;
+  }
+
   @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
   public ModelAndView addProduct(
       HttpServletRequest request,
@@ -383,35 +399,20 @@ public class ProductController {
       @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editProductForm");
+    ModelAndView mv = new ModelAndView("products/editProductForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
+    addEditSelectorOptions(mv.getModelMap());
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    m.put("existingProduct", true);
+    mv.addObject("existingProduct", true);
 
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
-    String collectionNumber = form.getCollectionNumber();
-    if (collectionNumber != null && !collectionNumber.isEmpty()) {
-      try {
-        CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
-        form.setCollectedSample(collectedSample);
-      } catch (NoResultException ex) {
-        form.setCollectedSample(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setCollectedSample(null);
-    }
 
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
+      mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above now!";
+      message = "Please fix the errors noted";
     }
     else {
       try {
@@ -419,14 +420,14 @@ public class ProductController {
         form.setIsDeleted(false);
         Product existingProduct = productRepository.updateProduct(form.getProduct());
         if (existingProduct == null) {
-          m.put("hasErrors", true);
+          mv.addObject("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          m.put("existingProduct", false);
+          mv.addObject("existingProduct", false);
           message = "Product does not already exist.";
         }
         else {
-          m.put("hasErrors", false);
+          mv.addObject("hasErrors", false);
           success = true;
           message = "Product Successfully Updated";
         }
@@ -443,12 +444,10 @@ public class ProductController {
       }
    }
 
-    m.put("editProductForm", form);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-
-    mv.addObject("model", m);
+    mv.addObject("editProductForm", form);
+    mv.addObject("success", success);
+    mv.addObject("errorMessage", message);
+    mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
 
     return mv;
   }

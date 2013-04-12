@@ -36,7 +36,7 @@ public class RequestViewModel {
   public String getRequiredDate() {
     if (request.getRequiredDate() == null)
       return "";
-    return CustomDateFormatter.getDateString(request.getRequiredDate());
+    return CustomDateFormatter.getDateTimeString(request.getRequiredDate());
   }
 
   public Integer getNumUnitsRequested() {
