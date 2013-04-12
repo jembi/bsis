@@ -98,9 +98,9 @@
 			<button type="button" class="cancelButton">
 				Done
 			</button>
-			<button type="button" class="editButton">
+			<!-- button type="button" class="editButton">
 				Edit
-			</button>
+			</button-->
 			<button type="button" class="deleteButton">
 				Delete
 			</button>
