@@ -582,32 +582,6 @@ public class ProductRepository {
     return m;
   }
 
-  private BloodGroup getBloodGroupForProduct(Product product) {
-
-    CollectedSample c = product.getCollectedSample();
-    String abo = null;
-    String rh = null;
-
-//    for (TestResult t : c.getTestResults()) {
-//      String testName = t.getBloodTest().getName();
-//      if (testName.equals("Blood ABO"))
-//        abo = t.getResult();
-//      else if (testName.equals("Blood Rh"))
-//        rh = t.getResult();
-//    }
-//
-    if (abo == null || rh == null) {
-      return new BloodGroup(BloodAbo.Unknown, BloodRh.Unknown);
-    }
-
-    return new BloodGroup(BloodAbo.valueOf(abo), BloodRh.valueOf(rh));
-  }
-
-  public BloodGroup getBloodGroupForProduct(Long productId) {
-    Product product = findProductById(productId);
-    return getBloodGroupForProduct(product);
-  }
-
   public void addAllProducts(List<Product> products) {
     for (Product p : products) {
       updateProductInternalFields(p);
@@ -753,8 +727,8 @@ public class ProductRepository {
 
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
-      BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRh bloodRh = (BloodRh) result[3];
+      String bloodAbo = (String) result[2];
+      String bloodRh = (String) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRh);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
@@ -856,8 +830,8 @@ public class ProductRepository {
 
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
-      BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRh bloodRh = (BloodRh) result[3];
+      String bloodAbo = (String) result[2];
+      String bloodRh = (String) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRh);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)

@@ -339,8 +339,8 @@ public class CollectedSampleRepository {
 
     for (Object[] result : resultList) {
       Date d = (Date) result[1];
-      BloodAbo bloodAbo = (BloodAbo) result[2];
-      BloodRh bloodRhd = (BloodRh) result[3];
+      String bloodAbo = (String) result[2];
+      String bloodRhd = (String) result[3];
       BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRhd);
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)

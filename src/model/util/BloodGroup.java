@@ -5,42 +5,37 @@ import java.util.Map;
 
 public class BloodGroup {
 
-  private BloodAbo abo;
-  private BloodRh rh;
+  private String abo;
+  private String rh;
 
   static final private Map<String, BloodGroup> bloodgroups = new HashMap<String, BloodGroup>();
   
   static {
-    bloodgroups.put("a+", new BloodGroup(BloodAbo.A, BloodRh.POSITIVE));
-    bloodgroups.put("b+", new BloodGroup(BloodAbo.B, BloodRh.POSITIVE));
-    bloodgroups.put("ab+", new BloodGroup(BloodAbo.AB, BloodRh.POSITIVE));
-    bloodgroups.put("o+", new BloodGroup(BloodAbo.O, BloodRh.POSITIVE));
-    bloodgroups.put("a-", new BloodGroup(BloodAbo.A, BloodRh.NEGATIVE));
-    bloodgroups.put("b-", new BloodGroup(BloodAbo.B, BloodRh.NEGATIVE));
-    bloodgroups.put("ab-", new BloodGroup(BloodAbo.AB, BloodRh.NEGATIVE));
-    bloodgroups.put("o-", new BloodGroup(BloodAbo.O, BloodRh.NEGATIVE));
+    bloodgroups.put("a+", new BloodGroup("A", "+"));
+    bloodgroups.put("b+", new BloodGroup("B", "+"));
+    bloodgroups.put("ab+", new BloodGroup("AB", "+"));
+    bloodgroups.put("o+", new BloodGroup("O", "+"));
+    bloodgroups.put("a-", new BloodGroup("A", "-"));
+    bloodgroups.put("b-", new BloodGroup("B", "-"));
+    bloodgroups.put("ab-", new BloodGroup("AB", "-"));
+    bloodgroups.put("o-", new BloodGroup("O", "-"));
   }
 
   public BloodGroup() {
-    abo = BloodAbo.Unknown;
-    rh = BloodRh.Unknown;
+    abo = "";
+    rh = "";
   }
 
   public BloodGroup(String bloodGroup) {
     BloodGroup bg = bloodgroups.get(bloodGroup.toLowerCase());
     if (bg == null) {
-      abo = BloodAbo.Unknown;
-      rh = BloodRh.Unknown;
+      abo = "";
+      rh = "";
     }
     else {
       abo = bg.abo;
       rh = bg.rh;
     }
-  }
-
-  public BloodGroup(BloodAbo abo, BloodRh rh) {
-    this.abo = abo;
-    this.rh = rh;
   }
 
   public BloodGroup(String abo, String rh) {
@@ -49,8 +44,8 @@ public class BloodGroup {
       this.rh = null;
       return;
     }
-    this.abo = BloodAbo.valueOf(BloodAbo.class, abo);
-    this.rh = BloodRh.valueOf(rh);
+    this.abo = abo;
+    this.rh = rh;
   }
 
   public BloodGroup toBloodGroup(String bloodGroup) {
@@ -65,14 +60,13 @@ public class BloodGroup {
     }
     else {
       strBuilder.append(abo.toString());
-      switch (rh) {
-        case POSITIVE: strBuilder.append("+");
-                       break;
-        case NEGATIVE: strBuilder.append("-");
-                       break;
-        case Unknown:  strBuilder = new StringBuilder();
-                       strBuilder.append("Unknown");
-                       break;
+      if (rh.equals("+"))
+        strBuilder.append("+");
+      else if (rh.equals("-"))
+        strBuilder.append("-");
+      else {
+        strBuilder = new StringBuilder();
+        strBuilder.append("Unknown");
       }
     }
     return strBuilder.toString();
