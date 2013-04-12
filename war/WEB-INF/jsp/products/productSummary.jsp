@@ -203,9 +203,11 @@
 			<button type="button" class="doneButton">
 				Done
 			</button>
+			<c:if test="${permissions['editInformation'] eq 'allowed'}">
 			<button type="button" class="editButton">
 				Edit
 			</button>
+			</c:if>
 			<!-- button type="button" class="testResultsForProductButton">
 				Test results for product
 			</button-->
@@ -221,9 +223,11 @@
 			<button type="button" class="productHistoryButton">
 				Show product movement details
 			</button>
+			<c:if test="${permissions['editInformation'] eq 'allowed'}">
 			<button type="button" class="deleteButton">
 				Delete
 			</button>
+			</c:if>
 			<button type="button" class="printButton">
 				Print
 			</button>

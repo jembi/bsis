@@ -506,6 +506,33 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table Permission (
+        id bigint not null auto_increment,
+        name varchar(20),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table Permission_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        name varchar(20),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table Permission_Role (
+        permissions_id bigint not null,
+        roles_id bigint not null
+    ) ENGINE=InnoDB;
+
+    create table Permission_Role_AUD (
+        REV integer not null,
+        permissions_id bigint not null,
+        roles_id bigint not null,
+        REVTYPE tinyint,
+        primary key (REV, permissions_id, roles_id)
+    ) ENGINE=InnoDB;
+
     create table PlateContent (
         id TINYINT not null auto_increment,
         colNumber SMALLINT,
@@ -798,6 +825,20 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table Role (
+        id bigint not null auto_increment,
+        name varchar(20),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table Role_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        name varchar(20),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table SequenceNumberStore (
         id integer not null auto_increment,
         columnName varchar(255),
@@ -864,6 +905,19 @@
         password varchar(255),
         username varchar(30),
         primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table User_Role (
+        users_id SMALLINT not null,
+        roles_id bigint not null
+    ) ENGINE=InnoDB;
+
+    create table User_Role_AUD (
+        REV integer not null,
+        users_id SMALLINT not null,
+        roles_id bigint not null,
+        REVTYPE tinyint,
+        primary key (REV, users_id, roles_id)
     ) ENGINE=InnoDB;
 
     create table Worksheet (
@@ -1210,6 +1264,30 @@
         foreign key (REV) 
         references REVINFO (REV);
 
+    alter table Permission_AUD 
+        add index FK6E934040DF74E053 (REV), 
+        add constraint FK6E934040DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table Permission_Role 
+        add index FK63DCE8E61D2E2631 (roles_id), 
+        add constraint FK63DCE8E61D2E2631 
+        foreign key (roles_id) 
+        references Role (id);
+
+    alter table Permission_Role 
+        add index FK63DCE8E612647DE3 (permissions_id), 
+        add constraint FK63DCE8E612647DE3 
+        foreign key (permissions_id) 
+        references Permission (id);
+
+    alter table Permission_Role_AUD 
+        add index FKE7FE33B7DF74E053 (REV), 
+        add constraint FKE7FE33B7DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table PlateContent 
         add index FK8E9BC0A3BCA935AF (rawBloodTest_id), 
         add constraint FK8E9BC0A3BCA935AF 
@@ -1402,6 +1480,12 @@
         foreign key (REV) 
         references REVINFO (REV);
 
+    alter table Role_AUD 
+        add index FKF3FAE767DF74E053 (REV), 
+        add constraint FKF3FAE767DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table SubdividedProduct 
         add index FK2137ED84D946D0A0 (parentProduct_id), 
         add constraint FK2137ED84D946D0A0 
@@ -1417,6 +1501,24 @@
     alter table User_AUD 
         add index FKF3FCA03CDF74E053 (REV), 
         add constraint FKF3FCA03CDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table User_Role 
+        add index FK8B9F886A1D2E2631 (roles_id), 
+        add constraint FK8B9F886A1D2E2631 
+        foreign key (roles_id) 
+        references Role (id);
+
+    alter table User_Role 
+        add index FK8B9F886A1D314A5B (users_id), 
+        add constraint FK8B9F886A1D314A5B 
+        foreign key (users_id) 
+        references User (id);
+
+    alter table User_Role_AUD 
+        add index FK269D713BDF74E053 (REV), 
+        add constraint FK269D713BDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

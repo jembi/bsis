@@ -1,16 +1,21 @@
 package model.user;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 
@@ -44,6 +49,9 @@ public class User {
 
   private Boolean isDeleted;
 
+  @ManyToMany(fetch=FetchType.EAGER)
+  private List<Role> roles;
+  
   @Lob
   private String notes;
 
@@ -164,5 +172,13 @@ public class User {
   @Override
   public String toString() {
     return this.username;
+  }
+
+  public List<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<Role> roles) {
+    this.roles = roles;
   }
 }

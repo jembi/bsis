@@ -177,24 +177,25 @@
 			<button class="doneButton">
 				Done
 			</button>
+			<c:if test="${permissions['editInformation'] eq 'allowed'}">
 			<button class="editButton">
 				Edit
 			</button>
+			</c:if>
 			<button class="donorDeferralsButton">
 				Show all deferrals
 			</button>
 			<button class="donorHistoryButton">
 				View Donation History
 			</button>
-			<!-- button class="createCollectionButton">
-				Add Collection
-			</button-->
 			<button class="deferDonorButton">
 				Defer Donor
 			</button>
+			<c:if test="${permissions['editInformation'] eq 'allowed'}">
 			<button type="button" class="deleteButton">
 				Delete
 			</button>
+			</c:if>
 			<button class="printButton">
 				Print
 			</button>

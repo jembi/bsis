@@ -119,12 +119,16 @@
 			<!-- button type="button" class="testResultsForCollectionButton">
 				Test results for collection
 			</button-->
+			<c:if test="${permissions['editInformation'] eq 'allowed'}">
 			<button type="button" class="editButton">
 				Edit
 			</button>
+			</c:if>
+			<c:if test="${permissions['editInformation'] eq 'allowed'}">
 			<button type="button" class="deleteButton">
 				Delete
 			</button>
+			</c:if>
 			<button type="button" class="printButton">
 				Print
 			</button>

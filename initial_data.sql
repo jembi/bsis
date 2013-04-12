@@ -1,7 +1,3 @@
-insert ignore into User (username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
-('admin','admin321123','admin',1,1,1,0),
-('test','test','technician',0,1,1,0);
-
 insert into FormField
 (form, field, defaultDisplayName, defaultValue, maxLength,
  hidden, isHidable,
@@ -795,3 +791,33 @@ insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) 
 ("Not required", "RETURNED", 0),
 ("Wrong product sent", "RETURNED", 0),
 ("Did not crossmatch with patient sample", "RETURNED", 0);
+
+insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
+(1, 'admin','admin321123','admin',1,1,1,0),
+(2, 'test','test','technician',0,1,1,0),
+(3, 'donor_user', 'donor_user', 'donor_user', 0,1,1,0),
+(4, 'test_user', 'test_user', 'test_user', 0,1,1,0);
+
+insert into Role(id, name) values
+(1, 'admin'),
+(2, 'donorlab'),
+(3, 'testlab');
+
+insert into Permission(id, name) values
+(1, 'viewDonorInformation'),
+(2, 'viewTestInformation'),
+(3, 'editInformation');
+
+insert into User_Role (users_id, roles_id) values
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 3);
+
+insert into Permission_Role (roles_id, permissions_id) values
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 1),
+(3, 2);
+

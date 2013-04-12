@@ -156,9 +156,11 @@ $(document).ready(function() {
 						<label style="width: auto; position: absolute;">
 							<b>Available TTI test results</b>
 						</label>
+						<c:if test="${permissions['editInformation'] eq 'allowed'}">
 						<label style="width: auto; position: absolute; right: 10px;">
 							<span class="link availableTestEdit">Edit</span>
 						</label>
+						</c:if>
 					</div>
 
 					<c:set var="availableTestResultCount" value="${0}" />

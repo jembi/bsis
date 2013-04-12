@@ -17,12 +17,16 @@
 	<ul id="topTabs">
 		<li class="topPanelTab"><a href="#homeLandingPageContent"><span
 				class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>
+
+		<c:if test="${permissions['viewDonorInformation'] eq 'allowed'}">
 		<li class="topPanelTab"><a href="#donorsLandingPageContent"><span
 				class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
+		</c:if>
 
 		<li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
 				class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
 
+		<c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
 		<li class="topPanelTab"><a href="#productsLandingPageContent"><span
 				class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
 		<li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
@@ -32,6 +36,7 @@
 				class="ui-icon ui-icon-tag" style="display: inline-block;"></span>Requests</a></li>
 		<li class="topPanelTab"><a href="#usageLandingPageContent"><span
 				class="ui-icon ui-icon-transferthick-e-w" style="display: inline-block;"></span>Usage</a></li>
+		</c:if>
 		<li class="topPanelTab"><a href="#reportsLandingPageContent"><span
 				class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
 		<c:if test="${model.user.isAdmin}">
@@ -54,17 +59,20 @@
 		</div>
 	</div>
 
-	<div id="donorsLandingPageContent">
-		<jsp:include page="donors/donors.jsp" />
-	</div>
+	<c:if test="${permissions['viewDonorInformation'] eq 'allowed'}">
+		<div id="donorsLandingPageContent">
+			<jsp:include page="donors/donors.jsp" />
+		</div>
+	</c:if>
 
 	<div id="collectionsLandingPageContent">
 		<jsp:include page="collections/collections.jsp" />
 	</div>
 
-	<div id="testResultsLandingPageContent">
-		<jsp:include page="testResults.jsp" />
-	</div>
+	<c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
+		<div id="testResultsLandingPageContent">
+			<jsp:include page="testResults.jsp" />
+		</div>
 
 	<div id="productsLandingPageContent">
 		<jsp:include page="products/products.jsp" />
@@ -77,6 +85,7 @@
 	<div id="usageLandingPageContent">
 		<jsp:include page="usage.jsp" />
 	</div>
+	</c:if>
 
 	<div id="reportsLandingPageContent">
 		<jsp:include page="reports.jsp" />

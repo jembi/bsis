@@ -62,10 +62,14 @@
 		<label>${collectionFields.bloodTypingStatus.displayName}</label>
 		<label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
 	</div>
-	<div>
-		<label>${collectionFields.ttiStatus.displayName}</label>
-		<label style="width: auto;">${collectedSample.TTIStatus}</label>
-	</div>
+
+	<c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
+		<div>
+			<label>${collectionFields.ttiStatus.displayName}</label>
+			<label style="width: auto;">${collectedSample.TTIStatus}</label>
+		</div>
+	</c:if>
+
 	<c:if test="${collectionFields.notes.hidden != true }">
 		<div>
 			<label>${collectionFields.notes.displayName}</label>
