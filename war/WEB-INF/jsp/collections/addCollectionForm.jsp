@@ -249,6 +249,10 @@
 			<c:if test="${collectionFields.useParametersFromBatch.hidden != true }">
 	
 				<div>
+
+					<form:label path="useParametersFromBatch" for="${addCollectionFormUseBatchCheckboxId}" style="width: auto;">
+						${collectionFields.useParametersFromBatch.displayName}
+					</form:label>
 	
 					<c:if test="${firstTimeRender}">
 						<c:if test="${collectionFields.useParametersFromBatch.defaultValue != 'true'}">
@@ -267,10 +271,6 @@
 							<form:checkbox id="${addCollectionFormUseBatchCheckboxId}" path="useParametersFromBatch" style="width:30px;" />
 						</c:if>
 					</c:if>
-	
-					<form:label path="useParametersFromBatch" for="${addCollectionFormUseBatchCheckboxId}" style="width: auto;">
-						${collectionFields.useParametersFromBatch.displayName}
-					</form:label>
 	
 					<form:errors class="formError"
 						path="useParametersFromBatch" delimiter=", "></form:errors>
