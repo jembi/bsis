@@ -70,7 +70,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
         errors.rejectValue("collectedSample.donor", "donor.deferral", errorMessageDonorDeferral);
       
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
-        errors.rejectValue("collectedSample.donor", "donor.tti", "Donor has positive TTI results");
+        errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
 
     utilController.commonFieldChecks(form, "collectedSample", errors);

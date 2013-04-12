@@ -116,9 +116,9 @@
 			<button type="button" class="cancelButton">
 				Done
 			</button>
-			<button type="button" class="testResultsForCollectionButton">
+			<!-- button type="button" class="testResultsForCollectionButton">
 				Test results for collection
-			</button>
+			</button-->
 			<button type="button" class="editButton">
 				Edit
 			</button>

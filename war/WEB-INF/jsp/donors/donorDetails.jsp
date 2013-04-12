@@ -43,16 +43,16 @@
 			<label>${donor.gender}</label>
 		</div>
 	</c:if>
+	<c:if test="${donorFields.nationalID.hidden != true }">
+		<div>
+			<label>${donorFields.nationalID.displayName}</label>
+			<label>${donor.nationalID}</label>
+		</div>
+	</c:if>
 	<c:if test="${donorFields.bloodGroup.hidden != true }">
 		<div>
 			<label>${donorFields.bloodGroup.displayName}</label>
 			<label>${donor.bloodGroup}</label>
-		</div>
-	</c:if>
-	<c:if test="${donorFields.donorStatus.hidden != true }">
-		<div>
-			<label>${donorFields.donorStatus.displayName}</label>
-			<label>${donor.donorStatus}</label>
 		</div>
 	</c:if>
 	<c:if test="${donorFields.address.hidden != true }">

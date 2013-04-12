@@ -160,11 +160,17 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
-  public void editDonorFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView editDonorFormGenerator(HttpServletRequest request,
+      @RequestParam(value="donorId") Long donorId) {
 
-    Donor donor = donorRepository.findDonorById((long) 1);
-    donor.setLastName("value:" + (int)(Math.random()*100));
-    donorRepository.updateDonor(donor);
+    ModelAndView mv = new ModelAndView("donors/editDonorForm");
+    Donor donor = donorRepository.findDonorById(donorId);
+    mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
+    DonorBackingForm form = new DonorBackingForm(donor);
+    addEditSelectorOptions(mv.getModelMap());
+    mv.addObject("editDonorForm", form);
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
   }
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
@@ -276,33 +282,33 @@ public class DonorController {
       @ModelAttribute(value="editDonorForm") @Valid DonorBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editDonorForm");
+    ModelAndView mv = new ModelAndView("donors/editDonorForm");
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    m.put("existingDonor", true);
+    mv.addObject("existingDonor", true);
 
     if (result.hasErrors()) {
-      m.put("hasErrors", true);
+      mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above";
+      message = "Please fix the errors noted";
     }
     else {
       try {
         form.setIsDeleted(false);
         Donor existingDonor = donorRepository.updateDonor(form.getDonor());
         if (existingDonor == null) {
-          m.put("hasErrors", true);
+          mv.addObject("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          m.put("existingDonor", false);
+          mv.addObject("existingDonor", false);
           message = "Donor does not already exist.";
         }
         else {
-          m.put("hasErrors", false);
+          mv.addObject("hasErrors", false);
           success = true;
           message = "Donor Successfully Updated";
         }
@@ -319,12 +325,11 @@ public class DonorController {
       }
    }
 
-    m.put("editDonorForm", form);
-    m.put("success", success);
-    m.put("message", message);
-    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
-
-    mv.addObject("model", m);
+    mv.addObject("editDonorForm", form);
+    mv.addObject("success", success);
+    addEditSelectorOptions(mv.getModelMap());
+    mv.addObject("errorMessage", message);
+    mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
 
     return mv;
   }

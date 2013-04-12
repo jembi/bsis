@@ -139,4 +139,8 @@ public class DonorViewModel {
   public DonorStatus getDonorStatus() {
     return donor.getDonorStatus();
   }
+
+  public String getNationalID() {
+    return donor.getNationalID();
+  }
 }

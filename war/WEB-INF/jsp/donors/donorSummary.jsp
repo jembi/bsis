@@ -186,9 +186,9 @@
 			<button class="donorHistoryButton">
 				View Donation History
 			</button>
-			<button class="createCollectionButton">
+			<!-- button class="createCollectionButton">
 				Add Collection
-			</button>
+			</button-->
 			<button class="deferDonorButton">
 				Defer Donor
 			</button>

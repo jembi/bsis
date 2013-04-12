@@ -171,7 +171,7 @@ insert into FormField
  '0', '1',
  '1', '1',
  '0', '0'),
-('CollectedSample', 'useParametersFromBatch', 'Use Collection center/site from batch?', '', 0,
+('CollectedSample', 'useParametersFromBatch', 'Collection center/site from batch?', '', 0,
  '0', '1',
  '0', '1',
  '0', '0'),

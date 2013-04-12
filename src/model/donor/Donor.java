@@ -245,6 +245,8 @@ public class Donor implements ModificationTracker {
     setBirthDate(donor.getBirthDate());
     setNotes(donor.getNotes());
     setGender(donor.getGender());
+    setDonorPanel(donor.getDonorPanel());
+    setNationalID(donor.getNationalID());
   }
 
   public List<CollectedSample> getCollectedSamples() {

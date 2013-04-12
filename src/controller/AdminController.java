@@ -149,8 +149,10 @@ public class AdminController {
       Boolean isRequired = params.get("isRequired").equals("true") ? true : false;
       ff.setIsRequired(isRequired);
 
-      Boolean autoGenerate = params.get("autoGenerate").equals("true") ? true : false;
-      ff.setAutoGenerate(autoGenerate);
+      if (ff.getIsAutoGeneratable()) {
+        Boolean autoGenerate = params.get("autoGenerate").equals("true") ? true : false;
+        ff.setAutoGenerate(autoGenerate);
+      }
 
       String displayName = params.get("displayName").trim();
       ff.setDisplayName(displayName);

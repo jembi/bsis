@@ -13,10 +13,10 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="addDonorFormId">addDonorForm-${unique_page_id}</c:set>
+<c:set var="editDonorFormId">editDonorForm-${unique_page_id}</c:set>
 
 <c:set var="genderSelectorId">genderSelector-${unique_page_id}</c:set>
-<c:set var="addDonorFormDonorPanelsId">addDonorFormDonorPanels-${uniquePageId}</c:set>
+<c:set var="editDonorFormDonorPanelsId">editDonorFormDonorPanels-${uniquePageId}</c:set>
 
 <script>
   $(document).ready(
@@ -32,20 +32,24 @@
 				   $("#${tabContentId}").parent().trigger("editDonorCancel");
 	   		}
 
-        $("#${mainContentId}").find(".addDonorButton").button({
+        $("#${mainContentId}").find(".saveDonorButton").button({
           icons : {
             primary : 'ui-icon-plusthick'
           }
         }).click(
             function() {
-                addNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+                updateExistingDonor($("#${editDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
             });
 
         $("#${mainContentId}").find(".clearFormButton")
         										  .button()
         										  .click(refetchForm);
 
-        $("#${addDonorFormDonorPanelsId}").multiselect({
+        $("#${mainContentId}").find(".cancelButton")
+			  											.button({icons : {primary : 'ui-icon-closethick'}})
+			  											.click(function() { $("#${tabContentId}").trigger("editDonorCancel"); });
+
+        $("#${editDonorFormDonorPanelsId}").multiselect({
           multiple : false,
           selectedList : 1,
           header : false
@@ -73,7 +77,7 @@
           header : false
         });
 
-        $("#${addDonorFormId}").find(".birthDate").datepicker({
+        $("#${editDonorFormId}").find(".birthDate").datepicker({
           changeMonth : true,
           changeYear : true,
           minDate : -36500,
@@ -86,16 +90,23 @@
           return $("#${tabContentId}").find('select[name="donorPanel"]').multiselect();
         }
 
-        if ("${firstTimeRender}" == "true") {
-          $("#${mainContentId}").find('textarea[name="address"]').html("${donorFields.address.defaultValue}");
-        	$("#${mainContentId}").find('textarea[name="notes"]').html("${donorFields.notes.defaultValue}");
-        	setDefaultValueForSelector(getDonorPanelSelector(), "${donorFields.donorPanel.defaultValue}");
-        	setDefaultValueForSelector(getGenderSelector(), "${donorFields.gender.defaultValue}");
-        }
-
         function getGenderSelector() {
           return $("#${mainContentId}").find('select[name="gender"]').multiselect();
         }
+
+        function updateBarcode(val) {
+            if (val === null || val === undefined || val === "")
+              val = "-";
+  	        $("#${editDonorFormId}").find(".barcodeContainer").barcode(
+  						  val,
+  							"code128",
+  							{barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
+          }
+          updateBarcode("${editDonorForm.donor.donorNumber}");
+
+          $("#${editDonorFormId}").find('input[name="donorNumber"]').keyup(function() {
+            updateBarcode($(this).val());
+          });
 
       });
 </script>
@@ -110,30 +121,31 @@
 				</jsp:include>
 		</c:if>
 
-		<form:form id="${addDonorFormId}" method="POST" class="formInTabPane"
-			commandName="addDonorForm">
+		<form:form id="${editDonorFormId}" method="POST" class="formInTabPane"
+			commandName="editDonorForm">
 			<form:hidden path="id" />
-			<c:if test="${!donorFields.donorNumber.autoGenerate}">
-				<c:if test="${donorFields.donorNumber.hidden != true }">
-					<div class="barcodeContainer"></div>
-					<div>
-						<form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
-						<form:input path="donorNumber" value="${firstTimeRender ? donorFields.donorNumber.defaultValue : ''}" />
-						<form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
-					</div>
-				</c:if>
+			<div>
+				<label><b>Edit donor</b></label>
+			</div>
+			<c:if test="${donorFields.donorNumber.hidden != true }">
+				<div class="barcodeContainer"></div>
+				<div>
+					<form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
+					<form:input path="donorNumber" />
+					<form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
+				</div>
 			</c:if>
 			<c:if test="${donorFields.firstName.hidden != true }">
 				<div>
 					<form:label path="firstName">${donorFields.firstName.displayName}</form:label>
-					<form:input path="firstName" value="${firstTimeRender ? donorFields.firstName.defaultValue : ''}" />
+					<form:input path="firstName" />
 					<form:errors class="formError" path="donor.firstName" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.middleName.hidden != true }">
 				<div>
 					<form:label path="middleName">${donorFields.middleName.displayName}</form:label>
-					<form:input path="middleName" value="${firstTimeRender ? donorFields.middleName.defaultValue : ''}" />
+					<form:input path="middleName" />
 					<form:errors class="formError" path="donor.middleName"
 						delimiter=", "></form:errors>
 				</div>
@@ -141,14 +153,14 @@
 			<c:if test="${donorFields.lastName.hidden != true }">
 				<div>
 					<form:label path="lastName">${donorFields.lastName.displayName}</form:label>
-					<form:input path="lastName" value="${firstTimeRender ? donorFields.lastName.defaultValue : ''}" />
+					<form:input path="lastName" />
 					<form:errors class="formError" path="donor.lastName" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.callingName.hidden != true }">
 				<div>
 					<form:label path="callingName">${donorFields.callingName.displayName}</form:label>
-					<form:input path="callingName" value="${firstTimeRender ? donorFields.callingName.defaultValue : ''}" />
+					<form:input path="callingName" />
 					<form:errors class="formError" path="donor.callingName" delimiter=", "></form:errors>
 				</div>
 			</c:if>
@@ -167,23 +179,21 @@
 			<c:if test="${donorFields.nationalID.hidden != true }">
 				<div>
 					<form:label path="nationalID">${donorFields.nationalID.displayName}</form:label>
-					<form:input path="nationalID" value="${firstTimeRender ? donorFields.nationalID.defaultValue : ''}" />
+					<form:input path="nationalID" />
 					<form:errors class="formError" path="donor.nationalID" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.birthDate.hidden != true }">
 				<div>
 					<form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
-					<form:input path="birthDate" class="birthDate"
-											value="${firstTimeRender ? donorFields.birthDate.defaultValue : ''}" />
+					<form:input path="birthDate" class="birthDate" />
 					<form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.age.hidden != true }">
 				<div>
 					<form:label path="age">${donorFields.age.displayName}</form:label>
-					<form:input path="age"
-											value="${firstTimeRender ? donorFields.age.defaultValue : ''}" /> years
+					<form:input path="age" /> years
 					<form:errors class="formError" path="age" delimiter=", "></form:errors>
 				</div>
 			</c:if>
@@ -197,42 +207,42 @@
 			<c:if test="${donorFields.city.hidden != true }">
 				<div>
 					<form:label path="city">${donorFields.city.displayName}</form:label>
-					<form:input path="city" value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
+					<form:input path="city" />
 					<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.province.hidden != true }">
 				<div>
 					<form:label path="province">${donorFields.province.displayName}</form:label>
-					<form:input path="province" value="${firstTimeRender ? donorFields.province.defaultValue : ''}" />
+					<form:input path="province" />
 					<form:errors class="formError" path="donor.province" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.district.hidden != true }">
 				<div>
 					<form:label path="district">${donorFields.district.displayName}</form:label>
-					<form:input path="district" value="${firstTimeRender ? donorFields.district.defaultValue : ''}" />
+					<form:input path="district" />
 					<form:errors class="formError" path="donor.district" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.state.hidden != true }">
 				<div>
 					<form:label path="state">${donorFields.state.displayName}</form:label>
-					<form:input path="state" value="${firstTimeRender ? donorFields.state.defaultValue : ''}" />
+					<form:input path="state" />
 					<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.country.hidden != true }">
 				<div>
 					<form:label path="country">${donorFields.country.displayName}</form:label>
-					<form:input path="country" value="${firstTimeRender ? donorFields.country.defaultValue : ''}" />
+					<form:input path="country" />
 					<form:errors class="formError" path="donor.country" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.zipcode.hidden != true }">
 				<div>
 					<form:label path="zipcode">${donorFields.zipcode.displayName}</form:label>
-					<form:input path="zipcode" value="${firstTimeRender ? donorFields.zipcode.defaultValue : ''}" />
+					<form:input path="zipcode" />
 					<ul>
 						<form:errors class="formError" path="donor.zipcode" delimiter=", "></form:errors>
 					</ul>
@@ -241,7 +251,7 @@
 			<c:if test="${donorFields.phoneNumber.hidden != true }">
 				<div>
 					<form:label path="phoneNumber">${donorFields.phoneNumber.displayName}</form:label>
-					<form:input path="phoneNumber" value="${firstTimeRender ? donorFields.phoneNumber.defaultValue : ''}" />
+					<form:input path="phoneNumber" />
 					<ul>
 						<form:errors class="formError" path="donor.phoneNumber" delimiter=", "></form:errors>
 					</ul>
@@ -250,7 +260,7 @@
 			<c:if test="${donorFields.otherPhoneNumber.hidden != true }">
 				<div>
 					<form:label path="otherPhoneNumber">${donorFields.otherPhoneNumber.displayName}</form:label>
-					<form:input path="otherPhoneNumber" value="${firstTimeRender ? donorFields.otherPhoneNumber.defaultValue : ''}" />
+					<form:input path="otherPhoneNumber" />
 					<ul>
 						<form:errors class="formError" path="donor.otherPhoneNumber" delimiter=", "></form:errors>
 					</ul>
@@ -260,7 +270,7 @@
 			<c:if test="${donorFields.donorPanel.hidden != true }">
 				<div>
 					<form:label path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
-					<form:select path="donorPanel" id="${addDonorFormDonorPanelsId}" class="addDonorFormDonorPanels">
+					<form:select path="donorPanel" id="${editDonorFormDonorPanelsId}" class="editDonorFormDonorPanels">
 						<form:option value="" selected="selected">&nbsp;</form:option>
 						<c:forEach var="donorPanel" items="${donorPanels}">
 							<form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
@@ -282,11 +292,14 @@
 	
 		<div style="margin-left: 200px;">
 			<label></label>
-			<button type="button" class="addDonorButton autoWidthButton">
-				Add Donor
+			<button type="button" class="saveDonorButton autoWidthButton">
+				Save Donor
 			</button>
 			<button type="button" class="clearFormButton autoWidthButton">
 				Clear form
+			</button>				
+			<button type="button" class="cancelButton autoWidthButton">
+				Cancel
 			</button>				
 		</div>
 	</div>
