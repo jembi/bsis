@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.GenericConfigRepository;
 import repository.LoginRepository;
 
 @Controller
@@ -23,6 +24,9 @@ public class LoginController {
 
 	@Autowired
 	private LoginRepository loginRepository;
+
+	@Autowired
+	private GenericConfigRepository genericConfigRepository;
 
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request) {
@@ -33,6 +37,7 @@ public class LoginController {
 	public ModelAndView welcome(HttpServletRequest request, Model m) {
 	  ModelAndView mv = new ModelAndView("welcomePage");
 	  m.addAttribute("versionNumber", UtilController.VERSION_NUMBER);
+	  m.addAttribute("tabs", genericConfigRepository.getConfigProperties("tabs"));
 	  mv.addObject("model", m);
 		return mv;
 	}

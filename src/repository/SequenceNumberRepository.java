@@ -336,4 +336,8 @@ public class SequenceNumberRepository {
   synchronized public String getNextWorksheetBatchNumber() {
     return getNextNumber("worksheet", "worksheetBatchNumber", "W");
   }
+
+  synchronized public String getNextBatchNumber() {
+    return getNextNumber("collectionBatch", "batchNumber", "B");
+  }
 }

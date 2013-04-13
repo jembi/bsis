@@ -58,6 +58,8 @@
 			id="${selectFormToConfigureSelectId}">
 			<option value="Donor">Donor Form</option>
 			<option value="CollectedSample">Collection Form</option>
+			<option value="CollectionBatch">Collection Batch Form</option>
+			<option value="Worksheet">Worksheet Form</option>
 			<option value="TestResult">Test Result Form</option>
 			<option value="Product">Product Form</option>
 			<option value="Request">Request Form</option>

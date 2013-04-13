@@ -147,6 +147,11 @@ $(document).ready(function() {
 			class="formInTabPane">
 
 			<div>
+				<form:label path="requestNumber">Request number</form:label>
+				<form:input path="requestNumber" placeholder="Request Number" />
+			</div>
+
+			<div>
 				<form:label path="productTypes">Product Type</form:label>
 				<form:select id="${findRequestFormProductTypeSelectorId}"
 										 path="productTypes"

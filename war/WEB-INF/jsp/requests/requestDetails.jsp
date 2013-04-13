@@ -90,7 +90,12 @@
 		<c:if test="${requestFields.patientAge.hidden != true }">
 			<div>
 				<label>${requestFields.patientAge.displayName}</label>
-				<label>${request.patientAge} years</label>
+				<c:if test="${empty request.patientAge}">
+					<label></label>
+				</c:if>
+				<c:if test="${not empty request.patientAge}">
+					<label>${request.patientAge} years</label>
+				</c:if>
 			</div>
 		</c:if>
 		<c:if test="${requestFields.patientDiagnosis.hidden != true }">

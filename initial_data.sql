@@ -278,7 +278,7 @@ insert into FormField
 ('CollectionBatch', 'batchNumber', 'Batch number', '', 0,
  '0', '0',
  '1', '0',
- '0', '1',
+ '1', '1',
  '0', '0'),
 ('CollectionBatch', 'collectionCenter', 'Collection center', '', 0,
  '0', '1',
@@ -534,7 +534,7 @@ insert into FormField
  '0', '0',
  '1', '0',
  '0', '0',
-'0', '0'),
+ '1', '1'),
 ('Request', 'requiredDate', 'Required date', '', 0,
  '0', '0',
  '1', '0',
@@ -615,7 +615,12 @@ insert into FormField
  '0', '1',
  '0', '0',
 '0', '0'),
-('Request', 'ward', 'ward', '', 0,
+('Request', 'ward', 'Ward', '', 0,
+ '0', '1',
+ '0', '1',
+ '0', '0',
+'0', '0'),
+('Request', 'department', 'Department', '', 0,
  '0', '1',
  '0', '1',
  '0', '0',
@@ -980,3 +985,11 @@ insert into Permission_Role (roles_id, permissions_id) values
 (2, 1),
 (3, 2);
 
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("donorsTabEnabled", "true", "tabs"),
+("collectionsTabEnabled", "true", "tabs"),
+("productsTabEnabled", "true", "tabs"),
+("testResultsTabEnabled", "true", "tabs"),
+("requestsTabEnabled", "true", "tabs"),
+("usageTabEnabled", "false", "tabs"),
+("reportsTabEnabled", "true", "tabs");

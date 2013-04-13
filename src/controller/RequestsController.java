@@ -158,6 +158,7 @@ public class RequestsController {
     }
 
     productRequests = requestRepository.findRequests(
+                        form.getRequestNumber(),
                         productTypeIds, siteIds,
                         requestedAfter, requiredBy,
                         includeSatisfiedRequests);

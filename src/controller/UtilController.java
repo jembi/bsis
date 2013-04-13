@@ -360,4 +360,8 @@ public class UtilController {
       return false;
     return formField.getUseCurrentTime();
   }
+
+  public String getNextBatchNumber() {
+    return sequenceNumberRepository.getNextBatchNumber();
+  }
 }

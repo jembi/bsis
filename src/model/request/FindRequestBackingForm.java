@@ -5,6 +5,8 @@ import java.util.List;
 
 public class FindRequestBackingForm {
 
+  private String requestNumber;
+
   private List<String> requestSites;
   private List<String> productTypes;
 
@@ -16,6 +18,14 @@ public class FindRequestBackingForm {
   public FindRequestBackingForm() {
     requestSites = Arrays.asList(new String[0]);
     productTypes = Arrays.asList(new String[0]);
+  }
+
+  public String getRequestNumber() {
+    return requestNumber;
+  }
+  
+  public void setRequestNumber(String requestNumber) {
+    this.requestNumber = requestNumber;
   }
 
   public List<String> getRequestSites() {
@@ -50,12 +60,11 @@ public class FindRequestBackingForm {
     this.requiredBy = requiredBy;
   }
 
-public Boolean getIncludeSatisfiedRequests() {
-	return includeSatisfiedRequests;
-}
-
-public void setIncludeSatisfiedRequests(Boolean includeSatisfiedRequests) {
-	this.includeSatisfiedRequests = includeSatisfiedRequests;
-}
-
+  public Boolean getIncludeSatisfiedRequests() {
+  	return includeSatisfiedRequests;
+  }
+  
+  public void setIncludeSatisfiedRequests(Boolean includeSatisfiedRequests) {
+  	this.includeSatisfiedRequests = includeSatisfiedRequests;
+  }
 }

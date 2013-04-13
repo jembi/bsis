@@ -250,12 +250,14 @@ $(document).ready(
 				</div>
 			</c:if>
 			<c:if test="${requestFields.requestDate.hidden != true }">
-				<div>
-					<form:label path="requestDate">${requestFields.requestDate.displayName}</form:label>
-					<form:input path="requestDate" class="requestDate" value="${firstTimeRender ?  requestFields.requestDate.defaultValue : ''}" />
-					<form:errors class="formError" path="request.requestDate"
-						delimiter=", "></form:errors>
-				</div>
+				<c:if test="${requestFields.requestDate.isTimeField == false or requestFields.requestDate.useCurrentTime == false}">
+					<div>
+						<form:label path="requestDate">${requestFields.requestDate.displayName}</form:label>
+						<form:input path="requestDate" class="requestDate" value="${firstTimeRender ?  requestFields.requestDate.defaultValue : ''}" />
+						<form:errors class="formError" path="request.requestDate"
+							delimiter=", "></form:errors>
+					</div>
+				</c:if>
 			</c:if>
 			<c:if test="${requestFields.requiredDate.hidden != true }">
 				<div>

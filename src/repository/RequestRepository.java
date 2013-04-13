@@ -25,6 +25,7 @@ import model.request.Request;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -279,19 +280,34 @@ public class RequestRepository {
     return to;      
   }
 
-  public List<Request> findRequests(List<Integer> productTypeIds,
+  public List<Request> findRequests(String requestNumber, List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
       String requiredBy, Boolean includeSatisfiedRequests) {
-	  String queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-	            "(r.productType.id IN (:productTypeIds) AND " +
-	            "r.requestSite.id IN (:requestSiteIds)) AND" +
-	            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
-	            "r.isDeleted= :isDeleted";
+    String queryStr;
+    TypedQuery<Request> query;
+    if (StringUtils.isNotBlank(requestNumber)) {
+      queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+          "r.requestNumber =:requestNumber AND " +
+          "r.isDeleted= :isDeleted";
 
-	if (!includeSatisfiedRequests)
-		queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
+      query = em.createQuery(queryStr, Request.class);
+      query.setParameter("requestNumber", requestNumber);
+      query.setParameter("isDeleted", false);
 
-    TypedQuery<Request> query = em.createQuery(queryStr, Request.class);
+      return query.getResultList();
+    }
+
+    queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+            "(r.productType.id IN (:productTypeIds) AND " +
+            "r.requestSite.id IN (:requestSiteIds)) AND" +
+            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
+            "r.isDeleted= :isDeleted";
+
+
+  	if (!includeSatisfiedRequests)
+  		queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
+
+  	query = em.createQuery(queryStr, Request.class);
 
     Date from = getDateRequestedAfterOrDefault(requestedAfter);
     Date to = getDateRequiredByOrDefault(requiredBy);
