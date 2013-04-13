@@ -30,10 +30,22 @@ public class RequestViewModel {
   public String getRequestDate() {
     if (request.getRequestDate() == null)
       return "";
-    return CustomDateFormatter.getDateTimeString(request.getRequestDate());
+    return CustomDateFormatter.getDateString(request.getRequestDate());
   }
 
   public String getRequiredDate() {
+    if (request.getRequiredDate() == null)
+      return "";
+    return CustomDateFormatter.getDateString(request.getRequiredDate());
+  }
+
+  public String getRequestDateWithTime() {
+    if (request.getRequestDate() == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(request.getRequestDate());
+  }
+
+  public String getRequiredDateWithTime() {
     if (request.getRequiredDate() == null)
       return "";
     return CustomDateFormatter.getDateTimeString(request.getRequiredDate());

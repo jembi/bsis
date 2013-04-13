@@ -74,7 +74,7 @@
 		</div>
 		<div>
 			<label>${collectionFields.bloodRh.displayName}</label>
-			<label style="width: auto;">${collectedSample.bloodRh}</label>
+			<label style="width: auto;">${collectedSample.bloodRh eq '+' ? 'POS' : collectedSample.bloodRh eq '-' ? 'NEG' : ''}</label>
 		</div>
 	</c:if>
 

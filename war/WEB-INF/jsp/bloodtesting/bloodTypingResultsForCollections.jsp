@@ -111,7 +111,7 @@ $(document).ready(function() {
 								${collection.bloodAbo}
 							</td>
 							<td style="text-align: center; width: 140px;">
-								${collection.bloodRh}
+								${collection.bloodRh eq '+' ? 'POS' : collection.bloodRh eq '-' ? 'NEG' : ''}
 							</td>
 							<td>
 								${collection.extraBloodTypeInformation}

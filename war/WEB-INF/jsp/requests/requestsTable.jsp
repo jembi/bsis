@@ -122,7 +122,7 @@ $(document).ready(
 								<td>${request.patientBloodAbo}</td>
 							</c:if>
 							<c:if test="${requestFields.patientBloodRh.hidden != true}">
-								<td>${request.patientBloodRh}</td>
+								<td>${request.patientBloodRh eq '+' ? 'POS' : request.patientBloodRh eq '-' ? 'NEG' : ''}</td>
 							</c:if>
 							<c:if test="${requestFields.requestDate.hidden != true}">
 								<td>${request.requestDate}</td>

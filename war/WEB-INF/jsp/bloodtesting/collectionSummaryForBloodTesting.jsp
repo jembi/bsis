@@ -32,7 +32,7 @@
 
 	<div>
 		<label>Blood Rh</label>
-		<label>${collection.bloodRh}</label>
+		<label>${collection.bloodRh eq '+' ? 'POS' : collection.bloodRh eq '-' ? 'NEG' : ''}</label>
 	</div>
 
 	<div>

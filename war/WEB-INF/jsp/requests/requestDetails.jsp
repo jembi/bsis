@@ -10,13 +10,13 @@
 		<c:if test="${requestFields.requestDate.hidden != true }">
 			<div>
 				<label>${requestFields.requestDate.displayName}</label>
-				<label style="width: auto;">${request.requestDate}</label>
+				<label style="width: auto;">${request.requestDateWithTime}</label>
 			</div>
 		</c:if>
 		<c:if test="${requestFields.requiredDate.hidden != true }">
 			<div>
 				<label>${requestFields.requiredDate.displayName}</label>
-				<label>${request.requiredDate}</label>
+				<label style="width:auto;">${request.requiredDate}</label>
 			</div>
 		</c:if>
 		<c:if test="${requestFields.patientBloodAbo.hidden != true }">
