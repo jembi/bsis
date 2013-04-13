@@ -23,6 +23,8 @@ public class FormField {
 
   public static final String IS_AUTO_GENERATABLE = "isAutoGeneratable";
   public static final String AUTO_GENERATE = "autoGenerate";
+  public static final String IS_TIME_FIELD = "isTimeField";
+  public static final String USE_CURRENT_TIME = "useCurrentTime";
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,6 +70,10 @@ public class FormField {
   private Boolean autoGenerate;
 
   private Boolean isAutoGeneratable;
+
+  private Boolean useCurrentTime;
+
+  private Boolean isTimeField;
 
   public Long getId() {
     return id;
@@ -134,8 +140,10 @@ public class FormField {
     this.isHidable = formField.isHidable;
     this.isRequired = formField.isRequired;
     this.canBeOptional = formField.canBeOptional;
-    this.autoGenerate = formField.autoGenerate;
-    this.isAutoGeneratable = formField.isAutoGeneratable;
+    if (this.isAutoGeneratable)
+      this.autoGenerate = formField.autoGenerate;
+    if (this.isTimeField)
+      this.useCurrentTime = formField.useCurrentTime;
     this.maxLength = formField.maxLength;
   }
 
@@ -185,5 +193,21 @@ public class FormField {
 
   public void setCanBeOptional(Boolean canBeOptional) {
     this.canBeOptional = canBeOptional;
+  }
+
+  public Boolean getUseCurrentTime() {
+    return useCurrentTime;
+  }
+
+  public void setUseCurrentTime(Boolean useCurrentTime) {
+    this.useCurrentTime = useCurrentTime;
+  }
+
+  public Boolean getIsTimeField() {
+    return isTimeField;
+  }
+
+  public void setIsTimeField(Boolean isTimeField) {
+    this.isTimeField = isTimeField;
   }
 }

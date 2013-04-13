@@ -86,6 +86,8 @@ public class UtilController {
       fieldProperties.put(FormField.HIDDEN, ff.getHidden());
       fieldProperties.put(FormField.IS_AUTO_GENERATABLE, ff.getIsAutoGeneratable());
       fieldProperties.put(FormField.AUTO_GENERATE, ff.getAutoGenerate());
+      fieldProperties.put(FormField.IS_TIME_FIELD, ff.getIsTimeField());
+      fieldProperties.put(FormField.USE_CURRENT_TIME, ff.getUseCurrentTime());
 
       formFieldMap.put(ff.getField(), fieldProperties);
     }
@@ -350,5 +352,12 @@ public class UtilController {
       }
     }
     return matchingProduct;
+  }
+
+  public boolean doesFieldUseCurrentTime(String formName, String fieldName) {
+    FormField formField = formFieldRepository.getFormField(formName, fieldName);
+    if (formField == null)
+      return false;
+    return formField.getUseCurrentTime();
   }
 }

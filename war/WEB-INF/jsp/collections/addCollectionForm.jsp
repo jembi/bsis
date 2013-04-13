@@ -209,12 +209,14 @@
 				</div>
 			</c:if>
 			<c:if test="${collectionFields.collectedOn.hidden != true }">
-				<div>
-					<form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
-					<form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
-					<form:errors class="formError" path="collectedSample.collectedOn"
-						delimiter=", "></form:errors>
-				</div>
+				<c:if test="${collectionFields.collectedOn.isTimeField == false or collectionFields.collectedOn.useCurrentTime == false}">
+					<div>
+						<form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
+						<form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
+						<form:errors class="formError" path="collectedSample.collectedOn"
+							delimiter=", "></form:errors>
+					</div>
+				</c:if>
 			</c:if>
 			<c:if test="${collectionFields.donationType.hidden != true }">
 				<div>

@@ -231,8 +231,8 @@ $(document).ready(
 											 id="${addRequestFormBloodRhSelectorId}"
 											 class="bloodRh">
 						<form:option value="" label="" />
-						<form:option value="+" label="+" />
-						<form:option value="-" label="-" />
+						<form:option value="+" label="POS" />
+						<form:option value="-" label="NEG" />
 					</form:select>
 					<form:errors class="formError" path="request.patientBloodRh" delimiter=", "></form:errors>
 				</div>

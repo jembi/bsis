@@ -47,6 +47,11 @@
         	var autoGenerate = propertiesDiv.find('input[name="autoGenerate"]').is(":checked");
        	}
 
+       	var useCurrentTime = "false";
+       	if ("${formField.isTimeField} == 'true'") {
+        	var useCurrentTime = propertiesDiv.find('input[name="useCurrentTime"]').is(":checked");
+       	}
+
         var displayNameInput = propertiesDiv.find('input[name="displayName"]');
         console.log(displayNameInput.val());
 
@@ -64,7 +69,8 @@
             		 displayName: displayNameInput.val(),
             		 defaultValue: defaultValueInput.val(),
             		 maxLength: maxLengthInput.val(),
-            		 autoGenerate: autoGenerate
+            		 autoGenerate: autoGenerate,
+            		 useCurrentTime: useCurrentTime
             		},
           type: "POST",
           success: function() {
@@ -130,6 +136,15 @@
 					</c:if>
 					<c:if test="${formField.autoGenerate == false}">
 						<input type="checkbox" name="autoGenerate" />
+					</c:if>
+				</c:if>
+				<c:if test="${formField.isTimeField}">
+					<label>Use current time?</label>
+					<c:if test="${formField.useCurrentTime == true}">
+						<input type="checkbox" name="useCurrentTime" checked />
+					</c:if>
+					<c:if test="${formField.useCurrentTime == false}">
+						<input type="checkbox" name="useCurrentTime" />
 					</c:if>
 				</c:if>
 				<div>

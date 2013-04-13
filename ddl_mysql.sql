@@ -438,7 +438,9 @@
         isAutoGeneratable boolean,
         isHidable boolean,
         isRequired boolean,
+        isTimeField boolean,
         maxLength integer,
+        useCurrentTime boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
