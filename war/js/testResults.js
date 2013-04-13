@@ -49,3 +49,20 @@ function deleteTestResult(testResultId, successCallback) {
     }
   });
 }
+
+function saveTestResultsWithConfirmation(url, bloodTestsData, successCallback, errorCallback) {
+
+  $.ajax({
+    url: url,
+    data: bloodTestsData,
+    type: "POST",
+    success: function(response) {
+               successCallback(response);
+             },
+    error: function(response) {
+             console.log(response);
+             errorCallback(response);
+           }
+  });
+
+}

@@ -1,5 +1,6 @@
 package repository.bloodtesting;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,10 +85,11 @@ public class BloodTestingRepository {
   }
 
   public Map<String, Object> saveBloodTestingResults(
-      Map<Long, Map<Long, String>> bloodTestResultsMap) {
+      Map<Long, Map<Long, String>> bloodTestResultsMap, boolean saveIfUninterpretable) {
 
     Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
-    Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>(); 
+    Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>();
+    List<Long> collectionsWithUninterpretableResults = new ArrayList<Long>();
     Date testedOn = new Date();
     Map<Long, Map<Long, String>> errorMap = validateTestResultValues(bloodTestResultsMap);
     if (errorMap.isEmpty()) {
@@ -98,31 +100,27 @@ public class BloodTestingRepository {
         collectedSamplesMap.put(collectedSample.getId(), collectedSample);
         bloodTestRuleResultsForCollections.put(collectedSample.getId(), ruleResult);
 
-        for (Long testId : bloodTestResultsForCollection.keySet()) {
-          BloodTestResult btResult = new BloodTestResult();
-          BloodTest bloodTest = new BloodTest();
-          // the only reason we are using Long in the parameter is that
-          // jsp uses Long for all numbers. Using an integer makes it difficult
-          // to compare Integer and Long values in the jsp conditionals
-          // specially when iterating through the list of results
-          bloodTest.setId(testId.intValue());
-          btResult.setBloodTest(bloodTest);
-          // not updating the inverse relation which means the
-          // collectedSample.getBloodTypingResults() will not
-          // contain this result
-          btResult.setCollectedSample(collectedSample);
-          btResult.setTestedOn(testedOn);
-          btResult.setNotes("");
-          btResult.setResult(bloodTestResultsForCollection.get(testId));
-          em.persist(btResult);
+        System.out.println(ruleResult.getAboUninterpretable());
+        System.out.println(ruleResult.getRhUninterpretable());
+        System.out.println(ruleResult.getTtiUninterpretable());
+        if (ruleResult.getAboUninterpretable() ||
+            ruleResult.getRhUninterpretable() ||
+            ruleResult.getTtiUninterpretable()) {
+          if (saveIfUninterpretable) {
+            System.out.println("Results are uninterpretable. Saving.");
+            saveBloodTestResultsToDatabase(bloodTestResultsForCollection, collectedSample, testedOn, ruleResult);
+          }
+          else {
+            System.out.println("Results are uninterpretable. Cannot save.");
+            Map<Long, String> uninterpretable = new HashMap<Long, String>();
+            collectionsWithUninterpretableResults.add(collectionId);
+            uninterpretable.put((long)-1, "Test results are uninterpretable");
+            errorMap.put(collectionId, uninterpretable);
+          }
+        } else {
+          saveBloodTestResultsToDatabase(bloodTestResultsForCollection, collectedSample, testedOn, ruleResult);
         }
 
-        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-        BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
-        bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10", Arrays.asList(collectedSample, ruleResult));
-        bloodTestsUpdatedEvent.setCollectedSample(collectedSample);
-        bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
-        applicationContext.publishEvent(bloodTestsUpdatedEvent);
       }
       em.flush();
     }
@@ -130,11 +128,42 @@ public class BloodTestingRepository {
     Map<String, Object> results = new HashMap<String, Object>();
     results.put("collections", collectedSamplesMap);
     results.put("bloodTestingResults", bloodTestRuleResultsForCollections);
+    results.put("collectionsWithUninterpretableResults", collectionsWithUninterpretableResults);
     results.put("errors", errorMap);
 
     return results;
   }
 
+  private void saveBloodTestResultsToDatabase(Map<Long, String> bloodTestResultsForCollection,
+      CollectedSample collectedSample,
+      Date testedOn, BloodTestingRuleResult ruleResult) {
+    for (Long testId : bloodTestResultsForCollection.keySet()) {
+      BloodTestResult btResult = new BloodTestResult();
+      BloodTest bloodTest = new BloodTest();
+      // the only reason we are using Long in the parameter is that
+      // jsp uses Long for all numbers. Using an integer makes it difficult
+      // to compare Integer and Long values in the jsp conditionals
+      // specially when iterating through the list of results
+      bloodTest.setId(testId.intValue());
+      btResult.setBloodTest(bloodTest);
+      // not updating the inverse relation which means the
+      // collectedSample.getBloodTypingResults() will not
+      // contain this result
+      btResult.setCollectedSample(collectedSample);
+      btResult.setTestedOn(testedOn);
+      btResult.setNotes("");
+      btResult.setResult(bloodTestResultsForCollection.get(testId));
+      em.persist(btResult);
+    }
+
+    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+    BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
+    bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10", Arrays.asList(collectedSample, ruleResult));
+    bloodTestsUpdatedEvent.setCollectedSample(collectedSample);
+    bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
+    applicationContext.publishEvent(bloodTestsUpdatedEvent);
+  }
+  
   public Map<Long, Map<Long, String>> validateTestResultValues(Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
     Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>(); 

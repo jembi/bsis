@@ -37,8 +37,14 @@ public class BloodTestRule {
   @Column(length=30)
   private String extraInformation;
 
-  @Column(length=30)
-  private String extraTestsIds;
+  @Column(length=60)
+  private String extraAboTestsIds;
+
+  @Column(length=60)
+  private String extraRhTestsIds;
+
+  @Column(length=60)
+  private String extraTtiTestsIds;
 
   private Boolean markSampleAsUnsafe;
 
@@ -108,11 +114,27 @@ public class BloodTestRule {
     this.extraInformation = extraInformation;
   }
 
-  public String getExtraTestsIds() {
-    return extraTestsIds;
+  public String getExtraAboTestsIds() {
+    return extraAboTestsIds;
   }
 
-  public void setExtraTestsIds(String extraTestsIds) {
-    this.extraTestsIds = extraTestsIds;
+  public void setExtraTestsIds(String extraAboTestsIds) {
+    this.extraAboTestsIds = extraAboTestsIds;
+  }
+
+  public String getExtraRhTestsIds() {
+    return extraRhTestsIds;
+  }
+
+  public void setExtraRhTestsIds(String extraRhTestsIds) {
+    this.extraRhTestsIds = extraRhTestsIds;
+  }
+
+  public String getExtraTtiTestsIds() {
+    return extraTtiTestsIds;
+  }
+
+  public void setExtraTtiTestsIds(String extraTtiTestsIds) {
+    this.extraTtiTestsIds = extraTtiTestsIds;
   }
 }

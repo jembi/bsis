@@ -85,9 +85,14 @@ public class BloodTestingRuleEngine {
     Set<String> bloodRhChanges = new HashSet<String>();
     Set<String> ttiStatusChanges = new HashSet<String>();
     Set<String> extraInformation = new HashSet<String>();
-    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
-    List<String> pendingTTITestsIds = new ArrayList<String>();
+    List<String> pendingAboTestsIds = new ArrayList<String>();
+    List<String> pendingRhTestsIds = new ArrayList<String>();
+    List<String> pendingTtiTestsIds = new ArrayList<String>();
 
+    boolean aboUninterpretable = false;
+    boolean rhUninterpretable = false;
+    boolean ttiUninterpretable = false;
+    
     for (BloodTestRule rule : rules) {
 
       String pattern = rule.getPattern();
@@ -98,6 +103,7 @@ public class BloodTestingRuleEngine {
       List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
 
       String inputPattern = "";
+      boolean atLeastOneResultFoundForPattern = false;
       for (String testId : testIds) {
         indexInPattern = indexInPattern+1;
         String actualResult = availableTestResults.get(testId); 
@@ -107,6 +113,7 @@ public class BloodTestingRuleEngine {
           patternMatch = false;
           continue;
         }
+        atLeastOneResultFoundForPattern = true;
         String expectedResult = pattern.substring(indexInPattern-1,indexInPattern);
         inputPattern += actualResult;
         if (!expectedResult.equals(actualResult)) {
@@ -145,28 +152,48 @@ public class BloodTestingRuleEngine {
           extraInformation.add(rule.getExtraInformation());
 
         // find extra tests for ABO
-        if (StringUtils.isNotBlank(rule.getExtraTestsIds())) {
-          for (String extraTestId : rule.getExtraTestsIds().split(",")) {
+        if (StringUtils.isNotBlank(rule.getExtraAboTestsIds())) {
+          for (String extraTestId : rule.getExtraAboTestsIds().split(",")) {
             if (!availableTestResults.containsKey(extraTestId)) {
-              if (collectionFieldChanged.equals(CollectionField.TTISTATUS))
-                pendingTTITestsIds.add(extraTestId);
-              else
-                pendingBloodTypingTestsIds.add(extraTestId);
+                pendingAboTestsIds.add(extraTestId);
+            }
+          }
+        }
+        if (StringUtils.isNotBlank(rule.getExtraRhTestsIds())) {
+          for (String extraTestId : rule.getExtraRhTestsIds().split(",")) {
+            if (!availableTestResults.containsKey(extraTestId)) {
+                pendingRhTestsIds.add(extraTestId);
+            }
+          }
+        }
+        if (StringUtils.isNotBlank(rule.getExtraTtiTestsIds())) {
+          for (String extraTestId : rule.getExtraTtiTestsIds().split(",")) {
+            if (!availableTestResults.containsKey(extraTestId)) {
+                pendingTtiTestsIds.add(extraTestId);
             }
           }
         }
       } else {
-//        System.out.println("Pattern did not match");
-//        System.out.println("test ids: " + rule.getBloodTypingTestIds() + ", " +
-//            "pattern: " + rule.getPattern() + ", " +
-//            "input pattern: " + inputPattern);
-//        System.out.println("Missing tests: " + missingTestIdsForRule);
+        // pattern did not match
+        CollectionField collectionFieldChanged = rule.getCollectionFieldChanged();
+        switch (collectionFieldChanged) {
+        case BLOODABO:  if (atLeastOneResultFoundForPattern)
+                          aboUninterpretable = true;
+                      break;
+        case BLOODRH:   if (atLeastOneResultFoundForPattern)
+                          rhUninterpretable = true;
+                      break;
+        case TTISTATUS: if (atLeastOneResultFoundForPattern)
+                          ttiUninterpretable = true;
+                      break;
+        }
       }
     }
 
     String bloodAbo = "";
     String bloodRh = "";
 
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
 
     int numBloodTypingTests = 0;
@@ -189,10 +216,27 @@ public class BloodTestingRuleEngine {
       if (bloodRhChanges.size() == 1)
         bloodRh = bloodRhChanges.iterator().next();
     }
-    if (bloodAboChanges.isEmpty() || bloodRhChanges.isEmpty()) {
-      if (pendingBloodTypingTestsIds.size() > 0)
+
+    if (bloodAboChanges.isEmpty()) {
+      if (pendingAboTestsIds.size() > 0) {
         bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+      }
+      else if (aboUninterpretable){
+        // there was an attempt to match a rule for blood abo
+        ruleResult.setAboUninterpretable(true);
+      }
     }
+
+    if (bloodRhChanges.isEmpty()) {
+      if (pendingRhTestsIds.size() > 0) {
+        bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+      }
+      else if (rhUninterpretable){
+        // there was an attempt to match a rule for blood abo
+        ruleResult.setRhUninterpretable(true);
+      }
+    }
+
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
       bloodTypingStatus = BloodTypingStatus.COMPLETE;
     }
@@ -209,20 +253,23 @@ public class BloodTestingRuleEngine {
       }
     }
 
-    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
+    pendingBloodTypingTestsIds.addAll(pendingAboTestsIds);
+    pendingBloodTypingTestsIds.addAll(pendingRhTestsIds);
     ruleResult.setAllBloodAboChanges(bloodAboChanges);
     ruleResult.setAllBloodRhChanges(bloodRhChanges);
     ruleResult.setBloodAbo(bloodAbo);
     ruleResult.setBloodRh(bloodRh);
     ruleResult.setExtraInformation(extraInformation);
     ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
-    ruleResult.setPendingTTITestsIds(pendingTTITestsIds);
+    ruleResult.setPendingTTITestsIds(pendingTtiTestsIds);
     ruleResult.setAvailableTestResults(availableTestResults);
     ruleResult.setBloodTypingStatus(bloodTypingStatus);
     ruleResult.setStoredTestResults(storedTestResults);
 
     ruleResult.setTTIStatusChanges(ttiStatusChanges);
     ruleResult.setTTIStatus(ttiStatus);
+    ruleResult.setTtiUninterpretable(false);
 
     return ruleResult;
   }

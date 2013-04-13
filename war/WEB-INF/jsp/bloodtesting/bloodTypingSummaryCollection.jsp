@@ -14,6 +14,9 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
+<c:set var="UninterpretableResultsDialogId">uninterpretableResultsDialog-${unique_page_id}</c:set>
+<c:set var="InvalidResultsDialogId">invalidResultsDialog-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function() {
 	$("#${mainContentId}").find(".showHideButton")
@@ -66,11 +69,40 @@ $(document).ready(function() {
 												.button()
 												.click(cancelTestsInput);
 
-	function saveTests() {
+	function saveTests(event, saveUninterpretableResults) {
 
+	  if (saveUninterpretableResults === undefined)
+	    saveUninterpretableResults = false;
+
+    //$("#${tabContentId}").show();
+	  var saveTestsData = prepareTestsDataToSave();
+
+		//$("#${tabContentId}").hide();
+	  $.ajax({
+	    url: "saveAdditionalBloodTypingTests.html",
+	    type: "POST",
+	    data: {saveTestsData : JSON.stringify(saveTestsData),
+	      		 collectionId: "${collectionId}",
+	      		 saveUninterpretableResults : saveUninterpretableResults},
+	    success: function () {
+	      				 showLoadingImage($("#${tabContentId}"));
+								 $("#${tabContentId}").trigger("testResultsUpdated");
+	    				 },
+	    error:   function(response) {
+	      				 var responseObj = $.parseJSON(response.responseText);
+	      				 if (responseObj.uninterpretable === true)
+	      				 	 showUninterpretableConfirmationDialog();
+	      				 else if (responseObj.invalidResults == true)
+	      				   showInvalidResultsDialog();
+	      				 else
+	      				   showErrorMessage("Something went wrong when trying to save the results");
+	    	 			 }
+	  });
+	}
+
+	function prepareTestsDataToSave() {
 	  var inputs = $("#${mainContentId}").find(".bloodTypingTestInput");
 	  var saveTestsData = {};
-
 		for (var index = 0; index < inputs.length; index++) {
 	    var input = $(inputs[index]);
 	    if (input.is(":hidden"))
@@ -81,20 +113,39 @@ $(document).ready(function() {
 	      saveTestsData[testId] = val;
 	    }
 	  }
+		return saveTestsData;
+	}
 
-	  showLoadingImage($("#${tabContentId}"));
-	  $.ajax({
-	    url: "saveAdditionalBloodTypingTests.html",
-	    type: "POST",
-	    data: {saveTestsData : JSON.stringify(saveTestsData), collectionId: "${collectionId}"},
-	    success: function () {
-								 $("#${tabContentId}").trigger("testResultsUpdated");
-	    				 },
-	    error:   function() {
-	      				 showErrorMessage("Something went wrong");
-	      				 $("#${tabContentId}").trigger("testResultsUpdated");
-	    	 			 }
-	  });
+	function showInvalidResultsDialog() {
+		 $("#${InvalidResultsDialogId}").dialog({
+		   modal: true,
+		   height: 200,
+		   width: 600,
+		   title: "Invalid results",
+		   buttons: {
+		     "OK" : function() {
+									$(this).dialog("close");
+ 							  }
+		   }
+		 });
+	}
+
+	function showUninterpretableConfirmationDialog() {
+		 $("#${UninterpretableResultsDialogId}").dialog({
+		   modal: true,
+		   height: 200,
+		   width: 600,
+		   title: "Confirm save",
+		   buttons: {
+		     "Save uninterpretable results" : function() {
+		       																	$(this).dialog("close");
+		       																	saveTests(event, true);
+		     																	},
+		     "Cancel and review results" : function() {
+		       																$(this).dialog("close");
+		     															 }
+		   }
+		 });
 	}
 
 	function reloadBloodTypingSummaryForCollection() {
@@ -274,4 +325,16 @@ $(document).ready(function() {
 
 	</div>
 
+</div>
+
+<div id="${UninterpretableResultsDialogId}" style="display: none">
+	<br />
+	Results for the collection are uninterpretable. Are you sure you want to save the results?
+	<br />
+</div>
+
+<div id="${InvalidResultsDialogId}" style="display: none">
+	<br />
+	Invalid values specified for test results. Please check the test results. 
+	<br />
 </div>

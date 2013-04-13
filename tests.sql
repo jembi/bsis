@@ -75,63 +75,63 @@ isEmptyAllowed, isActive) values
 insert into BloodTestRule
 (bloodTestsIds, pattern,
  collectionFieldChanged, newInformation, extraInformation,
- extraTestsIds, markSampleAsUnsafe, isActive
+ extraAboTestsIds, extraRhTestsIds, extraTtiTestsIds, markSampleAsUnsafe, isActive
 ) values
 ('1,2,3,4,5', '---++',
  'BLOODABO', 'O', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('1,2,3,4,5', '+-+-+',
  'BLOODABO', 'A', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('1,2,3,4,5', '-+++-',
  'BLOODABO', 'B', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('1,2,3,4,5', '+++--',
  'BLOODABO', 'AB', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('6', '+',
  'BLOODRH', '+', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('6', '-',
  'NOCHANGE', '', '',
- '9,10', '0', '1'
+ '', '9,10', '', '0', '1'
  ),
 ('6,9', '--',
  'BLOODRH', '-', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('6,9', '-+',
  'BLOODRH', '+', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('6,9,11', '-++',
  'EXTRA', 'DAT Pos;', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('6,9,11', '-+-',
  'EXTRA', 'DAT Neg;', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('1,2,3,4,5', '--+-+',
  'NOCHANGE', '', '',
- '13', '0', '1'
+ '13', '', '', '0', '1'
  ),
  ('1,2,3,4,5,13', '--+-++',
  'BLOODABO', 'A', 'wkA',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('1,2,3,4,5', '-++--',
  'NOCHANGE', '', '',
- '13', '0', '1'
+ '13', '', '', '0', '1'
  ),
  ('1,2,3,4,5,13', '-++--+',
  'BLOODABO', 'AB', 'wkAB',
- '', '0', '1'
+ '', '', '', '0', '1'
  );
 
  insert into BloodTest
@@ -191,131 +191,131 @@ isEmptyAllowed, isActive) values
 insert into BloodTestRule
 (bloodTestsIds, pattern,
  collectionFieldChanged, newInformation, extraInformation,
- extraTestsIds, markSampleAsUnsafe, isActive
+ extraAboTestsIds, extraRhTestsIds, extraTtiTestsIds, markSampleAsUnsafe, isActive
 ) values
 ('17,20,23,26', '----',
  'TTISTATUS', 'TTI_SAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('17', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '18,19', '0', '1'
+ '', '', '18,19', '0', '1'
  ),
  ('17,18,19', '-+-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19', '--+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19', '+--',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19', '++-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19', '-++',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19', '+-+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19', '---',
  'TTISTATUS', 'TTI_SAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('20', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '21,22', '0', '1'
+ '', '', '21,22', '0', '1'
  ),
  ('20,21,22', '-+-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('20,21,22', '--+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('20,21,22', '+--',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('20,21,22', '++-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('20,21,22', '-++',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('20,21,22', '+-+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('23', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '24,25', '0', '1'
+ '', '', '24,25', '0', '1'
  ),
  ('23,24,25', '-+-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('23,24,25', '--+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('23,24,25', '+--',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('23,24,25', '++-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('23,24,25', '-++',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('23,24,25', '+-+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
 ('26', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '27,28', '0', '1'
+ '', '', '27,28', '0', '1'
  ),
  ('26,27,28', '-+-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('26,27,28', '--+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('26,27,28', '+--',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('26,27,28', '++-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('26,27,28', '-++',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('26,27,28', '+-+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  ),
  ('17,18,19,20,21,22,23,24,25,26,27,28', '------------',
  'TTISTATUS', 'TTI_SAFE', '',
- '', '0', '1'
+ '', '', '', '0', '1'
  );
 
 insert into Tips(tipsKey, tipsName, tipsContent) values

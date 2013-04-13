@@ -114,7 +114,7 @@ public class TTIController {
     if (success) {
       Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
       bloodTestResultsMap.put(collectedSample.getId(), ttiInputToMap(ttiInput));
-      results = bloodTestingRepository.saveBloodTestingResults(bloodTestResultsMap);
+      results = bloodTestingRepository.saveBloodTestingResults(bloodTestResultsMap, true);
       if (results != null)
         errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
       success = true;
@@ -245,7 +245,7 @@ public class TTIController {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
       ttiTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap, true);
       Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
       if (errorMap != null && !errorMap.isEmpty())
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -279,7 +279,7 @@ public class TTIController {
         ttiTestResultsMap.put(Long.parseLong(collectionIdStr), saveTestsDataWithLong);
       }
 
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap, true);
       Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
 
       if (errorMap != null && !errorMap.isEmpty())

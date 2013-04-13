@@ -28,8 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
-import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTestViewModel;
+import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -156,7 +156,8 @@ public class BloodTypingController {
   public ModelAndView saveBloodTypingTests(HttpServletRequest request,
       HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests,
       @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
-      @RequestParam(value="refreshUrl") String refreshUrl) {
+      @RequestParam(value="refreshUrl") String refreshUrl,
+      @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
     ModelAndView mv = new ModelAndView();
     List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
@@ -169,7 +170,7 @@ public class BloodTypingController {
     boolean success = true;
     Map<String, Object> results = null;
     try {
-      results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResults);
+      results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResults, saveUninterpretableResults);
       if (results != null)
         errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     } catch (Exception ex) {
@@ -190,7 +191,7 @@ public class BloodTypingController {
       }
       mv.addObject("allBloodTypingTests", allBloodTypingTestsMap);
       mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
-      mv.addObject("collections", results.get("collections"));
+      mv.addObject("collectionsByCollectionId", results.get("collections"));
 
       List<String> collectionIds = new ArrayList<String>();
       for (CollectedSample collection : collections) {
@@ -210,6 +211,8 @@ public class BloodTypingController {
       mv.addObject("success", success);
       mv.addObject("refreshUrl", refreshUrl);
       mv.addObject("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
+      mv.addObject("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
+      mv.addObject("collectionsByCollectionId", results.get("collections"));
 
       utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       mv.addObject("bloodTestsOnPlate", getBloodTestsOnPlate());
@@ -316,8 +319,7 @@ public class BloodTypingController {
   public ModelAndView showCollectionSummaryForTesting(
       HttpServletRequest request,
       HttpServletResponse response,
-      @RequestParam(value="collectionId") String collectionId,
-      @RequestParam(value="showDoneButton", required=false) Boolean showDoneButton) {
+      @RequestParam(value="collectionId") String collectionId) {
     ModelAndView mv = new ModelAndView();
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
@@ -338,7 +340,8 @@ public class BloodTypingController {
       HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="collectionId") String collectionId,
-      @RequestParam(value="saveTestsData") String saveTestsDataStr) {
+      @RequestParam(value="saveTestsData") String saveTestsDataStr,
+      @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
     Map<String, Object> m = new HashMap<String, Object>();
 
@@ -351,10 +354,17 @@ public class BloodTypingController {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
       bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap);
-      Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
-      if (errorMap != null && !errorMap.isEmpty())
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, saveUninterpretableResults);
+      Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
+      System.out.println(errorMap);
+      if (errorMap != null && !errorMap.isEmpty()) {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(Long.parseLong(collectionId));
+        if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
+          m.put("uninterpretable", true);
+        else
+          m.put("invalidResults", true);
+      }
 
     } catch (Exception ex) {
       ex.printStackTrace();

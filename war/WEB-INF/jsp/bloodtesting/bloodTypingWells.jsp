@@ -37,7 +37,11 @@ $(document).ready(function() {
 	$("#${mainContentId}").find(".saveButton").
 	button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
 
-	function saveTestResults() {
+	function saveTestResults(eventObj, saveUninterpretableResults) {
+	  console.log(this);
+	  console.log(saveUninterpretableResults);
+	  if (saveUninterpretableResults === undefined)
+	  	saveUninterpretableResults = false;
 	  var inputs = $("#${mainContentId}").find(".wellInput");
 	  var data = {};
 	  for (var index = 0; index < inputs.length; index++) {
@@ -55,17 +59,19 @@ $(document).ready(function() {
       collectionNumbers.push(collectionNumberStrs[index]);
     }
     showLoadingImage($("#${tabContentId}"));
-	  $.ajax({
-	    url: "saveBloodTypingTests.html",
-	    data: {bloodTypingTests: JSON.stringify(data), collectionNumbers : collectionNumbers, refreshUrl: "${refreshUrl}"},
-	    type: "POST",
-	    success: function(response) {
-	      				 $("#${tabContentId}").replaceWith(response);
-	    			   },
-	   	error: function(response) {
-							 $("#${tabContentId}").replaceWith(response.responseText);	   	  
-	   				 }
-	  });
+    var bloodTestsData = {bloodTypingTests: JSON.stringify(data),
+        									collectionNumbers : collectionNumbers,
+        									refreshUrl: "${refreshUrl}",
+        									saveUninterpretableResults : saveUninterpretableResults};
+    saveTestResultsWithConfirmation("saveBloodTypingTests.html", bloodTestsData, saveBloodTestsSuccess, saveBloodTestsError);
+	}
+
+	function saveBloodTestsSuccess(response) {
+	  $("#${tabContentId}").replaceWith(response);
+	}
+
+	function saveBloodTestsError(response) {
+	  $("#${tabContentId}").replaceWith(response.responseText);
 	}
 
 	$("#${mainContentId}").find(".clearFormButton").
@@ -104,6 +110,12 @@ $(document).ready(function() {
 			  				});	  
 							});
 
+	$("#${mainContentId}").find(".saveUninterpretableResultsButton")
+												.button()
+												.click(function(event) {
+												  saveTestResults(event, true);
+												});
+
 });
 </script>
 
@@ -114,6 +126,40 @@ $(document).ready(function() {
 			<jsp:include page="../common/errorBox.jsp">
 				<jsp:param name="errorMessage" value="${errorMessage}" />
 			</jsp:include>
+		</c:if>
+
+		<!-- Show warning section when blood typing tests are uninterpretable for some collections -->
+		<c:if test="${!empty collectionsWithUninterpretableResults && fn:length(collectionsWithUninterpretableResults) gt 0}">
+			<div class="warningBox ui-state-highlight">
+				<img src="images/warning_icon.png" style="height: 50px;" />
+				The following collections have uninterpretable results. Please check the results you have entered.
+
+				<c:forEach var="collectionId" items="${collectionsWithUninterpretableResults}">
+	
+					<table class="simpleTable">
+						<thead>
+							<tr>
+								<th>Collection number</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									${collectionsByCollectionId[collectionId].collectionNumber}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<br />
+
+					Are you sure you want to save these results?
+					<br />
+					<button class="saveUninterpretableResultsButton">
+						Save uninterpretable results also
+					</button>
+
+				</c:forEach>
+			</div>
 		</c:if>
 
 		<!-- Show warning section when blood typing tests already added for some collections -->

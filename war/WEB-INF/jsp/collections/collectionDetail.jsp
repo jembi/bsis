@@ -58,15 +58,23 @@
 			<label>${collectedSample.collectionSite}</label>
 		</div>
 	</c:if>
-	<div>
-		<label>${collectionFields.bloodTypingStatus.displayName}</label>
-		<label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
-	</div>
 
 	<c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
 		<div>
+			<label>${collectionFields.bloodTypingStatus.displayName}</label>
+			<label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
+		</div>
+		<div>
 			<label>${collectionFields.ttiStatus.displayName}</label>
 			<label style="width: auto;">${collectedSample.TTIStatus}</label>
+		</div>
+		<div>
+			<label>${collectionFields.bloodAbo.displayName}</label>
+			<label style="width: auto;">${collectedSample.bloodAbo}</label>
+		</div>
+		<div>
+			<label>${collectionFields.bloodRh.displayName}</label>
+			<label style="width: auto;">${collectedSample.bloodRh}</label>
 		</div>
 	</c:if>
 

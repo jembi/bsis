@@ -72,7 +72,14 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}">
+		<div>
+			<button class="doneButton" style="margin-left: 20px;">Return to previous screen</button>
+		</div>
+		<br />
+		<br />
+
 	<div id="${mainContentId}">
+
 		<div style="width: 87%; margin-left: 20px;">
 			<table class="bloodTypingPrimaryTestsDoneSummaryTable">
 				<thead>
@@ -133,7 +140,4 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-	<div>
-		<button class="doneButton" style="margin-left: 20px;">Done</button>
-	</div>
 </div>

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import model.testresults.TTIStatus;
-
 import repository.bloodtesting.BloodTypingStatus;
 
 public class BloodTestingRuleResult {
@@ -36,6 +35,12 @@ public class BloodTestingRuleResult {
   private Set<String> ttiStatusChanges;
 
   private TTIStatus ttiStatus;
+
+  private boolean aboUninterpretable;
+
+  private boolean rhUninterpretable;
+
+  private boolean ttiUninterpretable;
 
   public BloodTestingRuleResult() {
   }
@@ -134,5 +139,29 @@ public class BloodTestingRuleResult {
 
   public void setPendingTTITestsIds(List<String> pendingTTITestsIds) {
     this.pendingTTITestsIds = pendingTTITestsIds;
+  }
+
+  public boolean getAboUninterpretable() {
+    return aboUninterpretable;
+  }
+
+  public void setAboUninterpretable(boolean aboUninterpretable) {
+    this.aboUninterpretable = aboUninterpretable;
+  }
+
+  public boolean getRhUninterpretable() {
+    return rhUninterpretable;
+  }
+
+  public void setRhUninterpretable(boolean rhUninterpretable) {
+    this.rhUninterpretable = rhUninterpretable;
+  }
+
+  public boolean getTtiUninterpretable() {
+    return ttiUninterpretable;
+  }
+
+  public void setTtiUninterpretable(boolean ttiUninterpretable) {
+    this.ttiUninterpretable = ttiUninterpretable;
   }
 }

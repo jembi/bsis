@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import model.worksheet.Worksheet;
 import model.worksheet.WorksheetType;
 
 import org.hibernate.envers.Audited;
