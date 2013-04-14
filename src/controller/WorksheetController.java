@@ -211,13 +211,13 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/findWorksheetFormGenerator", method=RequestMethod.GET)
-  public ModelAndView findCollectionWorksheetFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView findWorksheetFormGenerator(HttpServletRequest request, Model model) {
     ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
     FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
     mv.addObject("findWorksheetForm", findWorksheetForm);
     mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
+    mv.addObject("worksheetResultClickUrl", "worksheetSummary.html");
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -229,6 +229,7 @@ public class WorksheetController {
     List<Worksheet> worksheets = worksheetRepository.findWorksheets(form.getWorksheetNumber(), form.getWorksheetTypes());
     mv.addObject("allWorksheets", getWorksheetViewModels(worksheets));
     mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
+    mv.addObject("worksheetResultClickUrl", form.getWorksheetResultClickUrl());
     mv.addObject("refreshUrl", getUrl(request));
     mv.setViewName("worksheets/worksheetsTable");
     return mv;
@@ -242,7 +243,7 @@ public class WorksheetController {
     Worksheet worksheet = worksheetRepository.findWorksheetFullInformation(worksheetId);
     mv.addObject("worksheet", getWorksheetViewModel(worksheet));
     mv.addObject("allCollectedSamples", sortCollectionsInWorksheet(worksheet));
-    mv.addObject("bloodTests", worksheetTypeRepository.getBloodTestsInWorksheet(worksheet.getWorksheetType().getId()));
+    mv.addObject("bloodTests", worksheetRepository.getBloodTestsInWorksheet(worksheet));
     mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("worksheetId", worksheet.getId());
     mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
@@ -294,8 +295,12 @@ public class WorksheetController {
   @RequestMapping(value = "/worksheetForTestResultsFormGenerator", method = RequestMethod.GET)
   public ModelAndView findWorksheetForTestResultsFormGenerator(HttpServletRequest request) {
 
-    ModelAndView mv = new ModelAndView("worksheets/findWorksheetForTestResults");
+    ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
+    FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
+    mv.addObject("findWorksheetForm", findWorksheetForm);
+    mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
     mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("worksheetResultClickUrl", "editTestResultsForWorksheet.html");
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "testResults.worksheet");
     mv.addObject("tips", tips);
@@ -306,14 +311,15 @@ public class WorksheetController {
 
   @RequestMapping(value="/editTestResultsForWorksheet", method=RequestMethod.GET)
   public ModelAndView editTestResultsForWorksheet(HttpServletRequest request,
-      @RequestParam(value="worksheetNumber") String worksheetNumber) {
+      @RequestParam(value="worksheetId") Long worksheetId) {
 
     ModelAndView mv = new ModelAndView("worksheets/worksheetForTestResults");
+    Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);
     mv.addObject("worksheetFound", true);
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     
-    List<BloodTest> bloodTests = worksheetRepository.findTestsInWorksheet(worksheetNumber);
+    List<BloodTest> bloodTests = worksheetRepository.getBloodTestsInWorksheet(worksheet);
     mv.addObject("bloodTests", bloodTests);
 
     List<String> testIds = new ArrayList<String>();
@@ -323,21 +329,22 @@ public class WorksheetController {
 
     mv.addObject("testIdsCommaSeparated", StringUtils.join(testIds, ","));
 
-    mv.addObject("worksheetNumber", worksheetNumber);
+    mv.addObject("worksheetNumber", worksheet.getWorksheetNumber());
     mv.addObject("nextPageUrl", getNextPageUrl(request));
     return mv;
   }
 
   @RequestMapping(value="/editTestResultsForWorksheetPagination", method=RequestMethod.GET)
   public @ResponseBody Map<String, Object> editTestResultsForWorksheetPagination(HttpServletRequest request, Model model,
-      @RequestParam(value="worksheetNumber") String worksheetNumber) {
+      @RequestParam(value="worksheetId") Long worksheetId) {
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
-    List<Object> results = collectedSampleRepository.findCollectionsInWorksheet(worksheetNumber, pagingParams);
+    List<Object> results = collectedSampleRepository.findCollectionsInWorksheet(worksheetId, pagingParams);
 
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
     Long totalRecords = (Long) results.get(1);
-    List<BloodTest> bloodTests = worksheetRepository.findTestsInWorksheet(worksheetNumber);
+    Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);
+    List<BloodTest> bloodTests = worksheetRepository.getBloodTestsInWorksheet(worksheet);
     return generateDatatablesMap(collectedSamples, bloodTests, totalRecords);
   }
 

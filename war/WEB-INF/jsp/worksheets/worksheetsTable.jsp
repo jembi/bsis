@@ -36,7 +36,7 @@ $(document).ready(
 											          return;
 											        }
 											        var selectedRowId = elements[0].innerHTML;
-											        createWorksheetSummary("worksheetSummary.html",
+											        createWorksheetSummary("${worksheetResultClickUrl}",
 									  							{worksheetId: selectedRowId});
  													  },
 				"fnRowDeselected" : function(node) {
@@ -56,7 +56,6 @@ $(document).ready(
             				 $("#${tabContentId}").trigger("worksheetSummaryView", response);
             			 }
         });
-
       }
 
       function refreshResults() {

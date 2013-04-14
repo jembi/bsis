@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.bloodtesting.BloodTest;
 import model.worksheet.WorksheetType;
 
 import org.springframework.stereotype.Repository;
@@ -35,17 +34,5 @@ public class WorksheetTypeRepository {
     if (query.getResultList().size() == 0)
       return null;
     return query.getSingleResult();
-  }
-
-  public List<BloodTest> getBloodTestsInWorksheet(Integer worksheetTypeId) {
-    TypedQuery<WorksheetType> query;
-    query = em.createQuery("SELECT wt from WorksheetType wt LEFT JOIN FETCH wt.bloodTests " +
-            "WHERE wt.id=:id AND wt.isDeleted=:isDeleted", WorksheetType.class);
-    query.setParameter("isDeleted", false);
-    query.setParameter("id", worksheetTypeId);
-    if (query.getResultList().size() == 0)
-      return null;
-    WorksheetType worksheetType = query.getSingleResult();
-    return worksheetType.getBloodTests();
   }
 }

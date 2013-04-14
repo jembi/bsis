@@ -19,7 +19,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="findWorksheetFormId">findWorksheetForm-${unique_pageId}</c:set>
+<c:set var="findWorksheetFormId">findWorksheetForm-${unique_page_id}</c:set>
 <c:set var="findWorksheetFormWorksheetTypeSelectorId">findWorksheetFormWorksheetTypeSelectorId-${unique_page_id}</c:set>
 
 <script>
@@ -117,6 +117,9 @@ $(document).ready(function() {
 					</c:forEach>
 				</form:select>
 			</div>
+
+			<form:hidden path="worksheetResultClickUrl" value="${worksheetResultClickUrl}" />
+
 			<div>
 				<label></label>
 				<button type="button" class="findWorksheetButton">

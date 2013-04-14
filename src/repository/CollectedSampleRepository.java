@@ -478,13 +478,13 @@ public class CollectedSampleRepository {
     return collectedSamples;
   }
 
-  public List<Object> findCollectionsInWorksheet(String worksheetNumber, Map<String, Object> pagingParams) {
+  public List<Object> findCollectionsInWorksheet(Long worksheetId, Map<String, Object> pagingParams) {
 
     try {
       String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
-                                   "WHERE w.worksheetNumber = :worksheetNumber ORDER BY c.id ASC";
+                                   "WHERE w.id = :worksheetId ORDER BY c.id ASC";
       TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
-      collectionsQuery.setParameter("worksheetNumber", worksheetNumber);
+      collectionsQuery.setParameter("worksheetId", worksheetId);
   
       int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
       int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -494,18 +494,18 @@ public class CollectedSampleRepository {
   
       List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
   
-      return Arrays.asList(collectedSamples, getTotalCollectionsInWorksheet(worksheetNumber));
+      return Arrays.asList(collectedSamples, getTotalCollectionsInWorksheet(worksheetId));
     } catch (NoResultException ex){
       return Arrays.asList(Arrays.asList(new CollectedSample[0]), new Long(0));
     }
   }
 
-  private Long getTotalCollectionsInWorksheet(String worksheetNumber) {
+  private Long getTotalCollectionsInWorksheet(Long worksheetId) {
     String queryStr = "SELECT COUNT(c) from Worksheet w LEFT JOIN w.collectedSamples c " +
-        "where w.worksheetNumber = :worksheetNumber";
+        "where w.id = :worksheetId";
 
     TypedQuery<Long> query = em.createQuery(queryStr, Long.class);
-    query.setParameter("worksheetNumber", worksheetNumber);
+    query.setParameter("worksheetId", worksheetId);
     return query.getSingleResult().longValue();
   }
 

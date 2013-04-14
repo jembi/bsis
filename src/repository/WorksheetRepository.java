@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import model.bloodtesting.BloodTest;
 import model.collectedsample.CollectedSample;
 import model.worksheet.Worksheet;
+import model.worksheet.WorksheetType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,13 +139,15 @@ public class WorksheetRepository {
     return query.getSingleResult();
   }
 
-  public List<BloodTest> findTestsInWorksheet(String worksheetNumber) {
-    String queryStr = "SELECT w from Worksheet w WHERE " +
-        "w.worksheetNumber=:worksheetNumber AND w.isDeleted=:isDeleted";
-    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
-    query.setParameter("worksheetNumber", worksheetNumber);
+  public List<BloodTest> getBloodTestsInWorksheet(Worksheet worksheet) {
+    TypedQuery<WorksheetType> query;
+    query = em.createQuery("SELECT wt from WorksheetType wt LEFT JOIN FETCH wt.bloodTests " +
+            "WHERE wt.id=:id AND wt.isDeleted=:isDeleted", WorksheetType.class);
     query.setParameter("isDeleted", false);
-    Worksheet worksheet = query.getSingleResult();
-    return worksheetTypeRepository.getBloodTestsInWorksheet(worksheet.getWorksheetType().getId());
+    query.setParameter("id", worksheet.getWorksheetType().getId());
+    if (query.getResultList().size() == 0)
+      return null;
+    WorksheetType worksheetType = query.getSingleResult();
+    return worksheetType.getBloodTests();
   }
 }

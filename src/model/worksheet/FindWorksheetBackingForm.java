@@ -8,6 +8,8 @@ public class FindWorksheetBackingForm {
 
   private List<String> worksheetTypes;
 
+  private String worksheetResultClickUrl;
+
   public FindWorksheetBackingForm() {
   }
 
@@ -25,5 +27,13 @@ public class FindWorksheetBackingForm {
 
   public void setWorksheetTypes(List<String> worksheetTypes) {
     this.worksheetTypes = worksheetTypes;
+  }
+
+  public String getWorksheetResultClickUrl() {
+    return worksheetResultClickUrl;
+  }
+
+  public void setWorksheetResultClickUrl(String worksheetResultClickUrl) {
+    this.worksheetResultClickUrl = worksheetResultClickUrl;
   }
 }

@@ -83,7 +83,7 @@ $(document).ready(function() {
       								     						registerRadioButtonCallbacks();
       								     						setOriginalColorForAllInputs();
       								     						if (jsonResponse.iTotalRecords == 0) {
-      								     						  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
+      								     						  //$("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
       								     						}
       								   						},
       								   	"error" : function(jsonResponse) {
@@ -299,41 +299,49 @@ $(document).ready(function() {
     rowContents = rowContents.replace(/collectionId/g, collectionId);
     $(node).find(".viewableField").show();
   }
+
+  $("#${mainContentId}").find(".returnToFindWorksheetButton")
+  											.button({icons: {primary : 'ui-icon-arrowreturn-1-w'}})
+  											.click(function() {
+  											  if (isWorksheetModified()) {
+  											    showUnsavedChangesDialog();
+  											    return;
+  											  }
+  											  $("#${tabContentId}").trigger("worksheetSummarySuccess");
+  											});
 });
 </script>
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}">
-		<c:if test="${!worksheetFound}">
-			<span style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
-					No worksheet found.
-			</span>
-		</c:if>
-		<c:if test="${worksheetFound}">
 
-			<br />
-			<br />
+		<br />
+		<br />
 
-			<div class="printableArea">
+		<button class="returnToFindWorksheetButton">Return to find worksheet screen</button>
 
-				<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet ID: ${worksheetBatchId}</div>
-					<table class="dataTable worksheetForTestResultsTable noHighlight">
-						<thead>
-							<tr>
-								<th style="display: none"></th>
-								<c:if test="${worksheetConfig['collectionNumber'] == 'true'}">
-									<th style="width: 150px;">
-										Collection Number
-									</th>
-								</c:if>
+		<br />
 
-								<c:forEach var="bloodTest" items="${bloodTests}">
-									<th style="width: 170px;">
-										${bloodTest.testNameShort}
-									</th>
-								</c:forEach>
-							</tr>
-						</thead>
+		<div class="printableArea">
+
+			<div style="margin-top: 20px; margin-bottom: 20px; font-size: 18pt;">Worksheet Number: ${worksheetNumber}</div>
+				<table class="dataTable worksheetForTestResultsTable noHighlight">
+					<thead>
+						<tr>
+							<th style="display: none"></th>
+							<c:if test="${worksheetConfig['collectionNumber'] == 'true'}">
+								<th style="width: 150px;">
+									Collection Number
+								</th>
+							</c:if>
+
+							<c:forEach var="bloodTest" items="${bloodTests}">
+								<th style="width: 170px;">
+									${bloodTest.testNameShort}
+								</th>
+							</c:forEach>
+						</tr>
+					</thead>
 						<tbody style="font-size: 11pt;">
 							<c:forEach var="collectedSample" items="${allCollectedSamples}">
 								<tr>
@@ -362,7 +370,6 @@ $(document).ready(function() {
 						</tfoot>
 					</table>
 				</div>
-			</c:if>
 		</div>
 	<div id="${childContentId}"></div>
 </div>
@@ -409,7 +416,7 @@ $(document).ready(function() {
 <div id="${saveConfirmDialogId}" style="display: none;">
   <p>
   	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-  	There are unsaved changes on the worksheet. Please save this page before continuing to the next page.
+  	There are unsaved changes on the worksheet. Please save your changes or click on undo to cancel your changes.
   </p>
 </div>
 
