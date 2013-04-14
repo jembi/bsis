@@ -367,3 +367,7 @@ insert into BloodTest_WorksheetType
 (26,4),
 (27,4),
 (28,4);
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("horizontalentry", "true", "ttiWells"),
+("titerWellRadius", "25", "ttiWells");

@@ -302,9 +302,11 @@ public class TTIController {
   }
   
   @RequestMapping(value="/ttiWellsWorksheetGenerator", method=RequestMethod.GET)
-  public ModelAndView ttiWellsWorksheetGenerator() {
+  public ModelAndView ttiWellsWorksheetGenerator(HttpServletRequest request,
+      @RequestParam(value="ttiTestId") Integer ttiTestId) {
     ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheet");
     mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
+    mv.addObject("ttiConfig", genericConfigRepository.getConfigProperties("ttiWells"));
     return mv;
   }
 

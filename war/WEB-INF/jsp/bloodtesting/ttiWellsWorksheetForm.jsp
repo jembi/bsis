@@ -30,15 +30,34 @@ $(document).ready(function() {
 
   $("#${mainContentId}").find(".clearFormButton")
   											.button()
-  											.click(refetchForm);
+  											.click(function() {
+  											  			refetchForm();
+  											  			emptyChildContent();
+  											  		 });
 
   function generateTtiPlate() {
+    var ttiTestId = $("#${mainContentId}").find('select[name="ttiTestId"]')
+     																 		  .val();
+    console.log(ttiTestId);
+    $.ajax({
+      url: "ttiWellsWorksheetGenerator.html",
+      data: {ttiTestId : ttiTestId},
+      success: function (response) {
+        				 $("#${childContentId}").html(response);
+      				 },
+      error: function(response) {
+        			 showErrorMessage("Something went wrong. Please try again.");
+      			 }
+    });
   }
 
   function refetchForm() {
     $("#${tabContentId}").load("${refreshUrl}");
   }
 
+  function emptyChildContent() {
+    $("#${childContentId}").html("");
+  }
 });
 </script>
 
@@ -54,7 +73,7 @@ $(document).ready(function() {
 			</div>
 			<div>
 				<label style="width: auto;">Select TTI Result to record on the plate</label>
-				<select id="${ttiTestSelectorId}" class="ttiTestSelector">
+				<select id="${ttiTestSelectorId}" class="ttiTestSelector" name="ttiTestId">
 					<option value="-1"></option>
 					<c:forEach var="ttiTest" items="${ttiTests}">
 						<option value="${ttiTest.id}">
@@ -77,6 +96,9 @@ $(document).ready(function() {
 			</div>
 		</div>
 
+	</div>
+
+	<div id="${childContentId}">
 	</div>
 
 </div>
