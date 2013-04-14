@@ -123,6 +123,10 @@ $(document).ready(function() {
     		$("#${childContentId}").html("");
     		$("#${tabContentId}").find(".collectionsTable").trigger("refreshResults");
   		});
+
+  $("#${findCollectionBatchFormId}").submit(function(event) {
+    event.preventDefault();
+  });
 });
 </script>
 
@@ -166,7 +170,10 @@ $(document).ready(function() {
 
 			<br />
 			<br />
-	
+
+		</form:form>
+
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findCollectionBatchButton">
@@ -176,8 +183,8 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-	
-		</form:form>
+		</div>
+
 	<div class="findCollectionBatchResults"></div>	
 </div>
 	<div id="${childContentId}"></div>

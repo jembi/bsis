@@ -81,7 +81,7 @@ $(document).ready(function() {
 			<!-- this div is necessary to align the following message with the rest of the labels -->
 			<div>
 				<label style="width: auto;">
-					Scan or enter collection numbers (maximum ${plate.numColumns})
+					Scan or enter collection numbers (maximum ${plate.numColumns}) on the plate from left to right
 				</label>
 			</div>
 

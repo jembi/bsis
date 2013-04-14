@@ -131,6 +131,9 @@ $(document).ready(function() {
 					<form:option value="O-" label="O-" />
 				</form:select>
 			</div>
+		</form:form>
+
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findDonorButton">
@@ -140,7 +143,7 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-		</form:form>
+		</div>
 		<div class="findDonorResults"></div>
 	</div>
 

@@ -247,7 +247,9 @@ $(document).ready(function() {
 
 			<br />
 			<br />
-	
+		</form:form>
+
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findCollectionButton">
@@ -257,8 +259,8 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-	
-		</form:form>
+		</div>
+		
 	<div class="findCollectionResults"></div>	
 </div>
 	<div id="${childContentId}"></div>

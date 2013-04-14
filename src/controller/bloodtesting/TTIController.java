@@ -293,5 +293,19 @@ public class TTIController {
     return m;
   }
 
+  @RequestMapping(value="/ttiWellsWorksheetFormGenerator", method=RequestMethod.GET)
+  public ModelAndView ttiWellsWorksheetFormGenerator(HttpServletRequest request) {
+    ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheetForm");
+    mv.addObject("ttiTests", bloodTestingRepository.getBloodTTITests());
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+  }
+  
+  @RequestMapping(value="/ttiWellsWorksheetGenerator", method=RequestMethod.GET)
+  public ModelAndView ttiWellsWorksheetGenerator() {
+    ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheet");
+    mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
+    return mv;
+  }
 
 }

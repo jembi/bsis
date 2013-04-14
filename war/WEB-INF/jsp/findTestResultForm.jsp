@@ -55,6 +55,10 @@ $(document).ready(function() {
     $("#${childContentId}").html("");
   }
 
+  $("#${findTestResultFormId}").submit(function(event) {
+    event.preventDefault();
+  });
+
 });
 </script>
 
@@ -76,7 +80,9 @@ $(document).ready(function() {
 				 -->
 				<form:input path="collectionNumber" placeholder="Collection Number"/>
 			</div>
+		</form:form>
 
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findTestResultButton">
@@ -86,7 +92,8 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-		</form:form>
+		</div>
+		
 		<div class="findTestResults"></div>
 	</div>
 

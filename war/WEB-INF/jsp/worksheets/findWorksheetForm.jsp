@@ -89,6 +89,10 @@ $(document).ready(function() {
     		$("#${tabContentId}").find(".worksheetsTable").trigger("refreshResults");
   		});
 
+  $("#${findWorksheetFormId}").submit(function(event) {
+    event.preventDefault();
+  });
+
 });
 </script>
 
@@ -98,6 +102,7 @@ $(document).ready(function() {
 
 		<form:form method="GET" commandName="findWorksheetForm" id="${findWorksheetFormId}"
 			class="formInTabPane">
+			<form:hidden path="worksheetResultClickUrl" value="${worksheetResultClickUrl}" />
 			<div>
 				<label style="width: auto;"><b>Find collections worksheet</b></label>
 			</div>
@@ -118,8 +123,9 @@ $(document).ready(function() {
 				</form:select>
 			</div>
 
-			<form:hidden path="worksheetResultClickUrl" value="${worksheetResultClickUrl}" />
+			</form:form>
 
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findWorksheetButton">
@@ -129,7 +135,7 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-			</form:form>
+		</div>
 
 		<div class="findWorksheetResults"></div>
 

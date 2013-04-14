@@ -67,6 +67,10 @@ $(document).ready(function() {
     $("#${tabContentId}").load("${refreshUrl}");
   }
 
+  $("#${mainContentId}").find("form")
+  											.submit(function(event) {
+  											  event.preventDefault();
+  											});
 });
 </script>
 

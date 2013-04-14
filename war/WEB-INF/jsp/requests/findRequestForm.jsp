@@ -186,6 +186,9 @@ $(document).ready(function() {
 				<form:checkbox path="includeSatisfiedRequests" style="width: auto; position: relative; top: 2px;"/>
 			</div>
 
+		</form:form>
+
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findRequestButton">
@@ -195,7 +198,8 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-		</form:form>
+		</div>
+
 		<div class="findRequestResults"></div>
 	</div>
 

@@ -247,7 +247,10 @@ $(document).ready(function() {
 	
 			<br />
 			<br />
-	
+
+			</form:form>
+
+		<div class="formInTabPane">
 			<div>
 				<label></label>
 				<button type="button" class="findProductButton">
@@ -257,9 +260,10 @@ $(document).ready(function() {
 					Clear form
 				</button>
 			</div>
-	
-		</form:form>
-	<div class="findProductResults"></div>	
+		</div>
+
+	<div class="findProductResults"></div>
+
 </div>
 	<div id="${childContentId}"></div>
 </div>
