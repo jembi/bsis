@@ -22,6 +22,8 @@
 <c:set var="editableFieldsForTableId">editableFieldsForTableId-${unique_page_id}</c:set>
 <c:set var="saveConfirmDialogId">saveConfirmDialogId-${unique_page_id}</c:set>
 
+<c:set var="UninterpretableResultsDialogId">uninterpretableResultsDialog-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function() {
 
@@ -104,7 +106,7 @@ $(document).ready(function() {
       return;
 
 	  $("#${mainContentId}").find(".worksheetSaveAndNextButton").button(
-	      { icons : { primary: "ui-icon-disk" } }).click(saveAndNextButtonClicked);
+	      { icons : { primary: "ui-icon-disk" } }).click(saveTestResultsOnWorksheetPage);
 	  $("#${mainContentId}").find(".worksheetUndoChangesOnPageButton").button(
 	      {
 	        icons : {
@@ -115,13 +117,35 @@ $(document).ready(function() {
 	  buttonsAlreadyAdded = true;
 	 }
 
-  function saveAndNextButtonClicked() {
+ 	 function showUninterpretableConfirmationDialog() {
+		 $("#${UninterpretableResultsDialogId}").dialog({
+		   modal: true,
+		   height: 200,
+		   width: 600,
+		   title: "Confirm save",
+		   buttons: {
+		     "Save uninterpretable results" : function() {
+		       																	$(this).dialog("close");
+		       																	saveTestResultsOnWorksheetPage(event, true);
+		     																	},
+		     "Cancel and review results" : function() {
+		       																$(this).dialog("close");
+		     															 }
+		   }
+		 });
+	 }
+
+  function saveTestResultsOnWorksheetPage(event, saveUninterpretableResults) {
     if (!isWorksheetModified())
       return;
 
+    if (saveUninterpretableResults === undefined)
+	  	saveUninterpretableResults = false;
+
     $.ajax({
       "url"  : "saveAllTestResults.html", 
-      "data" : {saveTestsData: JSON.stringify(modified_cells)},
+      "data" : {saveTestsData: JSON.stringify(modified_cells),
+        				saveUninterpretableResults: saveUninterpretableResults},
       "type" : "POST",
       "success" : function() {
 										showMessage("Test results saved successfully");
@@ -129,7 +153,7 @@ $(document).ready(function() {
 										testResultsTable.fnStandingRedraw();
       					  },
     	"error" : function() {
-    	  					showErrorMessage("Something went wrong. Please verify test result values.");
+    	  					showUninterpretableConfirmationDialog();
     						}
     });
   }
@@ -275,7 +299,8 @@ $(document).ready(function() {
   function getEditableCollectionNumber(cell, collectionId) {
     return '<div style="height: ${worksheetConfig.rowHeight}px; margin-left: 2px; font-size: 1.2em;">' + cell +
     					'<br /> <br />' +
-    					'<span class="link clearSelection">Clear</span>' +
+    					// not showing clear selection link for now
+    					//'<span class="link clearSelection">Clear</span>' +
     			 '</div>';
   }
 
@@ -420,3 +445,8 @@ $(document).ready(function() {
   </p>
 </div>
 
+<div id="${UninterpretableResultsDialogId}" style="display: none">
+	<br />
+	Results for the collection are uninterpretable. Are you sure you want to save the results?
+	<br />
+</div>

@@ -261,13 +261,14 @@ public class TTIController {
   public @ResponseBody Map<String, Object> saveAllTestResults(
       HttpServletRequest request,
       HttpServletResponse response,
-      @RequestParam(value="saveTestsData") String saveTestsDataStr) {
+      @RequestParam(value="saveTestsData") String saveTestsDataStr,
+      @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
     Map<String, Object> m = new HashMap<String, Object>();
 
     try {
 
-      Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long,String>>();
+      Map<Long, Map<Long, String>> testResultsMap = new HashMap<Long, Map<Long,String>>();
       ObjectMapper mapper = new ObjectMapper();
       Map<String, Map<String, String>> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
       for (String collectionIdStr : saveTestsData.keySet()) {
@@ -276,10 +277,10 @@ public class TTIController {
         for (String testIdStr : testsForCollection.keySet()) {
           saveTestsDataWithLong.put(Long.parseLong(testIdStr), testsForCollection.get(testIdStr));
         }
-        ttiTestResultsMap.put(Long.parseLong(collectionIdStr), saveTestsDataWithLong);
+        testResultsMap.put(Long.parseLong(collectionIdStr), saveTestsDataWithLong);
       }
 
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(ttiTestResultsMap, true);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(testResultsMap, saveUninterpretableResults);
       Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
 
       if (errorMap != null && !errorMap.isEmpty())
