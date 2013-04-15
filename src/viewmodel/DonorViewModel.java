@@ -11,6 +11,7 @@ import model.location.Location;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -140,7 +141,35 @@ public class DonorViewModel {
     return donor.getDonorStatus();
   }
 
+  public String getPhoneNumber() {
+    return donor.getPhoneNumber();
+  }
+
+  public String getOtherPhoneNumber() {
+    return donor.getOtherPhoneNumber();
+  }
+
   public String getNationalID() {
     return donor.getNationalID();
+  }
+
+  public String getPreferredContactMethod() {
+    if (donor.getPreferredContactMethod() == null ||
+        donor.getPreferredContactMethod().getContactMethodType() == null)
+      return "";
+    else
+      return donor.getPreferredContactMethod().getContactMethodType();
+  }
+
+  public String getAge() {
+    if (donor.getBirthDateInferred() != null) {
+      DateTime dt1 = new DateTime(donor.getBirthDateInferred());
+      DateTime dt2 = new DateTime(new Date());
+      int year1 = dt1.year().get();
+      int year2 = dt2.year().get();
+      return new Integer(year2-year1).toString();
+    } else {
+      return "";
+    }
   }
 }

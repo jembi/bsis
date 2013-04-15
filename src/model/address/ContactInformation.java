@@ -2,6 +2,7 @@ package model.address;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -43,6 +44,9 @@ public class ContactInformation {
   @Length(max=20)
   @Column(length=20)
   private String otherPhoneNumber;
+
+  @ManyToOne
+  private ContactMethodType preferredContactMethod;
 
   public void copy(ContactInformation contactInformation) {
     this.address = contactInformation.address;
@@ -126,5 +130,13 @@ public class ContactInformation {
 
   public void setOtherPhoneNumber(String otherPhoneNumber) {
     this.otherPhoneNumber = otherPhoneNumber;
+  }
+
+  public ContactMethodType getPreferredContactMethod() {
+    return preferredContactMethod;
+  }
+
+  public void setPreferredContactMethod(ContactMethodType preferredContactMethod) {
+    this.preferredContactMethod = preferredContactMethod;
   }
 }

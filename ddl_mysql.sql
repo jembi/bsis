@@ -270,6 +270,22 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table ContactMethodType (
+        id SMALLINT not null auto_increment,
+        contactMethodType varchar(30),
+        isDeleted boolean not null,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ContactMethodType_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        contactMethodType varchar(30),
+        isDeleted boolean,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table CrossmatchType (
         id TINYINT not null auto_increment,
         crossmatchType varchar(255),
@@ -320,6 +336,7 @@
 
     create table Donor (
         id bigint not null auto_increment,
+        age TINYINT,
         birthDate date,
         birthDateInferred date,
         bloodAbo varchar(10),
@@ -346,6 +363,7 @@
         lastUpdated TIMESTAMP,
         nationalID varchar(15),
         notes longtext,
+        preferredContactMethod_id SMALLINT,
         donorPanel_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -380,6 +398,7 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
+        age TINYINT,
         birthDate date,
         birthDateInferred date,
         bloodAbo varchar(10),
@@ -406,6 +425,7 @@
         lastUpdated TIMESTAMP,
         nationalID varchar(15),
         notes longtext,
+        preferredContactMethod_id SMALLINT,
         donorPanel_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -1160,6 +1180,12 @@
         foreign key (REV) 
         references REVINFO (REV);
 
+    alter table ContactMethodType_AUD 
+        add index FK64A7DC2CDF74E053 (REV), 
+        add constraint FK64A7DC2CDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
     alter table CrossmatchType_AUD 
         add index FK7FC1C4D0DF74E053 (REV), 
         add constraint FK7FC1C4D0DF74E053 
@@ -1195,6 +1221,12 @@
         add constraint FK3F25E463043805 
         foreign key (donorPanel_id) 
         references Location (id);
+
+    alter table Donor 
+        add index FK3F25E46FCE9E976 (preferredContactMethod_id), 
+        add constraint FK3F25E46FCE9E976 
+        foreign key (preferredContactMethod_id) 
+        references ContactMethodType (id);
 
     alter table Donor 
         add index FK3F25E46D0AFB367 (lastUpdatedBy_id), 

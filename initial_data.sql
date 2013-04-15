@@ -109,6 +109,11 @@ insert into FormField
 '0', '1',
 '0', '0',
 '0', '0'),
+('Donor', 'preferredContactMethod', 'Preferred contact method', '', 0,
+'0', '1',
+'0', '1',
+'0', '0',
+'0', '0'),
 ('Donor', 'notes', 'Notes', '', 0,
 '0', '1',
 '0', '1',
@@ -993,3 +998,11 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("requestsTabEnabled", "true", "tabs"),
 ("usageTabEnabled", "false", "tabs"),
 ("reportsTabEnabled", "true", "tabs");
+
+insert into ContactMethodType (contactMethodType, isDeleted) values
+("None", 0),
+("Phone", 0),
+("SMS", 0),
+("Email", 0),
+("Mail", 0),
+("Do not contact", 0);

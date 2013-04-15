@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.address.ContactInformation;
+import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
 import model.location.Location;
 import model.location.LocationExists;
@@ -108,6 +109,9 @@ public class Donor implements ModificationTracker {
 
   @Temporal(TemporalType.DATE)
   private Date birthDateInferred;
+
+  @Column(columnDefinition="TINYINT")
+  private Integer age;
 
   /**
    * If the blood center wishes to store a unique id for the donor.
@@ -243,8 +247,10 @@ public class Donor implements ModificationTracker {
     setLastName(donor.getLastName());
     contactInformation.copy(donor.getContactInformation());
     setBirthDate(donor.getBirthDate());
+    setBirthDateInferred(donor.getBirthDateInferred());
     setNotes(donor.getNotes());
     setGender(donor.getGender());
+    setPreferredContactMethod(donor.getPreferredContactMethod());
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
   }
@@ -458,5 +464,21 @@ public class Donor implements ModificationTracker {
 
   public void setDonorStatus(DonorStatus donorStatus) {
     this.donorStatus = donorStatus;
+  }
+
+  public ContactMethodType getPreferredContactMethod() {
+    return contactInformation.getPreferredContactMethod();
+  }
+
+  public void setPreferredContactMethod(ContactMethodType preferredContactMethod) {
+    contactInformation.setPreferredContactMethod(preferredContactMethod);
+  }
+
+  public Integer getAge() {
+    return age;
+  }
+
+  public void setAge(Integer age) {
+    this.age = age;
   }
 }

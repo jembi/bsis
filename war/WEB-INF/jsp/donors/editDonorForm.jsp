@@ -17,6 +17,7 @@
 
 <c:set var="genderSelectorId">genderSelector-${unique_page_id}</c:set>
 <c:set var="editDonorFormDonorPanelsId">editDonorFormDonorPanels-${uniquePageId}</c:set>
+<c:set var="editDonorFormContactMethodTypesId">editDonorFormContactMethodTypes-${uniquePageId}</c:set>
 
 <script>
   $(document).ready(
@@ -55,6 +56,11 @@
           header : false
         });
 
+        $("#${editDonorFormContactMethodTypesId}").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
 
         function refetchForm() {
           $.ajax({
@@ -264,6 +270,20 @@
 					<ul>
 						<form:errors class="formError" path="donor.otherPhoneNumber" delimiter=", "></form:errors>
 					</ul>
+				</div>
+			</c:if>
+
+			<c:if test="${donorFields.preferredContactMethod.hidden != true }">
+				<div>
+					<form:label path="preferredContactMethod">${donorFields.preferredContactMethod.displayName}</form:label>
+					<form:select path="preferredContactMethod" id="${editDonorFormContactMethodTypesId}"
+											 class="editDonorFormPreferredContactMethods">
+						<form:option value="" selected="selected">&nbsp;</form:option>
+						<c:forEach var="preferredContactMethod" items="${preferredContactMethods}">
+							<form:option value="${preferredContactMethod.id}">${preferredContactMethod.contactMethodType}</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors class="formError" path="donor.preferredContactMethod" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 

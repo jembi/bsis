@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import viewmodel.DonorDeferralViewModel;
@@ -49,6 +50,9 @@ public class DonorController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private ContactMethodTypeRepository contactMethodTypeRepository;
   
   public DonorController() {
   }
@@ -205,6 +209,7 @@ public class DonorController {
 
     Donor savedDonor = null;
     if (result.hasErrors()) {
+      addEditSelectorOptions(mv.getModelMap());
       mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
@@ -330,18 +335,11 @@ public class DonorController {
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("errorMessage", message);
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
+    addEditSelectorOptions(mv.getModelMap());
 
     return mv;
   }
 
-  @RequestMapping(value = "/donorTypeAhead", method = RequestMethod.GET)
-  public @ResponseBody
-  List<DonorViewModel> donorTypeAhead(
-      @RequestParam("term") String term) {
-    List<Donor> donors = donorRepository.findAnyDonorStartsWith(term);
-    return getDonorsViewModels(donors);
-  }
-  
   @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
   public @ResponseBody
   Map<String, ? extends Object> deleteDonor(
@@ -404,6 +402,7 @@ public class DonorController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
+    m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
   }
 
   /**

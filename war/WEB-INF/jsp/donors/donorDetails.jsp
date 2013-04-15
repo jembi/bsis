@@ -37,6 +37,17 @@
 			<label>${donor.birthDate}</label>
 		</div>
 	</c:if>
+	<c:if test="${donorFields.age.hidden != true }">
+		<div>
+			<label>${donorFields.age.displayName}</label>
+			<c:if test="${not empty donor.age}">
+				<label>${donor.age} years</label>
+			</c:if>
+			<c:if test="${empty donor.age}">
+				<label>${donor.age}</label>
+			</c:if>
+		</div>
+	</c:if>
 	<c:if test="${donorFields.gender.hidden != true }">
 		<div>
 			<label>${donorFields.gender.displayName}</label>
@@ -95,6 +106,24 @@
 		<div>
 			<label>${donorFields.zipcode.displayName}</label>
 			<label>${donor.zipcode}</label>
+		</div>
+	</c:if>
+	<c:if test="${donorFields.phoneNumber.hidden != true }">
+		<div>
+			<label>${donorFields.phoneNumber.displayName}</label>
+			<label>${donor.phoneNumber}</label>
+		</div>
+	</c:if>
+	<c:if test="${donorFields.otherPhoneNumber.hidden != true }">
+		<div>
+			<label>${donorFields.otherPhoneNumber.displayName}</label>
+			<label>${donor.otherPhoneNumber}</label>
+		</div>
+	</c:if>
+	<c:if test="${donorFields.preferredContactMethod.hidden != true }">
+		<div>
+			<label>${donorFields.preferredContactMethod.displayName}</label>
+			<label>${donor.preferredContactMethod}</label>
 		</div>
 	</c:if>
 	<c:if test="${donorFields.donorPanel.hidden != true }">

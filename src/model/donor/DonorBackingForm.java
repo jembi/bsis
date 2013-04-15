@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import model.CustomDateFormatter;
 import model.address.ContactInformation;
+import model.address.ContactMethodType;
 import model.location.Location;
 import model.user.User;
 import model.util.Gender;
@@ -260,12 +261,21 @@ public class DonorBackingForm {
   }
 
   public String getAge() {
-    return ageSpecified;
+    if (donor.getBirthDateInferred() != null) {
+      DateTime dt1 = new DateTime(donor.getBirthDateInferred());
+      DateTime dt2 = new DateTime(new Date());
+      int year1 = dt1.year().get();
+      int year2 = dt2.year().get();
+      return new Integer(year2-year1).toString();
+    } else {
+      return ageSpecified;
+    }
   }
 
   public void setAge(String ageStr) {
     ageSpecified = ageStr;
     if (ageStr == null || StringUtils.isBlank(ageStr)) {
+      donor.setBirthDateInferred(null);
       return;
     }
     try {
@@ -323,6 +333,30 @@ public class DonorBackingForm {
       } catch (NumberFormatException ex) {
         ex.printStackTrace();
         donor.setDonorPanel(null);
+      }
+    }
+  }
+
+  public String getPreferredContactMethod() {
+    ContactMethodType contactMethodType = donor.getPreferredContactMethod();
+    if (contactMethodType == null || contactMethodType.getId() == null)
+      return null;
+    else
+      return contactMethodType.getId().toString();
+  }
+
+  public void setPreferredContactMethod(String contactMethodTypeId) {
+    if (StringUtils.isBlank(contactMethodTypeId)) {
+      donor.setPreferredContactMethod(null);
+    }
+    else {
+      ContactMethodType ct = new ContactMethodType();
+      try {
+        ct.setId(Integer.parseInt(contactMethodTypeId));
+        donor.setPreferredContactMethod(ct);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        donor.setPreferredContactMethod(null);
       }
     }
   }
