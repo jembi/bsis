@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,10 +34,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
@@ -345,6 +340,7 @@ public class WorksheetController {
     Long totalRecords = (Long) results.get(1);
     Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);
     List<BloodTest> bloodTests = worksheetRepository.getBloodTestsInWorksheet(worksheet);
+    System.out.println("Number of blood tests: " + bloodTests.size());
     return generateDatatablesMap(collectedSamples, bloodTests, totalRecords);
   }
 
@@ -401,38 +397,6 @@ public class WorksheetController {
     resultsMap.put("iTotalRecords", totalRecords);
     resultsMap.put("iTotalDisplayRecords", totalRecords);
     return resultsMap;
-  }
-
-  @RequestMapping(value="saveWorksheetTestResults", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object>
-          saveWorksheetTestResults(HttpServletRequest request,
-              HttpServletResponse response,
-              @RequestParam(value="params") String requestParams,
-              @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
-
-    Map<String, Object> result = new HashMap<String, Object>();
-
-    System.out.println(requestParams);
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      Map<String, Map<String, String>> testResultChanges = mapper.readValue(requestParams, HashMap.class);
-      System.out.println(testResultChanges);
-//      testResultRepository.saveTestResultsToWorksheet(worksheetBatchId, testResultChanges);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
-    return result;
   }
 
 }

@@ -61,23 +61,23 @@ $(document).ready(function() {
     "bSort" : false,
     "sPaginationType" : "full_numbers",
     "sAjaxSource" : "${nextPageUrl}",
-    "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]},
-                      { "sClass" : "white_bkg_class", "aTargets": [1,2,3,4,5,6]}
-    								 ],
+    "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
 
+      								 console.log("here");
       								 if (isWorksheetModified()) {
       								   // if unsaved changes then prompt user to save changes
       								   showUnsavedChangesDialog();
       								   return;
       								 }
-
+											 console.log("here1");
       								 oSettings.jqXHR = $.ajax({
       								   "datatype": "json",
       								   "type": "GET",
       								   "url": sSource,
       								   "data": aoData,
       								   "success": function(jsonResponse) {
+      								     						console.log("here2");
 											     						resetWorksheetCurrentPageData();
       								     						makeRowsEditable(jsonResponse.aaData);
       								     						fnCallback(jsonResponse);
@@ -367,34 +367,19 @@ $(document).ready(function() {
 							</c:forEach>
 						</tr>
 					</thead>
-						<tbody style="font-size: 11pt;">
-							<c:forEach var="collectedSample" items="${allCollectedSamples}">
-								<tr>
-									<td style="display: none">${collectedSample.id}</td>
-								  <c:if test="${worksheetConfig['collectionNumber'] == 'true'}">
-										<td>
-											${collectedSample.collectionNumber}
-										</td>
-									</c:if>
-									<c:forEach var="bloodTest" items="${bloodTests}">
-									  <c:if test="${worksheetConfig[bloodTest.name] == 'true'}">
-											<td></td>
-										</c:if>
-								</c:forEach>
-								</tr>
-							</c:forEach>
-						</tbody>
-						<tfoot>
-							<tr>
-							<!-- colspan must be set in order for buttons to appear at the appropriate position -->
-							<td colspan="${fn:length(bloodTests) + 2}" align="right">
-								<button class="worksheetSaveAndNextButton">Save</button>
-								<button class="worksheetUndoChangesOnPageButton">Undo changes on this page</button>
-							</td>
-							</tr>
+					<tbody style="font-size: 11pt;">
+					</tbody>
+					<tfoot>
+						<tr>
+						<!-- colspan must be set in order for buttons to appear at the appropriate position -->
+						<td colspan="${fn:length(bloodTests) + 2}" align="right">
+							<button class="worksheetSaveAndNextButton">Save</button>
+							<button class="worksheetUndoChangesOnPageButton">Undo changes on this page</button>
+						</td>
+						</tr>
 						</tfoot>
-					</table>
-				</div>
+				</table>
+			</div>
 		</div>
 	<div id="${childContentId}"></div>
 </div>
