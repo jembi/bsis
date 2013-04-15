@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -197,7 +198,7 @@ public class WorksheetController {
       mv.addObject("enteredCollectionNumbers", collectionNumbers);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     } else if (numValid > 0) {
-      worksheetRepository.addCollectionsToWorksheet(Long.parseLong(worksheetId), collectionNumbers);
+      worksheetRepository.addCollectionsToWorksheet(Long.parseLong(worksheetId), new HashSet<String>(collectionNumbers));
     }
 
     mv.setViewName("worksheets/worksheetDetail");

@@ -46,7 +46,7 @@ public class WorksheetRepository {
     return query.getSingleResult();
   }
 
-  public void addCollectionsToWorksheet(Long worksheetId, List<String> newCollectionNumbers) {
+  public void addCollectionsToWorksheet(Long worksheetId, Set<String> collectionNumbers) {
 
     String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples " +
     		"WHERE w.id=:worksheetId AND w.isDeleted=:isDeleted";
@@ -58,7 +58,7 @@ public class WorksheetRepository {
     		"LEFT JOIN FETCH c.worksheets WHERE " +
         "c.collectionNumber IN :collectionNumbers";
     TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionQueryStr, CollectedSample.class);
-    collectionsQuery.setParameter("collectionNumbers", newCollectionNumbers);
+    collectionsQuery.setParameter("collectionNumbers", collectionNumbers);
     List<CollectedSample> newCollections = collectionsQuery.getResultList();
 
     Worksheet worksheet = query.getSingleResult();
@@ -71,7 +71,8 @@ public class WorksheetRepository {
       if (existingCollectionNumbers.contains(c.getCollectionNumber()))
         continue;
       worksheet.getCollectedSamples().add(c);
-      c.getWorksheets().add(worksheet);
+//      c.getWorksheets().add(worksheet);
+//      em.merge(c);
     }
 
     em.merge(worksheet);

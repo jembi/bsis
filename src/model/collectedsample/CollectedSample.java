@@ -119,7 +119,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<Product> products;
 
-  @ManyToMany
+  @NotAudited
+  @ManyToMany(mappedBy="collectedSamples")
   private List<Worksheet> worksheets;
 
   @Column(precision=6, scale=2)

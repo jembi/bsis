@@ -102,7 +102,14 @@ $(document).ready(
       $("#${mainContentId}").find(".cancelSaveToWorksheetButton").button().click(toggleSaveToWorksheetFormDiv);
 
       function toggleSaveToWorksheetFormDiv() {
-        $("#${mainContentId}").find(".saveToWorksheetFormDiv").toggle("fast");
+        var saveToWorksheetFormDiv = $("#${mainContentId}").find(".saveToWorksheetFormDiv");
+        if (saveToWorksheetFormDiv.is(":visible"))
+          $("#${mainContentId}").find(".saveToWorksheetFormToggle")
+          											.button("option", {icons: {primary: 'ui-icon-plusthick'}});
+        else
+          $("#${mainContentId}").find(".saveToWorksheetFormToggle")
+																.button("option", {icons: {primary: 'ui-icon-minusthick'}});
+        saveToWorksheetFormDiv.toggle("fast");
   		}
 
       function hideSaveToWorksheetFormDiv() {

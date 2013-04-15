@@ -170,19 +170,6 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table CollectedSample_Worksheet (
-        collectedSamples_id bigint not null,
-        worksheets_id bigint not null
-    ) ENGINE=InnoDB;
-
-    create table CollectedSample_Worksheet_AUD (
-        REV integer not null,
-        collectedSamples_id bigint not null,
-        worksheets_id bigint not null,
-        REVTYPE tinyint,
-        primary key (REV, collectedSamples_id, worksheets_id)
-    ) ENGINE=InnoDB;
-
     create table CollectionBatch (
         id TINYINT(4) not null auto_increment,
         batchNumber varchar(30),
@@ -970,6 +957,11 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table Worksheet_CollectedSample (
+        worksheets_id bigint not null,
+        collectedSamples_id bigint not null
+    ) ENGINE=InnoDB;
+
     alter table BloodBagType_AUD 
         add index FKE16C6DF9DF74E053 (REV), 
         add constraint FKE16C6DF9DF74E053 
@@ -1091,24 +1083,6 @@
     alter table CollectedSample_AUD 
         add index FKD18B6684DF74E053 (REV), 
         add constraint FKD18B6684DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table CollectedSample_Worksheet 
-        add index FKC8D819C2EA518FDE (worksheets_id), 
-        add constraint FKC8D819C2EA518FDE 
-        foreign key (worksheets_id) 
-        references Worksheet (id);
-
-    alter table CollectedSample_Worksheet 
-        add index FKC8D819C2C02466CD (collectedSamples_id), 
-        add constraint FKC8D819C2C02466CD 
-        foreign key (collectedSamples_id) 
-        references CollectedSample (id);
-
-    alter table CollectedSample_Worksheet_AUD 
-        add index FK7FD9693DF74E053 (REV), 
-        add constraint FK7FD9693DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
@@ -1557,3 +1531,15 @@
         add constraint FK2D0D8F9FDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
+
+    alter table Worksheet_CollectedSample 
+        add index FK1BCDFCC2EA518FDE (worksheets_id), 
+        add constraint FK1BCDFCC2EA518FDE 
+        foreign key (worksheets_id) 
+        references Worksheet (id);
+
+    alter table Worksheet_CollectedSample 
+        add index FK1BCDFCC2C02466CD (collectedSamples_id), 
+        add constraint FK1BCDFCC2C02466CD 
+        foreign key (collectedSamples_id) 
+        references CollectedSample (id);

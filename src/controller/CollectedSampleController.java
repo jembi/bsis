@@ -530,10 +530,9 @@ public class CollectedSampleController {
     }
 
     String worksheetNumber = form.getWorksheetNumber();
-    System.out.println(worksheetNumber);
     ModelAndView mv = new ModelAndView("worksheetSaved");
     Map<String, Object> m = model.asMap();
-    m.put("worksheetBatchId", worksheetNumber);
+    m.put("worksheetNumber", worksheetNumber);
     try {
       collectedSampleRepository.saveToWorksheet(
                                         form.getCollectionNumber(),

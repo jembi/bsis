@@ -38,7 +38,7 @@ public class Worksheet implements ModificationTracker {
   private WorksheetType worksheetType;
 
   @NotAudited
-  @ManyToMany(mappedBy="worksheets")
+  @ManyToMany
   private List<CollectedSample> collectedSamples;
 
   private Boolean isDeleted;
