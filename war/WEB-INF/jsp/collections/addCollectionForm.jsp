@@ -230,7 +230,9 @@
 					<form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
 					<form:hidden path="donorIdHidden" />
 					<form:input path="donorNumber" class="donorNumber" value="${firstTimeRender ? collectionFields.donorNumber.defaultValue : ''}" />
-					<label class="link addCollectionFormFindDonor">Find donor</label>
+					<c:if test="${permissions['viewDonorInformation'] eq 'allowed'}">
+						<label class="link addCollectionFormFindDonor">Select donor</label>
+					</c:if>
 					<form:errors class="formError" path="collectedSample.donorNumber"
 						delimiter=", "></form:errors>
 					<form:errors class="formError" path="collectedSample.donor"
