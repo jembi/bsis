@@ -13,6 +13,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
+<c:set var="addCollectionBatchToWorksheetDialogId">addCollectionBatchToWorksheet-${unique_page_id}</c:set>
 
 <script>
   $(document).ready(
@@ -34,7 +35,7 @@
             $("#${tabContentId}").bind("editCollectionBatchCancel", editCollectionBatchDone);
 
   	        fetchContent("editCollectionBatchFormGenerator.html",
-              					 {collectionId: "${collectionBatch.id}"},
+              					 {collectionBatchId: "${collectionBatch.id}"},
               					 $("#${childContentId}")
   	        						);
         });
@@ -55,6 +56,29 @@
           notifyParentDone();
         });
 
+        $("#${mainContentId}").find(".addCollectionBatchToWorksheetButton")
+        											.button({icons: {primary : 'ui-icon-plusthick'}})
+        											.click(addCollectionBatchToWorksheet);
+
+        function addCollectionBatchToWorksheet() {
+          $("#${addCollectionBatchToWorksheetDialogId}").find(".findWorksheetFormSection")
+          																							.load("findWorksheetToAddCollectionBatchFormGenerator.html?"
+          																							    + $.param({collectionBatchId: "${collectionBatch.id}"}));
+
+          var addToWorksheetDialog = $("#${addCollectionBatchToWorksheetDialogId}").dialog({
+            modal: true,
+            title: "Select worksheet",
+            height: 600,
+            width: 800,
+            buttons: {
+              "Close" : function() {
+                					$(this).dialog("close");
+              					}
+            }
+          });
+          console.log(addToWorksheetDialog);
+        }
+        
         $("#${tabContentId}").find(".deleteButton").button({
           icons : {
             primary : 'ui-icon-trash'
@@ -98,6 +122,9 @@
 			<button type="button" class="cancelButton">
 				Done
 			</button>
+			<button type="button" class="addCollectionBatchToWorksheetButton">
+				Add collections in batch to worksheet
+			</button>
 			<!-- button type="button" class="editButton">
 				Edit
 			</button-->
@@ -130,4 +157,9 @@
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
 	Are	you sure you want to delete this Collection Batch?
+</div>
+
+<div id="${addCollectionBatchToWorksheetDialogId}" style="display: none;">
+	Find and select the worksheet you want to add this collection batch to
+	<div class="findWorksheetFormSection"></div> 
 </div>

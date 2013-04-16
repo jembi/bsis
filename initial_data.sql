@@ -996,7 +996,7 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("productsTabEnabled", "true", "tabs"),
 ("testResultsTabEnabled", "true", "tabs"),
 ("requestsTabEnabled", "true", "tabs"),
-("usageTabEnabled", "false", "tabs"),
+("usageTabEnabled", "true", "tabs"),
 ("reportsTabEnabled", "true", "tabs");
 
 insert into ContactMethodType (contactMethodType, isDeleted) values

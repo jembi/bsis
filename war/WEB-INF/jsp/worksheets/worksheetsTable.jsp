@@ -28,7 +28,7 @@ $(document).ready(
         								 ],
         "oTableTools" : {
           "sRowSelect" : "single",
-          "aButtons" : [ "print" ],
+          "aButtons" : [],
           "fnRowSelected" : function(node) {
 															$("#${mainContentId}").parent().trigger("collectionSummaryView");
 											        var elements = $(node).children();

@@ -30,7 +30,7 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-															$("#${mainContentId}").parent().trigger("collectionBatchSummaryView");
+															$("#${tabContentId}").parent().trigger("collectionBatchSummaryView");
 											        var elements = $(node).children();
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
@@ -53,22 +53,22 @@ $(document).ready(
           data: data,
           type: "GET",
           success: function(response) {
-            				 $("#${mainContentId}").trigger("collectionBatchSummaryView", response);
+            				 $("#${tabContentId}").trigger("collectionBatchSummaryView", response);
             			 }
         });
       }
 
       function refreshResults() {
-        showLoadingImage($("#${mainContentId}"));
+        showLoadingImage($("#${tabContentId}"));
         $.ajax({url: "${refreshUrl}",
           			type: "GET",
           			success: function(response) {
-          			  				 $("#${mainContentId}").html(response);
+          			  				 $("#${tabContentId}").html(response);
           							 }
         });
       }
 
-      $("#${mainContentId}").find(".collectionsBatchTable").bind("refreshResults", refreshResults);
+      $("#${tabContentId}").find(".collectionsBatchTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");

@@ -48,6 +48,8 @@ public class WorksheetRepository {
 
   public void addCollectionsToWorksheet(Long worksheetId, Set<String> collectionNumbers) {
 
+    if (collectionNumbers.isEmpty())
+      return;
     String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples " +
     		"WHERE w.id=:worksheetId AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
@@ -80,6 +82,9 @@ public class WorksheetRepository {
   }
 
   public List<Worksheet> findWorksheets(String worksheetNumber, List<String> worksheetTypes) {
+
+    if (worksheetTypes == null || worksheetTypes.size() == 0)
+      return Arrays.asList(new Worksheet[0]);
 
     List<Integer> worksheetTypeIds = new ArrayList<Integer>();
     for (String worksheetTypeIdStr : worksheetTypes) {

@@ -1,11 +1,14 @@
 package repository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 
 import org.apache.commons.lang3.StringUtils;
@@ -78,5 +81,14 @@ public class CollectionBatchRepository {
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", false);
     return query.getResultList();
+  }
+
+  public Set<String> findCollectionsInBatch(Integer batchId) {
+    CollectionBatch collectionBatch = findCollectionBatchByIdEager(batchId);
+    Set<String> collectionNumbers = new HashSet<String>();
+    for (CollectedSample c : collectionBatch.getCollectionsInBatch()) {
+      collectionNumbers.add(c.getCollectionNumber());
+    }
+    return collectionNumbers;
   }
 }

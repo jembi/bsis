@@ -121,7 +121,7 @@ $(document).ready(function() {
       function(event, content) {
     		$("#${mainContentId}").show();
     		$("#${childContentId}").html("");
-    		$("#${tabContentId}").find(".collectionsTable").trigger("refreshResults");
+    		$("#${tabContentId}").find(".collectionsBatchTable").trigger("refreshResults");
   		});
 
   $("#${findCollectionBatchFormId}").submit(function(event) {

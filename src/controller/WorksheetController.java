@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
+import repository.CollectionBatchRepository;
 import repository.GenericConfigRepository;
 import repository.WorksheetRepository;
 import repository.WorksheetTypeRepository;
@@ -48,6 +50,9 @@ public class WorksheetController {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
+
+  @Autowired
+  private CollectionBatchRepository collectionBatchRepository;
 
   @Autowired
   private WorksheetTypeRepository worksheetTypeRepository;
@@ -400,4 +405,40 @@ public class WorksheetController {
     return resultsMap;
   }
 
+  @RequestMapping(value = "/findWorksheetToAddCollectionBatchFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findWorksheetToAddCollectionBatchFormGenerator(HttpServletRequest request,
+      @RequestParam(value="collectionBatchId") Integer collectionBatchId) {
+
+    ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
+    FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
+    mv.addObject("findWorksheetForm", findWorksheetForm);
+    mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("worksheetResultClickUrl", "addCollectionBatchToWorksheet.html?collectionBatchId=" + collectionBatchId);
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "testResults.worksheet");
+    mv.addObject("tips", tips);
+    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
+    mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
+    return mv;
+  }
+
+  @RequestMapping(value="/addCollectionBatchToWorksheet", method=RequestMethod.GET)
+  public ModelAndView addCollectionBatchWorksheet(HttpServletRequest request,
+      @RequestParam(value="collectionBatchId") Integer collectionBatchId,
+      @RequestParam(value="worksheetId") Long worksheetId) {
+    ModelAndView mv = new ModelAndView();
+    Set<String> collectionNumbers = collectionBatchRepository.findCollectionsInBatch(collectionBatchId);
+    boolean success = false;
+    try {
+      worksheetRepository.addCollectionsToWorksheet(worksheetId, collectionNumbers);
+      success = true;
+      mv.setViewName("worksheets/collectionsAddedToWorksheetSuccess");
+    } catch (Exception ex) {
+      success = false;
+      mv.setViewName("worksheets/collectionsAddedToWorksheetError");
+    }
+    mv.addObject("success", success);
+    return mv;
+  }
 }
