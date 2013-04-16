@@ -2,7 +2,9 @@ package model.collectedsample;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -121,7 +123,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @NotAudited
   @ManyToMany(mappedBy="collectedSamples")
-  private List<Worksheet> worksheets;
+  private Set<Worksheet> worksheets;
 
   @Column(precision=6, scale=2)
   private BigDecimal haemoglobinCount;
@@ -160,6 +162,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
+    worksheets = new HashSet<Worksheet>();
   }
 
   public Long getId() {
@@ -287,11 +290,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public List<Worksheet> getWorksheets() {
+  public Set<Worksheet> getWorksheets() {
     return worksheets;
   }
 
-  public void setWorksheets(List<Worksheet> worksheets) {
+  public void setWorksheets(Set<Worksheet> worksheets) {
     this.worksheets = worksheets;
   }
 

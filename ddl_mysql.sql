@@ -979,7 +979,8 @@
 
     create table Worksheet_CollectedSample (
         worksheets_id bigint not null,
-        collectedSamples_id bigint not null
+        collectedSamples_id bigint not null,
+        primary key (worksheets_id, collectedSamples_id)
     ) ENGINE=InnoDB;
 
     alter table BloodBagType_AUD 

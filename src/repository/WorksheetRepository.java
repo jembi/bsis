@@ -69,14 +69,16 @@ public class WorksheetRepository {
       existingCollectionNumbers.add(c.getCollectionNumber());
     }
 
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
     for (CollectedSample c : newCollections) {
       if (existingCollectionNumbers.contains(c.getCollectionNumber()))
         continue;
-      worksheet.getCollectedSamples().add(c);
+      collectedSamples.add(c);
 //      c.getWorksheets().add(worksheet);
 //      em.merge(c);
     }
 
+    worksheet.getCollectedSamples().addAll(collectedSamples);
     em.merge(worksheet);
     em.flush();
   }

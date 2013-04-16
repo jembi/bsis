@@ -424,7 +424,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/addCollectionBatchToWorksheet", method=RequestMethod.GET)
-  public ModelAndView addCollectionBatchWorksheet(HttpServletRequest request,
+  public ModelAndView addCollectionBatchToWorksheet(HttpServletRequest request,
       @RequestParam(value="collectionBatchId") Integer collectionBatchId,
       @RequestParam(value="worksheetId") Long worksheetId) {
     ModelAndView mv = new ModelAndView();

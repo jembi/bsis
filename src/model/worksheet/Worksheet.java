@@ -1,8 +1,8 @@
 package model.worksheet;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,13 +14,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-
 import model.collectedsample.CollectedSample;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @Entity
 @Audited
@@ -39,7 +39,7 @@ public class Worksheet implements ModificationTracker {
 
   @NotAudited
   @ManyToMany
-  private List<CollectedSample> collectedSamples;
+  private Set<CollectedSample> collectedSamples;
 
   private Boolean isDeleted;
 
@@ -51,7 +51,7 @@ public class Worksheet implements ModificationTracker {
 
   public Worksheet() {
     modificationTracker = new RowModificationTracker();
-    collectedSamples = new ArrayList<CollectedSample>();
+    collectedSamples = new HashSet<CollectedSample>();
   }
 
   public Long getId() {
@@ -102,11 +102,11 @@ public class Worksheet implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public List<CollectedSample> getCollectedSamples() {
+  public Set<CollectedSample> getCollectedSamples() {
     return collectedSamples;
   }
 
-  public void setCollectedSamples(List<CollectedSample> collectedSamples) {
+  public void setCollectedSamples(Set<CollectedSample> collectedSamples) {
     this.collectedSamples = collectedSamples;
   }
 

@@ -475,7 +475,7 @@ public class CollectedSampleRepository {
     if (worksheet == null)
       return null;
 
-    List<CollectedSample> collectedSamples = worksheet.getCollectedSamples();
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>(worksheet.getCollectedSamples());
     Collections.sort(collectedSamples);
     return collectedSamples;
   }

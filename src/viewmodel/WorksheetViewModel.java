@@ -2,6 +2,7 @@ package viewmodel;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
@@ -37,7 +38,7 @@ public class WorksheetViewModel {
     return worksheet.getLastUpdatedBy();
   }
 
-  public List<CollectedSample> getCollectedSamples() {
+  public Set<CollectedSample> getCollectedSamples() {
     return worksheet.getCollectedSamples();
   }
 
