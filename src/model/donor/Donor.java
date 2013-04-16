@@ -49,9 +49,9 @@ public class Donor implements ModificationTracker {
    *  be sufficient. Smaller index keys are better. In most cases, this field
    *  will be auto-generated.
    */
-  @Column(length=15)
+  @Column(length=20, unique=true)
   @Index(name="donor_donorNumber_index")
-  @Length(max=15)
+  @Length(max=20)
   private String donorNumber;
 
   /**

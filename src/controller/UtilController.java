@@ -23,6 +23,7 @@ import model.donor.DonorUtils;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
+import model.worksheet.Worksheet;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,7 @@ import repository.ProductRepository;
 import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
+import repository.WorksheetRepository;
 
 @Component
 public class UtilController {
@@ -62,6 +64,9 @@ public class UtilController {
 
   @Autowired
   private CollectionBatchRepository collectionBatchRepository;
+
+  @Autowired
+  private WorksheetRepository worksheetRepository;
 
   @Autowired
   private TipsRepository tipsRepository;
@@ -363,5 +368,55 @@ public class UtilController {
 
   public String getNextBatchNumber() {
     return sequenceNumberRepository.getNextBatchNumber();
+  }
+
+  public boolean isDuplicateDonorNumber(Donor donor) {
+    String donorNumber = donor.getDonorNumber();
+    if (StringUtils.isBlank(donorNumber))
+      return false;
+    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateCollectionNumber(CollectedSample collection) {
+    String collectionNumber = collection.getCollectionNumber();
+    if (StringUtils.isBlank(collectionNumber))
+      return false;
+    CollectedSample existingCollection = collectedSampleRepository.findCollectionByCollectionNumberIncludeDeleted(collectionNumber);
+    if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateRequestNumber(Request request) {
+    String requestNumber = request.getRequestNumber();
+    if (StringUtils.isBlank(requestNumber))
+      return false;
+    Request existingRequest = requestRepository.findRequestByRequestNumberIncludeDeleted(requestNumber);
+    if (existingRequest != null && !existingRequest.getId().equals(request.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateCollectionBatchNumber(CollectionBatch collectionBatch) {
+    String batchNumber = collectionBatch.getBatchNumber();
+    if (StringUtils.isBlank(batchNumber))
+      return false;
+    CollectionBatch existingCollectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumberIncludeDeleted(batchNumber);
+    if (existingCollectionBatch != null && !existingCollectionBatch.getId().equals(collectionBatch.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateWorksheetNumber(Worksheet worksheet) {
+    String worksheetNumber = worksheet.getWorksheetNumber();
+    if (StringUtils.isBlank(worksheetNumber))
+      return false;
+    Worksheet existingWorksheet = worksheetRepository.findWorksheetByWorksheetNumberIncludeDeleted(worksheetNumber);
+    if (existingWorksheet != null && !existingWorksheet.getId().equals(worksheet.getId()))
+      return true;
+    return false;
   }
 }

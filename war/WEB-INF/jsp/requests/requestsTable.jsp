@@ -20,6 +20,8 @@ $(document).ready(
       var requestsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : 'C<"H"lfrT>t<"F"ip>T',
+        "aoColumnDefs" :  [{ "sClass" : "hide_class", "aTargets": [0]}
+        									],
         "oTableTools" : {
           "sRowSelect" : "single",
           "aButtons" : [],
@@ -131,7 +133,7 @@ $(document).ready(
 								<td>${request.requiredDate}</td>
 							</c:if>
 							<c:if test="${requestFields.productType.hidden != true}">
-								<td>${request.productType.productType}</td>
+								<td>${request.productType.productTypeShortName}</td>
 							</c:if>
 							<c:if test="${requestFields.numUnitsRequested.hidden != true}">
 								<td>${request.numUnitsRequested}</td>

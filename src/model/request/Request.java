@@ -43,7 +43,7 @@ public class Request implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @Column(length=30)
+  @Column(length=20, unique=true)
   @Index(name="request_requestNumber_index")
   private String requestNumber;
 
@@ -144,6 +144,7 @@ public class Request implements ModificationTracker {
 
   public void copy(Request request) {
     assert (this.getId() == request.getId());
+    this.requestNumber = request.requestNumber;
     this.patientBloodAbo = request.patientBloodAbo;
     this.patientBloodRh = request.patientBloodRh;
     this.requestSite = request.requestSite;

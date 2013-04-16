@@ -245,6 +245,18 @@ public class DonorRepository {
     return query.setParameter("donorNumber", donorNumber).getSingleResult();
   }
 
+  public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
+    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber";
+    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+    Donor donor = null;
+    try {
+      donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return donor;
+  }
+
   public List<DeferralReason> getDeferralReasons() {
     String queryString = "SELECT d from DeferralReason d WHERE d.isDeleted=:isDeleted";
     TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);

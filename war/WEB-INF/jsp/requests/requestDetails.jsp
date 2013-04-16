@@ -28,7 +28,7 @@
 		<c:if test="${requestFields.patientBloodRh.hidden != true }">
 			<div>
 				<label>${requestFields.patientBloodRh.displayName}</label>
-				<label>${request.patientBloodRh}</label>
+				<label>${request.patientBloodRh eq '+' ? 'POS' : request.patientBloodRh eq '-' ? 'NEG' : ''}</label>
 			</div>
 		</c:if>
 		<c:if test="${requestFields.productType.hidden != true }">

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -145,6 +146,20 @@ public class WorksheetRepository {
     query.setParameter("worksheetNumber", worksheetNumber);
     query.setParameter("isDeleted", false);
     return query.getSingleResult();
+  }
+
+  public Worksheet findWorksheetByWorksheetNumberIncludeDeleted(String worksheetNumber) {
+    String queryStr = "SELECT w from Worksheet w WHERE " +
+        "w.worksheetNumber=:worksheetNumber";
+    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
+    query.setParameter("worksheetNumber", worksheetNumber);
+    Worksheet worksheet = null;
+    try {
+      worksheet = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return worksheet;
   }
 
   public List<BloodTest> getBloodTestsInWorksheet(Worksheet worksheet) {

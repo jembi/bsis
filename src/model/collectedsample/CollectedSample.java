@@ -64,7 +64,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
    * Very common usecase to search for collection by collection number.
    * In most cases the collection numbers will be preprinted labels.
    */
-  @Column(length=20)
+  @Column(length=20, unique=true)
   @Index(name="collectedSample_collectionNumber_index")
   private String collectionNumber;
 

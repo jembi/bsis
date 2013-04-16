@@ -33,7 +33,7 @@ public class CollectionBatch implements ModificationTracker {
   @Column(nullable=false, columnDefinition="TINYINT(4)")
   private Integer id;
 
-  @Column(length=30)
+  @Column(length=20, unique=true)
   private String batchNumber;
 
   @LocationExists

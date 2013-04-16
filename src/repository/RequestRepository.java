@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -192,11 +193,28 @@ public class RequestRepository {
             Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestNumber", requestNumber);
-    List<Request> requests = query.getResultList();
-    if (CollectionUtils.isEmpty(requests)) {
-      return null;
+    Request request = null;
+    try {
+      request = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
     }
-    return requests.get(0);
+    return request;
+  }
+
+  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) {
+    TypedQuery<Request> query = em
+        .createQuery(
+            "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber",
+            Request.class);
+    query.setParameter("requestNumber", requestNumber);
+    Request request = null;
+    try {
+      request = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return request;
   }
 
   public Request updateOrAddRequest(Request request) {

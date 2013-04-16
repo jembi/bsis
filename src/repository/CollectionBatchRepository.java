@@ -50,6 +50,19 @@ public class CollectionBatchRepository {
     return query.setParameter("batchNumber", batchNumber).getSingleResult();
   }
 
+  public CollectionBatch findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber) {
+    String queryString = "SELECT b FROM CollectionBatch b " +
+        "WHERE b.batchNumber = :batchNumber";
+    TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
+    CollectionBatch batch = null;
+    try {
+      batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    return batch;
+  }
+
   public CollectionBatch addCollectionBatch(CollectionBatch collectionBatch) {
     em.persist(collectionBatch);
     em.flush();

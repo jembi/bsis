@@ -31,7 +31,7 @@ public class Worksheet implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @Column(length=20)
+  @Column(length=20, unique=true)
   private String worksheetNumber;
 
   @ManyToOne

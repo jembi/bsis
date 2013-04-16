@@ -425,6 +425,24 @@ public class CollectedSampleRepository {
     return c;
   }
 
+  public CollectedSample findCollectionByCollectionNumberIncludeDeleted(
+      String collectionNumber) {
+    String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber";
+    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
+    query.setParameter("collectionNumber", collectionNumber);
+    CollectedSample c = null;
+    try {
+       c = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+      System.out.println("Collection number not found: " + collectionNumber);
+    } catch (NonUniqueObjectException ex) {
+      ex.printStackTrace();
+      System.out.println("Multiple collections for collection: " + collectionNumber);
+    }
+    return c;
+  }
+
   public void saveToWorksheet(String collectionNumber,
       List<Integer> bloodBagTypeIds, List<Long> centerIds,
       List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo,
