@@ -11,6 +11,7 @@ public class FindDonorBackingForm {
   private String firstName;
   private String lastName;
   private List<BloodGroup> bloodGroups;
+  private boolean createDonorSummaryView;
 
   private String anyBloodGroup;
 
@@ -55,5 +56,13 @@ public class FindDonorBackingForm {
 
   public String getAnyBloodGroup() {
     return anyBloodGroup;
+  }
+
+  public boolean getCreateDonorSummaryView() {
+    return createDonorSummaryView;
+  }
+
+  public void setCreateDonorSummaryView(boolean createDonorSummaryView) {
+    this.createDonorSummaryView = createDonorSummaryView;
   }
 }

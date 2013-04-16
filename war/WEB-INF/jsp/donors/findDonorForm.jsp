@@ -104,6 +104,7 @@ $(document).ready(function() {
 		</div>
 		<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
 			class="formInTabPane">
+			<form:hidden path="createDonorSummaryView" />
 			<div>
 				<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
 				<form:input path="donorNumber" />

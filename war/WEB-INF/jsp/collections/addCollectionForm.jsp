@@ -21,6 +21,8 @@
 <c:set var="addCollectionFormDonationTypeId">addCollectionFormDonationType-${unique_page_id}</c:set>
 <c:set var="addCollectionFormUseBatchCheckboxId">addCollectionFormUseBatchCheckbox-${unique_page_id}</c:set>
 
+<c:set var="addCollectionFormFindDonorDialogId">addCollectionFormFindDonorFormDialog-${unique_page_id}</c:set>
+
 <script>
   $(document).ready(
       function() {
@@ -34,6 +36,32 @@
 	        $("#${tabContentId}").parent().trigger("editCollectionCancel");
         }
 
+        $("#${mainContentId}").find(".addCollectionFormFindDonor")
+        											.click(showFindDonorDialog);
+
+        function showFindDonorDialog() {
+          $("#${addCollectionFormFindDonorDialogId}").find(".findDonorFormSection")
+							.load("findDonorSelectorFormGenerator.html?");
+          $("#${addCollectionFormFindDonorDialogId}").find(".findDonorFormSection").bind("donorSelected", donorSelected);
+
+					var findDonorDialog = $("#${addCollectionFormFindDonorDialogId}").dialog({
+															modal: true,
+															title: "Select donor",
+															height: 600,
+															width: 900,
+															buttons: {
+																"Close" : function() {
+																						$(this).dialog("close");
+																					}
+															}
+														});
+        }
+
+        function donorSelected(event, data) {
+          $("#${addCollectionFormFindDonorDialogId}").dialog("close");
+          $("#${mainContentId}").find('input[name="donorNumber"]').val(data.donorNumber);
+        }
+        
         $("#${mainContentId}").find(".addCollectionButton").button({
           icons : {
             primary : 'ui-icon-plusthick'
@@ -202,6 +230,7 @@
 					<form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
 					<form:hidden path="donorIdHidden" />
 					<form:input path="donorNumber" class="donorNumber" value="${firstTimeRender ? collectionFields.donorNumber.defaultValue : ''}" />
+					<label class="link addCollectionFormFindDonor">Find donor</label>
 					<form:errors class="formError" path="collectedSample.donorNumber"
 						delimiter=", "></form:errors>
 					<form:errors class="formError" path="collectedSample.donor"
@@ -326,4 +355,8 @@
 			</div>
 	</div>
 	
+</div>
+
+<div id="${addCollectionFormFindDonorDialogId}" style="display: none;">
+	<div class="findDonorFormSection"></div> 
 </div>

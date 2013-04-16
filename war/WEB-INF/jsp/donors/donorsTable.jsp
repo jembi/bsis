@@ -50,8 +50,11 @@ $(document).ready(
             					          return;
             					        }
             					        var selectedRowId = elements[0].innerHTML;
-            					        createDonorSummary("donorSummary.html",
-                    							{donorId: selectedRowId});
+            					        var donorNumber = elements[1].innerHTML;
+            									$("#${tabContentId}").parent().trigger("donorSelected", {donorNumber: donorNumber});
+            									if ("${createDonorSummaryView}" === "true") {
+            					        	createDonorSummary("${donorRowClickUrl}",	{donorId: selectedRowId});
+            									}
           									},
           "fnRowDeselected" : function(node) {
           									},

@@ -367,6 +367,7 @@ public class DonorController {
   public ModelAndView findDonorFormGenerator(HttpServletRequest request, Model model) {
 
     FindDonorBackingForm form = new FindDonorBackingForm();
+    form.setCreateDonorSummaryView(true);
     model.addAttribute("findDonorForm", form);
 
     ModelAndView mv = new ModelAndView("donors/findDonorForm");
@@ -383,7 +384,7 @@ public class DonorController {
 
   @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
   public ModelAndView findDonor(HttpServletRequest request,
-      @ModelAttribute("findDonorForm") DonorBackingForm form,
+      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
       BindingResult result, Model model) {
 
     ModelAndView modelAndView = new ModelAndView("donors/donorsTable");
@@ -395,6 +396,8 @@ public class DonorController {
     m.put("contentLabel", "Find Donors");
     m.put("nextPageUrl", getNextPageUrl(request));
     m.put("refreshUrl", getUrl(request));
+    m.put("donorRowClickUrl", "donorSummary.html");
+    m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
@@ -520,6 +523,25 @@ public class DonorController {
     model.put("refreshUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
+  }
+
+  @RequestMapping(value = "/findDonorSelectorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView findDonorSelectorFormGenerator(HttpServletRequest request, Model model) {
+
+    FindDonorBackingForm form = new FindDonorBackingForm();
+    form.setCreateDonorSummaryView(false);
+    model.addAttribute("findDonorForm", form);
+
+    ModelAndView mv = new ModelAndView("donors/findDonorForm");
+    Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(model.asMap(), "donors.finddonor");
+    // to ensure custom field names are displayed in the form
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Find Donors");
+    m.put("refreshUrl", "findDonorSelectorFormGenerator.html");
+    addEditSelectorOptions(mv.getModelMap());
+    mv.addObject("model", m);
+    return mv;
   }
 
   private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
