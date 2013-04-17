@@ -19,36 +19,132 @@
 <script>
 $(document).ready(function() {
 
+  var currentWell = undefined;
   // this object stores all the data entered into the wells
   var ttidata = {};
 
   for (var i = 1; i <= ${plate.numRows}; ++i) {
     ttidata[i] = {};
     for (var j = 1; j <= ${plate.numColumns}; ++j) {
-      ttidata[i][j] = {'result' : ''};
+      ttidata[i][j] = {'contents' : 'empty'};
     }
   }
 
-  console.log(ttidata);
+  function initAllWells() {
+    $.each($("#${mainContentId}").find(".wellInput"), function() {
+      updateWellColor(this);
+    });
+  }
 
-  $("#${mainContentId}").find(".wellInput").focusout(focusOutOfWell);
+  initAllWells();
 
-  
-  function focusOutOfWell() {
-    if ($(this).val().length > 0) {
-    	$(this).addClass("wellWithData");
+  $("#${mainContentId}").find(".wellInput")
+  											.click(wellClicked);
+
+  function wellClicked() {
+    if (currentWell !== undefined) {
+      updateWellDataFromForm(currentWell);
+      emptyWellDetailsForm();
+      showTestResultInWell(currentWell);
+      updateWellColor(currentWell);
+      deselectWell(currentWell);
+    }
+    showWellDetailsForm();
+    updateWellColor(this);
+    populateWellDetailsForm(this);
+    selectWell(this);
+    currentWell = this;
+  }
+
+  function showWellDetailsForm() {
+    $("#${mainContentId}").find(".wellDetails").show();
+  }
+
+  function showTestResultInWell(inputElement) {
+    var rowNum = $(inputElement).data("rownum");
+    var colNum = $(inputElement).data("colnum");
+    if (ttidata[rowNum][colNum].contents === "sample") {
+      $(inputElement).val(ttidata[rowNum][colNum].testResult);
     }
   }
 
-  $("#${mainContentId}").find(".wellInput").focus(function() {
-    $("#${mainContentId}").find(".wellDetails")
-    										  .show();
-    if ($(this).val().length > 0) {
-    	$(this).removeClass("wellWithData");
-    }
-  });
+  function populateWellDetailsForm(inputElement) {
 
-  $.each($("#${mainContentId}").find(".wellInput"), focusOutOfWell);
+    var rowNum = $(inputElement).data("rownum");
+    var colNum = $(inputElement).data("colnum");
+
+    var wellDetailsForm = $("#${mainContentId}").find(".wellDetails");
+
+    wellDetailsForm.find('select[name="wellType"]').val(ttidata[rowNum][colNum].welltype);
+    wellDetailsForm.find('input[name="collectionNumber"]').val(ttidata[rowNum][colNum].collectionNumber);
+    wellDetailsForm.find('input[name="testResult"]').val(ttidata[rowNum][colNum].testresult);
+    wellDetailsForm.find('input[name="machineReading"]').val(ttidata[rowNum][colNum].machineReading);
+  }
+
+  function emptyWellDetailsForm() {
+    var wellDetailsForm = $("#${mainContentId}").find(".wellDetails");
+    wellDetailsForm.find('input[name="collectionNumber"]').val("");
+    wellDetailsForm.find('input[name="testResult"]').val("");
+    wellDetailsForm.find('input[name="machineReading"]').val("");
+  }
+
+  function updateWellDataFromForm(inputElement) {
+    var wellDetailsForm = $("#${mainContentId}").find(".wellDetails");
+    var wellType = wellDetailsForm.find('select[name="wellType"]').val();
+    var collectionNumber = wellDetailsForm.find('input[name="collectionNumber"]').val();
+    var testResult = wellDetailsForm.find('input[name="testResult"]').val();
+    var machineReading = wellDetailsForm.find('input[name="machineReading"]').val();
+
+    var rowNum = $(inputElement).data("rownum");
+    var colNum = $(inputElement).data("colnum");
+
+    if (collectionNumber !== undefined && collectionNumber.length > 0) {
+      ttidata[rowNum][colNum].contents = "sample";
+      ttidata[rowNum][colNum].welltype = wellType;
+      ttidata[rowNum][colNum].collectionNumber = collectionNumber;
+      ttidata[rowNum][colNum].testResult = testResult;
+      ttidata[rowNum][colNum].machineReading = machineReading;
+    } else if (machineReading !== undefined && machineReading.length > 0) {
+      // if collection number is not present then we can do nothing with the test result
+      // do not store the test result
+      ttidata[rowNum][colNum].contents = "other";
+      ttidata[rowNum][colNum].welltype = wellType;
+      ttidata[rowNum][colNum].machineReading = machineReading;
+    }
+  }
+
+  function populateWellDetailsForm(inputElement) {
+  }
+
+  function updateWellColor(inputElement) {
+    var rowNum = $(inputElement).data("rownum");
+    var colNum = $(inputElement).data("colnum");
+    if (ttidata[rowNum] === undefined)
+      return;
+    if (ttidata[rowNum][colNum] === undefined)
+      return;
+    if (ttidata[rowNum][colNum].contents === undefined)
+      return;
+
+    var backgroundColor = "white";
+    switch (ttidata[rowNum][colNum].contents) {
+    case 'empty': backgroundColor = "white";
+    							break;
+    case 'sample': backgroundColor = "rgb(0, 100, 44)";
+    							 break;
+    default: backgroundColor = "rgb(155, 155, 213)";
+    							break;
+    }
+    $(inputElement).css("background", backgroundColor);
+  }
+
+  function deselectWell(inputElement) {
+    $(inputElement).css("border-color", "#dadada");
+  }
+
+  function selectWell(inputElement) {
+    $(inputElement).css("border-color", "red");
+  }
 
 	$("#${mainContentId}").find(".saveButton").
 	button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
@@ -199,11 +295,14 @@ $(document).ready(function() {
 											 border-radius: ${ttiConfig['titerWellRadius']}px;
 											 text-align: center;
 											 border-color: ${wellBorderColor};
+											 color: white;
+											 background: white;
 											 padding: 0;
 											 "
 								data-rownum = "${rowNum}"
 								data-colnum = "${colNum}"
 								value="${testResultValue}"
+								readonly="readonly"
 								class="wellInput" />
 
 					 	</div>
@@ -212,11 +311,35 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 
-		<div style="position: relative; height: 220px;">
-		<div class="wellDetails formInTabPane" style="height: 150px; margin-top: 15px; width: 93%; position: absolute; left: 0; right: 0; top: 0;">
+		<div style="position: relative; height: 260px;">
+		<div class="wellDetails formInTabPane"
+				 style="margin-top: 15px; width: 93%; display: none;
+				 			  position: absolute; left: 0; right: 0; top: 0;">
+			<div>
+				<label>Row No.</label>
+				<label class="rowNumber" style="width: auto;"></label>
+				<label>Column No.</label>
+				<label class="columnNumber" style="width: auto;"></label>
+			</div>
+			<div>
+				<label>Type of well</label>
+				<select name="wellType">
+					<c:forEach var="wellType" items="${allWellTypes}">
+						<option value="${wellType.id}">${wellType.wellType}</option>
+					</c:forEach>
+				</select>
+			</div>
 			<div>
 				<label>Collection number</label>
-				<input name="collectionNumber" />
+				<input name="collectionNumber" placeholder="Collection number" />
+			</div>
+			<div>
+				<label>Result</label>
+				<input name="testResult" placeholder="Allowed results: ${ttiTest.validResults}" />
+			</div>
+			<div>
+				<label>Machine reading</label>
+				<input name="machineReading" placeholder="Optical Density"/>
 			</div>
 		</div>
 

@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
+import repository.WellTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
@@ -50,6 +51,9 @@ public class TTIController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  private WellTypeRepository wellTypeRepository;
 
   public TTIController() {
   }
@@ -306,8 +310,9 @@ public class TTIController {
       @RequestParam(value="ttiTestId") Integer ttiTestId) {
     ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheet");
     mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
+    mv.addObject("ttiTest", bloodTestingRepository.findBloodTestById(ttiTestId));
     mv.addObject("ttiConfig", genericConfigRepository.getConfigProperties("ttiWells"));
+    mv.addObject("allWellTypes", wellTypeRepository.getAllWellTypes());
     return mv;
   }
-
 }

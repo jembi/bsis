@@ -265,4 +265,12 @@ public class BloodTestingRepository {
     }
     return recentBloodTestResults;
   }
+
+  public BloodTest findBloodTestById(Integer bloodTestId) {
+    String queryStr = "SELECT bt FROM BloodTest bt WHERE " +
+        "bt.id=:bloodTestId";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("bloodTestId", bloodTestId);
+    return query.getSingleResult();
+  }
 }

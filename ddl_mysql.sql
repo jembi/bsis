@@ -37,10 +37,10 @@
 
     create table BloodTestResult (
         id bigint not null auto_increment,
+        machineReading decimal(7,3),
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        opticalDensity decimal(7,3),
         result varchar(10),
         testedOn datetime,
         bloodTest_id SMALLINT,
@@ -934,6 +934,24 @@
         primary key (REV, users_id, roles_id)
     ) ENGINE=InnoDB;
 
+    create table WellType (
+        id SMALLINT not null auto_increment,
+        isDeleted boolean,
+        requiresSample boolean,
+        wellType varchar(30),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table WellType_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isDeleted boolean,
+        requiresSample boolean,
+        wellType varchar(30),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table Worksheet (
         id bigint not null auto_increment,
         isDeleted boolean,
@@ -1533,6 +1551,12 @@
     alter table User_Role_AUD 
         add index FK269D713BDF74E053 (REV), 
         add constraint FK269D713BDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table WellType_AUD 
+        add index FKD3033B19DF74E053 (REV), 
+        add constraint FKD3033B19DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

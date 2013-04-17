@@ -43,7 +43,7 @@ public class BloodTestResult implements ModificationTracker {
   private String result;
 
   @Column(precision=7, scale=3)
-  private BigDecimal opticalDensity;
+  private BigDecimal machineReading;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
@@ -138,11 +138,11 @@ public class BloodTestResult implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public BigDecimal getOpticalDensity() {
-    return opticalDensity;
+  public BigDecimal getMachineReading() {
+    return machineReading;
   }
 
-  public void setOpticalDensity(BigDecimal opticalDensity) {
-    this.opticalDensity = opticalDensity;
+  public void setMachineReading(BigDecimal machineReading) {
+    this.machineReading = machineReading;
   }
 }

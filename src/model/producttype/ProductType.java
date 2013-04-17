@@ -17,7 +17,7 @@ public class ProductType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
   @Column(length=30)
