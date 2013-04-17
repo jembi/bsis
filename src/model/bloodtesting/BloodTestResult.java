@@ -1,5 +1,6 @@
 package model.bloodtesting;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -40,6 +41,9 @@ public class BloodTestResult implements ModificationTracker {
 
   @Column(length=10)
   private String result;
+
+  @Column(precision=7, scale=3)
+  private BigDecimal opticalDensity;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
@@ -132,5 +136,13 @@ public class BloodTestResult implements ModificationTracker {
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public BigDecimal getOpticalDensity() {
+    return opticalDensity;
+  }
+
+  public void setOpticalDensity(BigDecimal opticalDensity) {
+    this.opticalDensity = opticalDensity;
   }
 }

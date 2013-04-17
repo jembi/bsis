@@ -18,7 +18,21 @@
 
 <script>
 $(document).ready(function() {
+
+  // this object stores all the data entered into the wells
+  var ttidata = {};
+
+  for (var i = 1; i <= ${plate.numRows}; ++i) {
+    ttidata[i] = {};
+    for (var j = 1; j <= ${plate.numColumns}; ++j) {
+      ttidata[i][j] = {'result' : ''};
+    }
+  }
+
+  console.log(ttidata);
+
   $("#${mainContentId}").find(".wellInput").focusout(focusOutOfWell);
+
   
   function focusOutOfWell() {
     if ($(this).val().length > 0) {
@@ -27,6 +41,8 @@ $(document).ready(function() {
   }
 
   $("#${mainContentId}").find(".wellInput").focus(function() {
+    $("#${mainContentId}").find(".wellDetails")
+    										  .show();
     if ($(this).val().length > 0) {
     	$(this).removeClass("wellWithData");
     }
@@ -131,6 +147,7 @@ $(document).ready(function() {
 			</jsp:include>
 		</c:if>
 
+		<div style="width: 620px;">
 		<div class="ttiPlate">
 				<input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
 									 border-radius: ${ttiConfig['titerWellRadius']}px;
@@ -147,7 +164,7 @@ $(document).ready(function() {
 												 text-align: center;
 												 background: rgb(255, 208, 165);
 												 color: black;
-												 padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
+												 padding: 0;" value="${colNum}" disabled="disabled" />
 					 	</div>
 				</c:forEach>
 
@@ -164,59 +181,54 @@ $(document).ready(function() {
 										 padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
 
 					<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
-						<c:set var="collection" value="${collections[colNum-1]}" />
 						<div class="wellBox">
 							<!-- square around the well -->
-							<c:if test="${empty collection}">
-								<!-- show empty wells with disabled input -->
-								<input
-									style="width: ${ttiConfig['titerWellRadius']}px; 
-												 height: ${ttiConfig['titerWellRadius']}px;
-												 border-radius: ${ttiConfig['titerWellRadius']}px;
-												 background: rgb(175, 175, 175);
-												 text-align: center;
-												 padding: 0;
-												 "
-									disabled="disabled"/>
-							</c:if>
-							<c:if test="${not empty collection}">
-								<!-- non-empty wells -->
-								<c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
-							  <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
-							  <c:if test="${not empty errorMap[collection.id][testId]}">
-							  	<c:set var="wellBorderColor" value="red" />
-						  	</c:if>
-							  <c:if test="${empty errorMap[collection.id][testId]}">
-							  	<c:set var="wellBorderColor" value="" />
-						  	</c:if>
-									<input
-										style="width: ${ttiConfig['titerWellRadius']}px; 
-													 height: ${ttiConfig['titerWellRadius']}px;
-													 border-radius: ${ttiConfig['titerWellRadius']}px;
-													 text-align: center;
-													 border-color: ${wellBorderColor};
-													 padding: 0;
-													 "
-										title="${collection.collectionNumber}"
-										data-validresults="${bloodTestsOnPlate[rowNum-1].validResults}"
-										data-collectionid="${collection.id}"
-										data-testid="${bloodTestsOnPlate[rowNum-1].id}"
-										value="${testResultValue}"
-										class="wellInput" />
-							</c:if>
+							<!-- non-empty wells -->
+							<c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
+						  <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
+						  <c:if test="${not empty errorMap[collection.id][testId]}">
+						  	<c:set var="wellBorderColor" value="red" />
+					  	</c:if>
+						  <c:if test="${empty errorMap[collection.id][testId]}">
+						  	<c:set var="wellBorderColor" value="" />
+					  	</c:if>
+
+							<input
+								style="width: ${ttiConfig['titerWellRadius']}px; 
+											 height: ${ttiConfig['titerWellRadius']}px;
+											 border-radius: ${ttiConfig['titerWellRadius']}px;
+											 text-align: center;
+											 border-color: ${wellBorderColor};
+											 padding: 0;
+											 "
+								data-rownum = "${rowNum}"
+								data-colnum = "${colNum}"
+								value="${testResultValue}"
+								class="wellInput" />
+
 					 	</div>
 					</c:forEach>
-				<label style="width: 70px;">${bloodTestsOnPlate[rowNum-1].testNameShort}</label>
 				<br />
 			</c:forEach>
 		</div>
 
-		<div style="margin-left: 352px;">
-			<label></label>
-			<button type="button" class="saveButton">
-				Save
-			</button>
+		<div style="position: relative; height: 220px;">
+		<div class="wellDetails formInTabPane" style="height: 150px; margin-top: 15px; width: 93%; position: absolute; left: 0; right: 0; top: 0;">
+			<div>
+				<label>Collection number</label>
+				<input name="collectionNumber" />
+			</div>
 		</div>
+
+			<div style="position: absolute; right: 0; bottom: 0;">
+				<label></label>
+				<button type="button" class="saveButton">
+					Save all test results on plate
+				</button>
+			</div>
+		</div>
+		</div>
+
 
 	</div>
 </div>

@@ -801,3 +801,11 @@ tr > td
 	 padding: 3px;
 }
 
+.wellDetails {
+	border: 1px solid #7688A5;
+	border-radius: 5px;
+	width: 500px;
+	height: 130px;
+	margin-left: 45px;
+	background: rgb(212, 228, 227);
+}
