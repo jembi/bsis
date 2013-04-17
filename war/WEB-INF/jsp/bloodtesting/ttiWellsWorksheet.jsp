@@ -33,6 +33,9 @@ $(document).ready(function() {
   function initAllWells() {
     $.each($("#${mainContentId}").find(".wellInput"), function() {
       updateWellColor(this);
+      var rowNum = $(this).data("rownum");
+      var colNum = $(this).data("colnum");
+      ttidata[rowNum][colNum].well = this;
     });
   }
 
@@ -49,17 +52,26 @@ $(document).ready(function() {
       updateWellColor(currentWell);
       deselectWell(currentWell);
     }
-    showWellDetailsForm();
-    updateWellColor(this);
-    populateWellDetailsForm(this);
-    selectWell(this);
-    currentWell = this;
+    if (this == currentWell) {
+      hideWellDetailsForm();
+      currentWell = undefined;
+    } else {
+	    showWellDetailsForm();
+	    updateWellColor(this);
+	    populateWellDetailsForm(this);
+	    selectWell(this);
+	    currentWell = this;
+    }
   }
 
   function showWellDetailsForm() {
     $("#${mainContentId}").find(".wellDetails").show();
   }
 
+  function hideWellDetailsForm() {
+    $("#${mainContentId}").find(".wellDetails").hide();
+  }
+  
   function showTestResultInWell(inputElement) {
     var rowNum = $(inputElement).data("rownum");
     var colNum = $(inputElement).data("colnum");
@@ -75,9 +87,11 @@ $(document).ready(function() {
 
     var wellDetailsForm = $("#${mainContentId}").find(".wellDetails");
 
+    wellDetailsForm.find(".rowNumber").text(String.fromCharCode("A".charCodeAt(0) + rowNum-1));
+    wellDetailsForm.find(".columnNumber").text(colNum);
     wellDetailsForm.find('select[name="wellType"]').val(ttidata[rowNum][colNum].welltype);
     wellDetailsForm.find('input[name="collectionNumber"]').val(ttidata[rowNum][colNum].collectionNumber);
-    wellDetailsForm.find('input[name="testResult"]').val(ttidata[rowNum][colNum].testresult);
+    wellDetailsForm.find('input[name="testResult"]').val(ttidata[rowNum][colNum].testResult);
     wellDetailsForm.find('input[name="machineReading"]').val(ttidata[rowNum][colNum].machineReading);
   }
 
@@ -113,9 +127,6 @@ $(document).ready(function() {
     }
   }
 
-  function populateWellDetailsForm(inputElement) {
-  }
-
   function updateWellColor(inputElement) {
     var rowNum = $(inputElement).data("rownum");
     var colNum = $(inputElement).data("colnum");
@@ -139,6 +150,7 @@ $(document).ready(function() {
   }
 
   function deselectWell(inputElement) {
+    $(inputElement).focusout();
     $(inputElement).css("border-color", "#dadada");
   }
 
@@ -146,6 +158,43 @@ $(document).ready(function() {
     $(inputElement).css("border-color", "red");
   }
 
+  $("#${mainContentId}").find(".wellDetails").find(".moveUpButton")
+  											.button({icons: {primary: 'ui-icon-arrowthick-1-n'}})
+  											.click(function() {
+  											  moveSelectedWell(-1, 0);
+  											});
+  
+  $("#${mainContentId}").find(".wellDetails").find(".moveLeftButton")
+												.button({icons: {primary: 'ui-icon-arrowthick-1-w'}})
+												.click(function() {
+												  moveSelectedWell(0, -1);
+												});
+
+  $("#${mainContentId}").find(".wellDetails").find(".moveDownButton")
+												.button({icons: {primary: 'ui-icon-arrowthick-1-s'}})
+												.click(function() {
+												  moveSelectedWell(1, 0);
+												});
+
+  $("#${mainContentId}").find(".wellDetails")
+  											.find(".moveRightButton")
+												.button({icons: {primary: 'ui-icon-arrowthick-1-e'}})
+												.click(function() {
+													  moveSelectedWell(0, 1);
+												});
+
+  function moveSelectedWell(upMovement, rightMovement) {
+    if (currentWell === undefined) {
+      return;
+    }
+
+    var rowNum = $(currentWell).data("rownum") + upMovement;
+    var colNum = $(currentWell).data("colnum") + rightMovement;
+    if ((rowNum >= 1 && rowNum <= ${plate.numRows}) &&
+        (colNum >= 1 && colNum <= ${plate.numColumns}))
+      wellClicked.apply(ttidata[rowNum][colNum].well);
+  }
+  
 	$("#${mainContentId}").find(".saveButton").
 	button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
 
@@ -311,15 +360,15 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 
-		<div style="position: relative; height: 260px;">
+		<div style="position: relative; height: 300px;">
 		<div class="wellDetails formInTabPane"
 				 style="margin-top: 15px; width: 93%; display: none;
 				 			  position: absolute; left: 0; right: 0; top: 0;">
 			<div>
-				<label>Row No.</label>
-				<label class="rowNumber" style="width: auto;"></label>
-				<label>Column No.</label>
-				<label class="columnNumber" style="width: auto;"></label>
+				<label style="width: auto;">Row No.</label>
+				<label class="rowNumber" style="width: auto; text-align: left;"></label>
+				<label style="width: auto;">Column No.</label>
+				<label class="columnNumber" style="width: auto; text-align: left;"></label>
 			</div>
 			<div>
 				<label>Type of well</label>
@@ -340,6 +389,12 @@ $(document).ready(function() {
 			<div>
 				<label>Machine reading</label>
 				<input name="machineReading" placeholder="Optical Density"/>
+			</div>
+			<div>
+				<button class="moveWellButton moveUpButton">Move up</button>
+				<button class="moveWellButton moveLeftButton">Move left</button>
+				<button class="moveWellButton moveDownButton">Move down</button>
+				<button class="moveWellButton moveRightButton">Move right</button>
 			</div>
 		</div>
 
