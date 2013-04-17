@@ -1009,6 +1009,6 @@ insert into ContactMethodType (contactMethodType, isDeleted) values
 
 insert into WellType (wellType, requiresSample, isDeleted) values
 ("Sample", 1, 0),
-("Blank", 1, 0),
-("Negative control", 1,  0),
-("Positive control", 1, 0);
+("Blank", 0, 0),
+("Negative control", 0,  0),
+("Positive control", 0, 0);
