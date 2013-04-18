@@ -50,6 +50,10 @@ public class BloodTest {
   @Column(length=30)
   private BloodTestCategory category;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private BloodTestContext context;
+
   @ManyToMany
   private List<WorksheetType> worksheetTypes;
 
@@ -159,5 +163,13 @@ public class BloodTest {
 
   public void setWorksheetTypes(List<WorksheetType> worksheetTypes) {
     this.worksheetTypes = worksheetTypes;
+  }
+
+  public BloodTestContext getContext() {
+    return context;
+  }
+
+  public void setContext(BloodTestContext context) {
+    this.context = context;
   }
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToMany;
 import org.hibernate.envers.Audited;
 
 import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestContext;
 
 @Entity
 @Audited
@@ -28,6 +31,10 @@ public class WorksheetType {
   @ManyToMany(mappedBy="worksheetTypes")
   private List<BloodTest> bloodTests;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private BloodTestContext context;
+  
   private Boolean isDeleted;
 
   public Integer getId() {
@@ -65,5 +72,13 @@ public class WorksheetType {
   @Override
   public String toString() {
     return worksheetType;
+  }
+
+  public BloodTestContext getContext() {
+    return context;
+  }
+
+  public void setContext(BloodTestContext context) {
+    this.context = context;
   }
 }

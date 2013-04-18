@@ -17,6 +17,9 @@
 		<li id="adminWelcomePage">
 			<a href="adminWelcomePageGenerator.html">Admin Home</a>
 		</li>
+		<li id="labSetupPage">
+			<a href="labSetupPageGenerator.html">Lab setup</a>
+		</li>
 		<li id="bloodTypingTests">
 			<a href="bloodTypingTests.html">Blood typing tests</a>
 		</li>

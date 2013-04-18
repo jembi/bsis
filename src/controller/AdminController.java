@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
+import model.bloodtesting.BloodTestContext;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
 import model.producttype.ProductType;
@@ -58,6 +59,8 @@ import repository.TipsRepository;
 import repository.UserRepository;
 import repository.bloodtesting.BloodTestingRepository;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -88,7 +91,7 @@ public class AdminController {
   CrossmatchTypeRepository crossmatchTypesRepository;
 
   @Autowired
-  BloodTestingRepository bloodTypingRepository;
+  BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   TipsRepository tipsRepository;
@@ -192,7 +195,7 @@ public class AdminController {
   @RequestMapping("/bloodTypingTests")
   public ModelAndView bloodTypingTests(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("admin/bloodTypingTests");
-    mv.addObject("bloodTypingTests", bloodTypingRepository.getBloodTypingTests());
+    mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
     return mv;
   }
 
@@ -262,6 +265,58 @@ public class AdminController {
     return mv;
   }
 
+  @RequestMapping(value="/labSetupPageGenerator", method=RequestMethod.GET)
+  public ModelAndView labSetupFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/labSetup");
+    mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+  }
+
+  @RequestMapping(value="/updateLabSetup", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> updateLabSetup(HttpServletRequest request,
+      @RequestParam(value="labSetupParams") String params) {
+
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, String> paramsMap = null;
+    try {
+      paramsMap = mapper.readValue(params, HashMap.class);
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    System.out.println("here");
+    System.out.println(params);
+    String recordOutcomes = paramsMap.get("recordOutcomes");
+
+    if (recordOutcomes.equals("true")) {
+      bloodTestingRepository.activateTests(BloodTestContext.RECORD_OUTCOMES);
+    } else {
+      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_OUTCOMES);
+    }
+
+    String recordBloodTestResults = paramsMap.get("recordBloodTestResults");
+    if (recordBloodTestResults.equals("true")) {
+      bloodTestingRepository.activateTests(BloodTestContext.RECORD_BLOODTESTS);
+    } else {
+      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_BLOODTESTS);
+    }
+
+    genericConfigRepository.updateConfigProperties("labsetup", paramsMap);
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", true);
+    return m;
+  }
+  
   @RequestMapping(value="/configureProductTypesFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureProductTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
@@ -729,4 +784,5 @@ public class AdminController {
     }
     return listOfServerAddresses;
   }
+
 }

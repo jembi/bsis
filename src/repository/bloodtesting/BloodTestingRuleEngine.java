@@ -96,7 +96,7 @@ public class BloodTestingRuleEngine {
     
     for (BloodTestRule rule : rules) {
 
-      String pattern = rule.getPattern();
+      List<String> pattern = Arrays.asList(rule.getPattern().split(","));
       boolean patternMatch = true;
       int indexInPattern = 0;
 
@@ -106,8 +106,7 @@ public class BloodTestingRuleEngine {
       String inputPattern = "";
       boolean atLeastOneResultFoundForPattern = false;
       for (String testId : testIds) {
-        indexInPattern = indexInPattern+1;
-        String actualResult = availableTestResults.get(testId); 
+        String actualResult = availableTestResults.get(testId);
         if (actualResult == null) {
           missingTestIdsForRule.add(testId);
           inputPattern += "?";
@@ -115,11 +114,12 @@ public class BloodTestingRuleEngine {
           continue;
         }
         atLeastOneResultFoundForPattern = true;
-        String expectedResult = pattern.substring(indexInPattern-1,indexInPattern);
+        String expectedResult = pattern.get(indexInPattern);
         inputPattern += actualResult;
         if (!expectedResult.equals(actualResult)) {
           patternMatch = false;
         }
+        indexInPattern = indexInPattern+1;
       }
 
 //      System.out.println();

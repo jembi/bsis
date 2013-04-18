@@ -38,19 +38,10 @@ public class LoginController {
 	  ModelAndView mv = new ModelAndView("welcomePage");
 	  m.addAttribute("versionNumber", UtilController.VERSION_NUMBER);
 	  m.addAttribute("tabs", genericConfigRepository.getConfigProperties("tabs"));
+	  m.addAttribute("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
 	  mv.addObject("model", m);
 		return mv;
 	}
-
-  @RequestMapping("/firstTimeConfig")
-  public ModelAndView firstTimeConfig(HttpServletRequest request) {
-    return new ModelAndView("admin/firstTimeConfig");
-  }
-
-  @RequestMapping("/firstTimeConfigNotAllowed")
-  public ModelAndView firstTimeConfigNotAllowed(HttpServletRequest request) {
-    return new ModelAndView("admin/firstTimeConfigNotAllowed");
-  }
 
 	@RequestMapping("/loginUser")
 	public ModelAndView addDonor(@RequestParam Map<String, String> params,

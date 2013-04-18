@@ -16,17 +16,26 @@
 		<li id="findOrAddTestResultsContent">
 			<a href="findTestResultFormGenerator.html">Find Test Results</a>
 		</li>
-		<li id="bloodTypingTestResults">
-			<a href="bloodTypingWorksheetGenerator.html">Blood Typing</a>
-		</li>
-		<li id="ttiTestResultsWells">
-			<a href="ttiWellsWorksheetFormGenerator.html">TTI results for wells</a>
-		</li>
+
+		<c:if test="${model.labsetup['useElisaPlates'] == 'true' }">
+			<li id="bloodTypingTestResults">
+				<a href="bloodTypingWorksheetGenerator.html">Blood Typing (ELISA)</a>
+			</li>
+			<li id="ttiTestResultsWells">
+				<a href="ttiWellsWorksheetFormGenerator.html">TTI results (ELISA)</a>
+			</li>
+		</c:if>
+
 		<li id="ttiResults">
 			<a href="ttiFormGenerator.html">TTI Results</a>
 		</li>
-		<li id="addTestResultsForWorksheet">
-			<a href="worksheetForTestResultsFormGenerator.html">Enter worksheet results</a>
-		</li>
+
+		<c:if test="${model.labsetup['useWorksheets'] == 'true' }">
+			<li id="addTestResultsForWorksheet">
+				<a href="worksheetForTestResultsFormGenerator.html">Worksheets</a>
+			</li>
+		</c:if>
+
 	</ul>
+
 </div>

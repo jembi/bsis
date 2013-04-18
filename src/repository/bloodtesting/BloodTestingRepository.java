@@ -11,10 +11,12 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
+import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.WellType;
@@ -432,5 +434,21 @@ public class BloodTestingRepository {
     bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
     applicationContext.publishEvent(bloodTestsUpdatedEvent);
     return btResult;
+  }
+
+  public void activateTests(BloodTestContext context) {
+    String queryStr = "UPDATE BloodTest set isActive=:isActive WHERE context=:context";
+    Query query = em.createQuery(queryStr);
+    query.setParameter("isActive", true);
+    query.setParameter("context", context);
+    query.executeUpdate();
+  }
+
+  public void deactivateTests(BloodTestContext context) {
+    String queryStr = "UPDATE BloodTest set isActive=:isActive WHERE context=:context";
+    Query query = em.createQuery(queryStr);
+    query.setParameter("isActive", false);
+    query.setParameter("context", context);
+    query.executeUpdate();
   }
 }

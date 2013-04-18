@@ -32,7 +32,7 @@ public class GenericConfigRepository {
     return configProperties;
   }
 
-  private void updateConfigProperties(String propertyOwner, Map<String, String> params) {
+  public void updateConfigProperties(String propertyOwner, Map<String, String> params) {
     String queryStr = "SELECT c FROM GenericConfig c WHERE c.propertyOwner=:propertyOwner AND c.propertyName=:propertyName";
     for (String propertyName : params.keySet()) {
       TypedQuery<GenericConfig> query = em.createQuery(queryStr, GenericConfig.class);

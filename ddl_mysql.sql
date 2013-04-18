@@ -23,6 +23,7 @@
         id SMALLINT not null auto_increment,
         bloodTestType varchar(30),
         category varchar(30),
+        context varchar(30),
         dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
@@ -88,6 +89,7 @@
         REVTYPE tinyint,
         bloodTestType varchar(30),
         category varchar(30),
+        context varchar(30),
         dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
@@ -974,6 +976,7 @@
 
     create table WorksheetType (
         id SMALLINT not null auto_increment,
+        context varchar(30),
         isDeleted boolean,
         worksheetType varchar(30),
         primary key (id)
@@ -983,6 +986,7 @@
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
+        context varchar(30),
         isDeleted boolean,
         worksheetType varchar(30),
         primary key (id, REV)
