@@ -23,20 +23,40 @@ $(document).ready(function() {
   // this object stores all the data entered into the wells
   var ttidata = {};
 
+  console.log('${ttiTestResults}');
+  var existingTestResults = {};
+  console.log('${ttiTestResults}'.length);
+  if ('${ttiTestResults}'.length > 0)
+  	existingTestResults = JSON.parse('${ttiTestResults}');
+  console.log(existingTestResults);
+  if (existingTestResults[1] !== undefined)
+  	console.log(existingTestResults[1][1]);
   for (var i = 1; i <= ${plate.numRows}; ++i) {
     ttidata[i] = {};
     for (var j = 1; j <= ${plate.numColumns}; ++j) {
-      ttidata[i][j] = {'contents' : 'empty'};
+      if (existingTestResults[i] !== undefined &&
+          existingTestResults[i][j] !== undefined) {
+        ttidata[i][j] = {};
+        ttidata[i][j].contents = existingTestResults[i][j].contents;
+        ttidata[i][j].welltype = existingTestResults[i][j].welltype;
+        ttidata[i][j].collectionNumber = existingTestResults[i][j].collectionNumber;
+        ttidata[i][j].testResult = existingTestResults[i][j].testResult;
+        ttidata[i][j].machineReading = existingTestResults[i][j].machineReading;
+      } else {
+        ttidata[i][j] = {'contents' : 'empty'};
+      }
     }
   }
 
   function initAllWells() {
     $.each($("#${mainContentId}").find(".wellInput"), function() {
+      showTestResultInWell(this);
       updateWellColor(this);
       var rowNum = $(this).data("rownum");
       var colNum = $(this).data("colnum");
       ttidata[rowNum][colNum].well = this;
     });
+
   }
 
   initAllWells();
@@ -227,7 +247,8 @@ $(document).ready(function() {
   }
   
 	$("#${mainContentId}").find(".saveButton")
-												.button({icons : {primary: 'ui-icon-plusthick'}}).click(saveTestResults);
+												.button({icons : {primary: 'ui-icon-plusthick'}})
+												.click(saveTestResults);
 
 	function saveTestResults(eventObj, saveUninterpretableResults) {
 	  if (saveUninterpretableResults === undefined)
@@ -253,6 +274,10 @@ $(document).ready(function() {
 	        bloodTestsData[i] = {};
 	      if (bloodTestsData[i][j] === undefined)
 	        bloodTestsData[i][j] = {};
+	   		// we need to pass contents so that we get them back from the server
+	   		// when showing errors we need to show the same data as entered by the user
+	   		// having contents helps us set the color of the wells appropriately
+	      bloodTestsData[i][j].contents = ttidata[i][j].contents;
 	      bloodTestsData[i][j].welltype = ttidata[i][j].welltype;
 	      bloodTestsData[i][j].collectionNumber = ttidata[i][j].collectionNumber;
 	      bloodTestsData[i][j].testResult = ttidata[i][j].testResult;

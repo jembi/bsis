@@ -363,6 +363,7 @@ public class TTIController {
 
     mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
     mv.addObject("ttiTestId", ttiTestId);
+    mv.addObject("ttiTestResults", ttiResults);
     mv.addObject("ttiTest", bloodTestingRepository.findBloodTestById(ttiTestId));
     mv.addObject("ttiConfig", genericConfigRepository.getConfigProperties("ttiWells"));
     mv.addObject("allWellTypes", wellTypeRepository.getAllWellTypes());
