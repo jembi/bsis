@@ -37,7 +37,6 @@
 
     create table BloodTestResult (
         id bigint not null auto_increment,
-        machineReading decimal(7,3),
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
@@ -45,6 +44,7 @@
         testedOn datetime,
         bloodTest_id SMALLINT,
         collectedSample_id bigint,
+        machineReading_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id)
@@ -496,8 +496,19 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table MachineReading (
+        id bigint not null auto_increment,
+        columnNumber SMALLINT,
+        machineReading decimal(7,3),
+        rowNumber SMALLINT,
+        bloodTestResult_id bigint,
+        plateSession_id bigint,
+        wellType_id SMALLINT,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
     create table MicrotiterPlate (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         isDeleted boolean,
         notes longtext,
         numColumns SMALLINT,
@@ -508,7 +519,7 @@
     ) ENGINE=InnoDB;
 
     create table MicrotiterPlate_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         isDeleted boolean,
@@ -547,30 +558,26 @@
         primary key (REV, permissions_id, roles_id)
     ) ENGINE=InnoDB;
 
-    create table PlateContent (
-        id TINYINT not null auto_increment,
-        colNumber SMALLINT,
-        contentType varchar(15),
-        coverage varchar(15),
+    create table PlateSession (
+        id bigint not null auto_increment,
         isDeleted boolean,
-        rowNumber SMALLINT,
-        plateForContent_id TINYINT,
-        rawBloodTest_id SMALLINT,
+        plateUsedOn datetime,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table PlateContent_AUD (
-        id TINYINT not null,
+    create table PlateSession_AUD (
+        id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        colNumber SMALLINT,
-        contentType varchar(15),
-        coverage varchar(15),
         isDeleted boolean,
-        rowNumber SMALLINT,
-        plateForContent_id TINYINT,
-        rawBloodTest_id SMALLINT,
+        plateUsedOn datetime,
         primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table PlateSession_BloodTestResult (
+        PlateSession_id bigint not null,
+        bloodTestsOnPlate_id bigint not null,
+        unique (bloodTestsOnPlate_id)
     ) ENGINE=InnoDB;
 
     create table PreDonationTest (
@@ -1021,6 +1028,12 @@
         references CollectedSample (id);
 
     alter table BloodTestResult 
+        add index FK39946CC9E104121F (machineReading_id), 
+        add constraint FK39946CC9E104121F 
+        foreign key (machineReading_id) 
+        references MachineReading (id);
+
+    alter table BloodTestResult 
         add index FK39946CC9D0AFB367 (lastUpdatedBy_id), 
         add constraint FK39946CC9D0AFB367 
         foreign key (lastUpdatedBy_id) 
@@ -1290,6 +1303,24 @@
         foreign key (REV) 
         references REVINFO (REV);
 
+    alter table MachineReading 
+        add index FK4CF2E0652531C00D (wellType_id), 
+        add constraint FK4CF2E0652531C00D 
+        foreign key (wellType_id) 
+        references WellType (id);
+
+    alter table MachineReading 
+        add index FK4CF2E065AF35157F (plateSession_id), 
+        add constraint FK4CF2E065AF35157F 
+        foreign key (plateSession_id) 
+        references PlateSession (id);
+
+    alter table MachineReading 
+        add index FK4CF2E0658D7BC6C7 (bloodTestResult_id), 
+        add constraint FK4CF2E0658D7BC6C7 
+        foreign key (bloodTestResult_id) 
+        references BloodTestResult (id);
+
     alter table MicrotiterPlate_AUD 
         add index FK45D4695FDF74E053 (REV), 
         add constraint FK45D4695FDF74E053 
@@ -1320,23 +1351,23 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table PlateContent 
-        add index FK8E9BC0A3BCA935AF (rawBloodTest_id), 
-        add constraint FK8E9BC0A3BCA935AF 
-        foreign key (rawBloodTest_id) 
-        references BloodTest (id);
-
-    alter table PlateContent 
-        add index FK8E9BC0A3DC9AD7D (plateForContent_id), 
-        add constraint FK8E9BC0A3DC9AD7D 
-        foreign key (plateForContent_id) 
-        references MicrotiterPlate (id);
-
-    alter table PlateContent_AUD 
-        add index FK63E0E4F4DF74E053 (REV), 
-        add constraint FK63E0E4F4DF74E053 
+    alter table PlateSession_AUD 
+        add index FK79BBDC91DF74E053 (REV), 
+        add constraint FK79BBDC91DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
+
+    alter table PlateSession_BloodTestResult 
+        add index FK7A75514AAF35157F (PlateSession_id), 
+        add constraint FK7A75514AAF35157F 
+        foreign key (PlateSession_id) 
+        references PlateSession (id);
+
+    alter table PlateSession_BloodTestResult 
+        add index FK7A75514A2DA883C0 (bloodTestsOnPlate_id), 
+        add constraint FK7A75514A2DA883C0 
+        foreign key (bloodTestsOnPlate_id) 
+        references BloodTestResult (id);
 
     alter table PreDonationTest 
         add index FKAF309676903E59D (configuredPreDonationTest_id), 

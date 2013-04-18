@@ -16,8 +16,11 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
+import model.bloodtesting.WellType;
 import model.collectedsample.CollectedSample;
+import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
+import model.microtiterplate.PlateSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
+import repository.WellTypeRepository;
 import repository.events.ApplicationContextProvider;
 import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
@@ -42,6 +46,9 @@ public class BloodTestingRepository {
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
+
+  @Autowired
+  private WellTypeRepository wellTypeRepository;
 
   public MicrotiterPlate getPlate(String plateKey) {
     String queryStr = "SELECT p from MicrotiterPlate p " +
@@ -100,18 +107,13 @@ public class BloodTestingRepository {
         collectedSamplesMap.put(collectedSample.getId(), collectedSample);
         bloodTestRuleResultsForCollections.put(collectedSample.getId(), ruleResult);
 
-        System.out.println(ruleResult.getAboUninterpretable());
-        System.out.println(ruleResult.getRhUninterpretable());
-        System.out.println(ruleResult.getTtiUninterpretable());
         if (ruleResult.getAboUninterpretable() ||
             ruleResult.getRhUninterpretable() ||
             ruleResult.getTtiUninterpretable()) {
           if (saveIfUninterpretable) {
-            System.out.println("Results are uninterpretable. Saving.");
             saveBloodTestResultsToDatabase(bloodTestResultsForCollection, collectedSample, testedOn, ruleResult);
           }
           else {
-            System.out.println("Results are uninterpretable. Cannot save.");
             Map<Long, String> uninterpretable = new HashMap<Long, String>();
             collectionsWithUninterpretableResults.add(collectionId);
             uninterpretable.put((long)-1, "Test results are uninterpretable");
@@ -195,6 +197,17 @@ public class BloodTestingRepository {
     return errorMap;
   }
 
+  private boolean isResultValidForBloodTest(BloodTest test, String result) {
+    if (StringUtils.isBlank(result)) {
+      return false;
+    }
+    List<String> validResults = Arrays.asList(test.getValidResults().split(","));
+    if (!validResults.contains(result)) {
+      return false;
+    }
+    return true;
+  }
+  
   private List<BloodTest> getAllBloodTests() {
     String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
@@ -273,4 +286,154 @@ public class BloodTestingRepository {
     query.setParameter("bloodTestId", bloodTestId);
     return query.getSingleResult();
   }
-}
+
+  public Map<String, Object> saveTTIResultsOnPlate(Map<String, Map<String, Object>> ttiResultsMap,
+      Integer ttiTestId,
+      boolean saveIfUninterpretable) {
+
+    Map<String, Object> results = new HashMap<String, Object>();
+    Map<String, String> errorsByWellNumber = new HashMap<String, String>();
+    Map<String, Long> collectionIdByWellNumber = new HashMap<String, Long>();
+    Map<Long, String> errorsByCollectionId = new HashMap<Long, String>();
+
+    Map<Long, CollectedSample> collectionIdMap = new HashMap<Long, CollectedSample>();
+
+    Map<Long, MachineReading> machineReadingsForCollections = new HashMap<Long, MachineReading>();
+
+    BloodTest bloodTest = findBloodTestById(ttiTestId);
+
+    PlateSession plateSession = new PlateSession();
+    Date testedOn = new Date();
+    plateSession.setPlateUsedOn(testedOn);
+    em.persist(plateSession);
+    em.refresh(plateSession);
+
+    Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long,String>>(); 
+
+    boolean errorsFound = false;
+    
+    for (String rowNum : ttiResultsMap.keySet()) {
+      Map<String, Object> rowData = ttiResultsMap.get(rowNum);
+      for (String colNum : rowData.keySet()) {
+
+        String wellNumber = rowNum + "," + colNum;
+
+        MachineReading machineReading = new MachineReading();
+        Map<String, String> wellData = (Map<String, String>) rowData.get(colNum);
+
+        // store well type in machine configuration
+        Integer wellTypeId = Integer.parseInt(wellData.get("welltype"));
+        WellType wellType = wellTypeRepository.getWellTypeById(wellTypeId);
+        machineReading.setWellType(wellType);
+
+        machineReading.setRowNumber(Integer.parseInt(rowNum));
+        machineReading.setColumnNumber(Integer.parseInt(colNum));
+        machineReading.setPlateSession(plateSession);
+
+        if (wellType.getRequiresSample()) {
+          String collectionNumber = wellData.get("collectionNumber");
+          CollectedSample collection = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+          if (collection == null) {
+            errorsByWellNumber.put(wellNumber, "Invalid collection number");
+            errorsFound = true;
+          }
+          else {
+            String result = wellData.get("testResult");
+            collectionIdMap.put(collection.getId(), collection);
+            if (bloodTestResultsMap.containsKey(collection.getId())) {
+              errorsFound = true;
+              errorsByWellNumber.put(wellNumber, "Duplicate collection number");
+              errorsByCollectionId.put(collection.getId(), "Duplicate collection number");
+              collectionIdByWellNumber.put(wellNumber, collection.getId());
+            }
+            if (!isResultValidForBloodTest(bloodTest, result)) {
+              errorsFound = true;
+              errorsByWellNumber.put(wellNumber, "Invalid test result specified");
+            }
+            Map<Long, String> resultsForCollection = new HashMap<Long, String>();
+            resultsForCollection.put(new Long(ttiTestId), result);
+            bloodTestResultsMap.put(collection.getId(), resultsForCollection);
+            machineReadingsForCollections.put(collection.getId(), machineReading);
+          }
+        } else {
+          em.persist(machineReading);
+        }
+      }
+    }
+
+    Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>();
+    List<Long> collectionsWithUninterpretableResults = new ArrayList<Long>();
+
+    if (!errorsFound) {
+
+      BloodTestingRuleEngine ruleEngine = new BloodTestingRuleEngine();
+      for (Long collectionId : collectionIdMap.keySet()) {
+
+        Map<Long, String> bloodTestResultsForCollection = bloodTestResultsMap.get(collectionId);
+        CollectedSample collectedSample = collectionIdMap.get(collectionId);
+        MachineReading machineReading = machineReadingsForCollections.get(collectionId);
+
+        BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(collectedSample, bloodTestResultsForCollection);
+        bloodTestRuleResultsForCollections.put(collectionId, ruleResult);
+        if (ruleResult.getAboUninterpretable() ||
+            ruleResult.getRhUninterpretable() ||
+            ruleResult.getTtiUninterpretable()) {
+          if (saveIfUninterpretable) {
+            BloodTestResult btResult = saveBloodTestResultToDatabase(new Long(ttiTestId),
+                 bloodTestResultsForCollection.get(ttiTestId), collectedSample,
+                 testedOn, ruleResult);
+            machineReading.setBloodTestResult(btResult);
+            em.persist(machineReading);
+          }
+          else {
+            collectionsWithUninterpretableResults.add(collectionId);
+          }
+        } else {
+          BloodTestResult btResult = saveBloodTestResultToDatabase(new Long(ttiTestId),
+              bloodTestResultsForCollection.get(ttiTestId), collectedSample,
+              testedOn, ruleResult);
+          machineReading.setBloodTestResult(btResult);
+          em.persist(machineReading);
+        }
+      }
+    }
+
+    results.put("collections", collectionIdMap);
+    results.put("bloodTestingResults", bloodTestRuleResultsForCollections);
+    results.put("errorsFound", errorsFound);
+    results.put("errorsByCollectionId", errorsByCollectionId);
+    results.put("errorsByWellNumber", errorsByWellNumber);
+    results.put("collectionsWithUninterpretableResults", collectionsWithUninterpretableResults);
+    return results;
+  }
+
+  private BloodTestResult saveBloodTestResultToDatabase(Long testId, String testResult,
+      CollectedSample collectedSample, Date testedOn,
+      BloodTestingRuleResult ruleResult) {
+
+    BloodTestResult btResult = new BloodTestResult();
+    BloodTest bloodTest = new BloodTest();
+    // the only reason we are using Long in the parameter is that
+    // jsp uses Long for all numbers. Using an integer makes it difficult
+    // to compare Integer and Long values in the jsp conditionals
+    // specially when iterating through the list of results
+    bloodTest.setId(testId.intValue());
+    btResult.setBloodTest(bloodTest);
+    // not updating the inverse relation which means the
+    // collectedSample.getBloodTypingResults() will not
+    // contain this result
+    btResult.setCollectedSample(collectedSample);
+    btResult.setTestedOn(testedOn);
+    btResult.setNotes("");
+    btResult.setResult(testResult);
+    em.persist(btResult);
+    em.refresh(btResult);
+    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+    BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
+    bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10", Arrays.asList(collectedSample, ruleResult));
+    bloodTestsUpdatedEvent.setCollectedSample(collectedSample);
+    bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
+    applicationContext.publishEvent(bloodTestsUpdatedEvent);
+    return btResult;
+  }
+  }

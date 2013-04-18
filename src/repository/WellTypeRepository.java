@@ -38,7 +38,7 @@ public class WellTypeRepository {
 
   public WellType getWellTypeById(Integer id) {
     TypedQuery<WellType> query;
-    query = em.createQuery("SELECT wt from WellType pt " +
+    query = em.createQuery("SELECT wt from WellType wt " +
             "where wt.id=:id AND wt.isDeleted=:isDeleted", WellType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", id);

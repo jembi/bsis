@@ -1,14 +1,11 @@
 package model.microtiterplate;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
 
@@ -18,7 +15,7 @@ public class MicrotiterPlate {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="TINYINT")
+  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
   @Column(length=15, unique=true)
@@ -32,9 +29,6 @@ public class MicrotiterPlate {
 
   @Column(columnDefinition="SMALLINT")
   private Integer numColumns;
-
-  @OneToMany(mappedBy="plateForContent")
-  private List<PlateContent> specialContents;
 
   @Lob
   private String notes;
@@ -57,10 +51,6 @@ public class MicrotiterPlate {
     return numColumns;
   }
 
-  public List<PlateContent> getSpecialContents() {
-    return specialContents;
-  }
-
   public String getNotes() {
     return notes;
   }
@@ -79,10 +69,6 @@ public class MicrotiterPlate {
 
   public void setNumColumns(Integer numColumns) {
     this.numColumns = numColumns;
-  }
-
-  public void setSpecialContents(List<PlateContent> specialContents) {
-    this.specialContents = specialContents;
   }
 
   public void setNotes(String notes) {

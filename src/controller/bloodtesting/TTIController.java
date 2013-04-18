@@ -310,9 +310,63 @@ public class TTIController {
       @RequestParam(value="ttiTestId") Integer ttiTestId) {
     ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheet");
     mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
+    mv.addObject("ttiTestId", ttiTestId);
     mv.addObject("ttiTest", bloodTestingRepository.findBloodTestById(ttiTestId));
     mv.addObject("ttiConfig", genericConfigRepository.getConfigProperties("ttiWells"));
     mv.addObject("allWellTypes", wellTypeRepository.getAllWellTypes());
+    return mv;
+  }
+
+  @RequestMapping(value="saveTTIResultsOnPlate", method=RequestMethod.POST)
+  public ModelAndView saveTTIResultsOnPlate(HttpServletRequest request,
+      HttpServletResponse response,
+      @RequestParam(value="ttiTestId") Integer ttiTestId,
+      @RequestParam(value="ttiResults") String ttiResults,
+      @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
+
+    ModelAndView mv = new ModelAndView();
+
+    mv.setViewName("bloodtesting/ttiWellsWorksheet");
+
+    System.out.println("ttiTestId: " + ttiTestId);
+    System.out.println("ttiResults: " + ttiResults);
+    System.out.println("saveUninterpretableResults: " + saveUninterpretableResults);
+
+    ObjectMapper mapper = new ObjectMapper();
+    boolean success = true;
+    try {
+      Map<String, Map<String, Object>> ttiResultsMap = mapper.readValue(ttiResults, HashMap.class);
+      Map<String, Object> results = bloodTestingRepository.saveTTIResultsOnPlate(ttiResultsMap, ttiTestId, saveUninterpretableResults);
+      if (results.get("errorsFound").equals(false))
+        success = true;
+
+      mv.addObject("errorsByCollectionId", results.get("errorsByCollectionId"));
+      mv.addObject("errorsByWellNumber", results.get("errorsByWellNumber"));
+      mv.addObject("collections", results.get("collections"));
+      mv.addObject("bloodTestingResults", results.get("bloodTestingResults"));
+
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } 
+    
+    if (!success) {
+      mv.addObject("success", false);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
+    mv.addObject("ttiTestId", ttiTestId);
+    mv.addObject("ttiTest", bloodTestingRepository.findBloodTestById(ttiTestId));
+    mv.addObject("ttiConfig", genericConfigRepository.getConfigProperties("ttiWells"));
+    mv.addObject("allWellTypes", wellTypeRepository.getAllWellTypes());
+
     return mv;
   }
 }

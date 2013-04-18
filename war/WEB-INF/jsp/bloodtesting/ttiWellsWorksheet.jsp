@@ -237,7 +237,10 @@ $(document).ready(function() {
 	  var bloodTestsData = getDataToSave();
 	  console.log(bloodTestsData);
 
-//    saveTestResultsWithConfirmation("saveBloodTypingTests.html", bloodTestsData, saveBloodTestsSuccess, saveBloodTestsError);
+	  console.log(JSON.stringify(bloodTestsData));
+	  var dataToSend = {saveUninterpretableResults: saveUninterpretableResults, ttiTestId: ${ttiTestId}, ttiResults: JSON.stringify(bloodTestsData)};
+	  console.log(dataToSend);
+    saveTestResultsWithConfirmation("saveTTIResultsOnPlate.html", dataToSend, saveBloodTestsSuccess, saveBloodTestsError);
 	}
 
 	function getDataToSave() {

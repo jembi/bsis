@@ -1,6 +1,5 @@
 package model.bloodtesting;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,11 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
+import model.microtiterplate.MachineReading;
+import model.microtiterplate.PlateSession;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -42,11 +44,11 @@ public class BloodTestResult implements ModificationTracker {
   @Column(length=10)
   private String result;
 
-  @Column(precision=7, scale=3)
-  private BigDecimal machineReading;
-
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
+
+  @OneToOne(optional=true)
+  private MachineReading machineReading;
 
   @Valid
   private RowModificationTracker modificationTracker;
@@ -138,11 +140,11 @@ public class BloodTestResult implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public BigDecimal getMachineReading() {
+  public MachineReading getMachineReading() {
     return machineReading;
   }
 
-  public void setMachineReading(BigDecimal machineReading) {
+  public void setMachineReading(MachineReading machineReading) {
     this.machineReading = machineReading;
   }
 }
