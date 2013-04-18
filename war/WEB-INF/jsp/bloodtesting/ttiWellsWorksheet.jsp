@@ -19,18 +19,24 @@
 <script>
 $(document).ready(function() {
 
+  // no well selected initially
   var currentWell = undefined;
+
   // this object stores all the data entered into the wells
   var ttidata = {};
 
-  console.log('${ttiTestResults}');
+  // useful to show entered values on the same page when there was
+  // an error in storing the results
   var existingTestResults = {};
-  console.log('${ttiTestResults}'.length);
   if ('${ttiTestResults}'.length > 0)
   	existingTestResults = JSON.parse('${ttiTestResults}');
-  console.log(existingTestResults);
-  if (existingTestResults[1] !== undefined)
-  	console.log(existingTestResults[1][1]);
+
+  var errorsByWellNumber = {};
+  if ('${errorsByWellNumberAsJSON}'.length > 0)
+    errorsByWellNumber = JSON.parse('${errorsByWellNumberAsJSON}');
+
+  console.log(errorsByWellNumber);
+
   for (var i = 1; i <= ${plate.numRows}; ++i) {
     ttidata[i] = {};
     for (var j = 1; j <= ${plate.numColumns}; ++j) {
@@ -42,6 +48,8 @@ $(document).ready(function() {
         ttidata[i][j].collectionNumber = existingTestResults[i][j].collectionNumber;
         ttidata[i][j].testResult = existingTestResults[i][j].testResult;
         ttidata[i][j].machineReading = existingTestResults[i][j].machineReading;
+        // array of errors for well
+        ttidata[i][j].errors = errorsByWellNumber[i + ',' + j];
       } else {
         ttidata[i][j] = {'contents' : 'empty'};
       }
@@ -114,6 +122,14 @@ $(document).ready(function() {
     var colNum = $(inputElement).data("colnum");
 
     var wellDetailsForm = $("#${mainContentId}").find(".wellDetails");
+
+    wellDetailsForm.find(".errorList").html("");
+    if (ttidata[rowNum][colNum].errors !== undefined && ttidata[rowNum][colNum].errors.length > 0) {
+      console.log("here");
+      for (var errorIndex = 0; errorIndex < ttidata[rowNum][colNum].errors.length; ++errorIndex) {
+        wellDetailsForm.find(".errorList").append("<li>" + ttidata[rowNum][colNum].errors[errorIndex] + "</li>");
+      }
+    }
 
     wellDetailsForm.find(".rowNumber").text(String.fromCharCode("A".charCodeAt(0) + rowNum-1));
     wellDetailsForm.find(".columnNumber").text(colNum);
@@ -250,16 +266,14 @@ $(document).ready(function() {
 												.button({icons : {primary: 'ui-icon-plusthick'}})
 												.click(saveTestResults);
 
-	function saveTestResults(eventObj, saveUninterpretableResults) {
-	  if (saveUninterpretableResults === undefined)
-	  	saveUninterpretableResults = false;
+	function saveTestResults(eventObj) {
 	  if (currentWell !== undefined)
 	    wellClicked.apply(currentWell);
 	  var bloodTestsData = getDataToSave();
 	  console.log(bloodTestsData);
 
 	  console.log(JSON.stringify(bloodTestsData));
-	  var dataToSend = {saveUninterpretableResults: saveUninterpretableResults, ttiTestId: ${ttiTestId}, ttiResults: JSON.stringify(bloodTestsData)};
+	  var dataToSend = {ttiTestId: ${ttiTestId}, ttiResults: JSON.stringify(bloodTestsData)};
 	  console.log(dataToSend);
     saveTestResultsWithConfirmation("saveTTIResultsOnPlate.html", dataToSend, saveBloodTestsSuccess, saveBloodTestsError);
 	}
@@ -294,48 +308,6 @@ $(document).ready(function() {
 	function saveBloodTestsError(response) {
 	  $("#${tabContentId}").replaceWith(response.responseText);
 	}
-
-	$("#${mainContentId}").find(".clearFormButton").
-	button().click(refetchForm);
-
-	function refetchForm() {
-		$.ajax({
-		  url: "${refreshUrl}",
-		  data: {},
-		  type: "POST",
-		  success: function (response) {
-		    			 	 $("#${tabContentId}").replaceWith(response);
-		  				 },
-		  error:   function (response) {
-		    				 $("#${tabContentId}").replaceWith(response);
-		  				 }
-		  
-		});
-	}
-
-	$("#${mainContentId}").find(".changeCollectionsButton")
-												.button()
-												.click(
-							function() {
-								$.ajax({
-								  url: "${changeCollectionsUrl}",
-								  data: {},
-								  type: "GET",
-								  success: function (response) {
-								    			 	 $("#${tabContentId}").replaceWith(response);
-								  				 },
-								  error:   function (response) {
-														 showErrorMessage("Something went wrong. Please try again.");
-								  				 }
-								  
-			  				});	  
-							});
-
-	$("#${mainContentId}").find(".saveUninterpretableResultsButton")
-												.button()
-												.click(function(event) {
-												  saveTestResults(event, true);
-												});
 
 });
 </script>
@@ -387,24 +359,22 @@ $(document).ready(function() {
 											 padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
 
 						<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
-							<div class="wellBox">
+							<c:set var="wellNumber" value="${rowNum},${colNum}" />
+						  <c:if test="${not empty errorsByWellNumber[wellNumber]}">
+						  	<c:set var="wellColor" value="#000000" />
+					  	</c:if>
+						  <c:if test="${empty errorsByWellNumber[wellNumber]}">
+						  	<c:set var="wellColor" value="" />
+					  	</c:if>
+							<div class="wellBox" style="background: ${wellColor};">
 								<!-- square around the well -->
 								<!-- non-empty wells -->
-								<c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
-							  <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
-							  <c:if test="${not empty errorMap[collection.id][testId]}">
-							  	<c:set var="wellBorderColor" value="red" />
-						  	</c:if>
-							  <c:if test="${empty errorMap[collection.id][testId]}">
-							  	<c:set var="wellBorderColor" value="" />
-						  	</c:if>
 	
 								<input
 									style="width: ${ttiConfig['titerWellRadius']}px; 
 												 height: ${ttiConfig['titerWellRadius']}px;
 												 border-radius: ${ttiConfig['titerWellRadius']}px;
 												 text-align: center;
-												 border-color: ${wellBorderColor};
 												 color: white;
 												 background: white;
 												 padding: 0;
@@ -421,10 +391,14 @@ $(document).ready(function() {
 				</c:forEach>
 			</div>
 
-			<div style="position: relative; height: 300px;">
+			<div style="position: relative; ">
 				<div class="wellDetails formInTabPane"
 						 style="margin-top: 15px; width: 93%; display: none;
 						 			  position: relative;">
+					<div>
+						<ul class="errorList" style="color: red;">
+						</ul>
+					</div>
 					<div>
 						<label style="width: auto;">Row No.</label>
 						<label class="rowNumber" style="width: auto; text-align: left;"></label>
@@ -451,7 +425,7 @@ $(document).ready(function() {
 						<label>Machine reading</label>
 						<input name="machineReading" placeholder="Optical Density"/>
 					</div>
-					<div style="position: absolute; bottom: 3px;">
+					<div style="bottom: 3px;">
 						<button class="moveWellButton moveUpButton">Move up</button>
 						<button class="moveWellButton moveLeftButton">Move left</button>
 						<button class="moveWellButton moveDownButton">Move down</button>

@@ -58,6 +58,7 @@ public class BloodTestingRuleEngine {
   public BloodTestingRuleResult applyBloodTests(CollectedSample collectedSample, Map<Long, String> bloodTestResults) {
 
     String queryStr = "SELECT r FROM BloodTestRule r WHERE isActive=:isActive";
+    System.out.println(em);
     TypedQuery<BloodTestRule> query = em.createQuery(queryStr, BloodTestRule.class);
 
     query.setParameter("isActive", true);
