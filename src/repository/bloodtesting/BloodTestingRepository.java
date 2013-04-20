@@ -20,6 +20,7 @@ import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.WellType;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
@@ -442,6 +443,11 @@ public class BloodTestingRepository {
     query.setParameter("isActive", true);
     query.setParameter("context", context);
     query.executeUpdate();
+    queryStr = "UPDATE BloodTestingRule set isActive=:isActive WHERE context=:context";
+    query = em.createQuery(queryStr);
+    query.setParameter("isActive", true);
+    query.setParameter("context", context);
+    query.executeUpdate();
   }
 
   public void deactivateTests(BloodTestContext context) {
@@ -450,5 +456,18 @@ public class BloodTestingRepository {
     query.setParameter("isActive", false);
     query.setParameter("context", context);
     query.executeUpdate();
+    queryStr = "UPDATE BloodTestingRule set isActive=:isActive WHERE context=:context";
+    query = em.createQuery(queryStr);
+    query.setParameter("isActive", false);
+    query.setParameter("context", context);
+    query.executeUpdate();
+  }
+
+  public List<BloodTestingRule> getBloodTypingRules() {
+    String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND r.isActive=:isActive";
+    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
+    query.setParameter("category", BloodTestCategory.BLOODTYPING);
+    query.setParameter("isActive", true);
+    return query.getResultList();
   }
 }

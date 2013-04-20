@@ -8,13 +8,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import model.bloodtesting.BloodTestCategory;
+import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.CollectionField;
 
 import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class BloodTestRule {
+public class BloodTestingRule {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,6 +47,14 @@ public class BloodTestRule {
 
   @Column(length=60)
   private String extraTtiTestsIds;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private BloodTestCategory category;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private BloodTestContext context;
 
   private Boolean markSampleAsUnsafe;
 
@@ -136,5 +146,21 @@ public class BloodTestRule {
 
   public void setExtraTtiTestsIds(String extraTtiTestsIds) {
     this.extraTtiTestsIds = extraTtiTestsIds;
+  }
+
+  public BloodTestContext getContext() {
+    return context;
+  }
+
+  public void setContext(BloodTestContext context) {
+    this.context = context;
+  }
+
+  public BloodTestCategory getCategory() {
+    return category;
+  }
+
+  public void setCategory(BloodTestCategory category) {
+    this.category = category;
   }
 }

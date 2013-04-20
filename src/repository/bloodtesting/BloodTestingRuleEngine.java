@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.CollectionField;
-import model.bloodtesting.rules.BloodTestRule;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
 import model.testresults.TTIStatus;
 
@@ -57,12 +57,12 @@ public class BloodTestingRuleEngine {
    */
   public BloodTestingRuleResult applyBloodTests(CollectedSample collectedSample, Map<Long, String> bloodTestResults) {
 
-    String queryStr = "SELECT r FROM BloodTestRule r WHERE isActive=:isActive";
+    String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
     System.out.println(em);
-    TypedQuery<BloodTestRule> query = em.createQuery(queryStr, BloodTestRule.class);
+    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
 
     query.setParameter("isActive", true);
-    List<BloodTestRule> rules = query.getResultList();
+    List<BloodTestingRule> rules = query.getResultList();
 
     Map<String, String> storedTestResults = new TreeMap<String, String>();
 
@@ -94,7 +94,7 @@ public class BloodTestingRuleEngine {
     boolean rhUninterpretable = false;
     boolean ttiUninterpretable = false;
     
-    for (BloodTestRule rule : rules) {
+    for (BloodTestingRule rule : rules) {
 
       List<String> pattern = Arrays.asList(rule.getPattern().split(","));
       boolean patternMatch = true;

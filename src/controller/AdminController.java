@@ -30,6 +30,7 @@ import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestContext;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
 import model.producttype.ProductType;
@@ -58,6 +59,7 @@ import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import viewmodel.BloodTestingRuleViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -192,10 +194,15 @@ public class AdminController {
     return m;
   }
 
-  @RequestMapping("/bloodTypingTests")
+  @RequestMapping("/configureBloodTypingTests")
   public ModelAndView bloodTypingTests(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("admin/bloodTypingTests");
     mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
+    List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
+    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules()) {
+      rules.add(new BloodTestingRuleViewModel(rule));
+    }
+    mv.addObject("bloodTypingRules", rules);
     return mv;
   }
 

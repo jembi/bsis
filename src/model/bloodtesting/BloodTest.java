@@ -24,10 +24,10 @@ public class BloodTest {
   @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
-  @Column(length=15)
+  @Column(length=25)
   private String testNameShort;
 
-  @Column(length=30)
+  @Column(length=40)
   private String testName;
 
   @Enumerated(EnumType.STRING)

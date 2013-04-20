@@ -51,38 +51,6 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table BloodTestRule (
-        id MEDIUMINT not null auto_increment,
-        bloodTestsIds varchar(200),
-        collectionFieldChanged varchar(12),
-        extraAboTestsIds varchar(60),
-        extraInformation varchar(30),
-        extraRhTestsIds varchar(60),
-        extraTtiTestsIds varchar(60),
-        isActive boolean,
-        markSampleAsUnsafe boolean,
-        newInformation varchar(30),
-        pattern varchar(50),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTestRule_AUD (
-        id MEDIUMINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        bloodTestsIds varchar(200),
-        collectionFieldChanged varchar(12),
-        extraAboTestsIds varchar(60),
-        extraInformation varchar(30),
-        extraRhTestsIds varchar(60),
-        extraTtiTestsIds varchar(60),
-        isActive boolean,
-        markSampleAsUnsafe boolean,
-        newInformation varchar(30),
-        pattern varchar(50),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
     create table BloodTest_AUD (
         id SMALLINT not null,
         REV integer not null,
@@ -113,6 +81,42 @@
         worksheetTypes_id SMALLINT not null,
         REVTYPE tinyint,
         primary key (REV, bloodTests_id, worksheetTypes_id)
+    ) ENGINE=InnoDB;
+
+    create table BloodTestingRule (
+        id MEDIUMINT not null auto_increment,
+        bloodTestsIds varchar(200),
+        category varchar(30),
+        collectionFieldChanged varchar(12),
+        context varchar(30),
+        extraAboTestsIds varchar(60),
+        extraInformation varchar(30),
+        extraRhTestsIds varchar(60),
+        extraTtiTestsIds varchar(60),
+        isActive boolean,
+        markSampleAsUnsafe boolean,
+        newInformation varchar(30),
+        pattern varchar(50),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table BloodTestingRule_AUD (
+        id MEDIUMINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        bloodTestsIds varchar(200),
+        category varchar(30),
+        collectionFieldChanged varchar(12),
+        context varchar(30),
+        extraAboTestsIds varchar(60),
+        extraInformation varchar(30),
+        extraRhTestsIds varchar(60),
+        extraTtiTestsIds varchar(60),
+        isActive boolean,
+        markSampleAsUnsafe boolean,
+        newInformation varchar(30),
+        pattern varchar(50),
+        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table CollectedSample (
@@ -1049,12 +1053,6 @@
         foreign key (bloodTest_id) 
         references BloodTest (id);
 
-    alter table BloodTestRule_AUD 
-        add index FK67B61079DF74E053 (REV), 
-        add constraint FK67B61079DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
     alter table BloodTest_AUD 
         add index FKE1FA995DDF74E053 (REV), 
         add constraint FKE1FA995DDF74E053 
@@ -1076,6 +1074,12 @@
     alter table BloodTest_WorksheetType_AUD 
         add index FK7F06EF06DF74E053 (REV), 
         add constraint FK7F06EF06DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table BloodTestingRule_AUD 
+        add index FKE99C9FC3DF74E053 (REV), 
+        add constraint FKE99C9FC3DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

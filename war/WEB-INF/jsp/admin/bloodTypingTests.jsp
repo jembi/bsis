@@ -21,7 +21,45 @@
 <div id="${tabContentId}">
 
 	<div id="${mainContentId}">
+
 		<b>Blood Typing tests</b>
+
+		<table class="simpleTable">
+			<thead>
+				<tr>
+					<th></th>
+					<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+						<th>
+							${bloodTypingTest.testNameShort}
+						</th>
+					</c:forEach>
+					<th>
+						Result
+					</th>
+					<th>
+						Pending tests
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="bloodTypingRule" items="${bloodTypingRules}">
+					<tr>
+						<td>${bloodTypingRule.id}</td>
+						<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+							<td>
+								${bloodTypingRule.patternMap[bloodTypingTest.id]}
+							</td>
+						</c:forEach>
+						<td>
+							${bloodTypingRule.newInformation}
+						</td>
+						<td>
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+
 	</div>
 
 	<div id="${childContentId}">
