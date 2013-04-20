@@ -475,7 +475,7 @@ public class BloodTestingRepository {
     String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND " +
     		"r.context=:context";
     if (onlyActiveTests) {
-      queryStr = queryStr + " AND r.isActive:isActive";
+      queryStr = queryStr + " AND r.isActive=:isActive";
     }
     TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
     BloodTestContext context = genericConfigRepository.getCurrentBloodTypingContext();
@@ -491,5 +491,14 @@ public class BloodTestingRepository {
     TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
     query.setParameter("ruleId", ruleId);
     return query.getSingleResult();
+  }
+
+  public void deleteBloodTestingRule(Integer ruleId) {
+    String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
+    Query query = em.createQuery(queryStr);
+    query.setParameter("isActive", false);
+    query.setParameter("ruleId", ruleId);
+    query.executeUpdate();
+    em.flush();
   }
 }

@@ -195,17 +195,17 @@ public class AdminController {
   }
 
   @RequestMapping("/configureBloodTypingTests")
-  public ModelAndView bloodTypingTests(HttpServletRequest request) {
+  public ModelAndView configureBloodTypingTests(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("admin/bloodTypingTests");
     mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
     List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
-    for (BloodTestingRule rule : bloodTestingRepository.getAllBloodTypingRules()) {
+    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
       rules.add(new BloodTestingRuleViewModel(rule));
     }
     mv.addObject("bloodTypingRules", rules);
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
-
   
   @RequestMapping("/configureForms")
   public ModelAndView configureForms(HttpServletRequest request,

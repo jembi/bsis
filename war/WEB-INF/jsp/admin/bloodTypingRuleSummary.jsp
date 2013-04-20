@@ -18,9 +18,52 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
+<c:set var="deleteBloodTypingRuleConfirmDialogId">deleteBloodTypingRuleConfirmDialogId-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function() {
 
+  $("#${mainContentId}").find(".editButton")
+  											.button({icons: {primary: 'ui-icon-pencil'}})
+  											.click(function() {
+  											  console.log("edit button clicked");
+  											});
+
+  $("#${mainContentId}").find(".deleteButton")
+  											.button({icons: {primary: 'ui-icon-closethick'}})
+  											.click(
+  											function() {
+
+  											  $("#${deleteBloodTypingRuleConfirmDialogId}").dialog({
+  											    modal: true,
+  											    title: "Confirm delete",
+  											    buttons: {
+  											      "Delete": function() {
+  											        deleteBloodTypingRule();
+  											        $(this).dialog("close");
+  											      },
+  											      "Cancel": function() {
+  											        $(this).dialog("close");
+  											      }
+  											    }
+  											  });
+  											});
+
+  function deleteBloodTypingRule() {
+    $.ajax({
+      url: "deleteBloodTypingRule.html",
+      type: "POST",
+      data: {bloodTypingRuleId : '${bloodTypingRule.id}'},
+      success: function() {
+        				 showMessage("Blood Typing Rule successfully deleted");
+        				 $("#${tabContentId}").parent().trigger("bloodTypingRuleEditDone");
+      				 },
+     	error:   function() {
+     	  			   showErrorMessage("Something went wrong. Please try again");
+     	  			  	$("#${tabContentId}").parent().trigger("bloodTypingRuleEditError");
+     					 }
+    });
+  }
 });
 </script>
 
@@ -30,7 +73,9 @@ $(document).ready(function() {
 
 			<div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected rule</div>
 
-			<div class="summaryPageButtonSection">
+			<div class="summaryPageButtonSection" style="text-align: right;">
+				<button class="editButton">Edit</button>
+				<button class="deleteButton">Delete</button>
 			</div>
 	
 			<div class="ruleDetails">
@@ -38,7 +83,7 @@ $(document).ready(function() {
 
 					<div>
 						<label>Rule no.</label>
-						<label>${ruleNumber}</label>
+						<label>${bloodTypingRule.id}</label>
 					</div>
 
 					<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
@@ -76,4 +121,8 @@ $(document).ready(function() {
 		</div>
 
 	</div>
+</div>
+
+<div id="${deleteBloodTypingRuleConfirmDialogId}" style="display: none;">
+	Are you sure you want to delete this rule?
 </div>

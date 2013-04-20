@@ -64,11 +64,10 @@ $(document).ready(function() {
 
 	  $(this).css("background", "#9BB5AA");
 	  selectedRowId = clickedRowId;
-	  var ruleNumber = ruleIdElement.data("rulenumber");
 	  $.ajax({
 	    url: "bloodTypingRuleSummary.html",
 	    type: "GET",
-	    data: {bloodTypingRuleId : selectedRowId, ruleNumber: ruleNumber},
+	    data: {bloodTypingRuleId : selectedRowId},
 	    success: function(response) {
 	      				 var ruleSummarySection = $("#${mainContentId}").find(".ruleSummarySection");
 	      			   animatedScrollTo(ruleSummarySection);
@@ -80,6 +79,12 @@ $(document).ready(function() {
 	  })
 	}
 
+	$("#${tabContentId}").bind("bloodTypingRuleEditDone", refetchContent);
+	$("#${tabContentId}").bind("bloodTypingRuleEditError", refetchContent);
+
+	function refetchContent() {
+		$("#${tabContentId}").load("${refreshUrl}");
+	}
 });
 </script>
 
@@ -94,7 +99,7 @@ $(document).ready(function() {
 			<table class="bloodTypingTestsTable">	
 				<thead>
 					<tr style="height: 30px;">
-						<th class="ruleNumber">Rule #</th>
+						<th>Rule #</th>
 						<!--  column for rule id should be hidden. It cannot be part of the fixed columns as
 									fixed columns form a separate table.
 						  -->
@@ -108,11 +113,10 @@ $(document).ready(function() {
 					</tr>
 				</thead>
 				<tbody>
-					<c:set var="ruleNum" value="${1}" />
 					<c:forEach var="bloodTypingRule" items="${bloodTypingRules}">
 						<tr style="cursor: pointer; height: 30px;">
-							<td style="text-align: center;">${ruleNum}</td>
-							<td style="display: none;" class="bloodTypingRuleId" data-rulenumber="${ruleNum}">${bloodTypingRule.id}</td>
+							<td style="text-align: center;">${bloodTypingRule.id}</td>
+							<td style="display: none;" class="bloodTypingRuleId">${bloodTypingRule.id}</td>
 							<c:set var="ruleNum" value="${ruleNum + 1}" />
 							<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
 								<td style="text-align: center; width: 20px;">

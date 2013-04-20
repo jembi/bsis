@@ -377,14 +377,12 @@ public class BloodTypingController {
 
   @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)
   public ModelAndView getBloodTypingRuleSummary(HttpServletRequest request,
-      @RequestParam(value="bloodTypingRuleId") Integer ruleId,
-      @RequestParam(value="ruleNumber") String ruleNumber) {
+      @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
 
     ModelAndView mv = new ModelAndView ("admin/bloodTypingRuleSummary");
     BloodTestingRuleViewModel bloodTypingRule;
     bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(ruleId));
     mv.addObject("bloodTypingRule", bloodTypingRule);
-    mv.addObject("ruleNumber", ruleNumber);
     mv.addObject("refreshUrl", getUrl(request));
     List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     mv.addObject("bloodTypingTests", bloodTypingTests);
@@ -392,7 +390,16 @@ public class BloodTypingController {
     return mv;
   }
 
-  private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
+  @RequestMapping(value="deleteBloodTypingRule", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
+      @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    bloodTestingRepository.deleteBloodTestingRule(ruleId);
+    return m;
+  }
+
+private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
     Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();
     for (BloodTest bt : bloodTypingTests) {
       bloodTypingTestsMap.put(bt.getId(), bt);
