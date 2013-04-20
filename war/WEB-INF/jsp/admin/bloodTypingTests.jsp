@@ -18,47 +18,82 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
+<script>
+$(document).ready(function() {
+	$("#${mainContentId}").find(".bloodTypingTestsTable").dataTable({
+    "bJQueryUI" : true,
+    "sDom" : '<"H"lrT>t<"F"i>T',
+    "aaSorting" : [],
+    "bPaginate" : false,
+    "bSort" : false,
+    "oTableTools" : {
+      "sRowSelect" : "single",
+      "aButtons" : [],
+      "fnRowSelected" : function(node) {
+									        var elements = $(node).children();
+									        if (elements[0].getAttribute("class") === "dataTables_empty") {
+									          return;
+									        }
+									        var selectedRowId = elements[0].innerHTML;
+									        console.log("row selected");
+												},
+			"fnRowDeselected" : function(node) {
+													  var elements = $(node).children();
+										        if (elements[0].getAttribute("class") === "dataTables_empty") {
+										          return;
+										        }
+										        var selectedRowId = elements[0].innerHTML;
+										        console.log("row deselected");
+													},
+	    }
+	});
+});
+</script>
+
 <div id="${tabContentId}">
 
 	<div id="${mainContentId}">
 
-		<b>Blood Typing tests</b>
 
-		<table class="simpleTable">
-			<thead>
-				<tr>
-					<th></th>
-					<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
-						<th>
-							${bloodTypingTest.testNameShort}
-						</th>
-					</c:forEach>
-					<th>
-						Result
-					</th>
-					<th>
-						Pending tests
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="bloodTypingRule" items="${bloodTypingRules}">
+		<div style="width: 700px; margin-left: 50px; margin-top: 50px; border: thin solid #1075A1; border-radius: 5px;">
+			<div style="font-weight: bold; margin: 30px;">Blood Typing tests</div>
+			<table class="bloodTypingTestsTable">	
+				<thead>
 					<tr>
-						<td>${bloodTypingRule.id}</td>
-						<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
-							<td>
-								${bloodTypingRule.patternMap[bloodTypingTest.id]}
-							</td>
-						</c:forEach>
-						<td>
-							${bloodTypingRule.newInformation}
-						</td>
-						<td>
-						</td>
+						<th style="display: none;"></th>
+						<th style="width: 300px;">Pattern</th>
+						<th style="width: 100px;">
+							Result
+						</th>
+						<th style="width: 100px;">
+							Pending tests
+						</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<c:forEach var="bloodTypingRule" items="${bloodTypingRules}">
+						<tr style="cursor: pointer;">
+							<td style="display: none;">${bloodTypingRule.id}</td>
+							<td style="text-align: center;">
+								<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+									<c:if test="${not empty bloodTypingRule.patternMap[bloodTypingTest.id]}">
+										<div>
+											<label style="width: 130px; display: inline-block; text-align: left; cursor: pointer;">${bloodTypingTest.testNameShort}</label>
+											<label style="width: 130px; display: inline-block; text-align: left; cursor: pointer;">${bloodTypingRule.patternMap[bloodTypingTest.id]}</label>
+										</div>
+									</c:if>
+								</c:forEach>
+							</td>
+							<td style="text-align: center;">
+								${bloodTypingRule.newInformation}
+							</td>
+							<td style="width: auto; text-align: center;">
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 
 	</div>
 
