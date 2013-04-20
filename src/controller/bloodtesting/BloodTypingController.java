@@ -30,6 +30,7 @@ import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
+import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -374,4 +375,28 @@ public class BloodTypingController {
     return m;
   }
 
+  @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)
+  public ModelAndView getBloodTypingRuleSummary(HttpServletRequest request,
+      @RequestParam(value="bloodTypingRuleId") Integer ruleId,
+      @RequestParam(value="ruleNumber") String ruleNumber) {
+
+    ModelAndView mv = new ModelAndView ("admin/bloodTypingRuleSummary");
+    BloodTestingRuleViewModel bloodTypingRule;
+    bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(ruleId));
+    mv.addObject("bloodTypingRule", bloodTypingRule);
+    mv.addObject("ruleNumber", ruleNumber);
+    mv.addObject("refreshUrl", getUrl(request));
+    List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
+    mv.addObject("bloodTypingTests", bloodTypingTests);
+    mv.addObject("bloodTypingTestsMap", getBloodTypingTestsAsMap(bloodTypingTests));
+    return mv;
+  }
+
+  private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
+    Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();
+    for (BloodTest bt : bloodTypingTests) {
+      bloodTypingTestsMap.put(bt.getId(), bt);
+    }
+    return bloodTypingTestsMap;
+  }
 }

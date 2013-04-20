@@ -1,6 +1,5 @@
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("recordOutcomes", "false", "labsetup"),
-("recordBloodTestResults", "true", "labsetup"),
+("bloodTypingContext", "RECORD_BLOOD_TYPING_TESTS", "labsetup"),
 ("useElisaPlates", "true", "labsetup"),
 ("useWorksheets", "true", "labsetup");
 
@@ -17,159 +16,144 @@ isEmptyAllowed, isActive) values
 (1, 'Anti-A', 'Anti-A', 'STRING',
 '+,-', '-', '+',
 '1', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (2, 'Anti-B', 'Anti-B', 'STRING',
 '+,-', '-', '+',
 '2', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (3, 'Anti-A,B', 'Anti-A,B', 'STRING',
 '+,-', '-', '+',
 '3', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (4, 'A1 Cells', 'A1 Cells', 'STRING',
 '+,-', '-', '+',
 '4', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (5, 'B Cells', 'B Cells', 'STRING',
 '+,-', '-', '+',
 '5', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (6, 'Anti-D', 'Anti-D', 'STRING',
 '+,-', '-', '+',
 '6', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (7, 'AbScr', 'Antibody Screen', 'STRING',
 '+,-', '-', '+',
 '7', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (8, 'Haemolysin', 'Haemolysin', 'STRING',
 '+,-', '-', '+',
 '8', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (9, 'Du', 'Du', 'STRING',
 '+,-', '-', '+',
 '1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (10, 'AHG Control (Du)', 'AHG Control (Du)', 'STRING',
 '+,-', '-', '+',
 '1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (11, 'DAT if Du Pos', 'DAT if Du Pos', 'STRING',
 '+,-', '-', '+',
 '1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (12, 'AHG Control (DAT)', 'AHG Control (DAT)', 'STRING',
 '+,-', '-', '+',
 '1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1'),
 (13, 'Immune anti-A', 'Immune anti-A', 'STRING',
 '+,-', '-', '+',
 '1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
-'0', '1'),
-(14, 'IAT Screen - 10 min', 'IAT Screen - 10 min', 'STRING',
-'+,-', '-', '+',
-'1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
-'0', '1'),
-(15, 'IAT Screen - AHG', 'IAT Screen - AHG', 'STRING',
-'+,-', '-', '+',
-'1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
-'0', '1'),
-(16, 'AHG Control (IAT Screen)', 'AHG Control (IAT Screen)', 'STRING',
-'+,-', '-', '+',
-'1', 'ADVANCED_BLOODTYPING', 'BLOODTYPING',
-'RECORD_BLOODTESTS',
+'RECORD_BLOOD_TYPING_TESTS',
 '0', '1');
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
  collectionFieldChanged, newInformation, extraInformation,
- context, category,
- extraAboTestsIds, extraRhTestsIds, extraTtiTestsIds, markSampleAsUnsafe, isActive
+ context, category, subCategory,
+ pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
 ('1,2,3,4,5', '-,-,-,+,+',
  'BLOODABO', 'O', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '1'
  ),
 ('1,2,3,4,5', '+,-,+,-,+',
  'BLOODABO', 'A', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '1'
  ),
 ('1,2,3,4,5', '-,+,+,+,-',
  'BLOODABO', 'B', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '1'
  ),
 ('1,2,3,4,5', '+,+,+,-,-',
  'BLOODABO', 'AB', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '1'
  ),
 ('6', '+',
  'BLOODRH', '+', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '1'
  ),
 ('6', '-',
  'NOCHANGE', '', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '9,10', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
+ '9,10', '0', '1'
  ),
 ('6,9', '-,-',
  'BLOODRH', '-', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '1'
  ),
 ('6,9', '-,+',
  'BLOODRH', '+', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '1'
  ),
  ('6,9,11', '-,+,+',
- 'EXTRA', 'DAT Pos;', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'EXTRA', 'DAT Pos', '',
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '1'
  ),
  ('6,9,11', '-,+,-',
- 'EXTRA', 'DAT Neg;', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'EXTRA', 'DAT Neg', '',
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '1'
  ),
  ('1,2,3,4,5', '-,-,+,-,+',
  'NOCHANGE', '', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '13', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '13', '0', '1'
  ),
  ('1,2,3,4,5,13', '-,-,+,-,+,+',
  'BLOODABO', 'A', 'wkA',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '1'
  ),
  ('1,2,3,4,5', '-,+,+,-,-',
  'NOCHANGE', '', '',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '13', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '13', '0', '1'
  ),
  ('1,2,3,4,5,13', '-,+,+,-,-,+',
  'BLOODABO', 'AB', 'wkAB',
- 'RECORD_BLOODTESTS', 'BLOODTYPING',
- '', '', '', '0', '1'
+ 'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '1'
  );
 
  insert into BloodTest
@@ -181,224 +165,224 @@ isEmptyAllowed, isActive) values
 (17, 'HIV', 'HIV', 'STRING',
 '+,-', '-', '+',
 '1', 'BASIC_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (18, 'HIV Conf 1', 'HIV Confirmatory 1', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (19, 'HIV Conf 2', 'HIV Confirmatory 2', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (20, 'HBV', 'HBV', 'STRING',
 '+,-', '-', '+',
 '1', 'BASIC_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (21, 'HBV Conf 1', 'HBV Confirmatory 1', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (22, 'HBV Conf 2', 'HBV Confirmatory 2', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (23, 'HCV', 'HCV', 'STRING',
 '+,-', '-', '+',
 '1', 'BASIC_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (24, 'HCV Conf 1', 'HCV Confirmatory 1', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (25, 'HCV Conf 2', 'HCV Confirmatory 2', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (26, 'Syphilis', 'Syphilis', 'STRING',
 '+,-', '-', '+',
 '1', 'BASIC_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (27, 'Syphilis Conf 1', 'Syphilis Confirmatory 1', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1'),
 (28, 'Syphilis Conf 2', 'Syphilis Confirmatory 2', 'STRING',
 '+,-', '-', '+',
 '1', 'CONFIRMATORY_TTI', 'TTI',
-'INDEPENDENT',
+'RECORD_TTI_TESTS',
 '0', '1');
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
  collectionFieldChanged, newInformation, extraInformation,
- context, category,
- extraAboTestsIds, extraRhTestsIds, extraTtiTestsIds, markSampleAsUnsafe, isActive
+ context, category, subCategory,
+ pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
 ('17,20,23,26', '-,-,-,-',
  'TTISTATUS', 'TTI_SAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
 ('17', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '18,19', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '18,19', '0', '1'
  ),
  ('17,18,19', '-,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19', '-,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19', '+,-,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19', '+,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19', '-,+,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19', '+,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19', '-,-,-',
  'TTISTATUS', 'TTI_SAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
 ('20', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '21,22', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '21,22', '0', '1'
  ),
  ('20,21,22', '-,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('20,21,22', '-,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('20,21,22', '+,-,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('20,21,22', '+,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('20,21,22', '-,+,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('20,21,22', '+,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
 ('23', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '24,25', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '24,25', '0', '1'
  ),
  ('23,24,25', '-,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('23,24,25', '-,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('23,24,25', '+,-,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('23,24,25', '+,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('23,24,25', '-,+,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('23,24,25', '+,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
 ('26', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '27,28', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '27,28', '0', '1'
  ),
  ('26,27,28', '-,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('26,27,28', '-,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('26,27,28', '+,-,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('26,27,28', '+,+,-',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('26,27,28', '-,+,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('26,27,28', '+,-,+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  ),
  ('17,18,19,20,21,22,23,24,25,26,27,28', '-,-,-,-,-,-,-,-,-,-,-,-',
  'TTISTATUS', 'TTI_SAFE', '',
- 'INDEPENDENT', 'TTI',
- '', '', '', '0', '1'
+ 'RECORD_TTI_TESTS', 'TTI', 'TTI',
+ '', '0', '1'
  );
 
 insert into Tips(tipsKey, tipsName, tipsContent) values
@@ -421,58 +405,58 @@ isEmptyAllowed, isActive) values
 (29, 'Blood ABO', 'Blood ABO', 'STRING',
 'A,B,AB,O', '', '',
 '1', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_OUTCOMES',
+'RECORD_BLOOD_TYPING_OUTCOMES',
 '0', '0'),
 (30, 'Blood Rh', 'Blood Rh', 'STRING',
 '+,-', '', '',
 '1', 'BASIC_BLOODTYPING', 'BLOODTYPING',
-'RECORD_OUTCOMES',
+'RECORD_BLOOD_TYPING_OUTCOMES',
 '0', '0');
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
  collectionFieldChanged, newInformation, extraInformation,
- context, category,
- extraAboTestsIds, extraRhTestsIds, extraTtiTestsIds, markSampleAsUnsafe, isActive
+ context, category, subCategory,
+ pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
 ('29', 'A',
  'BLOODABO', 'A', '',
- 'RECORD_OUTCOMES', 'BLOODTYPING',
- '', '', '', '0', '0'
+ 'RECORD_BLOOD_TYPING_OUTCOMES', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '0'
  ),
 ('29', 'B',
  'BLOODABO', 'B', '',
- 'RECORD_OUTCOMES', 'BLOODTYPING',
- '', '', '', '0', '0'
+ 'RECORD_BLOOD_TYPING_OUTCOMES', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '0'
  ),
 ('29', 'AB',
  'BLOODABO', 'AB', '',
- 'RECORD_OUTCOMES', 'BLOODTYPING',
- '', '', '', '0', '0'
+ 'RECORD_BLOOD_TYPING_OUTCOMES', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '0'
  ),
 ('29', 'O',
  'BLOODABO', 'O', '',
- 'RECORD_OUTCOMES', 'BLOODTYPING',
- '', '', '', '0', '0'
+ 'RECORD_BLOOD_TYPING_OUTCOMES', 'BLOODTYPING', 'BLOODABO',
+ '', '0', '0'
  ),
 ('30', '+',
  'BLOODRH', '+', '',
- 'RECORD_OUTCOMES', 'BLOODTYPING',
- '', '', '', '0', '0'
+ 'RECORD_BLOOD_TYPING_OUTCOMES', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '0'
  ),
 ('30', '-',
  'BLOODRH', '-', '',
- 'RECORD_OUTCOMES', 'BLOODTYPING',
- '', '', '', '0', '0'
+ 'RECORD_BLOOD_TYPING_OUTCOMES', 'BLOODTYPING', 'BLOODRH',
+ '', '0', '0'
  );
 
 insert into WorksheetType
 (id, worksheetType, context, isDeleted) values
-(1, 'Blood Typing', 'RECORD_BLOODTESTS', '0'),
-(2, 'Full Blood Typing', 'RECORD_BLOODTESTS', '0'),
-(3, 'TTI', 'INDEPENDENT', '0'),
-(4, 'Full TTI', 'INDEPENDENT', '0'),
-(5, 'Blood ABO/Rh', 'RECORD_OUTCOMES', '0');
+(1, 'Blood Typing', 'RECORD_BLOOD_TYPING_TESTS', '0'),
+(2, 'Full Blood Typing', 'RECORD_BLOOD_TYPING_TESTS', '0'),
+(3, 'TTI', 'RECORD_TTI_TESTS', '0'),
+(4, 'Full TTI', 'RECORD_TTI_TESTS', '0'),
+(5, 'Blood ABO/Rh', 'RECORD_BLOOD_TYPING_OUTCOMES', '0');
 
 insert into BloodTest_WorksheetType
 (bloodTests_id, worksheetTypes_id) values

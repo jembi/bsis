@@ -199,7 +199,7 @@ public class AdminController {
     ModelAndView mv = new ModelAndView("admin/bloodTypingTests");
     mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
     List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
-    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules()) {
+    for (BloodTestingRule rule : bloodTestingRepository.getAllBloodTypingRules()) {
       rules.add(new BloodTestingRuleViewModel(rule));
     }
     mv.addObject("bloodTypingRules", rules);
@@ -306,16 +306,16 @@ public class AdminController {
     String recordOutcomes = paramsMap.get("recordOutcomes");
 
     if (recordOutcomes.equals("true")) {
-      bloodTestingRepository.activateTests(BloodTestContext.RECORD_OUTCOMES);
+      bloodTestingRepository.activateTests(BloodTestContext.RECORD_BLOOD_TYPING_OUTCOMES);
     } else {
-      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_OUTCOMES);
+      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_BLOOD_TYPING_OUTCOMES);
     }
 
     String recordBloodTestResults = paramsMap.get("recordBloodTestResults");
     if (recordBloodTestResults.equals("true")) {
-      bloodTestingRepository.activateTests(BloodTestContext.RECORD_BLOODTESTS);
+      bloodTestingRepository.activateTests(BloodTestContext.RECORD_BLOOD_TYPING_TESTS);
     } else {
-      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_BLOODTESTS);
+      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_BLOOD_TYPING_TESTS);
     }
 
     genericConfigRepository.updateConfigProperties("labsetup", paramsMap);

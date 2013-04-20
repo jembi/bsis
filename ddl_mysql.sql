@@ -30,8 +30,8 @@
         negativeResults varchar(255),
         positiveResults varchar(255),
         rankInCategory integer,
-        testName varchar(30),
-        testNameShort varchar(15),
+        testName varchar(40),
+        testNameShort varchar(25),
         validResults varchar(255),
         primary key (id)
     ) ENGINE=InnoDB;
@@ -64,8 +64,8 @@
         negativeResults varchar(255),
         positiveResults varchar(255),
         rankInCategory integer,
-        testName varchar(30),
-        testNameShort varchar(15),
+        testName varchar(40),
+        testNameShort varchar(25),
         validResults varchar(255),
         primary key (id, REV)
     ) ENGINE=InnoDB;
@@ -89,14 +89,13 @@
         category varchar(30),
         collectionFieldChanged varchar(12),
         context varchar(30),
-        extraAboTestsIds varchar(60),
         extraInformation varchar(30),
-        extraRhTestsIds varchar(60),
-        extraTtiTestsIds varchar(60),
         isActive boolean,
         markSampleAsUnsafe boolean,
         newInformation varchar(30),
         pattern varchar(50),
+        pendingTestsIds varchar(60),
+        subCategory varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -108,14 +107,13 @@
         category varchar(30),
         collectionFieldChanged varchar(12),
         context varchar(30),
-        extraAboTestsIds varchar(60),
         extraInformation varchar(30),
-        extraRhTestsIds varchar(60),
-        extraTtiTestsIds varchar(60),
         isActive boolean,
         markSampleAsUnsafe boolean,
         newInformation varchar(30),
         pattern varchar(50),
+        pendingTestsIds varchar(60),
+        subCategory varchar(30),
         primary key (id, REV)
     ) ENGINE=InnoDB;
 

@@ -19,6 +19,7 @@
 <script src="plugins/DataTables/media/js/jquery.dataTables.js"></script>
 
 <script src="plugins/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
+<script src="plugins/DataTables/extras/FixedColumns/media/js/FixedColumns.min.js"></script>
 <script src="plugins/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
 <script src="plugins/slidingmessage/jquery.slidingmessage.js"></script>
 <script src="plugins/barcode/jquery-barcode-2.0.2.min.js"></script>

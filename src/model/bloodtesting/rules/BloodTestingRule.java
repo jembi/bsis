@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
+import model.bloodtesting.BloodTestSubCategory;
 import model.bloodtesting.CollectionField;
 
 import org.hibernate.envers.Audited;
@@ -40,17 +41,15 @@ public class BloodTestingRule {
   private String extraInformation;
 
   @Column(length=60)
-  private String extraAboTestsIds;
-
-  @Column(length=60)
-  private String extraRhTestsIds;
-
-  @Column(length=60)
-  private String extraTtiTestsIds;
+  private String pendingTestsIds;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
   private BloodTestCategory category;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private BloodTestSubCategory subCategory;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
@@ -124,30 +123,6 @@ public class BloodTestingRule {
     this.extraInformation = extraInformation;
   }
 
-  public String getExtraAboTestsIds() {
-    return extraAboTestsIds;
-  }
-
-  public void setExtraTestsIds(String extraAboTestsIds) {
-    this.extraAboTestsIds = extraAboTestsIds;
-  }
-
-  public String getExtraRhTestsIds() {
-    return extraRhTestsIds;
-  }
-
-  public void setExtraRhTestsIds(String extraRhTestsIds) {
-    this.extraRhTestsIds = extraRhTestsIds;
-  }
-
-  public String getExtraTtiTestsIds() {
-    return extraTtiTestsIds;
-  }
-
-  public void setExtraTtiTestsIds(String extraTtiTestsIds) {
-    this.extraTtiTestsIds = extraTtiTestsIds;
-  }
-
   public BloodTestContext getContext() {
     return context;
   }
@@ -162,5 +137,21 @@ public class BloodTestingRule {
 
   public void setCategory(BloodTestCategory category) {
     this.category = category;
+  }
+
+  public String getPendingTestsIds() {
+    return pendingTestsIds;
+  }
+
+  public void setPendingTestsIds(String pendingTestsIds) {
+    this.pendingTestsIds = pendingTestsIds;
+  }
+
+  public BloodTestSubCategory getSubCategory() {
+    return subCategory;
+  }
+
+  public void setSubCategory(BloodTestSubCategory subCategory) {
+    this.subCategory = subCategory;
   }
 }

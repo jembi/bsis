@@ -153,27 +153,21 @@ public class BloodTestingRuleEngine {
           extraInformation.add(rule.getExtraInformation());
 
         // find extra tests for ABO
-        if (StringUtils.isNotBlank(rule.getExtraAboTestsIds())) {
-          for (String extraTestId : rule.getExtraAboTestsIds().split(",")) {
+        if (StringUtils.isNotBlank(rule.getPendingTestsIds())) {
+          for (String extraTestId : rule.getPendingTestsIds().split(",")) {
             if (!availableTestResults.containsKey(extraTestId)) {
-                pendingAboTestsIds.add(extraTestId);
+              switch (rule.getSubCategory()) {
+                case BLOODABO: pendingAboTestsIds.add(extraTestId);
+                               break;
+                case BLOODRH:  pendingRhTestsIds.add(extraTestId);
+                               break;
+                case TTI:      pendingTtiTestsIds.add(extraTestId);
+                               break;
+              }
             }
           }
         }
-        if (StringUtils.isNotBlank(rule.getExtraRhTestsIds())) {
-          for (String extraTestId : rule.getExtraRhTestsIds().split(",")) {
-            if (!availableTestResults.containsKey(extraTestId)) {
-                pendingRhTestsIds.add(extraTestId);
-            }
-          }
-        }
-        if (StringUtils.isNotBlank(rule.getExtraTtiTestsIds())) {
-          for (String extraTestId : rule.getExtraTtiTestsIds().split(",")) {
-            if (!availableTestResults.containsKey(extraTestId)) {
-                pendingTtiTestsIds.add(extraTestId);
-            }
-          }
-        }
+
       } else {
         // pattern did not match
         CollectionField collectionFieldChanged = rule.getCollectionFieldChanged();

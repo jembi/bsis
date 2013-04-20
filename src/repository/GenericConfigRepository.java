@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import model.admin.ConfigPropertyConstants;
 import model.admin.GenericConfig;
+import model.bloodtesting.BloodTestContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,5 +59,10 @@ public class GenericConfigRepository {
       configProperties.put(gc.getPropertyName(), gc.getPropertyValue());
     }
     return configProperties;
+  }
+
+  public BloodTestContext getCurrentBloodTypingContext() {
+    String contextStr = getConfigProperties("labsetup").get("bloodTypingContext");
+    return BloodTestContext.valueOf(contextStr);
   }
 }

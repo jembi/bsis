@@ -1,12 +1,16 @@
 package viewmodel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
+import model.bloodtesting.BloodTestSubCategory;
 import model.bloodtesting.CollectionField;
 import model.bloodtesting.rules.BloodTestingRule;
 
@@ -40,8 +44,17 @@ public class BloodTestingRuleViewModel {
     return rule.getPattern();
   }
 
-  public CollectionField getCollectionFieldChanged() {
-    return rule.getCollectionFieldChanged();
+  public String getCollectionFieldChanged() {
+    String collectionField = "";
+    switch (rule.getCollectionFieldChanged()) {
+    case BLOODABO: collectionField = "Blood ABO";
+                   break;
+    case BLOODRH:  collectionField = "Blood Rh";
+                   break;
+    case EXTRA:    collectionField = "Extra Info";
+                   break;
+    }
+    return collectionField;
   }
 
   public Boolean getMarkSampleAsUnsafe() {
@@ -60,18 +73,6 @@ public class BloodTestingRuleViewModel {
     return rule.getExtraInformation();
   }
 
-  public String getExtraAboTestsIds() {
-    return rule.getExtraAboTestsIds();
-  }
-
-  public String getExtraRhTestsIds() {
-    return rule.getExtraRhTestsIds();
-  }
-
-  public String getExtraTtiTestsIds() {
-    return rule.getExtraTtiTestsIds();
-  }
-
   public BloodTestContext getContext() {
     return rule.getContext();
   }
@@ -80,7 +81,30 @@ public class BloodTestingRuleViewModel {
     return rule.getCategory();
   }
 
+  public String getSubCategory() {
+    String subCategory = "";
+    switch (rule.getSubCategory()) {
+    case BLOODABO: subCategory = "Blood ABO";
+                   break;
+    case BLOODRH:  subCategory = "Blood Rh";
+                   break;
+    case TTI:      subCategory = "TTI";
+                   break;
+    }
+    return subCategory;
+  }
+
   public Map<Integer, String> getPatternMap() {
     return patternMap;
+  }
+
+  public List<Integer> getPendingTestsIds() {
+    List<Integer> pendingTestIds = new ArrayList<Integer>();
+    for (String pendingTestId : rule.getPendingTestsIds().split(",")) {
+      if (StringUtils.isBlank(pendingTestId))
+        continue;
+      pendingTestIds.add(Integer.parseInt(pendingTestId));
+    }
+    return pendingTestIds;
   }
 }

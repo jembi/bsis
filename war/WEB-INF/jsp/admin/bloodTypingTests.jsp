@@ -20,33 +20,66 @@
 
 <script>
 $(document).ready(function() {
-	$("#${mainContentId}").find(".bloodTypingTestsTable").dataTable({
+
+  var selectedRowId = undefined;
+  
+	var bloodTypingTable = $("#${mainContentId}").find(".bloodTypingTestsTable").dataTable({
     "bJQueryUI" : true,
-    "sDom" : '<"H"lrT>t<"F"i>T',
+    "sDom" : '<"H"lrC>t<"F"i>',
     "aaSorting" : [],
+    "sScrollX": "100%",
     "bPaginate" : false,
     "bSort" : false,
-    "oTableTools" : {
-      "sRowSelect" : "single",
-      "aButtons" : [],
-      "fnRowSelected" : function(node) {
-									        var elements = $(node).children();
-									        if (elements[0].getAttribute("class") === "dataTables_empty") {
-									          return;
-									        }
-									        var selectedRowId = elements[0].innerHTML;
-									        console.log("row selected");
-												},
-			"fnRowDeselected" : function(node) {
-													  var elements = $(node).children();
-										        if (elements[0].getAttribute("class") === "dataTables_empty") {
-										          return;
-										        }
-										        var selectedRowId = elements[0].innerHTML;
-										        console.log("row deselected");
-													},
-	    }
+      "oColVis" : {
+       	"aiExclude": [0,1],
+      }
 	});
+
+	new FixedColumns(bloodTypingTable, {"iLeftColumns" : 1, "iRightColumns" : 1});
+
+	$("#${mainContentId}").find(".bloodTypingTestsTable")
+												.find("tbody tr")
+												.click(bloodTypingRowClicked);
+
+	function bloodTypingRowClicked() {
+	  var ruleIdElement = $(this).find(".bloodTypingRuleId");
+	  if (ruleIdElement === undefined) {
+	    return;
+	  }
+
+	  if (selectedRowId !== undefined) {
+	    $(this).closest("table")
+	    			 .find("tr")
+	    			 .each(function() {
+	      						 $(this).css("background", "");
+	      					 });
+	  }
+
+	  var clickedRowId = ruleIdElement[0].innerHTML;
+	  if (clickedRowId === selectedRowId) {
+	    $("#${mainContentId}").find(".ruleSummarySection").html("");
+	    selectedRowId = undefined;
+	    return;
+	  }
+
+	  $(this).css("background", "#9BB5AA");
+	  selectedRowId = clickedRowId;
+	  var ruleNumber = ruleIdElement.data("rulenumber");
+	  $.ajax({
+	    url: "bloodTypingRuleSummary.html",
+	    type: "GET",
+	    data: {bloodTypingRuleId : selectedRowId, ruleNumber: ruleNumber},
+	    success: function(response) {
+	      				 var ruleSummarySection = $("#${mainContentId}").find(".ruleSummarySection");
+	      			   animatedScrollTo(ruleSummarySection);
+	      			   ruleSummarySection.html(response);
+	    				 },
+	    error: function(response) {
+	      			 showErrorMessage("Something went wrong. Please try again.");
+	    			 }
+	  })
+	}
+
 });
 </script>
 
@@ -54,45 +87,60 @@ $(document).ready(function() {
 
 	<div id="${mainContentId}">
 
+		<div style="margin-left: 20px; margin-right: 20px; margin-top: 50px; border-radius: 5px;">
 
-		<div style="width: 700px; margin-left: 50px; margin-top: 50px; border: thin solid #1075A1; border-radius: 5px;">
-			<div style="font-weight: bold; margin: 30px;">Blood Typing tests</div>
+			<div style="font-weight: bold; margin: 15px;">Blood Typing tests</div>
+
 			<table class="bloodTypingTestsTable">	
 				<thead>
-					<tr>
+					<tr style="height: 30px;">
+						<th class="ruleNumber">Rule #</th>
+						<!--  column for rule id should be hidden. It cannot be part of the fixed columns as
+									fixed columns form a separate table.
+						  -->
 						<th style="display: none;"></th>
-						<th style="width: 300px;">Pattern</th>
-						<th style="width: 100px;">
+						<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+							<th style="width: 20px;">${bloodTypingTest.testName}</th>
+						</c:forEach>
+						<th style="width: 300px;">
 							Result
-						</th>
-						<th style="width: 100px;">
-							Pending tests
 						</th>
 					</tr>
 				</thead>
 				<tbody>
+					<c:set var="ruleNum" value="${1}" />
 					<c:forEach var="bloodTypingRule" items="${bloodTypingRules}">
-						<tr style="cursor: pointer;">
-							<td style="display: none;">${bloodTypingRule.id}</td>
-							<td style="text-align: center;">
-								<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
-									<c:if test="${not empty bloodTypingRule.patternMap[bloodTypingTest.id]}">
-										<div>
-											<label style="width: 130px; display: inline-block; text-align: left; cursor: pointer;">${bloodTypingTest.testNameShort}</label>
-											<label style="width: 130px; display: inline-block; text-align: left; cursor: pointer;">${bloodTypingRule.patternMap[bloodTypingTest.id]}</label>
-										</div>
-									</c:if>
-								</c:forEach>
-							</td>
-							<td style="text-align: center;">
-								${bloodTypingRule.newInformation}
-							</td>
-							<td style="width: auto; text-align: center;">
+						<tr style="cursor: pointer; height: 30px;">
+							<td style="text-align: center;">${ruleNum}</td>
+							<td style="display: none;" class="bloodTypingRuleId" data-rulenumber="${ruleNum}">${bloodTypingRule.id}</td>
+							<c:set var="ruleNum" value="${ruleNum + 1}" />
+							<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+								<td style="text-align: center; width: 20px;">
+								<c:if test="${not empty bloodTypingRule.patternMap[bloodTypingTest.id]}">
+									${bloodTypingRule.patternMap[bloodTypingTest.id]}
+								</c:if>
+								</td>
+							</c:forEach>
+							<td style="width: 300px; text-align: center;">
+								<c:if test="${not empty bloodTypingRule.newInformation}">
+									<div>
+										<span style="text-align:left; display: inline-block; width: 45%; margin-left: 10px;">
+											${bloodTypingRule.collectionFieldChanged}
+										</span>
+										<span style="text-align: right; display: inline-block; width: 45%; margin-right: 10px;">
+											${bloodTypingRule.newInformation}
+										</span>
+									</div>
+								</c:if>
 							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
+
+			<div class="ruleSummarySection">
+			</div>
+
 		</div>
 
 	</div>

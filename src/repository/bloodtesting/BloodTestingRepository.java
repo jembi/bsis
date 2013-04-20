@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
+import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.events.ApplicationContextProvider;
 import repository.events.BloodTestsUpdatedEvent;
@@ -53,6 +54,9 @@ public class BloodTestingRepository {
 
   @Autowired
   private WellTypeRepository wellTypeRepository;
+
+  @Autowired
+  private GenericConfigRepository genericConfigRepository;
 
   public MicrotiterPlate getPlate(String plateKey) {
     String queryStr = "SELECT p from MicrotiterPlate p " +
@@ -463,11 +467,29 @@ public class BloodTestingRepository {
     query.executeUpdate();
   }
 
-  public List<BloodTestingRule> getBloodTypingRules() {
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND r.isActive=:isActive";
+  public List<BloodTestingRule> getAllBloodTypingRules() {
+    return getBloodTypingRules(false);
+  }
+
+  public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveTests) {
+    String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND " +
+    		"r.context=:context";
+    if (onlyActiveTests) {
+      queryStr = queryStr + " AND r.isActive:isActive";
+    }
     TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
+    BloodTestContext context = genericConfigRepository.getCurrentBloodTypingContext();
     query.setParameter("category", BloodTestCategory.BLOODTYPING);
-    query.setParameter("isActive", true);
+    query.setParameter("context", context);
+    if (onlyActiveTests)
+      query.setParameter("isActive", true);
     return query.getResultList();
+  }
+
+  public BloodTestingRule getBloodTestingRuleById(Integer ruleId) {
+    String queryStr = "SELECT r from BloodTestingRule r WHERE r.id=:ruleId";
+    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
+    query.setParameter("ruleId", ruleId);
+    return query.getSingleResult();
   }
 }
