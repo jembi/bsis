@@ -399,7 +399,33 @@ public class BloodTypingController {
     return m;
   }
 
-private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
+  @RequestMapping(value="saveNewBloodTypingRule", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
+      HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {
+    Map<String, Object> m = new HashMap<String, Object>();
+    ObjectMapper mapper = new ObjectMapper();
+    boolean success = false;
+    try {
+      Map<String, Object> newBloodTypingRuleAsMap;
+      newBloodTypingRuleAsMap = mapper.readValue(newBloodTypingRuleAsJsonStr, HashMap.class);
+      bloodTestingRepository.saveNewBloodTypingRule(newBloodTypingRuleAsMap);
+      success = true;
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (!success)
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    return m;
+  }
+  
+  private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
     Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();
     for (BloodTest bt : bloodTypingTests) {
       bloodTypingTestsMap.put(bt.getId(), bt);

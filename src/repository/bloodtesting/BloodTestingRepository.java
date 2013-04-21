@@ -18,7 +18,9 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestSubCategory;
 import model.bloodtesting.BloodTestType;
+import model.bloodtesting.CollectionField;
 import model.bloodtesting.WellType;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
@@ -500,5 +502,31 @@ public class BloodTestingRepository {
     query.setParameter("ruleId", ruleId);
     query.executeUpdate();
     em.flush();
+  }
+
+  public void saveNewBloodTypingRule(Map<String, Object> newBloodTypingRuleAsMap) {
+
+    BloodTestingRule rule = new BloodTestingRule();
+
+    BloodTestSubCategory subCategory = BloodTestSubCategory.valueOf((String) newBloodTypingRuleAsMap.get("subCategory"));
+    rule.setSubCategory(subCategory);
+
+    Map<String, String> pattern = (Map<String, String>) newBloodTypingRuleAsMap.get("pattern");
+    List<String> testIdsInPattern = new ArrayList<String>();
+    List<String> resultsInPattern = new ArrayList<String>();
+    for (String testId : pattern.keySet()) {
+      testIdsInPattern.add(testId);
+      resultsInPattern.add(pattern.get(testId));
+    }
+
+    rule.setBloodTestsIds(StringUtils.join(testIdsInPattern, ","));
+    rule.setPattern(StringUtils.join(resultsInPattern, ","));
+    rule.setPart(CollectionField.valueOf((String) newBloodTypingRuleAsMap.get("collectionFieldChanged")));
+    rule.setNewInformation((String) newBloodTypingRuleAsMap.get("result"));
+
+    rule.setCategory(BloodTestCategory.BLOODTYPING);
+    rule.setContext(genericConfigRepository.getCurrentBloodTypingContext());
+    rule.setIsActive(true);
+    em.persist(rule);
   }
 }

@@ -18,6 +18,12 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
+<c:set var="newBloodTypingRuleDialogId">newBloodTypingRuleDialog-${unique_page_id}</c:set>
+
+<c:set var="subCategorySelectorId">subCategorySelector-${unique_page_id}</c:set>
+<c:set var="collectionFieldChangedSelectorId">collectionFieldChanged-${unique_page_id}</c:set>
+<c:set var="pendingTestsIdsSelectorId">pendingTestsIdsSelector-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function() {
 
@@ -79,12 +85,126 @@ $(document).ready(function() {
 	  })
 	}
 
-	$("#${tabContentId}").bind("bloodTypingRuleEditDone", refetchContent);
-	$("#${tabContentId}").bind("bloodTypingRuleEditError", refetchContent);
+	$("#${tabContentId}").bind("bloodTypingRuleEditDone", refetchBloodTypingRules);
+	$("#${tabContentId}").bind("bloodTypingRuleCancel", function() {
+	  $("#${mainContentId}").find(".ruleSummarySection").html("");
+	  if (selectedRowId !== undefined) {
+	    $("#${mainContentId}").find(".bloodTypingTestsTable")
+	    			 .find("tr")
+	    			 .each(function() {
+	      						 $(this).css("background", "");
+	      					 });
+	  }
+	  selectedRowId = undefined;
+	});
 
-	function refetchContent() {
-		$("#${tabContentId}").load("${refreshUrl}");
+	function refetchBloodTypingRules() {
+	  showLoadingImage($("#${tabContentId}"));
+		refetchContent("${refreshUrl}", $("#${tabContentId}"));
 	}
+
+	$("#${mainContentId}").find(".newRuleButton")
+												.button({icons: {primary: 'ui-icon-plusthick'}})
+												.click(function() {
+												  showNewRuleDialog();
+												});
+
+  $("#${newBloodTypingRuleDialogId}").find(".subCategory")
+  																	 .multiselect({
+  														          multiple : false,
+  														          selectedList : 1,
+  														          header : false
+  														        });
+
+  $("#${newBloodTypingRuleDialogId}").find(".newRuleBloodTestPattern")
+	 .multiselect({
+   multiple : false,
+   selectedList : 1,
+   header : false
+ 	});
+
+  $("#${newBloodTypingRuleDialogId}").find(".collectionFieldChanged")
+	 .multiselect({
+     multiple : false,
+     selectedList : 1,
+     header : false
+   });
+
+  $("#${newBloodTypingRuleDialogId}").find(".pendingTestsIds")
+	 .multiselect({
+     multiple : true,
+     header : true,
+     noneSelectedText: 'No extra tests required',
+     selectedText: function(numSelected, numTotal, selectedValues) {
+								     var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+							  	   return checkedValues.length ? checkedValues.join(', ') : 'None';
+  					  		 }
+  });
+
+  $("#${newBloodTypingRuleDialogId}").find(".pendingTestsIds").multiselect("uncheckAll");
+
+  function showNewRuleDialog() {
+		$("#${newBloodTypingRuleDialogId}").dialog({
+		  modal: true,
+		  title: "New Blood Typing Rule",
+		  width: 700,
+		  height: 400,
+		  maxHeight: 400,
+		  buttons: {
+		    "Create" : function() {
+											console.log("new rule created");
+											var data = getNewBloodTypingRuleData();
+											saveNewBloodTypingRule(data);
+											$(this).dialog("close");
+		    					 },
+		    "Cancel" : function() {
+											console.log("cancel");
+											$(this).dialog("close");
+		    					 }
+		  }
+		});
+
+		function getNewBloodTypingRuleData() {
+		  var data = {};
+		  var newBloodTypingRuleForm = $("#${newBloodTypingRuleDialogId}").find("form");
+		  data.subCategory = newBloodTypingRuleForm.find(".subCategory").val();
+
+		  data.pattern = {};
+		  var testPatterns = newBloodTypingRuleForm.find(".newRuleBloodTestPattern");
+		  for (var index = 0; index < testPatterns.length; ++index) {
+		    if ($(testPatterns[index]).val() === "")
+		      continue;
+		    data.pattern[$(testPatterns[index]).data("testid")] = $(testPatterns[index]).val();
+		  }
+
+		  var pendingTestsSelector = newBloodTypingRuleForm.find(".pendingTestsIds"); 
+		  data.pendingTestsIds = pendingTestsSelector.multiselect("getChecked").map(function() {
+		    return this.value;
+		  }).get().join(",");
+		  data.collectionFieldChanged = newBloodTypingRuleForm.find(".collectionFieldChanged").val();
+		  data.result = newBloodTypingRuleForm.find(".result").val();
+
+		  console.log(data);
+		  return data;
+		}
+
+		function saveNewBloodTypingRule(data) {
+			$.ajax({
+			  url: "saveNewBloodTypingRule.html",
+			  type: "POST",
+			  data: {newBloodTypingRule : JSON.stringify(data)},
+			  success: function(response) {
+			    				 showMessage("New Blood Typing rule successfully created.");
+			    				 $("#${tabContentId}").trigger("bloodTypingRuleEditDone");
+			  				 },
+			  error:   function() {
+			    				 showErrorMessage("Unable to create new blood typing rule.");
+			  				 }
+			});
+		}
+
+	}
+
 });
 </script>
 
@@ -95,6 +215,12 @@ $(document).ready(function() {
 		<div style="margin-left: 20px; margin-right: 20px; margin-top: 50px; border-radius: 5px;">
 
 			<div style="font-weight: bold; margin: 15px;">Blood Typing tests</div>
+
+			<div>
+				<button class="newRuleButton">New blood typing rule</button>
+			</div>
+
+			<br />
 
 			<table class="bloodTypingTestsTable">	
 				<thead>
@@ -150,6 +276,74 @@ $(document).ready(function() {
 	</div>
 
 	<div id="${childContentId}">
+	</div>
+
+	<div id="${newBloodTypingRuleDialogId}" style="display: none;">
+		<form class="formInTabPane">
+			<div>
+				<label>Rule for testing</label>
+				<select id="${subCategorySelectorId}"
+								name="subCategory" class="subCategory">
+					<option value="BLOODABO">
+						Blood ABO
+					</option>
+					<option value="BLOODRH">
+						Blood Rh
+					</option>
+				</select>
+			</div>
+
+			<div>
+				<label><b>Pattern</b></label>
+			</div>
+
+			<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+				<div>
+					<label>${bloodTypingTest.testNameShort}</label>
+					<select id="$patternSelector-${bloodTypingTest.id}_${unique_page_id}"
+									name="patternInput-${bloodTypingTest.id}_${unique_page_id}"
+									class="newRuleBloodTestPattern"
+									data-testid="${bloodTypingTest.id}">
+						<option value="" />
+						<c:forEach var="validResult" items="${bloodTypingTest.validResults}" >
+							<option value="${validResult}">${validResult}</option>
+						</c:forEach>
+					</select>
+				</div>
+			</c:forEach>
+
+			<div>
+				<label>More tests required if rule matches</label>
+				<select id="${pendingTestsIdsSelectorId}"
+								name="pendingTestsIds-${unique_page_id}" class="pendingTestsIds">
+					<c:forEach var="bloodTypingTest" items="${bloodTypingTests}">
+						<option value="${bloodTypingTest.id}">${bloodTypingTest.testNameShort}</option>
+					</c:forEach>
+				</select>
+			</div>
+
+			<div>
+				<label><b>Result</b></label>
+			</div>
+			<div>
+				<label>
+					Result type
+				</label>
+				<select id="${collectionFieldChangedSelectorId}"
+								name="collectionFieldChanged" class="collectionFieldChanged">
+					<option value="NOCHANGE">This rule does not generate a final result</option>
+					<option value="BLOODABO">Blood ABO</option>
+					<option value="BLOODRH">Blood Rh</option>
+					<option value="EXTRA">Extra Information</option>
+				</select>
+			</div>
+			<div>
+				<label>Result value</label>
+				<input type="text" name="result" class="result" />
+			</div>
+
+		</form>
+
 	</div>
 
 </div>

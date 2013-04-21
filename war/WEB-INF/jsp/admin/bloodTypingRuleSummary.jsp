@@ -29,14 +29,23 @@ $(document).ready(function() {
   											  console.log("edit button clicked");
   											});
 
+  $("#${mainContentId}").find(".doneButton")
+												.button({icons: {primary: 'ui-icon-check'}})
+												.click(
+												    function() {
+												      $("#${tabContentId}").parent().trigger("bloodTypingRuleCancel");
+												    });
+
   $("#${mainContentId}").find(".deleteButton")
-  											.button({icons: {primary: 'ui-icon-closethick'}})
+  											.button({icons: {primary: 'ui-icon-trash'}})
   											.click(
   											function() {
 
   											  $("#${deleteBloodTypingRuleConfirmDialogId}").dialog({
   											    modal: true,
   											    title: "Confirm delete",
+  											    width: "400px",
+  											    resizable: false,
   											    buttons: {
   											      "Delete": function() {
   											        deleteBloodTypingRule();
@@ -74,7 +83,8 @@ $(document).ready(function() {
 			<div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected rule</div>
 
 			<div class="summaryPageButtonSection" style="text-align: right;">
-				<button class="editButton">Edit</button>
+				<!-- button class="editButton">Edit</button-->
+				<button class="doneButton">Done</button>
 				<button class="deleteButton">Delete</button>
 			</div>
 	
