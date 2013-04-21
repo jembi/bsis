@@ -519,6 +519,7 @@ public class BloodTestingRepository {
       resultsInPattern.add(pattern.get(testId));
     }
 
+    rule.setPendingTestsIds((String) newBloodTypingRuleAsMap.get("pendingTestsIds"));
     rule.setBloodTestsIds(StringUtils.join(testIdsInPattern, ","));
     rule.setPattern(StringUtils.join(resultsInPattern, ","));
     rule.setPart(CollectionField.valueOf((String) newBloodTypingRuleAsMap.get("collectionFieldChanged")));

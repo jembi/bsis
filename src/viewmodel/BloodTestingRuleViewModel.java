@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
-import model.bloodtesting.BloodTestSubCategory;
-import model.bloodtesting.CollectionField;
 import model.bloodtesting.rules.BloodTestingRule;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class BloodTestingRuleViewModel {
 
@@ -100,6 +98,8 @@ public class BloodTestingRuleViewModel {
 
   public List<Integer> getPendingTestsIds() {
     List<Integer> pendingTestIds = new ArrayList<Integer>();
+    if (rule.getPendingTestsIds() == null)
+      return pendingTestIds;
     for (String pendingTestId : rule.getPendingTestsIds().split(",")) {
       if (StringUtils.isBlank(pendingTestId))
         continue;

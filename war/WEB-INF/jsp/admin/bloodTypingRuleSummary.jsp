@@ -114,11 +114,11 @@ $(document).ready(function() {
 						<label>${bloodTypingRule.newInformation}</label>
 					</div>
 
-					<c:if test="${fn:length(pendingTestsIds) gt 0}">
+					<c:if test="${fn:length(bloodTypingRule.pendingTestsIds) gt 0}">
 						<div>
 							<label><b>Pending tests</b></label>
 						</div>
-						<c:forEach var="pendingTestId" items="${bloodTypingRule.pendingTestIds}">
+						<c:forEach var="pendingTestId" items="${bloodTypingRule.pendingTestsIds}">
 							<div>
 								<label>${bloodTypingTestsMap[pendingTestId].testNameShort}</label>
 							</div>
