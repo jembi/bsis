@@ -20,8 +20,11 @@
 		<li id="labSetupPage">
 			<a href="labSetupPageGenerator.html">Lab setup</a>
 		</li>
-		<li id="configureBloodTypingTests">
-			<a href="configureBloodTypingTests.html">Blood typing tests</a>
+		<li id="configureBloodTests">
+			<a href="configureBloodTests.html">Blood tests</a>
+		</li>
+		<li id="configureBloodTypingRules">
+			<a href="configureBloodTypingRules.html">Blood typing rules</a>
 		</li>
 		<li id="configureForms">
 			<a href="configureForms.html">Configure Forms</a>

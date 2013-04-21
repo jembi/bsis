@@ -1,6 +1,6 @@
 package model.bloodtesting;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class BloodTest {
+public class BloodTest implements Comparable<BloodTest> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,10 +29,6 @@ public class BloodTest {
 
   @Column(length=40)
   private String testName;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length=10)
-  private BloodTestDataType dataType;
 
   private String validResults;
 
@@ -55,7 +51,7 @@ public class BloodTest {
   private BloodTestContext context;
 
   @ManyToMany
-  private List<WorksheetType> worksheetTypes;
+  private Set<WorksheetType> worksheetTypes;
 
   private Boolean isEmptyAllowed;
 
@@ -71,10 +67,6 @@ public class BloodTest {
 
   public String getTestName() {
     return testName;
-  }
-
-  public BloodTestDataType getDataType() {
-    return dataType;
   }
 
   public String getValidResults() {
@@ -99,10 +91,6 @@ public class BloodTest {
 
   public void setTestName(String testName) {
     this.testName = testName;
-  }
-
-  public void setDataType(BloodTestDataType dataType) {
-    this.dataType = dataType;
   }
 
   public void setValidResults(String validResults) {
@@ -157,11 +145,11 @@ public class BloodTest {
     this.category = category;
   }
 
-  public List<WorksheetType> getWorksheetTypes() {
+  public Set<WorksheetType> getWorksheetTypes() {
     return worksheetTypes;
   }
 
-  public void setWorksheetTypes(List<WorksheetType> worksheetTypes) {
+  public void setWorksheetTypes(Set<WorksheetType> worksheetTypes) {
     this.worksheetTypes = worksheetTypes;
   }
 
@@ -171,5 +159,10 @@ public class BloodTest {
 
   public void setContext(BloodTestContext context) {
     this.context = context;
+  }
+
+  @Override
+  public int compareTo(BloodTest o) {
+    return this.id.compareTo(o.id);
   }
 }

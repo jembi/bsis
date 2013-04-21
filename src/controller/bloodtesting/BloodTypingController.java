@@ -238,6 +238,8 @@ public class BloodTypingController {
         Map<Long, String> testResults = new HashMap<Long, String>();
         bloodTestResultsMap.put(Long.parseLong(collectionId), testResults);
         for (String testId : generatedMap.get(collectionId).keySet()) {
+          if (StringUtils.isBlank(testId))
+            continue;
           testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
         }
       } 
@@ -390,15 +392,6 @@ public class BloodTypingController {
     return mv;
   }
 
-  @RequestMapping(value="deleteBloodTypingRule", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
-      @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    bloodTestingRepository.deleteBloodTestingRule(ruleId);
-    return m;
-  }
-
   @RequestMapping(value="saveNewBloodTypingRule", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {
@@ -425,6 +418,15 @@ public class BloodTypingController {
     return m;
   }
   
+  @RequestMapping(value="deleteBloodTypingRule", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
+      @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    bloodTestingRepository.deleteBloodTestingRule(ruleId);
+    return m;
+  }
+
   private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
     Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();
     for (BloodTest bt : bloodTypingTests) {

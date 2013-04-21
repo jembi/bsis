@@ -24,7 +24,6 @@
         bloodTestType varchar(30),
         category varchar(30),
         context varchar(30),
-        dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
         negativeResults varchar(255),
@@ -58,7 +57,6 @@
         bloodTestType varchar(30),
         category varchar(30),
         context varchar(30),
-        dataType varchar(10),
         isActive boolean,
         isEmptyAllowed boolean,
         negativeResults varchar(255),
@@ -72,7 +70,8 @@
 
     create table BloodTest_WorksheetType (
         bloodTests_id SMALLINT not null,
-        worksheetTypes_id SMALLINT not null
+        worksheetTypes_id SMALLINT not null,
+        primary key (bloodTests_id, worksheetTypes_id)
     ) ENGINE=InnoDB;
 
     create table BloodTest_WorksheetType_AUD (

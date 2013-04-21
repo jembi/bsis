@@ -1,7 +1,9 @@
 package viewmodel;
 
+import java.util.Set;
+
 import model.bloodtesting.BloodTest;
-import model.bloodtesting.BloodTestDataType;
+import model.worksheet.WorksheetType;
 
 public class BloodTestViewModel {
 
@@ -31,12 +33,21 @@ public class BloodTestViewModel {
     return rawBloodTest.getTestName();
   }
 
-  public BloodTestDataType getDataType() {
-    return rawBloodTest.getDataType();
-  }
-
   public String getValidResults() {
     return rawBloodTest.getValidResults();
+  }
+
+  public String getCategory() {
+    String category = "";
+    if (rawBloodTest.getCategory() == null)
+      return "";
+    switch (rawBloodTest.getCategory()) {
+    case BLOODTYPING: category = "Blood typing";
+                      break;
+    case TTI: category = "TTI";
+              break;
+    }
+    return category;
   }
 
   public String getNegativeResults() {
@@ -49,5 +60,9 @@ public class BloodTestViewModel {
 
   public Integer getRankInCategory() {
     return rawBloodTest.getRankInCategory();
+  }
+
+  public Set<WorksheetType> getWorksheetTypes() {
+    return rawBloodTest.getWorksheetTypes();
   }
 }

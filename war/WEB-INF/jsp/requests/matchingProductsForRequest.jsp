@@ -36,7 +36,6 @@ $(document).ready(
 											        var checkbox = $(node).find(":checkbox");
 										        	selected_products.push(selectedRowId);
 										        	checkbox.attr("checked", true);
-											        console.log(selected_products);
  													  },
 				"fnRowDeselected" : function(node) {
 														  var elements = $(node).children();

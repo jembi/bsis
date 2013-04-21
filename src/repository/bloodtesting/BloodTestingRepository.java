@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +29,7 @@ import model.collectedsample.CollectedSample;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
+import model.worksheet.WorksheetType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -218,10 +221,17 @@ public class BloodTestingRepository {
     return true;
   }
   
-  private List<BloodTest> getAllBloodTests() {
+  public List<BloodTest> getAllBloodTests() {
     String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     query.setParameter("isActive", true);
+    List<BloodTest> bloodTests = query.getResultList();
+    return bloodTests;
+  }
+
+  public List<BloodTest> getAllBloodTestsIncludeInactive() {
+    String queryStr = "SELECT b FROM BloodTest b";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
   }
@@ -291,6 +301,14 @@ public class BloodTestingRepository {
 
   public BloodTest findBloodTestById(Integer bloodTestId) {
     String queryStr = "SELECT bt FROM BloodTest bt WHERE " +
+        "bt.id=:bloodTestId";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("bloodTestId", bloodTestId);
+    return query.getSingleResult();
+  }
+
+  public BloodTest findBloodTestWithWorksheetTypesById(Integer bloodTestId) {
+    String queryStr = "SELECT bt FROM BloodTest bt LEFT JOIN FETCH bt.worksheetTypes WHERE " +
         "bt.id=:bloodTestId";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     query.setParameter("bloodTestId", bloodTestId);
@@ -495,15 +513,6 @@ public class BloodTestingRepository {
     return query.getSingleResult();
   }
 
-  public void deleteBloodTestingRule(Integer ruleId) {
-    String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("ruleId", ruleId);
-    query.executeUpdate();
-    em.flush();
-  }
-
   public void saveNewBloodTypingRule(Map<String, Object> newBloodTypingRuleAsMap) {
 
     BloodTestingRule rule = new BloodTestingRule();
@@ -529,5 +538,53 @@ public class BloodTestingRepository {
     rule.setContext(genericConfigRepository.getCurrentBloodTypingContext());
     rule.setIsActive(true);
     em.persist(rule);
+  }
+
+  public void deleteBloodTestingRule(Integer ruleId) {
+    String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
+    Query query = em.createQuery(queryStr);
+    query.setParameter("isActive", false);
+    query.setParameter("ruleId", ruleId);
+    query.executeUpdate();
+    em.flush();
+  }
+
+  public void saveNewBloodTest(Map<String, Object> newBloodTestAsMap) {
+    BloodTest bt = new BloodTest();
+    bt.setTestName((String) newBloodTestAsMap.get("testName"));
+    bt.setTestNameShort((String) newBloodTestAsMap.get("testNameShort"));
+    BloodTestCategory category = BloodTestCategory.valueOf((String) newBloodTestAsMap.get("category"));
+    bt.setCategory(category);
+    if (category.equals(BloodTestCategory.BLOODTYPING)) {
+      bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
+      bt.setContext(genericConfigRepository.getCurrentBloodTypingContext());
+    }
+    else {
+      bt.setBloodTestType(BloodTestType.BASIC_TTI);
+      bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
+    }
+    bt.setIsEmptyAllowed(false);
+    bt.setNegativeResults("");
+    bt.setPositiveResults("");
+    bt.setValidResults("+,-");
+    bt.setRankInCategory(1);
+    Set<WorksheetType> worksheetTypes = new HashSet<WorksheetType>();
+    String worksheetTypeIds = (String) newBloodTestAsMap.get("worksheetTypeIds");
+    for (String worksheetTypeId : worksheetTypeIds.split(",")) {
+      if (StringUtils.isBlank(worksheetTypeId))
+        continue;
+      WorksheetType wt = new WorksheetType();
+      wt.setId(Integer.parseInt(worksheetTypeId));
+      worksheetTypes.add(wt);
+    }
+    bt.setWorksheetTypes(worksheetTypes);
+    bt.setIsActive(true);
+    em.persist(bt);
+  }
+
+  public void deactivateBloodTest(Integer bloodTestId) {
+    BloodTest bt = findBloodTestById(bloodTestId);
+    bt.setIsActive(false);
+    em.merge(bt);
   }
 }

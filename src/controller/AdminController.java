@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
+import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
@@ -58,7 +59,9 @@ import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
+import repository.WorksheetTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleViewModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -94,6 +97,9 @@ public class AdminController {
 
   @Autowired
   BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  WorksheetTypeRepository worksheetTypeRepository;
 
   @Autowired
   TipsRepository tipsRepository;
@@ -194,9 +200,22 @@ public class AdminController {
     return m;
   }
 
-  @RequestMapping("/configureBloodTypingTests")
+  @RequestMapping("/configureBloodTests")
+  public ModelAndView configureBloodTests(HttpServletRequest request) {
+    ModelAndView mv = new ModelAndView("admin/configureBloodTests");
+    List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
+      bloodTests.add(new BloodTestViewModel(bt));
+    }
+    mv.addObject("bloodTests", bloodTests);
+    mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+  }
+
+  @RequestMapping("/configureBloodTypingRules")
   public ModelAndView configureBloodTypingTests(HttpServletRequest request) {
-    ModelAndView mv = new ModelAndView("admin/bloodTypingTests");
+    ModelAndView mv = new ModelAndView("admin/configureBloodTypingRules");
     mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
     List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
     for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {

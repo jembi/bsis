@@ -1,6 +1,6 @@
 package model.worksheet;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import org.hibernate.envers.Audited;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestContext;
+
+import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
@@ -29,7 +29,7 @@ public class WorksheetType {
   private String worksheetType;
 
   @ManyToMany(mappedBy="worksheetTypes")
-  private List<BloodTest> bloodTests;
+  private Set<BloodTest> bloodTests;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
@@ -53,11 +53,11 @@ public class WorksheetType {
     this.worksheetType = worksheetType;
   }
 
-  public List<BloodTest> getBloodTests() {
+  public Set<BloodTest> getBloodTests() {
     return bloodTests;
   }
 
-  public void setBloodTests(List<BloodTest> bloodTests) {
+  public void setBloodTests(Set<BloodTest> bloodTests) {
     this.bloodTests = bloodTests;
   }
 
@@ -80,5 +80,21 @@ public class WorksheetType {
 
   public void setContext(BloodTestContext context) {
     this.context = context;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof WorksheetType) {
+      WorksheetType wt = (WorksheetType) o;
+      return id != null && wt.id != null && id.equals(wt.id);
+    }
+    else {
+      return false;
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
   }
 }

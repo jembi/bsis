@@ -152,13 +152,11 @@ $(document).ready(function() {
 		  maxHeight: 400,
 		  buttons: {
 		    "Create" : function() {
-											console.log("new rule created");
 											var data = getNewBloodTypingRuleData();
 											saveNewBloodTypingRule(data);
 											$(this).dialog("close");
 		    					 },
 		    "Cancel" : function() {
-											console.log("cancel");
 											$(this).dialog("close");
 		    					 }
 		  }
@@ -184,7 +182,6 @@ $(document).ready(function() {
 		  data.collectionFieldChanged = newBloodTypingRuleForm.find(".collectionFieldChanged").val();
 		  data.result = newBloodTypingRuleForm.find(".result").val();
 
-		  console.log(data);
 		  return data;
 		}
 
@@ -214,7 +211,7 @@ $(document).ready(function() {
 
 		<div style="margin-left: 20px; margin-right: 20px; margin-top: 50px; border-radius: 5px;">
 
-			<div style="font-weight: bold; margin: 15px;">Blood Typing tests</div>
+			<div style="font-weight: bold; margin: 15px;">Blood Typing rules</div>
 
 			<div>
 				<button class="newRuleButton">New blood typing rule</button>
@@ -281,7 +278,7 @@ $(document).ready(function() {
 	<div id="${newBloodTypingRuleDialogId}" style="display: none;">
 		<form class="formInTabPane">
 			<div>
-				<label>Rule for testing</label>
+				<label>This is a test for</label>
 				<select id="${subCategorySelectorId}"
 								name="subCategory" class="subCategory">
 					<option value="BLOODABO">
