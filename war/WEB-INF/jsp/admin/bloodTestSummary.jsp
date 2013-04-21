@@ -19,6 +19,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <c:set var="deactivateBloodTestConfirmDialogId">deactivateBloodTestConfirmDialogId-${unique_page_id}</c:set>
+<c:set var="activateBloodTestConfirmDialogId">activateBloodTestConfirmDialogId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -73,7 +74,49 @@ $(document).ready(function() {
      					 }
     });
   }
-});
+
+  $("#${mainContentId}").find(".activateButton")
+	.button({icons: {primary: 'ui-icon-trash'}})
+	.click(
+	function() {
+
+	  $("#${activateBloodTestConfirmDialogId}").dialog({
+	    modal: true,
+	    title: "Activate",
+	    width: "400px",
+	    resizable: false,
+	    buttons: {
+	      "Deactivate": function() {
+	        activateBloodTest();
+	        $(this).dialog("close");
+	      },
+	      "Cancel": function() {
+	        $(this).dialog("close");
+	      }
+	    }
+	  });
+	});
+
+	function activateBloodTest() {
+
+	  $.ajax({
+        url : "activateBloodTest.html",
+        type : "POST",
+        data : {
+          bloodTestId : '${bloodTest.id}'
+        },
+        success : function() {
+          showMessage("Blood Test successfully activated");
+          $("#${tabContentId}").parent().trigger("bloodTestEditDone");
+        },
+        error : function() {
+          showErrorMessage("Something went wrong. Please try again");
+          $("#${tabContentId}").parent().trigger("bloodTestEditError");
+        }
+      });
+  }
+
+  });
 </script>
 
 <div id="${tabContentId}">
@@ -85,31 +128,38 @@ $(document).ready(function() {
 			<div class="summaryPageButtonSection" style="text-align: right;">
 				<!-- button class="editButton">Edit</button-->
 				<button class="doneButton">Done</button>
-				<button class="deactivateButton">Deactivate</button>
+				<c:if test="${bloodTest.isActive}">
+					<button class="deactivateButton">Deactivate</button>
+				</c:if>
+				<c:if test="${not bloodTest.isActive}">
+					<button class="activateButton">Activate</button>
+				</c:if>
 			</div>
 	
 			<div class="ruleDetails">
 				<div class="formInTabPane">
 
 					<div>
-						<label>Blood test name</label>
+						<label>Test name</label>
 						<label>${bloodTest.testName}</label>
 					</div>
 
 					<div>
-						<label>Blood test short name</label>
+						<label>Short name</label>
 						<label>${bloodTest.testNameShort}</label>
 					</div>
 
-					<div>
-						<label><b>Included in worksheets</b></label>
-					</div>
-
-					<c:forEach var="worksheetType" items="${bloodTest.worksheetTypes}">
+					<c:if test="${fn:length(bloodTest.worksheetTypes) gt 0}">
 						<div>
-							<label>${worksheetType.worksheetType}</label>
+							<label style="width: auto;"><b>Included in worksheets</b></label>
 						</div>
-					</c:forEach>
+	
+						<c:forEach var="worksheetType" items="${bloodTest.worksheetTypes}">
+							<div>
+								<label>${worksheetType.worksheetType}</label>
+							</div>
+						</c:forEach>
+					</c:if>
 
 				</div>
 			</div>
@@ -121,4 +171,8 @@ $(document).ready(function() {
 
 <div id="${deactivateBloodTestConfirmDialogId}" style="display: none;">
 	Are you sure you want to deactivate this blood test?
+</div>
+
+<div id="${activateBloodTestConfirmDialogId}" style="display: none;">
+	Are you sure you want to activate this blood test?
 </div>

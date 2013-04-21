@@ -99,4 +99,13 @@ public class BloodTestingController {
     bloodTestingRepository.deactivateBloodTest(bloodTestId);
     return m;
   }
+
+  @RequestMapping(value="activateBloodTest", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> activateBloodTest(HttpServletRequest request,
+      @RequestParam(value="bloodTestId") Integer bloodTestId) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    bloodTestingRepository.activateBloodTest(bloodTestId);
+    return m;
+  }
 }

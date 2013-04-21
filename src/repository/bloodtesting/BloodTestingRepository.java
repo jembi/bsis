@@ -587,4 +587,10 @@ public class BloodTestingRepository {
     bt.setIsActive(false);
     em.merge(bt);
   }
+
+  public void activateBloodTest(Integer bloodTestId) {
+    BloodTest bt = findBloodTestById(bloodTestId);
+    bt.setIsActive(true);
+    em.merge(bt);
+  }
 }
