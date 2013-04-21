@@ -1,5 +1,7 @@
 package model.producttype;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,8 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @Entity
 @Audited
@@ -32,6 +36,10 @@ public class ProductType {
   @Column(length=30)
   private ProductTypeTimeUnits expiresAfterUnits;
 
+  @NotAudited
+  @ManyToMany(mappedBy="productTypes")
+  private Set<ProductTypeCombination> productTypeCombinations;
+  
   private Boolean hasBloodGroup;
 
   private Boolean canSubdivide;
@@ -143,5 +151,13 @@ public class ProductType {
                 break;
     }
     return expiresAfter * factor;
+  }
+
+  public Set<ProductTypeCombination> getProductTypeCombinations() {
+    return productTypeCombinations;
+  }
+
+  public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations) {
+    this.productTypeCombinations = productTypeCombinations;
   }
 }

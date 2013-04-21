@@ -678,6 +678,28 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
+    create table ProductTypeCombination (
+        id SMALLINT not null auto_increment,
+        combinationName varchar(200),
+        isDeleted boolean,
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table ProductTypeCombination_AUD (
+        id SMALLINT not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        combinationName varchar(200),
+        isDeleted boolean,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
+    create table ProductTypeCombination_ProductType (
+        productTypeCombinations_id SMALLINT not null,
+        productTypes_id SMALLINT not null,
+        primary key (productTypeCombinations_id, productTypes_id)
+    ) ENGINE=InnoDB;
+
     create table ProductType_AUD (
         id SMALLINT not null,
         REV integer not null,
@@ -1453,6 +1475,24 @@
         add constraint FK79A8FA02DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
+
+    alter table ProductTypeCombination_AUD 
+        add index FK61943137DF74E053 (REV), 
+        add constraint FK61943137DF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table ProductTypeCombination_ProductType 
+        add index FK3F6704507548F61D (productTypeCombinations_id), 
+        add constraint FK3F6704507548F61D 
+        foreign key (productTypeCombinations_id) 
+        references ProductTypeCombination (id);
+
+    alter table ProductTypeCombination_ProductType 
+        add index FK3F670450EE5B3BAF (productTypes_id), 
+        add constraint FK3F670450EE5B3BAF 
+        foreign key (productTypes_id) 
+        references ProductType (id);
 
     alter table ProductType_AUD 
         add index FKA50719FADF74E053 (REV), 

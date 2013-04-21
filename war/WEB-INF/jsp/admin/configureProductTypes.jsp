@@ -20,8 +20,7 @@
 
 <c:set var="newProductTypeDialogId">newProductTypeDialog-${unique_page_id}</c:set>
 
-<c:set var="productTypeCategorySelectorId">productTypeCategorySelector-${unique_page_id}</c:set>
-<c:set var="productTypeWorksheetTypeSelectorId">productTypeWorksheetTypeSelector-${unique_page_id}</c:set>
+<c:set var="productTypeExpiresAfterUnitsSelectorId">productTypeExpiresAfterUnitsSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -72,21 +71,13 @@ $(document).ready(function() {
     }
 	});
 
-	$("#${newProductTypeDialogId}").find(".worksheetTypeSelector").multiselect({
-	  noneSelectedText: 'None Selected',
-	  selectedText: function(numSelected, numTotal, selectedValues) {
-									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
-									  return checkedValues.length ? checkedValues.join(', ') : 'None';
-	  							}
-	});
-	$("#${newProductTypeDialogId}").find(".worksheetTypeSelector")
-															 .multiselect("uncheckAll");
-
-  $("#${newProductTypeDialogId}").find(".productTypeCategorySelector").multiselect({
+  $("#${newProductTypeDialogId}").find(".expiresAfterUnitsSelector").multiselect({
     multiple : false,
     selectedList : 1,
     header : false
   });
+
+  $("#${newProductTypeDialogId} .ui-multiselect").css("width", "100px");
 
 	$("#${tabContentId}").bind("productTypeEditDone", refetchProductTypes);
 	$("#${tabContentId}").bind("productTypeCancel", function() {
@@ -131,9 +122,8 @@ $(document).ready(function() {
 		  var newProductTypeForm = $("#${newProductTypeDialogId}");
 		  data.productTypeName = newProductTypeForm.find('input[name="productTypeName"]').val();
 		  data.productTypeNameShort = newProductTypeForm.find('input[name="productTypeNameShort"]').val();
-		  data.worksheetTypeIds = worksheetTypesSelector.multiselect("getChecked").map(function() {
-		    return this.value;
-		  }).get().join(",");
+		  data.expiresAfter = newProductTypeForm.find('input[name="expiresAfter"]').val();
+		  data.expiresAfterUnits = newProductTypeForm.find('.expiresAfterUnitsSelector').val();
 		  console.log(data);
 		  return data;
 		}
@@ -203,7 +193,7 @@ $(document).ready(function() {
 				</tbody>
 			</table>
 
-			<div class="productTypeSummarySection">
+			<div class="productTypeSummarySection" style="height: 500px;">
 			</div>
 
 		</div>
@@ -222,6 +212,17 @@ $(document).ready(function() {
 			<div>
 				<label>Product type short name</label>
 				<input name="productTypeNameShort" />
+			</div>
+			<div>
+				<label>Expiry interal</label>
+				<input name="expiresAfter" type="number" min="1" />
+				<select name="expiresAfterUnits"
+								class="expiresAfterUnitsSelector"
+							 	id="${productTypeExpiresAfterUnitsSelectorId}">
+					 <option value="DAYS">Days</option>
+					 <option value="HOURS">HOURS</option>
+					 <option value="YEARS">YEARS</option>
+				</select>
 			</div>
 		</form>
 	</div>

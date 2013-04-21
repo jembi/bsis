@@ -824,12 +824,31 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Urgent', '', '0'),
 ('Elective Surgery', '', '0');
 
-insert into ProductType (productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
-('Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', '1', '0', '0'),
-('RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
-('FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),
-('Platelets', 'Platelets', '', 5, 'DAYS', '1', '1', '0', '0'),
-('Cryo', 'Cryoprecipitate', '', 35, 'DAYS', '0', '1', '0', '0');
+insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
+(1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', '1', '0', '0'),
+(2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
+(3, 'FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),
+(4, 'Platelets', 'Platelets', '', 5, 'DAYS', '1', '1', '0', '0'),
+(5, 'Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
+(6, 'RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
+(7, 'FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 365, 'DAYS', '1', '1', '0', '0'),
+(8, 'Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', '1', '0', '0');
+
+insert into ProductTypeCombination (id, combinationName, isDeleted) values
+(1, 'Whole Blood', 0),
+(2, 'RCC, FFP, Platelets', 0),
+(3, 'Whole Blood Pedi', 0),
+(4, 'RCC Pedi, FFP Pedi, FFP Pedi', 0);
+
+insert into ProductTypeCombination_ProductType (productTypeCombinations_id, productTypes_id) values
+(1, 1),
+(2, 2),
+(2, 3),
+(2, 4),
+(3, 5),
+(4, 6),
+(4, 7),
+(4, 8);
 
 insert into BloodBagType (bloodBagType, isDeleted) values
 ('Single', '0'),

@@ -54,7 +54,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="saveNewProductType", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewProductType(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam("bloodTest") String newProductTypeAsJsonStr) {
+      HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
     ObjectMapper mapper = new ObjectMapper();
     boolean success = false;

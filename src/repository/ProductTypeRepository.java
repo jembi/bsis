@@ -56,12 +56,13 @@ public class ProductTypeRepository {
 
   public void saveNewProductType(Map<String, Object> newProductTypeAsMap) {
     ProductType productType = new ProductType();
-    productType.setProductType((String) newProductTypeAsMap.get("productType"));
+    productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
     productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
     try {
       Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
       productType.setExpiresAfter(expiresAfter);
     } catch (NumberFormatException ex) {
+      productType.setExpiresAfter(0);
       ex.printStackTrace();
     }
     productType.setCanPool(false);

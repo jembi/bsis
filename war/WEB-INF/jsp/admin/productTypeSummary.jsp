@@ -86,7 +86,7 @@ $(document).ready(function() {
 	    width: "400px",
 	    resizable: false,
 	    buttons: {
-	      "Deactivate": function() {
+	      "Activate": function() {
 	        activateProductType();
 	        $(this).dialog("close");
 	      },
