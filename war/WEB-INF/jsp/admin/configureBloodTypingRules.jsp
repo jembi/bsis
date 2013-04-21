@@ -213,6 +213,13 @@ $(document).ready(function() {
 
 			<div style="font-weight: bold; margin: 15px;">Blood Typing rules</div>
 
+			<div class="tipsBox ui-state-highlight">
+				<p>
+					The following rules are used for inferring blood group from the test results.
+					You can create new rules. You can also delete rules which are no longer useful or incorrect.
+				</p> 
+			</div>
+
 			<div>
 				<button class="newRuleButton">New blood typing rule</button>
 			</div>

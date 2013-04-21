@@ -37,7 +37,6 @@ $(document).ready(function() {
   }
 
   function isWorksheetModified() {
-    console.log(modified_cells);
     for (var index in modified_cells) {
       var modifications = modified_cells[index];
       var modified = false;
@@ -64,20 +63,18 @@ $(document).ready(function() {
     "aoColumnDefs" : [{ "sClass" : "hide_class", "aTargets": [0]}],
     "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
 
-      								 console.log("here");
       								 if (isWorksheetModified()) {
       								   // if unsaved changes then prompt user to save changes
       								   showUnsavedChangesDialog();
       								   return;
       								 }
-											 console.log("here1");
       								 oSettings.jqXHR = $.ajax({
       								   "datatype": "json",
       								   "type": "GET",
       								   "url": sSource,
       								   "data": aoData,
       								   "success": function(jsonResponse) {
-      								     						console.log("here2");
+																			console.log("${collectionsMap}");      								     						
 											     						resetWorksheetCurrentPageData();
       								     						makeRowsEditable(jsonResponse.aaData);
       								     						fnCallback(jsonResponse);
@@ -180,7 +177,7 @@ $(document).ready(function() {
 		    original_data[collectionId][testid] = row[testidIndex+2];
 		  }
 
-		  row[1] = getEditableCollectionNumber(row[1], collectionId);
+		  row[1] = getEditableCollectionInformation(row[1]);
 		  // server returns the value of the cells in order but we have replace the
 		  // value by the relevant input elements. These DOM elements are generated below.
 		  for (var testidIndex = 0; testidIndex < testids.length; ++testidIndex) {
@@ -197,7 +194,6 @@ $(document).ready(function() {
     row.find('input[type="radio"]').prop('checked', false);
 
     var collectionId = $(row.find("td")[0]).html();
-    console.log(modified_cells);
     // recolor all cells in the row to make sure modified cells
     // are distinguishable from the original ones
     for (var index in testids) {
@@ -221,7 +217,6 @@ $(document).ready(function() {
   			setModifiedColor(tableCell);
   		}
     }
-    console.log(modified_cells);
   }
 
   function setModifiedColor(cell) {
@@ -269,7 +264,6 @@ $(document).ready(function() {
       		// collection id modified
       		var collectionId = $(rowCells[0]).html();
       		var cellInput = cell.find("input:checked");
-      		console.log(modified_cells);
       		modified_cells[collectionId] = modified_cells[collectionId] || {};
       		var testid = cellInput.data("testid");
       		var testvalue = cellInput.val();
@@ -285,7 +279,6 @@ $(document).ready(function() {
       		  cell.css("color", "black");
       			modified_cells[collectionId][testid] = testvalue;
       		}
-      		console.log(modified_cells);
     		});
   }
 
@@ -296,17 +289,27 @@ $(document).ready(function() {
     																 });
   }
 
-  function getEditableCollectionNumber(cell, collectionId) {
-    return '<div style="height: ${worksheetConfig.rowHeight}px; margin-left: 2px; font-size: 1.2em;">' + cell +
-    					'<br /> <br />' +
-    					// not showing clear selection link for now
-    					//'<span class="link clearSelection">Clear</span>' +
-    			 '</div>';
+  function getEditableCollectionInformation(cell) {
+    var collectionInfo = JSON.parse(cell);
+    var cellContents = '<div style="margin-left: 2px; font-size: 1.2em;">' + collectionInfo.collectionNumber +
+    					'<br /> <br/>';
+    if (collectionInfo.bloodAbo !== undefined) {
+			cellContents = cellContents + '<span style="font-size: 11px; color: #7A7A7A;">Blood ABO: ' + collectionInfo.bloodAbo + '</span><br />';
+    }
+    if (collectionInfo.bloodRh !== undefined) {
+			cellContents = cellContents + '<span style="font-size: 11px; color: #7A7A7A;">Blood Rh: ' + collectionInfo.bloodRh + '</span><br />';
+    }
+    if (collectionInfo.ttiStatus !== undefined) {
+      cellContents = cellContents + '<span style="font-size: 11px; color: #7A7A7A;">TTI: ' + collectionInfo.ttiStatus + '</span><br />';
+    }
+		// not showing clear selection link for now
+		//'<span class="link clearSelection">Clear</span>'
+		cellContents = cellContents + '<br/> </div>';
+		return cellContents;
   }
 
   function getEditableTestSelector(cell, collectionId, testid) {
     var rowContents = $("#${editableFieldsForTableId}").find(".editable" + testid + "Field");
-    console.log(rowContents[0]);
     rowContents = rowContents[0].outerHTML.replace(/collectionId/g, collectionId);
     rowContents = $(rowContents);
     if (cell !== null && cell !== undefined && cell !== "") {

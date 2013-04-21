@@ -166,6 +166,14 @@ $(document).ready(function() {
 
 			<div style="font-weight: bold; margin: 15px;">Blood tests</div>
 
+			<div class="tipsBox ui-state-highlight">
+				<p>
+					The following blood tests have been configured for Blood typing/TTI.
+					You can disable/enable tests based on your workflow. You can also create
+					new blood tests and add them to worksheets.
+				</p>
+			</div>
+
 			<div>
 				<button class="newBloodTestButton">New blood test</button>
 			</div>
@@ -188,7 +196,7 @@ $(document).ready(function() {
 							<td>${bloodTest.testNameShort}</td>
 							<td>${bloodTest.category}</td>
 							<c:set var="cellColor" value="${bloodTest.isActive ? '#154A16': '#A2361A'}" /> 
-							<td style="color: ${cellColor}">${bloodTest.isActive ? 'ACTIVE' : 'INACTIVE'}</td>
+							<td style="color: ${cellColor}">${bloodTest.isActive ? 'ENABLED' : 'DISABLED'}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

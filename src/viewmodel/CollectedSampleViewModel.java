@@ -80,10 +80,6 @@ public class CollectedSampleViewModel {
     return collectedSample.hashCode();
   }
 
-  public String toString() {
-    return collectedSample.toString();
-  }
-
   public String getDonorNumber() {
    if (collectedSample.getDonor() == null)
      return "";

@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import model.admin.ConfigPropertyConstants;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.collectedsample.CollectedSample;
+import model.testresults.TTIStatus;
 import model.worksheet.FindWorksheetBackingForm;
 import model.worksheet.Worksheet;
 import model.worksheet.WorksheetBackingForm;
@@ -43,7 +45,12 @@ import repository.GenericConfigRepository;
 import repository.WorksheetRepository;
 import repository.WorksheetTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import viewmodel.CollectedSampleViewModel;
 import viewmodel.WorksheetViewModel;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class WorksheetController {
@@ -346,7 +353,11 @@ public class WorksheetController {
     Long totalRecords = (Long) results.get(1);
     Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);
     List<BloodTest> bloodTests = worksheetRepository.getBloodTestsInWorksheet(worksheet);
-    System.out.println("Number of blood tests: " + bloodTests.size());
+    Map<String, CollectedSampleViewModel> collectionsMap = new HashMap<String, CollectedSampleViewModel>();
+    for (CollectedSample c : collectedSamples) {
+      collectionsMap.put(c.getId().toString(), new CollectedSampleViewModel(c));
+    }
+    model.addAttribute("collectionsMap", collectionsMap);
     return generateDatatablesMap(collectedSamples, bloodTests, totalRecords);
   }
 
@@ -374,19 +385,39 @@ public class WorksheetController {
     Map<String, Object> resultsMap = new HashMap<String, Object>();
     ArrayList<Object> resultList = new ArrayList<Object>();
 
+    ObjectMapper mapper = new ObjectMapper();
+    
     for (CollectedSample collectedSample : collectedSamples) {
 
       List<Object> row = new ArrayList<Object>();
       // id goes as the first column to identify the collection uniquely
       row.add(collectedSample.getId());
 
-      // second column is collection number
+      // second column is collection information
       if (properties.containsKey("collectionNumber") && properties.get("collectionNumber").equals("true")) {
-          row.add(collectedSample.getCollectionNumber());
+        Map<String, String> collectionInformation = new HashMap<String, String>();
+        collectionInformation.put("collectionNumber", collectedSample.getCollectionNumber());
+        if (StringUtils.isNotBlank(collectedSample.getBloodAbo()))
+          collectionInformation.put("bloodAbo", collectedSample.getBloodAbo());
+        if (StringUtils.isNotBlank(collectedSample.getBloodRh()))
+          collectionInformation.put("bloodRh", collectedSample.getBloodRh());
+        if (collectedSample.getTTIStatus() != null && !collectedSample.getTTIStatus().equals(TTIStatus.NOT_DONE))
+          collectionInformation.put("ttiStatus", collectedSample.getTTIStatus().toString());
+        try {
+          row.add(mapper.writeValueAsString(collectionInformation));
+        } catch (JsonGenerationException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (JsonMappingException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
 
       Map<Integer, BloodTestResult> recentTestResults = bloodTestingRepository.getRecentTestResultsForCollection(collectedSample.getId());
-      System.out.println(recentTestResults);
       // now add results for existing tests related to this worksheet
       for (BloodTest bt : bloodTests) {
         
@@ -395,7 +426,6 @@ public class WorksheetController {
         else
           row.add("");
       }
-      System.out.println(row);
       resultList.add(row);
     }
 

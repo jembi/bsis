@@ -31,14 +31,14 @@ $(document).ready(function() {
   											});
 
   $("#${mainContentId}").find(".doneButton")
-												.button({icons: {primary: 'ui-icon-check'}})
+												.button()
 												.click(
 												    function() {
 												      $("#${tabContentId}").parent().trigger("bloodTestCancel");
 												    });
 
   $("#${mainContentId}").find(".deactivateButton")
-  											.button({icons: {primary: 'ui-icon-trash'}})
+  											.button()
   											.click(
   											function() {
 
@@ -76,7 +76,7 @@ $(document).ready(function() {
   }
 
   $("#${mainContentId}").find(".activateButton")
-	.button({icons: {primary: 'ui-icon-trash'}})
+	.button()
 	.click(
 	function() {
 
@@ -129,10 +129,10 @@ $(document).ready(function() {
 				<!-- button class="editButton">Edit</button-->
 				<button class="doneButton">Done</button>
 				<c:if test="${bloodTest.isActive}">
-					<button class="deactivateButton">Deactivate</button>
+					<button class="deactivateButton">Disable</button>
 				</c:if>
 				<c:if test="${not bloodTest.isActive}">
-					<button class="activateButton">Activate</button>
+					<button class="activateButton">Enable</button>
 				</c:if>
 			</div>
 	
@@ -151,7 +151,7 @@ $(document).ready(function() {
 
 					<c:if test="${fn:length(bloodTest.worksheetTypes) gt 0}">
 						<div>
-							<label style="width: auto;"><b>Included in worksheets</b></label>
+							<label style="width: auto;"><b>This test is included in the following worksheets</b></label>
 						</div>
 	
 						<c:forEach var="worksheetType" items="${bloodTest.worksheetTypes}">
