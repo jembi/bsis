@@ -20,11 +20,11 @@ public class ProductType {
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
-  @Column(length=30)
-  private String productTypeShortName;
-
   @Column(length=50)
   private String productType;
+
+  @Column(length=30)
+  private String productTypeNameShort;
 
   private Integer expiresAfter;
 
@@ -84,12 +84,12 @@ public class ProductType {
     return this.id == pt.id;
   }
 
-  public String getProductTypeShortName() {
-    return productTypeShortName;
+  public String getProductTypeNameShort() {
+    return productTypeNameShort;
   }
 
-  public void setProductTypeShortName(String productTypeShortName) {
-    this.productTypeShortName = productTypeShortName;
+  public void setProductTypeNameShort(String productTypeShortName) {
+    this.productTypeNameShort = productTypeShortName;
   }
 
   public ProductTypeTimeUnits getExpiresAfterUnits() {

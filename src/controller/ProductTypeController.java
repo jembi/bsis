@@ -1,4 +1,4 @@
-package controller.bloodtesting;
+package controller;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.producttype.ProductType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,20 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.bloodtesting.BloodTestingRepository;
-import viewmodel.BloodTestViewModel;
+import repository.ProductTypeRepository;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
-public class BloodTestingController {
+public class ProductTypeController {
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
-
-  public BloodTestingController() {
+  private ProductTypeRepository productTypeRepository;
+  
+  public ProductTypeController() {
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -40,28 +41,27 @@ public class BloodTestingController {
     return reqUrl;
   }
 
-  @RequestMapping(value="bloodTestSummary", method=RequestMethod.GET)
-  public ModelAndView getBloodTestSummary(HttpServletRequest request,
-      @RequestParam(value="bloodTestId") Integer bloodTestId) {
+  @RequestMapping(value="productTypeSummary", method=RequestMethod.GET)
+  public ModelAndView getProductTypeSummary(HttpServletRequest request,
+      @RequestParam(value="productTypeId") Integer productTypeId) {
 
-    ModelAndView mv = new ModelAndView ("admin/bloodTestSummary");
-    BloodTestViewModel bloodTest;
-    bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(bloodTestId));
-    mv.addObject("bloodTest", bloodTest);
+    ModelAndView mv = new ModelAndView ("admin/productTypeSummary");
+    ProductType productType = productTypeRepository.getProductTypeById(productTypeId);
+    mv.addObject("productType", productType);
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
-  @RequestMapping(value="saveNewBloodTest", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> saveNewBloodTest(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam("bloodTest") String newBloodTestAsJsonStr) {
+  @RequestMapping(value="saveNewProductType", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> saveNewProductType(HttpServletRequest request,
+      HttpServletResponse response, @RequestParam("bloodTest") String newProductTypeAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
     ObjectMapper mapper = new ObjectMapper();
     boolean success = false;
     try {
-      Map<String, Object> newBloodTestAsMap;
-      newBloodTestAsMap = mapper.readValue(newBloodTestAsJsonStr, HashMap.class);
-      bloodTestingRepository.saveNewBloodTest(newBloodTestAsMap);
+      Map<String, Object> newProductTypeAsMap;
+      newProductTypeAsMap = mapper.readValue(newProductTypeAsJsonStr, HashMap.class);
+      productTypeRepository.saveNewProductType(newProductTypeAsMap);
       success = true;
     } catch (JsonParseException e) {
       // TODO Auto-generated catch block
@@ -78,21 +78,21 @@ public class BloodTestingController {
     return m;
   }
   
-  @RequestMapping(value="deactivateBloodTest", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> deactivateBloodTest(HttpServletRequest request,
-      @RequestParam(value="bloodTestId") Integer bloodTestId) {
+  @RequestMapping(value="deactivateProductType", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> deactivateProductType(HttpServletRequest request,
+      @RequestParam(value="productTypeId") Integer productTypeId) {
 
     Map<String, Object> m = new HashMap<String, Object>();
-    bloodTestingRepository.deactivateBloodTest(bloodTestId);
+    productTypeRepository.deactivateProductType(productTypeId);
     return m;
   }
 
-  @RequestMapping(value="activateBloodTest", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> activateBloodTest(HttpServletRequest request,
-      @RequestParam(value="bloodTestId") Integer bloodTestId) {
+  @RequestMapping(value="activateProductType", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> activateProductType(HttpServletRequest request,
+      @RequestParam(value="productTypeId") Integer productTypeId) {
 
     Map<String, Object> m = new HashMap<String, Object>();
-    bloodTestingRepository.activateBloodTest(bloodTestId);
+    productTypeRepository.activateProductType(productTypeId);
     return m;
   }
 }

@@ -18,8 +18,8 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="deactivateBloodTestConfirmDialogId">deactivateBloodTestConfirmDialogId-${unique_page_id}</c:set>
-<c:set var="activateBloodTestConfirmDialogId">activateBloodTestConfirmDialogId-${unique_page_id}</c:set>
+<c:set var="deactivateProductTypeConfirmDialogId">deactivateProductTypeConfirmDialogId-${unique_page_id}</c:set>
+<c:set var="activateProductTypeConfirmDialogId">activateProductTypeConfirmDialogId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -34,7 +34,7 @@ $(document).ready(function() {
 												.button()
 												.click(
 												    function() {
-												      $("#${tabContentId}").parent().trigger("bloodTestCancel");
+												      $("#${tabContentId}").parent().trigger("productTypeCancel");
 												    });
 
   $("#${mainContentId}").find(".deactivateButton")
@@ -42,14 +42,14 @@ $(document).ready(function() {
   											.click(
   											function() {
 
-  											  $("#${deactivateBloodTestConfirmDialogId}").dialog({
+  											  $("#${deactivateProductTypeConfirmDialogId}").dialog({
   											    modal: true,
-  											    title: "Deactivate",
+  											    title: "Disable",
   											    width: "400px",
   											    resizable: false,
   											    buttons: {
-  											      "Deactivate": function() {
-  											        deactivateBloodTest();
+  											      "Disable": function() {
+  											        deactivateProductType();
   											        $(this).dialog("close");
   											      },
   											      "Cancel": function() {
@@ -59,18 +59,18 @@ $(document).ready(function() {
   											  });
   											});
 
-  function deactivateBloodTest() {
+  function deactivateProductType() {
     $.ajax({
-      url: "deactivateBloodTest.html",
+      url: "deactivateProductType.html",
       type: "POST",
-      data: {bloodTestId : '${bloodTest.id}'},
+      data: {productTypeId : '${productType.id}'},
       success: function() {
         				 showMessage("Blood Test successfully deactivated");
-        				 $("#${tabContentId}").parent().trigger("bloodTestEditDone");
+        				 $("#${tabContentId}").parent().trigger("productTypeEditDone");
       				 },
      	error:   function() {
      	  			   showErrorMessage("Something went wrong. Please try again");
-     	  			  	$("#${tabContentId}").parent().trigger("bloodTestEditError");
+     	  			  	$("#${tabContentId}").parent().trigger("productTypeEditError");
      					 }
     });
   }
@@ -80,14 +80,14 @@ $(document).ready(function() {
 	.click(
 	function() {
 
-	  $("#${activateBloodTestConfirmDialogId}").dialog({
+	  $("#${activateProductTypeConfirmDialogId}").dialog({
 	    modal: true,
 	    title: "Activate",
 	    width: "400px",
 	    resizable: false,
 	    buttons: {
 	      "Deactivate": function() {
-	        activateBloodTest();
+	        activateProductType();
 	        $(this).dialog("close");
 	      },
 	      "Cancel": function() {
@@ -97,26 +97,26 @@ $(document).ready(function() {
 	  });
 	});
 
-	function activateBloodTest() {
+	function activateProductType() {
 
 	  $.ajax({
-        url : "activateBloodTest.html",
+        url : "activateProductType.html",
         type : "POST",
         data : {
-          bloodTestId : '${bloodTest.id}'
+          productTypeId : '${productType.id}'
         },
         success : function() {
           showMessage("Blood Test successfully activated");
-          $("#${tabContentId}").parent().trigger("bloodTestEditDone");
+          $("#${tabContentId}").parent().trigger("productTypeEditDone");
         },
         error : function() {
           showErrorMessage("Something went wrong. Please try again");
-          $("#${tabContentId}").parent().trigger("bloodTestEditError");
+          $("#${tabContentId}").parent().trigger("productTypeEditError");
         }
       });
   }
 
-  });
+});
 </script>
 
 <div id="${tabContentId}">
@@ -128,38 +128,31 @@ $(document).ready(function() {
 			<div class="summaryPageButtonSection" style="text-align: right;">
 				<!-- button class="editButton">Edit</button-->
 				<button class="doneButton">Done</button>
-				<c:if test="${bloodTest.isActive}">
+				<c:if test="${not productType.isDeleted}">
 					<button class="deactivateButton">Disable</button>
 				</c:if>
-				<c:if test="${not bloodTest.isActive}">
+				<c:if test="${productType.isDeleted}">
 					<button class="activateButton">Enable</button>
 				</c:if>
 			</div>
 	
-			<div class="bloodTestDetails">
+			<div class="productTypeDetails">
 				<div class="formInTabPane">
 
 					<div>
-						<label>Test name</label>
-						<label>${bloodTest.testName}</label>
+						<label>Product type name</label>
+						<label>${productType.productType}</label>
 					</div>
 
 					<div>
 						<label>Short name</label>
-						<label>${bloodTest.testNameShort}</label>
+						<label>${productType.productTypeNameShort}</label>
 					</div>
 
-					<c:if test="${fn:length(bloodTest.worksheetTypes) gt 0}">
-						<div>
-							<label style="width: auto;"><b>This test is included in the following worksheets</b></label>
-						</div>
-	
-						<c:forEach var="worksheetType" items="${bloodTest.worksheetTypes}">
-							<div>
-								<label>${worksheetType.worksheetType}</label>
-							</div>
-						</c:forEach>
-					</c:if>
+					<div>
+						<label>Expiry time</label>
+						<label>${productType.expiresAfter} ${productType.expiresAfterUnits}</label>
+					</div>
 
 				</div>
 			</div>
@@ -169,10 +162,10 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div id="${deactivateBloodTestConfirmDialogId}" style="display: none;">
-	Are you sure you want to deactivate this blood test?
+<div id="${deactivateProductTypeConfirmDialogId}" style="display: none;">
+	Are you sure you want to deactivate this product type?
 </div>
 
-<div id="${activateBloodTestConfirmDialogId}" style="display: none;">
-	Are you sure you want to activate this blood test?
+<div id="${activateProductTypeConfirmDialogId}" style="display: none;">
+	Are you sure you want to activate this product type?
 </div>

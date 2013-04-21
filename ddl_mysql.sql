@@ -674,7 +674,7 @@
         hasBloodGroup boolean,
         isDeleted boolean,
         productType varchar(50),
-        productTypeShortName varchar(30),
+        productTypeNameShort varchar(30),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -690,7 +690,7 @@
         hasBloodGroup boolean,
         isDeleted boolean,
         productType varchar(50),
-        productTypeShortName varchar(30),
+        productTypeNameShort varchar(30),
         primary key (id, REV)
     ) ENGINE=InnoDB;
 

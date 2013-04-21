@@ -824,7 +824,7 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Urgent', '', '0'),
 ('Elective Surgery', '', '0');
 
-insert into ProductType (productTypeShortName, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
+insert into ProductType (productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
 ('Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', '1', '0', '0'),
 ('RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
 ('FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),

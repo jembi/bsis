@@ -18,102 +18,212 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="configureProductTypesFormId">configureProductTypes-${unique_page_id}</c:set>
+<c:set var="newProductTypeDialogId">newProductTypeDialog-${unique_page_id}</c:set>
+
+<c:set var="productTypeCategorySelectorId">productTypeCategorySelector-${unique_page_id}</c:set>
+<c:set var="productTypeWorksheetTypeSelectorId">productTypeWorksheetTypeSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
 
-  $("#${tabContentId}").find(".addProductTypeButton").button({
-    icons : {
-      primary : 'ui-icon-plusthick'
+	var productTypesTable = $("#${mainContentId}").find(".productTypesTable").dataTable({
+    "bJQueryUI" : true,
+    "sDom" : '<"H"lfrCT>t<"F"i>',
+    "bPaginate" : false,
+    "oTableTools" : {
+      "sRowSelect" : "single",
+      "aButtons" : [ "print" ],
+      "fnRowSelected" : function(node) {
+
+									        var elements = $(node).children();
+									        if (elements[0].getAttribute("class") === "dataTables_empty") {
+									          return;
+									        }
+
+									        $("#${mainContentId}").find(".productTypeSummarySection").html("");
+									        var selectedRowId = elements[0].innerHTML;
+
+									    	  $.ajax({
+									    	    url: "productTypeSummary.html",
+									    	    type: "GET",
+									    	    data: {productTypeId : selectedRowId},
+									    	    success: function(response) {
+									    	      				 var productTypeSummarySection = $("#${mainContentId}").find(".productTypeSummarySection");
+									    	      			   animatedScrollTo(productTypeSummarySection);
+									    	      			   productTypeSummarySection.html(response);
+									    	    				 },
+									    	    error: function(response) {
+									    	      			 showErrorMessage("Something went wrong. Please try again.");
+									    	    			 }
+									    	  });
+											  },
+		"fnRowDeselected" : function(node) {
+												  var elements = $(node).children();
+									        if (elements[0].getAttribute("class") === "dataTables_empty") {
+									          return;
+									        }
+									        var selectedRowId = elements[0].innerHTML;
+									        var productTypeSummarySection = $("#${mainContentId}").find(".productTypeSummarySection");
+									        productTypeSummarySection.html("");
+												},
+    },
+    "oColVis" : {
+     	"aiExclude": [0],
     }
-  }).click(function() {
-    var div = $("#${configureProductTypesFormId}").find(".productTypeDiv")[0];
-    var newDiv = $($(div).clone());
-    console.log(newDiv);
-    newDiv.find('input[name="id"]').val("");
-    newDiv.find('input[name="productType"]').val("");
-    $("#${configureProductTypesFormId}").append(newDiv);
+	});
+
+	$("#${newProductTypeDialogId}").find(".worksheetTypeSelector").multiselect({
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+									  return checkedValues.length ? checkedValues.join(', ') : 'None';
+	  							}
+	});
+	$("#${newProductTypeDialogId}").find(".worksheetTypeSelector")
+															 .multiselect("uncheckAll");
+
+  $("#${newProductTypeDialogId}").find(".productTypeCategorySelector").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
   });
 
-  $("#${tabContentId}").find(".saveProductTypesButton").button({
-    icons : {
-      primary : 'ui-icon-disk'
-    }
-  }).click(function() {
-    var data = {};
-    var productTypeDivs = $("#${configureProductTypesFormId}").find(".productTypeDiv");
-    for (var index=0; index < productTypeDivs.length; index++) {
-      var div = $(productTypeDivs[index]);
-      var id = div.find('input[name="id"]').val();
-      var productType = div.find('input[name="productType"]').val();
-      console.log(productType);
-      if (id == undefined || id == null || id === "")
-        id = productType;
-      data[id] = productType;
-    }
+	$("#${tabContentId}").bind("productTypeEditDone", refetchProductTypes);
+	$("#${tabContentId}").bind("productTypeCancel", function() {
+	  // deselect all rows in the table
+	  var oTableTools = TableTools.fnGetInstance($("#${mainContentId}").find("table")[0]);
+	  oTableTools.fnSelectNone();
+	  $("#${mainContentId}").find(".productTypeSummarySection").html("");
+	});
 
-    console.log(JSON.stringify(data));
-    $.ajax({
-      url: "configureProductTypes.html",
-      data: {params: JSON.stringify(data)},
-      type: "POST",
-      success: function(response) {
-        				 $("#${tabContentId}").replaceWith(response);
-        				 showMessage("Product Types Updated Successfully!");
-      				 },
-      error: 	 function(response) {
-        				 showErrorMessage("Something went wrong. Please try again later");
-        				 console.log(response);
-      				 },
-    });
-    return false;
-  });
+	function refetchProductTypes() {
+	  showLoadingImage($("#${tabContentId}"));
+		refetchContent("${refreshUrl}", $("#${tabContentId}"));
+	}
 
-  $("#${tabContentId}").find(".cancelButton").button({
-    icons : {
-      
-    }
-  }).click(refetchForm);
-  
-  function refetchForm() {
-    refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
-    $("#${childContentId}").html("");
-  }
+	$("#${mainContentId}").find(".newProductTypeButton")
+												.button({icons: {primary: 'ui-icon-plusthick'}})
+												.click(function() {
+												  showNewProductTypeDialog();
+												});
+
+  function showNewProductTypeDialog() {
+		$("#${newProductTypeDialogId}").dialog({
+		  modal: true,
+		  title: "New Product Type",
+		  width: 700,
+		  height: 400,
+		  maxHeight: 400,
+		  buttons: {
+		    "Create" : function() {
+										 var data = getNewProductTypeData();
+										 saveNewProductType(data);
+										 $(this).dialog("close");
+		    					 },
+		    "Cancel" : function() {
+										 $(this).dialog("close");
+		    					 }
+		  }
+		});
+
+		function getNewProductTypeData() {
+		  var data = {};
+		  var newProductTypeForm = $("#${newProductTypeDialogId}");
+		  data.productTypeName = newProductTypeForm.find('input[name="productTypeName"]').val();
+		  data.productTypeNameShort = newProductTypeForm.find('input[name="productTypeNameShort"]').val();
+		  data.worksheetTypeIds = worksheetTypesSelector.multiselect("getChecked").map(function() {
+		    return this.value;
+		  }).get().join(",");
+		  console.log(data);
+		  return data;
+		}
+
+		function saveNewProductType(data) {
+			$.ajax({
+			  url: "saveNewProductType.html",
+			  type: "POST",
+			  data: {productType : JSON.stringify(data)},
+			  success: function(response) {
+			    				 showMessage("New product type successfully created.");
+			    				 $("#${tabContentId}").trigger("productTypeEditDone");
+			  				 },
+			  error:   function() {
+			    				 showErrorMessage("Unable to create new product type.");
+			  				 }
+			});
+		}
+
+	}
 
 });
 </script>
 
-<div id="${tabContentId}" class="formDiv">
+<div id="${tabContentId}">
+
 	<div id="${mainContentId}">
-		<b>Configure Product Types</b>
-		<br />
-		<br />
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				Modify names of product types. Add new product types. 
-			</p>
-		</div>
-		<form id="${configureProductTypesFormId}">
-				<c:forEach var="productType" items="${model.allProductTypes}">
-					<div class="productTypeDiv">
-						<div>
-							<input type="hidden" name="id" value="${productType.id}" />
-							<input type="text" name="productType" value="${productType.productType}" />
-						</div>
-					</div>
-			</c:forEach>
-		</form>
-			<br />
-			<div>
-				<label>&nbsp;</label>
-				<button class="addProductTypeButton">Add new product type</button>
-				<button class="saveProductTypesButton">Save</button>
-				<button class="cancelButton">Cancel</button>
+
+		<div style="margin-left: 20px; margin-right: 20px; margin-top: 50px; border-radius: 5px;">
+
+			<div style="font-weight: bold; margin: 15px;">Product types</div>
+
+			<div class="tipsBox ui-state-highlight">
+				<p>
+					The following product types can be created.
+					You can create new product types based on your requirement.
+				</p>
 			</div>
+
+			<div>
+				<button class="newProductTypeButton">New product type</button>
+			</div>
+
+			<br />
+
+			<table class="productTypesTable">	
+				<thead>
+					<tr style="height: 30px;">
+						<th style="display: none;"></th>
+						<th>Short name</th>
+						<th>Full name</th>
+						<th>Expiry time</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="productType" items="${productTypes}">
+						<tr>
+							<td style="display: none;">${productType.id}</td>
+							<td>${productType.productTypeNameShort}</td>
+							<td>${productType.productType}</td>
+							<td>${productType.expiresAfter} ${productType.expiresAfterUnits}</td>
+							<c:set var="cellColor" value="${productType.isDeleted ? '#A2361A':'#154A16'}" />
+							<td style="color: ${cellColor};">${productType.isDeleted ? 'Not in Use' : 'In Use'}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+
+			<div class="productTypeSummarySection">
+			</div>
+
+		</div>
 
 	</div>
 
-	<div id="${childContentId}"></div>
+	<div id="${childContentId}">
+	</div>
+
+	<div id="${newProductTypeDialogId}" style="display: none;">
+		<form class="formInTabPane">
+			<div>
+				<label>Product type name</label>
+				<input name="productTypeName" />
+			</div>
+			<div>
+				<label>Product type short name</label>
+				<input name="productTypeNameShort" />
+			</div>
+		</form>
+	</div>
 
 </div>

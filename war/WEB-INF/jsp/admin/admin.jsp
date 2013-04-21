@@ -36,7 +36,7 @@
 			<a href="configureLocationsFormGenerator.html">Centers/Sites</a>
 		</li>
 		<li id="productTypesForm">
-			<a href="configureProductTypesFormGenerator.html">Product Types</a>
+			<a href="configureProductTypes.html">Product Types</a>
 		</li>
 		<li id="bloodBagTypesForm">
 			<a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>

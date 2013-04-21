@@ -63,6 +63,8 @@ $(document).ready(function() {
 									          return;
 									        }
 									        var selectedRowId = elements[0].innerHTML;
+  	    	      				  var bloodTestSummarySection = $("#${mainContentId}").find(".bloodTestSummarySection");
+  	    	      				  bloodTestSummarySection.html("");
 												},
     },
     "oColVis" : {
@@ -144,7 +146,7 @@ $(document).ready(function() {
 			  type: "POST",
 			  data: {bloodTest : JSON.stringify(data)},
 			  success: function(response) {
-			    				 showMessage("New blood test rule successfully created.");
+			    				 showMessage("New blood test successfully created.");
 			    				 $("#${tabContentId}").trigger("bloodTestEditDone");
 			  				 },
 			  error:   function() {

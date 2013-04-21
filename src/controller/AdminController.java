@@ -343,16 +343,13 @@ public class AdminController {
     return m;
   }
   
-  @RequestMapping(value="/configureProductTypesFormGenerator", method=RequestMethod.GET)
-  public ModelAndView configureProductTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  @RequestMapping(value="/configureProductTypes", method=RequestMethod.GET)
+  public ModelAndView configureProductTypes(
+      HttpServletRequest request, HttpServletResponse response) {
 
     ModelAndView mv = new ModelAndView("admin/configureProductTypes");
-    Map<String, Object> m = model.asMap();
-    addAllProductTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
+    mv.addObject("productTypes", productTypesRepository.getAllProductTypesIncludeDeleted());
+    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -481,10 +478,6 @@ public class AdminController {
     m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
   }
 
-  private void addAllProductTypesToModel(Map<String, Object> m) {
-    m.put("allProductTypes", productTypesRepository.getAllProductTypes());
-  }
-
   private void addAllRequestTypesToModel(Map<String, Object> m) {
     m.put("allRequestTypes", requestTypesRepository.getAllRequestTypes());
   }
@@ -523,42 +516,6 @@ public class AdminController {
     Map<String, Object> m = model.asMap();
     addAllTipsToModel(m);
     m.put("refreshUrl", "configureTipsFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping("/configureProductTypes")
-  public ModelAndView configureProductTypes(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureProductTypes");
-    System.out.println(paramsAsJson);
-    List<ProductType> allProductTypes = new ArrayList<ProductType>();
-    try {
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        String productType = (String) params.get(id);
-        ProductType pt = new ProductType();
-        try {
-          pt.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          ex.printStackTrace();
-          pt.setId(null);
-        }
-        pt.setProductType(productType);
-        pt.setIsDeleted(false);
-        allProductTypes.add(pt);
-      }
-      productTypesRepository.saveAllProductTypes(allProductTypes);
-      System.out.println(params);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
-    Map<String, Object> m = model.asMap();
-    addAllProductTypesToModel(m);
-    m.put("refreshUrl", "configureProductTypesFormGenerator.html");
     mv.addObject("model", model);
     return mv;
   }
