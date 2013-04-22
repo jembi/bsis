@@ -74,6 +74,10 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
         // blood typing should be done otherwise we will not compare
         if (!bloodTypingStatus.equals(BloodTypingStatus.COMPLETE))
           continue;
+        if (c.getBloodAbo() == null || c.getBloodRh() == null)
+          continue;
+        if (bloodAbo == null || bloodRh == null)
+          continue;
         if (!bloodAbo.equals(c.getBloodAbo()) ||
             !bloodRh.equals(c.getBloodRh())) {
           donorStatus = DonorStatus.BLOOD_GROUP_MISMATCH;

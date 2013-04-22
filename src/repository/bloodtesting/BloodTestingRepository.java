@@ -491,17 +491,17 @@ public class BloodTestingRepository {
     return getBloodTypingRules(false);
   }
 
-  public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveTests) {
+  public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveRules) {
     String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND " +
     		"r.context=:context";
-    if (onlyActiveTests) {
+    if (onlyActiveRules) {
       queryStr = queryStr + " AND r.isActive=:isActive";
     }
     TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
     BloodTestContext context = genericConfigRepository.getCurrentBloodTypingContext();
     query.setParameter("category", BloodTestCategory.BLOODTYPING);
     query.setParameter("context", context);
-    if (onlyActiveTests)
+    if (onlyActiveRules)
       query.setParameter("isActive", true);
     return query.getResultList();
   }
@@ -592,5 +592,17 @@ public class BloodTestingRepository {
     BloodTest bt = findBloodTestById(bloodTestId);
     bt.setIsActive(true);
     em.merge(bt);
+  }
+
+  public List<BloodTestingRule> getTTIRules(boolean onlyActiveRules) {
+    String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category";
+    if (onlyActiveRules) {
+      queryStr = queryStr + " AND r.isActive=:isActive";
+    }
+    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
+    query.setParameter("category", BloodTestCategory.TTI);
+    if (onlyActiveRules)
+      query.setParameter("isActive", true);
+    return query.getResultList();
   }
 }

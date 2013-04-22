@@ -397,13 +397,15 @@ public class CollectedSampleRepository {
     return query.getResultList();
   }
 
-  public void addAllCollectedSamples(List<CollectedSample> collectedSamples) {
+  public List<CollectedSample> addAllCollectedSamples(List<CollectedSample> collectedSamples) {
     for (CollectedSample c : collectedSamples) {
       c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       c.setTTIStatus(TTIStatus.NOT_DONE);
       em.persist(c);
+      em.refresh(c);
     }
     em.flush();
+    return collectedSamples;
   }
 
   public CollectedSample findCollectedSampleByCollectionNumber(

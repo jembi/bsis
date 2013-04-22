@@ -115,12 +115,12 @@ insert into BloodTestingRule
  'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
  '9,10', '0', '1'
  ),
-('6,9', '-,-',
+('6,9,10', '-,-,+',
  'BLOODRH', '-', '',
  'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
  '', '0', '1'
  ),
-('6,9', '-,+',
+('6,9,10', '-,+,-',
  'BLOODRH', '+', '',
  'RECORD_BLOOD_TYPING_TESTS', 'BLOODTYPING', 'BLOODRH',
  '', '0', '1'

@@ -5,13 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.CollectionField;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectedSampleBackingForm;
 import model.donationtype.DonationType;
@@ -24,8 +29,10 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.request.RequestBackingForm;
 import model.requesttype.RequestType;
+import model.testresults.TTIStatus;
 import model.util.Gender;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +50,7 @@ import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.UsageRepository;
+import repository.bloodtesting.BloodTestingRepository;
 
 @Controller
 public class CreateDataController {
@@ -71,6 +79,9 @@ public class CreateDataController {
 	@Autowired
 	private RequestRepository requestRepository;
 
+	@Autowired
+	private BloodTestingRepository bloodTestingRepository;
+	
 	@Autowired
 	private UsageRepository usageRepository;
 
@@ -417,7 +428,7 @@ public class CreateDataController {
 		List<Location> centers = locationRepository.getAllCenters();
 		List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
-//    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTests();
+    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTests();
 
     List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
 
@@ -443,39 +454,16 @@ public class CreateDataController {
 
 		collectionRepository.addAllCollectedSamples(collectedSamples);
 
-//		List<TestResult> testResults = new ArrayList<TestResult>();
-//		for (CollectedSample collectedSample : collectedSamples) {
-//		  collectedSample = collectionRepository.findCollectedSampleByCollectionNumber(collectedSample.getCollectionNumber());
-//		  for (BloodTest b : bloodTests) {
-//
-//    	  TestResultBackingForm t = new TestResultBackingForm();
-//    	  t.setCollectedSample(collectedSample);
-//    	  t.setTestedOn(CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn()));
-//    	  t.setIsDeleted(false);
-//    	  t.getTestResult().setBloodTest(b);
-//
-//    	  String result = null;
-//    	  List<String> allowedResults = new ArrayList<String>(b.getAllowedResults());
-//
-////    	  if (!b.getCorrectResult().isEmpty()) {
-////    	    if (Math.abs(random.nextInt(100)) > 10) {
-////    	      result = b.getCorrectResult();
-////    	    }
-////    	    else {
-////    	      allowedResults.remove(b.getCorrectResult());
-////    	    }
-////    	  }
-//    	  if (result == null)
-//    	    result = allowedResults.get(Math.abs(random.nextInt(allowedResults.size())));
-//
-//    	  t.setResult(result);
-//    	  testResults.add(t.getTestResult());
-//		  }
-//		}
-//    testResultRepository.addAllTestResults(testResults);
+		addTestResultsForCollections(collectedSamples);
 	}
 
-	public void createProducts(int numProducts) {
+	private void addTestResultsForCollections(
+      List<CollectedSample> collectedSamples) {
+    addBloodTypingResultsForCollections(collectedSamples);
+    addTTIResultsForCollections(collectedSamples);
+  }
+
+  public void createProducts(int numProducts) {
 		List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
 		List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
 		List<Product> products = new ArrayList<Product>();
@@ -495,6 +483,159 @@ public class CreateDataController {
 		}
     productRepository.addAllProducts(products);
 	}
+
+	private void addBloodTypingResultsForCollections(List<CollectedSample> collectedSamples) {
+
+	  Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
+	  Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
+	  for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
+	    switch (rule.getCollectionFieldChanged()) {
+	      case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
+	                       bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+	                     }
+	                     bloodAboRuleMap.get(rule.getNewInformation()).add(rule);
+	                     break;
+	      case BLOODRH:  if (!bloodRhRuleMap.containsKey(rule.getNewInformation())) {
+	                       bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+	                     }
+	                     bloodRhRuleMap.get(rule.getNewInformation()).add(rule);
+	                     break;
+	    }
+	  }
+
+	  double leaveOutCollectionsPercentage = 0.10;
+	  double incorrectBloodTypePercentage = 0.10;
+
+	  List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
+	  List<String> rhValues = new ArrayList<String>(bloodRhRuleMap.keySet());
+
+	  Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+
+	  Random generator = new Random();
+
+	  for (CollectedSample collection : collectedSamples) {
+
+	    if (Math.random() < leaveOutCollectionsPercentage) {
+	      // do not add results for a small fraction of the collections
+	      continue;
+	    }
+
+	    String bloodAbo = "";
+	    String bloodRh = "";
+	    if (collection.getDonor() == null) {
+	      bloodAbo = collection.getDonor().getBloodAbo();
+	      bloodRh = collection.getDonor().getBloodRh();
+	    }
+	    if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh)) {
+	      // first collection for this donor
+	      bloodAbo = aboValues.get(generator.nextInt(aboValues.size()));
+	      bloodRh = rhValues.get(generator.nextInt(rhValues.size()));
+	    }
+
+	    if (Math.random() < incorrectBloodTypePercentage) {
+	      // with a small probability choose a different blood group
+        bloodAbo = aboValues.get(generator.nextInt(aboValues.size()));
+        bloodRh = rhValues.get(generator.nextInt(rhValues.size()));
+	    }
+
+      List<BloodTestingRule> aboRules = bloodAboRuleMap.get(bloodAbo);
+      List<BloodTestingRule> rhRules = bloodRhRuleMap.get(bloodRh);
+      // ideally this should not be empty but since we allow the user to configure the rules
+      // lets just handle this case
+      if (aboRules == null || aboRules.isEmpty() ||
+          rhRules == null || rhRules.isEmpty())
+        continue;
+
+      BloodTestingRule aboRule = aboRules.get(generator.nextInt(aboRules.size()));
+      BloodTestingRule rhRule = rhRules.get(generator.nextInt(rhRules.size()));
+
+      // we know which rule to apply
+      Map<Long, String> testResultsForCollection = new HashMap<Long, String>();
+      testResults.put(collection.getId(), testResultsForCollection);
+
+      int index = 0;
+      String[] patternResults = aboRule.getPattern().split(",");
+      for (String testId : aboRule.getBloodTestsIds().split(",")) {
+        if (StringUtils.isBlank(testId) ||
+            index >= patternResults.length ||
+            StringUtils.isBlank(patternResults[index]))
+          continue;
+        testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
+        index++;
+      }
+
+      index = 0;
+      patternResults = rhRule.getPattern().split(",");
+      for (String testId : rhRule.getBloodTestsIds().split(",")) {
+        if (StringUtils.isBlank(testId) ||
+            index >= patternResults.length ||
+            StringUtils.isBlank(patternResults[index]))
+          continue;
+        testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
+        index++;
+      }
+	  }
+
+	  bloodTestingRepository.saveBloodTestingResults(testResults, true);
+	}
+
+	private void addTTIResultsForCollections(List<CollectedSample> collectedSamples) {
+    Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
+    for (BloodTestingRule rule : bloodTestingRepository.getTTIRules(true)) {
+      if (rule.getCollectionFieldChanged().equals(CollectionField.TTISTATUS)) {
+        if (!ttiRuleMap.containsKey(rule.getNewInformation())) {
+          ttiRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+        }
+        ttiRuleMap.get(rule.getNewInformation()).add(rule);
+      }
+    }
+
+    double leaveOutCollectionsPercentage = 0.10;
+    double unsafePercentage = 0.10;
+
+    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+    Random generator = new Random();
+
+    for (CollectedSample collection : collectedSamples) {
+
+      if (Math.random() < leaveOutCollectionsPercentage) {
+        // do not add results for a small fraction of the collections
+        continue;
+      }
+
+      TTIStatus ttiStatus = TTIStatus.TTI_SAFE;
+      
+      if (Math.random() < unsafePercentage) {
+        // with a small probability choose a different blood group
+        ttiStatus = TTIStatus.TTI_UNSAFE;
+      }
+
+      List<BloodTestingRule> ttiRules = ttiRuleMap.get(ttiStatus.toString());
+      // ideally this should not be empty but since we allow the user to configure the rules
+      // lets just handle this case
+      if (ttiRules == null || ttiRules.isEmpty())
+        continue;
+
+      BloodTestingRule ttiRule = ttiRules.get(generator.nextInt(ttiRules.size()));
+
+      // we know which rule to apply
+      Map<Long, String> testResultsForCollection = new HashMap<Long, String>();
+      testResults.put(collection.getId(), testResultsForCollection);
+
+      int index = 0;
+      String[] patternResults = ttiRule.getPattern().split(",");
+      for (String testId : ttiRule.getBloodTestsIds().split(",")) {
+        if (StringUtils.isBlank(testId) ||
+            index >= patternResults.length ||
+            StringUtils.isBlank(patternResults[index]))
+          continue;
+        testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
+        index++;
+      }
+    }
+
+    bloodTestingRepository.saveBloodTestingResults(testResults, true);
+  }
 
 	public void createRequests(int numRequests) {
 
