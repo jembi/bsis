@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 import model.producttype.ProductTypeTimeUnits;
 
 import org.springframework.stereotype.Repository;
@@ -87,5 +88,24 @@ public class ProductTypeRepository {
     ProductType productType = getProductTypeById(productTypeId);
     productType.setIsDeleted(false);
     em.merge(productType);
+  }
+
+  public List<ProductTypeCombination> getAllProductTypeCombinations() {
+
+    String queryStr = "SELECT pt from ProductTypeCombination pt WHERE " +
+                      "pt.isDeleted=:isDeleted";
+    TypedQuery<ProductTypeCombination> query = em.createQuery(queryStr, ProductTypeCombination.class);
+    query.setParameter("isDeleted", false);
+    return query.getResultList();
+  }
+
+  public ProductTypeCombination getProductTypeCombinationById(Integer id) {
+    TypedQuery<ProductTypeCombination> query;
+    query = em.createQuery("SELECT pt from ProductTypeCombination pt " +
+            "where pt.id=:id", ProductTypeCombination.class);
+    query.setParameter("id", id);
+    if (query.getResultList().size() == 0)
+      return null;
+    return query.getSingleResult();
   }
 }

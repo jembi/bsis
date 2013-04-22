@@ -1,20 +1,26 @@
 package model.product;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
-import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class ProductBackingForm {
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class ProductCombinationBackingForm {
 
   public static final int ID_LENGTH = 12;
 
@@ -26,17 +32,21 @@ public class ProductBackingForm {
 
   private String expiresOn;
 
-  private List<String> productTypes;
+  private ProductTypeCombination productTypeCombination;
 
-  public ProductBackingForm() {
+  Map<String, String> expiresOnByProductTypeId;
+  
+  public ProductCombinationBackingForm() {
+    expiresOnByProductTypeId = new HashMap<String, String>();
     setProduct(new Product());
   }
 
-  public ProductBackingForm(boolean autoGenerate) {
+  public ProductCombinationBackingForm(boolean autoGenerate) {
+    expiresOnByProductTypeId = new HashMap<String, String>();
     setProduct(new Product());
   }
 
-  public ProductBackingForm(Product product) {
+  public ProductCombinationBackingForm(Product product) {
     this.setProduct(product);
   }
 
@@ -46,14 +56,6 @@ public class ProductBackingForm {
 
   public CollectedSample getCollectedSample() {
     return product.getCollectedSample();
-  }
-
-  public String getProductType() {
-    ProductType productType = product.getProductType();
-    if (productType == null)
-      return "";
-    else
-      return productType.getId().toString();
   }
 
   public Date getLastUpdated() {
@@ -92,22 +94,6 @@ public class ProductBackingForm {
     product.setCollectedSample(collectedSample);
   }
 
-  public void setProductType(String productTypeId) {
-    if (StringUtils.isBlank(productTypeId)) {
-      product.setProductType(null);
-    }
-    else {
-      ProductType pt = new ProductType();
-      try {
-        pt.setId(Integer.parseInt(productTypeId));
-        product.setProductType(pt);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        product.setProductType(null);
-      }
-    }
-  }
-
   public String getCreatedOn() {
     if (createdOn != null)
       return createdOn;
@@ -117,11 +103,7 @@ public class ProductBackingForm {
   }
 
   public String getExpiresOn() {
-    if (expiresOn != null)
-      return expiresOn;
-    if (getProduct() == null)
-      return "";
-    return CustomDateFormatter.getDateString(product.getExpiresOn());
+    return expiresOn;
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -160,24 +142,23 @@ public class ProductBackingForm {
 
   public void setExpiresOn(String expiresOn) {
     this.expiresOn = expiresOn;
+    ObjectMapper mapper = new ObjectMapper();
     try {
-      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiresOn));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      product.setExpiresOn(null);
+      expiresOnByProductTypeId = mapper.readValue(expiresOn, HashMap.class);
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
   }
 
   public String toString() {
     return product.toString();
-  }
-
-  public List<String> getProductTypes() {
-    return productTypes;
-  }
-
-  public void setProductTypes(List<String> productTypes) {
-    this.productTypes = productTypes;
   }
 
   public String getCollectionNumber() {
@@ -212,5 +193,26 @@ public class ProductBackingForm {
 
   public void setStatus(String status) {
     product.setStatus(ProductStatus.valueOf(status));
+  }
+
+  public String getProductTypeCombination() {
+    if (productTypeCombination == null || productTypeCombination.getId() == null)
+      return "";
+    else
+      return productTypeCombination.getId().toString();
+  }
+
+  public void setProductTypeCombination(String productTypeCombinationId) {
+    if (StringUtils.isBlank(productTypeCombinationId)) {
+      productTypeCombination = null;
+    }
+    else {
+      productTypeCombination = new ProductTypeCombination();
+      try {
+        productTypeCombination.setId(Integer.parseInt(productTypeCombinationId));
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 }

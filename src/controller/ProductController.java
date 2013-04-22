@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +17,11 @@ import model.product.FindProductBackingForm;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.product.ProductBackingFormValidator;
+import model.product.ProductCombinationBackingForm;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
+import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,10 @@ import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import viewmodel.ProductViewModel;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ProductController {
@@ -314,6 +322,26 @@ public class ProductController {
     return mv;
   }
 
+  @RequestMapping(value = "/addProductCombinationFormGenerator", method = RequestMethod.GET)
+  public ModelAndView addProductCombinationFormGenerator(HttpServletRequest request,
+      Model model) {
+
+    ProductCombinationBackingForm form = new ProductCombinationBackingForm();
+
+    ModelAndView mv = new ModelAndView("products/addProductCombinationForm");
+    mv.addObject("requestUrl", getUrl(request));
+    mv.addObject("firstTimeRender", true);
+    mv.addObject("addProductCombinationForm", form);
+
+    addOptionsForAddProductCombinationForm(mv.getModelMap());
+    mv.addObject("refreshUrl", getUrl(request));
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    // to ensure custom field names are displayed in the form
+    mv.addObject("productFields", formFields);
+    return mv;
+  }
+
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
   public ModelAndView editProductFormGenerator(HttpServletRequest request,
       @RequestParam(value="productId") Long productId) {
@@ -348,10 +376,6 @@ public class ProductController {
 
     Product savedProduct = null;
     if (result.hasErrors()) {
-      for (ObjectError error : result.getAllErrors()) {
-        System.out.println(error.getObjectName());
-        System.out.println(error.getDefaultMessage());
-      }
       mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
@@ -373,7 +397,6 @@ public class ProductController {
     }
 
     if (success) {
-      mv.addObject("collectionId", savedProduct.getId());
       mv.addObject("product", getProductViewModel(savedProduct));
       mv.addObject("addAnotherProductUrl", "addProductFormGenerator.html");
       mv.setViewName("products/addProductSuccess");
@@ -383,6 +406,63 @@ public class ProductController {
       mv.addObject("addProductForm", form);
       mv.addObject("refreshUrl", "addProductFormGenerator.html");
       mv.setViewName("products/addProductError");
+    }
+
+    mv.addObject("success", success);
+    return mv;
+  }
+
+  @RequestMapping(value = "/addProductCombination", method = RequestMethod.POST)
+  public ModelAndView addProductCombination(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @ModelAttribute("addProductCombinationForm") @Valid ProductCombinationBackingForm form,
+      BindingResult result, Model model) {
+
+    ModelAndView mv = new ModelAndView();
+    boolean success = false;
+
+    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    mv.addObject("productFields", formFields);
+
+    List<Product> savedProducts = null;
+    if (result.hasErrors()) {
+      for (ObjectError error : result.getAllErrors()) {
+        System.out.println(error.getObjectName());
+        System.out.println(error.getDefaultMessage());
+      }
+      mv.addObject("hasErrors", true);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      success = false;
+    } else {
+      try {
+        savedProducts = productRepository.addProductCombination(form);
+        mv.addObject("hasErrors", false);
+        success = true;
+        form = new ProductCombinationBackingForm();
+      } catch (EntityExistsException ex) {
+        ex.printStackTrace();
+        success = false;
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        success = false;
+      }
+    }
+
+    if (success) {
+      if (savedProducts.size() > 0)
+      mv.addObject("collectionNumber", savedProducts.get(0).getCollectionNumber());
+      mv.addObject("products", getProductViewModels(savedProducts));
+      mv.addObject("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
+      mv.setViewName("products/addProductCombinationSuccess");
+    } else {
+      mv.addObject("errorMessage", "Error creating product. Please fix the errors noted below.");
+      mv.addObject("firstTimeRender", false);
+      addOptionsForAddProductCombinationForm(mv.getModelMap());
+      mv.addObject("addProductCombinationForm", form);
+      mv.addObject("refreshUrl", "addProductCombinationFormGenerator.html");
+      mv.setViewName("products/addProductCombinationError");
     }
 
     mv.addObject("success", success);
@@ -583,5 +663,36 @@ public class ProductController {
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
+  }
+
+  private void addOptionsForAddProductCombinationForm(Map<String, Object> m) {
+    m.put("productTypes", productTypeRepository.getAllProductTypes());
+
+    List<ProductTypeCombination> productTypeCombinations = productTypeRepository.getAllProductTypeCombinations();
+    m.put("productTypeCombinations", productTypeCombinations);
+
+    ObjectMapper mapper = new ObjectMapper();
+    Map<Integer, String> productTypeCombinationsMap = new HashMap<Integer, String>();
+    for (ProductTypeCombination productTypeCombination : productTypeCombinations) {
+      Map<String, String> productExpiryIntervals = new HashMap<String, String>();
+      for (ProductType productType : productTypeCombination.getProductTypes()) {
+        Integer expiryIntervalMinutes = productType.getExpiryIntervalMinutes();
+        productExpiryIntervals.put(productType.getId().toString(), expiryIntervalMinutes.toString());
+      }
+
+      try {
+        productTypeCombinationsMap.put(productTypeCombination.getId(), mapper.writeValueAsString(productExpiryIntervals));
+      } catch (JsonGenerationException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (JsonMappingException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    m.put("productTypeCombinationsMap", productTypeCombinationsMap);
   }
 }

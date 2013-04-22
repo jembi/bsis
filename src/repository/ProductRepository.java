@@ -1,5 +1,6 @@
 package repository;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,15 +20,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.product.Product;
+import model.product.ProductCombinationBackingForm;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeType;
 import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.testresults.TTIStatus;
 import model.util.BloodAbo;
@@ -40,6 +44,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.CollectedSampleViewModel;
@@ -55,6 +63,9 @@ public class ProductRepository {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
+
+  @Autowired
+  private ProductTypeRepository productTypeRepository;
 
   @Autowired
   public RequestRepository requestRepository;
@@ -907,5 +918,33 @@ public class ProductRepository {
     query.setParameter("collectionNumber", collectionNumber);
     query.setParameter("isDeleted", false);
     return query.getResultList();
+  }
+
+  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws ParseException, JsonParseException, JsonMappingException, IOException {
+    List<Product> products = new ArrayList<Product>();
+    String expiresOn = form.getExpiresOn();
+    ObjectMapper mapper = new ObjectMapper();
+
+    Map<String, String> expiryDateByProductType = null;
+    expiryDateByProductType = mapper.readValue(expiresOn, HashMap.class);
+
+    ProductTypeCombination productTypeCombination;
+    productTypeCombination = productTypeRepository.getProductTypeCombinationById(Integer.parseInt(form.getProductTypeCombination()));
+    for (ProductType productType : productTypeCombination.getProductTypes()) {
+      Product product = new Product();
+      product.setCollectedSample(form.getCollectedSample());
+      product.setProductType(productType);
+      product.setCreatedOn(form.getProduct().getCreatedOn());
+      String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());
+      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
+      product.setIsDeleted(false);
+      updateProductInternalFields(product);
+      em.persist(product);
+      em.flush();
+      em.refresh(product);
+      products.add(product);
+    }
+
+    return products;
   }
 }

@@ -2,6 +2,10 @@ function addNewProduct(form, resultDivId, successCallback) {
   updateProductGeneric(form, resultDivId, "addProduct.html", successCallback);
 }
 
+function addNewProductCombination(form, resultDivId, successCallback) {
+  updateProductGeneric(form, resultDivId, "addProductCombination.html", successCallback);
+}
+
 function updateExistingProduct(form, resultDivId, successCallback) {
   updateProductGeneric(form, resultDivId, "updateProduct.html", successCallback);
 }
