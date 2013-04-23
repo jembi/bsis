@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
-import model.bloodtesting.BloodTest;
 import model.bloodtesting.CollectionField;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
@@ -22,7 +21,6 @@ import model.collectedsample.CollectedSampleBackingForm;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
-import model.location.LocationType;
 import model.product.Product;
 import model.product.ProductBackingForm;
 import model.producttype.ProductType;
@@ -43,13 +41,13 @@ import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
+import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
-import repository.UsageRepository;
 import repository.bloodtesting.BloodTestingRepository;
 
 @Controller
@@ -81,9 +79,9 @@ public class CreateDataController {
 
 	@Autowired
 	private BloodTestingRepository bloodTestingRepository;
-	
+
 	@Autowired
-	private UsageRepository usageRepository;
+	private GenericConfigRepository genericConfigRepository;
 
 	@Autowired
 	private SequenceNumberRepository sequenceNumberRepository;
@@ -334,10 +332,6 @@ public class CreateDataController {
 			"West", "Wheeler", "White", "Wilkerson", "Wilkins", "Williams",
 			"Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
 			"Woods", "Wright", "Yates", "Young", "Zimmerman" };
-	private String[] productTypes = new String[] { "rcc", "ffp", "wholeBlood",
-			"platelets", "partialPlatelets" };
-	private String[] bloodTypes = new String[] { "A", "B", "AB", "O" };
-	private String[] rhd = new String[] { "positive", "negative" };
 
 	@RequestMapping("/admin-createData")
 	public ModelAndView createDataPage(HttpServletRequest request) {
@@ -407,28 +401,25 @@ public class CreateDataController {
 		return date;
 	}
 
-	private boolean getRandomBooleanValue() {
-		return random.nextBoolean();
-	}
-
-	private LocationType getRandomLocationType(
-			List<LocationType> allLocationTypes) {
-		return allLocationTypes.get(random.nextInt(allLocationTypes.size()));
-	}
-
 	private Date getRandomCollectionDate() {
 		// Date twoYearsAgo = new DateTime().minusYears(2).toDate();
 		// return getRandomDate(twoYearsAgo, new Date());
-		Date twoYearsAgo = new DateTime().minusDays(1000).toDate();
+		Date twoYearsAgo = new DateTime().minusDays(300).toDate();
 		return getRandomDate(twoYearsAgo, new Date());
 	}
+
+  private Date getRandomRequestDate() {
+    // Date twoYearsAgo = new DateTime().minusYears(2).toDate();
+    // return getRandomDate(twoYearsAgo, new Date());
+    Date twoYearsAgo = new DateTime().minusDays(100).toDate();
+    return getRandomDate(twoYearsAgo, new Date());
+  }
 
 	void createCollectionsWithTestResults(int numCollections) {
 		List<Location> sites = locationRepository.getAllCollectionSites();
 		List<Location> centers = locationRepository.getAllCenters();
 		List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
-    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTests();
 
     List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
 
@@ -503,8 +494,10 @@ public class CreateDataController {
 	    }
 	  }
 
-	  double leaveOutCollectionsPercentage = 0.10;
-	  double incorrectBloodTypePercentage = 0.10;
+	  Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
+
+	  double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+	  double incorrectBloodTypePercentage = Double.parseDouble(createDataProperties.get("incorrectBloodTypeProbability"));
 
 	  List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
 	  List<String> rhValues = new ArrayList<String>(bloodRhRuleMap.keySet());
@@ -590,8 +583,9 @@ public class CreateDataController {
       }
     }
 
-    double leaveOutCollectionsPercentage = 0.10;
-    double unsafePercentage = 0.10;
+    Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
+    double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+    double unsafePercentage = Double.parseDouble(createDataProperties.get("unsafeProbability"));
 
     Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
     Random generator = new Random();
@@ -650,7 +644,7 @@ public class CreateDataController {
 
     List<Request> requests = new ArrayList<Request>();
 		for (int i = 0; i < numRequests; i++) {
-			Date requestDate = getRandomCollectionDate();
+			Date requestDate = getRandomRequestDate();
 			Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt() % 21).toDate();
 			RequestBackingForm form = new RequestBackingForm();
 			form.setRequestNumber(requestNumbers.get(i));
@@ -670,10 +664,6 @@ public class CreateDataController {
       requests.add(form.getRequest());
 		}
 		requestRepository.addAllRequests(requests);
-	}
-
-	private String getRandomTestResult() {
-		return random.nextBoolean() == true ? "reactive" : "negative";
 	}
 }
 

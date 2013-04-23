@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
-import repository.SequenceNumberRepository;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.ProductViewModel;
 import viewmodel.RequestViewModel;
@@ -59,8 +59,8 @@ public class RequestsController {
   private RequestTypeRepository requestTypeRepository;
 
   @Autowired
-  private SequenceNumberRepository sequenceNumberRepository;
-  
+  private GenericConfigRepository genericConfigRepository;
+
   @Autowired
   private UtilController utilController;
 
@@ -400,7 +400,8 @@ public class RequestsController {
     utilController.addTipsToModel(tips, "requests.findpending.findmatchingproducts");
     mv.addObject("tips", tips);
     mv.addObject("allProducts", products);
-    System.out.println(mv.getViewName());
+    Map<String, String> configProperties = genericConfigRepository.getConfigProperties("issueproducts");
+    mv.getModelMap().addAllAttributes(configProperties);
     return mv;
   }
 

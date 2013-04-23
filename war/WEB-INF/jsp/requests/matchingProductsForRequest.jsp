@@ -81,7 +81,10 @@ $(document).ready(
           primary : 'ui-icon-check'
         }
       }).click(function() {
-        				issueSelectedProducts()
+        				if ("${showCrossmatchConfirmation}" === "true")
+        					issueSelectedProducts(false);
+        				else
+        				  issueSelectedProducts(true);
       				 });
 
       $("#${tabContentId}").find(".cancelButton").button({
@@ -140,20 +143,15 @@ $(document).ready(
           $("#${crossmatchConfirmDialogId}").find("ul").append("<li>" + compatible_notknown[collectionId] + "</li>");
         }
 
+        var buttonsForCrossmatchConfirmDialog = {	"Cancel and add crossmatch tests": function() { $(this).dialog("close"); } };
+        if ("${allowSkipCrossmatch}" === "true")
+	        buttonsForCrossmatchConfirmDialog["Issue these products"] = function() {	$(this).dialog("close");	issueSelectedProducts(true); };
         $("#${crossmatchConfirmDialogId}").dialog({
           modal: true,
           title: "Crossmatch not done",
           width: 800,
           height: 400,
-          buttons: {
-            "Yes Issue these products": function() {
-																					$(this).dialog("close");
-																					issueSelectedProducts(true);
-            														},
-            "No I want to add crossmatch tests": function() {
-											 														 $(this).dialog("close");
-            				 														 }
-          }
+          buttons: buttonsForCrossmatchConfirmDialog
         });
       }
 

@@ -1031,3 +1031,12 @@ insert into WellType (wellType, requiresSample, isDeleted) values
 ("Blank", 0, 0),
 ("Negative control", 0,  0),
 ("Positive control", 0, 0);
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("showCrossmatchConfirmation", "true", "issueproducts"),
+("allowSkipCrossmatch", "true", "issueproducts");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("leaveOutCollectionsProbability", "0.10", "createdata"),
+("incorrectBloodTypeProbability", "0.05", "createdata"),
+("unsafeProbability", "0.05", "createdata");
