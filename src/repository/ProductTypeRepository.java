@@ -108,4 +108,22 @@ public class ProductTypeRepository {
       return null;
     return query.getSingleResult();
   }
+
+  public void updateProductType(Map<String, Object> newProductTypeAsMap) {
+    String productTypeId = (String) newProductTypeAsMap.get("id");
+    ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
+    productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
+    productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
+    try {
+      Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
+      productType.setExpiresAfter(expiresAfter);
+    } catch (NumberFormatException ex) {
+      productType.setExpiresAfter(0);
+      ex.printStackTrace();
+    }
+    ProductTypeTimeUnits expiresAfterUnits;
+    expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
+    productType.setExpiresAfterUnits(expiresAfterUnits);
+    em.merge(productType);
+  }
 }

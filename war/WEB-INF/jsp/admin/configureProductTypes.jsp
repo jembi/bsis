@@ -99,16 +99,30 @@ $(document).ready(function() {
 												});
 
   function showNewProductTypeDialog() {
+    clearProductTypeData();
+		showEditProductTypeDialogGeneric("New Product Type", "saveNewProductType.html");
+  }
+
+  $("#${tabContentId}").bind("editProductType", showUpdateProductTypeDialog);
+
+	function showUpdateProductTypeDialog() {
+	  setSelectedProductTypeData();
+	  showEditProductTypeDialogGeneric("Edit Product Type", "updateProductType.html");
+	}
+
+	function showEditProductTypeDialogGeneric(title, url) {
 		$("#${newProductTypeDialogId}").dialog({
 		  modal: true,
-		  title: "New Product Type",
-		  width: 700,
+		  title: title,
+		  width: 800,	// dialog width should be sufficient to make sure select option appears on the same line
+		  						// call to refresh method by setDefaultValueForSelector just ignores the width and the selector ends up on the next line
+		  						// setDefaultValueForSelector() does not seem to work all the time without call to refresh
 		  height: 400,
 		  maxHeight: 400,
 		  buttons: {
-		    "Create" : function() {
-										 var data = getNewProductTypeData();
-										 saveNewProductType(data);
+		    "Save" : function() {
+										 var data = getProductTypeData();
+										 saveProductType(url, data);
 										 $(this).dialog("close");
 		    					 },
 		    "Cancel" : function() {
@@ -116,34 +130,55 @@ $(document).ready(function() {
 		    					 }
 		  }
 		});
-
-		function getNewProductTypeData() {
-		  var data = {};
-		  var newProductTypeForm = $("#${newProductTypeDialogId}");
-		  data.productTypeName = newProductTypeForm.find('input[name="productTypeName"]').val();
-		  data.productTypeNameShort = newProductTypeForm.find('input[name="productTypeNameShort"]').val();
-		  data.expiresAfter = newProductTypeForm.find('input[name="expiresAfter"]').val();
-		  data.expiresAfterUnits = newProductTypeForm.find('.expiresAfterUnitsSelector').val();
-		  console.log(data);
-		  return data;
-		}
-
-		function saveNewProductType(data) {
-			$.ajax({
-			  url: "saveNewProductType.html",
-			  type: "POST",
-			  data: {productType : JSON.stringify(data)},
-			  success: function(response) {
-			    				 showMessage("New product type successfully created.");
-			    				 $("#${tabContentId}").trigger("productTypeEditDone");
-			  				 },
-			  error:   function() {
-			    				 showErrorMessage("Unable to create new product type.");
-			  				 }
-			});
-		}
-
 	}
+
+	function clearProductTypeData() {
+	  var newProductTypeForm = $("#${newProductTypeDialogId}");
+	  newProductTypeForm.find('input[name="productTypeId"]').val("");
+	  newProductTypeForm.find('input[name="productTypeName"]').val("");
+	  newProductTypeForm.find('input[name="productTypeNameShort"]').val("");
+	  newProductTypeForm.find('input[name="expiresAfter"]').val("");
+	  setDefaultValueForSelector(newProductTypeForm.find('select[name="expiresAfterUnits"]').multiselect(), "DAYS");
+	}
+
+	function setSelectedProductTypeData() {
+
+	  var oTableTools = TableTools.fnGetInstance($("#${mainContentId}").find("table")[0]);
+	  var selectedRow = oTableTools.fnGetSelected()[0];
+	  var newProductTypeForm = $("#${newProductTypeDialogId}");
+	  newProductTypeForm.find('input[name="productTypeId"]').val($(selectedRow).data("producttypeid"));
+	  newProductTypeForm.find('input[name="productTypeName"]').val($(selectedRow).data("producttypename"));
+	  newProductTypeForm.find('input[name="productTypeNameShort"]').val($(selectedRow).data("producttypenameshort"));
+	  newProductTypeForm.find('input[name="expiresAfter"]').val($(selectedRow).data("expiresafter"));
+	  setDefaultValueForSelector(newProductTypeForm.find('select[name="expiresAfterUnits"]').multiselect(), $(selectedRow).data("expiresafterunits"));
+	}
+
+	function getProductTypeData() {
+	  var data = {};
+	  var newProductTypeForm = $("#${newProductTypeDialogId}");
+	  data.id = newProductTypeForm.find('input[name="productTypeId"]').val();
+	  data.productTypeName = newProductTypeForm.find('input[name="productTypeName"]').val();
+	  data.productTypeNameShort = newProductTypeForm.find('input[name="productTypeNameShort"]').val();
+	  data.expiresAfter = newProductTypeForm.find('input[name="expiresAfter"]').val();
+	  data.expiresAfterUnits = newProductTypeForm.find('.expiresAfterUnitsSelector').val();
+	  return data;
+	}
+
+	function saveProductType(url, data) {
+		$.ajax({
+		  url: url,
+		  type: "POST",
+		  data: {productType : JSON.stringify(data)},
+		  success: function(response) {
+		    				 showMessage("Product type successfully created.");
+		    				 $("#${tabContentId}").trigger("productTypeEditDone");
+		  				 },
+		  error:   function() {
+		    				 showErrorMessage("Something went wrong. Please try again.");
+		  				 }
+		});
+	}
+
 
 });
 </script>
@@ -181,7 +216,12 @@ $(document).ready(function() {
 				</thead>
 				<tbody>
 					<c:forEach var="productType" items="${productTypes}">
-						<tr>
+						<tr data-producttypeid="${productType.id}"
+								data-producttypename="${productType.productType}"
+								data-producttypenameshort="${productType.productTypeNameShort}"
+								data-expiresafter="${productType.expiresAfter}"
+								data-expiresafterunits="${productType.expiresAfterUnits}"
+								>
 							<td style="display: none;">${productType.id}</td>
 							<td>${productType.productTypeNameShort}</td>
 							<td>${productType.productType}</td>
@@ -205,6 +245,7 @@ $(document).ready(function() {
 
 	<div id="${newProductTypeDialogId}" style="display: none;">
 		<form class="formInTabPane">
+			<input type="hidden" name="productTypeId" value="" />
 			<div>
 				<label>Product type name</label>
 				<input name="productTypeName" />
@@ -219,7 +260,7 @@ $(document).ready(function() {
 				<select name="expiresAfterUnits"
 								class="expiresAfterUnitsSelector"
 							 	id="${productTypeExpiresAfterUnitsSelectorId}">
-					 <option value="DAYS">Days</option>
+					 <option value="DAYS">DAYS</option>
 					 <option value="HOURS">HOURS</option>
 					 <option value="YEARS">YEARS</option>
 				</select>

@@ -27,7 +27,7 @@ $(document).ready(function() {
   $("#${mainContentId}").find(".editButton")
   											.button({icons: {primary: 'ui-icon-pencil'}})
   											.click(function() {
-  											  console.log("edit button clicked");
+  											  $("#${tabContentId}").parent().trigger("editProductType");
   											});
 
   $("#${mainContentId}").find(".doneButton")
@@ -126,7 +126,7 @@ $(document).ready(function() {
 			<div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected blood test</div>
 
 			<div class="summaryPageButtonSection" style="text-align: right;">
-				<!-- button class="editButton">Edit</button-->
+				<button class="editButton">Edit</button>
 				<button class="doneButton">Done</button>
 				<c:if test="${not productType.isDeleted}">
 					<button class="deactivateButton">Disable</button>

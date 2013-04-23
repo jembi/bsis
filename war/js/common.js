@@ -488,6 +488,9 @@ function animatedScrollTo(jqElement, interval){
 function setDefaultValueForSelector(selectorElement, valueToSelect) {
   var elementsToSelect = selectorElement.children().filter(function() { return $.trim($(this).text()) == valueToSelect });
   elementsToSelect.attr("selected", 1);
+  //multiselect refresh: Reloads the checkbox menu. If you're dynamically adding/removing option
+  // tags on the original select via AJAX or DOM manipulation methods,
+  // call refresh to reflect the changes in the widget.
   selectorElement.multiselect("refresh");
 }
 

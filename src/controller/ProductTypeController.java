@@ -78,6 +78,32 @@ public class ProductTypeController {
     return m;
   }
   
+  @RequestMapping(value="updateProductType", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> updateProductType(HttpServletRequest request,
+      HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
+    Map<String, Object> m = new HashMap<String, Object>();
+    ObjectMapper mapper = new ObjectMapper();
+    boolean success = false;
+    try {
+      Map<String, Object> newProductTypeAsMap;
+      newProductTypeAsMap = mapper.readValue(newProductTypeAsJsonStr, HashMap.class);
+      productTypeRepository.updateProductType(newProductTypeAsMap);
+      success = true;
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (!success)
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    return m;
+  }
+  
   @RequestMapping(value="deactivateProductType", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> deactivateProductType(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
