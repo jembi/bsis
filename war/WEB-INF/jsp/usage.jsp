@@ -15,7 +15,10 @@
 	<ul>
 		<!-- li id="findOrAddUsageContent"><a
 			href="findUsageFormGenerator.html">Find Usage</a></li-->
-		<li id="addUsageContent"><a
-			href="addUsageFormGenerator.html">Add Usage</a></li>
+		<li id="addUsageByRequestContent">
+			<a href="addUsageByRequestFormGenerator.html">Record Usage <br /> by Request</a>
+		<li id="addUsageContent">
+			<a href="addUsageFormGenerator.html">Add Usage</a>
+		</li>
 	</ul>
 </div>

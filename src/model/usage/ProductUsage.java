@@ -65,6 +65,7 @@ public class ProductUsage implements ModificationTracker {
 
   private Boolean isDeleted;
 
+  @Column(length=30)
   private String usedBy;
 
   public ProductUsage() {

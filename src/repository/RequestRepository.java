@@ -62,13 +62,31 @@ public class RequestRepository {
   public Request findRequest(String requestNumber) {
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
-      String queryString = "SELECT p FROM Request p WHERE p.requestNumber = :requestNumber and p.isDeleted= :isDeleted";
+      String queryString = "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      List<Request> requests = query.setParameter("requestNumber",
-          requestNumber).getResultList();
-      if (requests != null && requests.size() > 0) {
-        request = requests.get(0);
+      query.setParameter("requestNumber", requestNumber);
+      try {
+        request = query.getSingleResult();
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return request;
+  }
+
+  public Request findRequestWithIssuedProducts(String requestNumber) {
+    Request request = null;
+    if (requestNumber != null && requestNumber.length() > 0) {
+      String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+      		"r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
+      TypedQuery<Request> query = em.createQuery(queryString, Request.class);
+      query.setParameter("isDeleted", Boolean.FALSE);
+      query.setParameter("requestNumber", requestNumber);
+      try {
+        request = query.getSingleResult();
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
       }
     }
     return request;

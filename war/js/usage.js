@@ -6,6 +6,10 @@ function updateExistingUsage(form, resultDivId, successCallback) {
   updateUsageGeneric(form, resultDivId, "updateUsage.html", successCallback);
 }
 
+function addNewUsageForProduct(form, resultDivId, successCallback) {
+  updateUsageGeneric(form, resultDivId, "addUsageForProduct.html", successCallback);
+}
+
 function updateUsageGeneric(form, resultDivId, url, successCallback) {
   var usage = $(form).serialize();
   showLoadingImage($("#" + resultDivId));

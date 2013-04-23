@@ -1,30 +1,24 @@
 package model.usage;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Map;
 
 import model.CustomDateFormatter;
-import model.collectedsample.CollectedSampleBackingForm;
-import model.collectionbatch.CollectionBatch;
-import model.donor.Donor;
 import model.product.Product;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import viewmodel.ProductUsageViewModel;
-
+import viewmodel.RequestViewModel;
 import controller.UtilController;
 
-public class ProductUsageBackingFormValidator implements Validator {
+public class UsageBackingFormValidator implements Validator {
 
   private Validator validator;
   private UtilController utilController;
 
-  public ProductUsageBackingFormValidator(Validator validator, UtilController utilController) {
+  public UsageBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
     this.utilController = utilController;
@@ -32,7 +26,7 @@ public class ProductUsageBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(ProductUsageBackingForm.class, ProductUsageViewModel.class).contains(clazz);
+    return Arrays.asList(ProductUsageBackingForm.class, ProductUsageViewModel.class, RequestViewModel.class).contains(clazz);
   }
 
   @Override
