@@ -32,7 +32,7 @@ $(document).ready(function() {
     refetchContent("${addAnotherProductUrl}", $("#${tabContentId}"));
   });
 
-  $("#${tabContentId}").find(".addAnotherProductButton").button({
+  $("#${tabContentId}").find(".addMoreProductsButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
@@ -51,17 +51,18 @@ $(document).ready(function() {
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
 				Products created Successfully.
-				<br />
-				You can view the details below. Click "Add another product" to add another product.
 			</span>
+			<div style="margin-left: 55px;">
+				You can view the details below. Click "Add more products" to create more products.
+			</div>
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">
 				<button type="button" class="doneButton">
 					Done
 				</button>
-				<button type="button" class="addAnotherProductButton">
-					Add another product
+				<button type="button" class="addMoreProductsButton">
+					Add more products
 				</button>
 				<button type="button" class="printButton">
 					Print
@@ -75,6 +76,12 @@ $(document).ready(function() {
 					<label><b>${collectionNumber}</b></label>
 				</div>
 
+				<div>
+					<label style="width: auto;">
+						The following new products were created 
+					</label>
+				</div>
+
 				<table class="simpleTable" style="width: 50%;">
 					<thead>
 						<tr>
@@ -83,14 +90,48 @@ $(document).ready(function() {
 						</tr>
 					</thead>
 					<tbody>
-					<c:forEach var="product" items="${products}">
+					<c:forEach var="product" items="${createdProducts}">
 						<tr>
-							<td style="text-align: center;">${product.productType}</td>
+							<td style="text-align: left;">${product.productType}</td>
 							<td style="text-align: center;">${product.expiresOn}</td>
 						</tr>
 					</c:forEach>
 					</tbody>
 				</table>
+
+				<br />
+				<br />
+
+				<div>
+					<label style="width: auto;">
+						All products for this collection are shown below. 
+					</label>
+				</div>
+
+				<table class="simpleTable" style="width: 70%;">
+					<thead>
+						<tr>
+							<th>${productFields.productType.displayName}</th>
+							<th>${productFields.createdOn.displayName}</th>
+							<th>${productFields.expiresOn.displayName}</th>
+							<th>${productFields.status.displayName}</th>
+							<th>${productFields.createdBy.displayName}</th>
+						</tr>
+					</thead>
+					<tbody>
+					<c:forEach var="product" items="${allProductsForCollection}">
+						<tr>
+							<td style="text-align: left;">${product.productType}</td>
+							<td style="text-align: center;">${product.createdOn}</td>
+							<td style="text-align: center;">${product.expiresOn}</td>
+							<td style="text-align: center;">${product.status}</td>
+							<td style="text-align: center;">${product.createdBy}</td>
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
+
+
 			</div>
 
 		</div>

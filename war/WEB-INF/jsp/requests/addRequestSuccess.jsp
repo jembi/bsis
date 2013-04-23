@@ -56,9 +56,10 @@ $(document).ready(function() {
 					 style="height: 30px; padding-left: 10px; padding-right: 10px;" />
 			<span class="successText">
 				Request added Successfully.
-				<br />
-				You can view the details below. Click "Add another request" to add another request.
 			</span>
+			<div style="margin-left: 55px;">
+				You can view the details below. Click "Add another request" to add another request.
+			</div>
 		</div>
 		<div>
 			<div class="summaryPageButtonSection" style="text-align: right;">

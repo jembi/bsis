@@ -413,9 +413,11 @@ public class ProductController {
     }
 
     if (success) {
-      if (savedProducts.size() > 0)
+      // at least one product should be created, all products should have the same collection number
       mv.addObject("collectionNumber", savedProducts.get(0).getCollectionNumber());
-      mv.addObject("products", getProductViewModels(savedProducts));
+      mv.addObject("createdProducts", getProductViewModels(savedProducts));
+      List<Product> allProductsForCollection = productRepository.findProductsByCollectionNumber(savedProducts.get(0).getCollectionNumber());
+      mv.addObject("allProductsForCollection", getProductViewModels(allProductsForCollection));
       mv.addObject("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
       mv.setViewName("products/addProductCombinationSuccess");
     } else {
