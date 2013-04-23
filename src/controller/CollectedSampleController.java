@@ -142,12 +142,11 @@ public class CollectedSampleController {
   /**
    * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
    */
-  private String getSortingColumn(int columnId, Map<String, Object> formFields) {
+  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
     for (String field : Arrays.asList("collectionNumber", "collectedOn","bloodBagType", "collectionCenter", "collectionSite")) {
-      @SuppressWarnings("unchecked")
       Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
@@ -175,7 +174,7 @@ public class CollectedSampleController {
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     String collectionNumber = form.getCollectionNumber();
@@ -226,7 +225,7 @@ public class CollectedSampleController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in collectionsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords, Map<String, Object> formFields) {
+  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> collectionsMap = new HashMap<String, Object>();
 
     ArrayList<Object> collectionList = new ArrayList<Object>();
@@ -286,7 +285,7 @@ public class CollectedSampleController {
     mv.addObject("addCollectionForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionFields", formFields);
     mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
@@ -304,7 +303,7 @@ public class CollectedSampleController {
     mv.addObject("editCollectionForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionFields", formFields);
     mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
@@ -322,7 +321,7 @@ public class CollectedSampleController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     mv.addObject("collectionFields", formFields);
 
     CollectedSample savedCollection = null;
@@ -527,7 +526,7 @@ public class CollectedSampleController {
     }
 
     String worksheetNumber = form.getWorksheetNumber();
-    ModelAndView mv = new ModelAndView("worksheetSaved");
+    ModelAndView mv = new ModelAndView("collections/worksheetSaved");
     Map<String, Object> m = model.asMap();
     m.put("worksheetNumber", worksheetNumber);
     try {

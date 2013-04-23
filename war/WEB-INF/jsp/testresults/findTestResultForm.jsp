@@ -74,7 +74,7 @@ $(document).ready(function() {
 			class="formInTabPane">
 	
 			<div class="collectionNumberInput">
-				<form:label path="collectionNumber">${testResultFields.collectionNumber.displayName}</form:label>
+				<form:label path="collectionNumber">${collectedSampleFields.collectionNumber.displayName}</form:label>
 				<!-- Spring supports dynamic attributes so placeholder can be added
 						 http://stackoverflow.com/questions/4232983/adding-html5-placeholder-attribute-to-spring-3-0-form-input-elements
 				 -->

@@ -27,6 +27,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     this.utilController = utilController;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(CompatibilityTestBackingForm.class, CompatibilityTest.class, CompatibilityTestViewModel.class, CompatibilityTestBackingForm.class).contains(clazz);

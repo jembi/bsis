@@ -78,7 +78,7 @@ public class UsageController {
     mv.addObject("addUsageForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("usage");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
     mv.addObject("usageFields", formFields);
     return mv;
@@ -99,7 +99,7 @@ public class UsageController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("usage");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     mv.addObject("usageFields", formFields);
 
     ProductUsage savedUsage = null;
@@ -149,7 +149,7 @@ public class UsageController {
     mv.addObject("firstTimeRender", true);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("usage");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
     mv.addObject("usageFields", formFields);
     return mv;
@@ -195,7 +195,7 @@ public class UsageController {
     mv.addObject("productType", product.getProductType().getProductTypeNameShort());
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("usage");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
     mv.addObject("usageFields", formFields);
     return mv;
@@ -212,7 +212,7 @@ public class UsageController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("usage");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     mv.addObject("usageFields", formFields);
 
     ProductUsage savedUsage = null;

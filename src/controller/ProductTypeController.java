@@ -53,6 +53,7 @@ public class ProductTypeController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewProductType", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewProductType(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
@@ -79,6 +80,7 @@ public class ProductTypeController {
     return m;
   }
   
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="updateProductType", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> updateProductType(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
@@ -134,6 +136,7 @@ public class ProductTypeController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewProductTypeCombination", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewProductTypeCombination(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productTypeCombination") String newProductTypeCombinationAsJsonStr) {

@@ -24,6 +24,7 @@ public class DonorBackingFormValidator implements Validator {
     this.utilController = utilController;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(DonorBackingForm.class, FindDonorBackingForm.class, Donor.class, DonorViewModel.class).contains(clazz);

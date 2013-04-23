@@ -88,6 +88,7 @@ public class TTIController {
     return tests;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="/saveTTITests", method=RequestMethod.POST)
   public ModelAndView saveTTITests(HttpServletRequest request,
             HttpServletResponse response,
@@ -169,6 +170,7 @@ public class TTIController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   private Map<Long, String> ttiInputToMap(String ttiInput) {
     ObjectMapper mapper = new ObjectMapper();
     Map<Long, String> ttiInputMap = new HashMap<Long, String>();
@@ -231,6 +233,7 @@ public class TTIController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="/saveAdditionalTTITests", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveAdditionalTTITests(
       HttpServletRequest request,
@@ -274,6 +277,7 @@ public class TTIController {
 
       Map<Long, Map<Long, String>> testResultsMap = new HashMap<Long, Map<Long,String>>();
       ObjectMapper mapper = new ObjectMapper();
+      @SuppressWarnings("unchecked")
       Map<String, Map<String, String>> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
       for (String collectionIdStr : saveTestsData.keySet()) {
         Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
@@ -285,6 +289,7 @@ public class TTIController {
       }
 
       Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(testResultsMap, saveUninterpretableResults);
+      @SuppressWarnings("unchecked")
       Map<String, Object> errorMap = (Map<String, Object>) results.get("errors");
 
       if (errorMap != null && !errorMap.isEmpty())
@@ -317,6 +322,7 @@ public class TTIController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="saveTTIResultsOnPlate", method=RequestMethod.POST)
   public ModelAndView saveTTIResultsOnPlate(HttpServletRequest request,
       HttpServletResponse response,

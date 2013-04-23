@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -255,10 +254,7 @@ public class AdminController {
       Integer numDonors = Integer.parseInt(params.get("numDonors"));
       Integer numCollections = Integer.parseInt(params.get("numCollections"));
       Integer numProducts = Integer.parseInt(params.get("numProducts"));
-      Integer numTestResults = Integer.parseInt(params.get("numTestResults"));
       Integer numRequests = Integer.parseInt(params.get("numRequests"));
-      Integer numUsages = Integer.parseInt(params.get("numUsages"));
-      Integer numIssues = Integer.parseInt(params.get("numIssues"));
 
       createDataController.createDonors(numDonors);
       createDataController.createCollectionsWithTestResults(numCollections);
@@ -301,6 +297,7 @@ public class AdminController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="/updateLabSetup", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> updateLabSetup(HttpServletRequest request,
       @RequestParam(value="labSetupParams") String params) {
@@ -508,6 +505,7 @@ public class AdminController {
     System.out.println(paramsAsJson);
     List<Tips> allTips = new ArrayList<Tips>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String tipsKey : params.keySet()) {
         String tipsContent = (String) params.get(tipsKey);
@@ -538,6 +536,7 @@ public class AdminController {
     System.out.println(paramsAsJson);
     List<RequestType> allRequestTypes = new ArrayList<RequestType>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         String requestType = (String) params.get(id);
@@ -574,6 +573,7 @@ public class AdminController {
     System.out.println(paramsAsJson);
     List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         String crossmatchType = (String) params.get(id);
@@ -610,6 +610,7 @@ public class AdminController {
     System.out.println(paramsAsJson);
     List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         String bloodBagType = (String) params.get(id);
@@ -645,6 +646,7 @@ public class AdminController {
     ModelAndView mv = new ModelAndView("admin/configureDonationTypes");
     List<DonationType> allDonationTypes = new ArrayList<DonationType>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         String donationType = (String) params.get(id);
@@ -730,24 +732,18 @@ public class AdminController {
   public ModelAndView adminWelcomePageGenerator(HttpServletRequest request, Model model) {
     ModelAndView mv = new ModelAndView("admin/adminWelcomePage");
     Map<String, Object> m = model.asMap();
-    try {
-      InetAddress ip = InetAddress.getLocalHost();
-      List<InetAddress> wirelessAddresses = getServerNetworkAddresses();
-      List<String> serverAddresses = new ArrayList<String>();
-      for (InetAddress addr : wirelessAddresses) {
-        serverAddresses.add("http://" + addr.getHostAddress() + ":" + request.getServerPort() + "/v2v");
-      }
-      m.put("serverAddresses", serverAddresses);
-    } catch (UnknownHostException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    List<InetAddress> wirelessAddresses = getServerNetworkAddresses();
+    List<String> serverAddresses = new ArrayList<String>();
+    for (InetAddress addr : wirelessAddresses) {
+      serverAddresses.add("http://" + addr.getHostAddress() + ":" + request.getServerPort() + "/v2v");
     }
+    m.put("serverAddresses", serverAddresses);
     mv.addObject("model", m);
     return mv;
   }
 
   List<InetAddress> getServerNetworkAddresses() {
-    List<InetAddress> listOfServerAddresses = new ArrayList();
+    List<InetAddress> listOfServerAddresses = new ArrayList<InetAddress>();
     Enumeration<NetworkInterface> list;
     try {
         list = NetworkInterface.getNetworkInterfaces();

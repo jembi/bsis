@@ -10,6 +10,7 @@ import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -68,10 +69,10 @@ public class ProductBackingFormValidator implements Validator {
   }
 
   private void validateProductCombinationBackingForm(ProductCombinationBackingForm form, Errors errors) {
-    System.out.println(form.getCollectionNumber());
-    System.out.println(form.getCreatedOn());
-    System.out.println(form.getExpiresOn());
-    System.out.println(form.getProductTypeCombination());
+
+    if (StringUtils.isBlank(form.getProductTypeCombination()))
+      errors.rejectValue("productTypeCombination", "product.productTypeCombination",
+          "Product type combination should be specified");
 
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
@@ -83,6 +84,7 @@ public class ProductBackingFormValidator implements Validator {
 
     try {
 
+      @SuppressWarnings("unchecked")
       Map<String, String> expiryDateByProductType = mapper.readValue(expiresOn, HashMap.class);
       for (String productTypeId : expiryDateByProductType.keySet()) {
         String expiryDate = expiryDateByProductType.get(productTypeId);

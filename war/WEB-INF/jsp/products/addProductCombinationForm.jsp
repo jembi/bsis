@@ -41,7 +41,7 @@
 
               for (var index = 0; index < expiresOnInputs.length; ++index) {
                 var expiresOnInput = $(expiresOnInputs[index]);
-                if (expiresOnInput.data("producttypeid") in expiryIntervalByProductType) {
+                if (expiryIntervalByProductType !== undefined && expiresOnInput.data("producttypeid") in expiryIntervalByProductType) {
                   expiresOn[expiresOnInput.data("producttypeid")] = expiresOnInput.val();
                 }
               }
@@ -77,7 +77,7 @@
           // show the expires on inputs for only the product types in the current product type combination
           for (var index = 0; index < expiresOnInputs.length; ++index) {
             var expiresOnInput = $(expiresOnInputs[index]);
-            if (expiresOnInput.data("producttypeid") in expiryIntervalByProductType) {
+            if (expiryIntervalByProductType !== undefined && expiresOnInput.data("producttypeid") in expiryIntervalByProductType) {
               expiresOnInput.parent().show();
               var expiryDate = new Date(createdOnVal.getTime() + expiryIntervalByProductType[expiresOnInput.data("producttypeid")]*60*1000);
               expiresOnInput.datetimepicker('setDate', expiryDate);

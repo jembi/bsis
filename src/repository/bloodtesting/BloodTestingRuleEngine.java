@@ -92,8 +92,9 @@ public class BloodTestingRuleEngine {
 
     boolean aboUninterpretable = false;
     boolean rhUninterpretable = false;
+    @SuppressWarnings("unused")
     boolean ttiUninterpretable = false;
-    
+
     for (BloodTestingRule rule : rules) {
 
       List<String> pattern = Arrays.asList(rule.getPattern().split(","));
@@ -103,19 +104,16 @@ public class BloodTestingRuleEngine {
       List<String> missingTestIdsForRule = new ArrayList<String>();
       List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
 
-      String inputPattern = "";
       boolean atLeastOneResultFoundForPattern = false;
       for (String testId : testIds) {
         String actualResult = availableTestResults.get(testId);
         if (actualResult == null) {
           missingTestIdsForRule.add(testId);
-          inputPattern += "?";
           patternMatch = false;
           continue;
         }
         atLeastOneResultFoundForPattern = true;
         String expectedResult = pattern.get(indexInPattern);
-        inputPattern += actualResult;
         if (!expectedResult.equals(actualResult)) {
           patternMatch = false;
         }

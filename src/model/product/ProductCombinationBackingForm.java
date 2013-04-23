@@ -140,6 +140,7 @@ public class ProductCombinationBackingForm {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void setExpiresOn(String expiresOn) {
     this.expiresOn = expiresOn;
     ObjectMapper mapper = new ObjectMapper();

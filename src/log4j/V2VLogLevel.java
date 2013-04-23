@@ -4,7 +4,11 @@ import org.apache.log4j.Level;
 
 public class V2VLogLevel extends Level {
 
-	public static final int V2V_INT = WARN_INT + 100;
+	/**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+  public static final int V2V_INT = WARN_INT + 100;
 
 	protected V2VLogLevel(int level, String levelStr, int syslogEquivalent) {
 		super(level, levelStr, syslogEquivalent);

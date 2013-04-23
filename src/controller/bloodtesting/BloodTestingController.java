@@ -52,6 +52,7 @@ public class BloodTestingController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewBloodTest", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewBloodTest(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("bloodTest") String newBloodTestAsJsonStr) {

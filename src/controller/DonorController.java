@@ -110,7 +110,7 @@ public class DonorController {
   public ModelAndView viewDonorHistory(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
-    ModelAndView mv = new ModelAndView("collectionsForDonor");
+    ModelAndView mv = new ModelAndView("donors/collectionsForDonor");
 
     Donor donor = null;
     if (donorId != null) {
@@ -188,7 +188,7 @@ public class DonorController {
     mv.addObject("addDonorForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     // to ensure custom field names are displayed in the form
     mv.addObject("donorFields", formFields);
     return mv;
@@ -204,7 +204,7 @@ public class DonorController {
     ModelAndView mv = new ModelAndView();
     boolean success = false;
 
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
     Donor savedDonor = null;
@@ -290,7 +290,6 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("donors/editDonorForm");
     boolean success = false;
     String message = "";
-    Map<String, Object> m = model.asMap();
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
     mv.addObject("existingDonor", true);
@@ -411,7 +410,7 @@ public class DonorController {
   /**
    * Get column name from column id, depends on sequence of columns in donorsTable.jsp
    */
-  private String getSortingColumn(int columnId, Map<String, Object> formFields) {
+  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
@@ -449,7 +448,7 @@ public class DonorController {
     List<BloodGroup> bloodGroups = form.getBloodGroups();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("donor");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
@@ -457,6 +456,7 @@ public class DonorController {
     results = donorRepository.findAnyDonor(donorNumber, firstName,
         lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams);
 
+    @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);
     Long totalRecords = (Long) results.get(1);
@@ -468,7 +468,7 @@ public class DonorController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in donorsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<Donor> donors, Long totalRecords, Map<String, Object> formFields) {
+  private Map<String, Object> generateDatatablesMap(List<Donor> donors, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> donorsMap = new HashMap<String, Object>();
     ArrayList<Object> donorList = new ArrayList<Object>();
     for (DonorViewModel donor : getDonorsViewModels(donors)) {

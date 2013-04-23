@@ -18,7 +18,6 @@ import model.worksheet.Worksheet;
 import model.worksheet.WorksheetType;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +27,6 @@ public class WorksheetRepository {
 
   @PersistenceContext
   private EntityManager em;
-
-  @Autowired
-  private WorksheetTypeRepository worksheetTypeRepository;
 
   public Worksheet addWorksheet(Worksheet worksheet) {
     em.persist(worksheet);
@@ -85,6 +81,7 @@ public class WorksheetRepository {
     em.flush();
   }
 
+  @SuppressWarnings("unused")
   public List<Worksheet> findWorksheets(String worksheetNumber, List<String> worksheetTypes) {
 
     if (worksheetTypes == null || worksheetTypes.size() == 0)

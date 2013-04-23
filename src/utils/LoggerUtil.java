@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import log4j.V2VLogLevel;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 public class LoggerUtil {
 	static final Logger logger = Logger.getLogger("v2v");

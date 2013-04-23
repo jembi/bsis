@@ -80,9 +80,9 @@ public class UtilController {
   @Autowired
   private GenericConfigRepository genericConfigRepository;
   
-  public Map<String, Object> getFormFieldsForForm(String formName) {
+  public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
-    Map<String, Object> formFieldMap = new HashMap<String, Object>();
+    Map<String, Map<String, Object>> formFieldMap = new HashMap<String, Map<String, Object>>();
 
     for (FormField ff : formFields) {
       Map<String, Object> fieldProperties = new HashMap<String, Object>();
@@ -110,6 +110,7 @@ public class UtilController {
 
   public void checkFieldLengths(Object form, String formName, Errors errors) {
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> properties = BeanUtils.describe(form);
       Map<String, Integer> maxLengths = getFieldMaxLengths(formName);
       for (String field : maxLengths.keySet()) {
@@ -145,6 +146,7 @@ public class UtilController {
 
   public void checkRequiredFields(Object form, String formName, Errors errors) {
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> properties = BeanUtils.describe(form);
       List<String> requiredFields = getRequiredFields(formName);
       for (String requiredField : requiredFields) {

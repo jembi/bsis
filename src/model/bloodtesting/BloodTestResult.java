@@ -16,7 +16,6 @@ import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MachineReading;
-import model.microtiterplate.PlateSession;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;

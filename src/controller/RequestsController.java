@@ -189,7 +189,7 @@ public class RequestsController {
     mv.addObject("addRequestForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     // to ensure custom field names are displayed in the form
     mv.addObject("requestFields", formFields);
     return mv;
@@ -206,7 +206,7 @@ public class RequestsController {
     mv.addObject("editRequestForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     // to ensure custom field names are displayed in the form
     mv.addObject("requestFields", formFields);
     return mv;
@@ -223,7 +223,7 @@ public class RequestsController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("request");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     mv.addObject("requestFields", formFields);
 
     Request savedRequest = null;
@@ -269,7 +269,7 @@ public class RequestsController {
   public ModelAndView listIssuedProductsForRequest(HttpServletRequest request,
       HttpServletResponse response, Model model,
       @RequestParam(value="requestId") Long requestId) {
-    ModelAndView mv = new ModelAndView("productsIssuedToRequest");
+    ModelAndView mv = new ModelAndView("requests/productsIssuedToRequest");
     Map<String, Object> m = model.asMap();
     System.out.println(m);
     addEditSelectorOptions(m);

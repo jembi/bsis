@@ -24,6 +24,7 @@ public class RequestBackingFormValidator implements Validator {
     this.utilController = utilController;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(RequestBackingForm.class, Request.class, RequestViewModel.class, FindRequestBackingForm.class).contains(clazz);

@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -140,7 +139,7 @@ public class DonorRepository {
   }
 
   public List<Donor> getAllDonors() {
-    Query query = em.createQuery(
+    TypedQuery<Donor> query = em.createQuery(
         "SELECT d FROM Donor d WHERE d.isDeleted = :isDeleted", Donor.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.getResultList();

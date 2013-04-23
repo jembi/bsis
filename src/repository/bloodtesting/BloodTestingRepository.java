@@ -345,6 +345,7 @@ public class BloodTestingRepository {
         String wellNumber = rowNum + "," + colNum;
 
         MachineReading machineReading = new MachineReading();
+        @SuppressWarnings("unchecked")
         Map<String, String> wellData = (Map<String, String>) rowData.get(colNum);
 
         // store well type in machine configuration
@@ -520,6 +521,7 @@ public class BloodTestingRepository {
     BloodTestSubCategory subCategory = BloodTestSubCategory.valueOf((String) newBloodTypingRuleAsMap.get("subCategory"));
     rule.setSubCategory(subCategory);
 
+    @SuppressWarnings("unchecked")
     Map<String, String> pattern = (Map<String, String>) newBloodTypingRuleAsMap.get("pattern");
     List<String> testIdsInPattern = new ArrayList<String>();
     List<String> resultsInPattern = new ArrayList<String>();

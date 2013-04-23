@@ -47,6 +47,7 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
     }
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public void onPersist(PersistEvent event, Map arg1) throws HibernateException {
     // TODO Auto-generated method stub    
@@ -62,6 +63,7 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
     }
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public void onMerge(MergeEvent arg0, Map arg1) throws HibernateException {
     // TODO Auto-generated method stub

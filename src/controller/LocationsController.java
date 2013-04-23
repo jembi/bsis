@@ -59,8 +59,10 @@ public class LocationsController {
     System.out.println(paramsAsJson);
     List<Location> locations = new ArrayList<Location>();
     try {
+      @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
+        @SuppressWarnings("unchecked")
         Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
         Location location = new Location();
 

@@ -24,7 +24,7 @@ public class ProductTypeCombination {
 
   @Column(length=300)
   private String combinationName;
-  
+
   @NotAudited
   @ManyToMany(fetch=FetchType.EAGER)
   private Set<ProductType> productTypes;

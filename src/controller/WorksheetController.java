@@ -106,7 +106,7 @@ public class WorksheetController {
     mv.addObject("addWorksheetForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("worksheet");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("worksheet");
     // to ensure custom field names are displayed in the form
     mv.addObject("worksheetFields", formFields);
     return mv;
@@ -127,7 +127,7 @@ public class WorksheetController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("worksheet");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("worksheet");
     mv.addObject("worksheetFields", formFields);
 
     Worksheet savedWorksheet = null;
@@ -349,6 +349,7 @@ public class WorksheetController {
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     List<Object> results = collectedSampleRepository.findCollectionsInWorksheet(worksheetId, pagingParams);
 
+    @SuppressWarnings("unchecked")
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
     Long totalRecords = (Long) results.get(1);
     Worksheet worksheet = worksheetRepository.findWorksheetById(worksheetId);

@@ -19,11 +19,11 @@ public class CustomIntegrator implements Integrator {
 
   static final Logger logger = LoggerFactory.getLogger(CustomIntegrator.class);
 
+  @SuppressWarnings("unchecked")
   @Override
   public void integrate(Configuration configuration, SessionFactoryImplementor implementor,
                         SessionFactoryServiceRegistry registry) {
       logger.info("Registering event listeners");
-      System.out.println("here");
       // you can add duplication strategory for duplicate registrations
 
       final EventListenerRegistry eventRegistry = registry.getService(EventListenerRegistry.class);

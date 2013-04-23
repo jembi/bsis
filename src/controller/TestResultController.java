@@ -1,32 +1,21 @@
 package controller;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.testresults.FindTestResultBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
-import repository.GenericConfigRepository;
 
 @Controller
 public class TestResultController {
@@ -35,17 +24,9 @@ public class TestResultController {
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private GenericConfigRepository genericConfigRepository; 
-
-  @Autowired
   private UtilController utilController;
 
   public TestResultController() {
-  }
-
-  @InitBinder
-  protected void initBinder(WebDataBinder binder) {
-//    binder.setValidator(new TestResultBackingFormValidator(binder.getValidator(), utilController));
   }
 
   @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
@@ -53,16 +34,15 @@ public class TestResultController {
 
     FindTestResultBackingForm form = new FindTestResultBackingForm();
 
-    ModelAndView mv = new ModelAndView("findTestResultForm");
+    ModelAndView mv = new ModelAndView("testresults/findTestResultForm");
     mv.addObject("findTestResultForm", form);
 
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "testResults.find");
     mv.addObject("tips", tips);
 
-    addEditSelectorOptions(mv.getModelMap());
     // to ensure custom field names are displayed in the form
-    mv.addObject("testResultFields", utilController.getFormFieldsForForm("testResult"));
+    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
@@ -74,109 +54,6 @@ public class TestResultController {
         reqUrl += "?"+queryString;
     }
     return reqUrl;
-  }
-
-  private void addEditSelectorOptions(Map<String, Object> m) {
-//    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
-  }
-
-  @RequestMapping(value = "/addAllTestResultsFormGenerator", method = RequestMethod.GET, 
-      headers = "X-Requested-With=XMLHttpRequest")
-  public ModelAndView addAllTestResultsFormGenerator(HttpServletRequest request,
-      Model model) {
-
-    System.out.println("");
-    ModelAndView mv = new ModelAndView("addAllTestResultsForm");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(m);
-    // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    mv.addObject("model", m);
-    return mv;
-  }
-
-  @RequestMapping(value = "/addAllTestResults", method = RequestMethod.POST)
-  public ModelAndView addAllTestResults(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @RequestParam Map<String, String> params) {
-
-    ModelAndView mv = new ModelAndView("addAllTestResultsForm");
-    Boolean hasErrors = false; 
-
-    Map<String, Object> m = new HashMap<String, Object>();
-
-    System.out.println(params);
-    // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
-    String collectionNumber = params.get("collectionNumber");
-    CollectedSample collectedSample = null;
-    if (collectionNumber == null) {
-      hasErrors = true;
-      m.put("collectionNumberError", "Collection does not exist");
-    }
-    else {
-      try {
-        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
-        if (collectedSample == null) {
-          hasErrors = true;
-          m.put("collectionNumberError", "Collection does not exist");
-        }
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-        hasErrors = true;
-        m.put("collectionNumberError", "Collection does not exist");
-      }
-    }
-
-    String testedOnStr = params.get("testedOn");
-    Date testedOn = null;
-    try {
-        testedOn = CustomDateFormatter.getDateTimeFromString(testedOnStr);
-    } catch (ParseException e) {
-      hasErrors = true;
-      m.put("testedOnError", CustomDateFormatter.getDateErrorMessage());
-      e.printStackTrace();
-    }
-
-    m.put("refreshUrl", "addAllTestResultsFormGenerator.html");
-    addEditSelectorOptions(m);
-    // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    mv.addObject("model", m);
-
-    if (hasErrors) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      return mv;
-    }
-
-    String notes = params.get("notes");
-
-    for (Entry<String, String> param : params.entrySet()) {
-      String name = param.getKey();
-      if (!name.startsWith("Test"))
-        continue;
-
-      String testName = name.substring(4);
-      String testResult = param.getValue();
-
-//      BloodTest bloodTest = bloodTestRepository.findBloodTestByName(testName);
-//      TestResult t = new TestResult();
-//      t.setCollectedSample(collectedSample);
-//      t.setTestedOn(testedOn);
-//      t.setBloodTest(bloodTest);
-//      t.setResult(testResult);
-//      t.setIsDeleted(false);
-//      t.setNotes(notes);
-//      try {
-//        testResultRepository.addTestResult(t);
-//      } catch (Exception ex) {
-//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//      }
-    }
-
-    return mv;
   }
 
   @RequestMapping("/findTestResult")
@@ -197,11 +74,4 @@ public class TestResultController {
     }
     return mv;
   }
-  @RequestMapping(value="/ttiWorksheet", method=RequestMethod.GET)
-  public ModelAndView getTtiWorkSheetFormGenerator(HttpServletRequest request,
-      HttpServletResponse response) {
-    ModelAndView mv = new ModelAndView("ttiWorksheetForm");
-    return mv;
-  }
-
 }

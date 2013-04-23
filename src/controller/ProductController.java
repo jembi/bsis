@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import repository.CollectedSampleRepository;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
@@ -53,9 +52,6 @@ public class ProductController {
 
   @Autowired
   private ProductRepository productRepository;
-
-  @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
   private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
@@ -122,40 +118,6 @@ public class ProductController {
     return mv;
   }
 
-  @RequestMapping(value = "/testResultsForProduct", method = RequestMethod.GET)
-  public ModelAndView testResultsForProduct(HttpServletRequest request, Model model,
-      @RequestParam(value = "productId", required = false) Long productId) {
-
-    ModelAndView mv = new ModelAndView("testResultsHistory");
-    Map<String, Object> m = model.asMap();
-
-    m.put("requestUrl", getUrl(request));
-
-    Product product = null;
-    if (productId != null) {
-      product = productRepository.findProductById(productId);
-      if (product != null) {
-        m.put("existingProduct", true);
-      }
-      else {
-        m.put("existingProduct", false);
-      }
-    }
-
-    Long collectedSampleId = product.getCollectedSample().getId();
-//    Map<String, TestResult> testResultsMap = testResultsRepository.getRecentTestResultsForCollection(collectedSampleId);
-//    List<TestResult> testResults = new ArrayList<TestResult>();
-//    if (testResults != null)
-//      testResults.addAll(testResultsMap.values());
-//
-//    m.put("allTestResults", TestResultController.getTestResultViewModels(testResults));
-    m.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    m.put("testResultFields", utilController.getFormFieldsForForm("TestResult"));
-    mv.addObject("model", m);
-    return mv;
-  }
-
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
   public ModelAndView findProductFormGenerator(HttpServletRequest request) {
 
@@ -194,12 +156,12 @@ public class ProductController {
   /**
    * Get column name from column id, depends on sequence of columns in productsTable.jsp
    */
-  private String getSortingColumn(int columnId, Map<String, Object> formFields) {
+  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
     for (String field : Arrays.asList("collectionNumber", "productType","createdOn", "expiresOn", "status")) {
-      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      Map<String, Object> fieldProperties = formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
     }
@@ -230,7 +192,7 @@ public class ProductController {
     String searchBy = form.getSearchBy();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
@@ -262,7 +224,7 @@ public class ProductController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in productsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Object> formFields) {
+  private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
     for (ProductViewModel product : getProductViewModels(products)) {
@@ -316,7 +278,7 @@ public class ProductController {
     mv.addObject("addProductForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
     mv.addObject("productFields", formFields);
     return mv;
@@ -336,7 +298,7 @@ public class ProductController {
     addOptionsForAddProductCombinationForm(mv.getModelMap());
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
     mv.addObject("productFields", formFields);
     return mv;
@@ -354,7 +316,7 @@ public class ProductController {
     mv.addObject("editProductForm", form);
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
     mv.addObject("productFields", formFields);
     return mv;
@@ -371,7 +333,7 @@ public class ProductController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     mv.addObject("productFields", formFields);
 
     Product savedProduct = null;
@@ -423,7 +385,7 @@ public class ProductController {
     boolean success = false;
 
     addEditSelectorOptions(mv.getModelMap());
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("product");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     mv.addObject("productFields", formFields);
 
     List<Product> savedProducts = null;

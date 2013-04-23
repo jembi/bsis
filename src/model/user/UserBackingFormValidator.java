@@ -12,6 +12,7 @@ import controller.UtilController;
 public class UserBackingFormValidator implements Validator {
 
   private Validator validator;
+  @SuppressWarnings("unused")
   private UtilController utilController;
 
   public UserBackingFormValidator(Validator validator, UtilController utilController) {
@@ -20,6 +21,7 @@ public class UserBackingFormValidator implements Validator {
     this.utilController = utilController;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(UserBackingForm.class, User.class, UserViewModel.class).contains(clazz);

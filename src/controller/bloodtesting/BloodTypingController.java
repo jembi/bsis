@@ -352,16 +352,19 @@ public class BloodTypingController {
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
       ObjectMapper mapper = new ObjectMapper();
+      @SuppressWarnings("unchecked")
       Map<String, String> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
       for (String testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
       bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
       Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, saveUninterpretableResults);
+      @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
       System.out.println(errorMap);
       if (errorMap != null && !errorMap.isEmpty()) {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        @SuppressWarnings("unchecked")
         Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(Long.parseLong(collectionId));
         if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
           m.put("uninterpretable", true);
@@ -392,6 +395,7 @@ public class BloodTypingController {
     return mv;
   }
 
+  @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewBloodTypingRule", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {

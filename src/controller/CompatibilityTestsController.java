@@ -3,7 +3,6 @@ package controller;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -11,7 +10,6 @@ import javax.validation.Valid;
 import model.compatibility.CompatibilityTest;
 import model.compatibility.CompatibilityTestBackingForm;
 import model.compatibility.CompatibilityTestBackingFormValidator;
-import model.product.Product;
 import model.request.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
-import repository.ProductRepository;
 import repository.RequestRepository;
 
 @Controller
@@ -36,9 +33,6 @@ public class CompatibilityTestsController {
 
   @Autowired
   private RequestRepository requestRepository;
-
-  @Autowired
-  private ProductRepository productRepository;
 
   @Autowired
   private CompatibilityTestRepository compatibilityTestRepository;
@@ -81,7 +75,7 @@ public class CompatibilityTestsController {
     m.put("refreshUrl", getUrl(request));
     m.put("crossmatchForRequest", true);
     // to ensure custom field names are displayed in the form
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("CompatibilityTest");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("CompatibilityTest");
     m.put("compatibilityTestFields", formFields);
 
     CompatibilityTestBackingForm form = new CompatibilityTestBackingForm();

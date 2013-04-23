@@ -459,6 +459,7 @@ public class CollectedSampleRepository {
 
     Worksheet worksheet = worksheetRepository.findWorksheetFullInformation(worksheetNumber);
     
+    @SuppressWarnings("unchecked")
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
     Set<String> collectionNumbers = new HashSet<String>();
     for (CollectedSample c : collectedSamples) {

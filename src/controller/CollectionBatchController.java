@@ -71,7 +71,7 @@ public class CollectionBatchController {
     ModelAndView mv = new ModelAndView("collectionbatch/findCollectionBatchForm");
     addEditSelectorOptions(mv.getModelMap());
     Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "collectionBatch.find");
+    utilController.addTipsToModel(tips, "collectionbatch.find");
     mv.addObject("tips", tips);
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
@@ -131,7 +131,7 @@ public class CollectionBatchController {
     mv.addObject("firstTimeRender", true);
     mv.addObject("addCollectionBatchForm", form);
     mv.addObject("refreshUrl", getUrl(request));
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectionbatch");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectionbatch");
     addEditSelectorOptions(mv.getModelMap());
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionBatchFields", formFields);
@@ -148,7 +148,7 @@ public class CollectionBatchController {
     ModelAndView mv = new ModelAndView();
     boolean success = false;
 
-    Map<String, Object> formFields = utilController.getFormFieldsForForm("collectionBatch");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectionBatch");
     mv.addObject("collectionBatchFields", formFields);
 
     CollectionBatch savedCollectionBatch = null;
