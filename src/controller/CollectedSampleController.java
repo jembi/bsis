@@ -36,7 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
-import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.PreDonationTestRepository;
@@ -56,9 +55,6 @@ public class CollectedSampleController {
 
   @Autowired
   private DonationTypeRepository donorTypeRepository;
-
-  @Autowired
-  private DonorRepository donorRepository;
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
@@ -151,6 +147,7 @@ public class CollectedSampleController {
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
     for (String field : Arrays.asList("collectionNumber", "collectedOn","bloodBagType", "collectionCenter", "collectionSite")) {
+      @SuppressWarnings("unchecked")
       Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
@@ -565,7 +562,6 @@ public class CollectedSampleController {
     } else {
       m.put("worksheetFound", true);
       m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
-//      m.put("bloodTests", bloodTestRepository.getAllBloodTests());
       List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
       m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     }

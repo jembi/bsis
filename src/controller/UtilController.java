@@ -419,4 +419,14 @@ public class UtilController {
       return true;
     return false;
   }
+
+  public Product findProductById(String productId) {
+    Product product = null;
+    try {
+      product = productRepository.findProductById(Long.parseLong(productId));
+    } catch (NumberFormatException ex) {
+      ex.printStackTrace();
+    }
+    return product;
+  }
 }

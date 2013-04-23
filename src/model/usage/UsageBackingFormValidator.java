@@ -47,7 +47,7 @@ public class UsageBackingFormValidator implements Validator {
   }
 
   private void updateRelatedEntities(ProductUsageBackingForm form) {
-    Product product = utilController.findProduct(form.getCollectionNumber(), form.getProductType());
+    Product product = utilController.findProductById(form.getProductId());
     form.setProduct(product);
   }
 }

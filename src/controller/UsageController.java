@@ -186,8 +186,7 @@ public class UsageController {
     ProductUsageBackingForm form = new ProductUsageBackingForm();
 
     Product product = productRepository.findProductById(productId);
-    form.setCollectionNumber(product.getCollectionNumber());
-    form.setProductType(product.getProductType().getId().toString());
+    form.setProduct(product);
 
     ModelAndView mv = new ModelAndView("usage/addUsageForProductForm");
     mv.addObject("requestUrl", getUrl(request));

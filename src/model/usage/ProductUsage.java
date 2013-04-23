@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,8 +17,6 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.product.ProductExists;
-import model.producttype.ProductType;
-import model.producttype.ProductTypeExists;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
@@ -37,20 +34,17 @@ public class ProductUsage implements ModificationTracker {
   @ProductExists
   @OneToOne
   private Product product;
-  
-  @ProductTypeExists
-  @ManyToOne
-  private ProductType productType;
 
+  @Column(length=50)
   private String hospital;
 
-  @Column(length=30)
+  @Column(length=50)
   private String patientName;
 
   @Column(length=30)
   private String ward;
 
-  @Column(length=30)
+  @Column(length=50)
   private String useIndication;
 
   @DateTimeFormat(pattern="mm/dd/yyyy")
@@ -198,14 +192,6 @@ public class ProductUsage implements ModificationTracker {
 
   public void setUsedBy(String usedBy) {
     this.usedBy = usedBy;
-  }
-
-  public ProductType getProductType() {
-    return productType;
-  }
-
-  public void setProductType(ProductType productType) {
-    this.productType = productType;
   }
 
   public String getCollectionNumber() {

@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import model.productmovement.ProductStatusChange;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeExists;
 import model.request.Request;
+import model.usage.ProductUsage;
 import model.user.User;
 
 import org.hibernate.annotations.Index;
@@ -84,6 +86,9 @@ public class Product implements ModificationTracker {
   @OneToMany(mappedBy="parentProduct")
   private List<SubdividedProduct> subdividedProducts;
 
+  @OneToOne(mappedBy="product")
+  private ProductUsage usage;
+  
   @Lob
   private String notes;
 
@@ -253,5 +258,13 @@ public class Product implements ModificationTracker {
 
   public void setSubdividedProducts(List<SubdividedProduct> subdividedProducts) {
     this.subdividedProducts = subdividedProducts;
+  }
+
+  public ProductUsage getUsage() {
+    return usage;
+  }
+
+  public void setUsage(ProductUsage usage) {
+    this.usage = usage;
   }
 }

@@ -1,7 +1,6 @@
 package viewmodel;
 
 import model.CustomDateFormatter;
-import model.producttype.ProductType;
 import model.usage.ProductUsage;
 
 public class ProductUsageViewModel {
@@ -18,10 +17,6 @@ public class ProductUsageViewModel {
 
   public String getCollectionNumber() {
     return productUsage.getProduct().getCollectionNumber();
-  }
-
-  public ProductType getProductType() {
-    return productUsage.getProductType();
   }
 
   public String getHospital() {

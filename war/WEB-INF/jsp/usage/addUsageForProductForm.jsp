@@ -72,24 +72,18 @@
 		<form:form id="${addUsageForProductFormId}" class="addUsageForProductForm formInTabPane"
 			commandName="addUsageForProductForm">
 			<form:hidden path="id" />
+			<form:hidden path="productId" value="${addUsageForProductForm.product.id}" />
+			<form:errors class="formError" path="usage.product" delimiter=", " />
 			<c:if test="${usageFields.collectionNumber.hidden != true }">
 				<div>
-					<form:label path="collectionNumber">${usageFields.collectionNumber.displayName}</form:label>
-					<form:hidden path="collectionNumber" value="${addUsageForProductForm.usage.product.collectionNumber}"></form:hidden>
-					<form:label path="collectionNumber">${addUsageForProductForm.collectionNumber}</form:label>
-					<form:errors class="formError" path="usage.product"
-						delimiter=", "></form:errors>
+					<label>${usageFields.collectionNumber.displayName}</label>
+					<label>${addUsageForProductForm.product.collectionNumber}</label>
 				</div>
 			</c:if>
 			<c:if test="${usageFields.productType.hidden != true }">
 				<div>
-					<form:label path="productType">${usageFields.productType.displayName}</form:label>
-					<form:hidden path="productType" value="${addUsageForProductForm.productType}"></form:hidden>
-					<form:label path="productType" style="width: auto;">${productType}</form:label>
-					<form:errors class="formError" path="productType"
-						delimiter=", "></form:errors>
-					<form:errors class="formError" path="usage.productType"
-						delimiter=", "></form:errors>
+					<label>${usageFields.productType.displayName}</label>
+					<label style="width: auto;">${addUsageForProductForm.product.productType}</label>
 				</div>
 			</c:if>
 			<c:if test="${usageFields.usageDate.hidden != true }">

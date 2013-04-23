@@ -718,20 +718,19 @@
 
     create table ProductUsage (
         id bigint not null auto_increment,
-        hospital varchar(255),
+        hospital varchar(50),
         isDeleted boolean,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        patientName varchar(30),
+        patientName varchar(50),
         usageDate datetime,
-        useIndication varchar(30),
-        usedBy varchar(255),
+        useIndication varchar(50),
+        usedBy varchar(30),
         ward varchar(30),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         product_id bigint,
-        productType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -739,20 +738,19 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        hospital varchar(255),
+        hospital varchar(50),
         isDeleted boolean,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        patientName varchar(30),
+        patientName varchar(50),
         usageDate datetime,
-        useIndication varchar(30),
-        usedBy varchar(255),
+        useIndication varchar(50),
+        usedBy varchar(30),
         ward varchar(30),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         product_id bigint,
-        productType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -1505,12 +1503,6 @@
         add constraint FK45B6D212A49787C4 
         foreign key (createdBy_id) 
         references User (id);
-
-    alter table ProductUsage 
-        add index FK45B6D21273AC2B90 (productType_id), 
-        add constraint FK45B6D21273AC2B90 
-        foreign key (productType_id) 
-        references ProductType (id);
 
     alter table ProductUsage 
         add index FK45B6D212A8E71476 (product_id), 

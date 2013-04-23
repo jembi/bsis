@@ -375,7 +375,13 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productId", productId);
-    return query.getSingleResult();
+    Product product = null;
+    try {
+      product = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return product;
   }
 
   public List<Product> findAnyProductMatching(String productNumber,
@@ -564,6 +570,7 @@ public class ProductRepository {
     DateTime today = new DateTime();
     for (Product product : q.getResultList()) {
       String productType = product.getProductType().getProductType();
+      @SuppressWarnings("unchecked")
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
       CollectedSampleViewModel collectedSample;
       collectedSample = new CollectedSampleViewModel(product.getCollectedSample());
@@ -920,6 +927,7 @@ public class ProductRepository {
     return query.getResultList();
   }
 
+  @SuppressWarnings("unchecked")
   public List<Product> addProductCombination(ProductCombinationBackingForm form) throws ParseException, JsonParseException, JsonMappingException, IOException {
     List<Product> products = new ArrayList<Product>();
     String expiresOn = form.getExpiresOn();
