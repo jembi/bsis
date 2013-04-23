@@ -680,7 +680,7 @@
 
     create table ProductTypeCombination (
         id SMALLINT not null auto_increment,
-        combinationName varchar(200),
+        combinationName varchar(300),
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -689,7 +689,7 @@
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
-        combinationName varchar(200),
+        combinationName varchar(300),
         isDeleted boolean,
         primary key (id, REV)
     ) ENGINE=InnoDB;

@@ -170,7 +170,7 @@ $(document).ready(function() {
 		  type: "POST",
 		  data: {productType : JSON.stringify(data)},
 		  success: function(response) {
-		    				 showMessage("Product type successfully created.");
+		    				 showMessage("Product type successfully saved.");
 		    				 $("#${tabContentId}").trigger("productTypeEditDone");
 		  				 },
 		  error:   function() {
@@ -255,7 +255,7 @@ $(document).ready(function() {
 				<input name="productTypeNameShort" />
 			</div>
 			<div>
-				<label>Expiry interal</label>
+				<label>Expiry interval</label>
 				<input name="expiresAfter" type="number" min="1" />
 				<select name="expiresAfterUnits"
 								class="expiresAfterUnitsSelector"

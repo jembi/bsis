@@ -1,7 +1,10 @@
 package repository;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +14,7 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.producttype.ProductTypeTimeUnits;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +103,13 @@ public class ProductTypeRepository {
     return query.getResultList();
   }
 
+  public List<ProductTypeCombination> getAllProductTypeCombinationsIncludeDeleted() {
+
+    String queryStr = "SELECT pt from ProductTypeCombination pt";
+    TypedQuery<ProductTypeCombination> query = em.createQuery(queryStr, ProductTypeCombination.class);
+    return query.getResultList();
+  }
+
   public ProductTypeCombination getProductTypeCombinationById(Integer id) {
     TypedQuery<ProductTypeCombination> query;
     query = em.createQuery("SELECT pt from ProductTypeCombination pt " +
@@ -125,5 +136,43 @@ public class ProductTypeRepository {
     expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
     productType.setExpiresAfterUnits(expiresAfterUnits);
     em.merge(productType);
+  }
+
+  public void deactivateProductTypeCombination(Integer productTypeCombinationId) {
+    ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
+    productTypeCombination.setIsDeleted(true);
+    em.merge(productTypeCombination);
+  }
+
+  public void activateProductTypeCombination(Integer productTypeCombinationId) {
+    ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
+    productTypeCombination.setIsDeleted(false);
+    em.merge(productTypeCombination);
+  }
+
+  public void saveNewProductTypeCombination(
+      Map<String, Object> newProductTypeCombinationAsMap) {
+    ProductTypeCombination productTypeCombination = new ProductTypeCombination();
+    String combinationName = (String) newProductTypeCombinationAsMap.get("combinationName");
+    String productTypeIds = (String) newProductTypeCombinationAsMap.get("productTypeIds");
+    Set<ProductType> productTypes = new HashSet<ProductType>();
+    List<String> combinationNameList = new ArrayList<String>();
+    for (String productTypeId : productTypeIds.split(",")) {
+      if (StringUtils.isBlank(productTypeId))
+        continue;
+      ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
+      productTypes.add(productType);
+      combinationNameList.add(productType.getProductTypeNameShort());
+    }
+
+    if (StringUtils.isBlank(combinationName)) {
+      combinationName = StringUtils.join(combinationNameList, ",");
+    }
+
+    productTypeCombination.setCombinationName(combinationName);
+    productTypeCombination.setProductTypes(productTypes);
+
+    productTypeCombination.setIsDeleted(false);
+    em.persist(productTypeCombination);
   }
 }

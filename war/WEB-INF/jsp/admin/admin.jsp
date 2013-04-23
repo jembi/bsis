@@ -38,6 +38,9 @@
 		<li id="productTypesForm">
 			<a href="configureProductTypes.html">Product Types</a>
 		</li>
+		<li id="productTypeCombinationsForm">
+			<a href="configureProductTypeCombinations.html">Product Type <br /> Combinations</a>
+		</li>
 		<li id="bloodBagTypesForm">
 			<a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>
 		</li>

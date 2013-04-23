@@ -18,8 +18,8 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="deactivateProductTypeConfirmDialogId">deactivateProductTypeConfirmDialogId-${unique_page_id}</c:set>
-<c:set var="activateProductTypeConfirmDialogId">activateProductTypeConfirmDialogId-${unique_page_id}</c:set>
+<c:set var="deactivateProductTypeCombinationConfirmDialogId">deactivateProductTypeCombinationConfirmDialogId-${unique_page_id}</c:set>
+<c:set var="activateProductTypeCombinationConfirmDialogId">activateProductTypeCombinationConfirmDialogId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -27,14 +27,14 @@ $(document).ready(function() {
   $("#${mainContentId}").find(".editButton")
   											.button({icons: {primary: 'ui-icon-pencil'}})
   											.click(function() {
-  											  $("#${tabContentId}").parent().trigger("editProductType");
+  											  $("#${tabContentId}").parent().trigger("editProductTypeCombination");
   											});
 
   $("#${mainContentId}").find(".doneButton")
 												.button()
 												.click(
 												    function() {
-												      $("#${tabContentId}").parent().trigger("productTypeCancel");
+												      $("#${tabContentId}").parent().trigger("productTypeCombinationCancel");
 												    });
 
   $("#${mainContentId}").find(".deactivateButton")
@@ -42,14 +42,14 @@ $(document).ready(function() {
   											.click(
   											function() {
 
-  											  $("#${deactivateProductTypeConfirmDialogId}").dialog({
+  											  $("#${deactivateProductTypeCombinationConfirmDialogId}").dialog({
   											    modal: true,
   											    title: "Disable",
   											    width: "400px",
   											    resizable: false,
   											    buttons: {
   											      "Disable": function() {
-  											        deactivateProductType();
+  											        deactivateProductTypeCombination();
   											        $(this).dialog("close");
   											      },
   											      "Cancel": function() {
@@ -59,18 +59,18 @@ $(document).ready(function() {
   											  });
   											});
 
-  function deactivateProductType() {
+  function deactivateProductTypeCombination() {
     $.ajax({
-      url: "deactivateProductType.html",
+      url: "deactivateProductTypeCombination.html",
       type: "POST",
-      data: {productTypeId : '${productType.id}'},
+      data: {productTypeCombinationId : '${productTypeCombination.id}'},
       success: function() {
         				 showMessage("Blood Test successfully deactivated");
-        				 $("#${tabContentId}").parent().trigger("productTypeEditDone");
+        				 $("#${tabContentId}").parent().trigger("productTypeCombinationEditDone");
       				 },
      	error:   function() {
      	  			   showErrorMessage("Something went wrong. Please try again");
-     	  			  	$("#${tabContentId}").parent().trigger("productTypeEditError");
+     	  			  	$("#${tabContentId}").parent().trigger("productTypeCombinationEditError");
      					 }
     });
   }
@@ -80,14 +80,14 @@ $(document).ready(function() {
 	.click(
 	function() {
 
-	  $("#${activateProductTypeConfirmDialogId}").dialog({
+	  $("#${activateProductTypeCombinationConfirmDialogId}").dialog({
 	    modal: true,
 	    title: "Activate",
 	    width: "400px",
 	    resizable: false,
 	    buttons: {
 	      "Activate": function() {
-	        activateProductType();
+	        activateProductTypeCombination();
 	        $(this).dialog("close");
 	      },
 	      "Cancel": function() {
@@ -97,21 +97,21 @@ $(document).ready(function() {
 	  });
 	});
 
-	function activateProductType() {
+	function activateProductTypeCombination() {
 
 	  $.ajax({
-        url : "activateProductType.html",
+        url : "activateProductTypeCombination.html",
         type : "POST",
         data : {
-          productTypeId : '${productType.id}'
+          productTypeCombinationId : '${productTypeCombination.id}'
         },
         success : function() {
           showMessage("Blood Test successfully activated");
-          $("#${tabContentId}").parent().trigger("productTypeEditDone");
+          $("#${tabContentId}").parent().trigger("productTypeCombinationEditDone");
         },
         error : function() {
           showErrorMessage("Something went wrong. Please try again");
-          $("#${tabContentId}").parent().trigger("productTypeEditError");
+          $("#${tabContentId}").parent().trigger("productTypeCombinationEditError");
         }
       });
   }
@@ -123,35 +123,35 @@ $(document).ready(function() {
 	<div id="${mainContentId}">
 		<div style="	border: thin solid #1075A1;	border-radius: 5px;	margin: 20px;">
 
-			<div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected product type</div>
+			<div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected product type combination</div>
 
 			<div class="summaryPageButtonSection" style="text-align: right;">
-				<button class="editButton">Edit</button>
+				<!-- No edit functionality required for product type combinations -->
+				<!-- button class="editButton">Edit</button-->
 				<button class="doneButton">Done</button>
-				<c:if test="${not productType.isDeleted}">
+				<c:if test="${not productTypeCombination.isDeleted}">
 					<button class="deactivateButton">Disable</button>
 				</c:if>
-				<c:if test="${productType.isDeleted}">
+				<c:if test="${productTypeCombination.isDeleted}">
 					<button class="activateButton">Enable</button>
 				</c:if>
 			</div>
 	
-			<div class="productTypeDetails">
+			<div class="productTypeCombinationDetails">
 				<div class="formInTabPane">
 
 					<div>
-						<label>Product type name</label>
-						<label>${productType.productType}</label>
+						<label>Combination name</label>
+						<label style="width: auto;">${productTypeCombination.combinationName}</label>
 					</div>
 
 					<div>
-						<label>Short name</label>
-						<label>${productType.productTypeNameShort}</label>
-					</div>
-
-					<div>
-						<label>Expiry time</label>
-						<label>${productType.expiresAfter} ${productType.expiresAfterUnits}</label>
+						<label><b>Product types</b></label>
+						<ul>
+							<c:forEach var="productType" items="${productTypeCombination.productTypes}">
+								<li>${productType.productType}</li>
+							</c:forEach>
+						</ul>
 					</div>
 
 				</div>
@@ -162,10 +162,10 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div id="${deactivateProductTypeConfirmDialogId}" style="display: none;">
-	Are you sure you want to deactivate this product type?
+<div id="${deactivateProductTypeCombinationConfirmDialogId}" style="display: none;">
+	Are you sure you want to deactivate this product type combination?
 </div>
 
-<div id="${activateProductTypeConfirmDialogId}" style="display: none;">
-	Are you sure you want to activate this product type?
+<div id="${activateProductTypeCombinationConfirmDialogId}" style="display: none;">
+	Are you sure you want to activate this product type combination?
 </div>

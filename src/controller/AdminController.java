@@ -34,7 +34,6 @@ import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
-import model.producttype.ProductType;
 import model.requesttype.RequestType;
 import model.tips.Tips;
 
@@ -349,6 +348,17 @@ public class AdminController {
 
     ModelAndView mv = new ModelAndView("admin/configureProductTypes");
     mv.addObject("productTypes", productTypesRepository.getAllProductTypesIncludeDeleted());
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+  }
+
+  @RequestMapping(value="/configureProductTypeCombinations", method=RequestMethod.GET)
+  public ModelAndView configureProductTypeCombinations(
+      HttpServletRequest request, HttpServletResponse response) {
+
+    ModelAndView mv = new ModelAndView("admin/configureProductTypeCombinations");
+    mv.addObject("productTypeCombinations", productTypesRepository.getAllProductTypeCombinationsIncludeDeleted());
+    mv.addObject("productTypes", productTypesRepository.getAllProductTypes());
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }

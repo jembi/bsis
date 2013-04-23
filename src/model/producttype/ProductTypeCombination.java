@@ -22,7 +22,7 @@ public class ProductTypeCombination {
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
-  @Column(length=200)
+  @Column(length=300)
   private String combinationName;
   
   @NotAudited

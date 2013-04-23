@@ -103,7 +103,6 @@ $(document).ready(function() {
 											  return "Any Product Type";
 											}
 											else {
-											  console.log(selectedValues);
 											  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 											  return checkedValues.length ? checkedValues.join(', ') : 'Any Product Type';
 											}
