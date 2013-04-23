@@ -14,11 +14,15 @@
 <c:set var="productsTableEditRowDivId">productsTableEditRowDiv-${unique_page_id}</c:set>
 <c:set var="confirmIssueProductsDialogId">confirmIssueProductsDialog-${unique_page_id}</c:set>
 
+<c:set var="crossmatchConfirmDialogId">crossmatchConfirmDialog-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(
     function() {
 
       var selected_products = [];
+      var compatible_notknown = {};
+      var compatible = {};
       
       var productsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
@@ -32,17 +36,35 @@ $(document).ready(
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
 											        }
+
+											        var collectionId = elements[0].innerHTML;
+											        var collectionNumber = elements[2].innerHTML;
+											        switch ($(node).data('iscompatible')) {
+											        case 'OTHER':
+											        case 'NOT_KNOWN': compatible_notknown[collectionId] = collectionNumber; 
+											        									break;
+											        case 'COMPATIBLE': compatible[collectionId] = collectionNumber;
+											        									 break;
+											        }
+
 											        var selectedRowId = elements[0].innerHTML;
 											        var checkbox = $(node).find(":checkbox");
 										        	selected_products.push(selectedRowId);
 										        	checkbox.attr("checked", true);
  													  },
-				"fnRowDeselected" : function(node) {
+					"fnRowDeselected" : function(node) {
 														  var elements = $(node).children();
 											        if (elements[0].getAttribute("class") === "dataTables_empty") {
 											          return;
 											        }
+
 											        var selectedRowId = elements[0].innerHTML;
+
+											        if (selectedRowId in compatible)
+											          delete compatible[selectedRowId];
+											        if (selectedRowId in compatible_notknown)
+											          delete compatible_notknown[selectedRowId];
+
 											        var checkbox = $(node).find(":checkbox");
 											        selected_products.splice(selected_products.indexOf(selectedRowId), 1);
 											        checkbox.attr('checked', false);
@@ -58,7 +80,9 @@ $(document).ready(
         icons : {
           primary : 'ui-icon-check'
         }
-      }).click(issueSelectedProducts);
+      }).click(function() {
+        				issueSelectedProducts()
+      				 });
 
       $("#${tabContentId}").find(".cancelButton").button({
         icons : {
@@ -69,12 +93,21 @@ $(document).ready(
       });
 
 
-      function issueSelectedProducts() {
+      function issueSelectedProducts(skipCrossmatch) {
         console.log(selected_products);
         if (selected_products.length == 0) {
           showMessage("You must select at least one product to issue.");
           return;
         }
+
+        if (skipCrossmatch === undefined)
+          skipCrossmatch = false;
+        
+        if (Object.keys(compatible_notknown).length > 0 && skipCrossmatch === false) {
+          showCrossmatchConfirmDialog();
+          return;
+        }
+        
         var data = {requestId : "${requestId}",
             				productsToIssue : JSON.stringify(selected_products)
             			 };
@@ -98,6 +131,32 @@ $(document).ready(
         if (searchBox.val() != "")
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
+
+      function showCrossmatchConfirmDialog() {
+        // remove existing products from list
+        $("#${crossmatchConfirmDialogId}").find("ul").children().remove();
+
+        for (var collectionId in compatible_notknown) {
+          $("#${crossmatchConfirmDialogId}").find("ul").append("<li>" + compatible_notknown[collectionId] + "</li>");
+        }
+
+        $("#${crossmatchConfirmDialogId}").dialog({
+          modal: true,
+          title: "Crossmatch not done",
+          width: 800,
+          height: 400,
+          buttons: {
+            "Yes Issue these products": function() {
+																					$(this).dialog("close");
+																					issueSelectedProducts(true);
+            														},
+            "No I want to add crossmatch tests": function() {
+											 														 $(this).dialog("close");
+            				 														 }
+          }
+        });
+      }
+
     });
 </script>
 
@@ -154,7 +213,7 @@ $(document).ready(
 					<c:forEach var="product" items="${allProducts}">
 						<c:set var="rowColor" value="${product.isCompatible == 'COMPATIBLE' ? 'green' : '' }" />
 						<c:set var="rowFontWeight" value="${product.isCompatible == 'COMPATIBLE' ? 'bold' : '' }" />
-						<tr style="color: ${rowColor}; font-weight: ${rowFontWeight};">
+						<tr style="color: ${rowColor}; font-weight: ${rowFontWeight};" data-iscompatible="${product.isCompatible}">
 							<td style="display: none;">${product.id}</td>
 							<td>
 								<input type="checkbox" />
@@ -190,4 +249,17 @@ $(document).ready(
 
 <div id="${confirmIssueProductsDialogId}" title="Confirm Issue?" style="display: none;">
 	<div class="dialogContent"></div>
+</div>
+
+<div id="${crossmatchConfirmDialogId}" style="display: none;">
+	<div>
+		<p>
+			Crossmatch testing has not been done for the following products.
+		</p>
+		<p>
+			Do you want to skip crossmatch tests and issue the selected products?
+		</p>
+		<ul class="productsListWithoutCrossmatch">
+		</ul>
+	</div>
 </div>

@@ -428,12 +428,4 @@ public class RequestsController {
     m.put("errMsg", errMsg);
     return m;
   }
-
-  private void setRequestNumber(RequestBackingForm form,
-      Map<String, Object> requestNumberProperties) {
-    boolean isAutoGeneratable = (Boolean) requestNumberProperties.get("isAutoGeneratable");
-    boolean autoGenerate = (Boolean) requestNumberProperties.get("autoGenerate");
-    if (isAutoGeneratable && autoGenerate)
-      form.setRequestNumber(sequenceNumberRepository.getNextRequestNumber());    
-  }
 }

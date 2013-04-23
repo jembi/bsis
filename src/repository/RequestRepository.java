@@ -374,25 +374,28 @@ public class RequestRepository {
       // handle the case where the product, test result has been updated
       // between the time when matching products are searched and selected
       // for issuing
-      if (canIssueProduct(product, request)) {
-        Date today = new Date();
-        ProductStatusChange productIssue = new ProductStatusChange();
-        productIssue.setNewStatus(ProductStatus.ISSUED);
-        productIssue.setStatusChangedOn(today);
-        productIssue.setStatusChangeType(ProductStatusChangeType.ISSUED);
-        productIssue.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
-        productIssue.setIssuedTo(request);
-        productIssue.setProduct(product);
-        numUnitsIssued++;
-        product.setStatus(ProductStatus.ISSUED);
-        product.setIssuedOn(today);
-        product.setIssuedTo(request);
-        em.persist(productIssue);
-        em.merge(product);
-      }
-      else {
+      if (!canIssueProduct(product, request))
         throw new Exception("Could not issue products");
-      }
+    }
+
+    for (String productId : productIds) {
+      Product product = em.find(Product.class, Long.parseLong(productId));
+      // we know these products can be issued now
+      // although there is some doubt about the behavior of locks between the check above and now
+      Date today = new Date();
+      ProductStatusChange productIssue = new ProductStatusChange();
+      productIssue.setNewStatus(ProductStatus.ISSUED);
+      productIssue.setStatusChangedOn(today);
+      productIssue.setStatusChangeType(ProductStatusChangeType.ISSUED);
+      productIssue.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+      productIssue.setIssuedTo(request);
+      productIssue.setProduct(product);
+      numUnitsIssued++;
+      product.setStatus(ProductStatus.ISSUED);
+      product.setIssuedOn(today);
+      product.setIssuedTo(request);
+      em.persist(productIssue);
+      em.merge(product);
     }
 
     em.flush();
