@@ -242,38 +242,6 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ConfiguredPreDonationTest (
-        id SMALLINT not null auto_increment,
-        acceptableResults varchar(500),
-        allowedResults varchar(500),
-        enabled boolean,
-        lowerLimit varchar(30),
-        negateResult boolean,
-        resultDataType integer,
-        testName varchar(30),
-        testType varchar(15),
-        units varchar(10),
-        upperLimit varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ConfiguredPreDonationTest_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        acceptableResults varchar(500),
-        allowedResults varchar(500),
-        enabled boolean,
-        lowerLimit varchar(30),
-        negateResult boolean,
-        resultDataType integer,
-        testName varchar(30),
-        testType varchar(15),
-        units varchar(10),
-        upperLimit varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
     create table ContactMethodType (
         id SMALLINT not null auto_increment,
         contactMethodType varchar(30),
@@ -581,22 +549,6 @@
         PlateSession_id bigint not null,
         bloodTestsOnPlate_id bigint not null,
         unique (bloodTestsOnPlate_id)
-    ) ENGINE=InnoDB;
-
-    create table PreDonationTest (
-        id bigint not null auto_increment,
-        testResult varchar(30),
-        configuredPreDonationTest_id SMALLINT not null,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table PreDonationTest_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        testResult varchar(30),
-        configuredPreDonationTest_id SMALLINT,
-        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table Product (
@@ -1232,12 +1184,6 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table ConfiguredPreDonationTest_AUD 
-        add index FK564E4C9ADF74E053 (REV), 
-        add constraint FK564E4C9ADF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
     alter table ContactMethodType_AUD 
         add index FK64A7DC2CDF74E053 (REV), 
         add constraint FK64A7DC2CDF74E053 
@@ -1393,18 +1339,6 @@
         add constraint FK7A75514A2DA883C0 
         foreign key (bloodTestsOnPlate_id) 
         references BloodTestResult (id);
-
-    alter table PreDonationTest 
-        add index FKAF309676903E59D (configuredPreDonationTest_id), 
-        add constraint FKAF309676903E59D 
-        foreign key (configuredPreDonationTest_id) 
-        references ConfiguredPreDonationTest (id);
-
-    alter table PreDonationTest_AUD 
-        add index FKDE1E2BB8DF74E053 (REV), 
-        add constraint FKDE1E2BB8DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
 
     create index product_expiresOn_index on Product (expiresOn);
 

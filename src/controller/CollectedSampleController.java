@@ -38,7 +38,6 @@ import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.PreDonationTestRepository;
 import viewmodel.CollectedSampleViewModel;
 
 @Controller
@@ -58,9 +57,6 @@ public class CollectedSampleController {
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
-
-  @Autowired
-  private PreDonationTestRepository preDonationTestRepository;
 
   @Autowired
   private UtilController utilController;
@@ -288,7 +284,6 @@ public class CollectedSampleController {
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionFields", formFields);
-    mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
     return mv;
   }
 
@@ -306,7 +301,6 @@ public class CollectedSampleController {
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
     mv.addObject("collectionFields", formFields);
-    mv.addObject("preDonationTests", preDonationTestRepository.getAllConfiguredPreDonationTests());
     return mv;
   }
 

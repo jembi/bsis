@@ -871,13 +871,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("haemoglobinUnit", "g/dL", "measurementUnit"),
 ("bloodPressureUnit", "mmHg", "measurementUnit"),
 
-("ageLimitsEnabled", "true", "addDonorRequirements"),
-("minimumAge", "16", "addDonorRequirements"),
-("maximumAge", "65", "addDonorRequirements"),
-("minimumWeight", "65", "addDonorRequirements"),
-("donorWeightUnit", "Kg.", "addDonorRequirements"),
-("daysBetweenConsecutiveDonations", "90", "addDonorRequirements"),
-
 ("ageLimitsEnabled", "true", "donationRequirements"),
 ("minimumAge", "16", "donationRequirements"),
 ("maximumAge", "65", "donationRequirements"),
@@ -896,37 +889,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
-
-insert into ConfiguredPreDonationTest (
-testName, testType, resultDataType,
-lowerLimit, upperLimit,
-acceptableResults, allowedResults,
-negateResult, enabled) values
-("Donor age", "RANGE_CHECK", "INTEGER",
- "16", "65",
- "", "",
- "0", "1"
-),
-("Donor weight", "RANGE_CHECK", "INTEGER",
- "50", "90",
- "", "",
- "0", "1"
-),
-("Donor Haemoglobin Level", "RANGE_CHECK", "REAL",
- "12.5", "18.0",
- "", "",
- "0", "1"
-),
-("Donor blood pressure systolic", "RANGE_CHECK", "INTEGER",
- "115", "120",
- "", "",
- "0", "1"
-),
-("Donor blood pressure diastolic", "RANGE_CHECK", "INTEGER",
- "75", "80",
- "", "",
- "0", "1"
-);
 
 insert into DeferralReason (reason, isDeleted) values
 ("Other", 0),

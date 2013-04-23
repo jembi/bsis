@@ -305,7 +305,6 @@ public class UtilController {
         Integer minAge = Integer.parseInt(config.get("minimumAge"));
         Integer maxAge = Integer.parseInt(config.get("maximumAge"));
         Integer donorAge = DonorUtils.computeDonorAge(donor);
-        System.out.println("donor age: " + donorAge);
         if (donorAge == null) {
           errorMessage = "One of donor Date of Birth or Age must be specified";
         }

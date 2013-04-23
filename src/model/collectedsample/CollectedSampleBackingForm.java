@@ -33,7 +33,10 @@ public class CollectedSampleBackingForm {
 
   private String collectedOn;
 
-  private Boolean useParametersFromBatch;
+  // setting this to false is required as the use parameters from batch
+  // may be hidden by the user in which case we will get a null pointer
+  // exception
+  private Boolean useParametersFromBatch = false;
 
   public CollectedSampleBackingForm() {
     collectedSample = new CollectedSample();
