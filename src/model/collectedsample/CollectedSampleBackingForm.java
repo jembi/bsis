@@ -309,9 +309,11 @@ public class CollectedSampleBackingForm {
   }
 
   public void setCollectionBatchNumber(String collectionBatchNumber) {
-    CollectionBatch collectionBatch = new CollectionBatch();
-    collectionBatch.setBatchNumber(collectionBatchNumber);
-    collectedSample.setCollectionBatch(collectionBatch);
+    if (StringUtils.isNotBlank(collectionBatchNumber)) {
+      CollectionBatch collectionBatch = new CollectionBatch();
+      collectionBatch.setBatchNumber(collectionBatchNumber);
+      collectedSample.setCollectionBatch(collectionBatch);
+    }
   }
 
   public String getDonorIdHidden() {

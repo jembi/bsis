@@ -429,4 +429,11 @@ public class UtilController {
     }
     return product;
   }
+
+  public boolean isFieldRequired(String formName, String fieldName) {
+    FormField formField = formFieldRepository.getFormField(formName, fieldName);
+    if (formField == null)
+      return false;
+    return formField.getIsRequired();
+  }
 }

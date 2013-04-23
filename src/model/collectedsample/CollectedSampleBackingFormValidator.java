@@ -63,7 +63,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
           CustomDateFormatter.getDateTimeErrorMessage());
 
     updateRelatedEntities(form);
-    inheritParametersFromCollectionBatch(form);
+    inheritParametersFromCollectionBatch(form, errors);
     Donor donor = form.getDonor();
     if (donor != null) {
       String errorMessageDonorAge = utilController.verifyDonorAge(donor);
@@ -77,20 +77,32 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
         errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
-
+    
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }
 
   private void inheritParametersFromCollectionBatch(
-      CollectedSampleBackingForm form) {
+      CollectedSampleBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {
       CollectionBatch collectionBatch = form.getCollectionBatch();
-      if (collectionBatch == null)
+      if (collectionBatch == null) {
+        errors.rejectValue("collectedSample.collectionBatch", "collectionbatch.notspecified", "Collection batch should be specified");
         return;
+      }
       Location center = collectionBatch.getCollectionCenter();
-      form.setCollectionCenter(center.getId().toString());
+      if (center == null) {
+        errors.rejectValue("useParametersFromBatch", "collectionCenter.notspecified",
+            "Collection center not present in batch and is required.");
+      } else {
+        form.setCollectionCenter(center.getId().toString());
+      }
       Location site = collectionBatch.getCollectionSite();
-      form.setCollectionSite(site.getId().toString());
+      if (site == null) {
+        errors.rejectValue("useParametersFromBatch", "collectionSite.notspecified",
+            "Collection site not present in batch and is required.");
+      } else {
+        form.setCollectionSite(site.getId().toString());
+      }
     }
   }
 
