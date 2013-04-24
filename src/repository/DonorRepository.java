@@ -326,4 +326,8 @@ public class DonorRepository {
     return currentlyDeferred;
   }
 
+  public boolean isCurrentlyDeferred(Donor donor) {
+    List<DonorDeferral> donorDeferrals = getDonorDeferrals(donor.getId());
+    return isCurrentlyDeferred(donorDeferrals);
+  }
 }

@@ -35,9 +35,10 @@ $(document).ready(function() {
         }
       });
 
-  var lastYear = new Date();
-  lastYear.setFullYear(lastYear.getFullYear()-1);
-  $("#discardedProductsReportsDateCollectedFrom").datepicker("setDate", lastYear);
+  var firstDayOfYear = new Date();
+	firstDayOfYear.setDate(1);
+	firstDayOfYear.setMonth(0);
+  $("#discardedProductsReportsDateCollectedFrom").datepicker("setDate", firstDayOfYear);
   
   $("#discardedProductsReportsDateCollectedTo").datepicker(
       {
@@ -125,7 +126,6 @@ $(document).ready(function() {
 									  return "Any Center";
 									}
 									else {
-									  console.log(selectedValues);
 									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 									  return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
 									}
@@ -145,7 +145,6 @@ $(document).ready(function() {
 									  return "Any Site";
 									}
 									else {
-									  console.log(selectedValues);
 									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 									  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
 									}

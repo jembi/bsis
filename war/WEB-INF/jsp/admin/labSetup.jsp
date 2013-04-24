@@ -54,13 +54,10 @@ $(document).ready(function(){
   											.click(function() {
   											  var labSetupData = {};
   											  var selects = $("#${mainContentId}").find("select");
-  											  console.log(selects);
   											  for (var index = 0; index < selects.length; ++index) {
   											    var select = $(selects[index]);
   											    labSetupData[select.prop('name')] = select.val(); 
   											  }
-
-  											 	console.log(labSetupData);
 
   											  $.ajax({
   											    url: "updateLabSetup.html",
@@ -95,7 +92,7 @@ $(document).ready(function(){
 
 			<div class="tipsBox ui-state-highlight">
 				<p>
-					Customize as per workflow of your lab.
+					Customize as per the workflow of your lab
 				</p>
 			</div>
 

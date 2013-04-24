@@ -1,9 +1,14 @@
 package repository.bloodtesting;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -615,5 +620,112 @@ public class BloodTestingRepository {
     if (onlyActiveRules)
       query.setParameter("isActive", true);
     return query.getResultList();
+  }
+
+  public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
+      List<String> ttiTests, Date dateCollectedFrom, Date dateCollectedTo,
+      String aggregationCriteria, List<String> centers, List<String> sites) {
+    TypedQuery<Object[]> query = em.createQuery("SELECT count(t), c.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.collectedSample c WHERE "
+        + "bt.id IN (:ttiTestIds) AND "
+        + "t.result != :positiveResult AND "
+        + "c.collectionCenter.id IN (:centerIds) AND "
+        + "c.collectionSite.id IN (:siteIds) AND "
+        + "c.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo "
+        + "GROUP BY bt.testNameShort, c.collectedOn", Object[].class);
+
+    List<Long> centerIds = new ArrayList<Long>();
+    if (centers != null) {
+      for (String center : centers) {
+        centerIds.add(Long.parseLong(center));
+      }
+    } else {
+      centerIds.add((long)-1);
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    if (ttiTests != null) {
+      for (String site : sites) {
+        siteIds.add(Long.parseLong(site));
+      }
+    } else {
+      siteIds.add((long)-1);
+    }
+
+    List<Integer> ttiTestIds = new ArrayList<Integer>();
+    if (ttiTests != null) {
+      for (String ttiTest : ttiTests) {
+        ttiTestIds.add(Integer.parseInt(ttiTest));
+      }
+    } else {
+      ttiTestIds.add(-1);
+    }
+
+    query.setParameter("centerIds", centerIds);
+    query.setParameter("siteIds", siteIds);
+    query.setParameter("ttiTestIds", ttiTestIds);
+    query.setParameter("positiveResult", "+");
+
+    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    TypedQuery<BloodTest> bloodTestQuery = em.createQuery("SELECT t FROM BloodTest t WHERE t.id IN :ttiTestIds", BloodTest.class);
+    bloodTestQuery.setParameter("ttiTestIds", ttiTestIds);
+    for (BloodTest bt : bloodTestQuery.getResultList()) {
+      resultMap.put(bt.getTestNameShort(), new HashMap<Long, Long>());
+    }
+
+    query.setParameter("dateCollectedFrom", dateCollectedFrom);
+    query.setParameter("dateCollectedTo", dateCollectedTo);
+
+    // decide date format based on aggregation criteria
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    int incrementBy = Calendar.DAY_OF_YEAR;
+    if (aggregationCriteria.equals("monthly")) {
+      incrementBy = Calendar.MONTH;
+      resultDateFormat = new SimpleDateFormat("01/MM/yyyy");
+    } else if (aggregationCriteria.equals("yearly")) {
+      incrementBy = Calendar.YEAR;
+      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
+    }
+
+    List<Object[]> resultList = query.getResultList();
+
+    Calendar gcal = new GregorianCalendar();
+    Date lowerDate = null;
+    Date upperDate = null;
+    try {
+      lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+      upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+    } catch (ParseException e1) {
+      e1.printStackTrace();
+    }
+
+    // initialize the counter map storing (date, count) for each blood test
+    // counts should be set to 0
+    for (String bloodTestName : resultMap.keySet()) {
+      Map<Long, Long> m = resultMap.get(bloodTestName);
+      gcal.setTime(lowerDate);
+      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
+        m.put(gcal.getTime().getTime(), (long) 0);
+        gcal.add(incrementBy, 1);
+      }
+    }
+
+    for (Object[] result : resultList) {
+      Date d = (Date) result[1];
+      try {
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        System.out.println(formattedDate);
+        Long utcTime = formattedDate.getTime();
+        Map<Long, Long> m = resultMap.get(result[2]);
+        if (m.containsKey(utcTime)) {
+          Long newVal = m.get(utcTime) + (Long) result[0];
+          m.put(utcTime, newVal);
+        } else {
+          m.put(utcTime, (Long) result[0]);
+        }
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    }
+    return resultMap;
   }
 }

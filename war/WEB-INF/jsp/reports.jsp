@@ -22,9 +22,9 @@
 		<li id="collectionsReport">
 			<a href="collectionsReportFormGenerator.html">Collections</a>
 		</li>
-		<!-- li id="testResultsReport">
-			<a href="testResultsReportFormGenerator.html">Test Results</a>
-		</li-->
+		<li id="ttiReport">
+			<a href="ttiReportFormGenerator.html">TTI Reports</a>
+		</li>
 		<li id="requestsReport">
 			<a href="requestsReportFormGenerator.html">Requests</a>
 		</li>

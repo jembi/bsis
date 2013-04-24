@@ -8,6 +8,19 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%!public long getCurrentTime() {
+		return System.nanoTime();
+	}%>
+
+
+<c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
+
+<c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
+<c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
+<c:set var="childContentId">childContent-${unique_page_id}</c:set>
+
+<c:set var="ttiTestsSelectorId">ttiTestsSelectorId-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function() {
   $("#testResultReportTests").multiselect({
@@ -31,9 +44,10 @@ $(document).ready(function() {
         }
       });
 
-  var lastYear = new Date();
-  lastYear.setFullYear(lastYear.getFullYear()-1);
-  $("#trreportsDateTestedFrom").datepicker("setDate", lastYear);
+  var firstDayOfYear = new Date();
+	firstDayOfYear.setDate(1);
+	firstDayOfYear.setMonth(0);
+  $("#trreportsDateTestedFrom").datepicker("setDate", firstDayOfYear);
 
   $("#trreportsDateTestedTo").datepicker(
       {
@@ -66,7 +80,6 @@ $(document).ready(function() {
       url : "getTestResultsReport.html",
       data : formData,
       success : function(data) {
-        console.log(data);
         getTestResultsChart({
           data : data.numTestResults,
           renderDest : "testResultsReportResult",
@@ -103,7 +116,6 @@ $(document).ready(function() {
 									  return "Any Center";
 									}
 									else {
-									  console.log(selectedValues);
 									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 									  return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
 									}
@@ -123,7 +135,6 @@ $(document).ready(function() {
 									  return "Any Site";
 									}
 									else {
-									  console.log(selectedValues);
 									  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 									  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
 									}
@@ -132,6 +143,23 @@ $(document).ready(function() {
 
   $("#testResultsReportForm").find(".collectionSiteSelector").multiselect("checkAll");
 
+  $("#${ttiTestsSelectorId}").multiselect({
+	  position : {
+	    my : 'left top',
+	    at : 'right center'
+	  },
+	  noneSelectedText: 'None Selected',
+	  selectedText: function(numSelected, numTotal, selectedValues) {
+										if (numSelected == numTotal) {
+										  return "All Tests";
+										}
+										else {
+										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+										  return checkedValues.length ? checkedValues.join(', ') : 'All Tests';
+										}
+	  							}
+	});
+  
 });
 </script>
 
@@ -149,6 +177,18 @@ $(document).ready(function() {
 		<thead>
 		</thead>
 		<tbody>
+			<tr>
+				<td>
+					<form:label path="ttiTests">TTI Tests to compare</form:label>
+				</td>
+				<td>
+					<form:select path="ttiTests" id="${ttiTestsSelectorId}">
+						<c:forEach var="ttiTest" items="${ttiTests}">
+							<form:option value="${ttiTest.id}" label="${ttiTest.testNameShort}" />
+						</c:forEach>
+					</form:select>
+				</td>
+			</tr>
 			<tr>
 				<td>Enter Date Range</td>
 			</tr>

@@ -109,6 +109,9 @@ $(document).ready(
 						<c:if test="${productFields.productType.hidden != true}">
 							<th>${productFields.productType.displayName}</th>
 						</c:if>
+						<c:if test="${productFields.bloodGroup.hidden != true}">
+							<th>${productFields.bloodGroup.displayName}</th>
+						</c:if>
 						<c:if test="${productFields.createdOn.hidden != true}">
 							<th>${productFields.createdOn.displayName}</th>
 						</c:if>
@@ -128,7 +131,10 @@ $(document).ready(
 								<td>${product.collectionNumber}</td>
 							</c:if>
 							<c:if test="${productFields.productType.hidden != true}">
-								<td>${product.productType.productTypeName}</td>
+								<td>${product.productType.productTypeNameShort}</td>
+							</c:if>
+							<c:if test="${productFields.bloodGroup.hidden != true}">
+								<td>${product.bloodGroup}</td>
 							</c:if>
 							<c:if test="${productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>

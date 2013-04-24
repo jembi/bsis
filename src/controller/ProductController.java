@@ -232,7 +232,7 @@ public class ProductController {
       
       row.add(product.getId().toString());
 
-      for (String property : Arrays.asList("collectionNumber", "productType", "createdOn", "expiresOn", "status")) {
+      for (String property : Arrays.asList("collectionNumber", "productType", "bloodGroup", "createdOn", "expiresOn", "status")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {

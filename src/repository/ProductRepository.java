@@ -45,13 +45,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import repository.bloodtesting.BloodTypingStatus;
+import viewmodel.CollectedSampleViewModel;
+import viewmodel.MatchingProductViewModel;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import repository.bloodtesting.BloodTypingStatus;
-import viewmodel.CollectedSampleViewModel;
-import viewmodel.MatchingProductViewModel;
 import filter.UserInfoAddToThreadFilter;
 
 @Repository
@@ -68,7 +69,7 @@ public class ProductRepository {
   private ProductTypeRepository productTypeRepository;
 
   @Autowired
-  public RequestRepository requestRepository;
+  private RequestRepository requestRepository;
 
   /**
    * some fields like product status are cached internally.

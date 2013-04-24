@@ -68,6 +68,12 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
+    create table BloodTest_BloodTestResult (
+        BloodTest_id SMALLINT not null,
+        bloodTestResults_id bigint not null,
+        unique (bloodTestResults_id)
+    ) ENGINE=InnoDB;
+
     create table BloodTest_WorksheetType (
         bloodTests_id SMALLINT not null,
         worksheetTypes_id SMALLINT not null,
@@ -1028,6 +1034,18 @@
         add constraint FKE1FA995DDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
+
+    alter table BloodTest_BloodTestResult 
+        add index FKBEE33C16C9E816E6 (bloodTestResults_id), 
+        add constraint FKBEE33C16C9E816E6 
+        foreign key (bloodTestResults_id) 
+        references BloodTestResult (id);
+
+    alter table BloodTest_BloodTestResult 
+        add index FKBEE33C1645027987 (BloodTest_id), 
+        add constraint FKBEE33C1645027987 
+        foreign key (BloodTest_id) 
+        references BloodTest (id);
 
     alter table BloodTest_WorksheetType 
         add index FK7A6DA3B518CB61F2 (worksheetTypes_id), 

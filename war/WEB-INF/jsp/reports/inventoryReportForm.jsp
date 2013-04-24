@@ -73,8 +73,6 @@
             return this.value;	
          	}).get();
 
-         	console.log(collectionCenters);
-
           showLoadingImage($("#${childContentId}"));
           $.ajax({
             url: "generateInventoryReport.html",

@@ -59,7 +59,7 @@ public class ReportsController {
   
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView inventoryReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("inventoryReportForm");
+    ModelAndView mv = new ModelAndView("reports/inventoryReportForm");
     utilController.addTipsToModel(model.asMap(), "report.inventory.generate");
     utilController.addTipsToModel(model.asMap(), "report.inventory.productinventorychart");
     Map<String, Object> m = model.asMap();
@@ -99,7 +99,7 @@ public class ReportsController {
   
   @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView collectionsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("collectionsReport");
+    ModelAndView mv = new ModelAndView("reports/collectionsReport");
     Map<String, Object> m = model.asMap();
     utilController.addTipsToModel(model.asMap(), "report.collections.collectionsreport");
     m.put("centers", locationRepository.getAllCenters());
@@ -111,7 +111,7 @@ public class ReportsController {
 
   @RequestMapping(value = "/requestsReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView requestsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("requestsReport");
+    ModelAndView mv = new ModelAndView("reports/requestsReport");
     Map<String, Object> m = model.asMap();
     utilController.addTipsToModel(model.asMap(), "report.requests.requests");
     m.put("sites", locationRepository.getAllUsageSites());
@@ -122,7 +122,7 @@ public class ReportsController {
 
   @RequestMapping(value = "/discardedProductsReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView discardedProductsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("discardedProductsReport");
+    ModelAndView mv = new ModelAndView("reports/discardedProductsReport");
     Map<String, Object> m = model.asMap();
     utilController.addTipsToModel(m, "report.products.discardedproductsreport");
     m.put("centers", locationRepository.getAllCenters());
@@ -134,7 +134,7 @@ public class ReportsController {
 
   @RequestMapping(value = "/issuedProductsReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView issuedProductsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("issuedProductsReport");
+    ModelAndView mv = new ModelAndView("reports/issuedProductsReport");
     Map<String, Object> m = model.asMap();
     utilController.addTipsToModel(m, "report.products.issuedproductsreport");
     m.put("centers", locationRepository.getAllCenters());
@@ -369,12 +369,13 @@ public class ReportsController {
 
   public static class TestResultsReportBackingForm {
 
+    private List<String> ttiTests;
     private String dateTestedFrom;
     private String dateTestedTo;
     private String aggregationCriteria;
     private List<String> centers;
     private List<String> sites;
-
+    
     public String getDateTestedFrom() {
       return dateTestedFrom;
     }
@@ -405,13 +406,20 @@ public class ReportsController {
     public void setSites(List<String> sites) {
       this.sites = sites;
     }
+    public List<String> getTtiTests() {
+      return ttiTests;
+    }
+    public void setTtiTests(List<String> ttiTests) {
+      this.ttiTests = ttiTests;
+    }
 
   }
 
-  @RequestMapping(value = "/testResultsReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/ttiReportFormGenerator", method = RequestMethod.GET)
   public ModelAndView testResultsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("testResultsReport");
+    ModelAndView mv = new ModelAndView("reports/testResultsReport");
     Map<String, Object> m = model.asMap();
+    m.put("ttiTests", bloodTestingRepository.getTTITests());
     m.put("centers", locationRepository.getAllCenters());
     m.put("sites", locationRepository.getAllCollectionSites());
     utilController.addTipsToModel(m, "report.collections.testresultsreport");
@@ -426,6 +434,7 @@ public class ReportsController {
       @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form,
       BindingResult result, Model model) {
 
+    List<String> ttiTests = form.getTtiTests();
     String dateTestedFrom = form.getDateTestedFrom();
     String dateTestedTo = form.getDateTestedTo();
 
@@ -449,9 +458,9 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
   
-//      Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
-//          .findNumberOfPositiveTests(dateFrom, dateTo,
-//              form.getAggregationCriteria(), form.getCenters(), form.getSites());
+      Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
+          .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
+              form.getAggregationCriteria(), form.getCenters(), form.getSites());
   
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
@@ -462,11 +471,10 @@ public class ReportsController {
         interval = interval * 365;
   
       m.put("interval", interval);
-//      m.put("numTestResults", numTestResults);
+      m.put("numTestResults", numTestResults);
       m.put("dateTestedFromUTC", dateFrom.getTime());
       m.put("dateTestedToUTC", dateTo.getTime());
     } catch (ParseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
