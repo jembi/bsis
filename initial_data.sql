@@ -966,3 +966,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("leaveOutCollectionsProbability", "0.10", "createdata"),
 ("incorrectBloodTypeProbability", "0.05", "createdata"),
 ("unsafeProbability", "0.05", "createdata");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("recordMachineResultsForTTIEnabled", "true", "labsetup");

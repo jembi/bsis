@@ -240,13 +240,10 @@ public class CollectedSampleController {
             try {
               propertyValue = BeanUtils.getProperty(collection, property);
             } catch (IllegalAccessException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
             } catch (InvocationTargetException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
             } catch (NoSuchMethodException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
             }
             row.add(propertyValue.toString());
@@ -441,9 +438,7 @@ public class CollectedSampleController {
     try {
       collectedSampleRepository.deleteCollectedSample(collectionSampleId);
     } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
+      ex.printStackTrace();
       success = false;
       errMsg = "Internal Server Error";
     }

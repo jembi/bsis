@@ -137,6 +137,22 @@ $(document).ready(function() {
 	  														 unhideShowHideSection();
 															 });
 
+	$("#${mainContentId}").find(".showMachineReadings").click(toggleMachineReadingsDisplay);
+
+	var machineReadingsHidden = true;
+
+	function toggleMachineReadingsDisplay() {
+	  var showMachineReadingsText = $("#${mainContentId}").find(".showMachineReadings");
+	  if (machineReadingsHidden) {
+	    showMachineReadingsText.html("Hide machine readings");
+	    $("#${mainContentId}").find(".machineReadingText").each(function() { $(this).show() });
+	  } else {
+	    showMachineReadingsText.html("Show machine readings");
+	    $("#${mainContentId}").find(".machineReadingText").each(function() { $(this).hide() });
+	  }
+	  machineReadingsHidden = !machineReadingsHidden;
+	}
+	
 });
 </script>
 
@@ -165,11 +181,11 @@ $(document).ready(function() {
 						</c:if>
 					</div>
 
-					<c:if test="${recordMachineResultsForTTIEnabled}">
+					<c:if test="${recordMachineResultsForTTIEnabled eq 'true'}">
 						<div>
 							<label>&nbsp;</label>
 							<label style="width: auto; position: absolute; right: 10px;">
-								<span class="link availableTestMachineResults">Show machine results</span>
+								<span class="link showMachineReadings">Show machine results</span>
 							</label>
 						</div>
 					</c:if>
@@ -185,9 +201,13 @@ $(document).ready(function() {
 									<label class="availableTestResultLabel"
 									 		   style="font-size: 1.7em; vertical-align: middle; width: 80px;">
 											${availableTestResults[ttiTest.key]}
-											<span class="machineReadingText">
+
+										<c:if test="${recordMachineResultsForTTIEnabled eq 'true'}">
+											<span class="machineReadingText" style="display: none;">
 												${recentTestResults[ttiTest.key].machineReading.machineReading}
 											</span>
+										</c:if>
+
 									</label>
 									<input name="ttiTest-${ttiTest.key}" class="ttiTestInput availableTestResultInput"
 												 value="${availableTestResults[ttiTest.key]}"

@@ -264,9 +264,6 @@ public class BloodTestingRuleEngine {
     Map<String, BloodTestResult> recentTestResultsWithStringKey = new HashMap<String, BloodTestResult>();
 
     for (Integer testId : recentTestResults.keySet()) {
-      System.out.println(recentTestResults.get(testId).getMachineReading());
-      if (recentTestResults.get(testId).getMachineReading() != null)
-        System.out.println(recentTestResults.get(testId).getMachineReading().getMachineReading());
       recentTestResultsWithStringKey.put(testId.toString(), recentTestResults.get(testId));
     }
     

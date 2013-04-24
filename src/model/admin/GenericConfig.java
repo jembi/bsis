@@ -14,10 +14,10 @@ public class GenericConfig {
   @Column(nullable=false)
   private Long id;
 
-  @Column(length=30)
+  @Column(length=80)
   private String propertyName;
 
-  @Column(length=30)
+  @Column(length=80)
   private String propertyValue;
 
   @Column(length=30)

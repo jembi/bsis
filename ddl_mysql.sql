@@ -425,9 +425,9 @@
 
     create table GenericConfig (
         id bigint not null auto_increment,
-        propertyName varchar(30),
+        propertyName varchar(80),
         propertyOwner varchar(30),
-        propertyValue varchar(30),
+        propertyValue varchar(80),
         primary key (id)
     ) ENGINE=InnoDB;
 
