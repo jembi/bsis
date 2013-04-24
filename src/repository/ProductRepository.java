@@ -76,11 +76,11 @@ public class ProductRepository {
    * eg. Test result update should update the product status.
    * @param product
    */
-  public void updateProductInternalFields(Product product) {
-    updateProductStatus(product);
+  public boolean updateProductInternalFields(Product product) {
+    return updateProductStatus(product);
   }
 
-  private void updateProductStatus(Product product) {
+  private boolean updateProductStatus(Product product) {
 
     // if a product has been explicitly discarded maintain that status.
     // if the product has been issued do not change its status.
@@ -101,22 +101,24 @@ public class ProductRepository {
     List<ProductStatus> statusNotToBeChanged =
         Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
             ProductStatus.USED);
+
+    ProductStatus oldProductStatus = product.getStatus();
     
     // nothing to do if the product has any of these statuses
     if (product.getStatus() != null && statusNotToBeChanged.contains(product.getStatus()))
-      return;
+      return false;
 
     if (product.getCollectedSample() == null)
-      return;
+      return false;
     Long collectedSampleId = product.getCollectedSample().getId();
     CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
 
-    ProductStatus productStatus = ProductStatus.QUARANTINED;
+    ProductStatus newProductStatus = ProductStatus.QUARANTINED;
     if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
         ttiStatus.equals(TTIStatus.TTI_SAFE)) {
-      productStatus = ProductStatus.AVAILABLE;
+      newProductStatus = ProductStatus.AVAILABLE;
     }
 
     // just mark it as expired or unsafe
@@ -124,15 +126,18 @@ public class ProductRepository {
     // available, quarantined status hence this check is done
     // later in the code
     if (product.getExpiresOn().before(new Date())) {
-      productStatus = ProductStatus.EXPIRED;
+      newProductStatus = ProductStatus.EXPIRED;
     }
 
     if (ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
-      productStatus = ProductStatus.UNSAFE;
+      newProductStatus = ProductStatus.UNSAFE;
     }
 
-
-    product.setStatus(productStatus);
+    if (!newProductStatus.equals(oldProductStatus)) {
+      product.setStatus(newProductStatus);
+      return true;
+    }
+    return false;
   }
 
   public Product findProduct(String productNumber) {
