@@ -2,6 +2,10 @@ package viewmodel;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import repository.bloodtesting.BloodTypingStatus;
+
 import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
@@ -145,6 +149,10 @@ public class CollectedSampleViewModel {
   }
 
   public String getBloodGroup() {
-    return getBloodAbo() + getBloodRh();
+    String bloodTypingStatus = getBloodTypingStatus();
+    if (StringUtils.isBlank(bloodTypingStatus) || !bloodTypingStatus.equals(BloodTypingStatus.COMPLETE.toString()))
+      return "";
+    else
+      return getBloodAbo() + getBloodRh();
   }
 }

@@ -34,10 +34,7 @@ $(document).ready(
             numDonors: numDonors,
             numCollections: numCollections,
             numProducts: numProducts,
-            numTestResults: numTestResults,
             numRequests: numRequests,
-            numUsages: numUsages,
-            numIssues: numIssues,
           },
           type : "POST",
           success : function(responseData) {
@@ -77,23 +74,8 @@ $(document).ready(
 						 min="0" max="10000" step="20" />
 		</div>
 		<div>
-			<label> No. of test results </label>
-			<input name="numTestResults" type="number" value="0"
-						 min="0" max="10000" step="20" />
-		</div>
-		<div>
 			<label> No. of requests </label>
 			<input name="numRequests" type="number" value="0"
-						 min="0" max="10000" step="20" />
-		</div>
-		<div>
-			<label> No. of usages </label>
-			<input name="numUsages" type="number" value="0"
-						 min="0" max="10000" step="20" />
-		</div>
-		<div>
-			<label> No. of issues </label>
-			<input name="numIssues" type="number" value="0"
 						 min="0" max="10000" step="20" />
 		</div>
 	</form>

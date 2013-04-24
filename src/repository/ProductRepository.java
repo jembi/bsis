@@ -586,7 +586,6 @@ public class ProductRepository {
       age = Math.abs((age / 5) * 5);
       if (age > 30)
         age = (long) 30;
-      System.out.println(age);
       Long count = numDayMap.get(age);
       numDayMap.put(age, count+1);
     }
