@@ -935,15 +935,6 @@ insert into Permission_Role (roles_id, permissions_id) values
 (2, 1),
 (3, 2);
 
-insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("donorsTabEnabled", "true", "tabs"),
-("collectionsTabEnabled", "true", "tabs"),
-("productsTabEnabled", "true", "tabs"),
-("testResultsTabEnabled", "true", "tabs"),
-("requestsTabEnabled", "true", "tabs"),
-("usageTabEnabled", "true", "tabs"),
-("reportsTabEnabled", "true", "tabs");
-
 insert into ContactMethodType (contactMethodType, isDeleted) values
 ("None", 0),
 ("Phone", 0),
@@ -959,23 +950,38 @@ insert into WellType (wellType, requiresSample, isDeleted) values
 ("Positive control", 0, 0);
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("showCrossmatchConfirmation", "true", "issueproducts"),
-("allowSkipCrossmatch", "true", "issueproducts");
-
-insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("leaveOutCollectionsProbability", "0.10", "createdata"),
 ("incorrectBloodTypeProbability", "0.05", "createdata"),
 ("unsafeProbability", "0.05", "createdata");
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("bloodTypingMechanism", "BLOODTYPING_WELLS", "labsetup"),
-("ttiMechanism", "TTI_WELLS", "labsetup"),
+("bloodTypingMechanism", "BLOODTYPING_TEST_RESULTS_ELISA", "labsetup"),
+("ttiMechanism", "TTI_ELISA", "labsetup"),
+("recordUsage", "true", "labsetup"),
 ("crossmatchProcedure", "CROSSMATCH_DONE_CAN_SKIP", "labsetup");
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("bloodTypingContext", "RECORD_BLOOD_TYPING_TESTS", "labsetup"),
-("useElisaPlates", "true", "labsetup"),
-("useWorksheets", "true", "labsetup");
+("bloodTypingElisa", "true", "labsetup"),
+("bloodTypingWorksheets", "false", "labsetup");
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("recordMachineResultsForTTIEnabled", "true", "labsetup");
+("ttiElisa", "true", "labsetup"),
+("ttiWorksheets", "false", "labsetup"),
+("recordMachineReadingsForTTI", "true", "labsetup");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("useWorksheets", "false", "labsetup");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("donorsTabEnabled", "true", "labsetup"),
+("collectionsTabEnabled", "true", "labsetup"),
+("productsTabEnabled", "true", "labsetup"),
+("testResultsTabEnabled", "true", "labsetup"),
+("requestsTabEnabled", "true", "labsetup"),
+("usageTabEnabled", "true", "labsetup"),
+("reportsTabEnabled", "true", "labsetup");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("showCrossmatchConfirmation", "true", "labsetup"),
+("allowSkipCrossmatch", "true", "labsetup");

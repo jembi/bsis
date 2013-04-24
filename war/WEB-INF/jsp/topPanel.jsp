@@ -18,43 +18,43 @@
 		<li class="topPanelTab"><a href="#homeLandingPageContent"><span
 				class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>
 
-		<c:if test="${tabs['donorsTabEnabled']}">
+		<c:if test="${labsetup['donorsTabEnabled']}">
 		<c:if test="${permissions['viewDonorInformation'] eq 'allowed'}">
 		<li class="topPanelTab"><a href="#donorsLandingPageContent"><span
 				class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
 		</c:if>
 		</c:if>
 
-		<c:if test="${tabs['collectionsTabEnabled']}">
+		<c:if test="${labsetup['collectionsTabEnabled']}">
 		<li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
 				class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
 		</c:if>
 
 		<c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
 
-		<c:if test="${tabs['productsTabEnabled']}">
+		<c:if test="${labsetup['productsTabEnabled']}">
 		<li class="topPanelTab"><a href="#productsLandingPageContent"><span
 				class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
 		</c:if>
 
-		<c:if test="${tabs['testResultsTabEnabled']}">
+		<c:if test="${labsetup['testResultsTabEnabled']}">
 		<li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
 				class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test
 				Results</a></li>
 		</c:if>
 
-		<c:if test="${tabs['requestsTabEnabled']}">
+		<c:if test="${labsetup['requestsTabEnabled']}">
 		<li class="topPanelTab"><a href="#requestsLandingPageContent"><span
 				class="ui-icon ui-icon-tag" style="display: inline-block;"></span>Requests</a></li>
 		</c:if>
 
-		<c:if test="${tabs['usageTabEnabled']}">
+		<c:if test="${labsetup['usageTabEnabled']}">
 		<li class="topPanelTab"><a href="#usageLandingPageContent"><span
 				class="ui-icon ui-icon-transferthick-e-w" style="display: inline-block;"></span>Usage</a></li>
 		</c:if>
 		</c:if>
 
-		<c:if test="${tabs['reportsTabEnabled']}">
+		<c:if test="${labsetup['reportsTabEnabled']}">
 		<li class="topPanelTab"><a href="#reportsLandingPageContent"><span
 				class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
 		</c:if>
@@ -79,7 +79,7 @@
 		</div>
 	</div>
 
-	<c:if test="${tabs['donorsTabEnabled']}">
+	<c:if test="${labsetup['donorsTabEnabled']}">
 	<c:if test="${permissions['viewDonorInformation'] eq 'allowed'}">
 		<div id="donorsLandingPageContent">
 			<jsp:include page="donors/donors.jsp" />
@@ -87,32 +87,32 @@
 	</c:if>
 	</c:if>
 
-	<c:if test="${tabs['collectionsTabEnabled']}">
+	<c:if test="${labsetup['collectionsTabEnabled']}">
 	<div id="collectionsLandingPageContent">
 		<jsp:include page="collections/collections.jsp" />
 	</div>
 	</c:if>
 
 	<c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
-		<c:if test="${tabs['testResultsTabEnabled']}">
+		<c:if test="${labsetup['testResultsTabEnabled']}">
 		<div id="testResultsLandingPageContent">
 			<jsp:include page="testResults.jsp" />
 		</div>
 		</c:if>
 
-	<c:if test="${tabs['productsTabEnabled']}">
+	<c:if test="${labsetup['productsTabEnabled']}">
 	<div id="productsLandingPageContent">
 		<jsp:include page="products/products.jsp" />
 	</div>
 	</c:if>
 
-	<c:if test="${tabs['requestsTabEnabled']}">
+	<c:if test="${labsetup['requestsTabEnabled']}">
 	<div id="requestsLandingPageContent">
 		<jsp:include page="requests/requests.jsp" />
 	</div>
 	</c:if>
 
-	<c:if test="${tabs['usageTabEnabled']}">
+	<c:if test="${labsetup['usageTabEnabled']}">
 	<div id="usageLandingPageContent">
 		<jsp:include page="usage.jsp" />
 	</div>
@@ -120,7 +120,7 @@
 
 	</c:if>
 
-	<c:if test="${tabs['reportsTabEnabled']}">
+	<c:if test="${labsetup['reportsTabEnabled']}">
 	<div id="reportsLandingPageContent">
 		<jsp:include page="reports.jsp" />
 	</div>

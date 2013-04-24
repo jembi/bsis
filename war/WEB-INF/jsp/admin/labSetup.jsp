@@ -44,22 +44,20 @@ $(document).ready(function(){
     header : false
   });
 
-  setDefaultValueForSelectorUsingValue($("#${bloodTypingMechanismSelectorId}").multiselect(), "${labSetup['bloodTypingMechanism']}");
-  setDefaultValueForSelectorUsingValue($("#${ttiMechanismSelectorId}").multiselect(), "${labSetup['ttiMechanism']}");
-  setDefaultValueForSelectorUsingValue($("#${recordUsageSelectorId}").multiselect(), "${labSetup['recordUsage']}");
+  setDefaultValueForSelectorUsingValue($("#${bloodTypingMechanismSelectorId}").multiselect(), "${labsetup['bloodTypingMechanism']}");
+  setDefaultValueForSelectorUsingValue($("#${ttiMechanismSelectorId}").multiselect(), "${labsetup['ttiMechanism']}");
+  setDefaultValueForSelectorUsingValue($("#${recordUsageSelectorId}").multiselect(), "${labsetup['recordUsage']}");
   setDefaultValueForSelectorUsingValue($("#${crossmatchProcedureSelectorId}").multiselect(), "${labsetup['crossmatchProcedure']}");
 
   $("#${mainContentId}").find(".updateLabSetupButton")
   											.button()
   											.click(function() {
   											  var labSetupData = {};
-  											  var inputs = $("#${mainContentId}").find("input");
-  											  for (var index = 0; index < inputs.length; ++index) {
-  											    var input = $(inputs[index]);
-  											    if (input.is(':checked'))
-	  											    labSetupData[input.prop('name')] = 'true'; 
-  											    else
-  											      labSetupData[input.prop('name')] = 'false';
+  											  var selects = $("#${mainContentId}").find("select");
+  											  console.log(selects);
+  											  for (var index = 0; index < selects.length; ++index) {
+  											    var select = $(selects[index]);
+  											    labSetupData[select.prop('name')] = select.val(); 
   											  }
 
   											 	console.log(labSetupData);
@@ -69,7 +67,10 @@ $(document).ready(function(){
   											    data: {labSetupParams : JSON.stringify(labSetupData)},
   											    type: "POST",
   											    success: function(response) {
-  											      				 showMessage("Lab Setup successfully updated. Please refresh the page.");
+  											      				 showMessage("Lab Setup successfully updated. Please wait while the page is refreshed.");
+  											      				 setTimeout(function() {
+  											      				   						document.location.reload(true);
+  											      				 						}, 3000);
   											    				 },
   											    error:   function(response) {
 																			 showErrorMessage("Something went wrong. Please try again.");  											      
@@ -104,7 +105,7 @@ $(document).ready(function(){
 								id="${bloodTypingMechanismSelectorId}">
 					<option value="BLOODTYPING_TEST_RESULTS_ELISA">Record blood typing results (ELISA plate)</option>
 					<option value="BLOODTYPING_TEST_RESULTS_WORKSHEETS">Record blood typing results (Worksheets)</option>
-					<option value="BLOODTYPING_WORKSHEETS">Only record blood typing outcomes (Worksheets)</option>
+					<option value="BLOODTYPING_OUTCOMES_WORKSHEETS">Only record blood typing outcomes (Worksheets)</option>
 				</select>
 			</div>
 
@@ -121,8 +122,8 @@ $(document).ready(function(){
 				<label>Record usage information</label>
 				<select name="recordUsage"
 								id="${recordUsageSelectorId}">
-					<option value="YES">Yes</option>
-					<option value="NO">No</option>
+					<option value="true">Yes</option>
+					<option value="false">No</option>
 				</select>
 			</div>
 

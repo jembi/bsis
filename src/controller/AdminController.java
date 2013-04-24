@@ -29,7 +29,6 @@ import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTest;
-import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
@@ -52,6 +51,7 @@ import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
+import repository.LabSetupRepository;
 import repository.LocationRepository;
 import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
@@ -111,6 +111,9 @@ public class AdminController {
   @Autowired
   ServletContext servletContext;
 
+  @Autowired
+  LabSetupRepository labSetupRepository;
+  
   @Autowired
   UtilController utilController;
   
@@ -318,22 +321,7 @@ public class AdminController {
     }
     System.out.println("here");
     System.out.println(params);
-    String recordOutcomes = paramsMap.get("recordOutcomes");
-
-    if (recordOutcomes.equals("true")) {
-      bloodTestingRepository.activateTests(BloodTestContext.RECORD_BLOOD_TYPING_OUTCOMES);
-    } else {
-      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_BLOOD_TYPING_OUTCOMES);
-    }
-
-    String recordBloodTestResults = paramsMap.get("recordBloodTestResults");
-    if (recordBloodTestResults.equals("true")) {
-      bloodTestingRepository.activateTests(BloodTestContext.RECORD_BLOOD_TYPING_TESTS);
-    } else {
-      bloodTestingRepository.deactivateTests(BloodTestContext.RECORD_BLOOD_TYPING_TESTS);
-    }
-
-    genericConfigRepository.updateConfigProperties("labsetup", paramsMap);
+    labSetupRepository.updateLabSetup(paramsMap);
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", true);
     return m;

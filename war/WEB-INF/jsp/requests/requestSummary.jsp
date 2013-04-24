@@ -191,7 +191,7 @@
 				Print
 			</button>
 			<button type="button" class="addCompatibilityResultButton">
-				Add compatibility result
+				Add crossmatch test information
 			</button>
 		</div>
 

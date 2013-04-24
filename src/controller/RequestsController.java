@@ -400,7 +400,7 @@ public class RequestsController {
     utilController.addTipsToModel(tips, "requests.findpending.findmatchingproducts");
     mv.addObject("tips", tips);
     mv.addObject("allProducts", products);
-    Map<String, String> configProperties = genericConfigRepository.getConfigProperties("issueproducts");
+    Map<String, String> configProperties = genericConfigRepository.getConfigProperties("labsetup");
     mv.getModelMap().addAllAttributes(configProperties);
     return mv;
   }

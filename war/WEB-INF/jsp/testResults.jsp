@@ -17,18 +17,20 @@
 			<a href="findTestResultFormGenerator.html">Find Test Results</a>
 		</li>
 
-		<c:if test="${model.labsetup['useElisaPlates'] == 'true' }">
+		<c:if test="${model.labsetup['bloodTypingElisa'] == 'true' }">
 			<li id="bloodTypingTestResults">
 				<a href="bloodTypingWorksheetGenerator.html">Blood Typing (ELISA)</a>
 			</li>
+		</c:if>
+		<c:if test="${model.labsetup['ttiElisa'] == 'true' }">
 			<li id="ttiTestResultsWells">
 				<a href="ttiWellsWorksheetFormGenerator.html">TTI results (ELISA)</a>
 			</li>
 		</c:if>
 
-		<li id="ttiResults">
+		<!-- li id="ttiResults">
 			<a href="ttiFormGenerator.html">TTI Results</a>
-		</li>
+		</li-->
 
 		<c:if test="${model.labsetup['useWorksheets'] == 'true' }">
 			<li id="addTestResultsForWorksheet">

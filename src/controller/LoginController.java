@@ -37,7 +37,6 @@ public class LoginController {
 	public ModelAndView welcome(HttpServletRequest request, Model m) {
 	  ModelAndView mv = new ModelAndView("welcomePage");
 	  m.addAttribute("versionNumber", UtilController.VERSION_NUMBER);
-	  m.addAttribute("tabs", genericConfigRepository.getConfigProperties("tabs"));
 	  m.addAttribute("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
 	  mv.addObject("model", m);
 		return mv;
