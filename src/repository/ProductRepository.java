@@ -716,7 +716,7 @@ public class ProductRepository {
     query.setParameter("dateCollectedFrom", dateCollectedFrom);
     query.setParameter("dateCollectedTo", dateCollectedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;
@@ -819,7 +819,7 @@ public class ProductRepository {
     query.setParameter("dateCollectedFrom", dateCollectedFrom);
     query.setParameter("dateCollectedTo", dateCollectedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;

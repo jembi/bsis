@@ -93,7 +93,7 @@
           changeYear : true,
           minDate : -365,
           maxDate : 1,
-          dateFormat : "mm/dd/yy",
+          dateFormat : "dd/mm/yy",
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
         });
@@ -103,7 +103,7 @@
           changeYear : true,
           minDate : -1,
           maxDate : 365,
-          dateFormat : "mm/dd/yy",
+          dateFormat : "dd/mm/yy",
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c+1",
         });
@@ -113,7 +113,7 @@
           changeYear: true,
           minDate: -1,
           maxDate: 365,
-          dateFormat: "mm/dd/yy",
+          dateFormat: "dd/mm/yy",
           timeFormat: "hh:mm:ss tt",
           yearRange: "c-100:c+1"
         });

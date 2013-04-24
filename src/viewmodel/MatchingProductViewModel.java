@@ -76,14 +76,14 @@ public class MatchingProductViewModel {
   public String getCreatedOn() {
     if (product.getCreatedOn() == null)
       return ""; 
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
     return formatter.format(product.getCreatedOn());
   }
 
   public String getExpiresOn() {
     if (product.getExpiresOn() == null)
       return "";
-    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
     return formatter.format(product.getExpiresOn());
   }
 

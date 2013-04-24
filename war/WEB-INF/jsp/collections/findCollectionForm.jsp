@@ -133,7 +133,7 @@ $(document).ready(function() {
     changeYear : true,
     minDate : -36500,
     maxDate : 365,
-    dateFormat : "mm/dd/yy",
+    dateFormat : "dd/mm/yy",
     yearRange : "c-100:c+1",
     onSelect : function(selectedDate) {
       getDateOfCollectionToInput().datepicker("option", "minDate", selectedDate);
@@ -145,7 +145,7 @@ $(document).ready(function() {
     changeYear : true,
     minDate : -36500,
     maxDate : 365,
-    dateFormat : "mm/dd/yy",
+    dateFormat : "dd/mm/yy",
     yearRange : "c-100:c+1",
     onSelect : function(selectedDate) {
       getDateOfCollectionFromInput().datepicker("option", "maxDate", selectedDate);

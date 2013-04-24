@@ -39,7 +39,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "mm/dd/yy",
+    dateFormat : "dd/mm/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateUsedTo").datepicker("option", "minDate", selectedDate);
@@ -51,7 +51,7 @@
     changeYear : true,
     minDate : -36500,
     maxDate : 0,
-    dateFormat : "mm/dd/yy",
+    dateFormat : "dd/mm/yy",
     yearRange : "c-100:c0",
     onSelect : function(selectedDate) {
       $("#dateUsedFrom").datepicker("option", "maxDate", selectedDate);

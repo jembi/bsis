@@ -65,7 +65,7 @@ public class UsageRepository {
         : productNumber);
     query.setParameter("useIndications", useIndications);
 
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
     try {
       Date from = (dateUsedFrom == null || dateUsedFrom.equals("")) ? dateFormat
           .parse("12/31/1970") : dateFormat.parse(dateUsedFrom);

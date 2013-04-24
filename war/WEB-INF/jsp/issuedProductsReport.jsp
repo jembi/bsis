@@ -27,7 +27,7 @@ $(document).ready(function() {
         changeYear : true,
         minDate : -36500,
         maxDate : 0,
-        dateFormat : "mm/dd/yy",
+        dateFormat : "dd/mm/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
           $("#issuedProductsReportsDateIssuedTo").datepicker("option", "minDate",
@@ -45,7 +45,7 @@ $(document).ready(function() {
         changeYear : true,
         minDate : -36500,
         maxDate : 0,
-        dateFormat : "mm/dd/yy",
+        dateFormat : "dd/mm/yy",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
           $("#issuedProductsReportsDateIssuedFrom").datepicker("option", "maxDate",

@@ -47,12 +47,12 @@ public class Request implements ModificationTracker {
   @Index(name="request_requestNumber_index")
   private String requestNumber;
 
-  @DateTimeFormat(pattern="mm/dd/yyyy")
+  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="request_requestDate_index")
   private Date requestDate;
 
-  @DateTimeFormat(pattern="mm/dd/yyyy")
+  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="request_requiredDate_index")
   private Date requiredDate;
@@ -83,7 +83,7 @@ public class Request implements ModificationTracker {
   @Column(length=30)
   private String patientLastName;
 
-  @DateTimeFormat(pattern="mm/dd/yyyy")
+  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.DATE)
   private Date patientBirthDate;
 

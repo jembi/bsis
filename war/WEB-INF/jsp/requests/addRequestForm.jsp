@@ -88,7 +88,7 @@ $(document).ready(
         changeYear : true,
         minDate : -36500,
         maxDate : 1,
-        dateFormat : "mm/dd/yy",
+        dateFormat : "dd/mm/yy",
         timeFormat : "hh:mm:ss tt",
         yearRange : "c-100:c0",
         onSelect : function(selectedDate) {
@@ -101,7 +101,7 @@ $(document).ready(
         changeYear : true,
         minDate : -36500,
         maxDate : 60,
-        dateFormat : "mm/dd/yy",
+        dateFormat : "dd/mm/yy",
         yearRange : "c-100:c+1",
         onSelect : function(selectedDate) {
           //$("#${addRequestFormId}").find(".requestDate").datetimepicker("option", "maxDate", selectedDate);

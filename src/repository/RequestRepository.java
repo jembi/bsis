@@ -167,7 +167,7 @@ public class RequestRepository {
     query.setParameter("productTypes", productTypes);
     query.setParameter("statuses", statuses);
 
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
     try {
       Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
           .parse("12/31/1970") : dateFormat.parse(dateRequestedFrom);
@@ -285,7 +285,7 @@ public class RequestRepository {
   }
 
   private Date getDateRequestedAfterOrDefault(String requestedAfter) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
     Date from = null;
     try {
       from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
@@ -297,7 +297,7 @@ public class RequestRepository {
   }
 
   private Date getDateRequiredByOrDefault(String dateExpiresTo) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
     Date to = null;
     try {
       if (dateExpiresTo == null || dateExpiresTo.equals("")) {
@@ -522,7 +522,7 @@ public class RequestRepository {
     query.setParameter("dateRequestedFrom", dateRequestedFrom);
     query.setParameter("dateRequestedTo", dateRequestedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;

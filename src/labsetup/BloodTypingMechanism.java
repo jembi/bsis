@@ -1,0 +1,7 @@
+package labsetup;
+
+public enum BloodTypingMechanism {
+  BLOODTYPING_TEST_RESULTS_ELISA,
+  BLOODTYPING_TEST_RESULTS_WORKSHEETS,
+  BLOODTYPING_WORKSHEETS
+}

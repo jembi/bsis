@@ -47,7 +47,7 @@ public class ProductUsage implements ModificationTracker {
   @Column(length=50)
   private String useIndication;
 
-  @DateTimeFormat(pattern="mm/dd/yyyy")
+  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.TIMESTAMP)
   private Date usageDate;
 

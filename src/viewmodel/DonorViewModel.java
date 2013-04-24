@@ -1,7 +1,5 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.CustomDateFormatter;
@@ -67,10 +65,10 @@ public class DonorViewModel {
   public String getBirthDate() {
     Date birthDate = donor.getBirthDate();
     if (birthDate != null) {
-      DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-      return formatter.format(birthDate);
+      return CustomDateFormatter.getDateString(birthDate);
+    } else {
+      return "";
     }
-    return "";
   }
 
   public String getAddress() {

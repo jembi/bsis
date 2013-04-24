@@ -22,7 +22,7 @@ $(document).ready(function(){
     changeYear : true,
     minDate : 1,
     maxDate : 60,
-    dateFormat : "mm/dd/yy",
+    dateFormat : "dd/mm/yy",
     yearRange : "c-100:c+1",
   });
 
