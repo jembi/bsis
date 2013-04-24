@@ -968,4 +968,14 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("unsafeProbability", "0.05", "createdata");
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("bloodTypingMechanism", "BLOODTYPING_WELLS", "labsetup"),
+("ttiMechanism", "TTI_WELLS", "labsetup"),
+("crossmatchProcedure", "CROSSMATCH_DONE_CAN_SKIP", "labsetup");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("bloodTypingContext", "RECORD_BLOOD_TYPING_TESTS", "labsetup"),
+("useElisaPlates", "true", "labsetup"),
+("useWorksheets", "true", "labsetup");
+
+insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("recordMachineResultsForTTIEnabled", "true", "labsetup");

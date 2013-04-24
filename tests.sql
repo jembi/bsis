@@ -1,8 +1,3 @@
-insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("bloodTypingContext", "RECORD_BLOOD_TYPING_TESTS", "labsetup"),
-("useElisaPlates", "true", "labsetup"),
-("useWorksheets", "true", "labsetup");
-
 insert into MicrotiterPlate (id, plateKey, plateName, numRows, numColumns, notes, isDeleted) values
 (1, 'bloodtyping', 'Blood Typing Plate', 8, 12, '', '0'),
 (2, 'tti', 'Elisa Plate', 8, 12, '', '0');

@@ -12,8 +12,42 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 
+<c:set var="bloodTypingMechanismSelectorId">bloodTypingMechanismSelector-${unique_page_id}</c:set>
+<c:set var="ttiMechanismSelectorId">ttiMechanismSelector-${unique_page_id}</c:set>
+<c:set var="recordUsageSelectorId">recordUsageSelector-${unique_page_id}</c:set>
+<c:set var="crossmatchProcedureSelectorId">crossmatchProcedureSelector-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function(){
+
+  $("#${bloodTypingMechanismSelectorId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
+  $("#${ttiMechanismSelectorId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
+  $("#${recordUsageSelectorId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
+  $("#${crossmatchProcedureSelectorId}").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
+  setDefaultValueForSelectorUsingValue($("#${bloodTypingMechanismSelectorId}").multiselect(), "${labSetup['bloodTypingMechanism']}");
+  setDefaultValueForSelectorUsingValue($("#${ttiMechanismSelectorId}").multiselect(), "${labSetup['ttiMechanism']}");
+  setDefaultValueForSelectorUsingValue($("#${recordUsageSelectorId}").multiselect(), "${labSetup['recordUsage']}");
+  setDefaultValueForSelectorUsingValue($("#${crossmatchProcedureSelectorId}").multiselect(), "${labsetup['crossmatchProcedure']}");
 
   $("#${mainContentId}").find(".updateLabSetupButton")
   											.button()
@@ -50,53 +84,56 @@ $(document).ready(function(){
 
 	<div id="${mainContentId}">
 
-
 		<form class="formInTabPane">
 
 			<div>
 				<label>
-					<b>Lab setup form</b>
+					<b>Lab setup</b>
 				</label>
 			</div>
 
-			<div>
-				<label>Record outcomes</label>
-				<c:if test="${labsetup['recordOutcomes'] eq 'true'}">
-					<input name="recordOutcomes" type="checkbox" checked />
-				</c:if>
-				<c:if test="${labsetup['recordOutcomes'] ne 'true'}">
-					<input name="recordOutcomes" type="checkbox" />
-				</c:if>
+			<div class="tipsBox ui-state-highlight">
+				<p>
+					Customize as per workflow of your lab.
+				</p>
 			</div>
 
 			<div>
-				<label>Record blood test results</label>
-				<c:if test="${labsetup['recordBloodTestResults'] eq 'true'}">
-					<input name="recordBloodTestResults" type="checkbox" checked/>
-				</c:if>
-				<c:if test="${labsetup['recordBloodTestResults'] ne 'true'}">
-					<input name="recordBloodTestResults" type="checkbox" />
-				</c:if>
+				<label>Blood typing mechanism</label>
+				<select name="bloodTypingMechanism"
+								id="${bloodTypingMechanismSelectorId}">
+					<option value="BLOODTYPING_TEST_RESULTS_ELISA">Record blood typing results (ELISA plate)</option>
+					<option value="BLOODTYPING_TEST_RESULTS_WORKSHEETS">Record blood typing results (Worksheets)</option>
+					<option value="BLOODTYPING_WORKSHEETS">Only record blood typing outcomes (Worksheets)</option>
+				</select>
 			</div>
 
 			<div>
-				<label>Use ELISA Plates</label>
-				<c:if test="${labsetup['useElisaPlates'] eq 'true'}">
-					<input name="useElisaPlates" type="checkbox" checked/>
-				</c:if>
-				<c:if test="${labsetup['useElisaPlates'] ne 'true'}">
-					<input name="useElisaPlates" type="checkbox" />
-				</c:if>
+				<label>TTI recording mechanism</label>
+				<select name="ttiMechanism"
+								id="${ttiMechanismSelectorId}">
+					<option value="TTI_ELISA">Record on ELISA Plate (with Optical Densities)</option>
+					<option value="TTI_WORKSHEETS">Record on worksheets</option>
+				</select>
 			</div>
 
 			<div>
-				<label>Use Worksheets</label>
-				<c:if test="${labsetup['useWorksheets'] eq 'true'}">
-					<input name="useWorksheets" type="checkbox" checked/>
-				</c:if>
-				<c:if test="${labsetup['useWorksheets'] ne 'true'}">
-					<input name="useWorksheets" type="checkbox" />
-				</c:if>
+				<label>Record usage information</label>
+				<select name="recordUsage"
+								id="${recordUsageSelectorId}">
+					<option value="YES">Yes</option>
+					<option value="NO">No</option>
+				</select>
+			</div>
+
+			<div>
+				<label>Crossmatch procedure</label>
+				<select name="crossmatchProcedure"
+								id="${crossmatchProcedureSelectorId}">
+					<option value="CROSSMATCH_NOT_DONE">Crossmatch testing is not done</option>
+					<option value="CROSSMATCH_DONE_CAN_SKIP">Crossmatch testing is done but can be skipped</option>
+					<option value="CROSSMATCH_DONE_CANNOT_SKIP">Crossmatch testing is mandatory</option>
+				</select>
 			</div>
 
 		</form>

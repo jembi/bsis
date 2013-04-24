@@ -494,6 +494,17 @@ function setDefaultValueForSelector(selectorElement, valueToSelect) {
   selectorElement.multiselect("refresh");
 }
 
+//should be a multiselect selector object
+function setDefaultValueForSelectorUsingValue(selectorElement, valueToSelect) {
+  var elementsToSelect = selectorElement.children().filter(function() { return $.trim($(this).val()) == valueToSelect });
+  elementsToSelect.attr("selected", 1);
+  //multiselect refresh: Reloads the checkbox menu. If you're dynamically adding/removing option
+  // tags on the original select via AJAX or DOM manipulation methods,
+  // call refresh to reflect the changes in the widget.
+  selectorElement.multiselect("refresh");
+}
+
+
 function showBarcode(element, barcodeValue) {
   element.barcode(barcodeValue, "code128", {barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
 }
