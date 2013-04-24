@@ -113,6 +113,9 @@ public class Donor implements ModificationTracker {
   @Column(columnDefinition="TINYINT")
   private Integer age;
 
+  @Column(length=50)
+  private String donorHash;
+  
   /**
    * If the blood center wishes to store a unique id for the donor.
    * Can help in deduplication.
@@ -253,6 +256,7 @@ public class Donor implements ModificationTracker {
     setPreferredContactMethod(donor.getPreferredContactMethod());
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
+    this.donorHash = DonorUtils.computeDonorHash(this);
   }
 
   public List<CollectedSample> getCollectedSamples() {
@@ -480,5 +484,13 @@ public class Donor implements ModificationTracker {
 
   public void setAge(Integer age) {
     this.age = age;
+  }
+
+  public String getDonorHash() {
+    return donorHash;
+  }
+
+  public void setDonorHash(String donorHash) {
+    this.donorHash = donorHash;
   }
 }

@@ -22,6 +22,7 @@ import model.CustomDateFormatter;
 import model.donor.Donor;
 import model.donor.DonorDeferral;
 import model.donor.DonorStatus;
+import model.donor.DonorUtils;
 import model.donordeferral.DeferralReason;
 import model.util.BloodGroup;
 
@@ -235,6 +236,7 @@ public class DonorRepository {
       donor.setBloodAbo("");
     if (donor.getBloodRh() == null)
       donor.setBloodRh("");
+    donor.setDonorHash(DonorUtils.computeDonorHash(donor));
   }
 
   public Donor findDonorByDonorNumber(String donorNumber) {
