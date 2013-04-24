@@ -472,7 +472,6 @@
         columnNumber SMALLINT,
         machineReading decimal(7,3),
         rowNumber SMALLINT,
-        bloodTestResult_id bigint,
         plateSession_id bigint,
         wellType_id SMALLINT,
         primary key (id)
@@ -1285,12 +1284,6 @@
         add constraint FK4CF2E065AF35157F 
         foreign key (plateSession_id) 
         references PlateSession (id);
-
-    alter table MachineReading 
-        add index FK4CF2E0658D7BC6C7 (bloodTestResult_id), 
-        add constraint FK4CF2E0658D7BC6C7 
-        foreign key (bloodTestResult_id) 
-        references BloodTestResult (id);
 
     alter table MicrotiterPlate_AUD 
         add index FK45D4695FDF74E053 (REV), 

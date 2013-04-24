@@ -348,6 +348,9 @@ public class BloodTestingRepository {
         @SuppressWarnings("unchecked")
         Map<String, String> wellData = (Map<String, String>) rowData.get(colNum);
 
+        if (wellData.isEmpty())
+          continue;
+
         // store well type in machine configuration
         Integer wellTypeId = Integer.parseInt(wellData.get("welltype"));
         WellType wellType = wellTypeRepository.getWellTypeById(wellTypeId);
@@ -411,8 +414,14 @@ public class BloodTestingRepository {
             bloodTestResultsForCollection.get(ttiTestId), collectedSample,
             testedOn, ruleResult);
         // no need to worry about uninterpretable results here
+        btResult.setMachineReading(machineReading);
+        // bidirectional relationship with blood test result as the owning side
+        // must set in both directions and persist the machine reading first
+        // otherwise there will be a transient object in the entity manager
         machineReading.setBloodTestResult(btResult);
+        // must persist
         em.persist(machineReading);
+        em.merge(btResult);
       }
     }
 

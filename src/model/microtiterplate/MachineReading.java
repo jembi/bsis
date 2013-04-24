@@ -27,7 +27,7 @@ public class MachineReading {
   @Column(precision=7, scale=3)
   private BigDecimal machineReading;
 
-  @OneToOne(optional=true)
+  @OneToOne(mappedBy="machineReading")
   private BloodTestResult bloodTestResult;
 
   @Column(columnDefinition="SMALLINT")

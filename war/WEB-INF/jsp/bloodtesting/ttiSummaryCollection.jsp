@@ -144,7 +144,9 @@ $(document).ready(function() {
 
 	<div id="${mainContentId}">
 
+
 		<c:set var="availableTestResults" value="${ttiOutputForCollection.availableTestResults}" />
+		<c:set var="recentTestResults" value="${ttiOutputForCollection.recentTestResults}" />
 		<c:set var="pendingTests" value="${ttiOutputForCollection.pendingTTITestsIds}" />
 
 		<div class="ttiForCollectionSection formInTabPane" style="margin: 0;">
@@ -163,6 +165,15 @@ $(document).ready(function() {
 						</c:if>
 					</div>
 
+					<c:if test="${recordMachineResultsForTTIEnabled}">
+						<div>
+							<label>&nbsp;</label>
+							<label style="width: auto; position: absolute; right: 10px;">
+								<span class="link availableTestMachineResults">Show machine results</span>
+							</label>
+						</div>
+					</c:if>
+
 					<c:set var="availableTestResultCount" value="${0}" />
 					<c:if test="${fn:length(availableTestResults) gt 0}">
 						<!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
@@ -170,10 +181,13 @@ $(document).ready(function() {
 							<c:set var="testCategory" value="${ttiTest.value.category}" />
 							<c:if test="${not empty availableTestResults[ttiTest.key] and testCategory eq 'TTI'}">
 								<div>
-									<label>${ttiTest.value.testName}</label>
+									<label style="vertical-align: middle;">${ttiTest.value.testName}</label>
 									<label class="availableTestResultLabel"
-									 		   style="font-size: 1.5em; vertical-align: middle; width: 80px;">
+									 		   style="font-size: 1.7em; vertical-align: middle; width: 80px;">
 											${availableTestResults[ttiTest.key]}
+											<span class="machineReadingText">
+												${recentTestResults[ttiTest.key].machineReading.machineReading}
+											</span>
 									</label>
 									<input name="ttiTest-${ttiTest.key}" class="ttiTestInput availableTestResultInput"
 												 value="${availableTestResults[ttiTest.key]}"

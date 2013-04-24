@@ -18,18 +18,13 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
   @Override
   public void postHandle(HttpServletRequest request,
       HttpServletResponse response, Object handler, ModelAndView mv) {
-    System.out.println("here");
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     User user = (User) httpServletRequest.getSession().getAttribute("user");
-    System.out.println(user);
     if (user == null)
       return;
-    System.out.println(user.getUsername());
     Map<String, String> permissions = new HashMap<String, String>();
     for(Role role : user.getRoles()) {
-      System.out.println(role.getName());
       for (Permission perm : role.getPermissions()) {
-        System.out.println(perm.getName());
         permissions.put(perm.getName(), "allowed");
       }
     }

@@ -437,4 +437,8 @@ public class UtilController {
       return false;
     return formField.getIsRequired();
   }
+
+  public boolean shouldRecordMachineResultsForTTI() {
+    return true;
+  }
 }

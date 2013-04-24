@@ -2,6 +2,7 @@ package repository.bloodtesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -259,6 +260,17 @@ public class BloodTestingRuleEngine {
     ruleResult.setAvailableTestResults(availableTestResults);
     ruleResult.setBloodTypingStatus(bloodTypingStatus);
     ruleResult.setStoredTestResults(storedTestResults);
+
+    Map<String, BloodTestResult> recentTestResultsWithStringKey = new HashMap<String, BloodTestResult>();
+
+    for (Integer testId : recentTestResults.keySet()) {
+      System.out.println(recentTestResults.get(testId).getMachineReading());
+      if (recentTestResults.get(testId).getMachineReading() != null)
+        System.out.println(recentTestResults.get(testId).getMachineReading().getMachineReading());
+      recentTestResultsWithStringKey.put(testId.toString(), recentTestResults.get(testId));
+    }
+    
+    ruleResult.setRecentTestResults(recentTestResultsWithStringKey);
 
     ruleResult.setTTIStatusChanges(ttiStatusChanges);
     ruleResult.setTTIStatus(ttiStatus);

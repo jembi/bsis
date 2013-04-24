@@ -808,3 +808,10 @@ tr > td
 	margin-left: 45px;
 	background: rgb(212, 228, 227);
 }
+
+.machineReadingText {
+	color: #6a6a6a;
+	font-size: 0.6em;
+	vertical-align: middle;
+	margin-left: 15px;
+}

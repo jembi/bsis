@@ -46,7 +46,7 @@ public class BloodTestResult implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
 
-  @OneToOne(optional=true)
+  @OneToOne
   private MachineReading machineReading;
 
   @Valid

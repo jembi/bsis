@@ -206,11 +206,14 @@ public class TTIController {
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    // using test status to find existing test results and determine pending tests
     BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(collectedSampleId);
     mv.addObject("collection", new CollectedSampleViewModel(collectedSample));
     mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("ttiOutputForCollection", ruleResult);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+
+    mv.addObject("recordMachineResultsForTTIEnabled", utilController.shouldRecordMachineResultsForTTI());
 
     List<BloodTest> ttiTests = bloodTestingRepository.getTTITests();
     Map<String, BloodTest> ttiTestsMap = new LinkedHashMap<String, BloodTest>();
@@ -332,9 +335,6 @@ public class TTIController {
     ModelAndView mv = new ModelAndView();
 
     mv.setViewName("bloodtesting/ttiWellsWorksheet");
-
-    System.out.println("ttiTestId: " + ttiTestId);
-    System.out.println("ttiResults: " + ttiResults);
 
     ObjectMapper mapper = new ObjectMapper();
     boolean success = false;

@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -572,7 +574,14 @@ public class CreateDataController {
 	  bloodTestingRepository.saveBloodTestingResults(testResults, true);
 	}
 
-	private void addTTIResultsForCollections(List<CollectedSample> collectedSamples) {
+	@SuppressWarnings("unchecked")
+  private void addTTIResultsForCollections(List<CollectedSample> collectedSamples) {
+
+	  Map<Long, String> collectionNumberMap = new HashMap<Long, String>();
+	  for (CollectedSample c : collectedSamples) {
+	    collectionNumberMap.put(c.getId(), c.getCollectionNumber());
+	  }
+
     Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getTTIRules(true)) {
       if (rule.getCollectionFieldChanged().equals(CollectionField.TTISTATUS)) {
@@ -587,6 +596,8 @@ public class CreateDataController {
     double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
     double unsafePercentage = Double.parseDouble(createDataProperties.get("unsafeProbability"));
 
+    Set<String> allBloodTestsIds = new HashSet<String>();
+    
     Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
     Random generator = new Random();
 
@@ -623,12 +634,76 @@ public class CreateDataController {
             index >= patternResults.length ||
             StringUtils.isBlank(patternResults[index]))
           continue;
+        allBloodTestsIds.add(testId);
         testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
         index++;
       }
     }
 
-    bloodTestingRepository.saveBloodTestingResults(testResults, true);
+    // these test results are grouped by collection, put them on a plate
+    // so that we can record machine readings also
+
+    // for each test we will have a separate map of the plate
+    Map<String, Object> ttiPlatesByTest = null;
+
+    Integer maxColumns = 12;
+    Integer maxRows = 8;
+    // initialize to maximum so that the map is initialized
+    Integer rowNum = maxRows;
+    Integer colNum = maxColumns;
+
+    for (Long collectionId : testResults.keySet()) {
+      Map<Long, String> testResultsForCollection = testResults.get(collectionId);
+      for (Long testId : testResultsForCollection.keySet()) {
+        if (rowNum == maxRows && colNum == maxColumns) {
+          // save the data on the plate
+
+          if (ttiPlatesByTest != null) {
+            for (String t : allBloodTestsIds) {
+              bloodTestingRepository.saveTTIResultsOnPlate((Map<String, Map<String, Object>>) ttiPlatesByTest.get(t), Long.parseLong(t));
+            }
+          }
+
+          rowNum = 1;
+          colNum = 1;
+
+          ttiPlatesByTest = new HashMap<String, Object>();
+          for (String t : allBloodTestsIds) {
+            Map<String, Map<String, Object>> plateData = new HashMap<String, Map<String,Object>>();
+            for (int i = 1; i <= maxRows; i++) {
+              Map<String, Object> wellsInRow = new HashMap<String, Object>();
+              for (int j = 1; j <= maxColumns; j++) {
+                wellsInRow.put(Integer.toString(j), new HashMap<String, String>());
+              }
+              plateData.put(Integer.toString(i), wellsInRow);
+            }
+            ttiPlatesByTest.put(t, plateData);
+          }
+        }
+        else if (rowNum == maxRows) {
+          rowNum = 1;
+          colNum++;
+        }
+        
+        Map<String, Map<String, Object>> plate = (Map<String, Map<String, Object>>) ttiPlatesByTest.get(testId.toString());
+
+        Map<String, String> wellData = (Map<String, String>) plate.get(rowNum.toString()).get(colNum.toString());
+        wellData.put("contents", "sample");
+        wellData.put("collectionNumber", collectionNumberMap.get(collectionId));
+        wellData.put("welltype", "1");
+        wellData.put("testResult", testResultsForCollection.get(testId));
+        wellData.put("machineReading", Double.toString(Math.random()));
+
+        // fill data in the plates in column major manner
+        rowNum++;
+      }
+    }
+
+    for (String t : allBloodTestsIds) {
+      bloodTestingRepository.saveTTIResultsOnPlate((Map<String, Map<String, Object>>) ttiPlatesByTest.get(t), Long.parseLong(t));
+    }
+    // if plates not required then the following line should be used in place of the code above
+    // bloodTestingRepository.saveBloodTestingResults(testResults, true);
   }
 
 	public void createRequests(int numRequests) {

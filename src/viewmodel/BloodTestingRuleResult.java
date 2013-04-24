@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import model.bloodtesting.BloodTestResult;
 import model.testresults.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
@@ -24,6 +25,8 @@ public class BloodTestingRuleResult {
   private List<String> pendingTTITestsIds;
 
   private Map<String, String> availableTestResults;
+
+  private Map<String, BloodTestResult> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
 
@@ -163,5 +166,13 @@ public class BloodTestingRuleResult {
 
   public void setTtiUninterpretable(boolean ttiUninterpretable) {
     this.ttiUninterpretable = ttiUninterpretable;
+  }
+
+  public Map<String, BloodTestResult> getRecentTestResults() {
+    return recentTestResults;
+  }
+
+  public void setRecentTestResults(Map<String, BloodTestResult> recentTestResults) {
+    this.recentTestResults = recentTestResults;
   }
 }
