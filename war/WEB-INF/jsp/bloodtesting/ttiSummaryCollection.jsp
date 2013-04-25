@@ -181,7 +181,7 @@ $(document).ready(function() {
 						</c:if>
 					</div>
 
-					<c:if test="${recordMachineResultsForTTIEnabled eq 'true'}">
+					<c:if test="${recordMachineReadingsForTTI eq 'true'}">
 						<div>
 							<label>&nbsp;</label>
 							<label style="width: auto; position: absolute; right: 10px;">
@@ -202,7 +202,7 @@ $(document).ready(function() {
 									 		   style="font-size: 1.7em; vertical-align: middle; width: 80px;">
 											${availableTestResults[ttiTest.key]}
 
-										<c:if test="${recordMachineResultsForTTIEnabled eq 'true'}">
+										<c:if test="${recordMachineReadingsForTTI eq 'true'}">
 											<span class="machineReadingText" style="display: none;">
 												${recentTestResults[ttiTest.key].machineReading.machineReading}
 											</span>

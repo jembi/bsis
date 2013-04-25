@@ -213,7 +213,7 @@ public class TTIController {
     mv.addObject("ttiOutputForCollection", ruleResult);
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-    mv.addObject("recordMachineResultsForTTIEnabled", utilController.recordMachineResultsForTTIEnabled());
+    mv.addObject("recordMachineReadingsForTTI", utilController.recordMachineResultsForTTI());
 
     List<BloodTest> ttiTests = bloodTestingRepository.getTTITests();
     Map<String, BloodTest> ttiTestsMap = new LinkedHashMap<String, BloodTest>();

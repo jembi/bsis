@@ -438,7 +438,7 @@ public class UtilController {
     return formField.getIsRequired();
   }
 
-  public String recordMachineResultsForTTIEnabled() {
-    return genericConfigRepository.getConfigProperties("labsetup").get("recordMachineResultsForTTIEnabled");
+  public String recordMachineResultsForTTI() {
+    return genericConfigRepository.getConfigProperties("labsetup").get("recordMachineReadingsForTTI");
   }
 }
