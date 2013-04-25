@@ -82,6 +82,9 @@ public class BloodTestingRuleEngine {
     
     Map<String, String> availableTestResults = new TreeMap<String, String>();
     availableTestResults.putAll(storedTestResults);
+    for (String storedTestId: storedTestResults.keySet()) {
+      basicTTITestsNotAdded.remove(new Integer(storedTestId.toString()));
+    }
     for (Long extraTestId : bloodTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results
       availableTestResults.put(extraTestId.toString(), bloodTestResults.get(extraTestId));
@@ -90,6 +93,7 @@ public class BloodTestingRuleEngine {
     }
 
     System.out.println("available test results:" + availableTestResults);
+    System.out.println("basic TTI Tests not added:" + basicTTITestsNotAdded);
 
     Set<String> bloodAboChanges = new HashSet<String>();
     Set<String> bloodRhChanges = new HashSet<String>();
