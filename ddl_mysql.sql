@@ -133,7 +133,7 @@
         notes longtext,
         ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
-        collectionBatch_id TINYINT(4),
+        collectionBatch_id SMALLINT,
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
@@ -163,7 +163,7 @@
         notes longtext,
         ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
-        collectionBatch_id TINYINT(4),
+        collectionBatch_id SMALLINT,
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
@@ -175,7 +175,7 @@
     ) ENGINE=InnoDB;
 
     create table CollectionBatch (
-        id TINYINT(4) not null auto_increment,
+        id SMALLINT not null auto_increment,
         batchNumber varchar(20) unique,
         isDeleted boolean not null,
         createdDate TIMESTAMP,
@@ -189,7 +189,7 @@
     ) ENGINE=InnoDB;
 
     create table CollectionBatch_AUD (
-        id TINYINT(4) not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         batchNumber varchar(20),
@@ -214,7 +214,7 @@
         notes longtext,
         testedBy varchar(255),
         transfusedBefore boolean,
-        crossmatchType_id TINYINT,
+        crossmatchType_id SMALLINT,
         forRequest_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -234,7 +234,7 @@
         notes longtext,
         testedBy varchar(255),
         transfusedBefore boolean,
-        crossmatchType_id TINYINT,
+        crossmatchType_id SMALLINT,
         forRequest_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -259,14 +259,14 @@
     ) ENGINE=InnoDB;
 
     create table CrossmatchType (
-        id TINYINT not null auto_increment,
+        id SMALLINT not null auto_increment,
         crossmatchType varchar(255),
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
     create table CrossmatchType_AUD (
-        id TINYINT not null,
+        id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
         crossmatchType varchar(255),

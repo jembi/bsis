@@ -14,7 +14,7 @@ public class CrossmatchType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="TINYINT")
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
   private String crossmatchType;

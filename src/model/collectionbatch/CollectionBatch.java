@@ -29,7 +29,7 @@ public class CollectionBatch implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, columnDefinition="TINYINT(4)")
+  @Column(nullable=false, columnDefinition="SMALLINT")
   private Integer id;
 
   @Column(length=20, unique=true)
