@@ -113,7 +113,7 @@ public class ReportsController {
   public ModelAndView requestsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/requestsReport");
     Map<String, Object> m = model.asMap();
-    utilController.addTipsToModel(model.asMap(), "report.requests.requests");
+    utilController.addTipsToModel(model.asMap(), "report.requests.requestsreport");
     m.put("sites", locationRepository.getAllUsageSites());
     mv.addObject("requestsReportForm", new RequestsReportBackingForm());
     mv.addObject("model", model);

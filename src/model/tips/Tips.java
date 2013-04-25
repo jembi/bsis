@@ -14,7 +14,7 @@ public class Tips {
   @Column
   private String tipsName;
 
-  @Column(length=512)
+  @Column(length=1000)
   private String tipsContent;
 
   private Boolean isDeleted;

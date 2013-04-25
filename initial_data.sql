@@ -829,6 +829,7 @@ insert into Location(name, isCollectionCenter, isCollectionSite, isMobileSite, i
 
 insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),
+('report.requests.requestsreport', 'Requests report' ,'Track the number of requests by date range, location and blood group.'),
 ('testresults.find', 'Find/Edit Test Results', 'Find blood typing and TTI results by collection number'),
 ('products.find', 'Find/Edit Products', 'Find Products by collection number/product number/product type.'),
 ('products.findproduct.productsummary', 'Product Summary Page', 'Product details shown below. Discard, split or pool this product using the buttons above.'),
