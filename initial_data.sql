@@ -186,7 +186,7 @@ insert into FormField
 ('CollectedSample', 'collectionNumber', 'Collection Number', '', 0,
  '0', '0',
  '1', '0',
- '1', '1',
+ '0', '1',
  '0', '0'),
 ('CollectedSample', 'collectionBatchNumber', 'Batch number', '', 0,
  '0', '1',

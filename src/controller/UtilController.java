@@ -45,7 +45,7 @@ import repository.WorksheetRepository;
 
 @Component
 public class UtilController {
-  public static final String VERSION_NUMBER = "1.1";
+  public static final String VERSION_NUMBER = "1.2";
 
   @Autowired
   private FormFieldRepository formFieldRepository;
