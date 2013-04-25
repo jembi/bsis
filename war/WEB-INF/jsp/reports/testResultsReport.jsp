@@ -159,7 +159,9 @@ $(document).ready(function() {
 										}
 	  							}
 	});
-  
+
+  $("#${ttiTestsSelectorId}").multiselect("checkAll");
+
 });
 </script>
 
