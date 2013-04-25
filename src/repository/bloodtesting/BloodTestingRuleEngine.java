@@ -73,11 +73,20 @@ public class BloodTestingRuleEngine {
       storedTestResults.put(testId.toString(), testResult.getResult());
     }
 
+    List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();
+    Set<Integer> basicTTITestsNotAdded = new HashSet<Integer>();
+
+    for (BloodTest bt : basicTTITests) {
+      basicTTITestsNotAdded.add(bt.getId());
+    }
+    
     Map<String, String> availableTestResults = new TreeMap<String, String>();
     availableTestResults.putAll(storedTestResults);
     for (Long extraTestId : bloodTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results
       availableTestResults.put(extraTestId.toString(), bloodTestResults.get(extraTestId));
+      // this will check if all basic tti tests are available
+      basicTTITestsNotAdded.remove(new Integer(extraTestId.toString()));
     }
 
     System.out.println("available test results:" + availableTestResults);
@@ -244,6 +253,11 @@ public class BloodTestingRuleEngine {
                ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString())) {
         ttiStatus = TTIStatus.TTI_SAFE;
       }
+    }
+
+    if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTTITestsNotAdded.isEmpty()) {
+      // the test has been marked as safe while some basic TTI Tests were not done
+      ttiStatus = TTIStatus.NOT_DONE;
     }
 
     List<String> pendingBloodTypingTestsIds = new ArrayList<String>();

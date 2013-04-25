@@ -728,4 +728,14 @@ public class BloodTestingRepository {
     }
     return resultMap;
   }
+
+  public List<BloodTest> getBasicTTITests() {
+    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.bloodTestType=:bloodTestType AND b.category=:category";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("isActive", true);
+    query.setParameter("bloodTestType", BloodTestType.BASIC_TTI);
+    query.setParameter("category", BloodTestCategory.TTI);
+    List<BloodTest> bloodTests = query.getResultList();
+    return bloodTests;
+  }
 }
