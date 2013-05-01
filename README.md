@@ -8,9 +8,7 @@ Vein-to-Vein (V2V) is a project started at Georgia Institute of Technology as pa
 # Background
 V2V is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
 
-**Lifecycle of donated blood**
-[[lifecycle_blood.png]]
-
+![Lifecycle of Donated Blood] (https://raw.github.com/C4G/V2V/master/lifecycle_blood.png)
 
 The software is being developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa.
 
