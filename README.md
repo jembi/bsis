@@ -38,10 +38,17 @@ The challenges listed above have influenced the design of V2V and the following 
 
 Many other design decisions in the future will be influenced by the same parameters.
 
-Developing in Eclipse
----------------------
 
-1. Download Eclipse Indigo 3.7 or Eclipse Juno 4.2 from http://www.eclipse.org/downloads/.
-2. Install Apache Tomcat 7 and integrate with Eclipse (you may follow http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html).
-3. Fork and clone the master branch into a local directory.
-3. Import 'Existing project' into Eclipse. The master branch contains the required eclipse project files (e.g. .project and .settings/), so you should be able to start working right away.
+Development Environment
+-----------------------
+1. This repository contains some Eclipse specific configuration. If you are comfortable using Eclipse then setting up your development environment will be relatively easier.
+   You may use another IDE if you wish to.
+    * Download and unpack Eclipse Indigo 3.7 or Eclipse Juno 4.2 from http://www.eclipse.org/downloads/.
+    * Install Apache Tomcat 7 and integrate with Eclipse (you may follow http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html).
+    * Fork and clone the master branch into a local directory preferrably housed in your eclipse workspace.
+    * The project dependencies are configured using Maven. Install Eclipse plugin m2eclipse for easier integration of Maven with your development environment. Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
+    * Import 'Existing project' into Eclipse. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
+2. You will also need to setup a MySQL database and specify this configuration in the following files:
+    * V2V/src/database.properties
+    * V2V/war/WEB-INF/classes/META-INF/persistence.xml
+    * V2V/war/v2v.properties (Should contain the path of your MySQL binaries and database connection information, used to create backup programmatically from inside the webapp)
