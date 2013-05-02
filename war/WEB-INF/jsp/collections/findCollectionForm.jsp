@@ -177,7 +177,7 @@ $(document).ready(function() {
 			</p>
 		</div>
 		<form:form method="GET" commandName="findCollectedSampleForm" id="${findCollectionFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 	
 			<div>
 				<form:label path="collectionNumber">Collection number</form:label>
@@ -233,7 +233,7 @@ $(document).ready(function() {
 			<br />
 		</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findCollectionButton">

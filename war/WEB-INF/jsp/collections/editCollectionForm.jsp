@@ -168,7 +168,7 @@
 		</c:if>
 	
 		<form:form method="POST" commandName="editCollectionForm"
-			class="formInTabPane" id="${editCollectionFormId}">
+			class="formFormatClass" id="${editCollectionFormId}">
 			<form:hidden path="id" />
 			<c:if test="${collectionFields.collectionNumber.hidden != true }">
 					<div class="barcodeContainer"></div>

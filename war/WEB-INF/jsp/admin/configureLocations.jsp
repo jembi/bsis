@@ -89,7 +89,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}" class="formFormatClass">
 		<b>Configure Locations</b>
 		<br />
 		<br />

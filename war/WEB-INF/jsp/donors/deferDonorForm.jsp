@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 <div id="${tabContentId}">
 
-	<form class="formInTabPane deferDonorForm">
+	<form class="formFormatClass deferDonorForm">
 
 		<input name="donorId" type="hidden" value="${donorId}"/>
 		<div>

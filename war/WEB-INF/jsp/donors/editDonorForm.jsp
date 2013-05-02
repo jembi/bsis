@@ -127,7 +127,7 @@
 				</jsp:include>
 		</c:if>
 
-		<form:form id="${editDonorFormId}" method="POST" class="formInTabPane"
+		<form:form id="${editDonorFormId}" method="POST" class="formFormatClass"
 			commandName="editDonorForm">
 			<form:hidden path="id" />
 			<div>

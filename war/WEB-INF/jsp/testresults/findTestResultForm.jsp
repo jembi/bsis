@@ -71,7 +71,7 @@ $(document).ready(function() {
 			</p>
 		</div>
 		<form:form method="GET" commandName="findTestResultForm" id="${findTestResultFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 	
 			<div class="collectionNumberInput">
 				<form:label path="collectionNumber">${collectedSampleFields.collectionNumber.displayName}</form:label>
@@ -82,7 +82,7 @@ $(document).ready(function() {
 			</div>
 		</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findTestResultButton">

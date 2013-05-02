@@ -51,7 +51,7 @@
 </script>
 
 <div id="${tabContentId}">
-	<form:form method="POST" class="formInTabPane" id="${editUserFormId}"
+	<form:form method="POST" class="formFormatClass" id="${editUserFormId}"
 		commandName="editUserForm">
 		<form:hidden path="id" />
 		<div>

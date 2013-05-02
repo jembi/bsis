@@ -88,7 +88,7 @@
 
 
 	<div id="${mainContentId}">
-		<form:form id="${addUsageFormId}" class="formInTabPane"
+		<form:form id="${addUsageFormId}" class="formFormatClass"
 			commandName="addUsageForm">
 			<form:hidden path="id" />
 			<c:if test="${usageFields.collectionNumber.hidden != true }">

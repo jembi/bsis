@@ -64,7 +64,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 	<div id="${mainContentId}">
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<b>Enter blood typing results</b>
 			<div class="tipsBox ui-state-highlight">
 				<p>

@@ -139,7 +139,7 @@ $(document).ready(function() {
 			</p>
 		</div>
 		<form:form method="GET" commandName="findCollectionBatchForm" id="${findCollectionBatchFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 	
 			<div>
 				<form:label path="batchNumber">Batch number</form:label>
@@ -173,7 +173,7 @@ $(document).ready(function() {
 
 		</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findCollectionBatchButton">

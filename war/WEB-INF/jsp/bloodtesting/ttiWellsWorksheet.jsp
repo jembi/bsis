@@ -314,7 +314,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}" class="formFormatClass">
 
 		<br />
 		<br />
@@ -392,7 +392,7 @@ $(document).ready(function() {
 			</div>
 
 			<div style="position: relative; ">
-				<div class="wellDetails formInTabPane"
+				<div class="wellDetails formFormatClass"
 						 style="margin-top: 15px; width: 93%; display: none;
 						 			  position: relative;">
 					<div>

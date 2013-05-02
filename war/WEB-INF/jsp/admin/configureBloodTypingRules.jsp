@@ -283,7 +283,7 @@ $(document).ready(function() {
 	</div>
 
 	<div id="${newBloodTypingRuleDialogId}" style="display: none;">
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<div>
 				<label>This is a test for</label>
 				<select id="${subCategorySelectorId}"

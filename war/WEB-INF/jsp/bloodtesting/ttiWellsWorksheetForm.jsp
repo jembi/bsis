@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 	<div id="${mainContentId}">
 
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<div>
 				<label style="width: auto;">
 					<b>Enter TTI Results on plate</b>
@@ -84,7 +84,7 @@ $(document).ready(function() {
 			</div>
 		</form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label>&nbsp;</label>
 				<button class="generateTtiPlateButton">

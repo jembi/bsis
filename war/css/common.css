@@ -403,19 +403,19 @@ tr > td
 	resize: none;
 }
 
-.formInTabPane {
+.formFormatClass {
 	margin-top: 15px;
 	margin-bottom: 15px;
 	margin-left: 10px;
 	margin-right: 15px;
 }
 
-.formInTabPane > div {
+.formFormatClass > div {
 	position: relative;
 	margin-top: 6px;
 }
 
-.formInTabPane > div > label {
+.formFormatClass > div > label {
 	width: 150px;
 	display: inline-block;
 	padding-top: 0;
@@ -423,37 +423,37 @@ tr > td
 	margin-right: 10px;
 }
 
-.formInTabPane > div > .labelForTextArea {
+.formFormatClass > div > .labelForTextArea {
 	position: relative;
 	bottom: 40px;
 }
 
-.formInTabPane > div > input {
+.formFormatClass > div > input {
 	width: 220px;
 	display: inline-block;
 }
 
-.formInTabPane > div > button {
+.formFormatClass > div > button {
 	width: auto;
 	margin-left: 10px;
 	display: inline-block;
 }
 
-.formInTabPane > div > .ui-multiselect {
+.formFormatClass > div > .ui-multiselect {
 	width: 220px;
 	margin-left: 10px;
 	display: inline-block;
 	font-size: 0.9em;
 }
 
-.formInTabPane > div > textarea {
+.formFormatClass > div > textarea {
 	width: 240px;
 	display: inline-block;
 	height: 65px;
 	resize: none;
 }
 
-.formInTabPane > div > .checkBoxInForm {
+.formFormatClass > div > .checkBoxInForm {
 	width: 20px;
 	display: inline-block;
 }

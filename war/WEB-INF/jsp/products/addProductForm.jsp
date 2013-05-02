@@ -120,7 +120,7 @@
 	</c:if>
 
 	<form:form method="POST" commandName="addProductForm"
-		class="formInTabPane" id="${addProductFormId}">
+		class="formFormatClass" id="${addProductFormId}">
 		<c:if test="${productFields.collectionNumber.hidden != true }">
 			<div>
 				<form:label path="collectionNumber">${productFields.collectionNumber.displayName}</form:label>

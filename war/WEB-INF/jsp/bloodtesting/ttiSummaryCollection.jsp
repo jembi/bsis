@@ -165,10 +165,10 @@ $(document).ready(function() {
 		<c:set var="recentTestResults" value="${ttiOutputForCollection.recentTestResults}" />
 		<c:set var="pendingTests" value="${ttiOutputForCollection.pendingTTITestsIds}" />
 
-		<div class="ttiForCollectionSection formInTabPane" style="margin: 0;">
+		<div class="ttiForCollectionSection formFormatClass" style="margin: 0;">
 
 			<div class="testsPerformed">
-				<div class="formInTabPane" style="margin-left: 0px;">
+				<div class="formFormatClass" style="margin-left: 0px;">
 
 					<div style="position: relative; height: 30px;">
 						<label style="width: auto; position: absolute;">
@@ -233,7 +233,7 @@ $(document).ready(function() {
 			</div>
 
 			<div class="moreTestsSection">
-				<div class="formInTabPane" style="margin-left: 0px;">
+				<div class="formFormatClass" style="margin-left: 0px;">
 					<c:if test="${fn:length(pendingTests) gt 0}">
 						<div>
 							<label>
@@ -253,7 +253,7 @@ $(document).ready(function() {
 					</c:if>
 				</div>
 
-				<div class="showHideTestsSection formInTabPane" style="margin-left: 0px;">
+				<div class="showHideTestsSection formFormatClass" style="margin-left: 0px;">
 					<div>
 						<label>
 							<b>Other tests</b>

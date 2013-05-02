@@ -83,7 +83,7 @@ $(document).ready(function() {
 	</c:if>
 
 	<div id="${mainContentId}">
-		<form class="addTTIFrom formInTabPane">
+		<form class="addTTIFrom formFormatClass">
 			<div>
 				<label>${ttiFormFields.collectionNumber.displayName}</label>
 				<input type="text" name="collectionNumber" placeholder="Collection Number" value="${firstTimeRender ? '' : collectionNumber}"/>

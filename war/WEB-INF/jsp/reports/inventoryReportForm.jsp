@@ -39,8 +39,6 @@
       	  							}
       	});
 
-        getProductStatusSelector().multiselect("checkAll");
-
         getCollectionCenterSelector().multiselect({
       	  position : {
       	    my : 'left top',
@@ -114,12 +112,12 @@
 			</p>
 		</div>
 		<div style="margin-top: 10px;">
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<div>
 					<label>Product Status</label>
 					<select class="productStatusSelector">
 						<option value="QUARANTINED">Quarantined</option>
-						<option value="AVAILABLE">Available</option>
+						<option value="AVAILABLE" selected="selected">Available</option>
 					</select>
 			</div>
 			<div>

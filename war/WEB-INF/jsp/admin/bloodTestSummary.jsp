@@ -137,7 +137,7 @@ $(document).ready(function() {
 			</div>
 	
 			<div class="bloodTestDetails">
-				<div class="formInTabPane">
+				<div class="formFormatClass">
 
 					<div>
 						<label>Test name</label>

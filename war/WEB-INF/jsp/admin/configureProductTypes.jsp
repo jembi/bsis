@@ -244,7 +244,7 @@ $(document).ready(function() {
 	</div>
 
 	<div id="${newProductTypeDialogId}" style="display: none;">
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<input type="hidden" name="productTypeId" value="" />
 			<div>
 				<label>Product type name</label>

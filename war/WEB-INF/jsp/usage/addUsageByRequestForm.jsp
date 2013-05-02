@@ -61,7 +61,7 @@ $(document).ready(function() {
 
 	<div id="${mainContentId}">
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label>Request number</label>
 				<input name="requestNumber" />

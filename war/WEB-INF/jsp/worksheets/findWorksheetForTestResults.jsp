@@ -60,7 +60,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}" class="formFormatClass">
 
 		<div class="tipsBox ui-state-highlight">
 			<p>
@@ -70,7 +70,7 @@ $(document).ready(function() {
 
 		<div class="formDiv">
 			<b>Update worksheet with test results</b>
-			<form class="findWorksheetForm formInTabPane">
+			<form class="findWorksheetForm formFormatClass">
 				<div>
 					<label>Worksheet Number</label>
 					<input name="worksheetNumber" />

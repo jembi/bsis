@@ -215,7 +215,7 @@ $(document).ready(function() {
 	</div>
 
 	<div id="${newBloodTestDialogId}" style="display: none;">
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<div>
 				<label>Blood test name</label>
 				<input name="testName" />

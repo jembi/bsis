@@ -115,7 +115,7 @@
 <div id="${editTestResultFormDivId}">
 
 	<form:form method="POST" commandName="editTestResultForm"
-		class="formInTabPane" id="${editTestResultFormId}">
+		class="formFormatClass" id="${editTestResultFormId}">
 		<form:hidden path="id" />
 		<c:if test="${model.testResultFields.collectionNumber.hidden != true }">
 			<div>

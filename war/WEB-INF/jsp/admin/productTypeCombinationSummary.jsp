@@ -138,7 +138,7 @@ $(document).ready(function() {
 			</div>
 	
 			<div class="productTypeCombinationDetails">
-				<div class="formInTabPane">
+				<div class="formFormatClass">
 
 					<div>
 						<label>Combination name</label>

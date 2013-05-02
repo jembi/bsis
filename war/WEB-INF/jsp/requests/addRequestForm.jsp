@@ -198,7 +198,7 @@ $(document).ready(
 		</c:if>
 
 		<form:form method="POST" commandName="addRequestForm"
-			class="formInTabPane" id="${addRequestFormId}">
+			class="formFormatClass" id="${addRequestFormId}">
 			<c:if test="${!requestFields.requestNumber.autoGenerate}">		
 				<c:if test="${requestFields.requestNumber.hidden != true }">
 					<div>

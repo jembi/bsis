@@ -51,7 +51,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane printableArea">
+	<div id="${mainContentId}" class="formFormatClass printableArea">
 		<br />
 		<div class="worksheetBarcode"></div>
 

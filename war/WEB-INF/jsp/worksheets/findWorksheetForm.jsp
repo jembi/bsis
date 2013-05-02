@@ -101,7 +101,7 @@ $(document).ready(function() {
 	<div id="${mainContentId}">
 
 		<form:form method="GET" commandName="findWorksheetForm" id="${findWorksheetFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 			<form:hidden path="worksheetResultClickUrl" value="${worksheetResultClickUrl}" />
 			<div>
 				<label style="width: auto;"><b>Find collections worksheet</b></label>
@@ -125,7 +125,7 @@ $(document).ready(function() {
 
 			</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findWorksheetButton">

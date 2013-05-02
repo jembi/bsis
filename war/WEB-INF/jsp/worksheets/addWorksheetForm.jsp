@@ -104,7 +104,7 @@
 		</c:if>
 	
 		<form:form method="POST" commandName="addWorksheetForm"
-			class="formInTabPane" id="${addWorksheetFormId}">
+			class="formFormatClass" id="${addWorksheetFormId}">
 			<c:if test="${!worksheetFields.worksheetNumber.autoGenerate}">
 				<c:if test="${worksheetFields.worksheetNumber.hidden != true }">
 					<div class="barcodeContainer"></div>

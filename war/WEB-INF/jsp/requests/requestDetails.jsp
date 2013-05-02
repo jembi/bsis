@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div class="printableArea">
-	<div class="formInTabPane">
+	<div class="formFormatClass">
 		<div class="requestBarcode"></div>	
 		<c:if test="${requestFields.requestDate.hidden != true }">
 			<div>
@@ -62,7 +62,7 @@
 			</div>
 		</c:if>
 	</div>
-	<div class="formInTabPane showMoreSection">
+	<div class="formFormatClass showMoreSection">
 		<c:if test="${requestFields.patientNumber.hidden != true }">
 			<div>
 				<label>${requestFields.patientNumber.displayName}</label>

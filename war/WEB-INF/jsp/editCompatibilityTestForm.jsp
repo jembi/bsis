@@ -125,7 +125,7 @@
 			</p>
 		</div>
 		<form:form method="POST" commandName="editCompatibilityTestForm"
-			class="formInTabPane" id="${editCompatibilityTestFormId}">
+			class="formFormatClass" id="${editCompatibilityTestFormId}">
 			<div>
 				<label style="width: auto;"><b>Crossmatch Testing for Request Number
 				${model.editCompatibilityTestForm.compatibilityTest.forRequest.requestNumber}</b></label>

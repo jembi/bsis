@@ -89,7 +89,7 @@ $(document).ready(function() {
 			</div>
 	
 			<div class="ruleDetails">
-				<div class="formInTabPane">
+				<div class="formFormatClass">
 
 					<div>
 						<label>Rule no.</label>

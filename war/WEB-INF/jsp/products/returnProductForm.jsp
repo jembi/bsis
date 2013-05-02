@@ -30,7 +30,7 @@ $(document).ready(function() {
 <div id="${tabContentId}">
 	<div id="${mainContentId}">
 
-		<form class="formInTabPane returnProductForm">
+		<form class="formFormatClass returnProductForm">
 
 			<input name="productId" type="hidden" value="${productId}"/>
 	

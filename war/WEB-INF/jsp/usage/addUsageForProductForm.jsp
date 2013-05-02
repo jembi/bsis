@@ -69,7 +69,7 @@
 
 
 	<div id="${mainContentId}">
-		<form:form id="${addUsageForProductFormId}" class="addUsageForProductForm formInTabPane"
+		<form:form id="${addUsageForProductFormId}" class="addUsageForProductForm formFormatClass"
 			commandName="addUsageForProductForm">
 			<form:hidden path="id" />
 			<form:hidden path="productId" value="${addUsageForProductForm.product.id}" />

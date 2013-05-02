@@ -43,7 +43,7 @@
       });
 </script>
 
-<div id="${selectFormToConfigureDivId}" class="formInTabPane">
+<div id="${selectFormToConfigureDivId}" class="formFormatClass">
 
 	<div class="tipsBox ui-state-highlight">
 		<p>

@@ -137,7 +137,7 @@ $(document).ready(function() {
 			</div>
 	
 			<div class="productTypeDetails">
-				<div class="formInTabPane">
+				<div class="formFormatClass">
 
 					<div>
 						<label>Product type name</label>

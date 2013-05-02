@@ -82,7 +82,7 @@ $(document).ready(function(){
 
 	<div id="${mainContentId}">
 
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 
 			<div>
 				<label>

@@ -240,7 +240,7 @@ $(document).ready(function() {
 	</div>
 
 	<div id="${newProductTypeCombinationDialogId}" style="display: none;">
-		<form class="formInTabPane">
+		<form class="formFormatClass">
 			<div>
 				<label>Combination name</label>
 				<input name="combinationName" placeholder="Optional" />

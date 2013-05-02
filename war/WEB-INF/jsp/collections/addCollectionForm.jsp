@@ -203,7 +203,7 @@
 		</c:if>
 	
 		<form:form method="POST" commandName="addCollectionForm"
-			class="formInTabPane" id="${addCollectionFormId}">
+			class="formFormatClass" id="${addCollectionFormId}">
 			<c:if test="${!collectionFields.collectionNumber.autoGenerate}">
 				<c:if test="${collectionFields.collectionNumber.hidden != true }">
 					<div class="barcodeContainer"></div>

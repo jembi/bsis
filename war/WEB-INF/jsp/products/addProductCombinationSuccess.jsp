@@ -69,7 +69,7 @@ $(document).ready(function() {
 				</button>
 			</div>
 
-			<div class="formInTabPane">
+			<div class="formFormatClass">
 
 				<div>
 					<label><b>${productFields.collectionNumber.displayName}</b></label>

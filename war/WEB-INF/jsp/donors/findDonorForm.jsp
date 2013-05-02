@@ -103,7 +103,7 @@ $(document).ready(function() {
 			</p>
 		</div>
 		<form:form method="GET" commandName="findDonorForm" id="${findDonorFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 			<form:hidden path="createDonorSummaryView" />
 			<div>
 				<form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
@@ -134,7 +134,7 @@ $(document).ready(function() {
 			</div>
 		</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findDonorButton">

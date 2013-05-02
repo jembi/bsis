@@ -71,7 +71,7 @@ $(document).ready(function() {
 	<div id="${mainContentId}">
 		<div class="formDiv">
 			<b>Configure worksheet properties</b>
-			<form class="worksheetConfig formInTabPane">
+			<form class="worksheetConfig formFormatClass">
 				<div>
 					<label>Row height</label>
 					<input name="rowHeight" type="number" value="${model.worksheetConfig.rowHeight}" min="10" max="200" />

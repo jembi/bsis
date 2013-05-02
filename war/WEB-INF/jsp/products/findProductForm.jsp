@@ -197,7 +197,7 @@ $(document).ready(function() {
 			</p>
 		</div>
 		<form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 			<div>
 				<form:label path="searchBy">Find Product by </form:label>
 				<!-- need to set id searchBy selector otherwise the
@@ -249,7 +249,7 @@ $(document).ready(function() {
 
 			</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findProductButton">

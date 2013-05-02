@@ -186,7 +186,7 @@ $(document).ready(
 		</c:if>
 
 		<form:form method="POST" commandName="editRequestForm"
-			class="formInTabPane" id="${editRequestFormId}">
+			class="formFormatClass" id="${editRequestFormId}">
 			<form:hidden path="id" />
 			<c:if test="${requestFields.requestNumber.hidden != true }">
 				<div class="barcodeContainer"></div>

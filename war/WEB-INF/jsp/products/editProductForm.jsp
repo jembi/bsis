@@ -121,7 +121,7 @@
 		</c:if>
 	
 		<form:form method="POST" commandName="editProductForm"
-			class="formInTabPane" id="${editProductFormId}">
+			class="formFormatClass" id="${editProductFormId}">
 			<form:hidden path="id" />
 			<c:if test="${productFields.collectionNumber.hidden != true }">
 				<div>

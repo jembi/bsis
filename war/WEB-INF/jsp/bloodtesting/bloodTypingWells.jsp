@@ -120,7 +120,7 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}" class="formInTabPane">
+	<div id="${mainContentId}" class="formFormatClass">
 
 		<c:if test="${!empty success && !success}">
 			<jsp:include page="../common/errorBox.jsp">

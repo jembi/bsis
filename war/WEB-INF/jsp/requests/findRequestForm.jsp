@@ -144,7 +144,7 @@ $(document).ready(function() {
 			</p>
 		</div>
 		<form:form method="GET" commandName="findRequestForm" id="${findRequestFormId}"
-			class="formInTabPane">
+			class="formFormatClass">
 
 			<div>
 				<form:label path="requestNumber">Request number</form:label>
@@ -188,7 +188,7 @@ $(document).ready(function() {
 
 		</form:form>
 
-		<div class="formInTabPane">
+		<div class="formFormatClass">
 			<div>
 				<label></label>
 				<button type="button" class="findRequestButton">

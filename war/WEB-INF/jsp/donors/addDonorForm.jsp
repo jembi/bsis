@@ -121,7 +121,7 @@
 				</jsp:include>
 		</c:if>
 
-		<form:form id="${addDonorFormId}" method="POST" class="formInTabPane"
+		<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
 			commandName="addDonorForm">
 			<c:if test="${!donorFields.donorNumber.autoGenerate}">
 				<c:if test="${donorFields.donorNumber.hidden != true }">
