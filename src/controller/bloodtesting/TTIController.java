@@ -15,6 +15,9 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.collectedsample.CollectedSample;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +33,6 @@ import repository.bloodtesting.BloodTestingRepository;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import controller.UtilController;
 
 @Controller

@@ -24,6 +24,9 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,10 +45,6 @@ import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import viewmodel.ProductViewModel;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ProductController {
@@ -390,10 +389,6 @@ public class ProductController {
 
     List<Product> savedProducts = null;
     if (result.hasErrors()) {
-      for (ObjectError error : result.getAllErrors()) {
-        System.out.println(error.getObjectName());
-        System.out.println(error.getDefaultMessage());
-      }
       mv.addObject("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;

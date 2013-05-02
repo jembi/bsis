@@ -38,6 +38,9 @@ import model.util.BloodAbo;
 import model.util.BloodGroup;
 import model.util.BloodRh;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +51,6 @@ import org.springframework.util.CollectionUtils;
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import filter.UserInfoAddToThreadFilter;
 
