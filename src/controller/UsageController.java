@@ -35,24 +35,24 @@ import viewmodel.RequestViewModel;
 @Controller
 public class UsageController {
 
-	@Autowired
-	private UsageRepository usageRepository;
+  @Autowired
+  private UsageRepository usageRepository;
 
-	@Autowired
-	private ProductTypeRepository productTypeRepository;
+  @Autowired
+  private ProductTypeRepository productTypeRepository;
 
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Autowired
-	private RequestRepository requestRepository;
+  @Autowired
+  private ProductRepository productRepository;
+  
+  @Autowired
+  private RequestRepository requestRepository;
 
-	@Autowired
-	private UtilController utilController;
+  @Autowired
+  private UtilController utilController;
 
-	public UsageController() {
-	}
-	
+  public UsageController() {
+  }
+  
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new UsageBackingFormValidator(binder.getValidator(), utilController));

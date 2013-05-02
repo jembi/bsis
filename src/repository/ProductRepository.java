@@ -249,7 +249,7 @@ public class ProductRepository {
 
     String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND " +
                       "p.status IN :status AND " +
-    		              "p.isDeleted=:isDeleted";
+                      "p.isDeleted=:isDeleted";
 
     TypedQuery<Product> query;
     if (pagingParams.containsKey("sortColumn")) {
@@ -650,8 +650,8 @@ public class ProductRepository {
 
   public void updateExpiryStatus() {
     String updateExpiryQuery = "UPDATE Product p SET p.status=:status WHERE " +
-    		                       "p.status=:availableStatus AND " +
-    		                       "p.expiresOn < :today";
+                               "p.status=:availableStatus AND " +
+                               "p.expiresOn < :today";
     Query query = em.createQuery(updateExpiryQuery);
     query.setParameter("status", ProductStatus.EXPIRED);
     query.setParameter("availableStatus", ProductStatus.AVAILABLE);
@@ -879,8 +879,8 @@ public class ProductRepository {
 
   public Product findProduct(String collectionNumber, String productTypeId) {
     String queryStr = "SELECT p from Product p WHERE " +
-    		              "p.collectedSample.collectionNumber = :collectionNumber AND " +
-    		              "p.productType.id = :productTypeId";
+                      "p.collectedSample.collectionNumber = :collectionNumber AND " +
+                      "p.productType.id = :productTypeId";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("collectionNumber", collectionNumber);
     query.setParameter("productTypeId", Integer.parseInt(productTypeId));
@@ -915,7 +915,7 @@ public class ProductRepository {
 
   public List<ProductStatusChange> getProductStatusChanges(Product product) {
     String queryStr = "SELECT p FROM ProductStatusChange p WHERE " +
-    		"p.product.id=:productId";
+        "p.product.id=:productId";
     TypedQuery<ProductStatusChange> query = em.createQuery(queryStr, ProductStatusChange.class);
     query.setParameter("productId", product.getId());
     List<ProductStatusChange> statusChanges = query.getResultList();
@@ -924,7 +924,7 @@ public class ProductRepository {
 
   public List<Product> findProductsByCollectionNumber(String collectionNumber) {
     String queryStr = "SELECT p from Product p WHERE " +
-    		"p.collectedSample.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
+        "p.collectedSample.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("collectionNumber", collectionNumber);
     query.setParameter("isDeleted", false);

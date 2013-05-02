@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -18,36 +18,36 @@
 <script>
 $(document).ready(function() {
   $("#${mainContentId}").find(".ttiTestSelector")
-												.multiselect({
-												   multiple : false,
-												   selectedList : 1,
-												   header : false
-												 });
+                        .multiselect({
+                           multiple : false,
+                           selectedList : 1,
+                           header : false
+                         });
 
   $("#${mainContentId}").find(".generateTtiPlateButton")
-  											.button()
-  											.click(generateTtiPlate);
+                        .button()
+                        .click(generateTtiPlate);
 
   $("#${mainContentId}").find(".clearFormButton")
-  											.button()
-  											.click(function() {
-  											  			refetchForm();
-  											  			emptyChildContent();
-  											  		 });
+                        .button()
+                        .click(function() {
+                                refetchForm();
+                                emptyChildContent();
+                               });
 
   function generateTtiPlate() {
     var ttiTestId = $("#${mainContentId}").find('select[name="ttiTestId"]')
-     																 		  .val();
+                                            .val();
     console.log(ttiTestId);
     $.ajax({
       url: "ttiWellsWorksheetGenerator.html",
       data: {ttiTestId : ttiTestId},
       success: function (response) {
-        				 $("#${childContentId}").html(response);
-      				 },
+                 $("#${childContentId}").html(response);
+               },
       error: function(response) {
-        			 showErrorMessage("Something went wrong. Please try again.");
-      			 }
+               showErrorMessage("Something went wrong. Please try again.");
+             }
     });
   }
 
@@ -63,42 +63,42 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}">
+  <div id="${mainContentId}">
 
-		<form class="formFormatClass">
-			<div>
-				<label style="width: auto;">
-					<b>Enter TTI Results on plate</b>
-				</label>
-			</div>
-			<div>
-				<label style="width: auto;">Select TTI Result to record on the plate</label>
-				<select id="${ttiTestSelectorId}" class="ttiTestSelector" name="ttiTestId">
-					<option value="-1"></option>
-					<c:forEach var="ttiTest" items="${ttiTests}">
-						<option value="${ttiTest.id}">
-							${ttiTest.testName}
-						</option>
-					</c:forEach>
-				</select>
-			</div>
-		</form>
+    <form class="formFormatClass">
+      <div>
+        <label style="width: auto;">
+          <b>Enter TTI Results on plate</b>
+        </label>
+      </div>
+      <div>
+        <label style="width: auto;">Select TTI Result to record on the plate</label>
+        <select id="${ttiTestSelectorId}" class="ttiTestSelector" name="ttiTestId">
+          <option value="-1"></option>
+          <c:forEach var="ttiTest" items="${ttiTests}">
+            <option value="${ttiTest.id}">
+              ${ttiTest.testName}
+            </option>
+          </c:forEach>
+        </select>
+      </div>
+    </form>
 
-		<div class="formFormatClass">
-			<div>
-				<label>&nbsp;</label>
-				<button class="generateTtiPlateButton">
-					Generate TTI Plate for test
-				</button>
-				<button class="clearFormButton">
-					Clear form
-				</button>
-			</div>
-		</div>
+    <div class="formFormatClass">
+      <div>
+        <label>&nbsp;</label>
+        <button class="generateTtiPlateButton">
+          Generate TTI Plate for test
+        </button>
+        <button class="clearFormButton">
+          Clear form
+        </button>
+      </div>
+    </div>
 
-	</div>
+  </div>
 
-	<div id="${childContentId}">
-	</div>
+  <div id="${childContentId}">
+  </div>
 
 </div>

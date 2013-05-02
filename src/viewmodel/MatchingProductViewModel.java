@@ -16,12 +16,12 @@ import org.joda.time.Days;
 
 public class MatchingProductViewModel {
 
-	private Product product;
-	private CompatibilityTest compatibilityTest;
+  private Product product;
+  private CompatibilityTest compatibilityTest;
 
-	public MatchingProductViewModel(Product product) {
-	  this.product = product;
-	}
+  public MatchingProductViewModel(Product product) {
+    this.product = product;
+  }
 
   public MatchingProductViewModel(Product product,
       CompatibilityTest crossmatchTest) {

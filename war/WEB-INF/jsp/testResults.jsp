@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -12,32 +12,32 @@
 <script type="text/javascript" src="js/testResults.js"></script>
 
 <div id="testResultsTab" class="leftPanel tabs">
-	<ul>
-		<li id="findOrAddTestResultsContent">
-			<a href="findTestResultFormGenerator.html">Find Test Results</a>
-		</li>
+  <ul>
+    <li id="findOrAddTestResultsContent">
+      <a href="findTestResultFormGenerator.html">Find Test Results</a>
+    </li>
 
-		<c:if test="${model.labsetup['bloodTypingElisa'] == 'true' }">
-			<li id="bloodTypingTestResults">
-				<a href="bloodTypingWorksheetGenerator.html">Blood Typing (ELISA)</a>
-			</li>
-		</c:if>
-		<c:if test="${model.labsetup['ttiElisa'] == 'true' }">
-			<li id="ttiTestResultsWells">
-				<a href="ttiWellsWorksheetFormGenerator.html">TTI results (ELISA)</a>
-			</li>
-		</c:if>
+    <c:if test="${model.labsetup['bloodTypingElisa'] == 'true' }">
+      <li id="bloodTypingTestResults">
+        <a href="bloodTypingWorksheetGenerator.html">Blood Typing (ELISA)</a>
+      </li>
+    </c:if>
+    <c:if test="${model.labsetup['ttiElisa'] == 'true' }">
+      <li id="ttiTestResultsWells">
+        <a href="ttiWellsWorksheetFormGenerator.html">TTI results (ELISA)</a>
+      </li>
+    </c:if>
 
-		<!-- li id="ttiResults">
-			<a href="ttiFormGenerator.html">TTI Results</a>
-		</li-->
+    <!-- li id="ttiResults">
+      <a href="ttiFormGenerator.html">TTI Results</a>
+    </li-->
 
-		<c:if test="${model.labsetup['useWorksheets'] == 'true' }">
-			<li id="addTestResultsForWorksheet">
-				<a href="worksheetForTestResultsFormGenerator.html">Worksheets</a>
-			</li>
-		</c:if>
+    <c:if test="${model.labsetup['useWorksheets'] == 'true' }">
+      <li id="addTestResultsForWorksheet">
+        <a href="worksheetForTestResultsFormGenerator.html">Worksheets</a>
+      </li>
+    </c:if>
 
-	</ul>
+  </ul>
 
 </div>

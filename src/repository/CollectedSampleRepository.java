@@ -123,7 +123,7 @@ public class CollectedSampleRepository {
     String queryStr = "";
     if (StringUtils.isNotBlank(collectionNumber)) {
       queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
-      		       "c.collectionNumber = :collectionNumber AND " +
+                 "c.collectionNumber = :collectionNumber AND " +
                  "c.bloodBagType.id IN :bloodBagTypeIds AND " +
                  "c.collectionCenter.id IN :centerIds AND " +
                  "c.collectionSite.id IN :siteIds AND " +
@@ -537,15 +537,15 @@ public class CollectedSampleRepository {
 //    List<BloodTest> allBloodTests = bloodTestRepository.getAllBloodTests();
 //    boolean tested = true;
 //    for (BloodTest bt: allBloodTests) {
-//    	TestResult t = testResults.get(bt.getName());
-//    	if (t == null) {
-//    		tested = false;
-//    		break;
-//    	}
-//    	if (!bt.getAllowedResults().contains(t.getResult())) {
-//    		tested = false;
-//    		break;
-//    	}
+//      TestResult t = testResults.get(bt.getName());
+//      if (t == null) {
+//        tested = false;
+//        break;
+//      }
+//      if (!bt.getAllowedResults().contains(t.getResult())) {
+//        tested = false;
+//        break;
+//      }
 //    }
 //    if (tested)
 //      collectedSample.setTestedStatus(TestedStatus.TESTED);

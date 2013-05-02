@@ -137,8 +137,8 @@ public class BloodTestingRuleEngine {
       if (patternMatch) {
         System.out.println("Pattern matched for rule.");
 //        System.out.println("test ids: " + rule.getBloodTypingTestIds() + ", " +
-//        		               "pattern: " + rule.getPattern() + ", " +
-//        		               "input pattern: " + inputPattern);
+//                           "pattern: " + rule.getPattern() + ", " +
+//                           "input pattern: " + inputPattern);
 //        System.out.println("extra tests to be done: " + rule.getExtraTestsIds());
 //        System.out.println("Changes to result: " +
 //                            rule.getPart() + ", " + rule.getNewInformation() + ", " +

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -12,24 +12,24 @@
 <script type="text/javascript" src="js/collections.js"></script>
 
 <div id="collectionsTab" class="leftPanel tabs">
-	<ul>
-		<li id="findOrAddCollectionsContent">
-			<a href="findCollectionFormGenerator.html">Find Collections</a>
-		</li>
-		<li id="addCollectionsContent">
-			<a href="addCollectionFormGenerator.html">Add Collection</a>
-		</li>
-		<li id="findCollectionBatchContent">
-			<a href="findCollectionBatchFormGenerator.html">Find Collection Batch</a>
-		</li>
-		<li id="createCollectionBatch">
-			<a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
-		</li>
-		<li id="addWorksheet">
-			<a href="addWorksheetFormGenerator.html">Add worksheet</a>
-		</li>
-		<li id="findCollectionsWorksheet">
-			<a href="findWorksheetFormGenerator.html">Find/Print worksheet</a>
-		</li>
-	</ul>
+  <ul>
+    <li id="findOrAddCollectionsContent">
+      <a href="findCollectionFormGenerator.html">Find Collections</a>
+    </li>
+    <li id="addCollectionsContent">
+      <a href="addCollectionFormGenerator.html">Add Collection</a>
+    </li>
+    <li id="findCollectionBatchContent">
+      <a href="findCollectionBatchFormGenerator.html">Find Collection Batch</a>
+    </li>
+    <li id="createCollectionBatch">
+      <a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
+    </li>
+    <li id="addWorksheet">
+      <a href="addWorksheetFormGenerator.html">Add worksheet</a>
+    </li>
+    <li id="findCollectionsWorksheet">
+      <a href="findWorksheetFormGenerator.html">Find/Print worksheet</a>
+    </li>
+  </ul>
 </div>

@@ -65,7 +65,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       newBloodRh = "";
 
     String queryStr = "SELECT c FROM CollectedSample c WHERE " +
-    		"c.donor.id=:donorId AND c.isDeleted=:isDeleted";
+        "c.donor.id=:donorId AND c.isDeleted=:isDeleted";
     TypedQuery<CollectedSample> query = em.createQuery(queryStr, CollectedSample.class);
 
     query.setParameter("donorId", donor.getId());
@@ -125,7 +125,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
   private void updateProductStatus(CollectedSample collectedSample) {
     String queryStr = "SELECT p FROM Product p WHERE " +
-    		"p.collectedSample.id=:collectedSampleId AND p.isDeleted=:isDeleted";
+        "p.collectedSample.id=:collectedSampleId AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("collectedSampleId", collectedSample.getId());
     query.setParameter("isDeleted", false);

@@ -21,7 +21,7 @@ public class DonationTypeRepository {
   public DonationType getDonationType(String checkDonationType) {
     TypedQuery<DonationType> query;
     query = em.createQuery("SELECT dt from DonationType dt where " +
-    		                   "dt.donorType=:donorType and dt.isDeleted=:isDeleted", DonationType.class);
+                           "dt.donorType=:donorType and dt.isDeleted=:isDeleted", DonationType.class);
     query.setParameter("donorType", checkDonationType);
     query.setParameter("isDeleted", false);
     return query.getSingleResult();

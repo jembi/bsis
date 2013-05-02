@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -26,18 +26,18 @@
         $("#${tabContentId}").find(".editButton").button(
             {
               icons : {
-          			primary : 'ui-icon-pencil'
-        			}
+                primary : 'ui-icon-pencil'
+              }
             }).click(function() {
 
             hideMainContent();
             $("#${tabContentId}").bind("editCollectionBatchSuccess", editCollectionBatchDone);
             $("#${tabContentId}").bind("editCollectionBatchCancel", editCollectionBatchDone);
 
-  	        fetchContent("editCollectionBatchFormGenerator.html",
-              					 {collectionBatchId: "${collectionBatch.id}"},
-              					 $("#${childContentId}")
-  	        						);
+            fetchContent("editCollectionBatchFormGenerator.html",
+                         {collectionBatchId: "${collectionBatch.id}"},
+                         $("#${childContentId}")
+                        );
         });
 
         $("#${tabContentId}").find(".printButton").button({
@@ -57,13 +57,13 @@
         });
 
         $("#${mainContentId}").find(".addCollectionBatchToWorksheetButton")
-        											.button({icons: {primary : 'ui-icon-plusthick'}})
-        											.click(addCollectionBatchToWorksheet);
+                              .button({icons: {primary : 'ui-icon-plusthick'}})
+                              .click(addCollectionBatchToWorksheet);
 
         function addCollectionBatchToWorksheet() {
           $("#${addCollectionBatchToWorksheetDialogId}").find(".findWorksheetFormSection")
-          																							.load("findWorksheetToAddCollectionBatchFormGenerator.html?"
-          																							    + $.param({collectionBatchId: "${collectionBatch.id}"}));
+                                                        .load("findWorksheetToAddCollectionBatchFormGenerator.html?"
+                                                            + $.param({collectionBatchId: "${collectionBatch.id}"}));
 
           var addToWorksheetDialog = $("#${addCollectionBatchToWorksheetDialogId}").dialog({
             modal: true,
@@ -72,8 +72,8 @@
             width: 800,
             buttons: {
               "Close" : function() {
-                					$(this).dialog("close");
-              					}
+                          $(this).dialog("close");
+                        }
             }
           });
           console.log(addToWorksheetDialog);
@@ -105,61 +105,61 @@
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
-				function emptyChildContent() {
-				  $("#${childContentId}").remove();
-				}
+        function emptyChildContent() {
+          $("#${childContentId}").remove();
+        }
 
-				function hideMainContent() {
-				  $("#${mainContentId}").remove();
-				}
+        function hideMainContent() {
+          $("#${mainContentId}").remove();
+        }
       });
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}">
+  <div id="${mainContentId}">
 
-		<div class="summaryPageButtonSection" style="text-align: right;">
-			<button type="button" class="cancelButton">
-				Done
-			</button>
-			<button type="button" class="addCollectionBatchToWorksheetButton">
-				Add collections in batch to worksheet
-			</button>
-			<!-- button type="button" class="editButton">
-				Edit
-			</button-->
-			<button type="button" class="deleteButton">
-				Delete
-			</button>
-			<button type="button" class="printButton">
-				Print
-			</button>
-		</div>
+    <div class="summaryPageButtonSection" style="text-align: right;">
+      <button type="button" class="cancelButton">
+        Done
+      </button>
+      <button type="button" class="addCollectionBatchToWorksheetButton">
+        Add collections in batch to worksheet
+      </button>
+      <!-- button type="button" class="editButton">
+        Edit
+      </button-->
+      <button type="button" class="deleteButton">
+        Delete
+      </button>
+      <button type="button" class="printButton">
+        Print
+      </button>
+    </div>
 
-		<br />
-		<br />
+    <br />
+    <br />
 
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				${tips['collectionbatches.findcollectionbatch.collectionbatchsummary']}
-			</p>
-		</div>
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        ${tips['collectionbatches.findcollectionbatch.collectionbatchsummary']}
+      </p>
+    </div>
 
-		<jsp:include page="collectionBatchDetail.jsp" />
+    <jsp:include page="collectionBatchDetail.jsp" />
 
-	</div>
+  </div>
 
-	<br />
-	<br />
+  <br />
+  <br />
 
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 </div>
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
-	Are	you sure you want to delete this Collection Batch?
+  Are  you sure you want to delete this Collection Batch?
 </div>
 
 <div id="${addCollectionBatchToWorksheetDialogId}" style="display: none;">
-	Find and select the worksheet you want to add this collection batch to
-	<div class="findWorksheetFormSection"></div> 
+  Find and select the worksheet you want to add this collection batch to
+  <div class="findWorksheetFormSection"></div> 
 </div>

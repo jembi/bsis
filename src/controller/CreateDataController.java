@@ -55,8 +55,8 @@ import repository.bloodtesting.BloodTestingRepository;
 @Controller
 public class CreateDataController {
 
-	@Autowired
-	private DonorRepository donorRepository;
+  @Autowired
+  private DonorRepository donorRepository;
 
   @Autowired
   private DonationTypeRepository donorTypeRepository;
@@ -70,345 +70,345 @@ public class CreateDataController {
   @Autowired
   private RequestTypeRepository requestTypeRepository;
   
-	@Autowired
-	private LocationRepository locationRepository;
+  @Autowired
+  private LocationRepository locationRepository;
 
-	@Autowired
-	private CollectedSampleRepository collectionRepository;
+  @Autowired
+  private CollectedSampleRepository collectionRepository;
 
-	@Autowired
-	private RequestRepository requestRepository;
+  @Autowired
+  private RequestRepository requestRepository;
 
-	@Autowired
-	private BloodTestingRepository bloodTestingRepository;
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
-	@Autowired
-	private GenericConfigRepository genericConfigRepository;
+  @Autowired
+  private GenericConfigRepository genericConfigRepository;
 
-	@Autowired
-	private SequenceNumberRepository sequenceNumberRepository;
+  @Autowired
+  private SequenceNumberRepository sequenceNumberRepository;
 
-	Random random = new Random();
+  Random random = new Random();
 
-	private static final String[] cities = {"Lusaka", "Ndola", "Kitwe", "Kabwe",
-	                                        "Chingola", "Livingstone",
-	                                        "Luanshya", "Kasama", "Chipata"};
+  private static final String[] cities = {"Lusaka", "Ndola", "Kitwe", "Kabwe",
+                                          "Chingola", "Livingstone",
+                                          "Luanshya", "Kasama", "Chipata"};
 
-	@Autowired
-	private ProductRepository productRepository;
+  @Autowired
+  private ProductRepository productRepository;
 
-	private static final String[] MALE_FIRST_NAMES = new String[] { "Aaron",
-			"Abel", "Abraham", "Adam", "Adrian", "Al", "Alan", "Albert",
-			"Alberto", "Alejandro", "Alex", "Alexander", "Alfonso", "Alfred",
-			"Alfredo", "Allan", "Allen", "Alonzo", "Alton", "Alvin", "Amos",
-			"Andre", "Andres", "Andrew", "Andy", "Angel", "Angelo", "Anthony",
-			"Antonio", "Archie", "Armando", "Arnold", "Arthur", "Arturo",
-			"Aubrey", "Austin", "Barry", "Ben", "Benjamin", "Bennie", "Benny",
-			"Bernard", "Bert", "Bill", "Billy", "Blake", "Bob", "Bobby",
-			"Boyd", "Brad", "Bradford", "Bradley", "Brandon", "Brendan",
-			"Brent", "Brett", "Brian", "Bruce", "Bryan", "Bryant", "Byron",
-			"Caleb", "Calvin", "Cameron", "Carl", "Carlos", "Carlton",
-			"Carroll", "Cary", "Casey", "Cecil", "Cedric", "Cesar", "Chad",
-			"Charles", "Charlie", "Chester", "Chris", "Christian",
-			"Christopher", "Clarence", "Clark", "Claude", "Clay", "Clayton",
-			"Clifford", "Clifton", "Clint", "Clinton", "Clyde", "Cody",
-			"Colin", "Conrad", "Corey", "Cornelius", "Cory", "Courtney",
-			"Craig", "Curtis", "Dale", "Dallas", "Damon", "Dan", "Dana",
-			"Daniel", "Danny", "Darin", "Darnell", "Darrel", "Darrell",
-			"Darren", "Darrin", "Darryl", "Daryl", "Dave", "David", "Dean",
-			"Delbert", "Dennis", "Derek", "Derrick", "Devin", "Dewey",
-			"Dexter", "Domingo", "Dominic", "Dominick", "Don", "Donald",
-			"Donnie", "Doug", "Douglas", "Doyle", "Drew", "Duane", "Dustin",
-			"Dwayne", "Dwight", "Earl", "Earnest", "Ed", "Eddie", "Edgar",
-			"Edmond", "Edmund", "Eduardo", "Edward", "Edwin", "Elbert",
-			"Elias", "Elijah", "Ellis", "Elmer", "Emanuel", "Emilio", "Emmett",
-			"Enrique", "Eric", "Erick", "Erik", "Ernest", "Ernesto", "Ervin",
-			"Eugene", "Evan", "Everett", "Felipe", "Felix", "Fernando",
-			"Floyd", "Forrest", "Francis", "Francisco", "Frank", "Frankie",
-			"Franklin", "Fred", "Freddie", "Frederick", "Fredrick", "Gabriel",
-			"Garrett", "Garry", "Gary", "Gene", "Geoffrey", "George", "Gerald",
-			"Gerard", "Gerardo", "Gilbert", "Gilberto", "Glen", "Glenn",
-			"Gordon", "Grady", "Grant", "Greg", "Gregg", "Gregory",
-			"Guadalupe", "Guillermo", "Gustavo", "Guy", "Harold", "Harry",
-			"Harvey", "Hector", "Henry", "Herbert", "Herman", "Homer",
-			"Horace", "Howard", "Hubert", "Hugh", "Hugo", "Ian", "Ignacio",
-			"Ira", "Irvin", "Irving", "Isaac", "Ismael", "Israel", "Ivan",
-			"Jack", "Jackie", "Jacob", "Jaime", "Jake", "James", "Jamie",
-			"Jan", "Jared", "Jason", "Javier", "Jay", "Jean", "Jeff",
-			"Jeffery", "Jeffrey", "Jerald", "Jeremiah", "Jeremy", "Jermaine",
-			"Jerome", "Jerry", "Jesse", "Jessie", "Jesus", "Jim", "Jimmie",
-			"Jimmy", "Jody", "Joe", "Joel", "Joey", "John", "Johnathan",
-			"Johnnie", "Johnny", "Jon", "Jonathan", "Jonathon", "Jordan",
-			"Jorge", "Jose", "Joseph", "Josh", "Joshua", "Juan", "Julian",
-			"Julio", "Julius", "Justin", "Karl", "Keith", "Kelly", "Kelvin",
-			"Ken", "Kenneth", "Kenny", "Kent", "Kerry", "Kevin", "Kim", "Kirk",
-			"Kristopher", "Kurt", "Kyle", "Lamar", "Lance", "Larry",
-			"Laurence", "Lawrence", "Lee", "Leland", "Leo", "Leon", "Leonard",
-			"Leroy", "Leslie", "Lester", "Levi", "Lewis", "Lionel", "Lloyd",
-			"Lonnie", "Loren", "Lorenzo", "Louis", "Lowell", "Lucas", "Luis",
-			"Luke", "Luther", "Lyle", "Lynn", "Mack", "Malcolm", "Manuel",
-			"Marc", "Marco", "Marcos", "Marcus", "Mario", "Marion", "Mark",
-			"Marlon", "Marshall", "Martin", "Marty", "Marvin", "Mathew",
-			"Matt", "Matthew", "Maurice", "Max", "Melvin", "Merle", "Michael",
-			"Micheal", "Miguel", "Mike", "Milton", "Mitchell", "Morris",
-			"Moses", "Myron", "Nathan", "Nathaniel", "Neal", "Neil", "Nelson",
-			"Nicholas", "Nick", "Nicolas", "Noah", "Noel", "Norman", "Oliver",
-			"Omar", "Orlando", "Orville", "Oscar", "Otis", "Owen", "Pablo",
-			"Pat", "Patrick", "Paul", "Pedro", "Percy", "Perry", "Pete",
-			"Peter", "Phil", "Philip", "Phillip", "Preston", "Rafael", "Ralph",
-			"Ramiro", "Ramon", "Randal", "Randall", "Randolph", "Randy",
-			"Raul", "Ray", "Raymond", "Reginald", "Rene", "Rex", "Ricardo",
-			"Richard", "Rick", "Rickey", "Ricky", "Robert", "Roberto", "Robin",
-			"Roderick", "Rodney", "Rodolfo", "Rogelio", "Roger", "Roland",
-			"Rolando", "Roman", "Ron", "Ronald", "Ronnie", "Roosevelt", "Ross",
-			"Roy", "Ruben", "Rudolph", "Rudy", "Rufus", "Russell", "Ryan",
-			"Salvador", "Salvatore", "Sam", "Sammy", "Samuel", "Santiago",
-			"Santos", "Saul", "Scott", "Sean", "Sergio", "Seth", "Shane",
-			"Shannon", "Shaun", "Shawn", "Sheldon", "Sherman", "Sidney",
-			"Simon", "Spencer", "Stanley", "Stephen", "Steve", "Steven",
-			"Stewart", "Stuart", "Sylvester", "Taylor", "Ted", "Terence",
-			"Terrance", "Terrell", "Terrence", "Terry", "Theodore", "Thomas",
-			"Tim", "Timmy", "Timothy", "Toby", "Todd", "Tom", "Tomas",
-			"Tommie", "Tommy", "Tony", "Tracy", "Travis", "Trevor", "Troy",
-			"Tyler", "Tyrone", "Van", "Vernon", "Victor", "Vincent", "Virgil",
-			"Wade", "Wallace", "Walter", "Warren", "Wayne", "Wendell",
-			"Wesley", "Wilbert", "Wilbur", "Wilfred", "Willard", "William",
-			"Willie", "Willis", "Wilson", "Winston", "Wm", "Woodrow", "Zachary" };
+  private static final String[] MALE_FIRST_NAMES = new String[] { "Aaron",
+      "Abel", "Abraham", "Adam", "Adrian", "Al", "Alan", "Albert",
+      "Alberto", "Alejandro", "Alex", "Alexander", "Alfonso", "Alfred",
+      "Alfredo", "Allan", "Allen", "Alonzo", "Alton", "Alvin", "Amos",
+      "Andre", "Andres", "Andrew", "Andy", "Angel", "Angelo", "Anthony",
+      "Antonio", "Archie", "Armando", "Arnold", "Arthur", "Arturo",
+      "Aubrey", "Austin", "Barry", "Ben", "Benjamin", "Bennie", "Benny",
+      "Bernard", "Bert", "Bill", "Billy", "Blake", "Bob", "Bobby",
+      "Boyd", "Brad", "Bradford", "Bradley", "Brandon", "Brendan",
+      "Brent", "Brett", "Brian", "Bruce", "Bryan", "Bryant", "Byron",
+      "Caleb", "Calvin", "Cameron", "Carl", "Carlos", "Carlton",
+      "Carroll", "Cary", "Casey", "Cecil", "Cedric", "Cesar", "Chad",
+      "Charles", "Charlie", "Chester", "Chris", "Christian",
+      "Christopher", "Clarence", "Clark", "Claude", "Clay", "Clayton",
+      "Clifford", "Clifton", "Clint", "Clinton", "Clyde", "Cody",
+      "Colin", "Conrad", "Corey", "Cornelius", "Cory", "Courtney",
+      "Craig", "Curtis", "Dale", "Dallas", "Damon", "Dan", "Dana",
+      "Daniel", "Danny", "Darin", "Darnell", "Darrel", "Darrell",
+      "Darren", "Darrin", "Darryl", "Daryl", "Dave", "David", "Dean",
+      "Delbert", "Dennis", "Derek", "Derrick", "Devin", "Dewey",
+      "Dexter", "Domingo", "Dominic", "Dominick", "Don", "Donald",
+      "Donnie", "Doug", "Douglas", "Doyle", "Drew", "Duane", "Dustin",
+      "Dwayne", "Dwight", "Earl", "Earnest", "Ed", "Eddie", "Edgar",
+      "Edmond", "Edmund", "Eduardo", "Edward", "Edwin", "Elbert",
+      "Elias", "Elijah", "Ellis", "Elmer", "Emanuel", "Emilio", "Emmett",
+      "Enrique", "Eric", "Erick", "Erik", "Ernest", "Ernesto", "Ervin",
+      "Eugene", "Evan", "Everett", "Felipe", "Felix", "Fernando",
+      "Floyd", "Forrest", "Francis", "Francisco", "Frank", "Frankie",
+      "Franklin", "Fred", "Freddie", "Frederick", "Fredrick", "Gabriel",
+      "Garrett", "Garry", "Gary", "Gene", "Geoffrey", "George", "Gerald",
+      "Gerard", "Gerardo", "Gilbert", "Gilberto", "Glen", "Glenn",
+      "Gordon", "Grady", "Grant", "Greg", "Gregg", "Gregory",
+      "Guadalupe", "Guillermo", "Gustavo", "Guy", "Harold", "Harry",
+      "Harvey", "Hector", "Henry", "Herbert", "Herman", "Homer",
+      "Horace", "Howard", "Hubert", "Hugh", "Hugo", "Ian", "Ignacio",
+      "Ira", "Irvin", "Irving", "Isaac", "Ismael", "Israel", "Ivan",
+      "Jack", "Jackie", "Jacob", "Jaime", "Jake", "James", "Jamie",
+      "Jan", "Jared", "Jason", "Javier", "Jay", "Jean", "Jeff",
+      "Jeffery", "Jeffrey", "Jerald", "Jeremiah", "Jeremy", "Jermaine",
+      "Jerome", "Jerry", "Jesse", "Jessie", "Jesus", "Jim", "Jimmie",
+      "Jimmy", "Jody", "Joe", "Joel", "Joey", "John", "Johnathan",
+      "Johnnie", "Johnny", "Jon", "Jonathan", "Jonathon", "Jordan",
+      "Jorge", "Jose", "Joseph", "Josh", "Joshua", "Juan", "Julian",
+      "Julio", "Julius", "Justin", "Karl", "Keith", "Kelly", "Kelvin",
+      "Ken", "Kenneth", "Kenny", "Kent", "Kerry", "Kevin", "Kim", "Kirk",
+      "Kristopher", "Kurt", "Kyle", "Lamar", "Lance", "Larry",
+      "Laurence", "Lawrence", "Lee", "Leland", "Leo", "Leon", "Leonard",
+      "Leroy", "Leslie", "Lester", "Levi", "Lewis", "Lionel", "Lloyd",
+      "Lonnie", "Loren", "Lorenzo", "Louis", "Lowell", "Lucas", "Luis",
+      "Luke", "Luther", "Lyle", "Lynn", "Mack", "Malcolm", "Manuel",
+      "Marc", "Marco", "Marcos", "Marcus", "Mario", "Marion", "Mark",
+      "Marlon", "Marshall", "Martin", "Marty", "Marvin", "Mathew",
+      "Matt", "Matthew", "Maurice", "Max", "Melvin", "Merle", "Michael",
+      "Micheal", "Miguel", "Mike", "Milton", "Mitchell", "Morris",
+      "Moses", "Myron", "Nathan", "Nathaniel", "Neal", "Neil", "Nelson",
+      "Nicholas", "Nick", "Nicolas", "Noah", "Noel", "Norman", "Oliver",
+      "Omar", "Orlando", "Orville", "Oscar", "Otis", "Owen", "Pablo",
+      "Pat", "Patrick", "Paul", "Pedro", "Percy", "Perry", "Pete",
+      "Peter", "Phil", "Philip", "Phillip", "Preston", "Rafael", "Ralph",
+      "Ramiro", "Ramon", "Randal", "Randall", "Randolph", "Randy",
+      "Raul", "Ray", "Raymond", "Reginald", "Rene", "Rex", "Ricardo",
+      "Richard", "Rick", "Rickey", "Ricky", "Robert", "Roberto", "Robin",
+      "Roderick", "Rodney", "Rodolfo", "Rogelio", "Roger", "Roland",
+      "Rolando", "Roman", "Ron", "Ronald", "Ronnie", "Roosevelt", "Ross",
+      "Roy", "Ruben", "Rudolph", "Rudy", "Rufus", "Russell", "Ryan",
+      "Salvador", "Salvatore", "Sam", "Sammy", "Samuel", "Santiago",
+      "Santos", "Saul", "Scott", "Sean", "Sergio", "Seth", "Shane",
+      "Shannon", "Shaun", "Shawn", "Sheldon", "Sherman", "Sidney",
+      "Simon", "Spencer", "Stanley", "Stephen", "Steve", "Steven",
+      "Stewart", "Stuart", "Sylvester", "Taylor", "Ted", "Terence",
+      "Terrance", "Terrell", "Terrence", "Terry", "Theodore", "Thomas",
+      "Tim", "Timmy", "Timothy", "Toby", "Todd", "Tom", "Tomas",
+      "Tommie", "Tommy", "Tony", "Tracy", "Travis", "Trevor", "Troy",
+      "Tyler", "Tyrone", "Van", "Vernon", "Victor", "Vincent", "Virgil",
+      "Wade", "Wallace", "Walter", "Warren", "Wayne", "Wendell",
+      "Wesley", "Wilbert", "Wilbur", "Wilfred", "Willard", "William",
+      "Willie", "Willis", "Wilson", "Winston", "Wm", "Woodrow", "Zachary" };
 
-	private static final String[] FEMALE_FIRST_NAMES = new String[] { "Ada",
-			"Adrienne", "Agnes", "Alberta", "Alexandra", "Alexis", "Alice",
-			"Alicia", "Alison", "Allison", "Alma", "Alyssa", "Amanda", "Amber",
-			"Amelia", "Amy", "Ana", "Andrea", "Angel", "Angela", "Angelica",
-			"Angelina", "Angie", "Anita", "Ann", "Anna", "Anne", "Annette",
-			"Annie", "Antoinette", "Antonia", "April", "Arlene", "Ashley",
-			"Audrey", "Barbara", "Beatrice", "Becky", "Belinda", "Bernadette",
-			"Bernice", "Bertha", "Bessie", "Beth", "Bethany", "Betsy", "Betty",
-			"Beulah", "Beverly", "Billie", "Blanca", "Blanche", "Bobbie",
-			"Bonnie", "Brandi", "Brandy", "Brenda", "Bridget", "Brittany",
-			"Brooke", "Camille", "Candace", "Candice", "Carla", "Carmen",
-			"Carol", "Carole", "Caroline", "Carolyn", "Carrie", "Casey",
-			"Cassandra", "Catherine", "Cathy", "Cecelia", "Cecilia", "Celia",
-			"Charlene", "Charlotte", "Chelsea", "Cheryl", "Christie",
-			"Christina", "Christine", "Christy", "Cindy", "Claire", "Clara",
-			"Claudia", "Colleen", "Connie", "Constance", "Cora", "Courtney",
-			"Cristina", "Crystal", "Cynthia", "Daisy", "Dana", "Danielle",
-			"Darla", "Darlene", "Dawn", "Deanna", "Debbie", "Deborah", "Debra",
-			"Delia", "Della", "Delores", "Denise", "Desiree", "Diana", "Diane",
-			"Dianna", "Dianne", "Dixie", "Dolores", "Donna", "Dora", "Doreen",
-			"Doris", "Dorothy", "Ebony", "Edith", "Edna", "Eileen", "Elaine",
-			"Eleanor", "Elena", "Elisa", "Elizabeth", "Ella", "Ellen",
-			"Eloise", "Elsa", "Elsie", "Elvira", "Emily", "Emma", "Erica",
-			"Erika", "Erin", "Erma", "Ernestine", "Essie", "Estelle", "Esther",
-			"Ethel", "Eula", "Eunice", "Eva", "Evelyn", "Faith", "Fannie",
-			"Faye", "Felicia", "Flora", "Florence", "Frances", "Francis",
-			"Freda", "Gail", "Gayle", "Geneva", "Genevieve", "Georgia",
-			"Geraldine", "Gertrude", "Gina", "Ginger", "Gladys", "Glenda",
-			"Gloria", "Grace", "Gretchen", "Guadalupe", "Gwen", "Gwendolyn",
-			"Hannah", "Harriet", "Hattie", "Hazel", "Heather", "Heidi",
-			"Helen", "Henrietta", "Hilda", "Holly", "Hope", "Ida", "Inez",
-			"Irene", "Iris", "Irma", "Isabel", "Jackie", "Jacqueline",
-			"Jacquelyn", "Jaime", "Jamie", "Jan", "Jana", "Jane", "Janet",
-			"Janice", "Janie", "Janis", "Jasmine", "Jean", "Jeanette",
-			"Jeanne", "Jeannette", "Jeannie", "Jenna", "Jennie", "Jennifer",
-			"Jenny", "Jessica", "Jessie", "Jill", "Jo", "Joan", "Joann",
-			"Joanna", "Joanne", "Jodi", "Jody", "Johanna", "Johnnie",
-			"Josefina", "Josephine", "Joy", "Joyce", "Juana", "Juanita",
-			"Judith", "Judy", "Julia", "Julie", "June", "Kara", "Karen",
-			"Kari", "Karla", "Kate", "Katherine", "Kathleen", "Kathryn",
-			"Kathy", "Katie", "Katrina", "Kay", "Kayla", "Kelley", "Kelli",
-			"Kellie", "Kelly", "Kendra", "Kerry", "Kim", "Kimberly", "Krista",
-			"Kristen", "Kristi", "Kristie", "Kristin", "Kristina", "Kristine",
-			"Kristy", "Krystal", "Lana", "Latoya", "Laura", "Lauren", "Laurie",
-			"Laverne", "Leah", "Lee", "Leigh", "Lela", "Lena", "Leona",
-			"Leslie", "Leticia", "Lila", "Lillian", "Lillie", "Linda",
-			"Lindsay", "Lindsey", "Lisa", "Lois", "Lola", "Lora", "Lorena",
-			"Lorene", "Loretta", "Lori", "Lorraine", "Louise", "Lucia",
-			"Lucille", "Lucy", "Lula", "Luz", "Lydia", "Lynda", "Lynette",
-			"Lynn", "Lynne", "Mabel", "Mable", "Madeline", "Mae", "Maggie",
-			"Mamie", "Mandy", "Marcella", "Marcia", "Margaret", "Margarita",
-			"Margie", "Marguerite", "Maria", "Marian", "Marianne", "Marie",
-			"Marilyn", "Marion", "Marjorie", "Marlene", "Marsha", "Marta",
-			"Martha", "Mary", "Maryann", "Mattie", "Maureen", "Maxine", "May",
-			"Megan", "Meghan", "Melanie", "Melba", "Melinda", "Melissa",
-			"Melody", "Mercedes", "Meredith", "Michele", "Michelle", "Mildred",
-			"Mindy", "Minnie", "Miranda", "Miriam", "Misty", "Molly", "Mona",
-			"Monica", "Monique", "Muriel", "Myra", "Myrtle", "Nadine", "Nancy",
-			"Naomi", "Natalie", "Natasha", "Nellie", "Nettie", "Nichole",
-			"Nicole", "Nina", "Nora", "Norma", "Olga", "Olive", "Olivia",
-			"Ollie", "Opal", "Ora", "Pam", "Pamela", "Pat", "Patricia",
-			"Patsy", "Patti", "Patty", "Paula", "Paulette", "Pauline", "Pearl",
-			"Peggy", "Penny", "Phyllis", "Priscilla", "Rachael", "Rachel",
-			"Ramona", "Raquel", "Rebecca", "Regina", "Renee", "Rhonda", "Rita",
-			"Roberta", "Robin", "Robyn", "Rochelle", "Rosa", "Rosalie", "Rose",
-			"Rosemarie", "Rosemary", "Rosie", "Roxanne", "Ruby", "Ruth",
-			"Sabrina", "Sadie", "Sally", "Samantha", "Sandra", "Sandy", "Sara",
-			"Sarah", "Shannon", "Shari", "Sharon", "Shawna", "Sheila",
-			"Shelia", "Shelley", "Shelly", "Sheri", "Sherri", "Sherry",
-			"Sheryl", "Shirley", "Silvia", "Sonia", "Sonja", "Sonya", "Sophia",
-			"Sophie", "Stacey", "Stacy", "Stella", "Stephanie", "Sue", "Susan",
-			"Susie", "Suzanne", "Sylvia", "Tabitha", "Tamara", "Tami", "Tammy",
-			"Tanya", "Tara", "Tasha", "Teresa", "Teri", "Terri", "Terry",
-			"Thelma", "Theresa", "Tiffany", "Tina", "Toni", "Tonya", "Tracey",
-			"Traci", "Tracy", "Tricia", "Valerie", "Vanessa", "Velma", "Vera",
-			"Verna", "Veronica", "Vicki", "Vickie", "Vicky", "Victoria",
-			"Viola", "Violet", "Virginia", "Vivian", "Wanda", "Wendy",
-			"Whitney", "Willie", "Wilma", "Winifred", "Yolanda", "Yvette",
-			"Yvonne" };
-	private static final String[] LAST_NAMES = new String[] { "Abbott",
-			"Adams", "Adkins", "Aguilar", "Alexander", "Allen", "Allison",
-			"Alvarado", "Alvarez", "Anderson", "Andrews", "Armstrong",
-			"Arnold", "Atkins", "Austin", "Bailey", "Baker", "Baldwin", "Ball",
-			"Ballard", "Banks", "Barber", "Barker", "Barnes", "Barnett",
-			"Barrett", "Barton", "Bass", "Bates", "Beck", "Becker", "Bell",
-			"Bennett", "Benson", "Berry", "Bishop", "Black", "Blair", "Blake",
-			"Boone", "Bowen", "Bowers", "Bowman", "Boyd", "Bradley", "Brady",
-			"Brewer", "Bridges", "Briggs", "Brock", "Brooks", "Brown", "Bryan",
-			"Bryant", "Buchanan", "Burgess", "Burke", "Burns", "Burton",
-			"Bush", "Butler", "Byrd", "Cain", "Caldwell", "Campbell", "Cannon",
-			"Carlson", "Carpenter", "Carr", "Carroll", "Carson", "Carter",
-			"Casey", "Castillo", "Castro", "Chambers", "Chandler", "Chapman",
-			"Chavez", "Christensen", "Clark", "Clarke", "Clayton", "Cobb",
-			"Cohen", "Cole", "Coleman", "Collier", "Collins", "Colon",
-			"Conner", "Cook", "Cooper", "Copeland", "Cortez", "Cox", "Craig",
-			"Crawford", "Cross", "Cruz", "Cummings", "Cunningham", "Curry",
-			"Curtis", "Daniel", "Daniels", "Davidson", "Davis", "Dawson",
-			"Day", "Dean", "Delgado", "Dennis", "Diaz", "Dixon", "Douglas",
-			"Doyle", "Drake", "Duncan", "Dunn", "Edwards", "Elliott", "Ellis",
-			"Erickson", "Estrada", "Evans", "Farmer", "Ferguson", "Fernandez",
-			"Fields", "Figueroa", "Fisher", "Fitzgerald", "Fleming",
-			"Fletcher", "Flores", "Flowers", "Floyd", "Ford", "Foster",
-			"Fowler", "Fox", "Francis", "Frank", "Franklin", "Frazier",
-			"Freeman", "French", "Fuller", "Garcia", "Gardner", "Garner",
-			"Garrett", "Garza", "George", "Gibbs", "Gibson", "Gilbert", "Gill",
-			"Glover", "Gomez", "Gonzales", "Gonzalez", "Goodman", "Goodwin",
-			"Gordon", "Graham", "Grant", "Graves", "Gray", "Green", "Greene",
-			"Greer", "Gregory", "Griffin", "Griffith", "Gross", "Guerrero",
-			"Gutierrez", "Guzman", "Hale", "Hall", "Hamilton", "Hammond",
-			"Hampton", "Hansen", "Hanson", "Hardy", "Harmon", "Harper",
-			"Harrington", "Harris", "Harrison", "Hart", "Harvey", "Hawkins",
-			"Hayes", "Haynes", "Henderson", "Henry", "Hernandez", "Herrera",
-			"Hicks", "Higgins", "Hill", "Hines", "Hodges", "Hoffman", "Hogan",
-			"Holland", "Holloway", "Holmes", "Holt", "Hopkins", "Horton",
-			"Houston", "Howard", "Howell", "Hubbard", "Hudson", "Huff",
-			"Hughes", "Hunt", "Hunter", "Ingram", "Jackson", "Jacobs", "James",
-			"Jefferson", "Jenkins", "Jennings", "Jensen", "Jimenez", "Johnson",
-			"Johnston", "Jones", "Jordan", "Joseph", "Keller", "Kelley",
-			"Kelly", "Kennedy", "Kim", "King", "Klein", "Knight", "Lamb",
-			"Lambert", "Lane", "Larson", "Lawrence", "Lawson", "Lee",
-			"Leonard", "Lewis", "Lindsey", "Little", "Lloyd", "Logan", "Long",
-			"Lopez", "Love", "Lowe", "Lucas", "Luna", "Lynch", "Lyons", "Mack",
-			"Maldonado", "Malone", "Mann", "Manning", "Marsh", "Marshall",
-			"Martin", "Martinez", "Mason", "Massey", "Mathis", "Matthews",
-			"Maxwell", "May", "Mcbride", "Mccarthy", "Mccormick", "Mccoy",
-			"Mcdaniel", "Mcdonald", "Mcgee", "Mcguire", "Mckenzie", "Mckinney",
-			"Mclaughlin", "Medina", "Mendez", "Mendoza", "Meyer", "Miles",
-			"Miller", "Mills", "Mitchell", "Montgomery", "Moody", "Moore",
-			"Morales", "Moran", "Moreno", "Morgan", "Morris", "Morrison",
-			"Morton", "Moss", "Mullins", "Munoz", "Murphy", "Murray", "Myers",
-			"Nash", "Neal", "Nelson", "Newman", "Newton", "Nguyen", "Nichols",
-			"Norman", "Norris", "Norton", "Nunez", "Obrien", "Oliver", "Olson",
-			"Ortega", "Ortiz", "Osborne", "Owen", "Owens", "Padilla", "Page",
-			"Palmer", "Park", "Parker", "Parks", "Parsons", "Patrick",
-			"Patterson", "Patton", "Paul", "Payne", "Pearson", "Pena", "Perez",
-			"Perkins", "Perry", "Peters", "Peterson", "Phelps", "Phillips",
-			"Pierce", "Pittman", "Poole", "Pope", "Porter", "Potter", "Powell",
-			"Powers", "Pratt", "Price", "Quinn", "Ramirez", "Ramos", "Ramsey",
-			"Ray", "Reed", "Reese", "Reeves", "Reid", "Reyes", "Reynolds",
-			"Rhodes", "Rice", "Richards", "Richardson", "Riley", "Rios",
-			"Rivera", "Robbins", "Roberson", "Roberts", "Robertson",
-			"Robinson", "Rodgers", "Rodriguez", "Rodriquez", "Rogers",
-			"Romero", "Rose", "Ross", "Rowe", "Roy", "Ruiz", "Russell", "Ryan",
-			"Salazar", "Sanchez", "Sanders", "Sandoval", "Santiago", "Santos",
-			"Saunders", "Schmidt", "Schneider", "Schultz", "Schwartz", "Scott",
-			"Sharp", "Shaw", "Shelton", "Sherman", "Silva", "Simmons", "Simon",
-			"Simpson", "Sims", "Singleton", "Smith", "Snyder", "Soto",
-			"Sparks", "Spencer", "Stanley", "Steele", "Stephens", "Stevens",
-			"Stevenson", "Stewart", "Stokes", "Stone", "Strickland",
-			"Sullivan", "Summers", "Sutton", "Swanson", "Tate", "Taylor",
-			"Terry", "Thomas", "Thompson", "Thornton", "Todd", "Torres",
-			"Townsend", "Tran", "Tucker", "Turner", "Tyler", "Underwood",
-			"Valdez", "Vargas", "Vasquez", "Vaughn", "Vega", "Wade", "Wagner",
-			"Walker", "Wallace", "Walsh", "Walters", "Walton", "Ward",
-			"Warner", "Warren", "Washington", "Waters", "Watkins", "Watson",
-			"Watts", "Weaver", "Webb", "Weber", "Webster", "Welch", "Wells",
-			"West", "Wheeler", "White", "Wilkerson", "Wilkins", "Williams",
-			"Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
-			"Woods", "Wright", "Yates", "Young", "Zimmerman" };
+  private static final String[] FEMALE_FIRST_NAMES = new String[] { "Ada",
+      "Adrienne", "Agnes", "Alberta", "Alexandra", "Alexis", "Alice",
+      "Alicia", "Alison", "Allison", "Alma", "Alyssa", "Amanda", "Amber",
+      "Amelia", "Amy", "Ana", "Andrea", "Angel", "Angela", "Angelica",
+      "Angelina", "Angie", "Anita", "Ann", "Anna", "Anne", "Annette",
+      "Annie", "Antoinette", "Antonia", "April", "Arlene", "Ashley",
+      "Audrey", "Barbara", "Beatrice", "Becky", "Belinda", "Bernadette",
+      "Bernice", "Bertha", "Bessie", "Beth", "Bethany", "Betsy", "Betty",
+      "Beulah", "Beverly", "Billie", "Blanca", "Blanche", "Bobbie",
+      "Bonnie", "Brandi", "Brandy", "Brenda", "Bridget", "Brittany",
+      "Brooke", "Camille", "Candace", "Candice", "Carla", "Carmen",
+      "Carol", "Carole", "Caroline", "Carolyn", "Carrie", "Casey",
+      "Cassandra", "Catherine", "Cathy", "Cecelia", "Cecilia", "Celia",
+      "Charlene", "Charlotte", "Chelsea", "Cheryl", "Christie",
+      "Christina", "Christine", "Christy", "Cindy", "Claire", "Clara",
+      "Claudia", "Colleen", "Connie", "Constance", "Cora", "Courtney",
+      "Cristina", "Crystal", "Cynthia", "Daisy", "Dana", "Danielle",
+      "Darla", "Darlene", "Dawn", "Deanna", "Debbie", "Deborah", "Debra",
+      "Delia", "Della", "Delores", "Denise", "Desiree", "Diana", "Diane",
+      "Dianna", "Dianne", "Dixie", "Dolores", "Donna", "Dora", "Doreen",
+      "Doris", "Dorothy", "Ebony", "Edith", "Edna", "Eileen", "Elaine",
+      "Eleanor", "Elena", "Elisa", "Elizabeth", "Ella", "Ellen",
+      "Eloise", "Elsa", "Elsie", "Elvira", "Emily", "Emma", "Erica",
+      "Erika", "Erin", "Erma", "Ernestine", "Essie", "Estelle", "Esther",
+      "Ethel", "Eula", "Eunice", "Eva", "Evelyn", "Faith", "Fannie",
+      "Faye", "Felicia", "Flora", "Florence", "Frances", "Francis",
+      "Freda", "Gail", "Gayle", "Geneva", "Genevieve", "Georgia",
+      "Geraldine", "Gertrude", "Gina", "Ginger", "Gladys", "Glenda",
+      "Gloria", "Grace", "Gretchen", "Guadalupe", "Gwen", "Gwendolyn",
+      "Hannah", "Harriet", "Hattie", "Hazel", "Heather", "Heidi",
+      "Helen", "Henrietta", "Hilda", "Holly", "Hope", "Ida", "Inez",
+      "Irene", "Iris", "Irma", "Isabel", "Jackie", "Jacqueline",
+      "Jacquelyn", "Jaime", "Jamie", "Jan", "Jana", "Jane", "Janet",
+      "Janice", "Janie", "Janis", "Jasmine", "Jean", "Jeanette",
+      "Jeanne", "Jeannette", "Jeannie", "Jenna", "Jennie", "Jennifer",
+      "Jenny", "Jessica", "Jessie", "Jill", "Jo", "Joan", "Joann",
+      "Joanna", "Joanne", "Jodi", "Jody", "Johanna", "Johnnie",
+      "Josefina", "Josephine", "Joy", "Joyce", "Juana", "Juanita",
+      "Judith", "Judy", "Julia", "Julie", "June", "Kara", "Karen",
+      "Kari", "Karla", "Kate", "Katherine", "Kathleen", "Kathryn",
+      "Kathy", "Katie", "Katrina", "Kay", "Kayla", "Kelley", "Kelli",
+      "Kellie", "Kelly", "Kendra", "Kerry", "Kim", "Kimberly", "Krista",
+      "Kristen", "Kristi", "Kristie", "Kristin", "Kristina", "Kristine",
+      "Kristy", "Krystal", "Lana", "Latoya", "Laura", "Lauren", "Laurie",
+      "Laverne", "Leah", "Lee", "Leigh", "Lela", "Lena", "Leona",
+      "Leslie", "Leticia", "Lila", "Lillian", "Lillie", "Linda",
+      "Lindsay", "Lindsey", "Lisa", "Lois", "Lola", "Lora", "Lorena",
+      "Lorene", "Loretta", "Lori", "Lorraine", "Louise", "Lucia",
+      "Lucille", "Lucy", "Lula", "Luz", "Lydia", "Lynda", "Lynette",
+      "Lynn", "Lynne", "Mabel", "Mable", "Madeline", "Mae", "Maggie",
+      "Mamie", "Mandy", "Marcella", "Marcia", "Margaret", "Margarita",
+      "Margie", "Marguerite", "Maria", "Marian", "Marianne", "Marie",
+      "Marilyn", "Marion", "Marjorie", "Marlene", "Marsha", "Marta",
+      "Martha", "Mary", "Maryann", "Mattie", "Maureen", "Maxine", "May",
+      "Megan", "Meghan", "Melanie", "Melba", "Melinda", "Melissa",
+      "Melody", "Mercedes", "Meredith", "Michele", "Michelle", "Mildred",
+      "Mindy", "Minnie", "Miranda", "Miriam", "Misty", "Molly", "Mona",
+      "Monica", "Monique", "Muriel", "Myra", "Myrtle", "Nadine", "Nancy",
+      "Naomi", "Natalie", "Natasha", "Nellie", "Nettie", "Nichole",
+      "Nicole", "Nina", "Nora", "Norma", "Olga", "Olive", "Olivia",
+      "Ollie", "Opal", "Ora", "Pam", "Pamela", "Pat", "Patricia",
+      "Patsy", "Patti", "Patty", "Paula", "Paulette", "Pauline", "Pearl",
+      "Peggy", "Penny", "Phyllis", "Priscilla", "Rachael", "Rachel",
+      "Ramona", "Raquel", "Rebecca", "Regina", "Renee", "Rhonda", "Rita",
+      "Roberta", "Robin", "Robyn", "Rochelle", "Rosa", "Rosalie", "Rose",
+      "Rosemarie", "Rosemary", "Rosie", "Roxanne", "Ruby", "Ruth",
+      "Sabrina", "Sadie", "Sally", "Samantha", "Sandra", "Sandy", "Sara",
+      "Sarah", "Shannon", "Shari", "Sharon", "Shawna", "Sheila",
+      "Shelia", "Shelley", "Shelly", "Sheri", "Sherri", "Sherry",
+      "Sheryl", "Shirley", "Silvia", "Sonia", "Sonja", "Sonya", "Sophia",
+      "Sophie", "Stacey", "Stacy", "Stella", "Stephanie", "Sue", "Susan",
+      "Susie", "Suzanne", "Sylvia", "Tabitha", "Tamara", "Tami", "Tammy",
+      "Tanya", "Tara", "Tasha", "Teresa", "Teri", "Terri", "Terry",
+      "Thelma", "Theresa", "Tiffany", "Tina", "Toni", "Tonya", "Tracey",
+      "Traci", "Tracy", "Tricia", "Valerie", "Vanessa", "Velma", "Vera",
+      "Verna", "Veronica", "Vicki", "Vickie", "Vicky", "Victoria",
+      "Viola", "Violet", "Virginia", "Vivian", "Wanda", "Wendy",
+      "Whitney", "Willie", "Wilma", "Winifred", "Yolanda", "Yvette",
+      "Yvonne" };
+  private static final String[] LAST_NAMES = new String[] { "Abbott",
+      "Adams", "Adkins", "Aguilar", "Alexander", "Allen", "Allison",
+      "Alvarado", "Alvarez", "Anderson", "Andrews", "Armstrong",
+      "Arnold", "Atkins", "Austin", "Bailey", "Baker", "Baldwin", "Ball",
+      "Ballard", "Banks", "Barber", "Barker", "Barnes", "Barnett",
+      "Barrett", "Barton", "Bass", "Bates", "Beck", "Becker", "Bell",
+      "Bennett", "Benson", "Berry", "Bishop", "Black", "Blair", "Blake",
+      "Boone", "Bowen", "Bowers", "Bowman", "Boyd", "Bradley", "Brady",
+      "Brewer", "Bridges", "Briggs", "Brock", "Brooks", "Brown", "Bryan",
+      "Bryant", "Buchanan", "Burgess", "Burke", "Burns", "Burton",
+      "Bush", "Butler", "Byrd", "Cain", "Caldwell", "Campbell", "Cannon",
+      "Carlson", "Carpenter", "Carr", "Carroll", "Carson", "Carter",
+      "Casey", "Castillo", "Castro", "Chambers", "Chandler", "Chapman",
+      "Chavez", "Christensen", "Clark", "Clarke", "Clayton", "Cobb",
+      "Cohen", "Cole", "Coleman", "Collier", "Collins", "Colon",
+      "Conner", "Cook", "Cooper", "Copeland", "Cortez", "Cox", "Craig",
+      "Crawford", "Cross", "Cruz", "Cummings", "Cunningham", "Curry",
+      "Curtis", "Daniel", "Daniels", "Davidson", "Davis", "Dawson",
+      "Day", "Dean", "Delgado", "Dennis", "Diaz", "Dixon", "Douglas",
+      "Doyle", "Drake", "Duncan", "Dunn", "Edwards", "Elliott", "Ellis",
+      "Erickson", "Estrada", "Evans", "Farmer", "Ferguson", "Fernandez",
+      "Fields", "Figueroa", "Fisher", "Fitzgerald", "Fleming",
+      "Fletcher", "Flores", "Flowers", "Floyd", "Ford", "Foster",
+      "Fowler", "Fox", "Francis", "Frank", "Franklin", "Frazier",
+      "Freeman", "French", "Fuller", "Garcia", "Gardner", "Garner",
+      "Garrett", "Garza", "George", "Gibbs", "Gibson", "Gilbert", "Gill",
+      "Glover", "Gomez", "Gonzales", "Gonzalez", "Goodman", "Goodwin",
+      "Gordon", "Graham", "Grant", "Graves", "Gray", "Green", "Greene",
+      "Greer", "Gregory", "Griffin", "Griffith", "Gross", "Guerrero",
+      "Gutierrez", "Guzman", "Hale", "Hall", "Hamilton", "Hammond",
+      "Hampton", "Hansen", "Hanson", "Hardy", "Harmon", "Harper",
+      "Harrington", "Harris", "Harrison", "Hart", "Harvey", "Hawkins",
+      "Hayes", "Haynes", "Henderson", "Henry", "Hernandez", "Herrera",
+      "Hicks", "Higgins", "Hill", "Hines", "Hodges", "Hoffman", "Hogan",
+      "Holland", "Holloway", "Holmes", "Holt", "Hopkins", "Horton",
+      "Houston", "Howard", "Howell", "Hubbard", "Hudson", "Huff",
+      "Hughes", "Hunt", "Hunter", "Ingram", "Jackson", "Jacobs", "James",
+      "Jefferson", "Jenkins", "Jennings", "Jensen", "Jimenez", "Johnson",
+      "Johnston", "Jones", "Jordan", "Joseph", "Keller", "Kelley",
+      "Kelly", "Kennedy", "Kim", "King", "Klein", "Knight", "Lamb",
+      "Lambert", "Lane", "Larson", "Lawrence", "Lawson", "Lee",
+      "Leonard", "Lewis", "Lindsey", "Little", "Lloyd", "Logan", "Long",
+      "Lopez", "Love", "Lowe", "Lucas", "Luna", "Lynch", "Lyons", "Mack",
+      "Maldonado", "Malone", "Mann", "Manning", "Marsh", "Marshall",
+      "Martin", "Martinez", "Mason", "Massey", "Mathis", "Matthews",
+      "Maxwell", "May", "Mcbride", "Mccarthy", "Mccormick", "Mccoy",
+      "Mcdaniel", "Mcdonald", "Mcgee", "Mcguire", "Mckenzie", "Mckinney",
+      "Mclaughlin", "Medina", "Mendez", "Mendoza", "Meyer", "Miles",
+      "Miller", "Mills", "Mitchell", "Montgomery", "Moody", "Moore",
+      "Morales", "Moran", "Moreno", "Morgan", "Morris", "Morrison",
+      "Morton", "Moss", "Mullins", "Munoz", "Murphy", "Murray", "Myers",
+      "Nash", "Neal", "Nelson", "Newman", "Newton", "Nguyen", "Nichols",
+      "Norman", "Norris", "Norton", "Nunez", "Obrien", "Oliver", "Olson",
+      "Ortega", "Ortiz", "Osborne", "Owen", "Owens", "Padilla", "Page",
+      "Palmer", "Park", "Parker", "Parks", "Parsons", "Patrick",
+      "Patterson", "Patton", "Paul", "Payne", "Pearson", "Pena", "Perez",
+      "Perkins", "Perry", "Peters", "Peterson", "Phelps", "Phillips",
+      "Pierce", "Pittman", "Poole", "Pope", "Porter", "Potter", "Powell",
+      "Powers", "Pratt", "Price", "Quinn", "Ramirez", "Ramos", "Ramsey",
+      "Ray", "Reed", "Reese", "Reeves", "Reid", "Reyes", "Reynolds",
+      "Rhodes", "Rice", "Richards", "Richardson", "Riley", "Rios",
+      "Rivera", "Robbins", "Roberson", "Roberts", "Robertson",
+      "Robinson", "Rodgers", "Rodriguez", "Rodriquez", "Rogers",
+      "Romero", "Rose", "Ross", "Rowe", "Roy", "Ruiz", "Russell", "Ryan",
+      "Salazar", "Sanchez", "Sanders", "Sandoval", "Santiago", "Santos",
+      "Saunders", "Schmidt", "Schneider", "Schultz", "Schwartz", "Scott",
+      "Sharp", "Shaw", "Shelton", "Sherman", "Silva", "Simmons", "Simon",
+      "Simpson", "Sims", "Singleton", "Smith", "Snyder", "Soto",
+      "Sparks", "Spencer", "Stanley", "Steele", "Stephens", "Stevens",
+      "Stevenson", "Stewart", "Stokes", "Stone", "Strickland",
+      "Sullivan", "Summers", "Sutton", "Swanson", "Tate", "Taylor",
+      "Terry", "Thomas", "Thompson", "Thornton", "Todd", "Torres",
+      "Townsend", "Tran", "Tucker", "Turner", "Tyler", "Underwood",
+      "Valdez", "Vargas", "Vasquez", "Vaughn", "Vega", "Wade", "Wagner",
+      "Walker", "Wallace", "Walsh", "Walters", "Walton", "Ward",
+      "Warner", "Warren", "Washington", "Waters", "Watkins", "Watson",
+      "Watts", "Weaver", "Webb", "Weber", "Webster", "Welch", "Wells",
+      "West", "Wheeler", "White", "Wilkerson", "Wilkins", "Williams",
+      "Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
+      "Woods", "Wright", "Yates", "Young", "Zimmerman" };
 
-	@RequestMapping("/admin-createData")
-	public ModelAndView createDataPage(HttpServletRequest request) {
+  @RequestMapping("/admin-createData")
+  public ModelAndView createDataPage(HttpServletRequest request) {
 
-		ModelAndView modelAndView = new ModelAndView("createData");
-		return modelAndView;
-	}
+    ModelAndView modelAndView = new ModelAndView("createData");
+    return modelAndView;
+  }
 
-	public void createDonors(int numDonors) {
+  public void createDonors(int numDonors) {
 
-	  List<Donor> donors = new ArrayList<Donor>();
+    List<Donor> donors = new ArrayList<Donor>();
 
-		for (int i = 0; i < numDonors; i++) {
-			String firstName = "";
-			Gender gender = Gender.male;
-			if (i % 2 == 0) {
-				firstName = MALE_FIRST_NAMES[random.nextInt(MALE_FIRST_NAMES.length)];
-				gender = Gender.male;
-			} else {
-				firstName = FEMALE_FIRST_NAMES[random.nextInt(FEMALE_FIRST_NAMES.length)];
-				gender = Gender.female;
-			}
-			String lastName = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
-			Donor donor = new Donor();
-			donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
-			donor.setFirstName(firstName);
-			donor.setLastName(lastName);
-			donor.setGender(gender);
-			donor.setBirthDate(getRandomBirthDate());
-			donor.setAddress("address " + i);
-			donor.setCity(cities[random.nextInt(cities.length)]);
-			donor.setCountry("Zambia");
-			donor.setNotes("notes " + i);
-			donor.setIsDeleted(false);
-			donors.add(donor);
-		}
+    for (int i = 0; i < numDonors; i++) {
+      String firstName = "";
+      Gender gender = Gender.male;
+      if (i % 2 == 0) {
+        firstName = MALE_FIRST_NAMES[random.nextInt(MALE_FIRST_NAMES.length)];
+        gender = Gender.male;
+      } else {
+        firstName = FEMALE_FIRST_NAMES[random.nextInt(FEMALE_FIRST_NAMES.length)];
+        gender = Gender.female;
+      }
+      String lastName = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
+      Donor donor = new Donor();
+      donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
+      donor.setFirstName(firstName);
+      donor.setLastName(lastName);
+      donor.setGender(gender);
+      donor.setBirthDate(getRandomBirthDate());
+      donor.setAddress("address " + i);
+      donor.setCity(cities[random.nextInt(cities.length)]);
+      donor.setCountry("Zambia");
+      donor.setNotes("notes " + i);
+      donor.setIsDeleted(false);
+      donors.add(donor);
+    }
     donorRepository.addAllDonors(donors);
 
-	}
+  }
 
-	private Date getRandomBirthDate() {
-		try {
-			return getRandomDate(
-					new SimpleDateFormat("dd MM yyyy").parse("01 01 1970"),
-					new SimpleDateFormat("dd MM yyyy").parse("01 01 1990"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return new Date();
-		}
-	}
+  private Date getRandomBirthDate() {
+    try {
+      return getRandomDate(
+          new SimpleDateFormat("dd MM yyyy").parse("01 01 1970"),
+          new SimpleDateFormat("dd MM yyyy").parse("01 01 1990"));
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return new Date();
+    }
+  }
 
-	private Date getRandomDate(Date fromDate, Date toDate) {
+  private Date getRandomDate(Date fromDate, Date toDate) {
 
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(fromDate);
-		long decFrom = cal.getTimeInMillis();
-		cal.setTime(toDate);
-		long decTo = cal.getTimeInMillis();
-		long diff = decTo - decFrom;
-		long randomOffset = 0;
-		while (true) {
-		  randomOffset = random.nextLong() % diff;
-		  if (randomOffset > diff/2 && random.nextBoolean())
-		    break;
-		}
-		Date date = new Date(decFrom + randomOffset);
-		return date;
-	}
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(fromDate);
+    long decFrom = cal.getTimeInMillis();
+    cal.setTime(toDate);
+    long decTo = cal.getTimeInMillis();
+    long diff = decTo - decFrom;
+    long randomOffset = 0;
+    while (true) {
+      randomOffset = random.nextLong() % diff;
+      if (randomOffset > diff/2 && random.nextBoolean())
+        break;
+    }
+    Date date = new Date(decFrom + randomOffset);
+    return date;
+  }
 
-	private Date getRandomCollectionDate() {
-		// Date twoYearsAgo = new DateTime().minusYears(2).toDate();
-		// return getRandomDate(twoYearsAgo, new Date());
-		Date twoYearsAgo = new DateTime().minusDays(300).toDate();
-		return getRandomDate(twoYearsAgo, new Date());
-	}
+  private Date getRandomCollectionDate() {
+    // Date twoYearsAgo = new DateTime().minusYears(2).toDate();
+    // return getRandomDate(twoYearsAgo, new Date());
+    Date twoYearsAgo = new DateTime().minusDays(300).toDate();
+    return getRandomDate(twoYearsAgo, new Date());
+  }
 
   private Date getRandomRequestDate() {
     // Date twoYearsAgo = new DateTime().minusYears(2).toDate();
@@ -417,121 +417,121 @@ public class CreateDataController {
     return getRandomDate(twoYearsAgo, new Date());
   }
 
-	void createCollectionsWithTestResults(int numCollections) {
-		List<Location> sites = locationRepository.getAllCollectionSites();
-		List<Location> centers = locationRepository.getAllCenters();
-		List<Donor> donors = donorRepository.getAllDonors();
+  void createCollectionsWithTestResults(int numCollections) {
+    List<Location> sites = locationRepository.getAllCollectionSites();
+    List<Location> centers = locationRepository.getAllCenters();
+    List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
 
     List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
 
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
     List<String> collectionNumbers = sequenceNumberRepository.getBatchCollectionNumbers(numCollections);
-		for (int i = 0; i < numCollections; i++) {
-		  CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
+    for (int i = 0; i < numCollections; i++) {
+      CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
-		  collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
-		  collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
-		  collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
+      collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
+      collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
+      collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
 
-		  String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
-		  collection.setCollectedOn(collectionDate);
-		  collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
-		  collection.setNotes("notes sample " + i);
-		  collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()).getId().toString());
-		  collection.setIsDeleted(false);
+      String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
+      collection.setCollectedOn(collectionDate);
+      collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
+      collection.setNotes("notes sample " + i);
+      collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()).getId().toString());
+      collection.setIsDeleted(false);
 
-		  collectedSamples.add(collection.getCollectedSample());
-		}
+      collectedSamples.add(collection.getCollectedSample());
+    }
 
-		collectionRepository.addAllCollectedSamples(collectedSamples);
+    collectionRepository.addAllCollectedSamples(collectedSamples);
 
-		addTestResultsForCollections(collectedSamples);
-	}
+    addTestResultsForCollections(collectedSamples);
+  }
 
-	private void addTestResultsForCollections(
+  private void addTestResultsForCollections(
       List<CollectedSample> collectedSamples) {
     addBloodTypingResultsForCollections(collectedSamples);
     addTTIResultsForCollections(collectedSamples);
   }
 
   public void createProducts(int numProducts) {
-		List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
-		List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
-		List<Product> products = new ArrayList<Product>();
-		for (int i = 0; i < numProducts; i++) {
-		  CollectedSample c = collections.get(random.nextInt(collections.size()));
-			Product p = new ProductBackingForm(true).getProduct();
-			p.setCollectedSample(c);
-			p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
-			Date d = c.getCollectedOn();
-			p.setCreatedOn(d);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(d);
-			cal.add(Calendar.DATE, 35);
-			p.setExpiresOn(cal.getTime());
-			p.setIsDeleted(false);
-			products.add(p);
-		}
+    List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
+    List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+    List<Product> products = new ArrayList<Product>();
+    for (int i = 0; i < numProducts; i++) {
+      CollectedSample c = collections.get(random.nextInt(collections.size()));
+      Product p = new ProductBackingForm(true).getProduct();
+      p.setCollectedSample(c);
+      p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
+      Date d = c.getCollectedOn();
+      p.setCreatedOn(d);
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(d);
+      cal.add(Calendar.DATE, 35);
+      p.setExpiresOn(cal.getTime());
+      p.setIsDeleted(false);
+      products.add(p);
+    }
     productRepository.addAllProducts(products);
-	}
+  }
 
-	private void addBloodTypingResultsForCollections(List<CollectedSample> collectedSamples) {
+  private void addBloodTypingResultsForCollections(List<CollectedSample> collectedSamples) {
 
-	  Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
-	  Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
-	  for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-	    switch (rule.getCollectionFieldChanged()) {
-	      case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
-	                       bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
-	                     }
-	                     bloodAboRuleMap.get(rule.getNewInformation()).add(rule);
-	                     break;
-	      case BLOODRH:  if (!bloodRhRuleMap.containsKey(rule.getNewInformation())) {
-	                       bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
-	                     }
-	                     bloodRhRuleMap.get(rule.getNewInformation()).add(rule);
-	                     break;
-	    }
-	  }
+    Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
+    Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
+    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
+      switch (rule.getCollectionFieldChanged()) {
+        case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
+                         bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+                       }
+                       bloodAboRuleMap.get(rule.getNewInformation()).add(rule);
+                       break;
+        case BLOODRH:  if (!bloodRhRuleMap.containsKey(rule.getNewInformation())) {
+                         bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+                       }
+                       bloodRhRuleMap.get(rule.getNewInformation()).add(rule);
+                       break;
+      }
+    }
 
-	  Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
+    Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
 
-	  double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
-	  double incorrectBloodTypePercentage = Double.parseDouble(createDataProperties.get("incorrectBloodTypeProbability"));
+    double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+    double incorrectBloodTypePercentage = Double.parseDouble(createDataProperties.get("incorrectBloodTypeProbability"));
 
-	  List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
-	  List<String> rhValues = new ArrayList<String>(bloodRhRuleMap.keySet());
+    List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
+    List<String> rhValues = new ArrayList<String>(bloodRhRuleMap.keySet());
 
-	  Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
 
-	  Random generator = new Random();
+    Random generator = new Random();
 
-	  for (CollectedSample collection : collectedSamples) {
+    for (CollectedSample collection : collectedSamples) {
 
-	    if (Math.random() < leaveOutCollectionsPercentage) {
-	      // do not add results for a small fraction of the collections
-	      continue;
-	    }
+      if (Math.random() < leaveOutCollectionsPercentage) {
+        // do not add results for a small fraction of the collections
+        continue;
+      }
 
-	    String bloodAbo = "";
-	    String bloodRh = "";
-	    if (collection.getDonor() == null) {
-	      bloodAbo = collection.getDonor().getBloodAbo();
-	      bloodRh = collection.getDonor().getBloodRh();
-	    }
-	    if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh)) {
-	      // first collection for this donor
-	      bloodAbo = aboValues.get(generator.nextInt(aboValues.size()));
-	      bloodRh = rhValues.get(generator.nextInt(rhValues.size()));
-	    }
-
-	    if (Math.random() < incorrectBloodTypePercentage) {
-	      // with a small probability choose a different blood group
+      String bloodAbo = "";
+      String bloodRh = "";
+      if (collection.getDonor() == null) {
+        bloodAbo = collection.getDonor().getBloodAbo();
+        bloodRh = collection.getDonor().getBloodRh();
+      }
+      if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh)) {
+        // first collection for this donor
         bloodAbo = aboValues.get(generator.nextInt(aboValues.size()));
         bloodRh = rhValues.get(generator.nextInt(rhValues.size()));
-	    }
+      }
+
+      if (Math.random() < incorrectBloodTypePercentage) {
+        // with a small probability choose a different blood group
+        bloodAbo = aboValues.get(generator.nextInt(aboValues.size()));
+        bloodRh = rhValues.get(generator.nextInt(rhValues.size()));
+      }
 
       List<BloodTestingRule> aboRules = bloodAboRuleMap.get(bloodAbo);
       List<BloodTestingRule> rhRules = bloodRhRuleMap.get(bloodRh);
@@ -569,18 +569,18 @@ public class CreateDataController {
         testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
         index++;
       }
-	  }
+    }
 
-	  bloodTestingRepository.saveBloodTestingResults(testResults, true);
-	}
+    bloodTestingRepository.saveBloodTestingResults(testResults, true);
+  }
 
-	@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
   private void addTTIResultsForCollections(List<CollectedSample> collectedSamples) {
 
-	  Map<Long, String> collectionNumberMap = new HashMap<Long, String>();
-	  for (CollectedSample c : collectedSamples) {
-	    collectionNumberMap.put(c.getId(), c.getCollectionNumber());
-	  }
+    Map<Long, String> collectionNumberMap = new HashMap<Long, String>();
+    for (CollectedSample c : collectedSamples) {
+      collectionNumberMap.put(c.getId(), c.getCollectionNumber());
+    }
 
     Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getTTIRules(true)) {
@@ -706,25 +706,25 @@ public class CreateDataController {
     // bloodTestingRepository.saveBloodTestingResults(testResults, true);
   }
 
-	public void createRequests(int numRequests) {
+  public void createRequests(int numRequests) {
 
-	  String[] bloodAbos = { "A", "B", "AB", "O"};
-	  String[] bloodRhs = { "+", "-"};
+    String[] bloodAbos = { "A", "B", "AB", "O"};
+    String[] bloodRhs = { "+", "-"};
 
-		List<Location> sites = locationRepository.getAllUsageSites();
+    List<Location> sites = locationRepository.getAllUsageSites();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
     List<RequestType> requestTypes = requestTypeRepository.getAllRequestTypes();
 
     List<String> requestNumbers = sequenceNumberRepository.getBatchRequestNumbers(numRequests);
 
     List<Request> requests = new ArrayList<Request>();
-		for (int i = 0; i < numRequests; i++) {
-			Date requestDate = getRandomRequestDate();
-			Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt() % 21).toDate();
-			RequestBackingForm form = new RequestBackingForm();
-			form.setRequestNumber(requestNumbers.get(i));
-			form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
-			form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
+    for (int i = 0; i < numRequests; i++) {
+      Date requestDate = getRandomRequestDate();
+      Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt() % 21).toDate();
+      RequestBackingForm form = new RequestBackingForm();
+      form.setRequestNumber(requestNumbers.get(i));
+      form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
+      form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
       form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
       form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
       form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());
@@ -737,8 +737,8 @@ public class CreateDataController {
       form.setPatientBloodAbo(bloodAboStr);
       form.setPatientBloodRh(bloodRhStr);
       requests.add(form.getRequest());
-		}
-		requestRepository.addAllRequests(requests);
-	}
+    }
+    requestRepository.addAllRequests(requests);
+  }
 }
 

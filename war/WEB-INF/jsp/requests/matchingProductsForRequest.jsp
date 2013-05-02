@@ -2,11 +2,11 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
@@ -32,47 +32,47 @@ $(document).ready(
           "sRowSelect" : "multi",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
-											        var elements = $(node).children();
-											        if (elements[0].getAttribute("class") === "dataTables_empty") {
-											          return;
-											        }
+                              var elements = $(node).children();
+                              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                                return;
+                              }
 
-											        var collectionId = elements[0].innerHTML;
-											        var collectionNumber = elements[2].innerHTML;
-											        switch ($(node).data('iscompatible')) {
-											        case 'OTHER':
-											        case 'NOT_KNOWN': compatible_notknown[collectionId] = collectionNumber; 
-											        									break;
-											        case 'COMPATIBLE': compatible[collectionId] = collectionNumber;
-											        									 break;
-											        }
+                              var collectionId = elements[0].innerHTML;
+                              var collectionNumber = elements[2].innerHTML;
+                              switch ($(node).data('iscompatible')) {
+                              case 'OTHER':
+                              case 'NOT_KNOWN': compatible_notknown[collectionId] = collectionNumber; 
+                                                break;
+                              case 'COMPATIBLE': compatible[collectionId] = collectionNumber;
+                                                 break;
+                              }
 
-											        var selectedRowId = elements[0].innerHTML;
-											        var checkbox = $(node).find(":checkbox");
-										        	selected_products.push(selectedRowId);
-										        	checkbox.attr("checked", true);
- 													  },
-					"fnRowDeselected" : function(node) {
-														  var elements = $(node).children();
-											        if (elements[0].getAttribute("class") === "dataTables_empty") {
-											          return;
-											        }
+                              var selectedRowId = elements[0].innerHTML;
+                              var checkbox = $(node).find(":checkbox");
+                              selected_products.push(selectedRowId);
+                              checkbox.attr("checked", true);
+                             },
+          "fnRowDeselected" : function(node) {
+                              var elements = $(node).children();
+                              if (elements[0].getAttribute("class") === "dataTables_empty") {
+                                return;
+                              }
 
-											        var selectedRowId = elements[0].innerHTML;
+                              var selectedRowId = elements[0].innerHTML;
 
-											        if (selectedRowId in compatible)
-											          delete compatible[selectedRowId];
-											        if (selectedRowId in compatible_notknown)
-											          delete compatible_notknown[selectedRowId];
+                              if (selectedRowId in compatible)
+                                delete compatible[selectedRowId];
+                              if (selectedRowId in compatible_notknown)
+                                delete compatible_notknown[selectedRowId];
 
-											        var checkbox = $(node).find(":checkbox");
-											        selected_products.splice(selected_products.indexOf(selectedRowId), 1);
-											        checkbox.attr('checked', false);
-											        console.log(selected_products);
-														},
+                              var checkbox = $(node).find(":checkbox");
+                              selected_products.splice(selected_products.indexOf(selectedRowId), 1);
+                              checkbox.attr('checked', false);
+                              console.log(selected_products);
+                            },
         },
         "oColVis" : {
-         	"aiExclude": [0,1],
+           "aiExclude": [0,1],
         }
       });
 
@@ -81,11 +81,11 @@ $(document).ready(
           primary : 'ui-icon-check'
         }
       }).click(function() {
-        				if ("${showCrossmatchConfirmation}" === "true")
-        					issueSelectedProducts(false);
-        				else
-        				  issueSelectedProducts(true);
-      				 });
+                if ("${showCrossmatchConfirmation}" === "true")
+                  issueSelectedProducts(false);
+                else
+                  issueSelectedProducts(true);
+               });
 
       $("#${tabContentId}").find(".cancelButton").button({
         icons : {
@@ -112,19 +112,19 @@ $(document).ready(
         }
         
         var data = {requestId : "${requestId}",
-            				productsToIssue : JSON.stringify(selected_products)
-            			 };
+                    productsToIssue : JSON.stringify(selected_products)
+                   };
         $.ajax({
           url: "issueSelectedProducts.html",
           type: "POST",
           data: data,
           success: function() {
-            				 showMessage("Products issued successfully!");
-            				 $("#${tabContentId}").parent().trigger("productIssueSuccess");
-          				 },
-         	error:   function() {
-										 showErrorMessage("Something went wrong while issuing your request. Please try again.");         	  
-         					 }
+                     showMessage("Products issued successfully!");
+                     $("#${tabContentId}").parent().trigger("productIssueSuccess");
+                   },
+           error:   function() {
+                     showErrorMessage("Something went wrong while issuing your request. Please try again.");             
+                    }
         });
       }
 
@@ -143,9 +143,9 @@ $(document).ready(
           $("#${crossmatchConfirmDialogId}").find("ul").append("<li>" + compatible_notknown[collectionId] + "</li>");
         }
 
-        var buttonsForCrossmatchConfirmDialog = {	"Cancel and add crossmatch tests": function() { $(this).dialog("close"); } };
+        var buttonsForCrossmatchConfirmDialog = {  "Cancel and add crossmatch tests": function() { $(this).dialog("close"); } };
         if ("${allowSkipCrossmatch}" === "true")
-	        buttonsForCrossmatchConfirmDialog["Issue these products"] = function() {	$(this).dialog("close");	issueSelectedProducts(true); };
+          buttonsForCrossmatchConfirmDialog["Issue these products"] = function() {  $(this).dialog("close");  issueSelectedProducts(true); };
         $("#${crossmatchConfirmDialogId}").dialog({
           modal: true,
           title: "Crossmatch not done",
@@ -160,104 +160,104 @@ $(document).ready(
 
 <div id="${tabContentId}">
 
-	<c:choose>
+  <c:choose>
 
-		<c:when test="${fn:length(allProducts) eq 0}">
-			<span
-				style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
-				Sorry no matching products found for this request </span>
-		</c:when>
+    <c:when test="${fn:length(allProducts) eq 0}">
+      <span
+        style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
+        Sorry no matching products found for this request </span>
+    </c:when>
 
-		<c:otherwise>
+    <c:otherwise>
 
-			<div class="tipsBox ui-state-highlight">
-				<p>
-					${tips['requests.findpending.findmatchingproducts']}
-				</p>
-			</div>
+      <div class="tipsBox ui-state-highlight">
+        <p>
+          ${tips['requests.findpending.findmatchingproducts']}
+        </p>
+      </div>
 
-			<br />
-			<button class="issueSelectedProductsButton">Issue Selected Products</button>
-			<button class="cancelButton">Cancel</button>
-			<br />
-			<br />
-			<table id="${table_id}" class="dataTable productsTable">
-				<thead>
-					<tr>
-						<th style="display:none;"></th>
-						<th></th>
-						<c:if test="${productFields.collectionNumber.hidden != true}">
-							<th>${productFields.collectionNumber.displayName}</th>
-						</c:if>
-						<c:if test="${productFields.bloodGroup.hidden != true}">
-							<th>${productFields.bloodGroup.displayName}</th>
-						</c:if>
-						<c:if test="${productFields.productType.hidden != true}">
-							<th>${productFields.productType.displayName}</th>
-						</c:if>
-						<c:if test="${productFields.createdOn.hidden != true}">
-							<th>${productFields.createdOn.displayName}</th>
-						</c:if>
-						<c:if test="${productFields.age.hidden != true}">
-							<th>${productFields.age.displayName} (in days)</th>
-						</c:if>
-						<c:if test="${productFields.expiresOn.hidden != true}">
-							<th>${productFields.expiresOn.displayName}</th>
-						</c:if>
-						<th>${compatibilityTestFields.compatibilityResult.displayName}</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="product" items="${allProducts}">
-						<c:set var="rowColor" value="${product.isCompatible == 'COMPATIBLE' ? 'green' : '' }" />
-						<c:set var="rowFontWeight" value="${product.isCompatible == 'COMPATIBLE' ? 'bold' : '' }" />
-						<tr style="color: ${rowColor}; font-weight: ${rowFontWeight};" data-iscompatible="${product.isCompatible}">
-							<td style="display: none;">${product.id}</td>
-							<td>
-								<input type="checkbox" />
-							</td>
-							<c:if test="${productFields.collectionNumber.hidden != true}">
-								<td>${product.collectionNumber}</td>
-							</c:if>
-							<c:if test="${productFields.collectionNumber.hidden != true}">
-								<td>${product.bloodGroup}</td>
-							</c:if>
-							<c:if test="${productFields.productType.hidden != true}">
-								<td>${product.productType.productType}</td>
-							</c:if>
-							<c:if test="${productFields.createdOn.hidden != true}">
-								<td>${product.createdOn}</td>
-							</c:if>
-							<c:if test="${productFields.age.hidden != true}">
-								<td>${product.age}</td>
-							</c:if>
-							<c:if test="${productFields.expiresOn.hidden != true}">
-								<td>${product.expiresOn}</td>
-							</c:if>
-							<td>${product.isCompatible}</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+      <br />
+      <button class="issueSelectedProductsButton">Issue Selected Products</button>
+      <button class="cancelButton">Cancel</button>
+      <br />
+      <br />
+      <table id="${table_id}" class="dataTable productsTable">
+        <thead>
+          <tr>
+            <th style="display:none;"></th>
+            <th></th>
+            <c:if test="${productFields.collectionNumber.hidden != true}">
+              <th>${productFields.collectionNumber.displayName}</th>
+            </c:if>
+            <c:if test="${productFields.bloodGroup.hidden != true}">
+              <th>${productFields.bloodGroup.displayName}</th>
+            </c:if>
+            <c:if test="${productFields.productType.hidden != true}">
+              <th>${productFields.productType.displayName}</th>
+            </c:if>
+            <c:if test="${productFields.createdOn.hidden != true}">
+              <th>${productFields.createdOn.displayName}</th>
+            </c:if>
+            <c:if test="${productFields.age.hidden != true}">
+              <th>${productFields.age.displayName} (in days)</th>
+            </c:if>
+            <c:if test="${productFields.expiresOn.hidden != true}">
+              <th>${productFields.expiresOn.displayName}</th>
+            </c:if>
+            <th>${compatibilityTestFields.compatibilityResult.displayName}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <c:forEach var="product" items="${allProducts}">
+            <c:set var="rowColor" value="${product.isCompatible == 'COMPATIBLE' ? 'green' : '' }" />
+            <c:set var="rowFontWeight" value="${product.isCompatible == 'COMPATIBLE' ? 'bold' : '' }" />
+            <tr style="color: ${rowColor}; font-weight: ${rowFontWeight};" data-iscompatible="${product.isCompatible}">
+              <td style="display: none;">${product.id}</td>
+              <td>
+                <input type="checkbox" />
+              </td>
+              <c:if test="${productFields.collectionNumber.hidden != true}">
+                <td>${product.collectionNumber}</td>
+              </c:if>
+              <c:if test="${productFields.collectionNumber.hidden != true}">
+                <td>${product.bloodGroup}</td>
+              </c:if>
+              <c:if test="${productFields.productType.hidden != true}">
+                <td>${product.productType.productType}</td>
+              </c:if>
+              <c:if test="${productFields.createdOn.hidden != true}">
+                <td>${product.createdOn}</td>
+              </c:if>
+              <c:if test="${productFields.age.hidden != true}">
+                <td>${product.age}</td>
+              </c:if>
+              <c:if test="${productFields.expiresOn.hidden != true}">
+                <td>${product.expiresOn}</td>
+              </c:if>
+              <td>${product.isCompatible}</td>
+            </tr>
+          </c:forEach>
+        </tbody>
+      </table>
 
-		</c:otherwise>
-	</c:choose>
+    </c:otherwise>
+  </c:choose>
 
 </div>
 
 <div id="${confirmIssueProductsDialogId}" title="Confirm Issue?" style="display: none;">
-	<div class="dialogContent"></div>
+  <div class="dialogContent"></div>
 </div>
 
 <div id="${crossmatchConfirmDialogId}" style="display: none;">
-	<div>
-		<p>
-			Crossmatch testing has not been done for the following products.
-		</p>
-		<p>
-			Do you want to skip crossmatch tests and issue the selected products?
-		</p>
-		<ul class="productsListWithoutCrossmatch">
-		</ul>
-	</div>
+  <div>
+    <p>
+      Crossmatch testing has not been done for the following products.
+    </p>
+    <p>
+      Do you want to skip crossmatch tests and issue the selected products?
+    </p>
+    <ul class="productsListWithoutCrossmatch">
+    </ul>
+  </div>
 </div>

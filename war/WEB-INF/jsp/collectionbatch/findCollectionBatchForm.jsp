@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,8 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
@@ -39,12 +39,12 @@ $(document).ready(function() {
       url : "findCollectionBatch.html",
       data : findCollectionBatchFormData,
       success: function(data) {
-        				 animatedScrollTo(resultsDiv);
-				         resultsDiv.html(data);
-      				 },
+                 animatedScrollTo(resultsDiv);
+                 resultsDiv.html(data);
+               },
       error: function(data) {
-							 showErrorMessage("Something went wrong. Please try again later.");        
-      			 }
+               showErrorMessage("Something went wrong. Please try again later.");        
+             }
     });
   });
 
@@ -59,70 +59,70 @@ $(document).ready(function() {
     $("#${childContentId}").html("");
   }
 
-	$("#${findCollectionBatchFormId}").find(".collectionCenterSelector").multiselect({
-	  position : {
-	    my : 'left top',
-	    at : 'right center'
-	  },
-	  noneSelectedText: 'None Selected',
-	  //header: false,
-		 // uncomment the following if you wish to disallow selection of no options in the
-		 // selection menu
-	  //click: function(e) {
-			 //if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+  $("#${findCollectionBatchFormId}").find(".collectionCenterSelector").multiselect({
+    position : {
+      my : 'left top',
+      at : 'right center'
+    },
+    noneSelectedText: 'None Selected',
+    //header: false,
+     // uncomment the following if you wish to disallow selection of no options in the
+     // selection menu
+    //click: function(e) {
+       //if( $(this).multiselect("widget").find("input:checked").length == 0 ){
        // return false;
-			 //}
-		 //},
-	  selectedText: function(numSelected, numTotal, selectedValues) {
-										if (numSelected == numTotal) {
-										  return "Any Center";
-										}
-										else {
-										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
-										  return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
-										}
-	  							}
-	});
-	$("#${findCollectionBatchFormId}").find(".collectionCenterSelector").multiselect("checkAll");
+       //}
+     //},
+    selectedText: function(numSelected, numTotal, selectedValues) {
+                    if (numSelected == numTotal) {
+                      return "Any Center";
+                    }
+                    else {
+                      var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+                      return checkedValues.length ? checkedValues.join(', ') : 'Any Center';
+                    }
+                  }
+  });
+  $("#${findCollectionBatchFormId}").find(".collectionCenterSelector").multiselect("checkAll");
 
-	$("#${findCollectionBatchFormId}").find(".collectionSiteSelector").multiselect({
-	  position : {
-	    my : 'left top',
-	    at : 'right center'
-	  },
-	  noneSelectedText: 'None Selected',
-	  //header: false,
-		 // uncomment the following if you wish to disallow selection of no options in the
-		 // selection menu
-	  //click: function(e) {
-      			 //if( $(this).multiselect("widget").find("input:checked").length == 0 ){
+  $("#${findCollectionBatchFormId}").find(".collectionSiteSelector").multiselect({
+    position : {
+      my : 'left top',
+      at : 'right center'
+    },
+    noneSelectedText: 'None Selected',
+    //header: false,
+     // uncomment the following if you wish to disallow selection of no options in the
+     // selection menu
+    //click: function(e) {
+             //if( $(this).multiselect("widget").find("input:checked").length == 0 ){
              //  return false;
-      			 //}
-	  			 //},
-	  selectedText: function(numSelected, numTotal, selectedValues) {
-										if (numSelected == numTotal) {
-										  return "Any Site";
-										}
-										else {
-										  var checkedValues = $.map(selectedValues, function(input) { return input.title; });
-										  return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
-										}
-	  							}
-	});
-	$("#${findCollectionBatchFormId}").find(".collectionSiteSelector").multiselect("checkAll");
+             //}
+           //},
+    selectedText: function(numSelected, numTotal, selectedValues) {
+                    if (numSelected == numTotal) {
+                      return "Any Site";
+                    }
+                    else {
+                      var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+                      return checkedValues.length ? checkedValues.join(', ') : 'Any Site';
+                    }
+                  }
+  });
+  $("#${findCollectionBatchFormId}").find(".collectionSiteSelector").multiselect("checkAll");
 
   $("#${tabContentId}").bind("collectionBatchSummaryView",
       function(event, content) {
-    		$("#${mainContentId}").hide();
-    		$("#${childContentId}").html(content);
-  		});
+        $("#${mainContentId}").hide();
+        $("#${childContentId}").html(content);
+      });
 
   $("#${tabContentId}").bind("collectionBatchSummarySuccess",
       function(event, content) {
-    		$("#${mainContentId}").show();
-    		$("#${childContentId}").html("");
-    		$("#${tabContentId}").find(".collectionsBatchTable").trigger("refreshResults");
-  		});
+        $("#${mainContentId}").show();
+        $("#${childContentId}").html("");
+        $("#${tabContentId}").find(".collectionsBatchTable").trigger("refreshResults");
+      });
 
   $("#${findCollectionBatchFormId}").submit(function(event) {
     event.preventDefault();
@@ -131,61 +131,61 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
-	<div id="${mainContentId}">
-		<b>Find Collection Batches</b>
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				${tips['collectionbatch.find']}
-			</p>
-		</div>
-		<form:form method="GET" commandName="findCollectionBatchForm" id="${findCollectionBatchFormId}"
-			class="formFormatClass">
-	
-			<div>
-				<form:label path="batchNumber">Batch number</form:label>
-				<form:input path="batchNumber" placeholder="Batch Number" />
-			</div>
-	
-			<div>
-					<form:label path="collectionCenters">Collection center</form:label>
-					<form:select path="collectionCenters"
-											 id="${findCollectionBatchFormCollectionCentersSelectorId}"
-											 class="collectionCenterSelector">
-						<c:forEach var="center" items="${centers}">
-							<form:option value="${center.id}">${center.name}</form:option>
-						</c:forEach>
-					</form:select>
-			</div>
-	
-			<div>
-					<form:label path="collectionSites">Collection site</form:label>
-					<form:select path="collectionSites"
-											 id="${findCollectionBatchFormCollectionSitesSelectorId}"
-											 class="collectionSiteSelector">
-						<c:forEach var="site" items="${sites}">
-							<form:option value="${site.id}">${site.name}</form:option>
-						</c:forEach>
-					</form:select>
-			</div>
+  <div id="${mainContentId}">
+    <b>Find Collection Batches</b>
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        ${tips['collectionbatch.find']}
+      </p>
+    </div>
+    <form:form method="GET" commandName="findCollectionBatchForm" id="${findCollectionBatchFormId}"
+      class="formFormatClass">
+  
+      <div>
+        <form:label path="batchNumber">Batch number</form:label>
+        <form:input path="batchNumber" placeholder="Batch Number" />
+      </div>
+  
+      <div>
+          <form:label path="collectionCenters">Collection center</form:label>
+          <form:select path="collectionCenters"
+                       id="${findCollectionBatchFormCollectionCentersSelectorId}"
+                       class="collectionCenterSelector">
+            <c:forEach var="center" items="${centers}">
+              <form:option value="${center.id}">${center.name}</form:option>
+            </c:forEach>
+          </form:select>
+      </div>
+  
+      <div>
+          <form:label path="collectionSites">Collection site</form:label>
+          <form:select path="collectionSites"
+                       id="${findCollectionBatchFormCollectionSitesSelectorId}"
+                       class="collectionSiteSelector">
+            <c:forEach var="site" items="${sites}">
+              <form:option value="${site.id}">${site.name}</form:option>
+            </c:forEach>
+          </form:select>
+      </div>
 
-			<br />
-			<br />
+      <br />
+      <br />
 
-		</form:form>
+    </form:form>
 
-		<div class="formFormatClass">
-			<div>
-				<label></label>
-				<button type="button" class="findCollectionBatchButton">
-					Find collection batches
-				</button>
-				<button type="button" class="clearFindFormButton">
-					Clear form
-				</button>
-			</div>
-		</div>
+    <div class="formFormatClass">
+      <div>
+        <label></label>
+        <button type="button" class="findCollectionBatchButton">
+          Find collection batches
+        </button>
+        <button type="button" class="clearFindFormButton">
+          Clear form
+        </button>
+      </div>
+    </div>
 
-	<div class="findCollectionBatchResults"></div>	
+  <div class="findCollectionBatchResults"></div>  
 </div>
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 </div>

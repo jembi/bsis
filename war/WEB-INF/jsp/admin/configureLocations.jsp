@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,8 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
@@ -55,11 +55,11 @@ $(document).ready(function() {
       var isUsageSite = div.find('input[name="isUsageSite"]').is(":checked");
       var isDonorPanel = div.find('input[name="isDonorPanel"]').is(":checked");
       data[locationId] = {name: locationName,
-          								isCollectionCenter: isCollectionCenter,
-          								isCollectionSite: isCollectionSite,
-          								isUsageSite: isUsageSite,
-          								isDonorPanel: isDonorPanel
-          							 };
+                          isCollectionCenter: isCollectionCenter,
+                          isCollectionSite: isCollectionSite,
+                          isUsageSite: isUsageSite,
+                          isDonorPanel: isDonorPanel
+                         };
     }
 
     $.ajax({
@@ -67,13 +67,13 @@ $(document).ready(function() {
       data: {params: JSON.stringify(data)},
       type: "POST",
       success: function(response) {
-        				 $("#${tabContentId}").replaceWith(response);
-        				 showMessage("Centers and Sites Updated Successfully!");
-      				 },
-      error: 	 function(response) {
-        				 showErrorMessage("Something went wrong. Please try again later");
-        				 console.log(response);
-      				 },
+                 $("#${tabContentId}").replaceWith(response);
+                 showMessage("Centers and Sites Updated Successfully!");
+               },
+      error:    function(response) {
+                 showErrorMessage("Something went wrong. Please try again later");
+                 console.log(response);
+               },
     });
     return false;
   });
@@ -89,70 +89,70 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
-	<div id="${mainContentId}" class="formFormatClass">
-		<b>Configure Locations</b>
-		<br />
-		<br />
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				Edit/Create centers and sites. 
-			</p>
-		</div>
+  <div id="${mainContentId}" class="formFormatClass">
+    <b>Configure Locations</b>
+    <br />
+    <br />
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        Edit/Create centers and sites. 
+      </p>
+    </div>
 
-		<form id="${configureLocationsFormId}">
-				<c:forEach var="location" items="${model.allLocations}">
+    <form id="${configureLocationsFormId}">
+        <c:forEach var="location" items="${model.allLocations}">
 
-					<div class="locationDiv">
-						<div>
-							<input type="hidden" name="id" value="${location.id}" />
-							<input type="text" name="locationName" value="${location.name}" />
-				
-							<label for="isCollectionCenter">Center</label>
-							<c:if test="${location.isCollectionCenter}">
-								<input type="checkbox" name="isCollectionCenter" checked="checked"/>
-							</c:if>
-							<c:if test="${!location.isCollectionCenter}">
-								<input type="checkbox" name="isCollectionCenter" />
-							</c:if>
+          <div class="locationDiv">
+            <div>
+              <input type="hidden" name="id" value="${location.id}" />
+              <input type="text" name="locationName" value="${location.name}" />
+        
+              <label for="isCollectionCenter">Center</label>
+              <c:if test="${location.isCollectionCenter}">
+                <input type="checkbox" name="isCollectionCenter" checked="checked"/>
+              </c:if>
+              <c:if test="${!location.isCollectionCenter}">
+                <input type="checkbox" name="isCollectionCenter" />
+              </c:if>
 
-							<label for="isCollectionSite" style="margin-left: 10px;">Collection Site</label>
-							<c:if test="${location.isCollectionSite}">
-								<input type="checkbox" name="isCollectionSite" checked="checked"/>
-							</c:if>
-							<c:if test="${!location.isCollectionSite}">
-								<input type="checkbox" name="isCollectionSite" />
-							</c:if>
+              <label for="isCollectionSite" style="margin-left: 10px;">Collection Site</label>
+              <c:if test="${location.isCollectionSite}">
+                <input type="checkbox" name="isCollectionSite" checked="checked"/>
+              </c:if>
+              <c:if test="${!location.isCollectionSite}">
+                <input type="checkbox" name="isCollectionSite" />
+              </c:if>
 
-							<label for="isUsageSite" style="margin-left: 10px;">Request/Usage Site</label>
-							<c:if test="${location.isUsageSite}">
-								<input type="checkbox" name="isUsageSite" checked="checked"/>
-							</c:if>
-							<c:if test="${!location.isUsageSite}">
-								<input type="checkbox" name="isUsageSite" />
-							</c:if>
+              <label for="isUsageSite" style="margin-left: 10px;">Request/Usage Site</label>
+              <c:if test="${location.isUsageSite}">
+                <input type="checkbox" name="isUsageSite" checked="checked"/>
+              </c:if>
+              <c:if test="${!location.isUsageSite}">
+                <input type="checkbox" name="isUsageSite" />
+              </c:if>
 
-							<label for="isDonorPanel" style="margin-left: 10px;">Donor Panel</label>
-							<c:if test="${location.isDonorPanel}">
-								<input type="checkbox" name="isDonorPanel" checked="checked"/>
-							</c:if>
-							<c:if test="${!location.isDonorPanel}">
-								<input type="checkbox" name="isDonorPanel" />
-							</c:if>
-						</div>
-					</div>
+              <label for="isDonorPanel" style="margin-left: 10px;">Donor Panel</label>
+              <c:if test="${location.isDonorPanel}">
+                <input type="checkbox" name="isDonorPanel" checked="checked"/>
+              </c:if>
+              <c:if test="${!location.isDonorPanel}">
+                <input type="checkbox" name="isDonorPanel" />
+              </c:if>
+            </div>
+          </div>
 
-			</c:forEach>
-		</form>
-			<br />
-			<div>
-				<label>&nbsp;</label>
-				<button class="addLocationButton">Add new Center/Site</button>
-				<button class="saveLocationsButton">Save</button>
-				<button class="cancelButton">Cancel</button>
-			</div>
+      </c:forEach>
+    </form>
+      <br />
+      <div>
+        <label>&nbsp;</label>
+        <button class="addLocationButton">Add new Center/Site</button>
+        <button class="saveLocationsButton">Save</button>
+        <button class="cancelButton">Cancel</button>
+      </div>
 
-	</div>
+  </div>
 
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 
 </div>

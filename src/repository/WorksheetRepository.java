@@ -37,7 +37,7 @@ public class WorksheetRepository {
 
   public Worksheet findWorksheetById(Long worksheetId) {
     String queryStr = "SELECT w from Worksheet w WHERE " +
-    		"w.id=:worksheetId AND w.isDeleted=:isDeleted";
+        "w.id=:worksheetId AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
     query.setParameter("worksheetId", worksheetId);
     query.setParameter("isDeleted", false);
@@ -49,13 +49,13 @@ public class WorksheetRepository {
     if (collectionNumbers.isEmpty())
       return;
     String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples " +
-    		"WHERE w.id=:worksheetId AND w.isDeleted=:isDeleted";
+        "WHERE w.id=:worksheetId AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
     query.setParameter("worksheetId", worksheetId);
     query.setParameter("isDeleted", false);
 
     String collectionQueryStr = "SELECT c from CollectedSample c " +
-    		"LEFT JOIN FETCH c.worksheets WHERE " +
+        "LEFT JOIN FETCH c.worksheets WHERE " +
         "c.collectionNumber IN :collectionNumbers";
     TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionQueryStr, CollectedSample.class);
     collectionsQuery.setParameter("collectionNumbers", collectionNumbers);
@@ -96,13 +96,13 @@ public class WorksheetRepository {
     TypedQuery<Worksheet> query = null;
     if (StringUtils.isBlank(worksheetNumber)) {
       String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
-      		"w.worksheetType.id IN (:worksheetTypeIds) AND w.isDeleted=:isDeleted";
+          "w.worksheetType.id IN (:worksheetTypeIds) AND w.isDeleted=:isDeleted";
       query = em.createQuery(queryStr, Worksheet.class);
       query.setParameter("worksheetTypeIds", worksheetTypeIds);
       query.setParameter("isDeleted", false);
     } else {
       String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
-      		"w.worksheetNumber = :worksheetNumber AND w.isDeleted=:isDeleted";
+          "w.worksheetNumber = :worksheetNumber AND w.isDeleted=:isDeleted";
       query = em.createQuery(queryStr, Worksheet.class);
       query.setParameter("worksheetNumber", worksheetNumber);
       query.setParameter("isDeleted", false);

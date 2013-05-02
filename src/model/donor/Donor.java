@@ -40,9 +40,9 @@ import org.hibernate.validator.constraints.Length;
 public class Donor implements ModificationTracker {
 
   @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, updatable=false, insertable=false)
-	private Long id;
+  private Long id;
 
   /** Donor Number column should be indexed. It has high selectivity.
    *  Search by donor number is very common usecase. VARCHAR(15) should
@@ -60,7 +60,7 @@ public class Donor implements ModificationTracker {
   @Column(length=20)
   @Index(name="donor_firstName_index")
   @Length(max=20)
-	private String firstName;
+  private String firstName;
 
   @Length(max=20)
   @Column(length=20)
@@ -72,7 +72,7 @@ public class Donor implements ModificationTracker {
   @Length(max=20)
   @Index(name="donor_lastName_index")
   @Column(length=20)
-	private String lastName;
+  private String lastName;
 
   /**
    * Some people prefer to be called by a different name. If required this field can be used.
@@ -86,7 +86,7 @@ public class Donor implements ModificationTracker {
    */
   @Enumerated(EnumType.STRING)
   @Column(length=15)
-	private Gender gender;
+  private Gender gender;
 
   /**
    * TODO: Not sure if an index will help here.
@@ -105,7 +105,7 @@ public class Donor implements ModificationTracker {
    * Do not see a need to search by birthdate so need not add an index here.
    */
   @Temporal(TemporalType.DATE)
-	private Date birthDate;
+  private Date birthDate;
 
   @Temporal(TemporalType.DATE)
   private Date birthDateInferred;
@@ -135,7 +135,7 @@ public class Donor implements ModificationTracker {
   private Location donorPanel;
 
   @Lob
-	private String notes;
+  private String notes;
 
   @Valid
   private RowModificationTracker modificationTracker;
@@ -146,10 +146,10 @@ public class Donor implements ModificationTracker {
   /**
    * Never delete the rows. Just mark them as deleted.
    */
-	private Boolean isDeleted;
+  private Boolean isDeleted;
 
-	@NotAudited
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donor")
   private List<CollectedSample> collectedSamples;
 
@@ -159,10 +159,10 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
 
-	public Donor() {
-	  contactInformation = new ContactInformation();
-	  modificationTracker = new RowModificationTracker();
-	}
+  public Donor() {
+    contactInformation = new ContactInformation();
+    modificationTracker = new RowModificationTracker();
+  }
 
   public Long getId() {
     return id;

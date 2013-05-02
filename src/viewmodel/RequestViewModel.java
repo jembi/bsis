@@ -13,7 +13,7 @@ import model.user.User;
 import model.util.BloodGroup;
 
 public class RequestViewModel {
-	private Request request;
+  private Request request;
 
   public RequestViewModel(Request productRequest) {
     this.request = productRequest;

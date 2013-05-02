@@ -33,7 +33,7 @@ public class ProductStatusChangeReasonRepository {
       ProductStatusChangeReasonCategory category) {
     TypedQuery<ProductStatusChangeReason> query;
     query = em.createQuery("SELECT p from ProductStatusChangeReason p where " +
-    		"p.category=:category AND p.isDeleted=:isDeleted",
+        "p.category=:category AND p.isDeleted=:isDeleted",
         ProductStatusChangeReason.class);
     query.setParameter("isDeleted", false);
     query.setParameter("category", category);

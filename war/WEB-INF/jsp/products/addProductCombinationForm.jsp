@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -19,14 +19,14 @@
       function() {
 
         function notifyParentSuccess() {
-						// let the parent know we are done
-						$("#${tabContentId}").parent().trigger("editProductSuccess");
-				}
+            // let the parent know we are done
+            $("#${tabContentId}").parent().trigger("editProductSuccess");
+        }
 
         function notifyParentCancel() {
-					// let the parent know we are done
-					$("#${tabContentId}").parent().trigger("editProductCancel");
-				}
+          // let the parent know we are done
+          $("#${tabContentId}").parent().trigger("editProductCancel");
+        }
 
         $("#${tabContentId}").find(".addProductButton").button({
           icons : {
@@ -49,9 +49,9 @@
               console.log(expiresOn);
 
               $("#${addProductCombinationFormId}").find('input[name="expiresOn"]')
-																									.val(JSON.stringify(expiresOn));
+                                                  .val(JSON.stringify(expiresOn));
               addNewProductCombination($("#${addProductCombinationFormId}")[0],
-                    											 "${tabContentId}", notifyParentSuccess);
+                                           "${tabContentId}", notifyParentSuccess);
             });
 
         $("#${addProductCombinationFormId}").find(".productTypeCombination").multiselect({
@@ -119,8 +119,8 @@
         });
 
         $("#${tabContentId}").find(".clearFormButton")
-        										 .button()
-        										 .click(refetchForm);
+                             .button()
+                             .click(refetchForm);
 
         function refetchForm() {
           $.ajax({
@@ -128,18 +128,18 @@
             data: {},
             type: "GET",
             success: function (response) {
-              			 	 $("#${tabContentId}").replaceWith(response);
-            				 },
+                        $("#${tabContentId}").replaceWith(response);
+                     },
             error:   function (response) {
-											 showErrorMessage("Something went wrong. Please try again.");
-            				 }
+                       showErrorMessage("Something went wrong. Please try again.");
+                     }
             
           });
         }
 
         if ("${firstTimeRender}" == "true") {
-        	$("#${tabContentId}").find('textarea[name="notes"]').html("${productFields.notes.defaultValue}");
-        	setDefaultValueForSelector(getProductTypeCombinationSelector(), "${productFields.productTypeCombination.defaultValue}");
+          $("#${tabContentId}").find('textarea[name="notes"]').html("${productFields.notes.defaultValue}");
+          setDefaultValueForSelector(getProductTypeCombinationSelector(), "${productFields.productTypeCombination.defaultValue}");
         }
 
         function getProductTypeCombinationSelector() {
@@ -155,71 +155,71 @@
 
 <div id="${tabContentId}">
 
-	<c:if test="${!empty success && !success}">
-		<jsp:include page="../common/errorBox.jsp">
-			<jsp:param name="errorMessage" value="${errorMessage}" />
-		</jsp:include>
-	</c:if>
+  <c:if test="${!empty success && !success}">
+    <jsp:include page="../common/errorBox.jsp">
+      <jsp:param name="errorMessage" value="${errorMessage}" />
+    </jsp:include>
+  </c:if>
 
-	<form:form method="POST" commandName="addProductCombinationForm"
-		class="formFormatClass" id="${addProductCombinationFormId}">
-		<c:if test="${productFields.collectionNumber.hidden != true }">
-			<div>
-				<form:label path="collectionNumber">${productFields.collectionNumber.displayName}</form:label>
-				<form:input path="collectionNumber" value="${firstTimeRender ? productFields.collectionNumber.defaultValue : ''}" />
-				<form:errors class="formError"
-					path="product.collectionNumber" delimiter=", "></form:errors>
-				<form:errors class="formError"
-					path="product.collectedSample" delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${productFields.productTypeCombination.hidden != true }">
-			<div>
-				<form:label path="productTypeCombination">${productFields.productType.displayName}</form:label>
-				<form:select path="productTypeCombination" id="${addProductFormProductTypeCombinationsId}" class="productTypeCombination">
-					<form:option value="" selected="selected">&nbsp;</form:option>
-					<c:forEach var="productTypeCombination" items="${productTypeCombinations}">
-						<form:option value="${productTypeCombination.id}"
-							data-expiryintervalbyproducttype="${productTypeCombinationsMap[productTypeCombination.id]}">
-							${productTypeCombination.combinationName}
-						</form:option>
-					</c:forEach>
-				</form:select>
-				<form:errors class="formError" path="productTypeCombination"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${productFields.createdOn.hidden != true }">
-			<div>
-				<form:label path="createdOn">${productFields.createdOn.displayName}</form:label>
-				<form:input path="createdOn" class="createdOn" value="${firstTimeRender ? productFields.createdOn.defaultValue : ''}" />
-				<form:errors class="formError" path="product.createdOn"
-					delimiter=", "></form:errors>
-			</div>
-		</c:if>
-		<c:if test="${productFields.expiresOn.hidden != true }">
-			<div>
-				<form:hidden path="expiresOn" class="expiresOn" value="${firstTimeRender ? productFields.expiresOn.defaultValue : ''}" />
-				<form:errors class="formError" path="product.expiresOn"
-					delimiter=", "></form:errors>
-			</div>
-			<c:forEach var="productType" items="${productTypes}">
-				<div style="display: none;">
-					<label style="vertical-align: middle;">${productType.productTypeNameShort} <br />expires on</label>
-					<input class="productTypeExpiresOnInput" data-producttypeid="${productType.id}" />
-				</div>
-			</c:forEach>
-		</c:if>
-	</form:form>
+  <form:form method="POST" commandName="addProductCombinationForm"
+    class="formFormatClass" id="${addProductCombinationFormId}">
+    <c:if test="${productFields.collectionNumber.hidden != true }">
+      <div>
+        <form:label path="collectionNumber">${productFields.collectionNumber.displayName}</form:label>
+        <form:input path="collectionNumber" value="${firstTimeRender ? productFields.collectionNumber.defaultValue : ''}" />
+        <form:errors class="formError"
+          path="product.collectionNumber" delimiter=", "></form:errors>
+        <form:errors class="formError"
+          path="product.collectedSample" delimiter=", "></form:errors>
+      </div>
+    </c:if>
+    <c:if test="${productFields.productTypeCombination.hidden != true }">
+      <div>
+        <form:label path="productTypeCombination">${productFields.productType.displayName}</form:label>
+        <form:select path="productTypeCombination" id="${addProductFormProductTypeCombinationsId}" class="productTypeCombination">
+          <form:option value="" selected="selected">&nbsp;</form:option>
+          <c:forEach var="productTypeCombination" items="${productTypeCombinations}">
+            <form:option value="${productTypeCombination.id}"
+              data-expiryintervalbyproducttype="${productTypeCombinationsMap[productTypeCombination.id]}">
+              ${productTypeCombination.combinationName}
+            </form:option>
+          </c:forEach>
+        </form:select>
+        <form:errors class="formError" path="productTypeCombination"
+          delimiter=", "></form:errors>
+      </div>
+    </c:if>
+    <c:if test="${productFields.createdOn.hidden != true }">
+      <div>
+        <form:label path="createdOn">${productFields.createdOn.displayName}</form:label>
+        <form:input path="createdOn" class="createdOn" value="${firstTimeRender ? productFields.createdOn.defaultValue : ''}" />
+        <form:errors class="formError" path="product.createdOn"
+          delimiter=", "></form:errors>
+      </div>
+    </c:if>
+    <c:if test="${productFields.expiresOn.hidden != true }">
+      <div>
+        <form:hidden path="expiresOn" class="expiresOn" value="${firstTimeRender ? productFields.expiresOn.defaultValue : ''}" />
+        <form:errors class="formError" path="product.expiresOn"
+          delimiter=", "></form:errors>
+      </div>
+      <c:forEach var="productType" items="${productTypes}">
+        <div style="display: none;">
+          <label style="vertical-align: middle;">${productType.productTypeNameShort} <br />expires on</label>
+          <input class="productTypeExpiresOnInput" data-producttypeid="${productType.id}" />
+        </div>
+      </c:forEach>
+    </c:if>
+  </form:form>
 
-	<div style="margin-left: 200px;">
-		<label></label>
-		<button type="button" class="addProductButton">
-			Save
-		</button>
-		<button type="button" class="clearFormButton">
-			Clear form
-		</button>
-	</div>
+  <div style="margin-left: 200px;">
+    <label></label>
+    <button type="button" class="addProductButton">
+      Save
+    </button>
+    <button type="button" class="clearFormButton">
+      Clear form
+    </button>
+  </div>
 
 </div>

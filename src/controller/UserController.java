@@ -30,18 +30,18 @@ import viewmodel.UserViewModel;
 @Controller
 public class UserController {
 
-	@Autowired
-	private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-	@Autowired
-	private UtilController utilController;
+  @Autowired
+  private UtilController utilController;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController));
   }
 
-	@RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
   public ModelAndView configureUsersFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {

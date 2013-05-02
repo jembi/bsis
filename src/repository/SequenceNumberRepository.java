@@ -23,9 +23,9 @@ public class SequenceNumberRepository {
   
   synchronized public String getNextCollectionNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
-    		              "where s.targetTable=:targetTable AND " +
-    		              " s.columnName=:columnName AND " +
-    		              "s.sequenceNumberContext=:sequenceNumberContext";
+                      "where s.targetTable=:targetTable AND " +
+                      " s.columnName=:columnName AND " +
+                      "s.sequenceNumberContext=:sequenceNumberContext";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "CollectedSample");
     query.setParameter("columnName", "collectionNumber");
@@ -122,56 +122,56 @@ public class SequenceNumberRepository {
     return requestNumber;
   }
 
-	synchronized public String getNextDonorNumber() {
-		    String queryStr = "SELECT s from SequenceNumberStore s " +
-		            "where s.targetTable=:targetTable AND " +
-		            " s.columnName=:columnName AND " +
-		            "s.sequenceNumberContext=:sequenceNumberContext";
-		TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
-		query.setParameter("targetTable", "Donor");
-		query.setParameter("columnName", "donorNumber");
-		// use last two digits of year
-		DateTime today = new DateTime();
-		Integer mm = today.monthOfYear().get();
-		Integer yy = today.yearOfCentury().get();
-		
-		String mmStr = String.format("%02d", mm);
-		String yyStr = String.format("%02d", yy);
-		query.setParameter("sequenceNumberContext", mmStr + yyStr);
-		
-		SequenceNumberStore seqNumStore = null;
-		Long lastNumber = (long)0;
-		String prefix;
-		boolean valuePresentInTable = true;
-		try {
-		seqNumStore = query.getSingleResult();
-		lastNumber = seqNumStore.getLastNumber();
-		prefix = seqNumStore.getPrefix();
-		} catch (NoResultException ex) {
-		ex.printStackTrace();
-		valuePresentInTable = false;
-		seqNumStore = new SequenceNumberStore();
-		seqNumStore.setTargetTable("Donor");
-		seqNumStore.setColumnName("donorNumber");
-		prefix = "D";
-		seqNumStore.setPrefix(prefix);
-		seqNumStore.setSequenceNumberContext(mmStr + yyStr);
-		}
-		
-		String lastNumberStr = String.format("%06d", lastNumber);
-		// may need a prefix for center where the number is generated
-		String requestNumber = prefix + mmStr + yyStr + lastNumberStr;
-		lastNumber = lastNumber + 1;
-		seqNumStore.setLastNumber(lastNumber);
-		if (valuePresentInTable) {
-		  em.merge(seqNumStore);
-		} else {
-		  em.persist(seqNumStore);
-		}
-		
-		em.flush();
-		return requestNumber;
-	}
+  synchronized public String getNextDonorNumber() {
+        String queryStr = "SELECT s from SequenceNumberStore s " +
+                "where s.targetTable=:targetTable AND " +
+                " s.columnName=:columnName AND " +
+                "s.sequenceNumberContext=:sequenceNumberContext";
+    TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
+    query.setParameter("targetTable", "Donor");
+    query.setParameter("columnName", "donorNumber");
+    // use last two digits of year
+    DateTime today = new DateTime();
+    Integer mm = today.monthOfYear().get();
+    Integer yy = today.yearOfCentury().get();
+    
+    String mmStr = String.format("%02d", mm);
+    String yyStr = String.format("%02d", yy);
+    query.setParameter("sequenceNumberContext", mmStr + yyStr);
+    
+    SequenceNumberStore seqNumStore = null;
+    Long lastNumber = (long)0;
+    String prefix;
+    boolean valuePresentInTable = true;
+    try {
+    seqNumStore = query.getSingleResult();
+    lastNumber = seqNumStore.getLastNumber();
+    prefix = seqNumStore.getPrefix();
+    } catch (NoResultException ex) {
+    ex.printStackTrace();
+    valuePresentInTable = false;
+    seqNumStore = new SequenceNumberStore();
+    seqNumStore.setTargetTable("Donor");
+    seqNumStore.setColumnName("donorNumber");
+    prefix = "D";
+    seqNumStore.setPrefix(prefix);
+    seqNumStore.setSequenceNumberContext(mmStr + yyStr);
+    }
+    
+    String lastNumberStr = String.format("%06d", lastNumber);
+    // may need a prefix for center where the number is generated
+    String requestNumber = prefix + mmStr + yyStr + lastNumberStr;
+    lastNumber = lastNumber + 1;
+    seqNumStore.setLastNumber(lastNumber);
+    if (valuePresentInTable) {
+      em.merge(seqNumStore);
+    } else {
+      em.persist(seqNumStore);
+    }
+    
+    em.flush();
+    return requestNumber;
+  }
 
   synchronized public List<String> getBatchCollectionNumbers(int numCollections) {
     String queryStr = "SELECT s from SequenceNumberStore s " +

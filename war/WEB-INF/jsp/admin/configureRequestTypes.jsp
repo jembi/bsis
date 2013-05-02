@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,8 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
@@ -59,13 +59,13 @@ $(document).ready(function() {
       data: {params: JSON.stringify(data)},
       type: "POST",
       success: function(response) {
-        				 $("#${tabContentId}").replaceWith(response);
-        				 showMessage("Request Types Updated Successfully!");
-      				 },
-      error: 	 function(response) {
-        				 showErrorMessage("Something went wrong. Please try again later");
-        				 console.log(response);
-      				 },
+                 $("#${tabContentId}").replaceWith(response);
+                 showMessage("Request Types Updated Successfully!");
+               },
+      error:    function(response) {
+                 showErrorMessage("Something went wrong. Please try again later");
+                 console.log(response);
+               },
     });
     return false;
   });
@@ -85,35 +85,35 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
-	<div id="${mainContentId}">
-		<b>Configure Request Types</b>
-		<br />
-		<br />
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				Modify names of request types. Add new request types. 
-			</p>
-		</div>
-		<form id="${configureRequestTypesFormId}">
-				<c:forEach var="requestType" items="${model.allRequestTypes}">
-					<div class="requestTypeDiv">
-						<div>
-							<input type="hidden" name="id" value="${requestType.id}" />
-							<input type="text" name="requestType" value="${requestType.requestType}" />
-						</div>
-					</div>
-			</c:forEach>
-		</form>
-			<br />
-			<div>
-				<label>&nbsp;</label>
-				<button class="addRequestTypeButton">Add new request type</button>
-				<button class="saveRequestTypesButton">Save</button>
-				<button class="cancelButton">Cancel</button>
-			</div>
+  <div id="${mainContentId}">
+    <b>Configure Request Types</b>
+    <br />
+    <br />
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        Modify names of request types. Add new request types. 
+      </p>
+    </div>
+    <form id="${configureRequestTypesFormId}">
+        <c:forEach var="requestType" items="${model.allRequestTypes}">
+          <div class="requestTypeDiv">
+            <div>
+              <input type="hidden" name="id" value="${requestType.id}" />
+              <input type="text" name="requestType" value="${requestType.requestType}" />
+            </div>
+          </div>
+      </c:forEach>
+    </form>
+      <br />
+      <div>
+        <label>&nbsp;</label>
+        <button class="addRequestTypeButton">Add new request type</button>
+        <button class="saveRequestTypesButton">Save</button>
+        <button class="cancelButton">Cancel</button>
+      </div>
 
-	</div>
+  </div>
 
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 
 </div>

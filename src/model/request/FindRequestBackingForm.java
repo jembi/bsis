@@ -61,10 +61,10 @@ public class FindRequestBackingForm {
   }
 
   public Boolean getIncludeSatisfiedRequests() {
-  	return includeSatisfiedRequests;
+    return includeSatisfiedRequests;
   }
   
   public void setIncludeSatisfiedRequests(Boolean includeSatisfiedRequests) {
-  	this.includeSatisfiedRequests = includeSatisfiedRequests;
+    this.includeSatisfiedRequests = includeSatisfiedRequests;
   }
 }

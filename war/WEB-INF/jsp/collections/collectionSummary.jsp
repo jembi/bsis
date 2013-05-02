@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -19,7 +19,7 @@
       function() {
 
         showBarcode($("#${mainContentId}").find(".collectionBarcode"),
-            			  "${collectedSample.collectionNumber}");
+                    "${collectedSample.collectionNumber}");
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("collectionSummarySuccess");
@@ -28,18 +28,18 @@
         $("#${tabContentId}").find(".editButton").button(
             {
               icons : {
-          			primary : 'ui-icon-pencil'
-        			}
+                primary : 'ui-icon-pencil'
+              }
             }).click(function() {
 
             hideMainContent();
             $("#${tabContentId}").bind("editCollectionSuccess", editCollectionDone);
             $("#${tabContentId}").bind("editCollectionCancel", editCollectionDone);
 
-  	        fetchContent("editCollectionFormGenerator.html",
-              					 {collectionId: "${collectedSample.id}"},
-              					 $("#${childContentId}")
-  	        						);
+            fetchContent("editCollectionFormGenerator.html",
+                         {collectionId: "${collectedSample.id}"},
+                         $("#${childContentId}")
+                        );
         });
 
         $("#${tabContentId}").find(".printButton").button({
@@ -61,16 +61,16 @@
         $("#${tabContentId}").find(".testResultsForCollectionButton").button(
             {
               icons : {
-          			primary : 'ui-icon-bookmark'
-        			}
+                primary : 'ui-icon-bookmark'
+              }
             }).click(function() {
 
             $("#${tabContentId}").bind("testResultsHistorySuccess", emptyChildContent);
 
-  	        fetchContent("testResultsForCollection.html",
-              					 {collectedSampleId: "${collectedSample.id}"},
-              					 $("#${childContentId}")
-  	        						);
+            fetchContent("testResultsForCollection.html",
+                         {collectedSampleId: "${collectedSample.id}"},
+                         $("#${childContentId}")
+                        );
         });
 
         $("#${tabContentId}").find(".deleteButton").button({
@@ -99,57 +99,57 @@
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
-				function emptyChildContent() {
-				  $("#${childContentId}").remove();
-				}
+        function emptyChildContent() {
+          $("#${childContentId}").remove();
+        }
 
-				function hideMainContent() {
-				  $("#${mainContentId}").remove();
-				}
+        function hideMainContent() {
+          $("#${mainContentId}").remove();
+        }
       });
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}">
+  <div id="${mainContentId}">
 
-		<div class="summaryPageButtonSection" style="text-align: right;">
-			<button type="button" class="cancelButton">
-				Done
-			</button>
-			<!-- button type="button" class="testResultsForCollectionButton">
-				Test results for collection
-			</button-->
-			<c:if test="${permissions['editInformation'] eq 'allowed'}">
-			<button type="button" class="editButton">
-				Edit
-			</button>
-			</c:if>
-			<c:if test="${permissions['editInformation'] eq 'allowed'}">
-			<button type="button" class="deleteButton">
-				Delete
-			</button>
-			</c:if>
-			<button type="button" class="printButton">
-				Print
-			</button>
-		</div>
+    <div class="summaryPageButtonSection" style="text-align: right;">
+      <button type="button" class="cancelButton">
+        Done
+      </button>
+      <!-- button type="button" class="testResultsForCollectionButton">
+        Test results for collection
+      </button-->
+      <c:if test="${permissions['editInformation'] eq 'allowed'}">
+      <button type="button" class="editButton">
+        Edit
+      </button>
+      </c:if>
+      <c:if test="${permissions['editInformation'] eq 'allowed'}">
+      <button type="button" class="deleteButton">
+        Delete
+      </button>
+      </c:if>
+      <button type="button" class="printButton">
+        Print
+      </button>
+    </div>
 
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				${tips['collections.findcollection.collectionsummary']}
-			</p>
-		</div>
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        ${tips['collections.findcollection.collectionsummary']}
+      </p>
+    </div>
 
-		<jsp:include page="collectionDetail.jsp" />
+    <jsp:include page="collectionDetail.jsp" />
 
-	</div>
+  </div>
 
-	<br />
-	<br />
+  <br />
+  <br />
 
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 </div>
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
-	Are	you sure you want to delete this Collection?
+  Are  you sure you want to delete this Collection?
 </div>

@@ -25,8 +25,8 @@ import viewmodel.LocationViewModel;
 @Controller
 public class LocationsController {
 
-	@Autowired
-	private LocationRepository locationRepository;
+  @Autowired
+  private LocationRepository locationRepository;
 
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -37,18 +37,18 @@ public class LocationsController {
     return reqUrl;
   }
 
-	@RequestMapping(value="/configureLocationsFormGenerator", method=RequestMethod.GET)
-	public ModelAndView configureLocationsFormGenerator(
-	    HttpServletRequest request, HttpServletResponse response,
-	    Model model) {
+  @RequestMapping(value="/configureLocationsFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureLocationsFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
 
-	  ModelAndView mv = new ModelAndView("admin/configureLocations");
-	  Map<String, Object> m = model.asMap();
-	  addAllLocationsToModel(m);
-	  m.put("refreshUrl", getUrl(request));
-	  mv.addObject("model", model);
-	  return mv;
-	}
+    ModelAndView mv = new ModelAndView("admin/configureLocations");
+    Map<String, Object> m = model.asMap();
+    addAllLocationsToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    return mv;
+  }
 
   @RequestMapping("/configureLocations")
   public ModelAndView configureLocations(
@@ -91,13 +91,13 @@ public class LocationsController {
     return mv;
   }
   
-	private void addAllLocationsToModel(Map<String, Object> model) {
-		List<Location> allLocations = locationRepository.getAllLocations();
-		List<LocationViewModel> locations = new ArrayList<LocationViewModel>();
-		for (Location allLocation : allLocations) {
-			locations.add(new LocationViewModel(allLocation));
-		}
-		model.put("allLocations", locations);
-	}
+  private void addAllLocationsToModel(Map<String, Object> model) {
+    List<Location> allLocations = locationRepository.getAllLocations();
+    List<LocationViewModel> locations = new ArrayList<LocationViewModel>();
+    for (Location allLocation : allLocations) {
+      locations.add(new LocationViewModel(allLocation));
+    }
+    model.put("allLocations", locations);
+  }
 
 }

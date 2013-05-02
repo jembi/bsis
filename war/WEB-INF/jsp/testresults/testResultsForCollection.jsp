@@ -2,12 +2,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -49,34 +49,34 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}">
+  <div id="${mainContentId}">
 
-		<c:if test="${not collectionFound}">
-			Collection not found. Please check the collection number.
-		</c:if>
+    <c:if test="${not collectionFound}">
+      Collection not found. Please check the collection number.
+    </c:if>
 
-		<c:if test="${collectionFound}">
-			<div class="collectionSummarySection" style="width: 70%;">
-			</div>
+    <c:if test="${collectionFound}">
+      <div class="collectionSummarySection" style="width: 70%;">
+      </div>
 
-			<br />
-			<div style="position: relative; height: 100%;">
-				<div style="display: inline-block; width: 380px; vertical-align: top; margin-right: 5px;">
-					<span style="font-weight: bold;">Blood typing results for collection</span>
-					<div class="bloodTypingSection">
-					</div>
-				</div>
-			
-				<div style="display: inline-block; width: 380px; vertical-align: top; margin-left: 5px;">
-					<span style="font-weight: bold;">TTI results for collection</span>
-					<div class="ttiSection">
-					</div>
-				</div>
-			</div>
-		</c:if>
+      <br />
+      <div style="position: relative; height: 100%;">
+        <div style="display: inline-block; width: 380px; vertical-align: top; margin-right: 5px;">
+          <span style="font-weight: bold;">Blood typing results for collection</span>
+          <div class="bloodTypingSection">
+          </div>
+        </div>
+      
+        <div style="display: inline-block; width: 380px; vertical-align: top; margin-left: 5px;">
+          <span style="font-weight: bold;">TTI results for collection</span>
+          <div class="ttiSection">
+          </div>
+        </div>
+      </div>
+    </c:if>
 
-	</div>
+  </div>
 
-	<div id="${childContentId}">
-	</div>
+  <div id="${childContentId}">
+  </div>
 </div>

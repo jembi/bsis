@@ -14,14 +14,14 @@ import org.joda.time.Days;
 
 public class ProductViewModel {
 
-	private Product product;
+  private Product product;
 
-	public ProductViewModel() {
-	}
+  public ProductViewModel() {
+  }
 
-	public ProductViewModel(Product product) {
-	  this.product = product;
-	}
+  public ProductViewModel(Product product) {
+    this.product = product;
+  }
 
   public Product getProduct() {
     return product;

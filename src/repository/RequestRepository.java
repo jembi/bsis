@@ -79,7 +79,7 @@ public class RequestRepository {
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-      		"r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
+          "r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
@@ -96,7 +96,7 @@ public class RequestRepository {
     Request request = null;
     if (requestId != null) {
       String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-      		                 "r.id = :requestId and r.isDeleted= :isDeleted";
+                           "r.id = :requestId and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       List<Request> requests = query.setParameter("requestId", requestId)
@@ -340,16 +340,16 @@ public class RequestRepository {
             "r.isDeleted= :isDeleted";
 
 
-  	if (!includeSatisfiedRequests)
-  		queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
+    if (!includeSatisfiedRequests)
+      queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
 
-  	query = em.createQuery(queryStr, Request.class);
+    query = em.createQuery(queryStr, Request.class);
 
     Date from = getDateRequestedAfterOrDefault(requestedAfter);
     Date to = getDateRequiredByOrDefault(requiredBy);
 
     if (!includeSatisfiedRequests)
-    	query.setParameter("fulfilled", false);
+      query.setParameter("fulfilled", false);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypeIds", productTypeIds);

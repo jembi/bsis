@@ -39,7 +39,7 @@ public class RequestTypeRepository {
   public RequestType getRequestTypeById(Integer requestTypeId) {
     TypedQuery<RequestType> query;
     query = em.createQuery("SELECT r from RequestType r " +
-    		    "where r.id=:id AND r.isDeleted=:isDeleted", RequestType.class);
+            "where r.id=:id AND r.isDeleted=:isDeleted", RequestType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", requestTypeId);
     if (query.getResultList().size() == 0)

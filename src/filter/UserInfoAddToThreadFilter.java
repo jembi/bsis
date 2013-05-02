@@ -41,6 +41,6 @@ public class UserInfoAddToThreadFilter implements Filter {
 
   @Override
   protected void finalize() throws Throwable {
-	threadLocal.set(null);
+  threadLocal.set(null);
   }
 }

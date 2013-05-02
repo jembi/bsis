@@ -22,9 +22,9 @@ public class CollectedSampleViewModel {
   public CollectedSampleViewModel() {
   }
 
-	public CollectedSampleViewModel(CollectedSample collection) {
-		this.collectedSample = collection;
-	}
+  public CollectedSampleViewModel(CollectedSample collection) {
+    this.collectedSample = collection;
+  }
 
   public void copy(CollectedSample collection) {
     collection.copy(collection);

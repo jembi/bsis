@@ -2,11 +2,11 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -19,7 +19,7 @@
       function() {
 
         showBarcode($("#${mainContentId}").find(".worksheetBarcode"),
-            			  "${worksheet.worksheetNumber}");
+                    "${worksheet.worksheetNumber}");
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("worksheetSummarySuccess");
@@ -61,68 +61,68 @@
         }
 
         function emptyChildContent() {
-				  $("#${childContentId}").html("");
-				}
+          $("#${childContentId}").html("");
+        }
 
-      	$("#${mainContentId}").find(".showHideButton")
-															.button({icons: {primary : 'ui-icon-plusthick'}})
-															.click(showHideToggle);
+        $("#${mainContentId}").find(".showHideButton")
+                              .button({icons: {primary : 'ui-icon-plusthick'}})
+                              .click(showHideToggle);
 
-				function showHideToggle() {
-					var showHideButton = $(this);
-					var showHideSection = $("#${mainContentId}").find(".worksheetDetails")
-																											.find(".inputCollectionsSection");
-					var currentlyVisible = showHideSection.is(":visible");
-					if (currentlyVisible) {
-						$("#${mainContentId}").find(".availableTestResultInput")
-											 					  .each(function() {
-					                                $(this).prop("type", "hidden");
-					                              });
-						$("#${mainContentId}").find(".availableTestResultLabel")
-					                        .each(function() {
-						                              $(this).show();
-					                              });
-						showHideButton.button("option", "label", "Add collections");
-						showHideButton.button("option", "icons", {primary : "ui-icon-plusthick"});
-						showHideSection.hide();
-					}
-					else {
-						showHideButton.button("option", "label", "Show less");
-						showHideButton.button("option", "icons", {primary : "ui-icon-minusthick"});
-						showHideSection.show();
-					}
-				}
+        function showHideToggle() {
+          var showHideButton = $(this);
+          var showHideSection = $("#${mainContentId}").find(".worksheetDetails")
+                                                      .find(".inputCollectionsSection");
+          var currentlyVisible = showHideSection.is(":visible");
+          if (currentlyVisible) {
+            $("#${mainContentId}").find(".availableTestResultInput")
+                                   .each(function() {
+                                          $(this).prop("type", "hidden");
+                                        });
+            $("#${mainContentId}").find(".availableTestResultLabel")
+                                  .each(function() {
+                                          $(this).show();
+                                        });
+            showHideButton.button("option", "label", "Add collections");
+            showHideButton.button("option", "icons", {primary : "ui-icon-plusthick"});
+            showHideSection.hide();
+          }
+          else {
+            showHideButton.button("option", "label", "Show less");
+            showHideButton.button("option", "icons", {primary : "ui-icon-minusthick"});
+            showHideSection.show();
+          }
+        }
 
-				showHideToggle();
+        showHideToggle();
       });
 </script>
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}">
-			<div class="summaryPageButtonSection" style="text-align: right;">
-			<button type="button" class="cancelButton">
-				Done
-			</button>
-			<button type="button" class="deleteButton">
-				Delete
-			</button>
-		</div>
-		<div class="worksheetDetails">
-			<jsp:include page="worksheetDetail.jsp" />
-		</div>
-		<button class="showHideButton">Add collections</button>
+  <div id="${mainContentId}">
+      <div class="summaryPageButtonSection" style="text-align: right;">
+      <button type="button" class="cancelButton">
+        Done
+      </button>
+      <button type="button" class="deleteButton">
+        Delete
+      </button>
+    </div>
+    <div class="worksheetDetails">
+      <jsp:include page="worksheetDetail.jsp" />
+    </div>
+    <button class="showHideButton">Add collections</button>
 
-		<div class="worksheetSection">
-			<jsp:include page="printableWorksheet.jsp" />
-		</div>
+    <div class="worksheetSection">
+      <jsp:include page="printableWorksheet.jsp" />
+    </div>
 
 
-	</div>
+  </div>
 
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 </div>
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
-	Are	you sure you want to delete this worksheet?
+  Are  you sure you want to delete this worksheet?
 </div>

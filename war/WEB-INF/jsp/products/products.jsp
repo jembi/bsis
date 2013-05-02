@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -12,12 +12,12 @@
 <script type="text/javascript" src="js/products.js"></script>
 
 <div id="productsTab" class="leftPanel tabs">
-	<ul>
-		<li id="findOrAddProductsContent"><a
-			href="findProductFormGenerator.html">Find Products</a></li>
-		<li id="addProductCombinationsContent"><a
-			href="addProductCombinationFormGenerator.html">Create products</a></li>
-		<li id="addProductsContent"><a
-			href="addProductFormGenerator.html">Add Product</a></li>
-	</ul>
+  <ul>
+    <li id="findOrAddProductsContent"><a
+      href="findProductFormGenerator.html">Find Products</a></li>
+    <li id="addProductCombinationsContent"><a
+      href="addProductCombinationFormGenerator.html">Create products</a></li>
+    <li id="addProductsContent"><a
+      href="addProductFormGenerator.html">Add Product</a></li>
+  </ul>
 </div>

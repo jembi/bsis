@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -13,19 +13,19 @@
 <script type="text/javascript" src="js/collections.js"></script>
 
 <div id="donorsTab" class="tabs">
-	<ul>
-		<li id="findOrAddDonorsContent">
-			<a href="findDonorFormGenerator.html">
-				Find Donors
-			</a>
-		</li>
-		<li id="addDonorContent">
-			<a href="addDonorFormGenerator.html">
-				Add Donor
-			</a>
-		</li>
-		<!-- li id="viewDonorsContent">
-			<a href="viewDonors.html">View All Donors</a>
-		</li-->
-	</ul>
+  <ul>
+    <li id="findOrAddDonorsContent">
+      <a href="findDonorFormGenerator.html">
+        Find Donors
+      </a>
+    </li>
+    <li id="addDonorContent">
+      <a href="addDonorFormGenerator.html">
+        Add Donor
+      </a>
+    </li>
+    <!-- li id="viewDonorsContent">
+      <a href="viewDonors.html">View All Donors</a>
+    </li-->
+  </ul>
 </div>

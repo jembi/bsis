@@ -2,12 +2,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -29,7 +29,7 @@ $(document).ready(function() {
   // an error in storing the results
   var existingTestResults = {};
   if ('${ttiTestResults}'.length > 0)
-  	existingTestResults = JSON.parse('${ttiTestResults}');
+    existingTestResults = JSON.parse('${ttiTestResults}');
 
   var errorsByWellNumber = {};
   if ('${errorsByWellNumberAsJSON}'.length > 0)
@@ -70,7 +70,7 @@ $(document).ready(function() {
   initAllWells();
 
   $("#${mainContentId}").find(".wellInput")
-  											.click(wellClicked);
+                        .click(wellClicked);
 
   function wellClicked() {
     if (currentWell !== undefined) {
@@ -84,18 +84,18 @@ $(document).ready(function() {
       hideWellDetailsForm();
       currentWell = undefined;
     } else {
-	    showWellDetailsForm();
-	    focusWellDetailsForm();
-	    updateWellColor(this);
-	    populateWellDetailsForm(this);
-	    selectWell(this);
-	    currentWell = this;
+      showWellDetailsForm();
+      focusWellDetailsForm();
+      updateWellColor(this);
+      populateWellDetailsForm(this);
+      selectWell(this);
+      currentWell = this;
     }
   }
 
   function focusWellDetailsForm() {
     var collectionNumberInput = $("#${mainContentId}").find(".wellDetails")
-    																									.find('input[name="collectionNumber"]');
+                                                      .find('input[name="collectionNumber"]');
     collectionNumberInput.select();
     collectionNumberInput.focus();
   }
@@ -141,7 +141,7 @@ $(document).ready(function() {
   }
 
   $("#${mainContentId}").find('select[name="wellType"]')
-  											.change(wellTypeSelectionChanged);
+                        .change(wellTypeSelectionChanged);
 
   function wellTypeSelectionChanged() {
     var selectedOption = $(this).find("option:selected");
@@ -149,14 +149,14 @@ $(document).ready(function() {
     if (selectedOption.data("requiressample") !== true) {
       console.log("here1");
       $("#${mainContentId}").find(".wellDetails")
-      											.find(".fieldForWellWithSample").each(function() {
-      											  $(this).hide();
-      											});
+                            .find(".fieldForWellWithSample").each(function() {
+                              $(this).hide();
+                            });
     } else {
       $("#${mainContentId}").find(".wellDetails")
-			.find(".fieldForWellWithSample").each(function() {
-			  $(this).show();
-			});
+      .find(".fieldForWellWithSample").each(function() {
+        $(this).show();
+      });
     }
   }
 
@@ -207,11 +207,11 @@ $(document).ready(function() {
     var backgroundColor = "white";
     switch (ttidata[rowNum][colNum].contents) {
     case 'empty': backgroundColor = "white";
-    							break;
+                  break;
     case 'sample': backgroundColor = "rgb(0, 100, 44)";
-    							 break;
+                   break;
     default: backgroundColor = "rgb(155, 155, 213)";
-    							break;
+                  break;
     }
     $(inputElement).css("background", backgroundColor);
   }
@@ -226,29 +226,29 @@ $(document).ready(function() {
   }
 
   $("#${mainContentId}").find(".wellDetails").find(".moveUpButton")
-  											.button({icons: {primary: 'ui-icon-arrowthick-1-n'}})
-  											.click(function() {
-  											  moveSelectedWell(-1, 0);
-  											});
+                        .button({icons: {primary: 'ui-icon-arrowthick-1-n'}})
+                        .click(function() {
+                          moveSelectedWell(-1, 0);
+                        });
   
   $("#${mainContentId}").find(".wellDetails").find(".moveLeftButton")
-												.button({icons: {primary: 'ui-icon-arrowthick-1-w'}})
-												.click(function() {
-												  moveSelectedWell(0, -1);
-												});
+                        .button({icons: {primary: 'ui-icon-arrowthick-1-w'}})
+                        .click(function() {
+                          moveSelectedWell(0, -1);
+                        });
 
   $("#${mainContentId}").find(".wellDetails").find(".moveDownButton")
-												.button({icons: {primary: 'ui-icon-arrowthick-1-s'}})
-												.click(function() {
-												  moveSelectedWell(1, 0);
-												});
+                        .button({icons: {primary: 'ui-icon-arrowthick-1-s'}})
+                        .click(function() {
+                          moveSelectedWell(1, 0);
+                        });
 
   $("#${mainContentId}").find(".wellDetails")
-  											.find(".moveRightButton")
-												.button({icons: {primary: 'ui-icon-arrowthick-1-e'}})
-												.click(function() {
-													  moveSelectedWell(0, 1);
-												});
+                        .find(".moveRightButton")
+                        .button({icons: {primary: 'ui-icon-arrowthick-1-e'}})
+                        .click(function() {
+                            moveSelectedWell(0, 1);
+                        });
 
   function moveSelectedWell(upMovement, rightMovement) {
     if (currentWell === undefined) {
@@ -262,185 +262,185 @@ $(document).ready(function() {
       wellClicked.apply(ttidata[rowNum][colNum].well);
   }
   
-	$("#${mainContentId}").find(".saveButton")
-												.button({icons : {primary: 'ui-icon-plusthick'}})
-												.click(saveTestResults);
+  $("#${mainContentId}").find(".saveButton")
+                        .button({icons : {primary: 'ui-icon-plusthick'}})
+                        .click(saveTestResults);
 
-	function saveTestResults(eventObj) {
-	  if (currentWell !== undefined)
-	    wellClicked.apply(currentWell);
-	  var bloodTestsData = getDataToSave();
-	  console.log(bloodTestsData);
+  function saveTestResults(eventObj) {
+    if (currentWell !== undefined)
+      wellClicked.apply(currentWell);
+    var bloodTestsData = getDataToSave();
+    console.log(bloodTestsData);
 
-	  console.log(JSON.stringify(bloodTestsData));
-	  var dataToSend = {ttiTestId: ${ttiTestId}, ttiResults: JSON.stringify(bloodTestsData)};
-	  console.log(dataToSend);
+    console.log(JSON.stringify(bloodTestsData));
+    var dataToSend = {ttiTestId: ${ttiTestId}, ttiResults: JSON.stringify(bloodTestsData)};
+    console.log(dataToSend);
     saveTestResultsWithConfirmation("saveTTIResultsOnPlate.html", dataToSend, saveBloodTestsSuccess, saveBloodTestsError);
-	}
+  }
 
-	function getDataToSave() {
-	  var bloodTestsData = {};
-	  for (var i = 1; i <= ${plate.numRows}; ++i) {
-	    for (var j = 1; j <= ${plate.numColumns}; ++j) {
-	      if (ttidata[i][j].contents === 'empty')
-	        continue;
-	      if (bloodTestsData[i] === undefined)
-	        bloodTestsData[i] = {};
-	      if (bloodTestsData[i][j] === undefined)
-	        bloodTestsData[i][j] = {};
-	   		// we need to pass contents so that we get them back from the server
-	   		// when showing errors we need to show the same data as entered by the user
-	   		// having contents helps us set the color of the wells appropriately
-	      bloodTestsData[i][j].contents = ttidata[i][j].contents;
-	      bloodTestsData[i][j].welltype = ttidata[i][j].welltype;
-	      bloodTestsData[i][j].collectionNumber = ttidata[i][j].collectionNumber;
-	      bloodTestsData[i][j].testResult = ttidata[i][j].testResult;
-	      bloodTestsData[i][j].machineReading = ttidata[i][j].machineReading;
-	    }
-	  }
-	  return bloodTestsData;
-	}
-	
-	function saveBloodTestsSuccess(response) {
-	  $("#${tabContentId}").replaceWith(response);
-	}
+  function getDataToSave() {
+    var bloodTestsData = {};
+    for (var i = 1; i <= ${plate.numRows}; ++i) {
+      for (var j = 1; j <= ${plate.numColumns}; ++j) {
+        if (ttidata[i][j].contents === 'empty')
+          continue;
+        if (bloodTestsData[i] === undefined)
+          bloodTestsData[i] = {};
+        if (bloodTestsData[i][j] === undefined)
+          bloodTestsData[i][j] = {};
+         // we need to pass contents so that we get them back from the server
+         // when showing errors we need to show the same data as entered by the user
+         // having contents helps us set the color of the wells appropriately
+        bloodTestsData[i][j].contents = ttidata[i][j].contents;
+        bloodTestsData[i][j].welltype = ttidata[i][j].welltype;
+        bloodTestsData[i][j].collectionNumber = ttidata[i][j].collectionNumber;
+        bloodTestsData[i][j].testResult = ttidata[i][j].testResult;
+        bloodTestsData[i][j].machineReading = ttidata[i][j].machineReading;
+      }
+    }
+    return bloodTestsData;
+  }
+  
+  function saveBloodTestsSuccess(response) {
+    $("#${tabContentId}").replaceWith(response);
+  }
 
-	function saveBloodTestsError(response) {
-	  $("#${tabContentId}").replaceWith(response.responseText);
-	}
+  function saveBloodTestsError(response) {
+    $("#${tabContentId}").replaceWith(response.responseText);
+  }
 
 });
 </script>
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}" class="formFormatClass">
+  <div id="${mainContentId}" class="formFormatClass">
 
-		<br />
-		<br />
+    <br />
+    <br />
 
-		<c:if test="${!empty success && !success}">
-			<jsp:include page="../common/errorBox.jsp">
-				<jsp:param name="errorMessage" value="${errorMessage}" />
-			</jsp:include>
-		</c:if>
+    <c:if test="${!empty success && !success}">
+      <jsp:include page="../common/errorBox.jsp">
+        <jsp:param name="errorMessage" value="${errorMessage}" />
+      </jsp:include>
+    </c:if>
 
-		<div style="width: 620px;">
-			<div class="ttiPlate">
-					<input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
-										 border-radius: ${ttiConfig['titerWellRadius']}px;
-										 text-align: center;
-										 background: white;
-										 border: none;
-										 padding: 0;" disabled="disabled" />
+    <div style="width: 620px;">
+      <div class="ttiPlate">
+          <input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
+                     border-radius: ${ttiConfig['titerWellRadius']}px;
+                     text-align: center;
+                     background: white;
+                     border: none;
+                     padding: 0;" disabled="disabled" />
 
-					<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
-						<c:set var="collection" value="${collections[colNum-1]}" />
-						<div class="wellBoxHeader">
-								<input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
-													 border-radius: ${ttiConfig['titerWellRadius']}px;
-													 text-align: center;
-													 background: rgb(255, 208, 165);
-													 color: black;
-													 padding: 0;" value="${colNum}" disabled="disabled" />
-						 	</div>
-					</c:forEach>
+          <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
+            <c:set var="collection" value="${collections[colNum-1]}" />
+            <div class="wellBoxHeader">
+                <input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
+                           border-radius: ${ttiConfig['titerWellRadius']}px;
+                           text-align: center;
+                           background: rgb(255, 208, 165);
+                           color: black;
+                           padding: 0;" value="${colNum}" disabled="disabled" />
+               </div>
+          </c:forEach>
 
 
-				<br />
+        <br />
 
-				<c:forEach var="rowNum" begin="1" end="${plate.numRows}">
-						<!-- Top row style similar to input wells -->
-						<input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
-											 border-radius: ${ttiConfig['titerWellRadius']}px;
-											 text-align: center;
-											 background: rgb(255, 208, 165);
-											 color: black;
-											 padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
+        <c:forEach var="rowNum" begin="1" end="${plate.numRows}">
+            <!-- Top row style similar to input wells -->
+            <input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
+                       border-radius: ${ttiConfig['titerWellRadius']}px;
+                       text-align: center;
+                       background: rgb(255, 208, 165);
+                       color: black;
+                       padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
 
-						<c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
-							<c:set var="wellNumber" value="${rowNum},${colNum}" />
-						  <c:if test="${not empty errorsByWellNumber[wellNumber]}">
-						  	<c:set var="wellColor" value="#000000" />
-					  	</c:if>
-						  <c:if test="${empty errorsByWellNumber[wellNumber]}">
-						  	<c:set var="wellColor" value="" />
-					  	</c:if>
-							<div class="wellBox" style="background: ${wellColor};">
-								<!-- square around the well -->
-								<!-- non-empty wells -->
-	
-								<input
-									style="width: ${ttiConfig['titerWellRadius']}px; 
-												 height: ${ttiConfig['titerWellRadius']}px;
-												 border-radius: ${ttiConfig['titerWellRadius']}px;
-												 text-align: center;
-												 color: white;
-												 background: white;
-												 padding: 0;
-												 "
-									data-rownum = "${rowNum}"
-									data-colnum = "${colNum}"
-									value="${testResultValue}"
-									readonly="readonly"
-									class="wellInput" />
-	
-						 	</div>
-						</c:forEach>
-					<br />
-				</c:forEach>
-			</div>
+            <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
+              <c:set var="wellNumber" value="${rowNum},${colNum}" />
+              <c:if test="${not empty errorsByWellNumber[wellNumber]}">
+                <c:set var="wellColor" value="#000000" />
+              </c:if>
+              <c:if test="${empty errorsByWellNumber[wellNumber]}">
+                <c:set var="wellColor" value="" />
+              </c:if>
+              <div class="wellBox" style="background: ${wellColor};">
+                <!-- square around the well -->
+                <!-- non-empty wells -->
+  
+                <input
+                  style="width: ${ttiConfig['titerWellRadius']}px; 
+                         height: ${ttiConfig['titerWellRadius']}px;
+                         border-radius: ${ttiConfig['titerWellRadius']}px;
+                         text-align: center;
+                         color: white;
+                         background: white;
+                         padding: 0;
+                         "
+                  data-rownum = "${rowNum}"
+                  data-colnum = "${colNum}"
+                  value="${testResultValue}"
+                  readonly="readonly"
+                  class="wellInput" />
+  
+               </div>
+            </c:forEach>
+          <br />
+        </c:forEach>
+      </div>
 
-			<div style="position: relative; ">
-				<div class="wellDetails formFormatClass"
-						 style="margin-top: 15px; width: 93%; display: none;
-						 			  position: relative;">
-					<div>
-						<ul class="errorList" style="color: red;">
-						</ul>
-					</div>
-					<div>
-						<label style="width: auto;">Row No.</label>
-						<label class="rowNumber" style="width: auto; text-align: left;"></label>
-						<label style="width: auto;">Column No.</label>
-						<label class="columnNumber" style="width: auto; text-align: left;"></label>
-					</div>
-					<div>
-						<label>Type of well</label>
-						<select name="wellType">
-							<c:forEach var="wellType" items="${allWellTypes}">
-								<option value="${wellType.id}" data-requiressample="${wellType.requiresSample}">${wellType.wellType}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div class="fieldForWellWithSample">
-						<label>Collection number</label>
-						<input name="collectionNumber" placeholder="Collection number" />
-					</div>
-					<div class="fieldForWellWithSample">
-						<label>Result</label>
-						<input name="testResult" placeholder="Allowed results: ${ttiTest.validResults}" />
-					</div>
-					<div>
-						<label>Machine reading</label>
-						<input name="machineReading" placeholder="Optical Density"/>
-					</div>
-					<div style="bottom: 3px;">
-						<button class="moveWellButton moveUpButton">Move up</button>
-						<button class="moveWellButton moveLeftButton">Move left</button>
-						<button class="moveWellButton moveDownButton">Move down</button>
-						<button class="moveWellButton moveRightButton">Move right</button>
-					</div>
-				</div>
+      <div style="position: relative; ">
+        <div class="wellDetails formFormatClass"
+             style="margin-top: 15px; width: 93%; display: none;
+                     position: relative;">
+          <div>
+            <ul class="errorList" style="color: red;">
+            </ul>
+          </div>
+          <div>
+            <label style="width: auto;">Row No.</label>
+            <label class="rowNumber" style="width: auto; text-align: left;"></label>
+            <label style="width: auto;">Column No.</label>
+            <label class="columnNumber" style="width: auto; text-align: left;"></label>
+          </div>
+          <div>
+            <label>Type of well</label>
+            <select name="wellType">
+              <c:forEach var="wellType" items="${allWellTypes}">
+                <option value="${wellType.id}" data-requiressample="${wellType.requiresSample}">${wellType.wellType}</option>
+              </c:forEach>
+            </select>
+          </div>
+          <div class="fieldForWellWithSample">
+            <label>Collection number</label>
+            <input name="collectionNumber" placeholder="Collection number" />
+          </div>
+          <div class="fieldForWellWithSample">
+            <label>Result</label>
+            <input name="testResult" placeholder="Allowed results: ${ttiTest.validResults}" />
+          </div>
+          <div>
+            <label>Machine reading</label>
+            <input name="machineReading" placeholder="Optical Density"/>
+          </div>
+          <div style="bottom: 3px;">
+            <button class="moveWellButton moveUpButton">Move up</button>
+            <button class="moveWellButton moveLeftButton">Move left</button>
+            <button class="moveWellButton moveDownButton">Move down</button>
+            <button class="moveWellButton moveRightButton">Move right</button>
+          </div>
+        </div>
 
-				<div style="margin-top: 3px; position: relative; text-align: right;">
-					<label></label>
-					<button type="button" class="saveButton">
-						Save all test results on plate
-					</button>
-				</div>
-			</div>
-		</div>
+        <div style="margin-top: 3px; position: relative; text-align: right;">
+          <label></label>
+          <button type="button" class="saveButton">
+            Save all test results on plate
+          </button>
+        </div>
+      </div>
+    </div>
 
-	</div>
+  </div>
 </div>

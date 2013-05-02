@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,8 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
@@ -35,12 +35,12 @@ $(document).ready(function() {
       url : "editTestResultsForWorksheet.html",
       data : findWorksheetFormData,
       success: function(data) {
-        				 animatedScrollTo(resultsDiv);
-				         resultsDiv.html(data);
-      				 },
+                 animatedScrollTo(resultsDiv);
+                 resultsDiv.html(data);
+               },
       error: function(data) {
-							 showErrorMessage("Something went wrong. Please try again later.");        
-      			 }
+               showErrorMessage("Something went wrong. Please try again later.");        
+             }
     });
   });
 
@@ -60,32 +60,32 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}" class="formFormatClass">
+  <div id="${mainContentId}" class="formFormatClass">
 
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				${tips['testResults.worksheet']}
-			</p>
-		</div>
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        ${tips['testResults.worksheet']}
+      </p>
+    </div>
 
-		<div class="formDiv">
-			<b>Update worksheet with test results</b>
-			<form class="findWorksheetForm formFormatClass">
-				<div>
-					<label>Worksheet Number</label>
-					<input name="worksheetNumber" />
-				</div>
-			</form>
-			<div>
-				<label></label>
-				<button class="findWorksheetButton">Find generated worksheet</button>
-				<!--button class="clearFindFormButton">Clear form</button-->
-			</div>
-			<div class="findWorksheetResults"></div>
-		</div>
-	</div>
+    <div class="formDiv">
+      <b>Update worksheet with test results</b>
+      <form class="findWorksheetForm formFormatClass">
+        <div>
+          <label>Worksheet Number</label>
+          <input name="worksheetNumber" />
+        </div>
+      </form>
+      <div>
+        <label></label>
+        <button class="findWorksheetButton">Find generated worksheet</button>
+        <!--button class="clearFindFormButton">Clear form</button-->
+      </div>
+      <div class="findWorksheetResults"></div>
+    </div>
+  </div>
 
-	<div id="${childContentId}">
-	</div>
+  <div id="${childContentId}">
+  </div>
 
 </div>

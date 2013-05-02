@@ -70,7 +70,7 @@ public class BloodTestingRepository {
 
   public MicrotiterPlate getPlate(String plateKey) {
     String queryStr = "SELECT p from MicrotiterPlate p " +
-    		"WHERE p.plateKey=:plateKey";
+        "WHERE p.plateKey=:plateKey";
     TypedQuery<MicrotiterPlate> query = em.createQuery(queryStr, MicrotiterPlate.class);
     query.setParameter("plateKey", plateKey);
     return query.getSingleResult();
@@ -101,7 +101,7 @@ public class BloodTestingRepository {
   public List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
     String queryStr = "SELECT b FROM BloodTest b WHERE " +
         "b.bloodTestType IN (:types) AND " +
-    		"b.isActive=:isActive";
+        "b.isActive=:isActive";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     query.setParameter("types", types);
     query.setParameter("isActive", true);
@@ -286,7 +286,7 @@ public class BloodTestingRepository {
 
   public Map<Integer, BloodTestResult> getRecentTestResultsForCollection(Long collectedSampleId) {
     String queryStr = "SELECT bt FROM BloodTestResult bt WHERE " +
-    		"bt.collectedSample.id=:collectedSampleId";
+        "bt.collectedSample.id=:collectedSampleId";
     TypedQuery<BloodTestResult> query = em.createQuery(queryStr, BloodTestResult.class);
     query.setParameter("collectedSampleId", collectedSampleId);
     List<BloodTestResult> bloodTestResults = query.getResultList();
@@ -508,7 +508,7 @@ public class BloodTestingRepository {
 
   public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveRules) {
     String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND " +
-    		"r.context=:context";
+        "r.context=:context";
     if (onlyActiveRules) {
       queryStr = queryStr + " AND r.isActive=:isActive";
     }

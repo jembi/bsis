@@ -36,7 +36,7 @@ public class CollectionBatchRepository {
 
   public CollectionBatch findCollectionBatchById(Integer batchId) {
     String queryString = "SELECT b FROM CollectionBatch b " +
-    		                 "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
+                         "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.setParameter("batchId", batchId).getSingleResult();

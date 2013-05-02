@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -12,12 +12,12 @@
 <script type="text/javascript" src="js/requests.js"></script>
 
 <div id="requestsTab" class="leftPanel tabs">
-	<ul>
-		<li id="findOrAddRequestsContent"><a
-			href="findRequestFormGenerator.html">Issue Products</a></li>
-		<li id="addRequestsContent"><a
-			href="addRequestFormGenerator.html">Add Request</a></li>
-		<!-- li id="PendingRequestsContent"><a
-			href="pendingRequests.html">Pending Requests</a></li-->
-	</ul>
+  <ul>
+    <li id="findOrAddRequestsContent"><a
+      href="findRequestFormGenerator.html">Issue Products</a></li>
+    <li id="addRequestsContent"><a
+      href="addRequestFormGenerator.html">Add Request</a></li>
+    <!-- li id="PendingRequestsContent"><a
+      href="pendingRequests.html">Pending Requests</a></li-->
+  </ul>
 </div>

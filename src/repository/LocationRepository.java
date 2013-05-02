@@ -16,58 +16,58 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class LocationRepository {
-	@PersistenceContext
-	private EntityManager em;
+  @PersistenceContext
+  private EntityManager em;
 
-	public void saveLocation(Location location) {
-		em.persist(location);
-		em.flush();
-	}
+  public void saveLocation(Location location) {
+    em.persist(location);
+    em.flush();
+  }
 
-	public void deleteAllLocations() {
-		Query query = em.createQuery("DELETE FROM Location l");
-		query.executeUpdate();
-	}
+  public void deleteAllLocations() {
+    Query query = em.createQuery("DELETE FROM Location l");
+    query.executeUpdate();
+  }
 
-	public List<Location> getAllLocations() {
-		TypedQuery<Location> query = em
-				.createQuery("SELECT l FROM Location l where l.isDeleted= :isDeleted", Location.class);
-		query.setParameter("isDeleted", Boolean.FALSE);
-		return query.getResultList();
-	}
+  public List<Location> getAllLocations() {
+    TypedQuery<Location> query = em
+        .createQuery("SELECT l FROM Location l where l.isDeleted= :isDeleted", Location.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    return query.getResultList();
+  }
 
-	public List<Location> getAllUsageSites() {
+  public List<Location> getAllUsageSites() {
     TypedQuery<Location> query = em.createQuery(
         "SELECT l from Location l where l.isUsageSite=:isUsageSite and l.isDeleted=:isDeleted",
         Location.class);
     query.setParameter("isUsageSite", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
-	}
+  }
 
-	public Location getLocation(Long selectedLocationId) {
-		TypedQuery<Location> query = em.createQuery(
-			"SELECT l FROM Location l where l.id= :locationId and l.isDeleted= :isDeleted",
-			Location.class);
-		query.setParameter("isDeleted", false);
-		query.setParameter("locationId", selectedLocationId);
-		return query.getSingleResult();
-	}
+  public Location getLocation(Long selectedLocationId) {
+    TypedQuery<Location> query = em.createQuery(
+      "SELECT l FROM Location l where l.id= :locationId and l.isDeleted= :isDeleted",
+      Location.class);
+    query.setParameter("isDeleted", false);
+    query.setParameter("locationId", selectedLocationId);
+    return query.getSingleResult();
+  }
 
-	public Location updateLocation(Long locationId, Location location) {
-		Location existingLocation = em.find(Location.class, locationId);
-		existingLocation.copy(location);
-		em.merge(existingLocation);
-		em.flush();
-		return existingLocation;
-	}
+  public Location updateLocation(Long locationId, Location location) {
+    Location existingLocation = em.find(Location.class, locationId);
+    existingLocation.copy(location);
+    em.merge(existingLocation);
+    em.flush();
+    return existingLocation;
+  }
 
-	public void deleteLocation(Long locationId) {
-		Location existingLocation = em.find(Location.class, locationId);
-		existingLocation.setIsDeleted(Boolean.TRUE);
-		em.merge(existingLocation);
-		em.flush();
-	}
+  public void deleteLocation(Long locationId) {
+    Location existingLocation = em.find(Location.class, locationId);
+    existingLocation.setIsDeleted(Boolean.TRUE);
+    em.merge(existingLocation);
+    em.flush();
+  }
 
   public List<String> getAllCentersAsString() {
     List<Location> locations = getAllCenters();

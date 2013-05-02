@@ -281,7 +281,7 @@ public class DonorRepository {
 
   private DeferralReason findDeferralReasonById(String deferralReasonId) {
     String queryString = "SELECT d FROM DeferralReason d WHERE " +
-    		"d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
+        "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
     TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
     query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
     query.setParameter("isDeleted", false);
@@ -290,7 +290,7 @@ public class DonorRepository {
 
   public List<DonorDeferral> getDonorDeferrals(Long donorId) {
     String queryString = "SELECT d from DonorDeferral d WHERE " +
-    		                 " d.deferredDonor.id=:donorId";
+                         " d.deferredDonor.id=:donorId";
     TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
     query.setParameter("donorId", donorId);
     return query.getResultList();

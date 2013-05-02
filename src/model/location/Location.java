@@ -11,60 +11,60 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 public class Location {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+  private String name;
 
-	private Boolean isCollectionCenter;
+  private Boolean isCollectionCenter;
 
-	private Boolean isCollectionSite;
+  private Boolean isCollectionSite;
 
-	private Boolean isUsageSite;
+  private Boolean isUsageSite;
 
-	private Boolean isMobileSite;
+  private Boolean isMobileSite;
 
-	private Boolean isDonorPanel;
+  private Boolean isDonorPanel;
 
-	private Boolean isDeleted;
+  private Boolean isDeleted;
 
-	@Lob
-	private String notes;
+  @Lob
+  private String notes;
 
-	public Location() {
-	}
+  public Location() {
+  }
 
-	public void copy(Location location) {
-		this.name = location.name;
-		this.isCollectionCenter = location.isCollectionCenter;
-		this.isCollectionSite = location.isCollectionSite;
-		this.isUsageSite = location.isUsageSite;
-		this.notes = location.notes;
-	}
+  public void copy(Location location) {
+    this.name = location.name;
+    this.isCollectionCenter = location.isCollectionCenter;
+    this.isCollectionSite = location.isCollectionSite;
+    this.isUsageSite = location.isUsageSite;
+    this.notes = location.notes;
+  }
 
   public String getName() {
     return name;
   }
 
-	public Boolean getIsCollectionCenter() {
-		return isCollectionCenter;
-	}
+  public Boolean getIsCollectionCenter() {
+    return isCollectionCenter;
+  }
 
-	public Boolean getIsCollectionSite() {
-		return isCollectionSite;
-	}
+  public Boolean getIsCollectionSite() {
+    return isCollectionSite;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public Boolean getIsMobileSite() {
-		return isMobileSite;
-	}
+  public Boolean getIsMobileSite() {
+    return isMobileSite;
+  }
 
-	public Boolean getIsUsageSite() {
-		return isUsageSite;
-	}
+  public Boolean getIsUsageSite() {
+    return isUsageSite;
+  }
 
   public String getNotes() {
     return notes;
@@ -82,21 +82,21 @@ public class Location {
     this.name = name;
   }
 
-	public void setIsCollectionCenter(Boolean isCollectionCenter) {
-		this.isCollectionCenter = isCollectionCenter;
-	}
+  public void setIsCollectionCenter(Boolean isCollectionCenter) {
+    this.isCollectionCenter = isCollectionCenter;
+  }
 
-	public void setIsCollectionSite(Boolean collectionSite) {
-		isCollectionSite = collectionSite;
-	}
+  public void setIsCollectionSite(Boolean collectionSite) {
+    isCollectionSite = collectionSite;
+  }
 
-	public void setIsMobileSite(Boolean mobileSite) {
-		isMobileSite = mobileSite;
-	}
+  public void setIsMobileSite(Boolean mobileSite) {
+    isMobileSite = mobileSite;
+  }
 
-	public void setIsUsageSite(Boolean usageSite) {
-		isUsageSite = usageSite;
-	}
+  public void setIsUsageSite(Boolean usageSite) {
+    isUsageSite = usageSite;
+  }
 
   public void setNotes(String notes) {
     this.notes = notes;

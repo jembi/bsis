@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
@@ -50,96 +50,96 @@ $(document).ready(function(){
   setDefaultValueForSelectorUsingValue($("#${crossmatchProcedureSelectorId}").multiselect(), "${labsetup['crossmatchProcedure']}");
 
   $("#${mainContentId}").find(".updateLabSetupButton")
-  											.button()
-  											.click(function() {
-  											  var labSetupData = {};
-  											  var selects = $("#${mainContentId}").find("select");
-  											  for (var index = 0; index < selects.length; ++index) {
-  											    var select = $(selects[index]);
-  											    labSetupData[select.prop('name')] = select.val(); 
-  											  }
+                        .button()
+                        .click(function() {
+                          var labSetupData = {};
+                          var selects = $("#${mainContentId}").find("select");
+                          for (var index = 0; index < selects.length; ++index) {
+                            var select = $(selects[index]);
+                            labSetupData[select.prop('name')] = select.val(); 
+                          }
 
-  											  $.ajax({
-  											    url: "updateLabSetup.html",
-  											    data: {labSetupParams : JSON.stringify(labSetupData)},
-  											    type: "POST",
-  											    success: function(response) {
-  											      				 showMessage("Lab Setup successfully updated. Please wait while the page is refreshed.");
-  											      				 setTimeout(function() {
-  											      				   						document.location.reload(true);
-  											      				 						}, 3000);
-  											    				 },
-  											    error:   function(response) {
-																			 showErrorMessage("Something went wrong. Please try again.");  											      
-  											    				 }
-  											  });
-  											});
+                          $.ajax({
+                            url: "updateLabSetup.html",
+                            data: {labSetupParams : JSON.stringify(labSetupData)},
+                            type: "POST",
+                            success: function(response) {
+                                       showMessage("Lab Setup successfully updated. Please wait while the page is refreshed.");
+                                       setTimeout(function() {
+                                                     document.location.reload(true);
+                                                   }, 3000);
+                                     },
+                            error:   function(response) {
+                                       showErrorMessage("Something went wrong. Please try again.");                              
+                                     }
+                          });
+                        });
   
 });
 </script>
 
 <div id="${tabContentId}">
 
-	<div id="${mainContentId}">
+  <div id="${mainContentId}">
 
-		<form class="formFormatClass">
+    <form class="formFormatClass">
 
-			<div>
-				<label>
-					<b>Lab setup</b>
-				</label>
-			</div>
+      <div>
+        <label>
+          <b>Lab setup</b>
+        </label>
+      </div>
 
-			<div class="tipsBox ui-state-highlight">
-				<p>
-					Customize as per the workflow of your lab
-				</p>
-			</div>
+      <div class="tipsBox ui-state-highlight">
+        <p>
+          Customize as per the workflow of your lab
+        </p>
+      </div>
 
-			<div>
-				<label>Blood typing mechanism</label>
-				<select name="bloodTypingMechanism"
-								id="${bloodTypingMechanismSelectorId}">
-					<option value="BLOODTYPING_TEST_RESULTS_ELISA">Record blood typing results (ELISA plate)</option>
-					<option value="BLOODTYPING_TEST_RESULTS_WORKSHEETS">Record blood typing results (Worksheets)</option>
-					<option value="BLOODTYPING_OUTCOMES_WORKSHEETS">Only record blood typing outcomes (Worksheets)</option>
-				</select>
-			</div>
+      <div>
+        <label>Blood typing mechanism</label>
+        <select name="bloodTypingMechanism"
+                id="${bloodTypingMechanismSelectorId}">
+          <option value="BLOODTYPING_TEST_RESULTS_ELISA">Record blood typing results (ELISA plate)</option>
+          <option value="BLOODTYPING_TEST_RESULTS_WORKSHEETS">Record blood typing results (Worksheets)</option>
+          <option value="BLOODTYPING_OUTCOMES_WORKSHEETS">Only record blood typing outcomes (Worksheets)</option>
+        </select>
+      </div>
 
-			<div>
-				<label>TTI recording mechanism</label>
-				<select name="ttiMechanism"
-								id="${ttiMechanismSelectorId}">
-					<option value="TTI_ELISA">Record on ELISA Plate (with Optical Densities)</option>
-					<option value="TTI_WORKSHEETS">Record on worksheets</option>
-				</select>
-			</div>
+      <div>
+        <label>TTI recording mechanism</label>
+        <select name="ttiMechanism"
+                id="${ttiMechanismSelectorId}">
+          <option value="TTI_ELISA">Record on ELISA Plate (with Optical Densities)</option>
+          <option value="TTI_WORKSHEETS">Record on worksheets</option>
+        </select>
+      </div>
 
-			<div>
-				<label>Record usage information</label>
-				<select name="recordUsage"
-								id="${recordUsageSelectorId}">
-					<option value="true">Yes</option>
-					<option value="false">No</option>
-				</select>
-			</div>
+      <div>
+        <label>Record usage information</label>
+        <select name="recordUsage"
+                id="${recordUsageSelectorId}">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
 
-			<div>
-				<label>Crossmatch procedure</label>
-				<select name="crossmatchProcedure"
-								id="${crossmatchProcedureSelectorId}">
-					<option value="CROSSMATCH_NOT_DONE">Crossmatch testing is not done</option>
-					<option value="CROSSMATCH_DONE_CAN_SKIP">Crossmatch testing is done but can be skipped</option>
-					<option value="CROSSMATCH_DONE_CANNOT_SKIP">Crossmatch testing is mandatory</option>
-				</select>
-			</div>
+      <div>
+        <label>Crossmatch procedure</label>
+        <select name="crossmatchProcedure"
+                id="${crossmatchProcedureSelectorId}">
+          <option value="CROSSMATCH_NOT_DONE">Crossmatch testing is not done</option>
+          <option value="CROSSMATCH_DONE_CAN_SKIP">Crossmatch testing is done but can be skipped</option>
+          <option value="CROSSMATCH_DONE_CANNOT_SKIP">Crossmatch testing is mandatory</option>
+        </select>
+      </div>
 
-		</form>
+    </form>
 
-		<button class="updateLabSetupButton">
-		Update lab setup
-		</button>
+    <button class="updateLabSetupButton">
+    Update lab setup
+    </button>
 
-	</div>
+  </div>
 
 </div>

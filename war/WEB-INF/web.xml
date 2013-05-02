@@ -59,14 +59,14 @@
         <url-pattern>*.png</url-pattern>
     </servlet-mapping>
 
-		<filter>
-		    <filter-name>UserAddFilter</filter-name>
-		    <filter-class>
-		        filter.UserInfoAddToThreadFilter
-		    </filter-class>
-		</filter>
-		<filter-mapping>
-		    <filter-name>UserAddFilter</filter-name>
-		    <url-pattern>/*</url-pattern>
-		</filter-mapping>
+    <filter>
+        <filter-name>UserAddFilter</filter-name>
+        <filter-class>
+            filter.UserInfoAddToThreadFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UserAddFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

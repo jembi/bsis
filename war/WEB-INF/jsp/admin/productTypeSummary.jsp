@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,8 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
@@ -25,39 +25,39 @@
 $(document).ready(function() {
 
   $("#${mainContentId}").find(".editButton")
-  											.button({icons: {primary: 'ui-icon-pencil'}})
-  											.click(function() {
-  											  $("#${tabContentId}").parent().trigger("editProductType");
-  											});
+                        .button({icons: {primary: 'ui-icon-pencil'}})
+                        .click(function() {
+                          $("#${tabContentId}").parent().trigger("editProductType");
+                        });
 
   $("#${mainContentId}").find(".doneButton")
-												.button()
-												.click(
-												    function() {
-												      $("#${tabContentId}").parent().trigger("productTypeCancel");
-												    });
+                        .button()
+                        .click(
+                            function() {
+                              $("#${tabContentId}").parent().trigger("productTypeCancel");
+                            });
 
   $("#${mainContentId}").find(".deactivateButton")
-  											.button()
-  											.click(
-  											function() {
+                        .button()
+                        .click(
+                        function() {
 
-  											  $("#${deactivateProductTypeConfirmDialogId}").dialog({
-  											    modal: true,
-  											    title: "Disable",
-  											    width: "400px",
-  											    resizable: false,
-  											    buttons: {
-  											      "Disable": function() {
-  											        deactivateProductType();
-  											        $(this).dialog("close");
-  											      },
-  											      "Cancel": function() {
-  											        $(this).dialog("close");
-  											      }
-  											    }
-  											  });
-  											});
+                          $("#${deactivateProductTypeConfirmDialogId}").dialog({
+                            modal: true,
+                            title: "Disable",
+                            width: "400px",
+                            resizable: false,
+                            buttons: {
+                              "Disable": function() {
+                                deactivateProductType();
+                                $(this).dialog("close");
+                              },
+                              "Cancel": function() {
+                                $(this).dialog("close");
+                              }
+                            }
+                          });
+                        });
 
   function deactivateProductType() {
     $.ajax({
@@ -65,41 +65,41 @@ $(document).ready(function() {
       type: "POST",
       data: {productTypeId : '${productType.id}'},
       success: function() {
-        				 showMessage("Blood Test successfully deactivated");
-        				 $("#${tabContentId}").parent().trigger("productTypeEditDone");
-      				 },
-     	error:   function() {
-     	  			   showErrorMessage("Something went wrong. Please try again");
-     	  			  	$("#${tabContentId}").parent().trigger("productTypeEditError");
-     					 }
+                 showMessage("Blood Test successfully deactivated");
+                 $("#${tabContentId}").parent().trigger("productTypeEditDone");
+               },
+       error:   function() {
+                  showErrorMessage("Something went wrong. Please try again");
+                   $("#${tabContentId}").parent().trigger("productTypeEditError");
+                }
     });
   }
 
   $("#${mainContentId}").find(".activateButton")
-	.button()
-	.click(
-	function() {
+  .button()
+  .click(
+  function() {
 
-	  $("#${activateProductTypeConfirmDialogId}").dialog({
-	    modal: true,
-	    title: "Activate",
-	    width: "400px",
-	    resizable: false,
-	    buttons: {
-	      "Activate": function() {
-	        activateProductType();
-	        $(this).dialog("close");
-	      },
-	      "Cancel": function() {
-	        $(this).dialog("close");
-	      }
-	    }
-	  });
-	});
+    $("#${activateProductTypeConfirmDialogId}").dialog({
+      modal: true,
+      title: "Activate",
+      width: "400px",
+      resizable: false,
+      buttons: {
+        "Activate": function() {
+          activateProductType();
+          $(this).dialog("close");
+        },
+        "Cancel": function() {
+          $(this).dialog("close");
+        }
+      }
+    });
+  });
 
-	function activateProductType() {
+  function activateProductType() {
 
-	  $.ajax({
+    $.ajax({
         url : "activateProductType.html",
         type : "POST",
         data : {
@@ -120,52 +120,52 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}">
-	<div id="${mainContentId}">
-		<div style="	border: thin solid #1075A1;	border-radius: 5px;	margin: 20px;">
+  <div id="${mainContentId}">
+    <div style="  border: thin solid #1075A1;  border-radius: 5px;  margin: 20px;">
 
-			<div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected product type</div>
+      <div style="margin-left: 20px; padding-top: 10px; font-weight: bold;">Selected product type</div>
 
-			<div class="summaryPageButtonSection" style="text-align: right;">
-				<button class="editButton">Edit</button>
-				<button class="doneButton">Done</button>
-				<c:if test="${not productType.isDeleted}">
-					<button class="deactivateButton">Disable</button>
-				</c:if>
-				<c:if test="${productType.isDeleted}">
-					<button class="activateButton">Enable</button>
-				</c:if>
-			</div>
-	
-			<div class="productTypeDetails">
-				<div class="formFormatClass">
+      <div class="summaryPageButtonSection" style="text-align: right;">
+        <button class="editButton">Edit</button>
+        <button class="doneButton">Done</button>
+        <c:if test="${not productType.isDeleted}">
+          <button class="deactivateButton">Disable</button>
+        </c:if>
+        <c:if test="${productType.isDeleted}">
+          <button class="activateButton">Enable</button>
+        </c:if>
+      </div>
+  
+      <div class="productTypeDetails">
+        <div class="formFormatClass">
 
-					<div>
-						<label>Product type name</label>
-						<label>${productType.productType}</label>
-					</div>
+          <div>
+            <label>Product type name</label>
+            <label>${productType.productType}</label>
+          </div>
 
-					<div>
-						<label>Short name</label>
-						<label>${productType.productTypeNameShort}</label>
-					</div>
+          <div>
+            <label>Short name</label>
+            <label>${productType.productTypeNameShort}</label>
+          </div>
 
-					<div>
-						<label>Expiry time</label>
-						<label>${productType.expiresAfter} ${productType.expiresAfterUnits}</label>
-					</div>
+          <div>
+            <label>Expiry time</label>
+            <label>${productType.expiresAfter} ${productType.expiresAfterUnits}</label>
+          </div>
 
-				</div>
-			</div>
+        </div>
+      </div>
 
-		</div>
+    </div>
 
-	</div>
+  </div>
 </div>
 
 <div id="${deactivateProductTypeConfirmDialogId}" style="display: none;">
-	Are you sure you want to deactivate this product type?
+  Are you sure you want to deactivate this product type?
 </div>
 
 <div id="${activateProductTypeConfirmDialogId}" style="display: none;">
-	Are you sure you want to activate this product type?
+  Are you sure you want to activate this product type?
 </div>

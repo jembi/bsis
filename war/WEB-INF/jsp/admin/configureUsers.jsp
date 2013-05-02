@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+  pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,8 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
-		return System.nanoTime();
-	}%>
+    return System.nanoTime();
+  }%>
 
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
@@ -25,17 +25,17 @@ $(document).ready(function() {
 
   $("#${tabContentId}").find(".userDiv").click(function() {
     $.ajax({
-			       url: "editUserFormGenerator.html",
-			       type: "GET",
-			       data: { userId: $(this).find("input[name=id]").val() },
-			       success: function (content) {
-			         					animatedScrollTo($("#${childContentId}"));
-			    							$("#${childContentId}").html(content);
-			       					},
-			     	 error: function(response) {
-										  showErrorMessage("Something went wrong.");     	   
-			     	 				}
-			     });
+             url: "editUserFormGenerator.html",
+             type: "GET",
+             data: { userId: $(this).find("input[name=id]").val() },
+             success: function (content) {
+                         animatedScrollTo($("#${childContentId}"));
+                        $("#${childContentId}").html(content);
+                       },
+              error: function(response) {
+                      showErrorMessage("Something went wrong.");          
+                      }
+           });
   });
 
   $("#${tabContentId}").bind("editUserSuccess", editUserDone);
@@ -52,21 +52,21 @@ $(document).ready(function() {
     $("#${childContentId}").html("");
   }
 
-	function emptyChildContent() {
-	  $("#${childContentId}").html("");
-	}
+  function emptyChildContent() {
+    $("#${childContentId}").html("");
+  }
 
-	function editUserDone() {
-	  emptyChildContent();
-	  refetchForm();
-	}
+  function editUserDone() {
+    emptyChildContent();
+    refetchForm();
+  }
 
-	function editUserCancel() {
-	  emptyChildContent();
-	  refetchForm();
-	}
+  function editUserCancel() {
+    emptyChildContent();
+    refetchForm();
+  }
 
-	$("#${tabContentId}").find(".addNewUserButton").button({
+  $("#${tabContentId}").find(".addNewUserButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
@@ -76,44 +76,44 @@ $(document).ready(function() {
       type: "GET",
       data: {},
       success: function (content) {
-        					animatedScrollTo($("#${childContentId}"));
-   								$("#${childContentId}").html(content);
-      					},
-    	 error: function(response) {
-							  showErrorMessage("Something went wrong.");     	   
-    	 				}
+                  animatedScrollTo($("#${childContentId}"));
+                   $("#${childContentId}").html(content);
+                },
+       error: function(response) {
+                showErrorMessage("Something went wrong.");          
+               }
     });
-	});
-	
+  });
+  
 });
 </script>
 
 <div id="${tabContentId}" class="formDiv">
-	<div id="${mainContentId}">
-		<b>Configure Users</b>
-		<br />
-		<div class="tipsBox ui-state-highlight">
-			<p>
-				Select one of the users below to edit or add a new user. 
-			</p>
-		</div>
-		<c:forEach var="user" items="${model.allUsers}">
-			<div class="userDiv">
-				${user.username}
-				<input name="id" type="hidden" value="${user.id}">
-			</div>
-		</c:forEach>
-		<div>
-			<br />
-			<button class="addNewUserButton">Add new user</button>
-		</div>
-	</div>
+  <div id="${mainContentId}">
+    <b>Configure Users</b>
+    <br />
+    <div class="tipsBox ui-state-highlight">
+      <p>
+        Select one of the users below to edit or add a new user. 
+      </p>
+    </div>
+    <c:forEach var="user" items="${model.allUsers}">
+      <div class="userDiv">
+        ${user.username}
+        <input name="id" type="hidden" value="${user.id}">
+      </div>
+    </c:forEach>
+    <div>
+      <br />
+      <button class="addNewUserButton">Add new user</button>
+    </div>
+  </div>
 
-	<hr />
-	<br />
-	<br />
-	<br />
+  <hr />
+  <br />
+  <br />
+  <br />
 
-	<div id="${childContentId}"></div>
+  <div id="${childContentId}"></div>
 
 </div>
