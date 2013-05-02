@@ -57,7 +57,7 @@ Development Environment
 
 Important Coding Conventions
 ----------------------------
-Use spaces instead of tabs for formatting. You may configure your IDE to use spaces instead of tabs for all files Java, XML, HTML, JS.
-To setup Eclipse to do this for you by default you may read [this] (http://stackoverflow.com/questions/3460994/inserting-spaces-instead-of-tabs-in-all-files).
-This will ensure uniform rendering of files across editors.
-Also use 2 spaces to indent your code. Java code tends to have long variable names and hence it is easier to read code with smaller indentation.
+  * Use spaces instead of tabs for formatting. You may configure your IDE to use spaces instead of tabs for all files Java, XML, HTML, JS.
+    To setup Eclipse to do this for you by default you may read [this] (http://stackoverflow.com/questions/3460994/inserting-spaces-instead-of-tabs-in-all-files).
+    This will ensure uniform rendering of files across editors.
+  * Also use 2 spaces to indent your code. Java code tends to have long variable names and hence it is easier to read code with smaller indentation.
