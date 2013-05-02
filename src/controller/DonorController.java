@@ -389,7 +389,6 @@ public class DonorController {
     ModelAndView modelAndView = new ModelAndView("donors/donorsTable");
 
     Map<String, Object> m = model.asMap();
-    m.put("tableName", "findDonorResultsTable");
     m.put("requestUrl", getUrl(request));
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
@@ -516,7 +515,6 @@ public class DonorController {
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("requestUrl", getUrl(request));
 
-    model.put("tableName", "viewAllDonors");
     model.put("allDonors", getDonorsViewModels(allDonors));
     model.put("donorFields", utilController.getFormFieldsForForm("donor"));
     model.put("contentLabel", "View All Donors");

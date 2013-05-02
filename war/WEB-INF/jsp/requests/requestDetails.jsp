@@ -34,7 +34,7 @@
     <c:if test="${requestFields.productType.hidden != true }">
       <div>
         <label>${requestFields.productType.displayName}</label>
-        <label>${request.productType.productType}</label>
+        <label>${request.productType}</label>
       </div>
     </c:if>
     <c:if test="${requestFields.requestType.hidden != true }">

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -167,10 +168,10 @@ public class RequestRepository {
     query.setParameter("productTypes", productTypes);
     query.setParameter("statuses", statuses);
 
-    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     try {
       Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateRequestedFrom);
+          .parse("31/12/1970") : dateFormat.parse(dateRequestedFrom);
       query.setParameter("dateRequestedFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();
@@ -186,7 +187,7 @@ public class RequestRepository {
 
     try {
       Date from = (dateRequiredFrom == null || dateRequiredFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateRequiredFrom);
+          .parse("31/12/1970") : dateFormat.parse(dateRequiredFrom);
       query.setParameter("dateRequiredFrom", from);
     } catch (ParseException e) {
       e.printStackTrace();
@@ -285,30 +286,29 @@ public class RequestRepository {
   }
 
   private Date getDateRequestedAfterOrDefault(String requestedAfter) {
-    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date from = null;
     try {
       from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(requestedAfter);
+          .parse("31/12/1970") : dateFormat.parse(requestedAfter);
     } catch (ParseException ex) {
       ex.printStackTrace();
     }
     return from;      
   }
 
-  private Date getDateRequiredByOrDefault(String dateExpiresTo) {
-    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+  private Date getDateRequiredByOrDefault(String dateRequiredBy) {
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date to = null;
     try {
-      if (dateExpiresTo == null || dateExpiresTo.equals("")) {
-        to = new Date();
+      if (StringUtils.isBlank(dateRequiredBy)) {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(to);
+        cal.setTime(new Date());
         cal.add(Calendar.DATE, 365);
         to = cal.getTime();
       }
       else {
-        to = dateFormat.parse(dateExpiresTo);
+        to = dateFormat.parse(dateRequiredBy);
       }
     } catch (ParseException ex) {
       ex.printStackTrace();
@@ -316,49 +316,66 @@ public class RequestRepository {
     return to;      
   }
 
-  public List<Request> findRequests(String requestNumber, List<Integer> productTypeIds,
+  public List<Object> findRequests(String requestNumber, List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy, Boolean includeSatisfiedRequests) {
-    String queryStr;
-    TypedQuery<Request> query;
+      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) {
+
+    String queryStr = "";
     if (StringUtils.isNotBlank(requestNumber)) {
-      queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-          "r.requestNumber =:requestNumber AND " +
+      queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+                 "r.requestNumber =:requestNumber AND " +
+                 "r.isDeleted= :isDeleted";
+    } else {
+      queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+          "(r.productType.id IN (:productTypeIds) AND " +
+          "r.requestSite.id IN (:requestSiteIds)) AND" +
+          "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
           "r.isDeleted= :isDeleted";
-
-      query = em.createQuery(queryStr, Request.class);
-      query.setParameter("requestNumber", requestNumber);
-      query.setParameter("isDeleted", false);
-
-      return query.getResultList();
+      if (!includeSatisfiedRequests)
+        queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
     }
 
-    queryStr = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-            "(r.productType.id IN (:productTypeIds) AND " +
-            "r.requestSite.id IN (:requestSiteIds)) AND" +
-            "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
-            "r.isDeleted= :isDeleted";
 
-
-    if (!includeSatisfiedRequests)
-      queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
-
+    TypedQuery<Request> query;
+    if (pagingParams.containsKey("sortColumn")) {
+      queryStr += " ORDER BY r." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+    }
+    
     query = em.createQuery(queryStr, Request.class);
-
-    Date from = getDateRequestedAfterOrDefault(requestedAfter);
-    Date to = getDateRequiredByOrDefault(requiredBy);
-
-    if (!includeSatisfiedRequests)
-      query.setParameter("fulfilled", false);
-
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productTypeIds", productTypeIds);
-    query.setParameter("requestSiteIds", requestSiteIds);
-    query.setParameter("requestedAfter", from);
-    query.setParameter("requiredBy", to);
 
-    return query.getResultList();
+    if (StringUtils.isNotBlank(requestNumber)) {
+      query.setParameter("requestNumber", requestNumber);
+    }
+    else {
+      query.setParameter("productTypeIds", productTypeIds);
+      query.setParameter("requestSiteIds", requestSiteIds);
+      query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
+      query.setParameter("requiredBy", getDateRequiredByOrDefault(requiredBy));
+      if (!includeSatisfiedRequests)
+        query.setParameter("fulfilled", Boolean.FALSE);
+    }
+    
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+
+    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
   }
+
+  private Long getResultCount(String queryStr, Query query) {
+    String countQueryStr = queryStr.replaceFirst("SELECT r", "SELECT COUNT(r)");
+    // removing the join fetch is important otherwise Hibernate will complain
+    // owner of the fetched association was not present in the select list
+    countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH r.issuedProducts", "");
+    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+    for (Parameter<?> parameter : query.getParameters()) {
+      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
+    }
+    return countQuery.getSingleResult().longValue();
+  }  
 
   public void deleteRequest(Long requestId) {
     Request existingRequest = findRequestById(requestId);
@@ -522,7 +539,7 @@ public class RequestRepository {
     query.setParameter("dateRequestedFrom", dateRequestedFrom);
     query.setParameter("dateRequestedTo", dateRequestedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;

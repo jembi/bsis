@@ -114,7 +114,6 @@ public class CollectedSampleController {
 
     ModelAndView modelAndView = new ModelAndView("collections/collectionsTable");
     Map<String, Object> m = model.asMap();
-    m.put("tableName", "findProductsTable");
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     m.put("allCollectedSamples", getCollectionViewModels(collections));
     m.put("refreshUrl", getUrl(request));

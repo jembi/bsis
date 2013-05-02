@@ -20,7 +20,6 @@ import model.product.ProductExists;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Audited
@@ -47,7 +46,6 @@ public class ProductUsage implements ModificationTracker {
   @Column(length=50)
   private String useIndication;
 
-  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.TIMESTAMP)
   private Date usageDate;
 

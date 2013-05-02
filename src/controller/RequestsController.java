@@ -1,5 +1,6 @@
 package controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import model.request.Request;
 import model.request.RequestBackingForm;
 import model.request.RequestBackingFormValidator;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -130,10 +132,34 @@ public class RequestsController {
 
   @RequestMapping("/findRequest")
   public ModelAndView findRequest(HttpServletRequest request,
+      Model model,
       @ModelAttribute("findRequestForm") FindRequestBackingForm form,
       BindingResult result) {
 
     List<Request> productRequests = Arrays.asList(new Request[0]);
+
+    ModelAndView modelAndView = new ModelAndView("requests/requestsTable");
+    Map<String, Object> m = model.asMap();
+    m.put("requestFields", utilController.getFormFieldsForForm("request"));
+    m.put("allRequests", getRequestViewModels(productRequests));
+    m.put("refreshUrl", getUrl(request));
+    m.put("nextPageUrl", getNextPageUrl(request));
+    addEditSelectorOptions(m);
+
+    modelAndView.addObject("model", m);
+    return modelAndView;
+
+  }
+
+  @RequestMapping("/findRequestPagination")
+  public @ResponseBody Map<String, Object> findRequestPagination(HttpServletRequest request,
+      @ModelAttribute("findRequestForm") FindRequestBackingForm form,
+      BindingResult result, Model model) {
+
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     String requestedAfter = form.getRequestedAfter();
     String requiredBy = form.getRequiredBy();
@@ -157,25 +183,112 @@ public class RequestsController {
       }
     }
 
-    productRequests = requestRepository.findRequests(
+    List<Object> results = requestRepository.findRequests(
                         form.getRequestNumber(),
                         productTypeIds, siteIds,
                         requestedAfter, requiredBy,
-                        includeSatisfiedRequests);
+                        includeSatisfiedRequests, pagingParams);
 
-    ModelAndView mv = new ModelAndView("requests/requestsTable");
-    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
-    mv.addObject("allRequests", getRequestViewModels(productRequests));
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    @SuppressWarnings("unchecked")
+    List<Request> productRequests = (List<Request>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
 
-    return mv;
+    return generateDatatablesMap(productRequests, totalRecords, formFields);
+  }
+
+  private String getNextPageUrl(HttpServletRequest request) {
+    String reqUrl = request.getRequestURL().toString().replaceFirst("findRequest.html", "findRequestPagination.html");
+    String queryString = request.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
+  }
+
+  /**
+   * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
+   */
+  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
+
+    List<String> visibleFields = new ArrayList<String>();
+    visibleFields.add("id");
+    for (String field : Arrays.asList("requestNumber", "patientBloodAbo","patientBloodRh",
+                                      "requestDate", "requiredDate", "productType",
+                                      "numUnitsRequested", "numUnitsIssued", "requestSite")) {
+      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      if (fieldProperties.get("hidden").equals(false))
+        visibleFields.add(field);
+    }
+
+    Map<String, String> sortColumnMap = new HashMap<String, String>();
+    sortColumnMap.put("id", "id");
+    sortColumnMap.put("requestNumber", "requestNumber");
+    sortColumnMap.put("patientBloodAbo", "patientBloodAbo");
+    sortColumnMap.put("patientBloodRh", "patientBloodRh");
+    sortColumnMap.put("requestDate", "requestDate");
+    sortColumnMap.put("requiredDate", "requiredDate");
+    sortColumnMap.put("productType", "productType.productTypeNameShort");
+    sortColumnMap.put("numUnitsRequested", "numUnitsRequested");
+    sortColumnMap.put("numUnitsIssued", "numUnitsIssued");
+    sortColumnMap.put("requestSite", "requestSite");
+
+    String sortColumn = visibleFields.get(columnId);
+
+    if (sortColumnMap.get(sortColumn) == null)
+      return "id";
+    else
+      return sortColumnMap.get(sortColumn);
+  }
+
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in requestsTable.jsp.
+   */
+  private Map<String, Object> generateDatatablesMap(List<Request> productRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+    Map<String, Object> collectionsMap = new HashMap<String, Object>();
+
+    ArrayList<Object> requestList = new ArrayList<Object>();
+
+    for (RequestViewModel productRequest : getRequestViewModels(productRequests)) {
+
+      List<Object> row = new ArrayList<Object>();
+      
+      row.add(productRequest.getId().toString());
+
+      for (String property : Arrays.asList("requestNumber", "patientBloodAbo", "patientBloodRh",
+                                           "requestDate", "requiredDate", "productType",
+                                           "numUnitsRequested", "numUnitsIssued", "requestSite")) {
+        if (formFields.containsKey(property)) {
+          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          if (properties.get("hidden").equals(false)) {
+            String propertyValue = property;
+            try {
+              propertyValue = BeanUtils.getProperty(productRequest, property);
+            } catch (IllegalAccessException e) {
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              e.printStackTrace();
+            }
+            row.add(propertyValue.toString());
+          }
+        }
+      }
+
+      requestList.add(row);
+    }
+    collectionsMap.put("aaData", requestList);
+    collectionsMap.put("iTotalRecords", totalRecords);
+    collectionsMap.put("iTotalDisplayRecords", totalRecords);
+    return collectionsMap;
   }
 
   @RequestMapping(value = "/addRequestFormGenerator", method = RequestMethod.GET)

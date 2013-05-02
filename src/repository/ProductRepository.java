@@ -716,11 +716,11 @@ public class ProductRepository {
     query.setParameter("dateCollectedFrom", dateCollectedFrom);
     query.setParameter("dateCollectedTo", dateCollectedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;
-      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+      resultDateFormat = new SimpleDateFormat("01/MM/yyyy");
     } else if (aggregationCriteria.equals("yearly")) {
       incrementBy = Calendar.YEAR;
       resultDateFormat = new SimpleDateFormat("01/01/yyyy");
@@ -819,11 +819,11 @@ public class ProductRepository {
     query.setParameter("dateCollectedFrom", dateCollectedFrom);
     query.setParameter("dateCollectedTo", dateCollectedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;
-      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
+      resultDateFormat = new SimpleDateFormat("01/MM/yyyy");
     } else if (aggregationCriteria.equals("yearly")) {
       incrementBy = Calendar.YEAR;
       resultDateFormat = new SimpleDateFormat("01/01/yyyy");

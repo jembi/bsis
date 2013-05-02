@@ -32,7 +32,6 @@ import model.util.Gender;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Audited
@@ -47,12 +46,10 @@ public class Request implements ModificationTracker {
   @Index(name="request_requestNumber_index")
   private String requestNumber;
 
-  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="request_requestDate_index")
   private Date requestDate;
 
-  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="request_requiredDate_index")
   private Date requiredDate;
@@ -83,7 +80,6 @@ public class Request implements ModificationTracker {
   @Column(length=30)
   private String patientLastName;
 
-  @DateTimeFormat(pattern="dd/mm/yyyy")
   @Temporal(TemporalType.DATE)
   private Date patientBirthDate;
 

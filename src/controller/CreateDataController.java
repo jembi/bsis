@@ -720,7 +720,7 @@ public class CreateDataController {
     List<Request> requests = new ArrayList<Request>();
     for (int i = 0; i < numRequests; i++) {
       Date requestDate = getRandomRequestDate();
-      Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt() % 21).toDate();
+      Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt(21)).toDate();
       RequestBackingForm form = new RequestBackingForm();
       form.setRequestNumber(requestNumbers.get(i));
       form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));

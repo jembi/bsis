@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -142,7 +141,6 @@ public class ProductController {
     List<Product> products = Arrays.asList(new Product[0]);
 
     ModelAndView mv = new ModelAndView("products/productsTable");
-    mv.addObject("tableName", "findProductsTable");
     mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
     mv.addObject("allProducts", getProductViewModels(products));
     mv.addObject("refreshUrl", getUrl(request));

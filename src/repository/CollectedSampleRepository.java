@@ -241,11 +241,11 @@ public class CollectedSampleRepository {
   }
 
   private Date getDateCollectedFromOrDefault(String dateCollectedFrom) {
-    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date from = null;
     try {
       from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("12/31/1970") : dateFormat.parse(dateCollectedFrom);
+          .parse("31/12/1970") : dateFormat.parse(dateCollectedFrom);
     } catch (ParseException ex) {
       ex.printStackTrace();
     }
@@ -253,7 +253,7 @@ public class CollectedSampleRepository {
   }
 
   private Date getDateCollectedToOrDefault(String dateCollectedTo) {
-    DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date to = null;
     try {
       to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
@@ -305,7 +305,7 @@ public class CollectedSampleRepository {
     query.setParameter("dateCollectedFrom", dateCollectedFrom);
     query.setParameter("dateCollectedTo", dateCollectedTo);
 
-    DateFormat resultDateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
     if (aggregationCriteria.equals("monthly")) {
       incrementBy = Calendar.MONTH;

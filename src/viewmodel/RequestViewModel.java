@@ -6,7 +6,6 @@ import model.CustomDateFormatter;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
-import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.user.User;
@@ -75,8 +74,8 @@ public class RequestViewModel {
     return request.getModificationTracker();
   }
 
-  public ProductType getProductType() {
-    return request.getProductType();
+  public String getProductType() {
+    return request.getProductType().getProductTypeNameShort();
   }
 
   public Location getRequestSite() {
