@@ -1,9 +1,7 @@
 V2V
 ===
 
-C4G Vein-to-Vein (V2V) is a system to monitor and analyze data from blood collection, testing, and utilization.
-
-Vein-to-Vein (V2V) is a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech.
+C4G Vein-to-Vein (V2V) is a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech.
 
 # Background
 V2V is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
