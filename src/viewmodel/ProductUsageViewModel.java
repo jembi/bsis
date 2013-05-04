@@ -1,6 +1,6 @@
 package viewmodel;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
 import model.usage.ProductUsage;
 
 public class ProductUsageViewModel {

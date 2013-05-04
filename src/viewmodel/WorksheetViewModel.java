@@ -3,7 +3,8 @@ package viewmodel;
 import java.util.Date;
 import java.util.Set;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
+
 import model.collectedsample.CollectedSample;
 import model.user.User;
 import model.worksheet.Worksheet;

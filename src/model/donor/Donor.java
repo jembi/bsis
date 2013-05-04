@@ -35,6 +35,8 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 
+import utils.DonorUtils;
+
 @Entity
 @Audited
 public class Donor implements ModificationTracker {

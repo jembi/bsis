@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import model.CustomDateFormatter;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -18,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import controller.UtilController;
 

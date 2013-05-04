@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.CustomDateFormatter;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
@@ -18,6 +17,7 @@ import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
 
 import repository.RequestRepository;
+import utils.CustomDateFormatter;
 
 
 public class RequestBackingForm {

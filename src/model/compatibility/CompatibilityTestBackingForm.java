@@ -5,7 +5,8 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
+
 import model.product.Product;
 import model.request.Request;
 import model.user.User;

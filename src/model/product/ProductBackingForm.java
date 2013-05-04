@@ -7,12 +7,13 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.producttype.ProductType;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
+
+import utils.CustomDateFormatter;
 
 public class ProductBackingForm {
 

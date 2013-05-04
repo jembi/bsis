@@ -14,7 +14,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.CollectionField;
 import model.bloodtesting.rules.BloodTestingRule;
@@ -51,6 +50,7 @@ import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import utils.CustomDateFormatter;
 
 @Controller
 public class CreateDataController {

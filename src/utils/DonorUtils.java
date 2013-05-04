@@ -1,15 +1,17 @@
-package model.donor;
+package utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
-import model.CustomDateFormatter;
+
+import model.donor.Donor;
 
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class DonorUtils {

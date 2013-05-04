@@ -20,7 +20,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
@@ -49,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
+import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 

@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.CustomDateFormatter;
 import model.reports.CollectionsReportBackingForm;
 import model.reports.DiscardedProductsReportBackingForm;
 import model.reports.IssuedProductsReportBackingForm;
@@ -35,6 +34,7 @@ import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import utils.CustomDateFormatter;
 
 @Controller
 public class ReportsController {

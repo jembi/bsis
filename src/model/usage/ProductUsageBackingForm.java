@@ -6,7 +6,8 @@ import java.util.Date;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
+
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.user.User;

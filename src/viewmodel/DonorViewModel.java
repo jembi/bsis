@@ -2,7 +2,6 @@ package viewmodel;
 
 import java.util.Date;
 
-import model.CustomDateFormatter;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.location.Location;
@@ -11,6 +10,8 @@ import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
+
+import utils.CustomDateFormatter;
 
 @Component
 public class DonorViewModel {

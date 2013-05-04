@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import javax.persistence.NoResultException;
 
-import model.CustomDateFormatter;
 import model.product.Product;
 import model.request.Request;
 
@@ -13,6 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import utils.CustomDateFormatter;
 import viewmodel.CompatibilityTestViewModel;
 import controller.UtilController;
 

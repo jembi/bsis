@@ -2,7 +2,6 @@ package viewmodel;
 
 import java.util.Date;
 
-import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.product.ProductStatus;
@@ -11,6 +10,8 @@ import model.user.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+
+import utils.CustomDateFormatter;
 
 public class ProductViewModel {
 

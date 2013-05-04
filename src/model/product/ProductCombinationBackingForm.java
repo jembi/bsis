@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 import model.producttype.ProductTypeCombination;
 import model.user.User;
@@ -18,6 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import utils.CustomDateFormatter;
 
 public class ProductCombinationBackingForm {
 

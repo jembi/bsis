@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
-import model.CustomDateFormatter;
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.location.Location;
@@ -17,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import repository.DonorRepository;
+import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
 
 public class DonorBackingForm {

@@ -2,7 +2,8 @@ package viewmodel;
 
 import java.util.List;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
+
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.location.Location;

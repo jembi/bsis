@@ -19,7 +19,6 @@ import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.donor.DonorDeferral;
-import model.donor.DonorUtils;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
@@ -42,6 +41,7 @@ import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 import repository.WorksheetRepository;
+import utils.DonorUtils;
 
 @Component
 public class UtilController {

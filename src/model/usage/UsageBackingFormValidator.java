@@ -2,13 +2,13 @@ package model.usage;
 
 import java.util.Arrays;
 
-import model.CustomDateFormatter;
 import model.product.Product;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import utils.CustomDateFormatter;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
 import controller.UtilController;

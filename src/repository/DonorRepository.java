@@ -18,11 +18,9 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import model.CustomDateFormatter;
 import model.donor.Donor;
 import model.donor.DonorDeferral;
 import model.donor.DonorStatus;
-import model.donor.DonorUtils;
 import model.donordeferral.DeferralReason;
 import model.util.BloodGroup;
 
@@ -31,6 +29,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import utils.CustomDateFormatter;
+import utils.DonorUtils;
 
 import filter.UserInfoAddToThreadFilter;
 

@@ -2,7 +2,8 @@ package viewmodel;
 
 import java.util.List;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
+
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;

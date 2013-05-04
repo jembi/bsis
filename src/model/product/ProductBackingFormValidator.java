@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import model.CustomDateFormatter;
 import model.collectedsample.CollectedSample;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -18,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import utils.CustomDateFormatter;
 import viewmodel.ProductViewModel;
 import controller.UtilController;
 

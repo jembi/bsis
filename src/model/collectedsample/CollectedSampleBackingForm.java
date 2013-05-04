@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
@@ -17,6 +16,8 @@ import model.user.User;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import utils.CustomDateFormatter;
 
 public class CollectedSampleBackingForm {
 

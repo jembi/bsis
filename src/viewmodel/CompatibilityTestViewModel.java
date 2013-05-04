@@ -4,7 +4,8 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
-import model.CustomDateFormatter;
+import utils.CustomDateFormatter;
+
 import model.compatibility.CompatibilityTest;
 import model.compatibility.CrossmatchType;
 import model.product.Product;
