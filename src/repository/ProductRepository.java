@@ -32,9 +32,7 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.testresults.TTIStatus;
-import model.util.BloodAbo;
 import model.util.BloodGroup;
-import model.util.BloodRh;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -346,53 +344,6 @@ public class ProductRepository {
       ex.printStackTrace();
     }
     return product;
-  }
-
-  public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<ProductType> types, List<String> availability) {
-
-    return findAnyProductMatching(productNumber, collectionNumber,
-        Arrays.asList(BloodAbo.A, BloodAbo.B, BloodAbo.O, BloodAbo.AB),
-        Arrays.asList(BloodRh.POSITIVE, BloodRh.NEGATIVE), types, availability);
-  }
-
-  public List<Product> findAnyProductMatching(String productNumber,
-      String collectionNumber, List<BloodAbo> bloodAbo, List<BloodRh> bloodRh,
-      List<ProductType> types, List<String> availability) {
-
-    TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE "
-        + "(p.productNumber = :productNumber OR "
-        + "p.collectionNumber = :collectionNumber "
-        + "OR p.type IN (:types)) AND (p.isIssued IN (:isIssued)) AND "
-        + "p.abo IN (:bloodAbo) AND p.rhd IN (:bloodRh) AND "
-        + "(p.isDeleted= :isDeleted)", Product.class);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    String productNo = ((productNumber == null) ? "" : productNumber);
-    query.setParameter("productNumber", productNo);
-    String collectionNo = ((collectionNumber == null) ? "" : collectionNumber);
-    query.setParameter("collectionNumber", collectionNo);
-    query.setParameter("bloodAbo", bloodAbo);
-    query.setParameter("bloodRh", bloodRh);
-    query.setParameter("types", types);
-    query.setParameter("isIssued", getIssuedListFromAvailability(availability));
-
-    List<Product> resultList = query.getResultList();
-    return resultList;
-  }
-
-  private List<Boolean> getIssuedListFromAvailability(List<String> availability) {
-    List<Boolean> issued = new ArrayList<Boolean>();
-    if (availability == null)
-      return issued;
-    for (String available : availability) {
-      if (available.equals("available"))
-        issued.add(false);
-      if (available.equals("notAvailable")) {
-        issued.add(true);
-      }
-    }
-    return issued;
   }
 
   public Product updateProduct(Product product) {
