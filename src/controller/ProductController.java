@@ -194,10 +194,7 @@ public class ProductController {
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     List<Object> results = new ArrayList<Object>();
-    if (searchBy.equals("productNumber")) {
-      results = productRepository.findProductByProductNumber(form.getProductNumber(), form.getStatus(),
-                                          pagingParams);
-    } else if (searchBy.equals("collectionNumber")) {
+    if (searchBy.equals("collectionNumber")) {
       results = productRepository.findProductByCollectionNumber(
           form.getCollectionNumber(), form.getStatus(),
           pagingParams);

@@ -155,20 +155,6 @@ public class ProductRepository {
     return product;
   }
 
-  public Product findProductByProductNumber(String productNumber) {
-    TypedQuery<Product> query = em
-        .createQuery(
-            "SELECT p FROM Product p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted",
-            Product.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productNumber", productNumber);
-    List<Product> products = query.getResultList();
-    if (CollectionUtils.isEmpty(products)) {
-      return null;
-    }
-    return products.get(0);
-  }
-
   public List<Object> findProductByCollectionNumber(
       String collectionNumber, List<String> status, Map<String, Object> pagingParams) {
 
@@ -242,32 +228,6 @@ public class ProductRepository {
     query.setMaxResults(length);
 
     return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
-  }
-
-  public List<Object> findProductByProductNumber(
-      String productNumber, List<String> status, Map<String, Object> pagingParams) {
-
-    String queryStr = "SELECT p FROM Product p WHERE p.productNumber = :productNumber AND " +
-                      "p.status IN :status AND " +
-                      "p.isDeleted=:isDeleted";
-
-    TypedQuery<Product> query;
-    if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-    }
-
-    query = em.createQuery(queryStr, Product.class);
-    query.setParameter("status", statusStringToProductStatus(status));
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productNumber", productNumber);
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    query.setFirstResult(start);
-    query.setMaxResults(length);
-
-    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
   }
 
   private Long getResultCount(String queryStr, Query query) {
@@ -448,13 +408,6 @@ public class ProductRepository {
     return existingProduct;
   }
 
-  public void deleteProduct(String productNumber) {
-    Product existingProduct = findProductByProductNumber(productNumber);
-    existingProduct.setIsDeleted(Boolean.TRUE);
-    em.merge(existingProduct);
-    em.flush();
-  }
-
   public Product addProduct(Product product) {
     updateProductInternalFields(product);
     em.persist(product);
@@ -530,11 +483,6 @@ public class ProductRepository {
     return matchingProducts;
   }
   
-  public Product findSingleProductByProductNumber(String productNumber) {
-    Product product = findProductByProductNumber(productNumber);
-    return product;
-  }
-
   public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> centerIds) {
     Map<String, Object> inventory = new HashMap<String, Object>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
