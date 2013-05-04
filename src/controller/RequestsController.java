@@ -13,10 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.product.Product;
-import model.request.FindRequestBackingForm;
 import model.request.Request;
-import model.request.RequestBackingForm;
-import model.request.RequestBackingFormValidator;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,9 @@ import repository.RequestTypeRepository;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.ProductViewModel;
 import viewmodel.RequestViewModel;
+import backingform.FindRequestBackingForm;
+import backingform.RequestBackingForm;
+import backingform.validator.RequestBackingFormValidator;
 
 @Controller
 public class RequestsController {

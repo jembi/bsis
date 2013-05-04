@@ -10,8 +10,6 @@ import javax.validation.Valid;
 import model.product.Product;
 import model.request.Request;
 import model.usage.ProductUsage;
-import model.usage.ProductUsageBackingForm;
-import model.usage.UsageBackingFormValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +29,8 @@ import repository.RequestRepository;
 import repository.UsageRepository;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
+import backingform.ProductUsageBackingForm;
+import backingform.validator.UsageBackingFormValidator;
 
 @Controller
 public class UsageController {

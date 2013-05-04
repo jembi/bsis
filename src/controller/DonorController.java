@@ -13,10 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.donor.Donor;
-import model.donor.DonorBackingForm;
-import model.donor.DonorBackingFormValidator;
 import model.donor.DonorDeferral;
-import model.donor.FindDonorBackingForm;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -38,6 +35,9 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
+import backingform.DonorBackingForm;
+import backingform.FindDonorBackingForm;
+import backingform.validator.DonorBackingFormValidator;
 
 @Controller
 public class DonorController {

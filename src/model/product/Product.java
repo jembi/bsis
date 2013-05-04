@@ -20,19 +20,21 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
-import model.collectedsample.CollectedSampleExists;
 import model.compatibility.CompatibilityTest;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.productmovement.ProductStatusChange;
 import model.producttype.ProductType;
-import model.producttype.ProductTypeExists;
 import model.request.Request;
 import model.usage.ProductUsage;
 import model.user.User;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
+
+import constraintvalidator.CollectedSampleExists;
+import constraintvalidator.ProductTypeExists;
+
 
 @Entity
 @Audited

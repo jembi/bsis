@@ -13,11 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.product.FindProductBackingForm;
 import model.product.Product;
-import model.product.ProductBackingForm;
-import model.product.ProductBackingFormValidator;
-import model.product.ProductCombinationBackingForm;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
@@ -44,6 +40,10 @@ import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import viewmodel.ProductViewModel;
+import backingform.FindProductBackingForm;
+import backingform.ProductBackingForm;
+import backingform.ProductCombinationBackingForm;
+import backingform.validator.ProductBackingFormValidator;
 
 @Controller
 public class ProductController {

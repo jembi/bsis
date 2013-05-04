@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.compatibility.CompatibilityTest;
-import model.compatibility.CompatibilityTestBackingForm;
-import model.compatibility.CompatibilityTestBackingFormValidator;
 import model.request.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.RequestRepository;
+import backingform.CompatibilityTestBackingForm;
+import backingform.validator.CompatibilityTestBackingFormValidator;
 
 @Controller
 public class CompatibilityTestsController {

@@ -24,7 +24,6 @@ import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.product.Product;
-import model.product.ProductCombinationBackingForm;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
@@ -51,7 +50,7 @@ import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
-
+import backingform.ProductCombinationBackingForm;
 import filter.UserInfoAddToThreadFilter;
 
 @Repository

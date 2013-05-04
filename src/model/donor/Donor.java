@@ -22,7 +22,6 @@ import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
 import model.location.Location;
-import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -34,6 +33,8 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
+
+import constraintvalidator.LocationExists;
 
 import utils.DonorUtils;
 

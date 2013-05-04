@@ -16,10 +16,12 @@ import javax.validation.Valid;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
-import model.product.ProductExists;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
+
+import constraintvalidator.ProductExists;
+
 
 @Entity
 @Audited

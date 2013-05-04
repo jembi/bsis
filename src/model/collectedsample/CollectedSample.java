@@ -22,16 +22,11 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
-import model.bloodbagtype.BloodBagTypeExists;
 import model.bloodtesting.BloodTestResult;
 import model.collectionbatch.CollectionBatch;
-import model.collectionbatch.CollectionBatchExists;
 import model.donationtype.DonationType;
-import model.donationtype.DonationTypeExists;
 import model.donor.Donor;
-import model.donor.DonorExists;
 import model.location.Location;
-import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
@@ -43,6 +38,12 @@ import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+
+import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.CollectionBatchExists;
+import constraintvalidator.DonationTypeExists;
+import constraintvalidator.DonorExists;
+import constraintvalidator.LocationExists;
 
 import repository.bloodtesting.BloodTypingStatus;
 

@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 
 import model.collectedsample.CollectedSample;
 import model.location.Location;
-import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -22,6 +21,9 @@ import model.user.User;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+
+import constraintvalidator.LocationExists;
+
 
 @Entity
 @Audited

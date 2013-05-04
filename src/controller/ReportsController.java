@@ -13,11 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.reports.CollectionsReportBackingForm;
-import model.reports.DiscardedProductsReportBackingForm;
-import model.reports.IssuedProductsReportBackingForm;
-import model.reports.RequestsReportBackingForm;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +30,10 @@ import repository.ProductRepository;
 import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
+import backingform.CollectionsReportBackingForm;
+import backingform.DiscardedProductsReportBackingForm;
+import backingform.IssuedProductsReportBackingForm;
+import backingform.RequestsReportBackingForm;
 
 @Controller
 public class ReportsController {

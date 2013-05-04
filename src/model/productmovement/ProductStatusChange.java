@@ -14,14 +14,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.envers.Audited;
-
 import model.product.Product;
-import model.product.ProductExists;
 import model.product.ProductStatus;
 import model.request.Request;
-import model.request.RequestExists;
 import model.user.User;
+
+import org.hibernate.envers.Audited;
+
+import constraintvalidator.ProductExists;
+import constraintvalidator.RequestExists;
+
 
 @Entity
 @Audited

@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import model.collectedsample.CollectedSample;
-import model.testresults.FindTestResultBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
+import backingform.FindTestResultBackingForm;
 
 @Controller
 public class TestResultController {

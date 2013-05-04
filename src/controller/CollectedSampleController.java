@@ -14,10 +14,6 @@ import javax.validation.Valid;
 
 import model.admin.ConfigPropertyConstants;
 import model.collectedsample.CollectedSample;
-import model.collectedsample.CollectedSampleBackingForm;
-import model.collectedsample.CollectedSampleBackingFormValidator;
-import model.collectedsample.FindCollectedSampleBackingForm;
-import model.worksheet.WorksheetBackingForm;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +35,10 @@ import repository.DonationTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import viewmodel.CollectedSampleViewModel;
+import backingform.CollectedSampleBackingForm;
+import backingform.FindCollectedSampleBackingForm;
+import backingform.WorksheetBackingForm;
+import backingform.validator.CollectedSampleBackingFormValidator;
 
 @Controller
 public class CollectedSampleController {

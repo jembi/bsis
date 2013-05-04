@@ -18,20 +18,22 @@ import javax.validation.Valid;
 
 import model.compatibility.CompatibilityTest;
 import model.location.Location;
-import model.location.LocationExists;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
-import model.producttype.ProductTypeExists;
 import model.requesttype.RequestType;
-import model.requesttype.RequestTypeExists;
 import model.user.User;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
+
+import constraintvalidator.LocationExists;
+import constraintvalidator.ProductTypeExists;
+import constraintvalidator.RequestTypeExists;
+
 
 @Entity
 @Audited

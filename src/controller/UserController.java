@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.user.User;
-import model.user.UserBackingForm;
-import model.user.UserBackingFormValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.UserRepository;
 import viewmodel.UserViewModel;
+import backingform.UserBackingForm;
+import backingform.validator.UserBackingFormValidator;
 
 @Controller
 public class UserController {

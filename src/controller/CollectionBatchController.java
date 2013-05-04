@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectionbatch.CollectionBatch;
-import model.collectionbatch.CollectionBatchBackingForm;
-import model.collectionbatch.CollectionBatchBackingFormValidator;
-import model.collectionbatch.FindCollectionBatchBackingForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +28,9 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectionBatchRepository;
 import repository.LocationRepository;
 import viewmodel.CollectionBatchViewModel;
+import backingform.CollectionBatchBackingForm;
+import backingform.FindCollectionBatchBackingForm;
+import backingform.validator.CollectionBatchBackingFormValidator;
 
 @Controller
 public class CollectionBatchController {
