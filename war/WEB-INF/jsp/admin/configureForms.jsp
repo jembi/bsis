@@ -99,24 +99,31 @@
       <span class="formFieldLink">${formField.defaultDisplayName}</span>
       <div class="formFieldProperties">
         <input type="hidden" name="formFieldId" value="${formField.id}" />
-        <div>
-          <label>Hide this field?</label>
-          <c:if test="${formField.hidden == true}">
-                <input type="checkbox" name="hidden" checked />
-          </c:if>
-          <c:if test="${formField.hidden == false}">
-                <input type="checkbox" name="hidden" />
-          </c:if>
-        </div>
-        <div>
-          <label>Required field?</label>
-          <c:if test="${formField.isRequired == true}">
-            <input type="checkbox" name="isRequired" checked />
-          </c:if>
-          <c:if test="${formField.isRequired == false}">
-            <input type="checkbox" name="isRequired" />
-          </c:if>
-        </div>
+
+        <c:if test="${formField.isHidable}">
+          <div>
+            <label>Hide this field?</label>
+            <c:if test="${formField.hidden == true}">
+                  <input type="checkbox" name="hidden" checked />
+            </c:if>
+            <c:if test="${formField.hidden == false}">
+                  <input type="checkbox" name="hidden" />
+            </c:if>
+          </div>
+        </c:if>
+
+        <c:if test="${formField.canBeOptional}">
+          <div>
+            <label>Required field?</label>
+            <c:if test="${formField.isRequired == true}">
+              <input type="checkbox" name="isRequired" checked />
+            </c:if>
+            <c:if test="${formField.isRequired == false}">
+              <input type="checkbox" name="isRequired" />
+            </c:if>
+          </div>
+        </c:if>
+
         <div>
           <label>Display name</label>
           <input type="text" name="displayName" class="tableInputShort" value="${formField.displayName}" />
