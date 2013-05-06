@@ -154,8 +154,9 @@ public class UtilController {
           Object fieldValue = properties.get(requiredField);
           if (fieldValue == null ||
               (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))
-             )
+             ) {
             errors.rejectValue(formName + "." + requiredField, "requiredField.error", "This field is required");
+          }
         }
       }
     } catch (IllegalAccessException e) {

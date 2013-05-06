@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -174,5 +176,21 @@ public class ProductTypeRepository {
 
     productTypeCombination.setIsDeleted(false);
     em.persist(productTypeCombination);
+  }
+
+  public ProductType getProductTypeByName(String productTypeName) {
+    TypedQuery<ProductType> query;
+    query = em.createQuery("SELECT pt from ProductType pt " +
+            "where pt.productType=:productTypeName", ProductType.class);
+    query.setParameter("productTypeName", productTypeName);
+    ProductType productType = null;
+    try {
+      productType = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    } catch (NonUniqueResultException ex) {
+      ex.printStackTrace();
+    }
+    return productType;
   }
 }

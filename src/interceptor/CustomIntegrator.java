@@ -32,22 +32,6 @@ public class CustomIntegrator implements Integrator {
 
       eventRegistry.prependListeners(EventType.PERSIST, EntitySaveListener.class);
       eventRegistry.appendListeners(EventType.MERGE, EntitySaveListener.class);
-      Iterator<PreInsertEventListener> iter = eventRegistry.getEventListenerGroup(EventType.PRE_INSERT).listeners().iterator();
-      while (iter.hasNext()) {
-        PreInsertEventListener el = iter.next();
-        System.out.println(el.getClass());
-        BeanValidationEventListener listener = (BeanValidationEventListener) el;
-        System.out.println(listener);
-//        iter.remove();
-      }
-      Iterator<PreUpdateEventListener> iter1 = eventRegistry.getEventListenerGroup(EventType.PRE_UPDATE).listeners().iterator();
-      while (iter1.hasNext()) {
-        PreUpdateEventListener el = iter1.next();
-        System.out.println(el.getClass());
-        BeanValidationEventListener listener = (BeanValidationEventListener) el;
-        System.out.println(listener);
-       // iter1.remove();
-      }
   }
 
   @Override

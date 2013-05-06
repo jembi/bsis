@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -158,5 +160,22 @@ public class LocationRepository {
     query.setParameter("isDonorPanel", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
+  }
+
+  public Location findLocationByName(String locationName) {
+    TypedQuery<Location> query = em.createQuery(
+        "SELECT l FROM Location l where l.name= :locationName and l.isDeleted= :isDeleted",
+        Location.class);
+      query.setParameter("isDeleted", false);
+      query.setParameter("locationName", locationName);
+      Location location = null;
+      try {
+        location = query.getSingleResult();
+      } catch (NoResultException ex) {
+        ex.printStackTrace();
+      } catch (NonUniqueResultException ex) {
+        ex.printStackTrace();
+      }
+      return location;
   }
 }
