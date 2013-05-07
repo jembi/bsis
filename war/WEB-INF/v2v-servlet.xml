@@ -113,7 +113,7 @@
 
   <int:logging-channel-adapter id="logger" level="ERROR" />
 
-  <bean id="emailReceiverService" class="controller.mailreceiver.EmailReceiverService" />
+  <!-- bean id="emailReceiverService" class="controller.mailreceiver.EmailReceiverService" />
   <bean id="emailSender" class="controller.mailreceiver.EmailReceiverService" />
 
   <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
@@ -149,5 +149,6 @@
     <prop key="mail.imap.socketFactory.fallback">false</prop>
     <prop key="mail.store.protocol">imaps</prop>
     <prop key="mail.debug">false</prop>
-  </util:properties>
+  </util:properties-->
+
 </beans>
