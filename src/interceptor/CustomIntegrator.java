@@ -1,14 +1,9 @@
 package interceptor;
 
-import java.util.Iterator;
-
 import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.beanvalidation.BeanValidationEventListener;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
-import org.hibernate.event.spi.PreInsertEventListener;
-import org.hibernate.event.spi.PreUpdateEventListener;
 import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.metamodel.source.MetadataImplementor;
 import org.hibernate.service.spi.SessionFactoryServiceRegistry;
