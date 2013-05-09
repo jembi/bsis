@@ -63,6 +63,8 @@ public class UserRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     List<User> userList = query.setParameter("username", username)
         .getResultList();
+    System.out.println(userList);
+    System.out.println(userList.size());
     if (userList != null && userList.size() > 0) {
       return userList.get(0);
     }

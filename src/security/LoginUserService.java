@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import repository.UserRepository;
 
-@Service(value="myUserDetailsService")
+@Service
 public class LoginUserService implements UserDetailsService {
 
   @Autowired
@@ -21,8 +21,11 @@ public class LoginUserService implements UserDetailsService {
       throws UsernameNotFoundException {
 
     System.out.println("here");
+    System.out.println(username);
 
+    System.out.println(userRepository);
     User user = userRepository.findUser(username);
+    System.out.println(user);
     if (user != null)
       return new V2VUserDetails(user);
     else
