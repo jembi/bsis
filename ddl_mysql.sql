@@ -917,6 +917,22 @@
         primary key (REV, users_id, roles_id)
     ) ENGINE=InnoDB;
 
+    create table VerifiedSender (
+        id bigint not null auto_increment,
+        isDeleted boolean,
+        senderName varchar(200),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    create table VerifiedSender_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        isDeleted boolean,
+        senderName varchar(200),
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
+
     create table WellType (
         id SMALLINT not null auto_increment,
         isDeleted boolean,
@@ -1548,6 +1564,12 @@
     alter table User_Role_AUD 
         add index FK269D713BDF74E053 (REV), 
         add constraint FK269D713BDF74E053 
+        foreign key (REV) 
+        references REVINFO (REV);
+
+    alter table VerifiedSender_AUD 
+        add index FKE0CE028EDF74E053 (REV), 
+        add constraint FKE0CE028EDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

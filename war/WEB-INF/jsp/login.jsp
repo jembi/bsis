@@ -11,7 +11,7 @@
 <link type="text/css" rel="stylesheet" href="css/login.css" />
 </head>
 <body>
-<!-- Prompt IE users to install Chrome Frame. Remove this if you support IE 6.
+<!-- Prompt IE users to install Chrome Frame.
        chromium.org/developers/how-tos/chrome-frame-getting-started -->
 <!--[if lt IE 10]>
 <p class=chromeframe>Your browser is not supported. <a href="http://browsehappy.com/" target="_blank">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true" target="_blank">install Google Chrome Frame</a> to experience this site.</p>
@@ -36,7 +36,33 @@
       <div class="loginPanel">
         <div class="centralContent">
           <div id="login">
-            <form:form action="loginUser.html" id="loginAction">
+ 
+          <form name='f' action="<c:url value='j_spring_security_check' />"
+                method='POST'>
+            <table>
+              <tr>
+                <td>User:</td>
+                <td><input type='text' name='j_username' value=''>
+                </td>
+              </tr>
+              <tr>
+                <td>Password:</td>
+                <td><input type='password' name='j_password' />
+                </td>
+              </tr>
+              <tr>
+                <td colspan='2'><input name="submit" type="submit"
+                  value="submit" />
+                </td>
+              </tr>
+              <tr>
+                <td colspan='2'><input name="reset" type="reset" />
+                </td>
+              </tr>
+            </table>
+         </form>
+
+          <form:form action="<c:url value='j_spring_security_check' />" id="loginAction" method="POST">
               <c:choose>
                 <c:when test="${model.loginFailed==true}">
                   <script>
