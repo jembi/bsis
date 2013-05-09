@@ -1,31 +1,26 @@
 package viewmodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.product.Product;
 import model.producttype.ProductType;
-import model.user.User;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 
 public class MatchingProductViewModel {
 
   private Product product;
+  private ProductViewModel productViewModel;
   private CompatibilityTest compatibilityTest;
 
   public MatchingProductViewModel(Product product) {
     this.product = product;
+    this.productViewModel = new ProductViewModel(this.product);
   }
 
   public MatchingProductViewModel(Product product,
       CompatibilityTest crossmatchTest) {
     this.product = product;
+    this.productViewModel = new ProductViewModel(this.product);
     this.compatibilityTest = crossmatchTest;
   }
 
@@ -38,68 +33,55 @@ public class MatchingProductViewModel {
   }
 
   public Long getId() {
-    return product.getId();
+    return productViewModel.getId();
   }
 
   public CollectedSample getCollectedSample() {
-    return product.getCollectedSample();
+    return productViewModel.getCollectedSample();
   }
 
   public ProductType getProductType() {
-    return product.getProductType();
+    return productViewModel.getProductType();
   }
 
-  public Date getLastUpdated() {
-    return product.getLastUpdated();
+  public String getLastUpdated() {
+    return productViewModel.getLastUpdated();
   }
 
-  public Date getCreatedDate() {
-    return product.getCreatedDate();
+  public String getCreatedDate() {
+    return productViewModel.getCreatedDate();
   }
 
-  public User getCreatedBy() {
-    return product.getCreatedBy();
+  public String getCreatedBy() {
+    return productViewModel.getCreatedBy();
   }
 
-  public User getLastUpdatedBy() {
-    return product.getLastUpdatedBy();
+  public String getLastUpdatedBy() {
+    return productViewModel.getLastUpdatedBy();
   }
 
   public String getNotes() {
-    return product.getNotes();
+    return productViewModel.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return product.getIsDeleted();
+    return productViewModel.getIsDeleted();
   }
 
   public String getCreatedOn() {
-    if (product.getCreatedOn() == null)
-      return ""; 
-    DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
-    return formatter.format(product.getCreatedOn());
+    return productViewModel.getCreatedOn();
   }
 
   public String getExpiresOn() {
-    if (product.getExpiresOn() == null)
-      return "";
-    DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
-    return formatter.format(product.getExpiresOn());
+    return productViewModel.getExpiresOn();
   }
 
   public String getCollectionNumber() {
-    if (getProduct() == null || getProduct().getCollectedSample() == null ||
-        getProduct().getCollectedSample().getCollectionNumber() == null
-       )
-      return "";
-    return getProduct().getCollectedSample().getCollectionNumber();
+    return productViewModel.getCollectionNumber();
   }
 
-  public Long getAge() {
-    DateTime today = new DateTime();
-    DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
-    Long age = (long) Days.daysBetween(createdOn, today).getDays();
-    return age;
+  public String getAge() {
+    return productViewModel.getAge();
   }
 
   public String getIsCompatible() {
@@ -109,11 +91,6 @@ public class MatchingProductViewModel {
   }
 
   public String getBloodGroup() {
-    if (product == null || product.getCollectedSample() == null ||
-        product.getCollectedSample().getCollectionNumber() == null
-       )
-      return "";
-    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(product.getCollectedSample());
-    return collectionViewModel.getBloodGroup();
+    return productViewModel.getBloodGroup();
   }
 }
