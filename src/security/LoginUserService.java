@@ -3,12 +3,14 @@ package security;
 import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import repository.UserRepository;
+import repository.events.ApplicationContextProvider;
 
 @Service
 public class LoginUserService implements UserDetailsService {
@@ -22,6 +24,12 @@ public class LoginUserService implements UserDetailsService {
 
     System.out.println("here");
     System.out.println(username);
+
+    System.out.println(userRepository);
+    if (userRepository == null) {
+      ApplicationContext context = ApplicationContextProvider.getApplicationContext(); 
+      userRepository = context.getBean(UserRepository.class);
+    }
 
     System.out.println(userRepository);
     User user = userRepository.findUser(username);

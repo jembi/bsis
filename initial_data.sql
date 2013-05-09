@@ -917,7 +917,7 @@ insert into Role(id, name) values
 (1, 'admin'),
 (2, 'donorlab'),
 (3, 'testlab'),
-(4, 'role_user');
+(4, 'ROLE_USER');
 
 insert into Permission(id, name) values
 (1, 'viewDonorInformation'),

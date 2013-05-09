@@ -15,12 +15,12 @@
 
   <context:property-placeholder location="classpath:database.properties" />
 
-  <mvc:annotation-driven />
+  <!-- mvc:annotation-driven />
 
   <context:component-scan base-package="security"></context:component-scan>
-  <context:component-scan base-package="repository"></context:component-scan>
+  <context:component-scan base-package="repository"></context:component-scan-->
 
-  <beans:bean id="dataSource1" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  <!-- beans:bean id="dataSource1" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <beans:property name="driverClassName" value="${database.driver}" />
         <beans:property name="url" value="${database.url}" />
         <beans:property name="username" value="${database.user}" />
@@ -38,7 +38,7 @@
         <beans:prop key="javax.persistence.validation.mode">none</beans:prop>
       </beans:props>
     </beans:property>
-  </beans:bean>
+  </beans:bean-->
 
     <http pattern="/**/*.css" security="none" />
     <http pattern="/**/*.js" security="none" />
