@@ -505,7 +505,7 @@
 
     create table Permission (
         id bigint not null auto_increment,
-        name varchar(20),
+        name varchar(50),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -513,7 +513,7 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        name varchar(20),
+        name varchar(50),
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -824,7 +824,7 @@
 
     create table Role (
         id bigint not null auto_increment,
-        name varchar(20),
+        name varchar(50),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -832,7 +832,7 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        name varchar(20),
+        name varchar(50),
         primary key (id, REV)
     ) ENGINE=InnoDB;
 

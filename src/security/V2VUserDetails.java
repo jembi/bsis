@@ -60,4 +60,8 @@ public class V2VUserDetails implements UserDetails {
   public boolean isEnabled() {
     return user.getIsActive();
   }
+
+  public User getUser() {
+    return user;
+  }
 }

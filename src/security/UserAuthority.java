@@ -22,6 +22,7 @@ public class UserAuthority implements GrantedAuthority {
     return role.getName();
   }
 
+  @Override
   public String toString() {
     return role.getName();
   }

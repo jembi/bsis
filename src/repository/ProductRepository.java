@@ -44,12 +44,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import controller.UtilController;
+
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
-import filter.UserInfoAddToThreadFilter;
 
 @Repository
 @Transactional
@@ -66,6 +67,9 @@ public class ProductRepository {
 
   @Autowired
   private RequestRepository requestRepository;
+
+  @Autowired
+  private UtilController utilController;
 
   /**
    * some fields like product status are cached internally.
@@ -536,7 +540,7 @@ public class ProductRepository {
     statusChange.setStatusChangedOn(new Date());
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
-    statusChange.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingProduct.getStatusChanges() == null)
       existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
     existingProduct.getStatusChanges().add(statusChange);
@@ -635,7 +639,6 @@ public class ProductRepository {
         lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
         upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       } catch (ParseException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
       }
       gcal.setTime(lowerDate);
@@ -664,7 +667,6 @@ public class ProductRepository {
           m.put(utcTime, (Long) result[0]);
         }
       } catch (ParseException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -738,7 +740,6 @@ public class ProductRepository {
         lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
         upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       } catch (ParseException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
       }
       gcal.setTime(lowerDate);
@@ -767,7 +768,6 @@ public class ProductRepository {
           m.put(utcTime, (Long) result[0]);
         }
       } catch (ParseException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -801,7 +801,7 @@ public class ProductRepository {
     statusChange.setStatusChangeReason(returnReason);
     statusChange.setNewStatus(existingProduct.getStatus());
     statusChange.setStatusChangeReasonText(returnReasonText);
-    statusChange.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingProduct.getStatusChanges() == null)
       existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
     existingProduct.getStatusChanges().add(statusChange);

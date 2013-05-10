@@ -3,9 +3,7 @@ package controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,16 +25,11 @@ public class LoginController {
   }
 
   @RequestMapping("/welcomePage")
-  public ModelAndView welcome(HttpServletRequest request, Model m) {
-    System.out.println("here");
-    System.out.println("user");
-    System.out.println(request.getSession().getAttribute("user"));
-    System.out.println(request.getUserPrincipal());
-    System.out.println(request.getUserPrincipal().getName());
+  public ModelAndView welcome(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("welcomePage");
-    m.addAttribute("versionNumber", UtilController.VERSION_NUMBER);
-    m.addAttribute("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
-    mv.addObject("model", m);
+    mv.addObject("versionNumber", UtilController.VERSION_NUMBER);
+    System.out.println(genericConfigRepository.getConfigProperties("labsetup"));
+    mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
     return mv;
   }
 

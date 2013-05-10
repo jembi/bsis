@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import filter.UserInfoAddToThreadFilter;
+import controller.UtilController;
 
 @Repository
 @Transactional
@@ -47,6 +47,9 @@ public class RequestRepository {
   @Autowired
   private ProductRepository productRepository;
 
+  @Autowired
+  private UtilController utilController;
+  
   public void saveRequest(Request request) {
     em.persist(request);
     em.flush();
@@ -422,7 +425,7 @@ public class RequestRepository {
       productIssue.setNewStatus(ProductStatus.ISSUED);
       productIssue.setStatusChangedOn(today);
       productIssue.setStatusChangeType(ProductStatusChangeType.ISSUED);
-      productIssue.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+      productIssue.setChangedBy(utilController.getCurrentUser());
       productIssue.setIssuedTo(request);
       productIssue.setProduct(product);
       numUnitsIssued++;

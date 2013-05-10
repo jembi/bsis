@@ -282,5 +282,10 @@
       <artifactId>mail</artifactId>
       <version>1.4.7</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-taglibs</artifactId>
+      <version>3.1.4.RELEASE</version>
+    </dependency>
   </dependencies>
 </project>

@@ -22,12 +22,14 @@ import model.donor.DonorDeferral;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
+import model.user.User;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -41,6 +43,7 @@ import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 import repository.WorksheetRepository;
+import security.V2VUserDetails;
 import utils.DonorUtils;
 
 @Component
@@ -441,5 +444,13 @@ public class UtilController {
 
   public String recordMachineResultsForTTI() {
     return genericConfigRepository.getConfigProperties("labsetup").get("recordMachineReadingsForTTI");
+  }
+
+  public User getCurrentUser() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = null;
+    if (principal != null && principal instanceof V2VUserDetails)
+      user = ((V2VUserDetails) principal).getUser();
+    return user;
   }
 }

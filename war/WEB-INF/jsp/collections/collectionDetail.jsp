@@ -59,7 +59,7 @@
     </div>
   </c:if>
 
-  <c:if test="${permissions['viewTestInformation'] eq 'allowed'}">
+  <sec:authorize access="hasRole('ROLE_VIEW_TEST_INFORMATION')">
     <div>
       <label>${collectionFields.bloodTypingStatus.displayName}</label>
       <label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
@@ -76,7 +76,7 @@
       <label>${collectionFields.bloodRh.displayName}</label>
       <label style="width: auto;">${collectedSample.bloodRh eq '+' ? 'POS' : collectedSample.bloodRh eq '-' ? 'NEG' : ''}</label>
     </div>
-  </c:if>
+  </sec:authorize>
 
   <c:if test="${collectionFields.notes.hidden != true }">
     <div>

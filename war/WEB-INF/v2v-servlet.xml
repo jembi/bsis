@@ -92,7 +92,6 @@
   <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
 
   <mvc:interceptors>
-    <bean id="userInfoInterceptor" class="interceptor.UserInfoInterceptor" />
     <bean id="loggingInterceptor" class="interceptor.LoggingInterceptor" />
   </mvc:interceptors>
 

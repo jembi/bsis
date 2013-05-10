@@ -914,9 +914,9 @@ insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActiv
 (4, 'test_user', 'test_user', 'test_user', 0,1,1,0);
 
 insert into Role(id, name) values
-(1, 'admin'),
-(2, 'donorlab'),
-(3, 'testlab'),
+(1, 'ROLE_ADMIN'),
+(2, 'ROLE_VIEW_DONOR_INFORMATION'),
+(3, 'ROLE_VIEW_TEST_INFORMATION'),
 (4, 'ROLE_USER');
 
 insert into Permission(id, name) values
@@ -926,12 +926,16 @@ insert into Permission(id, name) values
 
 insert into User_Role (users_id, roles_id) values
 (1, 1),
-(2, 1),
-(3, 2),
-(4, 3),
+(1, 2),
+(1, 3),
 (1, 4),
+(2, 1),
+(2, 2),
+(2, 3),
 (2, 4),
+(3, 2),
 (3, 4),
+(4, 3),
 (4, 4);
 
 insert into Permission_Role (roles_id, permissions_id) values

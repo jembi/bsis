@@ -27,13 +27,14 @@ import model.util.BloodGroup;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import controller.UtilController;
+
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
-
-import filter.UserInfoAddToThreadFilter;
 
 @Repository
 @Transactional
@@ -43,6 +44,9 @@ public class DonorRepository {
 
   @PersistenceContext
   private EntityManager em;
+
+  @Autowired
+  private UtilController utilController;
   
   public void saveDonor(Donor donor) {
     em.persist(donor);
@@ -273,7 +277,7 @@ public class DonorRepository {
     donorDeferral.setDeferredOn(new Date());
     donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
     donorDeferral.setDeferredDonor(donor);
-    donorDeferral.setDeferredBy(UserInfoAddToThreadFilter.threadLocal.get());
+    donorDeferral.setDeferredBy(utilController.getCurrentUser());
     DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setDeferralReasonText(deferralReasonText);

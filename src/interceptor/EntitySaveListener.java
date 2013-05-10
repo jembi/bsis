@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import model.modificationtracker.ModificationTracker;
+import model.user.User;
 
 import org.hibernate.HibernateException;
 import org.hibernate.event.spi.MergeEvent;
@@ -16,9 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import filter.UserInfoAddToThreadFilter;
+import security.V2VUserDetails;
 
 @Component
 public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
@@ -38,12 +40,16 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   public void onPersist(PersistEvent event) throws HibernateException {
     System.out.println("onPersist");
 
-    if (event.getObject() instanceof ModificationTracker) {
-      ModificationTracker entity = (ModificationTracker) event.getObject();
-      entity.setCreatedDate(new Date());
-      entity.setCreatedBy(UserInfoAddToThreadFilter.threadLocal.get());
-      entity.setLastUpdated(new Date());
-      entity.setLastUpdatedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (principal != null && principal instanceof V2VUserDetails) {
+      User user = ((V2VUserDetails) principal).getUser();
+      if (event.getObject() instanceof ModificationTracker && user != null) {
+        ModificationTracker entity = (ModificationTracker) event.getObject();
+        entity.setCreatedDate(new Date());
+        entity.setCreatedBy(user);
+        entity.setLastUpdated(new Date());
+        entity.setLastUpdatedBy(user);
+      }
     }
   }
 
@@ -56,10 +62,14 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   @Override
   public void onMerge(MergeEvent event) throws HibernateException {
     System.out.println("onMerge");
-    if (event.getEntity() instanceof ModificationTracker) {
-      ModificationTracker entity = (ModificationTracker) event.getEntity();
-      entity.setLastUpdated(new Date());
-      entity.setLastUpdatedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (principal != null && principal instanceof V2VUserDetails) {
+      User user = ((V2VUserDetails) principal).getUser();
+      if (event.getEntity() instanceof ModificationTracker && user != null) {
+        ModificationTracker entity = (ModificationTracker) event.getEntity();
+        entity.setLastUpdated(new Date());
+        entity.setLastUpdatedBy(user);
+      }
     }
   }
 
