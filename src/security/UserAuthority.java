@@ -22,4 +22,7 @@ public class UserAuthority implements GrantedAuthority {
     return role.getName();
   }
 
+  public String toString() {
+    return role.getName();
+  }
 }

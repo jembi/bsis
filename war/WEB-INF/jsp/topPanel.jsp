@@ -9,7 +9,7 @@
 </div>
 <div class="headlink">
   <p class="topPanelUsername">Logged in as ${model.user.username}</p>
-  <a href="logout.html"><span
+  <a href="<c:url value="j_spring_security_logout" />"><span
         class="ui-icon ui-icon-locked" style="display: inline-block;"></span>Log out</a>
 </div>
 

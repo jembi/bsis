@@ -45,12 +45,16 @@ public class BloodTestingRuleViewModel {
   public String getCollectionFieldChanged() {
     String collectionField = "";
     switch (rule.getCollectionFieldChanged()) {
-    case BLOODABO: collectionField = "Blood ABO";
-                   break;
-    case BLOODRH:  collectionField = "Blood Rh";
-                   break;
-    case EXTRA:    collectionField = "Extra Info";
-                   break;
+    case BLOODABO:  collectionField = "Blood ABO";
+                    break;
+    case BLOODRH:   collectionField = "Blood Rh";
+                    break;
+    case EXTRA:     collectionField = "Extra Info";
+                    break;
+    case NOCHANGE:  collectionField = "No Change";
+                    break;
+    case TTISTATUS: collectionField = "TTI Status";
+                    break;
     }
     return collectionField;
   }

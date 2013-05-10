@@ -24,7 +24,9 @@
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util-2.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
   <context:property-placeholder location="classpath:database.properties" />
 
@@ -90,8 +92,6 @@
   <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
 
   <mvc:interceptors>
-    <bean id="loginInterceptor" class="interceptor.LoginInterceptor" />
-    <bean id="userInterceptor" class="interceptor.UserInterceptor" />
     <bean id="userInfoInterceptor" class="interceptor.UserInfoInterceptor" />
     <bean id="loggingInterceptor" class="interceptor.LoggingInterceptor" />
   </mvc:interceptors>

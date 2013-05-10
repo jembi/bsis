@@ -16,9 +16,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
     <error-page>
         <error-code>500</error-code>
         <location>/errorPage.jsp</location>
@@ -74,6 +71,10 @@
         <servlet-name>default</servlet-name>
         <url-pattern>/j_spring_security_check</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/j_spring_security_logout</url-pattern>
+    </servlet-mapping>
 
     <filter>
       <filter-name>UserAddFilter</filter-name>
@@ -96,8 +97,6 @@
       <dispatcher>REQUEST</dispatcher>
       <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-
-
 
     <listener>
       <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
