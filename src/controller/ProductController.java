@@ -157,7 +157,7 @@ public class ProductController {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
-    for (String field : Arrays.asList("collectionNumber", "productType","createdOn", "expiresOn", "status")) {
+    for (String field : Arrays.asList("collectionNumber", "productType", "bloodGroup", "createdOn", "expiresOn", "status")) {
       Map<String, Object> fieldProperties = formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
@@ -167,6 +167,8 @@ public class ProductController {
     sortColumnMap.put("id", "id");
     sortColumnMap.put("collectionNumber", "collectedSample.collectionNumber");
     sortColumnMap.put("productType", "productType.productType");
+    // just sort by blood abo for now
+    sortColumnMap.put("bloodGroup", "collectedSample.bloodAbo");
     sortColumnMap.put("createdOn", "createdOn");
     sortColumnMap.put("expiresOn", "expiresOn");
     sortColumnMap.put("status", "status");
