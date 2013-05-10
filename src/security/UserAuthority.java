@@ -1,6 +1,6 @@
 package security;
 
-import model.user.Role;
+import model.user.Permission;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,19 +11,19 @@ public class UserAuthority implements GrantedAuthority {
    */
   private static final long serialVersionUID = 1L;
 
-  private Role role;
+  private Permission permission;
 
-  public UserAuthority(Role role) {
-    this.role = role;
+  public UserAuthority(Permission permission) {
+    this.permission = permission;
   }
 
   @Override
   public String getAuthority() {
-    return role.getName();
+    return permission.getName();
   }
 
   @Override
   public String toString() {
-    return role.getName();
+    return permission.getName();
   }
 }

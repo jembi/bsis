@@ -28,6 +28,7 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
+  <security:global-method-security pre-post-annotations="enabled" />
   <context:property-placeholder location="classpath:database.properties" />
 
   <!-- Configures the @Controller programming model -->

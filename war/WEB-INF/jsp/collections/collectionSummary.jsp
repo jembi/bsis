@@ -120,12 +120,12 @@
       <!-- button type="button" class="testResultsForCollectionButton">
         Test results for collection
       </button-->
-      <sec:authorize access="hasRole('ROLE_ADMIN')">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="editButton">
         Edit
       </button>
       </sec:authorize>
-      <sec:authorize access="hasRole('ROLE_ADMIN')">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="deleteButton">
         Delete
       </button>

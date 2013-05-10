@@ -21,7 +21,7 @@
         class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>
 
     <c:if test="${labsetup['donorsTabEnabled']}">
-    <sec:authorize access="hasRole('ROLE_VIEW_DONOR_INFORMATION')">
+    <sec:authorize access="hasRole('PERM_VIEW_DONOR_INFORMATION')">
     <li class="topPanelTab"><a href="#donorsLandingPageContent"><span
         class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
     </sec:authorize>
@@ -33,7 +33,7 @@
     </c:if>
 
 
-    <sec:authorize access="hasRole('ROLE_VIEW_TEST_INFORMATION')">
+    <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
     <c:if test="${labsetup['productsTabEnabled']}">
     <li class="topPanelTab"><a href="#productsLandingPageContent"><span
         class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
@@ -61,7 +61,7 @@
         class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
     </c:if>
 
-    <sec:authorize access="hasRole('ROLE_ADMIN')">
+    <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
     <li class="topPanelTab"><a href="#adminLandingPageContent"><span
         class="ui-icon ui-icon-gear" style="display: inline-block;"></span>Admin</a></li>
     </sec:authorize>
@@ -83,7 +83,7 @@
   </div>
 
   <c:if test="${labsetup['donorsTabEnabled']}">
-  <sec:authorize access="hasRole('ROLE_VIEW_DONOR_INFORMATION')">
+  <sec:authorize access="hasRole('PERM_VIEW_DONOR_INFORMATION')">
     <div id="donorsLandingPageContent">
       <jsp:include page="donors/donors.jsp" />
     </div>
@@ -96,7 +96,7 @@
   </div>
   </c:if>
 
-  <sec:authorize access="hasRole('ROLE_VIEW_TEST_INFORMATION')">
+  <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <div id="testResultsLandingPageContent">
       <jsp:include page="testResults.jsp" />
@@ -129,7 +129,7 @@
   </div>
   </c:if>
 
-  <sec:authorize access="hasRole('ROLE_ADMIN')">
+  <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
     <div id="adminLandingPageContent">
       <jsp:include page="admin/admin.jsp" />
     </div>

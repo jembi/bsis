@@ -178,12 +178,12 @@
       <button type="button" class="findMatchingProductsButton">
         Find matching products
       </button>
-      <sec:authorize access="hasRole('ROLE_ADMIN')">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="editButton">
         Edit
       </button>
       </sec:authorize>
-      <sec:authorize access="hasRole('ROLE_ADMIN')">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="deleteButton">
         Delete
       </button>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import model.user.Permission;
 import model.user.Role;
 import model.user.User;
 
@@ -26,7 +27,9 @@ public class V2VUserDetails implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
     for (Role role : user.getRoles()) {
-      userAuthorities.add(new UserAuthority(role));
+      for (Permission permission : role.getPermissions()) {
+        userAuthorities.add(new UserAuthority(permission));
+      }
     }
     return userAuthorities;
   }

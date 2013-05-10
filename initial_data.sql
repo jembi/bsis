@@ -915,14 +915,16 @@ insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActiv
 
 insert into Role(id, name) values
 (1, 'ROLE_ADMIN'),
-(2, 'ROLE_VIEW_DONOR_INFORMATION'),
-(3, 'ROLE_VIEW_TEST_INFORMATION'),
+(2, 'ROLE_DONORLAB'),
+(3, 'ROLE_TESTLAB'),
 (4, 'ROLE_USER');
 
 insert into Permission(id, name) values
-(1, 'viewDonorInformation'),
-(2, 'viewTestInformation'),
-(3, 'editInformation');
+(1, 'PERM_LOGIN'),
+(2, 'PERM_VIEW_DONOR_INFORMATION'),
+(3, 'PERM_VIEW_TEST_INFORMATION'),
+(4, 'PERM_EDIT_INFORMATION'),
+(5, 'PERM_EDIT_CONFIGURATION');
 
 insert into User_Role (users_id, roles_id) values
 (1, 1),
@@ -939,11 +941,15 @@ insert into User_Role (users_id, roles_id) values
 (4, 4);
 
 insert into Permission_Role (roles_id, permissions_id) values
-(1, 1),
 (1, 2),
 (1, 3),
+(1, 4),
+(1, 5),
 (2, 1),
-(3, 2);
+(2, 2),
+(3, 1),
+(3, 3),
+(4, 1);
 
 insert into ContactMethodType (contactMethodType, isDeleted) values
 ("None", 0),

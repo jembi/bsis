@@ -208,7 +208,7 @@ $(document).ready(function() {
             <label style="width: auto; position: absolute;">
               <b>Available test results</b>
             </label>
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
             <label style="width: auto; position: absolute; right: 10px;">
               <span class="link availableTestEdit">Edit</span>
             </label>

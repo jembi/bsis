@@ -230,7 +230,7 @@
           <form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
           <form:hidden path="donorIdHidden" />
           <form:input path="donorNumber" class="donorNumber" value="${firstTimeRender ? collectionFields.donorNumber.defaultValue : ''}" />
-          <sec:authorize access="hasRole('ROLE_VIEW_DONOR_INFORMATION')">
+          <sec:authorize access="hasRole('PERM_VIEW_DONOR_INFORMATION')">
             <label class="link addCollectionFormFindDonor">Select donor</label>
           </sec:authorize>
           <form:errors class="formError" path="collectedSample.donorNumber"

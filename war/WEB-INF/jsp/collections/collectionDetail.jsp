@@ -60,7 +60,7 @@
     </div>
   </c:if>
 
-  <sec:authorize access="hasRole('ROLE_VIEW_TEST_INFORMATION')">
+  <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
     <div>
       <label>${collectionFields.bloodTypingStatus.displayName}</label>
       <label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
