@@ -83,10 +83,13 @@ public class Product implements ModificationTracker {
   @OneToMany(mappedBy="product", fetch=FetchType.LAZY)
   private List<ProductStatusChange> statusChanges;
 
+  @Column(length=3)
+  private String subdivisionCode;
+
   // not all products are subdivided into small packs. Just store the
   // extra information about subdivided products in a separate table. 
-  @OneToMany(mappedBy="parentProduct")
-  private List<SubdividedProduct> subdividedProducts;
+  @OneToOne(optional=true)
+  private Product parentProduct;
 
   @OneToOne(mappedBy="product")
   private ProductUsage usage;
@@ -254,19 +257,27 @@ public class Product implements ModificationTracker {
     this.statusChanges = statusChanges;
   }
 
-  public List<SubdividedProduct> getSubdividedProducts() {
-    return subdividedProducts;
-  }
-
-  public void setSubdividedProducts(List<SubdividedProduct> subdividedProducts) {
-    this.subdividedProducts = subdividedProducts;
-  }
-
   public ProductUsage getUsage() {
     return usage;
   }
 
   public void setUsage(ProductUsage usage) {
     this.usage = usage;
+  }
+
+  public String getSubdivisionCode() {
+    return subdivisionCode;
+  }
+
+  public void setSubdivisionCode(String subdivisionCode) {
+    this.subdivisionCode = subdivisionCode;
+  }
+
+  public Product getParentProduct() {
+    return parentProduct;
+  }
+
+  public void setParentProduct(Product parentProduct) {
+    this.parentProduct = parentProduct;
   }
 }

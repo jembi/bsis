@@ -787,15 +787,24 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Urgent', '', '0'),
 ('Elective Surgery', '', '0');
 
-insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
-(1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', '1', '0', '0'),
-(2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
-(3, 'FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),
-(4, 'Platelets', 'Platelets', '', 5, 'DAYS', '1', '1', '0', '0'),
-(5, 'Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
-(6, 'RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
-(7, 'FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 365, 'DAYS', '1', '1', '0', '0'),
-(8, 'Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', '1', '0', '0');
+insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, pediProductType_id, isDeleted) values
+(1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', NULL, '0'),
+(2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', NULL, '0'),
+(3, 'FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', NULL, '0'),
+(4, 'Platelets', 'Platelets', '', 5, 'DAYS', '1', NULL, '0'),
+(5, 'Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', NULL, '0'),
+(6, 'RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', NULL, '0'),
+(7, 'FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 365, 'DAYS', '1', NULL, '0'),
+(8, 'Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', NULL, '0');
+
+
+/**
+ * Create references to pedi product types.
+ */
+update ProductType set pediProductType_id=5 where id=1;
+update ProductType set pediProductType_id=6 where id=2;
+update ProductType set pediProductType_id=7 where id=3;
+update ProductType set pediProductType_id=8 where id=4;
 
 insert into ProductTypeCombination (id, combinationName, isDeleted) values
 (1, 'Whole Blood', 0),
@@ -905,7 +914,8 @@ insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) 
 ("Expired", "RETURNED", 0),
 ("Not required", "RETURNED", 0),
 ("Wrong product sent", "RETURNED", 0),
-("Did not crossmatch with patient sample", "RETURNED", 0);
+("Did not crossmatch with patient sample", "RETURNED", 0),
+("Split", "SPLIT", 0);
 
 insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
 (1, 'admin','admin321123','admin',1,1,1,0),

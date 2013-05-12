@@ -20,6 +20,7 @@ import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.donor.DonorDeferral;
 import model.product.Product;
+import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
@@ -353,8 +354,9 @@ public class UtilController {
     Product matchingProduct = null; 
     for (Product product : products) {
       if (product.getProductType().equals(productType)) {
-        if (matchingProduct != null) {
-          // multiple products have the same product type
+        if (matchingProduct != null &&
+            matchingProduct.getStatus().equals(ProductStatus.AVAILABLE)) {
+          // multiple products available have the same product type
           // cannot identify uniquely
           return null;
         }

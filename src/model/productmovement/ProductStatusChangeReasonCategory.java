@@ -2,5 +2,5 @@ package model.productmovement;
 
 
 public enum ProductStatusChangeReasonCategory {
-  DISCARDED, ISSUED, RETURNED
+  DISCARDED, ISSUED, RETURNED, SPLIT
 }

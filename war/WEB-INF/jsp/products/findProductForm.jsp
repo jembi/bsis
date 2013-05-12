@@ -81,7 +81,6 @@ $(document).ready(function() {
       $(this).hide();
     });
 
-    console.log(searchBy);
     switch(searchBy) {
       case "collectionNumber":   form.find(".collectionNumberInput").show();
                                break;
@@ -185,6 +184,10 @@ $(document).ready(function() {
         $("#${childContentId}").html("");
         $("#${tabContentId}").find(".productsTable").trigger("refreshResults");
       });
+
+  $("#${findProductFormId}").submit(function(e) {
+    e.preventDefault();
+  })
 });
 </script>
 
@@ -240,6 +243,8 @@ $(document).ready(function() {
             <form:option value="EXPIRED" label="Expired" selected="selected" />
             <form:option value="UNSAFE" label="Unsafe" selected="selected" />
             <form:option value="ISSUED" label="Issued" selected="selected" />
+            <form:option value="USED" label="Used" selected="selected" />
+            <form:option value="SPLIT" label="Split" selected="selected" />
             <form:option value="DISCARDED" label="Discarded" selected="selected" />
           </form:select>
       </div>

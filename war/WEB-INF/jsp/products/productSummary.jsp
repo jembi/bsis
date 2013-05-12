@@ -168,11 +168,50 @@
               });
         }
 
+        $("#${mainContentId}").find(".splitProductButton")
+        											.button({icons: {primary : 'ui-icon-arrow-4-diag'}})
+        											.click(generateSplitProductDialog);
+
+
+        function generateSplitProductDialog() {
+
+  				$("<div>").dialog(
+              {
+                modal : true,
+                open : function() {
+                  // extra parameters passed as string otherwise POST request sent
+                  $(this).load("splitProductFormGenerator.html?" + $.param({
+                    productId : "${product.id}"
+                  }));
+                },
+                close : function(event, ui) {
+                  $(this).remove();
+                },
+                title : "Split product",
+                height : 400,
+                width : 600,
+                buttons : {
+                  "Split Product" : function() {
+                    $(this).dialog("close");
+                    splitProduct($(this).find(".splitProductForm"),
+                        splitProductDone);
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                }
+              });
+        }
+
         function discardProductDone() {
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
         function returnProductDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
+
+        function splitProductDone() {
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
@@ -215,6 +254,11 @@
       <!-- button type="button" class="productLabelButton">
         Product Label
       </button-->
+      <c:if test="${product.statusAllowsSplitting and not empty product.productType.pediProductType}">
+        <button type="button" class="splitProductButton">
+          Split product into ${product.productType.pediProductType.productTypeNameShort}
+        </button>
+      </c:if>
       <button type="button" class="discardButton">
         Discard product
       </button>

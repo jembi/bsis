@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -42,13 +43,16 @@ public class ProductType {
   
   private Boolean hasBloodGroup;
 
-  private Boolean canSubdivide;
-
-  private Boolean canPool;
+  /**
+   * Pedi Product Type for this product type.
+   * can be null. 
+   */
+  @OneToOne(optional=true)
+  private ProductType pediProductType;
 
   @Lob
   private String description;
-  
+
   private Boolean isDeleted;
   
   public Integer getId() {
@@ -124,22 +128,6 @@ public class ProductType {
     this.hasBloodGroup = hasBloodGroup;
   }
 
-  public Boolean getCanSubdivide() {
-    return canSubdivide;
-  }
-
-  public void setCanSubdivide(Boolean canSubdivide) {
-    this.canSubdivide = canSubdivide;
-  }
-
-  public Boolean getCanPool() {
-    return canPool;
-  }
-
-  public void setCanPool(Boolean canPool) {
-    this.canPool = canPool;
-  }
-
   public int getExpiryIntervalMinutes() {
     int factor = 1;
     switch (expiresAfterUnits) {
@@ -159,5 +147,13 @@ public class ProductType {
 
   public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations) {
     this.productTypeCombinations = productTypeCombinations;
+  }
+
+  public ProductType getPediProductType() {
+    return pediProductType;
+  }
+
+  public void setPediProductType(ProductType pediProductType) {
+    this.pediProductType = pediProductType;
   }
 }

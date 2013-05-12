@@ -563,10 +563,12 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         status varchar(30),
+        subdivisionCode varchar(3),
         collectedSample_id bigint,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
+        parentProduct_id bigint,
         productType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -619,8 +621,6 @@
 
     create table ProductType (
         id SMALLINT not null auto_increment,
-        canPool boolean,
-        canSubdivide boolean,
         description longtext,
         expiresAfter integer,
         expiresAfterUnits varchar(30),
@@ -628,6 +628,7 @@
         isDeleted boolean,
         productType varchar(50),
         productTypeNameShort varchar(30),
+        pediProductType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -657,8 +658,6 @@
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
-        canPool boolean,
-        canSubdivide boolean,
         description longtext,
         expiresAfter integer,
         expiresAfterUnits varchar(30),
@@ -666,6 +665,7 @@
         isDeleted boolean,
         productType varchar(50),
         productTypeNameShort varchar(30),
+        pediProductType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -720,10 +720,12 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         status varchar(30),
+        subdivisionCode varchar(3),
         collectedSample_id bigint,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
+        parentProduct_id bigint,
         productType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
@@ -844,22 +846,6 @@
         sequenceNumberContext varchar(255),
         targetTable varchar(255),
         primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table SubdividedProduct (
-        id bigint not null auto_increment,
-        divisionCode varchar(5),
-        parentProduct_id bigint,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table SubdividedProduct_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        divisionCode varchar(5),
-        parentProduct_id bigint,
-        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table Tips (
@@ -1378,6 +1364,12 @@
         references ProductType (id);
 
     alter table Product 
+        add index FK50C664CFD946D0A0 (parentProduct_id), 
+        add constraint FK50C664CFD946D0A0 
+        foreign key (parentProduct_id) 
+        references Product (id);
+
+    alter table Product 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 
         add constraint FK50C664CFD0AFB367 
         foreign key (lastUpdatedBy_id) 
@@ -1418,6 +1410,12 @@
         add constraint FK79A8FA02DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
+
+    alter table ProductType 
+        add index FKA8168A93E7CEF4A (pediProductType_id), 
+        add constraint FKA8168A93E7CEF4A 
+        foreign key (pediProductType_id) 
+        references ProductType (id);
 
     alter table ProductTypeCombination_AUD 
         add index FK61943137DF74E053 (REV), 
@@ -1528,18 +1526,6 @@
     alter table Role_AUD 
         add index FKF3FAE767DF74E053 (REV), 
         add constraint FKF3FAE767DF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table SubdividedProduct 
-        add index FK2137ED84D946D0A0 (parentProduct_id), 
-        add constraint FK2137ED84D946D0A0 
-        foreign key (parentProduct_id) 
-        references Product (id);
-
-    alter table SubdividedProduct_AUD 
-        add index FKC0E9B955DF74E053 (REV), 
-        add constraint FKC0E9B955DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

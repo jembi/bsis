@@ -1,5 +1,6 @@
 package viewmodel;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import model.collectedsample.CollectedSample;
@@ -142,5 +143,14 @@ public class ProductViewModel {
       return "";
     CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(product.getCollectedSample());
     return collectionViewModel.getBloodGroup();
+  }
+
+  public String getSubdivisionCode() {
+    return product.getSubdivisionCode();
+  }
+
+  public Boolean getStatusAllowsSplitting() {
+    return Arrays.asList(ProductStatus.AVAILABLE, ProductStatus.QUARANTINED)
+                 .contains(product.getStatus());
   }
 }

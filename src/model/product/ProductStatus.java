@@ -2,7 +2,7 @@ package model.product;
 
 public enum ProductStatus {
 
-  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, USED, UNSAFE, DISCARDED;
+  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, SPLIT, USED, UNSAFE, DISCARDED;
 
   public static ProductStatus lookup(String statusStr) {
     ProductStatus status = null;

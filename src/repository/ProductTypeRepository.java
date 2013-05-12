@@ -72,8 +72,6 @@ public class ProductTypeRepository {
       productType.setExpiresAfter(0);
       ex.printStackTrace();
     }
-    productType.setCanPool(false);
-    productType.setCanSubdivide(true);
     productType.setDescription("");
     Boolean hasBloodGroup = Boolean.valueOf((String) newProductTypeAsMap.get("hasBloodGroup"));
     productType.setHasBloodGroup(hasBloodGroup);
