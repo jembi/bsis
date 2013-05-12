@@ -19,6 +19,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <c:set var="newProductTypeDialogId">newProductTypeDialog-${unique_page_id}</c:set>
+<c:set var="editProductTypeDialogId">editProductTypeDialog-${unique_page_id}</c:set>
 
 <c:set var="productTypeExpiresAfterUnitsSelectorId">productTypeExpiresAfterUnitsSelector-${unique_page_id}</c:set>
 
@@ -79,6 +80,14 @@ $(document).ready(function() {
 
   $("#${newProductTypeDialogId} .ui-multiselect").css("width", "100px");
 
+  $("#${editProductTypeDialogId}").find(".expiresAfterUnitsSelector").multiselect({
+    multiple : false,
+    selectedList : 1,
+    header : false
+  });
+
+  $("#${editProductTypeDialogId} .ui-multiselect").css("width", "100px");
+  
   $("#${tabContentId}").bind("productTypeEditDone", refetchProductTypes);
   $("#${tabContentId}").bind("productTypeCancel", function() {
     // deselect all rows in the table
@@ -99,19 +108,19 @@ $(document).ready(function() {
                         });
 
   function showNewProductTypeDialog() {
-    clearProductTypeData();
-    showEditProductTypeDialogGeneric("New Product Type", "saveNewProductType.html");
+    clearProductTypeData("${newProductTypeDialogId}");
+    showEditProductTypeDialogGeneric("${newProductTypeDialogId}", "New Product Type", "saveNewProductType.html");
   }
 
   $("#${tabContentId}").bind("editProductType", showUpdateProductTypeDialog);
 
   function showUpdateProductTypeDialog() {
-    setSelectedProductTypeData();
-    showEditProductTypeDialogGeneric("Edit Product Type", "updateProductType.html");
+    setSelectedProductTypeData("${editProductTypeDialogId}");
+    showEditProductTypeDialogGeneric("${editProductTypeDialogId}", "Edit Product Type", "updateProductType.html");
   }
 
-  function showEditProductTypeDialogGeneric(title, url) {
-    $("#${newProductTypeDialogId}").dialog({
+  function showEditProductTypeDialogGeneric(formDivId, title, url) {
+    $("#" + formDivId).dialog({
       modal: true,
       title: title,
       width: 800,  // dialog width should be sufficient to make sure select option appears on the same line
@@ -121,7 +130,7 @@ $(document).ready(function() {
       maxHeight: 400,
       buttons: {
         "Save" : function() {
-                     var data = getProductTypeData();
+                     var data = getProductTypeData(formDivId);
                      saveProductType(url, data);
                      $(this).dialog("close");
                    },
@@ -132,8 +141,8 @@ $(document).ready(function() {
     });
   }
 
-  function clearProductTypeData() {
-    var newProductTypeForm = $("#${newProductTypeDialogId}");
+  function clearProductTypeData(formDivId) {
+    var newProductTypeForm = $("#" + formDivId);
     newProductTypeForm.find('input[name="productTypeId"]').val("");
     newProductTypeForm.find('input[name="productTypeName"]').val("");
     newProductTypeForm.find('input[name="productTypeNameShort"]').val("");
@@ -141,11 +150,11 @@ $(document).ready(function() {
     setDefaultValueForSelector(newProductTypeForm.find('select[name="expiresAfterUnits"]').multiselect(), "DAYS");
   }
 
-  function setSelectedProductTypeData() {
+  function setSelectedProductTypeData(formDivId) {
 
     var oTableTools = TableTools.fnGetInstance($("#${mainContentId}").find("table")[0]);
     var selectedRow = oTableTools.fnGetSelected()[0];
-    var newProductTypeForm = $("#${newProductTypeDialogId}");
+    var newProductTypeForm = $("#" + formDivId);
     newProductTypeForm.find('input[name="productTypeId"]').val($(selectedRow).data("producttypeid"));
     newProductTypeForm.find('input[name="productTypeName"]').val($(selectedRow).data("producttypename"));
     newProductTypeForm.find('input[name="productTypeNameShort"]').val($(selectedRow).data("producttypenameshort"));
@@ -153,14 +162,23 @@ $(document).ready(function() {
     setDefaultValueForSelector(newProductTypeForm.find('select[name="expiresAfterUnits"]').multiselect(), $(selectedRow).data("expiresafterunits"));
   }
 
-  function getProductTypeData() {
+  function getProductTypeData(formDivId) {
     var data = {};
-    var newProductTypeForm = $("#${newProductTypeDialogId}");
+    var newProductTypeForm = $("#" + formDivId);
     data.id = newProductTypeForm.find('input[name="productTypeId"]').val();
     data.productTypeName = newProductTypeForm.find('input[name="productTypeName"]').val();
     data.productTypeNameShort = newProductTypeForm.find('input[name="productTypeNameShort"]').val();
     data.expiresAfter = newProductTypeForm.find('input[name="expiresAfter"]').val();
     data.expiresAfterUnits = newProductTypeForm.find('.expiresAfterUnitsSelector').val();
+    var createCheckBox = newProductTypeForm.find(".createPediProductType");
+    if (newProductTypeForm.find(".createPediProductType").length != 0) {
+      if (newProductTypeForm.find(".createPediProductType").is(":checked")) {
+        data.createPediProductType = "true";
+      }
+      else {
+        data.createPediProductType = "false";
+      }
+    }
     return data;
   }
 
@@ -178,7 +196,6 @@ $(document).ready(function() {
                }
     });
   }
-
 
 });
 </script>
@@ -243,6 +260,31 @@ $(document).ready(function() {
   <div id="${childContentId}">
   </div>
 
+  <div id="${editProductTypeDialogId}" style="display: none;">
+    <form class="formFormatClass">
+      <input type="hidden" name="productTypeId" value="" />
+      <div>
+        <label>Product type name</label>
+        <input name="productTypeName" />
+      </div>
+      <div>
+        <label>Product type short name</label>
+        <input name="productTypeNameShort" />
+      </div>
+      <div>
+        <label>Expiry interval</label>
+        <input name="expiresAfter" type="number" min="1" />
+        <select name="expiresAfterUnits"
+                class="expiresAfterUnitsSelector"
+                 id="${productTypeExpiresAfterUnitsSelectorId}">
+           <option value="DAYS">DAYS</option>
+           <option value="HOURS">HOURS</option>
+           <option value="YEARS">YEARS</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
   <div id="${newProductTypeDialogId}" style="display: none;">
     <form class="formFormatClass">
       <input type="hidden" name="productTypeId" value="" />
@@ -264,6 +306,10 @@ $(document).ready(function() {
            <option value="HOURS">HOURS</option>
            <option value="YEARS">YEARS</option>
         </select>
+      </div>
+      <div>
+        <label style="width: auto;">Create corresponding pedi product type</label>
+        <input type="checkbox" name="createPediProductType" class="createPediProductType" />
       </div>
     </form>
   </div>

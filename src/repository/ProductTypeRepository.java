@@ -79,6 +79,18 @@ public class ProductTypeRepository {
     expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
     productType.setExpiresAfterUnits(expiresAfterUnits);
     productType.setIsDeleted(false);
+    if (newProductTypeAsMap.get("createPediProductType").equals("true")) {
+      ProductType pediProductType = new ProductType();
+      pediProductType.setProductType(productType.getProductType() + " Pedi");
+      pediProductType.setProductTypeNameShort(productType.getProductTypeNameShort() + " Pedi");
+      pediProductType.setExpiresAfter(productType.getExpiresAfter());
+      pediProductType.setExpiresAfterUnits(productType.getExpiresAfterUnits());
+      pediProductType.setDescription("");
+      pediProductType.setHasBloodGroup(productType.getHasBloodGroup());
+      productType.setPediProductType(pediProductType);
+      pediProductType.setIsDeleted(false);
+      em.persist(pediProductType);
+    }
     em.persist(productType);
   }
 

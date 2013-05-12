@@ -93,4 +93,8 @@ public class MatchingProductViewModel {
   public String getBloodGroup() {
     return productViewModel.getBloodGroup();
   }
+
+  public String getSubdivisionCode() {
+    return productViewModel.getSubdivisionCode();
+  }
 }
