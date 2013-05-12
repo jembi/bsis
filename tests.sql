@@ -224,158 +224,83 @@ insert into BloodTestingRule
  context, category, subCategory,
  pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
-('17,20,23,26', '-,-,-,-',
+ ('17', '-',
  'TTISTATUS', 'TTI_SAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
-('17', '+',
+ ('17', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '18,19', '0', '1'
  ),
- ('17,18,19', '-,+,-',
+ ('18', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('17,18,19', '-,-,+',
+ ('19', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('17,18,19', '+,-,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('17,18,19', '+,+,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('17,18,19', '-,+,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('17,18,19', '+,-,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('17,18,19', '-,-,-',
+ ('20', '-',
  'TTISTATUS', 'TTI_SAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
-('20', '+',
+ ('20', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '21,22', '0', '1'
  ),
- ('20,21,22', '-,+,-',
+ ('21', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('20,21,22', '-,-,+',
+ ('22', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('20,21,22', '+,-,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
+ ('23', '-',
+ 'TTISTATUS', 'TTI_SAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('20,21,22', '+,+,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('20,21,22', '-,+,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('20,21,22', '+,-,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
-('23', '+',
+ ('23', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '24,25', '0', '1'
  ),
- ('23,24,25', '-,+,-',
+ ('24', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('23,24,25', '-,-,+',
+ ('25', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('23,24,25', '+,-,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
+ ('26', '-',
+ 'TTISTATUS', 'TTI_SAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('23,24,25', '+,+,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('23,24,25', '-,+,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('23,24,25', '+,-,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
-('26', '+',
+ ('26', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '27,28', '0', '1'
  ),
- ('26,27,28', '-,+,-',
+ ('27', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  ),
- ('26,27,28', '-,-,+',
+ ('28', '+',
  'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('26,27,28', '+,-,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('26,27,28', '+,+,-',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('26,27,28', '-,+,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('26,27,28', '+,-,+',
- 'TTISTATUS', 'TTI_UNSAFE', '',
- 'RECORD_TTI_TESTS', 'TTI', 'TTI',
- '', '0', '1'
- ),
- ('17,18,19,20,21,22,23,24,25,26,27,28', '-,-,-,-,-,-,-,-,-,-,-,-',
- 'TTISTATUS', 'TTI_SAFE', '',
  'RECORD_TTI_TESTS', 'TTI', 'TTI',
  '', '0', '1'
  );

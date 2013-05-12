@@ -96,7 +96,7 @@ public class BloodTestingRule {
   }
 
   public void setPart(CollectionField part) {
-    this.collectionFieldChanged = part;
+    this.setCollectionFieldChanged(part);
   }
 
   public void setMarkSampleAsUnsafe(Boolean markSampleAsUnsafe) {
@@ -153,5 +153,9 @@ public class BloodTestingRule {
 
   public void setSubCategory(BloodTestSubCategory subCategory) {
     this.subCategory = subCategory;
+  }
+
+  public void setCollectionFieldChanged(CollectionField collectionFieldChanged) {
+    this.collectionFieldChanged = collectionFieldChanged;
   }
 }

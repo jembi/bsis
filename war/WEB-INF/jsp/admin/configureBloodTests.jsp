@@ -72,6 +72,7 @@ $(document).ready(function() {
     }
   });
 
+
   $("#${newBloodTestDialogId}").find(".worksheetTypeSelector").multiselect({
     noneSelectedText: 'None Selected',
     selectedText: function(numSelected, numTotal, selectedValues) {
@@ -87,6 +88,20 @@ $(document).ready(function() {
     selectedList : 1,
     header : false
   });
+
+  $("#${bloodTestCategorySelectorId}").change(function() {
+    if ($(this).val() === "TTI")
+    	$("#${newBloodTestDialogId}").find(".confirmatoryTestsSection")
+    															 .show();
+    else
+    	$("#${newBloodTestDialogId}").find(".confirmatoryTestsSection")
+			 														 .hide();
+  });
+
+  // by default blood typing tests is selected we can hide
+  // the confirmatory tests section
+  $("#${newBloodTestDialogId}").find(".confirmatoryTestsSection")
+															 .hide();
 
   $("#${tabContentId}").bind("bloodTestEditDone", refetchBloodTests);
   $("#${tabContentId}").bind("bloodTestCancel", function() {
@@ -132,6 +147,8 @@ $(document).ready(function() {
       data.testName = newBloodTestForm.find('input[name="testName"]').val();
       data.testNameShort = newBloodTestForm.find('input[name="testNameShort"]').val();
       data.category = newBloodTestForm.find(".bloodTestCategorySelector").val();
+      if (data.category == "TTI")
+        data.numConfirmatoryTests = newBloodTestForm.find('input[name="numConfirmatoryTests"]').val();
       var worksheetTypesSelector = newBloodTestForm.find(".worksheetTypeSelector");
       data.worksheetTypeIds = worksheetTypesSelector.multiselect("getChecked").map(function() {
         return this.value;
@@ -231,6 +248,10 @@ $(document).ready(function() {
           <option value="BLOODTYPING">Blood typing</option>
           <option value="TTI">TTI</option>
         </select>
+      </div>
+      <div class="confirmatoryTestsSection">
+        <label style="width: auto;">Number of confirmatory tests</label>
+        <input name="numConfirmatoryTests" />
       </div>
       <div>
         <label>Add to worksheets</label>
