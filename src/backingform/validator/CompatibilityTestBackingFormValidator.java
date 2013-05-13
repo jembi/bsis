@@ -67,7 +67,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
         Product testedProduct = utilController.findProduct(collectionNumber, productRequest.getProductType());
         if (testedProduct == null)
           errors.rejectValue("compatibilityTest.testedProduct", "compatibilitytest.testedProduct.notFound",
-              "Product with this collection number and product type not found");
+              "Product with this collection number and product type not found or not available");
         form.setTestedProduct(testedProduct);
       } catch (NoResultException ex) {
         form.setTestedProduct(null);

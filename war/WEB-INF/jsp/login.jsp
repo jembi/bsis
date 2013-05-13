@@ -11,7 +11,7 @@
 <link type="text/css" rel="stylesheet" href="css/login.css" />
 </head>
 <body>
-<!-- Prompt IE users to install Chrome Frame. Remove this if you support IE 6.
+<!-- Prompt IE users to install Chrome Frame.
        chromium.org/developers/how-tos/chrome-frame-getting-started -->
 <!--[if lt IE 10]>
 <p class=chromeframe>Your browser is not supported. <a href="http://browsehappy.com/" target="_blank">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true" target="_blank">install Google Chrome Frame</a> to experience this site.</p>
@@ -36,37 +36,25 @@
       <div class="loginPanel">
         <div class="centralContent">
           <div id="login">
-            <form:form action="loginUser.html" id="loginAction">
-              <c:choose>
-                <c:when test="${model.loginFailed==true}">
-                  <script>
-                    var options = {
-                      backgroundColor : 'red',
-                      delay : 1500,
-                      speed : 300,
-                    };
-                    $.showMessage("Login Failed", options);
-                    setTimeout(function() {
-                      window.location = "/v2v";
-                    }, 2000);
-                  </script>
-                </c:when>
-              </c:choose>
+
+          <form action="<c:url value='j_spring_security_check' />"
+              id="loginAction" method="POST">
               <input type="hidden" name="targetUrl" value="${targetUrl}">
 
               <div class="inputFieldRow">
-                <label for="username">Username </label><input type="text"
-                  id="username" name="username" />
+                <label for="username">Username </label>
+                <input type="text" id="username" name="j_username" />
               </div>
               <div class="inputFieldRow">
-                <label for="password">Password </label><input type="password"
-                  id="password" name="password" />
+                <label for="password">Password </label>
+                <input type="password" id="password" name="j_password" />
               </div>
 
               <div>
-                <button id="loginButton" class="loginButton">Log In</button>
+                <button id="loginButton" name="submit" type="submit" class="loginButton">Log In</button>
               </div>
-            </form:form>
+            </form>
+
           </div>
         </div>
       </div>

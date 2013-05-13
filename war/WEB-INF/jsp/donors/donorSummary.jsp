@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -177,11 +178,11 @@
       <button class="doneButton">
         Done
       </button>
-      <c:if test="${permissions['editInformation'] eq 'allowed'}">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button class="editButton">
         Edit
       </button>
-      </c:if>
+      </sec:authorize>
       <button class="donorDeferralsButton">
         Show all deferrals
       </button>
@@ -191,11 +192,11 @@
       <button class="deferDonorButton">
         Defer Donor
       </button>
-      <c:if test="${permissions['editInformation'] eq 'allowed'}">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="deleteButton">
         Delete
       </button>
-      </c:if>
+      </sec:authorize>
       <button class="printButton">
         Print
       </button>

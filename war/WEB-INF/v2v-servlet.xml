@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-  xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:p="http://www.springframework.org/schema/p"
   xmlns:tx="http://www.springframework.org/schema/tx"
   xmlns:task="http://www.springframework.org/schema/task"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
   xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:util="http://www.springframework.org/schema/util"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security-3.1.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
+        http://www.springframework.org/schema/integration/mail
+        http://www.springframework.org/schema/integration/mail/spring-integration-mail-2.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-2.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
+  <security:global-method-security pre-post-annotations="enabled" />
   <context:property-placeholder location="classpath:database.properties" />
 
   <!-- Configures the @Controller programming model -->
@@ -26,6 +40,7 @@
   <context:component-scan base-package="viewmodel" />
   <context:component-scan base-package="tasks" />
   <context:component-scan base-package="utils" />
+  <context:component-scan base-package="security" />
 
   <bean id="messageSource"
     class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -78,9 +93,6 @@
   <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
 
   <mvc:interceptors>
-    <bean id="loginInterceptor" class="interceptor.LoginInterceptor" />
-    <bean id="userInterceptor" class="interceptor.UserInterceptor" />
-    <bean id="userInfoInterceptor" class="interceptor.UserInfoInterceptor" />
     <bean id="loggingInterceptor" class="interceptor.LoggingInterceptor" />
   </mvc:interceptors>
 
@@ -89,5 +101,58 @@
   <task:executor id="executor" pool-size="5"/>
   <task:scheduler id="scheduler" pool-size="5"/>
   <task:annotation-driven scheduler="scheduler" executor="executor"/>
+
+
+  <!-- int:channel id="receiveEmailChannel">    
+    <int:interceptors>
+      <int:wire-tap channel="logger" />
+    </int:interceptors>
+  </int:channel>
+
+  <int:channel id="sendEmailChannel">
+    <int:interceptors>
+      <int:wire-tap channel="logger" />
+    </int:interceptors>
+  </int:channel>
+
+  <int:logging-channel-adapter id="logger" level="ERROR" />
+
+  <bean id="emailReceiverService" class="controller.mailreceiver.EmailReceiverService" />
+  <bean id="emailSender" class="controller.mailreceiver.EmailReceiverService" />
+
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="${smtp.host}" />
+    <property name="port" value="${smtp.port}" />
+    <property name="username" value="${smtp.account.name}" />
+    <property name="password" value="${smtp.account.password}" />
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+          <prop key="mail.smtp.auth">true</prop>
+       </props>
+    </property>
+  </bean>
+
+  <int:service-activator input-channel="receiveEmailChannel"
+                         ref="emailReceiverService"
+                         method="receive" />
+
+  <int-mail:inbound-channel-adapter id="imapAdapter"
+    store-uri="imaps://${imap.username}:${imap.password}@imap.googlemail.com:993/INBOX"
+    java-mail-properties="javaMailProperties"
+    channel="receiveEmailChannel"
+    should-delete-messages="false"
+    should-mark-messages-as-read="false"
+    auto-startup="true"
+    >
+    <int:poller fixed-delay="${imap.polldelay}" time-unit="SECONDS" />
+  </int-mail:inbound-channel-adapter>
+
+  <util:properties id="javaMailProperties">
+    <prop key="mail.imap.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+    <prop key="mail.imap.socketFactory.fallback">false</prop>
+    <prop key="mail.store.protocol">imaps</prop>
+    <prop key="mail.debug">false</prop>
+  </util:properties-->
 
 </beans>

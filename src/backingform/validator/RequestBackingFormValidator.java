@@ -35,9 +35,10 @@ public class RequestBackingFormValidator implements Validator {
 
   @Override
   public void validate(Object obj, Errors errors) {
-    if (obj == null || validator == null)
+    if (obj == null)
       return;
-    ValidationUtils.invokeValidator(validator, obj, errors);
+    if (validator != null)
+      ValidationUtils.invokeValidator(validator, obj, errors);
     RequestBackingForm form = (RequestBackingForm) obj;
     String requestDate = form.getRequestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(requestDate)) {

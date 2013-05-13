@@ -3,6 +3,8 @@ package repository;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -60,5 +62,22 @@ public class RequestTypeRepository {
         }
     }
     em.flush();
+  }
+
+  public RequestType getRequestTypeByName(String requestTypeName) {
+    TypedQuery<RequestType> query;
+    query = em.createQuery("SELECT r from RequestType r " +
+            "where r.requestType=:requestTypeName AND r.isDeleted=:isDeleted", RequestType.class);
+    query.setParameter("isDeleted", false);
+    query.setParameter("requestTypeName", requestTypeName);
+    RequestType requestType = null;
+    try {
+      requestType = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    } catch (NonUniqueResultException ex) {
+      ex.printStackTrace();
+    }
+    return requestType;
   }
 }

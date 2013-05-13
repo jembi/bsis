@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -167,11 +168,50 @@
               });
         }
 
+        $("#${mainContentId}").find(".splitProductButton")
+        											.button({icons: {primary : 'ui-icon-arrow-4-diag'}})
+        											.click(generateSplitProductDialog);
+
+
+        function generateSplitProductDialog() {
+
+  				$("<div>").dialog(
+              {
+                modal : true,
+                open : function() {
+                  // extra parameters passed as string otherwise POST request sent
+                  $(this).load("splitProductFormGenerator.html?" + $.param({
+                    productId : "${product.id}"
+                  }));
+                },
+                close : function(event, ui) {
+                  $(this).remove();
+                },
+                title : "Split product",
+                height : 400,
+                width : 600,
+                buttons : {
+                  "Split Product" : function() {
+                    $(this).dialog("close");
+                    splitProduct($(this).find(".splitProductForm"),
+                        splitProductDone);
+                  },
+                  "Cancel" : function() {
+                    $(this).dialog("close");
+                  }
+                }
+              });
+        }
+
         function discardProductDone() {
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
         function returnProductDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
+
+        function splitProductDone() {
           refetchContent("${refreshUrl}", $("#${tabContentId}"));
         }
 
@@ -203,17 +243,22 @@
       <button type="button" class="doneButton">
         Done
       </button>
-      <c:if test="${permissions['editInformation'] eq 'allowed'}">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="editButton">
         Edit
       </button>
-      </c:if>
+      </sec:authorize>
       <!-- button type="button" class="testResultsForProductButton">
         Test results for product
       </button-->
       <!-- button type="button" class="productLabelButton">
         Product Label
       </button-->
+      <c:if test="${product.statusAllowsSplitting and not empty product.productType.pediProductType}">
+        <button type="button" class="splitProductButton">
+          Split product into ${product.productType.pediProductType.productTypeNameShort}
+        </button>
+      </c:if>
       <button type="button" class="discardButton">
         Discard product
       </button>
@@ -223,11 +268,11 @@
       <button type="button" class="productHistoryButton">
         Show product movement details
       </button>
-      <c:if test="${permissions['editInformation'] eq 'allowed'}">
+      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
       <button type="button" class="deleteButton">
         Delete
       </button>
-      </c:if>
+      </sec:authorize>
       <button type="button" class="printButton">
         Print
       </button>

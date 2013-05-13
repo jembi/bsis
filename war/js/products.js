@@ -76,3 +76,20 @@ function returnProduct(form, successCallback) {
     }
   });
 }
+
+function splitProduct(form, successCallback) {
+  var splitProductFormData = $(form).serialize();
+  $.ajax({
+    type : "POST",
+    url : "splitProduct.html",
+    data : splitProductFormData,
+    success : function(jsonResponse) {
+      if (jsonResponse["success"] === true) {
+        successCallback();
+        showMessage("Product split");
+      } else {
+        showMessage("Something went wrong." + jsonResponse["errMsg"]);
+      }
+    }
+  });
+}

@@ -223,7 +223,11 @@ $(document).ready(
                 <td>${product.bloodGroup}</td>
               </c:if>
               <c:if test="${productFields.productType.hidden != true}">
-                <td>${product.productType.productType}</td>
+                <td>${product.productType.productType}
+                  <c:if test="${not empty product.subdivisionCode}">
+                    ${product.subdivisionCode}
+                  </c:if>
+                </td>
               </c:if>
               <c:if test="${productFields.createdOn.hidden != true}">
                 <td>${product.createdOn}</td>

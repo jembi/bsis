@@ -787,15 +787,24 @@ insert into RequestType (requestType, description, isDeleted) values
 ('Urgent', '', '0'),
 ('Elective Surgery', '', '0');
 
-insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, canSubdivide, canPool, isDeleted) values
-(1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', '1', '0', '0'),
-(2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', '1', '0', '0'),
-(3, 'FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', '1', '0', '0'),
-(4, 'Platelets', 'Platelets', '', 5, 'DAYS', '1', '1', '0', '0'),
-(5, 'Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
-(6, 'RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', '1', '0', '0'),
-(7, 'FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 365, 'DAYS', '1', '1', '0', '0'),
-(8, 'Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', '1', '0', '0');
+insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, pediProductType_id, isDeleted) values
+(1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', NULL, '0'),
+(2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', NULL, '0'),
+(3, 'FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', NULL, '0'),
+(4, 'Platelets', 'Platelets', '', 5, 'DAYS', '1', NULL, '0'),
+(5, 'Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', NULL, '0'),
+(6, 'RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', NULL, '0'),
+(7, 'FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 365, 'DAYS', '1', NULL, '0'),
+(8, 'Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', NULL, '0');
+
+
+/**
+ * Create references to pedi product types.
+ */
+update ProductType set pediProductType_id=5 where id=1;
+update ProductType set pediProductType_id=6 where id=2;
+update ProductType set pediProductType_id=7 where id=3;
+update ProductType set pediProductType_id=8 where id=4;
 
 insert into ProductTypeCombination (id, combinationName, isDeleted) values
 (1, 'Whole Blood', 0),
@@ -905,7 +914,8 @@ insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) 
 ("Expired", "RETURNED", 0),
 ("Not required", "RETURNED", 0),
 ("Wrong product sent", "RETURNED", 0),
-("Did not crossmatch with patient sample", "RETURNED", 0);
+("Did not crossmatch with patient sample", "RETURNED", 0),
+("Split", "SPLIT", 0);
 
 insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
 (1, 'admin','admin321123','admin',1,1,1,0),
@@ -914,27 +924,42 @@ insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActiv
 (4, 'test_user', 'test_user', 'test_user', 0,1,1,0);
 
 insert into Role(id, name) values
-(1, 'admin'),
-(2, 'donorlab'),
-(3, 'testlab');
+(1, 'ROLE_ADMIN'),
+(2, 'ROLE_DONORLAB'),
+(3, 'ROLE_TESTLAB'),
+(4, 'ROLE_USER');
 
 insert into Permission(id, name) values
-(1, 'viewDonorInformation'),
-(2, 'viewTestInformation'),
-(3, 'editInformation');
+(1, 'PERM_LOGIN'),
+(2, 'PERM_VIEW_DONOR_INFORMATION'),
+(3, 'PERM_VIEW_TEST_INFORMATION'),
+(4, 'PERM_EDIT_INFORMATION'),
+(5, 'PERM_EDIT_CONFIGURATION');
 
 insert into User_Role (users_id, roles_id) values
 (1, 1),
-(2, 1),
-(3, 2),
-(4, 3);
-
-insert into Permission_Role (roles_id, permissions_id) values
-(1, 1),
 (1, 2),
 (1, 3),
+(1, 4),
 (2, 1),
-(3, 2);
+(2, 2),
+(2, 3),
+(2, 4),
+(3, 2),
+(3, 4),
+(4, 3),
+(4, 4);
+
+insert into Permission_Role (roles_id, permissions_id) values
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(2, 1),
+(2, 2),
+(3, 1),
+(3, 3),
+(4, 1);
 
 insert into ContactMethodType (contactMethodType, isDeleted) values
 ("None", 0),
@@ -986,3 +1011,8 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("showCrossmatchConfirmation", "true", "labsetup"),
 ("allowSkipCrossmatch", "true", "labsetup");
+
+insert into VerifiedSender (senderName, isDeleted) values
+("iamrohitbanga@gmail.com", 0),
+("rohit.banga@gatech.edu", 0),
+("vempala@cc.gatech.edu", 0);

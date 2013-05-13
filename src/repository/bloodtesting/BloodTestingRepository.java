@@ -34,6 +34,7 @@ import model.collectedsample.CollectedSample;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
+import model.testresults.TTIStatus;
 import model.worksheet.WorksheetType;
 
 import org.apache.commons.lang3.StringUtils;
@@ -571,14 +572,6 @@ public class BloodTestingRepository {
     bt.setTestNameShort((String) newBloodTestAsMap.get("testNameShort"));
     BloodTestCategory category = BloodTestCategory.valueOf((String) newBloodTestAsMap.get("category"));
     bt.setCategory(category);
-    if (category.equals(BloodTestCategory.BLOODTYPING)) {
-      bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
-      bt.setContext(genericConfigRepository.getCurrentBloodTypingContext());
-    }
-    else {
-      bt.setBloodTestType(BloodTestType.BASIC_TTI);
-      bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
-    }
     bt.setIsEmptyAllowed(false);
     bt.setNegativeResults("");
     bt.setPositiveResults("");
@@ -595,7 +588,81 @@ public class BloodTestingRepository {
     }
     bt.setWorksheetTypes(worksheetTypes);
     bt.setIsActive(true);
-    em.persist(bt);
+    if (category.equals(BloodTestCategory.BLOODTYPING)) {
+      bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
+      bt.setContext(genericConfigRepository.getCurrentBloodTypingContext());
+      em.persist(bt);
+    }
+    else {
+      bt.setBloodTestType(BloodTestType.BASIC_TTI);
+      bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
+      Integer numConfirmtatoryTests = 0;
+      if (newBloodTestAsMap.containsKey("numConfirmatoryTests"))
+        numConfirmtatoryTests = Integer.parseInt((String)newBloodTestAsMap.get("numConfirmatoryTests"));
+      List<Integer> pendingTestIds = new ArrayList<Integer>();
+      em.persist(bt);
+      em.refresh(bt);
+
+      BloodTestingRule ttiSafeRule = new BloodTestingRule();
+      ttiSafeRule.setBloodTestsIds("" + bt.getId());
+      ttiSafeRule.setPattern("-");
+      ttiSafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+      ttiSafeRule.setNewInformation(TTIStatus.TTI_SAFE.toString());
+      ttiSafeRule.setExtraInformation("");
+      ttiSafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
+      ttiSafeRule.setCategory(BloodTestCategory.TTI);
+      ttiSafeRule.setSubCategory(BloodTestSubCategory.TTI);
+      ttiSafeRule.setPendingTestsIds("");
+      ttiSafeRule.setMarkSampleAsUnsafe(false);
+      ttiSafeRule.setIsActive(true);
+      em.persist(ttiSafeRule);
+
+      for (int i = 1; i <= numConfirmtatoryTests; ++i) {
+        BloodTest confirmatoryBloodTest = new BloodTest();
+        confirmatoryBloodTest.setTestName(bt.getTestName() + " Confirmatory " + i);
+        confirmatoryBloodTest.setTestNameShort(bt.getTestNameShort() + " Conf " + i);
+        confirmatoryBloodTest.setCategory(category);
+        confirmatoryBloodTest.setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+        confirmatoryBloodTest.setContext(BloodTestContext.RECORD_TTI_TESTS);
+        confirmatoryBloodTest.setIsEmptyAllowed(false);
+        confirmatoryBloodTest.setNegativeResults("");
+        confirmatoryBloodTest.setPositiveResults("");
+        confirmatoryBloodTest.setValidResults("+,-");
+        confirmatoryBloodTest.setRankInCategory(1);
+        confirmatoryBloodTest.setIsActive(true);
+        em.persist(confirmatoryBloodTest);
+        em.refresh(confirmatoryBloodTest);
+        pendingTestIds.add(i);
+
+        BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
+        confirmatoryTestRule.setBloodTestsIds("" + confirmatoryBloodTest.getId());
+        confirmatoryTestRule.setPattern("+");
+        confirmatoryTestRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+        confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
+        confirmatoryTestRule.setExtraInformation("");
+        confirmatoryTestRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
+        confirmatoryTestRule.setCategory(BloodTestCategory.TTI);
+        confirmatoryTestRule.setSubCategory(BloodTestSubCategory.TTI);
+        confirmatoryTestRule.setPendingTestsIds("");
+        confirmatoryTestRule.setMarkSampleAsUnsafe(false);
+        confirmatoryTestRule.setIsActive(true);
+        em.persist(confirmatoryTestRule);
+      }
+
+      BloodTestingRule ttiUnsafeRule = new BloodTestingRule();
+      ttiUnsafeRule.setBloodTestsIds("" + bt.getId());
+      ttiUnsafeRule.setPattern("+");
+      ttiUnsafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+      ttiUnsafeRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
+      ttiUnsafeRule.setExtraInformation("");
+      ttiUnsafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
+      ttiUnsafeRule.setCategory(BloodTestCategory.TTI);
+      ttiUnsafeRule.setSubCategory(BloodTestSubCategory.TTI);
+      ttiUnsafeRule.setPendingTestsIds(StringUtils.join(pendingTestIds, ","));
+      ttiUnsafeRule.setMarkSampleAsUnsafe(false);
+      ttiUnsafeRule.setIsActive(true);
+      em.persist(ttiUnsafeRule);
+    }
   }
 
   public void deactivateBloodTest(Integer bloodTestId) {

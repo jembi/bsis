@@ -27,6 +27,7 @@ import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
+import model.productmovement.ProductStatusChangeReasonCategory;
 import model.productmovement.ProductStatusChangeType;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
@@ -44,12 +45,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import controller.UtilController;
+
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
-import filter.UserInfoAddToThreadFilter;
 
 @Repository
 @Transactional
@@ -66,6 +68,9 @@ public class ProductRepository {
 
   @Autowired
   private RequestRepository requestRepository;
+
+  @Autowired
+  private UtilController utilController;
 
   /**
    * some fields like product status are cached internally.
@@ -95,9 +100,12 @@ public class ProductRepository {
     // to be unsafe it should not have been issued in the first place.
     // In exceptional cases an admin can always delete this product and create a new one
     // if he wants to change the status to a new one.
+    // once a product has been labeled as split it does not exist anymore so we just mark
+    // it as SPLIT. Even if the collection is found to be unsafe later it should not matter
+    // as SPLIT products are not allowed to be issued
     List<ProductStatus> statusNotToBeChanged =
         Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
-            ProductStatus.USED);
+            ProductStatus.USED, ProductStatus.SPLIT);
 
     ProductStatus oldProductStatus = product.getStatus();
     
@@ -536,7 +544,7 @@ public class ProductRepository {
     statusChange.setStatusChangedOn(new Date());
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
-    statusChange.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingProduct.getStatusChanges() == null)
       existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
     existingProduct.getStatusChanges().add(statusChange);
@@ -635,7 +643,6 @@ public class ProductRepository {
         lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
         upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       } catch (ParseException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
       }
       gcal.setTime(lowerDate);
@@ -664,7 +671,6 @@ public class ProductRepository {
           m.put(utcTime, (Long) result[0]);
         }
       } catch (ParseException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -738,7 +744,6 @@ public class ProductRepository {
         lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
         upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       } catch (ParseException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
       }
       gcal.setTime(lowerDate);
@@ -767,7 +772,6 @@ public class ProductRepository {
           m.put(utcTime, (Long) result[0]);
         }
       } catch (ParseException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -801,7 +805,7 @@ public class ProductRepository {
     statusChange.setStatusChangeReason(returnReason);
     statusChange.setNewStatus(existingProduct.getStatus());
     statusChange.setStatusChangeReasonText(returnReasonText);
-    statusChange.setChangedBy(UserInfoAddToThreadFilter.threadLocal.get());
+    statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingProduct.getStatusChanges() == null)
       existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
     existingProduct.getStatusChanges().add(statusChange);
@@ -857,4 +861,59 @@ public class ProductRepository {
 
     return products;
   }
+
+  public boolean splitProduct(Long productId, Integer numProductsAfterSplitting) {
+
+    Product product = findProduct(productId);
+    if (product == null || product.getStatus().equals(ProductStatus.SPLIT))
+      return false;
+
+    ProductType pediProductType = product.getProductType().getPediProductType();
+    if (pediProductType == null) {
+      return false;
+    }
+
+    char nextSubdivisionCode = 'A';
+    for (int i = 0; i < numProductsAfterSplitting; ++i) {
+      Product newProduct = new Product();
+      // just set the id temporarily before copying all the fields
+      newProduct.setId(productId);
+      newProduct.copy(product);
+      newProduct.setId(null);
+      newProduct.setProductType(pediProductType);
+      newProduct.setSubdivisionCode("" + nextSubdivisionCode);
+      newProduct.setParentProduct(product);
+      newProduct.setIsDeleted(false);
+      updateProductInternalFields(newProduct);
+      em.persist(newProduct);
+      // Assuming we do not split into more than 26 products this should be fine
+      nextSubdivisionCode++;
+    }
+
+    product.setStatus(ProductStatus.SPLIT);
+    ProductStatusChange statusChange = new ProductStatusChange();
+    statusChange.setStatusChangeType(ProductStatusChangeType.SPLIT);
+    statusChange.setNewStatus(ProductStatus.SPLIT);
+
+    String queryStr = "SELECT p FROM ProductStatusChangeReason p WHERE " +
+    		"p.category=:category AND p.isDeleted=:isDeleted";
+    TypedQuery<ProductStatusChangeReason> query = em.createQuery(queryStr,
+        ProductStatusChangeReason.class);
+    query.setParameter("category", ProductStatusChangeReasonCategory.SPLIT);
+    query.setParameter("isDeleted", false);
+    List<ProductStatusChangeReason> productStatusChangeReasons = query.getResultList();
+    statusChange.setStatusChangedOn(new Date());
+    // expect only one product status change reason
+    statusChange.setStatusChangeReason(productStatusChangeReasons.get(0));
+    statusChange.setStatusChangeReasonText("");
+    statusChange.setChangedBy(utilController.getCurrentUser());
+    if (product.getStatusChanges() == null)
+      product.setStatusChanges(new ArrayList<ProductStatusChange>());
+    product.getStatusChanges().add(statusChange);
+    statusChange.setProduct(product);
+    em.persist(statusChange);
+    em.merge(product);
+    return true;
+  }
+
 }

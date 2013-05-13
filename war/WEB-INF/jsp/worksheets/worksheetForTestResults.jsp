@@ -121,7 +121,7 @@ $(document).ready(function() {
        width: 600,
        title: "Confirm save",
        buttons: {
-         "Save uninterpretable results" : function() {
+         "Save uninterpretable results" : function(event) {
                                              $(this).dialog("close");
                                              saveTestResultsOnWorksheetPage(event, true);
                                            },

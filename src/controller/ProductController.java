@@ -20,6 +20,7 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -157,7 +158,7 @@ public class ProductController {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
-    for (String field : Arrays.asList("collectionNumber", "productType","createdOn", "expiresOn", "status")) {
+    for (String field : Arrays.asList("collectionNumber", "productType", "bloodGroup", "createdOn", "expiresOn", "status")) {
       Map<String, Object> fieldProperties = formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
@@ -167,6 +168,8 @@ public class ProductController {
     sortColumnMap.put("id", "id");
     sortColumnMap.put("collectionNumber", "collectedSample.collectionNumber");
     sortColumnMap.put("productType", "productType.productType");
+    // just sort by blood abo for now
+    sortColumnMap.put("bloodGroup", "collectedSample.bloodAbo");
     sortColumnMap.put("createdOn", "createdOn");
     sortColumnMap.put("expiresOn", "expiresOn");
     sortColumnMap.put("status", "status");
@@ -234,14 +237,15 @@ public class ProductController {
             try {
               propertyValue = BeanUtils.getProperty(product, property);
             } catch (IllegalAccessException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
             } catch (InvocationTargetException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
             } catch (NoSuchMethodException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
+            }
+            if (property.equals("productType") &&
+                StringUtils.isNotBlank(product.getSubdivisionCode())) {
+              propertyValue = propertyValue + " (" + product.getSubdivisionCode() + ")";
             }
             row.add(propertyValue.toString());
           }
@@ -507,7 +511,6 @@ public class ProductController {
     try {
       productRepository.deleteProduct(productId);
     } catch (Exception ex) {
-      // TODO: Replace with logger
       System.err.println("Internal Exception");
       System.err.println(ex.getMessage());
       success = false;
@@ -566,6 +569,40 @@ public class ProductController {
         productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
     mv.addObject("returnReasons", statusChangeReasons);
     return mv;
+  }
+
+  @RequestMapping(value = "/splitProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView splitProductFormGenerator(HttpServletRequest request,
+      @RequestParam("productId") Long productId) {
+    ModelAndView mv = new ModelAndView("products/splitProductForm");
+    mv.addObject("productId", productId);
+    mv.addObject("product", getProductViewModel(productRepository.findProduct(productId)));
+    return mv;
+  }
+
+
+  @RequestMapping(value = "/splitProduct", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> discardProduct(
+      @RequestParam("productId") Long productId,
+      @RequestParam("numProductsAfterSplitting") Integer numProductsAfterSplitting) {
+
+    boolean success = true;
+    String errMsg = "";
+    try {
+      success = productRepository.splitProduct(productId, numProductsAfterSplitting);
+      if (!success)
+        errMsg = "Product cannot be split";
+    } catch (Exception ex) {
+      System.err.println("Internal Exception");
+      System.err.println(ex.getMessage());
+      success = false;
+      errMsg = "Internal Server Error";
+    }
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("success", success);
+    m.put("errMsg", errMsg);
+    return m;
   }
 
   @RequestMapping(value = "/viewProductHistory", method = RequestMethod.GET)
@@ -637,13 +674,10 @@ public class ProductController {
       try {
         productTypeCombinationsMap.put(productTypeCombination.getId(), mapper.writeValueAsString(productExpiryIntervals));
       } catch (JsonGenerationException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (JsonMappingException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }

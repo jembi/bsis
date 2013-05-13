@@ -27,9 +27,6 @@ public class RequestBackingForm {
   @Valid
   private Request request;
 
-  private String requestDate;
-  private String requiredDate;
-
   private String patientBirthDate;
 
   public RequestBackingForm() {
@@ -49,17 +46,13 @@ public class RequestBackingForm {
   }
 
   public String getRequestDate() {
-    if (requestDate != null)
-      return requestDate;
     if (request == null)
       return "";
     return CustomDateFormatter.getDateTimeString(request.getRequestDate());
   }
 
   public String getRequiredDate() {
-    if (requiredDate != null)
-      return requiredDate;
-    if (getRequest() == null)
+    if (request == null)
       return "";
     return CustomDateFormatter.getDateString(request.getRequiredDate());
   }
@@ -121,7 +114,6 @@ public class RequestBackingForm {
   }
 
   public void setRequestDate(String requestDate) {
-    this.requestDate = requestDate;
     try {
       request.setRequestDate(CustomDateFormatter.getDateTimeFromString(requestDate));
     } catch (ParseException ex) {
@@ -131,7 +123,6 @@ public class RequestBackingForm {
   }
 
   public void setRequiredDate(String requiredDate) {
-    this.requiredDate = requiredDate;
     try {
       request.setRequiredDate(CustomDateFormatter.getDateFromString(requiredDate));
     } catch (ParseException ex) {

@@ -4,11 +4,18 @@
          xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
+
     <display-name>Spring3MVC</display-name>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/security-v2v-servlet.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <error-page>
         <error-code>500</error-code>
         <location>/errorPage.jsp</location>
@@ -30,6 +37,7 @@
         <servlet-class>org.springframework.web.servlet.ResourceServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>v2v</servlet-name>
         <url-pattern>*.html</url-pattern>
@@ -38,6 +46,7 @@
         <servlet-name>v2v</servlet-name>
         <url-pattern>*.zip</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.css</url-pattern>
@@ -58,15 +67,28 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.png</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/j_spring_security_check</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/j_spring_security_logout</url-pattern>
+    </servlet-mapping>
 
     <filter>
-        <filter-name>UserAddFilter</filter-name>
-        <filter-class>
-            filter.UserInfoAddToThreadFilter
-        </filter-class>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>UserAddFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <url-pattern>/*</url-pattern>
+      <dispatcher>REQUEST</dispatcher>
+      <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+
+    <listener>
+      <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+
 </web-app>
