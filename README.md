@@ -44,8 +44,9 @@ Development Environment
     * Download and unpack Eclipse Indigo 3.7 or Eclipse Juno 4.2 from http://www.eclipse.org/downloads/.
     * Install Apache Tomcat 7 and integrate with Eclipse (you may follow http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html).
     * Fork and clone the master branch into a local directory preferrably housed in your eclipse workspace.
-    * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
+    * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. In Eclipse, select Help>Install New Software and add the site http://download.eclipse.org/technology/m2e/releases to add the m2eclipse plugin.Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
     * Import the source code into Eclipse by using 'Import Existing project' option. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
+    * If there are issues with Maven dependencies, try run > mvn dependency:tree in the Workspace folder of the V2V project (see http://stackoverflow.com/questions/4262186/missing-maven-dependencies-in-eclipse-project).
     * On your local system `V2V/build.properties` will get modified depending on where Apache Tomcat is installed. May be making build.properties an untracked file would be a good idea.
 2. You will also need to setup a MySQL database and specify this configuration in the following files:
     * `V2V/src/database.properties` should contain your database connection information
