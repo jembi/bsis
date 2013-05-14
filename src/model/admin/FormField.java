@@ -136,10 +136,10 @@ public class FormField {
   public void copy(FormField formField) {
     this.displayName = formField.displayName;
     this.defaultValue = formField.defaultValue;
-    this.hidden = formField.hidden;
-    this.isHidable = formField.isHidable;
-    this.isRequired = formField.isRequired;
-    this.canBeOptional = formField.canBeOptional;
+    if (this.isHidable)
+      this.hidden = formField.hidden;
+    if (this.canBeOptional)
+      this.isRequired = formField.isRequired;
     if (this.isAutoGeneratable)
       this.autoGenerate = formField.autoGenerate;
     if (this.isTimeField)
