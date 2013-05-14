@@ -28,6 +28,8 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
+  <!-- Annotations like PreAuthorize, needed here and not in security-v2v-servlet.xml
+       as this is the MVC configuration dealing with URLs??? -->
   <security:global-method-security pre-post-annotations="enabled" />
   <context:property-placeholder location="classpath:database.properties" />
 
@@ -73,6 +75,7 @@
         <property name="maxIdleTime" value="${database.maxIdleTime}" />
   </bean>
 
+  <!-- persistence unit name comes from persistence.xml -->
   <bean id="entityManagerFactory"
     class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
     p:dataSource-ref="dataSource" p:persistenceUnitName="v2v">
@@ -103,6 +106,7 @@
   <task:annotation-driven scheduler="scheduler" executor="executor"/>
 
 
+  <!-- Following part is for sending and receiving emails. Not using it right now. -->
   <!-- int:channel id="receiveEmailChannel">    
     <int:interceptors>
       <int:wire-tap channel="logger" />

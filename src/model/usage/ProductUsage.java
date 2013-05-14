@@ -22,7 +22,11 @@ import org.hibernate.envers.Audited;
 
 import constraintvalidator.ProductExists;
 
-
+/**
+ * We cannot use the name Usage for this class as Usage is
+ * a keyword in MySQL.
+ * @author iamrohitbanga
+ */
 @Entity
 @Audited
 public class ProductUsage implements ModificationTracker {

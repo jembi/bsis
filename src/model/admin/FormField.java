@@ -37,6 +37,9 @@ public class FormField {
   @Column(length=30)
   private String field;
 
+  /**
+   * User can override default display name with display name. 
+   */
   @Column(length=60)
   private String displayName;
 

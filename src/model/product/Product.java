@@ -31,6 +31,8 @@ import model.user.User;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.CollectedSampleExists;
 import constraintvalidator.ProductTypeExists;
@@ -77,17 +79,19 @@ public class Product implements ModificationTracker {
   @Column(length=30)
   private ProductStatus status;
 
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="testedProduct", fetch=FetchType.LAZY)
   private List<CompatibilityTest> compatibilityTests;
 
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="product", fetch=FetchType.LAZY)
   private List<ProductStatusChange> statusChanges;
 
   @Column(length=3)
   private String subdivisionCode;
 
-  // not all products are subdivided into small packs. Just store the
-  // extra information about subdivided products in a separate table. 
   @OneToOne(optional=true)
   private Product parentProduct;
 

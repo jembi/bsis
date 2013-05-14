@@ -15,8 +15,9 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import model.bloodbagtype.BloodBagType;
-import model.bloodtesting.CollectionField;
+import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.CollectionField;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
 import model.donor.Donor;
@@ -25,7 +26,6 @@ import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
-import model.testresults.TTIStatus;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;

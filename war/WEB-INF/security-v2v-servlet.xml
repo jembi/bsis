@@ -7,10 +7,13 @@
                     http://www.springframework.org/schema/security
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
+  <!-- referenced in web.xml -->
+  <!-- no authentication needed for static files -->
   <http pattern="/**/*.css" security="none" />
   <http pattern="/**/*.js" security="none" />
   <http pattern="/**/*.png" security="none" />
 
+  <!-- isAnonymous() is an expression proccessed by spring security -->
   <http auto-config="true" use-expressions="true">
     <intercept-url pattern="/login.html*" access="isAnonymous()" />
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />

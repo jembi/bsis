@@ -10,6 +10,11 @@ import javax.persistence.TemporalType;
 
 import model.user.User;
 
+/**
+ * Hibernate will not be able to generate schema for embedded
+ * modificationTracker if we do not implement the interface.
+ * @author iamrohitbanga
+ */
 @Embeddable
 public class RowModificationTracker implements ModificationTracker {
 

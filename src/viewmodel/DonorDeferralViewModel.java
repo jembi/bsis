@@ -1,8 +1,8 @@
 package viewmodel;
 
 import utils.CustomDateFormatter;
-import model.donor.DonorDeferral;
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
 
 public class DonorDeferralViewModel {
 

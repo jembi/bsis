@@ -18,8 +18,8 @@ import javax.validation.Valid;
 import model.admin.ConfigPropertyConstants;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
-import model.testresults.TTIStatus;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.lang3.StringUtils;

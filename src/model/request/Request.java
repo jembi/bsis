@@ -29,6 +29,8 @@ import model.util.Gender;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.LocationExists;
 import constraintvalidator.ProductTypeExists;
@@ -67,9 +69,13 @@ public class Request implements ModificationTracker {
   private String patientBloodRh;
 
   // fetch type eager to check how many products issued
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="issuedTo")
   private List<Product> issuedProducts;
 
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="forRequest")
   private Set<CompatibilityTest> crossmatchTests;
   
@@ -106,6 +112,11 @@ public class Request implements ModificationTracker {
   @Column(length=30)
   private String department;
 
+  /**
+   * Cannot be a many-to-one mapping to the user table.
+   * The request is coming from a hospital. we should store
+   * the name of the doctor requesting it.
+   */
   @Column(length=30)
   private String requestedBy;
 

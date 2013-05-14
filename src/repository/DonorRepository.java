@@ -19,9 +19,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import model.donor.Donor;
-import model.donor.DonorDeferral;
 import model.donor.DonorStatus;
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.RandomStringUtils;

@@ -24,8 +24,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
-import model.testresults.TTIStatus;
 import model.util.BloodGroup;
 import model.worksheet.Worksheet;
 

@@ -20,6 +20,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
@@ -32,7 +33,6 @@ import model.productmovement.ProductStatusChangeType;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.request.Request;
-import model.testresults.TTIStatus;
 import model.util.BloodGroup;
 
 import org.codehaus.jackson.JsonParseException;

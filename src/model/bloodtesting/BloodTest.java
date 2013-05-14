@@ -30,10 +30,20 @@ public class BloodTest implements Comparable<BloodTest> {
   @Column(length=40)
   private String testName;
 
+  /**
+   * Comma separated list of valid values.
+   * Typically '+,-'
+   */
   private String validResults;
 
+  /**
+   * TODO: not used now but will be useful for mapping numeric validResults to '-'.
+   */
   private String negativeResults;
 
+  /**
+   * TODO: not used now but will be useful for mapping numeric validResults to '+'.
+   */
   private String positiveResults;
 
   private Integer rankInCategory;
@@ -50,9 +60,15 @@ public class BloodTest implements Comparable<BloodTest> {
   @Column(length=30)
   private BloodTestContext context;
 
+  /**
+   * List cannot be used here.
+   */
   @ManyToMany
   private Set<WorksheetType> worksheetTypes;
 
+  /**
+   * TODO: not sure if this is useful.
+   */
   private Boolean isEmptyAllowed;
 
   private Boolean isActive;

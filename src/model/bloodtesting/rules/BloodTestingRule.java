@@ -10,8 +10,6 @@ import javax.persistence.Id;
 
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
-import model.bloodtesting.BloodTestSubCategory;
-import model.bloodtesting.CollectionField;
 
 import org.hibernate.envers.Audited;
 
@@ -24,6 +22,9 @@ public class BloodTestingRule {
   @Column(nullable = false, insertable=false, updatable=false, columnDefinition="MEDIUMINT")
   private Integer id;
 
+  /**
+   * Comma Separated list of ids of tests which correspond to the pattern.
+   */
   @Column(length=200)
   private String bloodTestsIds;
 
@@ -55,6 +56,9 @@ public class BloodTestingRule {
   @Column(length=30)
   private BloodTestContext context;
 
+  /**
+   * TODO: Not used right now.
+   */
   private Boolean markSampleAsUnsafe;
 
   private Boolean isActive;

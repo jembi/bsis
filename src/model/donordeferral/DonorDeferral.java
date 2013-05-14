@@ -1,4 +1,4 @@
-package model.donor;
+package model.donordeferral;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 
-import model.donordeferral.DeferralReason;
+import model.donor.Donor;
 import model.user.User;
 
 @Entity

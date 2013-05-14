@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 @Audited
 @Entity
@@ -26,6 +27,7 @@ public class ProductTypeCombination {
   private String combinationName;
 
   @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
   private Set<ProductType> productTypes;
 

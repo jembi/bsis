@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
+import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -113,6 +114,9 @@ public class Donor implements ModificationTracker {
   @Temporal(TemporalType.DATE)
   private Date birthDateInferred;
 
+  /**
+   * TODO: Not sure if age is used anymore
+   */
   @Column(columnDefinition="TINYINT")
   private Integer age;
 
@@ -159,6 +163,8 @@ public class Donor implements ModificationTracker {
   /**
    * If a donor has been deferred then we can disallow him to donate the next time.
    */
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
 

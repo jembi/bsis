@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import model.bloodtesting.BloodTestResult;
-import model.testresults.TTIStatus;
+import model.bloodtesting.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
 public class BloodTestingRuleResult {

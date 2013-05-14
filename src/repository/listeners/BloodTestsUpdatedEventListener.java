@@ -9,11 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.product.Product;
-import model.testresults.TTIStatus;
 import model.util.BloodAbo;
 import model.util.BloodRh;
 

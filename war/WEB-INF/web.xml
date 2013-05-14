@@ -7,11 +7,14 @@
 
     <display-name>Spring3MVC</display-name>
 
+    <!-- ContextLoaderListener can load multiple files listed in contextConfigLocation.
+         Spring MVC configuration is loaded by DispatcherServlet and not by ContextLoaderListener.  -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/security-v2v-servlet.xml</param-value>
     </context-param>
 
+    <!-- Loaded at startup -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -25,6 +28,7 @@
         <location>/errorPage.jsp</location>
     </error-page>
 
+    <!-- by default looks for v2v-servlet.xml -->
     <servlet>
         <servlet-name>v2v</servlet-name>
         <servlet-class>
@@ -32,6 +36,7 @@
         </servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+    <!-- not sure if we need Resource Servlet -->
     <servlet>
         <servlet-name>Resource Servlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.ResourceServlet</servlet-class>
@@ -67,6 +72,10 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.png</url-pattern>
     </servlet-mapping>
+
+    <!-- Spring security does not work without the following configuration
+         http://stackoverflow.com/questions/16452044/spring-security-j-spring-security-check-not-invoked
+     -->
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/j_spring_security_check</url-pattern>

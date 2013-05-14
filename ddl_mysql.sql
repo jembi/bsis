@@ -207,7 +207,7 @@
     create table CompatibilityTest (
         id bigint not null auto_increment,
         compatibililityTestDate datetime,
-        compatibilityResult integer,
+        compatibilityResult varchar(15),
         isDeleted boolean,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
@@ -227,7 +227,7 @@
         REV integer not null,
         REVTYPE tinyint,
         compatibililityTestDate datetime,
-        compatibilityResult integer,
+        compatibilityResult varchar(15),
         isDeleted boolean,
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
@@ -443,14 +443,6 @@
         isUsageSite boolean,
         name varchar(255),
         notes longtext,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table LocationType (
-        id bigint not null auto_increment,
-        isDeleted integer,
-        name varchar(255),
-        notes varchar(255),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -840,11 +832,11 @@
 
     create table SequenceNumberStore (
         id integer not null auto_increment,
-        columnName varchar(255),
+        columnName varchar(50),
         lastNumber bigint,
-        prefix varchar(255),
-        sequenceNumberContext varchar(255),
-        targetTable varchar(255),
+        prefix varchar(5),
+        sequenceNumberContext varchar(5),
+        targetTable varchar(50),
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -901,22 +893,6 @@
         roles_id bigint not null,
         REVTYPE tinyint,
         primary key (REV, users_id, roles_id)
-    ) ENGINE=InnoDB;
-
-    create table VerifiedSender (
-        id bigint not null auto_increment,
-        isDeleted boolean,
-        senderName varchar(200),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table VerifiedSender_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        senderName varchar(200),
-        primary key (id, REV)
     ) ENGINE=InnoDB;
 
     create table WellType (
@@ -1550,12 +1526,6 @@
     alter table User_Role_AUD 
         add index FK269D713BDF74E053 (REV), 
         add constraint FK269D713BDF74E053 
-        foreign key (REV) 
-        references REVINFO (REV);
-
-    alter table VerifiedSender_AUD 
-        add index FKE0CE028EDF74E053 (REV), 
-        add constraint FKE0CE028EDF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 

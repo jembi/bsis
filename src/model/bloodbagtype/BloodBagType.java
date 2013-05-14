@@ -20,6 +20,9 @@ public class BloodBagType {
   @Column(length=50)
   private String bloodBagType;
 
+  /**
+   * TODO: Not using the canSplit, canPool fields for now
+   */
   private Boolean canSplit;
 
   private Boolean canPool;

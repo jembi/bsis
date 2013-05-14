@@ -23,6 +23,7 @@ import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.TTIStatus;
 import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
@@ -30,7 +31,6 @@ import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
-import model.testresults.TTIStatus;
 import model.user.User;
 import model.worksheet.Worksheet;
 

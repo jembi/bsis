@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,13 +49,21 @@ public class CompatibilityTest implements ModificationTracker {
   @Index(name="compatibilityTest_crossmatchTestDate_index")
   private Date compatibililityTestDate;
 
+  /**
+   * TODO: This field is not used right now. Used in Zambia database.
+   */
   private Boolean transfusedBefore;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length=15)
   private CompatibilityResult compatibilityResult;
 
   @ManyToOne
   private CrossmatchType crossmatchType;
 
+  /**
+   * TODO: Should be a ManyToOne mapping to the User table.
+   */
   private String testedBy;
 
   private Boolean isDeleted;

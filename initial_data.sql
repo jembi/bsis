@@ -1011,8 +1011,3 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("showCrossmatchConfirmation", "true", "labsetup"),
 ("allowSkipCrossmatch", "true", "labsetup");
-
-insert into VerifiedSender (senderName, isDeleted) values
-("iamrohitbanga@gmail.com", 0),
-("rohit.banga@gatech.edu", 0),
-("vempala@cc.gatech.edu", 0);

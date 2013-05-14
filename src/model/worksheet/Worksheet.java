@@ -21,6 +21,7 @@ import model.user.User;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 @Entity
 @Audited
@@ -38,6 +39,7 @@ public class Worksheet implements ModificationTracker {
   private WorksheetType worksheetType;
 
   @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany
   private Set<CollectedSample> collectedSamples;
 

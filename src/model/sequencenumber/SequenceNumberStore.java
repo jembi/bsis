@@ -14,9 +14,13 @@ public class SequenceNumberStore {
   @Column(nullable=false)
   private Integer id;
   
+  @Column(length=50)
   private String targetTable;
+
+  @Column(length=50)
   private String columnName;
 
+  @Column(length=5)
   private String prefix;
 
   /**
@@ -25,6 +29,7 @@ public class SequenceNumberStore {
    * in a generic manner using this field. It could be
    * anything else for another field. 
    */
+  @Column(length=5)
   private String sequenceNumberContext;
 
   private Long lastNumber;

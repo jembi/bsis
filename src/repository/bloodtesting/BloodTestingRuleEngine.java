@@ -15,10 +15,10 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
-import model.bloodtesting.CollectionField;
+import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.CollectionField;
 import model.collectedsample.CollectedSample;
-import model.testresults.TTIStatus;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

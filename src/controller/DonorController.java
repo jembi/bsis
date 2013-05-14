@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.donor.Donor;
-import model.donor.DonorDeferral;
+import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;

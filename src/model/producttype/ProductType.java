@@ -40,12 +40,16 @@ public class ProductType {
   @NotAudited
   @ManyToMany(mappedBy="productTypes")
   private Set<ProductTypeCombination> productTypeCombinations;
-  
+
+  /**
+   * TODO: Not used for now. Some product types like Cryoprecipitate may not require
+   * blood group match before issuing. Usecase not clear yet.
+   */
   private Boolean hasBloodGroup;
 
   /**
    * Pedi Product Type for this product type.
-   * can be null. 
+   * can be null. This allows us to determine the target type after splitting.
    */
   @OneToOne(optional=true)
   private ProductType pediProductType;

@@ -18,7 +18,7 @@ import model.admin.FormField;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
-import model.donor.DonorDeferral;
+import model.donordeferral.DonorDeferral;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;

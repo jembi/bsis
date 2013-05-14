@@ -4,6 +4,12 @@ public enum ProductStatus {
 
   QUARANTINED, AVAILABLE, EXPIRED, ISSUED, SPLIT, USED, UNSAFE, DISCARDED;
 
+  /**
+   * Alternative to valueOf when we want to assign a default status instead
+   * of throwing an exception when an invalid string is passed.
+   * @param statusStr
+   * @return
+   */
   public static ProductStatus lookup(String statusStr) {
     ProductStatus status = null;
     try {
