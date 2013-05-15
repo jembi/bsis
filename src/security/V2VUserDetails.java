@@ -13,9 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class V2VUserDetails implements UserDetails {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
   private User user;
 
@@ -26,6 +23,10 @@ public class V2VUserDetails implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
+    /**
+     * Reason for using Permission as Authority object
+     * http://stackoverflow.com/questions/6357579/spring-security-with-roles-and-permissions
+     */
     for (Role role : user.getRoles()) {
       for (Permission permission : role.getPermissions()) {
         userAuthorities.add(new UserAuthority(permission));

@@ -864,9 +864,6 @@ insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Anti Human Globulin', '0');
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
-("dateFormat", "MM/dd/yy", "page"),
-("dateTimeFormat", "MM/dd/yy hh:mm:ss a", "page"),
-
 ("haemoglobinUnit", "g/dL", "measurementUnit"),
 ("bloodPressureUnit", "mmHg", "measurementUnit"),
 

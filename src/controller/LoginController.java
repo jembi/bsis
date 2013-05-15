@@ -25,16 +25,10 @@ public class LoginController {
   }
 
   @RequestMapping("/welcomePage")
-  public ModelAndView welcome(HttpServletRequest request) {
+  public ModelAndView welcomePage(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("welcomePage");
     mv.addObject("versionNumber", UtilController.VERSION_NUMBER);
     mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
     return mv;
-  }
-
-  @RequestMapping("/adminAccessOnly")
-  public ModelAndView adminAccessError(HttpServletRequest request) {
-
-    return new ModelAndView("adminAccessOnly");
   }
 }
