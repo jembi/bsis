@@ -257,7 +257,7 @@ $(document).ready(function() {
             <c:set var="collection" value="${collections[colNum-1]}" />
             <div class="wellBox">
               <!-- square around the well -->
-              <c:if test="${empty collection}">
+              <c:if test="${empty collection or empty bloodTestsOnPlate[rowNum-1]}">
                 <!-- show empty wells with disabled input -->
                 <input
                   style="width: ${bloodTypingConfig['titerWellRadius']}px; 
@@ -269,7 +269,7 @@ $(document).ready(function() {
                          "
                   disabled="disabled"/>
               </c:if>
-              <c:if test="${not empty collection}">
+              <c:if test="${not empty collection and not empty bloodTestsOnPlate[rowNum-1]}">
                 <!-- non-empty wells -->
                 <c:set var="testId" value="${bloodTestsOnPlate[rowNum-1].id + 0}" />
                 <c:set var="testResultValue" value="${empty bloodTypingTestResults ? '' : bloodTypingTestResults[collection.id][testId]}" />
