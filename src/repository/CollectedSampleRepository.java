@@ -56,42 +56,6 @@ public class CollectedSampleRepository {
   @Autowired
   private WorksheetRepository worksheetRepository;
 
-
-  public void updateCollectedSampleInternalFields(CollectedSample c) {
-    updateCollectedSampleBloodGroup(c);
-    updateCollectedSampleTestedStatus(c);
-  }
-
-  public void updateCollectedSampleBloodGroup(CollectedSample c) {
-//
-//    BloodAbo bloodAbo = c.getBloodAbo();
-//    BloodRh bloodRhd = c.getBloodRhd();
-//
-//    Map<String, TestResult> testResultsMap = testResultRepository.getRecentTestResultsForCollection(c.getId());
-//
-//    TestResult t = testResultsMap.get("Blood ABO");
-//    if (t != null && !t.getIsDeleted()) {
-//      try {
-//        bloodAbo = BloodAbo.valueOf(t.getResult());
-//      } catch (IllegalArgumentException ex) {
-//        ex.printStackTrace();
-//        bloodAbo = BloodAbo.Unknown;
-//      } 
-//    }
-//    
-//    t = testResultsMap.get("Blood Rh");
-//    if (t != null && !t.getIsDeleted()) {
-//      try {
-//        bloodRhd = BloodRh.valueOf(t.getResult());
-//      } catch (IllegalArgumentException ex) {
-//        ex.printStackTrace();
-//        bloodRhd = BloodRh.Unknown;
-//      }
-//    }
-//    c.setBloodAbo(bloodAbo);
-//    c.setBloodRhd(bloodRhd);
-  }
-  
   public void saveCollectedSample(CollectedSample collectedSample) {
     em.persist(collectedSample);
     em.flush();
@@ -104,7 +68,6 @@ public class CollectedSampleRepository {
     }
     existingCollectedSample.copy(collectedSample);
     existingCollectedSample = em.merge(existingCollectedSample);
-    updateCollectedSampleInternalFields(existingCollectedSample);
     em.flush();
     return existingCollectedSample;
   }
@@ -364,7 +327,6 @@ public class CollectedSampleRepository {
   }
 
   public CollectedSample addCollectedSample(CollectedSample collectedSample) {
-    updateCollectedSampleInternalFields(collectedSample);
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     em.persist(collectedSample);
@@ -530,28 +492,6 @@ public class CollectedSampleRepository {
     TypedQuery<Long> query = em.createQuery(queryStr, Long.class);
     query.setParameter("worksheetId", worksheetId);
     return query.getSingleResult().longValue();
-  }
-
-  public void updateCollectedSampleTestedStatus(CollectedSample collectedSample) {
-//    Map<String, TestResult> testResults = testResultRepository.getRecentTestResultsForCollection(collectedSample.getId());
-//    List<BloodTest> allBloodTests = bloodTestRepository.getAllBloodTests();
-//    boolean tested = true;
-//    for (BloodTest bt: allBloodTests) {
-//      TestResult t = testResults.get(bt.getName());
-//      if (t == null) {
-//        tested = false;
-//        break;
-//      }
-//      if (!bt.getAllowedResults().contains(t.getResult())) {
-//        tested = false;
-//        break;
-//      }
-//    }
-//    if (tested)
-//      collectedSample.setTestedStatus(TestedStatus.TESTED);
-//    else
-//      collectedSample.setTestedStatus(TestedStatus.NOT_TESTED);
-    collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
   }
 
   public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {

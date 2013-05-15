@@ -750,6 +750,12 @@ tr > td
 	color: white;
 }
 
+.wellWithInvalidData {
+	background-color: rgb(0, 100, 44);
+	border-color: red;
+	color: white;
+}
+
 .bloodTypingForCollectionSection {
 	background-color: rgb(212, 228, 227);
 	border-radius: 10px;

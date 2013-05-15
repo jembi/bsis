@@ -23,12 +23,24 @@ $(document).ready(function() {
   function focusOutOfWell() {
     if ($(this).val().length > 0) {
       $(this).addClass("wellWithData");
+      var testresult = $(this).val();
+      // valid results as an array
+     	var validresults = $(this).data("validresults").split(",");
+      var valid = false;
+      for (var index = 0; index < validresults.length; ++index) {
+        if (validresults[index] === testresult) {
+          valid = true;
+        }
+      }
+      if (!valid)
+        $(this).addClass("wellWithInvalidData");
     }
   }
 
   $("#${mainContentId}").find(".wellInput").focus(function() {
     if ($(this).val().length > 0) {
       $(this).removeClass("wellWithData");
+      $(this).removeClass("wellWithInvalidData");
     }
   });
 
