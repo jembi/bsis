@@ -12,25 +12,21 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.events.CollectionAddedEvent;
+import repository.events.CollectionUpdatedEvent;
 
 @Repository
 @Transactional
-public class CollectionAddedEventListener implements ApplicationListener<CollectionAddedEvent> {
+public class CollectionUpdatedEventListener implements ApplicationListener<CollectionUpdatedEvent> {
 
   @PersistenceContext
   private EntityManager em;
   
   @Override
-  public void onApplicationEvent(CollectionAddedEvent event) {
-    System.out.println("collection added event listener called");
-    System.out.println("event ID: " + event.getEventId());
-    System.out.println("event context: " + event.getEventContext());
+  public void onApplicationEvent(CollectionUpdatedEvent event) {
     updateDonor(event);
   }
 
-  private void updateDonor(CollectionAddedEvent event) {
-    System.out.println("Updating donor date of last donation");
+  private void updateDonor(CollectionUpdatedEvent event) {
     CollectedSample c = (CollectedSample) event.getEventContext();
     Donor donor = c.getDonor();
     if (donor == null)

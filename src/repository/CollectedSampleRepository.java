@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
-import repository.events.CollectionAddedEvent;
+import repository.events.CollectionUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -68,6 +68,8 @@ public class CollectedSampleRepository {
     }
     existingCollectedSample.copy(collectedSample);
     existingCollectedSample = em.merge(existingCollectedSample);
+    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+    applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.flush();
     return existingCollectedSample;
   }
@@ -332,7 +334,7 @@ public class CollectedSampleRepository {
     em.persist(collectedSample);
     em.flush();
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new CollectionAddedEvent("10", collectedSample));
+    applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.refresh(collectedSample);
     return collectedSample;
   }
@@ -360,10 +362,12 @@ public class CollectedSampleRepository {
   }
 
   public List<CollectedSample> addAllCollectedSamples(List<CollectedSample> collectedSamples) {
+    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     for (CollectedSample c : collectedSamples) {
       c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       c.setTTIStatus(TTIStatus.NOT_DONE);
       em.persist(c);
+      applicationContext.publishEvent(new CollectionUpdatedEvent("10", c));
       em.refresh(c);
     }
     em.flush();

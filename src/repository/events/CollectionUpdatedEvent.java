@@ -1,11 +1,11 @@
 package repository.events;
 
 
-public class CollectionAddedEvent extends AbstractApplicationEvent {
+public class CollectionUpdatedEvent extends AbstractApplicationEvent {
 
   private static final long serialVersionUID = 1L;
 
-  public CollectionAddedEvent(String eventId, Object eventContext) {
+  public CollectionUpdatedEvent(String eventId, Object eventContext) {
     super(eventId, eventContext);
     System.out.println("Event created");
     System.out.println("eventId: " + eventId);
