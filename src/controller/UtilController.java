@@ -159,7 +159,7 @@ public class UtilController {
           if (fieldValue == null ||
               (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))
              ) {
-            errors.rejectValue(formName + "." + requiredField, "requiredField.error", "This field is required");
+            errors.rejectValue(formName + "." + requiredField, "requiredField.error", "This information is required");
           }
         }
       }

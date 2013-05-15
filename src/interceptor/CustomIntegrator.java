@@ -10,6 +10,12 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Read about integrators here:
+ * http://docs.jboss.org/hibernate/orm/4.1/devguide/en-US/html_single/#integrators
+ * http://stackoverflow.com/a/11672377/161628
+ * @author iamrohitbanga
+ */
 public class CustomIntegrator implements Integrator {
 
   static final Logger logger = LoggerFactory.getLogger(CustomIntegrator.class);
