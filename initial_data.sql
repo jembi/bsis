@@ -867,17 +867,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("dateFormat", "MM/dd/yy", "page"),
 ("dateTimeFormat", "MM/dd/yy hh:mm:ss a", "page"),
 
-("rowHeight", "30", "collectionsWorksheet"),
-("columnWidth", "100", "collectionsWorksheet"),
-("collectionNumber", "true", "collectionsWorksheet"),
-("testedOn", "false", "collectionsWorksheet"),
-("Blood ABO", "true", "collectionsWorksheet"),
-("Blood Rh", "true", "collectionsWorksheet"),
-("HIV", "true", "collectionsWorksheet"),
-("HBV", "true", "collectionsWorksheet"),
-("HCV", "true", "collectionsWorksheet"),
-("Syphilis", "true", "collectionsWorksheet"),
-
 ("haemoglobinUnit", "g/dL", "measurementUnit"),
 ("bloodPressureUnit", "mmHg", "measurementUnit"),
 

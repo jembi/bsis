@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.admin.ConfigPropertyConstants;
 import model.collectedsample.CollectedSample;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -533,29 +532,6 @@ public class CollectedSampleController {
 
     mv.addObject("model", m);
     
-    return mv;
-  }
-
-  @RequestMapping(value="/findCollectionsWorksheet", method=RequestMethod.GET)
-  public ModelAndView findCollectionsWorksheet(HttpServletRequest request, Model model,
-      @RequestParam(value="worksheetBatchId") String worksheetBatchId) {
-
-    List<CollectedSample> collectedSamples = collectedSampleRepository.findCollectionsInWorksheet(worksheetBatchId);
-    ModelAndView mv = new ModelAndView("collectionsWorksheet");
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    if (collectedSamples == null) {
-      m.put("worksheetFound", false);
-    } else {
-      m.put("worksheetFound", true);
-      m.put("allCollectedSamples", getCollectionViewModels(collectedSamples));
-      List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
-      m.put("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
-    }
-
-    m.put("worksheetBatchId", worksheetBatchId);
-    mv.addObject("model", m);
-
     return mv;
   }
 }

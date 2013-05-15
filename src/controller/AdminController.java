@@ -663,58 +663,6 @@ public class AdminController {
     return mv;
   }
 
-  @RequestMapping(value="/configureWorksheetsFormGenerator", method=RequestMethod.GET)
-  public ModelAndView configureWorksheetsFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
-
-    ModelAndView mv = new ModelAndView("admin/configureWorksheets");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-
-    List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
-    Map<String, String> worksheetProperties = genericConfigRepository.getConfigProperties(propertyOwners);
-    m.put("worksheetConfig", worksheetProperties);    
-//    m.put("bloodTests", bloodTestRepository.getAllBloodTests());
-
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping(value="/configureWorksheets")
-  public @ResponseBody Map<String, Object> configureWorksheet(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @RequestParam Map<String, String> params) {
-
-    Map<String, Object> result = new HashMap<String, Object>();
-    try {
-      Long.parseLong(params.get(ConfigPropertyConstants.COLLECTIONS_WORKSHEET_ROW_HEIGHT));
-      Long.parseLong(params.get(ConfigPropertyConstants.COLLECTIONS_WORKSHEET_COLUMN_WIDTH));
-
-      if (!params.containsKey("collectionNumber"))
-        params.put("collectionNumber", "false");
-
-      if (!params.containsKey("testedOn"))
-        params.put("testedOn", "false");
-
-//      for (BloodTest bt : bloodTestRepository.getAllBloodTests()) {
-//        if (!params.containsKey(bt.getName()))
-//          params.put(bt.getName(), "false");
-//      }
-
-      genericConfigRepository.updateWorksheetProperties(params);
-      result.put("success", true);
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      result.put("success", false);
-    }
-
-    return result;
-  }
-
   @RequestMapping(value="/adminWelcomePageGenerator")
   public ModelAndView adminWelcomePageGenerator(HttpServletRequest request, Model model) {
     ModelAndView mv = new ModelAndView("admin/adminWelcomePage");
