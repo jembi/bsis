@@ -129,7 +129,7 @@
   </div>
   </c:if>
 
-  <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+  <sec:authorize access="hasRole('PERM_EDIT_CONFIGURATION')">
     <div id="adminLandingPageContent">
       <jsp:include page="admin/admin.jsp" />
     </div>

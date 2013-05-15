@@ -27,6 +27,7 @@ public class LoginController {
   @RequestMapping("/welcomePage")
   public ModelAndView welcomePage(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("welcomePage");
+    // for showing the version number on the home page. see welcomePage.jsp and topPanel.jsp.
     mv.addObject("versionNumber", UtilController.VERSION_NUMBER);
     mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
     return mv;
