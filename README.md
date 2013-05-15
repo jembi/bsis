@@ -47,6 +47,9 @@ Development Environment
     * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. In Eclipse, select Help>Install New Software and add the site http://download.eclipse.org/technology/m2e/releases to add the m2eclipse plugin.Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
     * Import the source code into Eclipse by using 'Import Existing project' option. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
     * If there are issues with Maven dependencies, try run > mvn dependency:tree in the Workspace folder of the V2V project (see http://stackoverflow.com/questions/4262186/missing-maven-dependencies-in-eclipse-project).
+    * Sometimes we get NoClassDefFound errors for ContextLoaderListener and some other classes. To fix this error right click Project, select properties, then Deployment Assembly and then add Maven Dependencies to WEB-INF/lib. This should fix the errors.
+      http://stackoverflow.com/questions/6083501/maven-dependencies-not-visible-in-web-inf-lib
+      Note that the Maven Dependencies are removed from Deployment Assembly and need to readded when Maven update project is run.
     * On your local system `V2V/build.properties` will get modified depending on where Apache Tomcat is installed. May be making build.properties an untracked file would be a good idea.
 2. You will also need to setup a MySQL database and specify this configuration in the following files:
     * `V2V/src/database.properties` should contain your database connection information. Please note this should be an untracked file.
