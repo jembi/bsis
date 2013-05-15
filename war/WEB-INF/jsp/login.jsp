@@ -36,6 +36,11 @@
       <div class="loginPanel">
         <div class="centralContent">
           <div id="login">
+            <c:if test="${not empty param.error}">
+              <jsp:include page="common/errorBox.jsp">
+                <jsp:param name="errorMessage" value="Your login attempt was not successful, try again." />
+              </jsp:include>
+            </c:if>
 
           <form action="<c:url value='j_spring_security_check' />"
               id="loginAction" method="POST">

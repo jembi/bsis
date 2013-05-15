@@ -864,6 +864,10 @@ insert into CrossmatchType (crossmatchType, isDeleted) values
 ('Anti Human Globulin', '0');
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
+("rowHeight", "30", "collectionsWorksheet"),
+("columnWidth", "100", "collectionsWorksheet"),
+("collectionNumber", "true", "collectionsWorksheet"),
+
 ("haemoglobinUnit", "g/dL", "measurementUnit"),
 ("bloodPressureUnit", "mmHg", "measurementUnit"),
 

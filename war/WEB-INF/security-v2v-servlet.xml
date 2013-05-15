@@ -19,7 +19,7 @@
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />
     <form-login login-page="/login.html"
                 default-target-url="/welcomePage.html"
-                authentication-failure-url="/login.html"
+                authentication-failure-url="/login.html?error=true"
                 always-use-default-target="true" />
   </http>
 
