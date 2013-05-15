@@ -19,3 +19,18 @@
 .loginPanel {
 	margin: 50px -250px 0;
 }
+
+.errorBox {
+	margin: 6px;
+	font-family: 'helvetica';
+	border-color: red;
+	border-style: dotted;
+	border-radius: 5px;
+	padding-left: 8px;
+	padding-right: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 80%;
+}
