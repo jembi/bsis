@@ -69,7 +69,7 @@
   
 
   <div id="homeLandingPageContent" class="centerContent" style="padding: 20px;">
-    <h3>Welcome to Vein-To-Vein - ${model.versionNumber}</h3>
+    <h3>Welcome to Vein-To-Vein - ${versionNumber}</h3>
     <div class="infoMessage">
       C4G Vein-to-Vein (V2V) is a system to monitor blood inventory from collection to transfusion.
       <br /> 
