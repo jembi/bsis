@@ -49,7 +49,7 @@ import utils.DonorUtils;
 
 @Component
 public class UtilController {
-  public static final String VERSION_NUMBER = "1.2";
+  public static final String VERSION_NUMBER = "1.3";
 
   @Autowired
   private FormFieldRepository formFieldRepository;
