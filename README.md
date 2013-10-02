@@ -1,14 +1,14 @@
 BSIS
 ====
 
-BSIS (Blood Safety Information System) was a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech, under the name V2V (Vein to Vein). The project is now maintained by Jembi Health Systems in South Africa.
+BSIS (Blood Safety Information System) was a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech, under the name V2V (Vein to Vein). The project is now maintained by [Jembi Health Systems](http://www.jembi.org) in South Africa.
 
 # Background
 BSIS is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
 
-![Lifecycle of Donated Blood] (https://raw.github.com/C4G/BSIS/master/lifecycle_blood.png)
+![Lifecycle of Donated Blood] (https://raw.github.com/jembi/bsis/master/lifecycle_blood.png)
 
-The software is being developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa.
+The software was developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa, and is now developed and maintained by Jembi Health Systems (JHS) in South Africa.
 
 # [Video Introduction to BSIS] (http://www.youtube.com/watch?v=O_zIIXepPHc)
 
