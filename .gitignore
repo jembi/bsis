@@ -1,5 +1,12 @@
-*.class
-
 # Package Files #
 *.war
 *.ear
+
+.DS_Store
+.classpath
+.project
+.settings/
+target/
+~/
+src/database.properties
+build.properties
