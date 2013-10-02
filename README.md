@@ -1,16 +1,16 @@
-V2V
-===
+BSIS
+====
 
-C4G Vein-to-Vein (V2V) is a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech.
+BSIS (Blood Safety Information System) was a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech, under the name V2V (Vein to Vein). The project is now maintained by Jembi Health Systems in South Africa.
 
 # Background
-V2V is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
+BSIS is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
 
-![Lifecycle of Donated Blood] (https://raw.github.com/C4G/V2V/master/lifecycle_blood.png)
+![Lifecycle of Donated Blood] (https://raw.github.com/C4G/BSIS/master/lifecycle_blood.png)
 
 The software is being developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa.
 
-# [Video Introduction to V2V] (http://www.youtube.com/watch?v=O_zIIXepPHc)
+# [Video Introduction to BSIS] (http://www.youtube.com/watch?v=O_zIIXepPHc)
 
 ## Problems related to blood supply in Africa
 * Unsafe blood can lead to disease transmissions
@@ -28,7 +28,7 @@ The software is being developed at Georgia Tech as part of the C4G program in co
  * Developing intuitive and easy-to-use admin. Cannot depend on an onsite admin to configure databases.
 
 ## Solution
-The challenges listed above have influenced the design of V2V and the following design features have resulted.
+The challenges listed above have influenced the design of BSIS and the following design features have resulted.
  * Develop a browser based but locally deployable solution to avoid dependence on Internet
  * Smaller upgrade package size to allow 
  * Make features configurable so that blood processing centers can turn them on/off based on their current practice
@@ -46,16 +46,16 @@ Development Environment
     * Fork and clone the master branch into a local directory preferrably housed in your eclipse workspace.
     * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. In Eclipse, select Help>Install New Software and add the site http://download.eclipse.org/technology/m2e/releases to add the m2eclipse plugin.Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
     * Import the source code into Eclipse by using 'Import Existing project' option. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
-    * If there are issues with Maven dependencies, try run > mvn dependency:tree in the Workspace folder of the V2V project (see http://stackoverflow.com/questions/4262186/missing-maven-dependencies-in-eclipse-project).
+    * If there are issues with Maven dependencies, try run > mvn dependency:tree in the Workspace folder of the BSIS project (see http://stackoverflow.com/questions/4262186/missing-maven-dependencies-in-eclipse-project).
     * Sometimes we get NoClassDefFound errors for ContextLoaderListener and some other classes. To fix this error right click Project, select properties, then Deployment Assembly and then add Maven Dependencies to WEB-INF/lib. This should fix the errors.
       http://stackoverflow.com/questions/6083501/maven-dependencies-not-visible-in-web-inf-lib
       Note that the Maven Dependencies are removed from Deployment Assembly and need to readded when Maven update project is run.
-    * On your local system `V2V/build.properties` will get modified depending on where Apache Tomcat is installed. May be making build.properties an untracked file would be a good idea.
+    * On your local system `BSIS/build.properties` will get modified depending on where Apache Tomcat is installed. May be making build.properties an untracked file would be a good idea.
 2. You will also need to setup a MySQL database and specify this configuration in the following files:
-    * `V2V/src/database.properties` should contain your database connection information. Please note this should be an untracked file.
-    * `V2V/war/WEB-INF/classes/META-INF/persistence.xml` should contain your database connection information
-    * `V2V/war/v2v.properties` Should contain the path of your MySQL binaries and database connection information, used to create backup programmatically from inside the webapp
-    * You may use the script `V2V/resetDatabase.sh` to setup your database intially. Note this script will work only a linux system. If you are developing on Windows then you may have to write a new batch script. The file `ddl_mysql.sql` is autogenerated using the class `V2V/src/datagenerator/SchemaGenerator`.
+    * `BSIS/src/database.properties` should contain your database connection information. Please note this should be an untracked file.
+    * `BSIS/war/WEB-INF/classes/META-INF/persistence.xml` should contain your database connection information
+    * `BSIS/war/BSIS.properties` Should contain the path of your MySQL binaries and database connection information, used to create backup programmatically from inside the webapp
+    * You may use the script `BSIS/resetDatabase.sh` to setup your database intially. Note this script will work only a linux system. If you are developing on Windows then you may have to write a new batch script. The file `ddl_mysql.sql` is autogenerated using the class `BSIS/src/datagenerator/SchemaGenerator`.
 
 Important Coding Conventions
 ----------------------------
