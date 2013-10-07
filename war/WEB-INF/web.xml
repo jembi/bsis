@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 
-    <display-name>Spring3MVC</display-name>
+    <display-name>Blood Safety Information System (BSIS)</display-name>
 
     <!-- ContextLoaderListener can load multiple files listed in contextConfigLocation.
          Spring MVC configuration is loaded by DispatcherServlet and not by ContextLoaderListener.  -->

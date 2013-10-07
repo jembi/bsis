@@ -1,11 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>v2v</groupId>
-  <artifactId>v2v</artifactId>
-  <version>1.2</version>
-  <name>V2V</name>
-  <description>C4G Vein-to-Vein</description>
+  <groupId>bsis</groupId>
+  <name>BSIS</name>
+  <description>Blood Safety Information System (BSIS)</description>
+  <artifactId>bsis</artifactId>
+  <version>0.1</version>
+  <packaging>war</packaging>
+  
+  <properties>
+      <webapp.name>bsis</webapp.name>
+   </properties>
+  
   <build>
+  	<finalName>${webapp.name}</finalName>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
@@ -24,9 +31,59 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      <plugin>            
+  		  <groupId>org.apache.maven.plugins</groupId>
+ 		  <artifactId>maven-war-plugin</artifactId>
+ 		  <version>2.4</version>
+		  <configuration>
+	      	<webXml>${basedir}/war/WEB-INF/web.xml</webXml>
+    		<warSourceDirectory>${basedir}/war</warSourceDirectory>    
+  		  </configuration>
+	  </plugin>
     </plugins>
   </build>
   <dependencies>
+	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>servlet-api</artifactId>
+	  <version>2.4</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-coyote</artifactId>
+		<version>7.0.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-api</artifactId>
+		<version>7.0.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-servlet-api</artifactId>
+		<version>7.0.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-juli</artifactId>
+		<version>7.0.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-util</artifactId>
+		<version>7.0.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-catalina</artifactId>
+		<version>7.0.5</version>
+		<scope>provided</scope>
+	</dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-c3p0</artifactId>
@@ -72,11 +129,11 @@
       <artifactId>joda-time</artifactId>
       <version>2.1</version>
     </dependency>
-    <dependency>
+	<dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
-    </dependency>
+   </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
