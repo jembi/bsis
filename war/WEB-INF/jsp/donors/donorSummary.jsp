@@ -22,6 +22,7 @@
       function() {
 
         showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+       // showDonorDeferrals();  display deferral history by default
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("donorSummarySuccess");
@@ -167,6 +168,10 @@
                        $("#${childContentId}")
                       );
         }
+        
+        function showDonorDeferralStatus() {
+        	
+        }
 
       });
 </script>
@@ -202,22 +207,32 @@
       </button>
     </div>
 
+    <!-- not needed  
     <div class="tipsBox ui-state-highlight">
       <p>
         ${tips['donors.finddonor.donorsummary']}
       </p>
     </div>
+    -->
+
+	  <c:if test="${isDonorCurrentlyDeferred}">
+        <div id="deferralStatus" class="tipsBox ui-state-highlight" style="font-size: 18px; color: #a12020; padding: 10px;">
+          Donor is currently deferred until ${donorLatestDeferredUntilDate}.
+          <br />
+        </div>
+      </c:if>
+
+  	<br />
+  	<div id="${childContentId}"></div>
+    <br />
 
     <jsp:include page="donorDetails.jsp" />
 
   </div>
 
-  <br />
-  <br />
 
-  <div id="${childContentId}"></div>
 </div>
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
-  Are  you sure you want to delete this Donor?
+  Are you sure you want to delete this Donor?
 </div>
