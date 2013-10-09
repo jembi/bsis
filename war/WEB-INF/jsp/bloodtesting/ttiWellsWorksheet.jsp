@@ -325,7 +325,7 @@ $(document).ready(function() {
       </jsp:include>
     </c:if>
 
-    <div style="width: 620px;">
+    <div style="width: 650px;">
       <div class="ttiPlate">
           <input style="width: ${ttiConfig['titerWellRadius']}px;height: ${ttiConfig['titerWellRadius']}px;
                      border-radius: ${ttiConfig['titerWellRadius']}px;

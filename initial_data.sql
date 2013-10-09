@@ -59,7 +59,7 @@ insert into FormField
 '0', '1',
 '0', '0',
 '0', '0'),
-('Donor', 'address', 'Address', '', 0,
+('Donor', 'address', 'Postal Address', '', 0,
 '0', '1',
 '0', '1',
 '0', '0',

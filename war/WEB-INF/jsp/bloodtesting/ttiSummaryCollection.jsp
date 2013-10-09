@@ -186,7 +186,7 @@ $(document).ready(function() {
             <div>
               <label>&nbsp;</label>
               <label style="width: auto; position: absolute; right: 10px;">
-                <span class="link showMachineReadings">Show machine results</span>
+                <span class="link showMachineReadings">Show machine outcomes</span>
               </label>
             </div>
           </c:if>

@@ -335,4 +335,20 @@ public class DonorRepository {
     List<DonorDeferral> donorDeferrals = getDonorDeferrals(donor.getId());
     return isCurrentlyDeferred(donorDeferrals);
   }
+  
+  public Date getLastDonorDeferralDate(Long donorId){
+	  List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
+	  
+	  if (deferrals == null){
+		  return null;
+	  }
+	  
+	  Date lastDeferredUntil = deferrals.get(0).getDeferredUntil();
+	  for(DonorDeferral deferral : deferrals){
+		  if( deferral.getDeferredUntil().after(lastDeferredUntil)){
+			  lastDeferredUntil = deferral.getDeferredUntil();
+		  }
+	  }
+	  return lastDeferredUntil;
+  }
 }
