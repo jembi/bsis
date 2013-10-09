@@ -127,8 +127,33 @@ $(document).ready(function() {
                         .click(function(event) {
                           saveTestResults(event, true);
                         });
-
+  
+  document.getElementById('well1').focus(); // onPageLoad - set focus on first well
 });
+
+function autoTab(field,fieldID){
+	
+	if(event.keyCode == 37 && fieldID > 1) {   // left key pressed
+		var prevFieldID = fieldID;
+		prevFieldID--;
+		document.getElementById('well' + prevFieldID).focus();
+	}
+	
+	else if(event.keyCode == 39) {   // right key pressed
+		var nextFieldID = fieldID;
+		nextFieldID++;
+		document.getElementById('well' + nextFieldID).focus();
+	}
+		
+	else if(field.value.length >= 1){ // value entered into current field
+		var nextFieldID = fieldID;
+		nextFieldID++;
+	    document.getElementById('well' + nextFieldID).focus();
+	}
+	
+};
+
+
 </script>
 
 <div id="${tabContentId}">
@@ -256,6 +281,7 @@ $(document).ready(function() {
 
       <br />
 
+	  <c:set var="wellNum" value="0" />
       <c:forEach var="rowNum" begin="1" end="${plate.numRows}">
           <!-- Top row style similar to input wells -->
           <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
@@ -264,7 +290,7 @@ $(document).ready(function() {
                      background: rgb(255, 208, 165);
                      color: black;
                      padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
-
+                     	  
           <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
             <c:set var="collection" value="${collections[colNum-1]}" />
             <div class="wellBox">
@@ -291,6 +317,7 @@ $(document).ready(function() {
                 <c:if test="${empty errorMap[collection.id][testId]}">
                   <c:set var="wellBorderColor" value="" />
                 </c:if>
+                <c:set var="wellNum" value="${wellNum + 1}" />
                   <input
                     style="width: ${bloodTypingConfig['titerWellRadius']}px; 
                            height: ${bloodTypingConfig['titerWellRadius']}px;
@@ -304,7 +331,10 @@ $(document).ready(function() {
                     data-collectionid="${collection.id}"
                     data-testid="${bloodTestsOnPlate[rowNum-1].id}"
                     value="${testResultValue}"
-                    class="wellInput" />
+                    class="wellInput" 
+                    id="well${wellNum}"
+                    onkeyup="autoTab(this,'${wellNum}')"
+                    />
               </c:if>
              </div>
           </c:forEach>

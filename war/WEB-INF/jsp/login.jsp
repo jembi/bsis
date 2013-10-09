@@ -31,7 +31,7 @@
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
-        <a href="/v2v">VEIN-TO-VEIN</a>
+        <a href="/bsis">Blood Safety Information System</a>
       </div>
       <div class="loginPanel">
         <div class="centralContent">
