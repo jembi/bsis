@@ -93,7 +93,7 @@ $(document).ready(function() {
   $("#${tabContentId}").bind("donorSummarySuccess",
       function(event, content) {
         $("#${mainContentId}").show();
-        $("#${addDonorContentId}").hide();
+        $("#${addDonorContentId}").show();
         $("#${childContentId}").html("");
         $("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
       });
