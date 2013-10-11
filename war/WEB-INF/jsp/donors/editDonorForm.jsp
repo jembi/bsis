@@ -137,7 +137,7 @@
         <div class="barcodeContainer"></div>
         <div>
           <form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
-          <form:input path="donorNumber" />
+          <form:label path="donorNumber" >${editDonorForm.donor.donorNumber}</form:label>
           <form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
         </div>
       </c:if>
