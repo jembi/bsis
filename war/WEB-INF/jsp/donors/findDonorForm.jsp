@@ -302,6 +302,10 @@ $(document).ready(function() {
           <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
           <form:input path="birthDate" class="birthDate"
                       value="${firstTimeRender ? model.donorFields.birthDate.defaultValue : ''}" />
+          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+          	${donorFields.birthDateEstimated.displayName}
+			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
+          </c:if>
         </div>
       </c:if>
       <c:if test="${model.donorFields.notes.hidden != true }">

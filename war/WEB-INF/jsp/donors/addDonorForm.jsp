@@ -194,6 +194,11 @@
           <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
           <form:input path="birthDate" class="birthDate"
                       value="${firstTimeRender ? donorFields.birthDate.defaultValue : ''}" />
+          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+          	${donorFields.birthDateEstimated.displayName}
+			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
+			<form:errors class="formError" path="donor.birthDateEstimated" delimiter=", "></form:errors>
+          </c:if>
           <form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
         </div>
       </c:if>

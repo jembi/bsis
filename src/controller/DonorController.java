@@ -338,6 +338,7 @@ public class DonorController {
     else {
       try {
         form.setIsDeleted(false);
+        
         Donor existingDonor = donorRepository.updateDonor(form.getDonor());
         if (existingDonor == null) {
           mv.addObject("hasErrors", true);
