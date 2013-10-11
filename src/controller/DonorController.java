@@ -252,7 +252,6 @@ public class DonorController {
     if (request.getServletPath().contains("addDonor")){
     	addDonorBool = true;
     }
-    System.err.println("///////////////////////////REQUEST.SERVLETPATH:" + request.getServletPath());
     
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
