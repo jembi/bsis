@@ -210,7 +210,7 @@ public class DonorController {
     return mv;
   }
 
-  @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
+  @RequestMapping(value = {"/addDonor", "/findDonor"}, method = RequestMethod.POST)
   public ModelAndView
         addDonor(HttpServletRequest request,
                  HttpServletResponse response,
@@ -246,16 +246,36 @@ public class DonorController {
       }
     }
 
+    // check if method originates from /addDonor or /findDonor
+    // if true - addDonor, if false - findDonor
+    Boolean addDonorBool = false;
+    if (request.getServletPath().contains("addDonor")){
+    	addDonorBool = true;
+    }
+    System.err.println("///////////////////////////REQUEST.SERVLETPATH:" + request.getServletPath());
+    
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
       mv.addObject("donor", getDonorsViewModel(savedDonor));
-      mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
+      if(addDonorBool){
+    	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
+      }
+      else {
+    	  mv.addObject("addAnotherDonorUrl", "findDonorFormGenerator.html");
+    	  mv.addObject("refreshUrl", "findDonorFormGenerator.html");
+      }
       mv.setViewName("donors/addDonorSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating donor. Please fix the errors noted below.");
       mv.addObject("firstTimeRender", false);
       mv.addObject("addDonorForm", form);
-      mv.addObject("refreshUrl", "addDonorFormGenerator.html");
+      if(addDonorBool){
+    	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
+      }
+      else {
+    	  mv.addObject("addAnotherDonorUrl", "findDonorFormGenerator.html");
+    	  mv.addObject("refreshUrl", "findDonorFormGenerator.html");
+      }
       mv.setViewName("donors/addDonorError");
     }
 
@@ -384,6 +404,9 @@ public class DonorController {
     FindDonorBackingForm form = new FindDonorBackingForm();
     form.setCreateDonorSummaryView(true);
     model.addAttribute("findDonorForm", form);
+   
+    DonorBackingForm dbform = new DonorBackingForm();
+
 
     ModelAndView mv = new ModelAndView("donors/findDonorForm");
     Map<String, Object> m = model.asMap();
@@ -394,6 +417,7 @@ public class DonorController {
     m.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
+    mv.addObject("addDonorForm", dbform);
     return mv;
   }
 

@@ -39,7 +39,14 @@
           }
         }).click(
             function() {
-                addNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+            	
+            	if ("${refreshUrl}" == "findDonorFormGenerator.html"){
+                    findAndAddNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+
+            	}
+            	else{
+                	addNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+            	}
             });
 
         $("#${mainContentId}").find(".clearFormButton")
