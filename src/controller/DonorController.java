@@ -101,7 +101,21 @@ public class DonorController {
     mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-
+    
+    
+    // include donor deferral status
+    List<DonorDeferral> donorDeferrals = null;
+    try {
+      donorDeferrals = donorRepository.getDonorDeferrals(donorId);  
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    Boolean isCurrentlyDeferred = donorRepository.isCurrentlyDeferred(donorDeferrals);
+    mv.addObject("isDonorCurrentlyDeferred", isCurrentlyDeferred);
+    if(isCurrentlyDeferred){
+    	mv.addObject("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(donorId));
+    }
+    
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     mv.addObject("tips", tips);

@@ -43,7 +43,7 @@
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
-        <a href="/v2v">VEIN-TO-VEIN</a>
+        <a href="/bsis">Blood Safety Information System</a>
       </div>
       <div class="headlink">
         <p class="topPanelUsername">Logged in as ${model.user.username}</p>
@@ -54,7 +54,7 @@
         Only Admin can perform this operation. Please sign out and login as admin or
         contact the admin to perform this operation. 
         If you feel you are receiving this message in error, please <a
-          href="mailto:rohit.banga@gatech.edu, vempala@cc.gatech.edu"
+          href="mailto:support@jembi.org?subject=BSIS%20Support"
           target="_blank"> Contact Us </a>.
         <br />
         <br />
