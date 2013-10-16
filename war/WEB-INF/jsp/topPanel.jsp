@@ -69,16 +69,18 @@
   
 
   <div id="homeLandingPageContent" class="centerContent" style="padding: 20px;">
-    <h3>Welcome to Vein-To-Vein - ${versionNumber}</h3>
+    <h3>Welcome to BSIS - Blood Safety Information System - v${versionNumber}</h3>
     <div class="infoMessage">
-      C4G Vein-to-Vein (V2V) is a system to monitor blood inventory from collection to transfusion.
+      BSIS is a system to monitor blood inventory from collection to transfusion.
       <br /> 
-      A collaboration between the Computing For Good (C4G) program at Georgia Tech, the CDC and participating countries.
+      Started as a collaboration between the Computing For Good (C4G) program at Georgia Tech and the Centers for Diseases Control and Prevention (CDC), the application is now maintained, developed and managed by Jembi Health Systems (JHS), in partnership with Safe Blood for Africa (SBFA) and the Centers for Diseases Control (CDC).
       <br />
       <br />
-      About <a
+      About - <a
         href="http://www.cc.gatech.edu/about/advancing/c4g/" target="_blank">
-        C4G</a>.
+        C4G</a> | <a
+        href="http://www.jembi.org" target="_blank">
+        Jembi</a>
     </div>
   </div>
 

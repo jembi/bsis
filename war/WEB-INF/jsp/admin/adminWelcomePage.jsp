@@ -23,7 +23,7 @@
     <br/>
     <br/>
     <br/>
-    To access V2V from another computer visit the following location in a supported web browser (Firefox/Google Chrome)
+    To access BSIS from another computer visit the following location in a supported web browser (Firefox/Google Chrome)
     <c:forEach var="serverAddress" items="${model.serverAddresses}">
       <br />
       <a href="${serverAddress}" target="_blank"><b>${serverAddress}</b></a>
