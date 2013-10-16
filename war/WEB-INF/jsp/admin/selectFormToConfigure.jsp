@@ -48,7 +48,7 @@
   <div class="tipsBox ui-state-highlight">
     <p>
       Customize the properties of data entry forms. Hide unneeded fields.
-      Select which field values must be provided in order to enter data successfully into V2V.
+      Select which field values must be provided in order to enter data successfully into BSIS.
       Also specify default values for some fields. 
     </p>
   </div>
