@@ -14,7 +14,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V - First Time Configuration Wizard</title>
+<title>BSIS - First Time Configuration Wizard</title>
 <link type="text/css" rel="stylesheet" href="css/common.css" />
 <link type="text/css" rel="stylesheet" href="css/topPanel.css" />
 <link type="text/css" rel="stylesheet"

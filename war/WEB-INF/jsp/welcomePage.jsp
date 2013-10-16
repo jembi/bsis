@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V</title>
+<title>BSIS</title>
 <jsp:include page="commonHeadIncludes.jsp" flush="true" />
 </head>
 <body style="margin-top: 2px;">
