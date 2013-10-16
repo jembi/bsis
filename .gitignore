@@ -8,5 +8,3 @@
 .settings/
 target/
 ~/
-src/database.properties
-build.properties
