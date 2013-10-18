@@ -257,7 +257,9 @@ function autoTab(field,fieldID){
 
       </div>
     </c:if>
-
+<table width="100%">
+<tr>
+<td width="50%">
     <div class="bloodTypingPlate">
         <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
                    border-radius: ${bloodTypingConfig['titerWellRadius']}px;
@@ -355,17 +357,13 @@ function autoTab(field,fieldID){
         Clear form
       </button>
     </div>
-
-
-    <br />
-    <span style="font-size: 15pt; font-weight: bold;">List of collection numbers by column in titer plate</span>
-    <br />
-    <br />
+</td>
+<td width="50%">
     <table style="width: 40%" class="simpleTable">
       <thead>
         <tr>
-          <th>Column number</th>
-          <th>Collection Number in Column</th>
+          <th></th>
+          <th>Collection Number</th>
         </tr>
       </thead>
       <tbody>
@@ -385,7 +383,9 @@ function autoTab(field,fieldID){
         </c:forEach>
       </tbody>
     </table>
-
+</td>
+</tr>
+</table>
 
   </div>
 </div>
