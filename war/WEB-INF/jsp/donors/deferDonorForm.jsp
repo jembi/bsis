@@ -14,6 +14,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <c:set var="deferralReasonSelectorId">deferralReasonSelector-${unique_page_id}</c:set>
+<c:set var="deferPermanentlyId">deferPermanently-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function(){
@@ -31,7 +32,15 @@ $(document).ready(function(){
     selectedList : 1,
     header : false
   });
-
+  function toggleCheckboxPopulateDefaultValueForDeferUntil() {
+	  var isChecked = $("#${deferPermanentlyId}").is(":checked");
+      if (isChecked) {
+    	  $("#${tabContentId}").find(".deferUntil").val('01/01/2100');
+      }else{
+    	  $("#${tabContentId}").find(".deferUntil").val('');
+      }
+  }
+  $("#${deferPermanentlyId}").change(toggleCheckboxPopulateDefaultValueForDeferUntil);
 });
 </script>
 
@@ -42,9 +51,12 @@ $(document).ready(function(){
     <input name="donorId" type="hidden" value="${donorId}"/>
     <div>
       <label>Defer until</label>
-      <input name="deferUntil" class="deferUntil" value="${deferralUntilDate}" />
+      <input name="deferUntil" class="deferUntil" value="${deferralUntilDate}" id="deferUntilId"/>
     </div>
-
+	<div>
+	  <label>Defer permanently</label>
+	  <input type="checkbox" name="deferPermanently" id="${deferPermanentlyId}" class="deferPermanently" style="width:30px;">
+	</div>
     <div>
       <label>Deferral reason</label>
       <select name="deferralReasonId" id="${deferralReasonSelectorId}">
