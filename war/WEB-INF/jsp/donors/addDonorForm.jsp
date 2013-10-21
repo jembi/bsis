@@ -165,11 +165,9 @@
       <c:if test="${donorFields.gender.hidden != true }">
         <div>
           <form:label path="gender">${donorFields.gender.displayName}</form:label>
-          <form:select path="gender" id="${genderSelectorId}">
-            <form:option value="not_known" label="Not Known" />
+          <form:select path="gender" id="${genderSelectorId}">            
             <form:option value="male" label="Male" />
-            <form:option value="female" label="Female" />
-            <form:option value="not_applicable" label="Not Applicable" />
+            <form:option value="female" label="Female" />            
           </form:select>
           <form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
         </div>
