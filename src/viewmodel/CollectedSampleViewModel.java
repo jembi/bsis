@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
-
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
@@ -155,4 +154,19 @@ public class CollectedSampleViewModel {
     else
       return getBloodAbo() + getBloodRh();
   }
+  
+  public Integer getBloodPressureSystolic() {
+		return  collectedSample.getBloodPressureSystolic();
+	}
+	
+	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+	}
+	public Integer getBloodPressureDiastolic() {
+		return collectedSample.getBloodPressureDiastolic();
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+	}
 }

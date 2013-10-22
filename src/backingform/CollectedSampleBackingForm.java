@@ -362,4 +362,21 @@ public class CollectedSampleBackingForm {
   public void setUseParametersFromBatch(Boolean useParametersFromBatch) {
     this.useParametersFromBatch = useParametersFromBatch;
   }
+  
+  
+	public Integer getBloodPressureSystolic() {
+		return  collectedSample.getBloodPressureSystolic();
+	}
+	
+	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+	}
+	
+	public Integer getBloodPressureDiastolic() {
+		return collectedSample.getBloodPressureDiastolic();
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+	}
 }
