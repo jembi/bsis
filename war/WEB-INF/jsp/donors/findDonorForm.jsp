@@ -284,10 +284,8 @@ $(document).ready(function() {
           <form:label path="gender">${model.donorFields.gender.displayName}</form:label>
           <form:select path="gender" id="${genderSelectorId}">
           	<form:option value="" />
-            <form:option value="not_known" label="Not Known" />
             <form:option value="male" label="Male" />
             <form:option value="female" label="Female" />
-            <form:option value="not_applicable" label="Not Applicable" />
           </form:select>
         </div>
       </c:if>
