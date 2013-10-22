@@ -39,7 +39,14 @@
           }
         }).click(
             function() {
-                addNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+            	
+            	if ("${refreshUrl}" == "findDonorFormGenerator.html"){
+                    findAndAddNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+
+            	}
+            	else{
+                	addNewDonor($("#${addDonorFormId}")[0], "${tabContentId}", notifyParentSuccess);
+            	}
             });
 
         $("#${mainContentId}").find(".clearFormButton")
@@ -166,6 +173,7 @@
         <div>
           <form:label path="gender">${donorFields.gender.displayName}</form:label>
           <form:select path="gender" id="${genderSelectorId}">
+          	<form:option value="" />
             <form:option value="not_known" label="Not Known" />
             <form:option value="male" label="Male" />
             <form:option value="female" label="Female" />
@@ -186,6 +194,11 @@
           <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
           <form:input path="birthDate" class="birthDate"
                       value="${firstTimeRender ? donorFields.birthDate.defaultValue : ''}" />
+          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+          	${donorFields.birthDateEstimated.displayName}
+			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
+			<form:errors class="formError" path="donor.birthDateEstimated" delimiter=", "></form:errors>
+          </c:if>
           <form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
         </div>
       </c:if>
