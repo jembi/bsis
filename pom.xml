@@ -24,6 +24,7 @@
 		<liquibase.driver>com.mysql.jdbc.Driver</liquibase.driver>
 		<liquibase.username>root</liquibase.username>
 		<liquibase.password>root</liquibase.password>		
+		<liquibase.changeLogFile>liquibase/baselineAndChangeLog.xml</liquibase.changeLogFile>
 	</properties>
 
 	<build>
