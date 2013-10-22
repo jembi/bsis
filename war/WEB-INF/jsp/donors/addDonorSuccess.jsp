@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -17,6 +18,24 @@
 $(document).ready(function() {
   showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
 
+  
+  $("#${tabContentId}").find(".editButton").button(
+    {
+      icons : {
+        primary : 'ui-icon-pencil'
+      }
+    }).click(function() {
+
+    hideMainContent();
+    $("#${tabContentId}").bind("editDonorSuccess", editDonorDone);
+    $("#${tabContentId}").bind("editDonorCancel", editDonorDone);
+
+    fetchContent("editDonorFormGenerator.html",
+      {donorId: "${donor.id}"},
+      $("#${childContentId}")
+     );
+  });
+  
   $("#${tabContentId}").find(".printButton").button({
     icons : {
       primary : 'ui-icon-print'
@@ -40,7 +59,21 @@ $(document).ready(function() {
   }).click(function() {
     refetchContent("${addAnotherDonorUrl}", $("#${tabContentId}"));
   });
+  
+  function hideMainContent() {
+	    $("#${mainContentId}").remove();
+  }
 
+  function editDonorDone() {
+      emptyChildContent();
+      refetchContent("${refreshUrl}", $("#${tabContentId}"));
+      $("#${addDonorContentId}").show();
+  }
+  
+  function emptyChildContent() {
+      $("#${childContentId}").remove();
+  }
+  
 });
 </script>
 
@@ -52,12 +85,15 @@ $(document).ready(function() {
            style="height: 30px; padding-left: 10px; padding-right: 10px;" />
       <span class="successText">
         Donor added Successfully.
-        <br />
-        You can view the details below. Click "Add another donor" to add another donor.
       </span>
     </div>
     <div>
       <div class="summaryPageButtonSection" style="text-align: right;">
+      	<sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+	      <button type="button" class="editButton">
+	        Edit
+	      </button>
+	    </sec:authorize>
         <button type="button" class="doneButton">
           Done
         </button>
