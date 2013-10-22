@@ -16,7 +16,11 @@
   <c:if test="${donorFields.firstName.hidden != true }">
     <div>
       <label>${donorFields.firstName.displayName}</label>
-      <label>${donor.firstName}</label>
+      <label>
+       <c:if test="${donor.title != 'Blank' }">
+      		${donor.title} 
+       </c:if>
+       ${donor.firstName}</label>
     </div>
   </c:if>
   <c:if test="${donorFields.middleName.hidden != true }">
