@@ -171,4 +171,13 @@ public class DonorViewModel {
       return "";
     }
   }
+  
+  public String getDateOfFirstDonation() {
+    Date firstDonationDate = donor.getDateOfFirstDonation();
+    if (firstDonationDate != null) {
+      return CustomDateFormatter.getDateString(firstDonationDate);
+    } else {
+      return "";
+    }
+  }
 }

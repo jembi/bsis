@@ -88,6 +88,15 @@
           yearRange : "c-100:c0",
         });
 
+        $("#${addDonorFormId}").find(".dateOfFirstDonation").datepicker({
+            changeMonth : true,
+            changeYear : true,
+            minDate : -36500,
+            maxDate : 0,
+            dateFormat : "dd/mm/yy",
+            yearRange : "c-100:c0",
+          });
+        
         function getDonorPanelSelector() {
           return $("#${tabContentId}").find('select[name="donorPanel"]').multiselect();
         }
@@ -195,6 +204,13 @@
           <form:input path="age"
                       value="${firstTimeRender ? donorFields.age.defaultValue : ''}" /> years
           <form:errors class="formError" path="age" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      <c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
+        <div>
+          <form:label path="dateOfFirstDonation">${donorFields.dateOfFirstDonation.displayName}</form:label>
+          <form:input path="dateOfFirstDonation" class="dateOfFirstDonation"
+                      value="${firstTimeRender ? donorFields.dateOfFirstDonation.defaultValue : ''}" />
         </div>
       </c:if>
       <c:if test="${donorFields.address.hidden != true }">
