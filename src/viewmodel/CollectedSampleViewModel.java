@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
-
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
@@ -155,4 +154,12 @@ public class CollectedSampleViewModel {
     else
       return getBloodAbo() + getBloodRh();
   }
+  
+  public Integer getDonorPulse() {
+		return collectedSample.getDonorPulse();
+	}
+
+	public void setDonorPulse(Integer donorPulse) {
+		collectedSample.setDonorPulse(donorPulse);
+	}
 }
