@@ -1,12 +1,12 @@
 package viewmodel;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
-
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
@@ -155,4 +155,11 @@ public class CollectedSampleViewModel {
     else
       return getBloodAbo() + getBloodRh();
   }
+  public BigDecimal getHaemoglobinCount() {
+		return collectedSample.getHaemoglobinCount();
+	}
+	
+	public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+		collectedSample.setHaemoglobinCount(haemoglobinCount);
+	}
 }

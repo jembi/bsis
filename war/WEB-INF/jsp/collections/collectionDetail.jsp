@@ -79,6 +79,13 @@
     </div>
   </sec:authorize>
 
+	<c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+		<div>
+			<label>${collectionFields.haemoglobinCount.displayName}</label>
+		  <label>${collectedSample.haemoglobinCount}</label>
+		</div>
+	</c:if>
+	
   <c:if test="${collectionFields.notes.hidden != true }">
     <div>
       <label>${collectionFields.notes.displayName}</label>
