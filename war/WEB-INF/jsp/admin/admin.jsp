@@ -50,6 +50,9 @@
     <li id="requestTypesForm">
       <a href="configureRequestTypesFormGenerator.html">Request Types</a>
     </li>
+    <li id="requestTypesForm">
+      <a href="configureProductStatusFormGenerator.html">Product Discards & <br/> Returns</a>
+    </li>
     <li id="crossmatchTypesForm">
       <a href="configureCrossmatchTypesFormGenerator.html">Crossmatch Types</a>
     </li>

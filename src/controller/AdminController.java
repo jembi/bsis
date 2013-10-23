@@ -10,7 +10,6 @@ import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,13 +24,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
+import model.productmovement.ProductStatusChangeReason;
+import model.productmovement.ProductStatusChangeReasonCategory;
 import model.requesttype.RequestType;
 import model.tips.Tips;
 
@@ -56,6 +56,7 @@ import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LabSetupRepository;
 import repository.LocationRepository;
+import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import repository.RequestTypeRepository;
 import repository.TipsRepository;
@@ -115,6 +116,9 @@ public class AdminController {
   
   @Autowired
   UtilController utilController;
+  
+  @Autowired
+  ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -476,6 +480,10 @@ public class AdminController {
     m.put("allRequestTypes", requestTypesRepository.getAllRequestTypes());
   }
 
+  private void addAllProductStatusChangeReasonToModel(Map<String, Object> m) {
+	    m.put("allProductStatusChangeReasons", productStatusChangeReasonRepository.getAllProductStatusChangeReasons());
+	  }
+  
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
     m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
   }
@@ -707,6 +715,66 @@ public class AdminController {
         return new ArrayList<InetAddress>();
     }
     return listOfServerAddresses;
+  }
+  
+  @RequestMapping(value="/configureProductStatusFormGenerator", method=RequestMethod.GET)
+  public ModelAndView configureProductDiscardReturnReasonFormGenerator(
+      HttpServletRequest request, HttpServletResponse response,
+      Model model) {
+
+    ModelAndView mv = new ModelAndView("admin/configureProductReasonForm");
+    Map<String, Object> m = model.asMap();
+    addAllProductStatusChangeReasonToModel(m);
+    m.put("refreshUrl", getUrl(request));
+    mv.addObject("model", model);
+    m.put("productStatusChangeCategories", ProductStatusChangeReasonCategory.values());
+    return mv;
+  }
+  
+  @RequestMapping("/configureProductStatusChangeReasons")
+  public ModelAndView configureProductStatusChangeReasons(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="dataId") String paramsAsJsonFordataId,Model model) {
+    ModelAndView mv = new ModelAndView("admin/configureProductReasonForm");
+    System.out.println(paramsAsJsonFordataId);
+    List<ProductStatusChangeReason> allProductStatusChangeReason = new ArrayList<ProductStatusChangeReason>();
+    try {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> paramsId = new ObjectMapper().readValue(paramsAsJsonFordataId, HashMap.class);
+      System.out.println("paramsId.values()::::::"+paramsId.values());
+      
+       for (Object paramStrng : paramsId.values()) {
+       String splitArr[] = paramStrng.toString().split("~");
+       ProductStatusChangeReason productStatusChangeReasonObj = new ProductStatusChangeReason();
+        try {
+        	productStatusChangeReasonObj.setId(Integer.parseInt(splitArr[0]));
+        } catch (NumberFormatException ex) {
+          ex.printStackTrace();
+          productStatusChangeReasonObj.setId(null);
+        }
+        productStatusChangeReasonObj.setStatusChangeReason((String)splitArr[1]);
+        productStatusChangeReasonObj.setCategory(ProductStatusChangeReasonCategory.valueOf(splitArr[2].toString()));
+        if(Boolean.valueOf(splitArr[3].toString()) == true)
+        	productStatusChangeReasonObj.setIsDeleted(false);
+        else
+        	productStatusChangeReasonObj.setIsDeleted(true);
+        System.out.println(productStatusChangeReasonObj);
+        allProductStatusChangeReason.add(productStatusChangeReasonObj);
+       }
+      
+      productStatusChangeReasonRepository.saveAllProductStatusChangeReason(allProductStatusChangeReason);
+     
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    Map<String, Object> m = model.asMap();
+    addAllProductStatusChangeReasonToModel(m);
+    m.put("productStatusChangeCategories", ProductStatusChangeReasonCategory.values());
+    m.put("refreshUrl", "configureProductStatusFormGenerator.html");
+    mv.addObject("model", model);
+    return mv;
   }
 
 }

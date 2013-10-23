@@ -23,9 +23,9 @@ public class ProductStatusChangeReasonRepository {
 
   public List<ProductStatusChangeReason> getAllProductStatusChangeReasons() {
     TypedQuery<ProductStatusChangeReason> query;
-    query = em.createQuery("SELECT p from ProductStatusChangeReason p where p.isDeleted=:isDeleted",
+    query = em.createQuery("SELECT p from ProductStatusChangeReason p",
         ProductStatusChangeReason.class);
-    query.setParameter("isDeleted", false);
+   // query.setParameter("isDeleted", false);
     return query.getResultList();
   }
 
@@ -43,8 +43,8 @@ public class ProductStatusChangeReasonRepository {
   public ProductStatusChangeReason getProductStatusChangeReasonById(Integer id) {
     TypedQuery<ProductStatusChangeReason> query;
     query = em.createQuery("SELECT p from ProductStatusChangeReason p " +
-            "where p.id=:id AND p.isDeleted=:isDeleted", ProductStatusChangeReason.class);
-    query.setParameter("isDeleted", false);
+            "where p.id=:id", ProductStatusChangeReason.class);
+    //query.setParameter("isDeleted", false);
     query.setParameter("id", id);
     if (query.getResultList().size() == 0)
       return null;
@@ -63,4 +63,22 @@ public class ProductStatusChangeReasonRepository {
     }
     return statusChangeReasonMap;
   }
+  
+  public void saveAllProductStatusChangeReason(List<ProductStatusChangeReason> allproductStatusChangeReason) {
+	    for (ProductStatusChangeReason statusReasonObj: allproductStatusChangeReason) {
+	    	
+	    	ProductStatusChangeReason existingProductStatusChangeReasonCategory= getProductStatusChangeReasonById(statusReasonObj.getId());
+	        if (existingProductStatusChangeReasonCategory != null) {
+	        	existingProductStatusChangeReasonCategory.setStatusChangeReason(statusReasonObj.getStatusChangeReason());
+	        	existingProductStatusChangeReasonCategory.setCategory(statusReasonObj.getCategory());
+	        	existingProductStatusChangeReasonCategory.setIsDeleted(statusReasonObj.getIsDeleted());
+	          em.merge(existingProductStatusChangeReasonCategory);
+	        }
+	        else {
+	         
+	          em.persist(statusReasonObj);
+	        }
+	    }
+	    em.flush();
+	  }
 }
