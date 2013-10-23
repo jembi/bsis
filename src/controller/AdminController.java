@@ -10,7 +10,6 @@ import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTest;

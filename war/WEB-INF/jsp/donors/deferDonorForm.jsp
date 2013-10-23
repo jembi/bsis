@@ -18,15 +18,17 @@
 
 <script>
 $(document).ready(function(){
-  $("#${tabContentId}").find(".deferUntil").datepicker({
-    changeMonth : true,
-    changeYear : true,
-    minDate : 1,
-    maxDate : 60,
-    dateFormat : "dd/mm/yy",
-    yearRange : "c-100:c+1",
-  });
-
+  function createDatePickerForUntilDate()
+  {
+	  $("#${tabContentId}").find(".deferUntil").datepicker({
+		    changeMonth : true,
+		    changeYear : true,
+		    minDate : 1,
+		    maxDate : 60,
+		    dateFormat : "dd/mm/yy",
+		    yearRange : "c-100:c+1",
+		  }); 
+  }
   $("#${deferralReasonSelectorId}").multiselect({
     multiple : false,
     selectedList : 1,
@@ -36,11 +38,16 @@ $(document).ready(function(){
 	  var isChecked = $("#${deferPermanentlyId}").is(":checked");
       if (isChecked) {
     	  $("#${tabContentId}").find(".deferUntil").val('01/01/2100');
+    	  $("#${tabContentId}").find(".deferUntil").attr("readOnly","true");    
+    	  $("#${tabContentId}").find(".deferUntil").datepicker("destroy");
       }else{
     	  $("#${tabContentId}").find(".deferUntil").val('');
+    	  $("#${tabContentId}").find(".deferUntil").removeAttr("readOnly");
+    	  createDatePickerForUntilDate();
       }
   }
   $("#${deferPermanentlyId}").change(toggleCheckboxPopulateDefaultValueForDeferUntil);
+  createDatePickerForUntilDate();
 });
 </script>
 
