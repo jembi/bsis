@@ -11,19 +11,6 @@
 	<properties>
 		<webapp.name>bsis</webapp.name>
 		<cxf-version>2.2.10</cxf-version>
-		
-		<!--
-			Resources, which should be converted to ascii with unicode escape
-			sequences because they will be read by as Java properties. Note: no
-			replacing of tokens will be done on these files. According to
-			native2ascii docs, this can be a comma or space separated list of
-			file patterns. But more than one pattern does not seem to work.
-		-->
-		<NATIVE2ASCII-RESOURCES>*.properties</NATIVE2ASCII-RESOURCES>
-		<liquibase.url>jdbc:mysql://localhost:3306/v2v_new</liquibase.url>
-		<liquibase.driver>com.mysql.jdbc.Driver</liquibase.driver>
-		<liquibase.username>root</liquibase.username>
-		<liquibase.password>root</liquibase.password>		
 	</properties>
 
 	<build>
@@ -55,32 +42,25 @@
 					<warSourceDirectory>${basedir}/war</warSourceDirectory>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<version>2.0.3</version>
 				<configuration>
-					<driver>${liquibase.driver}</driver>
-					<url>${liquibase.url}</url>
-					<username>${liquibase.username}</username>
-					<password>${liquibase.password}</password>
+					<propertyFile>liquibase/liquibase.properties</propertyFile>
 				</configuration>
 				<executions>
 					<execution>
-            <id></id>
-            <phase>verify</phase>
-            <goals>
-              <goal>update</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-            	<changeLogFile>liquibase/baselineAndChangeLog.xml</changeLogFile>
-            </configuration>
-          </execution>					
+						<id></id>
+						<phase>verify</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 	<dependencies>
@@ -385,12 +365,12 @@
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>3.1.4.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>2.0.3</version>					
+			<version>2.0.3</version>
 		</dependency>
-		
-	</dependencies>	
+
+	</dependencies>
 </project>

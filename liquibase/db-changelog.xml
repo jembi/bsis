@@ -19,13 +19,13 @@
 
 	<changeSet author="devang" id="2013-10-18-01">
 		<sql>
-			CREATE TABLE TEMPTABLE (  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,  
+			CREATE TABLE TEMPTABLE ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
 			`username` VARCHAR(50) NOT NULL,
-  			PRIMARY KEY (`id`)  
+			PRIMARY KEY (`id`)
 			)
-		</sql>			
+		</sql>
 	</changeSet>
 	<changeSet id="2013-10-19-01" author="devang">
-		<dropTable tableName="TEMPTABLE"/>
-	</changeSet>	
+		<dropTable tableName="TEMPTABLE" />
+	</changeSet>
 </databaseChangeLog>	
