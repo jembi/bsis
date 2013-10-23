@@ -80,9 +80,26 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
         errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
-    
+    validateRangeDonorWeight(form,errors);
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }
+  
+private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors errors) {
+  	boolean flag=false;
+  	if(form.getDonorWeight()==null){
+  		flag=true;
+  	}
+  	if(form.getDonorWeight()!=null && !(form.getDonorWeight().doubleValue() >= 0 && form.getDonorWeight().doubleValue() <= 300)){
+  		flag=true;
+  	}
+  	
+  	if(flag){
+  		errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"DonorWeight value should be enter numeric between 0 to 300.0.");
+  		return;
+  	}
+  	return;
+  	
+}
 
   private void inheritParametersFromCollectionBatch(
       CollectedSampleBackingForm form, Errors errors) {

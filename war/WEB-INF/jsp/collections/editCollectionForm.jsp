@@ -284,6 +284,13 @@
           <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
         </div>
       </c:if>
+      <c:if test="${collectionFields.donorWeight.hidden != true }">
+        <div>
+          <form:label path="donorWeight">${collectionFields.donorWeight.displayName}</form:label>
+          <form:input path="donorWeight" value="${firstTimeRender ? collectionFields.donorWeight.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorWeight" delimiter=", "></form:errors>
+        </div>
+      </c:if>
       <c:if test="${collectionFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
