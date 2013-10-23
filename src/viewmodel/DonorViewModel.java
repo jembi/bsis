@@ -171,4 +171,13 @@ public class DonorViewModel {
       return "";
     }
   }
+  
+  public Long getNumberOfDonations() {
+		return donor.getNumberOfDonations();
+	}
+
+	public void setNumberOfDonations(Long numberOfDonations) {
+		donor.setNumberOfDonations(numberOfDonations);
+	}
+	
 }

@@ -168,6 +168,9 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
 
+  @Column(nullable=false)
+  private Long numberOfDonations;
+  
   public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
@@ -502,4 +505,13 @@ public class Donor implements ModificationTracker {
   public void setDonorHash(String donorHash) {
     this.donorHash = donorHash;
   }
+
+	public Long getNumberOfDonations() {
+		return numberOfDonations;
+	}
+
+	public void setNumberOfDonations(Long numberOfDonations) {
+		this.numberOfDonations = numberOfDonations;
+	}
+  
 }

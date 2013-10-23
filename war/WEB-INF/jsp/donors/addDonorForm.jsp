@@ -293,7 +293,15 @@
           <form:errors class="formError" path="donor.donorPanel" delimiter=", "></form:errors>
         </div>
       </c:if>
-
+	
+	 <c:if test="${donorFields.numberOfDonations.hidden != true }">
+        <div>
+          <form:label path="numberOfDonations">${donorFields.numberOfDonations.displayName}</form:label>
+          <form:input path="numberOfDonations" value="${firstTimeRender ? donorFields.numberOfDonations.defaultValue : 0}" />
+            <form:errors class="formError" path="donor.numberOfDonations" delimiter=", "></form:errors>
+        </div>
+      </c:if>		
+		
       <c:if test="${donorFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${donorFields.notes.displayName}</form:label>

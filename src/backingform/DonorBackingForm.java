@@ -361,4 +361,17 @@ public class DonorBackingForm {
       }
     }
   }
+  
+	public Long getNumberOfDonations() {
+		return donor.getNumberOfDonations();
+	}
+
+	public void setNumberOfDonations(Long numberOfDonations) {
+		if(numberOfDonations == null){
+			donor.setNumberOfDonations(Long.valueOf("0"));
+		}
+		else{
+			donor.setNumberOfDonations(numberOfDonations);
+		}	
+	}
 }

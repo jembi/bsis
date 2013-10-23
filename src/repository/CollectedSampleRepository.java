@@ -329,7 +329,8 @@ public class CollectedSampleRepository {
   }
 
   public CollectedSample addCollectedSample(CollectedSample collectedSample) {
-    collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+  	collectedSample.getDonor().setNumberOfDonations(collectedSample.getDonor().getNumberOfDonations() + 1);
+  	collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     em.persist(collectedSample);
     em.flush();
