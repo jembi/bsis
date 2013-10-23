@@ -3,6 +3,7 @@ package controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -321,6 +322,11 @@ public class CollectedSampleController {
     } else {
       try {
         CollectedSample collectedSample = form.getCollectedSample();
+        
+        if(collectedSample.getDonor().getDateOfFirstDonation() == null){
+        	collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
+        }
+        
         collectedSample.setIsDeleted(false);
         savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
         mv.addObject("hasErrors", false);
