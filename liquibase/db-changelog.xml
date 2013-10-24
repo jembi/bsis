@@ -28,19 +28,38 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
-	<changeSet id="2013-10-24-01" author="nikita">
-	<delete tableName="deferralreason"></delete>
-	<sql>
-		ALTER TABLE deferralreason AUTO_INCREMENT=1;
-	</sql>
-	<sql>
-			INSERT INTO DeferralReason (reason, isDeleted) VALUES
-			("High risk behaviour",0),
-			("Low weight", 0),
-			("Low haemoglobin", 0),
-			("Other reasons", 0),
-			("Other medical conditions", 0),
-			("Travel history", 0);
-	</sql>
+	<changeSet id="201310241525" author="nikita">
+		<delete tableName="deferralreason"></delete>
+	</changeSet>
+	<changeSet id="201310241526" author="nikita">
+		<sql>
+			ALTER TABLE deferralreason AUTO_INCREMENT=1;
+		</sql>
+	</changeSet>
+	<changeSet id="201310241527" author="nikita">
+		<insert tableName="DeferralReason">
+        	<column name="reason" value="High risk behaviour"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Low weight"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Low haemoglobin"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Other reasons"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Other medical conditions"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Travel history"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
 	</changeSet>
 </databaseChangeLog>	
