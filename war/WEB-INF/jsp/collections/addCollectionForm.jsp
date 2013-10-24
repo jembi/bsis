@@ -107,10 +107,10 @@
           yearRange : "c-100:c0",
         });
 
-//        var collectedOnDatePicker = $("#${addCollectionFormId}").find(".collectedOn");
-//        if ("${existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
-//          collectedOnDatePicker.datepicker('setDate', new Date());
-//        }
+       var collectedOnDatePicker = $("#${addCollectionFormId}").find(".collectedOn");
+       if(collectedOn != null){	   
+         collectedOnDatePicker.datepicker('setDate', new Date());
+       }
 
         $("#${mainContentId}").find(".clearFormButton").button({
           icons : {
