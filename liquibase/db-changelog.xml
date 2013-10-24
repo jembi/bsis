@@ -28,4 +28,11 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	<!-- Fixes for issue 4 i.e. Remove' Whole Blood' from Add/Create Product Type list -->
+	<changeSet id="201310241503" author="devang">
+		<update tableName="ProductType">
+			<column name="isDeleted" value="1"></column>
+			<where>productType ='Whole Blood'</where>
+		</update>
+	</changeSet>
 </databaseChangeLog>	
