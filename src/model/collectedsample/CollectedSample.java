@@ -126,11 +126,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
-  @Column(precision=6, scale=2)
+  @Column(precision=7, scale=1)
   private BigDecimal haemoglobinCount;
 
-  @Column(precision=6, scale=2)
-  private BigDecimal bloodPressure;
+  @Column(name="bloodPressureSystolic")
+  private Integer bloodPressureSystolic;
 
   /**
    * Limit the number of bytes required to store.
@@ -249,6 +249,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
+    this.haemoglobinCount=collectedSample.haemoglobinCount;
   }
 
   public List<Product> getProducts() {
@@ -328,14 +329,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
-  }
-
-  public BigDecimal getBloodPressure() {
-    return bloodPressure;
-  }
-
-  public void setBloodPressure(BigDecimal bloodPressure) {
-    this.bloodPressure = bloodPressure;
   }
 
   public BigDecimal getDonorWeight() {
@@ -421,4 +414,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
+
+	public Integer getBloodPressureSystolic() {
+		return bloodPressureSystolic;
+	}
+
+	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
+	}
+  
 }

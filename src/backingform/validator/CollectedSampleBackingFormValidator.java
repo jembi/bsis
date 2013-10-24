@@ -80,10 +80,26 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
         errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
-    
+    validateRangeForHaemoglobinCount(form,errors);
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }
-
+  
+  private void validateRangeForHaemoglobinCount(CollectedSampleBackingForm form, Errors errors) {
+  	boolean flag=false;
+  	if(form.getHaemoglobinCount()==null){
+  		flag=true;
+  	}
+  	
+  	if(form.getHaemoglobinCount()!=null && !(form.getHaemoglobinCount().doubleValue() >= 0 && form.getHaemoglobinCount().doubleValue() <= 30.0)){
+  		flag=true;
+  	}
+  	if(flag){
+  		errors.rejectValue("collectedSample.haemoglobinCount","haemoglobinCount.incorrect" ,"HhaemoglobinCount value should be enter numeric between 0 to 30.0.");
+  	}
+  	return;
+  	
+}
+  
   private void inheritParametersFromCollectionBatch(
       CollectedSampleBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {

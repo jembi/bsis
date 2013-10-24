@@ -284,6 +284,13 @@
           <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
         </div>
       </c:if>
+      <c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+        <div>
+          <form:label path="haemoglobinCount">${collectionFields.haemoglobinCount.displayName}</form:label>
+          <form:input path="haemoglobinCount" value="${firstTimeRender ? collectionFields.haemoglobinCount.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
+        </div>
+      </c:if>
       <c:if test="${collectionFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
