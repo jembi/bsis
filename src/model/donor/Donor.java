@@ -113,6 +113,8 @@ public class Donor implements ModificationTracker {
 
   @Temporal(TemporalType.DATE)
   private Date birthDateInferred;
+  
+  private Boolean birthDateEstimated;
 
   /**
    * TODO: Not sure if age is used anymore
@@ -260,6 +262,7 @@ public class Donor implements ModificationTracker {
     contactInformation.copy(donor.getContactInformation());
     setBirthDate(donor.getBirthDate());
     setBirthDateInferred(donor.getBirthDateInferred());
+    setBirthDateEstimated(donor.getBirthDateEstimated());
     setNotes(donor.getNotes());
     setGender(donor.getGender());
     setPreferredContactMethod(donor.getPreferredContactMethod());
@@ -501,5 +504,13 @@ public class Donor implements ModificationTracker {
 
   public void setDonorHash(String donorHash) {
     this.donorHash = donorHash;
+  }
+
+  public Boolean getBirthDateEstimated() {
+	return birthDateEstimated;
+  }
+
+  public void setBirthDateEstimated(Boolean birthDateEstimated) {
+	this.birthDateEstimated = birthDateEstimated;
   }
 }
