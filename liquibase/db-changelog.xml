@@ -28,4 +28,19 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	<changeSet id="2013-10-24-01" author="nikita">
+	<delete tableName="deferralreason"></delete>
+	<sql>
+		ALTER TABLE deferralreason AUTO_INCREMENT=1;
+	</sql>
+	<sql>
+			INSERT INTO DeferralReason (reason, isDeleted) VALUES
+			("High risk behaviour",0),
+			("Low weight", 0),
+			("Low haemoglobin", 0),
+			("Other reasons", 0),
+			("Other medical conditions", 0),
+			("Travel history", 0);
+	</sql>
+	</changeSet>
 </databaseChangeLog>	
