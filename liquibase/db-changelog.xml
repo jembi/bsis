@@ -28,18 +28,41 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
-	<changeSet id="2013-10-24-01" author="nikita">
-	<sql>
-		DELETE FROM ProductStatusChangeReason WHERE category='DISCARDED';
-	</sql>
-	<sql>	
-		INSERT INTO ProductStatusChangeReason (statusChangeReason, category, isDeleted) VALUES
-		("Incomplete Donation", "DISCARDED", 0),
-		("Processing Problems", "DISCARDED", 0),
-		("Passed Expiry Dates", "DISCARDED", 0),
-		("Reactive FOR TTIs", "DISCARDED", 0),
-		("STORAGE Problems", "DISCARDED", 0),
-		("Transport Problems", "DISCARDED", 0);
-	</sql>
+	<changeSet id="201310241507" author="nikita">
+		<delete tableName="ProductStatusChangeReason">
+			<where>category='DISCARDED'</where>
+		</delete>
+	</changeSet>
+	<changeSet id="201310241508" author="nikita">
+		<insert tableName="ProductStatusChangeReason">
+            <column name="statusChangeReason" value="Incomplete Donation"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+    	</insert>
+    	<insert tableName="ProductStatusChangeReason">
+            <column name="statusChangeReason" value="Processing Problems"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+    	</insert>
+    	<insert tableName="ProductStatusChangeReason">
+            <column name="statusChangeReason" value="Passed Expiry Dates"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+    	</insert>
+    	<insert tableName="ProductStatusChangeReason">
+            <column name="statusChangeReason" value="Reactive FOR TTIs"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+    	</insert>
+    	<insert tableName="ProductStatusChangeReason">
+            <column name="statusChangeReason" value="STORAGE Problems"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+    	</insert>
+    	<insert tableName="ProductStatusChangeReason">
+            <column name="statusChangeReason" value="Transport Problems"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+    	</insert>
 	</changeSet>
 </databaseChangeLog>	
