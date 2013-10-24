@@ -11,6 +11,7 @@
 	<properties>
 		<webapp.name>bsis</webapp.name>
 		<cxf-version>2.2.10</cxf-version>
+		<liquibase.propertyFile>liquibase/liquibase.properties</liquibase.propertyFile>
 	</properties>
 
 	<build>
