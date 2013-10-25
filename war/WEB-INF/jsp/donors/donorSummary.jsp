@@ -41,7 +41,7 @@
 
             fetchContent("editDonorFormGenerator.html",
                          {donorId: "${donor.id}"},
-                         $("#${childContentId}")
+                         $("#${tabContentId}")
                         );
         });
 

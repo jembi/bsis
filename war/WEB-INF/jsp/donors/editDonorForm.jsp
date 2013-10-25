@@ -137,7 +137,7 @@
         <div class="barcodeContainer"></div>
         <div>
           <form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
-          <form:input path="donorNumber" />
+          <form:label path="donorNumber" >${editDonorForm.donor.donorNumber}</form:label>
           <form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
         </div>
       </c:if>
@@ -174,10 +174,8 @@
         <div>
           <form:label path="gender">${donorFields.gender.displayName}</form:label>
           <form:select path="gender" id="${genderSelectorId}">
-            <form:option value="not_known" label="Not Known" />
             <form:option value="male" label="Male" />
             <form:option value="female" label="Female" />
-            <form:option value="not_applicable" label="Not Applicable" />
           </form:select>
           <form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
         </div>
@@ -193,6 +191,11 @@
         <div>
           <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
           <form:input path="birthDate" class="birthDate" />
+          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+          	${donorFields.birthDateEstimated.displayName}
+			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
+			<form:errors class="formError" path="donor.birthDateEstimated" delimiter=", "></form:errors>
+          </c:if>
           <form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
         </div>
       </c:if>
