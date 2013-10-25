@@ -10,7 +10,6 @@ import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,17 +24,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
+import model.donordeferral.DeferralReason;
 import model.requesttype.RequestType;
 import model.tips.Tips;
 
 import org.apache.http.conn.util.InetAddressUtils;
+import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -52,6 +52,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
+import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LabSetupRepository;
@@ -67,6 +68,11 @@ import viewmodel.BloodTestingRuleViewModel;
 
 @Controller
 public class AdminController {
+	
+	/**
+	  * The Constant LOGGER.
+	  */
+	  private static final Logger LOGGER = Logger.getLogger(AdminController.class);
 
   @Autowired
   FormFieldRepository formFieldRepository;
@@ -115,6 +121,9 @@ public class AdminController {
   
   @Autowired
   UtilController utilController;
+  
+  @Autowired
+  DonorRepository donorRepository; 
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -189,7 +198,7 @@ public class AdminController {
         errMsg = "Internal Server Error";
       }
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -264,7 +273,7 @@ public class AdminController {
       createDataController.createRequests(numRequests);
     }
     catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -504,7 +513,7 @@ public class AdminController {
       tipsRepository.saveAllTips(allTips);
       System.out.println(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -531,7 +540,7 @@ public class AdminController {
         try {
           rt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+        	LOGGER.error("Number Format Exception.");
           rt.setId(null);
         }
         rt.setRequestType(requestType);
@@ -541,7 +550,7 @@ public class AdminController {
       requestTypesRepository.saveAllRequestTypes(allRequestTypes);
       System.out.println(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -568,7 +577,7 @@ public class AdminController {
         try {
           ct.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+        	LOGGER.error("CrossmatchType ID is null.");
           ct.setId(null);
         }
         ct.setCrossmatchType(crossmatchType);
@@ -578,7 +587,7 @@ public class AdminController {
       crossmatchTypesRepository.saveAllCrossmatchTypes(allCrossmatchTypes);
       System.out.println(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -605,7 +614,7 @@ public class AdminController {
         try {
           bt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+        	LOGGER.error("BloodBagType ID is null.");
           bt.setId(null);
         }
         bt.setBloodBagType(bloodBagType);
@@ -615,7 +624,7 @@ public class AdminController {
       bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
       System.out.println(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -641,7 +650,7 @@ public class AdminController {
         try {
           dt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+        	LOGGER.error("DonationType ID is null.");
           dt.setId(null);
         }
         dt.setDonationType(donationType);
@@ -652,7 +661,7 @@ public class AdminController {
       donationTypesRepository.saveAllDonationTypes(allDonationTypes);
       System.out.println(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Internal Server Error");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -708,5 +717,61 @@ public class AdminController {
     }
     return listOfServerAddresses;
   }
+  
+	private void addAllDonorDeferralReasonToModel(Map<String, Object> m) {
+		m.put("allDonorDeferralReason", donorRepository.getDonorDeferralReasons());
+	}
 
+	@RequestMapping(value = "/configureDonorDeferralReasonFormGenerator", method = RequestMethod.GET)
+	public ModelAndView configureDonorDeferralReasonFormGenerator(
+			HttpServletRequest request, HttpServletResponse response, Model model) {
+
+		ModelAndView mv = new ModelAndView("admin/configureDonorDeferralReasonForm");
+		Map<String, Object> m = model.asMap();
+		addAllDonorDeferralReasonToModel(m);
+		m.put("refreshUrl", getUrl(request));
+		mv.addObject("model", model);
+		return mv;
+	}
+
+	@RequestMapping("/configureDonorDeferralReasons")
+	public ModelAndView configureDonorDeferralReasons(HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "dataId") String paramsAsJsonFordataId, Model model) {
+		ModelAndView mv = new ModelAndView("admin/configureDonorDeferralReasonForm");
+
+		List<DeferralReason> donorDeferralReasons = new ArrayList<DeferralReason>();
+		try {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> dataId = new ObjectMapper().readValue(
+					paramsAsJsonFordataId, HashMap.class);
+			for (Object dataStrng : dataId.values()) {
+				String splitArr[] = dataStrng.toString().split("-");
+				DeferralReason deferralReasonObj = new DeferralReason();
+
+				// Set id
+				if (splitArr[0] != null) {
+					deferralReasonObj.setId(Integer.parseInt(splitArr[0]));
+				}
+				// Set reason
+				deferralReasonObj.setReason((String) splitArr[1]);
+				// Set isDeleted flag
+				if (Boolean.valueOf(splitArr[2].toString()) == true)
+					deferralReasonObj.setIsDeleted(false);
+				else
+					deferralReasonObj.setIsDeleted(true);
+				donorDeferralReasons.add(deferralReasonObj);
+			}
+			donorRepository.saveDonorDeferralReasons(donorDeferralReasons);
+		} catch (Exception ex) {
+			LOGGER.error("Internal Server Error");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
+
+		Map<String, Object> m = model.asMap();
+		addAllDonorDeferralReasonToModel(m);
+		m.put("refreshUrl", "configureDonorDeferralReasonForm.html");
+		mv.addObject("model", model);
+		return mv;
+	}
 }

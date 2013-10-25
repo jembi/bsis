@@ -351,4 +351,37 @@ public class DonorRepository {
 	  }
 	  return lastDeferredUntil;
   }
+  
+  public List<DeferralReason> getDonorDeferralReasons() {
+    String queryString = "SELECT d from DeferralReason d";
+    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
+    return query.getResultList();
+  }
+  
+  private DeferralReason findDeferralReasonsById(String deferralReasonId) {
+    String queryString = "SELECT d FROM DeferralReason d WHERE " +
+        "d.id = :deferralReasonId";
+    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
+    query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
+    if(query.getResultList().size()==0){
+    	return null;
+    }
+    return query.getSingleResult();
+  }
+  
+  public void saveDonorDeferralReasons(List<DeferralReason> donorDeferralReasonData) {
+      for (DeferralReason statusReasonObj: donorDeferralReasonData) {
+        
+      	DeferralReason existingDonorDeferralReasons= findDeferralReasonsById(statusReasonObj.getId().toString());
+          if (existingDonorDeferralReasons != null) {
+          	existingDonorDeferralReasons.setReason(statusReasonObj.getReason());
+          	existingDonorDeferralReasons.setIsDeleted(statusReasonObj.getIsDeleted());
+            em.merge(existingDonorDeferralReasons);
+          }else {
+          	em.merge(statusReasonObj);
+          	//em.merge(statusReasonObj);
+          }
+      }
+      em.flush();
+    }
 }

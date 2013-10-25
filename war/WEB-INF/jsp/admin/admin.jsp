@@ -41,6 +41,9 @@
     <li id="productTypeCombinationsForm">
       <a href="configureProductTypeCombinations.html">Product Type <br /> Combinations</a>
     </li>
+    <li id="configureDonorDeferralReason">
+      <a href="configureDonorDeferralReasonFormGenerator.html">Donor Deferral Reason</a>
+    </li>
     <li id="bloodBagTypesForm">
       <a href="configureBloodBagTypesFormGenerator.html">Blood Bag Types</a>
     </li>
