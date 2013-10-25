@@ -27,6 +27,7 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 import model.util.Gender;
+import model.util.Title;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
@@ -170,6 +171,13 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
 
+  /**
+   * Just store the string for the Title. Low selectivity column. No need to index it.
+   */
+  @Enumerated(EnumType.STRING)
+  @Column(length=15)
+  private Title title;
+  
   public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
@@ -269,6 +277,7 @@ public class Donor implements ModificationTracker {
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
     this.donorHash = DonorUtils.computeDonorHash(this);
+    setTitle(donor.getTitle());
   }
 
   public List<CollectedSample> getCollectedSamples() {
@@ -506,6 +515,14 @@ public class Donor implements ModificationTracker {
     this.donorHash = donorHash;
   }
 
+  public Title getTitle() {
+  	return title;
+  }
+
+  public void setTitle(Title title) {
+  	this.title = title;
+  }
+  
   public Boolean getBirthDateEstimated() {
 	return birthDateEstimated;
   }
