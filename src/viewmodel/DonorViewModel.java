@@ -71,6 +71,10 @@ public class DonorViewModel {
       return "";
     }
   }
+  
+  public Boolean getBirthDateEstimated(){
+	  return donor.getBirthDateEstimated();
+  }
 
   public String getAddress() {
     return donor.getAddress();
