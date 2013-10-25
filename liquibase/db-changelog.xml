@@ -28,4 +28,12 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	
+	<changeSet id="201310251417" author="ankur">
+		<update tableName="formfield">
+			<column name="useCurrentTime" value="0">
+			</column>
+			<where>form = 'CollectedSample' AND defaultDisplayName = 'Collected on'</where>
+		</update>
+	</changeSet>
 </databaseChangeLog>	
