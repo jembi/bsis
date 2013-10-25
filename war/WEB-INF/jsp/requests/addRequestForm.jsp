@@ -240,11 +240,9 @@ $(document).ready(
       <c:if test="${requestFields.patientGender.hidden != true}">
         <div>
           <form:label path="patientGender">${requestFields.patientGender.displayName}</form:label>
-          <form:select path="patientGender" id="${addRequestFormPatientGenderSelectorId}">
-            <form:option value="not_known" label="Not Known" />
+          <form:select path="patientGender" id="${addRequestFormPatientGenderSelectorId}">            
             <form:option value="male" label="Male" />
             <form:option value="female" label="Female" />
-            <form:option value="not_applicable" label="Not Applicable" />
           </form:select>
           <form:errors class="formError" path="request.patientGender" delimiter=", "></form:errors>
         </div>
