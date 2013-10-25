@@ -130,7 +130,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private BigDecimal haemoglobinCount;
 
   @Column(precision=6, scale=2)
-  private BigDecimal bloodPressure;
+  private BigDecimal bloodPressureSystolic;
 
   /**
    * Limit the number of bytes required to store.
@@ -330,15 +330,17 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.haemoglobinCount = haemoglobinCount;
   }
 
-  public BigDecimal getBloodPressure() {
-    return bloodPressure;
-  }
+  
+  
+  public BigDecimal getBloodPressureSystolic() {
+		return bloodPressureSystolic;
+	}
 
-  public void setBloodPressure(BigDecimal bloodPressure) {
-    this.bloodPressure = bloodPressure;
-  }
+	public void setBloodPressureSystolic(BigDecimal bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
+	}
 
-  public BigDecimal getDonorWeight() {
+	public BigDecimal getDonorWeight() {
     return donorWeight;
   }
 

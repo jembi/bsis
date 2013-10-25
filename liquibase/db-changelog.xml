@@ -28,4 +28,28 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	<!-- for issue 63 (Enable Auditing on BloodTestResult table) -->
+	<changeSet id="201310251435" author="devang">
+		<createTable tableName="bloodtestresult_aud">
+			<column name="id" type="bigint(20)" autoIncrement="true">
+	      		<constraints primaryKey="true" nullable="false" />
+	  		</column>	  		 
+			<column name="createdDate" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP" ></column>
+			<column name="lastUpdated" type="timestamp" defaultValue="0000-00-00 00:00:00"></column>
+			<column name="notes" type="longtext" ></column>
+			<column name="result" type="varchar(10)" defaultValue="NULL"  ></column>
+			<column name="testedOn" type="datetime" defaultValue="NULL" ></column>
+			<column name="bloodTest_id" type="smallint(6)"  defaultValue="NULL" ></column>
+			<column name="collectedSample_id" type="bigint(20)"  defaultValue="NULL"></column>
+			<column name="machineReading_id" type="bigint(20)"  defaultValue="NULL"></column>
+			<column name="createdBy_id" type="smallint(6)"  defaultValue="NULL" ></column>
+			<column name="lastUpdatedBy_id"  type="smallint(6)" ></column>
+			<column name="REV" type="int(11)"></column>
+			<column name="REVTYPE" type="tinyint(4)"  defaultValue="NULL"></column>					
+		</createTable>
+		<addForeignKeyConstraint constraintName="fk_revinfo" 
+		referencedTableName="revinfo"  referencedColumnNames="REV" 
+		baseTableName="bloodtestresult_aud" baseColumnNames="REV" 
+	 	/>
+	</changeSet>
 </databaseChangeLog>	

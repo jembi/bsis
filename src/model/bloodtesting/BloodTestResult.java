@@ -10,9 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import model.collectedsample.CollectedSample;
 import model.microtiterplate.MachineReading;
@@ -27,16 +31,18 @@ import model.user.User;
  * @author iamrohitbanga
  */
 @Entity
+@Table(name="BloodTestResult")
+@Audited(targetAuditMode= RelationTargetAuditMode.NOT_AUDITED)  
 public class BloodTestResult implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false, insertable=false, updatable=false)
   private Long id;
-
+  
   @ManyToOne
   private CollectedSample collectedSample;
-
+  
   @ManyToOne
   private BloodTest bloodTest;
 
