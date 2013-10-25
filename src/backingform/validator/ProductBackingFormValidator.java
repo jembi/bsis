@@ -2,6 +2,7 @@ package backingform.validator;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,7 +120,9 @@ public class ProductBackingFormValidator implements Validator {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);
+      BigDecimal unitWeight = form.getCollectedSample().getUnitWeight();
       CollectedSample collectedSample = utilController.findCollectionInForm(bean);
+      collectedSample.setUnitWeight(unitWeight);
       form.setCollectedSample(collectedSample);
     } catch (IllegalAccessException e) {
       e.printStackTrace();

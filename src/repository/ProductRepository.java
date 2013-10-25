@@ -345,6 +345,7 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productId", productId);
+    
     Product product = null;
     try {
       product = query.getSingleResult();
@@ -355,10 +356,17 @@ public class ProductRepository {
   }
 
   public Product updateProduct(Product product) {
-    Product existingProduct = findProductById(product.getId());
+  	Product existingProduct = findProductById(product.getId());
     if (existingProduct == null) {
       return null;
     }
+    
+    String updateExpiryQuery = "UPDATE CollectedSample c SET c.unitWeight=:unitWeight WHERE c.id=:id"; 
+    Query query = em.createQuery(updateExpiryQuery);
+		query.setParameter("unitWeight", product.getCollectedSample().getUnitWeight());
+		query.setParameter("id", existingProduct.getCollectedSample().getId());
+		query.executeUpdate();
+    
     existingProduct.copy(product);
     updateProductInternalFields(existingProduct);
     em.merge(existingProduct);
@@ -367,6 +375,13 @@ public class ProductRepository {
   }
 
   public Product addProduct(Product product) {
+  	
+  	String updateExpiryQuery = "UPDATE CollectedSample c SET c.unitWeight=:unitWeight WHERE c.id=:id"; 
+    Query query = em.createQuery(updateExpiryQuery);
+		query.setParameter("unitWeight", product.getUnitWeight());
+		query.setParameter("id", product.getCollectedSample().getId());
+		query.executeUpdate();
+		
     updateProductInternalFields(product);
     em.persist(product);
     em.flush();

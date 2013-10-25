@@ -1,5 +1,6 @@
 package model.product;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -283,5 +284,11 @@ public class Product implements ModificationTracker {
 
   public void setParentProduct(Product parentProduct) {
     this.parentProduct = parentProduct;
+  }
+  
+  public BigDecimal getUnitWeight() {
+    if (collectedSample == null)
+      return null;
+    return collectedSample.getUnitWeight();
   }
 }

@@ -30,6 +30,12 @@
       <label>${product.productType.productType}</label>
     </div>
   </c:if>
+  <c:if test="${productFields.unitWeight.hidden != true }">
+    <div>
+      <label>${productFields.unitWeight.displayName}</label>
+      <label>${product.unitWeight}</label>
+    </div>
+  </c:if>
   <c:if test="${productFields.status.hidden != true }">
     <div>
       <label>${productFields.status.displayName}</label>

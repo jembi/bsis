@@ -161,6 +161,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   private Boolean isDeleted;
 
+  @Column(precision=6, scale=2)
+  private BigDecimal unitWeight;
+  
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -249,6 +252,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
+    this.unitWeight = collectedSample.unitWeight;
   }
 
   public List<Product> getProducts() {
@@ -421,4 +425,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
+
+	public BigDecimal getUnitWeight() {
+		return unitWeight;
+	}
+
+	public void setUnitWeight(BigDecimal unitWeight) {
+		this.unitWeight = unitWeight;
+	}
+  
 }

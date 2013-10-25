@@ -1,5 +1,6 @@
 package viewmodel;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -152,5 +153,12 @@ public class ProductViewModel {
   public Boolean getStatusAllowsSplitting() {
     return Arrays.asList(ProductStatus.AVAILABLE, ProductStatus.QUARANTINED)
                  .contains(product.getStatus());
+  }
+  public BigDecimal getUnitWeight() {
+    if (getProduct() == null || getProduct().getCollectedSample() == null ||
+        getProduct().getCollectedSample().getCollectionNumber() == null
+       )
+      return BigDecimal.valueOf(0);
+    return getProduct().getCollectedSample().getUnitWeight();
   }
 }

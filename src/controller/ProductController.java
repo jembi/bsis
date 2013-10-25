@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
@@ -308,7 +309,7 @@ public class ProductController {
 
     Product product = productRepository.findProductById(productId);
     ProductBackingForm form = new ProductBackingForm(product);
-
+    
     ModelAndView mv = new ModelAndView("products/editProductForm");
     mv.addObject("requestUrl", getUrl(request));
     mv.addObject("editProductForm", form);
@@ -343,6 +344,10 @@ public class ProductController {
       try {
         Product product = form.getProduct();
         product.setIsDeleted(false);
+        
+//        if(form.getUnitWeight() != null){
+//        	product.getCollectedSample().setUnitWeight(form.getUnitWeight());
+//        }
         savedProduct = productRepository.addProduct(product);
         mv.addObject("hasErrors", false);
         success = true;
@@ -454,8 +459,8 @@ public class ProductController {
     }
     else {
       try {
-
-        form.setIsDeleted(false);
+      	
+      	form.setIsDeleted(false);
         Product existingProduct = productRepository.updateProduct(form.getProduct());
         if (existingProduct == null) {
           mv.addObject("hasErrors", true);

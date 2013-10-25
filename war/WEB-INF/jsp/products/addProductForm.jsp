@@ -147,6 +147,12 @@
           delimiter=", "></form:errors>
       </div>
     </c:if>
+    <c:if test="${productFields.unitWeight.hidden != true }">
+      <div>
+        <form:label path="unitWeight">${productFields.unitWeight.displayName}</form:label>
+        <form:input path="unitWeight" value="${firstTimeRender ? productFields.unitWeight.defaultValue : ''}" />
+      </div>
+    </c:if>
     <c:if test="${productFields.createdOn.hidden != true }">
       <div>
         <form:label path="createdOn">${productFields.createdOn.displayName}</form:label>

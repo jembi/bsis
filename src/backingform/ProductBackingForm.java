@@ -1,5 +1,6 @@
 package backingform;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,10 @@ public class ProductBackingForm {
 
   private List<String> productTypes;
 
+  private BigDecimal unitWeight;
+  
+  CollectedSample collectedSample = new CollectedSample();
+  
   public ProductBackingForm() {
     setProduct(new Product());
   }
@@ -124,7 +129,7 @@ public class ProductBackingForm {
       return expiresOn;
     if (getProduct() == null)
       return "";
-    return CustomDateFormatter.getDateString(product.getExpiresOn());
+    return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -192,7 +197,6 @@ public class ProductBackingForm {
   }
 
   public void setCollectionNumber(String collectionNumber) {
-    CollectedSample collectedSample = new CollectedSample();
     collectedSample.setCollectionNumber(collectionNumber);
     product.setCollectedSample(collectedSample);
   }
@@ -215,5 +219,18 @@ public class ProductBackingForm {
 
   public void setStatus(String status) {
     product.setStatus(ProductStatus.valueOf(status));
+  }
+
+  public BigDecimal getUnitWeight() {
+  	if (product == null || product.getCollectedSample() == null ||
+        product.getCollectedSample().getCollectionNumber() == null
+       )
+      return BigDecimal.valueOf(0);
+    return product.getCollectedSample().getUnitWeight();
+  }
+
+  public void setUnitWeight(BigDecimal unitWeight) {
+    collectedSample.setUnitWeight(unitWeight);
+    product.setCollectedSample(collectedSample);
   }
 }
