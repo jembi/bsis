@@ -28,4 +28,29 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	
+	 <!-- For issue 29 [Add field to Collection to capture blood unit weight] -->
+	<changeSet id="201310251145" author="ankur">
+		<addColumn tableName="collectedsample">
+			<column name="unitWeight" type="decimal(6,2)" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="unitWeight" type="decimal(6,2)" defaultValue="NULL"></column>
+		</addColumn>		
+		<insert tableName="FormField">
+			<column name="form" value="Product"></column>
+			<column name="FIELD" value="unitWeight"></column>
+			<column name="defaultDisplayName" value="Unit Weight"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
 </databaseChangeLog>	
