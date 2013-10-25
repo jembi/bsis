@@ -97,6 +97,10 @@ public class DonorBackingForm {
     return donor.getCallingName();
   }
 
+  public Boolean getBirthDateEstimated(){
+	return donor.getBirthDateEstimated();
+  }
+  
   public String getGender() {
     if (donor == null || donor.getGender() == null)
       return null;
@@ -185,6 +189,10 @@ public class DonorBackingForm {
 
   public void setGender(String gender) {
     donor.setGender(Gender.valueOf(gender));
+  }
+  
+  public void setBirthDateEstimated(Boolean birthDateEstimated){
+	  donor.setBirthDateEstimated(birthDateEstimated);
   }
 
   public void setAddress(String address) {

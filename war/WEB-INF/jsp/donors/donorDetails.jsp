@@ -34,7 +34,13 @@
   <c:if test="${donorFields.birthDate.hidden != true }">
     <div>
       <label>${donorFields.birthDate.displayName}</label>
-      <label>${donor.birthDate}</label>
+      <label style="width:300px">${donor.birthDate}
+      <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+      	 <c:if test="${donor.birthDateEstimated == true}">
+      	 	(${donorFields.birthDateEstimated.displayName})
+      	 </c:if>
+      </c:if>
+      </label>
     </div>
   </c:if>
   <c:if test="${donorFields.age.hidden != true }">
