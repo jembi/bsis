@@ -94,7 +94,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
   		flag=true;
   	}
   	if(flag){
-  		errors.rejectValue("collectedSample.donorPulse","donorPulse.incorrect" ,"DonorPulse value should be enter numeric between 0 to 290.");
+  		errors.rejectValue("collectedSample.donorPulse","donorPulse.incorrect" ,"Enter a value between 0 to 290.");
   	}
   	return;
   	

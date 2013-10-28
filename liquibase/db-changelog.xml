@@ -45,7 +45,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<addColumn tableName="collectedsample">
+		<addColumn tableName="CollectedSample">
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>
 		<addColumn tableName="CollectedSample_AUD">
