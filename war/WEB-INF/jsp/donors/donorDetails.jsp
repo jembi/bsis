@@ -132,11 +132,12 @@
       <label>${donor.preferredContactMethod}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.donorPanel.hidden != true }">
+  <c:if test="donorFields.donorPanel.hidden != true}">
+  	<c:if test="${not empty donorFields.donorPanel.hidden}">
     <div>
       <label>${donorFields.donorPanel.displayName}</label>
       <label>${donor.donorPanel}</label>
-    </div>
+    </div></c:if>
   </c:if>
   <c:if test="${donorFields.dateOfLastDonation.hidden != true }">
     <div>

@@ -26,20 +26,24 @@ import model.util.BloodGroup;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import controller.UtilController;
-
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
+import controller.UtilController;
 
 @Repository
 @Transactional
 public class DonorRepository {
 
+  /**
+  * The Constant LOGGER.
+  */
+  private static final Logger LOGGER = Logger.getLogger(DonorRepository.class);
   public static final int ID_LENGTH = 12;
 
   @PersistenceContext
@@ -257,8 +261,9 @@ public class DonorRepository {
     Donor donor = null;
     try {
       donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
+    } catch (NoResultException ex) {    	
+    	LOGGER.error("could not fine record with donorNumber :" + donorNumber);
+    	LOGGER.error(ex.getMessage());
     }
     return donor;
   }
