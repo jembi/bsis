@@ -129,8 +129,16 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Column(precision=7, scale=1)
   private BigDecimal haemoglobinCount;
 
+<<<<<<< HEAD
   @Column(name="bloodPressure")
   private Integer bloodPressure;
+=======
+  @Column(name="bloodPressureSystolic")
+  private Integer bloodPressureSystolic;
+  
+  @Column(name="bloodPressureDiastolic")
+  private Integer bloodPressureDiastolic;
+>>>>>>> develop
 
   /**
    * Limit the number of bytes required to store.
@@ -250,6 +258,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
     this.haemoglobinCount=collectedSample.haemoglobinCount;
+    this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
+    this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
   }
 
   public List<Product> getProducts() {
@@ -331,10 +341,20 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.haemoglobinCount = haemoglobinCount;
   }
 
+  
+  	public Integer getBloodPressureSystolic() {
+		return bloodPressureSystolic;
+	}
+
+	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
+	}
+
   public BigDecimal getDonorWeight() {
     return donorWeight;
   }
 
+  
   public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
@@ -407,20 +427,20 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodRh = bloodRh;
   }
 
-  public String getExtraBloodTypeInformation() {
+  public Integer getBloodPressureDiastolic() {
+		return bloodPressureDiastolic;
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
+	}
+
+	public String getExtraBloodTypeInformation() {
     return extraBloodTypeInformation;
   }
 
   public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
-
-	public Integer getBloodPressure() {
-		return bloodPressure;
-	}
-
-	public void setBloodPressure(Integer bloodPressure) {
-		this.bloodPressure = bloodPressure;
-	}
   
 }
