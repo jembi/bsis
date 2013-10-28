@@ -129,8 +129,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Column(precision=6, scale=2)
   private BigDecimal haemoglobinCount;
 
-  @Column(precision=6, scale=2)
-  private BigDecimal bloodPressure;
+  @Column(name="bloodPressureSystolic")
+  private Integer bloodPressureSystolic;
+  
+  @Column(name="bloodPressureDiastolic")
+  private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
@@ -253,6 +256,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
     this.donorPulse = collectedSample.donorPulse;
+    this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
+    this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
   }
 
   public List<Product> getProducts() {
@@ -334,18 +339,28 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.haemoglobinCount = haemoglobinCount;
   }
 
-  public BigDecimal getBloodPressure() {
+  /*public BigDecimal getBloodPressure() {
     return bloodPressure;
   }
 
   public void setBloodPressure(BigDecimal bloodPressure) {
     this.bloodPressure = bloodPressure;
-  }
+  }*/
+  
+  	public Integer getBloodPressureSystolic() {
+		return bloodPressureSystolic;
+	}
 
+	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
+	}
+
+  
   public BigDecimal getDonorWeight() {
     return donorWeight;
   }
 
+  
   public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
@@ -418,7 +433,15 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodRh = bloodRh;
   }
 
-  public String getExtraBloodTypeInformation() {
+  public Integer getBloodPressureDiastolic() {
+		return bloodPressureDiastolic;
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
+	}
+
+	public String getExtraBloodTypeInformation() {
     return extraBloodTypeInformation;
   }
 
@@ -433,6 +456,5 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 	public void setDonorPulse(Integer donorPulse) {
 		this.donorPulse = donorPulse;
 	}
-  
   
 }

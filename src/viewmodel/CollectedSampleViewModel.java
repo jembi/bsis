@@ -161,5 +161,19 @@ public class CollectedSampleViewModel {
 
 	public void setDonorPulse(Integer donorPulse) {
 		collectedSample.setDonorPulse(donorPulse);
+
+  public Integer getBloodPressureSystolic() {
+		return  collectedSample.getBloodPressureSystolic();
+	}
+	
+	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+	}
+	public Integer getBloodPressureDiastolic() {
+		return collectedSample.getBloodPressureDiastolic();
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
 	}
 }
