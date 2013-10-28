@@ -1,5 +1,6 @@
 package backingform;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -363,12 +364,21 @@ public class CollectedSampleBackingForm {
     this.useParametersFromBatch = useParametersFromBatch;
   }
   
+	
+	public BigDecimal getHaemoglobinCount() {
+		return collectedSample.getHaemoglobinCount();
+	}
+	
+	public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+		collectedSample.setHaemoglobinCount(haemoglobinCount);
+
   public Integer getDonorPulse() {
 		return collectedSample.getDonorPulse();
 	}
 
 	public void setDonorPulse(Integer donorPulse) {
 		collectedSample.setDonorPulse(donorPulse);
+>>>>>>> develop
   
 	public Integer getBloodPressureSystolic() {
 		return  collectedSample.getBloodPressureSystolic();

@@ -126,7 +126,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
-  @Column(precision=6, scale=2)
+  @Column(precision=7, scale=1)
   private BigDecimal haemoglobinCount;
 
   @Column(name="bloodPressureSystolic")
@@ -255,6 +255,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
+    this.haemoglobinCount=collectedSample.haemoglobinCount;
     this.donorPulse = collectedSample.donorPulse;
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
@@ -339,13 +340,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.haemoglobinCount = haemoglobinCount;
   }
 
-  /*public BigDecimal getBloodPressure() {
-    return bloodPressure;
-  }
-
-  public void setBloodPressure(BigDecimal bloodPressure) {
-    this.bloodPressure = bloodPressure;
-  }*/
   
   	public Integer getBloodPressureSystolic() {
 		return bloodPressureSystolic;
@@ -355,7 +349,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 
-  
   public BigDecimal getDonorWeight() {
     return donorWeight;
   }
