@@ -94,7 +94,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
   		flag=true;
   	}
   	if(flag){
-  		errors.rejectValue("collectedSample.haemoglobinCount","haemoglobinCount.incorrect" ,"HhaemoglobinCount value should be enter numeric between 0 to 30.0.");
+  		errors.rejectValue("collectedSample.haemoglobinCount","haemoglobinCount.incorrect" ,"Enter a value between 0 and 30.");
   	}
   	return;
   	
