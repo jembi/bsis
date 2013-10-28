@@ -85,6 +85,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
 
     validateRangeForHaemoglobinCount(form,errors);
     validateRangeForDonorPulse(form, errors);
+    validateRangeDonorWeight(form,errors);
     validateRange(form,errors);
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }
@@ -104,7 +105,24 @@ public class CollectedSampleBackingFormValidator implements Validator {
   	return;
   	
 }
-
+  
+  private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors errors) {
+  	boolean flag=false;
+  	if(form.getDonorWeight()==null){
+  		flag=true;
+  	}
+  	if(form.getDonorWeight()!=null && !(form.getDonorWeight().doubleValue() >= 0 && form.getDonorWeight().doubleValue() <= 300)){
+  		flag=true;
+  	}
+  	
+  	if(flag){
+  		errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"Enter a value between 0 and 300.");
+  		return;
+  	}
+  	return;
+  	
+  }
+  
   private void validateRangeForDonorPulse(CollectedSampleBackingForm form, Errors errors) {
   	boolean flag=false;
   	if(form.getDonorPulse()==null){

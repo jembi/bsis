@@ -337,6 +337,14 @@
         </div>
       </c:if>
 
+       <c:if test="${collectionFields.donorWeight.hidden != true }">
+        <div>
+          <form:label path="donorWeight">${collectionFields.donorWeight.displayName}</form:label>
+          <form:input path="donorWeight" value="${firstTimeRender ? collectionFields.donorWeight.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorWeight" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+
       <c:if test="${collectionFields.donorPulse.hidden != true }">
         <div>
           <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>

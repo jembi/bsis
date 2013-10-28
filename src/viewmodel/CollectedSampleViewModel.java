@@ -163,21 +163,31 @@ public class CollectedSampleViewModel {
 	public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
 		collectedSample.setHaemoglobinCount(haemoglobinCount);
   
+  public BigDecimal getDonorWeight() {
+		return collectedSample.getDonorWeight();
+	}
+
+	public void setDonorWeight(BigDecimal donorWeight) {
+		collectedSample.setDonorWeight(donorWeight);
+	}
+
   public Integer getDonorPulse() {
 		return collectedSample.getDonorPulse();
 	}
 
-	public void setDonorPulse(Integer donorPulse) {
+  public void setDonorPulse(Integer donorPulse) {
 		collectedSample.setDonorPulse(donorPulse);
+  }
 
   public Integer getBloodPressureSystolic() {
 		return  collectedSample.getBloodPressureSystolic();
 	}
 	
-	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
 		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
 	}
-	public Integer getBloodPressureDiastolic() {
+  
+  public Integer getBloodPressureDiastolic() {
 		return collectedSample.getBloodPressureDiastolic();
 	}
 

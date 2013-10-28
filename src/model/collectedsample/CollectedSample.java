@@ -138,7 +138,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   /**
    * Limit the number of bytes required to store.
    */
-  @Column(precision=6, scale=2)
+  @Column(precision=7, scale=1)
   private BigDecimal donorWeight;
 
   @ManyToOne(optional=true)
@@ -339,20 +339,18 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
-
   
-  	public Integer getBloodPressureSystolic() {
+  public Integer getBloodPressureSystolic() {
 		return bloodPressureSystolic;
 	}
 
-	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
 		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 
   public BigDecimal getDonorWeight() {
     return donorWeight;
   }
-
   
   public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;

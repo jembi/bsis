@@ -78,6 +78,13 @@
       <label style="width: auto;">${collectedSample.bloodRh eq '+' ? 'POS' : collectedSample.bloodRh eq '-' ? 'NEG' : ''}</label>
     </div>
   </sec:authorize>
+  
+  <c:if test="${collectionFields.donorWeight.hidden != true }">
+    <div>
+      <label>${collectionFields.donorWeight.displayName}</label>
+      <label>${collectedSample.donorWeight}</label>
+    </div>
+  </c:if>
 
   <c:if test="${collectionFields.donorPulse.hidden != true }">
     <div>
