@@ -28,6 +28,8 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+
+	<!-- For issue 57 [Add WHO Product Discard Reasons] -->
 	<changeSet id="201310241507" author="nikita">
 		<delete tableName="ProductStatusChangeReason">
 			<where>category='DISCARDED'</where>
@@ -65,4 +67,153 @@
             <column name="isDeleted" value="0"/>
     	</insert>
 	</changeSet>
+
+	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
+	<changeSet id="201310242025" author="devang">
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="haemoglobinCount"></column>
+			<column name="defaultDisplayName" value="Haemoglobin Count"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<update tableName="collectedsample">
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+		<update tableName="CollectedSample_AUD">
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+	</changeSet>
+
+	<!-- For issue 69 [Allow for entry of donor weight] -->
+	<changeSet id="201310241815" author="devang">
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="donorWeight"></column>
+			<column name="defaultDisplayName" value="Donor Weight"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<update tableName="collectedsample">
+			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+		<update tableName="CollectedSample_AUD">
+			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+	</changeSet>
+	
+	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+    <changeSet id="201310242001" author="devang">
+        <insert tableName="FormField">
+            <column name="form" value="CollectedSample"></column>
+            <column name="FIELD" value="bloodPressureSystolic"></column>
+            <column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
+            <column name="defaultValue" value=""></column>
+            <column name="maxLength" value="0"></column>
+            <column name="hidden" value="0"></column>
+            <column name="isHidable" value="1"></column>
+            <column name="isRequired" value="0"></column>
+            <column name="canBeOptional" value="1"></column>
+            <column name="autoGenerate" value="0"></column>
+            <column name="isAutoGeneratable" value="0"></column>
+            <column name="useCurrentTime" value="0"></column>
+            <column name="isTimeField" value="0"></column>                        
+        </insert>
+        <insert tableName="FormField">
+            <column name="form" value="CollectedSample"></column>
+            <column name="FIELD" value="bloodPressureDiastolic"></column>
+            <column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
+            <column name="defaultValue" value=""></column>
+            <column name="maxLength" value="0"></column>
+            <column name="hidden" value="0"></column>
+            <column name="isHidable" value="1"></column>
+            <column name="isRequired" value="0"></column>
+            <column name="canBeOptional" value="1"></column>
+            <column name="autoGenerate" value="0"></column>
+            <column name="isAutoGeneratable" value="0"></column>
+            <column name="useCurrentTime" value="0"></column>
+            <column name="isTimeField" value="0"></column>                        
+        </insert>                        
+        <update tableName="CollectedSample">
+            <column name="bloodPressure" type="int" defaultValue="NULL"></column>
+        </update>
+        <renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+        <update tableName="CollectedSample_AUD">
+            <column name="bloodPressure" type="int" defaultValue="NULL"></column>
+        </update>
+        <renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+        <addColumn tableName="collectedsample">
+            <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
+        </addColumn>
+        <addColumn tableName="CollectedSample_AUD">
+            <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
+        </addColumn>                        
+    </changeSet>
+	
+	<!-- For issue 70 [Allow for entry of donor pulse] -->
+	<changeSet id="201310241926" author="devang">
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="donorPulse"></column>
+			<column name="defaultDisplayName" value="Donor Pulse"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<addColumn tableName="CollectedSample">
+			<column name="donorPulse" type="int" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="donorPulse" type="int" defaultValue="NULL"></column>
+		</addColumn>		
+	</changeSet>
+	
+	<!-- For issue 69 [Allow for entry of donor weight] -->
+    <changeSet id="201310241815" author="devang">
+        <insert tableName="FormField">
+           <column name="form" value="CollectedSample"></column>
+           <column name="FIELD" value="donorWeight"></column>
+           <column name="defaultDisplayName" value="Donor Weight"></column>
+           <column name="defaultValue" value=""></column>
+           <column name="maxLength" value="0"></column>
+           <column name="hidden" value="0"></column>
+           <column name="isHidable" value="1"></column>
+           <column name="isRequired" value="0"></column>
+           <column name="canBeOptional" value="1"></column>
+           <column name="autoGenerate" value="0"></column>
+           <column name="isAutoGeneratable" value="0"></column>
+           <column name="useCurrentTime" value="0"></column>
+           <column name="isTimeField" value="0"></column>                        
+        </insert>
+        <update tableName="collectedsample">
+                <column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+        </update>
+        <update tableName="CollectedSample_AUD">
+                <column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+        </update>
+    </changeSet>
+    
 </databaseChangeLog>	

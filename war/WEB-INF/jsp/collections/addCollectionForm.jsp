@@ -240,7 +240,7 @@
         </div>
       </c:if>
       <c:if test="${collectionFields.collectedOn.hidden != true }">
-        <c:if test="${collectionFields.collectedOn.isTimeField == false or collectionFields.collectedOn.useCurrentTime == false}">
+        <c:if test="${collectionFields.collectedOn.isTimeField == true or collectionFields.collectedOn.useCurrentTime == true}">
           <div>
             <form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
             <form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
@@ -336,6 +336,46 @@
           <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
         </div>
       </c:if>
+
+       <c:if test="${collectionFields.donorWeight.hidden != true }">
+        <div>
+          <form:label path="donorWeight">${collectionFields.donorWeight.displayName}</form:label>
+          <form:input path="donorWeight" value="${firstTimeRender ? collectionFields.donorWeight.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorWeight" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+
+      <c:if test="${collectionFields.donorPulse.hidden != true }">
+        <div>
+          <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>
+          <form:input path="donorPulse" value="${firstTimeRender ? collectionFields.donorPulse.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorPulse" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      
+      <c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+        <div>
+          <form:label path="haemoglobinCount">${collectionFields.haemoglobinCount.displayName}</form:label>
+          <form:input path="haemoglobinCount" value="${firstTimeRender ? collectionFields.haemoglobinCount.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
+
+       <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+        <div>
+          <form:label path="bloodPressureSystolic">${collectionFields.bloodPressureSystolic.displayName}</form:label>
+          <form:input path="bloodPressureSystolic" value="${firstTimeRender ? collectionFields.bloodPressureSystolic.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.bloodPressureSystolic" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      
+       <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+        <div>
+          <form:label path="bloodPressureDiastolic">${collectionFields.bloodPressureDiastolic.displayName}</form:label>
+          <form:input path="bloodPressureDiastolic" value="${firstTimeRender ? collectionFields.bloodPressureDiastolic.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.bloodPressureDiastolic" delimiter=", "></form:errors>
+
+        </div>
+      </c:if>
+      
       <c:if test="${collectionFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
