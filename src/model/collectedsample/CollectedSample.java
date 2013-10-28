@@ -163,6 +163,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private TTIStatus ttiStatus;
 
   private Boolean isDeleted;
+  
+  @Column(length=11)
+  private Integer donorPulse;
 
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
@@ -252,6 +255,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
+    this.donorPulse = collectedSample.donorPulse;
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
   }
@@ -444,5 +448,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
+
+	public Integer getDonorPulse() {
+		return donorPulse;
+	}
+
+	public void setDonorPulse(Integer donorPulse) {
+		this.donorPulse = donorPulse;
+	}
   
 }

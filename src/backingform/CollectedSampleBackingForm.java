@@ -363,6 +363,12 @@ public class CollectedSampleBackingForm {
     this.useParametersFromBatch = useParametersFromBatch;
   }
   
+  public Integer getDonorPulse() {
+		return collectedSample.getDonorPulse();
+	}
+
+	public void setDonorPulse(Integer donorPulse) {
+		collectedSample.setDonorPulse(donorPulse);
   
 	public Integer getBloodPressureSystolic() {
 		return  collectedSample.getBloodPressureSystolic();

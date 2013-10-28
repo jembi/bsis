@@ -336,6 +336,14 @@
           <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
         </div>
       </c:if>
+
+      <c:if test="${collectionFields.donorPulse.hidden != true }">
+        <div>
+          <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>
+          <form:input path="donorPulse" value="${firstTimeRender ? collectionFields.donorPulse.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorPulse" delimiter=", "></form:errors>
+        </div>
+      </c:if>
       
        <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
         <div>
