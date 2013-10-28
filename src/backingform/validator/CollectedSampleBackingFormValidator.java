@@ -94,7 +94,7 @@ private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors er
   	}
   	
   	if(flag){
-  		errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"DonorWeight value should be enter numeric between 0 to 300.0.");
+  		errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"Enter a value between 0 and 300.");
   		return;
   	}
   	return;

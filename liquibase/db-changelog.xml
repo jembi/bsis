@@ -45,7 +45,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<update tableName="collectedsample">
+		<update tableName="CollectedSample">
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
