@@ -60,10 +60,10 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>			
-		<update tableName="collectedsample">
+		<update tableName="CollectedSample">
 			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
 		</update>
-		<renameColumn tableName="collectedsample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
 		<update tableName="CollectedSample_AUD">
 			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
 		</update>

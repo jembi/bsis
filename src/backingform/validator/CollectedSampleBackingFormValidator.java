@@ -126,18 +126,18 @@ public class CollectedSampleBackingFormValidator implements Validator {
 	private void validateRange(CollectedSampleBackingForm form, Errors errors) {
   	
 		if(form.getBloodPressureSystolic()==null){
-			errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"BloodPressureSystolic value should be enter numeric between 0 to 250.");
+			errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
   	}
 		
   	if(form.getBloodPressureDiastolic()==null){
-  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"BloodPressureDiastolic value should be enter numeric between 0 to 150.");
+  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
   	}
   	
   	if(form.getBloodPressureSystolic()!=null &&  !(form.getBloodPressureSystolic() >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && form.getBloodPressureSystolic() <= CollectionConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE)){
-  		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"BloodPressureSystolic value should be enter numeric between 0 to 250.");
+  		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
   	}
   	if(form.getBloodPressureDiastolic()!=null && !(form.getBloodPressureDiastolic() >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && form.getBloodPressureDiastolic() <= CollectionConstants.BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE)){
-  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"BloodPressureDiastolic value should be enter numeric between 0 to 150.");
+  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
   	}
   	return;
   	
