@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 
 import model.collectedsample.CollectedSample;
+import model.collectedsample.CollectionConstants;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -20,6 +21,7 @@ import org.springframework.validation.Validator;
 import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import backingform.CollectedSampleBackingForm;
+import backingform.DonorBackingForm;
 import backingform.FindCollectedSampleBackingForm;
 import backingform.WorksheetBackingForm;
 import controller.UtilController;
@@ -80,11 +82,14 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
         errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
+
     validateRangeDonorWeight(form,errors);
+	validateRangeForDonorPulse(form, errors);
+	validateRange(form,errors);
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }
   
-private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors errors) {
+  private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors errors) {
   	boolean flag=false;
   	if(form.getDonorWeight()==null){
   		flag=true;
@@ -99,8 +104,24 @@ private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors er
   	}
   	return;
   	
-}
-
+  }
+  
+  private void validateRangeForDonorPulse(CollectedSampleBackingForm form, Errors errors) {
+  	boolean flag=false;
+  	if(form.getDonorPulse()==null){
+  		flag=true;
+  	}
+  	
+  	if(form.getDonorPulse()!=null && !(form.getDonorPulse() >= 0 && form.getDonorPulse() <= 290)){
+  		flag=true;
+  	}
+  	if(flag){
+  		errors.rejectValue("collectedSample.donorPulse","donorPulse.incorrect" ,"Enter a value between 0 to 290.");
+  	}
+  	return;
+  	
+  }
+  
   private void inheritParametersFromCollectionBatch(
       CollectedSampleBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {
@@ -136,6 +157,27 @@ private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors er
       form.getCollectedSample().setCollectedOn(new Date());
     }
   }
+  
+  
+	private void validateRange(CollectedSampleBackingForm form, Errors errors) {
+  	
+		if(form.getBloodPressureSystolic()==null){
+			errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
+  	}
+		
+  	if(form.getBloodPressureDiastolic()==null){
+  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
+  	}
+  	
+  	if(form.getBloodPressureSystolic()!=null &&  !(form.getBloodPressureSystolic() >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && form.getBloodPressureSystolic() <= CollectionConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE)){
+  		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
+  	}
+  	if(form.getBloodPressureDiastolic()!=null && !(form.getBloodPressureDiastolic() >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && form.getBloodPressureDiastolic() <= CollectionConstants.BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE)){
+  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
+  	}
+  	return;
+  	
+}
 
   @SuppressWarnings("unchecked")
   private void updateRelatedEntities(CollectedSampleBackingForm form) {

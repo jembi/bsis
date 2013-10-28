@@ -345,7 +345,7 @@ public class DonorRepository {
 	  
 	  Date lastDeferredUntil = deferrals.get(0).getDeferredUntil();
 	  for(DonorDeferral deferral : deferrals){
-		  if( deferral.getDeferredUntil().after(lastDeferredUntil)){
+		  if(deferral.getDeferredUntil() != null && deferral.getDeferredUntil().after(lastDeferredUntil)){
 			  lastDeferredUntil = deferral.getDeferredUntil();
 		  }
 	  }

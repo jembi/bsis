@@ -85,7 +85,28 @@
       <label>${collectedSample.donorWeight}</label>
     </div>
   </c:if>
+
+  <c:if test="${collectionFields.donorPulse.hidden != true }">
+    <div>
+      <label>${collectionFields.donorPulse.displayName}</label>
+      <label>${collectedSample.donorPulse}</label>
+    </div>
+  </c:if>
   
+  <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+    <div>
+      <label>${collectionFields.bloodPressureSystolic.displayName}</label>
+      <label>${collectedSample.bloodPressureSystolic}</label>
+    </div>
+  </c:if>
+  
+   <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+    <div>
+      <label>${collectionFields.bloodPressureDiastolic.displayName}</label>
+      <label>${collectedSample.bloodPressureDiastolic}</label>
+    </div>
+  </c:if>
+
   <c:if test="${collectionFields.notes.hidden != true }">
     <div>
       <label>${collectionFields.notes.displayName}</label>

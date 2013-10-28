@@ -131,6 +131,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @Column(name="bloodPressureSystolic")
   private Integer bloodPressureSystolic;
+  
+  @Column(name="bloodPressureDiastolic")
+  private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
@@ -160,6 +163,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private TTIStatus ttiStatus;
 
   private Boolean isDeleted;
+  
+  @Column(length=11)
+  private Integer donorPulse;
 
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
@@ -249,6 +255,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
+    this.donorPulse = collectedSample.donorPulse;
+    this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
+    this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
   }
 
   public List<Product> getProducts() {
@@ -329,19 +338,19 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
-
+  
   public Integer getBloodPressureSystolic() {
 		return bloodPressureSystolic;
 	}
 
-	public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
 		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 
-	public BigDecimal getDonorWeight() {
+  public BigDecimal getDonorWeight() {
     return donorWeight;
   }
-
+  
   public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
@@ -414,11 +423,28 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodRh = bloodRh;
   }
 
-  public String getExtraBloodTypeInformation() {
+  public Integer getBloodPressureDiastolic() {
+		return bloodPressureDiastolic;
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
+	}
+
+	public String getExtraBloodTypeInformation() {
     return extraBloodTypeInformation;
   }
 
   public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
+
+	public Integer getDonorPulse() {
+		return donorPulse;
+	}
+
+	public void setDonorPulse(Integer donorPulse) {
+		this.donorPulse = donorPulse;
+	}
+  
 }

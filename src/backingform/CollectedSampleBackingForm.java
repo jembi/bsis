@@ -363,11 +363,36 @@ public class CollectedSampleBackingForm {
   public void setUseParametersFromBatch(Boolean useParametersFromBatch) {
     this.useParametersFromBatch = useParametersFromBatch;
   }
+
   public BigDecimal getDonorWeight() {
 		return collectedSample.getDonorWeight();
 	}
 
-	public void setDonorWeight(BigDecimal donorWeight) {
+  public void setDonorWeight(BigDecimal donorWeight) {
 		collectedSample.setDonorWeight(donorWeight);
+	}
+  
+  public Integer getDonorPulse() {
+		return collectedSample.getDonorPulse();
+	}
+
+  public void setDonorPulse(Integer donorPulse) {
+		collectedSample.setDonorPulse(donorPulse);
+	}
+  
+  public Integer getBloodPressureSystolic() {
+		return  collectedSample.getBloodPressureSystolic();
+	}
+	
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+	}
+	
+  public Integer getBloodPressureDiastolic() {
+		return collectedSample.getBloodPressureDiastolic();
+	}
+
+  public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
 	}
 }
