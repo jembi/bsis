@@ -371,6 +371,14 @@ public class CollectedSampleBackingForm {
 	
 	public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
 		collectedSample.setHaemoglobinCount(haemoglobinCount);
+
+  public Integer getDonorPulse() {
+		return collectedSample.getDonorPulse();
+	}
+
+	public void setDonorPulse(Integer donorPulse) {
+		collectedSample.setDonorPulse(donorPulse);
+>>>>>>> develop
   
 	public Integer getBloodPressureSystolic() {
 		return  collectedSample.getBloodPressureSystolic();

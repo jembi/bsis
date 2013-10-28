@@ -291,6 +291,12 @@
           <form:input path="haemoglobinCount" value="${firstTimeRender ? collectionFields.haemoglobinCount.defaultValue : ''}" />
           <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
 
+      <c:if test="${collectionFields.donorPulse.hidden != true }">
+        <div>
+          <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>
+          <form:input path="donorPulse" value="${firstTimeRender ? collectionFields.donorPulse.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorPulse" delimiter=", "></form:errors>
+
       <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
         <div>
           <form:label path="bloodPressureSystolic">${collectionFields.bloodPressureSystolic.displayName}</form:label>
