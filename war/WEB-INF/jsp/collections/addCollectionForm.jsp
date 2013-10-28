@@ -240,7 +240,7 @@
         </div>
       </c:if>
       <c:if test="${collectionFields.collectedOn.hidden != true }">
-        <c:if test="${collectionFields.collectedOn.isTimeField == false or collectionFields.collectedOn.useCurrentTime == false}">
+        <c:if test="${collectionFields.collectedOn.isTimeField == true or collectionFields.collectedOn.useCurrentTime == true}">
           <div>
             <form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
             <form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
