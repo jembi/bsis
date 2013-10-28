@@ -78,6 +78,20 @@
       <label style="width: auto;">${collectedSample.bloodRh eq '+' ? 'POS' : collectedSample.bloodRh eq '-' ? 'NEG' : ''}</label>
     </div>
   </sec:authorize>
+  
+  <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+    <div>
+      <label>${collectionFields.bloodPressureSystolic.displayName}</label>
+      <label>${collectedSample.bloodPressureSystolic}</label>
+    </div>
+  </c:if>
+  
+   <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+    <div>
+      <label>${collectionFields.bloodPressureDiastolic.displayName}</label>
+      <label>${collectedSample.bloodPressureDiastolic}</label>
+    </div>
+  </c:if>
 
   <c:if test="${collectionFields.notes.hidden != true }">
     <div>
