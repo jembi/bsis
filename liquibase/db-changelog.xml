@@ -55,7 +55,7 @@
             <column name="isDeleted" value="0"/>
     	</insert>
     	<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="STORAGE Problems"/>
+            <column name="statusChangeReason" value="Storage Problems"/>
             <column name="category" value="DISCARDED"/>
             <column name="isDeleted" value="0"/>
     	</insert>
