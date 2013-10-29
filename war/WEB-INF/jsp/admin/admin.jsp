@@ -38,6 +38,9 @@
     <li id="productTypesForm">
       <a href="configureProductTypes.html">Product Types</a>
     </li>
+     <li id="componentProcessingForm">
+      <a href="configureComponentProcessingFormGenerator.html">Component Processing</a>
+    </li>
     <li id="productTypeCombinationsForm">
       <a href="configureProductTypeCombinations.html">Product Type <br /> Combinations</a>
     </li>

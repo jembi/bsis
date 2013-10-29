@@ -10,7 +10,6 @@ import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,12 +24,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
+import model.componentprocessing.ComponentProcessing;
 import model.donationtype.DonationType;
 import model.requesttype.RequestType;
 import model.tips.Tips;
@@ -50,6 +49,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.BloodBagTypeRepository;
+import repository.ComponentProcessingRepository;
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
 import repository.FormFieldRepository;
@@ -115,6 +115,9 @@ public class AdminController {
   
   @Autowired
   UtilController utilController;
+  
+  @Autowired
+  ComponentProcessingRepository componentProcessingRepository;  
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -708,5 +711,99 @@ public class AdminController {
     }
     return listOfServerAddresses;
   }
+  
+ 
+  @RequestMapping(value = "/configureComponentProcessingFormGenerator", method = RequestMethod.GET)
+    public ModelAndView configureDonorDeferralReasonFormGenerator(
+        HttpServletRequest request, HttpServletResponse response, Model model) {
+  
+  	ModelAndView mv = new ModelAndView("admin/configureComponentProcessing");
+    mv.addObject("allComponentProcessing", componentProcessingRepository.getAllComponentProcessing());
+    mv.addObject("productTypes", productTypesRepository.getAllProductTypes());
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+    }
+  
+  @SuppressWarnings("unchecked")
+  @RequestMapping(value="saveComponentProcessing", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> saveComponentProcessing(HttpServletRequest request,
+      HttpServletResponse response, @RequestParam("componentProcessingType") String newComponentProcessingAsJsonStr) {
+    Map<String, Object> mv = new HashMap<String, Object>();
+    ObjectMapper mapper = new ObjectMapper();
+    boolean success = false;
+    try {
+      Map<String, Object> newComponentProcessingAsMap;
+      newComponentProcessingAsMap = mapper.readValue(newComponentProcessingAsJsonStr, HashMap.class);
+      componentProcessingRepository.saveNewComponentProcessing(newComponentProcessingAsMap);
+      success = true;
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (!success)
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    return mv;
+  }
+  
+  @SuppressWarnings("unchecked")
+  @RequestMapping(value="updateComponentProcessing", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> updateProductType(HttpServletRequest request,
+      HttpServletResponse response, @RequestParam("componentProcessingType") String newComponentProcessingAsJsonStr) {
+    Map<String, Object> m = new HashMap<String, Object>();
+    ObjectMapper mapper = new ObjectMapper();
+    boolean success = false;
+    try {
+      Map<String, Object> newComponentProcessingAsMap;
+      newComponentProcessingAsMap = mapper.readValue(newComponentProcessingAsJsonStr, HashMap.class);
+      componentProcessingRepository.updateComponentProcessing(newComponentProcessingAsMap);
+      success = true;
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (!success)
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    return m;
+  }
+  
+  @RequestMapping(value="componentProcessingSummary", method=RequestMethod.GET)
+  public ModelAndView getComponentProcessingSummary(HttpServletRequest request,
+      @RequestParam(value="productTypeId") Integer productTypeId) {
 
+    ModelAndView mv = new ModelAndView ("admin/componentProcessingSummary");
+    ComponentProcessing componentProcessing = componentProcessingRepository.getComponentProcessingById(productTypeId);
+    mv.addObject("componentProcessing", componentProcessing);
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+  }
+  
+  @RequestMapping(value="deactivateComponentProcessing", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> deactivateComponentProcessing(HttpServletRequest request,
+      @RequestParam(value="componentProcessID") Integer componentProcessID) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    componentProcessingRepository.deactivateComponentProcessing(componentProcessID);
+    return m;
+  }
+  
+  @RequestMapping(value="activateComponentProcessing", method=RequestMethod.POST)
+  public @ResponseBody Map<String, Object> activateProductType(HttpServletRequest request,
+      @RequestParam(value="componentProcessID") Integer componentProcessID) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    componentProcessingRepository.activateComponentProcessing(componentProcessID);
+    return m;
+  }
 }

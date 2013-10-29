@@ -6,12 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+import model.componentprocessing.ComponentProcessing;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -40,8 +44,21 @@ public class ProductType {
   @NotAudited
   @ManyToMany(mappedBy="productTypes")
   private Set<ProductTypeCombination> productTypeCombinations;
+  
+  @NotAudited
+  @OneToOne(fetch=FetchType.EAGER)
+  @PrimaryKeyJoinColumn
+  private ComponentProcessing componentProcessing;
 
-  /**
+  public ComponentProcessing getComponentProcessing() {
+		return componentProcessing;
+	}
+
+	public void setComponentProcessing(ComponentProcessing componentProcessing) {
+		this.componentProcessing = componentProcessing;
+	}
+
+	/**
    * TODO: Not used for now. Some product types like Cryoprecipitate may not require
    * blood group match before issuing. Usecase not clear yet.
    */
@@ -58,8 +75,8 @@ public class ProductType {
   private String description;
 
   private Boolean isDeleted;
-  
-  public Integer getId() {
+
+	public Integer getId() {
     return id;
   }
 

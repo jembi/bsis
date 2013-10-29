@@ -28,4 +28,57 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	
+	<!-- For issue 44 [Define Component Processing Rules] -->
+	<changeSet id="201310261300" author="devang">
+		<createTable tableName="componentprocessing">
+		<column name="id" type="bigint(20)" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="productProcessed" type="smallint(6)"></column>
+		<column name="productSource" type="smallint(6)"></column>
+		<column name="unitsMin" type="int(11)"></column>
+		<column name="unitsMax" type="int(11)"></column>
+		<column name="isDeleted" type="tinyint(1)"></column>
+		</createTable>
+	</changeSet>
+	<changeSet id="201310261310" author="devang">
+		<createTable tableName="componentprocessing_aud">
+			<column name="id" type="bigint(20)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REV" type="int(11)"></column>
+			<column name="REVTYPE" type="tinyint(4)" defaultValue="NULL"></column>
+			<column name="productProcessed" type="smallint(6)"></column>
+			<column name="productSource" type="smallint(6)"></column>
+			<column name="unitsMin" type="int(11)"></column>
+			<column name="unitsMax" type="int(11)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="201310261315" author="devang">
+		<addForeignKeyConstraint constraintName="fk_productProcessed"
+			baseTableName="componentprocessing" baseColumnNames="productProcessed"
+			referencedTableName="producttype" referencedColumnNames="id"
+			 />
+		<addForeignKeyConstraint constraintName="fk_productSource"
+			baseTableName="componentprocessing" baseColumnNames="productSource"
+			referencedTableName="producttype" referencedColumnNames="id"
+			 />
+	</changeSet>
+	<changeSet id="201310261320" author="devang">
+		<addForeignKeyConstraint constraintName="fk_revinfo"
+			baseTableName="componentprocessing_aud" baseColumnNames="REV" 
+			referencedTableName="revinfo" referencedColumnNames="REV"
+			/>
+		<addForeignKeyConstraint constraintName="fk_productProcessed_aud"
+			baseTableName="componentprocessing_aud" baseColumnNames="productProcessed"
+			referencedTableName="producttype" referencedColumnNames="id"
+			 />
+		<addForeignKeyConstraint constraintName="fk_productSource_aud"
+			baseTableName="componentprocessing_aud" baseColumnNames="productSource"
+			referencedTableName="producttype" referencedColumnNames="id"
+			 />
+	</changeSet>			
 </databaseChangeLog>	
