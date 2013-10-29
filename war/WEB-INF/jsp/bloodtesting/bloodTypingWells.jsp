@@ -277,8 +277,6 @@ function autoTab(field,fieldID){
                          padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
              </div>
         </c:forEach>
-
-
       <br />
 
 	  <c:set var="wellNum" value="0" />
