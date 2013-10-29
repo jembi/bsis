@@ -83,7 +83,7 @@ $(document).ready(function() {
     header : false
   });
 
-  $("#${newComponentProcessingDialogId} .ui-multiselect").css("width", "100px");
+  $("#${newComponentProcessingDialogId} .ui-multiselect").css("width", "227px");
 
   $("#${editComponentProcessingDialogId}").find(".expiresAfterUnitsSelector").multiselect({
     multiple : false,
@@ -294,7 +294,7 @@ $(document).ready(function() {
               <form:option value="${productTypes.id}">${productTypes.productType}</form:option>
             </c:forEach>
           </form:select>
-         
+         <form:errors class="formError" path="productTypes" delimiter=", "></form:errors>
       </div>
       <div>
         <label>Units Min </label>
