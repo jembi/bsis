@@ -257,9 +257,7 @@ function autoTab(field,fieldID){
 
       </div>
     </c:if>
-<table width="100%">
-<tr>
-<td width="60%">
+<div style="float: left;">
     <div class="bloodTypingPlate">
         <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
                    border-radius: ${bloodTypingConfig['titerWellRadius']}px;
@@ -357,9 +355,9 @@ function autoTab(field,fieldID){
         Clear form
       </button>
     </div>
-</td>
-<td width="20%">
-    <table class="simpleTable" style="width:60%">
+</div>  
+<div style="float: none;">  
+<table class="simpleTable" style="width: 10% !important">
       <thead>
         <tr>
           <th></th>
@@ -383,10 +381,7 @@ function autoTab(field,fieldID){
         </c:forEach>
       </tbody>
     </table>
-</td>
-<td width="20%"></td>
-</tr>
-</table>
+</div>
 
   </div>
 </div>
