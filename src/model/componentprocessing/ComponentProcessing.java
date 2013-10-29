@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 import model.producttype.ProductType;
 
@@ -38,7 +37,7 @@ public class ComponentProcessing {
 	
 	private Boolean isDeleted;
 	
-	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="componentProcessing")
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="componentProcessing")
 	private ProductType productType;
 	
 	

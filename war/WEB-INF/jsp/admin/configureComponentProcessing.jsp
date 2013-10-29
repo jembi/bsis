@@ -148,7 +148,7 @@ $(document).ready(function() {
 
   function clearComponentProcessingData(formDivId) {
     var newProductTypeForm = $("#" + formDivId);
-    newProductTypeForm.find(".addComponentProcessingFormeId").val("");
+    newProductTypeForm.find('select[name="productTypes"]').val("");
     newProductTypeForm.find('input[name="unitsMin"]').val("");
     newProductTypeForm.find('input[name="unitsMax"]').val("");
   }
@@ -158,7 +158,7 @@ $(document).ready(function() {
 	var oTableTools = TableTools.fnGetInstance($("#${mainContentId}").find("table")[0]);
 	var selectedRow = oTableTools.fnGetSelected()[0];
 	var newComponentProcessingForm = $("#" + formDivId);
-	
+	alert($(selectedRow).data("productprocesses"));
 	newComponentProcessingForm.find('input[name="productTypeId"]').val($(selectedRow).data("processingid"));
     newComponentProcessingForm.find('select[name="productTypes"]').val($(selectedRow).data("productprocesses"));
     newComponentProcessingForm.find('input[name="unitsMin"]').val($(selectedRow).data("unitsmins"));
@@ -170,7 +170,7 @@ $(document).ready(function() {
     var data = {};
     var newProductTypeForm = $("#" + formDivId);
     data.id = newProductTypeForm.find('input[name="productTypeId"]').val();
-    data.productType = newProductTypeForm.find(".addComponentProcessingFormeId").val();
+    data.productType = newProductTypeForm.find('select[name="productTypes"]').val();
     data.unitsMin = newProductTypeForm.find('input[name="unitsMin"]').val();
     data.unitsMax = newProductTypeForm.find('input[name="unitsMax"]').val();
     return data;
@@ -260,7 +260,7 @@ $(document).ready(function() {
       <input type="hidden" name="productTypeId"/>
       <div>
         <label>Product Processed</label>
-        <form:select path="productTypes"
+       	<form:select path="productTypes"
             id="${addComponentProcessingFormProductType}" name="productTypes"
             class="addComponentProcessingFormeId">
             <form:option value="">&nbsp;</form:option>
@@ -268,7 +268,7 @@ $(document).ready(function() {
               <form:option value="${productTypes.id}">${productTypes.productType}</form:option>
             </c:forEach>
           </form:select>
-         
+         <form:errors class="formError" path="productTypes" delimiter=", "></form:errors>
       </div>
      <div>
         <label>Units Min </label>
