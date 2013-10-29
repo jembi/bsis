@@ -355,19 +355,19 @@ function autoTab(field,fieldID){
     </div>
 </div>  
 <div style="float: none;">  
-<table class="simpleTable" style="width: 10% !important">
+<table class="simpleTable" style="width: 10%; padding:50px 40px; border:none;">
       <thead>
         <tr>
           <th></th>
-          <th>Collection Number</th>
+          <th style="font-size:80%;">Collection Number</th>
         </tr>
       </thead>
       <tbody>
         <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
           <c:set var="collection" value="${collections[colNum-1]}" />
           <tr>
-            <td style="text-align: center;">${colNum}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; font-size:90%;">${colNum}</td>
+            <td style="text-align: center; font-size:90%;">
               <c:if test="${empty collection}">
                 EMPTY
               </c:if>
