@@ -35,12 +35,12 @@ public class ComponentProcessingRepository {
 		if(newComponentProcessingAsMap.get("unitsMax")!=null && newComponentProcessingAsMap.get("unitsMax")!=""){
 			componentProcessing.setUnitsMax(Integer.parseInt((String) newComponentProcessingAsMap.get("unitsMax")));
 		}else{
-			componentProcessing.setUnitsMax(0);
+			componentProcessing.setUnitsMax(1);
 		}
 		if(newComponentProcessingAsMap.get("unitsMin")!=null && newComponentProcessingAsMap.get("unitsMin")!=""){
 			componentProcessing.setUnitsMin(Integer.parseInt((String) newComponentProcessingAsMap.get("unitsMin")));
 		}else{
-			componentProcessing.setUnitsMin(0);
+			componentProcessing.setUnitsMin(1);
 		}
 		em.persist(componentProcessing);
 	  }
@@ -84,12 +84,12 @@ public class ComponentProcessingRepository {
 		 		if(newComponentProcessingAsMap.get("unitsMax")!=null && newComponentProcessingAsMap.get("unitsMax")!=""){
 		 			query.setParameter("unitsMax", Integer.parseInt((String) newComponentProcessingAsMap.get("unitsMax")));
 				}else{
-					query.setParameter("unitsMax",0);
+					query.setParameter("unitsMax",1);
 				}
 		 		if(newComponentProcessingAsMap.get("unitsMin")!=null && newComponentProcessingAsMap.get("unitsMin")!=""){
 		 			query.setParameter("unitsMin", Integer.parseInt((String) newComponentProcessingAsMap.get("unitsMin")));
 				}else{
-					query.setParameter("unitsMin", 0);
+					query.setParameter("unitsMin", 1);
 				}
 		 		
 		 		//int numUpdated = query.executeUpdate();

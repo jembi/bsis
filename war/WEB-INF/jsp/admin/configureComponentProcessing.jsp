@@ -136,8 +136,23 @@ $(document).ready(function() {
       buttons: {
         "Save" : function() {
                      var data = getComponentProcessingData(formDivId);
-                     saveComponentProcessing(url, data);
-                     $(this).dialog("close");
+                     if(data.productType!=null && data.productType!=""){
+                    	 $("#p3").html("");
+                    	 $("#p4").html("");
+                    	 if(data.unitsMax > data.unitsMin){
+                        	 saveComponentProcessing(url, data);
+                             $(this).dialog("close");	 
+                         }else{
+                        	 $("#p1").html("UnitMin cannot be greater than Unitmax.");
+                        	 $("#p2").html("UnitMin cannot be greater than Unitmax.");
+                        	 
+                         }
+                     }else{
+                    	 $("#p3").html("Processed Product cannot be Blank.");
+                    	 $("#p4").html("Processed Product cannot be Blank.");
+                     }
+                    
+                     
                    },
         "Cancel" : function() {
                      $(this).dialog("close");
@@ -148,17 +163,19 @@ $(document).ready(function() {
 
   function clearComponentProcessingData(formDivId) {
     var newProductTypeForm = $("#" + formDivId);
+    $("#p1").html("");
+    $("#p2").html("");
+    $("#p3").html("");
+    $("#p4").html("");
     newProductTypeForm.find('select[name="productTypes"]').val("");
     newProductTypeForm.find('input[name="unitsMin"]').val("");
     newProductTypeForm.find('input[name="unitsMax"]').val("");
   }
 
   function setSelectedComponentProcessingData(formDivId) {
-	
 	var oTableTools = TableTools.fnGetInstance($("#${mainContentId}").find("table")[0]);
 	var selectedRow = oTableTools.fnGetSelected()[0];
 	var newComponentProcessingForm = $("#" + formDivId);
-	alert($(selectedRow).data("productprocesses"));
 	newComponentProcessingForm.find('input[name="productTypeId"]').val($(selectedRow).data("processingid"));
     newComponentProcessingForm.find('select[name="productTypes"]').val($(selectedRow).data("productprocesses"));
     newComponentProcessingForm.find('input[name="unitsMin"]').val($(selectedRow).data("unitsmins"));
@@ -267,12 +284,11 @@ $(document).ready(function() {
             <c:forEach var="productTypes" items="${productTypes}">
               <form:option value="${productTypes.id}">${productTypes.productType}</form:option>
             </c:forEach>
-          </form:select>
-         <form:errors class="formError" path="productTypes" delimiter=", "></form:errors>
+          </form:select><label id="p3" style="width:39%;color:red"></label>
       </div>
      <div>
         <label>Units Min </label>
-        <input name="unitsMin" />
+        <input name="unitsMin" /><label id="p1" style="width:39%;color:red"></label>
       </div>
       <div>
         <label>Units Max </label>
@@ -293,12 +309,11 @@ $(document).ready(function() {
             <c:forEach var="productTypes" items="${productTypes}">
               <form:option value="${productTypes.id}">${productTypes.productType}</form:option>
             </c:forEach>
-          </form:select>
-         <form:errors class="formError" path="productTypes" delimiter=", "></form:errors>
+          </form:select><label id="p4" style="width:39%;color:red"></label>
       </div>
       <div>
         <label>Units Min </label>
-        <input name="unitsMin" />
+        <input name="unitsMin" /><label id="p2" style="width:39%;color:red"></label>
       </div>
       <div>
         <label>Units Max </label>
