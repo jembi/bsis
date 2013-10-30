@@ -251,8 +251,8 @@ $(document).ready(function() {
                 data-unitsmins="${componentProcessing.unitsMin}"
                 data-unitsmaxs="${componentProcessing.unitsMax}">
               <td style="display: none;">${componentProcessing.id}</td>
-              <td>${componentProcessing.productType.productType}</td>
               <td>${componentProcessing.productType.productTypeNameShort}</td>
+              <td>${componentProcessing.productType.productType}</td>
               <td>${componentProcessing.unitsMin} </td>
               <td>${componentProcessing.unitsMax} </td>
               <c:set var="cellColor" value="${componentProcessing.isDeleted ? '#A2361A':'#154A16'}" />

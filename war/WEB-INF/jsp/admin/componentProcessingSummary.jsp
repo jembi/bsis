@@ -138,7 +138,7 @@ $(document).ready(function() {
         <div class="formFormatClass">
 
           <div>
-            <label>Product Processed</label>
+            <label>Source Product</label>
             <label>${componentProcessing.productType.productType}</label>
           </div>
 
