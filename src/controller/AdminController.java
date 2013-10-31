@@ -333,6 +333,7 @@ public class AdminController {
     ModelAndView mv = new ModelAndView("admin/configureProductTypes");
     mv.addObject("productTypes", productTypesRepository.getAllProductTypesIncludeDeleted());
     mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("ConfigureProductTypes", utilController.getFormFieldsForForm("ConfigureProductTypes"));
     return mv;
   }
 

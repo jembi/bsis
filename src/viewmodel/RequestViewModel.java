@@ -76,7 +76,7 @@ public class RequestViewModel {
   }
 
   public String getProductType() {
-    return request.getProductType().getProductTypeNameShort();
+    return request.getProductType().getProductTypeCode();
   }
 
   public Location getRequestSite() {

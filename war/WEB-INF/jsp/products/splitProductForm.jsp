@@ -29,7 +29,7 @@ $(document).ready(function() {
       <div>
         <label style="width: auto;">
           Split this product to create
-          ${product.productType.pediProductType.productTypeNameShort}
+          ${product.productType.pediProductType.productTypeCode}
           products
         </label>
       </div>

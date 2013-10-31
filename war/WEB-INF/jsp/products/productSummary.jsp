@@ -256,7 +256,7 @@
       </button-->
       <c:if test="${product.statusAllowsSplitting and not empty product.productType.pediProductType}">
         <button type="button" class="splitProductButton">
-          Split product into ${product.productType.pediProductType.productTypeNameShort}
+          Split product into ${product.productType.pediProductType.productTypeCode}
         </button>
       </c:if>
       <button type="button" class="discardButton">

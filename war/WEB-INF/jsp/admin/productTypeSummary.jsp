@@ -140,20 +140,23 @@ $(document).ready(function() {
         <div class="formFormatClass">
 
           <div>
-            <label>Product type name</label>
+            <label>Product Type Name</label>
             <label>${productType.productType}</label>
           </div>
 
           <div>
-            <label>Short name</label>
-            <label>${productType.productTypeNameShort}</label>
+            <label>Product Code Name</label>
+            <label>${productType.productTypeCode}</label>
           </div>
 
           <div>
-            <label>Expiry time</label>
+            <label>Expiry Interval</label>
             <label>${productType.expiresAfter} ${productType.expiresAfterUnits}</label>
           </div>
-
+		<div>
+        <label>Bled Product</label>
+        	<label>${productType.bledProduct ? '<input type="checkbox" id="bledProduct" name="bledProduct" class="createPediProductType" disabled="true" checked />' :'<input type="checkbox" id="bledProduct" name="bledProduct" disabled="true" class="createPediProductType" />'}</label>
+		</div>	
         </div>
       </div>
 

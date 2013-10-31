@@ -192,7 +192,7 @@ public class UsageController {
     mv.addObject("requestUrl", getUrl(request));
     mv.addObject("firstTimeRender", true);
     mv.addObject("addUsageForProductForm", form);
-    mv.addObject("productType", product.getProductType().getProductTypeNameShort());
+    mv.addObject("productType", product.getProductType().getProductTypeCode());
     mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");

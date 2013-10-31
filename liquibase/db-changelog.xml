@@ -28,4 +28,211 @@
 	<changeSet id="2013-10-19-01" author="devang">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
+	
+	<!-- For issue 34 [Add admin interface to manage & configure product type components and rules] -->
+	<changeSet id="201310261238" author="ankur">
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="productTypes"></column>
+			<column name="defaultDisplayName" value="Product types"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="newProductType"></column>
+			<column name="defaultDisplayName" value="New product type"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="productCode"></column>
+			<column name="defaultDisplayName" value="Product Code"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="productType"></column>
+			<column name="defaultDisplayName" value="Product Type"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="expiryTime"></column>
+			<column name="defaultDisplayName" value="Expiry Time"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="status"></column>
+			<column name="defaultDisplayName" value="Status"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="productTypeName"></column>
+			<column name="defaultDisplayName" value="Product Type Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="productCodeName"></column>
+			<column name="defaultDisplayName" value="Product Code Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="expiryInterval"></column>
+			<column name="defaultDisplayName" value="Expiry Time"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="days"></column>
+			<column name="defaultDisplayName" value="DAYS"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="hours"></column>
+			<column name="defaultDisplayName" value="HOURS"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="years"></column>
+			<column name="defaultDisplayName" value="YEARS"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ConfigureProductTypes"></column>
+			<column name="FIELD" value="bledProduct"></column>
+			<column name="defaultDisplayName" value="Bled Product"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<renameColumn tableName="producttype" oldColumnName="productTypeNameShort" newColumnName="productTypeCode" columnDataType="varchar(30)"/>
+		<renameColumn tableName="producttype_aud" oldColumnName="productTypeNameShort" newColumnName="productTypeCode" columnDataType="varchar(30)"/>
+		<addColumn tableName="producttype">
+			<column name="bledProduct" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+		<addColumn tableName="producttype_aud">
+			<column name="bledProduct" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>	

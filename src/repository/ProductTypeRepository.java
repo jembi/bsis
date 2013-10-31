@@ -64,7 +64,7 @@ public class ProductTypeRepository {
   public void saveNewProductType(Map<String, Object> newProductTypeAsMap) {
     ProductType productType = new ProductType();
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
-    productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
+    productType.setProductTypeCode((String) newProductTypeAsMap.get("productTypeCode"));
     try {
       Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
       productType.setExpiresAfter(expiresAfter);
@@ -82,15 +82,27 @@ public class ProductTypeRepository {
     if (newProductTypeAsMap.get("createPediProductType").equals("true")) {
       ProductType pediProductType = new ProductType();
       pediProductType.setProductType(productType.getProductType() + " Pedi");
-      pediProductType.setProductTypeNameShort(productType.getProductTypeNameShort() + " Pedi");
+      pediProductType.setProductTypeCode(productType.getProductTypeCode() + " Pedi");
       pediProductType.setExpiresAfter(productType.getExpiresAfter());
       pediProductType.setExpiresAfterUnits(productType.getExpiresAfterUnits());
       pediProductType.setDescription("");
       pediProductType.setHasBloodGroup(productType.getHasBloodGroup());
       productType.setPediProductType(pediProductType);
+      if(newProductTypeAsMap.get("bledProduct").equals("true")){
+      	pediProductType.setBledProduct(Boolean.TRUE);
+      }else{
+      	pediProductType.setBledProduct(Boolean.FALSE);
+      }
       pediProductType.setIsDeleted(false);
       em.persist(pediProductType);
     }
+
+    if(newProductTypeAsMap.get("bledProduct").equals("true")){
+    	productType.setBledProduct(Boolean.TRUE);
+    }else{
+    	productType.setBledProduct(Boolean.FALSE);
+    }
+    
     em.persist(productType);
   }
 
@@ -136,7 +148,12 @@ public class ProductTypeRepository {
     String productTypeId = (String) newProductTypeAsMap.get("id");
     ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
-    productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
+    productType.setProductTypeCode((String) newProductTypeAsMap.get("productTypeCode"));
+    if(newProductTypeAsMap.get("bledProduct").equals("true")){
+    	productType.setBledProduct(Boolean.TRUE);
+    }else{
+    	productType.setBledProduct(Boolean.FALSE);
+    }
     try {
       Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
       productType.setExpiresAfter(expiresAfter);
@@ -174,16 +191,16 @@ public class ProductTypeRepository {
         continue;
       ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
       productTypes.add(productType);
-      combinationNameList.add(productType.getProductTypeNameShort());
+      combinationNameList.add(productType.getProductTypeCode());
     }
 
     if (StringUtils.isBlank(combinationName)) {
       combinationName = StringUtils.join(combinationNameList, ",");
     }
-
+    
     productTypeCombination.setCombinationName(combinationName);
     productTypeCombination.setProductTypes(productTypes);
-
+    
     productTypeCombination.setIsDeleted(false);
     em.persist(productTypeCombination);
   }

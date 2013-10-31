@@ -131,7 +131,7 @@ $(document).ready(
                 <td>${product.collectionNumber}</td>
               </c:if>
               <c:if test="${productFields.productType.hidden != true}">
-                <td>${product.productType.productTypeNameShort}</td>
+                <td>${product.productType.productTypeCode}</td>
               </c:if>
               <c:if test="${productFields.bloodGroup.hidden != true}">
                 <td>${product.bloodGroup}</td>

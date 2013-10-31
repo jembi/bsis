@@ -205,7 +205,7 @@
       </div>
       <c:forEach var="productType" items="${productTypes}">
         <div style="display: none;">
-          <label style="vertical-align: middle;">${productType.productTypeNameShort} <br />expires on</label>
+          <label style="vertical-align: middle;">${productType.productTypeCode} <br />expires on</label>
           <input class="productTypeExpiresOnInput" data-producttypeid="${productType.id}" />
         </div>
       </c:forEach>

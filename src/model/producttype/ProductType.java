@@ -29,7 +29,7 @@ public class ProductType {
   private String productType;
 
   @Column(length=30)
-  private String productTypeNameShort;
+  private String productTypeCode;
 
   private Integer expiresAfter;
 
@@ -58,6 +58,8 @@ public class ProductType {
   private String description;
 
   private Boolean isDeleted;
+  
+  private Boolean bledProduct;
   
   public Integer getId() {
     return id;
@@ -100,12 +102,12 @@ public class ProductType {
     return this.id == pt.id;
   }
 
-  public String getProductTypeNameShort() {
-    return productTypeNameShort;
+  public String getProductTypeCode() {
+    return productTypeCode;
   }
 
-  public void setProductTypeNameShort(String productTypeShortName) {
-    this.productTypeNameShort = productTypeShortName;
+  public void setProductTypeCode(String productTypeCode) {
+    this.productTypeCode = productTypeCode;
   }
 
   public ProductTypeTimeUnits getExpiresAfterUnits() {
@@ -160,4 +162,13 @@ public class ProductType {
   public void setPediProductType(ProductType pediProductType) {
     this.pediProductType = pediProductType;
   }
+
+	public Boolean getBledProduct() {
+		return bledProduct;
+	}
+
+	public void setBledProduct(Boolean bledProduct) {
+		this.bledProduct = bledProduct;
+	}
+  
 }

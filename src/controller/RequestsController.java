@@ -233,7 +233,7 @@ public class RequestsController {
     sortColumnMap.put("patientBloodRh", "patientBloodRh");
     sortColumnMap.put("requestDate", "requestDate");
     sortColumnMap.put("requiredDate", "requiredDate");
-    sortColumnMap.put("productType", "productType.productTypeNameShort");
+    sortColumnMap.put("productType", "productType.productTypeCode");
     sortColumnMap.put("numUnitsRequested", "numUnitsRequested");
     sortColumnMap.put("numUnitsIssued", "numUnitsIssued");
     sortColumnMap.put("requestSite", "requestSite");
