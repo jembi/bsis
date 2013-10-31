@@ -132,6 +132,14 @@ $(document).ready(function() {
           <form:option value="O-" label="O-" />
         </form:select>
       </div>
+      
+       <div>
+        <form:label path="dueToDonate" style="width: 9.2%;">Due To Donate</form:label>
+        <form:checkbox path="dueToDonate" style="width: auto; position: relative; top: 2px;"/>
+      </div>
+
+      <br />
+      <br />
     </form:form>
 
     <div class="formFormatClass">

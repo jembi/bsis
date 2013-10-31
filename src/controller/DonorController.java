@@ -412,6 +412,7 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
+    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
@@ -469,7 +470,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams);
+        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate());
 
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
