@@ -190,30 +190,5 @@
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>		
 	</changeSet>
-	
-	<!-- For issue 69 [Allow for entry of donor weight] -->
-    <changeSet id="201310241815" author="devang">
-        <insert tableName="FormField">
-           <column name="form" value="CollectedSample"></column>
-           <column name="FIELD" value="donorWeight"></column>
-           <column name="defaultDisplayName" value="Donor Weight"></column>
-           <column name="defaultValue" value=""></column>
-           <column name="maxLength" value="0"></column>
-           <column name="hidden" value="0"></column>
-           <column name="isHidable" value="1"></column>
-           <column name="isRequired" value="0"></column>
-           <column name="canBeOptional" value="1"></column>
-           <column name="autoGenerate" value="0"></column>
-           <column name="isAutoGeneratable" value="0"></column>
-           <column name="useCurrentTime" value="0"></column>
-           <column name="isTimeField" value="0"></column>                        
-        </insert>
-        <update tableName="collectedsample">
-                <column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
-        </update>
-        <update tableName="CollectedSample_AUD">
-                <column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
-        </update>
-    </changeSet>
     
 </databaseChangeLog>	
