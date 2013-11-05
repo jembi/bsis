@@ -85,7 +85,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<update tableName="collectedsample">
+		<update tableName="CollectedSample">
 			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
@@ -110,7 +110,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<update tableName="collectedsample">
+		<update tableName="CollectedSample">
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
@@ -158,7 +158,7 @@
             <column name="bloodPressure" type="int" defaultValue="NULL"></column>
         </update>
         <renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-        <addColumn tableName="collectedsample">
+        <addColumn tableName="CollectedSample">
             <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
         </addColumn>
         <addColumn tableName="CollectedSample_AUD">
