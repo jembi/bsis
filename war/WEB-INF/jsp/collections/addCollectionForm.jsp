@@ -358,6 +358,8 @@
           <form:label path="haemoglobinCount">${collectionFields.haemoglobinCount.displayName}</form:label>
           <form:input path="haemoglobinCount" value="${firstTimeRender ? collectionFields.haemoglobinCount.defaultValue : ''}" />
           <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
+        </div>
+      </c:if>    
 
        <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
         <div>
@@ -372,7 +374,6 @@
           <form:label path="bloodPressureDiastolic">${collectionFields.bloodPressureDiastolic.displayName}</form:label>
           <form:input path="bloodPressureDiastolic" value="${firstTimeRender ? collectionFields.bloodPressureDiastolic.defaultValue : ''}" />
           <form:errors class="formError" path="collectedSample.bloodPressureDiastolic" delimiter=", "></form:errors>
-
         </div>
       </c:if>
       
@@ -384,6 +385,7 @@
             delimiter=", "></form:errors>
         </div>
       </c:if>
+      
       </form:form>
   
       <div style="margin-left: 200px;">
