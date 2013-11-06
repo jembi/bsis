@@ -73,7 +73,7 @@
     <div class="infoMessage">
       BSIS is a system to monitor blood inventory from collection to transfusion.
       <br /> 
-      Started as a collaboration between the Computing For Good (C4G) program at Georgia Tech and the Centers for Diseases Control and Prevention (CDC), the application is now maintained, developed and managed by Jembi Health Systems (JHS), in partnership with Safe Blood for Africa (SBFA) and the Centers for Diseases Control (CDC).
+      Started as a collaboration between the Computing For Good (C4G) program at Georgia Tech and the Centers for Disease Control and Prevention (CDC), the application is now maintained, developed and managed by Jembi Health Systems (JHS), in partnership with Safe Blood for Africa (SBFA) and the Centers for Disease Control and Prevention (CDC).
       <br />
       <br />
       About - <a
