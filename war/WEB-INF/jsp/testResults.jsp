@@ -27,6 +27,12 @@
         <a href="ttiWellsWorksheetFormGenerator.html">TTI results (ELISA)</a>
       </li>
     </c:if>
+    
+    <c:if test="${labsetup['ttiUploadResult'] == 'true' }">
+      <li id="ttiTestResultsWells">
+        <a href="uploadTTIResultsFormGenerator.html">Upload TTI Results</a>
+      </li>
+    </c:if>
 
     <!-- li id="ttiResults">
       <a href="ttiFormGenerator.html">TTI Results</a>
@@ -37,7 +43,5 @@
         <a href="worksheetForTestResultsFormGenerator.html">Worksheets</a>
       </li>
     </c:if>
-
   </ul>
-
 </div>
