@@ -25,6 +25,7 @@
 <c:set var="addDonorFormId">addDonorForm-${unique_page_id}</c:set>
 
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="titleSelectorId">titleSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -99,7 +100,11 @@ $(document).ready(function() {
       });
   
   
-  
+  $("#${titleSelectorId}").multiselect({
+      multiple : false,
+      selectedList : 1,
+      header : false
+    });
   
   function notifyParentSuccess() {
       // let the parent know we are done

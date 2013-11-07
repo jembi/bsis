@@ -175,4 +175,8 @@ public class DonorViewModel {
       return "";
     }
   }
+  
+  public String getTitle() {
+    return donor.getTitle().name();
+  }
 }

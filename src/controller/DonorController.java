@@ -17,6 +17,7 @@ import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,10 @@ import backingform.validator.DonorBackingFormValidator;
 @Controller
 public class DonorController {
 
+	/**
+	 * The Constant LOGGER.
+	 */	
+  private static final Logger LOGGER = Logger.getLogger(DonorController.class);
   @Autowired
   private DonorRepository donorRepository;
 
@@ -232,7 +237,9 @@ public class DonorController {
     } else {
       try {
         Donor donor = form.getDonor();
-        donor.setIsDeleted(false);
+        donor.setIsDeleted(false);        
+        // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
+        donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
@@ -385,9 +392,8 @@ public class DonorController {
     try {
       donorRepository.deleteDonor(donorId);
     } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
+    	LOGGER.error("Internal Exception");
+    	LOGGER.error(ex.getMessage());    	      
       success = false;
       errMsg = "Internal Server Error";
     }

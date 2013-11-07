@@ -257,7 +257,7 @@ function autoTab(field,fieldID){
 
       </div>
     </c:if>
-
+<div style="float: left;">
     <div class="bloodTypingPlate">
         <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
                    border-radius: ${bloodTypingConfig['titerWellRadius']}px;
@@ -277,8 +277,6 @@ function autoTab(field,fieldID){
                          padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
              </div>
         </c:forEach>
-
-
       <br />
 
 	  <c:set var="wellNum" value="0" />
@@ -355,25 +353,21 @@ function autoTab(field,fieldID){
         Clear form
       </button>
     </div>
-
-
-    <br />
-    <span style="font-size: 15pt; font-weight: bold;">List of collection numbers by column in titer plate</span>
-    <br />
-    <br />
-    <table style="width: 40%" class="simpleTable">
+</div>  
+<div style="float: none;">  
+<table class="simpleTable" style="width: 10%; padding:50px 40px; border:none;">
       <thead>
         <tr>
-          <th>Column number</th>
-          <th>Collection Number in Column</th>
+          <th></th>
+          <th style="font-size:80%;">Collection Number</th>
         </tr>
       </thead>
       <tbody>
         <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
           <c:set var="collection" value="${collections[colNum-1]}" />
           <tr>
-            <td style="text-align: center;">${colNum}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; font-size:90%;">${colNum}</td>
+            <td style="text-align: center; font-size:90%;">
               <c:if test="${empty collection}">
                 EMPTY
               </c:if>
@@ -385,7 +379,7 @@ function autoTab(field,fieldID){
         </c:forEach>
       </tbody>
     </table>
-
+</div>
 
   </div>
 </div>
