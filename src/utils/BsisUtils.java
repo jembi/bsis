@@ -19,7 +19,7 @@ public class BsisUtils {
 	 * @return the directory
 	 */
 	public static String getDirectory(String basePath) {
-		StringBuilder dirStructure = getImageRootDirectory(basePath);		
+		StringBuilder dirStructure = getRootDirectory(basePath);		
 		dirStructure.append(File.separator);
 		File objectDir = new File(dirStructure.toString());
 		mkdirs(objectDir);
@@ -33,7 +33,7 @@ public class BsisUtils {
 	 *          the image root directory
 	 * @return the image root directory
 	 */
-	public static StringBuilder getImageRootDirectory(String imageRootDirectory) {
+	public static StringBuilder getRootDirectory(String imageRootDirectory) {
 		File rootDir = new File(imageRootDirectory);
 		mkdirs(rootDir);
 		StringBuilder dirStructure = new StringBuilder(imageRootDirectory);
