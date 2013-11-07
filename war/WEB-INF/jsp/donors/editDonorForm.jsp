@@ -141,6 +141,18 @@
           <form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
         </div>
       </c:if>
+      <c:if test="${donorFields.title.hidden != true }">
+        <div>
+          <form:label path="title">${donorFields.title.displayName}</form:label>
+          <form:select path="title" id="${titleSelectorId}">
+            <form:option value="Blank" label="" />
+            <form:option value="Mr" label="Mr" />
+            <form:option value="Ms" label="Ms" />
+            <form:option value="Mrs" label="Mrs" />
+            <form:option value="Dr" label="Dr" />
+          </form:select>
+        </div>
+      </c:if>
       <c:if test="${donorFields.firstName.hidden != true }">
         <div>
           <form:label path="firstName">${donorFields.firstName.displayName}</form:label>
