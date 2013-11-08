@@ -33,6 +33,7 @@ $(document).ready(function() {
     console.log(newDiv);
     newDiv.find('input[name="id"]').val("");
     newDiv.find('input[name="requestType"]').val("");
+    newDiv.find('input[name="bulkTransfer"]').removeAttr('checked');
     $("#${configureRequestTypesFormId}").append(newDiv);
   });
 
@@ -47,10 +48,18 @@ $(document).ready(function() {
       var div = $(requestTypeDivs[index]);
       var id = div.find('input[name="id"]').val();
       var requestType = div.find('input[name="requestType"]').val();
+      var bulkTransfer = div.find('input[name="bulkTransfer"]').is(":checked");
       console.log(requestType);
       if (id == undefined || id == null || id === "")
         id = requestType;
-      data[id] = requestType;
+      if(bulkTransfer == true){
+    	  data[id] = {requestType:requestType,bulkTransfer:"true"};  
+      }
+      else{
+    	  data[id] = {requestType:requestType,bulkTransfer:"false"};
+      }
+      
+      
     }
 
     console.log(JSON.stringify(data));
@@ -100,6 +109,10 @@ $(document).ready(function() {
             <div>
               <input type="hidden" name="id" value="${requestType.id}" />
               <input type="text" name="requestType" value="${requestType.requestType}" />
+             <c:choose>
+      			<c:when test="${requestType.bulkTransfer eq true}"><input type="checkbox" name="bulkTransfer" checked="checked"/></c:when>
+				<c:otherwise><input type="checkbox" name="bulkTransfer"/></c:otherwise>
+			</c:choose>
             </div>
           </div>
       </c:forEach>
