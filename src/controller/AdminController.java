@@ -527,17 +527,12 @@ public class AdminController {
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         @SuppressWarnings("unchecked")
-				Map<String, String> innerMap = (HashMap<String, String>) params.get(id);
-        
-        int c=0;
+        Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
+				
         RequestType rt = new RequestType();
-        for(Map.Entry<String, String>  val : innerMap.entrySet()){
-        	if(c==0)
-        		rt.setRequestType(val.getValue());
-        	else
-        		rt.setBulkTransfer(Boolean.parseBoolean(val.getValue()));
-        	c++;
-        }
+
+        rt.setRequestType((String) paramValue.get("requestType"));
+        rt.setBulkTransfer((Boolean) paramValue.get("bulkTransfer"));
         
         try {
           rt.setId(Integer.parseInt(id));

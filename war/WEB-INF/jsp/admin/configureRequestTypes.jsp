@@ -52,13 +52,7 @@ $(document).ready(function() {
       console.log(requestType);
       if (id == undefined || id == null || id === "")
         id = requestType;
-      if(bulkTransfer == true){
-    	  data[id] = {requestType:requestType,bulkTransfer:"true"};  
-      }
-      else{
-    	  data[id] = {requestType:requestType,bulkTransfer:"false"};
-      }
-      
+      data[id] = {requestType:requestType,bulkTransfer:bulkTransfer};  
       
     }
 
