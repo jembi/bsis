@@ -46,7 +46,7 @@ import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
-import utils.BsisUtils;
+import utils.FileUploadUtils;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
@@ -461,7 +461,7 @@ public class TTIController {
 			tsvFile = request.getFile(iterator.next());
 		}
 		fileName = tsvFile.getOriginalFilename();
-		uploadPath = BsisUtils.getDirectory( UploadTTIResultConstant.UPLOAD_DIRECTORY);
+		uploadPath = FileUploadUtils.getDirectory( UploadTTIResultConstant.UPLOAD_DIRECTORY);
 		String[] tsvFilestr;
 		tsvFilestr = tsvFile.getOriginalFilename().toString()
 				.split(UploadTTIResultConstant.FILE_SPLIT);

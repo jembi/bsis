@@ -5,9 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
-public class BsisUtils {
+public class FileUploadUtils {
 
-	private static final Logger LOGGER = Logger.getLogger(BsisUtils.class);
+	private static final Logger LOGGER = Logger.getLogger(FileUploadUtils.class);
 
 	/**
 	 * Gets the directory.
