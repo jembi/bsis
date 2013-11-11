@@ -190,5 +190,15 @@
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>		
 	</changeSet>
+	
+	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
+	<changeSet id="201311081617" author="devang">
+	    <addColumn tableName="requesttype">
+	        <column name="bulkTransfer" type="TINYINT(1)"/>
+	    </addColumn>
+		<addColumn tableName="requesttype_aud">
+	        <column name="bulkTransfer" type="TINYINT(1)"/>
+	    </addColumn>
+	</changeSet>
     
 </databaseChangeLog>	
