@@ -98,18 +98,21 @@ $(document).ready(function() {
       </p>
     </div>
     <form id="${configureRequestTypesFormId}">
-        <c:forEach var="requestType" items="${model.allRequestTypes}">
-          <div class="requestTypeDiv">
-            <div>
-              <input type="hidden" name="id" value="${requestType.id}" />
-              <input type="text" name="requestType" value="${requestType.requestType}" />
-             <c:choose>
-      			<c:when test="${requestType.bulkTransfer eq true}"><input type="checkbox" name="bulkTransfer" checked="checked"/></c:when>
-				<c:otherwise><input type="checkbox" name="bulkTransfer"/></c:otherwise>
-			</c:choose>
-            </div>
-          </div>
-      </c:forEach>
+    
+        
+       <div class="requestTypeDiv">
+       	<c:forEach var="requestType" items="${model.allRequestTypes}">
+         <div>
+           <input type="hidden" name="id" value="${requestType.id}" />
+           <input type="text" name="requestType" value="${requestType.requestType}" />
+           <c:choose>
+   			 <c:when test="${requestType.bulkTransfer eq true}"> Bulk Transfer <input type="checkbox" name="bulkTransfer" checked="checked"/></c:when>
+			 <c:otherwise> Bulk Transfer <input type="checkbox" name="bulkTransfer"/></c:otherwise>
+		   </c:choose>
+         </div>
+         </c:forEach>
+       </div>
+      
     </form>
       <br />
       <div>
