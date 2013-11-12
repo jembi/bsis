@@ -191,4 +191,14 @@
 		</addColumn>		
 	</changeSet>
     
+    <!-- For issue 104 [Add Lot Release Functionality] -->
+    <changeSet id="201311111726" author="devang">
+    	<insert tableName="genericconfig">
+    		<column name="id" value="48"></column>
+    		<column name="propertyName" value="lotRelease"></column>
+    		<column name="propertyOwner" value="labsetup"></column>
+    		<column name="propertyValue" value="TRUE"></column>
+    	</insert>
+    </changeSet>
+    
 </databaseChangeLog>	
