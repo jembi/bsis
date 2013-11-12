@@ -193,10 +193,10 @@
       
  	<!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
   	<changeSet id="201311071517" author="devang">
-		<addColumn tableName="bloodtestresult">
+		<addColumn tableName="BloodTestResult">
 			<column name="reagentLotNumber" type="varchar(20)" />
 		</addColumn>
-		<insert tableName="genericconfig">
+		<insert tableName="GenericConfig">
 			<column name="id" value="47"></column>
 			<column name="propertyName" value="ttiUploadResult"></column>
 			<column name="propertyOwner" value="labsetup"></column>

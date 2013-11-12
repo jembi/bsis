@@ -1,13 +1,17 @@
 package utils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import model.bloodtesting.UploadTTIResultConstant;
 
 import org.apache.log4j.Logger;
 
-public class BsisUtils {
+public class FileUploadUtils {
 
-	private static final Logger LOGGER = Logger.getLogger(BsisUtils.class);
+	private static final Logger LOGGER = Logger.getLogger(FileUploadUtils.class);
 
 	/**
 	 * Gets the directory.
@@ -82,4 +86,26 @@ public class BsisUtils {
 			LOGGER.error(errorMsg + e.getMessage());
 		}
 	}
+	
+	/**
+	 * Utility method to split file path
+	 * 
+	 * @param fileName
+	 * @return file split path
+	 */
+	public static String  splitFilePath(String fileName){
+		 String[] getFileName = fileName.split(UploadTTIResultConstant.TSV_FILE_EXTENTION);
+		 String fileNameWithExt= getFileName[0] + getCurrentDateAsString() + UploadTTIResultConstant.TSV_FILE_EXTENTION ;
+		 return fileNameWithExt;
+	 }
+	 
+	/**
+	 * utility method that returns current date in YearMonthDateHoursMinuteSecond
+	 * @return current date in YearMonthDateHoursMinuteSecond format
+	 */
+	 public static String getCurrentDateAsString(){
+	  Date currentDate = new Date();
+	  SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddhhmmss");  
+	  return ft.format(currentDate);
+	 }
 }
