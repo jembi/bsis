@@ -82,7 +82,6 @@ $(document).ready(function() {
         saveTestsData[testId] = val;
       }
     }
-
     showLoadingImage($("#${tabContentId}"));
     $.ajax({
       url: "saveAdditionalTTITests.html",
@@ -196,22 +195,40 @@ $(document).ready(function() {
             <!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
             <c:forEach var="ttiTest" items="${allTTITests}">
               <c:set var="testCategory" value="${ttiTest.value.category}" />
-              <c:if test="${not empty availableTestResults[ttiTest.key] and testCategory eq 'TTI'}">
+              <c:set var="counter" value="-1"></c:set>
+              <c:forEach var="availableTestKey" items="${availableTestResults}">
+              <c:set var="string1" value="${availableTestKey.key}"/>
+              <c:set var="string2" value="${fn:substring(string1,0,fn:indexOf(string1, '~'))}" />
+              <c:set var="bloodTestIdAvailable" value="${fn:substring(string1,(fn:indexOf(string1, '~')+1),fn:length(availableTestResults))}"/>
+              <c:set var="string3" value="${string2}~${ttiTest.key}" />
+            
+              <c:if test="${not empty availableTestResults[string3] and testCategory eq 'TTI'}">
                 <div>
+               
+                <c:set var="oldBloodTestIdAvailable" value="${bloodTestIdAvailable}"></c:set>
+                <c:if test="${ttiTest.value.id eq bloodTestIdAvailable and ttiTest.value.id eq bloodTestIdAvailable}">
+                  <c:set var="oldBloodTestIdAvailable" value="${ttiTest.value.id}"></c:set>
+                <c:set var="counter" value="${counter+1}"></c:set>
+                </c:if>
+                <c:if test="${counter eq 0 or counter eq -1}">
                   <label style="vertical-align: middle;">${ttiTest.value.testName}</label>
+                 </c:if>
+                   <c:if test="${counter gt 0}">
+                    <label style="vertical-align: middle;">${ttiTest.value.testName} (Repeat-${counter})</label>
+                   </c:if>
                   <label class="availableTestResultLabel"
                           style="font-size: 1.7em; vertical-align: middle; width: 80px;">
-                      ${availableTestResults[ttiTest.key]}
+                      ${availableTestResults[string3]}
 
                     <c:if test="${recordMachineReadingsForTTI eq 'true'}">
                       <span class="machineReadingText" style="display: none;">
-                        ${recentTestResults[ttiTest.key].machineReading.machineReading}
+                        ${recentTestResults[string3].machineReading.machineReading}
                       </span>
                     </c:if>
 
                   </label>
                   <input name="ttiTest-${ttiTest.key}" class="ttiTestInput availableTestResultInput"
-                         value="${availableTestResults[ttiTest.key]}"
+                         value="${availableTestResults[string3]}"
                          data-testid="${ttiTest.value.id}"
                          data-available="true"
                          style="width: 80px;"
@@ -219,6 +236,8 @@ $(document).ready(function() {
                 </div>
                 <c:set var="availableTestResultCount" value="${availableTestResultCount + 1}" />
               </c:if>
+               </c:forEach>
+                 <c:set var="counter" value="1"></c:set>
             </c:forEach>
           </c:if>
 
@@ -262,15 +281,17 @@ $(document).ready(function() {
           </div>
           <!-- Show other tests to the user -->
           <c:forEach var="ttiTest" items="${allTTITests}">
-    
-            <c:set var="isPendingTest" value="${false}" />
-            <c:forEach var="pendingTestId" items="${pendingTests}">
-              <c:if test="${pendingTestId eq ttiTest.key}">
+    	   <c:set var="isPendingTest" value="${false}" />
+            <c:forEach var="availableTestResultsId" items="${availableTestResults}">
+             <c:set var="actTestDoneStr" value="${availableTestResultsId.key}"/>
+             <c:set var="otherTestPending" value="${fn:substring(actTestDoneStr,(fn:indexOf(actTestDoneStr, '~')+1),fn:length(actTestDoneStr))}"/>
+             
+             
+              <c:if test="${otherTestPending eq ttiTest.key}">
                 <c:set var="isPendingTest" value="${true}" />
               </c:if>
             </c:forEach>
-    
-            <c:if test="${!isPendingTest && empty availableTestResults[ttiTest.key]}">
+            <c:if test="${!isPendingTest && empty availableTestResults[string3]}">
               <div>
                 <label>${ttiTest.value.testName}</label>
                 <input name="ttiTest-${ttiTest.value.id}"
@@ -280,7 +301,6 @@ $(document).ready(function() {
               </div>
             </c:if>
           </c:forEach>
-
           <!-- Save/Cancel button should be hidable if no pending tests -->
           <c:if test="${fn:length(pendingTests) eq 0}">
             <div>
@@ -308,8 +328,5 @@ $(document).ready(function() {
 
       </div>
     </div>
-
-
-  </div>
-
+ </div>
 </div>

@@ -805,4 +805,18 @@ public class BloodTestingRepository {
     List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
   }
+  
+  public Map<String, BloodTestResult> getAllTestResultsForCollection(Long collectedSampleId) {
+	String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "+ "bt.collectedSample.id=:collectedSampleId ORDER BY bt.testedOn , bt.bloodTest.id";
+	TypedQuery<BloodTestResult> query = em.createQuery(queryStr,BloodTestResult.class);
+	query.setParameter("collectedSampleId", collectedSampleId);
+	List<BloodTestResult> bloodTestResults = query.getResultList();
+	Map<String, BloodTestResult> allBloodTestResults = new LinkedHashMap<String, BloodTestResult>();
+	for (BloodTestResult bt : bloodTestResults) {
+		Integer bloodTestId = bt.getBloodTest().getId();
+		allBloodTestResults.put(bt.getId()+"~"+bloodTestId, bt);
+	
+	}
+	return allBloodTestResults;
+	}
 }

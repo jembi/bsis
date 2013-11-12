@@ -220,12 +220,19 @@ $(document).ready(function() {
             <!-- traverse blood typing tests in order to make sure they are traversed in the order of id's -->
             <c:forEach var="bloodTypingTest" items="${allBloodTypingTests}">
               <c:set var="testCategory" value="${bloodTypingTest.value.category}" />
-              <c:if test="${not empty availableTestResults[bloodTypingTest.key] and testCategory eq 'BLOODTYPING'}">
+              
+              <c:forEach var="availableTestKey" items="${availableTestResults}">             
+              <c:set var="string1" value="${availableTestKey.key}"/>
+              <c:set var="string2" value="${fn:substring(string1,0,fn:indexOf(string1, '~'))}" />
+              <c:set var="bloodTestIdAvailable" value="${fn:substring(string1,(fn:indexOf(string1, '~')+1),fn:length(availableTestResults))}"/>
+              <c:set var="string3" value="${string2}~${bloodTypingTest.key}" />
+              
+              <c:if test="${not empty availableTestResults[string3] and testCategory eq 'BLOODTYPING'}">
                 <div>
                   <label>${bloodTypingTest.value.testName}</label>
-                  <label class="availableTestResultLabel" style="font-size: 1.5em; vertical-align: middle; width: 80px;">${availableTestResults[bloodTypingTest.key]}</label>
+                  <label class="availableTestResultLabel" style="font-size: 1.5em; vertical-align: middle; width: 80px;">${availableTestResults[string3]}</label>
                   <input name="bloodTypingTest-${bloodTypingTest.key}" class="bloodTypingTestInput availableTestResultInput"
-                         value="${availableTestResults[bloodTypingTest.key]}"
+                         value="${availableTestResults[string3]}"
                          data-testid="${bloodTypingTest.value.id}"
                          data-available="true"
                          style="width: 80px;"
@@ -233,6 +240,7 @@ $(document).ready(function() {
                 </div>
                 <c:set var="availableTestResultCount" value="${availableTestResultCount + 1}" />
               </c:if>
+              </c:forEach>
             </c:forEach>
           </c:if>
 

@@ -2,12 +2,11 @@ package repository.bloodtesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,6 +20,8 @@ import model.bloodtesting.rules.CollectionField;
 import model.collectedsample.CollectedSample;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,9 @@ import viewmodel.BloodTestingRuleResult;
 @Repository
 @Transactional
 public class BloodTestingRuleEngine {
-
+	
+  static final Logger LOGGER = LoggerFactory.getLogger(BloodTestingRuleEngine.class);
+  
   @PersistenceContext
   private EntityManager em;
 
@@ -64,12 +67,16 @@ public class BloodTestingRuleEngine {
     query.setParameter("isActive", true);
     List<BloodTestingRule> rules = query.getResultList();
 
-    Map<String, String> storedTestResults = new TreeMap<String, String>();
+    Map<String, String> storedTestResults = new LinkedHashMap<String, String>();
 
     Map<Integer, BloodTestResult> recentTestResults = 
         bloodTestingRepository.getRecentTestResultsForCollection(collectedSample.getId());
-    for (Integer testId : recentTestResults.keySet()) {
-      BloodTestResult testResult = recentTestResults.get(testId); 
+    
+    Map<String, BloodTestResult> allBloodTestResults = 
+            bloodTestingRepository.getAllTestResultsForCollection(collectedSample.getId());
+
+    for (String testId : allBloodTestResults.keySet()) {
+      BloodTestResult testResult = allBloodTestResults.get(testId); 
       storedTestResults.put(testId.toString(), testResult.getResult());
     }
 
@@ -80,10 +87,11 @@ public class BloodTestingRuleEngine {
       basicTTITestsNotAdded.add(bt.getId());
     }
     
-    Map<String, String> availableTestResults = new TreeMap<String, String>();
+    Map<String, String> availableTestResults = new LinkedHashMap<String, String>();
     availableTestResults.putAll(storedTestResults);
     for (String storedTestId: storedTestResults.keySet()) {
-      basicTTITestsNotAdded.remove(new Integer(storedTestId.toString()));
+      String[] splitString = 	storedTestId.split("~");
+      basicTTITestsNotAdded.remove(new Integer(splitString[1].toString()));
     }
     for (Long extraTestId : bloodTestResults.keySet()) {
       // for rule comparison we are overwriting existing test results with new test results
@@ -119,7 +127,8 @@ public class BloodTestingRuleEngine {
 
       boolean atLeastOneResultFoundForPattern = false;
       for (String testId : testIds) {
-        String actualResult = availableTestResults.get(testId);
+        String actualResult = getActualTest(availableTestResults,testId);
+       // actualResult = availableTestResults.get("1~"+testId);
         if (actualResult == null) {
           missingTestIdsForRule.add(testId);
           patternMatch = false;
@@ -277,8 +286,10 @@ public class BloodTestingRuleEngine {
     ruleResult.setAvailableTestResults(availableTestResults);
     ruleResult.setBloodTypingStatus(bloodTypingStatus);
     ruleResult.setStoredTestResults(storedTestResults);
+    
+   
 
-    Map<String, BloodTestResult> recentTestResultsWithStringKey = new HashMap<String, BloodTestResult>();
+    Map<String, BloodTestResult> recentTestResultsWithStringKey = new LinkedHashMap<String, BloodTestResult>();
 
     for (Integer testId : recentTestResults.keySet()) {
       recentTestResultsWithStringKey.put(testId.toString(), recentTestResults.get(testId));
@@ -292,5 +303,23 @@ public class BloodTestingRuleEngine {
 
     return ruleResult;
   }
+
+  /**
+   * Method to find other test id from available test result.
+   */   
+	private String getActualTest(Map<String, String> availableTestResult, String expectedTestId) {
+		String actualResult=null;
+		for (String availableKeySet : availableTestResult.keySet()) {
+			LOGGER.debug(availableKeySet.toString());
+			String[] splitStrOfTestId = availableKeySet.toString().split("~");
+			if(splitStrOfTestId.length == 2 && splitStrOfTestId[1].equals(expectedTestId))
+			{
+				//testId=splitStrOfTestId[1];
+				actualResult=availableTestResult.get(availableKeySet);
+				break;
+			}
+		}
+		return actualResult;
+	}
 
 }
