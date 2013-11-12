@@ -80,5 +80,36 @@
 			baseTableName="componentprocessing_aud" baseColumnNames="productSource"
 			referencedTableName="producttype" referencedColumnNames="id"
 			 />
-	</changeSet>			
+	</changeSet>
+	
+	<!-- For issue 44 [Define Component Processing Rules] -->
+	<changeSet id="201311121520" author="devang">
+		<insert tableName="producttype">
+			<column name="id" value="9"></column>
+			<column name="expiresAfter" value="35"></column>
+			<column name="expiresAfterUnits" value="DAYS"></column>
+			<column name="hasBloodGroup" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="productType" value="Refrigerated Plasma"></column>
+			<column name="productTypeNameShort" value="RP"></column>
+		</insert>
+		<insert tableName="producttype">
+			<column name="id" value="10"></column>
+			<column name="expiresAfter" value="35"></column>
+			<column name="expiresAfterUnits" value="DAYS"></column>
+			<column name="hasBloodGroup" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="productType" value="Buffy Coat"></column>
+			<column name="productTypeNameShort" value="BC"></column>
+		</insert>
+		<insert tableName="producttype">
+			<column name="id" value="11"></column>
+			<column name="expiresAfter" value="5"></column>
+			<column name="expiresAfterUnits" value="DAYS"></column>
+			<column name="hasBloodGroup" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="productType" value="Pooled Platelets"></column>
+			<column name="productTypeNameShort" value="PP"></column>
+		</insert>
+	</changeSet>	
 </databaseChangeLog>	
