@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -46,7 +47,6 @@ import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
-import utils.BsisUtils;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
@@ -451,7 +451,7 @@ public class TTIController {
 		Iterator<String> iterator = request.getFileNames();
 		if (!iterator.hasNext()) {
 			mv.addObject("refreshUrl", getUrl(request));
-			mv.addObject("errorMessage", "Please Select File");
+			mv.addObject("errorMessage", UploadTTIResultConstant.MESSAGE1);
 			success = false;
 			mv.setViewName("bloodtesting/uploadTTIResults");
 			mv.addObject("success", success);
@@ -460,23 +460,26 @@ public class TTIController {
 		if (iterator.hasNext()) {
 			tsvFile = request.getFile(iterator.next());
 		}
-		fileName = tsvFile.getOriginalFilename();
-		uploadPath = BsisUtils.getDirectory( UploadTTIResultConstant.UPLOAD_DIRECTORY);
-		String[] tsvFilestr;
+				
+		fileName = tsvFile.getOriginalFilename();			
+		String getFullRealPath=request.getServletContext().getRealPath("/");
+	  String[] path=getFullRealPath.split(".metadata");
+	  uploadPath = path[0];
+	  String[] tsvFilestr;
 		tsvFilestr = tsvFile.getOriginalFilename().toString()
 				.split(UploadTTIResultConstant.FILE_SPLIT);
 		if (StringUtils.isBlank(tsvFilestr.toString())	|| 
 				!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
 			mv.addObject("refreshUrl", getUrl(request));
-			mv.addObject("errorMessage", "Please Select tsv File");
+			mv.addObject("errorMessage",UploadTTIResultConstant.MESSAGE2);
 			success = false;
 			mv.setViewName("bloodtesting/uploadTTIResults");
 			mv.addObject("success", success);
 			return mv;
 		}
-
-		writeTSVFile(fileName, uploadPath, tsvFile);
-		String file = uploadPath + fileName;
+		String fileWithExt=splitFilePath(fileName);
+		writeTSVFile(fileWithExt, uploadPath, tsvFile);
+		String file = uploadPath + fileWithExt;
 		readTSVToDB(request, mv, tsvFilestr, file);
 		mv.addObject("success", success);
 		return mv;
@@ -543,26 +546,36 @@ public class TTIController {
 
 	}
 
-	private void writeTSVFile(String fileName, String uploadPath,
-			MultipartFile tsvFile) {
-		InputStream inputStream;
-		OutputStream outputStream;
-
-		try {
-			inputStream = tsvFile.getInputStream();
-			File newFile = new File(uploadPath + fileName);
-			if (!newFile.exists()) {
-				newFile.createNewFile();
-			}
-			outputStream = new FileOutputStream(newFile);
-			int read = 0;
-			byte[] bytes = new byte[1024];
-			while ((read = inputStream.read(bytes)) != -1) {
-				outputStream.write(bytes, 0, read);
-			}
-		} catch (IOException e) {
-			LOGGER.error("Error occurred while writing to disk: " + e);
-		}
-	}
-
+	 private void writeTSVFile(String fileName, String uploadPath,
+		   MultipartFile tsvFile) {
+		  InputStream inputStream;
+		  OutputStream outputStream;
+		  try {
+		   inputStream = tsvFile.getInputStream();
+		   File newFile = new File(uploadPath + fileName);
+		   if (!newFile.exists()) {
+		    newFile.createNewFile();
+		   }
+		   outputStream = new FileOutputStream(newFile);
+		   int read = 0;
+		   byte[] bytes = new byte[1024];
+		   while ((read = inputStream.read(bytes)) != -1) {
+		    outputStream.write(bytes, 0, read);
+		   }
+		  } catch (IOException e) {
+		   LOGGER.error("Error occurred while writing to disk: " + e);
+		  }
+		 }
+	 
+	 	 public static String  splitFilePath(String fileName){
+	 		 String[] getFileName = fileName.split(UploadTTIResultConstant.TSV_FILE_EXTENTION);
+	 		 String fileNameWithExt= getFileName[0] + getCurrentDateAsString() + UploadTTIResultConstant.TSV_FILE_EXTENTION ;
+	 		 return fileNameWithExt;
+	 	 }
+		 
+		 public static String getCurrentDateAsString(){
+		  Date currentDate = new Date();
+		  SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddhhmmss");  
+		  return ft.format(currentDate);
+		 }
 }

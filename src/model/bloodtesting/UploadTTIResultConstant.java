@@ -8,6 +8,9 @@ public class UploadTTIResultConstant {
 	public static final String FILE_SPLIT = "\\.";
 	public static final String FILE_EXTENTION = "tsv";
 	public static final String DATE_FORMAT = "dd.MM.yyyy hh:mm";
+	public static final String TSV_FILE_EXTENTION = ".tsv";
+	public static final String MESSAGE1 = "Please Select File";
+	public static final String MESSAGE2 = "Please Select tsv File";
 
 	// upload settings
 	public static final int MEMORY_THRESHOLD = 1024 * 1024 * 3; // 3MB
