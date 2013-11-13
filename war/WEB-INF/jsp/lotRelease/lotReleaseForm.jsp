@@ -39,6 +39,14 @@ $(document).ready(function() {
                         .button()
                         .click(refetchForm);
 
+  $("#${tabContentId}").find(".printLabelButton").button({
+      icons : {
+        primary : 'ui-icon-print'
+      }
+    }).click(function() {
+  	  window.open("printLabel.html?"+ $.param({dinNumber : "${dinNumber}"}));
+    });
+  
   function refetchForm() {
     $.ajax({
       url: "${refreshUrl}",
@@ -67,7 +75,7 @@ $(document).ready(function() {
    </c:if>
    <c:if test="${success}">
         <div class="tipsBox ui-state-highlight">
-      		<p>Collection suitable for labelling. <label style="background-color:white;">Print Pack Label</label> </p>
+      		<p>Collection suitable for labelling. <button class="printLabelButton">Print Label</button> </p>
     	</div>
     </c:if>
    
