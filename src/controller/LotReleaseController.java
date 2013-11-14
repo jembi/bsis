@@ -1,10 +1,9 @@
 package controller;
 
-import java.util.Calendar;
-import java.util.List;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.LotReleaseConstant;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,10 +82,24 @@ public class LotReleaseController {
    ModelAndView mv = new ModelAndView("lotRelease/lotReleaseForm");
     boolean success = true;
     List<CollectedSample> collectedSample = collectedSampleRepository.findLotReleseById(dinNumber);
+    if(dinNumber.isEmpty()){
+    	mv.addObject("errorMessage", "Please Enter the Donation Identification Number.");
+    	success=false;
+    	mv.addObject("success", success);
+    	return mv;
+    }
+    
+    if(collectedSample == null || collectedSample.size() == 0){
+    	mv.addObject("errorMessage", "Donation Identification Number does not exist.");
+    	success=false;
+    	mv.addObject("success", success);
+    	return mv;
+    }
+    
     success = checkCollectionNumber(mv, collectedSample);
     
     if(!success){
-    	mv.addObject("errorMessage", "Collection Discarded. Cannot print pack label.");
+    	mv.addObject("errorMessage", "Collection Discarded. Cannot print pack label for DIN "+dinNumber);
     }
     
     mv.addObject("dinNumber", dinNumber);
@@ -189,10 +201,10 @@ public class LotReleaseController {
     		success=false;
     	}else if(collectedSample.get(0).getDonor()!=null && collectedSample.get(0).getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
-    	}else if(collectedSample.get(0).getProducts()!=null && (collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) || collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
+    	}else if(collectedSample.get(0).getProducts()!=null && !collectedSample.get(0).getProducts().isEmpty() && (collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) || collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
     			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) || collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
     		success=false;
-    	}else if(collectedSample.get(0).getBloodTestResults()!=null && !collectedSample.get(0).getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
+    	}else if(collectedSample.get(0).getBloodTestResults()!=null && !collectedSample.get(0).getBloodTestResults().isEmpty() && !collectedSample.get(0).getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}else if(collectedSample.get(0).getDonor().getDeferrals()!=null && ! collectedSample.get(0).getDonor().getDeferrals().isEmpty()){
     		success=false;

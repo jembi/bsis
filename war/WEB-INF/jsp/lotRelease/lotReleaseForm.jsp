@@ -49,7 +49,7 @@ $(document).ready(function() {
   
   function refetchForm() {
     $.ajax({
-      url: "${refreshUrl}",
+      url: "lotReleaseFormGenerator.html",
       data: {},
       type: "GET",
       success: function (response) {
