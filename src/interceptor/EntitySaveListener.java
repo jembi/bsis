@@ -20,7 +20,7 @@ import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.mysql.jdbc.Security;
+//import com.mysql.jdbc.Security;
 
 import security.V2VUserDetails;
 

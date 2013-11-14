@@ -446,6 +446,26 @@ public class DonorController {
     modelAndView.addObject("model", m);
     return modelAndView;
   }
+  
+  @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
+  public ModelAndView printDonorLabel(HttpServletRequest request, Model model,
+		  @RequestParam(value="donorNumber") String donorNumber) {
+	  
+	ModelAndView mv = new ModelAndView("zplLabel");
+	
+	mv.addObject("${^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ" +
+			"^XA" +
+			"^MMT" +
+			"^PW360" +
+			"^LL0120" +
+			"^LS0" +
+			"^BY2,3,30^FT77,62^BCN,,Y,N" +
+			"^FD>:" + donorNumber+ "^FS" +
+			"^PQ1,0,1,Y^XZ}$");
+	
+	
+	return mv;
+  }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());

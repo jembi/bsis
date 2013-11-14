@@ -110,13 +110,15 @@ public class LotReleaseController {
     try{
         
         String bloodABO = collectedSample.getBloodAbo();
-        
+        String inverse = "";
         String bloodRh = "";
-        if (collectedSample.getBloodRh().contains("+"))
+        if (collectedSample.getBloodRh().contains("+")){
         	bloodRh = "Positive";
-        else if (collectedSample.getBloodRh().contains("-"))
+        }
+        else if (collectedSample.getBloodRh().contains("-")){	
         	bloodRh = "Negative";
-        
+        	inverse = "^LRY^FO562,175^GB204,0,171^FS^LRN";
+        }
         String collectionDate = df.format(collectedSample.getCollectedOn());        	
 
         // TODO: improve calculation of expiry date according to final processed components expiry dates 
@@ -129,43 +131,45 @@ public class LotReleaseController {
     	expiryDate = df.format(c.getTime());
 
     // Generate ZPL label
-    mv.addObject("labelZPL",
-    		"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ" +
-    		"^XA" +
-    		"^MMT" +
-    		"^PW799" +
-    		"^LL0799" +
-    		"^LS0" +
-    		"^FT301,348^A0N,243,240^FH\\^FD" + bloodABO + "^FS" +
-    		"^FT603,302^A0N,39,31^FH\\^FD" + bloodRh + "^FS" +
-    		"^FT626,119^A0N,28,28^FH\\^FD" + expiryDate + "^FS" +
-    		"^FT49,118^A0N,28,28^FH\\^FD" + collectionDate + "^FS" +
-    		"^FT631,37^A0N,18,43^FH\\^FDExpiry ^FS" +
-    		"^FT631,59^A0N,18,43^FH\\^FD  Date^FS" +
-    		"^FT15,37^A0N,18,43^FH\\^FDCollection^FS" +
-    		"^FT15,59^A0N,18,43^FH\\^FD    Date^FS" +
-    		"^FT320,42^A0N,18,43^FH\\^FDPack ID^FS" +
-    		"^FO575,11^GB0,150,8^FS" +
-    		"^FO201,10^GB0,148,10^FS" +
-    		"^FO16,439^GB747,0,6^FS" +
-    		"^FO15,157^GB748,0,5^FS" +
-    		"^FT19,254^A0N,16,19^FH\\^FDPrepared from 450ml of whole ^FS" +
-    		"^FT19,274^A0N,16,19^FH\\^FDblood \\F1 10% in CPD anti-^FS" +
-    		"^FT19,294^A0N,16,19^FH\\^FDcoagulant solution. Final ^FS" +
-    		"^FT19,314^A0N,16,19^FH\\^FDhaematocrit is 0.4 \\F1 litre/litre. ^FS" +
-    		"^FT19,334^A0N,16,19^FH\\^FDStore at 1\\F8C to 6\\F8C. ^FS" +
-    		"^FT19,354^A0N,16,19^FH\\^FDTransport at 2\\F8C to 10\\F8 C      ^FS" +
-    		"^FT19,374^A0N,16,19^FH\\^FD            Low Titre Donor^FS" +
-    		"^FO15,379^GB750,0,6^FS" +
-    		"^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS" +
-    		"^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS" +
-    		"^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood collected and processed by the National Blood Service ^FS" +
-    		"^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS" +
-    		"^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS" +
-    		"^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
-    		"^FT299,119^A@N,28,29,TT0003M_^FH\\^CI17^F8^FDAffix Pack ID^FS^CI0" +
-    		"^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0" +
-    		"^PQ1,0,1,Y^XZ"
+    mv.addObject(		
+    		"${^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
+    				"^XA"+
+    				"^MMT"+
+    				"^PW799"+
+    				"^LL0799"+
+    				"^LS0"+
+    				"^FT308,356^A0N,226,240^FH\\^FD" + bloodABO + "^FS"+
+    				"^FT603,302^A0N,39,31^FH\\^FD" + bloodRh + "^FS"+
+    				"^FT626,119^A0N,28,28^FH\\^FD" + expiryDate + "^FS"+
+    				"^FT49,118^A0N,28,28^FH\\^FD" + collectionDate + "^FS"+
+    				"^FT631,37^A0N,18,43^FH\\^FDExpiry ^FS"+
+    				"^FT631,59^A0N,18,43^FH\\^FD  Date^FS"+
+    				"^FT15,37^A0N,18,43^FH\\^FDCollection^FS"+
+    				"^FT15,59^A0N,18,43^FH\\^FD    Date^FS"+
+    				"^FT237,46^A0N,18,43^FH\\^FDDonation Number^FS"+
+    				"^FO575,11^GB0,150,8^FS"+
+    				"^FO201,10^GB0,148,10^FS"+
+    				"^FO16,439^GB747,0,6^FS"+
+    				"^FO15,157^GB748,0,5^FS"+
+    				"^FT19,254^A0N,16,19^FH\\^FDPrepared from 450ml of whole ^FS"+
+    				"^FT19,274^A0N,16,19^FH\\^FDblood \\F1 10% in CPD anti-^FS"+
+    				"^FT19,294^A0N,16,19^FH\\^FDcoagulant solution. Final ^FS"+
+    				"^FT19,314^A0N,16,19^FH\\^FDhaematocrit is 0.4 \\F1 litre/litre. ^FS"+
+    				"^FT19,334^A0N,16,19^FH\\^FDStore at 1\\F8C to 6\\F8C. ^FS"+
+    				"^FT19,354^A0N,16,19^FH\\^FDTransport at 2\\F8C to 10\\F8 C      ^FS"+
+    				"^FT19,374^A0N,16,19^FH\\^FD            Low Titre Donor^FS"+
+    				"^FO15,379^GB750,0,6^FS"+
+    				"^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS"+
+    				"^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS"+
+    				"^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood collected and processed by the National Blood Service ^FS"+
+    				"^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS"+
+    				"^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS"+
+    				"^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS"+
+    				"^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0"+
+    				"^BY2,3,42^FT285,111^BCN,,Y,N"+
+    				"^FD>:" + dinNumber + "^FS"+
+    				inverse +
+    				"^PQ1,0,1,Y^XZ}$"
     		);
     }
     catch (Exception e){

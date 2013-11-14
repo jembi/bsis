@@ -44,14 +44,22 @@
                          $("#${tabContentId}")
                         );
         });
-
+        
+        $("#${tabContentId}").find(".printBarcode").button({
+            icons : {
+              primary : 'ui-icon-print'
+            }
+          }).click(function() {
+        	  window.open("printDonorLabel.html?"+ $.param({donorNumber : "${donor.id}"}));
+          });
+        
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
           }
         }).click(function() {
           $("#${mainContentId}").find(".printableArea").printArea();
-        });
+        }); 
 
         $("#${tabContentId}").find(".createCollectionButton").button({
           icons : {
@@ -202,7 +210,7 @@
         Delete
       </button>
       </sec:authorize>
-      <button class="printButton">
+      <button class="printBarcode">
         Print
       </button>
     </div>
