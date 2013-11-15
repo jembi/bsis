@@ -78,7 +78,7 @@ $(document).ready(function() {
         <!-- Spring supports dynamic attributes so placeholder can be added
              http://stackoverflow.com/questions/4232983/adding-html5-placeholder-attribute-to-spring-3-0-form-input-elements
          -->
-        <form:input path="collectionNumber" placeholder="Collection Number"/>
+        <form:input path="collectionNumber" placeholder="Donation Identification Number"/>
       </div>
     </form:form>
 

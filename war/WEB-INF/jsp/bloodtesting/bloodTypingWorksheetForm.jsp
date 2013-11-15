@@ -81,7 +81,7 @@ $(document).ready(function() {
       <!-- this div is necessary to align the following message with the rest of the labels -->
       <div>
         <label style="width: auto;">
-          Scan or enter collection numbers (maximum ${plate.numColumns}) on the plate from left to right
+          Scan or enter Donation Idenitification Numbers (DINs) (maximum ${plate.numColumns}) on the plate from left to right
         </label>
       </div>
 
@@ -92,11 +92,11 @@ $(document).ready(function() {
             <label>Column ${columnNumber}</label>
             <input name="collectionNumber_${columnNumber}"
                    value="${not empty collection ? collection.collectionNumber : ''}"
-                   placeholder="Collection Number"
+                   placeholder="DIN"
                    class="collectionNumberInput"
                    />
             <c:if test="${empty collection}">
-              <label class="formError" style="width: auto;">Collection does not exist</label>
+              <label class="formError" style="width: auto;">Donation Identification Number does not exist</label>
             </c:if>
           </div>
         </c:forEach>
@@ -107,7 +107,7 @@ $(document).ready(function() {
           <div>
             <label>Column ${columnNumber}</label>
             <input name="collectionNumber_${columnNumber}"
-                   placeholder="Collection Number"
+                   placeholder="Donation Identification Number"
                    class="collectionNumberInput"
                    />
           </div>
