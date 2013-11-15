@@ -66,7 +66,7 @@ $(document).ready(function() {
   <div id="${mainContentId}">
     <form class="formFormatClass">
       <b>Enter blood typing results</b>
-      <div class="tipsBox ui-state-highlight">
+      <div class="tipsBox ui-state-highlight" style="display:none;">
         <p>
           ${tips['bloodtyping.plate.step1']}
         </p>

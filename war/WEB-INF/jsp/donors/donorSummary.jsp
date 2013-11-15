@@ -21,7 +21,7 @@
   $(document).ready(
       function() {
 
-        showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+       // showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
        // showDonorDeferrals();  display deferral history by default
 
         function notifyParentDone() {
