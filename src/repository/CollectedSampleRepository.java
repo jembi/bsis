@@ -26,6 +26,9 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
+import model.product.Product;
+import model.product.ProductStatus;
+import model.producttype.ProductType;
 import model.util.BloodGroup;
 import model.worksheet.Worksheet;
 
@@ -63,6 +66,9 @@ public class CollectedSampleRepository {
   @Autowired
   private WorksheetRepository worksheetRepository;
 
+  @Autowired
+  private ProductRepository productRepository;
+  
   public void saveCollectedSample(CollectedSample collectedSample) {
     em.persist(collectedSample);
     em.flush();
@@ -343,6 +349,32 @@ public class CollectedSampleRepository {
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.refresh(collectedSample);
+    
+    // Add product
+    Product product = new Product();
+    product.setIsDeleted(false);
+    product.setPackNumber(collectedSample.getCollectionNumber());
+    product.setCollectedSample(collectedSample);
+    product.setStatus(ProductStatus.QUARANTINED);
+    product.setCreatedDate(collectedSample.getCreatedDate());
+    product.setCreatedOn(collectedSample.getCollectedOn());
+    product.setCreatedBy(collectedSample.getCreatedBy());
+    
+    ProductType productType = productRepository.findProductTypeByProductTypeName("Whole Blood");
+    
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(collectedSample.getCollectedOn());
+    cal.add(Calendar.DATE, productType.getExpiresAfter());
+    Date expiresOn = cal.getTime();    
+    
+    product.setExpiresOn(expiresOn);
+    product.setProductType(productType);
+    
+    em.persist(product);
+    //em.flush();
+    em.refresh(product);
+    
+    
     return collectedSample;
   }
 

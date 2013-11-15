@@ -153,4 +153,9 @@ public class ProductViewModel {
     return Arrays.asList(ProductStatus.AVAILABLE, ProductStatus.QUARANTINED)
                  .contains(product.getStatus());
   }
+  
+  public String getPackNumber() {
+    return product.getPackNumber();
+  }
+  
 }
