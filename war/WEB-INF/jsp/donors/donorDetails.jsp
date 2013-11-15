@@ -5,8 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div class="formFormatClass printableArea">
-  <br />
-  <div class="donorBarcode"></div>
+  <!-- <br />
+   <div class="donorBarcode"></div> -->
   <c:if test="${donorFields.donorNumber.hidden != true }">
     <div>
       <label>${donorFields.donorNumber.displayName}</label>
