@@ -345,7 +345,6 @@ public class RequestsController {
     boolean success = false;
     boolean bulkTransferStatus;
     bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(request.getParameter("requestType")));
-    System.out.println("bulkTransferStatus::::::::::::::::::::::::::::::::::"+bulkTransferStatus);
 
     addEditSelectorOptions(mv.getModelMap());
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");

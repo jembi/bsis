@@ -262,4 +262,32 @@
 			referencedTableName="producttype" referencedColumnNames="id"
 			 />
 	</changeSet>
+	
+	<changeSet id="201311151240" author="devang">
+	    <addColumn tableName="request">
+	        <column name="dispatchDate" type="timestamp"/>
+	    </addColumn>
+		<addColumn tableName="request_aud">
+	        <column name="dispatchDate" type="timestamp"/>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="201311151245" author="devang">
+        <insert tableName="formfield">
+            <column name="id" value="148"></column>
+            <column name="autoGenerate" value="0"></column>
+            <column name="canBeOptional" value="0"></column>
+            <column name="defaultDisplayName" value="Date/Time Dispatched"></column>
+            <column name="field" value="dispatchDate"></column>
+            <column name="form" value="Request"></column>
+            <column name="hidden" value="0"></column>
+            <column name="isAutoGeneratable" value="0"></column>
+            <column name="isHidable" value="0"></column>
+            <column name="isRequired" value="1"></column>
+            <column name="isTimeField" value="1"></column>
+            <column name="maxLength" value="0"></column>
+            <column name="useCurrentTime" value="0"></column>
+        </insert>
+     </changeSet>
+	
 </databaseChangeLog>	
