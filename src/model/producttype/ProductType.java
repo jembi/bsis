@@ -9,12 +9,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-
-import model.requestedComponents.RequestedComponents;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -50,10 +47,6 @@ public class ProductType {
    */
   private Boolean hasBloodGroup;
   
- /* @OneToOne
-  @JoinColumn(name="id")
-	private RequestedComponents requestedComponents;*/
-
   /**
    * Pedi Product Type for this product type.
    * can be null. This allows us to determine the target type after splitting.

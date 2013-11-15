@@ -593,7 +593,7 @@ public class RequestsController {
 	   
 	  	System.out.println(params.get("requestedComponent"));
 	  	RequestedComponents requestedComponents = new RequestedComponents();
-	  	requestedComponents.setProductType(Long.parseLong(params.get("requestedComponent").toString()));
+	  	requestedComponents.setProductType(Integer.parseInt(params.get("requestedComponent").toString()));
 	  	requestedComponents.setBloodABO(params.get("bloodABO").toString());
 	  	requestedComponents.setBloodRh(params.get("bloodRh").toString());
 	  	requestedComponents.setNumUnits(Long.parseLong(params.get("numUnitsRequested").toString()));

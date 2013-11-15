@@ -138,7 +138,7 @@
 	      		</tr>
 	      		<c:forEach var="requestedComponents" items="${requestedComponents}">
 	      			<tr>
-	      				<td align="left">${requestedComponents.productType}</td>
+	      				<td align="left">${requestedComponents.productTypes.productType}</td>
 	      				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodABO}</td></c:if>
 	      				<c:if test="${bulkTransferStatus != true }"><td align="center">${request.patientBloodRh eq '+' ? 'POS' : request.patientBloodRh eq '-' ? 'NEG' : ''}</td></c:if>
 	      				<td align="center">${requestedComponents.numUnits}</td>
@@ -159,7 +159,7 @@
 	      		</tr>
 	      		<c:forEach var="requestedComponents" items="${requestedComponents}">
 	      			<tr>
-	      				<td align="left">${requestedComponents.productType}</td>
+	      				<td align="left">${requestedComponents.productTypes.productType}</td>
 	      				<td>DIN</td>
 	      				<td align="center">${requestedComponents.bloodABO}</td>
 	      				<td align="center">${request.patientBloodRh eq '+' ? 'POS' : request.patientBloodRh eq '-' ? 'NEG' : ''}</td>
@@ -171,7 +171,7 @@
 	      
 	      <c:if test="${requestFields.dispatchDate.hidden != true }">
 	        <div>
-	          <label>${requestFields.dispatchDate.displayName}</label>
+	          <label style="width:10%">${requestFields.dispatchDate.displayName}</label>
 	          <label>${request.dispatchDate}</label>
 	        </div>
       	</c:if>

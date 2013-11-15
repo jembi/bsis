@@ -464,7 +464,7 @@ $(document).ready(
       		</tr>
       		<c:forEach var="requestedComponents" items="${requestedComponents}">
       			<tr>
-      				<td align="left">${requestedComponents.productType}</td>
+      				<td align="left">${requestedComponents.productTypes.productType}</td>
       				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodABO}</td></c:if>
       				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodRh}</td></c:if>
       				<td align="center">${requestedComponents.numUnits}</td>
@@ -562,7 +562,7 @@ $(document).ready(
 	      		</tr>
 	      		<c:forEach var="requestedComponents" items="${requestedComponents}">
 	      			<tr>
-	      				<td align="left">${requestedComponents.productType}</td>
+	      				<td align="left">${requestedComponents.productTypes.productType}</td>
 	      				<td>DIN</td>
 	      				<td align="center">${requestedComponents.bloodABO}</td>
 	      				<td align="center">${requestedComponents.bloodRh}</td>
@@ -574,7 +574,7 @@ $(document).ready(
 	     
 	     <c:if test="${requestFields.dispatchDate.hidden != true }">
 	        <div>
-	          <form:label path="dispatchDate">${requestFields.dispatchDate.displayName}</form:label>
+	          <form:label path="dispatchDate" style="width:10%">${requestFields.dispatchDate.displayName}</form:label>
 	          <form:input path="dispatchDate" class="dispatchDate" value="${firstTimeRender ?  requestFields.dispatchDate.defaultValue : ''}" />
 	          <form:errors class="formError" path="request.dispatchDate"
 	            delimiter=", "></form:errors>
@@ -583,7 +583,7 @@ $(document).ready(
 	     
 	    <c:if test="${requestFields.notes.hidden != true }">
 	        <div>
-	          <form:label path="notes" class="labelForTextArea">${requestFields.notes.displayName}</form:label>
+	          <form:label path="notes" class="labelForTextArea" style="width:10%">${requestFields.notes.displayName}</form:label>
 	          <form:textarea path="notes" />
 	          <form:errors class="formError" path="request.notes"
 	            delimiter=", "></form:errors>

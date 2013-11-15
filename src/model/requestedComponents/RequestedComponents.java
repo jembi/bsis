@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.validation.Valid;
 
 import model.modificationtracker.ModificationTracker;
@@ -21,8 +19,6 @@ import model.producttype.ProductType;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
-
-import constraintvalidator.ProductTypeExists;
 
 @Entity
 @Audited
@@ -35,7 +31,7 @@ public class RequestedComponents implements ModificationTracker  {
 	
 	private Long request_id;
 	
-	private Long productType;
+	private Integer productType;
 	
 	private String bloodABO;
 	
@@ -46,10 +42,10 @@ public class RequestedComponents implements ModificationTracker  {
 	private Boolean isDeleted;
 	
 	
-	/*//@ProductTypeExists
-	@OneToOne
-	@JoinColumn(name="id")
-  private ProductType productTypes;*/
+	
+	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+	@JoinColumn(name="productType",insertable =false, updatable =false)
+  private ProductType productTypes;
 	
 	 @Valid
 	 private RowModificationTracker modificationTracker;
@@ -89,14 +85,14 @@ public class RequestedComponents implements ModificationTracker  {
 	/**
 	 * @return the productType
 	 */
-	public Long getProductType() {
+	public Integer getProductType() {
 		return productType;
 	}
 
 	/**
 	 * @param productType the productType to set
 	 */
-	public void setProductType(Long productType) {
+	public void setProductType(Integer productType) {
 		this.productType = productType;
 	}
 
@@ -190,15 +186,15 @@ public class RequestedComponents implements ModificationTracker  {
 
 	/**
 	 * @return the productTypes
-	 *//*
+	 */
 	public ProductType getProductTypes() {
 		return productTypes;
 	}
 
-	*//**
+	/**
 	 * @param productTypes the productTypes to set
-	 *//*
+	 */
 	public void setProductTypes(ProductType productTypes) {
 		this.productTypes = productTypes;
-	}*/
+	}
 }

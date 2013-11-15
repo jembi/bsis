@@ -234,7 +234,10 @@ public class RequestRepository {
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
     try {
-      request = query.getSingleResult();
+    	if(query.getResultList().size() > 0)
+    		request = query.getSingleResult();
+    	else 
+    		return null;
     } catch (NoResultException ex) {
       ex.printStackTrace();
     }
@@ -623,11 +626,9 @@ public class RequestRepository {
     TypedQuery<RequestedComponents> query = em.createQuery(queryString, RequestedComponents.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<RequestedComponents> requestedComponentsList = query.getResultList();
-   /* if(requestedComponentsList.size() > 0){
-    	for(RequestedComponents rc:requestedComponentsList){
-    		rc.getProductTypes();
-    	}
-    }*/
+    for(RequestedComponents rc:requestedComponentsList){
+    	rc.getProductTypes().getId();
+    }
     return requestedComponentsList;
   }
   
@@ -657,9 +658,15 @@ public class RequestRepository {
     TypedQuery<RequestType> query = em.createQuery(queryString, RequestType.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requesttypeID", requesttypeID);
-    if(query.getResultList().size() > 0)
-    	return true;
-    else
+    RequestType requestType = null;
+    if(query.getResultList().size() > 0){
+    	requestType = query.getSingleResult();
+    	if(requestType.getBulkTransfer() !=null && requestType.getBulkTransfer() == true)
+    		return true;
+    	else
+    		return false;
+    }else{
     	return false;
+    }
   }
 }
