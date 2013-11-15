@@ -193,12 +193,28 @@
 	
 	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
 	<changeSet id="201311081617" author="devang">
-	    <addColumn tableName="requesttype">
+	    <addColumn tableName="RequestType">
 	        <column name="bulkTransfer" type="TINYINT(1)"/>
 	    </addColumn>
-		<addColumn tableName="requesttype_aud">
+		<addColumn tableName="RequestType_AUD">
 	        <column name="bulkTransfer" type="TINYINT(1)"/>
 	    </addColumn>
 	</changeSet>
-    
+	
+	<!-- Update FormField table to rename Collection info to Donation -->
+	<changeSet id="201311081720" author="danfuterman">
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Identification Number" />
+    		<where>field = "collectionNumber"</where>
+		</update>
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Site" />
+    		<where>field = "collectionSite"</where>
+		</update>
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Centre" />
+    		<where>field = "collectionCenter"</where>
+		</update>
+	</changeSet>
+	    
 </databaseChangeLog>	
