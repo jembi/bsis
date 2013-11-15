@@ -47,6 +47,14 @@ $(document).ready(function() {
   	  window.open("printLabel.html?"+ $.param({dinNumber : "${dinNumber}"}));
     });
   
+  $("#${tabContentId}").find(".printDiscardButton").button({
+      icons : {
+        primary : 'ui-icon-print'
+      }
+    }).click(function() {
+  	  window.open("printDiscard.html?"+ $.param({dinNumber : "${dinNumber}"}));
+    });
+  
   function refetchForm() {
     $.ajax({
       url: "lotReleaseFormGenerator.html",
@@ -68,14 +76,19 @@ $(document).ready(function() {
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
-  <c:if test="${!empty success && !success}">
+  <c:if test="${!empty success && !success && !discard}">
         <jsp:include page="../common/errorBox.jsp">
           <jsp:param name="errorMessage" value="${errorMessage}" />
         </jsp:include>
    </c:if>
    <c:if test="${success}">
         <div class="tipsBox ui-state-highlight">
-      		<p>Collection suitable for labelling. <button class="printLabelButton">Print Label</button> </p>
+      		<p>Donation suitable for labelling. <button class="printLabelButton">Print Label</button> </p>
+    	</div>
+    </c:if>
+    <c:if test="${discard}">
+        <div class="tipsBox ui-state-highlight">
+      		<p>Product has been discarded. <button class="printDiscardButton">Print Discard Label</button> </p>
     	</div>
     </c:if>
    
