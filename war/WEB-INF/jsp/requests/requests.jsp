@@ -14,9 +14,9 @@
 <div id="requestsTab" class="leftPanel tabs">
   <ul>
     <li id="findOrAddRequestsContent"><a
-      href="findRequestFormGenerator.html">Issue Products</a></li>
-    <li id="addRequestsContent"><a
-      href="addRequestFormGenerator.html">Add Request</a></li>
+      href="findRequestFormGenerator.html">Requests</a></li>
+    <!-- <li id="addRequestsContent"><a
+      href="addRequestFormGenerator.html">Add Request</a></li> -->
     <!-- li id="PendingRequestsContent"><a
       href="pendingRequests.html">Pending Requests</a></li-->
   </ul>

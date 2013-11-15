@@ -201,4 +201,65 @@
 	    </addColumn>
 	</changeSet>
     
+    <!-- For issue 103 [Update Requests Functionality] -->
+    <changeSet id="201311131120" author="devang">
+		<createTable tableName="requestedComponents">
+			<column name="id" type="smallint(6)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="request_id" type="bigint(20)"></column>
+			<column name="productType" type="smallint(6)"></column>
+			<column name="bloodABO" type="varchar(10)"></column>
+			<column name="bloodRh" type="varchar(10)"></column>
+			<column name="numUnits" type="int(11)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="201311121135" author="devang">
+		<addForeignKeyConstraint constraintName="fk_requestId"
+			baseTableName="requestedComponents" baseColumnNames="request_id"
+			referencedTableName="request" referencedColumnNames="id"
+			 />
+		<addForeignKeyConstraint constraintName="fk_productType"
+			baseTableName="requestedComponents" baseColumnNames="productType"
+			referencedTableName="producttype" referencedColumnNames="id"
+			 />
+	</changeSet>
+	
+	
+	<changeSet id="201311131220" author="devang">
+		<createTable tableName="requestedComponents_aud">
+			<column name="id" type="smallint(6)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="request_id" type="bigint(20)"></column>
+			<column name="productType" type="smallint(6)"></column>
+			<column name="bloodABO" type="varchar(10)"></column>
+			<column name="bloodRh" type="varchar(10)"></column>
+			<column name="numUnits" type="int(11)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="rev" type="int(11)"></column>
+			<column name="revtype" type="tinyint(4)"></column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="201311121235" author="devang">
+		<addForeignKeyConstraint constraintName="fk_requestId_aud"
+			baseTableName="requestedComponents_aud" baseColumnNames="request_id"
+			referencedTableName="request" referencedColumnNames="id"
+			 />
+		<addForeignKeyConstraint constraintName="fk_productType_aud"
+			baseTableName="requestedComponents_aud" baseColumnNames="productType"
+			referencedTableName="producttype" referencedColumnNames="id"
+			 />
+	</changeSet>
 </databaseChangeLog>	

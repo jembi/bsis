@@ -24,6 +24,8 @@ import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeType;
 import model.request.Request;
+import model.requestedComponents.RequestedComponents;
+import model.requesttype.RequestType;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -614,5 +616,50 @@ public class RequestRepository {
       request.setFulfilled(false);
     else
       request.setFulfilled(true);
+  }
+  
+  public List<RequestedComponents> getRequestedComponents() {
+    String queryString = "SELECT r FROM RequestedComponents r WHERE r.isDeleted= :isDeleted";
+    TypedQuery<RequestedComponents> query = em.createQuery(queryString, RequestedComponents.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    List<RequestedComponents> requestedComponentsList = query.getResultList();
+   /* if(requestedComponentsList.size() > 0){
+    	for(RequestedComponents rc:requestedComponentsList){
+    		rc.getProductTypes();
+    	}
+    }*/
+    return requestedComponentsList;
+  }
+  
+  public void removeRequestedComponents(Long requestedComponentsId) {
+    String queryString = "UPDATE RequestedComponents r set r.isDeleted=:isDeleted WHERE r.id= :requestedComponentsId";
+    Query query = em.createQuery(queryString);
+    query.setParameter("isDeleted", Boolean.TRUE);
+    query.setParameter("requestedComponentsId", requestedComponentsId);
+    query.executeUpdate();
+  }
+  
+  public void addRequestedComponents(RequestedComponents requestedComponents) {
+  	requestedComponents.setIsDeleted(Boolean.FALSE);
+  	em.merge(requestedComponents);
+  }
+  
+  public void updateRequestedComponents(Long requestID) {
+  	String queryString = "UPDATE RequestedComponents r set r.request_id=:requestID WHERE r.isDeleted= :isDeleted AND r.request_id IS NULL";
+    Query query = em.createQuery(queryString);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("requestID", requestID);
+    query.executeUpdate();
+  }
+  
+  public Boolean getBulkTransferStatus(Integer requesttypeID) {
+  	String queryString = "SELECT r FROM RequestType r WHERE r.id=:requesttypeID AND r.isDeleted= :isDeleted";
+    TypedQuery<RequestType> query = em.createQuery(queryString, RequestType.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("requesttypeID", requesttypeID);
+    if(query.getResultList().size() > 0)
+    	return true;
+    else
+    	return false;
   }
 }

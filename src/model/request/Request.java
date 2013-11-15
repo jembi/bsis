@@ -38,7 +38,7 @@ import constraintvalidator.RequestTypeExists;
 
 
 @Entity
-@Audited
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class Request implements ModificationTracker {
 
   @Id
@@ -145,6 +145,9 @@ public class Request implements ModificationTracker {
   private Location requestSite;
 
   private Boolean isDeleted;
+  
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date dispatchDate;
 
   public Request() {
     modificationTracker = new RowModificationTracker();
@@ -285,7 +288,21 @@ public class Request implements ModificationTracker {
     return modificationTracker.getLastUpdated();
   }
 
-  public Date getCreatedDate() {
+  /**
+	 * @return the dispatchDate
+	 */
+	public Date getDispatchDate() {
+		return dispatchDate;
+	}
+
+	/**
+	 * @param dispatchDate the dispatchDate to set
+	 */
+	public void setDispatchDate(Date dispatchDate) {
+		this.dispatchDate = dispatchDate;
+	}
+
+	public Date getCreatedDate() {
     return modificationTracker.getCreatedDate();
   }
 

@@ -1,6 +1,7 @@
 package backingform;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -28,6 +29,8 @@ public class RequestBackingForm {
   private Request request;
 
   private String patientBirthDate;
+  
+  private String dispatchDate;
 
   public RequestBackingForm() {
     setRequest(new Request());
@@ -54,7 +57,7 @@ public class RequestBackingForm {
   public String getRequiredDate() {
     if (request == null)
       return "";
-    return CustomDateFormatter.getDateString(request.getRequiredDate());
+    return CustomDateFormatter.getDateString(new Date());
   }
 
   public Integer getNumUnitsRequested() {
@@ -333,4 +336,24 @@ public class RequestBackingForm {
   public void setFulfilled(boolean fulfilled) {
     request.setFulfilled(fulfilled);
   }
+  
+	 public String getDispatchDate() {
+	    if (dispatchDate != null)
+	      return dispatchDate;
+	    if (request == null)
+	      return "";
+	    return CustomDateFormatter.getDateTimeString(request.getDispatchDate());
+	  }
+
+	 
+	  public void setDispatchDate(String dispatchDate) {
+	    this.dispatchDate = dispatchDate;
+	    try {
+	    	request.setDispatchDate(CustomDateFormatter.getDateTimeFromString(dispatchDate));
+	    } catch (ParseException ex) {
+	      ex.printStackTrace();
+	      request.setDispatchDate(null);
+	    }
+	  }
+	
 }

@@ -9,6 +9,7 @@ public class FindRequestBackingForm {
 
   private List<String> requestSites;
   private List<String> productTypes;
+  private List<String> requestTypes;
 
   private String requestedAfter;
   private String requiredBy;
@@ -18,6 +19,7 @@ public class FindRequestBackingForm {
   public FindRequestBackingForm() {
     requestSites = Arrays.asList(new String[0]);
     productTypes = Arrays.asList(new String[0]);
+    requestTypes = Arrays.asList(new String[0]);
   }
 
   public String getRequestNumber() {
@@ -67,4 +69,12 @@ public class FindRequestBackingForm {
   public void setIncludeSatisfiedRequests(Boolean includeSatisfiedRequests) {
     this.includeSatisfiedRequests = includeSatisfiedRequests;
   }
+
+	public List<String> getRequestTypes() {
+		return requestTypes;
+	}
+
+	public void setRequestTypes(List<String> requestTypes) {
+		this.requestTypes = requestTypes;
+	}
 }

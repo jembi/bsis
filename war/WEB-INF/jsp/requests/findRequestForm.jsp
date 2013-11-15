@@ -19,9 +19,11 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
 <c:set var="findRequestFormId">findRequestForm-${unique_page_id}</c:set>
+<c:set var="addRequestFormId">addRequestForm-${unique_page_id}</c:set>
 
 <c:set var="findRequestFormProductTypeSelectorId">findRequestFormProductTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="findRequestFormRequestSiteSelectorId">findRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
+<c:set var="addRequestFormRequestSiteSelectorId">addRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -44,6 +46,28 @@ $(document).ready(function() {
       }
     });
   });
+  
+  $("#${tabContentId}").find(".addRequestButton").button({
+	    icons : {
+	      primary : 'ui-icon-search'
+	    }
+	  }).click(function() {
+		  var addRequestFormData = $("#${addRequestFormId}").serialize();
+		    var resultsDiv = $("#${mainContentId}").find(".addRequestResults");
+	    //showLoadingImage(resultsDiv);
+	    $.ajax({
+	      type : "GET",
+	      url : "addRequestFormGenerator.html",
+	      data : addRequestFormData,
+	      success : function(data) {
+	    	  $("#${tabContentId}").find(".addRequestForm").hide();
+	    	  $("#${tabContentId}").find(".findRequestForm").hide();
+	    	  resultsDiv.html(data);
+	      }
+	    });
+	  });
+
+  
 
   $("#${tabContentId}").find(".clearFindFormButton").button({
     icons : {
@@ -93,6 +117,18 @@ $(document).ready(function() {
                   }
   });
   $("#${tabContentId}").find(".requestSiteSelector").multiselect("checkAll");
+  
+  $("#${addRequestFormId}").find(".requestSites").multiselect({
+      multiple : false,
+      selectedList : 1,
+      header : false
+    });
+  
+  $("#${addRequestFormId}").find(".requestType").multiselect({
+      multiple : false,
+      selectedList : 1,
+      header : false
+    });
 
   $("#${tabContentId}").find(".statusSelector").multiselect({
     multiple : false,
@@ -137,6 +173,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
+  <div class="findRequestForm">
     <b>Find Requests</b>
     <div class="tipsBox ui-state-highlight">
       <p>
@@ -199,10 +236,55 @@ $(document).ready(function() {
         </button>
       </div>
     </div>
-
+	
     <div class="findRequestResults"></div>
+    </div>
+     <div class="addRequestResults"></div>
   </div>
 
   <div id="${childContentId}"></div>
+  
+ <div class="addRequestForm">
+  <b>Add Requests</b>
+  
+   <form:form method="GET" commandName="addRequestForm" id="${addRequestFormId}"
+      class="formFormatClass">
 
+      <div>
+        <form:label path="requestNumber">${requestFields.requestNumber.displayName}</form:label>
+        <form:input path="requestNumber" />
+      </div>
+      <div>
+        <form:label path="requestSite">${requestFields.requestSite.displayName}</form:label>
+       	<form:select path="requestSite"
+            id="${addRequestFormRequestSiteSelectorId}"
+            class="requestSites">
+            <form:option value="" selected="selected">&nbsp;</form:option>
+            <c:forEach var="site" items="${sites}">
+              <form:option value="${site.id}">${site.name}</form:option>
+            </c:forEach>
+          </form:select>
+      </div>
+      <div>
+          <form:label path="requestType">${requestFields.requestType.displayName}</form:label>
+          <form:select path="requestType"
+                       id="${addRequestFormRequestTypeSelectorId}"
+                       class="requestType">
+            <form:option value="">&nbsp;</form:option>
+            <c:forEach var="requestType" items="${requestTypes}">
+              <form:option value="${requestType.id}">${requestType.requestType}</form:option>
+            </c:forEach>
+          </form:select>
+        </div>
+	</form:form>
+	
+	<div class="formFormatClass">
+      <div>
+        <label></label>
+        <button type="button" class="addRequestButton autoWidthButton">
+          Add requests
+        </button>
+      </div>
+    </div>
+   </div>
 </div>

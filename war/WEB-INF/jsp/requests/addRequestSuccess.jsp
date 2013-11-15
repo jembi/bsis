@@ -12,10 +12,38 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
+<c:set var="deleteConfirmDialogId">deleteConfirmDialog-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
   showBarcode($("#${tabContentId}").find(".requestBarcode"), "${request.requestNumber}");
+  
+  $("#${tabContentId}").find(".deleteButton").button({
+      icons : {
+        primary : 'ui-icon-trash'
+      }
+    }).click(function() {
+    	alert(1);
+      $("#${deleteConfirmDialogId}").dialog(
+          {
+            modal : true,
+            title : "Confirm Delete",
+            buttons : {
+              "Delete" : function() {
+            	  alert(2);
+                deleteRequest("${request.id}", notifyParentDone);
+                $(this).dialog("close");
+              },
+              "Cancel" : function() {
+                $(this).dialog("close");
+              }
+            }
+          });
+    });
+  
+  function notifyParentDone() {
+	  refetchContent("${addAnotherRequestUrl}", $("#${tabContentId}"));
+    }
 
   $("#${tabContentId}").find(".printButton").button({
     icons : {
@@ -55,20 +83,23 @@ $(document).ready(function() {
       <img src="images/check_icon.png"
            style="height: 30px; padding-left: 10px; padding-right: 10px;" />
       <span class="successText">
-        Request added Successfully.
+        Request has been partially fulfilled.
       </span>
-      <div style="margin-left: 55px;">
-        You can view the details below. Click "Add another request" to add another request.
-      </div>
     </div>
     <div>
-      <div class="summaryPageButtonSection" style="text-align: right;">
+      <div class="summaryPageButtonSection" style="text-align: left;">
         <button type="button" class="doneButton">
           Done
         </button>
-        <button type="button" class="addAnotherRequestButton">
-          Add another request
+        <button type="button" class="editButton">
+          Edit 
         </button>
+        <button type="button" class="deleteButton">
+          Delete
+        </button>
+       <!--  <button type="button" class="addAnotherRequestButton">
+          Add another request
+        </button> -->
         <button type="button" class="printButton">
           Print
         </button>
@@ -81,4 +112,7 @@ $(document).ready(function() {
   <div id="${childContentId}">
   </div>
 
+</div>
+<div id="${deleteConfirmDialogId}" style="display: none;">
+  Are  you sure you want to delete this Collection?
 </div>

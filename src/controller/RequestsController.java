@@ -14,8 +14,10 @@ import javax.validation.Valid;
 
 import model.product.Product;
 import model.request.Request;
+import model.requestedComponents.RequestedComponents;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -117,7 +119,10 @@ public class RequestsController {
   public ModelAndView findRequestFormGenerator(HttpServletRequest request, Model model) {
 
     FindRequestBackingForm form = new FindRequestBackingForm();
+    RequestBackingForm form1 = new RequestBackingForm();
+    
     model.addAttribute("findRequestForm", form);
+    model.addAttribute("addRequestForm", form1);
 
     ModelAndView mv = new ModelAndView("requests/findRequestForm");
     addEditSelectorOptions(mv.getModelMap());
@@ -209,6 +214,7 @@ public class RequestsController {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
+    m.put("requestedComponents", requestRepository.getRequestedComponents());
   }
 
   /**
@@ -292,16 +298,19 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/addRequestFormGenerator", method = RequestMethod.GET)
-  public ModelAndView addRequestFormGenerator(HttpServletRequest request) {
-
-    RequestBackingForm form = new RequestBackingForm();
-
+  public ModelAndView addRequestFormGenerator(HttpServletRequest request,@ModelAttribute("addRequestForm")  RequestBackingForm form) {
+  	
     ModelAndView mv = new ModelAndView("requests/addRequestForm");
+    Boolean bulkTransferStatus;
+    bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(request.getParameter("requestType")));
+    System.out.println("bulkTransferStatus:"+bulkTransferStatus);
     mv.addObject("requestUrl", getUrl(request));
     mv.addObject("firstTimeRender", true);
-    mv.addObject("addRequestForm", form);
+    mv.addObject("bulkTransferStatus", bulkTransferStatus);
     mv.addObject("refreshUrl", getUrl(request));
+    //mv.addObject("requestedComponents",requestRepository.getRequestedComponents());
     addEditSelectorOptions(mv.getModelMap());
+    mv.addObject("addRequestForm", form);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     // to ensure custom field names are displayed in the form
     mv.addObject("requestFields", formFields);
@@ -334,6 +343,9 @@ public class RequestsController {
 
     ModelAndView mv = new ModelAndView();
     boolean success = false;
+    boolean bulkTransferStatus;
+    bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(request.getParameter("requestType")));
+    System.out.println("bulkTransferStatus::::::::::::::::::::::::::::::::::"+bulkTransferStatus);
 
     addEditSelectorOptions(mv.getModelMap());
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
@@ -349,6 +361,7 @@ public class RequestsController {
         Request productRequest = form.getRequest();
         productRequest.setIsDeleted(false);
         savedRequest = requestRepository.addRequest(productRequest);
+        requestRepository.updateRequestedComponents(form.getId());
         mv.addObject("hasErrors", false);
         success = true;
         form = new RequestBackingForm();
@@ -364,7 +377,7 @@ public class RequestsController {
     if (success) {
       mv.addObject("requestId", savedRequest.getId());
       mv.addObject("request",  new RequestViewModel(savedRequest));
-      mv.addObject("addAnotherRequestUrl", "addRequestFormGenerator.html");
+      mv.addObject("addAnotherRequestUrl", "findRequestFormGenerator.html");
       mv.setViewName("requests/addRequestSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating request. Please fix the errors noted below.");
@@ -373,7 +386,7 @@ public class RequestsController {
       mv.addObject("refreshUrl", "addRequestFormGenerator.html");
       mv.setViewName("requests/addRequestError");
     }
-
+    mv.addObject("bulkTransferStatus", bulkTransferStatus);
     mv.addObject("success", success);
     return mv;
   }
@@ -542,4 +555,65 @@ public class RequestsController {
     m.put("errMsg", errMsg);
     return m;
   }
+  
+  @RequestMapping("/removeRequestedComponents")
+  public ModelAndView removeRequestedComponents(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson,@ModelAttribute("addRequestForm") RequestBackingForm form)  {
+    ModelAndView mv = new ModelAndView("requests/addRequestForm");
+    try{
+	    @SuppressWarnings("unchecked")
+	    Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+	   
+	  	System.out.println(params.get("requestedComponent"));
+	  	requestRepository.removeRequestedComponents(Long.parseLong(params.get("requestedComponent").toString()));
+	  	
+	  	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+	    // to ensure custom field names are displayed in the form
+	  	mv.addObject("requestUrl", getUrl(request));
+	    mv.addObject("firstTimeRender", true);
+	    mv.addObject("refreshUrl", getUrl(request));
+	  	mv.addObject("addRequestForm", form);
+	    mv.addObject("requestFields", formFields);
+	    addEditSelectorOptions(mv.getModelMap());
+    }catch(Exception e){
+    	e.printStackTrace();
+    }
+    
+    return mv;
+  }
+  
+  @RequestMapping("/addRequestedComponents")
+  public ModelAndView addRequestedComponents(
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value="params") String paramsAsJson,@ModelAttribute("addRequestForm") RequestBackingForm form)  {
+    ModelAndView mv = new ModelAndView("requests/addRequestForm");
+    try{
+	    @SuppressWarnings("unchecked")
+	    Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+	   
+	  	System.out.println(params.get("requestedComponent"));
+	  	RequestedComponents requestedComponents = new RequestedComponents();
+	  	requestedComponents.setProductType(Long.parseLong(params.get("requestedComponent").toString()));
+	  	requestedComponents.setBloodABO(params.get("bloodABO").toString());
+	  	requestedComponents.setBloodRh(params.get("bloodRh").toString());
+	  	requestedComponents.setNumUnits(Long.parseLong(params.get("numUnitsRequested").toString()));
+	  	
+	  	requestRepository.addRequestedComponents(requestedComponents);
+	  	
+	  	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+	    // to ensure custom field names are displayed in the form
+	  	mv.addObject("requestUrl", getUrl(request));
+	    mv.addObject("firstTimeRender", true);
+	    mv.addObject("refreshUrl",getUrl(request));
+	  	mv.addObject("addRequestForm", form);
+	    mv.addObject("requestFields", formFields);
+	    addEditSelectorOptions(mv.getModelMap());
+    }catch(Exception e){
+    	e.printStackTrace();
+    }
+    
+    return mv;
+  }
+  
 }

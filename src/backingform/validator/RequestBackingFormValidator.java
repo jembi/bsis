@@ -40,13 +40,14 @@ public class RequestBackingFormValidator implements Validator {
     if (validator != null)
       ValidationUtils.invokeValidator(validator, obj, errors);
     RequestBackingForm form = (RequestBackingForm) obj;
-    String requestDate = form.getRequestDate();
+   /* String requestDate = form.getRequestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(requestDate)) {
       errors.rejectValue("request.requestDate", "dateFormat.incorrect",
           CustomDateFormatter.getDateTimeErrorMessage());
-    }
-    String requiredDate = form.getRequiredDate();
-    if (!CustomDateFormatter.isDateStringValid(requiredDate)) {
+    }*/
+    form.setNumUnitsRequested(0);
+    String dispatchDate = form.getDispatchDate();
+    if (!CustomDateFormatter.isDateStringValid(dispatchDate)) {
       errors.rejectValue("request.requiredDate", "dateFormat.incorrect",
             CustomDateFormatter.getDateErrorMessage());
     }
