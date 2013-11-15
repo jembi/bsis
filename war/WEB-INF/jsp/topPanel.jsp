@@ -29,7 +29,7 @@
 
     <c:if test="${labsetup['collectionsTabEnabled']}">
     <li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
-        class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
+        class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Donations</a></li>
     </c:if>
 
 
@@ -41,7 +41,7 @@
 
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
-        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>TestResults</a></li>
+        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test Results</a></li>
     </c:if>
     
     <c:if test="${labsetup['lotRelease']}">

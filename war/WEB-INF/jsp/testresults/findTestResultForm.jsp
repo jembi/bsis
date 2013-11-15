@@ -65,7 +65,7 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <b>Find Test Results</b>
-    <div class="tipsBox ui-state-highlight">
+    <div class="tipsBox ui-state-highlight" style="display:none;">
       <p>
         ${tips['testResults.find']}
       </p>
@@ -78,7 +78,7 @@ $(document).ready(function() {
         <!-- Spring supports dynamic attributes so placeholder can be added
              http://stackoverflow.com/questions/4232983/adding-html5-placeholder-attribute-to-spring-3-0-form-input-elements
          -->
-        <form:input path="collectionNumber" placeholder="Collection Number"/>
+        <form:input path="collectionNumber" placeholder="Donation Identification Number"/>
       </div>
     </form:form>
 

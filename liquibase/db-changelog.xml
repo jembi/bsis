@@ -190,15 +190,41 @@
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>		
 	</changeSet>
-    
-    <!-- For issue 104 [Add Lot Release Functionality] -->
+	
+	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
+	<changeSet id="201311081617" author="devang">
+	    <addColumn tableName="RequestType">
+	        <column name="bulkTransfer" type="TINYINT(1)"/>
+	    </addColumn>
+		<addColumn tableName="RequestType_AUD">
+	        <column name="bulkTransfer" type="TINYINT(1)"/>
+	    </addColumn>
+	</changeSet>
+	
+	<!-- Update FormField table to rename Collection info to Donation -->
+	<changeSet id="201311081720" author="danfuterman">
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Identification Number" />
+    		<where>field = "collectionNumber"</where>
+		</update>
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Site" />
+    		<where>field = "collectionSite"</where>
+		</update>
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Centre" />
+    		<where>field = "collectionCenter"</where>
+		</update>
+	</changeSet>
+
+	<!-- For issue 104 [Add Lot Release Functionality] -->
     <changeSet id="201311111726" author="devang">
-    	<insert tableName="GenericConfig">
-    		<column name="id" value="48"></column>
-    		<column name="propertyName" value="lotRelease"></column>
-    		<column name="propertyOwner" value="labsetup"></column>
-    		<column name="propertyValue" value="TRUE"></column>
-    	</insert>
+            <insert tableName="GenericConfig">
+                    <column name="id" value="48"></column>
+                    <column name="propertyName" value="lotRelease"></column>
+                    <column name="propertyOwner" value="labsetup"></column>
+                    <column name="propertyValue" value="TRUE"></column>
+            </insert>
     </changeSet>
-    
+	    
 </databaseChangeLog>	

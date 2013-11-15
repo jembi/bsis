@@ -239,7 +239,7 @@ public class DonorController {
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);        
         // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
-        donor.setDonorNumber(utilController.getNextDonorNumber());
+        //donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
