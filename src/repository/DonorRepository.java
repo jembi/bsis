@@ -262,7 +262,7 @@ public class DonorRepository {
     try {
       donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
     } catch (NoResultException ex) {    	
-    	LOGGER.error("could not fine record with donorNumber :" + donorNumber);
+    	LOGGER.error("could not find record with donorNumber :" + donorNumber);
     	LOGGER.error(ex.getMessage());
     }
     return donor;
