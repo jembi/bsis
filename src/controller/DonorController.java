@@ -451,18 +451,19 @@ public class DonorController {
   public ModelAndView printDonorLabel(HttpServletRequest request, Model model,
 		  @RequestParam(value="donorNumber") String donorNumber) {
 	  
-	ModelAndView mv = new ModelAndView("zplLabel");
+	ModelAndView mv = new ModelAndView("zplBarcode");
 	
-	mv.addObject("${^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ" +
-			"^XA" +
-			"^MMT" +
-			"^PW360" +
-			"^LL0120" +
-			"^LS0" +
-			"^BY2,3,30^FT77,62^BCN,,Y,N" +
-			"^FD>:" + donorNumber+ "^FS" +
-			"^PQ1,0,1,Y^XZ}$");
-	
+	mv.addObject("labelZPL",
+		"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
+		"^XA"+
+		"^MMT"+
+		"^PW360"+
+		"^LL0120"+
+		"^LS0"+
+		"^BY2,3,52^FT63,69^BCN,,Y,N"+
+		"^FD>:" + donorNumber + "^FS"+
+		"^PQ1,0,1,Y^XZ"
+	);
 	
 	return mv;
   }

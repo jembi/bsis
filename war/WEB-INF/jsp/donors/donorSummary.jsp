@@ -50,7 +50,7 @@
               primary : 'ui-icon-print'
             }
           }).click(function() {
-        	  window.open("printDonorLabel.html?"+ $.param({donorNumber : "${donor.id}"}));
+        	  window.open("printDonorLabel.html?"+ $.param({donorNumber : "${donor.donorNumber}"}));
           });
         
         $("#${tabContentId}").find(".printButton").button({
@@ -211,7 +211,7 @@
       </button>
       </sec:authorize>
       <button class="printBarcode">
-        Print
+        Print Barcode
       </button>
     </div>
 
