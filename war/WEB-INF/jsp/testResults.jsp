@@ -24,7 +24,7 @@
     </c:if>
     <c:if test="${labsetup['ttiElisa'] == 'true' }">
       <li id="ttiTestResultsWells">
-        <a href="ttiWellsWorksheetFormGenerator.html">TTI results (ELISA)</a>
+        <a href="ttiWellsWorksheetFormGenerator.html">TTI Results (ELISA)</a>
       </li>
     </c:if>
 

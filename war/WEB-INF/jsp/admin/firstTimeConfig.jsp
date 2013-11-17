@@ -52,7 +52,7 @@
           style="display: inline-block;"></span>Sign out</a>
       </div>
       <div class="firstTimeConfigDiv">
-        Looks like you are running Vein-to-Vein for the first time. You need
+        Looks like you are running BSIS for the first time. You need
         to configure this server this server. Please click on configure
         below to begin the configuration process. <br /> <br /> <br />
 

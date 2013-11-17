@@ -138,7 +138,7 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <b>Find Requests</b>
-    <div class="tipsBox ui-state-highlight">
+    <div class="tipsBox ui-state-highlight" style="display:none;">
       <p>
         ${tips['requests.findpending']}
       </p>

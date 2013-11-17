@@ -5,8 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div class="formFormatClass printableArea">
-  <br />
-  <div class="donorBarcode"></div>
+  <!-- <br />
+   <div class="donorBarcode"></div> -->
   <c:if test="${donorFields.donorNumber.hidden != true }">
     <div>
       <label>${donorFields.donorNumber.displayName}</label>
@@ -132,11 +132,12 @@
       <label>${donor.preferredContactMethod}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.donorPanel.hidden != true }">
+  <c:if test="donorFields.donorPanel.hidden != true}">
+  	<c:if test="${not empty donorFields.donorPanel.hidden}">
     <div>
       <label>${donorFields.donorPanel.displayName}</label>
       <label>${donor.donorPanel}</label>
-    </div>
+    </div></c:if>
   </c:if>
   <c:if test="${donorFields.dateOfLastDonation.hidden != true }">
     <div>
