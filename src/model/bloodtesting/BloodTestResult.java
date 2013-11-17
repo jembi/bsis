@@ -2,6 +2,7 @@ package model.bloodtesting;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,10 +35,10 @@ public class BloodTestResult implements ModificationTracker {
   @Column(nullable = false, insertable=false, updatable=false)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(cascade = {CascadeType.MERGE})
   private CollectedSample collectedSample;
 
-  @ManyToOne
+  @ManyToOne(cascade = {CascadeType.MERGE})
   private BloodTest bloodTest;
 
   @Column(length=10)
@@ -46,7 +47,7 @@ public class BloodTestResult implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
 
-  @OneToOne
+  @OneToOne(cascade = {CascadeType.MERGE})
   private MachineReading machineReading;
 
   @Valid
@@ -54,6 +55,9 @@ public class BloodTestResult implements ModificationTracker {
 
   @Lob
   private String notes;
+    
+  @Column(length=20)
+  private String reagentLotNumber;
 
   public BloodTestResult() {
     modificationTracker = new RowModificationTracker();
@@ -146,4 +150,12 @@ public class BloodTestResult implements ModificationTracker {
   public void setMachineReading(MachineReading machineReading) {
     this.machineReading = machineReading;
   }
+
+	public String getReagentLotNumber() {
+		return reagentLotNumber;
+	}
+
+	public void setReagentLotNumber(String reagentLotNumber) {
+		this.reagentLotNumber = reagentLotNumber;
+	}
 }
