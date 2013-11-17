@@ -915,12 +915,12 @@ public class BloodTestingRepository {
 		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
 			BloodTestResult btResult = new BloodTestResult();
 			MachineReading machineReading = new MachineReading();
-			CollectedSample collectedSample = new CollectedSample();
-
+			
+			CollectedSample collection = collectedSampleRepository
+			.findCollectedSampleByCollectionNumber(ts.getSID());
+			
 			BloodTest bloodTest = new BloodTest();
-
-			collectedSample.setId(ts.getSID());
-			btResult.setCollectedSample(collectedSample);
+			btResult.setCollectedSample(collection);
 			bloodTest.setId(ts.getAssayNumber());
 			btResult.setBloodTest(bloodTest);
 			machineReading.setMachineReading(ts.getResult());

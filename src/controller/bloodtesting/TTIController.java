@@ -526,7 +526,8 @@ public class TTIController {
 							tSVFailedList.add(tSVFileFailedObj);
 						} else {
 							tSVFileHeaderNameObj = new TSVFileHeaderName();
-							tSVFileHeaderNameObj.setSID(Long.valueOf(next[1].trim()));
+							//tSVFileHeaderNameObj.setSID(Long.valueOf(next[1].trim()));
+							tSVFileHeaderNameObj.setSID(next[1].trim());
 							tSVFileHeaderNameObj.setAssayNumber(Integer
 									.valueOf(next[6]));
 							tSVFileHeaderNameObj.setResult(BigDecimal
