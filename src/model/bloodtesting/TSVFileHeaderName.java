@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class TSVFileHeaderName {
 
-	private Long SID;
-
+	private String SID;
+	
 	private Integer assayNumber;
 
 	private BigDecimal result;
@@ -23,7 +23,7 @@ public class TSVFileHeaderName {
 	/**
 	 * @return the sID
 	 */
-	public Long getSID() {
+	public String getSID() {
 		return SID;
 	}
 
@@ -31,7 +31,7 @@ public class TSVFileHeaderName {
 	 * @param sID
 	 *            the sID to set
 	 */
-	public void setSID(Long sID) {
+	public void setSID(String sID) {
 		SID = sID;
 	}
 
