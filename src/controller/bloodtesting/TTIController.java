@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -448,42 +449,51 @@ public class TTIController {
 		MultipartFile tsvFile = null;
 		String fileName, uploadPath;
 		boolean success = true;
-		Iterator<String> iterator = request.getFileNames();
-		if (!iterator.hasNext()) {
-			mv.addObject("refreshUrl", getUrl(request));
-			mv.addObject("errorMessage", UploadTTIResultConstant.MESSAGE1);
-			success = false;
-			mv.setViewName("bloodtesting/uploadTTIResults");
+		
+		try{
+			Iterator<String> iterator = request.getFileNames();
+			if (!iterator.hasNext()) {
+				mv.addObject("refreshUrl", getUrl(request));
+				mv.addObject("errorMessage", UploadTTIResultConstant.MESSAGE1);
+				success = false;
+				mv.setViewName("bloodtesting/uploadTTIResults");
+				mv.addObject("success", success);
+				return mv;
+			}
+			if (iterator.hasNext()) {
+				tsvFile = request.getFile(iterator.next());
+			}
+					
+			fileName = tsvFile.getOriginalFilename();			
+			String getFullRealPath = request.getSession().getServletContext().getRealPath("/");
+		  String[] path=getFullRealPath.split(".metadata");
+		  uploadPath = path[0];
+		  String[] tsvFilestr;
+	
+			tsvFilestr = tsvFile.getOriginalFilename().toString()
+					.split(UploadTTIResultConstant.FILE_SPLIT);
+			if (StringUtils.isBlank(tsvFilestr.toString())	|| 
+					!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
+				mv.addObject("refreshUrl", getUrl(request));
+				mv.addObject("errorMessage",UploadTTIResultConstant.MESSAGE2);
+				success = false;
+				mv.setViewName("bloodtesting/uploadTTIResults");
+				mv.addObject("success", success);
+				return mv;
+			}
+			
+			String fileWithExt= FileUploadUtils.splitFilePath(fileName);
+			writeTSVFile(fileWithExt, uploadPath, tsvFile);
+			String file = uploadPath + fileWithExt;
+			readTSVToDB(request, mv, tsvFilestr, file);
 			mv.addObject("success", success);
-			return mv;
-		}
-		if (iterator.hasNext()) {
-			tsvFile = request.getFile(iterator.next());
-		}
-
-				
-		fileName = tsvFile.getOriginalFilename();			
-		String getFullRealPath=request.getServletContext().getRealPath("/");
-	  String[] path=getFullRealPath.split(".metadata");
-	  uploadPath = path[0];
-	  String[] tsvFilestr;
-
-		tsvFilestr = tsvFile.getOriginalFilename().toString()
-				.split(UploadTTIResultConstant.FILE_SPLIT);
-		if (StringUtils.isBlank(tsvFilestr.toString())	|| 
-				!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
-			mv.addObject("refreshUrl", getUrl(request));
-			mv.addObject("errorMessage",UploadTTIResultConstant.MESSAGE2);
+		}	
+		catch (Exception ex){
+			ex.printStackTrace();
 			success = false;
-			mv.setViewName("bloodtesting/uploadTTIResults");
 			mv.addObject("success", success);
-			return mv;
 		}
-		String fileWithExt= FileUploadUtils.splitFilePath(fileName);
-		writeTSVFile(fileWithExt, uploadPath, tsvFile);
-		String file = uploadPath + fileWithExt;
-		readTSVToDB(request, mv, tsvFilestr, file);
-		mv.addObject("success", success);
+		
 		return mv;
 
 	}
@@ -506,27 +516,31 @@ public class TTIController {
 
 				TSVFileHeaderName tSVFileHeaderNameObj, tSVFileFailedObj;
 				while ((next = csvReader.readNext()) != null) {
-					tSVFileHeaderNameObj = new TSVFileHeaderName();
-					tSVFileFailedObj = new TSVFileHeaderName();
-					if (next[1] == null || next[6] == null || next[8] == null
-							|| next[9] == null || next[16] == null
-							|| next[18] == null || next[20] == null) {
-						tSVFileFailedObj = new TSVFileHeaderName();
-						tSVFailedList.add(tSVFileFailedObj);
-					} else {
+					if(next.length > 1){
 						tSVFileHeaderNameObj = new TSVFileHeaderName();
-						tSVFileHeaderNameObj.setSID(Long.valueOf(next[1]));
-						tSVFileHeaderNameObj.setAssayNumber(Integer
-								.valueOf(next[6]));
-						tSVFileHeaderNameObj.setResult(BigDecimal
-								.valueOf(Double.valueOf(next[8])));
-						tSVFileHeaderNameObj.setInterpretation(next[9]);
-						tSVFileHeaderNameObj.setCompleted(formatter
-								.parse(next[16]));
-						tSVFileHeaderNameObj.setOperatorID(Integer
-								.parseInt(next[18]));
-						tSVFileHeaderNameObj.setReagentLotNumber(next[20]);
-						tSVFileHeaderNameList.add(tSVFileHeaderNameObj);
+						tSVFileFailedObj = new TSVFileHeaderName();
+						if (next[1] == null || next[6] == null || next[8] == null
+								|| next[9] == null || next[16] == null
+								|| next[18] == null || next[20] == null) {
+							tSVFileFailedObj = new TSVFileHeaderName();
+							tSVFailedList.add(tSVFileFailedObj);
+						} else {
+							tSVFileHeaderNameObj = new TSVFileHeaderName();
+							tSVFileHeaderNameObj.setSID(Long.valueOf(next[1].trim()));
+							tSVFileHeaderNameObj.setAssayNumber(Integer
+									.valueOf(next[6]));
+							tSVFileHeaderNameObj.setResult(BigDecimal
+									.valueOf(Double.valueOf(next[8].trim())));
+							tSVFileHeaderNameObj.setInterpretation(next[9]);
+							tSVFileHeaderNameObj.setCompleted(formatter
+									.parse(next[16]));
+							tSVFileHeaderNameObj.setOperatorID(Integer
+									.parseInt(next[18].trim()));
+							tSVFileHeaderNameObj.setReagentLotNumber(next[20]);
+							tSVFileHeaderNameList.add(tSVFileHeaderNameObj);
+							
+						}
+						
 					}
 				}
 
