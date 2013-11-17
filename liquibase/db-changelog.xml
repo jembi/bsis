@@ -193,10 +193,10 @@
     
     <!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
     <changeSet id="201311071844" author="Ankur">
-		<addColumn tableName="product">
+		<addColumn tableName="Product">
 			<column name="packNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
-		<addColumn tableName="product_AUD">
+		<addColumn tableName="Product_AUD">
 			<column name="packNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
 		<insert tableName="FormField">
