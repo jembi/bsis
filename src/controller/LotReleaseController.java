@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.LotReleaseConstant;
 import model.product.Product;
@@ -27,6 +28,7 @@ import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
+import repository.bloodtesting.BloodTypingStatus;
 import backingform.validator.CollectedSampleBackingFormValidator;
 
 @Controller
@@ -97,13 +99,8 @@ public class LotReleaseController {
     	mv.addObject("success", success);
     	return mv;
     }
-    
-    
-    for(Product product : collectedSample.get(0).getProducts()){
-    	if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)){
-    		discard = true;
-    	}
-    }
+   
+    discard = checkCollectionForDiscard(mv,collectedSample);
 
     if(!discard){
     
@@ -304,22 +301,56 @@ public class LotReleaseController {
 		boolean success=false;
 		if(collectedSample != null){
     	success=true;
-    	if(collectedSample.get(0).getTTIStatus().equals(LotReleaseConstant.TTI_UNSAFE)){
+    	if(collectedSample.get(0).getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
+    			|| collectedSample.get(0).getTTIStatus().equals(TTIStatus.NOT_DONE)
+    			){
     		success=false;
     	}else if(collectedSample.get(0).getDonor()!=null && collectedSample.get(0).getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
-    	}else if(collectedSample.get(0).getProducts()!=null && !collectedSample.get(0).getProducts().isEmpty() && (collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) || collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
-    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) || collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
+    	}else if(collectedSample.get(0).getProducts()!=null && !collectedSample.get(0).getProducts().isEmpty() && 
+    			(collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
+    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
+    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
+    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
     		success=false;
-    	}else if(collectedSample.get(0).getBloodTestResults()!=null && !collectedSample.get(0).getBloodTestResults().isEmpty() && !collectedSample.get(0).getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
-    		success=false;
-    	}else if(collectedSample.get(0).getDonor().getDeferrals()!=null && ! collectedSample.get(0).getDonor().getDeferrals().isEmpty()){
+    	}else if(collectedSample.get(0).getBloodTestResults()!=null 
+    			&& !collectedSample.get(0).getBloodTestResults().isEmpty() 
+    			&& !collectedSample.get(0).getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}
+    	else if(collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
+    			|| collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
+    			|| collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
+    			|| collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
+    			){
+    		success = false;
+    	}
+    	// TODO: improve deferrals check - should only flag donors that are CURRENTLY deferred 
+    	/*else if(collectedSample.get(0).getDonor().getDeferrals()!=null 
+    			&& ! collectedSample.get(0).getDonor().getDeferrals().isEmpty()){
+    		success=false;
+    	}
+    	*/
+    	
     }else{
     	success=false;
     }
 		return success;
+	}
+	
+	private boolean checkCollectionForDiscard(ModelAndView mv, List<CollectedSample> collectedSample){
+		boolean discard = false;
+		
+		if(collectedSample.get(0).getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
+    		discard=true;
+    	}
+		for(Product product : collectedSample.get(0).getProducts()){ 
+			if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)){
+				discard = true;
+			}
+		}
+		
+		return discard;
 	}
   
 }
