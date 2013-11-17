@@ -180,7 +180,7 @@ $(document).ready(function() {
         <td />
       </tr>
       <tr>
-        <td><form:label path="centers">Collection Centers</form:label></td>
+        <td><form:label path="centers">Donation Centers</form:label></td>
         <td style="padding-left: 10px;"><form:select path="centers" class="collectionCenterSelector">
           <c:forEach var="center" items="${model.centers}">
             <form:option value="${center.id}" label="${center.name}" />
@@ -190,7 +190,7 @@ $(document).ready(function() {
       </tr>
       <tr>
         <td>
-          <form:label path="sites">Collection Sites</form:label>
+          <form:label path="sites">Donation Sites</form:label>
         </td>
         <td style="padding-left: 10px;">
           <form:select path="sites" class="collectionSiteSelector">

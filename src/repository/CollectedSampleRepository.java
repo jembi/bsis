@@ -535,4 +535,25 @@ public class CollectedSampleRepository {
     }
     return statusMap;
   }
+  
+  
+  public List<CollectedSample> findLotReleseById(String din) {
+  	String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted";
+  	List<CollectedSample> collectedSample;
+  	TypedQuery<CollectedSample> query = em.createQuery(queryString,CollectedSample.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("collectionNumber",din);
+    collectedSample = query.getResultList();
+    
+    for(CollectedSample sample : collectedSample){
+    	sample.getProducts().size();
+    	sample.getBloodTestResults().size();
+    	sample.getDonor().getDeferrals().size();
+    }
+    
+  	if(collectedSample.size() == 0)
+  		return null;
+  	else 
+  		return collectedSample;
+  }
 }

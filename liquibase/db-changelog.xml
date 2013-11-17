@@ -29,6 +29,42 @@
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
 
+	<!-- For issue 26 [Add WHO Deferral Reasons] -->
+	<changeSet id="201310241525" author="nikita">
+		<delete tableName="DeferralReason"></delete>
+	</changeSet>
+	<changeSet id="201310241526" author="nikita">
+		<sql>
+			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
+		</sql>
+	</changeSet>
+	<changeSet id="201310241527" author="nikita">
+		<insert tableName="DeferralReason">
+        	<column name="reason" value="High risk behaviour"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Low weight"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Low haemoglobin"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Other reasons"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Other medical conditions"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DeferralReason">
+        	<column name="reason" value="Travel history"/>
+        	<column name="isDeleted" value="0"/>
+        </insert>
+	</changeSet>
+
 	<!-- For issue 57 [Add WHO Product Discard Reasons] -->
 	<changeSet id="201310241507" author="nikita">
 		<delete tableName="ProductStatusChangeReason">
@@ -190,18 +226,54 @@
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>		
 	</changeSet>
-      
- 	<!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
-  	<changeSet id="201311071517" author="devang">
-		<addColumn tableName="BloodTestResult">
-			<column name="reagentLotNumber" type="varchar(20)" />
-		</addColumn>
-		<insert tableName="GenericConfig">
-			<column name="id" value="47"></column>
-			<column name="propertyName" value="ttiUploadResult"></column>
-			<column name="propertyOwner" value="labsetup"></column>
-			<column name="propertyValue" value="true"></column>
-		</insert>
+	
+	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
+	<changeSet id="201311081617" author="devang">
+	    <addColumn tableName="RequestType">
+	        <column name="bulkTransfer" type="TINYINT(1)"/>
+	    </addColumn>
+		<addColumn tableName="RequestType_AUD">
+	        <column name="bulkTransfer" type="TINYINT(1)"/>
+	    </addColumn>
 	</changeSet>
-  
+	
+	<!-- Update FormField table to rename Collection info to Donation -->
+	<changeSet id="201311081720" author="danfuterman">
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Identification Number" />
+    		<where>field = "collectionNumber"</where>
+		</update>
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Site" />
+    		<where>field = "collectionSite"</where>
+		</update>
+		<update tableName="FormField">
+    		<column name="defaultDisplayName" value="Donation Centre" />
+    		<where>field = "collectionCenter"</where>
+		</update>
+	</changeSet>
+
+	<!-- For issue 104 [Add Lot Release Functionality] -->
+    <changeSet id="201311111726" author="devang">
+            <insert tableName="GenericConfig">
+                    <column name="id" value="48"></column>
+                    <column name="propertyName" value="lotRelease"></column>
+                    <column name="propertyOwner" value="labsetup"></column>
+                    <column name="propertyValue" value="TRUE"></column>
+            </insert>
+    </changeSet>
+
+    <!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
+     <changeSet id="201311071517" author="devang">
+	     <addColumn tableName="BloodTestResult">
+	     	<column name="reagentLotNumber" type="varchar(20)" />
+	     </addColumn>
+	     <insert tableName="GenericConfig">
+	     	<column name="id" value="47"></column>
+	     	<column name="propertyName" value="ttiUploadResult"></column>
+	     	<column name="propertyOwner" value="labsetup"></column>
+	     	<column name="propertyValue" value="true"></column>
+	     </insert>
+   </changeSet>
+
 </databaseChangeLog>	

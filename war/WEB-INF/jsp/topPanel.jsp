@@ -29,7 +29,7 @@
 
     <c:if test="${labsetup['collectionsTabEnabled']}">
     <li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
-        class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
+        class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Donations</a></li>
     </c:if>
 
 
@@ -41,9 +41,13 @@
 
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
-        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test
-        Results</a></li>
+        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test Results</a></li>
     </c:if>
+    
+    <c:if test="${labsetup['lotRelease']}">
+    <li class="topPanelTab"><a href="#lotReleasePageContent"><span
+        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Lot Release</a></li>
+    </c:if>    
 
     <c:if test="${labsetup['requestsTabEnabled']}">
     <li class="topPanelTab"><a href="#requestsLandingPageContent"><span
@@ -104,6 +108,12 @@
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <div id="testResultsLandingPageContent">
       <jsp:include page="testResults.jsp" />
+    </div>
+    </c:if>
+	
+  <c:if test="${labsetup['lotRelease']}">
+    <div id="lotReleasePageContent">
+      <jsp:include page="lotRelease/lotRelease.jsp" />
     </div>
     </c:if>
 

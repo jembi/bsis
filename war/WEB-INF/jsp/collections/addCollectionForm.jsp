@@ -206,7 +206,7 @@
       class="formFormatClass" id="${addCollectionFormId}">
       <c:if test="${!collectionFields.collectionNumber.autoGenerate}">
         <c:if test="${collectionFields.collectionNumber.hidden != true }">
-          <div class="barcodeContainer"></div>
+          <div class="barcodeContainer" style="display:none"></div>
           <div>
             <form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
             <form:input path="collectionNumber" value="${firstTimeRender ? collectionFields.collectionNumber.defaultValue : ''}" />

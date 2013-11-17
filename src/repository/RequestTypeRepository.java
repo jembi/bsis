@@ -54,6 +54,7 @@ public class RequestTypeRepository {
         RequestType existingRequestType = getRequestTypeById(rt.getId());
         if (existingRequestType != null) {
           existingRequestType.setRequestType(rt.getRequestType());
+          existingRequestType.setBulkTransfer(rt.getBulkTransfer());
           em.merge(existingRequestType);
         }
         else {
