@@ -29,11 +29,11 @@
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
 	<changeSet id="201310241525" author="nikita">
-		<delete tableName="deferralreason"></delete>
+		<delete tableName="DeferralReason"></delete>
 	</changeSet>
 	<changeSet id="201310241526" author="nikita">
 		<sql>
-			ALTER TABLE deferralreason AUTO_INCREMENT=1;
+			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
 		</sql>
 	</changeSet>
 	<changeSet id="201310241527" author="nikita">
