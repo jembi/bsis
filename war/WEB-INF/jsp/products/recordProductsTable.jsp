@@ -74,7 +74,7 @@ $(document).ready(
                         	      data : findProductFormData,
                         	      success: function(data) {
                         	    	  	$("#${tabContentId}").replaceWith(data);
-                        	    	  	if(elements[0].innerHTML == 1){
+                        	    	  	if(elements[2].innerHTML == "Whole Blood"){
           								  $("#noOfUnits").attr('disabled', 'disabled');
           								  $(".firstSeperation").val("1");
           								}
@@ -144,7 +144,7 @@ $(document).ready(
     	var numberRegex = /^\d+$/;
     	var str = $('#noOfUnits').val();
     	if(numberRegex.test(str)) {
-    	    if($(".productID").val() != 1 && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
+    		if($(".productID").val() != 1 && $("#noOfUnits").attr('disabled') !="disabled" && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
 	   	   	  showErrorMessage("Num. Units should be between 2 and 5.");   
 	   	   	  return;
 	   	   	}
@@ -178,6 +178,7 @@ $(document).ready(
     	  if(selectedOption.attr( "title" ) === "Whole Blood Pedi"){
     		  $("#noOfUnits").removeAttr("disabled");
     	  }
+    	  
     	  if($(".firstSeperation").val() == "1" && selectedOption.attr( "title" ) != "Whole Blood Pedi"){
     		  $("#noOfUnits").attr('disabled', 'disabled');
     		  $("#noOfUnits").val(0);
@@ -348,6 +349,7 @@ $(document).ready(
 				<button type="button" class="recordNewProduct">Record New
 					Product</button>
 				<button type="button" class="clearFindFormButton">Done</button>
+				
 			</div>
 		</div>
 

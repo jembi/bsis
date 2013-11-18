@@ -29,8 +29,6 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.dom4j.xpp.ProxyXmlStartTag;
-import org.omg.PortableServer.ForwardRequestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +36,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -920,9 +917,11 @@ public class ProductController {
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
-  	String productTypeName = form.getProductTypes().get(form.getProductTypes().size()-1);
-  	ProductType productType = productRepository.findProductTypeByProductTypeName(productTypeName);
-  	
+  	ProductType productType = null;
+  	if(form.getProductTypes() != null){
+	  	String productTypeName = form.getProductTypes().get(form.getProductTypes().size()-1);
+	  	productType = productRepository.findProductTypeByProductTypeName(productTypeName);
+  	}
   	List<Product> products = Arrays.asList(new Product[0]);
   	
     ModelAndView mv = new ModelAndView("products/recordProductsTable");
@@ -932,16 +931,14 @@ public class ProductController {
     mv.addObject("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
     mv.addObject("addProductForm", form);
     
-    if(form.getCollectionNumber().contains("-")){
+    if(form.getCollectionNumber().contains("-") && form.getProductTypes() != null){
     	addEditSelectorOptionsForNewRecordByList(mv.getModelMap(),productType);
   	}
   	else{
   		 addEditSelectorOptionsForNewRecord(mv.getModelMap());
   	}
     
-    
-
-     return mv;
+    return mv;
   }
   
   private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ProductType productType) {
