@@ -735,7 +735,6 @@ public class ProductController {
     mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("nextPageUrl", getNextPageUrlForRecordProduct(request));
     mv.addObject("addProductForm", form);
-    //addEditSelectorOptions(mv.getModelMap());
     addEditSelectorOptionsForNewRecord(mv.getModelMap());
 
     return mv;
@@ -814,15 +813,10 @@ public class ProductController {
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
-//    try {
-      //Product product = form.getProduct();
-  
       ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
       String collectionNumber = form.getCollectionNumber();
       String status = form.getStatus().get(0);
       long productId = form.getProductID();
-      
-      
       
       if(collectionNumber.contains("-")){
       	collectionNumber = collectionNumber.split("-")[0];
@@ -843,14 +837,12 @@ public class ProductController {
 	        	Product product = new Product();
 	          product.setIsDeleted(false);
 	          product.setPackNumber(createdPackNumber+"-"+i);
-	          //11/11/2013 06:36:52 pm
 	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
 	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
 	          
 	          product.setCreatedOn(createdOn);
 	          product.setExpiresOn(expiresOn);
-	          //product.setCollectedSample();
 	          ProductType productType = new ProductType();
 	          productType.setProductType(form.getProductTypes().get(0));
 	          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
@@ -859,7 +851,6 @@ public class ProductController {
 	          collectedSample.setId(collectedSampleID);
 	          product.setCollectedSample(collectedSample);
 	          product.setStatus(ProductStatus.QUARANTINED);
-	          //product.getCollectedSample().setId(hiddenCollectedSampleID);
 		        productRepository.addProduct(product);
 
 		        // Once product save successfully update selected product status with processed
@@ -867,10 +858,8 @@ public class ProductController {
 		        
 		      } catch (EntityExistsException ex) {
 		        ex.printStackTrace();
-//		        success = false;
 		      } catch (Exception ex) {
 		        ex.printStackTrace();
-//		        success = false;
 		      }
       	}
       }
@@ -880,14 +869,12 @@ public class ProductController {
 	        	Product product = new Product();
 	          product.setIsDeleted(false);
 	          product.setPackNumber(createdPackNumber);
-	          //11/11/2013 06:36:52 pm
 	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
 	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
 	          
 	          product.setCreatedOn(createdOn);
 	          product.setExpiresOn(expiresOn);
-	          //product.setCollectedSample();
 	          ProductType productType = new ProductType();
 	          productType.setProductType(form.getProductTypes().get(0));
 	          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
@@ -896,20 +883,13 @@ public class ProductController {
 	          collectedSample.setId(collectedSampleID);
 	          product.setCollectedSample(collectedSample);
 	          product.setStatus(ProductStatus.QUARANTINED);
-	          //product.getCollectedSample().setId(hiddenCollectedSampleID);
 		        productRepository.addProduct(product);
-//		        mv.addObject("hasErrors", false);
-//		        success = true;
-//		        form = new ProductBackingForm();
-		        // Once product save successfully update selected product status with processed
 		        productRepository.updateProductByProductId(productId);
 		        
 		      } catch (EntityExistsException ex) {
 		        ex.printStackTrace();
-//		        success = false;
 		      } catch (Exception ex) {
 		        ex.printStackTrace();
-//		        success = false;
 		      }
 	
       	
@@ -921,13 +901,9 @@ public class ProductController {
     ModelAndView mv = new ModelAndView("products/recordProductsTable");
     mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
     mv.addObject("allProducts", getProductViewModels(products));
-   // mv.addObject("refreshUrl", getUrl(request));
-    //mv.addObject("nextPageUrl", getNextPageUrlForRecordProduct(request));
     mv.addObject("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
     mv.addObject("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
     mv.addObject("addProductForm", form);
-    //addEditSelectorOptions(mv.getModelMap());
-    
     
     if(form.getCollectionNumber().contains("-")){
     	addEditSelectorOptionsForNewRecordByList(mv.getModelMap(),productType2);
@@ -944,7 +920,6 @@ public class ProductController {
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
-  	//ProductType productType = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
   	String productTypeName = form.getProductTypes().get(form.getProductTypes().size()-1);
   	ProductType productType = productRepository.findProductTypeByProductTypeName(productTypeName);
   	
@@ -992,7 +967,6 @@ public class ProductController {
   	else{
   		reqUrl = req.getRequestURL().toString().replaceFirst("getRecordNewProductComponents.html", "findProductByPackNumberPagination.html");
   	}
-    //String queryString = req.getQueryString();   // d=789
     String queryString[] = qString.split("-"); 
     if (queryString != null) {
         reqUrl += "?collectionNumber="+queryString[0];

@@ -206,9 +206,12 @@ public class ProductTypeRepository {
   
   public List<ProductType> getAllParentProductTypes() {
     TypedQuery<ProductType> query;
-    query = em.createQuery("SELECT p from ProductType p where p.isDeleted=:isDeleted AND pediProductType_id != null", ProductType.class);
+    List<ProductType> productTypes = new ArrayList<ProductType>();
+    query = em.createQuery("SELECT p from ProductType p where p.isDeleted=:isDeleted AND pediProductType_id != null AND p.id!= 1", ProductType.class);
     query.setParameter("isDeleted", false);
-    return query.getResultList();
+    productTypes = query.getResultList(); 
+    productTypes.add(getProductTypeByIdList(1).get(0));
+    return productTypes;
   }
   
   public List<ProductType> getProductTypeByIdList(Integer id) {

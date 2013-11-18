@@ -76,7 +76,8 @@ $(document).ready(
                         	    	  	$("#${tabContentId}").replaceWith(data);
                         	    	  	if(elements[0].innerHTML == 1){
           								  $("#noOfUnits").attr('disabled', 'disabled');
-                                        }
+          								  $(".firstSeperation").val("1");
+          								}
                         	    	  	$("#newProductComponent").show();
                         	               },
                         	      error: function(data) {
@@ -116,7 +117,7 @@ $(document).ready(
           header : false
         });
       
-      $("#${tabContentId}").find(".recordNewComponent").button().click(function() {
+      $("#${tabContentId}").find(".addNewRecord").button().click(function() {
     	    var findProductFormData = $("#${findProductFormId}").serialize();
     	    var resultsDiv = $("#${mainContentId}").find(".tabContentId");
     	    $.ajax({
@@ -133,25 +134,55 @@ $(document).ready(
     	    });
     	  });
       
-      $("#${tabContentId}").find(".addNewRecord").button().click(function() {
+      $("#${tabContentId}").find(".recordNewProduct").button().click(function() {
   	    var findProductFormData = $("#${findProductFormId}").serialize();
         var resultsDiv = $("#${mainContentId}").find(".tabContentId");
-  	    $.ajax({
-  	      type : "GET",
-  	      url : "recordNewProductComponents.html",
-  	      data : findProductFormData,
-  	      success: function(data) {
-  	               $("#${tabContentId}").replaceWith(data);
-  	               },
-  	      error: function(data) {
-  	               showErrorMessage("Something went wrong. Please try again later.");        
-  	             }
-  	    });
+    	
+    	var selectedValue = getProductTypeSelector().val();
+    	var selectedOption = $(this).find('option[value="' + selectedValue + '"]');
+    	
+    	var numberRegex = /^\d+$/;
+    	var str = $('#noOfUnits').val();
+    	if(numberRegex.test(str)) {
+    	    if($(".productID").val() != 1 && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
+	   	   	  showErrorMessage("Num. Units should be between 2 and 5.");   
+	   	   	  return;
+	   	   	}
+	   	   	else{
+	   	   		if(selectedValue == 5 && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
+			    	  showErrorMessage("Num. Units should be between 2 and 5.");   
+			   	   	  return;
+      			}else{
+			  	    $.ajax({
+			  	      type : "GET",
+			  	      url : "recordNewProductComponents.html",
+			  	      data : findProductFormData,
+			  	      success: function(data) {
+			  	               $("#${tabContentId}").replaceWith(data);
+			  	               },
+			  	      error: function(data) {
+			  	               showErrorMessage("Something went wrong. Please try again later.");        
+			  	             }
+			  	    });
+	   	   		}
+	      	}
+    	}
+    	else{
+    		showErrorMessage("Num. Units should be numeric and between 2 to 5.");
+    	}
   	  });
       
       $("#${tabContentId}").find(".productType").change(function() {
     	  var selectedValue = getProductTypeSelector().val();
-          var selectedOption = $(this).find('option[value="' + selectedValue + '"]');
+    	  var selectedOption = $(this).find('option[value="' + selectedValue + '"]');
+    	  if(selectedOption.attr( "title" ) === "Whole Blood Pedi"){
+    		  $("#noOfUnits").removeAttr("disabled");
+    	  }
+    	  if($(".firstSeperation").val() == "1" && selectedOption.attr( "title" ) != "Whole Blood Pedi"){
+    		  $("#noOfUnits").attr('disabled', 'disabled');
+    		  $("#noOfUnits").val(0);
+    	  }
+    	  
           var dateExpiresFrom = $("#${addProductFormId}").find(".dateExpiresFrom");
           if (dateExpiresFrom.val() === undefined ||
         		  dateExpiresFrom.val().trim() === "") {
@@ -164,6 +195,20 @@ $(document).ready(
           $("#${addProductFormId}").find(".dateExpiresTo")
                                    .datetimepicker('setDate', expiryDate);
         });
+      
+      
+      $("#${tabContentId}").find(".clearFindFormButton").button({
+    	    icons : {
+    	      
+    	    }
+    	  }).click(clearFindForm);
+    	  
+    	  function clearFindForm() {
+    	    refetchContent("${refreshUrl}", $("#${tabContentId}"));
+    	    $("#${childContentId}").html("");
+    	    // show the appropriate input based on default search by
+    	    $("#${findProductFormId}").find(".searchBy").trigger("change");
+    	  }
       
       function getProductTypeSelector() {
     	  return $("#${addProductFormId}").find('select[name="productTypes"]').multiselect();
@@ -270,10 +315,10 @@ $(document).ready(
 
 					<form:label path="productTypes">${productFields.productType.displayName}</form:label>
 
-					<form:select path="productTypes" class="productType">
+					<form:select path="productTypes" class="productType" id="productType">
 						<form:option value="">&nbsp;</form:option>
 						<c:forEach var="productType" items="${productTypes}">
-							<form:option value="${productType.id}"
+							<form:option value="${productType.id}" title="${productType.productType}"
 								data-expiryintervalminutes="${productType.expiryIntervalMinutes}">
 	              ${productType.productType}
 	            </form:option>
@@ -289,10 +334,10 @@ $(document).ready(
 			<form:hidden path="dateExpiresTo" class="dateExpiresTo" />
 			<form:hidden path="status" class="status" />
 			<form:hidden path="productID" class="productID" />
-
+			<input type="hidden" id="firstSeperation" name="firstSeperation" class="firstSeperation"/>
 			<div class="noOfUnits">
 				<form:label path="noOfUnits">${productFields.numUnits.displayName}</form:label>
-				<form:input path="noOfUnits" id="noOfUnits" />
+				<form:input path="noOfUnits" id="noOfUnits"  size="1"/>
 			</div>
 
 		</form:form>
@@ -300,9 +345,9 @@ $(document).ready(
 		<div class="formFormatClass">
 			<div>
 				<label></label>
-<!-- 				<button type="button" class="recordNewComponent">Record New -->
-<!-- 					Component</button> -->
-				<button type="button" class="addNewRecord">Done</button>
+				<button type="button" class="recordNewProduct">Record New
+					Product</button>
+				<button type="button" class="clearFindFormButton">Done</button>
 			</div>
 		</div>
 
