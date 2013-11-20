@@ -230,4 +230,12 @@
 			<column name="isTimeField" value="0"></column>			
 		</insert>		
 	</changeSet>
+	<changeSet id="201311201844" author="Ankur">
+		<update tableName="product">
+            <column name="donationIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
+        </update>
+        <update tableName="product_AUD">
+            <column name="donationIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
+        </update>
+    </changeSet>   
 </databaseChangeLog>	
