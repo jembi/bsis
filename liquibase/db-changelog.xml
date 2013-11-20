@@ -193,17 +193,17 @@
 	
 	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
 	<changeSet id="201311081617" author="devang">
-	    <addColumn tableName="RequestType">
+	    <addColumn tableName="requesttype">
 	        <column name="bulkTransfer" type="TINYINT(1)"/>
 	    </addColumn>
-		<addColumn tableName="Requesttype_AUD">
+		<addColumn tableName="requesttype_aud">
 	        <column name="bulkTransfer" type="TINYINT(1)"/>
 	    </addColumn>
 	</changeSet>
     
     <!-- For issue 103 [Update Requests Functionality] -->
     <changeSet id="201311131120" author="devang">
-		<createTable tableName="RequestedComponents">
+		<createTable tableName="requestedComponents">
 			<column name="id" type="smallint(6)" autoIncrement="true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -222,18 +222,18 @@
 	
 	<changeSet id="201311121135" author="devang">
 		<addForeignKeyConstraint constraintName="fk_requestId"
-			baseTableName="RequestedComponents" baseColumnNames="request_id"
-			referencedTableName="Request" referencedColumnNames="id"
+			baseTableName="requestedComponents" baseColumnNames="request_id"
+			referencedTableName="request" referencedColumnNames="id"
 			 />
 		<addForeignKeyConstraint constraintName="fk_productType"
-			baseTableName="RequestedComponents" baseColumnNames="productType"
-			referencedTableName="ProducTtype" referencedColumnNames="id"
+			baseTableName="requestedComponents" baseColumnNames="productType"
+			referencedTableName="producttype" referencedColumnNames="id"
 			 />
 	</changeSet>
 	
 	
 	<changeSet id="201311131220" author="devang">
-		<createTable tableName="RequestedComponents_AUD">
+		<createTable tableName="requestedComponents_aud">
 			<column name="id" type="smallint(6)" autoIncrement="true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -254,26 +254,26 @@
 	
 	<changeSet id="201311121235" author="devang">
 		<addForeignKeyConstraint constraintName="fk_requestId_aud"
-			baseTableName="RequestedComponents_AUD" baseColumnNames="request_id"
-			referencedTableName="Request" referencedColumnNames="id"
+			baseTableName="requestedComponents_aud" baseColumnNames="request_id"
+			referencedTableName="request" referencedColumnNames="id"
 			 />
 		<addForeignKeyConstraint constraintName="fk_productType_aud"
-			baseTableName="RequestedComponents_AUD" baseColumnNames="productType"
-			referencedTableName="ProductType" referencedColumnNames="id"
+			baseTableName="requestedComponents_aud" baseColumnNames="productType"
+			referencedTableName="producttype" referencedColumnNames="id"
 			 />
 	</changeSet>
 	
 	<changeSet id="201311151240" author="devang">
-	    <addColumn tableName="Request">
+	    <addColumn tableName="request">
 	        <column name="dispatchDate" type="timestamp"/>
 	    </addColumn>
-		<addColumn tableName="Request_AUD">
+		<addColumn tableName="request_aud">
 	        <column name="dispatchDate" type="timestamp"/>
 	    </addColumn>
 	</changeSet>
 	
 	<changeSet id="201311151245" author="devang">
-        <insert tableName="FormField">
+        <insert tableName="formfield">
             <column name="id" value="148"></column>
             <column name="autoGenerate" value="0"></column>
             <column name="canBeOptional" value="0"></column>
@@ -289,5 +289,11 @@
             <column name="useCurrentTime" value="0"></column>
         </insert>
      </changeSet>
-	
+	 
+	 <changeSet id="201311201245" author="devang">
+	    <update tableName="formfield">
+	        <column name="isRequired" value="0"></column>
+	        <where>id = 99</where>
+	    </update>
+	</changeSet>
 </databaseChangeLog>	

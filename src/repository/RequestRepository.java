@@ -663,10 +663,6 @@ public class RequestRepository {
     query.executeUpdate();
   }
   
-/*  public void addRequestedComponents(RequestedComponents requestedComponents) {
-  	requestedComponents.setIsDeleted(Boolean.FALSE);
-  	em.merge(requestedComponents);
-  }*/
   
   public void updateRequestedComponents(Long requestID) {
   	String queryString = "UPDATE RequestedComponents r set r.request_id=:requestID WHERE r.isDeleted= :isDeleted AND r.request_id IS NULL";
@@ -692,4 +688,5 @@ public class RequestRepository {
     	return false;
     }
   }
+ 
 }

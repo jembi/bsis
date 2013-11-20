@@ -384,7 +384,7 @@ public class RequestsController {
         //requestRepository.updateRequestedComponents(form.getId());
         mv.addObject("hasErrors", false);
         success = true;
-        mv.addObject("issuedComponent", collectedSampleRepository.findDINNumber(form.getDin()));
+        mv.addObject("issuedComponent", collectedSampleRepository.findDINNumber(form.getDin(),form.getCompatbilityTestDate(),form.getCrossmatchType(),form.getCompatbilityResult()));
         form = new RequestBackingForm();
       } catch (EntityExistsException ex) {
         LOGGER.error(ex.getMessage() + ex.getStackTrace());
@@ -660,20 +660,16 @@ public class RequestsController {
   	try{
   		@SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-
-      List<CollectedSample>  collectedSampleList = collectedSampleRepository.findDINNumber(params.get("din").toString());
+  		
+      List<CollectedSample>  collectedSampleList = collectedSampleRepository.findDINNumber(params.get("din").toString(),params.get("compatbilityTestDate"),params.get("crossmatchType"),params.get("compatbilityResult"));
       
       if (collectedSampleList == null) {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         mv.addObject("errorMessage", "Request not found");
       }
-    	//requestRepository.addRequestedComponents(requestedComponents);
-     
+    	   
     	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
       mv.addObject("requestUrl", getUrl(request));
-      //mv.addObject("firstTimeRender", true);
-      //mv.addObject("refreshUrl",getUrl(request));
-    	//mv.addObject("addRequestForm", form);
     	mv.addObject("requestFields", formFields);
     	mv.addObject("nextPageUrl", getNextPageUrl(request));
     	mv.addObject("issuedComponent", collectedSampleList);

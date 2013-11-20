@@ -26,6 +26,7 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
+import model.compatibility.CompatibilityTest;
 import model.util.BloodGroup;
 import model.worksheet.Worksheet;
 
@@ -536,8 +537,10 @@ public class CollectedSampleRepository {
     return statusMap;
   }
   
-  public List<CollectedSample> findDINNumber(String collectionNumber){
+  
+  public List<CollectedSample> findDINNumber(String collectionNumber,Object compatbilityTestDate,Object crossmatchType,Object compatbilityResult){
   	String queryString ;
+  	Date date=getDateCompatbilityTestDate(compatbilityTestDate.toString());
   	if(collectionNumber == null)
   		queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = null and  c.isDeleted = :isDeleted";
   	else
@@ -558,13 +561,57 @@ public class CollectedSampleRepository {
     				if(cs.getProducts().get(0).getIssuedTo() !=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null){
     					cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size();
     					
-    					if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
-    							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
-    						cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType().getId();
+    					if(cs.getProducts().get(0).getIssuedTo() != null && cs.getProducts().get(0).getIssuedTo().getCrossmatchTests() !=null && !cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().isEmpty()){
+    						//cs.getProducts().get(0).getCompatibilityTests().get(0).getCompatibilityTestDate();
+    						cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().size();
+    						for(CompatibilityTest cmt:cs.getProducts().get(0).getIssuedTo().getCrossmatchTests()){
+    							if((cmt.getCompatibilityTestDate() != null && getDateCompatbilityTestDate(cmt.getCompatibilityTestDate()).equals(date)) && 
+    									(cmt.getCrossmatchType().getId() != null && cmt.getCrossmatchType().getId().equals(Integer.parseInt(crossmatchType.toString())))
+    									&& (cmt.getCompatibilityResult() != null && cmt.getCompatibilityResult().equals(compatbilityResult))){
+    									
+    								if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
+    	    							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
+    	    						cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType().getId();
+    							}
+    						}
+    					}else{
+    						if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
+      							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
+      						cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType().getId();
+    					}
+    					
     				}
     			}
     	}
     }
     return query.getResultList();
+  }
+  
+	private Date getDateCompatbilityTestDate(String dateCompatbilityTestDate) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    Date from = null;
+    try {
+      from = (dateCompatbilityTestDate == null || dateCompatbilityTestDate.equals("")) ? dateFormat
+          .parse("31/12/1970") : dateFormat.parse(dateCompatbilityTestDate);
+    } catch (ParseException ex) {
+    	LOGGER.error("Inside getDateCollectedFromOrDefault::"+ex);
+    }
+    return from;      
+  }
+  
+	private Date getDateCompatbilityTestDate(Date dateCompatbilityTestDate) {
+  	Date form=null;
+  	String output=null;
+  	try {
+	  	String input = dateCompatbilityTestDate.toString();
+	  	DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+	  	Date date = inputFormatter.parse(input);
+	  	DateFormat outputFormatter = new SimpleDateFormat("dd/MM/yyyy");
+	  	output = outputFormatter.format(date);
+	  	form=outputFormatter.parse(output);
+    } catch (ParseException ex) {
+    	LOGGER.error("Inside getDateCollectedFromOrDefault::"+ex);
+    }
+    return form;      
   }
 }

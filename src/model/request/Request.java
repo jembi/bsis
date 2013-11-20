@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -77,8 +78,8 @@ public class Request implements ModificationTracker {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="forRequest")
-  private Set<CompatibilityTest> crossmatchTests;
+  @OneToMany(mappedBy="forRequest",fetch=FetchType.LAZY)
+  private List<CompatibilityTest> crossmatchTests;
   
   @Column(length=30)
   private String patientNumber;
@@ -459,11 +460,11 @@ public class Request implements ModificationTracker {
     this.requestType = requestType;
   }
 
-  public Set<CompatibilityTest> getCrossmatchTests() {
+  public List<CompatibilityTest> getCrossmatchTests() {
     return crossmatchTests;
   }
 
-  public void setCrossmatchTests(Set<CompatibilityTest> crossmatchTests) {
+  public void setCrossmatchTests(List<CompatibilityTest> crossmatchTests) {
     this.crossmatchTests = crossmatchTests;
   }
 
