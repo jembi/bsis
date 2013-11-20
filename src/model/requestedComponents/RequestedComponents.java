@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.producttype.ProductType;
+import model.request.Request;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
@@ -29,9 +30,10 @@ public class RequestedComponents implements ModificationTracker  {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 	
-	private Long request_id;
+	@ManyToOne
+	private Request request;
 	
-	private Integer productType;
+	//private Integer productType;
 	
 	private String bloodABO;
 	
@@ -42,10 +44,9 @@ public class RequestedComponents implements ModificationTracker  {
 	private Boolean isDeleted;
 	
 	
-	
 	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-	@JoinColumn(name="productType",insertable =false, updatable =false)
-  private ProductType productTypes;
+	@JoinColumn(name="productType", updatable =false)
+  private ProductType productType;
 	
 	 @Valid
 	 private RowModificationTracker modificationTracker;
@@ -53,6 +54,14 @@ public class RequestedComponents implements ModificationTracker  {
 	 public RequestedComponents(){
 		 modificationTracker = new RowModificationTracker();
 	 }
+	 
+	 
+	 public void copy(RequestedComponents requestedComponents) {
+	    assert (this.getId() == requestedComponents.getId());
+	    this.bloodABO = requestedComponents.bloodABO;
+	    this.bloodRh = requestedComponents.bloodRh;
+	    this.numUnits = requestedComponents.numUnits;
+	  }
 
 	/**
 	 * @return the id
@@ -66,34 +75,6 @@ public class RequestedComponents implements ModificationTracker  {
 	 */
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the request_id
-	 */
-	public Long getRequest_id() {
-		return request_id;
-	}
-
-	/**
-	 * @param request_id the request_id to set
-	 */
-	public void setRequest_id(Long request_id) {
-		this.request_id = request_id;
-	}
-
-	/**
-	 * @return the productType
-	 */
-	public Integer getProductType() {
-		return productType;
-	}
-
-	/**
-	 * @param productType the productType to set
-	 */
-	public void setProductType(Integer productType) {
-		this.productType = productType;
 	}
 
 	/**
@@ -185,16 +166,33 @@ public class RequestedComponents implements ModificationTracker  {
   }
 
 	/**
-	 * @return the productTypes
+	 * @return the productType
 	 */
-	public ProductType getProductTypes() {
-		return productTypes;
+	public ProductType getProductType() {
+		return productType;
+	}
+
+
+	/**
+	 * @param productType the productType to set
+	 */
+	public void setProductType(ProductType productType) {
+		this.productType = productType;
+	}
+
+
+	/**
+	 * @return the request
+	 */
+	public Request getRequest() {
+		return request;
 	}
 
 	/**
-	 * @param productTypes the productTypes to set
+	 * @param request the request to set
 	 */
-	public void setProductTypes(ProductType productTypes) {
-		this.productTypes = productTypes;
+	public void setRequest(Request request) {
+		this.request = request;
 	}
+	
 }

@@ -30,6 +30,7 @@ import model.util.BloodGroup;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,8 @@ import controller.UtilController;
 @Repository
 @Transactional
 public class RequestRepository {
+	
+	private static final Logger LOGGER = Logger.getLogger(RequestRepository.class);
 
   public static final int ID_LENGTH = 12;
 
@@ -48,6 +51,9 @@ public class RequestRepository {
 
   @Autowired
   private ProductRepository productRepository;
+  
+  @Autowired
+  private ProductTypeRepository productTypeRepository;
 
   @Autowired
   private UtilController utilController;
@@ -75,7 +81,7 @@ public class RequestRepository {
       try {
         request = query.getSingleResult();
       } catch (NoResultException ex) {
-        ex.printStackTrace();
+      	LOGGER.error(ex.getMessage() + ex.getStackTrace());
       }
     }
     return request;
@@ -92,7 +98,7 @@ public class RequestRepository {
       try {
         request = query.getSingleResult();
       } catch (NoResultException ex) {
-        ex.printStackTrace();
+        LOGGER.error(ex.getMessage() + ex.getStackTrace());
       }
     }
     return request;
@@ -179,7 +185,7 @@ public class RequestRepository {
           .parse("31/12/1970") : dateFormat.parse(dateRequestedFrom);
       query.setParameter("dateRequestedFrom", from);
     } catch (ParseException e) {
-      e.printStackTrace();
+      LOGGER.error(e.getMessage() + e.getStackTrace());
     }
     try {
       Date to = (dateRequestedTo == null || dateRequestedTo.equals("")) ? dateFormat
@@ -187,7 +193,7 @@ public class RequestRepository {
           .parse(dateRequestedTo);
       query.setParameter("dateRequestedTo", to);
     } catch (ParseException e) {
-      e.printStackTrace();
+      LOGGER.error(e.getMessage() + e.getStackTrace());
     }
 
     try {
@@ -195,7 +201,7 @@ public class RequestRepository {
           .parse("31/12/1970") : dateFormat.parse(dateRequiredFrom);
       query.setParameter("dateRequiredFrom", from);
     } catch (ParseException e) {
-      e.printStackTrace();
+      LOGGER.error(e.getMessage() + e.getStackTrace());
     }
     try {
       Date to = (dateRequiredTo == null || dateRequiredTo.equals("")) ? dateFormat
@@ -203,7 +209,7 @@ public class RequestRepository {
           .parse(dateRequiredTo);
       query.setParameter("dateRequiredTo", to);
     } catch (ParseException e) {
-      e.printStackTrace();
+      LOGGER.error(e.getMessage() + e.getStackTrace());
     }
 
     List<Request> resultList = query.getResultList();
@@ -221,7 +227,7 @@ public class RequestRepository {
     try {
       request = query.getSingleResult();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      LOGGER.error(ex.getMessage() + ex.getStackTrace());
     }
     return request;
   }
@@ -239,7 +245,7 @@ public class RequestRepository {
     	else 
     		return null;
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      LOGGER.error(ex.getMessage() + ex.getStackTrace());
     }
     return request;
   }
@@ -288,11 +294,28 @@ public class RequestRepository {
   public Request addRequest(Request productRequest) {
     updateNewRequestFields(productRequest);
     em.persist(productRequest);
+    if(productRequest.getRequestedComponents()!=null){
+    	saveRequestedComponents(productRequest);
+    }
     em.flush();
     em.refresh(productRequest);
     return productRequest;
   }
-
+  
+  public void saveRequestedComponents(Request request){
+  	for(RequestedComponents rc: request.getRequestedComponents()){
+  		rc.setRequest(request);
+  		rc.setProductType(productTypeRepository.getProductTypeById(rc.getProductType().getId()));
+  		rc.setCreatedBy(request.getCreatedBy());
+  		rc.setLastUpdatedBy(request.getLastUpdatedBy());
+  		rc.setBloodABO(rc.getBloodABO());
+  		rc.setBloodRh(rc.getBloodRh());
+  		rc.setNumUnits(rc.getNumUnits());
+  		rc.setIsDeleted(Boolean.FALSE);
+  		em.merge(rc);
+  	}
+  }  
+  
   private Date getDateRequestedAfterOrDefault(String requestedAfter) {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date from = null;
@@ -300,7 +323,7 @@ public class RequestRepository {
       from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
           .parse("31/12/1970") : dateFormat.parse(requestedAfter);
     } catch (ParseException ex) {
-      ex.printStackTrace();
+      LOGGER.error(ex.getMessage() + ex.getStackTrace());
     }
     return from;      
   }
@@ -319,7 +342,7 @@ public class RequestRepository {
         to = dateFormat.parse(dateRequiredBy);
       }
     } catch (ParseException ex) {
-      ex.printStackTrace();
+      LOGGER.error(ex.getMessage() + ex.getStackTrace());
     }
     return to;      
   }
@@ -501,7 +524,7 @@ public class RequestRepository {
     try {
       request = findRequestById(Long.parseLong(requestId));
     } catch (NumberFormatException ex) {
-      ex.printStackTrace();
+      LOGGER.error(ex.getMessage() + ex.getStackTrace());
     }
     return request;
   }
@@ -598,7 +621,7 @@ public class RequestRepository {
         }
       } catch (ParseException e) {
         // TODO Auto-generated catch block
-        e.printStackTrace();
+        LOGGER.error(e.getMessage() + e.getStackTrace());
       }
     }
     return resultMap;
@@ -627,7 +650,7 @@ public class RequestRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     List<RequestedComponents> requestedComponentsList = query.getResultList();
     for(RequestedComponents rc:requestedComponentsList){
-    	rc.getProductTypes().getId();
+    	rc.getProductType().getId();
     }
     return requestedComponentsList;
   }
@@ -640,10 +663,10 @@ public class RequestRepository {
     query.executeUpdate();
   }
   
-  public void addRequestedComponents(RequestedComponents requestedComponents) {
+/*  public void addRequestedComponents(RequestedComponents requestedComponents) {
   	requestedComponents.setIsDeleted(Boolean.FALSE);
   	em.merge(requestedComponents);
-  }
+  }*/
   
   public void updateRequestedComponents(Long requestID) {
   	String queryString = "UPDATE RequestedComponents r set r.request_id=:requestID WHERE r.isDeleted= :isDeleted AND r.request_id IS NULL";

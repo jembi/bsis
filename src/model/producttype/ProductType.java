@@ -59,6 +59,8 @@ public class ProductType {
 
   private Boolean isDeleted;
   
+ 
+
   public Integer getId() {
     return id;
   }
@@ -160,4 +162,5 @@ public class ProductType {
   public void setPediProductType(ProductType pediProductType) {
     this.pediProductType = pediProductType;
   }
+
 }

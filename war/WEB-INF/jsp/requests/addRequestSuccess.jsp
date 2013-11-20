@@ -83,7 +83,12 @@ $(document).ready(function() {
       <img src="images/check_icon.png"
            style="height: 30px; padding-left: 10px; padding-right: 10px;" />
       <span class="successText">
-        Request has been partially fulfilled.
+        <c:if test="${bulkTransferStatus == true }">
+        	Request has been fulfilled.
+        </c:if>
+        <c:if test="${bulkTransferStatus != true }">
+        	Request has been partially fulfilled.
+        </c:if>
       </span>
     </div>
     <div>

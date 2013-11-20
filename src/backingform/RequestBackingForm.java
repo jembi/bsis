@@ -1,6 +1,7 @@
 package backingform;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
+import model.requestedComponents.RequestedComponents;
 import model.requesttype.RequestType;
 import model.util.BloodGroup;
 import model.util.Gender;
@@ -31,6 +33,14 @@ public class RequestBackingForm {
   private String patientBirthDate;
   
   private String dispatchDate;
+  
+  private String compatbilityTestDate;
+  
+  private String crossmatchType;
+  
+  private String compatbilityResult;
+  
+  private String din;
 
   public RequestBackingForm() {
     setRequest(new Request());
@@ -184,11 +194,67 @@ public class RequestBackingForm {
     return request.hashCode();
   }
 
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
+  /**
+	 * @return the compatbilityTestDate
+	 */
+	public String getCompatbilityTestDate() {
+		return compatbilityTestDate;
+	}
+
+	/**
+	 * @param compatbilityTestDate the compatbilityTestDate to set
+	 */
+	public void setCompatbilityTestDate(String compatbilityTestDate) {
+		this.compatbilityTestDate = compatbilityTestDate;
+	}
+
+	/**
+	 * @return the crossmatchType
+	 */
+	public String getCrossmatchType() {
+		return crossmatchType;
+	}
+
+	/**
+	 * @param crossmatchType the crossmatchType to set
+	 */
+	public void setCrossmatchType(String crossmatchType) {
+		this.crossmatchType = crossmatchType;
+	}
+
+	/**
+	 * @return the compatbilityResult
+	 */
+	public String getCompatbilityResult() {
+		return compatbilityResult;
+	}
+
+	/**
+	 * @param compatbilityResult the compatbilityResult to set
+	 */
+	public void setCompatbilityResult(String compatbilityResult) {
+		this.compatbilityResult = compatbilityResult;
+	}
+
+	public void setModificationTracker(RowModificationTracker modificationTracker) {
     request.setModificationTracker(modificationTracker);
   }
 
-  public void setRequestSite(String requestSite) {
+  /**
+	 * @return the din
+	 */
+	public String getDin() {
+		return din;
+	}
+
+	/**
+	 * @param din the din to set
+	 */
+	public void setDin(String din) {
+		this.din = din;
+	}
+
+	public void setRequestSite(String requestSite) {
     if (requestSite == null) {
       request.setRequestSite(null);
     }
@@ -355,5 +421,24 @@ public class RequestBackingForm {
 	      request.setDispatchDate(null);
 	    }
 	  }
-	
+	  
+	  /**
+		 * @return the requestedComponents
+		 */
+		public List<RequestedComponents> getRequestedComponents() {
+			if(request == null){
+				List<RequestedComponents> rc = new ArrayList<RequestedComponents>();
+			  return rc;
+			}else{
+				return request.getRequestedComponents();
+			}
+		}
+
+		/**
+		 * @param requestedComponents the requestedComponents to set
+		 */
+		public void setRequestedComponents(List<RequestedComponents> requestedComponents) {
+			request.setRequestedComponents(requestedComponents);
+		}
+		
 }

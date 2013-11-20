@@ -3,6 +3,7 @@ package backingform.validator;
 import java.util.Arrays;
 import java.util.Date;
 
+import model.collectedsample.CollectedSample;
 import model.request.Request;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +31,7 @@ public class RequestBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(RequestBackingForm.class, Request.class, RequestViewModel.class, FindRequestBackingForm.class).contains(clazz);
+    return Arrays.asList(RequestBackingForm.class, Request.class, RequestViewModel.class, FindRequestBackingForm.class,CollectedSample.class).contains(clazz);
   }
 
   @Override
@@ -45,6 +46,12 @@ public class RequestBackingFormValidator implements Validator {
       errors.rejectValue("request.requestDate", "dateFormat.incorrect",
           CustomDateFormatter.getDateTimeErrorMessage());
     }*/
+    
+    /*String requestSite=form.getRequestSite();
+    if(requestSite.isEmpty()){
+    	 errors.rejectValue("request.requestSite", "PLease Select Request Site.");
+    }*/
+    
     form.setNumUnitsRequested(0);
     String dispatchDate = form.getDispatchDate();
     if (!CustomDateFormatter.isDateStringValid(dispatchDate)) {

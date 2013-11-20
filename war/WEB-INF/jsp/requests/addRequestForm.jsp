@@ -19,6 +19,9 @@
 <c:set var="addRequestFormRequestTypeSelectorId">addRequestFormRequestTypeSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormRequestSiteSelectorId">addRequestFormRequestSiteSelectorId-${unique_page_id}</c:set>
 <c:set var="addRequestFormPatientGenderSelectorId">addRequestFormPatientGenderSelectorId-${unique_page_id}</c:set>
+<c:set var="addRequestFormCrossmatchTypeSelectorId">addRequestFormCrossmatchTypeSelectorId-${unique_page_id}</c:set>
+<c:set var="addRequestcompatbilityResultSelectorId">addRequestcompatbilityResultSelectorId-${unique_page_id}</c:set>
+<c:set var="table_id">requestsTable-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(
@@ -77,11 +80,29 @@ $(document).ready(
         header : false
       });
 
-      $("#${addRequestFormId}").find(".requestSites").multiselect({
+      $("#${addRequestFormId}").find(".crossmatchType").multiselect({
         multiple : false,
         selectedList : 1,
         header : false
       });
+      
+      $("#${addRequestFormId}").find(".compatbilityResult").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+      
+      $("#${addRequestFormId}").find(".bloodAbo").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
+      
+      $("#${addRequestFormId}").find(".requestSites").multiselect({
+          multiple : false,
+          selectedList : 1,
+          header : false
+        });
 
       $("#${addRequestFormId}").find(".requestDate").datetimepicker({
         changeMonth : true,
@@ -95,6 +116,8 @@ $(document).ready(
           //$("#${addRequestFormId}").find(".requiredDate").datetimepicker("option", "minDate", selectedDate);
         },
       });
+      
+      
 
       $("#${addRequestFormId}").find(".dispatchDate").datetimepicker({
         changeMonth : true,
@@ -108,7 +131,21 @@ $(document).ready(
           //$("#${addRequestFormId}").find(".requestDate").datetimepicker("option", "maxDate", selectedDate);
         },
       });
-
+      
+      
+      $("#${addRequestFormId}").find(".compatbilityTestDate").datepicker({
+          changeMonth : true,
+          changeYear : true,
+          minDate : -36500,
+          maxDate : 60,
+          dateFormat : "dd/mm/yy",
+          yearRange : "c-100:c+1",
+          onSelect : function(selectedDate) {
+            //$("#${addRequestFormId}").find(".requestDate").datetimepicker("option", "maxDate", selectedDate);
+          },
+        });
+      
+		
       $("#${tabContentId}").find(".clearFormButton").button({
         icons : {
           
@@ -183,25 +220,32 @@ $(document).ready(
   	    return false;
   	  });
       
+      
+
+         
+      
+      
+      
       $("#${tabContentId}").find(".addDINComponentsButton").button({
     	    icons : {
-    	      primary : 'ui-icon-disk'
+    	      primary : 'ui-icon-search'
     	    }
     	  }).click(function() {
     	    var data = {};
     	    
-    	    data.requestedComponent=$("#${tabContentId}").find(".productType").val();
-  		data.bloodABO = $("#${tabContentId}").find(".bloodAbo").val();
-  		data.bloodRh = $("#${tabContentId}").find(".bloodRh").val();
-  		data.numUnitsRequested = $("#${tabContentId}").find(".numUnitsRequested").val();
+    	   data.din = $("#${mainContentId}").find('input[name="din"]').val();
     	    
     	    console.log(JSON.stringify(data));
     	    $.ajax({
-    	      url: "addRequestedComponents.html",
+    	      url: "findComponent.html",
     	      data: {params: JSON.stringify(data)},
     	      type: "GET",
     	      success: function(response) {
-    	    	refetchForm() ;
+    	    	  var $response = $(response);
+    	    	  var $page = $response.find('.dinComponents').html();
+    	    	  	//$("#${mainContentId}").find(".dinComponents").html($page);
+    	    	  	$("#${mainContentId}").find(".dinComponents").html(response);
+    	    	  
     	               },
     	      error:    function(response) {
     	                 showErrorMessage("Something went wrong. Please try again later");
@@ -209,7 +253,7 @@ $(document).ready(
     	               },
     	    });
     	    return false;
-    	  });
+    	  }); 
       
       getGenderSelector().multiselect({
         multiple : false,
@@ -464,7 +508,7 @@ $(document).ready(
       		</tr>
       		<c:forEach var="requestedComponents" items="${requestedComponents}">
       			<tr>
-      				<td align="left">${requestedComponents.productTypes.productType}</td>
+      				<td align="left">${requestedComponents.productType.productType}</td>
       				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodABO}</td></c:if>
       				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodRh}</td></c:if>
       				<td align="center">${requestedComponents.numUnits}</td>
@@ -541,35 +585,43 @@ $(document).ready(
       <br>
       <b>Issued Components</b>
       	<div>
-      		<label>DIN</label>
-      		<input type="text">
+      		<label style="width:10%">DIN</label>
+      		<form:input id="din" name="din" path="din"></form:input>
       	</div>
+      	
+      	
       	<c:if test="${bulkTransferStatus == true }">
       		<div>
-      			<label>Compatbility Test Date</label>
-      			 <input type="text">
+      			<label style="width:10%">Compatbility Test Date</label>
+      			 <form:input path="compatbilityTestDate" id="compatbilityTestDate" class="compatbilityTestDate"/>
+      		</div>
+      		<div>
+      			<label style="width:10%">Crossmatch Type</label>
+      			<form:select path="crossmatchType" id="${addRequestFormCrossmatchTypeSelectorId}" class="crossmatchType">
+            				<form:option value="">&nbsp;</form:option>
+            				<c:forEach var="crossmatchType" items="${crossmatchType}">
+              					<form:option value="${crossmatchType.id}">${crossmatchType.crossmatchType}</form:option>
+            				</c:forEach>
+          				</form:select>
+      		</div>
+      		<div>
+      			<label style="width:10%">Compatbility Result</label>
+      			 <form:select path="compatbilityResult"
+				                       id="${addRequestcompatbilityResultSelectorId}"
+				                       class="compatbilityResult">
+				            <form:option value="" label="" />
+				            <form:option value="COMPATIBLE" label="COMPATIBLE" />
+				            <form:option value="NOT_COMPATIBLE" label="NOT_COMPATIBLE" />
+				            <form:option value="NOT_KNOWN" label="NOT_KNOWN" />
+				            <form:option value="OTHER" label="OTHER" />
+				          </form:select>
       		</div>
       	</c:if>
       
-      <div>
-	      <table border="1" class="displayedRequestedComponentsTable" width="80%">
-	      		<tr>	
-	      			<th>Component Type</th>
-	      			<th>DIN</th>
-	      			<th>Blood ABO</th>
-	      			<th>Blood Rh</th>
-	      			<th>Num. Units</th>
-	      		</tr>
-	      		<c:forEach var="requestedComponents" items="${requestedComponents}">
-	      			<tr>
-	      				<td align="left">${requestedComponents.productTypes.productType}</td>
-	      				<td>DIN</td>
-	      				<td align="center">${requestedComponents.bloodABO}</td>
-	      				<td align="center">${requestedComponents.bloodRh}</td>
-	      				<td align="center">${requestedComponents.numUnits}</td>
-	      			</tr>
-	      		</c:forEach>
-	      		</table>
+      <div style="padding-left: 195px;"><button type="button" class="addDINComponentsButton">Add Component</button></div>
+      
+      <div id="dinComponents" class="dinComponents">
+      	  
 	      </div>
 	     
 	     <c:if test="${requestFields.dispatchDate.hidden != true }">
@@ -589,19 +641,24 @@ $(document).ready(
 	            delimiter=", "></form:errors>
 	        </div>
       </c:if>
-      
-     <%--  --%>
-     
     </form:form>
 
-    <div style="margin-left: 200px;">
-      <label></label>
-      <button type="button" class="addRequestButton autoWidthButton">
-        Submit Request
-      </button>
-      <button type="button" class="clearFormButton autoWidthButton">
-        Cancel
-      </button>        
+    <div style="margin-left: 215px;">
+      <c:if test="${bulkTransferStatus != true }">	
+	      <label></label>
+	      <button type="button" class="addRequestButton autoWidthButton">
+	        Add Request
+	      </button>
+	      <button type="button" class="clearFormButton autoWidthButton">
+	        Cancel
+	      </button>
+	   </c:if>
+	   <c:if test="${bulkTransferStatus == true }">
+	   		<label></label>
+	      <button type="button" class="addRequestButton autoWidthButton">
+	        Submit Request
+	      </button>
+	   </c:if>        
     </div>
   </div>
 </div>

@@ -535,4 +535,36 @@ public class CollectedSampleRepository {
     }
     return statusMap;
   }
+  
+  public List<CollectedSample> findDINNumber(String collectionNumber){
+  	String queryString ;
+  	if(collectionNumber == null)
+  		queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = null and  c.isDeleted = :isDeleted";
+  	else
+  		queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
+  	
+    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    if(collectionNumber != null)
+    	query.setParameter("collectionNumber", collectionNumber);
+    
+    if(query.getResultList().size() > 0){
+    	
+    	for(CollectedSample cs:query.getResultList()){
+    			cs.getProducts().size();
+    			if(cs.getProducts() != null && cs.getProducts().size() > 0){
+    				cs.getProducts().get(0).getIssuedTo().getId();
+    				
+    				if(cs.getProducts().get(0).getIssuedTo() !=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null){
+    					cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size();
+    					
+    					if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
+    							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
+    						cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType().getId();
+    				}
+    			}
+    	}
+    }
+    return query.getResultList();
+  }
 }

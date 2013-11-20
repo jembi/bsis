@@ -22,6 +22,7 @@ import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.producttype.ProductType;
+import model.requestedComponents.RequestedComponents;
 import model.requesttype.RequestType;
 import model.user.User;
 import model.util.Gender;
@@ -148,6 +149,11 @@ public class Request implements ModificationTracker {
   
   @Temporal(TemporalType.TIMESTAMP)
   private Date dispatchDate;
+  
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @OneToMany(mappedBy="request")
+  private List<RequestedComponents> requestedComponents;
 
   public Request() {
     modificationTracker = new RowModificationTracker();
@@ -156,6 +162,7 @@ public class Request implements ModificationTracker {
 
   public void copy(Request request) {
     assert (this.getId() == request.getId());
+    this.requestedComponents=request.requestedComponents;
     this.requestNumber = request.requestNumber;
     this.patientBloodAbo = request.patientBloodAbo;
     this.patientBloodRh = request.patientBloodRh;
@@ -300,6 +307,20 @@ public class Request implements ModificationTracker {
 	 */
 	public void setDispatchDate(Date dispatchDate) {
 		this.dispatchDate = dispatchDate;
+	}
+
+	/**
+	 * @return the requestedComponents
+	 */
+	public List<RequestedComponents> getRequestedComponents() {
+		return requestedComponents;
+	}
+
+	/**
+	 * @param requestedComponents the requestedComponents to set
+	 */
+	public void setRequestedComponents(List<RequestedComponents> requestedComponents) {
+		this.requestedComponents = requestedComponents;
 	}
 
 	public Date getCreatedDate() {

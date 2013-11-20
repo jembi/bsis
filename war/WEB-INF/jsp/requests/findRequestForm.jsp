@@ -49,22 +49,42 @@ $(document).ready(function() {
   
   $("#${tabContentId}").find(".addRequestButton").button({
 	    icons : {
-	      primary : 'ui-icon-search'
+	      primary : 'ui-icon-plusthick'
 	    }
 	  }).click(function() {
 		  var addRequestFormData = $("#${addRequestFormId}").serialize();
 		    var resultsDiv = $("#${mainContentId}").find(".addRequestResults");
 	    //showLoadingImage(resultsDiv);
-	    $.ajax({
-	      type : "GET",
-	      url : "addRequestFormGenerator.html",
-	      data : addRequestFormData,
-	      success : function(data) {
-	    	  $("#${tabContentId}").find(".addRequestForm").hide();
-	    	  $("#${tabContentId}").find(".findRequestForm").hide();
-	    	  resultsDiv.html(data);
-	      }
-	    });
+	    $("#${tabContentId}").find(".errorMsgRequestNumber").html("");
+	    $("#${tabContentId}").find(".errorMsgRequestType").html("");
+	    $("#${tabContentId}").find(".errorMsgRequestSites").html("");
+	    
+	     var din=$("#${tabContentId}").find(".din").val();
+	     var requestSites=$("#${tabContentId}").find(".requestSites").val();
+	     var requestType=$("#${tabContentId}").find(".requestType").val();
+	     if(din == "" || requestSites == "" || requestType == ""){
+	    	 if(din == ""){
+		    	 $("#${tabContentId}").find(".errorMsgRequestNumber").html("Please Enter Request Number.");
+		     }
+	    	 if(requestSites == ""){
+		    	 $("#${tabContentId}").find(".errorMsgRequestSites").html("Please Select RequestSites.");
+		     }
+			 if(requestType == ""){
+		    	 $("#${tabContentId}").find(".errorMsgRequestType").html("Please Select RequestType.");
+		     }
+	     }else{
+	    	 $.ajax({
+		   	      type : "GET",
+		   	      url : "addRequestFormGenerator.html",
+		   	      data : addRequestFormData,
+		   	      success : function(data) {
+		   	    	  $("#${tabContentId}").find(".addRequestForm").hide();
+		   	    	  $("#${tabContentId}").find(".findRequestForm").hide();
+		   	    	  resultsDiv.html(data);
+		   	      }
+		   	    });
+	     }
+    
 	  });
 
   
@@ -245,6 +265,13 @@ $(document).ready(function() {
   <div id="${childContentId}"></div>
   
  <div class="addRequestForm">
+ <c:if test="${!empty success && !success}">
+        <jsp:include page="../common/errorBox.jsp">
+          <jsp:param name="errorMessage" value="${errorMessage}" />
+        </jsp:include>
+    </c:if>
+ 
+ 
   <b>Add Requests</b>
   
    <form:form method="GET" commandName="addRequestForm" id="${addRequestFormId}"
@@ -252,7 +279,8 @@ $(document).ready(function() {
 
       <div>
         <form:label path="requestNumber">${requestFields.requestNumber.displayName}</form:label>
-        <form:input path="requestNumber" />
+        <form:input path="requestNumber" name="requestNumber" class="din"/><label style="width:20%;color:red" class="errorMsgRequestNumber"></label>
+        
       </div>
       <div>
         <form:label path="requestSite">${requestFields.requestSite.displayName}</form:label>
@@ -264,6 +292,7 @@ $(document).ready(function() {
               <form:option value="${site.id}">${site.name}</form:option>
             </c:forEach>
           </form:select>
+          <label style="width:20%;color:red" class="errorMsgRequestSites"></label>
       </div>
       <div>
           <form:label path="requestType">${requestFields.requestType.displayName}</form:label>
@@ -275,6 +304,7 @@ $(document).ready(function() {
               <form:option value="${requestType.id}">${requestType.requestType}</form:option>
             </c:forEach>
           </form:select>
+          <label style="width:20%;color:red" class="errorMsgRequestType"></label>
         </div>
 	</form:form>
 	

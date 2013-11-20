@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.request.Request;
 import model.requestedComponents.RequestedComponents;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.CollectedSampleRepository;
+import repository.CrossmatchTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
@@ -46,6 +50,8 @@ import backingform.validator.RequestBackingFormValidator;
 
 @Controller
 public class RequestsController {
+	
+	private static final Logger LOGGER = Logger.getLogger(RequestsController.class);
 
   @Autowired
   private RequestRepository requestRepository;
@@ -66,14 +72,20 @@ public class RequestsController {
   private GenericConfigRepository genericConfigRepository;
 
   @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
+  
+  @Autowired
+  private CrossmatchTypeRepository crossmatchTypeRepository;
+  
+  @Autowired
   private UtilController utilController;
-
+  
   public RequestsController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new RequestBackingFormValidator(binder.getValidator(), utilController));
+  	binder.setValidator(new RequestBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -214,6 +226,7 @@ public class RequestsController {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
+    m.put("crossmatchType", crossmatchTypeRepository.getAllCrossmatchTypes());
     m.put("requestedComponents", requestRepository.getRequestedComponents());
   }
 
@@ -278,11 +291,11 @@ public class RequestsController {
             try {
               propertyValue = BeanUtils.getProperty(productRequest, property);
             } catch (IllegalAccessException e) {
-              e.printStackTrace();
+              LOGGER.error(e.getMessage() + e.getStackTrace());
             } catch (InvocationTargetException e) {
-              e.printStackTrace();
+              LOGGER.error(e.getMessage() + e.getStackTrace());
             } catch (NoSuchMethodException e) {
-              e.printStackTrace();
+              LOGGER.error(e.getMessage() + e.getStackTrace());
             }
             row.add(propertyValue.toString());
           }
@@ -301,9 +314,10 @@ public class RequestsController {
   public ModelAndView addRequestFormGenerator(HttpServletRequest request,@ModelAttribute("addRequestForm")  RequestBackingForm form) {
   	
     ModelAndView mv = new ModelAndView("requests/addRequestForm");
-    Boolean bulkTransferStatus;
-    bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(request.getParameter("requestType")));
-    System.out.println("bulkTransferStatus:"+bulkTransferStatus);
+    Boolean bulkTransferStatus = null;
+    if(request.getParameter("requestType") != null && !request.getParameter("requestType").isEmpty())
+    	bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(request.getParameter("requestType")));
+    
     mv.addObject("requestUrl", getUrl(request));
     mv.addObject("firstTimeRender", true);
     mv.addObject("bulkTransferStatus", bulkTransferStatus);
@@ -357,18 +371,26 @@ public class RequestsController {
       success = false;
     } else {
       try {
-        Request productRequest = form.getRequest();
+      	Request productRequest = form.getRequest();
         productRequest.setIsDeleted(false);
-        savedRequest = requestRepository.addRequest(productRequest);
-        requestRepository.updateRequestedComponents(form.getId());
+        @SuppressWarnings("unchecked")
+				List<RequestedComponents> rcList =(List<RequestedComponents>) request.getSession().getAttribute("rcList");
+        if(rcList !=null && rcList.size() > 0){
+        	productRequest.setRequestedComponents(rcList);
+        	savedRequest = requestRepository.addRequest(productRequest);
+        }else{
+        	savedRequest = requestRepository.addRequest(productRequest);
+        }
+        //requestRepository.updateRequestedComponents(form.getId());
         mv.addObject("hasErrors", false);
         success = true;
+        mv.addObject("issuedComponent", collectedSampleRepository.findDINNumber(form.getDin()));
         form = new RequestBackingForm();
       } catch (EntityExistsException ex) {
-        ex.printStackTrace();
+        LOGGER.error(ex.getMessage() + ex.getStackTrace());
         success = false;
       } catch (Exception ex) {
-        ex.printStackTrace();
+        LOGGER.error(ex.getMessage() + ex.getStackTrace());
         success = false;
       }
     }
@@ -378,6 +400,9 @@ public class RequestsController {
       mv.addObject("request",  new RequestViewModel(savedRequest));
       mv.addObject("addAnotherRequestUrl", "findRequestFormGenerator.html");
       mv.setViewName("requests/addRequestSuccess");
+      
+      request.getSession().removeAttribute("rcList");
+      addEditSelectorOptions(mv.getModelMap());
     } else {
       mv.addObject("errorMessage", "Error creating request. Please fix the errors noted below.");
       mv.addObject("firstTimeRender", false);
@@ -396,7 +421,6 @@ public class RequestsController {
       @RequestParam(value="requestId") Long requestId) {
     ModelAndView mv = new ModelAndView("requests/productsIssuedToRequest");
     Map<String, Object> m = model.asMap();
-    System.out.println(m);
     addEditSelectorOptions(m);
     List<Product> issuedProducts = requestRepository.getIssuedProductsForRequest(requestId);
     List<ProductViewModel> issuedProductViewModels = null;
@@ -451,12 +475,12 @@ public class RequestsController {
           message = "Request Successfully Updated";
         }
       } catch (EntityExistsException ex) {
-        ex.printStackTrace();
+        LOGGER.error(ex.getMessage() + ex.getStackTrace());
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Request Already exists.";
       } catch (Exception ex) {
-        ex.printStackTrace();
+        LOGGER.error(ex.getMessage() + ex.getStackTrace());
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Internal Error. Please try again or report a Problem.";
@@ -493,8 +517,9 @@ public class RequestsController {
       requestRepository.deleteRequest(requestId);
     } catch (Exception ex) {
       // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
+    	LOGGER.error("Internal Exception");
+    	LOGGER.error(ex.getMessage() + ex.getStackTrace());
+    	LOGGER.error("Internal Exception");
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -540,11 +565,12 @@ public class RequestsController {
     try {
       requestRepository.issueProductsToRequest(requestId, productsToIssue);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      LOGGER.error(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
+      LOGGER.error("Internal Exception");
+    	LOGGER.error(ex.getMessage() + ex.getStackTrace());
+    	LOGGER.error("Internal Exception");
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -564,7 +590,7 @@ public class RequestsController {
 	    @SuppressWarnings("unchecked")
 	    Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
 	   
-	  	System.out.println(params.get("requestedComponent"));
+	  	LOGGER.debug(params.get("requestedComponent"));
 	  	requestRepository.removeRequestedComponents(Long.parseLong(params.get("requestedComponent").toString()));
 	  	
 	  	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
@@ -576,7 +602,7 @@ public class RequestsController {
 	    mv.addObject("requestFields", formFields);
 	    addEditSelectorOptions(mv.getModelMap());
     }catch(Exception e){
-    	e.printStackTrace();
+    	LOGGER.error(e.getMessage() + e.getStackTrace());
     }
     
     return mv;
@@ -591,14 +617,24 @@ public class RequestsController {
 	    @SuppressWarnings("unchecked")
 	    Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
 	   
-	  	System.out.println(params.get("requestedComponent"));
-	  	RequestedComponents requestedComponents = new RequestedComponents();
-	  	requestedComponents.setProductType(Integer.parseInt(params.get("requestedComponent").toString()));
-	  	requestedComponents.setBloodABO(params.get("bloodABO").toString());
-	  	requestedComponents.setBloodRh(params.get("bloodRh").toString());
-	  	requestedComponents.setNumUnits(Long.parseLong(params.get("numUnitsRequested").toString()));
-	  	
-	  	requestRepository.addRequestedComponents(requestedComponents);
+	  	@SuppressWarnings("unchecked")
+			List<RequestedComponents> rcList =(List<RequestedComponents>) request.getSession().getAttribute("rcList");
+	  	RequestedComponents rc =new RequestedComponents();
+	  	if(rcList == null){
+	  	  rcList = new ArrayList<RequestedComponents>();
+	  	  rc.setBloodABO(params.get("bloodABO").toString());
+		  	rc.setBloodRh(params.get("bloodRh").toString());
+		  	rc.setProductType(productTypeRepository.getProductTypeById(Integer.parseInt(params.get("requestedComponent").toString())));
+		  	rc.setNumUnits(Long.parseLong(params.get("numUnitsRequested").toString()));
+	  	}else{
+	  		rc.setBloodABO(params.get("bloodABO").toString());
+		  	rc.setBloodRh(params.get("bloodRh").toString());
+		  	rc.setProductType(productTypeRepository.getProductTypeById(Integer.parseInt(params.get("requestedComponent").toString())));
+		  	rc.setNumUnits(Long.parseLong(params.get("numUnitsRequested").toString()));
+	  	}
+	  	rcList.add(rc);
+	  
+	  	//requestRepository.addRequestedComponents(requestedComponents);
 	  	
 	  	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
 	    // to ensure custom field names are displayed in the form
@@ -606,13 +642,47 @@ public class RequestsController {
 	    mv.addObject("firstTimeRender", true);
 	    mv.addObject("refreshUrl",getUrl(request));
 	  	mv.addObject("addRequestForm", form);
-	    mv.addObject("requestFields", formFields);
+	  	mv.addObject("requestFields", formFields);
 	    addEditSelectorOptions(mv.getModelMap());
+	    request.getSession().setAttribute("rcList", rcList);
     }catch(Exception e){
-    	e.printStackTrace();
+    	LOGGER.error(e.getMessage() + e.getStackTrace());
     }
     
     return mv;
   }
+  
+  @RequestMapping(value="/findComponent", method=RequestMethod.GET)
+  public ModelAndView findComponent(HttpServletRequest request, HttpServletResponse response,
+  		@RequestParam(value="params") String paramsAsJson) {
+
+  	ModelAndView mv = new ModelAndView("requests/issueComponetTable");
+  	try{
+  		@SuppressWarnings("unchecked")
+      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+
+      List<CollectedSample>  collectedSampleList = collectedSampleRepository.findDINNumber(params.get("din").toString());
+      
+      if (collectedSampleList == null) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        mv.addObject("errorMessage", "Request not found");
+      }
+    	//requestRepository.addRequestedComponents(requestedComponents);
+     
+    	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+      mv.addObject("requestUrl", getUrl(request));
+      //mv.addObject("firstTimeRender", true);
+      //mv.addObject("refreshUrl",getUrl(request));
+    	//mv.addObject("addRequestForm", form);
+    	mv.addObject("requestFields", formFields);
+    	mv.addObject("nextPageUrl", getNextPageUrl(request));
+    	mv.addObject("issuedComponent", collectedSampleList);
+      addEditSelectorOptions(mv.getModelMap());
+  	}catch(Exception e){
+  		LOGGER.error(e.getMessage() + e.getStackTrace());
+  	}
+    return mv;
+  }
+  
   
 }
