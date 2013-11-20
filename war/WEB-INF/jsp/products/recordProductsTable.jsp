@@ -58,8 +58,8 @@ $(document).ready(
                               $(".productTypes1").val(elements[2].innerHTML);
                               
                               var findProductFormData = $("#${findProductFormId}").serialize();
-                              var packNumber = elements[3].innerHTML.split('-');
-                              if(packNumber.length == 3){
+                              var donationIdentificationNumber = elements[3].innerHTML.split('-');
+                              if(donationIdentificationNumber.length == 3){
                             	  showErrorMessage("This product cannot be processed further.");      
                             	  return;
                               }	
@@ -79,16 +79,18 @@ $(document).ready(
           								  $(".firstSeperation").val("1");
           								}
                         	    	  	$("#newProductComponent").show();
+                        	    	  	
                         	               },
                         	      error: function(data) {
                         	    	       showErrorMessage("Something went wrong. Please try again later.");        
                         	             }
                         	    });
                              
-                              $(".productID").val(elements[0].innerHTML);
-                              $(".collectedSampleID").val(elements[1].innerHTML);
-                              $(".hiddenPackNumber").val(elements[3].innerHTML);
-                              $(".status").val(elements[6].innerHTML);
+//                               $(".productID").val(elements[0].innerHTML);
+//                               $(".collectedSampleID").val(elements[1].innerHTML);
+//                               $(".hiddenPackNumber").val(elements[3].innerHTML);
+//                               $(".status").val(elements[6].innerHTML);
+                              
                              },
         "fnRowDeselected" : function(node) {
                             },
@@ -137,44 +139,54 @@ $(document).ready(
       $("#${tabContentId}").find(".recordNewProduct").button().click(function() {
   	    var findProductFormData = $("#${findProductFormId}").serialize();
         var resultsDiv = $("#${mainContentId}").find(".tabContentId");
-    	
-    	var selectedValue = getProductTypeSelector().val();
-    	var selectedOption = $(this).find('option[value="' + selectedValue + '"]');
-    	
+    	var selectedProductType = $(".selectedProductType").val();
     	var numberRegex = /^\d+$/;
     	var str = $('#noOfUnits').val();
-    	if(numberRegex.test(str)) {
-    		if($(".productID").val() != 1 && $("#noOfUnits").attr('disabled') !="disabled" && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
-	   	   	  showErrorMessage("Num. Units should be between 2 and 5.");   
-	   	   	  return;
-	   	   	}
-	   	   	else{
-	   	   		if(selectedValue == 5 && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
-			    	  showErrorMessage("Num. Units should be between 2 and 5.");   
-			   	   	  return;
-      			}else{
-			  	    $.ajax({
-			  	      type : "GET",
-			  	      url : "recordNewProductComponents.html",
-			  	      data : findProductFormData,
-			  	      success: function(data) {
-			  	               $("#${tabContentId}").replaceWith(data);
-			  	               },
-			  	      error: function(data) {
-			  	               showErrorMessage("Something went wrong. Please try again later.");        
-			  	             }
-			  	    });
-	   	   		}
-	      	}
-    	}
+   	 
+    	if(selectedProductType != ''){
+	    	if(numberRegex.test(str)) {
+	    		if(selectedProductType == 'Platelets concentrate' && $("#noOfUnits").attr('disabled') !="disabled" && ($("#noOfUnits").val() > 6 || $("#noOfUnits").val() < 2)){
+	 	   			  showErrorMessage("Num. Units should be between 2 and 6.");   
+		   	   	      return;
+	 	   		}
+	 	   		if($(".productID").val() != 1 && $("#noOfUnits").attr('disabled') !="disabled" && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
+		   	   	  showErrorMessage("Num. Units should be between 2 and 5.");   
+		   	   	  return;
+		   	   	}
+		   	   	else{
+		   	   		if(selectedProductType == 'Whole Blood Pedi' && ($("#noOfUnits").val() > 5 || $("#noOfUnits").val() < 2)){
+				    	  showErrorMessage("Num. Units should be between 2 and 5.");   
+				   	   	  return;
+	      			}
+		   	   		else{
+				  	    $.ajax({
+				  	      type : "GET",
+				  	      url : "recordNewProductComponents.html",
+				  	      data : findProductFormData,
+				  	      success: function(data) {
+				  	               $("#${tabContentId}").replaceWith(data);
+				  	               },
+				  	      error: function(data) {
+				  	               showErrorMessage("Something went wrong. Please try again later.");        
+				  	             }
+				  	    });
+		   	   		}
+		      	}
+	    	}
+	    	else{
+	    		showErrorMessage("Num. Units should be numeric.");
+	    	}
+       }
     	else{
-    		showErrorMessage("Num. Units should be numeric and between 2 to 5.");
+    		showErrorMessage("Please select Product Type.");
     	}
   	  });
       
       $("#${tabContentId}").find(".productType").change(function() {
     	  var selectedValue = getProductTypeSelector().val();
     	  var selectedOption = $(this).find('option[value="' + selectedValue + '"]');
+    	  $(".selectedProductType").val(selectedOption.attr( "title" ));
+    	  
     	  if(selectedOption.attr( "title" ) === "Whole Blood Pedi"){
     		  $("#noOfUnits").removeAttr("disabled");
     	  }
@@ -257,8 +269,8 @@ $(document).ready(
 						<c:if test="${productFields.productType.hidden != true}">
 							<th>${productFields.productType.displayName}</th>
 						</c:if>
-						<c:if test="${productFields.packNumber.hidden != true}">
-							<th>${productFields.packNumber.displayName}</th>
+						<c:if test="${productFields.donationIdentificationNumber.hidden != true}">
+							<th>${productFields.donationIdentificationNumber.displayName}</th>
 						</c:if>
 						<c:if test="${productFields.createdOn.hidden != true}">
 							<th>${productFields.createdOn.displayName}</th>
@@ -282,8 +294,8 @@ $(document).ready(
 							<c:if test="${productFields.productType.hidden != true}">
 								<td>${product.productType.productTypeNameShort}</td>
 							</c:if>
-							<c:if test="${productFields.packNumber.hidden != true}">
-								<th>${product.packNumber}</th>
+							<c:if test="${productFields.donationIdentificationNumber.hidden != true}">
+								<th>${product.donationIdentificationNumber}</th>
 							</c:if>
 							<c:if test="${productFields.createdOn.hidden != true}">
 								<td>${product.createdOn}</td>
@@ -305,7 +317,6 @@ $(document).ready(
 		</c:otherwise>
 	</c:choose>
 
-
 	<br>
 	<div id="newProductComponent" style="display: none;">
 		<form:form method="POST" commandName="addProductForm"
@@ -316,13 +327,15 @@ $(document).ready(
 
 					<form:label path="productTypes">${productFields.productType.displayName}</form:label>
 
-					<form:select path="productTypes" class="productType" id="productType">
+					<form:select path="productTypes" class="productType"
+						id="productType">
 						<form:option value="">&nbsp;</form:option>
 						<c:forEach var="productType" items="${productTypes}">
-							<form:option value="${productType.id}" title="${productType.productType}"
+							<form:option value="${productType.id}"
+								title="${productType.productType}"
 								data-expiryintervalminutes="${productType.expiryIntervalMinutes}">
-	              ${productType.productType}
-	            </form:option>
+			              ${productType.productType}
+			            </form:option>
 						</c:forEach>
 
 					</form:select>
@@ -335,10 +348,13 @@ $(document).ready(
 			<form:hidden path="dateExpiresTo" class="dateExpiresTo" />
 			<form:hidden path="status" class="status" />
 			<form:hidden path="productID" class="productID" />
-			<input type="hidden" id="firstSeperation" name="firstSeperation" class="firstSeperation"/>
+			<input type="hidden" id="firstSeperation" name="firstSeperation"
+				class="firstSeperation" />
+			<input type="hidden" id="selectedProductType" name="selectedProductType"
+				class="selectedProductType" />	
 			<div class="noOfUnits">
 				<form:label path="noOfUnits">${productFields.numUnits.displayName}</form:label>
-				<form:input path="noOfUnits" id="noOfUnits"  size="1"/>
+				<form:input path="noOfUnits" id="noOfUnits" size="1" />
 			</div>
 
 		</form:form>
@@ -349,7 +365,7 @@ $(document).ready(
 				<button type="button" class="recordNewProduct">Record New
 					Product</button>
 				<button type="button" class="clearFindFormButton">Done</button>
-				
+
 			</div>
 		</div>
 

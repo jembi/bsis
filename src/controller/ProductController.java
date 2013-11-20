@@ -774,7 +774,7 @@ public class ProductController {
       
       row.add(product.getId().toString());
       row.add(product.getCollectedSample().getId());
-      for (String property : Arrays.asList("productType", "packNumber", "createdOn", "expiresOn", "status", "createdBy")) {
+      for (String property : Arrays.asList("productType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -833,7 +833,7 @@ public class ProductController {
       		try{
 	        	Product product = new Product();
 	          product.setIsDeleted(false);
-	          product.setPackNumber(createdPackNumber+"-"+i);
+	          product.setDonationIdentificationNumber(createdPackNumber+"-"+i);
 	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
 	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
@@ -865,7 +865,7 @@ public class ProductController {
       	try{
 	        	Product product = new Product();
 	          product.setIsDeleted(false);
-	          product.setPackNumber(createdPackNumber);
+	          product.setDonationIdentificationNumber(createdPackNumber);
 	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
 	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
@@ -888,9 +888,7 @@ public class ProductController {
 		      } catch (Exception ex) {
 		        ex.printStackTrace();
 		      }
-	
-      	
-      }
+	    	}
       }
    
     List<Product> products = Arrays.asList(new Product[0]);
@@ -950,12 +948,13 @@ public class ProductController {
   
   public static String getUrlForNewProduct(HttpServletRequest req,String qString) {
     String reqUrl = req.getRequestURL().toString();
-    String queryString[] = qString.split("-");   // d=789
+    String queryString[] = qString.split("-");   
     if (queryString != null) {
         reqUrl += "?collectionNumber="+queryString[0];
     }
     return reqUrl;
   }
+  
   public static String getNextPageUrlForNewRecordProduct(HttpServletRequest req,String qString) {
   	String reqUrl ="";
   	if(req.getRequestURI().contains("recordNewProductComponents")){

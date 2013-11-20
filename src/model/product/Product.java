@@ -107,7 +107,7 @@ public class Product implements ModificationTracker {
   private RowModificationTracker modificationTracker;
 
   @Column(length=20)
-  private String packNumber;
+  private String donationIdentificationNumber;
   
   public Product() {
     modificationTracker = new RowModificationTracker();
@@ -120,7 +120,7 @@ public class Product implements ModificationTracker {
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
     this.notes = product.notes;
-    this.packNumber = product.packNumber;
+    this.donationIdentificationNumber = product.donationIdentificationNumber;
   }
 
   public Long getId() {
@@ -289,12 +289,12 @@ public class Product implements ModificationTracker {
     this.parentProduct = parentProduct;
   }
 
-	public String getPackNumber() {
-		return packNumber;
+	public String getDonationIdentificationNumber() {
+		return donationIdentificationNumber;
 	}
 
-	public void setPackNumber(String packNumber) {
-		this.packNumber = packNumber;
+	public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+		this.donationIdentificationNumber = donationIdentificationNumber;
 	}
   
 }

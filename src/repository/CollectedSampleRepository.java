@@ -353,7 +353,7 @@ public class CollectedSampleRepository {
     // Add product
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setPackNumber(collectedSample.getCollectionNumber());
+    product.setDonationIdentificationNumber(collectedSample.getCollectionNumber());
     product.setCollectedSample(collectedSample);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(collectedSample.getCreatedDate());
