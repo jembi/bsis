@@ -565,9 +565,9 @@ public class CollectedSampleRepository {
     						//cs.getProducts().get(0).getCompatibilityTests().get(0).getCompatibilityTestDate();
     						cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().size();
     						for(CompatibilityTest cmt:cs.getProducts().get(0).getIssuedTo().getCrossmatchTests()){
-    							if((cmt.getCompatibilityTestDate() != null && getDateCompatbilityTestDate(cmt.getCompatibilityTestDate()).equals(date)) && 
+    							if((cmt.getCompatibilityTestDate() != null && getDateCompatbilityTestDate(cmt.getCompatibilityTestDate()).equals(date)) || 
     									(cmt.getCrossmatchType().getId() != null && cmt.getCrossmatchType().getId().equals(Integer.parseInt(crossmatchType.toString())))
-    									&& (cmt.getCompatibilityResult() != null && cmt.getCompatibilityResult().equals(compatbilityResult))){
+    									|| (cmt.getCompatibilityResult() != null && cmt.getCompatibilityResult().equals(compatbilityResult))){
     									
     								if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
     	    							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
