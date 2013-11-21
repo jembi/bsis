@@ -232,5 +232,11 @@
            		<column name="lotReleaseStatus" type="varchar(30)"/>
            </addColumn>
     </changeSet>
+    
+    <changeSet id="201311211226" author="devang">
+           <addColumn tableName="CollectedSample_AUD">
+           		<column name="lotReleaseStatus" type="varchar(30)"/>
+           </addColumn>
+    </changeSet>
 	    
 </databaseChangeLog>	
