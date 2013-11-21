@@ -226,5 +226,11 @@
                     <column name="propertyValue" value="TRUE"></column>
             </insert>
     </changeSet>
+    
+    <changeSet id="201311211226" author="devang">
+           <addColumn tableName="CollectedSample">
+           		<column name="lotReleaseStatus" type="varchar(30)"/>
+           </addColumn>
+    </changeSet>
 	    
 </databaseChangeLog>	

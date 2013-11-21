@@ -39,13 +39,12 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import repository.bloodtesting.BloodTypingStatus;
 import constraintvalidator.BloodBagTypeExists;
 import constraintvalidator.CollectionBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
-
-import repository.bloodtesting.BloodTypingStatus;
 
 /**
  * A donation or a collection as it is in the UI.
@@ -161,6 +160,10 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Enumerated(EnumType.STRING)
   @Column(length=20)
   private TTIStatus ttiStatus;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(length=30)
+  private LotReleaseStatus lotReleaseStatus;
 
   private Boolean isDeleted;
   
@@ -289,7 +292,21 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     modificationTracker.setLastUpdated(lastUpdated);
   }
 
-  public void setCreatedDate(Date createdDate) {
+  /**
+	 * @return the lotReleaseStatus
+	 */
+	public LotReleaseStatus getLotReleaseStatus() {
+		return lotReleaseStatus;
+	}
+
+	/**
+	 * @param lotReleaseStatus the lotReleaseStatus to set
+	 */
+	public void setLotReleaseStatus(LotReleaseStatus lotReleaseStatus) {
+		this.lotReleaseStatus = lotReleaseStatus;
+	}
+
+	public void setCreatedDate(Date createdDate) {
     modificationTracker.setCreatedDate(createdDate);
   }
 
