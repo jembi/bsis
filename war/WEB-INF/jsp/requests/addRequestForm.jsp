@@ -26,6 +26,49 @@
 <script>
 $(document).ready(
     function() {
+    	
+    	var requestsTable = $("#${table_id}").dataTable({
+            "bJQueryUI" : true,
+            "sDom" : '<"H"lrT>t<"F"ip>',
+            "bServerSide" : true,
+            "sAjaxSource" : "${nextPageUrl}",
+            "sPaginationType" : "full_numbers",
+            "aoColumnDefs" :  [{ "sClass" : "hide_class", "aTargets": [0]}
+                              ],
+            "fnServerData" : function (sSource, aoData, fnCallback, oSettings) {
+                                oSettings.jqXHR = $.ajax({
+                                  "datatype": "json",
+                                  "type": "GET",
+                                  "url": sSource,
+                                  "data": aoData,
+                                  "success": function(jsonResponse) {
+                                                if (jsonResponse.iTotalRecords == 0) {
+                                                  $("#${mainContentId}").html($("#${noResultsFoundDivId}").html());
+                                                }
+                                                fnCallback(jsonResponse);
+                                              }
+                                  });
+                                },
+             "oTableTools" : {
+               "sRowSelect" : "single",
+               "aButtons" : [ "print" ],
+               "fnRowSelected" : function(node) {
+                                   /* $("#${mainContentId}").parent().trigger("requestSummaryView");
+                                   var elements = $(node).children();
+                                   if (elements[0].getAttribute("class") === "dataTables_empty") {
+                                     return;
+                                   }
+                                   var selectedRowId = elements[0].innerHTML;
+                                   createRequestSummary("requestSummary.html",
+                                       {requestId: selectedRowId}); */
+                                  },
+             "fnRowDeselected" : function(node) {
+                                 },
+             },
+             "oColVis" : {
+                "aiExclude": [0,1],
+             }
+          });
 		
       function notifyParentSuccess() {
         // let the parent know we are done
@@ -170,7 +213,7 @@ $(document).ready(
       
       $("#${tabContentId}").find(".removedRequestedComponentsButton").button({
     	    icons : {
-    	      primary : 'ui-icon-disk'
+    	      primary : 'ui-icon-trash'
     	    }
     	  }).click(function() {
     	    var data = {};
@@ -496,28 +539,32 @@ $(document).ready(
       
       <b>Requested Components</b>
       <div class="requestedComponents">
-      	<table border="1" class="requestedComponentsTable">
-      		<tr>	
-      			<th>Component Type</th>
-      			<c:if test="${bulkTransferStatus != true }"><th>Blood ABO</th></c:if>
-      			<c:if test="${bulkTransferStatus != true }"><th>Blood Rh</th></c:if>
-      			<th>Num. Units</th>
-      			<th></th>
-      		</tr>
-      		<c:forEach var="requestedComponents" items="${requestedComponents}">
-      			<tr>
-      				<td align="left">${requestedComponents.productType.productType}</td>
-      				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodABO}</td></c:if>
-      				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodRh}</td></c:if>
-      				<td align="center">${requestedComponents.numUnits}</td>
-      				<td><button type="button" id="${requestedComponents.id}" class="removedRequestedComponentsButton">Remove</button></td>
-      			</tr>
-      		</c:forEach>
+      	<table id="${table_id}" class="dataTable requestsTable">
+      		<thead>
+	      		<tr>
+	      			<th style="display: none"></th>
+	      			<th>Component Type</th>
+	      			<c:if test="${bulkTransferStatus != true }"><th>Blood ABO</th></c:if>
+	      			<c:if test="${bulkTransferStatus != true }"><th>Blood Rh</th></c:if>
+	      			<th>Num. Units</th>
+	      			<th></th>
+	      		</tr>
+	      	</thead>
+	      	<tbody>
+	      		<c:forEach var="requestedComponents" items="${requestedComponents}">
+	      			<tr>
+	      				<td align="left">${requestedComponents.productType.productType}</td>
+	      				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodABO}</td></c:if>
+	      				<c:if test="${bulkTransferStatus != true }"><td align="center">${requestedComponents.bloodRh}</td></c:if>
+	      				<td align="center">${requestedComponents.numUnits}</td>
+	      				<td align="center"><button type="button" id="${requestedComponents.id}" class="removedRequestedComponentsButton">Remove</button></td>
+	      			</tr>
+	      		</c:forEach>
+	      	
       		<tr>
       			<td>
       				<c:if test="${requestFields.productType.hidden != true }">
         			<div>
-          				<form:label path="productType">${requestFields.productType.displayName}</form:label>
           				<form:select path="productType" id="${addRequestFormProductTypeSelectorId}" class="productType">
             				<form:option value="">&nbsp;</form:option>
             				<c:forEach var="productType" items="${productTypes}">
@@ -535,7 +582,6 @@ $(document).ready(
       			<td>
       				<c:if test="${requestFields.patientBloodAbo.hidden != true }">
 				        <div>
-				          <form:label path="patientBloodAbo">${requestFields.patientBloodAbo.displayName}</form:label>
 				          <form:select path="patientBloodAbo"
 				                       id="${addRequestFormBloodAboSelectorId}"
 				                       class="bloodAbo">
@@ -552,7 +598,6 @@ $(document).ready(
       			<td>
       				<c:if test="${requestFields.patientBloodRh.hidden != true }">
 				        <div>
-				          <form:label path="patientBloodRh">${requestFields.patientBloodRh.displayName}</form:label>
 				          <form:select path="patientBloodRh"
 				                       id="${addRequestFormBloodRhSelectorId}"
 				                       class="bloodRh">
@@ -567,17 +612,17 @@ $(document).ready(
       			</c:if>
       			<td>
       				 <c:if test="${requestFields.numUnitsRequested.hidden != true }">
-				        <div>
-				          <form:label path="numUnitsRequested">${requestFields.numUnitsRequested.displayName}</form:label>
-				          <form:input path="numUnitsRequested" class="numUnitsRequested" value="${firstTimeRender ?  requestFields.numUnitsRequested.defaultValue : ''}" />
+				        <div align="center">
+				          <form:input path="numUnitsRequested" class="numUnitsRequested" value="${firstTimeRender ?  requestFields.numUnitsRequested.defaultValue : ''}"  />
 				          <form:errors class="formError" path="request.numUnitsRequested" delimiter=", "></form:errors>
 				        </div>
       				</c:if>
       			</td>
-      			<td>
-      				<button type="button" class="addRequestedComponentsButton">Add</button>
+      			<td align="center">
+      				<button type="button" class="addRequestedComponentsButton" style="width:35%">Add</button>
       			</td>
       		</tr>
+      	</tbody>
       	</table>
       </div>
       <br>

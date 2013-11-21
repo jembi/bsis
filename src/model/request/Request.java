@@ -2,7 +2,6 @@ package model.request;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -180,10 +179,10 @@ public class Request implements ModificationTracker {
     this.patientGender = request.patientGender;
     this.ward = request.ward;
     this.patientNumber = request.patientNumber;
-    this.productType = request.productType;
+    //this.productType = request.productType;
     this.requestDate = request.requestDate;
     this.requiredDate = request.requiredDate;
-    this.numUnitsRequested = request.numUnitsRequested;
+    //this.numUnitsRequested = request.numUnitsRequested;
     this.numUnitsIssued = request.numUnitsIssued;
     this.notes = request.notes;
   }

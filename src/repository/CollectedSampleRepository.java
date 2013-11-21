@@ -392,8 +392,8 @@ public class CollectedSampleRepository {
     try {
        c = query.getSingleResult();
     } catch (NoResultException ex) {
-    	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex);
-      System.out.println("Collection number not found: " + collectionNumber);
+    	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex.getMessage() + ex.getStackTrace());
+    	LOGGER.error("Collection number not found: " + collectionNumber);
     } catch (NonUniqueObjectException ex) {
     	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex);
     	LOGGER.error("Multiple collections for collection::"+collectionNumber);
@@ -540,7 +540,11 @@ public class CollectedSampleRepository {
   
   public List<CollectedSample> findDINNumber(String collectionNumber,Object compatbilityTestDate,Object crossmatchType,Object compatbilityResult){
   	String queryString ;
-  	Date date=getDateCompatbilityTestDate(compatbilityTestDate.toString());
+  	
+  	Date date=null;
+  	if(compatbilityTestDate!=null){
+  		date=getDateCompatbilityTestDate(compatbilityTestDate.toString());
+  	}
   	if(collectionNumber == null)
   		queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = null and  c.isDeleted = :isDeleted";
   	else
@@ -560,23 +564,24 @@ public class CollectedSampleRepository {
     				
     				if(cs.getProducts().get(0).getIssuedTo() !=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null){
     					cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size();
-    					
-    					if(cs.getProducts().get(0).getIssuedTo() != null && cs.getProducts().get(0).getIssuedTo().getCrossmatchTests() !=null && !cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().isEmpty()){
-    						//cs.getProducts().get(0).getCompatibilityTests().get(0).getCompatibilityTestDate();
-    						cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().size();
-    						for(CompatibilityTest cmt:cs.getProducts().get(0).getIssuedTo().getCrossmatchTests()){
-    							if((cmt.getCompatibilityTestDate() != null && getDateCompatbilityTestDate(cmt.getCompatibilityTestDate()).equals(date)) && 
-    									(cmt.getCrossmatchType().getId() != null && cmt.getCrossmatchType().getId().equals(Integer.parseInt(crossmatchType.toString())))
-    									&& (cmt.getCompatibilityResult() != null && cmt.getCompatibilityResult().name().equals(compatbilityResult.toString()))){
-    								if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
-    	    							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
-    	    						cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType().getId();
-    							}
-    							else {
-    								return collectedSample;
-    							}
-    						}
-    						
+    					if(compatbilityTestDate != null && crossmatchType !=null && compatbilityResult!=null){
+    						if(cs.getProducts().get(0).getIssuedTo() != null && cs.getProducts().get(0).getIssuedTo().getCrossmatchTests() !=null && !cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().isEmpty()){
+      						//cs.getProducts().get(0).getCompatibilityTests().get(0).getCompatibilityTestDate();
+      						cs.getProducts().get(0).getIssuedTo().getCrossmatchTests().size();
+      						for(CompatibilityTest cmt:cs.getProducts().get(0).getIssuedTo().getCrossmatchTests()){
+      							if((cmt.getCompatibilityTestDate() != null && getDateCompatbilityTestDate(cmt.getCompatibilityTestDate()).equals(date)) && 
+      									(cmt.getCrossmatchType().getId() != null && cmt.getCrossmatchType().getId().equals(Integer.parseInt(crossmatchType.toString())))
+      									&& (cmt.getCompatibilityResult() != null && cmt.getCompatibilityResult().name().equals(compatbilityResult.toString()))){
+      								if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
+      	    							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
+      	    						cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType().getId();
+      							}
+      							else {
+      								return collectedSample;
+      							}
+      						}
+      						
+      					}
     					}else{
     						if(cs.getProducts().get(0).getIssuedTo().getRequestedComponents()!=null && cs.getProducts().get(0).getIssuedTo().getRequestedComponents().size() > 0
       							&& cs.getProducts().get(0).getIssuedTo().getRequestedComponents().get(0).getProductType()!=null)
