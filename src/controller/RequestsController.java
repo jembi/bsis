@@ -314,7 +314,7 @@ public class RequestsController {
   public ModelAndView addRequestFormGenerator(HttpServletRequest request,@ModelAttribute("addRequestForm")  RequestBackingForm form) {
   	
     ModelAndView mv = new ModelAndView("requests/addRequestForm");
-    Boolean bulkTransferStatus = null;
+    boolean bulkTransferStatus = false;
     if(request.getParameter("requestType") != null && !request.getParameter("requestType").isEmpty())
     	bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(request.getParameter("requestType")));
     
@@ -654,9 +654,10 @@ public class RequestsController {
   
   @RequestMapping(value="/findComponent", method=RequestMethod.GET)
   public ModelAndView findComponent(HttpServletRequest request, HttpServletResponse response,
-  		@RequestParam(value="params") String paramsAsJson) {
+  		@RequestParam(value="params") String paramsAsJson,@ModelAttribute("addRequestForm") RequestBackingForm form) {
 
   	ModelAndView mv = new ModelAndView("requests/issueComponetTable");
+  	boolean bulkTransferStatus=false;
   	try{
   		@SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
@@ -667,10 +668,11 @@ public class RequestsController {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         mv.addObject("errorMessage", "Request not found");
       }
-    	   
+      bulkTransferStatus=requestRepository.getBulkTransferStatus(Integer.parseInt(params.get("requestType").toString()));  
     	Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
       mv.addObject("requestUrl", getUrl(request));
     	mv.addObject("requestFields", formFields);
+    	mv.addObject("bulkTransferStatus", bulkTransferStatus);
     	mv.addObject("nextPageUrl", getNextPageUrl(request));
     	mv.addObject("issuedComponent", collectedSampleList);
       addEditSelectorOptions(mv.getModelMap());

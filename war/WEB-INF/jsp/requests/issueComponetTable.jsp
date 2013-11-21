@@ -119,6 +119,7 @@ $(document).ready(
       			<th>Blood ABO</th>
       			<th>Blood Rh</th>
       			<th>Num. Units</th>
+      			<c:if test="${bulkTransferStatus == true }"><th>Compatbility</th></c:if>
             </tr>
           </thead>
           <tbody>
@@ -130,6 +131,7 @@ $(document).ready(
       				<td align="center">${requestedComponents.products.get(0).issuedTo.requestedComponents.get(0).bloodABO}</td>
       				<td align="center">${requestedComponents.products.get(0).issuedTo.requestedComponents.get(0).bloodRh eq '+' ? 'POS' : requestedComponents.products.get(0).issuedTo.requestedComponents.get(0).bloodRh eq '-' ? 'NEG' : ''}</td>
       				<td align="center">${requestedComponents.products.get(0).issuedTo.requestedComponents.get(0).numUnits}</td>
+      				<c:if test="${bulkTransferStatus == true }"><td align="center">${requestedComponents.products.get(0).issuedTo.crossmatchTests.get(0).compatibilityResult}</td></c:if>
       			</tr>
 	      	</c:forEach>
           </tbody>

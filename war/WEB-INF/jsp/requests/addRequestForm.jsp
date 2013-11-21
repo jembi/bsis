@@ -231,6 +231,7 @@ $(document).ready(
     	   data.compatbilityTestDate = $("#${mainContentId}").find(".compatbilityTestDate").val(); 
     	   data.crossmatchType = $("#${mainContentId}").find(".crossmatchType").val(); 
     	   data.compatbilityResult = $("#${mainContentId}").find(".compatbilityResult").val();
+    	   data.requestType = $("#${mainContentId}").find(".requestType").val();
     	   
     	    console.log(JSON.stringify(data));
     	    $.ajax({
