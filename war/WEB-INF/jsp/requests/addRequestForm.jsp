@@ -159,8 +159,6 @@ $(document).ready(
           //$("#${addRequestFormId}").find(".requiredDate").datetimepicker("option", "minDate", selectedDate);
         },
       });
-      
-      
 
       $("#${addRequestFormId}").find(".dispatchDate").datetimepicker({
         changeMonth : true,
