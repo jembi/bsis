@@ -29,6 +29,45 @@ $(document).ready(
         },
         "bPaginate" : false
       });
+      
+      $("#${tabContentId}").find(".editDeferDonorButton")
+  			.button({icons: {primary : 'ui-icon-pencil'}})
+  			.click(editDeferDonorDialog);
+      
+      function editDeferDonorDialog() {
+    	  var donorId=this.id;
+    	  
+          $("<div>").dialog({
+            modal: true,
+            open:  function() {
+                     // extra parameters passed as string otherwise POST request sent
+                     $(this).load("editDeferDonorFormGenerator.html?" + $.param({donorDeferralId : donorId}));
+                    },
+            close: function(event, ui) {
+                     $(this).remove();
+                    },
+            title: "Defer donor",
+            height: 400,
+            width: 600,
+            buttons:
+              {
+                 "Update Deferral": function() {
+                                 $(this).dialog("close");
+                                 updateDeferDonor($(this).find(".deferDonorForm"), deferDonorDone);
+                                },
+                  "Cancel Deferral": function() {
+                      $(this).dialog("close");
+                      //deleteDeferDonor($(this).find(".deferDonorForm"), deferDonorDone);
+                     			},
+                 "Cancel": function() {
+                              $(this).dialog("close");                                                        
+                            }
+              }
+          });
+         }
+      function deferDonorDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
 
       $("#${tabContentId}").find(".doneButton").button({
         icons : {
@@ -46,6 +85,7 @@ $(document).ready(
       });
 
     });
+	
 </script>
 
 <div id="${tabContentId}">
@@ -88,6 +128,7 @@ $(document).ready(
             <c:if test="${donorDeferralFields.deferralReasonText.hidden != true}">
               <th>${donorDeferralFields.deferralReasonText.displayName}</th>
             </c:if>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -109,6 +150,7 @@ $(document).ready(
               <c:if test="${donorDeferralFields.deferralReasonText.hidden != true}">
                 <td>${donorDeferral.deferralReasonText}</td>
               </c:if>
+              <td> <button class="editDeferDonorButton" id="${donorDeferral.id}">Edit Deferral</button></td>
             </tr>
           </c:forEach>
         </tbody>

@@ -288,6 +288,32 @@ public class DonorRepository {
     donorDeferral.setDeferralReasonText(deferralReasonText);
     em.persist(donorDeferral);
   }
+  
+  public void updatedeferDonor(String donorDeferralId,String donorId, String deferUntil,
+      String deferralReasonId, String deferralReasonText) throws ParseException {
+    DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
+    DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
+    Donor donor = findDonorById(donorId);
+    if(donorDeferral != null){
+    	donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
+    	donorDeferral.setDeferredDonor(donor);
+    	donorDeferral.setDeferredBy(utilController.getCurrentUser());
+    	donorDeferral.setDeferralReasonText(deferralReasonText);
+    	donorDeferral.setDeferralReason(deferralReason);
+      em.persist(donorDeferral);
+    }
+    
+    
+    /*Donor donor = findDonorById(donorId);
+    --donorDeferral.setDeferredOn(new Date());
+    donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
+    donorDeferral.setDeferredDonor(donor);
+    donorDeferral.setDeferredBy(utilController.getCurrentUser());
+    DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
+    donorDeferral.setDeferralReason(deferralReason);
+    donorDeferral.setDeferralReasonText(deferralReasonText);*/
+    //em.persist(donorDeferral);
+  }
 
   private DeferralReason findDeferralReasonById(String deferralReasonId) {
     String queryString = "SELECT d FROM DeferralReason d WHERE " +
@@ -355,5 +381,15 @@ public class DonorRepository {
 		  }
 	  }
 	  return lastDeferredUntil;
+  }
+  
+  public DonorDeferral getDonorDeferralsId(Long donorDeferralsId) {
+    String queryString = "SELECT d from DonorDeferral d WHERE " +
+                         " id=:donorDeferralsId";
+    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
+    query.setParameter("donorDeferralsId", donorDeferralsId);
+    if(query.getResultList().size() > 0)
+    	return query.getSingleResult();
+    return null;
   }
 }
