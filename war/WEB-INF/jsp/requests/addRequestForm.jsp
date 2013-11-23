@@ -53,21 +53,11 @@ $(document).ready(
                "sRowSelect" : "single",
                "aButtons" : [ "print" ],
                "fnRowSelected" : function(node) {
-                                   /* $("#${mainContentId}").parent().trigger("requestSummaryView");
-                                   var elements = $(node).children();
-                                   if (elements[0].getAttribute("class") === "dataTables_empty") {
-                                     return;
-                                   }
-                                   var selectedRowId = elements[0].innerHTML;
-                                   createRequestSummary("requestSummary.html",
-                                       {requestId: selectedRowId}); */
                                   },
              "fnRowDeselected" : function(node) {
                                  },
              },
-             "oColVis" : {
-                "aiExclude": [0,1],
-             }
+             "bPaginate" : false
           });
 		
       function notifyParentSuccess() {

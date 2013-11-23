@@ -293,7 +293,8 @@
 	 <changeSet id="201311201245" author="devang">
 	    <update tableName="formfield">
 	        <column name="isRequired" value="0"></column>
-	        <where>id = 99</where>
+	        <where> FIELD = 'productType' </where>
 	    </update>
 	</changeSet>
+	
 </databaseChangeLog>	
