@@ -12,10 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.envers.Audited;
-
 import model.donor.Donor;
 import model.user.User;
+
+import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
@@ -40,9 +40,17 @@ public class DonorDeferral {
 
   @ManyToOne
   private DeferralReason deferralReason;
+  
+  @ManyToOne
+  private User voidedBy;
 
   @Lob
   private String deferralReasonText;
+  
+  private Boolean isVoided;
+  
+  @Temporal(TemporalType.DATE)
+  private Date voidedDate;
 
   public Long getId() {
     return id;
@@ -99,4 +107,47 @@ public class DonorDeferral {
   public void setDeferralReasonText(String deferralReasonText) {
     this.deferralReasonText = deferralReasonText;
   }
+
+	/**
+	 * @return the isVoided
+	 */
+	public Boolean getIsVoided() {
+		return isVoided;
+	}
+
+	/**
+	 * @param isVoided the isVoided to set
+	 */
+	public void setIsVoided(Boolean isVoided) {
+		this.isVoided = isVoided;
+	}
+
+	/**
+	 * @return the voidedBy
+	 */
+	public User getVoidedBy() {
+		return voidedBy;
+	}
+
+	/**
+	 * @param voidedBy the voidedBy to set
+	 */
+	public void setVoidedBy(User voidedBy) {
+		this.voidedBy = voidedBy;
+	}
+
+	/**
+	 * @return the voidedDate
+	 */
+	public Date getVoidedDate() {
+		return voidedDate;
+	}
+
+	/**
+	 * @param voidedDate the voidedDate to set
+	 */
+	public void setVoidedDate(Date voidedDate) {
+		this.voidedDate = voidedDate;
+	}
+  
 }

@@ -75,11 +75,11 @@ function updateDeferDonor(form, successCallback) {
 	  });
 }
 
-function deleteDeferDonor(form, successCallback) {
+function cancelDeferDonor(form, successCallback) {
 	  var donorDeferralFormData = $(form).serialize();
 	  $.ajax({
 	    type: "POST",
-	    url:  "deleteDeferDonor.html",
+	    url:  "cancelDeferDonor.html",
 	    data: donorDeferralFormData,
 	    success: function(jsonResponse) {
 	               successCallback();

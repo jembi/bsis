@@ -57,7 +57,7 @@ $(document).ready(
                                 },
                   "Cancel Deferral": function() {
                       $(this).dialog("close");
-                      //deleteDeferDonor($(this).find(".deferDonorForm"), deferDonorDone);
+                      cancelDeferDonor($(this).find(".deferDonorForm"), deferDonorDone);
                      			},
                  "Cancel": function() {
                               $(this).dialog("close");                                                        

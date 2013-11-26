@@ -285,6 +285,8 @@ public class DonorRepository {
     donorDeferral.setDeferredBy(utilController.getCurrentUser());
     DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
     donorDeferral.setDeferralReason(deferralReason);
+    donorDeferral.setIsVoided(Boolean.FALSE);
+  	donorDeferral.setVoidedBy(utilController.getCurrentUser());
     donorDeferral.setDeferralReasonText(deferralReasonText);
     em.persist(donorDeferral);
   }
@@ -314,6 +316,16 @@ public class DonorRepository {
     donorDeferral.setDeferralReasonText(deferralReasonText);*/
     //em.persist(donorDeferral);
   }
+  
+  public void cancelDeferDonor(String donorDeferralId) {
+  	DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
+  	if(donorDeferral != null){
+  		donorDeferral.setIsVoided(Boolean.TRUE);
+  		donorDeferral.setVoidedDate(new Date());
+  		donorDeferral.setVoidedBy(utilController.getCurrentUser());
+  	}
+  	em.persist(donorDeferral);
+  }
 
   private DeferralReason findDeferralReasonById(String deferralReasonId) {
     String queryString = "SELECT d FROM DeferralReason d WHERE " +
@@ -326,9 +338,10 @@ public class DonorRepository {
 
   public List<DonorDeferral> getDonorDeferrals(Long donorId) {
     String queryString = "SELECT d from DonorDeferral d WHERE " +
-                         " d.deferredDonor.id=:donorId";
+                         " d.deferredDonor.id=:donorId AND d.isVoided=:isVoided";
     TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
     query.setParameter("donorId", donorId);
+    query.setParameter("isVoided", Boolean.FALSE);
     return query.getResultList();
   }
 

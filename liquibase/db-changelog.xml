@@ -275,5 +275,28 @@
 	     	<column name="propertyValue" value="true"></column>
 	     </insert>
    </changeSet>
+   
+   <!-- For issue 58 [Add ability to update Deferrals] -->
+     <changeSet id="201311251517" author="devang">
+	     <addColumn tableName="DonorDeferral">
+	     	<column name="isVoided" type="tinyint(1)" />
+	     	<column name="voidedBy_id" type="smallint(6)" />
+	     	<column name="voidedDate" type="date" />
+	     </addColumn>
+	    <addForeignKeyConstraint constraintName="fk_voidedBy"
+			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
+			referencedTableName="user" referencedColumnNames="id"/>
+   </changeSet>
+   
+    <changeSet id="201311251525" author="devang">
+	     <addColumn tableName="DonorDeferral_AUD">
+	     	<column name="isVoided" type="tinyint(1)" />
+	     	<column name="voidedBy_id" type="smallint(6)" />
+	     	<column name="voidedDate" type="date" />
+	     </addColumn>
+	    <addForeignKeyConstraint constraintName="fk_voidedBy_aud"
+			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
+			referencedTableName="user" referencedColumnNames="id"/>
+   </changeSet>
 
 </databaseChangeLog>	

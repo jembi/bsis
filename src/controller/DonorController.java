@@ -340,6 +340,23 @@ public class DonorController {
 
     return donorDeferralResult;
   }
+  
+  @RequestMapping(value="/cancelDeferDonor", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> cancelDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.cancelDeferDonor(donorDeferralId);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
+  }
 
   @RequestMapping(value="/deferDonor", method = RequestMethod.POST)
   public @ResponseBody Map<String, Object> deferDonor(HttpServletRequest request,
