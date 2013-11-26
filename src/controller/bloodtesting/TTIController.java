@@ -210,10 +210,6 @@ public class TTIController {
     mv.addObject("collectionId", collectedSample.getId());
     mv.addObject("ttiOutputForCollection", ruleResult);
     
-    for (String allBlood : ruleResult.getAvailableTestResults().keySet()) {
-		System.out.println("allBlood________Controller ____"+allBlood.toString());
-	
-	}
     mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
     mv.addObject("recordMachineReadingsForTTI", utilController.recordMachineResultsForTTI());
