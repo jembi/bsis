@@ -286,7 +286,6 @@ public class DonorRepository {
     DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setIsVoided(Boolean.FALSE);
-  	donorDeferral.setVoidedBy(utilController.getCurrentUser());
     donorDeferral.setDeferralReasonText(deferralReasonText);
     em.persist(donorDeferral);
   }
