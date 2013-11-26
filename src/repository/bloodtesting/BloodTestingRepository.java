@@ -819,4 +819,35 @@ public class BloodTestingRepository {
 	}
 	return allBloodTestResults;
 	}
+  
+  public List<BloodTestResult> validatuionForDuplicateBloodTestResult(List<BloodTestResult> bloodTestResult){
+	  boolean duplicateRecord = false;
+	  List<BloodTestResult> duplicateBloodTestResults = new ArrayList<BloodTestResult>();
+	  for(BloodTestResult  bloodTestResultObj : bloodTestResult){
+		  duplicateRecord = matchWithValidationCriteria(bloodTestResultObj.getCollectedSample().getId() , bloodTestResultObj.getId() , bloodTestResultObj.getTestedOn());
+		  if(duplicateRecord)
+		  {
+			  duplicateBloodTestResults.add(bloodTestResultObj);
+		  }
+	  }
+	  return duplicateBloodTestResults;
+	  
+  }
+  
+  public boolean matchWithValidationCriteria(Long collectedSampleId , Long bloodTestId , Date testedOn) {
+		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "+
+						  "bt.collectedSample.id=:collectedSampleId AND "+
+						  "bt.id=:bloodTestId AND "+
+						  "bt.testedOn=:testedOn";
+		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,BloodTestResult.class);
+		
+		query.setParameter("collectedSampleId", collectedSampleId);
+		query.setParameter("bloodTestId", bloodTestId);
+		query.setParameter("testedOn", testedOn);
+		
+		List<BloodTestResult> bloodTestResults = query.getResultList();
+		
+		return bloodTestResults.size() > 0 ? true : false;
+	}
+  
 }
