@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.user.Role;
 import model.user.User;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,6 +74,7 @@ public class UserController {
       User user = userRepository.findUserById(userId);
       if (user != null) {
         form = new UserBackingForm(user);
+        m.put("userRoles", form.getUserRole());
         m.put("existingUser", true);
       }
       else {
@@ -95,6 +98,7 @@ public class UserController {
 
     ModelAndView mv = new ModelAndView("admin/editUserForm");
     boolean success = false;
+    
     String message = "";
     Map<String, Object> m = model.asMap();
 
@@ -107,7 +111,9 @@ public class UserController {
       try {
         User user = form.getUser();
         user.setIsDeleted(false);
+        user.setRoles(userRepository.getUserRole(userRole(form)));
         userRepository.addUser(user);
+       
         m.put("hasErrors", false);
         success = true;
         message = "User Successfully Added";
@@ -146,7 +152,6 @@ public class UserController {
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
     m.put("existingUser", true);
-
     if (result.hasErrors()) {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -159,7 +164,8 @@ public class UserController {
         User user = form.getUser();
         if (form.getModifyPassword())
           user.setPassword(form.getPassword());
-        User existingUser = userRepository.updateUser(user, form.getModifyPassword());
+        user.setRoles(userRepository.getUserRole(userRole(form)));
+        User existingUser = userRepository.updateUser(user, true);
         if (existingUser == null) {
           m.put("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -184,7 +190,8 @@ public class UserController {
         message = "Internal Error. Please try again or report a Problem.";
       }
    }
-
+    
+    m.put("userRoles", form.getUserRole());
     m.put("editUserForm", form);
     m.put("success", success);
     m.put("message", message);
@@ -193,4 +200,35 @@ public class UserController {
 
     return mv;
   }
+  
+	public String[] userRole(UserBackingForm form){
+  	String []str = new String[4];
+    if(form.getRoleAdmin()!=null && StringUtils.isNotEmpty(form.getRoleAdmin()) && !form.getRoleAdmin().isEmpty()){
+    	str[0]=form.getRoleAdmin();
+    }
+    if(form.getRoleDonorLab()!=null && StringUtils.isNotEmpty(form.getRoleDonorLab()) && !form.getRoleDonorLab().isEmpty()){
+    	str[1]=form.getRoleDonorLab();
+    }
+    String strRoleTestLab=form.getRoleTestLab();
+    if(strRoleTestLab !=null && StringUtils.isNotEmpty(form.getRoleTestLab()) && !form.getRoleTestLab().isEmpty()){
+    	str[2]=form.getRoleTestLab();
+    }
+    if(StringUtils.isNotEmpty(form.getRoleUser()) && !form.getRoleUser().isEmpty()){
+    	str[3]=form.getRoleUser();
+    }
+		return str;
+  }
+	
+	public String userRole(Integer id) {
+		String userRole = "";
+		User user=userRepository.findUserById(id);
+		List<Role> roles=user.getRoles();
+		if(roles!=null && roles.size() > 0){
+			for(Role r:roles){
+				userRole= userRole +" "+ r.getId();
+			}
+			
+		}
+		return userRole;
+	}
 }

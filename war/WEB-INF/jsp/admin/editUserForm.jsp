@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
@@ -54,11 +55,20 @@
   <form:form method="POST" class="formFormatClass" id="${editUserFormId}"
     commandName="editUserForm">
     <form:hidden path="id" />
-    <div>
-      <form:label path="username">Username</form:label>
-      <form:input path="username" />
-      <form:errors class="formError" path="user.username" delimiter=", "></form:errors>
-    </div>
+    <c:if test="${model.existingUser  ne true}">
+	    <div>
+	      <form:label path="username">Username</form:label>
+	      <form:input path="username" />
+	      <form:errors class="formError" path="user.username" delimiter=", "></form:errors>
+	    </div>
+    </c:if>
+    <c:if test="${model.existingUser eq true}">
+	    <div>
+	      <form:label path="username">Username</form:label>
+	      <form:input path="username" disabled="true" />
+	      <form:hidden path="username"/>
+	    </div>
+    </c:if>
     <div>
       <form:label path="firstName">First name</form:label>
       <form:input path="firstName" />
@@ -69,7 +79,7 @@
       <form:input path="lastName" />
       <form:errors class="formError" path="user.lastName" delimiter=", "></form:errors>
     </div>
-    <div>
+    <%-- <div>
       <form:label path="isAdmin">Admin User?</form:label>
       <form:checkbox path="isAdmin" style="width: auto;" />
       <form:errors class="formError" path="user.isAdmin" delimiter=", "></form:errors>
@@ -77,11 +87,64 @@
     <div>
       <form:label path="modifyPassword">Modify Password?</form:label>
       <form:checkbox path="modifyPassword" style="width: auto;" />
-    </div>
+    </div> --%>
+    <c:if test="${model.existingUser  ne true}">
+	    <div>
+	      <form:label path="password">Password</form:label>
+	      <form:password path="password" />
+	      <form:errors class="formError" path="user.password" delimiter=", "></form:errors>
+	    </div>	
+	   <div>
+	      <label>Confirm Password</label>
+	      <form:password path="userConfirPassword" />
+	    </div>
+    </c:if> 
+    <c:if test="${model.existingUser  eq true}">
+    <b>Update Password</b>
+    	<div>
+	      <form:label path="password">Current Password</form:label>
+	      <form:password path="currentPassword" />
+	      <form:errors class="formError" path="user.isAdmin" delimiter=", "></form:errors>
+	    </div>	
+    	<div>
+	      <form:label path="password">New Password</form:label>
+	      <form:password path="password" />
+	      <form:errors class="formError" path="user.password" delimiter=", "></form:errors>
+	    </div>	
+	   <div>
+	      <label>Confirm Password</label>
+	      <form:password path="userConfirPassword" id="userConfirPassword" name="userConfirPassword"/>
+	    </div>
+    </c:if>
+    
     <div>
-      <form:label path="password">Password</form:label>
-      <form:password path="password" />
-      <form:errors class="formError" path="user.password" delimiter=", "></form:errors>
+    	<form:hidden path="userRole" id="userRoles"/>
+    	<table>
+    		<tr>
+    			<td  style="width:175px"><label>Roles</label></td>
+    			<td>
+    				<c:choose>
+			   			 <c:when test="${fn:containsIgnoreCase(userRoles, '1')}">  <input type="checkbox" name="roleAdmin" id="roleAdmin" value="1" checked="checked"/></c:when>
+						 <c:otherwise><input type="checkbox" name="roleAdmin" id="roleAdmin" value="1"/></c:otherwise>
+		   			</c:choose>Administrator &nbsp; <form:errors class="formError" path="user.isStaff" delimiter=", "></form:errors> <br/>
+    				
+    				<c:choose>
+			   			 <c:when test="${fn:containsIgnoreCase(userRoles, '2')}"><input type="checkbox" name="roleDonorLab" id="roleDonorLab" value="2" checked="checked"/></c:when>
+						 <c:otherwise> <input type="checkbox" name="roleDonorLab" id="roleDonorLab" value="2"/></c:otherwise>
+		   			</c:choose>Donor Staff<br/>
+		   			
+		   			<c:choose>
+			   			 <c:when test="${fn:contains(userRoles, '3')}"> <input type="checkbox" name="roleTestLab" id="roleTestLab" value="3" checked="checked"/></c:when>
+						 <c:otherwise> <input type="checkbox" name="roleTestLab" id="roleTestLab" value="3"/></c:otherwise>
+		   			</c:choose>Testing Lab Staff<br/>
+		   			
+		   			<c:choose>
+			   			 <c:when test="${fn:containsIgnoreCase(userRoles, '4')}"><input type="checkbox" name="roleUser" id="roleUser" value="4" checked="checked"/></c:when>
+						 <c:otherwise><input type="checkbox" name="roleUser" id="roleUser" value="4"/></c:otherwise>
+		   			</c:choose>Authenticated User
+			     </td>
+    		</tr>
+    	</table>
     </div>
     <div>
       <label></label>

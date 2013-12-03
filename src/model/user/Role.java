@@ -30,6 +30,9 @@ public class Role {
 
   @ManyToMany(mappedBy="roles", fetch=FetchType.EAGER)
   private Set<Permission> permissions;
+  
+  @ManyToMany(mappedBy="roles")
+  private List<UserRole> userRole;
 
   public Long getId() {
     return id;

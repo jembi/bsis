@@ -1,9 +1,11 @@
 package backingform;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
+import model.user.Role;
 import model.user.User;
 
 public class UserBackingForm {
@@ -12,6 +14,13 @@ public class UserBackingForm {
   private User user;
 
   private boolean modifyPassword;
+  private String userRole;
+  private String userConfirPassword;
+  private String currentPassword;
+  private String roleAdmin;
+  private String roleDonorLab;
+  private String roleTestLab;
+  private String roleUser;
 
   public UserBackingForm() {
     setUser(new User());
@@ -148,4 +157,111 @@ public class UserBackingForm {
   public boolean getModifyPassword() {
     return modifyPassword;
   }
+  
+  public List<Role> getRoles() {
+    return user.getRoles();
+  }
+  
+  public String getUserRole() {
+		List<Role> roles=user.getRoles();
+		if(roles!=null && roles.size() > 0){
+			for(Role r:roles){
+				userRole= userRole +" "+ r.getId();
+			}
+			
+		}
+		return userRole;
+	}
+
+	/**
+	 * @return the userConfirPassword
+	 */
+	public String getUserConfirPassword() {
+		return userConfirPassword;
+	}
+
+	/**
+	 * @param userConfirPassword the userConfirPassword to set
+	 */
+	public void setUserConfirPassword(String userConfirPassword) {
+		this.userConfirPassword = userConfirPassword;
+	}
+
+	/**
+	 * @return the currentPassword
+	 */
+	public String getCurrentPassword() {
+		return currentPassword;
+	}
+
+	/**
+	 * @param currentPassword the currentPassword to set
+	 */
+	public void setCurrentPassword(String currentPassword) {
+		this.currentPassword = currentPassword;
+	}
+
+	/**
+	 * @return the roleAdmin
+	 */
+	public String getRoleAdmin() {
+		return roleAdmin;
+	}
+
+	/**
+	 * @param roleAdmin the roleAdmin to set
+	 */
+	public void setRoleAdmin(String roleAdmin) {
+		this.roleAdmin = roleAdmin;
+	}
+
+	/**
+	 * @return the roleDonorLab
+	 */
+	public String getRoleDonorLab() {
+		return roleDonorLab;
+	}
+
+	/**
+	 * @param roleDonorLab the roleDonorLab to set
+	 */
+	public void setRoleDonorLab(String roleDonorLab) {
+		this.roleDonorLab = roleDonorLab;
+	}
+
+	/**
+	 * @return the roleTestLab
+	 */
+	public String getRoleTestLab() {
+		return roleTestLab;
+	}
+
+	/**
+	 * @param roleTestLab the roleTestLab to set
+	 */
+	public void setRoleTestLab(String roleTestLab) {
+		this.roleTestLab = roleTestLab;
+	}
+
+	/**
+	 * @return the roleUser
+	 */
+	public String getRoleUser() {
+		return roleUser;
+	}
+
+	/**
+	 * @param roleUser the roleUser to set
+	 */
+	public void setRoleUser(String roleUser) {
+		this.roleUser = roleUser;
+	}
+
+	/**
+	 * @param userRole the userRole to set
+	 */
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+  
 }
