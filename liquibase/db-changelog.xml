@@ -275,5 +275,16 @@
 	     	<column name="propertyValue" value="true"></column>
 	     </insert>
    </changeSet>
-
+   
+  <!-- For issue 117 [Configure Role] -->
+  <changeSet id="20131129112" author="nikita">
+  <addColumn tableName="role">
+  	<column name="description" type="longtext"></column>
+  </addColumn>
+  </changeSet>
+   <changeSet id="20131129113" author="nikita">
+  <addColumn tableName="role_aud">
+  	<column name="description" type="longtext"></column>
+  </addColumn>
+  </changeSet>
 </databaseChangeLog>	
