@@ -22,9 +22,18 @@
                 authentication-failure-url="/login.html?error=true"
                 always-use-default-target="true" />
   </http>
-
+  
+  <beans:bean id="saltSource" class="security.SaltGenerator" scope="singleton" />
+  <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+        <beans:constructor-arg value="512"/>
+  </beans:bean>
+    
   <authentication-manager>
-    <authentication-provider user-service-ref="userDetailsService" />
+		<authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="passwordEncoder"> 
+                <salt-source ref="saltSource"/> 
+            </password-encoder>
+        </authentication-provider>
   </authentication-manager>
 
   <beans:bean id="userDetailsService" class="security.LoginUserService">

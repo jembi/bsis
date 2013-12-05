@@ -3,6 +3,8 @@ package controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,11 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.apache.commons.codec.binary.Base64;
 
 import repository.UserRepository;
+import security.SecureAuthentication;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
 import backingform.validator.UserBackingFormValidator;
+
 
 @Controller
 public class UserController {
@@ -107,6 +112,10 @@ public class UserController {
       try {
         User user = form.getUser();
         user.setIsDeleted(false);
+        
+        String encruptedPassword =  SecureAuthentication.encryptPassword(user.getUsername(),user.getPassword());
+        user.setPassword(encruptedPassword);
+        
         userRepository.addUser(user);
         m.put("hasErrors", false);
         success = true;
@@ -193,4 +202,6 @@ public class UserController {
 
     return mv;
   }
+  
+	
 }
