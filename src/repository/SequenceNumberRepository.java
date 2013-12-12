@@ -146,21 +146,26 @@ public class SequenceNumberRepository {
     try {
     seqNumStore = query.getSingleResult();
     lastNumber = seqNumStore.getLastNumber();
-    prefix = seqNumStore.getPrefix();
+    //prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
     ex.printStackTrace();
     valuePresentInTable = false;
     seqNumStore = new SequenceNumberStore();
     seqNumStore.setTargetTable("Donor");
     seqNumStore.setColumnName("donorNumber");
-    prefix = "D";
-    seqNumStore.setPrefix(prefix);
+    //prefix = "D";
+    //seqNumStore.setPrefix(prefix);
     seqNumStore.setSequenceNumberContext(mmStr + yyStr);
     }
     
+    
+    if (lastNumber == 0){
+    	lastNumber ++;
+    }
     String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String requestNumber = prefix + mmStr + yyStr + lastNumberStr;
+    //String requestNumber = prefix + mmStr + yyStr + lastNumberStr;
+    String requestNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {

@@ -20,7 +20,7 @@ import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.mysql.jdbc.Security;
+//import com.mysql.jdbc.Security;
 
 import security.V2VUserDetails;
 
@@ -40,20 +40,22 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   }
 
   public void onPersist(PersistEvent event) throws HibernateException {
-    System.out.println("onPersist");
-
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (principal != null && principal instanceof V2VUserDetails) {
-      User user = ((V2VUserDetails) principal).getUser();
-      if (event.getObject() instanceof ModificationTracker && user != null) {
-        ModificationTracker entity = (ModificationTracker) event.getObject();
-        entity.setCreatedDate(new Date());
-        entity.setCreatedBy(user);
-        entity.setLastUpdated(new Date());
-        entity.setLastUpdatedBy(user);
-      }
-    }
-  }
+	    System.out.println("onPersist");
+	    if (SecurityContextHolder.getContext() != null &&
+	        SecurityContextHolder.getContext().getAuthentication() != null) {
+	     Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	     if (principal != null && principal instanceof V2VUserDetails) {
+	       User user = ((V2VUserDetails) principal).getUser();
+	       if (event.getObject() instanceof ModificationTracker && user != null) {
+	         ModificationTracker entity = (ModificationTracker) event.getObject();
+	         entity.setCreatedDate(new Date());
+	         entity.setCreatedBy(user);
+	         entity.setLastUpdated(new Date());
+	         entity.setLastUpdatedBy(user);
+	       }
+	     }
+	    }
+	  }
 
   @SuppressWarnings("rawtypes")
   @Override
