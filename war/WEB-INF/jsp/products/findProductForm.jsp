@@ -194,7 +194,7 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <b>Find Products</b>
-    <div class="tipsBox ui-state-highlight">
+    <div class="tipsBox ui-state-highlight" style="display:none;">
       <p>
         ${tips['products.find']}
       </p>

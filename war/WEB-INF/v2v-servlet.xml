@@ -94,6 +94,8 @@
   </bean>
 
   <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+  </bean>
 
   <mvc:interceptors>
     <bean id="loggingInterceptor" class="interceptor.LoggingInterceptor" />

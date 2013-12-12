@@ -169,14 +169,14 @@ function autoTab(field,fieldID){
     <c:if test="${!empty collectionsWithUninterpretableResults && fn:length(collectionsWithUninterpretableResults) gt 0}">
       <div class="warningBox ui-state-highlight">
         <img src="images/warning_icon.png" style="height: 50px;" />
-        The following collections have uninterpretable results. Please check the results you have entered.
+        The following donations have uninterpretable results. Please check the results you have entered.
 
         <c:forEach var="collectionId" items="${collectionsWithUninterpretableResults}">
   
           <table class="simpleTable">
             <thead>
               <tr>
-                <th>Collection number</th>
+                <th>Donation Identification Number</th>
               </tr>
             </thead>
             <tbody>
@@ -192,7 +192,7 @@ function autoTab(field,fieldID){
           Are you sure you want to save these results?
           <br />
           <button class="saveUninterpretableResultsButton">
-            Save uninterpretable results also
+            Save all results (including uninterpretable results)
           </button>
 
         </c:forEach>
@@ -207,7 +207,7 @@ function autoTab(field,fieldID){
       <span class="warningText">
         <b>Warning</b>
         <br />
-        The following collections already have blood typing results. Are you sure you want to add blood typing results again?
+        The following donations already have blood typing results. Are you sure you want to add blood typing results again?
         <br />
         Previous data will be overwritten.
       </span>
@@ -215,7 +215,7 @@ function autoTab(field,fieldID){
       <br />
       <br />
       <div>
-        <button class="changeCollectionsButton">Go back and change collections</button>
+        <button class="changeCollectionsButton">Go back and change donations</button>
       </div>
       <br />
       <br />
@@ -223,7 +223,7 @@ function autoTab(field,fieldID){
       <table class="simpleTable">
         <thead>
           <tr>
-            <th>Collection number</th>
+            <th>DIN</th>
             <th>Blood typing status</th>
             <th>Blood ABO</th>
             <th>Blood Rh</th>
@@ -257,7 +257,7 @@ function autoTab(field,fieldID){
 
       </div>
     </c:if>
-
+<div style="float: left;">
     <div class="bloodTypingPlate">
         <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
                    border-radius: ${bloodTypingConfig['titerWellRadius']}px;
@@ -277,8 +277,6 @@ function autoTab(field,fieldID){
                          padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
              </div>
         </c:forEach>
-
-
       <br />
 
 	  <c:set var="wellNum" value="0" />
@@ -343,37 +341,33 @@ function autoTab(field,fieldID){
       </c:forEach>
     </div>
 
-    <div style="margin-left: 200px;">
+    <div style="margin-left: 30px; margin-top: 50px;">
       <label></label>
       <button type="button" class="saveButton">
         Save
       </button>
       <button type="button" class="changeCollectionsButton">
-        Change collections
+        Change Donations
       </button>
       <button type="button" class="clearFormButton">
-        Clear form
+        Clear Form
       </button>
     </div>
-
-
-    <br />
-    <span style="font-size: 15pt; font-weight: bold;">List of collection numbers by column in titer plate</span>
-    <br />
-    <br />
-    <table style="width: 40%" class="simpleTable">
+</div>  
+<div style="float: none;">  
+<table class="simpleTable" style="width: 10%; padding:50px 40px; border:none;">
       <thead>
         <tr>
-          <th>Column number</th>
-          <th>Collection Number in Column</th>
+          <th></th>
+          <th style="font-size:80%;">DINs</th>
         </tr>
       </thead>
       <tbody>
         <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
           <c:set var="collection" value="${collections[colNum-1]}" />
           <tr>
-            <td style="text-align: center;">${colNum}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; font-size:90%;">${colNum}</td>
+            <td style="text-align: center; font-size:90%;">
               <c:if test="${empty collection}">
                 EMPTY
               </c:if>
@@ -385,7 +379,7 @@ function autoTab(field,fieldID){
         </c:forEach>
       </tbody>
     </table>
-
+</div>
 
   </div>
 </div>

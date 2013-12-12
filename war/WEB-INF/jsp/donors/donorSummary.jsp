@@ -21,7 +21,7 @@
   $(document).ready(
       function() {
 
-        showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+       // showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
        // showDonorDeferrals();  display deferral history by default
 
         function notifyParentDone() {
@@ -44,14 +44,22 @@
                          $("#${tabContentId}")
                         );
         });
-
+        
+        $("#${tabContentId}").find(".printBarcode").button({
+            icons : {
+              primary : 'ui-icon-print'
+            }
+          }).click(function() {
+        	  window.open("printDonorLabel.html?"+ $.param({donorNumber : "${donor.donorNumber}"}));
+          });
+        
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
           }
         }).click(function() {
           $("#${mainContentId}").find(".printableArea").printArea();
-        });
+        }); 
 
         $("#${tabContentId}").find(".createCollectionButton").button({
           icons : {
@@ -202,8 +210,8 @@
         Delete
       </button>
       </sec:authorize>
-      <button class="printButton">
-        Print
+      <button class="printBarcode">
+        Print Barcode
       </button>
     </div>
 
