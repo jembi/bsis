@@ -92,9 +92,8 @@ public class CollectedSampleBackingFormValidator implements Validator {
   
   private void validateRangeForHaemoglobinCount(CollectedSampleBackingForm form, Errors errors) {
   	boolean flag=false;
-  	if(form.getHaemoglobinCount()==null){
-  		flag=true;
-  	}
+  	
+  	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
   	
   	if(form.getHaemoglobinCount()!=null && !(form.getHaemoglobinCount().doubleValue() >= 0 && form.getHaemoglobinCount().doubleValue() <= 30.0)){
   		flag=true;
@@ -108,9 +107,9 @@ public class CollectedSampleBackingFormValidator implements Validator {
   
   private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors errors) {
   	boolean flag=false;
-  	if(form.getDonorWeight()==null){
-  		flag=true;
-  	}
+
+  	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
+  	
   	if(form.getDonorWeight()!=null && !(form.getDonorWeight().doubleValue() >= 0 && form.getDonorWeight().doubleValue() <= 300)){
   		flag=true;
   	}
@@ -125,9 +124,8 @@ public class CollectedSampleBackingFormValidator implements Validator {
   
   private void validateRangeForDonorPulse(CollectedSampleBackingForm form, Errors errors) {
   	boolean flag=false;
-  	if(form.getDonorPulse()==null){
-  		flag=true;
-  	}
+  	
+  	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
   	
   	if(form.getDonorPulse()!=null && !(form.getDonorPulse() >= 0 && form.getDonorPulse() <= 290)){
   		flag=true;
@@ -178,13 +176,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
   
 	private void validateRange(CollectedSampleBackingForm form, Errors errors) {
   	
-		if(form.getBloodPressureSystolic()==null){
-			errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
-  	}
-		
-  	if(form.getBloodPressureDiastolic()==null){
-  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
-  	}
+	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
   	
   	if(form.getBloodPressureSystolic()!=null &&  !(form.getBloodPressureSystolic() >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && form.getBloodPressureSystolic() <= CollectionConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE)){
   		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");

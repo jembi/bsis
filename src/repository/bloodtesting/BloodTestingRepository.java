@@ -913,24 +913,31 @@ public class BloodTestingRepository {
 	public void saveTestResultsToDatabase(
 			List<TSVFileHeaderName> tSVFileHeaderNameList) {
 		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
-			BloodTestResult btResult = new BloodTestResult();
-			MachineReading machineReading = new MachineReading();
 			
-			CollectedSample collection = collectedSampleRepository
-			.findCollectedSampleByCollectionNumber(ts.getSID());
+			CollectedSample cs = collectedSampleRepository
+					.findCollectedSampleByCollectionNumber(ts.getSID());
+			if (cs != null){
+				
+				try{
+					
+					Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
+					Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>();
+	
+					BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
+							cs,	new HashMap<Long, String>());
+					bloodTestRuleResultsForCollections.put(cs.getId(), ruleResult);
+					
+					saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
+							ts.getInterpretation(), cs, ts.getCompleted(), ruleResult);
+				
+				}
+				catch(Exception ex){
+					System.out.println("Cannot save TTI Test Result to DB");
+			    	ex.printStackTrace();
+				}
+				
+			}
 			
-			BloodTest bloodTest = new BloodTest();
-			btResult.setCollectedSample(collection);
-			bloodTest.setId(ts.getAssayNumber());
-			btResult.setBloodTest(bloodTest);
-			machineReading.setMachineReading(ts.getResult());
-			btResult.setMachineReading(machineReading);
-
-			btResult.setResult(ts.getInterpretation());
-			btResult.setTestedOn(ts.getCompleted());
-			btResult.setCreatedBy(getUser(ts.getOperatorID()));
-			btResult.setReagentLotNumber(ts.getReagentLotNumber());
-			em.merge(btResult);
 		}
 	}
 }
