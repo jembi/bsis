@@ -25,6 +25,8 @@ public class RequestType {
 
   private Boolean isDeleted;
   
+  private Boolean bulkTransfer;
+  
   public Integer getId() {
     return id;
   }
@@ -57,4 +59,12 @@ public class RequestType {
     this.isDeleted = isDeleted;
   }
 
+	public Boolean getBulkTransfer() {
+		return bulkTransfer;
+	}
+	
+	public void setBulkTransfer(Boolean bulkTransfer) {
+		this.bulkTransfer = bulkTransfer;
+	}
+  
 }
