@@ -276,4 +276,15 @@
 	     </insert>
    </changeSet>
 
+	<!-- Update FormField table to rename Collection info to Donation -->
+	<changeSet id="201312131717" author="ankur">
+		<update tableName="User">
+    		<column name="password" value="9f6ae86780be83183ed41a6b4fcc35ca067979ce69eaeaf87c86dfc04865c92160f8b07f975847ee471c18e6c376cc0601da41b0609da2245422bbb0084680a1" />
+    		<where>password = "test"</where>
+		</update>
+		<update tableName="User">
+    		<column name="password" value="9ce0ab196fd33f5943c17a9cdf21cdfc1cf46abb1cd77879a65b59d3d63536c02e1967e1080991041fa3556c7266c8a46f7a4320e7358474cd38efeacec350fd" />
+    		<where>password = "admin321123"</where>
+		</update>
+	</changeSet>
 </databaseChangeLog>	
