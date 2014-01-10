@@ -6,7 +6,7 @@ insert into FormField
  useCurrentTime, isTimeField) values
 ('Donor', 'donorNumber', 'Donor #', '', 15,
  '0', '0',
- '0', '0',
+ '1', '0',
  '1', '1',
 '0', '0'),
 ('Donor', 'firstName', 'First Name', '', 0,

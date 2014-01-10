@@ -177,6 +177,49 @@ public class SequenceNumberRepository {
     em.flush();
     return requestNumber;
   }
+  
+  
+  synchronized public String getSequenceNumber(String targetTable,String columnName) {
+      String queryStr = "SELECT s from SequenceNumberStore s " +
+              "where s.targetTable=:targetTable AND " +
+              " s.columnName=:columnName " ;
+  TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
+  query.setParameter("targetTable", targetTable);
+  query.setParameter("columnName", columnName);
+  // use last two digits of year
+  
+  SequenceNumberStore seqNumStore = null;
+  Long lastNumber = (long)0;
+  String prefix;
+  boolean valuePresentInTable = true;
+  try {
+  seqNumStore = query.getSingleResult();
+  lastNumber = seqNumStore.getLastNumber();
+  //prefix = seqNumStore.getPrefix();
+  } catch (NoResultException ex) {
+  ex.printStackTrace();
+  valuePresentInTable = false;
+  seqNumStore = new SequenceNumberStore();
+  seqNumStore.setTargetTable("Donor");
+  seqNumStore.setColumnName("donorNumber");
+
+  
+  }
+  
+  
+  if (lastNumber == 0){
+  	lastNumber ++;
+  }
+  String lastNumberStr = String.format("%06d", lastNumber);
+  // may need a prefix for center where the number is generated
+  //String requestNumber = prefix + mmStr + yyStr + lastNumberStr;
+  String requestNumber = lastNumberStr;
+  lastNumber = lastNumber - 1;
+ 
+   em.flush();
+  return requestNumber;
+}
+
 
   synchronized public List<String> getBatchCollectionNumbers(int numCollections) {
     String queryStr = "SELECT s from SequenceNumberStore s " +
