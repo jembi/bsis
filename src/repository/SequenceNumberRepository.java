@@ -212,7 +212,7 @@ public class SequenceNumberRepository {
   String lastNumberStr = String.format("%06d", lastNumber);
   
   String requestNumber = lastNumberStr;
-  lastNumber = lastNumber - 1;
+  
  
    em.flush();
   return requestNumber;
