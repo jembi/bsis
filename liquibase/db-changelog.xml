@@ -277,11 +277,6 @@
    </changeSet>
  
    
-    <changeSet id="201410011105" author="devang">
-            <insert tableName="formField">
-            <column name="isRequired"></column>
-
-            </insert>
-    </changeSet>
+    
 
 </databaseChangeLog>	
