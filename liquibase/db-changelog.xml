@@ -275,5 +275,14 @@
 	     	<column name="propertyValue" value="true"></column>
 	     </insert>
    </changeSet>
+   
+   <!-- for issue 64 [Add isDeleted field to BloodTest Table] -->
+     <changeSet id="201401140950" author="srikanth">
+	     <addColumn tableName="BloodTest">
+	     	<column name="isDeleted" type="TINYINT(1)" />
+	     </addColumn>
+	</changeSet>
+   
+   
 
 </databaseChangeLog>	
