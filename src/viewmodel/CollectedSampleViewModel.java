@@ -195,4 +195,9 @@ public class CollectedSampleViewModel {
 	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
 		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
 	}
+	
+	public String getBloodPressure()
+	{
+	return collectedSample.getBloodPressure();
+	}
 }

@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
@@ -166,6 +167,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   
   @Column(length=11)
   private Integer donorPulse;
+  
+  @Transient
+  private String bloodPressure;
 
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
@@ -176,6 +180,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
+  public String getBloodPressure()
+  {
+	  return bloodPressureSystolic+"/"+bloodPressureDiastolic;
+  }
+  
   public String getCollectionNumber() {
     return collectionNumber;
   }
