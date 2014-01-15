@@ -86,7 +86,7 @@ $(document).ready(
               <th>${collectedSampleFields.donorWeight.displayName}</th>
             </c:if>
            <c:if test="${collectedSampleFields.donarPulse.hidden != true}">
-              <th>Donor Pulse</th>
+              <th>${collectedSampleFields.donorPulse.displayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.bloodPressure.hidden != true}">
               <th>${collectedSampleFields.bloodPressure.displayName}</th>

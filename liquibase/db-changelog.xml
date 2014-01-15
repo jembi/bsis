@@ -294,7 +294,7 @@
     		<column name="displayName" value="WT" />
     		<where>field = "donorWeight"</where>
   </update>
-  
+   
   <insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="bloodPressure"></column>
@@ -312,6 +312,14 @@
 			<column name="displayName" value="BP"></column>		
 		</insert>
   </changeSet>
+  
+ <!-- For issue 71 [donor pulse display name is not defined] -->
+   <changeSet id="201401151110" author="srikanth">
+   <update tableName="FormField">
+    		<column name="displayName" value="Donor Pulse" />
+    		<where>field = "donorPulse"</where>
+  </update>
+   </changeSet>
    
 
 </databaseChangeLog>	
