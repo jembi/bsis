@@ -321,5 +321,15 @@
   </update>
    </changeSet>
    
+   
+   <!-- For issue 71 [donor pulse display name change to HR] -->
+   <changeSet id="2014011511200" author="srikanth">
+   <update tableName="FormField">
+    		<column name="displayName" value="HR" />
+    		<where>field = "donorPulse"</where>
+  </update>
+   </changeSet>
+   
+   
 
 </databaseChangeLog>	

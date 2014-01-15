@@ -71,7 +71,7 @@ $(document).ready(
           <tr>
             <th style="display: none"></th>
             <c:if test="${collectedSampleFields.collectionNumber.hidden != true}">
-              <th>${collectedSampleFields.collectionNumber.displayName}</th>
+              <th>${collectedSampleFields.collectionNumber.shortDisplayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.collectedOn.hidden != true}">
               <th>${collectedSampleFields.collectedOn.displayName}</th>
@@ -83,16 +83,16 @@ $(document).ready(
               <th>${collectedSampleFields.donationType.displayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.donorWeight.hidden != true}">
-              <th>${collectedSampleFields.donorWeight.displayName}</th>
+              <th>${collectedSampleFields.donorWeight.shortDisplayName}</th>
             </c:if>
            <c:if test="${collectedSampleFields.donarPulse.hidden != true}">
-              <th>${collectedSampleFields.donorPulse.displayName}</th>
+              <th>${collectedSampleFields.donorPulse.shortDisplayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.bloodPressure.hidden != true}">
-              <th>${collectedSampleFields.bloodPressure.displayName}</th>
+              <th>${collectedSampleFields.bloodPressure.shortDisplayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.haemoglobinCount.hidden != true}">
-              <th>${collectedSampleFields.haemoglobinCount.displayName}</th>
+              <th>${collectedSampleFields.haemoglobinCount.shortDisplayName}</th>
             </c:if>
             
           </tr>
