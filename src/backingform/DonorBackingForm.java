@@ -27,6 +27,11 @@ public class DonorBackingForm {
 
   // store a local copy of birthdate string as validation may have failed
   private String birthDate;
+  
+  //to capture date of birth parameters--#11
+  String year;
+  String month;
+  String dayOfMonth;
 
   private Boolean ageFormatCorrect;
 
@@ -49,8 +54,8 @@ public class DonorBackingForm {
     return CustomDateFormatter.getDateString(donor.getBirthDate());
   }
 
-  public void setBirthDate(String birthDate) {
-    this.birthDate = birthDate;
+  public void setBirthDate() {
+     birthDate = dayOfMonth+"/"+month+"/"+year;
     try {
       donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
     } catch (ParseException ex) {
@@ -329,8 +334,35 @@ public class DonorBackingForm {
       return null;
     return donorPanel.getId().toString();
   }
+  
+  
+  
 
-  public void setDonorPanel(String donorPanel) {
+  public String getYear() {
+	return year;
+}
+
+public void setYear(String year) {
+	this.year = year;
+}
+
+public String getMonth() {
+	return month;
+}
+
+public void setMonth(String month) {
+	this.month = month;
+}
+
+public String getDayOfMonth() {
+	return dayOfMonth;
+}
+
+public void setDayOfMonth(String dayOfMonth) {
+	this.dayOfMonth = dayOfMonth;
+}
+
+public void setDonorPanel(String donorPanel) {
     if (StringUtils.isBlank(donorPanel)) {
       donor.setDonorPanel(null);
     }
