@@ -288,30 +288,18 @@ $(document).ready(function() {
             <form:option value="female" label="Female" />
           </form:select>
         </div>
-      </c:if>
+        </c:if>
       <c:if test="${model.donorFields.nationalID.hidden != true }">
         <div>
           <form:label path="nationalID">${model.donorFields.nationalID.displayName}</form:label>
           <form:input path="nationalID" value="${firstTimeRender ? model.donorFields.nationalID.defaultValue : ''}" />
         </div>
       </c:if>
-         
-            <!--  code commented for issue improve date entry-#11   -->
-      <%-- <c:if test="${model.donorFields.birthDate.hidden != true }">
-        <div>
-          <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
-          <form:input path="birthDate" class="birthDate"
-                      value="${firstTimeRender ? model.donorFields.birthDate.defaultValue : ''}" />
-          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
-          	${donorFields.birthDateEstimated.displayName}
-			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
-          </c:if>
-        </div>
-          </c:if> --%>
-          <div> 
+     
+        <div> 
        
-       <form:label path="">Birthday</form:label>
-        <form:input  style="width:34px" placeholder="day" path="dayOfMonth" alt="dayOfMonth" title="dayOfMonth"   maxlength="2"/>
+       <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
+        <form:input  style="width:34px" placeholder="Day" path="dayOfMonth" alt="dayOfMonth"    maxlength="2"/>
        
         <form:select path="month"  name="Month">
         <form:option value="">Month</form:option> 
@@ -329,14 +317,12 @@ $(document).ready(function() {
        <form:option value="12">December</form:option>
        </form:select>
        
-        <form:input style="width:46px" path="year" maxlength="4" alt="year" id="year" placeholder="year" />
-        <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+        <form:input style="width:46px" path="year" maxlength="4" alt="year" id="year" placeholder="Year" />
+          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
 			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
           </c:if>
-  
-        </div>
-        <div>  <form:errors path="birthDate"> </form:errors>
+ 
         </div>
         
       <c:if test="${model.donorFields.notes.hidden != true }">

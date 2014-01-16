@@ -222,26 +222,9 @@
 				</div>
 			</c:if>
 
-			<%-- commented for issue date entry-#11-->
-		
-			<%--<c:if test="${donorFields.birthDate.hidden != true }">
-                <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
-                 <form:input path="birthDate" class="birthDate"
-                 value="${firstTimeRender ? donorFields.birthDate.defaultValue : ''}" />
-               <c:if test="${donorFields.birthDateEstimated.hidden != true }">
-                 	${donorFields.birthDateEstimated.displayName}
-			       <form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
-			       <form:errors class="formError" path="donor.birthDateEstimated" delimiter=", "></form:errors>
-                </c:if>
-               <form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
-                 </div>
-         </c:if> --%>
-
-			<div>
-
-				<form:label path="">Date Of Birth</form:label>
-
-				<form:input style="width:34px" placeholder="day" path="dayOfMonth"
+               <div>
+               <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
+				<form:input style="width:34px" placeholder="Day" path="dayOfMonth"
 					alt="dayOfMonth" title="dayOfMonth" maxlength="2" />
 
 
@@ -261,8 +244,8 @@
 					<form:option value="12">December</form:option>
 				</form:select>
             
-            <form:input style="width:46px" path="year" maxlength="4" alt="year"
-					 placeholder="year" />
+            <form:input style="width:46px" path="Year" maxlength="4" alt="year"
+					 placeholder="Year" />
 
 		   <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
@@ -271,9 +254,8 @@
 					<form:errors class="formError" path="donor.birthDateEstimated"
 						delimiter=", "></form:errors>
 				</c:if>
-			</div>
-			<div>
-				<form:errors path="birthDate">
+			
+				<form:errors class="formError" path="donor.birthDate">
 				</form:errors>
 			</div>
 

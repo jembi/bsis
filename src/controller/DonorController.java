@@ -225,7 +225,6 @@ public class DonorController {
     ModelAndView mv = new ModelAndView();
     boolean success = false;
      form.setBirthDate();
-     System.out.println("after setbirth..............");
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
