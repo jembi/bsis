@@ -223,7 +223,9 @@
 			</c:if>
 
                <div>
-               <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
+               
+               <c:if test="${donorFields.birthDate.hidden != true }">
+               <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
 				<form:input style="width:34px" placeholder="Day" path="dayOfMonth"
 					alt="dayOfMonth" title="dayOfMonth" maxlength="2" />
 
@@ -246,6 +248,8 @@
             
             <form:input style="width:46px" path="Year" maxlength="4" alt="year"
 					 placeholder="Year" />
+					 
+		      </c:if>   
 
 		   <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
@@ -254,6 +258,8 @@
 					<form:errors class="formError" path="donor.birthDateEstimated"
 						delimiter=", "></form:errors>
 				</c:if>
+				
+		  
 			
 				<form:errors class="formError" path="donor.birthDate">
 				</form:errors>

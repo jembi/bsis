@@ -55,7 +55,13 @@ public class DonorBackingForm {
   }
 
   public void setBirthDate() {
-     birthDate = dayOfMonth+"/"+month+"/"+year;
+	
+	  if(year.equals("")&&month.equals("")&&dayOfMonth.equals(""))
+	  {  
+	donor.setBirthDate(null);
+    return;
+	  }
+	  birthDate = dayOfMonth+"/"+month+"/"+year;
     try {
       donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
     } catch (ParseException ex) {

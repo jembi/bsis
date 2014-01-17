@@ -297,8 +297,8 @@ $(document).ready(function() {
       </c:if>
      
         <div> 
-       
-       <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
+        <c:if test="${donorFields.birthDate.hidden != true }">
+       <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
         <form:input  style="width:34px" placeholder="Day" path="dayOfMonth" alt="dayOfMonth"    maxlength="2"/>
        
         <form:select path="month"  name="Month">
@@ -318,7 +318,8 @@ $(document).ready(function() {
        </form:select>
        
         <form:input style="width:46px" path="year" maxlength="4" alt="year" id="year" placeholder="Year" />
-          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+       </c:if> 
+         <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
 			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
           </c:if>

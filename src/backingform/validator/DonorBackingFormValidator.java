@@ -64,13 +64,7 @@ public class DonorBackingFormValidator implements Validator {
 
     String birthDate = form.getBirthDate();
     
-  if(form.getYear().equals("")&&form.getMonth().equals("")&&form.getDayOfMonth().equals(""))
-  {
-	  errors.rejectValue("donor.birthDate", "dateFormat.incorrect","Date Of Birth is required.");
-	  return;
-  }
-
-    if (birthDate == null)
+  if (birthDate == null)
         return;
 
     if (!CustomDateFormatter.isDateStringValid(birthDate)) {

@@ -74,11 +74,11 @@ public class CustomDateFormatter {
   }
 
   public static String getDateErrorMessage() {
-    return "Invalid Date specified. Use " + getDatePatternHumanReadable().toLowerCase();
+    return "Invalid Date specified.";
   }
 
   public static String getDateTimeErrorMessage() {
-    return "Invalid Date specified. Use " + getDatetimepatternhumanreadable().toLowerCase();
+    return "Invalid Date specified.";
   }
 
   public static String getDateString(Date date) {
