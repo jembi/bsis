@@ -56,7 +56,7 @@ $(document).ready(
 
 <div id="${createSampleDataFormDivId}" class="editFormDiv">
   <div style="font-weight: bold; font-style: italic; margin-top: 20px; margin-bottom: 20px;">
-    Create sample data for testing Vein-to-Vein</div>
+    Create sample data for testing BSIS</div>
   <form id="${createSampleDataFormId}" class="editForm">
     <div>
       <label> No. of donors </label>

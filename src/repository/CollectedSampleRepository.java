@@ -26,11 +26,15 @@ import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
+import model.product.Product;
+import model.product.ProductStatus;
+import model.producttype.ProductType;
 import model.util.BloodGroup;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.NonUniqueObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -46,6 +50,12 @@ import viewmodel.BloodTestingRuleResult;
 @Repository
 @Transactional
 public class CollectedSampleRepository {
+	
+	
+	/**
+	  * The Constant LOGGER.
+	  */
+	  private static final Logger LOGGER = Logger.getLogger(CollectedSampleRepository.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -56,6 +66,9 @@ public class CollectedSampleRepository {
   @Autowired
   private WorksheetRepository worksheetRepository;
 
+  @Autowired
+  private ProductRepository productRepository;
+  
   public void saveCollectedSample(CollectedSample collectedSample) {
     em.persist(collectedSample);
     em.flush();
@@ -212,7 +225,7 @@ public class CollectedSampleRepository {
       from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
           .parse("31/12/1970") : dateFormat.parse(dateCollectedFrom);
     } catch (ParseException ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Inside getDateCollectedFromOrDefault::"+ex);
     }
     return from;      
   }
@@ -224,7 +237,7 @@ public class CollectedSampleRepository {
       to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
               dateFormat.parse(dateCollectedTo);
     } catch (ParseException ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Inside getDateCollectedToOrDefault::"+ex);
     }
     return to;      
   }
@@ -336,6 +349,32 @@ public class CollectedSampleRepository {
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.refresh(collectedSample);
+    
+    // Add product
+    Product product = new Product();
+    product.setIsDeleted(false);
+    product.setDonationIdentificationNumber(collectedSample.getCollectionNumber());
+    product.setCollectedSample(collectedSample);
+    product.setStatus(ProductStatus.QUARANTINED);
+    product.setCreatedDate(collectedSample.getCreatedDate());
+    product.setCreatedOn(collectedSample.getCollectedOn());
+    product.setCreatedBy(collectedSample.getCreatedBy());
+    
+    ProductType productType = productRepository.findProductTypeByProductTypeName("Whole Blood");
+    
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(collectedSample.getCollectedOn());
+    cal.add(Calendar.DATE, productType.getExpiresAfter());
+    Date expiresOn = cal.getTime();    
+    
+    product.setExpiresOn(expiresOn);
+    product.setProductType(productType);
+    
+    em.persist(product);
+    //em.flush();
+    em.refresh(product);
+    
+    
     return collectedSample;
   }
 
@@ -384,11 +423,11 @@ public class CollectedSampleRepository {
     try {
        c = query.getSingleResult();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+    	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex);
       System.out.println("Collection number not found: " + collectionNumber);
     } catch (NonUniqueObjectException ex) {
-      ex.printStackTrace();
-      System.out.println("Multiple collections for collection: " + collectionNumber);
+    	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex);
+    	LOGGER.error("Multiple collections for collection::"+collectionNumber);
     }
     return c;
   }
@@ -402,11 +441,11 @@ public class CollectedSampleRepository {
     try {
        c = query.getSingleResult();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
-      System.out.println("Collection number not found: " + collectionNumber);
+    	LOGGER.error("Inside findCollectionByCollectionNumberIncludeDeleted::"+ex);
+    	LOGGER.error("Collection number not found::"+collectionNumber);
     } catch (NonUniqueObjectException ex) {
-      ex.printStackTrace();
-      System.out.println("Multiple collections for collection: " + collectionNumber);
+    	LOGGER.error("Inside findCollectionByCollectionNumberIncludeDeleted::"+ex);
+    	LOGGER.error("Multiple collections for collection::"+collectionNumber);
     }
     return c;
   }
@@ -448,7 +487,7 @@ public class CollectedSampleRepository {
     try {
     worksheet = query.getSingleResult();
     } catch (NoResultException ex) {
-    ex.printStackTrace();
+    	LOGGER.error("Inside findWorksheet::"+ex);
     }
     
     if (worksheet == null)
@@ -527,5 +566,26 @@ public class CollectedSampleRepository {
       }
     }
     return statusMap;
+  }
+  
+  
+  public List<CollectedSample> findLotReleseById(String din) {
+  	String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted";
+  	List<CollectedSample> collectedSample;
+  	TypedQuery<CollectedSample> query = em.createQuery(queryString,CollectedSample.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("collectionNumber",din);
+    collectedSample = query.getResultList();
+    
+    for(CollectedSample sample : collectedSample){
+    	sample.getProducts().size();
+    	sample.getBloodTestResults().size();
+    	sample.getDonor().getDeferrals().size();
+    }
+    
+  	if(collectedSample.size() == 0)
+  		return null;
+  	else 
+  		return collectedSample;
   }
 }

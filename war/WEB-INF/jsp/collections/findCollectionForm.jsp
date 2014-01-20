@@ -171,7 +171,7 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <b>Find Collections</b>
-    <div class="tipsBox ui-state-highlight">
+    <div class="tipsBox ui-state-highlight" style="display:none;">
       <p>
         ${tips['collectedSamples.find']}
       </p>
@@ -180,8 +180,8 @@ $(document).ready(function() {
       class="formFormatClass">
   
       <div>
-        <form:label path="collectionNumber">Collection number</form:label>
-        <form:input path="collectionNumber" placeholder="Collection Number" />
+        <form:label path="collectionNumber">Donation Identification number</form:label>
+        <form:input path="collectionNumber" placeholder="Donation Identification Number" />
       </div>
   
       <div>

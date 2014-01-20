@@ -10,7 +10,6 @@ import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.admin.ConfigPropertyConstants;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTest;
@@ -36,6 +34,7 @@ import model.requesttype.RequestType;
 import model.tips.Tips;
 
 import org.apache.http.conn.util.InetAddressUtils;
+import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -67,6 +66,8 @@ import viewmodel.BloodTestingRuleViewModel;
 
 @Controller
 public class AdminController {
+	
+	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
 
   @Autowired
   FormFieldRepository formFieldRepository;
@@ -148,7 +149,7 @@ public class AdminController {
     String errMsg = "";
 
     try {
-      System.out.println(params);
+      LOGGER.debug(params);
 
       FormField ff = new FormField();
       String id = params.get("id");
@@ -189,7 +190,7 @@ public class AdminController {
         errMsg = "Internal Server Error";
       }
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -264,7 +265,7 @@ public class AdminController {
       createDataController.createRequests(numRequests);
     }
     catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -309,17 +310,15 @@ public class AdminController {
     try {
       paramsMap = mapper.readValue(params, HashMap.class);
     } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      LOGGER.debug(e.getMessage() + e.getStackTrace());
     } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      LOGGER.debug(e.getMessage() + e.getStackTrace());
     } catch (IOException e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      LOGGER.debug(e.getMessage() + e.getStackTrace());
     }
-    System.out.println("here");
-    System.out.println(params);
+    LOGGER.debug("here");
+    LOGGER.debug(params);
     labSetupRepository.updateLabSetup(paramsMap);
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", true);
@@ -410,7 +409,7 @@ public class AdminController {
     String fileName = "mysql_backup_" + currentDate;
     String fullFileName = servletContext.getRealPath("") + "/tmp/" + fileName + ".zip";
 
-    System.out.println("Writing backup to " + fullFileName);
+    LOGGER.debug("Writing backup to " + fullFileName);
 
     try {
       Properties prop = utilController.getV2VProperties();
@@ -419,10 +418,10 @@ public class AdminController {
       String password = (String) prop.get("v2v.dbbackup.password");
       String dbname = (String) prop.get("v2v.dbbackup.dbname");
 
-      System.out.println(mysqldumpPath);
-      System.out.println(username);
-      System.out.println(password);
-      System.out.println(dbname);
+      LOGGER.debug(mysqldumpPath);
+      LOGGER.debug(username);
+      LOGGER.debug(password);
+      LOGGER.debug(dbname);
 
       ProcessBuilder pb = new ProcessBuilder(mysqldumpPath,
                     "--single-transaction",
@@ -445,11 +444,11 @@ public class AdminController {
       zipOut.finish();
       zipOut.close();
       p.waitFor();
-      System.out.println("Exit value: " + p.exitValue());
+      LOGGER.debug("Exit value: " + p.exitValue());
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.debug(e.getMessage() + e.getStackTrace());
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      LOGGER.debug(e.getMessage() + e.getStackTrace());
     }
   }
   @RequestMapping(value="/configureDonationTypesFormGenerator", method=RequestMethod.GET)
@@ -490,11 +489,12 @@ public class AdminController {
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureTips");
-    System.out.println(paramsAsJson);
+    LOGGER.debug(paramsAsJson);
     List<Tips> allTips = new ArrayList<Tips>();
     try {
       @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+      
       for (String tipsKey : params.keySet()) {
         String tipsContent = (String) params.get(tipsKey);
         Tips tips = new Tips();
@@ -503,9 +503,9 @@ public class AdminController {
         allTips.add(tips);
       }
       tipsRepository.saveAllTips(allTips);
-      System.out.println(params);
+      LOGGER.debug(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -521,28 +521,33 @@ public class AdminController {
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureRequestTypes");
-    System.out.println(paramsAsJson);
+    LOGGER.debug(paramsAsJson);
     List<RequestType> allRequestTypes = new ArrayList<RequestType>();
-    try {
-      @SuppressWarnings("unchecked")
+    try {      
+    	@SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
-        String requestType = (String) params.get(id);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
+				
         RequestType rt = new RequestType();
+
+        rt.setRequestType((String) paramValue.get("requestType"));
+        rt.setBulkTransfer((Boolean) paramValue.get("bulkTransfer"));
+        
         try {
           rt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+        	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
           rt.setId(null);
         }
-        rt.setRequestType(requestType);
         rt.setIsDeleted(false);
         allRequestTypes.add(rt);
       }
       requestTypesRepository.saveAllRequestTypes(allRequestTypes);
-      System.out.println(params);
+      LOGGER.debug(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -558,7 +563,7 @@ public class AdminController {
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureCrossmatchTypes");
-    System.out.println(paramsAsJson);
+    LOGGER.debug(paramsAsJson);
     List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
     try {
       @SuppressWarnings("unchecked")
@@ -569,7 +574,7 @@ public class AdminController {
         try {
           ct.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
           ct.setId(null);
         }
         ct.setCrossmatchType(crossmatchType);
@@ -577,9 +582,9 @@ public class AdminController {
         allCrossmatchTypes.add(ct);
       }
       crossmatchTypesRepository.saveAllCrossmatchTypes(allCrossmatchTypes);
-      System.out.println(params);
+      LOGGER.debug(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -595,7 +600,7 @@ public class AdminController {
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     ModelAndView mv = new ModelAndView("admin/configureBloodBagTypes");
-    System.out.println(paramsAsJson);
+    LOGGER.debug(paramsAsJson);
     List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
     try {
       @SuppressWarnings("unchecked")
@@ -606,7 +611,7 @@ public class AdminController {
         try {
           bt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
           bt.setId(null);
         }
         bt.setBloodBagType(bloodBagType);
@@ -614,9 +619,9 @@ public class AdminController {
         allBloodBagTypes.add(bt);
       }
       bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
-      System.out.println(params);
+      LOGGER.debug(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -642,7 +647,7 @@ public class AdminController {
         try {
           dt.setId(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
-          ex.printStackTrace();
+          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
           dt.setId(null);
         }
         dt.setDonationType(donationType);
@@ -651,9 +656,9 @@ public class AdminController {
         allDonationTypes.add(dt);
       }
       donationTypesRepository.saveAllDonationTypes(allDonationTypes);
-      System.out.println(params);
+      LOGGER.debug(params);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
@@ -690,13 +695,13 @@ public class AdminController {
             if(iface == null) continue;
 
             if(!iface.isLoopback() && iface.isUp()) {
-                System.out.println("Found non-loopback, up interface:" + iface);
+                LOGGER.debug("Found non-loopback, up interface:" + iface);
 
                 Iterator<InterfaceAddress> it = iface.getInterfaceAddresses().iterator();
                 while (it.hasNext()) {
                     InterfaceAddress address = (InterfaceAddress) it.next();
 
-                    System.out.println("Found address: " + address);
+                    LOGGER.debug("Found address: " + address);
 
                     if(address == null) continue;
                     if (InetAddressUtils.isIPv4Address(address.getAddress().getHostAddress()))

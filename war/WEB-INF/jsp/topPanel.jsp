@@ -29,7 +29,7 @@
 
     <c:if test="${labsetup['collectionsTabEnabled']}">
     <li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
-        class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Collections</a></li>
+        class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Donations</a></li>
     </c:if>
 
 
@@ -41,9 +41,13 @@
 
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
-        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test
-        Results</a></li>
+        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test Results</a></li>
     </c:if>
+    
+    <c:if test="${labsetup['lotRelease']}">
+    <li class="topPanelTab"><a href="#lotReleasePageContent"><span
+        class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Lot Release</a></li>
+    </c:if>    
 
     <c:if test="${labsetup['requestsTabEnabled']}">
     <li class="topPanelTab"><a href="#requestsLandingPageContent"><span
@@ -73,7 +77,9 @@
     <div class="infoMessage">
       BSIS is a system to monitor blood inventory from collection to transfusion.
       <br /> 
-      Started as a collaboration between the Computing For Good (C4G) program at Georgia Tech and the Centers for Diseases Control and Prevention (CDC), the application is now maintained, developed and managed by Jembi Health Systems (JHS), in partnership with Safe Blood for Africa (SBFA) and the Centers for Diseases Control (CDC).
+      Started as a collaboration between the Computing For Good (C4G) program at Georgia Tech and the U.S. Centers for Disease Control and Prevention (CDC), 
+      the application is now maintained, developed and managed by Jembi Health Systems (JHS), in partnership with Safe Blood for Africa (SBFA), 
+      the U.S. Centers for Disease Control and Prevention (CDC), and the U.S. President's Emergency Plan for AIDS Relief (PEPFAR).
       <br />
       <br />
       About - <a
@@ -102,6 +108,12 @@
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <div id="testResultsLandingPageContent">
       <jsp:include page="testResults.jsp" />
+    </div>
+    </c:if>
+	
+  <c:if test="${labsetup['lotRelease']}">
+    <div id="lotReleasePageContent">
+      <jsp:include page="lotRelease/lotRelease.jsp" />
     </div>
     </c:if>
 

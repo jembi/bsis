@@ -17,6 +17,7 @@ import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,10 @@ import backingform.validator.DonorBackingFormValidator;
 @Controller
 public class DonorController {
 
+	/**
+	 * The Constant LOGGER.
+	 */	
+  private static final Logger LOGGER = Logger.getLogger(DonorController.class);
   @Autowired
   private DonorRepository donorRepository;
 
@@ -232,7 +237,9 @@ public class DonorController {
     } else {
       try {
         Donor donor = form.getDonor();
-        donor.setIsDeleted(false);
+        donor.setIsDeleted(false);        
+        // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
+        //donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
@@ -385,9 +392,8 @@ public class DonorController {
     try {
       donorRepository.deleteDonor(donorId);
     } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
+    	LOGGER.error("Internal Exception");
+    	LOGGER.error(ex.getMessage());    	      
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -436,9 +442,31 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
+    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
+  }
+  
+  @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
+  public ModelAndView printDonorLabel(HttpServletRequest request, Model model,
+		  @RequestParam(value="donorNumber") String donorNumber) {
+	  
+	ModelAndView mv = new ModelAndView("zplBarcode");
+	
+	mv.addObject("labelZPL",
+		"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
+		"^XA"+
+		"^MMT"+
+		"^PW360"+
+		"^LL0120"+
+		"^LS0"+
+		"^BY2,3,52^FT63,69^BCN,,Y,N"+
+		"^FD>:" + donorNumber + "^FS"+
+		"^PQ1,0,1,Y^XZ"
+	);
+	
+	return mv;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -493,7 +521,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams);
+        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate());
 
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);

@@ -106,6 +106,9 @@ public class Product implements ModificationTracker {
   @Valid
   private RowModificationTracker modificationTracker;
 
+  @Column(length=20)
+  private String donationIdentificationNumber;
+  
   public Product() {
     modificationTracker = new RowModificationTracker();
   }
@@ -117,6 +120,7 @@ public class Product implements ModificationTracker {
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
     this.notes = product.notes;
+    this.donationIdentificationNumber = product.donationIdentificationNumber;
   }
 
   public Long getId() {
@@ -284,4 +288,13 @@ public class Product implements ModificationTracker {
   public void setParentProduct(Product parentProduct) {
     this.parentProduct = parentProduct;
   }
+
+	public String getDonationIdentificationNumber() {
+		return donationIdentificationNumber;
+	}
+
+	public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+		this.donationIdentificationNumber = donationIdentificationNumber;
+	}
+  
 }
