@@ -2,6 +2,10 @@ function addNewDonor(form, resultDivId, successCallback) {
   updateDonorGeneric(form, resultDivId, "addDonor.html", successCallback);
 }
 
+function findAndAddNewDonor(form, resultDivId, successCallback) {
+  updateDonorGeneric(form, resultDivId, "findDonor.html", successCallback);
+}
+
 function updateExistingDonor(form, resultDivId, successCallback) {
   updateDonorGeneric(form, resultDivId, "updateDonor.html", successCallback);
 }

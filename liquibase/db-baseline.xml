@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- NEVER ALTER THIS FILE -->
+	<!-- Liquibase has issues processing DELIMITER commands that get added in the SQL when we export SPs, Functions, Triggers, etc. -->
+	<!-- So, execute following 2 SQLs manually for now -->
+
+	<changeSet id="2013-10-18-01" author="devang">
+		<sqlFile path="./ddl_mysql.sql"/>
+		<sqlFile path="./initial_data.sql"/>
+		<sqlFile path="./tests.sql"/>
+	</changeSet>
+
+</databaseChangeLog>

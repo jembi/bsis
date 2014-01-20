@@ -20,7 +20,7 @@
       <a href="inventoryReportFormGenerator.html">Product Inventory</a>
     </li>
     <li id="collectionsReport">
-      <a href="collectionsReportFormGenerator.html">Collections</a>
+      <a href="collectionsReportFormGenerator.html">Donations</a>
     </li>
     <li id="ttiReport">
       <a href="ttiReportFormGenerator.html">TTI Reports</a>

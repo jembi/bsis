@@ -19,14 +19,7 @@
   <br />
   <br />
   <div class="tipsBox ui-state-highlight">
-    Use the panel on the left to customize Vein-to-Vein.
+    Use the panel on the left to customize BSIS.
     <br/>
-    <br/>
-    <br/>
-    To access BSIS from another computer visit the following location in a supported web browser (Firefox/Google Chrome)
-    <c:forEach var="serverAddress" items="${model.serverAddresses}">
-      <br />
-      <a href="${serverAddress}" target="_blank"><b>${serverAddress}</b></a>
-    </c:forEach>
   </div>
 </div>
