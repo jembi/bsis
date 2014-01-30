@@ -43,20 +43,20 @@ public class RoleController {
 
 		ModelAndView mv = new ModelAndView("admin/configureRoles");
 		Map<String, Object> m = model.asMap();
-		addAllRolesrsToModel(m);
+		addAllRolesToModel(m);
 		m.put("refreshUrl", utilController.getUrl(request));
 		mv.addObject("model", model);
 		return mv;
 	}
 
-	private void addAllRolesrsToModel(Map<String, Object> m) {
-		List<RoleViewModel> roles = roleRepository.getAllRules();
+	private void addAllRolesToModel(Map<String, Object> m) {
+		List<RoleViewModel> roles = roleRepository.getAllRoles();
 		m.put("allRules", roles);
 	}
 
-	private void addAllPermissionToModel(Map<String, Object> m) {
-		List<Permission> permissions = roleRepository.getAllPermission();
-		m.put("allPermission", permissions);
+	private void addAllPermissionsToModel(Map<String, Object> m) {
+		List<Permission> permissions = roleRepository.getAllPermissions();
+		m.put("allPermissions", permissions);
 	}
 
 	@RequestMapping(value = "/editRoleFormGenerator", method = RequestMethod.GET)
@@ -78,7 +78,7 @@ public class RoleController {
 			m.put("existingRole", false);
 
 		}
-		addAllPermissionToModel(m);
+		addAllPermissionsToModel(m);
 		m.put("editRoleForm", form);
 		m.put("refreshUrl", utilController.getUrl(request));
 		// to ensure custom field names are displayed in the form
@@ -129,7 +129,7 @@ public class RoleController {
 			message = "Internal Error. Please try again or report a Problem.";
 		}
 
-		addAllPermissionToModel(m);
+		addAllPermissionsToModel(m);
 		m.put("editRoleForm", form);
 		m.put("success", success);
 		m.put("message", message);

@@ -70,7 +70,7 @@
     </div>
     <div>
       <form:label path="permissions">Permissions</form:label>
-      <c:forEach var="permissionVar" items="${model.allPermission}">
+      <c:forEach var="permissionVar" items="${model.allPermissions}">
         <div style="padding-left:180px;">
         <c:set var="idMatch" value="false"></c:set>
         <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">

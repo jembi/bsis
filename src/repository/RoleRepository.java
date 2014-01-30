@@ -22,7 +22,7 @@ public class RoleRepository {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<RoleViewModel> getAllRules() {
+	public List<RoleViewModel> getAllRoles() {
 		TypedQuery<Role> query = em.createQuery("FROM Role", Role.class);
 		List<Role> roles = query.getResultList();
 		List<RoleViewModel> userViewModels = new ArrayList<RoleViewModel>();
@@ -44,7 +44,7 @@ public class RoleRepository {
 		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 
-	public List<Permission> getAllPermission() {
+	public List<Permission> getAllPermissions() {
 		TypedQuery<Permission> query = em.createQuery("FROM Permission",
 				Permission.class);
 		List<Permission> permission = query.getResultList();
