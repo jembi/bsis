@@ -49,9 +49,10 @@
            	 });
               if ("${model.existingRole}" == "true")
                 updateExistingRole(permissiondata,$("#${editRoleFormId}")[0],
-                                    "${tabContentId}", notifyParentSuccess);
+                        "${tabContentId}", notifyParentSuccess);
               else
-                addNewRole(permissiondata,$("#${editRoleFormId}")[0], "${tabContentId}", notifyParentSuccess);
+                addNewRole(permissiondata,$("#${editRoleFormId}")[0],
+                		"${tabContentId}", notifyParentSuccess);
             });
       });
 </script>
