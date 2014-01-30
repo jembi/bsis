@@ -18,7 +18,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 
-<c:set var="configureRoleFormId">configureRole-${unique_page_id}</c:set>
+<c:set var="configureRolesFormId">configureRoles-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -37,7 +37,7 @@ $(document).ready(function() {
            });
   });
 
-  $("#${tabContentId}").bind("editUserSuccess", editUserDone);
+  $("#${tabContentId}").bind("editRoleSuccess", editRoleDone);
   $("#${tabContentId}").bind("editRoleCancel", editRoleCancel);
 
   $("#${tabContentId}").find(".cancelButton").button({
@@ -55,7 +55,7 @@ $(document).ready(function() {
     $("#${childContentId}").html("");
   }
 
-  function editUserDone() {
+  function editRoleDone() {
     emptyChildContent();
     refetchForm();
   }
