@@ -32,6 +32,18 @@ public class RoleRepository {
 		return userViewModels;
 	}
 
+	public Role findRoleByName(String name) {
+		if (name.isEmpty()){
+			return null;
+		}
+		String queryString = "SELECT r FROM Role r WHERE r.name = :roleName";
+		TypedQuery<Role> query = em.createQuery(queryString, Role.class)
+				.setMaxResults(1);
+		query.setParameter("roleName", name);
+		List<Role> resultList = query.getResultList();
+		return resultList.isEmpty() ? null : resultList.get(0);
+	}
+	
 	public Role findRoleDetailById(Long id) {
 		if (id == null) {
 			return null;
@@ -64,9 +76,11 @@ public class RoleRepository {
 		return existingRole;
 	}
 	
-	public void addRole(Role role) {
+	public Role addRole(Role role) {
 	    em.merge(role);
 	    em.flush();
+	    
+	    return role;
 	  }
 
 	public Permission findPermissionByPermissionId(long permissionId) {

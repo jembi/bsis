@@ -64,6 +64,8 @@
     <div>
       <form:label path="name">Role</form:label>
       <form:input path="role.name" />
+      <form:errors class="formError" path="role.name"
+            delimiter=", "></form:errors>
     </div>
     <div>
       <form:label path="description">Description</form:label>
@@ -71,6 +73,8 @@
     </div>
     <div>
       <form:label path="permissions">Permissions</form:label>
+      <form:errors class="formError" path="role.permissions"
+            delimiter=", "></form:errors>
       <c:forEach var="permissionVar" items="${model.allPermissions}">
         <div style="padding-left:180px;">
         <c:set var="idMatch" value="false"></c:set>
