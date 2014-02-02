@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashSet;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class RoleController {
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-	  binder.setValidator(new RoleBackingFormValidator(binder.getValidator(), utilController));
+	  binder.setValidator(new RoleBackingFormValidator(binder.getValidator(), utilController,roleRepository));
 	}
 
 	@RequestMapping(value = "/configureRolesFormGenerator", method = RequestMethod.GET)
@@ -84,6 +85,7 @@ public class RoleController {
 		if (roleId != null) {
 			form.setId(roleId);
 			Role role = roleRepository.findRoleDetailById(roleId);
+			form.setName(role.getName());
 			form.setRole(role);
 			m.put("existingRole", true);
 		} else {
@@ -105,14 +107,8 @@ public class RoleController {
 			HttpServletResponse response,
 			@ModelAttribute(value = "editRoleForm") @Valid RoleBackingForm form,
 			BindingResult result,
-			Model model,
-			@RequestParam(value = "permissiondata", required = false) String permissiondata) {
+			Model model) {
 		
-		
-		
-		
-		String[] splitpermission = permissiondata.split("~");
-		Set<Permission> permissions = setPermissionValues(splitpermission);
 		ModelAndView mv = new ModelAndView("admin/editRoleForm");
 		boolean success = false;
 		String message = "";
@@ -120,9 +116,11 @@ public class RoleController {
 		m.put("existingRole", true);
 		try {
 
+			Set<Permission> permissions = setPermissions(form.getPermissionValues());
 			Role role = form.getRole();
+			role.setName(form.getName());
 			role.setPermissions(permissions);
-			Role existingRole = roleRepository.updateRole(role);
+        	Role existingRole = roleRepository.updateRole(role);
 			if (existingRole == null) {
 				m.put("hasErrors", true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -157,11 +155,12 @@ public class RoleController {
 	}
 
 	@RequestMapping(value = "/addRole", method = RequestMethod.POST)
-	public @ResponseBody Map<String, ? extends Object> addRole(HttpServletRequest request,
+	public ModelAndView addRole(HttpServletRequest request,
 			HttpServletResponse response,
 			@ModelAttribute("editRoleForm") @Valid RoleBackingForm form,
-			BindingResult result, Model model,@RequestParam(value = "permissiondata", required = false) String permissiondata) {
+			BindingResult result, Model model) {
 		
+		ModelAndView mv = new ModelAndView("admin/editRoleForm");
 		Map<String, Object> m = model.asMap();
 	    boolean success = false;
 		
@@ -173,10 +172,9 @@ public class RoleController {
 	    } else {
 			try {
 				
-				String[] splitpermission = permissiondata.split("~");
-				Set<Permission> permissions = setPermissionValues(splitpermission);
-				
-				Role role = form.getRole();
+	    		Set<Permission> permissions = setPermissions(form.getPermissionValues());
+				Role role =new Role();
+				role.setName(form.getName());
 				role.setPermissions(permissions);
 				savedRole = roleRepository.addRole(role);
 				m.put("hasErrors", false);
@@ -190,31 +188,30 @@ public class RoleController {
 				success = false;
 			}
 		}
+		addAllPermissionsToModel(m);
 
 		if (success) {
 			m.put("editRoleForm", form);
 			m.put("existingRole", false);
 			m.put("refreshUrl", "configureRolesFormGenerator.html");
-			m.put("errorMessage", "Error creating new Role. Please fix the errors noted below.");
-	    } else {
-	    	m.put("editRoleForm", form);
-	    	m.put("existingRole", false);
-	    	m.put("refreshUrl", "configureRolesFormGenerator.html");
-	    	m.put("errorMessage", "Error creating new Role. Please fix the errors noted below.");
-	    }
 		
+	    } else {
+	    
+	    	m.put("editRoleForm", form);
+	    	m.put("refreshUrl", "admin/editRoleForm");
+	     	m.put("errorMessage", "Error creating new Role. Please fix the errors noted below.");
+	    
+
+	    }
+		mv.addObject("model", m);
 		m.put("success", success);
-	    return m;
+        return mv;
 	}
 
-	private Set<Permission> setPermissionValues(String[] splitPermissionArr) {
-
-		Set<Permission> permissions = new HashSet<Permission>();
-		
-		System.out.println("\tsplitPermissionArr: "+splitPermissionArr);
-		for (String permissionId : splitPermissionArr) {
-			
-			System.out.println("\tpermissionId: "+permissionId);
+	private Set<Permission> setPermissions(Set<String> permissionValues) {
+         Set<Permission> permissions = new HashSet<Permission>();
+		for (String permissionId : permissionValues) {
+		    System.out.println("\tpermissionId: "+permissionId);
 			if(!permissionId.equals("")){
 			Permission permission = roleRepository
 					.findPermissionByPermissionId(Long.parseLong(permissionId));

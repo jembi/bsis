@@ -33,12 +33,9 @@ public class RoleRepository {
 	}
 
 	public Role findRoleByName(String name) {
-		if (name.isEmpty()){
-			return null;
-		}
+		System.out.println("role not empty....");
 		String queryString = "SELECT r FROM Role r WHERE r.name = :roleName";
-		TypedQuery<Role> query = em.createQuery(queryString, Role.class)
-				.setMaxResults(1);
+		TypedQuery<Role> query = em.createQuery(queryString, Role.class);
 		query.setParameter("roleName", name);
 		List<Role> resultList = query.getResultList();
 		return resultList.isEmpty() ? null : resultList.get(0);

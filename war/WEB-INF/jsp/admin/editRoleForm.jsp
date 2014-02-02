@@ -46,7 +46,7 @@
            		 if ($(this).is(':checked')) {
            			 permissiondata += $(this).prop('value')+"~";
            		 }
-           	 });
+           	 }); 
               if ("${model.existingRole}" == "true")
                 updateExistingRole(permissiondata,$("#${editRoleFormId}")[0],
                         "${tabContentId}", notifyParentSuccess);
@@ -63,31 +63,34 @@
     <form:hidden path="id" /> 
     <div>
       <form:label path="name">Role</form:label>
-      <form:input path="role.name" />
-      <form:errors class="formError" path="role.name"
-            delimiter=", "></form:errors>
+      <form:input path="name" />
+       <form:errors class="formError" path="Role.name"
+            delimiter=","></form:errors>
     </div>
     <div>
-      <form:label path="description">Description</form:label>
+       <form:label path="description">Description</form:label> 
       <form:input path="role.description"/>
     </div>
     <div>
-      <form:label path="permissions">Permissions</form:label>
-      <form:errors class="formError" path="role.permissions"
+      <form:label path="permissionValues">Permissions</form:label>
+      <form:errors class="formError" path="Role.permissions"
             delimiter=", "></form:errors>
-      <c:forEach var="permissionVar" items="${model.allPermissions}">
+     
+       <c:forEach var="permissionVar" items="${model.allPermissions}">
         <div style="padding-left:180px;">
         <c:set var="idMatch" value="false"></c:set>
+     
         <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
         	<c:if test="${permissionRole.id eq permissionVar.id}">
         		<c:set var="idMatch" value="true"></c:set>
       		</c:if>
       	</c:forEach>
+     
       	<c:if test="${idMatch eq 'true'}">
-     		<input type="checkbox" value="${permissionVar.id}" style="width: auto;" checked="checked"/>${permissionVar.name}
+     		<form:checkbox path="permissionValues" value="${permissionVar.id}" style="width: auto;" checked="checked"/>${permissionVar.name}
       	</c:if>
       	<c:if test="${idMatch ne 'true'}">
-      		<input type="checkbox" value="${permissionVar.id}"  style="width: auto;"/>${permissionVar.name}
+      		< form:checkbox path="permissionValues" value="${permissionVar.id}"  style="width: auto;"/>${permissionVar.name}
       	</c:if>
       	</div>
       </c:forEach>
