@@ -35,8 +35,9 @@ public class UserBackingFormValidator implements Validator {
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
     UserBackingForm form = (UserBackingForm) obj;
-    comparePassword(form,errors);
+     utilController.commonFieldChecks(form, "user", errors);
     checkUserName(form,errors);
+    comparePassword(form,errors);
     compareUserPassword(form,errors);
     checkRoles(form,errors);
   }
@@ -68,11 +69,9 @@ public class UserBackingFormValidator implements Validator {
   
   private void checkUserName(UserBackingForm form, Errors errors) {
   	boolean flag=false;
-  	String userName=null;
-  	if(form.getUsername() != null){
-  		userName=form.getUsername();
-  	}
-  	if(userName.length() <= 2 &&  userName.length() >= 50){
+  	
+  	String userName=form.getUsername();
+  	if(userName.length() <= 2 ||  userName.length() >= 50){
   		flag=true;
   	}
   	
@@ -81,6 +80,7 @@ public class UserBackingFormValidator implements Validator {
   	}
   	
   	if(flag){
+  		System.out.println("in flag.....");
   		errors.rejectValue("user.username","user.incorrect" ,"Username invalid. Should be 2-50 chars.Only letters,digits,.,-,and _ are allowes.");
   	}
   	return;
