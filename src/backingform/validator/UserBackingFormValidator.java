@@ -81,7 +81,7 @@ public class UserBackingFormValidator implements Validator {
   	
   	if(flag){
   		System.out.println("in flag.....");
-  		errors.rejectValue("user.username","user.incorrect" ,"Username invalid. Should be 2-50 chars.Only letters,digits,.,-,and _ are allowes.");
+  		errors.rejectValue("user.username","user.incorrect" ,"Username invalid. it must  between 2 and 50 characters. Only letters, digits, \".\", \"-\", and \"_\" are allowed, no spaces.");
   	}
   	return;
   }
