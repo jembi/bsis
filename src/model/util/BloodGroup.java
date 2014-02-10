@@ -79,4 +79,8 @@ public class BloodGroup {
   public String getBloodRh() {
     return rh.toString();
   }
+
+public static Map<String, BloodGroup> getBloodgroups() {
+	return bloodgroups;
+}
 }

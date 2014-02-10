@@ -604,6 +604,7 @@ public class DonorController {
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorSelectorFormGenerator.html");
+   
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
     return mv;
@@ -624,5 +625,26 @@ public class DonorController {
         reqUrl += "?"+queryString;
     }
     return reqUrl;
+  }
+  
+  @RequestMapping(value = "/donorCommunicFormGenerator", method = RequestMethod.GET)
+  public ModelAndView donorCommunicFormGenerator(HttpServletRequest request, Model model) {
+  
+    DonorBackingForm dbform = new DonorBackingForm();
+
+
+    ModelAndView mv = new ModelAndView("donors/donorCommunicationsForm");
+    Map<String, Object> m = model.asMap();
+    utilController.addTipsToModel(model.asMap(), "donors.finddonor");
+    // to ensure custom field names are displayed in the form
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Find Donors");
+    m.put("refreshUrl", "donorCommunicFormGenerator.html");
+    m.put("donorPanels", locationRepository.getAllDonorPanels());
+    m.put("bloodGroups", dbform.getBloodGroups());
+    addEditSelectorOptions(mv.getModelMap());
+    mv.addObject("model", m);
+    mv.addObject("donorCommunicationForm", dbform);
+    return mv;
   }
 }
