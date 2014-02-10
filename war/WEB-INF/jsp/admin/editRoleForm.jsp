@@ -58,6 +58,14 @@
 </script>
 
 <div id="${tabContentId}">
+
+
+    <c:if test="${!empty success && !success}">
+        <jsp:include page="../common/errorBox.jsp">
+          <jsp:param name="errorMessage" value="${errorMessage}" />
+        </jsp:include>
+    </c:if>
+
   <form:form method="POST" class="formFormatClass" id="${editRoleFormId}"
     commandName="editRoleForm">
     <form:hidden path="id" /> 
