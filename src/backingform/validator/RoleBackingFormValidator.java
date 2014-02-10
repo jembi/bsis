@@ -1,9 +1,7 @@
 package backingform.validator;
 
 import java.util.Arrays;
-
 import model.user.Role;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
@@ -45,22 +43,24 @@ public RoleBackingFormValidator(Validator validator, UtilController utilControll
    	RoleBackingForm form = (RoleBackingForm) obj;  
 	ValidationUtils.invokeValidator(validator, obj, errors);
     utilController.commonFieldChecks(form, "Role", errors);
-	
+    
+   String roleName=form.getName();
+   Role existingRole ;
+// Role name cannot exist already
+    if(!roleName.equals(""))
+      {
+         existingRole=roleRepository.findRoleByName(roleName);
+         if(existingRole != null && !existingRole.getId().equals(form.getId()))
+            errors.rejectValue("Role.name", "roleName.nonunique",
+          "Role name already exists.");
+      }
 	if(form.getPermissionValues()==null)
   	errors.rejectValue("Role.permissions", "permissions.empty",
 	            "Role must have one or more permissions");
   
-	String roleName=form.getName();
-    if(errors.hasErrors())
-    return;
-   
-     //  Role name cannot exist already
-	  Role existingRole = roleRepository.findRoleByName(roleName);
-         if(existingRole != null && !existingRole.getId().equals(form.getId())){
-            errors.rejectValue("Role.name", "roleName.nonunique",
-		            "Role name already exists.");
-	    	return;
-	    }
+     if(errors.hasErrors())
+        	    return;
+	    	
     
    }
 }
