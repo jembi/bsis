@@ -122,11 +122,7 @@
 
   <div id="${mainContentId}">
 
-    <c:if test="${!empty success && !success}">
-        <jsp:include page="../common/errorBox.jsp">
-          <jsp:param name="errorMessage" value="${errorMessage}" />
-        </jsp:include>
-    </c:if>
+  
 
     <form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
       commandName="addDonorForm">

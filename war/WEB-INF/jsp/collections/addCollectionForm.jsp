@@ -194,14 +194,7 @@
     });
 </script>
 
-<div id="${tabContentId}">
-  <div id="${mainContentId}">
-    <c:if test="${!empty success && !success}">
-      <jsp:include page="../common/errorBox.jsp">
-        <jsp:param name="errorMessage" value="${errorMessage}" />
-      </jsp:include>
-    </c:if>
-  
+
     <form:form method="POST" commandName="addCollectionForm"
       class="formFormatClass" id="${addCollectionFormId}">
       <c:if test="${!collectionFields.collectionNumber.autoGenerate}">
