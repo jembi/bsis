@@ -44,7 +44,7 @@ public class UserBackingFormValidator implements Validator {
   
   private void comparePassword(UserBackingForm form, Errors errors) {
   	if(form.getPassword() == null || form.getPassword().isEmpty() || !form.getPassword().equals(form.getUserConfirPassword())){
-  		errors.rejectValue("user.password","user.incorrect" ,"Password do not match");
+  		errors.rejectValue("user.password","user.incorrect" ,"Passwords do not match");
   	}
   	return;
   }
@@ -61,7 +61,7 @@ public class UserBackingFormValidator implements Validator {
   
   private void checkRoles(UserBackingForm form, Errors errors) {
   	if(form.getRoleAdmin() ==null && form.getRoleDonorLab() ==null && form.getRoleTestLab() ==null && form.getRoleUser()==null){
-  		errors.rejectValue("user.isStaff","user.incorrect" ,"Must select of least one role");
+  		errors.rejectValue("user.isStaff","user.incorrect" ,"Must select at least one role");
   		form.setUserRole("");
   	}
   	return;
@@ -79,9 +79,8 @@ public class UserBackingFormValidator implements Validator {
   		flag=true;
   	}
   	
-  	if(flag){
-  		System.out.println("in flag.....");
-  		errors.rejectValue("user.username","user.incorrect" ,"Username invalid. it must  between 2 and 50 characters. Only letters, digits, \".\", \"-\", and \"_\" are allowed, no spaces.");
+  	if(flag && userName.length() > 0){
+  		errors.rejectValue("user.username","user.incorrect" ,"Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
   	}
   	return;
   }
