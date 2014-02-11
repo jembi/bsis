@@ -116,7 +116,7 @@ public class RoleController {
 		m.put("existingRole", true);
 		 if (result.hasErrors()) {
 		      m.put("hasErrors", true);
-		      message = "Error In Updating  Role. Please fix the errors noted below.";
+		      message = "Error Updating  Role. Please fix the errors noted below.";
 		      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		      success = false;
 		    } else
