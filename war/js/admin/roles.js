@@ -25,8 +25,7 @@ function updateRoleGeneric(permissiondata,form, resultDivId, url, successCallbac
         }
       },
     error: function(response) {
-             showErrorMessage("Something went wrong. Please fix the errors noted.");
-             $("#" + resultDivId).replaceWith(response.responseText);
+           $("#" + resultDivId).replaceWith(response.responseText);
            }
   });
 }
