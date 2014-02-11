@@ -92,7 +92,7 @@ $(document).ready(function() {
     <br />
     <div class="tipsBox ui-state-highlight">
       <p>
-        Select one of the role below to edit or add a new role. 
+        Select one of the roles below to edit or add a new role. 
       </p>
     </div>
     <div style="overflow: hidden;">
