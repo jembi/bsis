@@ -53,7 +53,7 @@
 
 <div id="${tabContentId}">
   <form:form method="POST" class="formFormatClass" id="${editUserFormId}"
-    commandName="editUserForm">
+    commandName="editUserForm" autocomplete="off">
     <form:hidden path="id" />
     <c:if test="${model.existingUser  ne true}">
 	    <div>
