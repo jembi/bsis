@@ -52,7 +52,7 @@ public class UserBackingFormValidator implements Validator {
   private void compareUserPassword(UserBackingForm form, Errors errors) {
   	String pwd= utilController.getUserPassword(form.getId());
   	if(pwd!=null){
-	  	if(form.getCurrentPassword() == null || form.getCurrentPassword() == "" || !form.getCurrentPassword().equals(pwd)){
+	  	if(form.getCurrentPassword()=="" || form.getCurrentPassword() == "" || !form.getCurrentPassword().equals(pwd)){
 	  		errors.rejectValue("user.isAdmin","user.incorrect" ,"Current Password does not match");
 	  	}
   }
@@ -60,11 +60,9 @@ public class UserBackingFormValidator implements Validator {
   }
   
   private void checkRoles(UserBackingForm form, Errors errors) {
-  	if(form.getRoleAdmin() ==null && form.getRoleDonorLab() ==null && form.getRoleTestLab() ==null && form.getRoleUser()==null){
-  		errors.rejectValue("user.isStaff","user.incorrect" ,"Must select at least one role");
-  		form.setUserRole("");
-  	}
-  	return;
+	  if(form.getUserRoles()==null)
+		  errors.rejectValue("userRoles","user.selectRole" ,"please select any one of the role");
+	  return;
   }
   
   private void checkUserName(UserBackingForm form, Errors errors) {

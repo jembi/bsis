@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.RoleRepository;
 import repository.UserRepository;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
@@ -38,6 +40,9 @@ public class UserController {
   @Autowired
   private UtilController utilController;
 
+  @Autowired
+  private RoleRepository roleRepository;
+  
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController));
@@ -52,6 +57,7 @@ public class UserController {
     Map<String, Object> m = model.asMap();
     addAllUsersToModel(m);
     m.put("refreshUrl", utilController.getUrl(request));
+    m.put("userRoles", roleRepository.getAllRoles());
     mv.addObject("model", model);
     return mv;
   }
@@ -64,8 +70,7 @@ public class UserController {
   @RequestMapping(value = "/editUserFormGenerator", method = RequestMethod.GET)
   public ModelAndView editUserFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "userId", required = false) Integer userId) {
-
-    UserBackingForm form = new UserBackingForm();
+	 UserBackingForm form = new UserBackingForm();
     ModelAndView mv = new ModelAndView("admin/editUserForm");
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", utilController.getUrl(request));
@@ -74,14 +79,17 @@ public class UserController {
       User user = userRepository.findUserById(userId);
       if (user != null) {
         form = new UserBackingForm(user);
-        m.put("userRoles", form.getUserRole());
+        m.put("userRoles", roleRepository.getAllRoles());
         m.put("existingUser", true);
       }
       else {
+    	m.put("userRoles",roleRepository.getAllRoles());
         form = new UserBackingForm();
         m.put("existingUser", false);
       }
     }
+    m.put("allRoles",roleRepository.getAllRoles());
+    m.put("userRoles", form.getRoles());
     m.put("editUserForm", form);
     m.put("refreshUrl", utilController.getUrl(request));
     // to ensure custom field names are displayed in the form
@@ -95,7 +103,6 @@ public class UserController {
                  HttpServletResponse response,
                  @ModelAttribute("editUserForm") @Valid UserBackingForm form,
                  BindingResult result, Model model) {
-
     ModelAndView mv = new ModelAndView("admin/editUserForm");
     boolean success = false;
     
@@ -111,9 +118,8 @@ public class UserController {
       try {
         User user = form.getUser();
         user.setIsDeleted(false);
-        user.setRoles(userRepository.getUserRole(userRole(form)));
+        user.setRoles(assignUserRoles(form));
         userRepository.addUser(user);
-       
         m.put("hasErrors", false);
         success = true;
         message = "User Successfully Added";
@@ -128,7 +134,7 @@ public class UserController {
         message = "Internal Error. Please try again or report a Problem.";
       }
     }
-
+    m.put("userRoles", roleRepository.getAllRoles());
     m.put("editUserForm", form);
     m.put("existingUser", false);
     m.put("refreshUrl", "editUserFormGenerator.html");
@@ -138,7 +144,17 @@ public class UserController {
     mv.addObject("model", m);
     return mv;
   }
-
+   
+  public List<Role> assignUserRoles(UserBackingForm userForm)
+  {
+	   List<String> userRoles=userForm.getUserRoles();
+       List<Role> roles=new ArrayList<Role>();
+       for(String roleId : userRoles)
+       {
+       	roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
+       }
+       return roles;
+  }
   @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
   public ModelAndView updateUser(
       HttpServletResponse response,
@@ -164,7 +180,8 @@ public class UserController {
         User user = form.getUser();
         if (form.getModifyPassword())
           user.setPassword(form.getPassword());
-        user.setRoles(userRepository.getUserRole(userRole(form)));
+        user.setRoles(assignUserRoles(form));
+      //  user.setRoles(userRepository.getUserRole(userRoles(form)));
         User existingUser = userRepository.updateUser(user, true);
         if (existingUser == null) {
           m.put("hasErrors", true);
@@ -191,7 +208,7 @@ public class UserController {
       }
    }
     
-    m.put("userRoles", form.getUserRole());
+ //   m.put("userRoles", form.getUserRole());
     m.put("editUserForm", form);
     m.put("success", success);
     m.put("message", message);
@@ -201,23 +218,7 @@ public class UserController {
     return mv;
   }
   
-	public String[] userRole(UserBackingForm form){
-  	String []str = new String[4];
-    if(form.getRoleAdmin()!=null && StringUtils.isNotEmpty(form.getRoleAdmin()) && !form.getRoleAdmin().isEmpty()){
-    	str[0]=form.getRoleAdmin();
-    }
-    if(form.getRoleDonorLab()!=null && StringUtils.isNotEmpty(form.getRoleDonorLab()) && !form.getRoleDonorLab().isEmpty()){
-    	str[1]=form.getRoleDonorLab();
-    }
-    String strRoleTestLab=form.getRoleTestLab();
-    if(strRoleTestLab !=null && StringUtils.isNotEmpty(form.getRoleTestLab()) && !form.getRoleTestLab().isEmpty()){
-    	str[2]=form.getRoleTestLab();
-    }
-    if(StringUtils.isNotEmpty(form.getRoleUser()) && !form.getRoleUser().isEmpty()){
-    	str[3]=form.getRoleUser();
-    }
-		return str;
-  }
+	
 	
 	public String userRole(Integer id) {
 		String userRole = "";

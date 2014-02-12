@@ -118,32 +118,31 @@
     </c:if>
     
     <div>
-    	<form:hidden path="userRole" id="userRoles"/>
+    
     	<table>
     		<tr>
     			<td  style="width:175px"><label>Roles</label></td>
     			<td>
-    				<c:choose>
-			   			 <c:when test="${fn:containsIgnoreCase(userRoles, '1')}">  <input type="checkbox" name="roleAdmin" id="roleAdmin" value="1" checked="checked"/></c:when>
-						 <c:otherwise><input type="checkbox" name="roleAdmin" id="roleAdmin" value="1"/></c:otherwise>
-		   			</c:choose>Administrator &nbsp; <form:errors class="formError" path="user.isStaff" delimiter=", "></form:errors> <br/>
-    				
-    				<c:choose>
-			   			 <c:when test="${fn:containsIgnoreCase(userRoles, '2')}"><input type="checkbox" name="roleDonorLab" id="roleDonorLab" value="2" checked="checked"/></c:when>
-						 <c:otherwise> <input type="checkbox" name="roleDonorLab" id="roleDonorLab" value="2"/></c:otherwise>
-		   			</c:choose>Donor Staff<br/>
-		   			
-		   			<c:choose>
-			   			 <c:when test="${fn:contains(userRoles, '3')}"> <input type="checkbox" name="roleTestLab" id="roleTestLab" value="3" checked="checked"/></c:when>
-						 <c:otherwise> <input type="checkbox" name="roleTestLab" id="roleTestLab" value="3"/></c:otherwise>
-		   			</c:choose>Testing Lab Staff<br/>
-		   			
-		   			<c:choose>
-			   			 <c:when test="${fn:containsIgnoreCase(userRoles, '4')}"><input type="checkbox" name="roleUser" id="roleUser" value="4" checked="checked"/></c:when>
-						 <c:otherwise><input type="checkbox" name="roleUser" id="roleUser" value="4"/></c:otherwise>
-		   			</c:choose>Authenticated User
-			     </td>
-    		</tr>
+    			    <c:forEach var="userRole" items="${userRoles}">   
+    			     	
+    			     	
+                        <c:forEach   var="role" items="${allRoles}"> 
+                        <c:if test="${userRole.id eq role.id}">     
+                            <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" checked="checked"/><br>
+                       </c:if>
+                       </c:forEach>
+                       
+                       <c:forEach   var="role" items="${allRoles}">  
+                         <c:if test="${userRole.id ne role.id}">    
+                            <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
+                         </c:if>
+                       </c:forEach>
+                       
+                     </c:forEach>
+                
+                </td>
+    			         
+    		    </tr>
     	</table>
     </div>
     <div>
