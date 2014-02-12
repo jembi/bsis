@@ -127,23 +127,19 @@
           <c:if test="${userRoles!=null}">
     			    <c:forEach var="userRole" items="${userRoles}">   
     			         
-    			        <c:forEach   var="role" items="${allRoles}"> 
+    			   <c:forEach   var="role" items="${allRoles}"> 
                        <c:if test="${userRole.id eq role.id}">     
                             <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" checked="checked"/><br>
                        </c:if>
-                       
-                       
-                    
-                         <c:if test="${userRole.id ne role.id}">    
+                        <c:if test="${userRole.id ne role.id}">    
                             <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
                          </c:if>
                          
-                           </c:forEach>
+                      </c:forEach>
                   
                  </c:forEach>
                        
-                    
-         </c:if>
+        </c:if>
       <!-- Adding a new User -->           
            <c:if test="${userRoles== null }">
                        
