@@ -83,8 +83,7 @@ public class UserController {
         m.put("existingUser", true);
       }
       else {
-    	m.put("userRoles",roleRepository.getAllRoles());
-        form = new UserBackingForm();
+    	form = new UserBackingForm();
         m.put("existingUser", false);
       }
     }
@@ -134,7 +133,7 @@ public class UserController {
         message = "Internal Error. Please try again or report a Problem.";
       }
     }
-    m.put("userRoles", roleRepository.getAllRoles());
+    m.put("allRoles", roleRepository.getAllRoles());
     m.put("editUserForm", form);
     m.put("existingUser", false);
     m.put("refreshUrl", "editUserFormGenerator.html");
@@ -181,6 +180,7 @@ public class UserController {
         if (form.getModifyPassword())
           user.setPassword(form.getPassword());
         user.setRoles(assignUserRoles(form));
+        user.setIsActive(true);
       //  user.setRoles(userRepository.getUserRole(userRoles(form)));
         User existingUser = userRepository.updateUser(user, true);
         if (existingUser == null) {

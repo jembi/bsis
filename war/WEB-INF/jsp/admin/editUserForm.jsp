@@ -53,7 +53,7 @@
 
 <div id="${tabContentId}">
   <form:form method="POST" class="formFormatClass" id="${editUserFormId}"
-    commandName="editUserForm" autocomplete="off">
+    commandName="editUserForm">
     <form:hidden path="id" />
     <c:if test="${model.existingUser  ne true}">
 	    <div>
@@ -123,23 +123,31 @@
     		<tr>
     			<td  style="width:175px"><label>Roles</label></td>
     			<td>
+          <c:if test="${userRoles!=null}">
     			    <c:forEach var="userRole" items="${userRoles}">   
-    			     	
-    			     	
-                        <c:forEach   var="role" items="${allRoles}"> 
-                        <c:if test="${userRole.id eq role.id}">     
+    			         
+    			        <c:forEach   var="role" items="${allRoles}"> 
+                       <c:if test="${userRole.id eq role.id}">     
                             <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" checked="checked"/><br>
                        </c:if>
-                       </c:forEach>
+                         </c:forEach>
                        
-                       <c:forEach   var="role" items="${allRoles}">  
+                         <c:forEach   var="role" items="${allRoles}">  
                          <c:if test="${userRole.id ne role.id}">    
                             <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
                          </c:if>
                        </c:forEach>
                        
-                     </c:forEach>
-                
+                      </c:forEach>
+         </c:if>
+                       
+           <c:if test="${userRoles== null }">
+                       
+                 <c:forEach   var="role" items="${allRoles}"> 
+                       <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
+                     
+                 </c:forEach>
+            </c:if>
                 </td>
     			         
     		    </tr>
