@@ -123,6 +123,7 @@
     		<tr>
     			<td  style="width:175px"><label>Roles</label></td>
     			<td>
+     <!--  When editing the user--> 
           <c:if test="${userRoles!=null}">
     			    <c:forEach var="userRole" items="${userRoles}">   
     			         
@@ -130,17 +131,20 @@
                        <c:if test="${userRole.id eq role.id}">     
                             <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" checked="checked"/><br>
                        </c:if>
-                         </c:forEach>
                        
-                         <c:forEach   var="role" items="${allRoles}">  
+                       
+                    
                          <c:if test="${userRole.id ne role.id}">    
                             <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
                          </c:if>
-                       </c:forEach>
+                         
+                           </c:forEach>
+                  
+                 </c:forEach>
                        
-                      </c:forEach>
+                    
          </c:if>
-                       
+      <!-- Adding a new User -->           
            <c:if test="${userRoles== null }">
                        
                  <c:forEach   var="role" items="${allRoles}"> 
