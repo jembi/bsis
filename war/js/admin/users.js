@@ -19,7 +19,6 @@ function updateUserGeneric(form, resultDivId, url, successCallback) {
                 $("#" + resultDivId).replaceWith(jsonResponse);
               },
     error: function(response) {
-             showErrorMessage("Something went wrong. Please fix the errors noted.");
              $("#" + resultDivId).replaceWith(response.responseText);
            }
   });

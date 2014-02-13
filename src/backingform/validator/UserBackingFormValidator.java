@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import repository.UserRepository;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
 import controller.UtilController;
@@ -16,11 +17,13 @@ public class UserBackingFormValidator implements Validator {
 
   private Validator validator;
 	private UtilController utilController;
+	private UserRepository userRepository;
 
-  public UserBackingFormValidator(Validator validator, UtilController utilController) {
+  public UserBackingFormValidator(Validator validator, UtilController utilController, UserRepository userRepository) {
     super();
     this.validator = validator;
     this.utilController = utilController;
+    this.userRepository=userRepository;
   }
 
   @SuppressWarnings("unchecked")
@@ -38,7 +41,7 @@ public class UserBackingFormValidator implements Validator {
      utilController.commonFieldChecks(form, "user", errors);
     checkUserName(form,errors);
     comparePassword(form,errors);
-    compareUserPassword(form,errors);
+   
     checkRoles(form,errors);
   }
   
@@ -46,22 +49,15 @@ public class UserBackingFormValidator implements Validator {
   	if(form.getPassword() == null || form.getPassword().isEmpty() || !form.getPassword().equals(form.getUserConfirPassword())){
   		errors.rejectValue("user.password","user.incorrect" ,"Passwords do not match");
   	}
-  	return;
+  
   }
   
-  private void compareUserPassword(UserBackingForm form, Errors errors) {
-  	String pwd= utilController.getUserPassword(form.getId());
-  	if(pwd!=null){
-	  	if(form.getCurrentPassword()=="" || form.getCurrentPassword() == "" || !form.getCurrentPassword().equals(pwd)){
-	  		errors.rejectValue("user.isAdmin","user.incorrect" ,"Current Password does not match");
-	  	}
-  }
-  	return;
-  }
+ 
+  
   
   private void checkRoles(UserBackingForm form, Errors errors) {
 	  if(form.getUserRoles()==null)
-		  errors.rejectValue("userRoles","user.selectRole" ,"please select any one of the role");
+		  errors.rejectValue("userRoles","user.selectRole" ,"Must select at least one Role");
 	  return;
   }
   
@@ -69,6 +65,18 @@ public class UserBackingFormValidator implements Validator {
   	boolean flag=false;
   	
   	String userName=form.getUsername();
+  	
+  	User existingUser=null;
+  	if(!userName.equals(""))
+  	{
+  		existingUser=userRepository.findUser(userName);
+  		 if(existingUser != null && !existingUser.getId().equals(form.getId())){
+  			 errors.rejectValue("user.username", "userName.nonunique",
+           "Username  already exists.");
+  		 return;
+  		 
+       }
+  	}
   	if(userName.length() <= 2 ||  userName.length() >= 50){
   		flag=true;
   	}
@@ -80,6 +88,6 @@ public class UserBackingFormValidator implements Validator {
   	if(flag && userName.length() > 0){
   		errors.rejectValue("user.username","user.incorrect" ,"Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
   	}
-  	return;
+  
   }
 }

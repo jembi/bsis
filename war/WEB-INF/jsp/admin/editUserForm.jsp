@@ -53,7 +53,14 @@
 
 <div id="${tabContentId}">
   <form:form method="POST" class="formFormatClass" id="${editUserFormId}"
-    commandName="editUserForm">
+    commandName="editUserForm" autocomplete="off">
+    
+      <c:if test="${!empty success && !success}">
+        <jsp:include page="../common/errorBox.jsp">
+          <jsp:param name="errorMessage" value="${errorMessage}" />
+        </jsp:include>
+    </c:if>
+     
     <form:hidden path="id" />
     <c:if test="${model.existingUser  ne true}">
 	    <div>
@@ -101,11 +108,7 @@
     </c:if> 
     <c:if test="${model.existingUser  eq true}">
     <b>Update Password</b>
-    	<div>
-	      <form:label path="password">Current Password</form:label>
-	      <form:password path="currentPassword" />
-	      <form:errors class="formError" path="user.isAdmin" delimiter=", "></form:errors>
-	    </div>	
+    
     	<div>
 	      <form:label path="password">New Password</form:label>
 	      <form:password path="password" />
@@ -122,33 +125,43 @@
     	<table>
     		<tr>
     			<td  style="width:175px"><label>Roles</label></td>
+                		
     			<td>
+    			 <form:errors class="formError" path="userRoles" delimiter=", "></form:errors>	<br>
      <!--  When editing the user--> 
-          <c:if test="${userRoles!=null}">
-    			    <c:forEach var="userRole" items="${userRoles}">   
-    			         
-    			   <c:forEach   var="role" items="${allRoles}"> 
-                       <c:if test="${userRole.id eq role.id}">     
-                            <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" checked="checked"/><br>
-                       </c:if>
-                        <c:if test="${userRole.id ne role.id}">    
-                            <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
+          <c:choose>
+          <c:when test="${userRoles!=null}">
+    			   
+            <c:forEach var="role" items="${allRoles}">  
+                 <c:set var="idFound" value="false"></c:set>
+                 
+                   <c:forEach   var="userRole" items="${userRoles}"> 
+                        <c:if test="${role.id eq userRole.id}">    
+                           <c:set var="idFound" value="true"></c:set>
                          </c:if>
-                         
-                      </c:forEach>
+                  </c:forEach>
                   
-                 </c:forEach>
+               <c:if test="${idFound eq 'true'}">
+     		    <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" checked="checked" /><br>
+            	</c:if>
+              	<c:if test="${idFound eq 'false'}">
+      	         <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
+              	</c:if>
+                  
+             </c:forEach>
                        
-        </c:if>
-      <!-- Adding a new User -->           
-           <c:if test="${userRoles== null }">
+        </c:when>
+            
+           <c:otherwise>
                        
                  <c:forEach   var="role" items="${allRoles}"> 
                        <form:checkbox path="userRoles" value="${role.id}" label="${role.name}" /><br>
                      
                  </c:forEach>
-            </c:if>
+            </c:otherwise>
+        </c:choose>
                 </td>
+                
     			         
     		    </tr>
     	</table>

@@ -45,7 +45,7 @@ public class UserController {
   
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController,userRepository));
   }
 
   @RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
@@ -112,7 +112,7 @@ public class UserController {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
       success = false;
-      message = "Please fix the errors noted above.";
+      message = "Error creating new User. Please fix the errors noted below.";
     } else {
       try {
         User user = form.getUser();
@@ -138,7 +138,7 @@ public class UserController {
     m.put("existingUser", false);
     m.put("refreshUrl", "editUserFormGenerator.html");
     m.put("success", success);
-    m.put("message", message);
+    m.put("errorMessage", message);
 
     mv.addObject("model", m);
     return mv;
@@ -168,10 +168,11 @@ public class UserController {
     // property will be changed
     m.put("existingUser", true);
     if (result.hasErrors()) {
+      m.put("allRoles", roleRepository.getAllRoles());
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above";
+      message = "Error Updating user. Please fix the errors noted below";
     }
     else {
       try {
@@ -188,8 +189,7 @@ public class UserController {
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
           m.put("existingUser", false);
-          message = "User does not already exist.";
-        }
+      }
         else {
           m.put("hasErrors", false);
           success = true;
@@ -211,7 +211,7 @@ public class UserController {
  //   m.put("userRoles", form.getUserRole());
     m.put("editUserForm", form);
     m.put("success", success);
-    m.put("message", message);
+    m.put("errorMessage", message);
 
     mv.addObject("model", m);
 
