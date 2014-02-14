@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.validation.Valid;
 
@@ -35,21 +36,21 @@ public class DonorBackingForm {
 
 	private String ageSpecified;
 
-	private List<String> bloodGroups;
+	private List<BloodGroup> bloodGroups;
+	
+	private List<Location> donorPanels;
 	
 	private String clinicDate;
 	
 	private String lastDonationFromDate;
 	
 	private String lastDonationToDate;
+	
+	private String anyBloodGroup;
 
 	public DonorBackingForm() {
 		donor = new Donor();
 		ageFormatCorrect = null;
-		bloodGroups = new ArrayList<String>();
-		for (String bg : BloodGroup.getBloodgroups().keySet()) {
-			bloodGroups.add(bg.toUpperCase());
-		}
 	}
 
 	public DonorBackingForm(Donor donor) {
@@ -345,14 +346,23 @@ public class DonorBackingForm {
 		return donorPanel.getId().toString();
 	}
 
+	private static final Pattern COMMA_SPLIT_PATTERN = Pattern.compile(",");
+
 	public void setDonorPanel(String donorPanel) {
 		if (StringUtils.isBlank(donorPanel)) {
 			donor.setDonorPanel(null);
 		} else {
-			Location l = new Location();
 			try {
-				l.setId(Long.parseLong(donorPanel));
-				donor.setDonorPanel(l);
+				List<Location> panels = new ArrayList<Location>();
+				String[] donorPanelStr = COMMA_SPLIT_PATTERN.split(donorPanel);
+				for(String donorPanelId : donorPanelStr)
+				{
+					Location l = new Location();
+					l.setId(Long.parseLong(donorPanelId));
+					panels.add(l);
+					donor.setDonorPanel(l);
+				}
+				donorPanels = panels;
 			} catch (NumberFormatException ex) {
 				ex.printStackTrace();
 				donor.setDonorPanel(null);
@@ -383,13 +393,6 @@ public class DonorBackingForm {
 		}
 	}
 
-	public List<String> getBloodGroups() {
-		return bloodGroups;
-	}
-
-	public void setBloodGroups(List<String> bloodGroups) {
-		this.bloodGroups = bloodGroups;
-	}
 
 	public String getClinicDate() {
 		return clinicDate;
@@ -414,4 +417,31 @@ public class DonorBackingForm {
 	public void setLastDonationToDate(String lastDonationToDate) {
 		this.lastDonationToDate = lastDonationToDate;
 	}
+
+	public List<Location> getDonorPanels() {
+		return donorPanels;
+	}
+
+	public void setDonorPanels(List<Location> donorPanels) {
+		this.donorPanels = donorPanels;
+	}
+
+	public String getAnyBloodGroup() {
+		return anyBloodGroup;
+	}
+
+	public void setAnyBloodGroup(String anyBloodGroup) {
+		this.anyBloodGroup = anyBloodGroup;
+	}
+
+	public List<BloodGroup> getBloodGroups() {
+		return bloodGroups;
+	}
+
+	public void setBloodGroups(List<String> bloodGroups) {
+	    this.bloodGroups = new ArrayList<BloodGroup>();
+	    for (String bg : bloodGroups) {
+	      this.bloodGroups.add(new BloodGroup(bg));
+	    }
+	  }
 }

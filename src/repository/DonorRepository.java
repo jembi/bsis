@@ -22,6 +22,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.location.Location;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -81,7 +82,7 @@ public class DonorRepository {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
-
+    
     Expression<Boolean> exp1;
     if (anyBloodGroup.equals("true")) {
       exp1 = cb.not(cb.disjunction());
@@ -356,4 +357,88 @@ public class DonorRepository {
 	  }
 	  return lastDeferredUntil;
   }
+
+			
+	public List<Object> findDonorFromDonorCommunication(
+			List<Location> donorPanel, String clinicDate,
+			String lastDonationFromDate, String lastDonationToDate,
+			List<BloodGroup> bloodGroups, String anyBloodGroup,
+			Map<String, Object> pagingParams) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
+		Root<Donor> root = cq.from(Donor.class);
+
+		Expression<Boolean> exp;
+		Expression<Boolean> exp1;
+		Predicate panelExp;
+		Predicate clinicDateExp;
+		Predicate lastDonationBtwn;
+
+		
+		 List<Predicate> panelPredicates = new ArrayList<Predicate>();
+		 if(donorPanel.isEmpty()) 
+		 { 
+			 panelExp = cb.disjunction();
+			 exp = cb.not(cb.disjunction());
+		 } else 
+		 { 
+			 for(Location location : donorPanel) 
+			 { 
+				 panelExp = cb.equal(root.<String>get("donorPanel"), location); 
+			 } 
+			 exp = cb.or(panelPredicates.toArray(new Predicate[0])); 
+		}
+		 
+		List<Predicate> bgPredicates = new ArrayList<Predicate>();
+		if (anyBloodGroup.equals("true")) {
+			exp1 = cb.not(cb.disjunction());
+		} else {
+			for (BloodGroup bg : bloodGroups) {
+				Expression<Boolean> aboExp = cb.equal(root.<String> get("bloodAbo"), bg.getBloodAbo().toString());
+				Expression<Boolean> rhExp = cb.equal(root.<String> get("bloodRh"), bg.getBloodRh().toString());
+				bgPredicates.add(cb.and(aboExp, rhExp));
+			}
+			exp1 = cb.or(exp,cb.and(bgPredicates.toArray(new Predicate[0])));
+		}
+		
+		if(StringUtils.isBlank(clinicDate)) { clinicDateExp =cb.disjunction(); }
+		else{ clinicDateExp = cb.lessThanOrEqualTo(root.<String> get("dateOfLastDonation"),clinicDate); 
+		}
+		  
+		  if(!StringUtils.isBlank(lastDonationFromDate) && !StringUtils.isBlank(lastDonationToDate)) { 
+			  lastDonationBtwn = cb.between(root.<String> get("dateOfLastDonation"), lastDonationFromDate,lastDonationToDate); } 
+		  else { lastDonationBtwn =cb.disjunction(); }
+		 
+		Predicate notDeleted = cb.equal(root.<String> get("isDeleted"), false);
+		cq.where(cb.and(notDeleted, exp1));
+
+		int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+		int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+		if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
+			List<Order> order = new ArrayList<Order>();
+			if (pagingParams.get("sortDirection").equals("asc")) {
+				order.add(cb.asc(root.<String> get((String) pagingParams.get("sortColumn"))));
+			} else {
+				order.add(cb.desc(root.<String> get((String) pagingParams.get("sortColumn"))));
+			}
+			cq.orderBy(order);
+		}
+
+		TypedQuery<Donor> query = em.createQuery(cq);
+		query.toString();
+		query.setFirstResult(start);
+		query.setMaxResults(length);
+
+		CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
+		Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
+
+		countCriteriaQuery.select(cb.countDistinct(countRoot));
+
+		TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
+		Long totalResults = countQuery.getSingleResult().longValue();
+		return Arrays.asList(query.getResultList(), totalResults);
+	}
+
 }

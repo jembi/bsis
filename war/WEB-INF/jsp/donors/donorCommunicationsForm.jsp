@@ -20,6 +20,7 @@
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
+<c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -27,6 +28,9 @@ $(document).ready(function() {
 	     multiple : true,
 	     header : false
 	   });
+	 
+	
+	 
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
@@ -43,7 +47,7 @@ $(document).ready(function() {
 		     dateFormat : "dd/mm/yy",
 		     yearRange : "c-100:c0",
 		     onSelect : function(selectedDate) {
-		          $("#lastDonationFromDate").datepicker("option", "minDate",
+		          $("#lastDonationFromDate").datepicker("option", "maxDate",
 		              selectedDate);
 		        }
 		   });
@@ -55,11 +59,10 @@ $(document).ready(function() {
 		     dateFormat : "dd/mm/yy",
 		     yearRange : "c-100:c0",
 		     onSelect : function(selectedDate) {
-		          $("#lastDonationToDate").datepicker("option", "maxDate",
+		          $("#lastDonationToDate").datepicker("option", "minDate",
 		              selectedDate);
 		        }
 		   });
-	  
 	  // add multiple select / deselect functionality
 	    $("#selectall").click(function () {
 	          $('.case').attr('checked', this.checked);
@@ -76,10 +79,51 @@ $(document).ready(function() {
 	        }
 	 
 	    });
+	    
+	    $("#${donorCommunicationFormBloodGroupSelectorId}").multiselect({
+	        position : {
+	          my : 'left top',
+	          at : 'right center'
+	        },
+	        noneSelectedText: 'None Selected',
+	        selectedText: function(numSelected, numTotal, selectedValues) {
+	                        if (numSelected == numTotal) {
+	                          $("#${donorCommunicationFormId}").find(".anyBloodGroupInput")
+	                                                  .val("true");
+	                          return "Any Blood Group";
+	                        }
+	                        else {
+	                          $("#${donorCommunicationFormId}").find(".anyBloodGroupInput")
+	                                                  .val("false");
+	                          var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+	                          return checkedValues.length ? checkedValues.join(', ') : 'Any Blood Group';
+	                        }
+	                          
+	                      }
+	      });
+
+	      $("#${donorCommunicationFormBloodGroupSelectorId}").multiselect("checkAll");
+	    
+	    
+	    
+	    
 	    $("#${tabContentId}").find(".findDonorCommButton").button({
 	        icons : {
 	          primary : 'ui-icon-search'
 	        }
+	      }).click(function() {
+	    	    var donorCommunicationData = $("#${donorCommunicationFormId}").serialize();
+	    	   
+	    	    var resultsDiv = $("#${mainContentId}").find(".findDonorResultsFromDonorComm");
+	    	    $.ajax({
+	    	      type : "GET",
+	    	      url : "findDonorCommunicationForm.html",
+	    	      data : donorCommunicationData,
+	    	      success : function(data) {
+	    	        animatedScrollTo(resultsDiv);
+	    	        resultsDiv.html(data);
+	    	      }
+	    	    });
 	      });
 	    $("#${tabContentId}").find(".clearDonorCommButton").button({
 	        icons : {
@@ -120,9 +164,14 @@ $(document).ready(function() {
       </div>
       <div>
       <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-      <input type="checkbox" value="all" id="selectall" style="width: 23px !important;" checked="checked">All Groups
-      <form:checkboxes items="${bloodGroups}" path="bloodGroups" cssClass="case"/>
-      </div>
+      <form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
+        <form:select path="bloodGroups" id="${donorCommunicationFormBloodGroupSelectorId}">
+          <form:option value="Unknown" label="Unknown" />
+          <c:forEach var="bloodGroupVar" items="${bloodGroups}">
+            <form:option  value="${bloodGroupVar.value}">${bloodGroupVar.value}</form:option>
+          </c:forEach>
+        </form:select>
+       </div>
       <div>
       <form:label path="clinicDate">Clinic Date</form:label>
       <form:input path="clinicDate" class="clinicDate"/>
@@ -146,7 +195,7 @@ $(document).ready(function() {
         </button>
       </div>
     </div>
-    <div class="findDonorResults"></div>
+    <div class="findDonorResultsFromDonorComm"></div>
   </div>
 <div id="${childContentId}"></div>
   <br/>

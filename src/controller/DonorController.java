@@ -1,8 +1,12 @@
 package controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +18,7 @@ import javax.validation.Valid;
 
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
+import model.location.Location;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -628,7 +633,7 @@ public class DonorController {
   }
   
   @RequestMapping(value = "/donorCommunicFormGenerator", method = RequestMethod.GET)
-  public ModelAndView donorCommunicFormGenerator(HttpServletRequest request, Model model) {
+  public ModelAndView donorCommunicationFormGenerator(HttpServletRequest request, Model model) {
   
     DonorBackingForm dbform = new DonorBackingForm();
 
@@ -641,10 +646,122 @@ public class DonorController {
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "donorCommunicFormGenerator.html");
     m.put("donorPanels", locationRepository.getAllDonorPanels());
-    m.put("bloodGroups", dbform.getBloodGroups());
+    m.put("bloodGroups", BloodGroup.getBloodgroups());
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
     mv.addObject("donorCommunicationForm", dbform);
     return mv;
   }
+  
+  @RequestMapping(value = "/findDonorCommunicationForm", method = RequestMethod.GET)
+  public ModelAndView findDonorFromDonorCommunication(HttpServletRequest request,
+      @ModelAttribute("donorCommunicationForm") DonorBackingForm form,
+      BindingResult result, Model model) {
+    ModelAndView modelAndView = new ModelAndView("donors/donorsCommunicationTable");
+
+    Map<String, Object> m = model.asMap();
+    m.put("requestUrl", getUrl(request));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Find Donors");
+    m.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
+    m.put("refreshUrl", getUrl(request));
+   // m.put("donorRowClickUrl", "donorSummary.html");
+    //addEditSelectorOptions(m);
+    modelAndView.addObject("model", m);
+    return modelAndView;
+  } 
+  
+  public static String getNextPageUrlForDonorCommunication(HttpServletRequest req) {
+	    String reqUrl = req.getRequestURL().toString().replaceFirst("findDonorCommunicationForm.html", "findDonorCommunicationPagination.html");
+	    String queryString = req.getQueryString();
+	    if (queryString != null) {
+	        reqUrl += "?"+queryString;
+	    }
+	    return reqUrl;
+	  }
+  
+  @RequestMapping("/findDonorCommunicationPagination")
+  public @ResponseBody Map<String, Object> findDonorCommunicationPagination(HttpServletRequest request,
+      @ModelAttribute("donorCommunicationForm") DonorBackingForm form,
+      BindingResult result, Model model) {
+
+	List<Location> donorPanel            = form.getDonorPanels();
+    String clinicDate                    = getEligibleDonorDate(form.getClinicDate());
+    String lastDonationFromDate          = form.getLastDonationFromDate();
+    String lastDonationToDate            = form.getLastDonationToDate();
+    List<BloodGroup> bloodGroups         = form.getBloodGroups();
+    
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+
+    List<Object> results = new ArrayList<Object>();
+    results = donorRepository.findDonorFromDonorCommunication(donorPanel, clinicDate, lastDonationFromDate, lastDonationToDate, bloodGroups , form.getAnyBloodGroup() , pagingParams);
+
+    @SuppressWarnings("unchecked")
+    List<Donor> donors = (List<Donor>) results.get(0);
+    System.out.println(donors);
+    Long totalRecords = (Long) results.get(1);
+    return generateDatatablesMapForDonorCommunication(donors, totalRecords, formFields);
+  }
+  
+  private static String getEligibleDonorDate(String clinicDate)
+  {
+	  
+	  SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy"); 
+	  Calendar cal = Calendar.getInstance();
+	  try {
+		  if(!clinicDate.trim().equalsIgnoreCase(""))
+		  {
+			  Date dateObj = curFormater.parse(clinicDate);
+			  Date clinicDt = new Date(clinicDate);
+			  cal .setTime(dateObj);
+			  cal.add(Calendar.DATE, -56);
+		}
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} 
+	  return !clinicDate.trim().equalsIgnoreCase("") ? cal.getTime().toString() : "";
+  }
+  
+  private Map<String, Object> generateDatatablesMapForDonorCommunication(List<Donor> donors, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+	    Map<String, Object> donorsMap = new HashMap<String, Object>();
+	    ArrayList<Object> donorList = new ArrayList<Object>();
+	    for (DonorViewModel donor : getDonorsViewModels(donors)) {
+
+	      List<Object> row = new ArrayList<Object>();
+	      
+	      row.add(donor.getId().toString());
+
+	      for (String property : Arrays.asList("donorNumber", "firstName", "lastName", "phoneNumber", "dateOfLastDonation" , "bloodGroup", "donorPanel")) {
+	        if (formFields.containsKey(property)) {
+	          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+	          if (properties.get("hidden").equals(false)) {
+	            String propertyValue = property;
+	            try {
+	              propertyValue = BeanUtils.getProperty(donor, property);
+	            } catch (IllegalAccessException e) {
+	              // TODO Auto-generated catch block
+	              e.printStackTrace();
+	            } catch (InvocationTargetException e) {
+	              // TODO Auto-generated catch block
+	              e.printStackTrace();
+	            } catch (NoSuchMethodException e) {
+	              // TODO Auto-generated catch block
+	              e.printStackTrace();
+	            }
+	            row.add(propertyValue != null ?propertyValue.toString():"");
+	          }
+	        }
+	      }
+
+	      donorList.add(row);
+	    }
+	    donorsMap.put("aaData", donorList);
+	    donorsMap.put("iTotalRecords", totalRecords);
+	    donorsMap.put("iTotalDisplayRecords", totalRecords);
+	    return donorsMap;
+	  }
 }

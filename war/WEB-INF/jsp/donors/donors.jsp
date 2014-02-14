@@ -19,7 +19,7 @@
         Donors
       </a>
     </li>
-     <li id="findOrAddDonorsContent">
+     <li id="donorCommunicationContent">
       <a href="donorCommunicFormGenerator.html">
          Donor <br/> Communnications
       </a>
