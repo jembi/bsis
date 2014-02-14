@@ -54,7 +54,7 @@ public class DonorRepositoryTest {
 	
 	@Test
 	public void testDeleteDonorById() {
-		 donorRepository.deleteDonor(2l);
+		 donorRepository.deleteDonor(dbid);
 		 Donor donor = donorRepository.findDonorById(dbid);
 		assertNull("Delete Donor object return null",donor);
 	}
