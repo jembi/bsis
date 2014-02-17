@@ -35,7 +35,7 @@ public class DonorRepositoryTest {
 	DonorRepository donorRepository;
 	private User user;
 	private Donor donor;
-	private long dbid,deletedbid;;
+	private long dbid, deletedbid;;
 	private String donorNumber;
 	private DonorBackingForm donorBackingForm;
 	private DonorBackingFormValidator donorBackingFormValidator;
@@ -58,11 +58,10 @@ public class DonorRepositoryTest {
 
 	@Test
 	public void testAddDonor() {
-		String DateToString="10/06/1989";
+		String DateToString = "10/06/1989";
 		donorBackingForm.setBirthDate(DateToString);
 		// Donorrandomnumber generation
-		String dno = Utility.getUniqueNumber("999999");
-		donorBackingForm.setDonorNumber(dno);
+		donorBackingForm.setDonorNumber("");
 		setBackingFormValue();
 		errors = new BindException(donorBackingForm, "donor");
 		Object obj = donorBackingForm;
@@ -82,10 +81,9 @@ public class DonorRepositoryTest {
 
 	@Test
 	public void testSaveDonor() {
-		String DateToString="10/06/1991";
+		String DateToString = "10/06/1991";
 		donorBackingForm.setBirthDate(DateToString);
-		String dno = Utility.getUniqueNumber("999999");
-		donorBackingForm.setDonorNumber(dno);
+		donorBackingForm.setDonorNumber("");
 		setBackingFormValue();
 		errors = new BindException(donorBackingForm, "donor");
 		Object obj = donorBackingForm;
@@ -106,8 +104,6 @@ public class DonorRepositoryTest {
 		assertTrue(isIdZero);
 		System.out.println("success");
 	}
-	
-	
 
 	@Test
 	public void testgetAllDonors() {
