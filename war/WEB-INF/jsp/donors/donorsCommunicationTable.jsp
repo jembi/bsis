@@ -41,10 +41,13 @@ $(document).ready(
                              });
                            },
         "oTableTools" : {
+          "sSwfPath": "plugins/DataTables/extras/TableTools/media/swf/copy_csv_xls_pdf.swf",
           "sRowSelect" : "single",
-          "aButtons" : [ "print" ],
+          "aButtons" : [ "print" , {
+              "sExtends":    "csv",
+              "sButtonText": "Export to csv"
+          } ],
           "fnRowSelected" : function(node) {
-        	  alert("!");
                               $("#${tabContentId}").parent().trigger("donorSummaryView");
                               var elements = $(node).children();
                               if (elements[0].getAttribute("class") === "dataTables_empty") {

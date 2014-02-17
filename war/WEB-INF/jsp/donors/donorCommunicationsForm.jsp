@@ -29,8 +29,6 @@ $(document).ready(function() {
 	     header : false
 	   });
 	 
-	
-	 
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
