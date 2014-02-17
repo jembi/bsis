@@ -47,6 +47,8 @@ public class DonorBackingForm {
 	private String lastDonationToDate;
 	
 	private String anyBloodGroup;
+	
+	private boolean createDonorSummaryView;
 
 	public DonorBackingForm() {
 		donor = new Donor();
@@ -444,4 +446,13 @@ public class DonorBackingForm {
 	      this.bloodGroups.add(new BloodGroup(bg));
 	    }
 	  }
+
+	public boolean getCreateDonorSummaryView() {
+		return createDonorSummaryView;
+	}
+
+	public void setCreateDonorSummaryView(boolean createDonorSummaryView) {
+		this.createDonorSummaryView = createDonorSummaryView;
+	}
+
 }

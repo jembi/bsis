@@ -1,6 +1,7 @@
 package repository;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -368,50 +369,46 @@ public class DonorRepository {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
 		Root<Donor> root = cq.from(Donor.class);
-
-		Expression<Boolean> exp;
-		Expression<Boolean> exp1;
-		Predicate panelExp;
-		Predicate clinicDateExp;
-		Predicate lastDonationBtwn;
-
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		
-		 List<Predicate> panelPredicates = new ArrayList<Predicate>();
-		 if(donorPanel.isEmpty()) 
-		 { 
-			 panelExp = cb.disjunction();
-			 exp = cb.not(cb.disjunction());
-		 } else 
-		 { 
-			 for(Location location : donorPanel) 
-			 { 
-				 panelExp = cb.equal(root.<String>get("donorPanel"), location); 
-			 } 
-			 exp = cb.or(panelPredicates.toArray(new Predicate[0])); 
+		List<Predicate> panelPredicates = new ArrayList<Predicate>();
+		if(donorPanel != null  && !donorPanel.isEmpty()) {
+		panelPredicates.add(root.get("donorPanel").in(donorPanel));
 		}
-		 
-		List<Predicate> bgPredicates = new ArrayList<Predicate>();
-		if (anyBloodGroup.equals("true")) {
-			exp1 = cb.not(cb.disjunction());
-		} else {
-			for (BloodGroup bg : bloodGroups) {
-				Expression<Boolean> aboExp = cb.equal(root.<String> get("bloodAbo"), bg.getBloodAbo().toString());
-				Expression<Boolean> rhExp = cb.equal(root.<String> get("bloodRh"), bg.getBloodRh().toString());
-				bgPredicates.add(cb.and(aboExp, rhExp));
+		if(!StringUtils.isBlank(clinicDate)) {
+			try {
+				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(clinicDate)));
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-			exp1 = cb.or(exp,cb.and(bgPredicates.toArray(new Predicate[0])));
+		}
+		if(!StringUtils.isBlank(lastDonationFromDate)) {
+			try {
+				panelPredicates.add(cb.greaterThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(lastDonationFromDate)));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		if(!StringUtils.isBlank(lastDonationToDate)) {
+			try {
+				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(lastDonationToDate)));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}			
 		}
 		
-		if(StringUtils.isBlank(clinicDate)) { clinicDateExp =cb.disjunction(); }
-		else{ clinicDateExp = cb.lessThanOrEqualTo(root.<String> get("dateOfLastDonation"),clinicDate); 
-		}
-		  
-		  if(!StringUtils.isBlank(lastDonationFromDate) && !StringUtils.isBlank(lastDonationToDate)) { 
-			  lastDonationBtwn = cb.between(root.<String> get("dateOfLastDonation"), lastDonationFromDate,lastDonationToDate); } 
-		  else { lastDonationBtwn =cb.disjunction(); }
-		 
-		Predicate notDeleted = cb.equal(root.<String> get("isDeleted"), false);
-		cq.where(cb.and(notDeleted, exp1));
+	    if (!anyBloodGroup.equals("true")) {
+	      List<Predicate> bgPredicates = new ArrayList<Predicate>();
+	      for (BloodGroup bg : bloodGroups) {
+	        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
+	        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
+	        bgPredicates.add(cb.and(aboExp, rhExp));
+	      }
+	      panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
+	    }
+	    panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
+		cq.where(panelPredicates.toArray(new Predicate[0]));
 
 		int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
 		int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);

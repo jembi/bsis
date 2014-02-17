@@ -660,13 +660,15 @@ public class DonorController {
     ModelAndView modelAndView = new ModelAndView("donors/donorsCommunicationTable");
 
     Map<String, Object> m = model.asMap();
+    form.setCreateDonorSummaryView(true);
     m.put("requestUrl", getUrl(request));
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
     m.put("refreshUrl", getUrl(request));
-   // m.put("donorRowClickUrl", "donorSummary.html");
-    //addEditSelectorOptions(m);
+    m.put("donorRowClickUrl", "donorSummary.html");
+    m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
+    addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
   } 
@@ -723,7 +725,8 @@ public class DonorController {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} 
-	  return !clinicDate.trim().equalsIgnoreCase("") ? cal.getTime().toString() : "";
+	  
+	  return !clinicDate.trim().equalsIgnoreCase("") ? curFormater.format(cal.getTime()) : "";
   }
   
   private Map<String, Object> generateDatatablesMapForDonorCommunication(List<Donor> donors, Long totalRecords, Map<String, Map<String, Object>> formFields) {

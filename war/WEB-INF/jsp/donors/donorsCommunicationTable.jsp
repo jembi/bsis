@@ -44,6 +44,7 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" ],
           "fnRowSelected" : function(node) {
+        	  alert("!");
                               $("#${tabContentId}").parent().trigger("donorSummaryView");
                               var elements = $(node).children();
                               if (elements[0].getAttribute("class") === "dataTables_empty") {
@@ -52,6 +53,7 @@ $(document).ready(
                               var selectedRowId = elements[0].innerHTML;
                               var donorNumber = elements[1].innerHTML;
                               $("#${tabContentId}").parent().trigger("donorSelected", {donorNumber: donorNumber});
+                              
                               if ("${createDonorSummaryView}" === "true") {
                                 createDonorSummary("${donorRowClickUrl}",  {donorId: selectedRowId});
                               }

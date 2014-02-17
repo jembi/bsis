@@ -135,6 +135,18 @@ $(document).ready(function() {
 	        refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
 	        $("#${childContentId}").html("");
 	      }
+	      
+	      $("#${tabContentId}").bind("donorSummaryView",
+	    	      function(event, content) {
+	    	        $("#${mainContentId}").hide();
+	    	        $("#${childContentId}").html(content);
+	    	      });
+	      $("#${tabContentId}").bind("donorSummarySuccess",
+	    	      function(event, content) {
+	    	        $("#${mainContentId}").show();
+	    	        $("#${childContentId}").html("");
+	    	        $("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
+	    	      });
 });
 </script>
 
