@@ -263,7 +263,7 @@ public class UtilController {
     }
     else if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
-        donor = donorRepository.findDonorByDonorNumber(donorNumber);
+        donor = donorRepository.findDonorByDonorNumber(donorNumber,false);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
@@ -381,7 +381,7 @@ public class UtilController {
     String donorNumber = donor.getDonorNumber();
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,false);
     if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
       return true;
     return false;

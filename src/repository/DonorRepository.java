@@ -248,25 +248,27 @@ public class DonorRepository {
     donor.setDonorHash(DonorUtils.computeDonorHash(donor));
   }
 
-  public Donor findDonorByDonorNumber(String donorNumber) {
+  public Donor findDonorByDonorNumber(String donorNumber,boolean isDelete) {
     String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
     TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
+    query.setParameter("isDeleted", isDelete);
     return query.setParameter("donorNumber", donorNumber).getSingleResult();
   }
-
-  public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
-    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber";
+/*
+  public Donor findDonorByDonorNumber(String donorNumber,boolean isDelete) {
+    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
     TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
     Donor donor = null;
     try {
-      donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
+       query.setParameter("donorNumber", donorNumber);
+      query.setParameter("isDeleted", isDelete);
+      donor=query.getSingleResult();
     } catch (NoResultException ex) {    	
     	LOGGER.error("could not find record with donorNumber :" + donorNumber);
     	LOGGER.error(ex.getMessage());
     }
     return donor;
-  }
+  }*/
 
   public List<DeferralReason> getDeferralReasons() {
     String queryString = "SELECT d from DeferralReason d WHERE d.isDeleted=:isDeleted";
