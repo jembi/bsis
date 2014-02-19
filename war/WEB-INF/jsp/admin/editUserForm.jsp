@@ -17,7 +17,7 @@
   $(document).ready(
       function() {
     	  
-    	  	  $('#${editUserFormId} :checkbox').click(function() {
+    	  	  $('#modifyPassword:checkbox').click(function() {
     		    var $this = $(this);
     		    // $this will contain a reference to the checkbox   
     		    if ($this.is(':checked')) {
