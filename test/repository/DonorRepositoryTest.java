@@ -4,30 +4,27 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import model.donor.Donor;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
 import model.user.User;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -36,6 +33,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 
 import repository.DonorRepository;
+import repository.SequenceNumberRepository;
 import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
@@ -153,12 +151,7 @@ public class DonorRepositoryTest {
 	@Test
 	public void testUpdateDonor() {
 
-		V2VUserDetails userDetails = (V2VUserDetails) userDetailsService
-				.loadUserByUsername("admin");
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				userDetails, userDetails.getPassword(),
-				userDetails.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authToken);
+		this.authentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
 		donorBackingForm = new DonorBackingForm(editDonor);
 		setBackingUpdateFormValue(donorBackingForm);
@@ -233,35 +226,130 @@ public class DonorRepositoryTest {
 		donorBackingForm.setZipcode("361001");
 	}
 
-	@Test
+	 @Test
 	public void testFindDonorByIdLong() {
 		Donor donor = donorRepository.findDonorById(dbid);
 		assertNotNull("Find Donor By Id method argument is long", donor);
 	}
 
-	@Test
+	 @Test
 	public void testFindDonorByIdStringWithSpace() {
 		Donor donor = donorRepository.findDonorById("18");
 		assertNotNull("Find Donor By Id method argument is black space", donor);
 	}
 
-	@Test
+	 @Test
 	public void testFindDonorByIdStringWithoutSpace() {
 		Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
 		assertNotNull("Find Donor By Id method argument is String number",
 				donor);
 	}
 
-	@Test
+	 @Test
 	public void testFindDonorByNumber() {
 		Donor donor = donorRepository.findDonorByNumber(donorNumber);
 		assertNotNull("Find Donor by DonorNumber", donor);
 	}
 
-	@Test
+	 @Test
 	public void testDeleteDonorById() {
 		donorRepository.deleteDonor(deletedbid);
 		assertTrue(true);
+	}
+
+	@Test
+	public void testdeferDonor() {
+		boolean isScucess = false;
+		try {
+			this.authentication();
+			donorRepository.deferDonor("168", "28/02/2014", "1", "text");
+			isScucess = true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			isScucess = false;
+		} finally {
+			assertTrue(isScucess);
+		}
+	}
+
+	@Test
+	public void testaddAllDonors() {
+		Donor donor = new Donor();
+		DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
+		String DateToString = "10/06/1991";
+		donorBackingForm.setBirthDate(DateToString);
+
+		donorBackingForm.setDonorNumber(sequenceNumberRepository
+				.getNextDonorNumber());
+		setBackingFormValue(donorBackingForm);
+		List<Donor> listAllDonor = new ArrayList<Donor>();
+		listAllDonor.add(donorBackingForm.getDonor());
+		donor = new Donor();
+		donorBackingForm = new DonorBackingForm(donor);
+		DateToString = "11/06/1991";
+		donorBackingForm.setBirthDate(DateToString);
+		donorBackingForm.setDonorNumber(sequenceNumberRepository
+				.getNextDonorNumber());
+		setBackingFormValue(donorBackingForm);
+		listAllDonor.add(donorBackingForm.getDonor());
+		donor = new Donor();
+		donorBackingForm = new DonorBackingForm(donor);
+		DateToString = "12/06/1991";
+		donorBackingForm.setBirthDate(DateToString);
+		donorBackingForm.setDonorNumber(sequenceNumberRepository
+				.getNextDonorNumber());
+		setBackingFormValue(donorBackingForm);
+		listAllDonor.add(donorBackingForm.getDonor());
+		donorRepository.addAllDonors(listAllDonor);
+	}
+	
+	@Test
+	public void testGetDeferralReasons(){
+		List<DeferralReason> list = donorRepository.getDeferralReasons();
+		if(list!=null && list.size()>0){
+			for(DeferralReason deferralReason:list){
+				if(deferralReason.getIsDeleted()==true){
+					assertTrue(false);
+				}
+			}
+		}else{
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void testGetDonorDeferrals()
+	{
+		List<DonorDeferral> list = donorRepository.getDonorDeferrals(1l);
+		if(list!=null && list.size()>0){
+				for(DonorDeferral donorDeferral:list){
+					System.out.println(donorDeferral.getId());
+				}
+		}
+		
+	}
+	
+	@Test
+	public void testisCurrentlyDeferredPassList(){
+		List<DonorDeferral> list = donorRepository.getDonorDeferrals(167l);
+		System.out.println("Is defer donor found with list as a argument:::"+donorRepository.isCurrentlyDeferred(list));
+	}
+	
+	@Test
+	public void testisCurrentlyDeferredPassDonor(){
+		Donor donor = donorRepository.findDonorById(167l);
+		
+		System.out.println("Is defer donor found with Donor argument as argument:::"+donorRepository.isCurrentlyDeferred(donor));
+	}
+	
+
+	public void authentication() {
+		V2VUserDetails userDetails = (V2VUserDetails) userDetailsService
+				.loadUserByUsername("admin");
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+				userDetails, userDetails.getPassword(),
+				userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 
 }
