@@ -16,7 +16,22 @@
 <script>
   $(document).ready(
       function() {
-
+    	  
+    	  	  $('#${editUserFormId} :checkbox').click(function() {
+    		    var $this = $(this);
+    		    // $this will contain a reference to the checkbox   
+    		    if ($this.is(':checked')) {
+    		        // the checkbox was checked 
+    		    	document.getElementById("password").disabled=false;
+    			    document.getElementById("userConfirmPassword").disabled=false;
+    		    } else {
+    		        // the checkbox was unchecked
+    		    	document.getElementById("password").disabled=true;
+    			    document.getElementById("userConfirmPassword").disabled=true;
+    		    }
+    		});
+   
+    	  	  
         function notifyParentSuccess() {
            // let the parent know we are done
            $("#${tabContentId}").parent().trigger("editUserSuccess");
@@ -86,15 +101,7 @@
       <form:input path="lastName" />
       <form:errors class="formError" path="user.lastName" delimiter=", "></form:errors>
     </div>
-    <%-- <div>
-      <form:label path="isAdmin">Admin User?</form:label>
-      <form:checkbox path="isAdmin" style="width: auto;" />
-      <form:errors class="formError" path="user.isAdmin" delimiter=", "></form:errors>
-    </div>
-    <div>
-      <form:label path="modifyPassword">Modify Password?</form:label>
-      <form:checkbox path="modifyPassword" style="width: auto;" />
-    </div> --%>
+   
     <c:if test="${model.existingUser  ne true}">
 	    <div>
 	      <form:label path="password">Password</form:label>
@@ -107,16 +114,21 @@
 	    </div>
     </c:if> 
     <c:if test="${model.existingUser  eq true}">
+   
+   
     <b>Update Password</b>
+    <form:checkbox path="modifyPassword" id="modifyPassword" onclick="checkPasswordStatus()"/>
     
+   
+      <form:hidden  path="currentPassword"/>
     	<div>
 	      <form:label path="password">New Password</form:label>
-	      <form:password path="password" />
+	      <form:password path="password" id="password"  disabled="true"/>
 	      <form:errors class="formError" path="user.password" delimiter=", "></form:errors>
 	    </div>	
 	   <div>
 	      <label>Confirm Password</label>
-	      <form:password path="userConfirPassword" id="userConfirPassword" name="userConfirPassword"/>
+	      <form:password path="userConfirPassword" id="userConfirmPassword"  disabled="true"/>
 	    </div>
     </c:if>
     

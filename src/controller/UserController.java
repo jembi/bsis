@@ -79,6 +79,7 @@ public class UserController {
       User user = userRepository.findUserById(userId);
       if (user != null) {
         form = new UserBackingForm(user);
+        form.setCurrentPassword(user.getPassword());
         m.put("userRoles", roleRepository.getAllRoles());
         m.put("existingUser", true);
       }
@@ -170,6 +171,7 @@ public class UserController {
     if (result.hasErrors()) {
       m.put("allRoles", roleRepository.getAllRoles());
       m.put("hasErrors", true);
+      form.setModifyPassword(false);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
       message = "Error Updating user. Please fix the errors noted below";
@@ -178,11 +180,12 @@ public class UserController {
       try {
         form.setIsDeleted(false);
         User user = form.getUser();
-        if (form.getModifyPassword())
+        if (form.isModifyPassword())
           user.setPassword(form.getPassword());
+        else
+        	user.setPassword(form.getCurrentPassword());
         user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
-      //  user.setRoles(userRepository.getUserRole(userRoles(form)));
         User existingUser = userRepository.updateUser(user, true);
         if (existingUser == null) {
           m.put("hasErrors", true);

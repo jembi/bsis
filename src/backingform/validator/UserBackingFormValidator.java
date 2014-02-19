@@ -18,6 +18,7 @@ public class UserBackingFormValidator implements Validator {
   private Validator validator;
 	private UtilController utilController;
 	private UserRepository userRepository;
+	boolean editingUser=false;
 
   public UserBackingFormValidator(Validator validator, UtilController utilController, UserRepository userRepository) {
     super();
@@ -40,11 +41,17 @@ public class UserBackingFormValidator implements Validator {
     UserBackingForm form = (UserBackingForm) obj;
      utilController.commonFieldChecks(form, "user", errors);
     checkUserName(form,errors);
-    comparePassword(form,errors);
-   
-    checkRoles(form,errors);
+    if(editingUser){
+       if(form.isModifyPassword())
+          comparePassword(form,errors);
+    }
+    else  
+    	  comparePassword(form,errors);
+     
+     checkRoles(form,errors);
   }
   
+ 
   private void comparePassword(UserBackingForm form, Errors errors) {
 	if( (form.getPassword()==null||form.getPassword().isEmpty() ) && (form.getUserConfirPassword()==null||form.getUserConfirPassword().isEmpty()) )
   	    errors.rejectValue("user.password","user.incorrect" ,"Password cannot be blank");
@@ -73,6 +80,9 @@ public class UserBackingFormValidator implements Validator {
   	if(!userName.equals(""))
   	{
   		existingUser=userRepository.findUser(userName);
+  		 if(existingUser != null && existingUser.getId().equals(form.getId()))
+  			 editingUser=true;
+  		
   		 if(existingUser != null && !existingUser.getId().equals(form.getId())){
   			 errors.rejectValue("user.username", "userName.nonunique",
            "Username  already exists.");

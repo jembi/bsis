@@ -21,6 +21,7 @@ public class UserBackingForm {
   private String roleDonorLab;
   private String roleTestLab;
   private String roleUser;
+  
 
   public UserBackingForm() {
     setUser(new User());
@@ -37,8 +38,9 @@ public class UserBackingForm {
   public Integer getId() {
     return getUser().getId();
   }
+  
 
-  public String getUsername() {
+public String getUsername() {
     return getUser().getUsername();
   }
 
@@ -149,23 +151,23 @@ public class UserBackingForm {
   public void setUser(User user) {
     this.user = user;
   }
-
-  public void setModifyPassword(boolean modifyPassword) {
-    this.modifyPassword = modifyPassword;
-  }
-
-  public boolean getModifyPassword() {
-    return modifyPassword;
-  }
   
-  public List<Role> getRoles() {
+  
+ public boolean isModifyPassword() {
+	return modifyPassword;
+}
+
+public void setModifyPassword(boolean modifyPassword) {
+	this.modifyPassword = modifyPassword;
+}
+
+public List<Role> getRoles() {
     return user.getRoles();
   }
   
   public List<String> getUserRoles() {
 		return userRoles;
   }
-
 
 	/**
 	 * @return the userConfirPassword
