@@ -7,12 +7,15 @@ import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.user.User;
+import model.util.BloodGroup;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
@@ -116,7 +119,7 @@ public class DonorRepositoryTest {
 
 	@Test
 	public void testfindDonorByDonorNumber() {
-		Donor donor = donorRepository.findDonorByDonorNumber("000001", false);
+		Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
 		System.out.println("Donor ::::" + donor);
 		assertNotNull(donor);
 	}
@@ -201,10 +204,10 @@ public class DonorRepositoryTest {
 
 	public void setBackingFormValue(DonorBackingForm donorBackingForm) {
 		Date date = new Date();
-		donorBackingForm.setAddress("address");
-		donorBackingForm.setFirstName("nikita");
+		donorBackingForm.setAddress("myaddress");
+		donorBackingForm.setFirstName("firstname");
 		donorBackingForm.setMiddleName("middlename");
-		donorBackingForm.setLastName("shah");
+		donorBackingForm.setLastName("lastname");
 		donorBackingForm.setIsDeleted(false);
 		donorBackingForm.setGender("male");
 		donorBackingForm.setCallingName("CallingName");
@@ -342,7 +345,8 @@ public class DonorRepositoryTest {
 		System.out.println("Is defer donor found with Donor argument as argument:::"+donorRepository.isCurrentlyDeferred(donor));
 	}
 	
-
+	
+	
 	public void authentication() {
 		V2VUserDetails userDetails = (V2VUserDetails) userDetailsService
 				.loadUserByUsername("admin");
