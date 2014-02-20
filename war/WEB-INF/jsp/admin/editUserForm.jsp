@@ -27,7 +27,9 @@
     		    } else {
     		        // the checkbox was unchecked
     		    	document.getElementById("password").disabled=true;
+    		    	document.getElementById("password").value = "";
     			    document.getElementById("userConfirmPassword").disabled=true;
+    			    document.getElementById("userConfirmPassword").value = "";
     		    }
     		});
    
@@ -116,18 +118,19 @@
     <c:if test="${model.existingUser  eq true}">
    
    
-    <b>Update Password</b>
-    <form:checkbox path="modifyPassword" id="modifyPassword" onclick="checkPasswordStatus()"/>
-    
+    <div>
+    	<form:label path="password">Update Password</form:label>
+    	<form:checkbox path="modifyPassword" id="modifyPassword" onclick="checkPasswordStatus()"/>
+    </div>
    
       <form:hidden  path="currentPassword"/>
     	<div>
-	      <form:label path="password">New Password</form:label>
+	      <form:label path="password" id="newPasswordLbl">New Password</form:label>
 	      <form:password path="password" id="password"  disabled="true"/>
 	      <form:errors class="formError" path="user.password" delimiter=", "></form:errors>
 	    </div>	
 	   <div>
-	      <label>Confirm Password</label>
+	       <form:label path="userConfirPassword" id="confirmPasswordLbl">Confirm Password</form:label>
 	      <form:password path="userConfirPassword" id="userConfirmPassword"  disabled="true"/>
 	    </div>
     </c:if>
