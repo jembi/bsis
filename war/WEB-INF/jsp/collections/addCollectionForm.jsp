@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<%@ page import="model.collectedsample.CollectionConstants" %>
 <%!public long getCurrentTime() {
     return System.nanoTime();
   }%>
@@ -69,8 +69,30 @@
           }
         }).click(
             function() {
-                addNewCollection($("#${addCollectionFormId}")[0],
-                                      "${tabContentId}", notifyParentSuccess);
+            	var collectedSample = $($("#${addCollectionFormId}")[0]).serialize();
+		       		  $.ajax({  
+						     type : "Get",   
+						     url : "findLastDonationForDonor.html",   
+						     data : collectedSample,  
+						     success : function(response) {  
+						      var noOfDays = response[0];
+						      var blockBetweenCollections = <%=CollectionConstants.BLOCK_BETWEEN_COLLECTIONS%>;
+						      if(noOfDays > blockBetweenCollections || noOfDays == 'firstTime'){
+						    	  addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+						      }
+						      else{
+						    	  if(noOfDays <= 0 || noOfDays > 0){
+						    		  generateDeferDonorDialog(response);
+						    	  }
+						    	  else{
+						    		  generateDeferDonorAlertDialog(response);
+						    	  }
+						      }
+						     },  
+						     error : function(e) {  
+						    	 showMessage("Something went wrong."+e);
+						     }  
+						    });  
             });
 
         $("#${addCollectionFormCentersId}").multiselect({
@@ -106,11 +128,6 @@
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
         });
-
-//        var collectedOnDatePicker = $("#${addCollectionFormId}").find(".collectedOn");
-//        if ("${existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
-//          collectedOnDatePicker.datepicker('setDate', new Date());
-//        }
 
         $("#${mainContentId}").find(".clearFormButton").button({
           icons : {
@@ -190,6 +207,61 @@
          toggleCheckboxDisabledState();
 
          $("#${addCollectionFormUseBatchCheckboxId}").change(toggleCheckboxDisabledState);
+		
+         function generateDeferDonorAlertDialog(message) {
+             $("<div>").dialog({
+               modal: true,
+               open:  function() {
+ 			    	       	$(this).append(message[1]);
+                       },
+               close: function(event, ui) {
+            	            $(this).remove();
+                       },
+               title: "Donor's Last Donation",
+               height: 200,
+               width: 450,
+               buttons:
+                 {
+                    "OK": function() {
+                    	    $(this).dialog("close");                                                        
+                    }
+                 }
+             });
+            }
+         function generateDeferDonorDialog(message) {
+             $("<div>").dialog({
+               modal: true,
+               open:  function() {
+            	   var alertMessage ="";
+            	   if(message[0] > 0){
+                   		alertMessage = "Donor last donated on "+message[1]+", "+message[0]+" days ago. Allow the donor to be bled:";
+                   }
+            	   if(message[0] == 0){
+                  		alertMessage = "Donor's Last Donation on "+message[1]+", Today. Allow the donor to be bled:";
+           	   	   }
+            	   if(message[0] < 0){
+            			alertMessage = "Donor donated on "+message[1]+", "+Math.abs(message[0])+" days after the provided donation date ("+message[2]+"). Allow the donor to be bled:";
+          	   	   }
+            	   $(this).append(alertMessage);
+                       },
+               close: function(event, ui) {
+                        $(this).remove();
+                       },
+               title: "Donor's Last Donation",
+               height: 200,
+               width: 450,
+               buttons:
+                 {
+                    "Add Donation": function() {
+                    	 			addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+                                    $(this).dialog("close");
+                                   },
+                    "Cancel": function() {
+                    	         $(this).dialog("close");                                                        
+                               }
+                 }
+             });
+            }
 
     });
 </script>

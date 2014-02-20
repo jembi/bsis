@@ -275,8 +275,39 @@
 	     	<column name="propertyValue" value="true"></column>
 	     </insert>
    </changeSet>
-
-<!-- For issue 118[improve admin UI to manage users ] -->
+   
+	<!-- For issue 117 [Configure Role] -->
+	<changeSet id="20131129112" author="nikita">
+		<addColumn tableName="Role">
+			<column name="description" type="longtext"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="20131129113" author="nikita">
+		<addColumn tableName="Role_AUD">
+			<column name="description" type="longtext"></column>
+		</addColumn>
+	</changeSet>
+	
+	<!-- For issue 117 [for issue role management] -->
+	<changeSet id="201401310210" author="srikanth">
+		<insert tableName="FormField">
+			<column name="form" value="Role"></column>
+			<column name="FIELD" value="name"></column>
+			<column name="defaultDisplayName" value="Role Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		</changeSet>
+		
+	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="201402030408" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="user"></column>
@@ -295,7 +326,7 @@
 		</insert>
 	</changeSet>
 	
-<!-- For issue 118[improve admin UI to manage users ] -->
+	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="201402030415" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="user"></column>
@@ -331,5 +362,4 @@
 		
 	</changeSet>
 	
-
 </databaseChangeLog>	

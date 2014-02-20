@@ -10,6 +10,7 @@
 
 <link type="text/css" rel="stylesheet" href="css/admin.css" />
 <script type="text/javascript" src="js/admin/users.js"></script>
+<script type="text/javascript" src="js/admin/roles.js"></script>
 
 
 <div id="adminTab" class="leftPanel">
@@ -55,6 +56,9 @@
     </li>
     <li id="configureUsersForm">
       <a href="configureUsersFormGenerator.html">Users</a>
+    </li>
+     <li id="configureRoleForm">
+      <a href="configureRolesFormGenerator.html">Roles</a>
     </li>
     <li id="configureTipsForm">
       <a href="configureTipsFormGenerator.html">Tips</a>

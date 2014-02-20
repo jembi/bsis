@@ -46,6 +46,13 @@
 			    </configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+        		<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<server>tomcat</server>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
