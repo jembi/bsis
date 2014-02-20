@@ -7,12 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.user.Permission;
+import model.user.User;
 import model.user.Role;
+import model.user.Permission;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import viewmodel.UserViewModel;
 import viewmodel.RoleViewModel;
 
 @Repository
@@ -88,4 +90,5 @@ public class RoleRepository {
 		List<Permission> permission =  query.getResultList();
 		return permission.isEmpty() ? null : permission.get(0);
 	}
+
 }

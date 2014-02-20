@@ -32,6 +32,9 @@ public class Role {
 	@ManyToMany(mappedBy = "roles")
 	private List<User> users;
 
+	@ManyToMany(mappedBy="roles")
+	private List<UserRole> userRole;
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Permission_Role", joinColumns = { @JoinColumn(name = "roles_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "permissions_id", referencedColumnName = "id") })
 	private Set<Permission> permissions;

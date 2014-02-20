@@ -17,11 +17,24 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-
+<c:set var="table_id">manageRolesTable-${unique_page_id}</c:set>
 <c:set var="configureRolesFormId">configureRoles-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
+	
+	 var manageRolesTable = $("#${table_id}").dataTable({
+	        "bJQueryUI" : true,
+	        "sDom" : '<"H"lfrT>t<"F"ip>',
+	        "oTableTools" : {
+	          "aButtons" : [],
+	          "fnRowSelected" : function(node) {
+	                            },
+	          "fnRowDeselected" : function(node) {
+	                            },
+	        },
+	        "bPaginate" : false
+	      });
 	
   $("#${tabContentId}").find(".roleDiv").click(function() {
     $.ajax({
@@ -87,29 +100,43 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
+  
+  <b>Manage Roles</b>
+  <br/>
+  <br/>
+  
   <div id="${mainContentId}">
-    <b>Manage Roles</b>
-    <br />
-    <div class="tipsBox ui-state-highlight">
+
+    <!-- <div class="tipsBox ui-state-highlight">
       <p>
         Select one of the roles below to edit or add a new role. 
       </p>
     </div>
-    <div style="overflow: hidden;">
+    -->
+    <div></div>
     
-    <table>
-    <tr>
-    <td width="45%" style="padding:5px;"><b>Roles</b></td>
-    <td width="45%"><b>Description</b></td>
-    <td width="10%"></td>
-    </tr>
-    <c:forEach var="role" items="${model.allRules}">
-    <tr>
-	    <td width="45%" class="roleDiv">${role.name}<input name="id" type="hidden" value="${role.id}"></td>
-	    <td width="45%">${role.description}</td>
-	    <td width="10%"></td>
-    </tr>
-    </c:forEach>
+    <table id="${table_id}" class="bloodTestsTable">
+    	<thead>
+	    	<tr>
+	    		<th style="display: none"></th>
+	    		<th>Role</th>
+	    		<th>Description</th>
+		    </tr>
+		  </thead>
+		  <tbody> 
+		  	<c:forEach var="role" items="${model.allRoles}">
+		     	<tr>
+		     		<td style="display: none">${role.id}</td>
+		     		<td width="25%">
+		     			<div class="roleDiv">
+		        			${role.name}
+		        			<input name="id" type="hidden" value="${role.id}">
+		     			 </div>
+		     		</td>
+		     		<td>${role.description}</td>
+		     	</tr>
+		    </c:forEach>
+	     </tbody>
     </table>
       
     <div>
@@ -117,10 +144,6 @@ $(document).ready(function() {
       <button class="addNewRoleButton">Add new role</button>
     </div>
   </div>
-</div>
-  <br />
-  <br />
-  <br />
 
   <div id="${childContentId}"></div>
 

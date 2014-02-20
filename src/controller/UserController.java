@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.user.Role;
 import model.user.User;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import repository.RoleRepository;
 import repository.UserRepository;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
@@ -36,9 +40,12 @@ public class UserController {
   @Autowired
   private UtilController utilController;
 
+  @Autowired
+  private RoleRepository roleRepository;
+  
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController,userRepository));
   }
 
   @RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
@@ -50,6 +57,7 @@ public class UserController {
     Map<String, Object> m = model.asMap();
     addAllUsersToModel(m);
     m.put("refreshUrl", utilController.getUrl(request));
+    m.put("userRoles", roleRepository.getAllRoles());
     mv.addObject("model", model);
     return mv;
   }
@@ -62,8 +70,7 @@ public class UserController {
   @RequestMapping(value = "/editUserFormGenerator", method = RequestMethod.GET)
   public ModelAndView editUserFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "userId", required = false) Integer userId) {
-
-    UserBackingForm form = new UserBackingForm();
+	 UserBackingForm form = new UserBackingForm();
     ModelAndView mv = new ModelAndView("admin/editUserForm");
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", utilController.getUrl(request));
@@ -72,13 +79,17 @@ public class UserController {
       User user = userRepository.findUserById(userId);
       if (user != null) {
         form = new UserBackingForm(user);
+        form.setCurrentPassword(user.getPassword());
+        m.put("userRoles", roleRepository.getAllRoles());
         m.put("existingUser", true);
       }
       else {
-        form = new UserBackingForm();
+    	form = new UserBackingForm();
         m.put("existingUser", false);
       }
     }
+    m.put("allRoles",roleRepository.getAllRoles());
+    m.put("userRoles", form.getRoles());
     m.put("editUserForm", form);
     m.put("refreshUrl", utilController.getUrl(request));
     // to ensure custom field names are displayed in the form
@@ -92,9 +103,9 @@ public class UserController {
                  HttpServletResponse response,
                  @ModelAttribute("editUserForm") @Valid UserBackingForm form,
                  BindingResult result, Model model) {
-
     ModelAndView mv = new ModelAndView("admin/editUserForm");
     boolean success = false;
+    
     String message = "";
     Map<String, Object> m = model.asMap();
 
@@ -102,11 +113,12 @@ public class UserController {
       m.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
       success = false;
-      message = "Please fix the errors noted above.";
+      message = "Error creating new User. Please fix the errors noted below.";
     } else {
       try {
         User user = form.getUser();
         user.setIsDeleted(false);
+        user.setRoles(assignUserRoles(form));
         userRepository.addUser(user);
         m.put("hasErrors", false);
         success = true;
@@ -122,17 +134,27 @@ public class UserController {
         message = "Internal Error. Please try again or report a Problem.";
       }
     }
-
+    m.put("allRoles", roleRepository.getAllRoles());
     m.put("editUserForm", form);
     m.put("existingUser", false);
     m.put("refreshUrl", "editUserFormGenerator.html");
     m.put("success", success);
-    m.put("message", message);
+    m.put("errorMessage", message);
 
     mv.addObject("model", m);
     return mv;
   }
-
+   
+  public List<Role> assignUserRoles(UserBackingForm userForm)
+  {
+	   List<String> userRoles=userForm.getUserRoles();
+       List<Role> roles=new ArrayList<Role>();
+       for(String roleId : userRoles)
+       {
+       	roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
+       }
+       return roles;
+  }
   @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
   public ModelAndView updateUser(
       HttpServletResponse response,
@@ -146,27 +168,31 @@ public class UserController {
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
     m.put("existingUser", true);
-
     if (result.hasErrors()) {
+      m.put("allRoles", roleRepository.getAllRoles());
       m.put("hasErrors", true);
+      form.setModifyPassword(false);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      message = "Please fix the errors noted above";
+      message = "Error Updating user. Please fix the errors noted below";
     }
     else {
       try {
         form.setIsDeleted(false);
         User user = form.getUser();
-        if (form.getModifyPassword())
+        if (form.isModifyPassword())
           user.setPassword(form.getPassword());
-        User existingUser = userRepository.updateUser(user, form.getModifyPassword());
+        else
+        	user.setPassword(form.getCurrentPassword());
+        user.setRoles(assignUserRoles(form));
+        user.setIsActive(true);
+        User existingUser = userRepository.updateUser(user, true);
         if (existingUser == null) {
           m.put("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
           m.put("existingUser", false);
-          message = "User does not already exist.";
-        }
+      }
         else {
           m.put("hasErrors", false);
           success = true;
@@ -184,13 +210,29 @@ public class UserController {
         message = "Internal Error. Please try again or report a Problem.";
       }
    }
-
+    
+ //   m.put("userRoles", form.getUserRole());
     m.put("editUserForm", form);
     m.put("success", success);
-    m.put("message", message);
+    m.put("errorMessage", message);
 
     mv.addObject("model", m);
 
     return mv;
   }
+  
+	
+	
+	public String userRole(Integer id) {
+		String userRole = "";
+		User user=userRepository.findUserById(id);
+		List<Role> roles=user.getRoles();
+		if(roles!=null && roles.size() > 0){
+			for(Role r:roles){
+				userRole= userRole +" "+ r.getId();
+			}
+			
+		}
+		return userRole;
+	}
 }

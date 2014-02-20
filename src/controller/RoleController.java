@@ -65,7 +65,7 @@ public class RoleController {
 
 	private void addAllRolesToModel(Map<String, Object> m) {
 		List<RoleViewModel> roles = roleRepository.getAllRoles();
-		m.put("allRules", roles);
+		m.put("allRoles", roles);
 	}
 
 	private void addAllPermissionsToModel(Map<String, Object> m) {

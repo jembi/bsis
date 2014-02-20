@@ -25,8 +25,8 @@ import org.springframework.stereotype.Component;
 import security.V2VUserDetails;
 
 @Component
-public class EntitySaveListener implements PersistEventListener,
-		MergeEventListener, PreInsertEventListener {
+
+public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,10 +49,9 @@ public class EntitySaveListener implements PersistEventListener,
 					.getAuthentication().getPrincipal();
 			if (principal != null && principal instanceof V2VUserDetails) {
 				User user = ((V2VUserDetails) principal).getUser();
-				if (event.getObject() instanceof ModificationTracker
-						&& user != null) {
-					ModificationTracker entity = (ModificationTracker) event
-							.getObject();
+				if (event.getObject() instanceof ModificationTracker &&
+				user != null) {
+					ModificationTracker entity = (ModificationTracker) event.getObject();
 					entity.setCreatedDate(new Date());
 					entity.setCreatedBy(user);
 					entity.setLastUpdated(new Date());
