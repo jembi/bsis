@@ -35,8 +35,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 
-import repository.DonorRepository;
-import repository.SequenceNumberRepository;
 import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
@@ -58,11 +56,11 @@ public class DonorRepositoryTest {
 	private SequenceNumberRepository sequenceNumberRepository;
 	private User user;
 	private Donor donor;
-	private long dbid, deletedbid, updatedbid;;;
+	private long dbid, deletedbid, updatedbid,donoridfordefer;
 	private String donorNumber;
 	private DonorBackingForm donorBackingForm;
 	private DonorBackingFormValidator donorBackingFormValidator;
-
+	String DateToString = null;
 	private BindException errors;
 	ApplicationContext applicationContext = null;
 	UserDetailsService userDetailsService;
@@ -71,10 +69,12 @@ public class DonorRepositoryTest {
 	public void init() {
 		applicationContext = new ClassPathXmlApplicationContext(
 				"file:**/security-v2v-servlet.xml");
-		dbid = 1;// For Find Record set db id here.
-		deletedbid = 2; // Delete datbase record set db id here.
-		updatedbid = 121;// For update record set db id here.
-		donorNumber = "000001";
+		dbid = 218;// For Find Record set db id here.
+		donoridfordefer =230;//Donor Id for defer list
+		deletedbid = 217; // Delete datbase record set db id here.
+		updatedbid = 218;// For update record set db id here.
+		donorNumber = "000221";
+		DateToString = "10/06/1989";
 		validator = new DonorBackingFormValidator();
 		donorBackingFormValidator = new DonorBackingFormValidator(validator,
 				utilController);
@@ -89,7 +89,7 @@ public class DonorRepositoryTest {
 
 	@Test
 	public void testAddDonor() {
-		String DateToString = "10/06/1989";
+		
 		donorBackingForm.setBirthDate(DateToString);
 		// Donorrandomnumber generation
 		donorBackingForm.setDonorNumber("");
@@ -110,23 +110,29 @@ public class DonorRepositoryTest {
 		System.out.println("success");
 	}
 
-	@Test
+	 @Test
 	public void testGenerateUniqueDonorNumber() {
 		String generateRandomUniqueNo = DonorRepository
 				.generateUniqueDonorNumber();
 		assertFalse(StringUtils.isEmpty(generateRandomUniqueNo));
 	}
 
-	@Test
+	 @Test
 	public void testfindDonorByDonorNumber() {
-		Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
+		Donor donor = donorRepository
+				.findDonorByDonorNumber(donorNumber, false);
 		System.out.println("Donor ::::" + donor);
 		assertNotNull(donor);
 	}
 
+	/*
+	 * Issue 
+	 * doonorHash value is set to null. 
+	 * donor status value is set to  null.
+	 */
+
 	@Test
 	public void testSaveDonor() {
-		String DateToString = "10/06/1991";
 		donorBackingForm.setBirthDate(DateToString);
 		donorBackingForm.setDonorNumber("");
 		setBackingFormValue(donorBackingForm);
@@ -140,20 +146,15 @@ public class DonorRepositoryTest {
 		assertFalse(errors.hasErrors());
 		Donor donor = donorBackingForm.getDonor();
 		donorRepository.saveDonor(donor);
-		/*
-		 * Issue doonorHash value is set to null. donor status value is set to
-		 * null.
-		 */
-
+		
 		boolean isIdZero = donor.getId() == 0 ? false : true;
 		// dbid = donor.getId();
 		assertTrue(isIdZero);
 		System.out.println("success");
 	}
 
-	@Test
+	 @Test
 	public void testUpdateDonor() {
-
 		this.authentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
 		donorBackingForm = new DonorBackingForm(editDonor);
@@ -171,37 +172,220 @@ public class DonorRepositoryTest {
 		assertNotNull(donorRepository.updateDonor(updateDonor));
 	}
 
-	public void setBackingUpdateFormValue(DonorBackingForm donorBackingForm) {
-		donorBackingForm.setAddress("address_update");
-		donorBackingForm.setFirstName("firstName_update");
-		donorBackingForm.setMiddleName("middlename_update");
-		donorBackingForm.setLastName("lastname_update");
-		donorBackingForm.setIsDeleted(false);
-		donorBackingForm.setGender("female");
-		donorBackingForm.setCallingName("CallingName_update");
-		donorBackingForm.setCity("City_update");
-		donorBackingForm.setCountry("country_update");
-		donorBackingForm.setDistrict("District_update");
-		donorBackingForm.setDonorPanel("2");
-		donorBackingForm.setNationalID("1212");
-		donorBackingForm.setNotes("Notes_update");
-		donorBackingForm.setOtherPhoneNumber("9878787878");
-		donorBackingForm.setPhoneNumber("874525452");
-		donorBackingForm.setPreferredContactMethod("2");
-		donorBackingForm.setProvince("Province_update");
-		donorBackingForm.setState("State_update");
-		donorBackingForm.setZipcode("361001");
+	
 
-	}
-
-	@Test
+	 @Test
 	public void testgetAllDonors() {
 		List<Donor> lists = donorRepository.getAllDonors();
 		for (Donor donor : lists) {
 			assertFalse(donor.getIsDeleted());
 		}
 	}
+	
+	 @Test
+	public void testFindDonorByIdLong() {
+		Donor donor = donorRepository.findDonorById(dbid);
+		assertNotNull("Find Donor By Id method argument is long", donor);
+	}
 
+	 @Test
+	public void testFindDonorByIdStringWithoutSpace() {
+		Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
+		assertNotNull("Find Donor By Id method argument is String number",
+				donor);
+	}
+
+	 @Test
+	public void testFindDonorByNumber() {
+		Donor donor = donorRepository.findDonorByNumber(donorNumber);
+		assertNotNull("Find Donor by DonorNumber", donor);
+	}
+
+	 @Test
+	public void testDeleteDonorById() {
+		donorRepository.deleteDonor(deletedbid);
+		assertTrue(true);
+	}
+
+	 @Test
+	public void testdeferDonor() {
+		boolean isScucess = false;
+		try {
+			this.authentication();
+			donorRepository.deferDonor(String.valueOf(donoridfordefer), "28/02/2014", "1", "text");
+			isScucess = true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			isScucess = false;
+		} finally {
+			assertTrue(isScucess);
+		}
+	}
+
+	@Test
+	public void testaddAllDonors() {
+		Donor donor = new Donor();
+		DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
+		donorBackingForm.setBirthDate(DateToString);
+		donorBackingForm.setDonorNumber(sequenceNumberRepository
+				.getNextDonorNumber());
+		setBackingFormValue(donorBackingForm);
+		List<Donor> listAllDonor = new ArrayList<Donor>();
+		listAllDonor.add(donorBackingForm.getDonor());
+		donor = new Donor();
+		donorBackingForm = new DonorBackingForm(donor);
+		DateToString = "11/06/1991";
+		donorBackingForm.setBirthDate(DateToString);
+		donorBackingForm.setDonorNumber(sequenceNumberRepository
+				.getNextDonorNumber());
+		setBackingFormValue(donorBackingForm);
+		listAllDonor.add(donorBackingForm.getDonor());
+		donor = new Donor();
+		donorBackingForm = new DonorBackingForm(donor);
+		DateToString = "12/06/1991";
+		donorBackingForm.setBirthDate(DateToString);
+		donorBackingForm.setDonorNumber(sequenceNumberRepository
+				.getNextDonorNumber());
+		setBackingFormValue(donorBackingForm);
+		listAllDonor.add(donorBackingForm.getDonor());
+		donorRepository.addAllDonors(listAllDonor);
+	}
+
+	 @Test
+	public void testGetDeferralReasons() {
+		List<DeferralReason> list = donorRepository.getDeferralReasons();
+		if (list != null && list.size() > 0) {
+			for (DeferralReason deferralReason : list) {
+				if (deferralReason.getIsDeleted() == true) {
+					assertTrue(false);
+				}
+			}
+		}
+	}
+
+	 @Test
+	public void testGetDonorDeferrals() {
+		List<DonorDeferral> list = donorRepository.getDonorDeferrals(1l);
+		if (list != null && list.size() > 0) {
+			for (DonorDeferral donorDeferral : list) {
+				System.out.println(donorDeferral.getId());
+			}
+		}
+
+	}
+
+	 @Test
+	public void testisCurrentlyDeferredPassList() {
+		List<DonorDeferral> list = donorRepository.getDonorDeferrals(donoridfordefer);
+		System.out.println("Is defer donor found with list as a argument:::"
+				+ donorRepository.isCurrentlyDeferred(list));
+	}
+
+	 @Test
+	public void testisCurrentlyDeferredPassDonor() {
+		Donor donor = donorRepository.findDonorById(230l);
+		System.out
+				.println("Is defer donor found with Donor argument as argument:::"
+						+ donorRepository.isCurrentlyDeferred(donor));
+	}
+
+	@Test
+	public void testFindAnyDonor() {
+		String searchDonorNumber = "";
+		String donorFirstName = "Fir";
+		String donorLastName = "";
+		String anyBloodGroup = "true";
+		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		bloodGroups.add(new BloodGroup("A+"));
+		pagingParams.put("sortColumn", "id");
+		pagingParams.put("start", "0");
+		pagingParams.put("sortColumnId", "0");
+		pagingParams.put("length", "10");
+		pagingParams.put("sortDirection", "asc");
+		System.out.println("donorFirstName:::::" + donorFirstName);
+		List<Object> listObject = donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams);
+		System.out.println("1::" + listObject.size());
+		List<Donor> donors = (List<Donor>) listObject.get(0);
+		System.out.println("1::" + donors.size());
+		if (donors != null && donors.size() > 0) {
+			System.out
+					.println("ID\tDonorNumber\tFirstName\tLastName\tGender\tBloodGroup\tBirthDate");
+			for (Donor donor : donors) {
+				System.out.println();
+				System.out.print(donor.getId());
+				System.out.print("\t");
+				System.out.print(donor.getDonorNumber());
+				System.out.print("\t\t");
+				System.out.print(donor.getFirstName());
+				System.out.print("\t");
+				System.out.print(donor.getLastName());
+				System.out.print("\t");
+				System.out.print(donor.getGender());
+				System.out.print("\t");
+				System.out.print(donor.getBloodAbo() + donor.getBloodRh());
+				System.out.print("\t\t");
+				System.out.print(donor.getBirthDate());
+				System.out.println();
+			}
+		}
+
+	}
+
+	
+	 @Test
+	public void testFindAnyDonorStartWith() {
+		String term = "Fir";
+
+		System.out.println("Term:::" + term);
+		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
+
+		if (listObject != null && listObject.size() > 0) {
+			System.out
+					.println("ID\tDonorNumber\tFirstName\tLastName\tGender\tBirthDate");
+			for (Donor donor : listObject) {
+				System.out.println();
+				System.out.print(donor.getId());
+				System.out.print("\t");
+				System.out.print(donor.getDonorNumber());
+				System.out.print("\t");
+				System.out.print(donor.getFirstName());
+				System.out.print("\t\t");
+				System.out.print(donor.getLastName());
+				System.out.print("\t");
+				System.out.print(donor.getGender());
+				System.out.print("\t");
+				System.out.print(donor.getBirthDate());
+				System.out.println();
+			}
+		}
+
+	}
+	 
+	 public void setBackingUpdateFormValue(DonorBackingForm donorBackingForm) {
+			donorBackingForm.setAddress("address_update");
+			donorBackingForm.setFirstName("firstName_update");
+			donorBackingForm.setMiddleName("middlename_update");
+			donorBackingForm.setLastName("lastname_update");
+			donorBackingForm.setIsDeleted(false);
+			donorBackingForm.setGender("female");
+			donorBackingForm.setCallingName("CallingName_update");
+			donorBackingForm.setCity("City_update");
+			donorBackingForm.setCountry("country_update");
+			donorBackingForm.setDistrict("District_update");
+			donorBackingForm.setDonorPanel("2");
+			donorBackingForm.setNationalID("1212");
+			donorBackingForm.setNotes("Notes_update");
+			donorBackingForm.setOtherPhoneNumber("9878787878");
+			donorBackingForm.setPhoneNumber("874525452");
+			donorBackingForm.setPreferredContactMethod("2");
+			donorBackingForm.setProvince("Province_update");
+			donorBackingForm.setState("State_update");
+			donorBackingForm.setZipcode("361001");
+
+		}
 	public void setBackingFormValue(DonorBackingForm donorBackingForm) {
 		Date date = new Date();
 		donorBackingForm.setAddress("myaddress");
@@ -229,124 +413,7 @@ public class DonorRepositoryTest {
 		donorBackingForm.setZipcode("361001");
 	}
 
-	 @Test
-	public void testFindDonorByIdLong() {
-		Donor donor = donorRepository.findDonorById(dbid);
-		assertNotNull("Find Donor By Id method argument is long", donor);
-	}
-
-	 @Test
-	public void testFindDonorByIdStringWithSpace() {
-		Donor donor = donorRepository.findDonorById("18");
-		assertNotNull("Find Donor By Id method argument is black space", donor);
-	}
-
-	 @Test
-	public void testFindDonorByIdStringWithoutSpace() {
-		Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
-		assertNotNull("Find Donor By Id method argument is String number",
-				donor);
-	}
-
-	 @Test
-	public void testFindDonorByNumber() {
-		Donor donor = donorRepository.findDonorByNumber(donorNumber);
-		assertNotNull("Find Donor by DonorNumber", donor);
-	}
-
-	 @Test
-	public void testDeleteDonorById() {
-		donorRepository.deleteDonor(deletedbid);
-		assertTrue(true);
-	}
-
-	@Test
-	public void testdeferDonor() {
-		boolean isScucess = false;
-		try {
-			this.authentication();
-			donorRepository.deferDonor("168", "28/02/2014", "1", "text");
-			isScucess = true;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			isScucess = false;
-		} finally {
-			assertTrue(isScucess);
-		}
-	}
-
-	@Test
-	public void testaddAllDonors() {
-		Donor donor = new Donor();
-		DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
-		String DateToString = "10/06/1991";
-		donorBackingForm.setBirthDate(DateToString);
-
-		donorBackingForm.setDonorNumber(sequenceNumberRepository
-				.getNextDonorNumber());
-		setBackingFormValue(donorBackingForm);
-		List<Donor> listAllDonor = new ArrayList<Donor>();
-		listAllDonor.add(donorBackingForm.getDonor());
-		donor = new Donor();
-		donorBackingForm = new DonorBackingForm(donor);
-		DateToString = "11/06/1991";
-		donorBackingForm.setBirthDate(DateToString);
-		donorBackingForm.setDonorNumber(sequenceNumberRepository
-				.getNextDonorNumber());
-		setBackingFormValue(donorBackingForm);
-		listAllDonor.add(donorBackingForm.getDonor());
-		donor = new Donor();
-		donorBackingForm = new DonorBackingForm(donor);
-		DateToString = "12/06/1991";
-		donorBackingForm.setBirthDate(DateToString);
-		donorBackingForm.setDonorNumber(sequenceNumberRepository
-				.getNextDonorNumber());
-		setBackingFormValue(donorBackingForm);
-		listAllDonor.add(donorBackingForm.getDonor());
-		donorRepository.addAllDonors(listAllDonor);
-	}
-	
-	@Test
-	public void testGetDeferralReasons(){
-		List<DeferralReason> list = donorRepository.getDeferralReasons();
-		if(list!=null && list.size()>0){
-			for(DeferralReason deferralReason:list){
-				if(deferralReason.getIsDeleted()==true){
-					assertTrue(false);
-				}
-			}
-		}else{
-			assertTrue(false);
-		}
-	}
-	
-	@Test
-	public void testGetDonorDeferrals()
-	{
-		List<DonorDeferral> list = donorRepository.getDonorDeferrals(1l);
-		if(list!=null && list.size()>0){
-				for(DonorDeferral donorDeferral:list){
-					System.out.println(donorDeferral.getId());
-				}
-		}
-		
-	}
-	
-	@Test
-	public void testisCurrentlyDeferredPassList(){
-		List<DonorDeferral> list = donorRepository.getDonorDeferrals(167l);
-		System.out.println("Is defer donor found with list as a argument:::"+donorRepository.isCurrentlyDeferred(list));
-	}
-	
-	@Test
-	public void testisCurrentlyDeferredPassDonor(){
-		Donor donor = donorRepository.findDonorById(167l);
-		
-		System.out.println("Is defer donor found with Donor argument as argument:::"+donorRepository.isCurrentlyDeferred(donor));
-	}
-	
-	
-	
+	 
 	public void authentication() {
 		V2VUserDetails userDetails = (V2VUserDetails) userDetailsService
 				.loadUserByUsername("admin");
