@@ -27,7 +27,7 @@ $(document).ready(function() {
 	        "bJQueryUI" : true,
 	        "sDom" : '<"H"lfrT>t<"F"ip>',
 	        "oTableTools" : {
-	          "aButtons" : [ "print" ],
+	          "aButtons" : [],
 	          "fnRowSelected" : function(node) {
 	                            },
 	          "fnRowDeselected" : function(node) {
@@ -106,6 +106,8 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
  <b>Manage Users</b>
  <br />
+ <br/>
+ 
   <div id="${mainContentId}">
    <!--  <div class="tipsBox ui-state-highlight">
       <p>
