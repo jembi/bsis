@@ -72,6 +72,9 @@ public class DonorRepository {
   }
 
   public Donor findDonorById(String donorId) {
+	  if(StringUtils.isBlank(donorId)){
+		  return null;
+	  }
     return findDonorById(Long.parseLong(donorId));
   }
 
