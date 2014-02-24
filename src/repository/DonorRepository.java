@@ -398,7 +398,7 @@ public class DonorRepository {
 			}			
 		}
 		
-	    if (!anyBloodGroup.equals("true")) {
+	   
 	      List<Predicate> bgPredicates = new ArrayList<Predicate>();
 	      for (BloodGroup bg : bloodGroups) {
 	        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
@@ -406,7 +406,7 @@ public class DonorRepository {
 	        bgPredicates.add(cb.and(aboExp, rhExp));
 	      }
 	      panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
-	    }
+	    
 	    panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
 		cq.where(panelPredicates.toArray(new Predicate[0]));
 

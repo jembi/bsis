@@ -16,8 +16,21 @@
 
 <script>
 $(document).ready(
+		
     function() {
-
+    	
+   	 $("#${tabContentId}").find(".cancelDonorCommButton")
+        .button({
+        	icons : {}
+        })
+        .click(function() {
+                 notifyParentDone();
+               });
+   	
+   	 function notifyParentDone() {
+        $("#${tabContentId}").parent().trigger("donorSummarySuccess");
+      }
+   	 
       var donorsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : '<"H"lrT>t<"F"ip>',
@@ -45,7 +58,7 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" , {
               "sExtends":    "csv",
-              "sButtonText": "Export to csv"
+              "sButtonText": "Export List"
           } ],
           "fnRowSelected" : function(node) {
                               $("#${tabContentId}").parent().trigger("donorSummaryView");
@@ -96,8 +109,8 @@ $(document).ready(
         if (searchBox.val() != "")
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
-
-    });
+      
+   });
 </script>
 
 <div id="${tabContentId}">
@@ -171,7 +184,16 @@ $(document).ready(
 
     </c:otherwise>
   </c:choose>
-
+   <div class="">
+      <div>
+        <label></label>
+        <br>
+        <button type="button" class="cancelDonorCommButton">
+          Cancel
+        </button>
+        
+      </div>
+    </div>
 </div>
 
 <div id="${noResultsFoundDivId}" style="display: none;">
