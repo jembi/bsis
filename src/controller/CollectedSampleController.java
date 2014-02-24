@@ -549,50 +549,40 @@ public class CollectedSampleController {
   
   @RequestMapping("/findLastDonationForDonor.html")  
   public @ResponseBody  
-  List<String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
+  Map<String, String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
 	   
    CollectedSample collectedSample = form.getCollectedSample();
    long diffInDays =0;
    Date dateofLastDonation = null;
    List<String> message = new ArrayList<String>();
    
+   Map<String, String> m = new HashMap<String, String>();
+   
    try{
-	   Donor donor = donorRepository.findDonorById(collectedSample.getDonor().getDonorNumber());
-	   dateofLastDonation = donor.getDateOfLastDonation();
-	   if(dateofLastDonation != null){
-		   Date collectedOnDate = collectedSample.getCollectedOn();
+	   // if the donor exists
+	   if(donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber()) != null){
+		   Donor donor = donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber());
 		   
-		   long diff = collectedOnDate.getTime() - dateofLastDonation.getTime();
-		   diffInDays = diff / (24 * 60 * 60 * 1000);
-		 	
-		   SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		
-		   message.add(String.valueOf(diffInDays));
-		   message.add(formatter.format(dateofLastDonation).toString());
-		   message.add(formatter.format(collectedOnDate).toString());
+		   // if the donor has donated before
+		   if(donor.getDateOfLastDonation() != null){
+			   dateofLastDonation = donor.getDateOfLastDonation();
+			   Date collectedOnDate = collectedSample.getCollectedOn();
+			   
+			   long diff = collectedOnDate.getTime() - dateofLastDonation.getTime();
+			   diffInDays = diff / (24 * 60 * 60 * 1000);
+			 	
+			   SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			
+			   m.put("diffInDays",String.valueOf(diffInDays));
+			   m.put("dateOfLastDonation",formatter.format(dateofLastDonation).toString());
+			   m.put("collectedOnDate",formatter.format(collectedOnDate).toString());
+		   }  
 	   }
-	   else{
-		   message.add("firstTime");
-	  	   message.add("Donor is first time donar");
-	   }
    }
-   catch(NoResultException e){
-  	 message.add("notExist");
-		 message.add("Donor does not exist");
+   catch(Exception ex){
+	 ex.printStackTrace();
    }
-   catch(NullPointerException e){
-  	 message.add("collectedOnRequired");
-  	 message.add("'Collected On' Date is required");
-   }
-   catch(NumberFormatException e){
-  	 message.add("invalidDonor");
-  	 message.add("Invalid Donor Number");
-   }
-   catch(Exception e){
-	 message.add("error");
-	 message.add(e.toString());
-   }
-   return message;  
+   return m;  
   }  
   
 }

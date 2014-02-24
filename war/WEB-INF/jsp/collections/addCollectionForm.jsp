@@ -75,18 +75,13 @@
 						     url : "findLastDonationForDonor.html",   
 						     data : collectedSample,  
 						     success : function(response) {  
-						      var noOfDays = response[0];
+						      var noOfDays = response["diffInDays"];
 						      var blockBetweenCollections = <%=CollectionConstants.BLOCK_BETWEEN_COLLECTIONS%>;
-						      if(noOfDays > blockBetweenCollections || noOfDays == 'firstTime'){
-						    	  addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+						      if(noOfDays != null && noOfDays <= blockBetweenCollections){
+						    	  generateDeferDonorDialog(response);
 						      }
-						      else{
-						    	  if(noOfDays <= 0 || noOfDays > 0){
-						    		  generateDeferDonorDialog(response);
-						    	  }
-						    	  else{
-						    		  generateDeferDonorAlertDialog(response);
-						    	  }
+						      else {
+						    	  addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
 						      }
 						     },  
 						     error : function(e) {  
@@ -208,46 +203,26 @@
 
          $("#${addCollectionFormUseBatchCheckboxId}").change(toggleCheckboxDisabledState);
 		
-         function generateDeferDonorAlertDialog(message) {
-             $("<div>").dialog({
-               modal: true,
-               open:  function() {
- 			    	       	$(this).append(message[1]);
-                       },
-               close: function(event, ui) {
-            	            $(this).remove();
-                       },
-               title: "Donor's Last Donation",
-               height: 200,
-               width: 450,
-               buttons:
-                 {
-                    "OK": function() {
-                    	    $(this).dialog("close");                                                        
-                    }
-                 }
-             });
-            }
          function generateDeferDonorDialog(message) {
              $("<div>").dialog({
                modal: true,
                open:  function() {
             	   var alertMessage ="";
-            	   if(message[0] > 0){
-                   		alertMessage = "Donor last donated on "+message[1]+", "+message[0]+" days ago. Allow the donor to be bled:";
+            	   if(message["diffInDays"] > 0){
+                   		alertMessage = "Donor last donated on "+message["dateOfLastDonation"]+", "+message["diffInDays"]+" day(s) ago. Allow the donation to be added?";
                    }
-            	   if(message[0] == 0){
-                  		alertMessage = "Donor's Last Donation on "+message[1]+", Today. Allow the donor to be bled:";
+            	   if(message["diffInDays"] == 0){
+                  		alertMessage = "Donor donated today, "+message["dateOfLastDonation"]+". Allow the donation to be added?";
            	   	   }
-            	   if(message[0] < 0){
-            			alertMessage = "Donor donated on "+message[1]+", "+Math.abs(message[0])+" days after the provided donation date ("+message[2]+"). Allow the donor to be bled:";
+            	   if(message["diffInDays"] < 0){
+            			alertMessage = "Donor donated on "+message["dateOfLastDonation"]+", "+Math.abs(message["diffInDays"])+" day(s) after the provided donation date ("+message["collectedOnDate"]+"). Allow the donation to be added?";
           	   	   }
             	   $(this).append(alertMessage);
                        },
                close: function(event, ui) {
                         $(this).remove();
                        },
-               title: "Donor's Last Donation",
+               title: "Donor Not Due to Donate",
                height: 200,
                width: 450,
                buttons:
