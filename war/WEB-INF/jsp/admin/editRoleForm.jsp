@@ -82,14 +82,12 @@
     <div>
       <table>
     		<tr>
-    			<td  style="width:175px"> <form:label path="permissionValues">Permissions</form:label></td>
-                 <td>   <form:errors class="formError" path="Role.permissions"
-            delimiter=", "></form:errors>
-     
-       <c:forEach var="permissionVar" items="${model.allPermissions}">
-        <div style="padding-left:180px;">
-        <c:set var="idMatch" value="false"></c:set>
-     
+    			<td  style="width:100px"> <form:label path="permissionValues">Permissions</form:label></td>
+                     
+       <td > <form:errors class="formError" path="Role.permissions" delimiter=", "></form:errors>
+        <c:forEach var="permissionVar" items="${model.allPermissions}">
+        <div style="padding-left:180px;word-wrap:break-word">
+         <c:set var="idMatch" value="false"></c:set>
         <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
         	<c:if test="${permissionRole.id eq permissionVar.id}">
         		<c:set var="idMatch" value="true"></c:set>
@@ -97,16 +95,16 @@
       	</c:forEach>
      
       	<c:if test="${idMatch eq 'true'}">
-     		<form:checkbox path="permissionValues" value="${permissionVar.id}" style="width: auto;" checked="checked"/>${permissionVar.name}
+     		<form:checkbox path="permissionValues" value="${permissionVar.id}" label="${permissionVar.name}" checked="checked"/>
       	</c:if>
       	<c:if test="${idMatch ne 'true'}">
-      		< form:checkbox path="permissionValues" value="${permissionVar.id}"  style="width: auto;"/>${permissionVar.name}
+      		< form:checkbox path="permissionValues"  label="${permissionVar.name}" value="${permissionVar.id}"/>
       	</c:if>
       	</div>
       </c:forEach>
       </td>
       </tr>
-      </table>
+      </table>  
     </div>
     <br />
   	

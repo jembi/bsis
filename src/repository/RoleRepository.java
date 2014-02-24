@@ -56,7 +56,7 @@ public class RoleRepository {
 	}
 
 	public List<Permission> getAllPermissions() {
-		TypedQuery<Permission> query = em.createQuery("FROM Permission",
+		TypedQuery<Permission> query = em.createQuery("FROM Permission order by name ASC",
 				Permission.class);
 		List<Permission> permission = query.getResultList();
 		return permission;
