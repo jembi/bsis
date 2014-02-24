@@ -100,7 +100,7 @@ public class DonorRepositoryTest {
 	@Test
 	public void testAddDonor() {
 
-		donorBackingForm.setDonorNumber("");
+		donorBackingForm.setDonorNumber("000322");
 		donorBackingForm.setBirthDate(DateToString);
 		// Set Inputvalue.
 		setBackingFormValue(donorBackingForm);
