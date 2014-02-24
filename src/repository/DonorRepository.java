@@ -264,7 +264,7 @@ public class DonorRepository {
 	  return donor;
   }
 
-  
+  /*
   public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
 	    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber";
 	    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
@@ -277,7 +277,7 @@ public class DonorRepository {
 	    }
 	    return donor;
 	  }
-
+*/
   public List<DeferralReason> getDeferralReasons() {
     String queryString = "SELECT d from DeferralReason d WHERE d.isDeleted=:isDeleted";
     TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
