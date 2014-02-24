@@ -382,7 +382,7 @@
 	</changeSet>
 	
 	
-	<changeSet id="201402210923" author="srikanth">
+	<changeSet id="201402241012" author="srikanth">
 	     <insert tableName="Role">
 	       <column name="id" value="1"></column>
 	       <column name="name" value="Super User"></column>
@@ -466,7 +466,7 @@
 	 
 	   <insert tableName="Permission">
 	       <column name="id" value="1"></column>
-	       <column name="name" value="Add Donoe"></column>
+	       <column name="name" value="Add Donor"></column>
 	   </insert>
 	    <insert tableName="Permission">
 	       <column name="id" value="2"></column>
@@ -476,225 +476,201 @@
 	       <column name="id" value="3"></column>
 	       <column name="name" value="Edit Donor"></column>
 	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="4"></column>
-	       <column name="name" value=""></column>
-	   </insert> 
-	   <insert tableName="Permission">
+      <insert tableName="Permission">
 	       <column name="id" value="5"></column>
 	       <column name="name" value="Void Donor"></column>
 	   </insert>
 	    <insert tableName="Permission">
 	       <column name="id" value="6"></column>
 	       <column name="name" value="Add Donation"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="7"></column>
-	       <column name="name" value=""></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="8"></column>
+	       <column name="id" value="7"></column>
 	       <column name="name" value="View Donation"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="9"></column>
+	       <column name="id" value="8"></column>
 	       <column name="name" value="Edit Donation"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="10"></column>
+	       <column name="id" value="9"></column>
 	       <column name="name" value="Void Donation"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="11"></column>
+	       <column name="id" value="10"></column>
 	       <column name="name" value="Import Clinic Data"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="12"></column>
-	       <column name="name" value="Export clinic Data"></column>
+	       <column name="id" value="11"></column>
+	       <column name="name" value="Export Clinic Data"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="13"></column>
+	       <column name="id" value="12"></column>
 	       <column name="name" value="Add Component"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="14"></column>
+	       <column name="id" value="13"></column>
 	       <column name="name" value="View Component"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="15"></column>
+	       <column name="id" value="14"></column>
 	       <column name="name" value="Edit Component"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="16"></column>
+	       <column name="id" value="15"></column>
 	       <column name="name" value="Void Component"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="17"></column>
-	       <column name="name" value=""></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="18"></column>
+	       <column name="id" value="16"></column>
 	       <column name="name" value="Add TTI Outcomes"></column>
+	   </insert>
+	   <insert tableName="Permission">
+	       <column name="id" value="17"></column>
+	       <column name="name" value="Edit TTI Outcomes"></column>
+	   </insert>
+	     <insert tableName="Permission">
+	       <column name="id" value="18"></column>
+	       <column name="name" value="View TTI Results"></column>
 	   </insert>
 	    <insert tableName="Permission">
 	       <column name="id" value="19"></column>
 	       <column name="name" value="Add Blood Typing Outcomes"></column>
 	   </insert>
-	    <insert tableName="Permission">
+	   <insert tableName="Permission">
 	       <column name="id" value="20"></column>
-	       <column name="name" value="Edit TTI Outcomes"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="21"></column>
 	       <column name="name" value="Edit Blood Typing Outcomes"></column>
 	   </insert>
-       <insert tableName="Permission">
-	       <column name="id" value="22"></column>
-	       <column name="name" value="View TTi Results"></column>
+	   <insert tableName="Permission">
+	       <column name="id" value="21"></column>
+	       <column name="name" value="View Blood Typing Outcomes"></column>
 	   </insert>
+	   
 	    <insert tableName="Permission">
-	       <column name="id" value="23"></column>
+	       <column name="id" value="22"></column>
 	       <column name="name" value="Blood Cross Match Check"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="24"></column>
+	       <column name="id" value="23"></column>
 	       <column name="name" value="Issue Blood Bag"></column>
+	   </insert>
+	   <insert tableName="Permission">
+	       <column name="id" value="24"></column>
+	       <column name="name" value="Component Labelling"></column>
 	   </insert>
 	    <insert tableName="Permission">
 	       <column name="id" value="25"></column>
-	       <column name="name" value=""></column>
-	   </insert> 
-	   <insert tableName="Permission">
+	       <column name="name" value="Issue Components"></column>
+	   </insert>
+	    <insert tableName="Permission">
 	       <column name="id" value="26"></column>
-	       <column name="name" value="Product Labelling"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="27"></column>
-	       <column name="name" value="Issue Products"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="28"></column>
 	       <column name="name" value="Discard Component"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="29"></column>
+	       <column name="id" value="27"></column>
 	       <column name="name" value="View Discarded Components"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="30"></column>
+	       <column name="id" value="28"></column>
 	       <column name="name" value="Donations Reporting"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="31"></column>
+	       <column name="id" value="29"></column>
 	       <column name="name" value="Requests Reporting"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="32"></column>
+	       <column name="id" value="30"></column>
 	       <column name="name" value="TTI Reporting"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="33"></column>
+	       <column name="id" value="31"></column>
 	       <column name="name" value="Components Issued Reporting"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="34"></column>
+	       <column name="id" value="32"></column>
 	       <column name="name" value="Components Discarded Reporting"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="35"></column>
-	       <column name="name" value="Manage users"></column>
+	       <column name="id" value="33"></column>
+	       <column name="name" value="Manage Users"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="36"></column>
+	       <column name="id" value="34"></column>
 	       <column name="name" value="Manage Roles"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="37"></column>
+	       <column name="id" value="35"></column>
 	       <column name="name" value="Manage Donation sites"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="38"></column>
+	       <column name="id" value="36"></column>
 	       <column name="name" value="Manage Donation Types"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="39"></column>
+	       <column name="id" value="37"></column>
 	       <column name="name" value="Manage Donation Categories"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="40"></column>
+	       <column name="id" value="38"></column>
 	       <column name="name" value="Manage Component Combinations"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="41"></column>
+	       <column name="id" value="39"></column>
 	       <column name="name" value="Manage Cross Match Types"></column>
+	   </insert>
+	    <insert tableName="Permission">
+	       <column name="id" value="40"></column>
+	       <column name="name" value="Manage Blood Tests"></column>
+	   </insert>
+	    <insert tableName="Permission">
+	       <column name="id" value="41"></column>
+	       <column name="name" value="Manage Donation Categories"></column>
 	   </insert>
 	    <insert tableName="Permission">
 	       <column name="id" value="42"></column>
-	       <column name="name" value="Manage Blood Tests"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="43"></column>
-	       <column name="name" value="Manage Donation Categories"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="44"></column>
 	       <column name="name" value="Manage Component Combinations"></column>
 	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="45"></column>
-	       <column name="name" value="Manage Cross Match Types"></column>
-	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="46"></column>
+	       <column name="id" value="43"></column>
 	       <column name="name" value="Manage Blood Typing Rules"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="47"></column>
+	       <column name="id" value="44"></column>
 	       <column name="name" value="Manage Blood Bag Types"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="48"></column>
+	       <column name="id" value="45"></column>
 	       <column name="name" value="Manage Discard Reasons"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="49"></column>
+	       <column name="id" value="46"></column>
 	       <column name="name" value="Manage Donor Defer Reasons"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="50"></column>
+	       <column name="id" value="47"></column>
 	       <column name="name" value="Manage Donor Codes"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="51"></column>
+	       <column name="id" value="48"></column>
 	       <column name="name" value="Manage Diagnoses Codes"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="52"></column>
+	       <column name="id" value="49"></column>
 	       <column name="name" value="Manage Lab Setup"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="53"></column>
+	       <column name="id" value="50"></column>
 	       <column name="name" value="Manage Data Setup"></column>
 	   </insert>
 	    <insert tableName="Permission">
-	       <column name="id" value="54"></column>
+	       <column name="id" value="51"></column>
 	       <column name="name" value="Manage Forms"></column>
 	   </insert> 
 	   <insert tableName="Permission">
-	       <column name="id" value="55"></column>
+	       <column name="id" value="52"></column>
 	       <column name="name" value="Manage Blood Tests"></column>
 	   </insert>
-	    
-	 </changeSet>
+	  </changeSet>
 	 
-	 <changeSet id="201402210414" author="srikanth"> 
-	 <delete tableName="Permission">
-			<where>name=''</where>
-	</delete>
-	<update tableName="Permission">
-    		<column name="name" value="Add Donor" />
-    		<where>id = "1"</where>
-	</update>
-   </changeSet>
+	
 	
 </databaseChangeLog>	

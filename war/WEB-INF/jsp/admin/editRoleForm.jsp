@@ -70,7 +70,7 @@
     commandName="editRoleForm">
     <form:hidden path="id" /> 
     <div>
-      <form:label path="name">Role</form:label>
+      <form:label path="name">Role*</form:label>
       <form:input path="name" />
        <form:errors class="formError" path="Role.name"
             delimiter=","></form:errors>
@@ -80,8 +80,10 @@
       <form:input path="role.description"/>
     </div>
     <div>
-      <form:label path="permissionValues">Permissions</form:label>
-      <form:errors class="formError" path="Role.permissions"
+      <table>
+    		<tr>
+    			<td  style="width:175px"> <form:label path="permissionValues">Permissions</form:label></td>
+                 <td>   <form:errors class="formError" path="Role.permissions"
             delimiter=", "></form:errors>
      
        <c:forEach var="permissionVar" items="${model.allPermissions}">
@@ -102,6 +104,9 @@
       	</c:if>
       	</div>
       </c:forEach>
+      </td>
+      </tr>
+      </table>
     </div>
     <br />
   	
