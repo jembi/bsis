@@ -80,18 +80,16 @@
       <form:input path="role.description"/>
     </div>
     
-    
-      <div>
-       <form:label path="permissionValues">Permissions</form:label>
+    <div>
+      <form:label path="Role.permissions">Permissions</form:label>
       <table style="padding-left:180px">
-    		
-     <tr>  <form:errors class="formError" path="Role.permissions" delimiter=", "/></tr>
-           <tr> 
+       <tr>  <form:errors class="formError" path="Role.permissions" delimiter=", "/></tr>
+       <tr> 
           <c:set var="count" value="0" /> 
           <c:forEach var="permissionVar" items="${model.allPermissions}">
           <c:set var="idMatch" value="false"></c:set>
           <c:set var="count" value="${count+1}" />
-           <td>
+          <td>
          <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
             <c:if test="${permissionRole.id eq permissionVar.id}">
         		<c:set var="idMatch" value="true"></c:set>
@@ -99,12 +97,12 @@
       	 </c:forEach>
      
             	<c:if test="${idMatch eq 'true'}">
-     		    <form:checkbox path="permissionValues" value="${permissionVar.id}"  checked="checked"/><form:label   path="permissionValues">${permissionVar.name}</form:label>
+     		    <form:checkbox path="permissionValues" value="${permissionVar.id}"  label="${permissionVar.name}" checked="checked"/>
       	        </c:if>
             	<c:if test="${idMatch ne 'true'}">
-      		    < form:checkbox path="permissionValues"    value="${permissionVar.id}"/><form:label  path="permissionValues">${permissionVar.name}</form:label>
+      		    < form:checkbox path="permissionValues"  label="${permissionVar.name}"  value="${permissionVar.id}"/>
              	</c:if>
-               </td>
+         </td>
       
       	        <c:if test="${count%2==0}">
                  </tr><tr>
