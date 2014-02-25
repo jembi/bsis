@@ -2,6 +2,7 @@ package repository;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -75,7 +76,7 @@ public class DonorRepositoryTest {
 		dbid = 218;// For Find Record set db id here.
 		donoridfordefer = 230;// Donor Id for defer list
 		deletedbid = 223; // Delete datbase record set db id here.
-		updatedbid = 220;// For update record set db id here.
+		updatedbid = 224;// For update record set db id here.
 		donorNumber = "000311";
 		donorBirthdate = "10/06/1989";
 		validator = new DonorBackingFormValidator();
@@ -97,7 +98,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor firstname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	//@Test
+	@Test
 	public void testAddDonorFirstNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -108,7 +109,7 @@ public class DonorRepositoryTest {
 		Object obj = donorBackingForm;
 		// Check Input value is valid or not.
 		donorBackingFormValidator.validate(obj, errors);
-		//First Name is blank,donor should not persist.
+		//First Name is blank,donor object should not persist.
 		assertFalse(errors.hasErrors());
 		Donor donor = donorBackingForm.getDonor();
 		donorRepository.addDonor(donor);
@@ -126,7 +127,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor lastname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	//@Test
+	@Test
 	public void testAddDonorLastNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -137,7 +138,7 @@ public class DonorRepositoryTest {
 		Object obj = donorBackingForm;
 		// Check Input value is valid or not.
 		donorBackingFormValidator.validate(obj, errors);
-		//Last Name is blank,donor should not persist.
+		//Last Name is blank,donor object should not persist.
 		assertFalse(errors.hasErrors());
 		Donor donor = donorBackingForm.getDonor();
 		donorRepository.addDonor(donor);
@@ -154,7 +155,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass duplicate donor number.
 	 * Expected Result:Donor object should not persist.
 	 */
-	//@Test
+	@Test
 	public void testAddDonorDonorNumberDuplicate() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -180,25 +181,23 @@ public class DonorRepositoryTest {
 	 * method. If user input is valid than Donor object should persist.
 	 * DonorNumber should be unique and not null.
 	 * Here we can pass blank donor number.
-	 * Expected Result:Donor object should not persist.
+	 * Expected Result:Here automatic new donornumber is generated and assign to persist object and donor object should be persist.
 	 */
-	/*
-	 * Issue: New record is added into database with blank donornumber.
-	 */
-	//@Test
+	
+	@Test
 	public void testAddDonorDonorNumberBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
 		setBackingFormValue(donorBackingForm);
 		donorBackingForm.setBirthDateEstimated(true);
+		donorBackingForm.setDonorNumber("");//Here we can pass blank donor number and check method result.
 		errors = new BindException(donorBackingForm, "donor");
 		Object obj = donorBackingForm;
 		// Check Input value is valid or not.
 		donorBackingFormValidator.validate(obj, errors);
-		donorBackingForm.getDonor().setDonorNumber("");//Here we can pass blank donor number and check method result.
-		//Donor Number is blank,donor object should not persist.
 		assertFalse(errors.hasErrors());
 		Donor donor = donorBackingForm.getDonor();
+		//New donornumber is generated and assign to persist donor object and donor object should persist.
 		donorRepository.addDonor(donor);
 		boolean isIdZero = donor.getId() == 0 ? false : true;
 		assertTrue(isIdZero);
@@ -214,7 +213,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:Donor object should not persist.
 	 */
 	
-	//@Test
+	@Test
 	public void testAddDonorGenderBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -242,7 +241,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is less than 16.
 	 * Expected Result:Donor object should not persist.
 	 */
-	//@Test
+	@Test
 	public void testAddDonorMinimumAge() {
 		donorBirthdate = "10/06/2000";//Calculate Donor age is less than 16.
 		donorBackingForm.setBirthDate(donorBirthdate);
@@ -298,7 +297,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:Donor object should be persist.
 	 */
 	
-	//@Test
+	@Test
 	public void testAddDonor() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -323,7 +322,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string length is less than 2.
 	 * Expected Result: List<Donor> size should be zero.
 	 */
-	//@Test
+	@Test
 	public void testFindAnyDonorStartWithStringLengthLessthan2() {
 		String term = "F";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -338,11 +337,11 @@ public class DonorRepositoryTest {
 	 * Description:
 	 * Expected Result: List<Donor> size should not zero.
 	 */
-	//@Test
+	@Test
 	public void testFindAnyDonorStartWithDonorNumberMatch() {
 		String term = "000310";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
-		//Search string is donor number and list size should not zero.
+		//Search string is valid donornumber and list size should not zero.
 		assertNotSame(listObject.size(),0);
 	}
 	
@@ -352,13 +351,13 @@ public class DonorRepositoryTest {
 	 * In this test case search string is donornumber.
 	 * Expected Result: Soft Deleted record should not added into List<Donor>.
 	 */
-	//@Test
+	@Test
 	public void testFindAnyDonorStartWithTestDeleteDonorNotInclude() {
 		String term = "000310";
 		deletedbid=303;
 		testDeleteDonorById();//Soft delete and try to access that record.
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
-		//Search string is donor number and list size should be zero.
+		//Search string is valid donornumber and list size should be zero.
 		assertEquals(listObject.size(),0);
 	}
 	/**
@@ -367,7 +366,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string is firstname.
 	 * Expected Result: List<Donor> size should not zero.
 	 */
-	//@Test
+	@Test
 	public void testFindAnyDonorStartWithDonorFirstNameMatch() {
 		String term = "fi";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -381,7 +380,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string is lastname.
 	 * Expected Result: List<Donor> size should not zero.
 	 */
-	//@Test
+	@Test
 	public void testFindAnyDonorStartWithDonorLastNameMatch() {
 		String term = "la";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -396,42 +395,104 @@ public class DonorRepositoryTest {
 	 * Generate Unique Donor Number prefix with D-<12 Digit Random Number
 	 * UniqueNo>
 	 */
-	//@Test
+	@Test
 	public void testGenerateUniqueDonorNumber() {
 		String generateRandomUniqueNo = DonorRepository
 				.generateUniqueDonorNumber();
 		assertFalse(StringUtils.isEmpty(generateRandomUniqueNo));
-	}
-
-	/**
-	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
-	 * Description:
-	 * Donor object should be null, if Input DonorNumber is not match with donor(donorNumber) table.
-	 * Donor object should be null,If Donornumber is match with N record of donor(donorNumber) table but In N record isDeleted value is 0 and
-	 * findDonorByDonorNumber(donorNumber,isdeleted) isdeleted set to true.
-	 * Donor object should not null,If Donornumber is match with N record of donor(donorNumber) table but In N record isDeleted value is 1 and
-	 * findDonorByDonorNumber(donorNumber,isdeleted) isdeleted set to true. 
-	 */
-	//@Test
-	public void testfindDonorByDonorNumberDeleteDonorTrue() {
-		System.out.println("Donor Number:::" + donorNumber);
-		Donor donor = donorRepository
-				.findDonorByDonorNumber(donorNumber, true);
-		assertNotNull(donor);
 	}
 	
 	/**
 	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
 	 * Description:
 	 * Donor object should be null, if Input DonorNumber is not match with donor(donorNumber) table.
-	 * Donor object should be null,If Donornumber is match with N record of donor(donorNumber) table but In N record isDeleted value is 1.
-	 * Donor object should not null,If Donornumber is match with N record of donor(donorNumber) table but In N record isDeleted value is 0
+	 * donornumber value is -1. Isdeleted value is set to true.
+	 * Expected Result:
+	 * Donor object should be null.
 	 */
-	//@Test
-	public void testfindDonorByDonorNumberDeleteDonorFalse() {
-		System.out.println("Donor Number:::" + donorNumber);
+	@Test
+	public void testfindDonorByDonorNumberCheckDonorExistDeleteTrue() {
+		donorNumber="-1";
+		Donor donor = donorRepository
+				.findDonorByDonorNumber(donorNumber, true);
+		//Set  donor number as -1 and deleted true so donor object should null.
+		assertNull(donor);
+	}
+	
+	/**
+	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
+	 * Description:
+	 * Donor object should be null, if Input DonorNumber is not match with donor(donorNumber) table.
+	 * donornumber value is -1. Isdeleted value is set to false.
+	 * Expected Result:
+	 * Donor object should be null.
+	 */
+	@Test
+	public void testfindDonorByDonorNumberCheckDonorExistDeleteFalse() {
+		donorNumber="-1";
 		Donor donor = donorRepository
 				.findDonorByDonorNumber(donorNumber, false);
+		//Set  donor number as -1 and deleted false so donor object should null.
+		assertNull(donor);
+	}
+
+	/**
+	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
+	 * Description:
+	 * Set Valid deleted donor donornumber value and set isdeleted = true
+	 *Expected Result:
+	 * Donor Object should not null.
+	 */
+	@Test
+	public void testfindDonorByDonorNumberSelectDeleteDonorIsDeleteTrue() {
+		Donor donor = donorRepository
+				.findDonorByDonorNumber(donorNumber, true);
+		//Set delete donor donornumber value and deleted true so donor object should not null.
+		assertNotNull(donor);
+	}
+	
+	/**
+	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
+	 * Description:
+	 * Set Valid deleted donor donornumber value and set isdeleted = false
+	 *Expected Result:
+	 * Donor Object should be null.
+	 */
+	@Test
+	public void testfindDonorByDonorNumberSelectDeleteDonorIsDleteFalse() {
+		Donor donor = donorRepository
+				.findDonorByDonorNumber(donorNumber, false);
+		//Set delete donor donornumber value and deleted false so donor object should null.
+		assertNull(donor);
+	}
+	
+	/**
+	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
+	 * Description:
+	 * Set valid value for donornumber and set isdeleted = false.
+	 * Expected Result:
+	 * Donor object should null.
+	 */
+	@Test
+	public void testfindDonorByDonorNumberIsDeletedtrue() {
+		Donor donor = donorRepository
+				.findDonorByDonorNumber(donorNumber, true);
+		//valid donor donornumber, donor object should null because isdeleted=true.
+		assertNull(donor);
+	}
+	
+	/**
+	 * Purpose: Test findDonorByDonorNumber(String donorNumber,boolean isdeleted) Method
+	 * Description:
+	 * Set valid value for donornumber and set isdeleted = false.
+	 * Expected Result:
+	 * Donor object should not null.
+	 */
+	@Test
+	public void testfindDonorByDonorNumberIsDeletedfalse() {
+		Donor donor = donorRepository
+				.findDonorByDonorNumber(donorNumber, false);
+		//set valid donor donornumber and isdeleted=false so donor object should not null.
 		assertNotNull(donor);
 	}
 
@@ -439,15 +500,205 @@ public class DonorRepositoryTest {
 	 * Purpose: Test saveDonor(Donor donor) Method
 	 * Description:
 	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * Here we can pass donor firstname value is blank.
+	 * Expected Result:Donor object should not persist.
+	 */
+	@Test
+	public void testSaveDonorFirstNameBlank() {
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setFirstName("");//Here we can pass donor firstname value is blank.
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		//First Name is blank,donor object should not persist.
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		donorRepository.saveDonor(donor);
+		assertTrue(donor.getId() == 0 ? false : true);
+	}
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * Last Name should not null.
+	 * Here we can pass donor lastname value is blank.
+	 * Expected Result:Donor object should not persist.
+	 */
+	//@Test
+	public void testSaveDonorLastNameBlank() {
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setLastName("");//Here we can pass donor lastname value is blank.
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		//Last Name is blank,donor object should not persist.
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		donorRepository.saveDonor(donor);
+		assertTrue( donor.getId() == 0 ? false : true);
+	}
+	
+	
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * DonorNumber should be unique and not null.
+	 * Here we can pass duplicate donor number.
+	 * Expected Result:Donor object should not persist.
+	 */
+	@Test
+	public void testSaveDonorDonorNumberDuplicate() {
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setDonorNumber("000321");//Here we can pass duplicate donor number and check method result.
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's donornumber is duplicate,donor object should not persist.
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		donorRepository.saveDonor(donor);
+		assertTrue(donor.getId() == 0 ? false : true);
+	}
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * DonorNumber should be unique and not null.
+	 * Here we can pass blank donor number.
+	 * Expected Result:New donornumber is generated and assign to persist object and donor object should be persist.
+	 */
+	
+	@Test
+	public void testSaveDonorDonorNumberBlank() {
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setDonorNumber("");//Here we can pass blank donor number and check method result.
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		//New donornumber is generated and assign to persist donor object and donor object should persist.
+		donorRepository.saveDonor(donor);
+		assertTrue(donor.getId() == 0 ? false : true);
+	}
+	
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * Gender should not blank.
+	 * Here we can pass blank gender.
+	 * Expected Result:Donor object should not persist.
+	 */
+	
+	@Test
+	public void testsaveDonorGenderBlank() {
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setGender("");
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		//Gender is blank,donor should not persist.
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		donorRepository.saveDonor(donor);
+		assertTrue(donor.getId() == 0 ? false : true);
+	}
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * Birthdate  should be between 16 to 65.
+	 * Here we can pass wrong birthdate so that donor's age is less than 16.
+	 * Expected Result:Donor object should not persist.
+	 */
+	@Test
+	public void testSaveDonorMinimumAge() {
+		donorBirthdate = "10/06/2000";//Calculate Donor age is less than 16.
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's date of birth is invalid. donor object should not persist.
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		donorRepository.saveDonor(donor);
+		assertTrue(donor.getId() == 0 ? false : true);
+	}
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should persist.
+	 * Birthdate  should be between 16 to 65.
+	 * Here we can pass wrong birthdate so that donor's age is greater than 65.
+	 * Expected Result:Donor object should not persist.
+	 */
+	@Test
+	public void testSaveDonorMaximumAge() {
+		donorBirthdate = "24/02/1948";//Calculate Donor age is greater than 65.
+		donorBackingForm.setBirthDate(donorBirthdate);
+		// Set Inputvalue.
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setBirthDateEstimated(true);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		// Check Input value is valid or not.
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's date of birth is invalid. donor object should not perist.
+		assertFalse(errors.hasErrors());
+		Donor donor = donorBackingForm.getDonor();
+		donorRepository.saveDonor(donor);
+		assertTrue(donor.getId() == 0 ? false : true);
+	}
+	
+	/**
+	 * Purpose: Test saveDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
 	 * method. If user input is valid then Donor object should persist.
 	 * First Name,Last Name,Gender(M or F),Birth date should not null.
 	 * DonorNumber should be unique and not null. Donor Age should be between 16 to 25.
+	 * Expected Result: Donor object should pass validation framework and donor object should persist.
 	 */
-	/*
-	 * Issue doonorHash value is set to null. donor status value is set to null.
-	 */
-
-	//@Test
+	@Test
 	public void testSaveDonor() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		donorBackingForm.setDonorNumber("");
@@ -455,49 +706,212 @@ public class DonorRepositoryTest {
 		errors = new BindException(donorBackingForm, "donor");
 		Object obj = donorBackingForm;
 		donorBackingFormValidator.validate(obj, errors);
-		List<ObjectError> list = errors.getAllErrors();
-		for (ObjectError oe : list) {
-			System.out.println(oe.getDefaultMessage());
-		}
-		System.out.println("errors.hasErrors()::" + errors.hasErrors());
 		assertFalse(errors.hasErrors());
 		Donor donor = donorBackingForm.getDonor();
 		donorRepository.saveDonor(donor);
-
-		boolean isIdZero = donor.getId() == 0 ? false : true;
-		// dbid = donor.getId();
-		assertTrue(isIdZero);
-		System.out.println("success");
+		assertTrue(donor.getId() == 0 ? false : true);
 	}
-
+	
+	
+	
+	
+	
 	/**
 	 * Purpose: Test updateDonor(Donor donor) Method
 	 * Description:
-	 * Authorize user through userAuthentication() method.
 	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
-	 * method. If user input is valid then Donor object should update.
-	 * First Name,Last Name,Gender(M or F),Birth date should not null.
-	 * DonorNumber should be unique,not null and newly generated. Donor Age should be between 16 to 25.
+	 * method. If user input is valid than Donor object should update.
+	 * Here we can pass donor firstname value is blank.
+	 * Expected Result:Donor object should not update.
 	 */
 	//@Test
-	public void testUpdateDonor() {
+	public void testUpdateDonorFirstNameBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
 		donorBackingForm = new DonorBackingForm(editDonor);
 		setBackingUpdateFormValue(donorBackingForm);
+		donorBackingForm.setFirstName("");
 		errors = new BindException(donorBackingForm, "donor");
 		Object obj = donorBackingForm;
 		donorBackingFormValidator.validate(obj, errors);
-		List<ObjectError> list = errors.getAllErrors();
-		for (ObjectError oe : list) {
-			System.out.println(oe.getDefaultMessage());
-		}
+		//Donor's firstname is blank. Donor object should not update.
 		assertFalse(errors.hasErrors());
 		System.out.println("editDonor__________" + editDonor.getLastUpdated());
 		Donor updateDonor = donorBackingForm.getDonor();
 		assertNotNull(donorRepository.updateDonor(updateDonor));
 	}
+	
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should update.
+	 * Here we can pass donor lastname value is blank.
+	 * Expected Result:Donor object should not update.
+	 */
+	//@Test
+	public void testUpdateDonorLastNameBlank() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(updatedbid);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		donorBackingForm.setLastName("");
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's lastname is blank. Donor object should not update.
+		assertFalse(errors.hasErrors());
+		Donor updateDonor = donorBackingForm.getDonor();
+		assertNotNull(donorRepository.updateDonor(updateDonor));
+	}
+	
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should update.
+	 * Here we can pass donor's duplicate donornumber.
+	 * Expected Result:Donor object should not update.
+	 */
+	@Test
+	public void testUpdateDonorDonorNumberDuplicate() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(updatedbid);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		donorBackingForm.setDonorNumber("000222");//Here we can pass duplicate donor number and check method result.
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's donornumber is duplicate. Donor object should not update.
+		assertFalse(errors.hasErrors());
+		Donor updateDonor = donorBackingForm.getDonor();
+		assertNotNull(donorRepository.updateDonor(updateDonor));
+	}
 
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should update.
+	 * Here we can pass donor's donornumber is blank.
+	 * Expected Result:Donor object should not update.
+	 */
+	@Test
+	public void testUpdateDonorDonorNumberBlank() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(updatedbid);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		donorBackingForm.setFirstName("000231");//Here we can pass duplicate donor number and check method result.
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's donornumber is duplicate. Donor object should not update.
+		assertFalse(errors.hasErrors());
+		Donor updateDonor = donorBackingForm.getDonor();
+		assertNotNull(donorRepository.updateDonor(updateDonor));
+	}
+	
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should update.
+	 * Here we can pass donor's gender is blank.
+	 * Expected Result:Donor object should not update(persist).
+	 */
+	//@Test
+	public void testUpdateDonorGenderBlank() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(updatedbid);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		donorBackingForm.setGender("");
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's gender value is blank. Donor object should not update.
+		assertFalse(errors.hasErrors());
+		Donor updateDonor = donorBackingForm.getDonor();
+		assertNotNull(donorRepository.updateDonor(updateDonor));
+	}
+	
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should update.
+	 * Birthdate  should be between 16 to 65.
+	 * Here we can pass wrong birthdate so that donor's age is less than 16.
+	 * Expected Result:Donor object should not update.
+	 */
+	@Test
+	public void testUpdateDonorMinimumAge() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(updatedbid);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		donorBirthdate = "10/06/2000";//Calculate Donor age is less than 16.
+		donorBackingForm.setBirthDate(donorBirthdate);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's date of birth is invalid. donor object should not update.
+		assertFalse(errors.hasErrors());
+		Donor updateDonor = donorBackingForm.getDonor();
+		assertNotNull(donorRepository.updateDonor(updateDonor));
+	}
+	
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid than Donor object should update.
+	 * Birthdate  should be between 16 to 65.
+	 * Here we can pass wrong birthdate so that donor's age is greater than 65.
+	 * Expected Result:Donor object should not update.
+	 */
+	//@Test
+	public void testUpdateDonorMaximumAge() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(updatedbid);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		donorBirthdate = "24/02/1948";//Calculate Donor age is greater than 65.
+		donorBackingForm.setBirthDate(donorBirthdate);
+		errors = new BindException(donorBackingForm, "donor");
+		Object obj = donorBackingForm;
+		donorBackingFormValidator.validate(obj, errors);
+		//Donor's date of birth is invalid. donor object should not update.
+		assertFalse(errors.hasErrors());
+		Donor updateDonor = donorBackingForm.getDonor();
+		assertNotNull(donorRepository.updateDonor(updateDonor));
+	}
+	/**
+	 * Purpose: Test updateDonor(Donor donor) Method
+	 * Description:
+	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
+	 * method. If user input is valid then Donor object should update.
+	 * First Name,Last Name,Gender(M or F),Birth date should not null.
+	 * DonorNumber should be unique and not null. Donor Age should be between 16 to 25.
+	 * Expected Result: Here Donor object should update.
+	 */
+	//@Test
+		public void testUpdateDonor() {
+			this.userAuthentication();
+			Donor editDonor = donorRepository.findDonorById(updatedbid);
+			donorBackingForm = new DonorBackingForm(editDonor);
+			setBackingUpdateFormValue(donorBackingForm);
+			errors = new BindException(donorBackingForm, "donor");
+			Object obj = donorBackingForm;
+			donorBackingFormValidator.validate(obj, errors);
+			assertFalse(errors.hasErrors());
+			Donor updateDonor = donorBackingForm.getDonor();
+			assertNotNull(donorRepository.updateDonor(updateDonor));
+		}
+	
+	
 	/**
 	 * purpose: Test addAllDonors(List<Donor>) method
 	 * Description:
@@ -805,6 +1219,7 @@ public class DonorRepositoryTest {
 		donorBackingForm.setProvince("Province");
 		donorBackingForm.setState("State");
 		donorBackingForm.setZipcode("361001");
+		donorBackingForm.setBirthDateEstimated(true);
 	}
 
 	/**
