@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -302,14 +303,25 @@ public class UtilController {
     return collectedSample;
   }
 
-  public String verifyDonorAge(Donor donor) {
+  public boolean isFutureDate(Date date){
+	  Date today = new Date();
+	  System.out.println("\tTODAY:"+today);
+	  if(date.after(today)){
+		  return true;
+	  }
+	  else{
+		  return false;
+	  }
+  }
+  
+  public String verifyDonorAge(Date birthDate) {
     Map<String, String> config = getConfigProperty("donationRequirements");
     String errorMessage = "";
     if (config.get("ageLimitsEnabled").equals("true")) {
       try {
         Integer minAge = Integer.parseInt(config.get("minimumAge"));
         Integer maxAge = Integer.parseInt(config.get("maximumAge"));
-        Integer donorAge = DonorUtils.computeDonorAge(donor);
+        Integer donorAge = DonorUtils.computeDonorAge(birthDate);
         if (donorAge == null) {
           errorMessage = "One of donor Date of Birth or Age must be specified";
         }
@@ -383,6 +395,15 @@ public class UtilController {
       return false;
     Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
     if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
+      return true;
+    return false;
+  }
+  
+  public boolean donorNumberExists(String donorNumber) {
+    if (StringUtils.isBlank(donorNumber))
+      return false;
+    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    if (existingDonor != null && existingDonor.getId() != null)
       return true;
     return false;
   }
