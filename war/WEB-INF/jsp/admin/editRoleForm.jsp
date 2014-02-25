@@ -79,33 +79,41 @@
        <form:label path="description">Description</form:label> 
       <form:input path="role.description"/>
     </div>
-    <div>
-      <table>
-    		<tr>
-    			<td  style="width:100px"> <form:label path="permissionValues">Permissions</form:label></td>
-                     
-       <td > <form:errors class="formError" path="Role.permissions" delimiter=", "></form:errors>
-        <c:forEach var="permissionVar" items="${model.allPermissions}">
-        <div style="padding-left:180px;word-wrap:break-word">
-         <c:set var="idMatch" value="false"></c:set>
-        <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
-        	<c:if test="${permissionRole.id eq permissionVar.id}">
+    
+    
+      <div>
+       <form:label path="permissionValues">Permissions</form:label>
+      <table style="padding-left:180px">
+    		
+     <tr>  <form:errors class="formError" path="Role.permissions" delimiter=", "/></tr>
+           <tr> 
+          <c:set var="count" value="0" /> 
+          <c:forEach var="permissionVar" items="${model.allPermissions}">
+          <c:set var="idMatch" value="false"></c:set>
+          <c:set var="count" value="${count+1}" />
+           <td>
+         <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
+            <c:if test="${permissionRole.id eq permissionVar.id}">
         		<c:set var="idMatch" value="true"></c:set>
       		</c:if>
-      	</c:forEach>
+      	 </c:forEach>
      
-      	<c:if test="${idMatch eq 'true'}">
-     		<form:checkbox path="permissionValues" value="${permissionVar.id}" label="${permissionVar.name}" checked="checked"/>
-      	</c:if>
-      	<c:if test="${idMatch ne 'true'}">
-      		< form:checkbox path="permissionValues"  label="${permissionVar.name}" value="${permissionVar.id}"/>
-      	</c:if>
-      	</div>
-      </c:forEach>
-      </td>
+            	<c:if test="${idMatch eq 'true'}">
+     		    <form:checkbox path="permissionValues" value="${permissionVar.id}"  checked="checked"/><form:label   path="permissionValues">${permissionVar.name}</form:label>
+      	        </c:if>
+            	<c:if test="${idMatch ne 'true'}">
+      		    < form:checkbox path="permissionValues"    value="${permissionVar.id}"/><form:label  path="permissionValues">${permissionVar.name}</form:label>
+             	</c:if>
+               </td>
+      
+      	        <c:if test="${count%2==0}">
+                 </tr><tr>
+             	</c:if>
+            </c:forEach>
+      	
       </tr>
       </table>  
-    </div>
+     </div>
     <br />
   	
     <div>

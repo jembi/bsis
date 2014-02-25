@@ -382,7 +382,7 @@
 	</changeSet>
 	
 	
-	<changeSet id="201402240317" author="srikanth">
+	<changeSet id="201402251103" author="srikanth">
 	     <insert tableName="Role">
 	       <column name="id" value="1"></column>
 	       <column name="name" value="Super User"></column>
@@ -410,8 +410,8 @@
 	    </insert>
 	     <insert tableName="Role">
 	       <column name="id" value="6"></column>
-	       <column name="name" value="Donor Counselor"></column>
-	       <column name="description" value="donor counselor"></column>
+	       <column name="name" value="Donor Counselling Staff"></column>
+	       <column name="description" value="donor counselling staff"></column>
 	    </insert>
 	    <insert tableName="Role">
 	       <column name="id" value="7"></column>

@@ -69,7 +69,7 @@ public class RoleController {
 	}
 
 	private void addAllPermissionsToModel(Map<String, Object> m) {
-		List<Permission> permissions = roleRepository.getAllPermissions();
+		List<Permission> permissions = roleRepository.getAllPermissionsByName();
 		m.put("allPermissions", permissions);
 	}
 

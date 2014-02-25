@@ -56,12 +56,18 @@ public class RoleRepository {
 	}
 
 	public List<Permission> getAllPermissions() {
-		TypedQuery<Permission> query = em.createQuery("FROM Permission order by name ASC",
+		TypedQuery<Permission> query = em.createQuery("FROM Permission",
 				Permission.class);
 		List<Permission> permission = query.getResultList();
 		return permission;
 	}
 
+	public List<Permission> getAllPermissionsByName() {
+		TypedQuery<Permission> query = em.createQuery("FROM Permission ORDER BY name ASC",
+				Permission.class);
+		List<Permission> permission = query.getResultList();
+		return permission;
+	}
 	public Role updateRole(Role role) {
 		Role existingRole = findRoleDetailById(role.getId());
 		if (existingRole == null) {
