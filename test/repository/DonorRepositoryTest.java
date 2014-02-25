@@ -531,7 +531,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor lastname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	//@Test
+	@Test
 	public void testSaveDonorLastNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -724,7 +724,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor firstname value is blank.
 	 * Expected Result:Donor object should not update.
 	 */
-	//@Test
+	@Test
 	public void testUpdateDonorFirstNameBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -749,7 +749,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor lastname value is blank.
 	 * Expected Result:Donor object should not update.
 	 */
-	//@Test
+	@Test
 	public void testUpdateDonorLastNameBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -819,9 +819,9 @@ public class DonorRepositoryTest {
 	 * Check user input value is valid through DonorBackingFormValidator validate(Object,Errors)
 	 * method. If user input is valid than Donor object should update.
 	 * Here we can pass donor's gender is blank.
-	 * Expected Result:Donor object should not update(persist).
+	 * Expected Result:Donor object should not update.
 	 */
-	//@Test
+	@Test
 	public void testUpdateDonorGenderBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -872,7 +872,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is greater than 65.
 	 * Expected Result:Donor object should not update.
 	 */
-	//@Test
+	@Test
 	public void testUpdateDonorMaximumAge() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -897,7 +897,7 @@ public class DonorRepositoryTest {
 	 * DonorNumber should be unique and not null. Donor Age should be between 16 to 25.
 	 * Expected Result: Here Donor object should update.
 	 */
-	//@Test
+		@Test
 		public void testUpdateDonor() {
 			this.userAuthentication();
 			Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -920,7 +920,7 @@ public class DonorRepositoryTest {
 	 * Donor list will be used to persist donor object. First Name,Last Name,Gender(M or F),Birth date should not null.
 	 * DonorNumber should be unique and not null. Donor Age should be between 16 to 25.
 	 */
-	//@Test
+	@Test
 	public void testaddAllDonors() {
 		Donor donor = new Donor();
 		DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
@@ -955,7 +955,7 @@ public class DonorRepositoryTest {
 	 * It should return List<Donor> object with condition that isDeleted=0
 	 * If isDeleted=1 for all database rows then list size should be zero.
 	 */
-	//@Test
+	@Test
 	public void testgetAllDonors() {
 		List<Donor> lists = donorRepository.getAllDonors();
 		for (Donor donor : lists) {
