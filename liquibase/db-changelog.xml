@@ -687,8 +687,23 @@
 	       <column name="id" value="56"></column>
 	       <column name="name" value="Manage Blood Tests"></column>
 	   </insert>
-	  </changeSet>
-	 
-	
-	
+	   <insert tableName="Permission">
+	       <column name="id" value="57"></column>
+	       <column name="name" value="Add Donor Code"></column>
+	   </insert>
+	   <insert tableName="Permission">
+	       <column name="id" value="58"></column>
+	       <column name="name" value="View Donor Code"></column>
+	   </insert>
+	   <insert tableName="Permission">
+	       <column name="id" value="59"></column>
+	       <column name="name" value="Edit Donor Code"></column>
+	   </insert>
+	   
+	   <insert tableName="Permission">
+	       <column name="id" value="60"></column>
+	       <column name="name" value="Void Donor Code"></column>
+	   </insert>
+  </changeSet>
+
 </databaseChangeLog>	

@@ -11,6 +11,12 @@ public class PermissionConstants {
 	public static final String VIEW_DEFERRAL = "View Deferral";
 	public static final String EDIT_DEFERRAL = "Edit Deferral";
 	public static final String VOID_DEFERRAL = "Void Deferral";
+	public static final String ADD_DONOR_CODE  = "Add Donor Code";
+	public static final String VIEW_DONOR_CODE = "View Donor Code";
+	public static final String EDIT_DONOR_CODE = "Edit Donor Code";
+	public static final String VOID_DONOR_CODE = "Void Donor Code";
+	
+	
 	
 	// Donation Permissions
 	public static final String ADD_DONATION  = "Add Donation";
@@ -76,5 +82,7 @@ public class PermissionConstants {
 	public static final String MANAGE_FORMS = "Manage Forms";
 	public static final String MANAGE_BACKUP_DATA = "Manage Backup Data";
 	public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
+
+	
 
 }
