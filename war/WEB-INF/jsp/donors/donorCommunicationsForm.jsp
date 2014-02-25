@@ -21,12 +21,30 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
+<style>
 
+.test-selection {
+    background-color: Highlight;
+    color: HighlightText;
+}
+
+</style>
 <script>
+var test_Multiselection = function(){
+    $("#test_target_no_optgroup").MultiSelect({
+        size: 20,
+        css_class_selected: "test-selection"
+    });
+};
+
 $(document).ready(function() {
 	 $("#${addDonorFormDonorPanelsId}").multiselect({
 	     multiple : true,
-	     header : false
+	     header : false,
+	     css_class_selected: "test-selection",
+	     size: 10,
+	     keepPrevSelection:true,
+	 	 selectedList:10
 	   });
 	 
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({

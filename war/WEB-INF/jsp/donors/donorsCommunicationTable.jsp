@@ -13,7 +13,6 @@
 <c:set var="table_id">donorsTable-${unique_page_id}</c:set>
 <c:set var="childContentId">childContentId-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
-
 <script>
 $(document).ready(
 		
@@ -26,6 +25,8 @@ $(document).ready(
         .click(function() {
                  notifyParentDone();
                });
+   	 
+   	
    	
    	 function notifyParentDone() {
         $("#${tabContentId}").parent().trigger("donorSummarySuccess");
@@ -58,7 +59,7 @@ $(document).ready(
           "sRowSelect" : "single",
           "aButtons" : [ "print" , {
               "sExtends":    "csv",
-              "sButtonText": "Export List"
+              "sButtonText": "Export List",
           } ],
           "fnRowSelected" : function(node) {
                               $("#${tabContentId}").parent().trigger("donorSummaryView");
@@ -78,7 +79,7 @@ $(document).ready(
                             },
         }
       });
-
+	$("ZeroClipboard_TableToolsMovie_1").hide();
       function createDonorSummary(url, data) {
         $.ajax({
           url: url,
@@ -109,7 +110,9 @@ $(document).ready(
         if (searchBox.val() != "")
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
-      
+     
+      var pdfButton = $(".DTTT_button_csv").detach();
+      $("#newPosition").append( pdfButton );
    });
 </script>
 
@@ -184,16 +187,14 @@ $(document).ready(
 
     </c:otherwise>
   </c:choose>
-   <div class="">
-      <div>
+   <div id="newPosition">
+     
         <label></label>
         <br>
         <button type="button" class="cancelDonorCommButton">
           Cancel
         </button>
-        
-      </div>
-    </div>
+     </div>
 </div>
 
 <div id="${noResultsFoundDivId}" style="display: none;">
