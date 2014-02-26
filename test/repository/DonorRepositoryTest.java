@@ -98,7 +98,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor firstname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testAddDonorFirstNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -127,7 +127,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor lastname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testAddDonorLastNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -155,7 +155,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass duplicate donor number.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testAddDonorDonorNumberDuplicate() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -184,7 +184,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:Here automatic new donornumber is generated and assign to persist object and donor object should be persist.
 	 */
 	
-	@Test
+	//@Test
 	public void testAddDonorDonorNumberBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -213,7 +213,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:Donor object should not persist.
 	 */
 	
-	@Test
+	//@Test
 	public void testAddDonorGenderBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -241,7 +241,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is less than 16.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testAddDonorMinimumAge() {
 		donorBirthdate = "10/06/2000";//Calculate Donor age is less than 16.
 		donorBackingForm.setBirthDate(donorBirthdate);
@@ -269,7 +269,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is greater than 65.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testAddDonorMaximumAge() {
 		donorBirthdate = "24/02/1948";//Calculate Donor age is greater than 65.
 		donorBackingForm.setBirthDate(donorBirthdate);
@@ -297,7 +297,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:Donor object should be persist.
 	 */
 	
-	@Test
+	//@Test
 	public void testAddDonor() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -322,7 +322,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string length is less than 2.
 	 * Expected Result: List<Donor> size should be zero.
 	 */
-	@Test
+	//@Test
 	public void testFindAnyDonorStartWithStringLengthLessthan2() {
 		String term = "F";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -337,7 +337,7 @@ public class DonorRepositoryTest {
 	 * Description:
 	 * Expected Result: List<Donor> size should not zero.
 	 */
-	@Test
+	//@Test
 	public void testFindAnyDonorStartWithDonorNumberMatch() {
 		String term = "000310";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -351,7 +351,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string is donornumber.
 	 * Expected Result: Soft Deleted record should not added into List<Donor>.
 	 */
-	@Test
+	//@Test
 	public void testFindAnyDonorStartWithTestDeleteDonorNotInclude() {
 		String term = "000310";
 		deletedbid=303;
@@ -366,7 +366,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string is firstname.
 	 * Expected Result: List<Donor> size should not zero.
 	 */
-	@Test
+	//@Test
 	public void testFindAnyDonorStartWithDonorFirstNameMatch() {
 		String term = "fi";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -380,7 +380,7 @@ public class DonorRepositoryTest {
 	 * In this test case search string is lastname.
 	 * Expected Result: List<Donor> size should not zero.
 	 */
-	@Test
+	//@Test
 	public void testFindAnyDonorStartWithDonorLastNameMatch() {
 		String term = "la";
 		List<Donor> listObject = donorRepository.findAnyDonorStartsWith(term);
@@ -395,7 +395,7 @@ public class DonorRepositoryTest {
 	 * Generate Unique Donor Number prefix with D-<12 Digit Random Number
 	 * UniqueNo>
 	 */
-	@Test
+	//@Test
 	public void testGenerateUniqueDonorNumber() {
 		String generateRandomUniqueNo = DonorRepository
 				.generateUniqueDonorNumber();
@@ -410,7 +410,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:
 	 * Donor object should be null.
 	 */
-	@Test
+	//@Test
 	public void testfindDonorByDonorNumberCheckDonorExistDeleteTrue() {
 		donorNumber="-1";
 		Donor donor = donorRepository
@@ -427,7 +427,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:
 	 * Donor object should be null.
 	 */
-	@Test
+	//@Test
 	public void testfindDonorByDonorNumberCheckDonorExistDeleteFalse() {
 		donorNumber="-1";
 		Donor donor = donorRepository
@@ -443,7 +443,7 @@ public class DonorRepositoryTest {
 	 *Expected Result:
 	 * Donor Object should not null.
 	 */
-	@Test
+	//@Test
 	public void testfindDonorByDonorNumberSelectDeleteDonorIsDeleteTrue() {
 		Donor donor = donorRepository
 				.findDonorByDonorNumber(donorNumber, true);
@@ -458,7 +458,7 @@ public class DonorRepositoryTest {
 	 *Expected Result:
 	 * Donor Object should be null.
 	 */
-	@Test
+	//@Test
 	public void testfindDonorByDonorNumberSelectDeleteDonorIsDleteFalse() {
 		Donor donor = donorRepository
 				.findDonorByDonorNumber(donorNumber, false);
@@ -473,7 +473,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:
 	 * Donor object should null.
 	 */
-	@Test
+	//@Test
 	public void testfindDonorByDonorNumberIsDeletedtrue() {
 		Donor donor = donorRepository
 				.findDonorByDonorNumber(donorNumber, true);
@@ -488,7 +488,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:
 	 * Donor object should not null.
 	 */
-	@Test
+	//@Test
 	public void testfindDonorByDonorNumberIsDeletedfalse() {
 		Donor donor = donorRepository
 				.findDonorByDonorNumber(donorNumber, false);
@@ -504,7 +504,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor firstname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testSaveDonorFirstNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -531,7 +531,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor lastname value is blank.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testSaveDonorLastNameBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -560,7 +560,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass duplicate donor number.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testSaveDonorDonorNumberDuplicate() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -588,7 +588,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:New donornumber is generated and assign to persist object and donor object should be persist.
 	 */
 	
-	@Test
+	//@Test
 	public void testSaveDonorDonorNumberBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -617,7 +617,7 @@ public class DonorRepositoryTest {
 	 * Expected Result:Donor object should not persist.
 	 */
 	
-	@Test
+	//@Test
 	public void testsaveDonorGenderBlank() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
@@ -644,7 +644,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is less than 16.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testSaveDonorMinimumAge() {
 		donorBirthdate = "10/06/2000";//Calculate Donor age is less than 16.
 		donorBackingForm.setBirthDate(donorBirthdate);
@@ -671,7 +671,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is greater than 65.
 	 * Expected Result:Donor object should not persist.
 	 */
-	@Test
+	//@Test
 	public void testSaveDonorMaximumAge() {
 		donorBirthdate = "24/02/1948";//Calculate Donor age is greater than 65.
 		donorBackingForm.setBirthDate(donorBirthdate);
@@ -698,7 +698,7 @@ public class DonorRepositoryTest {
 	 * DonorNumber should be unique and not null. Donor Age should be between 16 to 25.
 	 * Expected Result: Donor object should pass validation framework and donor object should persist.
 	 */
-	@Test
+	//@Test
 	public void testSaveDonor() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		donorBackingForm.setDonorNumber("");
@@ -724,7 +724,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor firstname value is blank.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorFirstNameBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -749,7 +749,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor lastname value is blank.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorLastNameBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -773,7 +773,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor's duplicate donornumber.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorDonorNumberDuplicate() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -797,7 +797,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor's donornumber is blank.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorDonorNumberBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -821,7 +821,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass donor's gender is blank.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorGenderBlank() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -846,7 +846,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is less than 16.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorMinimumAge() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -872,7 +872,7 @@ public class DonorRepositoryTest {
 	 * Here we can pass wrong birthdate so that donor's age is greater than 65.
 	 * Expected Result:Donor object should not update.
 	 */
-	@Test
+	//@Test
 	public void testUpdateDonorMaximumAge() {
 		this.userAuthentication();
 		Donor editDonor = donorRepository.findDonorById(updatedbid);
@@ -911,7 +911,127 @@ public class DonorRepositoryTest {
 			assertNotNull(donorRepository.updateDonor(updateDonor));
 		}
 	
-	
+		/**
+		 * Purpose: Test getAllDonors() method
+		 * Description:
+		 * It should return List<Donor> object with condition that isDeleted=0
+		 * Expected Result:
+		 * Soft Deleted object should not added into List<Donor>.
+		 */
+		@Test
+		public void testgetAllDonors() {
+			List<Donor> lists = donorRepository.getAllDonors();
+			for (Donor donor : lists) {
+				//If soft deleted object is added into list then test case failed.
+				assertFalse(donor.getIsDeleted());
+			}
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(Long) method
+		 * Description:
+		 * Here,We can pass donor id as a -1.
+		 * Expected Result:
+		 * Donor object should null. 
+		 */
+		@Test
+		public void testFindDonorByIdLongDonorIdDoesNotExist() {
+			dbid=-1;
+			Donor donor = donorRepository.findDonorById(dbid);
+			//Donor Id does not exist into system donor object should null.
+			assertNull(donor);
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(Long) method
+		 * Description:
+		 * Here,We can pass soft deleted donor id so return donor object should null.
+		 * Expected Result:
+		 * Donor object should null. 
+		 */
+		@Test
+		public void testFindDonorByIdLongDonorDeleteTrue() {
+			donorRepository.deleteDonor(dbid);
+			Donor donor = donorRepository.findDonorById(dbid);
+			//Donor Id exist into system donor but that record is soft deleted. Donor object should null.
+			assertNull(donor);
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(Long) method
+		 * Description:
+		 * Here,We can pass soft deleted donor id so return donor object should null.
+		 * Expected Result:
+		 * Donor object should null. 
+		 */
+		@Test
+		public void testFindDonorByIdLongDonorDeleteFalse() {
+			dbid=335;
+			Donor donor = donorRepository.findDonorById(dbid);
+			//Donor Id is exist into system donor object should not null.
+			assertNotNull(donor);
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(String) method
+		 * Description:
+		 * Donor object should be null if Input dbid is blank.
+		 * Expected Result:
+		 * Donor Object should null.
+		 */
+
+		@Test
+		public void testFindDonorByIdStringWithblankSpace() {
+			Donor donor = donorRepository.findDonorById("");
+			//Method argument is blank space donor object should null.
+			assertNull(donor);
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(String) method
+		 * Description:
+		 * Here,We can pass donor id as a -1.
+		 * Expected Result:
+		 * Donor object should null. 
+		 */
+		@Test
+		public void testFindDonorByIdStringDonorIdDoesNotExist() {
+			dbid=-1;
+			Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
+			//Donor Id does not exist into system donor object should null.
+			assertNull(donor);
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(String) method
+		 * Description:
+		 * Here,We can pass soft deleted donor id so return donor object should null.
+		 * Expected Result:
+		 * Donor object should null. 
+		 */
+		@Test
+		public void testFindDonorByIdStringDonorDeleteTrue() {
+			donorRepository.deleteDonor(dbid);
+			Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
+			//Donor Id exist into system  but that record is soft deleted. Donor object should null.
+			assertNull(donor);
+		}
+		
+		/**
+		 * Purpose:Test findDonorById(String) method
+		 * Description:
+		 * Here,We can pass soft deleted donor id so return donor object should null.
+		 * Expected Result:
+		 * Donor object should null. 
+		 */
+		@Test
+		public void testFindDonorByIdStringDonorDeleteFalse() {
+			dbid=335;
+			Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
+			//Donor Id is exist into system donor object should not null.
+			assertNotNull(donor);
+		}
+		
 	/**
 	 * purpose: Test addAllDonors(List<Donor>) method
 	 * Description:
@@ -920,7 +1040,7 @@ public class DonorRepositoryTest {
 	 * Donor list will be used to persist donor object. First Name,Last Name,Gender(M or F),Birth date should not null.
 	 * DonorNumber should be unique and not null. Donor Age should be between 16 to 25.
 	 */
-	@Test
+	//@Test
 	public void testaddAllDonors() {
 		Donor donor = new Donor();
 		DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
@@ -949,47 +1069,11 @@ public class DonorRepositoryTest {
 		donorRepository.addAllDonors(listAllDonor);
 	}
 
-	/**
-	 * Purpose: Test getAllDonors() method
-	 * Description:
-	 * It should return List<Donor> object with condition that isDeleted=0
-	 * If isDeleted=1 for all database rows then list size should be zero.
-	 */
-	@Test
-	public void testgetAllDonors() {
-		List<Donor> lists = donorRepository.getAllDonors();
-		for (Donor donor : lists) {
-			assertFalse(donor.getIsDeleted());
-		}
-	}
+	
 
-	/**
-	 * Purpose:Test findDonorById(Long) method
-	 * Description:
-	 * Donor object should be null if Input dbid is not match with donor(id) table.
-	 * donor object should be null if dbid is match with n record of donor(id) table but in N record  isDeleted value is 1. 
-	 * Donor object should not null if dbid is match with n record of donor(dbid) table and in N record  isDeleted value is 0. 
-	 */
-	//@Test
-	public void testFindDonorByIdLong() {
-		Donor donor = donorRepository.findDonorById(dbid);
-		assertNotNull("Find Donor By Id method argument is long", donor);
-	}
+	
 
-	/**
-	 * Purpose:Test findDonorById(String) method
-	 * Description:
-	 * Donor object should be null if Input dbid is not match with donor(id) table.
-	 * donor object should be null if dbid is match with n record of donor(id) table but in N record  isDeleted value is 1. 
-	 * Donor object should not null if dbid is match with n record of donor(dbid) table and in N record  isDeleted value is 0. 
-	 */
-
-	//@Test
-	public void testFindDonorByIdStringWithoutSpace() {
-		Donor donor = donorRepository.findDonorById(String.valueOf(dbid));
-		assertNotNull("Find Donor By Id method argument is String number",
-				donor);
-	}
+	
 
 	/**
 	 * Purpose:Test findDonorByNumber(String) method
