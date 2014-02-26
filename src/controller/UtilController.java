@@ -43,6 +43,7 @@ import repository.ProductRepository;
 import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
+import repository.UserRepository;
 import repository.WorksheetRepository;
 import security.V2VUserDetails;
 import utils.DonorUtils;
@@ -83,6 +84,9 @@ public class UtilController {
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
+  
+  @Autowired
+  private UserRepository userRepository;
   
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -459,5 +463,13 @@ public class UtilController {
     if (principal != null && principal instanceof V2VUserDetails)
       user = ((V2VUserDetails) principal).getUser();
     return user;
+  }
+  
+  public String getUserPassword(Integer id){
+  	User user= userRepository.findUserById(id);
+  	String pwd=null;
+  	if(user!=null)
+  		pwd=user.getPassword();
+  	return pwd;
   }
 }
