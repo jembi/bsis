@@ -1229,6 +1229,8 @@ public class DonorRepositoryTest {
 		 * Purpose: Test deleteDonor(long) method
 		 * Description:
 		 * Here db id is invalid
+		 * Expected Result:
+		 * Donor Object soft deleted operation is failed.
 		 */
 		
 		@Test
@@ -1237,10 +1239,10 @@ public class DonorRepositoryTest {
 			try{
 			deletedbid=-1;
 			donorRepository.deleteDonor(deletedbid);
-			assertTrue(true);
 			}catch(Exception e){
 				isDelete = false;
 			}finally{
+				//SoftDelete operation is failed because deletedbid is invalid.
 				assertFalse(isDelete);
 			}
 		}
