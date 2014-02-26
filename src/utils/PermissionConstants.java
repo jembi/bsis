@@ -15,6 +15,7 @@ public class PermissionConstants {
 	public static final String VIEW_DONOR_CODE = "View Donor Code";
 	public static final String EDIT_DONOR_CODE = "Edit Donor Code";
 	public static final String VOID_DONOR_CODE = "Void Donor Code";
+	public static final String VIEW_DONOR_CODE_GROUP = "View Donor Code Group";
 	
 	
 	

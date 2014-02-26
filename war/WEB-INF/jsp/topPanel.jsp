@@ -65,10 +65,10 @@
         class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
     </c:if>
 
-    <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+    
     <li class="topPanelTab"><a href="#adminLandingPageContent"><span
         class="ui-icon ui-icon-gear" style="display: inline-block;"></span>Admin</a></li>
-    </sec:authorize>
+    
   </ul>
   
 
@@ -143,10 +143,11 @@
   </div>
   </c:if>
 
-  <sec:authorize access="hasRole('PERM_EDIT_CONFIGURATION')">
+  
     <div id="adminLandingPageContent">
       <jsp:include page="admin/admin.jsp" />
     </div>
-  </sec:authorize>
+
+
 
 </div>
