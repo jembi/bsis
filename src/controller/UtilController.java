@@ -239,6 +239,11 @@ public class UtilController {
   public String getNextDonorNumber() {
     return sequenceNumberRepository.getNextDonorNumber();
   }
+  
+  public String getSequenceNumber(String targetTable,String columnName) {
+	    return sequenceNumberRepository.getSequenceNumber(targetTable,columnName);
+	  }
+	  
 
   public String getNextCollectionNumber() {
     return sequenceNumberRepository.getNextCollectionNumber();
