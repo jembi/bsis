@@ -57,7 +57,7 @@ $(document).ready(
         "oTableTools" : {
           "sSwfPath": "plugins/DataTables/extras/TableTools/media/swf/copy_csv_xls_pdf.swf",
           "sRowSelect" : "single",
-          "aButtons" : [ "print" , {
+          "aButtons" : [{
               "sExtends":    "csv",
               "sButtonText": "Export List",
           } ],

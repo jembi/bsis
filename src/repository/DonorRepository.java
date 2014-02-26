@@ -398,7 +398,7 @@ public class DonorRepository {
 			}			
 		}
 		
-	   
+	   if(bloodGroups != null && !bloodGroups.isEmpty()){
 	      List<Predicate> bgPredicates = new ArrayList<Predicate>();
 	      for (BloodGroup bg : bloodGroups) {
 	        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
@@ -406,7 +406,7 @@ public class DonorRepository {
 	        bgPredicates.add(cb.and(aboExp, rhExp));
 	      }
 	      panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
-	    
+	   }
 	    panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
 		cq.where(panelPredicates.toArray(new Predicate[0]));
 
@@ -424,17 +424,17 @@ public class DonorRepository {
 		}
 
 		TypedQuery<Donor> query = em.createQuery(cq);
-		query.toString();
 		query.setFirstResult(start);
 		query.setMaxResults(length);
 
 		CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
 		Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-
+		countCriteriaQuery.where(panelPredicates.toArray(new Predicate[0]));
 		countCriteriaQuery.select(cb.countDistinct(countRoot));
-
+		
 		TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
 		Long totalResults = countQuery.getSingleResult().longValue();
+		System.out.println("query.getResultList()______-"+query.getResultList()+"totalResults_____"+totalResults);
 		return Arrays.asList(query.getResultList(), totalResults);
 	}
 

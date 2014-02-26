@@ -21,22 +21,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
-<style>
-
-.test-selection {
-    background-color: Highlight;
-    color: HighlightText;
-}
-
-</style>
 <script>
-var test_Multiselection = function(){
-    $("#test_target_no_optgroup").MultiSelect({
-        size: 20,
-        css_class_selected: "test-selection"
-    });
-};
-
 $(document).ready(function() {
 	 $("#${addDonorFormDonorPanelsId}").multiselect({
 	     multiple : true,
@@ -79,7 +64,7 @@ $(document).ready(function() {
 		              selectedDate);
 		        }
 		   });
-	// add multiple select / deselect functionality
+	   // add multiple select / deselect functionality
 		$("#selectall").click(function () {
 			  $('.case').attr('checked', this.checked);
 		});
@@ -168,10 +153,10 @@ $(document).ready(function() {
       <div>
     
         <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-      		<input type="checkbox" value="all" style="width :50px !important" id="selectall" checked="checked">All Groups
+      		<input type="checkbox" value="all" style="width :50px !important" id="selectall">All Groups
       		<br>
       		<c:forEach var="bloodGroupsVar" items="${bloodGroups}" >
-      		<form:checkbox  path="bloodGroups" id="case" value="${bloodGroupsVar.value}"  cssClass="case" cssStyle="width :50px !important;margin-left :191px !important"   checked="checked"/>${bloodGroupsVar.value}<br>
+      		<form:checkbox  path="bloodGroups" id="case" value="${bloodGroupsVar.value}"  cssClass="case" cssStyle="width :50px !important;margin-left :191px !important" />${bloodGroupsVar.value}<br>
       		</c:forEach>
        	
        </div>
@@ -201,8 +186,6 @@ $(document).ready(function() {
     </div>
     <div class="findDonorResultsFromDonorComm"></div>
   </div>
-<div id="${childContentId}">
-
-</div>
+<div id="${childContentId}"></div>
   <br/>
 </div>
