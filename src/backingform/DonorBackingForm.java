@@ -49,6 +49,8 @@ public class DonorBackingForm {
 	private String anyBloodGroup;
 	
 	private boolean createDonorSummaryView;
+	
+	private String anyDonorPanel;
 
 	public DonorBackingForm() {
 		donor = new Donor();
@@ -453,6 +455,14 @@ public class DonorBackingForm {
 
 	public void setCreateDonorSummaryView(boolean createDonorSummaryView) {
 		this.createDonorSummaryView = createDonorSummaryView;
+	}
+
+	public String getAnyDonorPanel() {
+		return anyDonorPanel;
+	}
+
+	public void setAnyDonorPanel(String anyDonorPanel) {
+		this.anyDonorPanel = anyDonorPanel;
 	}
 
 }

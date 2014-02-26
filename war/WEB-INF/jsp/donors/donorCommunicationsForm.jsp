@@ -21,16 +21,33 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector-${unique_page_id}</c:set>
+
 <script>
 $(document).ready(function() {
-	 $("#${addDonorFormDonorPanelsId}").multiselect({
-	     multiple : true,
-	     header : false,
-	     css_class_selected: "test-selection",
-	     size: 10,
-	     keepPrevSelection:true,
-	 	 selectedList:10
-	   });
+	$("#${donorCommunicationFormDonorPanelsId}").multiselect({
+		    position : {
+		      my : 'left top',
+		      at : 'right center'
+		    },
+		    noneSelectedText: 'None Selected',
+		    selectedText: function(numSelected, numTotal, selectedValues) {
+		                    if (numSelected == numTotal) {
+		                      $("#${donorCommunicationFormId}").find(".anyDonorPanelInput")
+		                                              .val("true");
+		                      return "Any Donor Panel";
+		                    }
+		                    else {
+		                      $("#${donorCommunicationFormId}").find(".anyDonorPanelInput")
+		                                              .val("false");
+		                      var checkedValues = $.map(selectedValues, function(input) { return input.title; });
+		                      return checkedValues.length ? checkedValues.join(', ') : 'Any Donor Panel';
+		                    }
+		                      
+		                  }
+		  });
+
+	  $("#${donorCommunicationFormDonorPanelsId}").multiselect("checkAll");
 	 
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
@@ -139,26 +156,27 @@ $(document).ready(function() {
       class="formFormatClass">
    
       <div>
-      <div style="float: left;margin-left:13px;margin-right:72px;margin-top:2px;">
+      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;">
          <form:label path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
       </div>
       <div>
-         <form:select path="donorPanel" id="${addDonorFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
+         <form:select path="donorPanel" id="${donorCommunicationFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
           <c:forEach var="donorPanel" items="${donorPanels}">
             <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
           </c:forEach>
         </form:select>
       </div>
       </div>
-      <div>
-    
-        <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-      		<input type="checkbox" value="all" style="width :50px !important" id="selectall">All Groups
-      		<br>
+      <div style="margin: auto;padding-left: 12px;padding-top: 12px;">
+      <div style="width: 13%;height: 200px;float: left;">
+        <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label></div>
+        <div style="margin-left: 13.5%;padding :10px;height: 220px;border: 2px solid #DADADA;border-radius: 7px;width : 15% !important">
+      		<input type="checkbox" value="all" style="margin-left :2px !important" id="selectall">All Groups
+      		<br><hr style="color: #DADADA">
       		<c:forEach var="bloodGroupsVar" items="${bloodGroups}" >
-      		<form:checkbox  path="bloodGroups" id="case" value="${bloodGroupsVar.value}"  cssClass="case" cssStyle="width :50px !important;margin-left :191px !important" />${bloodGroupsVar.value}<br>
+      		<form:checkbox  path="bloodGroups" id="case" value="${bloodGroupsVar.value}"  cssClass="case" cssStyle="width :0px !important;margin-left :2px !important" />${bloodGroupsVar.value}<br>
       		</c:forEach>
-       	
+       	</div>
        </div>
      
       <div>

@@ -25,8 +25,13 @@ $(document).ready(
         .click(function() {
                  notifyParentDone();
                });
-   	 
-   	
+	$("#${tabContentId}").find(".backDonorCommButton")
+	    .button({
+	    	icons : {primary : 'ui-icon-arrowreturn-1-s'}
+	    })
+	    .click(function() {
+	             notifyParentDone();
+	           });
    	
    	 function notifyParentDone() {
         $("#${tabContentId}").parent().trigger("donorSummarySuccess");
@@ -47,9 +52,10 @@ $(document).ready(
                              "url": sSource,
                              "data": aoData,
                              "success": function(jsonResponse) {
-                                           if (jsonResponse.iTotalRecords == 0) {
-                                             $("#${tabContentId}").html($("#${noResultsFoundDivId}").html());
-                                           }
+                            	 		   if (jsonResponse.iTotalRecords == 0) {
+                            	 			  $('#backButtonId').show();
+                            	 			  $('#newPosition').hide();
+                            	 		   }
                                            fnCallback(jsonResponse);
                                          }
                              });
@@ -187,18 +193,18 @@ $(document).ready(
 
     </c:otherwise>
   </c:choose>
-   <div id="newPosition">
-     
+   <div id="newPosition">     
         <label></label>
         <br>
         <button type="button" class="cancelDonorCommButton">
           Cancel
         </button>
-     </div>
-</div>
-
-<div id="${noResultsFoundDivId}" style="display: none;">
-  <span
-    style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
-    Sorry no results found matching your search request </span>
+    </div>
+    <div id="backButtonId" style="display: none;">
+    <label></label>
+    <br>
+    <button type="button" class="backDonorCommButton">
+          Back
+        </button>
+    </div>
 </div>
