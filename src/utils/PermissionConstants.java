@@ -84,6 +84,25 @@ public class PermissionConstants {
 	public static final String MANAGE_BACKUP_DATA = "Manage Backup Data";
 	public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
 
+	//page control permissions
+	public static final String VIEW_DONOR_INFORMATION = "View Donors Information";
+	public static final String VIEW_DONATION_INFORMATION = "View Donation Information";
+	public static final String VIEW_MOBILE_CLINIC_INFORMATION = "View Mobile Clinic Information";
+	public static final String VIEW_COMPONENT_INFORMATION = "View Component Information";
+	public static final String VIEW_TESTING_INFORMATION = "View Testing Information";
+	public static final String VIEW_BLOOD_BANK_INFORMATION = "View Blook Bank Information";
+	public static final String VIEW_INVENTORY_INFORMATION = "View Inventory Information";
+	public static final String VIEW_DISCARD_INFORMATION = "View Discard Information";
+	public static final String VIEW_REPORTING_INFORMATION = "View Reporting Information";
+	public static final String VIEW_ADMIN_INFORMATION = "View Admin Information";
+	
+	
+	
+
+	
+	
+	
+	
 	
 
 }

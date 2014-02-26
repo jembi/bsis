@@ -21,7 +21,7 @@
         class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>
 
     <c:if test="${labsetup['donorsTabEnabled']}">
-    <sec:authorize access="hasRole('PERM_VIEW_DONOR_INFORMATION')">
+    <sec:authorize access="hasRole('View Donor Information')">
     <li class="topPanelTab"><a href="#donorsLandingPageContent"><span
         class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
     </sec:authorize>
@@ -33,7 +33,7 @@
     </c:if>
 
 
-    <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
+    <sec:authorize access="hasRole('View Testing Information')">
     <c:if test="${labsetup['productsTabEnabled']}">
     <li class="topPanelTab"><a href="#productsLandingPageContent"><span
         class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
@@ -65,12 +65,14 @@
         class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
     </c:if>
 
-    
+    <sec:authorize access="hasRole('View Admin Information')"> 
     <li class="topPanelTab"><a href="#adminLandingPageContent"><span
         class="ui-icon ui-icon-gear" style="display: inline-block;"></span>Admin</a></li>
+    </sec:authorize>
     
   </ul>
-  
+     
+   
 
   <div id="homeLandingPageContent" class="centerContent" style="padding: 20px;">
     <h3>Welcome to BSIS - Blood Safety Information System - v${versionNumber}</h3>
@@ -91,7 +93,7 @@
   </div>
 
   <c:if test="${labsetup['donorsTabEnabled']}">
-  <sec:authorize access="hasRole('PERM_VIEW_DONOR_INFORMATION')">
+  <sec:authorize access="hasRole('View Donor Information')">
     <div id="donorsLandingPageContent">
       <jsp:include page="donors/donors.jsp" />
     </div>
@@ -99,17 +101,21 @@
   </c:if>
 
   <c:if test="${labsetup['collectionsTabEnabled']}">
+  <sec:authorize access="hasRole('View Donation Information')">
   <div id="collectionsLandingPageContent">
     <jsp:include page="collections/collections.jsp" />
   </div>
+  </sec:authorize>
   </c:if>
+  
 
-  <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
+  <sec:authorize access="hasRole('View Testing Information')">
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <div id="testResultsLandingPageContent">
       <jsp:include page="testResults.jsp" />
     </div>
     </c:if>
+     </sec:authorize>
 	
   <c:if test="${labsetup['lotRelease']}">
     <div id="lotReleasePageContent">
@@ -118,15 +124,20 @@
     </c:if>
 
   <c:if test="${labsetup['productsTabEnabled']}">
+  <sec:authorize access="hasRole('View Component Information')">
   <div id="productsLandingPageContent">
     <jsp:include page="products/products.jsp" />
   </div>
+  </sec:authorize>
+  
   </c:if>
-
+  
   <c:if test="${labsetup['requestsTabEnabled']}">
+  <sec:authorize access="hasRole('View Blood Bank Information')">
   <div id="requestsLandingPageContent">
     <jsp:include page="requests/requests.jsp" />
   </div>
+  </sec:authorize>
   </c:if>
 
   <c:if test="${labsetup['usageTabEnabled']}">
@@ -135,19 +146,22 @@
   </div>
   </c:if>
 
-  </sec:authorize>
+  
 
   <c:if test="${labsetup['reportsTabEnabled']}">
+   <sec:authorize access="hasRole('View Reporting Permission')">
   <div id="reportsLandingPageContent">
     <jsp:include page="reports.jsp" />
   </div>
+  </sec:authorize>
   </c:if>
-
   
+
+    <sec:authorize access="hasRole('View Admin Information')">
     <div id="adminLandingPageContent">
       <jsp:include page="admin/admin.jsp" />
     </div>
-
+    </sec:authorize>
 
 
 </div>
