@@ -191,12 +191,18 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("donors/editDonorForm");
     Donor donor = donorRepository.findDonorById(donorId);
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-    DonorBackingForm form = new DonorBackingForm(donor);
+    DonorBackingForm donorForm = new DonorBackingForm(donor);
+    String dateToken[]=donorForm.getBirthDate().split("/");
+    donorForm.setDayOfMonth(dateToken[0]);
+    donorForm.setMonth(dateToken[1]);
+    donorForm.setYear(dateToken[2]);
     addEditSelectorOptions(mv.getModelMap());
-    mv.addObject("editDonorForm", form);
+    mv.addObject("editDonorForm", donorForm);
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
+  
+ 
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView addDonorFormGenerator(HttpServletRequest request) {

@@ -205,7 +205,7 @@
 				<div>
 					<form:label path="gender">${donorFields.gender.displayName}</form:label>
 					<form:select path="gender" id="${genderSelectorId}">
-						<form:option value="" />
+						<form:option value="" label="Gender"/>
 						<form:option value="male" label="Male" />
 						<form:option value="female" label="Female" />
 					</form:select>
