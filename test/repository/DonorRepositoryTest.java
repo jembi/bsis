@@ -6,20 +6,17 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.user.User;
 import model.util.BloodGroup;
-
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +34,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
-
 import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
@@ -1358,7 +1354,7 @@ public class DonorRepositoryTest {
 			boolean isScucess = false;
 			try {
 				this.userAuthentication();
-				donoridfordefer=335;
+				donoridfordefer=338;
 				donorRepository.deferDonor(String.valueOf(donoridfordefer),
 						"28/06/2014", "1", "");
 				isScucess = true;
@@ -1374,6 +1370,53 @@ public class DonorRepositoryTest {
 			}
 		}
 
+		/**
+		 * Purpose: Test getDonorDeferrals(Long) method
+		 * Description:
+		 * Here we can pass Invalid donorId,so that list size should be zero.
+		 * Expected Result:
+		 * List size should be zero.
+		 */
+		@Test
+		public void testGetDonorDeferralsDonorIdIsInvalid() {
+			List<DonorDeferral> list = donorRepository.getDonorDeferrals(0l);
+			//Here donor Id is invalid so that list size should be zero.
+			assertEquals(0, list.size());
+
+		}
+		
+		/**
+		 * Purpose: Test getDonorDeferrals(Long) method
+		 * Description:
+		 * Here we can pass Invalid donorId,so that list size should be none zero.
+		 * Expected Result:
+		 * List size should be none zero.
+		 */
+		@Test
+		public void testGetDonorDeferralsDonorIdIsValid() {
+			List<DonorDeferral> list = donorRepository.getDonorDeferrals(230l);
+			assertNotSame(0, list.size());
+
+		}
+		
+		/**
+		 * Purpose: Test getDeferralReasons() method
+		 * Description:
+		 * It should return List<DeferralReason>. Soft deleted record in DeferralReason table should not part of List<DeferralReason>.
+		 * Expected Result:
+		 * Soft Deleted DeferralReason object should not part of List<DeferralReason>.
+		 */
+
+		@Test
+		public void testGetDeferralReasons() {
+			List<DeferralReason> list = donorRepository.getDeferralReasons();
+			if (list != null && list.size() > 0) {
+				for (DeferralReason deferralReason : list) {
+					//Soft Delete DeferralReason object should not part of List<DeferralReason>.
+						assertFalse(deferralReason.getIsDeleted());
+				}
+			}
+		}
 		
 	/**
 	 * purpose: Test addAllDonors(List<Donor>) method
@@ -1416,80 +1459,157 @@ public class DonorRepositoryTest {
 
 	
 
-	
-
-	
-	
-
-	
-
-	/**
-	 * Purpose: Test getDeferralReasons() method
-	 * Description:
-	 * It should return List<DeferralReason>. Soft deleted record in DeferralReason table should not return.
-	 */
-
-	//////@Test
-	public void testGetDeferralReasons() {
-		List<DeferralReason> list = donorRepository.getDeferralReasons();
-		if (list != null && list.size() > 0) {
-			for (DeferralReason deferralReason : list) {
-				if (deferralReason.getIsDeleted() == true) {
-					assertTrue(false);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Purpose: Test getDonorDeferrals(Long) method
-	 * Description:
-	 * It should return List<DonorDeferral> base on donorId. If no record found then List<DonorDeferral> size should be zero.
-	 */
-	//////@Test
-	public void testGetDonorDeferrals() {
-		List<DonorDeferral> list = donorRepository.getDonorDeferrals(1l);
-		if (list != null && list.size() > 0) {
-			for (DonorDeferral donorDeferral : list) {
-				System.out.println(donorDeferral.getId());
-			}
-		}
-
-	}
-
 	/**
 	 * Purpose:Test isCurrentlyDeferred(List<DonorDeferral>) method
 	 * Description:
-	 * It should return true if any donor is deferal otherwise false. Here we should pass donorDeferral list base on donorid. 
+	 * Here DeferralDonorId is invalid so that List<DonorDeferral> size should be zero and can not findout iscurrentlyDefferal or not. 
 	 * DeferDonor calculation is mention as below
 	 *  if currentdate >= deferredon and currentdate<=deferredUntil
-	 * then donor is deferred.
+	 * Expected Result:
+	 * List<DonorDeferral> size should be zero.
 	 * 
 	 */
-	//////@Test
-	public void testisCurrentlyDeferredPassList() {
-		List<DonorDeferral> list = donorRepository
-				.getDonorDeferrals(donoridfordefer);
-		System.out.println("Is defer donor found with list as a argument:::"
-				+ donorRepository.isCurrentlyDeferred(list));
+	@Test
+	public void testisCurrentlyDeferredInValidDonorId() {
+		try{
+			List<DonorDeferral> list = donorRepository
+					.getDonorDeferrals(-1l);
+			//Here donorId is invalid so that list size should be zero.
+			assertEquals(0, list.size());
+			////Below code part is never execute.
+			if(list.size()>0)
+			{
+				assertTrue(donorRepository.isCurrentlyDeferred(list));
+			}
+		}catch(Exception e){
+			assertFalse(false);
+		}
 	}
+	
+	/**
+	 * Purpose:Test isCurrentlyDeferred(List<DonorDeferral>) method
+	 * Description:
+	 * Here DeferralDonorId is valid but no matching record is found in donordefferal so that List<DonorDeferral> size should be zero. 
+	 * DeferDonor calculation is mention as below
+	 *  if currentdate >= deferredon and currentdate<=deferredUntil
+	 * Expected Result:
+	 * List<DonorDeferral> size should be zero.
+	 * 
+	 */
+	@Test
+	public void testisCurrentlyDeferredValidDonorId() {
+		List<DonorDeferral> list = donorRepository
+				.getDonorDeferrals(451l);
+		//Here donorId is valid but no matching record is found in donordefferal table so that list size should be zero.
+		assertEquals(0, list.size());
+		////Below code part is never execute.
+		if(list.size()>0)
+		{
+			assertTrue(donorRepository.isCurrentlyDeferred(list));
+		}
+	}
+	
+	/**
+	 * Purpose:Test isCurrentlyDeferred(List<DonorDeferral>) method
+	 * Description:
+	 * Here DeferralDonorId is valid and matching record is found in donordef so that List<DonorDeferral> size should be none zero. 
+	 * And deferal donor should be found. 
+	 * DeferDonor calculation is mention as below
+	 *  if currentdate >= deferredon and currentdate<=deferredUntil
+	 * Expected Result:
+	 * List<DonorDeferral> size should not zero. And dereral donor isCurrentlyDeferred(List<DonorDeferral>) method should return true.
+	 */
+	@Test
+	public void testisCurrentlyDeferredValidDonorIdAndDeferalDonorFound() {
+		List<DonorDeferral> list = donorRepository
+				.getDonorDeferrals(216l);
+		//Here donorId is valid and  List<DonorDeferral> size should not zero.
+		assertNotSame(0, list.size());
+			//Here record is found in DonorDeferral table and isCurrentlyDeferred(List<DonorDeferral>) method should return true.
+			assertTrue(donorRepository.isCurrentlyDeferred(list));
+	}
+	
+	/**
+	 * Purpose:Test isCurrentlyDeferred(List<DonorDeferral>) method
+	 * Description:
+	 * Here DeferralDonorId is valid and matching record is found in donordef so that List<DonorDeferral> size should be none zero. 
+	 * And deferal donor should not found. 
+	 * DeferDonor calculation is mention as below
+	 *  if currentdate >= deferredon and currentdate<=deferredUntil
+	 * Expected Result:
+	 * List<DonorDeferral> size should not zero. And dereral donor isCurrentlyDeferred(List<DonorDeferral>) method should return false.
+	 * 
+	 */
+	@Test
+	public void testisCurrentlyDeferredValidDonorIdAndDeferalDonorNotFound() {
+		List<DonorDeferral> list = donorRepository
+				.getDonorDeferrals(337l);
+		//Here donorId is invalid so that list size should be zero.
+		assertNotSame(0, list.size());
+			//Here record is found in DonorDeferral table but isCurrentlyDeferred(List<DonorDeferral>) method should return false.
+			assertFalse(donorRepository.isCurrentlyDeferred(list));
+	}
+
 
 	/**
 	 * Purpose: Test isCurrentlyDeferred(Donor) method.
 	 * Description:
-	 * It should return true if donor is deferal otherwise false. 
-	 * Here we should pass Donor base on donorid. DeferDonor calculation is mention below 
-	 * if  currentdate >= deferredon and currentdate<=deferredUntil 
-	 * then donor is deferred.
-	 * 
+	 * Expected Result:
+	 * Here we can pass Invalid DonorId donor object should null.
 	 */
-	//////@Test
-	public void testisCurrentlyDeferredPassDonor() {
-		Donor donor = donorRepository.findDonorById(230l);
-		System.out
-				.println("Is defer donor found with Donor argument as argument:::"
-						+ donorRepository.isCurrentlyDeferred(donor));
+	@Test
+	public void testisCurrentlydeferredInValidDonorId() {
+		Donor donor = donorRepository.findDonorById(-1l);
+		//DororId is invalid donor object should null.
+		assertNull(donor);
+		//Below code part is never execute.
+		if(donor!=null){
+		assertTrue(donorRepository.isCurrentlyDeferred(donor));
+		}
 	}
+	
+	/**
+	 * Purpose: Test isCurrentlyDeferred(Donor) method.
+	 * Description:
+	 * Expected Result:
+	 * DororId is valid but donor object is softdelete so donor object should null.
+	 */
+	@Test
+	public void testisCurrentlydeferredDeleteDonorId() {
+		try{
+		Donor donor = donorRepository.findDonorById(-1l);
+		//DororId is valid but donor object is softdelete so donor object should null.
+				assertNull(donor);
+		if(donor!=null){
+			assertTrue(donorRepository.isCurrentlyDeferred(donor));
+			}
+		}catch(Exception e){
+			assertFalse(false);
+		}
+	}
+	
+	
+	/**
+	 * Purpose: Test isCurrentlyDeferred(Donor) method.
+	 * Description:
+	 * Expected Result:
+	 * DororId is valid but donor object is softdelete so donor object should null.
+	 */
+	@Test
+	public void testisCurrentlydeferredValidDonorIdNoRecordFoundIndDeferalDonor() {
+		try{
+			Donor donor = donorRepository.findDonorById(-1l);
+			//DororId is valid  donor object should not null.
+					assertNotNull(donor);
+				//Donor Id is valid but no matching record found in Donordeferral table so that DonorDeferral object is null. 
+					//And isCurrentlyDeferred() method return false. 
+				assertFalse(donorRepository.isCurrentlyDeferred(donor));
+		}catch(Exception e){
+			assertFalse(false);
+		}
+		}
+
+
 
 	/**
 	 * Purpose: Test findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>) method
@@ -1499,7 +1619,7 @@ public class DonorRepositoryTest {
 	 *  Soft Deleted object should not be return.
 	 */
 
-	//@Test
+	////@Test
 	public void testFindAnyDonor() {
 		String searchDonorNumber = "";
 		String donorFirstName = "Fir";
