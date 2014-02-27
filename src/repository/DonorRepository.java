@@ -398,7 +398,7 @@ public class DonorRepository {
 			}			
 		}
 		
-	   if(bloodGroups != null && !bloodGroups.isEmpty()){
+	   if(bloodGroups != null && !bloodGroups.isEmpty() &&  !anyBloodGroup.equals("true")){
 	      List<Predicate> bgPredicates = new ArrayList<Predicate>();
 	      for (BloodGroup bg : bloodGroups) {
 	        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
@@ -434,7 +434,6 @@ public class DonorRepository {
 		
 		TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
 		Long totalResults = countQuery.getSingleResult().longValue();
-		System.out.println("query.getResultList()______-"+query.getResultList()+"totalResults_____"+totalResults);
 		return Arrays.asList(query.getResultList(), totalResults);
 	}
 

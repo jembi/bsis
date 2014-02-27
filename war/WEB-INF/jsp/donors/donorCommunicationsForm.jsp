@@ -84,12 +84,15 @@ $(document).ready(function() {
 	   // add multiple select / deselect functionality
 		$("#selectall").click(function () {
 			  $('.case').attr('checked', this.checked);
+			  if($("#selectall").is(":checked") == false)
+			  {
+				  $("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("true");
+			  }
 		});
 
 		// if all checkbox are selected, check the selectall checkbox
 		// and viceversa
 		$(".case").click(function(){
-
 			if($(".case").length == $(".case:checked").length) {
 				$("#selectall").attr("checked", "checked");
 			} else {
@@ -103,8 +106,15 @@ $(document).ready(function() {
 	          primary : 'ui-icon-search'
 	        }
 	      }).click(function() {
+	    	    if($(".case:checked").length == 0)
+	    	    {
+	    	    	$("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("true");
+	    	    }
+	    	    else
+	    	    {
+	    	    	$("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("false");
+	    	    }
 	    	    var donorCommunicationData = $("#${donorCommunicationFormId}").serialize();
-	    	   
 	    	    var resultsDiv = $("#${mainContentId}").find(".findDonorResultsFromDonorComm");
 	    	    $.ajax({
 	    	      type : "GET",
@@ -171,6 +181,7 @@ $(document).ready(function() {
       <div style="width: 13%;height: 200px;float: left;">
         <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label></div>
         <div style="margin-left: 13.5%;padding :10px;height: 220px;border: 2px solid #DADADA;border-radius: 7px;width : 15% !important">
+        	<form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
       		<input type="checkbox" value="all" style="margin-left :2px !important" id="selectall">All Groups
       		<br><hr style="color: #DADADA">
       		<c:forEach var="bloodGroupsVar" items="${bloodGroups}" >

@@ -717,6 +717,7 @@ public class DonorController {
 		  if(!clinicDate.trim().equalsIgnoreCase(""))
 		  {
 			  Date dateObj = curFormater.parse(clinicDate);
+			  @SuppressWarnings({ "unused", "deprecation" })
 			  Date clinicDt = new Date(clinicDate);
 			  cal .setTime(dateObj);
 			  cal.add(Calendar.DATE, -56);
