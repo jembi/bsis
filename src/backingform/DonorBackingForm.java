@@ -3,23 +3,18 @@ package backingform;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.validation.Valid;
-
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.donor.Donor;
 import model.location.Location;
 import model.user.User;
 import model.util.Gender;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-
 import repository.DonorRepository;
 import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
-
 public class DonorBackingForm {
 
   @Valid
@@ -56,7 +51,7 @@ public class DonorBackingForm {
 
   public void setBirthDate() {
 	
-	  if(year.equals("")&&month.equals("")&&dayOfMonth.equals(""))
+    if(year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty())
 	  {  
 	donor.setBirthDate(null);
     return;
