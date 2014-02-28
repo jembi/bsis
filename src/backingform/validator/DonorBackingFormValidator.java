@@ -51,9 +51,9 @@ public class DonorBackingFormValidator implements Validator {
     }
 
     form.setBirthDate();
+    validateBirthDate(form, errors);    
     validateDonorHistory(form, errors);
     utilController.commonFieldChecks(form, "donor", errors);
-    validateBirthDate(form, errors);    
   }
 
   //Commented the following method to fix issue 16, now it is unused method
@@ -64,31 +64,14 @@ public class DonorBackingFormValidator implements Validator {
     }
   }
 
-  private void validateBirthDate(DonorBackingForm donorForm, Errors errors) {
+  private boolean validateBirthDate(DonorBackingForm form, Errors errors) {
 
-  String birthDate = donorForm.getBirthDate();
-  String dayOfMonth=donorForm.getDayOfMonth();
-  String month=donorForm.getMonth();
-  String year=donorForm.getYear();
+  String birthDate = form.getBirthDate();
   
-  if(!birthDate.equals(""))
-  {
-  if(birthDate!=null && dayOfMonth.isEmpty() || month.isEmpty()|| year.isEmpty()){
-	  errors.rejectValue("donor.birthDate", "date.futureDate", "Please specify Day, Month & Year");
-	  return ;
-  }
-  
-  String regex="[0-9]+";
-  if(!(dayOfMonth.matches(regex) && year.matches(regex)))
-  {
-	  errors.rejectValue("donor.birthDate", "date.futureDate", "Invalid Birhdate. please verify date and year are in numbers");
-	  return ;
-  }
-  }
-  Boolean isAgeFormatCorrect = donorForm.isAgeFormatCorrect();
+    Boolean isAgeFormatCorrect = form.isAgeFormatCorrect();
     if (isAgeFormatCorrect != null && !isAgeFormatCorrect) {
-      errors.rejectValue("donor.birthDate", "ageFormat.incorrect", "Age should be number of years");
-      return ;
+      errors.rejectValue("age", "ageFormat.incorrect", "Age should be number of years");
+      return false;
     }    
     
     try{
@@ -117,10 +100,10 @@ public class DonorBackingFormValidator implements Validator {
     catch(ParseException ex){
     	errors.rejectValue("donor.birthDate", "dateFormat.incorrect",
     	CustomDateFormatter.getDateErrorMessage());
-    	return ;
+    	return false;
     }
   
-    return ;
+    return true;
   }
 
   private void validateDonorHistory(DonorBackingForm form, Errors errors) {

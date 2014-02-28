@@ -231,19 +231,19 @@
 
 
 				<form:select path="month" name="Month">
-					<form:option value="" label="Month"/>
-					<form:option value="01" label="January"/>
-					<form:option value="02" label="February"/>
-					<form:option value="03" label="March"/>
-					<form:option value="04" label="April"/>
-					<form:option value="05" label="May"/>
-					<form:option value="06" label="June"/>
-					<form:option value="07" label="July"/>
-					<form:option value="08" label="August"/>
-					<form:option value="09" label="September"/>
-					<form:option value="10" label="Octobor"/>
-					<form:option value="11" label="November"/>
-					<form:option value="12" label="December"/>
+					<form:option value="">Month</form:option>
+					<form:option value="01">January</form:option>
+					<form:option value="02">February</form:option>
+					<form:option value="03">March</form:option>
+					<form:option value="04">April</form:option>
+					<form:option value="05">May</form:option>
+					<form:option value="06">June</form:option>
+					<form:option value="07">July</form:option>
+					<form:option value="08">August</form:option>
+					<form:option value="09">September</form:option>
+					<form:option value="10">Octobor</form:option>
+					<form:option value="11">November</form:option>
+					<form:option value="12">December</form:option>
 				</form:select>
             
             <form:input style="width:46px" path="Year" maxlength="4" alt="year"
