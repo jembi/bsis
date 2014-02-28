@@ -18,6 +18,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -360,11 +361,11 @@ public class DonorRepository {
   }
 
 			
-	public List<Object> findDonorFromDonorCommunication(
+  public List<Object> findDonorFromDonorCommunication(
 			List<Location> donorPanel, String clinicDate,
 			String lastDonationFromDate, String lastDonationToDate,
 			List<BloodGroup> bloodGroups, String anyBloodGroup,
-			Map<String, Object> pagingParams) {
+			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -378,6 +379,12 @@ public class DonorRepository {
 		if(!StringUtils.isBlank(clinicDate)) {
 			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(clinicDate)));
+				Subquery<Long> donorDefferel =   cq.subquery(Long.class);
+				Root<DonorDeferral> rootdonorDefferel = donorDefferel.from(DonorDeferral.class);
+				donorDefferel.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
+						cb.lessThanOrEqualTo(rootdonorDefferel.get("deferredOn").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor)),
+						cb.greaterThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor) ));
+				panelPredicates.add(cb.not(cb.exists(donorDefferel)));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

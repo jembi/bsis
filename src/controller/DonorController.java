@@ -689,6 +689,7 @@ public class DonorController {
 
 	List<Location> donorPanel            = form.getDonorPanels();
     String clinicDate                    = getEligibleDonorDate(form.getClinicDate());
+    String clinicDateToCheckdeferredDonor = form.getClinicDate();
     String lastDonationFromDate          = form.getLastDonationFromDate();
     String lastDonationToDate            = form.getLastDonationToDate();
     List<BloodGroup> bloodGroups         = form.getBloodGroups();
@@ -699,7 +700,7 @@ public class DonorController {
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     List<Object> results = new ArrayList<Object>();
-    results = donorRepository.findDonorFromDonorCommunication(donorPanel, clinicDate, lastDonationFromDate, lastDonationToDate, bloodGroups , form.getAnyBloodGroup() , pagingParams);
+    results = donorRepository.findDonorFromDonorCommunication(donorPanel, clinicDate, lastDonationFromDate, lastDonationToDate, bloodGroups , form.getAnyBloodGroup() , pagingParams, clinicDateToCheckdeferredDonor);
 
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
