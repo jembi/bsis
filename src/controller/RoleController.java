@@ -181,6 +181,7 @@ public class RoleController {
 	    		Set<Permission> permissions = setPermissions(form.getPermissionValues());
 				Role role =new Role();
 				role.setName(form.getName());
+				role.setDescription(form.getDescription());
 				role.setPermissions(permissions);
 				savedRole = roleRepository.addRole(role);
 				m.put("hasErrors", false);
