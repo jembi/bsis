@@ -119,6 +119,7 @@ public class UserController {
         User user = form.getUser();
         user.setIsDeleted(false);
         user.setRoles(assignUserRoles(form));
+        user.setIsActive(true);
         userRepository.addUser(user);
         m.put("hasErrors", false);
         success = true;
