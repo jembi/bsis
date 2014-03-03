@@ -16,7 +16,6 @@ import java.util.Map;
 
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
-import model.donordeferral.DonorDeferral;
 import model.user.User;
 import model.util.BloodGroup;
 
@@ -36,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Validator;
+
 import security.LoginUserService;
 import security.V2VUserDetails;
 import util.Verifies;
@@ -97,7 +97,11 @@ public class DonorRepositoryTest {
 		donorBackingForm.setFirstName("");//Here we can pass donor firstname value is blank.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor First Name is blank.", errors.hasErrors());
+		assertTrue("Donor First Name is blank. Donor object should not persist.", errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -109,7 +113,11 @@ public class DonorRepositoryTest {
 		donorBackingForm.setLastName("");//Here we can pass donor lastname value is blank.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor Last Name is blank.",errors.hasErrors());
+		assertTrue("Donor Last Name is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -120,19 +128,27 @@ public class DonorRepositoryTest {
 		donorBackingForm.setDonorNumber("000292");//Here we can pass duplicate donor number and check method result.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Duplicate Donor Number exist.",errors.hasErrors());
+		assertTrue("Duplicate Donor Number exist. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
 	
 	@Test
-	@Verifies(value = "Donor Number is blank. Donor Object should persist.", method = "addDonor(Donor)")
+	@Verifies(value = "should fail donor is missing required fields(Blank Donor Number).", method = "addDonor(Donor)")
 	public void addDonor_shouldNotPersistBlankDonorBlank() {
 		setBackingFormValue(donorBackingForm);
 		donorBackingForm.setDonorNumber("");//Here we can pass blank donor number and check method result.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor Number is blank. Donor should persist.",errors.hasErrors());
+		assertTrue("Donor Number is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 		
@@ -164,7 +180,11 @@ public class DonorRepositoryTest {
 		donorBackingForm.setZipcode("361001");
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor's Gender is blank.",errors.hasErrors());
+		assertTrue("Donor's Gender is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -177,11 +197,15 @@ public class DonorRepositoryTest {
 		setBackingFormValue(donorBackingForm);
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor's age is less than 16.",errors.hasErrors());
+		assertTrue("Donor's age is less than 16. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
-	@Test
+	//@Test
 	@Verifies(value = "should fail donor is missing required fields(Age is greater than 65)", method = "addDonor(Donor)")
 	public void addDonor_shouldNotPersistMaximumAgeIsGreaterThan65() {
 		donorBirthdate = "24/02/1948";//Calculate Donor age is greater than 65.
@@ -189,7 +213,11 @@ public class DonorRepositoryTest {
 		setBackingFormValue(donorBackingForm);
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor's age is greater than 65.",errors.hasErrors());
+		assertTrue("Donor's age is greater than 65. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.addDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -197,12 +225,7 @@ public class DonorRepositoryTest {
 	@Test
 	@Verifies(value = "Donor Object should persist.", method = "addDonor(Donor)")
 	public void addDonor_shouldPersist() {
-		donorBackingForm.setBirthDate(donorBirthdate);
 		setBackingFormValue(donorBackingForm);
-		donorBackingForm.setFirstName("Add Donor");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertFalse("Donor Object validation is Failed.",errors.hasErrors());
 		donorRepository.addDonor( donorBackingForm.getDonor());
 		assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
 	}
@@ -212,20 +235,20 @@ public class DonorRepositoryTest {
 	@Test
 	@Verifies(value = "should return empty List , search string is less than 2 characters.", method = "findAnyDonorStartsWith(String)")
 	public void findAnyDonorStartsWith_stringLengthLessthan2() {
-		assertEquals("Search String is less than 2,List size should be zero.", 
-				donorRepository.findAnyDonorStartsWith("Fll").size(),0);
+		assertEquals("Search String length is less than 2,List size should be zero.", 
+				donorRepository.findAnyDonorStartsWith("F").size(),0);
 	}
 	
 	@Test
 	@Verifies(value = "should allow search if search string is 2 or more characters.", method = "findAnyDonorStartsWith(String)")
 	public void findAnyDonorStartsWith_stringLengthGreaterthan2() {
-		assertNotSame("Search String is Greater than 2,List size should not zero.",donorRepository.findAnyDonorStartsWith("Fi").size(),0);
+		assertNotSame("Search String length is Greater than 2,List size should not zero.",donorRepository.findAnyDonorStartsWith("Fi").size(),0);
 	}
 	
 	@Test
 	@Verifies(value = "should return empty list (instead of a null object) when no match is found.", method = "findAnyDonorStartsWith(String)")
 	public void findAnyDonorStartsWith_NoMatchingRecordFound() {
-		assertEquals("List size should not zero,because matching record is found.",donorRepository.findAnyDonorStartsWith("xx").size(),0);
+		assertEquals("List size should be zero,because matching record is not found.",donorRepository.findAnyDonorStartsWith("xx").size(),0);
 	}
 	
 
@@ -316,7 +339,11 @@ public class DonorRepositoryTest {
 		donorBackingForm.setFirstName("");//Here we can pass donor firstname value is blank.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor First Name is blank.",errors.hasErrors());
+		assertTrue("Donor First Name is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -327,7 +354,11 @@ public class DonorRepositoryTest {
 		donorBackingForm.setLastName("");//Here we can pass donor lastname value is blank.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor Last Name is blank.",errors.hasErrors());
+		assertTrue("Donor Last Name is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -340,19 +371,27 @@ public class DonorRepositoryTest {
 		donorBackingForm.setDonorNumber("000321");//Here we can pass duplicate donor number and check method result.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Duplicate Donor Number exist.",errors.hasErrors());
+		assertTrue("Duplicate Donor Number exist. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
 	
 	@Test
-	@Verifies(value = "should fail donor is missing required fields(Duplicate Donor Number)", method = "saveDonor(Donor)")
+	@Verifies(value = "should fail donor is missing required fields(Blank Donor Number)", method = "saveDonor(Donor)")
 	public void saveDonor_shouldNotPersistBlankDonorBlank() {
 		setBackingFormValue(donorBackingForm);
 		donorBackingForm.setDonorNumber("");//Here we can pass blank donor number and check method result.
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor object should not persist because donornumber is blank.",errors.hasErrors());
+		assertTrue("Donornumber is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -384,7 +423,11 @@ public class DonorRepositoryTest {
 		donorBackingForm.setZipcode("361001");
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor's Gender is blank.",errors.hasErrors());
+		assertTrue("Donor's Gender is blank. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -396,7 +439,11 @@ public class DonorRepositoryTest {
 		setBackingFormValue(donorBackingForm);
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor's age is less than 16.",errors.hasErrors());
+		assertTrue("Donor's age is less than 16. Donor object should not persist.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -409,6 +456,10 @@ public class DonorRepositoryTest {
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
 		assertTrue("Donor's age is greater than 65.",errors.hasErrors());
+		if(!errors.hasErrors()){
+			donorRepository.saveDonor( donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist. Donor object should not persist.",donor.getId() == 0 ? false : true);
+		}
 	}
 	
 	
@@ -417,10 +468,6 @@ public class DonorRepositoryTest {
 	public void saveDonor_shouldPersist() {
 		donorBackingForm.setBirthDate(donorBirthdate);
 		setBackingFormValue(donorBackingForm);
-		donorBackingForm.setFirstName("Save Donor");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertFalse("Donor Object validation is Failed.",errors.hasErrors());
 		donorRepository.saveDonor(donorBackingForm.getDonor());
 		assertTrue(donorBackingForm.getDonor().getId() == 0 ? false : true);
 	}
@@ -442,7 +489,7 @@ public class DonorRepositoryTest {
 		@Verifies(value="Donor object should not null when Donor Number match with an existing Donor",method="updateDonor(Donor)")
 		public void updateDonor_shouleReturnNotNull() {
 			this.userAuthentication();
-			Donor editDonor = donorRepository.findDonorById(675l);
+			Donor editDonor = donorRepository.findDonorById(722l);
 			donorBackingForm = new DonorBackingForm(editDonor);
 			setBackingUpdateFormValue(donorBackingForm);
 			errors = new BindException(donorBackingForm, "donor");
@@ -519,7 +566,7 @@ public class DonorRepositoryTest {
 			Donor donor = null;
 			try{
 				donorRepository.deleteDonor(676l);
-				donor = donorRepository.findDonorById(676l);
+				donor = donorRepository.findDonorById(String.valueOf("676"));
 			assertNull("Donor Object should null.",donor);
 			}catch(Exception e){
 				assertNull("Donor Object should null.",donor);
@@ -529,17 +576,17 @@ public class DonorRepositoryTest {
 		
 		
 		@Test
-		@Verifies(value="should return donor with given Donor Number",method="findDonorByNumber(String)")
+		@Verifies(value="should return donor when given Donor Number is not match.",method="findDonorByNumber(String)")
 		public void findDonorByNumber_shouldReturnDonorObject() {
 			assertNotNull(donorRepository.findDonorByNumber("001406"));
 		}
 		
 		@Test
-		@Verifies(value="should return null with given Donor Number",method="findDonorByNumber(String)")
+		@Verifies(value="should return null when given Donor Number is not match.",method="findDonorByNumber(String)")
 		public void findDonorByNumber_shouldReturnNull() {
 			Donor fetchDonor = null;
 			try{
-				fetchDonor = donorRepository.findDonorByNumber("-1");
+				fetchDonor = donorRepository.findDonorByNumber("001356");
 				assertNull("Donor Object should null.",fetchDonor);
 			}catch(Exception e){
 				assertNull("Donor Object should null.",fetchDonor);
@@ -552,7 +599,7 @@ public class DonorRepositoryTest {
 		public void findDonorByNumber_shouldReturnNullDonorIsDeleted() {
 			Donor fetchDonor = null;
 			try{
-				fetchDonor = donorRepository.findDonorByNumber("-1");
+				fetchDonor = donorRepository.findDonorByNumber("001356");
 				assertNull("Donor Object should null.",fetchDonor);
 			}catch(Exception e){
 				assertNull("Donor Object should null.",fetchDonor);
@@ -585,30 +632,12 @@ public class DonorRepositoryTest {
 			}catch(Exception e){
 				isDelete = false;
 			}finally{
-				assertFalse("Soft Delete operation is completed successfully.",isDelete);
+				assertFalse("SoftDelete operation is completed successfully.",isDelete);
 			}
 		}
 		
 		
-		@Test
-		@Verifies(value="should delete donor from database.",method="deleteDonor(long)")
-		public void testdeferDonorDonorIdInvalid() {
-			boolean isScucess = false;
-			try {
-				this.userAuthentication();
-				donoridfordefer=-1;
-				donorRepository.deferDonor(String.valueOf(donoridfordefer),
-						"28/02/2014", "2", "text");
-				isScucess = true;
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				isScucess = false;
-			}catch(Exception e){
-				isScucess = false;
-			}finally {
-				assertFalse(isScucess);
-			}
-		}
+		
 		
 		@Test
 		@Verifies(value="DeferDonor should not persist.Invalid Donor Id.",method="deferDonor(String,String,String,String)")
@@ -676,8 +705,8 @@ public class DonorRepositoryTest {
 			boolean isScucess = false;
 			try {
 				this.userAuthentication();
-				donorRepository.deferDonor("338",
-						"28/06/2014", "1", "");
+				donorRepository.deferDonor("491",
+						"19/07/2015", "3", "");
 				isScucess = true;
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -773,7 +802,7 @@ public class DonorRepositoryTest {
 
 
 	@Test
-	@Verifies(value="Method should return true.",method="isCurrentlyDeferred(List<DonorDeferral>)")
+	@Verifies(value="Method should return true.",method="isCurrentlyDeferred(Donor)")
 	public void donorRepositoryDonor_methodShouldReturnTrue() {
 				assertTrue("Defer donor should found.",donorRepository.isCurrentlyDeferred(donorRepository
 						.findDonorById(335l)));
@@ -781,20 +810,14 @@ public class DonorRepositoryTest {
 	
 	
 	@Test
-	@Verifies(value="Method should return true.",method="isCurrentlyDeferred(List<DonorDeferral>)")
+	@Verifies(value="Method should return true.",method="isCurrentlyDeferred(Donor)")
 	public void donorRepositoryDonor_methodShouldReturnFalse() {
 				assertFalse("Defer donor should not found.",donorRepository.isCurrentlyDeferred(donorRepository
-						.findDonorById(335l)));
+						.findDonorById(-335l)));
 	}
 
 
-	/**
-	 * Purpose: Test findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>) method
-	 * Searching is work on firstname,lastname,donornumber and bloodgroup.
-	 * if anyBloodGroup=false then search List<BloodGroup> should consider otherwise not.
-	 *  If matching record is found then Object List is return. Otherwise Object list is return with size 0.
-	 *  Soft Deleted object should not be return.
-	 */
+	
 	
 	public void setPaginationParam(Map<String, Object> pagingParams){
 		pagingParams.put("sortColumn", "id");
@@ -805,7 +828,7 @@ public class DonorRepositoryTest {
 	}
 
 	@Test
-	//@Verifies(value="List size should not zero.",method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)")
+	@Verifies(value="List size should not zero.",method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)")
 	public void findAnyDonor_listSizeShouldNotZero() {
 		String searchDonorNumber = "";
 		String donorFirstName = "";
@@ -900,9 +923,6 @@ public class DonorRepositoryTest {
 		List<Donor> listDonor = (List<Donor>)(donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0));
-		for(Donor donor:listDonor){
-				System.out.println(donor.getId()+":::::Donor Blood Group<>>>><>><>>>>>>>>>>>>>>>>::::"+donor.getBloodAbo()+donor.getBloodRh());
-		}
 	}
 	
 	@Test
@@ -931,6 +951,9 @@ public class DonorRepositoryTest {
 	public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil(){
 		assertNotNull("should return last donor derferral date", donorRepository.getLastDonorDeferralDate(682l));
 	}
+	
+	
+	
 	/**
 	 * Called when update existing record.
 	 * 
