@@ -380,11 +380,13 @@ public class DonorRepository {
 			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(clinicDate)));
 				Subquery<Long> donorDefferel =   cq.subquery(Long.class);
-				Root<DonorDeferral> rootdonorDefferel = donorDefferel.from(DonorDeferral.class);
-				donorDefferel.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
-						cb.lessThanOrEqualTo(rootdonorDefferel.get("deferredOn").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor)),
-						cb.greaterThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor) ));
-				panelPredicates.add(cb.not(cb.exists(donorDefferel)));
+				if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {
+					Root<DonorDeferral> rootdonorDefferel = donorDefferel.from(DonorDeferral.class);
+					donorDefferel.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
+					cb.lessThanOrEqualTo(rootdonorDefferel.get("deferredOn").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor)),
+					cb.greaterThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor) ));
+					panelPredicates.add(cb.not(cb.exists(donorDefferel)));
+				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
