@@ -138,6 +138,7 @@
         <div>
           <form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
           <form:label path="donorNumber" >${editDonorForm.donor.donorNumber}</form:label>
+          <form:input path="donorNumber" style="display:none; disabled:true;"/>
           <form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
         </div>
       </c:if>
