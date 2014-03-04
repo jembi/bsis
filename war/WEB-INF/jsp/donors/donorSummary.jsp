@@ -191,7 +191,7 @@
       <button class="doneButton">
         Done
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+       <sec:authorize access="hasRole('Edit Donor')">
       <button class="editButton">
         Edit
       </button>
@@ -205,7 +205,7 @@
       <button class="deferDonorButton">
         Defer Donor
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+      <sec:authorize access="hasRole('Void Donor')">
       <button type="button" class="deleteButton">
         Delete
       </button>

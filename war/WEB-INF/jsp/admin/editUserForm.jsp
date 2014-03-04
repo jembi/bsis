@@ -132,14 +132,14 @@
 	   <div>
 	       <form:label path="userConfirPassword" id="confirmPasswordLbl">Confirm Password</form:label>
 	      <form:password path="userConfirPassword" id="userConfirmPassword"  disabled="true"/>
-	    </div>
+	    </div>  
     </c:if>
     
     <div>
     
     	<table>
     		<tr>
-    			<td  style="width:175px"><label>Roles</label></td>
+    			<td  style="width:175px"><label><form:label path="userRoles">Roles</form:label></td>
                 		
     			<td>
     			 <form:errors class="formError" path="userRoles" delimiter=", "></form:errors>	<br>
