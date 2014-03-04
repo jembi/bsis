@@ -89,7 +89,34 @@ public class DonorRepositoryTest {
 		
 
 	}
-
+	
+	@Test
+	@Verifies(value = "Donor Object should persist.", method = "addDonor(Donor)")
+	public void addDonor_shouldPersist() {
+		setBackingFormValue(donorBackingForm);
+		donorRepository.addDonor( donorBackingForm.getDonor());
+		assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
+	}
+	
+	@Test
+	@Verifies(value = "Donor Object should persist.", method = "saveDonor(Donor)")
+	public void saveDonor_shouldPersist() {
+		donorBackingForm.setBirthDate(donorBirthdate);
+		setBackingFormValue(donorBackingForm);
+		donorRepository.saveDonor(donorBackingForm.getDonor());
+		assertTrue(donorBackingForm.getDonor().getId() == 0 ? false : true);
+	}
+	
+	@Test
+	@Verifies(value="Donor object should not null when Donor Number match with an existing Donor",method="updateDonor(Donor)")
+	public void updateDonor_shouleReturnNotNull() {
+		this.userAuthentication();
+		Donor editDonor = donorRepository.findDonorById(722l);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		assertNotNull("Donor Object should update.",donorRepository.updateDonor(donorBackingForm.getDonor()));
+	}
+	
 	@Test
 	@Verifies(value = "should fail donor is missing required fields(Blank Fist Name)", method = "addDonor(Donor)")
 	public void addDonor_shouldNotPersistFirstNameBlank() {
@@ -205,7 +232,7 @@ public class DonorRepositoryTest {
 	}
 	
 	
-	//@Test
+	@Test
 	@Verifies(value = "should fail donor is missing required fields(Age is greater than 65)", method = "addDonor(Donor)")
 	public void addDonor_shouldNotPersistMaximumAgeIsGreaterThan65() {
 		donorBirthdate = "24/02/1948";//Calculate Donor age is greater than 65.
@@ -222,15 +249,8 @@ public class DonorRepositoryTest {
 	
 	
 	
-	@Test
-	@Verifies(value = "Donor Object should persist.", method = "addDonor(Donor)")
-	public void addDonor_shouldPersist() {
-		setBackingFormValue(donorBackingForm);
-		donorRepository.addDonor( donorBackingForm.getDonor());
-		assertTrue("Donor Object should persist.",donor.getId() == 0 ? false : true);
-	}
 	
-	
+
 	
 	@Test
 	@Verifies(value = "should return empty List , search string is less than 2 characters.", method = "findAnyDonorStartsWith(String)")
@@ -463,14 +483,7 @@ public class DonorRepositoryTest {
 	}
 	
 	
-	@Test
-	@Verifies(value = "Donor Object should persist.", method = "saveDonor(Donor)")
-	public void saveDonor_shouldPersist() {
-		donorBackingForm.setBirthDate(donorBirthdate);
-		setBackingFormValue(donorBackingForm);
-		donorRepository.saveDonor(donorBackingForm.getDonor());
-		assertTrue(donorBackingForm.getDonor().getId() == 0 ? false : true);
-	}
+	
 	
 		@Test
 		@Verifies(value="Donor object should null when Donor Number does match with an existing Donor",method="updateDonor(Donor)")
@@ -485,18 +498,6 @@ public class DonorRepositoryTest {
 			}
 		}
 		
-		@Test
-		@Verifies(value="Donor object should not null when Donor Number match with an existing Donor",method="updateDonor(Donor)")
-		public void updateDonor_shouleReturnNotNull() {
-			this.userAuthentication();
-			Donor editDonor = donorRepository.findDonorById(722l);
-			donorBackingForm = new DonorBackingForm(editDonor);
-			setBackingUpdateFormValue(donorBackingForm);
-			errors = new BindException(donorBackingForm, "donor");
-			donorBackingFormValidator.validate(donorBackingForm, errors);
-			assertFalse("Donor Object validtion is fail.",errors.hasErrors());
-			assertNotNull("Donor Object should update.",donorRepository.updateDonor(donorBackingForm.getDonor()));
-		}
 	
 	
 		
@@ -798,9 +799,6 @@ public class DonorRepositoryTest {
 						.getDonorDeferrals(-451l)));
 	}
 	
-	
-
-
 	@Test
 	@Verifies(value="Method should return true.",method="isCurrentlyDeferred(Donor)")
 	public void donorRepositoryDonor_methodShouldReturnTrue() {
@@ -816,8 +814,6 @@ public class DonorRepositoryTest {
 						.findDonorById(-335l)));
 	}
 
-
-	
 	
 	public void setPaginationParam(Map<String, Object> pagingParams){
 		pagingParams.put("sortColumn", "id");
