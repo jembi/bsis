@@ -47,7 +47,7 @@ $(document).ready(function() {
 		                  }
 		  });
 
-	  $("#${donorCommunicationFormDonorPanelsId}").multiselect("checkAll");
+	 // $("#${donorCommunicationFormDonorPanelsId}").multiselect("checkAll");
 	 
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
@@ -56,6 +56,18 @@ $(document).ready(function() {
 		     maxDate : 36500,
 		     dateFormat : "dd/mm/yy",
 		     yearRange : "c-100:c0",
+		     onClose: function(selectedDate,evnt) {
+		         alert(selectedDate);
+		         if(selectedDate != null && selectedDate != "" ){
+		        	 $("#lastDonationToDate").datepicker('disable');
+		        	 $("#lastDonationFromDate").datepicker('disable');
+		        	 $("#lastDonationToDate").datepicker( "setDate"  , null);
+		        	 $("#lastDonationFromDate").datepicker( "setDate"  , null);
+		         }else{
+		        	 $("#lastDonationToDate").datepicker('enable');
+		        	 $("#lastDonationFromDate").datepicker('enable');
+		         }
+		    }
 		   });
 	  $("#${donorCommunicationFormId}").find(".lastDonationToDate").datepicker({
 		     changeMonth : true,
@@ -67,7 +79,15 @@ $(document).ready(function() {
 		     onSelect : function(selectedDate) {
 		          $("#lastDonationFromDate").datepicker("option", "maxDate",
 		              selectedDate);
-		        }
+		        },
+		        onClose: function(selectedDate,evnt) {
+			         if((selectedDate != null && selectedDate != "") || ($("#lastDonationFromDate").val() != null && $("#lastDonationFromDate").val() != "")){
+			        	 $("#clinicDate").datepicker('disable');
+				         $("#clinicDate").datepicker( "setDate"  , null);
+			         }else{
+			        	 $("#clinicDate").datepicker('enable');
+			         }
+			    } 
 		   });
 	  $("#${donorCommunicationFormId}").find(".lastDonationFromDate").datepicker({
 		     changeMonth : true,
@@ -79,7 +99,17 @@ $(document).ready(function() {
 		     onSelect : function(selectedDate) {
 		          $("#lastDonationToDate").datepicker("option", "minDate",
 		              selectedDate);
-		        }
+		          $("#clinicDate").datepicker('disable');
+		          $("#clinicDate").datepicker( "setDate"  , null);
+		        },
+		        onClose: function(selectedDate,evnt) {
+			         if((selectedDate != null && selectedDate != "") || ($("#lastDonationToDate").val() != null && $("#lastDonationToDate").val() != "")){
+			        	 $("#clinicDate").datepicker('disable');
+				         $("#clinicDate").datepicker( "setDate"  , null);
+			         }else{
+			        	 $("#clinicDate").datepicker('enable');
+			         }
+			    } 
 		   });
 	   // add multiple select / deselect functionality
 		$("#selectall").click(function () {
@@ -121,10 +151,10 @@ $(document).ready(function() {
 	    	      url : "findDonorCommunicationForm.html",
 	    	      data : donorCommunicationData,
 	    	      success : function(data) {
-	    	        animatedScrollTo(resultsDiv);
-	    	        //resultsDiv.html(data);
-	    	        $("#${mainContentId}").hide();
-	    	        $("#${childContentId}").html(data);
+	    	    		  animatedScrollTo(resultsDiv);
+	  	    	        //resultsDiv.html(data);
+	  	    	        $("#${mainContentId}").hide();
+	  	    	        $("#${childContentId}").html(data);  
 	    	      }
 	    	    });
 	      });
@@ -155,13 +185,13 @@ $(document).ready(function() {
 
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
-  
+  <b>Donor Communications</b>
   	<c:if test="${!empty success && !success}">
         <jsp:include page="../common/errorBox.jsp">
           <jsp:param name="errorMessage" value="${errorMessage}" />
         </jsp:include>
     </c:if>
-    <b>Donor Communications</b>
+    
     <form:form method="GET" commandName="donorCommunicationForm" id="${donorCommunicationFormId}"
       class="formFormatClass">
    

@@ -658,18 +658,42 @@ public class DonorController {
       @ModelAttribute("donorCommunicationForm") DonorBackingForm form,
       BindingResult result, Model model) {
     ModelAndView modelAndView = new ModelAndView("donors/donorsCommunicationTable");
-
-    Map<String, Object> m = model.asMap();
+    Map<String, Object> m                    = model.asMap();
+    List<Location> donorPanel              = form.getDonorPanels();
+    List<BloodGroup> bloodGroups       = form.getBloodGroups();
+    boolean success = true;
+    addEditSelectorOptions(m);
+    m.put("bloodGroups", BloodGroup.getBloodgroups());
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    if(donorPanel == null  || donorPanel.isEmpty() )
+    {
+    	modelAndView = new ModelAndView("donors/donorCommunicationsForm");
+    	modelAndView.addObject("errorMessage", "Select 1 or more Donor Panel(s).");
+    	success=false;
+    	m.put("success", success);
+    	modelAndView.addObject("model", m);
+    	modelAndView.addObject("success", success);
+    	return modelAndView;
+    }
+    if(bloodGroups == null  || bloodGroups.isEmpty() )
+    {
+    	modelAndView = new ModelAndView("donors/donorCommunicationsForm");
+    	modelAndView.addObject("errorMessage", "Select 1 or more Blood Group(s)");
+    	success=false;
+    	m.put("success", success);
+    	modelAndView.addObject("model", m);
+    	modelAndView.addObject("success", success);
+    	return modelAndView;
+    }
     form.setCreateDonorSummaryView(true);
     m.put("requestUrl", getUrl(request));
-    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-    addEditSelectorOptions(m);
-    modelAndView.addObject("model", m);
+   modelAndView.addObject("model", m);
+    modelAndView.addObject("success", success);
     return modelAndView;
   } 
   
