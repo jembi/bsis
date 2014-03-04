@@ -66,6 +66,8 @@ $(document).ready(
           "aButtons" : [{
               "sExtends":    "csv",
               "sButtonText": "Export List",
+              "bFooter": false,
+              "bHeader": false
           } ],
           "fnRowSelected" : function(node) {
                               $("#${tabContentId}").parent().trigger("donorSummaryView");
