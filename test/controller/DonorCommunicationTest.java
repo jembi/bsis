@@ -9,7 +9,10 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,7 +190,7 @@ public class DonorCommunicationTest {
 		try {
 			List<Location> donorPanel = new ArrayList<Location>();
 			List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-			String clinicDate = "27/2/2015";
+			String clinicDate = getEligibleDonorDate("27/2/2015");
 			String lastDonationFromDate = "";
 			String lastDonationToDate = "";
 			String anyBloodGroup = "false";
@@ -198,7 +201,7 @@ public class DonorCommunicationTest {
 			results = donorRepository.findDonorFromDonorCommunication(
 					donorPanel, clinicDate, lastDonationFromDate,
 					lastDonationToDate, bloodGroups, anyBloodGroup,
-					pagingParams, clinicDate);
+					pagingParams, "27/2/2015");
 
 			Long totalRecords = (Long) results.get(1);
 			assertNotSame(
@@ -242,7 +245,7 @@ public class DonorCommunicationTest {
 		try{
 		long donorListSizeBeforDonorDelete = getDonorListSizeWithoutAnyCriteria();
 		long donorListSizeAfterDonorDelete = 0;
-		Donor donor = donorRepository.findDonorByDonorNumberIncludeDeleted("000005");
+		Donor donor = donorRepository.findDonorByDonorNumberIncludeDeleted("000012");
 		if(!donor.getIsDeleted())
 		{
 			donorRepository.deleteDonor(donor.getId());
@@ -264,16 +267,20 @@ public class DonorCommunicationTest {
 	@Verifies(value="should not return donors who will be deferred on the date of the clinic, or for part of the period selected",method="findDonorFromDonorCommunication(List<Location>,String,String,String,List<BloodGroup>,String ,Map<String, Object> )")
 	public void returnNotDefferedDonorOnSpeficClinicDateTest()
 	{
-		String deferUntil = "05/3/2014";
+		String deferUntil = "07/07/2015";
 		String deferralReasonId = "1";
 		String deferralReasonText = "deferralReasonText";
+		String deferredDonorId = "2";
 		long donorListSizeBeforDonorDeffered = getDonorTocheckDefferedTestCase();
 		long donorListSizeAfterDonorDeffered = 0;
 		try {
 			userAuthentication();
-			donorRepository.deferDonor("2", deferUntil, deferralReasonId, deferralReasonText);
-			donorListSizeAfterDonorDeffered = getDonorTocheckDefferedTestCase();
-			assertNotSame("donor list size is not same after donor Deffered",donorListSizeBeforDonorDeffered,donorListSizeAfterDonorDeffered);
+			if(donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId)) == null && donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId)).isEmpty())
+			{
+				donorRepository.deferDonor(deferredDonorId, deferUntil, deferralReasonId, deferralReasonText);
+				donorListSizeAfterDonorDeffered = getDonorTocheckDefferedTestCase();
+				assertNotSame("donor list size is not same after donor Deffered",donorListSizeBeforDonorDeffered,donorListSizeAfterDonorDeffered);
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -343,7 +350,7 @@ public class DonorCommunicationTest {
 	{
 		List<Location> donorPanel = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		String clinicDate = "03/03/2014";
+		String clinicDate = getEligibleDonorDate("07/07/2014");
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		String anyBloodGroup = "false";
@@ -354,8 +361,29 @@ public class DonorCommunicationTest {
 		results = donorRepository.findDonorFromDonorCommunication(
 				donorPanel, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup,
-				pagingParams, clinicDate);
+				pagingParams, "07/07/2014");
 
-		return (Long) results.get(1);
+		return results != null && !results.isEmpty() ? (Long) results.get(1) : 0;
 	}
+	
+	 private static String getEligibleDonorDate(String clinicDate)
+	  {
+		  
+		  SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy"); 
+		  Calendar cal = Calendar.getInstance();
+		  try {
+			  if(!clinicDate.trim().equalsIgnoreCase(""))
+			  {
+				  Date dateObj = curFormater.parse(clinicDate);
+				  @SuppressWarnings({ "unused", "deprecation" })
+				  Date clinicDt = new Date(clinicDate);
+				  cal .setTime(dateObj);
+				  cal.add(Calendar.DATE, -56);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		  return !clinicDate.trim().equalsIgnoreCase("") ? curFormater.format(cal.getTime()) : "";
+}
 }
