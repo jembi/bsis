@@ -223,6 +223,9 @@
 					<form:errors class="formError" path="donor.birthDateEstimated"
 						delimiter=", "></form:errors>
 				</c:if>
+				
+				<form:errors class="formError" path="donor.birthDate">
+				</form:errors>
 		</div>
 				
       <c:if test="${donorFields.age.hidden != true }">
