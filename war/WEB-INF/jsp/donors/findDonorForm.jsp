@@ -283,29 +283,49 @@ $(document).ready(function() {
         <div>
           <form:label path="gender">${model.donorFields.gender.displayName}</form:label>
           <form:select path="gender" id="${genderSelectorId}">
-          	<form:option value="" />
+          	<form:option value="" >Gender</form:option>
             <form:option value="male" label="Male" />
             <form:option value="female" label="Female" />
           </form:select>
         </div>
-      </c:if>
+        </c:if>
       <c:if test="${model.donorFields.nationalID.hidden != true }">
         <div>
           <form:label path="nationalID">${model.donorFields.nationalID.displayName}</form:label>
           <form:input path="nationalID" value="${firstTimeRender ? model.donorFields.nationalID.defaultValue : ''}" />
         </div>
       </c:if>
-      <c:if test="${model.donorFields.birthDate.hidden != true }">
-        <div>
-          <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
-          <form:input path="birthDate" class="birthDate"
-                      value="${firstTimeRender ? model.donorFields.birthDate.defaultValue : ''}" />
-          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+     
+        <div> 
+        <c:if test="${donorFields.birthDate.hidden != true }">
+       <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
+        <form:input  style="width:34px" placeholder="Day" path="dayOfMonth" alt="dayOfMonth"    maxlength="2"/>
+       
+        <form:select path="month"  name="Month">
+        <form:option value="">Month</form:option> 
+       <form:option value="01">January</form:option>
+       <form:option value="02">February</form:option>
+       <form:option value="03">March</form:option>
+       <form:option value="04">April</form:option>
+       <form:option value="05">May</form:option>
+       <form:option value="06">June</form:option>
+       <form:option value="07">July</form:option>
+       <form:option value="08">August</form:option>
+       <form:option value="09">September</form:option>
+       <form:option value="10">Octobor</form:option>
+       <form:option value="11">November</form:option>
+       <form:option value="12">December</form:option>
+       </form:select>
+       
+        <form:input style="width:46px" path="year" maxlength="4" alt="year" id="year" placeholder="Year" />
+       </c:if> 
+         <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
 			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
           </c:if>
+ 
         </div>
-      </c:if>
+        
       <c:if test="${model.donorFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${model.donorFields.notes.displayName}</form:label>
