@@ -88,7 +88,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('PERM_VIEW_DONOR_INFORMATION')")
+  @PreAuthorize("hasRole('View Donor')")
   public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -245,7 +245,7 @@ public class DonorController {
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);        
         // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
-        //donor.setDonorNumber(utilController.getNextDonorNumber());
+         donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
