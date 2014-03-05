@@ -200,6 +200,7 @@ public class CollectedSampleViewModel {
 	{
 		 if(collectedSample.getBloodPressureSystolic()!=null && collectedSample.getBloodPressureDiastolic()!=null)
 		 return collectedSample.getBloodPressureSystolic()+"/"+getBloodPressureDiastolic();
+		 else
 		 return null;
 	}
 	 
