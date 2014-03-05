@@ -168,9 +168,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Column(length=11)
   private Integer donorPulse;
   
-  @Transient
-  private String bloodPressure;
-
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -180,10 +177,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
-  public String getBloodPressure()
-  {
-	  return bloodPressureSystolic+"/"+bloodPressureDiastolic;
-  }
+
   
   public String getCollectionNumber() {
     return collectionNumber;
