@@ -198,7 +198,9 @@ public class CollectedSampleViewModel {
 	
 	public String getBloodPressure()
 	{
-		 return collectedSample.getBloodPressureSystolic()+""+"/"+getBloodPressureDiastolic()+"";
+		 if(collectedSample.getBloodPressureSystolic()!=null && collectedSample.getBloodPressureDiastolic()!=null)
+		 return collectedSample.getBloodPressureSystolic()+"/"+getBloodPressureDiastolic();
+		 return null;
 	}
 	 
 }
