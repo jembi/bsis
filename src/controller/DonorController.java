@@ -17,6 +17,7 @@ import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,10 @@ import backingform.validator.DonorBackingFormValidator;
 @Controller
 public class DonorController {
 
+	/**
+	 * The Constant LOGGER.
+	 */	
+  private static final Logger LOGGER = Logger.getLogger(DonorController.class);
   @Autowired
   private DonorRepository donorRepository;
 
@@ -83,7 +88,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('PERM_VIEW_DONOR_INFORMATION')")
+  @PreAuthorize("hasRole('View Donor')")
   public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -101,7 +106,21 @@ public class DonorController {
     mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-
+    
+    
+    // include donor deferral status
+    List<DonorDeferral> donorDeferrals = null;
+    try {
+      donorDeferrals = donorRepository.getDonorDeferrals(donorId);  
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    Boolean isCurrentlyDeferred = donorRepository.isCurrentlyDeferred(donorDeferrals);
+    mv.addObject("isDonorCurrentlyDeferred", isCurrentlyDeferred);
+    if(isCurrentlyDeferred){
+    	mv.addObject("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(donorId));
+    }
+    
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     mv.addObject("tips", tips);
@@ -172,12 +191,18 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("donors/editDonorForm");
     Donor donor = donorRepository.findDonorById(donorId);
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-    DonorBackingForm form = new DonorBackingForm(donor);
+    DonorBackingForm donorForm = new DonorBackingForm(donor);
+    String dateToken[]=donorForm.getBirthDate().split("/");
+    donorForm.setDayOfMonth(dateToken[0]);
+    donorForm.setMonth(dateToken[1]);
+    donorForm.setYear(dateToken[2]);
     addEditSelectorOptions(mv.getModelMap());
-    mv.addObject("editDonorForm", form);
+    mv.addObject("editDonorForm", donorForm);
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
+  
+ 
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView addDonorFormGenerator(HttpServletRequest request) {
@@ -196,7 +221,7 @@ public class DonorController {
     return mv;
   }
 
-  @RequestMapping(value = "/addDonor", method = RequestMethod.POST)
+  @RequestMapping(value = {"/addDonor", "/findDonor"}, method = RequestMethod.POST)
   public ModelAndView
         addDonor(HttpServletRequest request,
                  HttpServletResponse response,
@@ -205,7 +230,7 @@ public class DonorController {
 
     ModelAndView mv = new ModelAndView();
     boolean success = false;
-
+     form.setBirthDate();
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
@@ -218,7 +243,9 @@ public class DonorController {
     } else {
       try {
         Donor donor = form.getDonor();
-        donor.setIsDeleted(false);
+        donor.setIsDeleted(false);        
+        // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
+         donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
@@ -232,16 +259,35 @@ public class DonorController {
       }
     }
 
+    // check if method originates from /addDonor or /findDonor
+    // if true - addDonor, if false - findDonor
+    Boolean addDonorBool = false;
+    if (request.getServletPath().contains("addDonor")){
+    	addDonorBool = true;
+    }
+    
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
       mv.addObject("donor", getDonorsViewModel(savedDonor));
-      mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
+      if(addDonorBool){
+    	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
+      }
+      else {
+    	  mv.addObject("addAnotherDonorUrl", "findDonorFormGenerator.html");
+    	  mv.addObject("refreshUrl", "findDonorFormGenerator.html");
+      }
       mv.setViewName("donors/addDonorSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating donor. Please fix the errors noted below.");
       mv.addObject("firstTimeRender", false);
       mv.addObject("addDonorForm", form);
-      mv.addObject("refreshUrl", "addDonorFormGenerator.html");
+      if(addDonorBool){
+    	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
+      }
+      else {
+    	  mv.addObject("addAnotherDonorUrl", "findDonorFormGenerator.html");
+    	  mv.addObject("refreshUrl", "findDonorFormGenerator.html");
+      }
       mv.setViewName("donors/addDonorError");
     }
 
@@ -305,6 +351,7 @@ public class DonorController {
     else {
       try {
         form.setIsDeleted(false);
+        
         Donor existingDonor = donorRepository.updateDonor(form.getDonor());
         if (existingDonor == null) {
           mv.addObject("hasErrors", true);
@@ -351,9 +398,8 @@ public class DonorController {
     try {
       donorRepository.deleteDonor(donorId);
     } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
+    	LOGGER.error("Internal Exception");
+    	LOGGER.error(ex.getMessage());    	      
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -370,6 +416,9 @@ public class DonorController {
     FindDonorBackingForm form = new FindDonorBackingForm();
     form.setCreateDonorSummaryView(true);
     model.addAttribute("findDonorForm", form);
+   
+    DonorBackingForm dbform = new DonorBackingForm();
+
 
     ModelAndView mv = new ModelAndView("donors/findDonorForm");
     Map<String, Object> m = model.asMap();
@@ -380,6 +429,7 @@ public class DonorController {
     m.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
+    mv.addObject("addDonorForm", dbform);
     return mv;
   }
 
@@ -401,6 +451,27 @@ public class DonorController {
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
+  }
+  
+  @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
+  public ModelAndView printDonorLabel(HttpServletRequest request, Model model,
+		  @RequestParam(value="donorNumber") String donorNumber) {
+	  
+	ModelAndView mv = new ModelAndView("zplBarcode");
+	
+	mv.addObject("labelZPL",
+		"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
+		"^XA"+
+		"^MMT"+
+		"^PW360"+
+		"^LL0120"+
+		"^LS0"+
+		"^BY2,3,52^FT63,69^BCN,,Y,N"+
+		"^FD>:" + donorNumber + "^FS"+
+		"^PQ1,0,1,Y^XZ"
+	);
+	
+	return mv;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {

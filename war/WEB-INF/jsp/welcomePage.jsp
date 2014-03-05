@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V</title>
+<title>BSIS</title>
 <jsp:include page="commonHeadIncludes.jsp" flush="true" />
 </head>
 <body style="margin-top: 2px;">
@@ -22,7 +22,7 @@
     <div class="bottomPanel">
         <span
         class="ui-icon ui-icon-mail-closed" style="display: inline-block; margin-left: 20px;"></span><a
-        href="mailto:rohit.banga@gatech.edu, vempala@cc.gatech.edu"
+        href="mailto:support@jembi.org?subject=BSIS%20Support"
         target="_blank">Contact Us</a>
     </div>
   </div>

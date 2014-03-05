@@ -15,7 +15,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V - First Time Configuration Wizard</title>
+<title>BSIS - First Time Configuration Wizard</title>
 <link type="text/css" rel="stylesheet" href="css/common.css" />
 <link type="text/css" rel="stylesheet" href="css/topPanel.css" />
 <link type="text/css" rel="stylesheet"
@@ -44,7 +44,7 @@
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
-        <a href="/v2v">VEIN-TO-VEIN</a>
+        <a href="/bsis">Blood Safety Information System</a>
       </div>
       <div class="headlink">
         <p class="topPanelUsername">Logged in as ${model.user.username}</p>
@@ -52,14 +52,14 @@
           style="display: inline-block;"></span>Sign out</a>
       </div>
       <div class="firstTimeConfigDiv">
-        Looks like you are running Vein-to-Vein for the first time. You need
+        Looks like you are running BSIS for the first time. You need
         to configure this server this server. Please click on configure
         below to begin the configuration process. <br /> <br /> <br />
 
         Note that all data related to blood collection will be deleted if
         you begin the configuration. If you feel you are receiving this
         message in error, please <a
-          href="mailto:rohit.banga@gatech.edu, vempala@cc.gatech.edu"
+          href="mailto:support@jembi.org?subject=BSIS%20Support"
           target="_blank"> Contact Us </a> and select the Sign Out option. <br />
         <br /> <br />
 

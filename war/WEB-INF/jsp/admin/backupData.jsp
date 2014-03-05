@@ -31,12 +31,12 @@ $(document).ready(function() {
   <div id="${mainContentId}">
     <!-- div class="tipsBox ui-state-highlight">
       <p>
-        Backup the V2V database by clicking on the button below.
+        Backup the BSIS database by clicking on the button below.
       </p>
     </div-->
     <br />
     <br />
-    <button class="backupDataButton" style="margin-left: 50px;">Backup the V2V Database</button>
+    <button class="backupDataButton" style="margin-left: 50px;">Backup the BSIS Database</button>
   </div>
   <div id="${childContentId}">
   </div>

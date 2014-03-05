@@ -127,8 +127,33 @@ $(document).ready(function() {
                         .click(function(event) {
                           saveTestResults(event, true);
                         });
-
+  
+  document.getElementById('well1').focus(); // onPageLoad - set focus on first well
 });
+
+function autoTab(field,fieldID){
+	
+	if(event.keyCode == 37 && fieldID > 1) {   // left key pressed
+		var prevFieldID = fieldID;
+		prevFieldID--;
+		document.getElementById('well' + prevFieldID).focus();
+	}
+	
+	else if(event.keyCode == 39) {   // right key pressed
+		var nextFieldID = fieldID;
+		nextFieldID++;
+		document.getElementById('well' + nextFieldID).focus();
+	}
+		
+	else if(field.value.length >= 1){ // value entered into current field
+		var nextFieldID = fieldID;
+		nextFieldID++;
+	    document.getElementById('well' + nextFieldID).focus();
+	}
+	
+};
+
+
 </script>
 
 <div id="${tabContentId}">
@@ -144,14 +169,14 @@ $(document).ready(function() {
     <c:if test="${!empty collectionsWithUninterpretableResults && fn:length(collectionsWithUninterpretableResults) gt 0}">
       <div class="warningBox ui-state-highlight">
         <img src="images/warning_icon.png" style="height: 50px;" />
-        The following collections have uninterpretable results. Please check the results you have entered.
+        The following donations have uninterpretable results. Please check the results you have entered.
 
         <c:forEach var="collectionId" items="${collectionsWithUninterpretableResults}">
   
           <table class="simpleTable">
             <thead>
               <tr>
-                <th>Collection number</th>
+                <th>Donation Identification Number</th>
               </tr>
             </thead>
             <tbody>
@@ -167,7 +192,7 @@ $(document).ready(function() {
           Are you sure you want to save these results?
           <br />
           <button class="saveUninterpretableResultsButton">
-            Save uninterpretable results also
+            Save all results (including uninterpretable results)
           </button>
 
         </c:forEach>
@@ -182,7 +207,7 @@ $(document).ready(function() {
       <span class="warningText">
         <b>Warning</b>
         <br />
-        The following collections already have blood typing results. Are you sure you want to add blood typing results again?
+        The following donations already have blood typing results. Are you sure you want to add blood typing results again?
         <br />
         Previous data will be overwritten.
       </span>
@@ -190,7 +215,7 @@ $(document).ready(function() {
       <br />
       <br />
       <div>
-        <button class="changeCollectionsButton">Go back and change collections</button>
+        <button class="changeCollectionsButton">Go back and change donations</button>
       </div>
       <br />
       <br />
@@ -198,7 +223,7 @@ $(document).ready(function() {
       <table class="simpleTable">
         <thead>
           <tr>
-            <th>Collection number</th>
+            <th>DIN</th>
             <th>Blood typing status</th>
             <th>Blood ABO</th>
             <th>Blood Rh</th>
@@ -232,7 +257,7 @@ $(document).ready(function() {
 
       </div>
     </c:if>
-
+<div style="float: left;">
     <div class="bloodTypingPlate">
         <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
                    border-radius: ${bloodTypingConfig['titerWellRadius']}px;
@@ -252,10 +277,9 @@ $(document).ready(function() {
                          padding: 0;" value="${colNum}" disabled="disabled" title="${not empty collection ? collection.collectionNumber : ''}" />
              </div>
         </c:forEach>
-
-
       <br />
 
+	  <c:set var="wellNum" value="0" />
       <c:forEach var="rowNum" begin="1" end="${plate.numRows}">
           <!-- Top row style similar to input wells -->
           <input style="width: ${bloodTypingConfig['titerWellRadius']}px;height: ${bloodTypingConfig['titerWellRadius']}px;
@@ -264,7 +288,7 @@ $(document).ready(function() {
                      background: rgb(255, 208, 165);
                      color: black;
                      padding: 0;" value="&#${65 + rowNum-1};" disabled="disabled" />
-
+                     	  
           <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
             <c:set var="collection" value="${collections[colNum-1]}" />
             <div class="wellBox">
@@ -291,6 +315,7 @@ $(document).ready(function() {
                 <c:if test="${empty errorMap[collection.id][testId]}">
                   <c:set var="wellBorderColor" value="" />
                 </c:if>
+                <c:set var="wellNum" value="${wellNum + 1}" />
                   <input
                     style="width: ${bloodTypingConfig['titerWellRadius']}px; 
                            height: ${bloodTypingConfig['titerWellRadius']}px;
@@ -304,7 +329,10 @@ $(document).ready(function() {
                     data-collectionid="${collection.id}"
                     data-testid="${bloodTestsOnPlate[rowNum-1].id}"
                     value="${testResultValue}"
-                    class="wellInput" />
+                    class="wellInput" 
+                    id="well${wellNum}"
+                    onkeyup="autoTab(this,'${wellNum}')"
+                    />
               </c:if>
              </div>
           </c:forEach>
@@ -313,37 +341,33 @@ $(document).ready(function() {
       </c:forEach>
     </div>
 
-    <div style="margin-left: 200px;">
+    <div style="margin-left: 30px; margin-top: 50px;">
       <label></label>
       <button type="button" class="saveButton">
         Save
       </button>
       <button type="button" class="changeCollectionsButton">
-        Change collections
+        Change Donations
       </button>
       <button type="button" class="clearFormButton">
-        Clear form
+        Clear Form
       </button>
     </div>
-
-
-    <br />
-    <span style="font-size: 15pt; font-weight: bold;">List of collection numbers by column in titer plate</span>
-    <br />
-    <br />
-    <table style="width: 40%" class="simpleTable">
+</div>  
+<div style="float: none;">  
+<table class="simpleTable" style="width: 10%; padding:50px 40px; border:none;">
       <thead>
         <tr>
-          <th>Column number</th>
-          <th>Collection Number in Column</th>
+          <th></th>
+          <th style="font-size:80%;">DINs</th>
         </tr>
       </thead>
       <tbody>
         <c:forEach var="colNum" begin="${1}" end="${plate.numColumns}">
           <c:set var="collection" value="${collections[colNum-1]}" />
           <tr>
-            <td style="text-align: center;">${colNum}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; font-size:90%;">${colNum}</td>
+            <td style="text-align: center; font-size:90%;">
               <c:if test="${empty collection}">
                 EMPTY
               </c:if>
@@ -355,7 +379,7 @@ $(document).ready(function() {
         </c:forEach>
       </tbody>
     </table>
-
+</div>
 
   </div>
 </div>

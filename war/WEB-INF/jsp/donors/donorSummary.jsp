@@ -21,7 +21,8 @@
   $(document).ready(
       function() {
 
-        showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+       // showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+       // showDonorDeferrals();  display deferral history by default
 
         function notifyParentDone() {
           $("#${tabContentId}").parent().trigger("donorSummarySuccess");
@@ -40,17 +41,25 @@
 
             fetchContent("editDonorFormGenerator.html",
                          {donorId: "${donor.id}"},
-                         $("#${childContentId}")
+                         $("#${tabContentId}")
                         );
         });
-
+        
+        $("#${tabContentId}").find(".printBarcode").button({
+            icons : {
+              primary : 'ui-icon-print'
+            }
+          }).click(function() {
+        	  window.open("printDonorLabel.html?"+ $.param({donorNumber : "${donor.donorNumber}"}));
+          });
+        
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
           }
         }).click(function() {
           $("#${mainContentId}").find(".printableArea").printArea();
-        });
+        }); 
 
         $("#${tabContentId}").find(".createCollectionButton").button({
           icons : {
@@ -167,6 +176,10 @@
                        $("#${childContentId}")
                       );
         }
+        
+        function showDonorDeferralStatus() {
+        	
+        }
 
       });
 </script>
@@ -178,7 +191,7 @@
       <button class="doneButton">
         Done
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+       <sec:authorize access="hasRole('Edit Donor')">
       <button class="editButton">
         Edit
       </button>
@@ -192,32 +205,42 @@
       <button class="deferDonorButton">
         Defer Donor
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+      <sec:authorize access="hasRole('Void Donor')">
       <button type="button" class="deleteButton">
         Delete
       </button>
       </sec:authorize>
-      <button class="printButton">
-        Print
+      <button class="printBarcode">
+        Print Barcode
       </button>
     </div>
 
+    <!-- not needed  
     <div class="tipsBox ui-state-highlight">
       <p>
         ${tips['donors.finddonor.donorsummary']}
       </p>
     </div>
+    -->
+
+	  <c:if test="${isDonorCurrentlyDeferred}">
+        <div id="deferralStatus" class="tipsBox ui-state-highlight" style="font-size: 18px; color: #a12020; padding: 10px;">
+          Donor is currently deferred until ${donorLatestDeferredUntilDate}.
+          <br />
+        </div>
+      </c:if>
+
+  	<br />
+  	<div id="${childContentId}"></div>
+    <br />
 
     <jsp:include page="donorDetails.jsp" />
 
   </div>
 
-  <br />
-  <br />
 
-  <div id="${childContentId}"></div>
 </div>
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
-  Are  you sure you want to delete this Donor?
+  Are you sure you want to delete this Donor?
 </div>

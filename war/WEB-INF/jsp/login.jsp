@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V</title>
+<title>BSIS</title>
 <jsp:include page="commonHeadIncludes.jsp" flush="true" />
 <link type="text/css" rel="stylesheet" href="css/login.css" />
 </head>
@@ -31,7 +31,7 @@
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
-        <a href="/v2v">VEIN-TO-VEIN</a>
+        <a href="/bsis">Blood Safety Information System</a>
       </div>
       <div class="loginPanel">
         <div class="centralContent">

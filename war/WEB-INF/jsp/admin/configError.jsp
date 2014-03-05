@@ -14,7 +14,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>V2V - Configuration Error</title>
+<title>BSIS - Configuration Error</title>
 <link type="text/css" rel="stylesheet" href="css/common.css" />
 <link type="text/css" rel="stylesheet" href="css/topPanel.css" />
 <link type="text/css" rel="stylesheet"
@@ -39,7 +39,7 @@
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
-        <a href="/v2v">VEIN-TO-VEIN</a>
+        <a href="/bsis">Blood Safety Information System</a>
       </div>
       <div class="headlink">
         <p class="topPanelUsername">Logged in as ${model.user.username}</p>
@@ -48,7 +48,7 @@
       </div>
       <div class="firstTimeConfigDiv">
         An unexpected error occurred.
-        Please <a href="mailto:rohit.banga@gatech.edu, vempala@cc.gatech.edu"
+        Please <a href="mailto:support@jembi.org?subject=BSIS%20Support"
           target="_blank"> Contact Us </a> to report the problem. <br />
         <br /> <br />
 
