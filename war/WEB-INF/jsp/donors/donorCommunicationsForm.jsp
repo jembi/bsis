@@ -186,9 +186,7 @@ $(document).ready(function() {
 	    	      });
 	      $("#${tabContentId}").bind("donorSummarySuccess",
 	    	      function(event, content) {
-	    	        $("#${mainContentId}").show();
-	    	        $("#${childContentId}").html("");
-	    	        $("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
+	    	        refetchForm();
 	    	      });
 	      
       function refetchForm() {
@@ -216,7 +214,6 @@ $(document).ready(function() {
   	<b>&nbsp;&nbsp;Donor Comunication</b>
   	</div>
   	<c:if test="${!empty success && !success}">
-  	
         <jsp:include page="../common/errorBox.jsp">
           <jsp:param name="errorMessage" value="${errorMessage}" />
         </jsp:include>
