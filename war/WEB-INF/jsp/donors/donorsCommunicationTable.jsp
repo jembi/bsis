@@ -17,7 +17,6 @@
 $(document).ready(
 		
     function() {
-    	
    	 $("#${tabContentId}").find(".cancelDonorCommButton")
         .button({
         	icons : {}
@@ -36,7 +35,7 @@ $(document).ready(
    	 function notifyParentDone() {
         $("#${tabContentId}").parent().trigger("donorSummarySuccess");
       }
-   	 
+   	  textName = getDynamicCSVFileName();
       var donorsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : '<"H"lrT>t<"F"ip>',
@@ -66,8 +65,9 @@ $(document).ready(
           "aButtons" : [{
               "sExtends":    "csv",
               "sButtonText": "Export List",
-              "mColumns": [1,2,3,4,5,6,7 ]
-          } ],
+              "mColumns": [1,2,3,4,5,6,7 ],
+              "sFileName": textName
+              }],
           "fnRowSelected" : function(node) {
                               $("#${tabContentId}").parent().trigger("donorSummaryView");
                               var elements = $(node).children();
@@ -117,16 +117,27 @@ $(document).ready(
         if (searchBox.val() != "")
           $("#${table_id}").find("td").highlight(searchBox.val());
       });
-     
-      var pdfButton = $(".DTTT_button_csv").detach();
-      $("#newPosition").append( pdfButton );
+      
+      var csvButton = $(".DTTT_button_csv").detach();
+      $("#newPosition").append( csvButton );
+      
+      function getDynamicCSVFileName()
+      {
+    	  var timestamp = $.now();
+    	  var d = new Date(timestamp);
+    	  var dd = d.getDate();
+    	  var mm = d.getMonth() + 1;
+    	  var h = d.getHours();
+    	  var m = d.getMinutes();
+    	  var s = d.getSeconds();
+    	  var dateAndTime = (dd < 10 ? "0" : "") + dd + (mm < 10 ? "0" : "") + mm + "" + d.getFullYear() + "-" + (h < 10 ? "0" : "") + h + (m < 10 ? "0" : "") + m + (s < 10 ? "0" : "") + s;
+    	  return "ExportList_" + dateAndTime + ".csv";
+      }
    });
 </script>
 
 <div id="${tabContentId}">
-
   <c:choose>
-
     <c:when test="${fn:length(model.allDonors) eq -1}">
       <span
         style="font-style: italic; font-size: 14pt; margin-top: 30px; display: block;">
@@ -134,7 +145,6 @@ $(document).ready(
     </c:when>
 
     <c:otherwise>
-
       <table id="${table_id}" class="dataTable donorsTable">
         <thead>
           <tr>
