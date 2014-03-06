@@ -208,7 +208,7 @@ $(document).ready(
         <label></label>
         <br>
         <button type="button" class="cancelDonorCommButton">
-          Cancel
+          Close
         </button>
     </div>
     <div id="backButtonId" style="display: none;">
