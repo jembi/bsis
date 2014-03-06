@@ -661,7 +661,6 @@ public class DonorController {
     Map<String, Object> m                    = model.asMap();
     List<Location> donorPanel              = form.getDonorPanels();
     List<BloodGroup> bloodGroups       = form.getBloodGroups();
-    boolean success = true;
     addEditSelectorOptions(m);
     m.put("bloodGroups", BloodGroup.getBloodgroups());
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
@@ -669,20 +668,22 @@ public class DonorController {
     {
     	modelAndView = new ModelAndView("donors/donorCommunicationsForm");
     	modelAndView.addObject("errorMessage", "Select 1 or more Donor Panel(s).");
-    	success=false;
-    	m.put("success", success);
+    	m.put("success", Boolean.FALSE);
+    	m.put("requestUrl", getUrl(request));
+    	m.put("refreshUrl", "donorCommunicFormGenerator.html");
     	modelAndView.addObject("model", m);
-    	modelAndView.addObject("success", success);
+    	modelAndView.addObject("success", Boolean.FALSE);
     	return modelAndView;
     }
     if(bloodGroups == null  || bloodGroups.isEmpty() )
     {
     	modelAndView = new ModelAndView("donors/donorCommunicationsForm");
     	modelAndView.addObject("errorMessage", "Select 1 or more Blood Group(s)");
-    	success=false;
-    	m.put("success", success);
+    	m.put("success", Boolean.FALSE);
+      	m.put("requestUrl", getUrl(request));
+    	m.put("refreshUrl", "donorCommunicFormGenerator.html");
     	modelAndView.addObject("model", m);
-    	modelAndView.addObject("success", success);
+    	modelAndView.addObject("success", Boolean.FALSE);
     	return modelAndView;
     }
     form.setCreateDonorSummaryView(true);
@@ -692,8 +693,9 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-   modelAndView.addObject("model", m);
-    modelAndView.addObject("success", success);
+	m.put("success", Boolean.TRUE);
+    modelAndView.addObject("model", m);
+    modelAndView.addObject("success", Boolean.TRUE);
     return modelAndView;
   } 
   

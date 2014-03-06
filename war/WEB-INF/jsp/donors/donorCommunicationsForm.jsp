@@ -21,7 +21,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector-${unique_page_id}</c:set>
+<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector</c:set>
 
 <script>
 $(document).ready(function() {
@@ -46,9 +46,15 @@ $(document).ready(function() {
 		                      
 		                  }
 		  });
-
-	 // $("#${donorCommunicationFormDonorPanelsId}").multiselect("checkAll");
-	 
+			function selectDefaultValueOfPanel(){
+			$('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
+				if(this.title == "Chingola")
+					{
+					this.click();
+					}
+		   });
+		}
+	
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
@@ -150,23 +156,28 @@ $(document).ready(function() {
 	    	      url : "findDonorCommunicationForm.html",
 	    	      data : donorCommunicationData,
 	    	      success : function(data) {
-	    	    		 //animatedScrollTo(resultsDiv);
-	  	    	        //resultsDiv.html(data);
-	  	    	        $("#${mainContentId}").hide();
-	  	    	        $("#${childContentId}").html(data);  
-	    	      }
+	    	    	  var donorSelect = false;
+		    	    	  $('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
+		    	  			if(this.checked)
+		    	  				{
+		    	  					donorSelect = this.checked;
+		    	  				}
+		    	  	      });
+		    	    	  if(donorSelect == true && ($(".case:checked").length > 0) )
+		    	    	  {
+		    	    		  $("#${mainContentId}").hide();
+				  	    	  $("#${childContentId}").html(data);
+		    	    	  }
+		    	    	 else
+		    	    	 {
+		    	    		  $("#${tabContentId}").replaceWith(data);
+		    	    		  selectDefaultValueOfPanel();
+		    	    	 }
+	    	    	 }
 	    	    });
 	      });
-	    $("#${tabContentId}").find(".clearDonorCommButton").button({
-	        icons : {
-	          
-	        }
-	      }).click(clearFindForm);
-	      
-	      function clearFindForm() {
-	        refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
-	        $("#${childContentId}").html("");
-	      }
+	    $("#${tabContentId}").find(".clearDonorCommButton").button()
+        	.click(refetchForm);
 	      
 	      $("#${tabContentId}").bind("donorSummaryView",
 	    	      function(event, content) {
@@ -179,23 +190,40 @@ $(document).ready(function() {
 	    	        $("#${childContentId}").html("");
 	    	        $("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
 	    	      });
+	      
+      function refetchForm() {
+    	    $.ajax({
+    	      url: "donorCommunicFormGenerator.html",
+    	      data: {},
+    	      type: "GET",
+    	      success: function (response) {
+    	                  $("#${tabContentId}").replaceWith(response);
+    	               },
+    	      error:   function (response) {
+    	                 showErrorMessage("Something went wrong. Please try again.");
+    	               }
+    	      
+    	    });
+    	  }
+      selectDefaultValueOfPanel();
+      
 });
 </script>
 
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
-  <b>Donor Communications</b>
+    <div style="margin-top:0px !important;">
+  	<b>&nbsp;&nbsp;Donor Comunication</b>
+  	</div>
   	<c:if test="${!empty success && !success}">
+  	
         <jsp:include page="../common/errorBox.jsp">
           <jsp:param name="errorMessage" value="${errorMessage}" />
         </jsp:include>
     </c:if>
-    
     <form:form method="GET" commandName="donorCommunicationForm" id="${donorCommunicationFormId}"
       class="formFormatClass">
-   
-      <div>
-      
+      <div>      
 	      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;width:115px;">
 	         <form:label cssStyle="width:175px !important;" path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
 	      </div>
@@ -259,5 +287,4 @@ $(document).ready(function() {
     <div class="findDonorResultsFromDonorComm"></div>
   </div>
 <div id="${childContentId}"></div>
-  <br/>
 </div>
