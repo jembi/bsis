@@ -91,7 +91,7 @@ public class DonorCommunicationTest {
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		String anyBloodGroup = "false";
-		String[] bloodGroupStrArray = { "o-" };
+		String[] bloodGroupStrArray = { "O-" };
 
 		bloodGroups = createBloodGroupListForSearch(bloodGroupStrArray);
 		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
@@ -118,7 +118,7 @@ public class DonorCommunicationTest {
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		String anyBloodGroup = "false";
-		String[] bloodGroupStrArray = { "a-" };
+		String[] bloodGroupStrArray = { "A-" };
 
 		bloodGroups = createBloodGroupListForSearch(bloodGroupStrArray);
 		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
