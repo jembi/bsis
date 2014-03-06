@@ -26,14 +26,13 @@ $(document).ready(
                });
 	$("#${tabContentId}").find(".backDonorCommButton")
 	    .button({
-	    	icons : {primary : 'ui-icon-arrowreturn-1-s'}
+	    	icons : {}
 	    })
 	    .click(function() {
 	             notifyParentDone();
 	           });
-   	
    	 function notifyParentDone() {
-        $("#${tabContentId}").parent().trigger("donorSummarySuccess");
+        $("#${tabContentId}").parent().trigger("donorFindSuccess");
       }
    	  textName = getDynamicCSVFileName();
       var donorsTable = $("#${table_id}").dataTable({
@@ -215,7 +214,8 @@ $(document).ready(
     <label></label>
     <br>
     <button type="button" class="backDonorCommButton">
-          Back
+          Close
         </button>
     </div>
+    <div id="${childContentId}"></div>
 </div>

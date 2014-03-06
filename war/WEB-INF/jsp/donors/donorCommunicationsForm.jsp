@@ -21,7 +21,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector</c:set>
+<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -46,15 +46,6 @@ $(document).ready(function() {
 		                      
 		                  }
 		  });
-			function selectDefaultValueOfPanel(){
-			$('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
-				if(this.title == "Chingola")
-					{
-					this.click();
-					}
-		   });
-		}
-	
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
@@ -150,7 +141,7 @@ $(document).ready(function() {
 	    	    	$("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("false");
 	    	    }
 	    	    var donorCommunicationData = $("#${donorCommunicationFormId}").serialize();
-	    	    var resultsDiv = $("#${mainContentId}").find(".findDonorResultsFromDonorComm");
+	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorResultsFromDonorComm");
 	    	    $.ajax({
 	    	      type : "GET",
 	    	      url : "findDonorCommunicationForm.html",
@@ -171,7 +162,9 @@ $(document).ready(function() {
 		    	    	 else
 		    	    	 {
 		    	    		  $("#${tabContentId}").replaceWith(data);
-		    	    		  selectDefaultValueOfPanel();
+		    	    		  if($(".case").length == $(".case:checked").length) {
+		    	  				$("#selectall").attr("checked", "checked");
+		    	    		  }
 		    	    	 }
 	    	    	 }
 	    	    });
@@ -182,11 +175,18 @@ $(document).ready(function() {
 	      $("#${tabContentId}").bind("donorSummaryView",
 	    	      function(event, content) {
 	    	        $("#${mainContentId}").hide();
-	    	        $("#${childContentId}").html(content);
+	    	        $("#${childContentId}").hide();
+	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html(content);
 	    	      });
 	      $("#${tabContentId}").bind("donorSummarySuccess",
 	    	      function(event, content) {
-	    	        refetchForm();
+	    	 			$("#${mainContentId}").hide();
+  	        			$("#${childContentId}").show();
+  	        			$("#${tabContentId}").find(".findDonorResultsFromDonorComm").hide();
+	    	      });
+	      $("#${tabContentId}").bind("donorFindSuccess",
+	    	      function(event, content) {
+	    	  		refetchForm();
 	    	      });
 	      
       function refetchForm() {
@@ -203,9 +203,7 @@ $(document).ready(function() {
     	      
     	    });
     	  }
-      selectDefaultValueOfPanel();
-      
-});
+ });
 </script>
 
 <div id="${tabContentId}" class="formDiv">
@@ -281,7 +279,7 @@ $(document).ready(function() {
         </button>
       </div>
     </div>
-    <div class="findDonorResultsFromDonorComm"></div>
   </div>
+<div class="findDonorResultsFromDonorComm"></div>
 <div id="${childContentId}"></div>
 </div>

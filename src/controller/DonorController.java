@@ -741,7 +741,7 @@ public class DonorController {
 	  SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy"); 
 	  Calendar cal = Calendar.getInstance();
 	  try {
-		  if(!clinicDate.trim().equalsIgnoreCase(""))
+		  if(clinicDate != null && !clinicDate.trim().equalsIgnoreCase(""))
 		  {
 			  Date dateObj = curFormater.parse(clinicDate);
 			  @SuppressWarnings({ "unused", "deprecation" })
@@ -754,7 +754,7 @@ public class DonorController {
 		e.printStackTrace();
 	} 
 	  
-	  return !clinicDate.trim().equalsIgnoreCase("") ? curFormater.format(cal.getTime()) : "";
+	  return clinicDate != null && !clinicDate.trim().equalsIgnoreCase("") ? curFormater.format(cal.getTime()) : "";
   }
   
   private Map<String, Object> generateDatatablesMapForDonorCommunication(List<Donor> donors, Long totalRecords, Map<String, Map<String, Object>> formFields) {
