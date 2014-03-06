@@ -180,19 +180,19 @@ public class CollectedSampleViewModel {
 		collectedSample.setDonorPulse(donorPulse);
   }
 
-  public Integer getBloodPressureSystolic() {
+  public String getBloodPressureSystolic() {
 		return  collectedSample.getBloodPressureSystolic();
   }
 	
-  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+  public void setBloodPressureSystolic(String bloodPressureSystolic) {
 		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
   }
   
-  public Integer getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic();
+  public String  getBloodPressureDiastolic() {
+		return collectedSample.getBloodPressureDiastolic().toString();
 	}
 
-	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+	public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
 		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
 	}
 	
