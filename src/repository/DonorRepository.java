@@ -18,6 +18,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donor.DonorConstants;
 import model.donor.DonorStatus;
@@ -111,7 +112,7 @@ public class DonorRepository {
     if (!dueToDonate)
     	dueToDonateExp = cb.disjunction();
     else
-    	dueToDonateExp = cb.greaterThan(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), DonorConstants.DUE_TO_DONATE_VALUE));
+    	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
     Predicate lastNameExp;
     if (lastName.trim().equals(""))
