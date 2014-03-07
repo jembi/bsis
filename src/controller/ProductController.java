@@ -2,8 +2,11 @@ package controller;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.collectedsample.CollectedSample;
 import model.product.Product;
+import model.product.ProductStatus;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
@@ -44,6 +49,7 @@ import viewmodel.ProductViewModel;
 import backingform.FindProductBackingForm;
 import backingform.ProductBackingForm;
 import backingform.ProductCombinationBackingForm;
+import backingform.RecordProductBackingForm;
 import backingform.validator.ProductBackingFormValidator;
 
 @Controller
@@ -151,6 +157,26 @@ public class ProductController {
     return mv;
   }
 
+  /**
+   * Form Generator to create Record Product page
+   */
+  @RequestMapping(value = "/recordProductFormGenerator", method = RequestMethod.GET)
+  public ModelAndView recordProductFormGenerator(HttpServletRequest request) {
+
+  	RecordProductBackingForm form = new RecordProductBackingForm();
+    ModelAndView mv = new ModelAndView("products/recordProductForm");
+    mv.addObject("findProductByPackNumberForm", form);
+
+    Map<String, Object> tips = new HashMap<String, Object>();
+    addEditSelectorOptions(mv.getModelMap());
+    utilController.addTipsToModel(tips, "products.find");
+    mv.addObject("tips", tips);
+    // to ensure custom field names are displayed in the form
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    mv.addObject("refreshUrl", getUrl(request));
+    return mv;
+  }
+  
   /**
    * Get column name from column id, depends on sequence of columns in productsTable.jsp
    */
@@ -683,4 +709,265 @@ public class ProductController {
     }
     m.put("productTypeCombinationsMap", productTypeCombinationsMap);
   }
+  
+  public static String getNextPageUrlForRecordProduct(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findProductByPackNumber.html", "findProductByPackNumberPagination.html");
+    String queryString = req.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
+  
+  @RequestMapping("/findProductByPackNumber")
+  public ModelAndView findProductByPackNumber(HttpServletRequest request,
+      @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
+      BindingResult result, Model model) {
+
+    List<Product> products = Arrays.asList(new Product[0]);
+
+    ModelAndView mv = new ModelAndView("products/recordProductsTable");
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    mv.addObject("allProducts", getProductViewModels(products));
+    mv.addObject("refreshUrl", getUrl(request));
+    mv.addObject("nextPageUrl", getNextPageUrlForRecordProduct(request));
+    mv.addObject("addProductForm", form);
+    addEditSelectorOptionsForNewRecord(mv.getModelMap());
+
+    return mv;
+  }
+  @SuppressWarnings("unchecked")
+  @RequestMapping("/findProductByPackNumberPagination")
+  public @ResponseBody Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request,
+      @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
+      BindingResult result, Model model) {
+
+    List<Product> products = Arrays.asList(new Product[0]);
+
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+
+    List<Object> results = new ArrayList<Object>();
+    List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
+    
+      results = productRepository.findProductByCollectionNumber(
+          form.getCollectionNumber(), status,
+          pagingParams);
+
+    products = (List<Product>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+    return generateRecordProductTablesMap(products, totalRecords, formFields);
+  }
+  
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in recordProductTable.jsp.
+   */
+  private Map<String, Object> generateRecordProductTablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+    Map<String, Object> productsMap = new HashMap<String, Object>();
+    ArrayList<Object> productList = new ArrayList<Object>();
+    for (ProductViewModel product : getProductViewModels(products)) {
+      List<Object> row = new ArrayList<Object>();
+      
+      row.add(product.getId().toString());
+      row.add(product.getCollectedSample().getId());
+      for (String property : Arrays.asList("productType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
+        if (formFields.containsKey(property)) {
+          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          if (properties.get("hidden").equals(false)) {
+            String propertyValue = property;
+            try {
+              propertyValue = BeanUtils.getProperty(product, property);
+            } catch (IllegalAccessException e) {
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              e.printStackTrace();
+            }
+            if (property.equals("productType") &&
+                StringUtils.isNotBlank(product.getSubdivisionCode())) {
+              propertyValue = propertyValue + " (" + product.getSubdivisionCode() + ")";
+            }
+            row.add(propertyValue.toString());
+          }
+        }
+      }
+
+      productList.add(row);
+    }
+    productsMap.put("aaData", productList);
+    productsMap.put("iTotalRecords", totalRecords);
+    productsMap.put("iTotalDisplayRecords", totalRecords);
+    return productsMap;
+  }
+  
+  @RequestMapping("/recordNewProductComponents")
+  public ModelAndView recordNewProductComponents(HttpServletRequest request,
+      @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
+      BindingResult result, Model model) {
+
+      ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
+      String collectionNumber = form.getCollectionNumber();
+      String status = form.getStatus().get(0);
+      long productId = form.getProductID();
+      
+      if(collectionNumber.contains("-")){
+      	collectionNumber = collectionNumber.split("-")[0];
+      }
+      String sortName = productType2.getProductTypeNameShort();
+      int noOfUnits = form.getNoOfUnits();
+      //long hiddenCollectedSampleID =Long.parseLong(request.getParameter("hiddenCollectedSampleID"));
+      long collectedSampleID = form.getCollectedSampleID();
+      
+      String createdPackNumber = collectionNumber +"-"+sortName;
+      
+      // Add New product
+      if(!status.equalsIgnoreCase("PROCESSED")){
+      if(noOfUnits > 0 ){
+      	
+      	for(int i=1; i <= noOfUnits ; i++){
+      		try{
+	        	Product product = new Product();
+	          product.setIsDeleted(false);
+	          product.setDonationIdentificationNumber(createdPackNumber+"-"+i);
+	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
+	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
+	          
+	          product.setCreatedOn(createdOn);
+	          product.setExpiresOn(expiresOn);
+	          ProductType productType = new ProductType();
+	          productType.setProductType(form.getProductTypes().get(0));
+	          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
+	          product.setProductType(productType);
+	          CollectedSample collectedSample = new CollectedSample();
+	          collectedSample.setId(collectedSampleID);
+	          product.setCollectedSample(collectedSample);
+	          product.setStatus(ProductStatus.QUARANTINED);
+		        productRepository.addProduct(product);
+
+		        // Once product save successfully update selected product status with processed
+		        productRepository.updateProductByProductId(productId);
+		        
+		      } catch (EntityExistsException ex) {
+		        ex.printStackTrace();
+		      } catch (Exception ex) {
+		        ex.printStackTrace();
+		      }
+      	}
+      }
+      else{
+      	
+      	try{
+	        	Product product = new Product();
+	          product.setIsDeleted(false);
+	          product.setDonationIdentificationNumber(createdPackNumber);
+	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
+	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
+	          
+	          product.setCreatedOn(createdOn);
+	          product.setExpiresOn(expiresOn);
+	          ProductType productType = new ProductType();
+	          productType.setProductType(form.getProductTypes().get(0));
+	          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
+	          product.setProductType(productType);
+	          CollectedSample collectedSample = new CollectedSample();
+	          collectedSample.setId(collectedSampleID);
+	          product.setCollectedSample(collectedSample);
+	          product.setStatus(ProductStatus.QUARANTINED);
+		        productRepository.addProduct(product);
+		        productRepository.updateProductByProductId(productId);
+		        
+		      } catch (EntityExistsException ex) {
+		        ex.printStackTrace();
+		      } catch (Exception ex) {
+		        ex.printStackTrace();
+		      }
+	    	}
+      }
+   
+    List<Product> products = Arrays.asList(new Product[0]);
+   
+    ModelAndView mv = new ModelAndView("products/recordProductsTable");
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    mv.addObject("allProducts", getProductViewModels(products));
+    mv.addObject("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
+    mv.addObject("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
+    mv.addObject("addProductForm", form);
+    
+    if(form.getCollectionNumber().contains("-")){
+    	addEditSelectorOptionsForNewRecordByList(mv.getModelMap(),productType2);
+  	}
+  	else{
+  		 addEditSelectorOptionsForNewRecord(mv.getModelMap());
+  	}
+
+    return mv;
+  }
+  
+  @RequestMapping("/getRecordNewProductComponents")
+  public ModelAndView getRecordNewProductComponents(HttpServletRequest request,
+      @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
+      BindingResult result, Model model) {
+
+  	ProductType productType = null;
+  	if(form.getProductTypes() != null){
+	  	String productTypeName = form.getProductTypes().get(form.getProductTypes().size()-1);
+	  	productType = productRepository.findProductTypeByProductTypeName(productTypeName);
+  	}
+  	List<Product> products = Arrays.asList(new Product[0]);
+  	
+    ModelAndView mv = new ModelAndView("products/recordProductsTable");
+    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    mv.addObject("allProducts", getProductViewModels(products));
+    mv.addObject("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
+    mv.addObject("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
+    mv.addObject("addProductForm", form);
+    
+    if(form.getCollectionNumber().contains("-") && form.getProductTypes() != null){
+    	addEditSelectorOptionsForNewRecordByList(mv.getModelMap(),productType);
+  	}
+  	else{
+  		 addEditSelectorOptionsForNewRecord(mv.getModelMap());
+  	}
+    
+    return mv;
+  }
+  
+  private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ProductType productType) {
+    m.put("productTypes", productTypeRepository.getProductTypeByIdList(productType.getId()));
+  }
+  private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
+    m.put("productTypes", productTypeRepository.getAllParentProductTypes());
+  }
+  
+  public static String getUrlForNewProduct(HttpServletRequest req,String qString) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString[] = qString.split("-");   
+    if (queryString != null) {
+        reqUrl += "?collectionNumber="+queryString[0];
+    }
+    return reqUrl;
+  }
+  
+  public static String getNextPageUrlForNewRecordProduct(HttpServletRequest req,String qString) {
+  	String reqUrl ="";
+  	if(req.getRequestURI().contains("recordNewProductComponents")){
+  		reqUrl = req.getRequestURL().toString().replaceFirst("recordNewProductComponents.html", "findProductByPackNumberPagination.html");
+  	}
+  	else{
+  		reqUrl = req.getRequestURL().toString().replaceFirst("getRecordNewProductComponents.html", "findProductByPackNumberPagination.html");
+  	}
+    String queryString[] = qString.split("-"); 
+    if (queryString != null) {
+        reqUrl += "?collectionNumber="+queryString[0];
+    }
+    return reqUrl;
+  }
+  
 }
