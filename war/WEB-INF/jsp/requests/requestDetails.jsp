@@ -129,12 +129,12 @@
     	  <br>
     	  <b>Requested Components</b>
     	  <div>
-	      	<jsp:include page="requestedComponetTable.jsp"/>
+	      	<jsp:include page="requestComponentTable.jsp"/>
 	      </div>
 	      <br>
 	      <b>Issued Components</b>
 	      <div>
-	      	<jsp:include page="issueComponetTable.jsp" />
+	      	<jsp:include page="issueComponentTable.jsp" />
 	      </div>
 	      
 	      <c:if test="${requestFields.dispatchDate.hidden != true }">
