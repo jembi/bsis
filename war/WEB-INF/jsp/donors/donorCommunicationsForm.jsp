@@ -21,10 +21,11 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
 <c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector-${unique_page_id}</c:set>
+<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector</c:set>
 
 <script>
 $(document).ready(function() {
+	function populatePanelCombo(){
 	$("#${donorCommunicationFormDonorPanelsId}").multiselect({
 		    position : {
 		      my : 'left top',
@@ -46,6 +47,8 @@ $(document).ready(function() {
 		                      
 		                  }
 		  });
+	}
+	populatePanelCombo();
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
@@ -148,12 +151,16 @@ $(document).ready(function() {
 	    	      data : donorCommunicationData,
 	    	      success : function(data) {
 	    	    	  var donorSelect = false;
+	    	    	  var selectedValues = new Array();
 		    	    	  $('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
 		    	  			if(this.checked)
 		    	  				{
-		    	  					donorSelect = this.checked;
+			    	  				donorSelect = this.checked;
+			    	  				selectedValues.push(this.value);
+			    	  				selectedValues.join(",");
 		    	  				}
 		    	  	      });
+		    	    	  
 		    	    	  if(donorSelect == true && ($(".case:checked").length > 0) )
 		    	    	  {
 		    	    		  $("#${mainContentId}").hide();
@@ -165,6 +172,15 @@ $(document).ready(function() {
 		    	    		  if($(".case").length == $(".case:checked").length) {
 		    	  				$("#selectall").attr("checked", "checked");
 		    	    		  }
+		    	    		  $('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
+		    	    			  if(jQuery.inArray(this.value, selectedValues) !=-1)
+		    	    			  {
+		    	    				  if(!this.checked)
+		    	    				  {
+		    	    					  this.click();
+		    	    				  }
+		    	    			  }
+		    	    		  });
 		    	    	 }
 	    	    	 }
 	    	    });
@@ -204,6 +220,7 @@ $(document).ready(function() {
     	    });
     	  }
  });
+
 </script>
 
 <div id="${tabContentId}" class="formDiv">
