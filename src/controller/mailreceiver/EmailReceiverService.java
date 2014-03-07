@@ -93,7 +93,7 @@ public class EmailReceiverService {
 //          "Your request has been received for " +
 //          request.getPatientBloodAbo() + request.getPatientBloodRh() +
 //          " (" + request.getNumUnitsRequested() + " units, " +
-//          request.getProductType().getProductTypeNameShort() + "). " +
+//          request.getProductType().getProductTypeCode() + "). " +
 //      		"Request number: " + request.getRequestNumber() + ". Thank you.");
 //      break;
 //    case INVALID:

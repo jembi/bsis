@@ -251,7 +251,7 @@ $(document).ready(function() {
                 class="productTypesSelector"
                  id="${productTypeCombinationProductTypeSelectorId}">
           <c:forEach var="productType" items="${productTypes}">
-            <option value="${productType.id}">${productType.productTypeNameShort}</option>
+            <option value="${productType.id}">${productType.productTypeCode}</option>
           </c:forEach>
         </select>
       </div>

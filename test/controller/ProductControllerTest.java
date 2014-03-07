@@ -57,7 +57,7 @@ public class ProductControllerTest {
 	      if(collectionNumber.contains("-")){
 	      	collectionNumber = collectionNumber.split("-")[0];
 	      }
-	      String sortName = productType2.getProductTypeNameShort();
+	      String sortName = productType2.getProductTypeCode();
 	      int noOfUnits = 3;
 	      long collectedSampleID = 1;
 	      
