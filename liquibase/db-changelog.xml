@@ -276,9 +276,13 @@
 	     </insert>
    </changeSet>
    
-   <!-- for issue 64 [Add isDeleted field to BloodTest Table] -->
+   <!-- for issue 64 [Add isDeleted field to BloodTest and BloodTest_AUD Tables] -->
      <changeSet id="201401140950" author="srikanth">
 	     <addColumn tableName="BloodTest">
+	     	<column name="isDeleted" type="TINYINT(1)" />
+	     </addColumn>
+	     
+	     <addColumn tableName="BloodTest_AUD">
 	     	<column name="isDeleted" type="TINYINT(1)" />
 	     </addColumn>
 	</changeSet>
