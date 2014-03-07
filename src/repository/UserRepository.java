@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.user.Role;
 import model.user.User;
 
 import org.springframework.stereotype.Repository;
@@ -29,10 +30,11 @@ public class UserRepository {
     }
     existingUser.copy(user);
     if (modifyPassword)
-      existingUser.setPassword(user.getPassword());
-    existingUser.setIsDeleted(false);
-    em.merge(existingUser);
-    em.flush();
+	    existingUser.setRoles(user.getRoles());	
+	    existingUser.setPassword(user.getPassword());
+	    existingUser.setIsDeleted(false);
+	    em.merge(existingUser);
+	    em.flush();
     return existingUser;
   }
 
@@ -102,5 +104,30 @@ public class UserRepository {
   public void addUser(User user) {
     em.persist(user);
     em.flush();
+  }
+  
+	public List<Role> getUserRole(String []str) {
+		Role role=null;
+		List<Role> roles=new ArrayList<Role>();
+  	if(str!=null){
+  		for(String s:str){
+  			if(s!= null && !s.isEmpty()){
+	  			role=findRoleById(Long.parseLong(s));
+	  			roles.add(role);
+  			}
+  		}
+  	}
+	return roles;
+  }
+  
+  public Role findRoleById(Long id) {
+    if (id == null)
+      return null;
+    String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";
+    TypedQuery<Role> query = em.createQuery(queryString, Role.class);
+    query.setParameter("roleId", id);
+    if (query.getResultList().size() == 0)
+      return null;
+    return query.getSingleResult();
   }
 }
