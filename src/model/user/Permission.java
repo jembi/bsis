@@ -23,7 +23,7 @@ public class Permission {
   @Column(length=50)
   private String name;
 
-  @ManyToMany
+  @ManyToMany(mappedBy = "permissions")
   private List<Role> roles;
 
   public Long getId() {

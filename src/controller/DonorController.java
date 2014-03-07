@@ -89,7 +89,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('PERM_VIEW_DONOR_INFORMATION')")
+  @PreAuthorize("hasRole('View Donor')")
   public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -192,12 +192,18 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("donors/editDonorForm");
     Donor donor = donorRepository.findDonorById(donorId);
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-    DonorBackingForm form = new DonorBackingForm(donor);
+    DonorBackingForm donorForm = new DonorBackingForm(donor);
+    String dateToken[]=donorForm.getBirthDate().split("/");
+    donorForm.setDayOfMonth(dateToken[0]);
+    donorForm.setMonth(dateToken[1]);
+    donorForm.setYear(dateToken[2]);
     addEditSelectorOptions(mv.getModelMap());
-    mv.addObject("editDonorForm", form);
+    mv.addObject("editDonorForm", donorForm);
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
+  
+ 
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView addDonorFormGenerator(HttpServletRequest request) {
@@ -225,7 +231,7 @@ public class DonorController {
 
     ModelAndView mv = new ModelAndView();
     boolean success = false;
-
+     form.setBirthDate();
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
@@ -240,7 +246,7 @@ public class DonorController {
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);        
         // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
-        //donor.setDonorNumber(utilController.getNextDonorNumber());
+         donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
