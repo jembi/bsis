@@ -209,7 +209,7 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <div style="margin-top:0px !important;">
-  	<b>&nbsp;&nbsp;Donor Comunication</b>
+  	<b>&nbsp;&nbsp;Donor Communications</b>
   	</div>
   	<c:if test="${!empty success && !success}">
         <jsp:include page="../common/errorBox.jsp">
