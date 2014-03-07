@@ -12,27 +12,25 @@
   xmlns:security="http://www.springframework.org/schema/security"
   xmlns:util="http://www.springframework.org/schema/util"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-        http://www.springframework.org/schema/security
-        http://www.springframework.org/schema/security/spring-security-3.1.xsd
-        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
-        http://www.springframework.org/schema/integration
-        http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
-        http://www.springframework.org/schema/integration/mail
-        http://www.springframework.org/schema/integration/mail/spring-integration-mail-2.2.xsd
-        http://www.springframework.org/schema/util
-        http://www.springframework.org/schema/util/spring-util-2.0.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
-        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-3.1.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+http://www.springframework.org/schema/integration
+http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
+http://www.springframework.org/schema/integration/mail
+http://www.springframework.org/schema/integration/mail/spring-integration-mail-2.2.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-2.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
   <!-- Annotations like PreAuthorize, needed here and not in security-v2v-servlet.xml
-       as this is the MVC configuration dealing with URLs??? -->
-<!-- 	  
+as this is the MVC configuration dealing with URLs??? -->
   <security:global-method-security pre-post-annotations="enabled" />
- --> 
   <context:property-placeholder location="classpath:database.properties" />
 
   <!-- Configures the @Controller programming model -->
@@ -45,7 +43,6 @@
   <context:component-scan base-package="tasks" />
   <context:component-scan base-package="utils" />
   <context:component-scan base-package="security" />
-  <context:component-scan base-package="util" />
 
   <bean id="messageSource"
     class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -59,13 +56,13 @@
  
 
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-          destroy-method="close" autowire="byName">
-        <property name="driverClass" value="org.hsqldb.jdbcDriver" />
-        <property name="jdbcUrl" value="jdbc:hsqldb:mem:DBNAME" />
+          destroy-method="close">
+        <property name="driverClass" value="${testdatabase.driver}" />
+        <property name="jdbcUrl" value="${testdatabase.url}" />
         
-        <property name="user" value="sa" />
-        <property name="password" value="" /> 
-		        <!-- these are C3P0 properties -->
+        <property name="user" value="${testdatabase.user}" />
+        <property name="password" value="" />
+<!-- these are C3P0 properties -->
         <property name="acquireIncrement" value="${database.acquireIncrement}" />
         <property name="minPoolSize" value="${database.minPoolSize}" />
         <property name="maxPoolSize" value="${database.maxPoolSize}" />
@@ -93,7 +90,6 @@
   </bean>
 
   <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
-
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
   </bean>
 

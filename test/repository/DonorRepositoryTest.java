@@ -14,6 +14,10 @@ import model.location.Location;
 import model.user.User;
 
 import org.hsqldb.server.ServerAcl.AclFormatException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -22,19 +26,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import security.LoginUserService;
 import security.V2VUserDetails;
-import util.HSQLServerUtil;
+import util.Verifies;
 import backingform.DonorBackingForm;
+
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+
 import controller.UtilController;
 
-@ContextConfiguration(locations = { "classpath*:ApplicationContextTest.xml" })
-public class DonorRepositoryTest extends
-		AbstractTransactionalTestNGSpringContextTests {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "file:**/ApplicationContextTest.xml")
+@WebAppConfiguration
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class,
+    DbUnitTestExecutionListener.class })
+@DatabaseSetup("classpath:/DonorDataset.xml")
+public class DonorRepositoryTest {
 	@Autowired
 	private UtilController utilController;
 	@Autowired
@@ -50,68 +67,90 @@ public class DonorRepositoryTest extends
 	private LocationRepository locationRepository;
 	@Autowired
 	private ContactMethodTypeRepository contactMethodTypeRepository;
-	private long donorDbId, donorDeletedDbId;
-	private int userDbId;
-	private String deletedDonorNmber, donorNumber;
+	private int userDbId=1;
 	private DonorBackingForm donorBackingForm;
 	String donorBirthdate = null;
 	ApplicationContext applicationContext = null;
 	UserDetailsService userDetailsService;
 
-	@Test(dependsOnMethods = { "setupUser", "setUpContactMethodType",
-			"setUpLocation" }, description = "Donor Object should persist. method=addDonor(Donor)")
-	@Rollback(false)
-	public void addDonor_shouldPersist() {
-
-		try {
-			DonorBackingForm donorBackingForm = new DonorBackingForm();
-			setBackingFormValue(donorBackingForm);
-			donorBackingForm
-					.setDonorNumber(utilController.getNextDonorNumber());
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-			donorDbId = donorBackingForm.getDonor().getId();
-			donorNumber = donorBackingForm.getDonor().getDonorNumber();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test(dependsOnMethods = { "addDonor_shouldPersist" }, description = "Donor object should not null when Donor Number match with an existing Donor. method=updateDonor(Donor)")
-	@Rollback(false)
-	public void updateDonor_shouldReturnNotNull() {
-		Donor editDonor = donorRepository.findDonorById(donorDbId);
-		donorBackingForm = new DonorBackingForm(editDonor);
-		setBackingUpdateFormValue(donorBackingForm);
-		assertNotNull("Donor Object should update.",
-				donorRepository.updateDonor(donorBackingForm.getDonor()));
-	}
-
-	@Test(dependsOnMethods = { "deleteDonor_shouldPersist" }, description = "should return deleted donor because IsDelete true. method=findDonorByDonorNumber(String,boolean)")
-	public void findDonorByDonorNumber_deleteDonorObjectShouldNotNullDonorDeleteTrue() {
-		try {
-			assertNotNull("Donor object should not null.",
-					donorRepository.findDonorByDonorNumber(deletedDonorNmber,
-							true));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	@Test
+	@Verifies(value="should return  donor because IsDeleted false.",method="findDonorByDonorNumber(String,boolean)")
 	
-	@Test(dependsOnMethods = { "addDonor_shouldPersist" }, description = "should return none deleted donor because IsDelete false. method=findDonorByDonorNumber(String,boolean)")
 	public void findDonorByDonorNumber_donorObjectShouldNotNullDonorDeleteFalse() {
 		try {
 			assertNotNull("Donor object should not null.",
-					donorRepository.findDonorByDonorNumber(donorNumber,
+					donorRepository.findDonorByDonorNumber("000001",
 							false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Test(dependsOnMethods = { "addDonor_shouldPersist",
-			"updateDonor_shouldReturnNotNull" }, description = "should return none deleted listall donor. method=getAllDonors()")
+	@Test
+	@Verifies(value = "Donor Object should persist.", method = "addDonor(Donor)")
+	public void addDonor_shouldPersist() {
+
+		try {
+			DonorBackingForm donorBackingForm = new DonorBackingForm();
+			setBackingFormValue(donorBackingForm);
+			donorBackingForm
+					.setDonorNumber("000004");
+			donorRepository.addDonor(donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.", donorBackingForm
+					.getDonor().getId() == 0 ? false : true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+		@Verifies(value = "Donor Object should persist.", method = "saveDonor(Donor)")
+		public void saveDonor_shouldPersist() {
+			donorBackingForm = new DonorBackingForm();
+			setBackingFormValue(donorBackingForm);
+			donorBackingForm.setDonorNumber("000005");
+			donorRepository.saveDonor(donorBackingForm.getDonor());
+			assertTrue(donorBackingForm.getDonor().getId() == 0 ? false : true);
+		}
+	
+	@Test
+	@Verifies(value="Donor object should not null when Donor Number match with an existing Donor",method="updateDonor(Donor)")
+	public void updateDonor_shouldReturnNotNull() {
+		Donor editDonor = donorRepository.findDonorById(1l);
+		donorBackingForm = new DonorBackingForm(editDonor);
+		setBackingUpdateFormValue(donorBackingForm);
+		assertNotNull("Donor Object should update.",
+				donorRepository.updateDonor(donorBackingForm.getDonor()));
+	}
+
+	@Test
+	@Verifies(value="should return deleted donor because IsDelete true.",method="findDonorByDonorNumber(String,boolean)")
+	public void findDonorByDonorNumber_deleteDonorObjectShouldNotNullDonorDeleteTrue() {
+		try {
+			assertNotNull("Donor object should not null.",
+					donorRepository.findDonorByDonorNumber("000002",
+							true));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@Verifies(value="should delete donor from database.",method="deleteDonor(long)")
+	public void deleteDonor_shouldSoftDeleteDonorFromDatabase() {
+		boolean isDelete = true;
+		try{
+		donorRepository.deleteDonor(2l);
+		}catch(Exception e){
+			isDelete = false;
+		}finally{
+			assertFalse("SoftDelete operation is completed successfully.",isDelete);
+		}
+	}
+	
+	
+	@Test
+	@Verifies(value="should return none deleted donor list.",method="getAllDonors()")
 	public void getAllDonors_shouldReturnNoneDeleteDonor() {
 		try {
 			List<Donor> listDonor = donorRepository.getAllDonors();
@@ -124,26 +163,8 @@ public class DonorRepositoryTest extends
 		}
 	}
 
-	@Test(dependsOnMethods = { "setupUser", "setUpContactMethodType",
-			"setUpLocation" }, description = "Donor Object should persist. method=addDonor(Donor)")
-	@Rollback(false)
-	public void deleteDonor_shouldPersist() {
-
-		try {
-			DonorBackingForm donorBackingForm = new DonorBackingForm();
-			setBackingFormValue(donorBackingForm);
-			donorBackingForm
-					.setDonorNumber(utilController.getNextDonorNumber());
-			donorBackingForm.setIsDeleted(true);
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-			deletedDonorNmber = donorBackingForm.getDonor().getDonorNumber();
-			donorDeletedDbId = donorBackingForm.getDonor().getId();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
+	
 
 	/**
 	 * Called when insert new record into table.
@@ -180,6 +201,8 @@ public class DonorRepositoryTest extends
 		donorBackingForm.setBirthDate(donorBirthdate);
 		donorBackingForm.setBirthDateEstimated(true);
 	}
+	
+	
 
 	/**
 	 * Called when update existing record.
@@ -211,88 +234,8 @@ public class DonorRepositoryTest extends
 		donorBackingForm.setCreatedBy(user);
 	}
 
-	/**
-	 * This method is useful to configure instance variable value which is used
-	 * by different test case .
-	 * 
-	 * @throws AclFormatException
-	 * @throws IOException
-	 */
-	@BeforeClass
-	public void init() {
-		try {
-			HSQLServerUtil.getInstance().start("DBNAME");
-
-		} catch (Exception ee) {
-
-		}
-
-	}
-
-	/**
-	 * Create New Location
-	 */
-	@Test
-	@Rollback(false)
-	public void setUpLocation() {
-		try {
-			model.location.Location location = new Location();
-			location.setName("location");
-			locationRepository.saveLocation(location);
-			System.out.println("Location Id is:::" + location.getId());
-
-			location = new Location();
-			location.setName("location");
-			locationRepository.saveLocation(location);
-			System.out.println("Location Id is:::" + location.getId());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create New User
-	 */
-	@Test
-	@Rollback(false)
-	public void setupUser() {
-		try {
-			user = new User();
-			user.setEmailId("email@email.com");
-			user.setFirstName("admin");
-			user.setIsAdmin(true);
-			user.setIsActive(true);
-			user.setIsDeleted(false);
-			user.setIsStaff(true);
-			user.setUsername("admin");
-			user.setPassword("admin");
-			userRepository.addUser(user);
-			userDbId = user.getId();
-			user = null;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create various Contact Method Type
-	 */
-	@Test
-	@Rollback(false)
-	public void setUpContactMethodType() {
-		String[] str = { "None", "Phone", "SMS", "Email", "Mail",
-				"Do not contact" };
-		ContactMethodType contactMethodType = null;
-		for (String contactString : str) {
-			contactMethodType = new ContactMethodType();
-			contactMethodType.setContactMethodType(contactString);
-			contactMethodType.setIsDeleted(false);
-			contactMethodTypeRepository.saveContactMethod(contactMethodType);
-			contactMethodType = null;
-		}
-
-	}
+	
+	
 
 	/**
 	 * UserPassword,V2vUserDetails(Principal) and authority detail store into
