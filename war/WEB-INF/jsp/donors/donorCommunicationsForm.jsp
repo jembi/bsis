@@ -25,7 +25,6 @@
 
 <script>
 $(document).ready(function() {
-	function populatePanelCombo(){
 	$("#${donorCommunicationFormDonorPanelsId}").multiselect({
 		    position : {
 		      my : 'left top',
@@ -47,15 +46,13 @@ $(document).ready(function() {
 		                      
 		                  }
 		  });
-	}
-	populatePanelCombo();
 	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
-		     maxDate : 36500,
+		     maxDate : new Date(2020, 12, 31),
 		     dateFormat : "dd/mm/yy",
-		     yearRange : "c-100:c0",
+		     yearRange : "c-100:2020",
 		     onClose: function(selectedDate,evnt) {
 		         if(selectedDate != null && selectedDate != "" ){
 		        	 $("#lastDonationToDate").datepicker('disable');
@@ -192,6 +189,7 @@ $(document).ready(function() {
 	    	      function(event, content) {
 	    	        $("#${mainContentId}").hide();
 	    	        $("#${childContentId}").hide();
+	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").show();
 	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html(content);
 	    	      });
 	      $("#${tabContentId}").bind("donorSummarySuccess",
