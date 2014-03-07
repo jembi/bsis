@@ -82,3 +82,11 @@
 .selectedRowInDatatablesWithFixedColumns {
 	background: #9BB5AA;
 }
+
+.roleDiv {
+	padding: 5px;
+	cursor: pointer;
+	color: #132CE7;
+	font-weight: bold;
+	text-decoration: underline;
+}

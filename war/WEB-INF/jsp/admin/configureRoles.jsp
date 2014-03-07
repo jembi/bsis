@@ -17,13 +17,13 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="table_id">manageUsersTable-${unique_page_id}</c:set>
-<c:set var="configureUsersFormId">configureUsers-${unique_page_id}</c:set>
+<c:set var="table_id">manageRolesTable-${unique_page_id}</c:set>
+<c:set var="configureRolesFormId">configureRoles-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
 	
-	 var manageUsersTable = $("#${table_id}").dataTable({
+	 var manageRolesTable = $("#${table_id}").dataTable({
 	        "bJQueryUI" : true,
 	        "sDom" : '<"H"lfrT>t<"F"ip>',
 	        "oTableTools" : {
@@ -35,16 +35,14 @@ $(document).ready(function() {
 	        },
 	        "bPaginate" : false
 	      });
-
-  $("#${tabContentId}").find(".userDiv").click(function() {
+	
+  $("#${tabContentId}").find(".roleDiv").click(function() {
     $.ajax({
-             url: "editUserFormGenerator.html",
+             url: "editRoleFormGenerator.html",
              type: "GET",
-             data: { userId: $(this).find("input[name=id]").val() },
+             data: { roleId: $(this).find("input[name=id]").val() },
              success: function (content) {
-                         animatedScrollTo($("#${childContentId}"));
-                        $("#${childContentId}").html(content);
-                        $("#${mainContentId}").hide();
+                        $("#${tabContentId}").html(content);
                        },
               error: function(response) {
                       showErrorMessage("Something went wrong.");          
@@ -52,8 +50,8 @@ $(document).ready(function() {
            });
   });
 
-  $("#${tabContentId}").bind("editUserSuccess", editUserDone);
-  $("#${tabContentId}").bind("editUserCancel", editUserCancel);
+  $("#${tabContentId}").bind("editRoleSuccess", editRoleDone);
+  $("#${tabContentId}").bind("editRoleCancel", editRoleCancel);
 
   $("#${tabContentId}").find(".cancelButton").button({
     icons : {
@@ -70,29 +68,27 @@ $(document).ready(function() {
     $("#${childContentId}").html("");
   }
 
-  function editUserDone() {
+  function editRoleDone() {
     emptyChildContent();
     refetchForm();
   }
 
-  function editUserCancel() {
+  function editRoleCancel() {
     emptyChildContent();
     refetchForm();
   }
 
-  $("#${tabContentId}").find(".addNewUserButton").button({
+  $("#${tabContentId}").find(".addNewRoleButton").button({
     icons : {
       primary : 'ui-icon-plusthick'
     }
   }).click(function() {
     $.ajax({
-      url: "editUserFormGenerator.html",
+      url: "editRoleFormGenerator.html",
       type: "GET",
       data: {},
       success: function (content) {
-                  animatedScrollTo($("#${childContentId}"));
-                   $("#${childContentId}").html(content);
-                   $("#${mainContentId}").hide();
+    	  		$("#${tabContentId}").html(content);
                 },
        error: function(response) {
                 showErrorMessage("Something went wrong.");          
@@ -104,47 +100,48 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
- <b>Manage Users</b>
- <br />
- <br/>
- 
+  
+  <b>Manage Roles</b>
+  <br/>
+  <br/>
+  
   <div id="${mainContentId}">
-   <!--  <div class="tipsBox ui-state-highlight">
+
+    <!-- <div class="tipsBox ui-state-highlight">
       <p>
-        Select one of the users below to edit or add a new user. 
+        Select one of the roles below to edit or add a new role. 
       </p>
-    </div> -->
+    </div>
+    -->
     <div></div>
+    
     <table id="${table_id}" class="bloodTestsTable">
     	<thead>
 	    	<tr>
 	    		<th style="display: none"></th>
-	    		<th>Username</th>
-	    		<th>First Name</th>
-	    		<th>Last Name</th>
-	    		<th>Role(s)</th>
+	    		<th>Role</th>
+	    		<th>Description</th>
 		    </tr>
 		  </thead>
 		  <tbody> 
-		    <c:forEach var="user" items="${model.allUsers}">
+		  	<c:forEach var="role" items="${model.allRoles}">
 		     	<tr>
-		     		<td style="display: none">${user.id}</td>
-		     		<td>
-		     			<div class="userDiv">
-		        			${user.username}
-		        			<input name="id" type="hidden" value="${user.id}">
+		     		<td style="display: none">${role.id}</td>
+		     		<td width="25%">
+		     			<div class="roleDiv">
+		        			${role.name}
+		        			<input name="id" type="hidden" value="${role.id}">
 		     			 </div>
 		     		</td>
-		     		<td>${user.firstName}</td>
-		     		<td>${user.lastName}</td>
-		     		<td>${user.userRole}</td>
+		     		<td>${role.description}</td>
 		     	</tr>
 		    </c:forEach>
 	     </tbody>
-   	</table>
+    </table>
+      
     <div>
       <br />
-      <button class="addNewUserButton">Add new user</button>
+      <button class="addNewRoleButton">Add new role</button>
     </div>
   </div>
 
