@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import utils.CustomDateFormatter;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
 import backingform.DonorBackingForm;
@@ -307,6 +308,60 @@ public class DonorController {
     mv.addObject("donorId", donorId);
     mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
     return mv;
+  }
+  
+  @RequestMapping(value = "/editDeferDonorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editDeferDonorFormGenerator(HttpServletRequest request,
+      @RequestParam("donorDeferralId") String donorDeferralId) {
+    ModelAndView mv = new ModelAndView("donors/deferDonorForm");
+    DonorDeferral donorDeferral = donorRepository.getDonorDeferralsId(Long.parseLong(donorDeferralId));
+    if(donorDeferral != null){
+  		mv.addObject("deferralUntilDate", CustomDateFormatter.getDateString(donorDeferral.getDeferredUntil()));
+  		mv.addObject("deferReasonText",donorDeferral.getDeferralReasonText());
+  		mv.addObject("deferReasonId",donorDeferral.getDeferralReason().getId());
+  		mv.addObject("donorId", donorDeferral.getDeferredDonor().getId());
+  		mv.addObject("donorDeferralId", donorDeferral.getId());
+    }
+    mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
+    return mv;
+  }
+  
+  @RequestMapping(value="/updateDeferDonor", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> updateDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId,
+         @RequestParam("donorId") String donorId,
+         @RequestParam("deferUntil") String deferUntil,
+         @RequestParam("deferralReasonId") String deferralReasonId,
+         @RequestParam("deferralReasonText") String deferralReasonText) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.updatedeferDonor(donorDeferralId,donorId, deferUntil, deferralReasonId, deferralReasonText);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
+  }
+  
+  @RequestMapping(value="/cancelDeferDonor", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> cancelDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.cancelDeferDonor(donorDeferralId);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
   }
 
   @RequestMapping(value="/deferDonor", method = RequestMethod.POST)
