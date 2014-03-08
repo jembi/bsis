@@ -18,7 +18,7 @@
 	<contactmethodtype id="6" contactMethodType="Do not Contact"
 		isDeleted="0" />
 	<donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
+		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
 		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
 		dateOfLastDonation="2014-02-21 00:00:00" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -28,7 +28,7 @@
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="2" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
+		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
 		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
 		dateOfLastDonation="2014-02-21 00:00:00" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -47,5 +47,142 @@
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+	<donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
+		city="city" country="country" district="district" otherPhoneNumber="999999999"
+		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
+		dateOfLastDonation="2014-02-21 00:00:00" donorHash="1256c5cd51e6641c969573b0aa249dd6"
+		donorNumber="000004" donorStatus="NORMAL" firstName="firstName"
+		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
+		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
+		nationalID="null" notes="notes" preferredContactMethod_id="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+
+
+	<genericconfig id="1" propertyName="rowHeight"
+		propertyOwner="collectionsWorksheet" propertyValue="30" />
+	<genericconfig id="2" propertyName="columnWidth"
+		propertyOwner="collectionsWorksheet" propertyValue="100" />
+	<genericconfig id="3" propertyName="collectionNumber"
+		propertyOwner="collectionsWorksheet" propertyValue="true" />
+	<genericconfig id="4" propertyName="haemoglobinUnit"
+		propertyOwner="measurementUnit" propertyValue="g/dL" />
+	<genericconfig id="5" propertyName="bloodPressureUnit"
+		propertyOwner="measurementUnit" propertyValue="mmHg" />
+	<genericconfig id="6" propertyName="ageLimitsEnabled"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<genericconfig id="7" propertyName="minimumAge"
+		propertyOwner="donationRequirements" propertyValue="16" />
+	<genericconfig id="8" propertyName="maximumAge"
+		propertyOwner="donationRequirements" propertyValue="65" />
+	<genericconfig id="9" propertyName="minimumWeight"
+		propertyOwner="donationRequirements" propertyValue="65" />
+	<genericconfig id="10" propertyName="donorWeightUnit"
+		propertyOwner="donationRequirements" propertyValue="Kg." />
+	<genericconfig id="11" propertyName="daysBetweenConsecutiveDonations"
+		propertyOwner="donationRequirements" propertyValue="90" />
+	<genericconfig id="12" propertyName="donorDeferralCheckRequired"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<genericconfig id="13" propertyName="donorBloodGroupMatchRequired"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<genericconfig id="14" propertyName="donorHistoryCheckRequired"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<genericconfig id="15" propertyName="useShortNameForProductTypes"
+		propertyOwner="products" propertyValue="true" />
+	<genericconfig id="16"
+		propertyName="allowPediComponentsFromFirstTimeDonors" propertyOwner="componentSplit"
+		propertyValue="true" />
+	<genericconfig id="17" propertyName="donorRecordRequired"
+		propertyOwner="productReleaseRequirements" propertyValue="true" />
+	<genericconfig id="18" propertyName="allowProductsWithoutCollection"
+		propertyOwner="productReleaseRequirements" propertyValue="true" />
+	<genericconfig id="19" propertyName="allowImportedProducts"
+		propertyOwner="productReleaseRequirements" propertyValue="true" />
+	<genericconfig id="20" propertyName="leaveOutCollectionsProbability"
+		propertyOwner="createdata" propertyValue="0.10" />
+	<genericconfig id="21" propertyName="incorrectBloodTypeProbability"
+		propertyOwner="createdata" propertyValue="0.05" />
+	<genericconfig id="22" propertyName="unsafeProbability"
+		propertyOwner="createdata" propertyValue="0.05" />
+	<genericconfig id="23" propertyName="bloodTypingMechanism"
+		propertyOwner="labsetup" propertyValue="BLOODTYPING_TEST_RESULTS_ELISA" />
+	<genericconfig id="24" propertyName="ttiMechanism"
+		propertyOwner="labsetup" propertyValue="TTI_ELISA" />
+	<genericconfig id="25" propertyName="recordUsage"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="26" propertyName="crossmatchProcedure"
+		propertyOwner="labsetup" propertyValue="CROSSMATCH_DONE_CAN_SKIP" />
+	<genericconfig id="27" propertyName="bloodTypingContext"
+		propertyOwner="labsetup" propertyValue="RECORD_BLOOD_TYPING_TESTS" />
+	<genericconfig id="28" propertyName="bloodTypingElisa"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="29" propertyName="bloodTypingWorksheets"
+		propertyOwner="labsetup" propertyValue="false" />
+	<genericconfig id="30" propertyName="ttiElisa"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="31" propertyName="ttiWorksheets"
+		propertyOwner="labsetup" propertyValue="false" />
+	<genericconfig id="32" propertyName="recordMachineReadingsForTTI"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="33" propertyName="useWorksheets"
+		propertyOwner="labsetup" propertyValue="false" />
+	<genericconfig id="34" propertyName="donorsTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="35" propertyName="collectionsTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="36" propertyName="productsTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="37" propertyName="testResultsTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="38" propertyName="requestsTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="39" propertyName="usageTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="40" propertyName="reportsTabEnabled"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="41" propertyName="showCrossmatchConfirmation"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="42" propertyName="allowSkipCrossmatch"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="43" propertyName="horizontalentry"
+		propertyOwner="bloodtyping" propertyValue="true" />
+	<genericconfig id="44" propertyName="titerWellRadius"
+		propertyOwner="bloodtyping" propertyValue="25" />
+	<genericconfig id="45" propertyName="horizontalentry"
+		propertyOwner="ttiWells" propertyValue="true" />
+	<genericconfig id="46" propertyName="titerWellRadius"
+		propertyOwner="ttiWells" propertyValue="25" />
+	<genericconfig id="47" propertyName="ttiUploadResult"
+		propertyOwner="labsetup" propertyValue="true" />
+	<genericconfig id="48" propertyName="lotRelease"
+		propertyOwner="labsetup" propertyValue="TRUE" />
+
+	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" />
+	<deferralreason id="2" isDeleted="0" reason="Low weight" />
+	<deferralreason id="3" isDeleted="0" reason="Low haemoglobin" />
+	<deferralreason id="4" isDeleted="0" reason="Other reasons" />
+	<deferralreason id="5" isDeleted="0"
+		reason="Other medical conditions" />
+	<deferralreason id="6" isDeleted="0" reason="Travel history" />
+	<deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" />
+
+	<formfield id="1" autoGenerate="1" canBeOptional="0"
+		defaultDisplayName="Donor #" field="donorNumber" form="donor" hidden="0"
+		isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
+		maxLength="15" useCurrentTime="0" />
+
+	<donordeferral id="1" deferralReasonText="" deferredOn="2014-02-20"
+		deferredUntil="2014-06-20" deferralReason_id="2" deferredBy_id="1"
+		deferredDonor_id="1" />
+	<donordeferral id="2" deferralReasonText="" deferredOn="2014-03-01"
+		deferredUntil="2014-05-14" deferralReason_id="2" deferredBy_id="1"
+		deferredDonor_id="1" />
+	<donordeferral id="3" deferralReasonText="" deferredOn="2014-01-11"
+		deferredUntil="2014-08-22" deferralReason_id="2" deferredBy_id="1"
+		deferredDonor_id="1" />
+	<donordeferral id="4" deferralReasonText="" deferredOn="2014-01-11"
+		deferredUntil="2014-02-22" deferralReason_id="2" deferredBy_id="1"
+		deferredDonor_id="4" />
+
 
 </dataset>

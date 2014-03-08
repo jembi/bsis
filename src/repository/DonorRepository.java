@@ -57,11 +57,13 @@ public class DonorRepository {
     em.flush();
   }
 
-  public void deleteDonor(Long donorId) {
+  public Donor deleteDonor(Long donorId) {
     Donor existingDonor = findDonorById(donorId);
     existingDonor.setIsDeleted(Boolean.TRUE);
     em.merge(existingDonor);
     em.flush();
+    return existingDonor;
+    
   }
 
   public Donor findDonorById(Long donorId) {
@@ -307,6 +309,10 @@ public class DonorRepository {
     query.setParameter("isDeleted", false);
     return query.getSingleResult();
   }
+  
+  public DeferralReason findDeferralReasonUsingId(String deferralReasonId) {
+	  return this.findDeferralReasonById(deferralReasonId);
+	  }
 
   public List<DonorDeferral> getDonorDeferrals(Long donorId) {
     String queryString = "SELECT d from DonorDeferral d WHERE " +
