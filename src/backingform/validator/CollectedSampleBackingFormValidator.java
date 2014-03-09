@@ -92,20 +92,27 @@ public class CollectedSampleBackingFormValidator implements Validator {
   
   private void validateBloodPressure(CollectedSampleBackingForm collectionForm, Errors errors)
   {
-	 String bloodPressureSyStolic =collectionForm.getBloodPressureSystolic();
-	 String bloodPressureDiastolic=collectionForm.getBloodPressureDiastolic();
-	 String regex="[0-9]+"; 
+	 String bloodPressureSyStolic="";
+	 if(!StringUtils.isBlank(collectionForm.getBloodPressureSystolic()))
+		 bloodPressureSyStolic = collectionForm.getBloodPressureSystolic();
+	 else 
+		 collectionForm.setBloodPressureSystolic(null);
 	 
-	boolean notEmpty =false;
-	 if(!bloodPressureSyStolic.isEmpty())
+	 String bloodPressureDiastolic="";
+	 if(!StringUtils.isBlank(collectionForm.getBloodPressureDiastolic()))
+		 bloodPressureDiastolic = collectionForm.getBloodPressureDiastolic();
+	 else 
+		 collectionForm.setBloodPressureDiastolic(null);
+     
+	 String regex="[0-9]+"; 
+	 if(!bloodPressureSyStolic.isEmpty()  || !bloodPressureDiastolic.isEmpty())
 	  {
 		 
 		   if(!bloodPressureSyStolic.matches(regex) || !( Integer.parseInt(collectionForm.getBloodPressureSystolic()) >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && Integer.parseInt(collectionForm.getBloodPressureSystolic()) <= CollectionConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE) )
 			  		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
-	              notEmpty =true;
-	  }		  
-	  if(!bloodPressureDiastolic.isEmpty() || notEmpty == true){
-			  	if(!bloodPressureDiastolic.matches(regex) ||( !(Integer.parseInt(collectionForm.getBloodPressureDiastolic()) >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && Integer.parseInt( collectionForm.getBloodPressureDiastolic() )<= CollectionConstants.BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE)))
+	             
+	
+			  	if(!bloodPressureDiastolic.matches(regex) || !( (Integer.parseInt(collectionForm.getBloodPressureDiastolic()) >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && Integer.parseInt( collectionForm.getBloodPressureDiastolic() )<= CollectionConstants.BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE)))
 			  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
 	  }
 	  return;
@@ -114,48 +121,43 @@ public class CollectedSampleBackingFormValidator implements Validator {
 		 
 			 
   private void validateRangeForHaemoglobinCount(CollectedSampleBackingForm form, Errors errors) {
-  	boolean flag=false;
-  	
-  	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
-  	
- 	if(form.getHaemoglobinCount()!=null && !(form.getHaemoglobinCount().doubleValue() >= 0 && form.getHaemoglobinCount().doubleValue() <= 30.0)){
-  		flag=true;
-  	}
-  	if(flag){
-  		errors.rejectValue("collectedSample.haemoglobinCount","haemoglobinCount.incorrect" ,"Enter a value between 0 and 30.");
-  	}
-  	return;
+  
+  	if(!StringUtils.isBlank(form.getHaemoglobinCount())){
+	String haemoglobinCount = form.getHaemoglobinCount();
+   	String regex="[0-9]*\\.?[0-9]+";
+   	if( !haemoglobinCount.matches(regex) ||! (Float.parseFloat(haemoglobinCount) >= 0 && Float.parseFloat(haemoglobinCount)<= 30))
+   		errors.rejectValue("collectedSample.haemoglobinCount","haemoglobinCount.incorrect" ,"Enter a value between 0 and 30.");
+    }else
+    	form.setHaemoglobinCount(null);
+ 
+return;  	
   	
 }
   
   private void validateRangeDonorWeight(CollectedSampleBackingForm form, Errors errors) {
-  	boolean flag=false;
-
-  	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
-  	
-  	if(form.getDonorWeight()!=null && !(form.getDonorWeight().doubleValue() >= 0 && form.getDonorWeight().doubleValue() <= 300)){
-  		flag=true;
-  	}
-  	
-  	if(flag){
-  		errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"Enter a value between 0 and 300.");
-  		return;
-  	}
-  	return;
+  	 if(!StringUtils.isBlank(form.getDonorWeight())){
+  		String donorWeight = form.getDonorWeight();
+    	String regex="[0-9]*\\.?[0-9]+";
+    	if( !donorWeight.matches(regex) || !(Float.parseFloat(donorWeight) >= 0 && Float.parseFloat(donorWeight)<= 300))
+    	errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"Enter a value between 0 and 300.");
+     }else
+  	 form.setDonorWeight(null);
+ return;
   	
   }
   
   private void validateRangeForDonorPulse(CollectedSampleBackingForm form, Errors errors) {
-  	boolean flag=false;
   	
-  	// TODO: add Integer.parseInteger() and catch (NumberFormatException e) to ensure value entered is numeric
+  	String donorPulse;
   	
-  	if(form.getDonorPulse()!=null && !(form.getDonorPulse() >= 0 && form.getDonorPulse() <= 290)){
-  		flag=true;
-  	}
-  	if(flag){
+	 if(!StringUtils.isBlank(form.getDonorPulse())){
+   
+	  donorPulse = form.getDonorPulse();
+      String regex="[0-9]+";
+  	  if( !donorPulse.matches(regex) || !(Integer.parseInt(donorPulse) >= 0 && Integer.parseInt(donorPulse)<= 290))
   		errors.rejectValue("collectedSample.donorPulse","donorPulse.incorrect" ,"Enter a value between 0 to 290.");
-  	}
+   }else
+	   form.setDonorPulse(null);
   	return;
   	
   }

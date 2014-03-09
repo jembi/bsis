@@ -1,6 +1,6 @@
 package model.collectedsample;
 
-import java.math.BigDecimal;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -127,8 +127,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
-  @Column(precision=7, scale=1)
-  private BigDecimal haemoglobinCount;
+ 
+  private String haemoglobinCount;
 
   @Column(name="bloodPressureSystolic")
   private String bloodPressureSystolic;
@@ -139,8 +139,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   /**
    * Limit the number of bytes required to store.
    */
-  @Column(precision=7, scale=1)
-  private BigDecimal donorWeight;
+  
+  private String donorWeight;
 
   @ManyToOne(optional=true)
   private User donationCreatedBy;
@@ -165,8 +165,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   private Boolean isDeleted;
   
-  @Column(length=11)
-  private Integer donorPulse;
+  
+  private String donorPulse;
   
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
@@ -335,11 +335,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.ttiStatus = testedStatus;
   }
 
-  public BigDecimal getHaemoglobinCount() {
+  public String getHaemoglobinCount() {
     return haemoglobinCount;
   }
 
-  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+  public void setHaemoglobinCount(String haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
   
@@ -351,11 +351,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 
-  public BigDecimal getDonorWeight() {
+  public String getDonorWeight() {
     return donorWeight;
   }
   
-  public void setDonorWeight(BigDecimal donorWeight) {
+  public void setDonorWeight(String donorWeight) {
     this.donorWeight = donorWeight;
   }
 
@@ -443,11 +443,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
 
-	public Integer getDonorPulse() {
+	public String getDonorPulse() {
 		return donorPulse;
 	}
 
-	public void setDonorPulse(Integer donorPulse) {
+	public void setDonorPulse(String donorPulse) {
 		this.donorPulse = donorPulse;
 	}
   

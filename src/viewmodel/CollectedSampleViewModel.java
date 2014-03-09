@@ -1,6 +1,6 @@
 package viewmodel;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -156,27 +156,27 @@ public class CollectedSampleViewModel {
       return getBloodAbo() + getBloodRh();
   }
 
-  public BigDecimal getHaemoglobinCount() {
+  public String getHaemoglobinCount() {
 		return collectedSample.getHaemoglobinCount();
 	}
 	
-  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+  public void setHaemoglobinCount(String haemoglobinCount) {
 		collectedSample.setHaemoglobinCount(haemoglobinCount);
 	}
   
-  public BigDecimal getDonorWeight() {
+  public String getDonorWeight() {
 		return collectedSample.getDonorWeight();
 	}
 
-  public void setDonorWeight(BigDecimal donorWeight) {
+  public void setDonorWeight(String donorWeight) {
 		collectedSample.setDonorWeight(donorWeight);
 	}
 
-  public Integer getDonorPulse() {
+  public String  getDonorPulse() {
 		return collectedSample.getDonorPulse();
 	}
 
-  public void setDonorPulse(Integer donorPulse) {
+  public void setDonorPulse(String donorPulse) {
 		collectedSample.setDonorPulse(donorPulse);
   }
 
@@ -189,7 +189,7 @@ public class CollectedSampleViewModel {
   }
   
   public String  getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic().toString();
+		return collectedSample.getBloodPressureDiastolic();
 	}
 
 	public void setBloodPressureDiastolic(String bloodPressureDiastolic) {

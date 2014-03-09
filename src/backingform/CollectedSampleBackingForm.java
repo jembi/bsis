@@ -364,28 +364,28 @@ public class CollectedSampleBackingForm {
     this.useParametersFromBatch = useParametersFromBatch;
   }
 
-  public BigDecimal getDonorWeight() {
+  public String getDonorWeight() {
 		return collectedSample.getDonorWeight();
 	}
 
-  public void setDonorWeight(BigDecimal donorWeight) {
+  public void setDonorWeight(String donorWeight) {
 		collectedSample.setDonorWeight(donorWeight);
 	}
   
 	
-	public BigDecimal getHaemoglobinCount() {
+	public String getHaemoglobinCount() {
 		return collectedSample.getHaemoglobinCount();
 	}
 	
-	public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+	public void setHaemoglobinCount(String haemoglobinCount) {
 		collectedSample.setHaemoglobinCount(haemoglobinCount);
 	}
 
-  public Integer getDonorPulse() {
+  public String getDonorPulse() {
 		return collectedSample.getDonorPulse();
 	}
 
-  public void setDonorPulse(Integer donorPulse) {
+  public void setDonorPulse(String donorPulse) {
 		collectedSample.setDonorPulse(donorPulse);
 	}
   
