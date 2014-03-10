@@ -50,7 +50,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import controller.UtilController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/ApplicationContextTest.xml")
+@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @WebAppConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
