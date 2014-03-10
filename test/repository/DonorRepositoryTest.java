@@ -73,6 +73,15 @@ public class DonorRepositoryTest {
 	private DonorBackingFormValidator donorBackingFormValidator;
 	private Donor donor;
 
+	@Before
+	public void init() {
+		validator = new DonorBackingFormValidator();
+		donorBackingFormValidator = new DonorBackingFormValidator(validator,
+				utilController);
+		donor = new Donor();
+		donorBackingForm = new DonorBackingForm(donor);
+	}
+	
 	@Test
 	/**
 	 * value = should fail when donor is missing required fields.
@@ -890,15 +899,6 @@ public class DonorRepositoryTest {
 		user = new User();
 		user.setId(userDbId);
 		donorBackingForm.setCreatedBy(user);
-	}
-
-	@Before
-	public void init() {
-		validator = new DonorBackingFormValidator();
-		donorBackingFormValidator = new DonorBackingFormValidator(validator,
-				utilController);
-		donor = new Donor();
-		donorBackingForm = new DonorBackingForm(donor);
 	}
 	
 	
