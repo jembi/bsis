@@ -1,6 +1,6 @@
 <dataset>
 	<user id="1" emailId="admin" firstName="admin" isactive="true"
-		isAdmin="true" isDeleted="true" isStaff="true" username="admin"
+		isAdmin="true" isDeleted="false" isStaff="true" username="admin"
 		password="admin" />
 	<location id="1" name="location 1" />
 	<location id="2" name="location 2" />

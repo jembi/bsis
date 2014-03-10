@@ -715,7 +715,6 @@ public class DonorRepositoryTest {
 				donorRepository.deferDonor("1",
 						"19/07/2015", "3", "");
 				assertTrue("Defer Donor Should persist.",true);
-			
 	}
 	
 	@Test
