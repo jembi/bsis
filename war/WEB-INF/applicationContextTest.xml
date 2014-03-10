@@ -53,6 +53,10 @@ as this is the MVC configuration dealing with URLs??? -->
     </property>
   </bean>
 
+
+  <bean id="dbUnitDatabaseConfig" class="com.github.springtestdbunit.bean.DatabaseConfigBean">
+		<property name="dataTypeFactory" ref="org.dbunit.ext.hsqldb.HsqldbDataTypeFactory"/>
+  </bean>
  
 
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
