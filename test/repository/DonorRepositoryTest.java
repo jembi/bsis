@@ -1,11 +1,11 @@
 package repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -55,7 +55,8 @@ import controller.UtilController;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
-		DbUnitTestExecutionListener.class })
+		DbUnitTestExecutionListener.class})
+
 @DatabaseSetup("classpath:/DonorDataset.xml")
 public class DonorRepositoryTest {
 	@Autowired
@@ -73,13 +74,28 @@ public class DonorRepositoryTest {
 	private DonorBackingFormValidator donorBackingFormValidator;
 	private Donor donor;
 
+	/*
+	 We can also read ddl_mysql.sql file using below method. But That file is specifically created for mysql so still facing
+	 some issues.
+	@BeforeClass
+	public static void executeDbScript(){
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		 EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.HSQL).addScript("ddl_mysql.sql").build();
+		    // do stuff against the db (EmbeddedDatabase extends javax.sql.DataSource)
+		    db.shutdown();
+	}
+	*/
 	@Before
 	public void init() {
+	try{	
 		validator = new DonorBackingFormValidator();
 		donorBackingFormValidator = new DonorBackingFormValidator(validator,
 				utilController);
 		donor = new Donor();
 		donorBackingForm = new DonorBackingForm(donor);
+	}catch(Exception e){
+		e.printStackTrace();
+	}
 	}
 	
 	@Test

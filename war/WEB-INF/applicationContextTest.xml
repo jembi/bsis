@@ -43,7 +43,9 @@ as this is the MVC configuration dealing with URLs??? -->
   <context:component-scan base-package="tasks" />
   <context:component-scan base-package="utils" />
   <context:component-scan base-package="security" />
-
+  <!-- 
+   <context:component-scan base-package="util" />
+ -->
   <bean id="messageSource"
     class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basenames">
@@ -53,12 +55,21 @@ as this is the MVC configuration dealing with URLs??? -->
     </property>
   </bean>
 
-
+    
   <bean id="dbUnitDatabaseConfig" class="com.github.springtestdbunit.bean.DatabaseConfigBean">
-		<property name="dataTypeFactory" ref="org.dbunit.ext.hsqldb.HsqldbDataTypeFactory"/>
+		<property name="datatypeFactory" ref="hsqldbDefination"/>
   </bean>
+   
+  <bean id="hsqldbDefination" class="org.dbunit.ext.hsqldb.HsqldbDataTypeFactory"></bean>
+   
  
+<!-- 
+  <bean id="dbUnitDatabaseConfig" class="com.github.springtestdbunit.bean.DatabaseConfigBean">
+		<property name="datatypeFactory" ref="hsqldbDefination"/>
+  </bean>
 
+ <bean id="hsqldbDefination" class="util.HsqldbMappingFile"></bean>
+ --> 
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
         <property name="driverClass" value="${testdatabase.driver}" />
@@ -81,8 +92,10 @@ as this is the MVC configuration dealing with URLs??? -->
     <property name="jpaProperties">
       <props>
         <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <!-- 
         <prop key="hibernate.hbm2ddl.auto">create</prop>
+         -->
         <prop key="javax.persistence.validation.mode">none</prop>
       </props>
     </property>
