@@ -37,12 +37,10 @@ public class EntitySaveListener implements PersistEventListener,
 	private LocalEntityManagerFactoryBean entityManagerFactory;
 
 	public EntitySaveListener() {
-		System.out.println("listener created here");
-		System.out.println(entityManagerFactory);
+		logger.info("EntitySaveListener created");
 	}
 
 	public void onPersist(PersistEvent event) throws HibernateException {
-		System.out.println("onPersist");
 		if (SecurityContextHolder.getContext() != null
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Object principal = SecurityContextHolder.getContext()
@@ -71,7 +69,6 @@ public class EntitySaveListener implements PersistEventListener,
 
 	@Override
 	public void onMerge(MergeEvent event) throws HibernateException {
-		System.out.println("onMerge");
 		if (SecurityContextHolder.getContext() != null
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Object principal = SecurityContextHolder.getContext()

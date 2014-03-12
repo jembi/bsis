@@ -524,7 +524,7 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Product> products = query.getResultList();
-    System.out.println("number of products to update: " + products.size());
+    //System.out.println("number of products to update: " + products.size());
     for (Product product : products) {
       updateProductInternalFields(product);
       em.merge(product);
@@ -563,7 +563,7 @@ public class ProductRepository {
     query.setParameter("availableStatus", ProductStatus.AVAILABLE);
     query.setParameter("today", new Date());
     int numUpdated = query.executeUpdate();
-    System.out.println("Number of rows updated: " + numUpdated);
+    //System.out.println("Number of rows updated: " + numUpdated);
   }
 
   public List<Product> getProductsFromProductIds(String[] productIds) {

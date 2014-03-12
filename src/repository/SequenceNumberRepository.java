@@ -46,7 +46,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       prefix = "C";
       seqNumStore = new SequenceNumberStore();
@@ -97,7 +97,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Request");
@@ -148,7 +148,7 @@ public class SequenceNumberRepository {
     lastNumber = seqNumStore.getLastNumber();
     //prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-    ex.printStackTrace();
+    //ex.printStackTrace();
     valuePresentInTable = false;
     seqNumStore = new SequenceNumberStore();
     seqNumStore.setTargetTable("Donor");
@@ -203,7 +203,7 @@ public class SequenceNumberRepository {
     lastNumber = seqNumStore.getLastNumber();
     prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-    ex.printStackTrace();
+    //ex.printStackTrace();
     valuePresentInTable = false;
     prefix = "C";
     seqNumStore = new SequenceNumberStore();
@@ -258,7 +258,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Request");
@@ -313,7 +313,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       prefix = numberPrefix;
       seqNumStore = new SequenceNumberStore();
