@@ -8,9 +8,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +24,6 @@ import model.util.BloodGroup;
 
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -44,13 +40,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Validator;
@@ -59,23 +50,11 @@ import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
-
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-
 import controller.UtilController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @WebAppConfiguration
-/*
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-		DirtiesContextTestExecutionListener.class,
-		TransactionalTestExecutionListener.class,
-		DbUnitTestExecutionListener.class})*/
-		
-
-//@DatabaseSetup("classpath:/DonorDataset.xml")
 public class DonorRepositoryTest {
 	@Autowired
 	private UtilController utilController;
@@ -92,63 +71,55 @@ public class DonorRepositoryTest {
 	private DonorBackingFormValidator donorBackingFormValidator;
 	private Donor donor;
 	@Autowired
-	 private DataSource dataSource; 
+	private DataSource dataSource;
 	static IDatabaseConnection connection;
-	/*
-	 We can also read ddl_mysql.sql file using below method. But That file is specifically created for mysql so still facing
-	 some issues.
-	@BeforeClass
-	public static void executeDbScript(){
-		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		 EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.HSQL).addScript("ddl_mysql.sql").build();
-		    // do stuff against the db (EmbeddedDatabase extends javax.sql.DataSource)
-		    db.shutdown();
-	}
-	*/
-	
-	
-	
+
 	@Before
 	public void init() {
-	try{
-		if(connection==null)
-			getConnection();
-		DatabaseOperation.CLEAN_INSERT.execute(connection, getDataSet());  
-		validator = new DonorBackingFormValidator();
-		donorBackingFormValidator = new DonorBackingFormValidator(validator,
-				utilController);
-		donor = new Donor();
-		donorBackingForm = new DonorBackingForm(donor);
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-	}
-	
-	@After  
-    public void after() throws Exception{  
-        // insert data into db  
-        DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
-    }  
-	/**
-	 * This method is execute once before test case execution start and acquire datasource from spring context and set HSQLDB datatype.
-	 */
-	private void getConnection(){
-		System.out.println(" Inside getConnection() method ");
-		try{
-	         connection = new DatabaseDataSourceConnection(dataSource);
-	         DatabaseConfig config = connection.getConfig();  
-	        // HSQLDB   
-	        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());  
-		}catch(Exception e){
+		try {
+			if (connection == null)
+				getConnection();
+			// Insert Data into database using DonorDataset.xml
+			DatabaseOperation.CLEAN_INSERT.execute(connection, getDataSet());
+			validator = new DonorBackingFormValidator();
+			donorBackingFormValidator = new DonorBackingFormValidator(
+					validator, utilController);
+			donor = new Donor();
+			donorBackingForm = new DonorBackingForm(donor);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	    }  
-	      
-	    private IDataSet getDataSet() throws Exception{  
-	        // get insert data  
-	        File file = new File("test/DonorDataset.xml");  
-	        return new FlatXmlDataSet(file);  
-	    }  
+	}
+
+	@After
+	public void after() throws Exception {
+		// Remove data from database
+		DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
+	}
+
+	/**
+	 * This method is execute once before test case execution start and acquire
+	 * datasource from spring context and create new dbunit IDatabaseConnection.
+	 * This method is also useful to set HSQLDB datatypefactory.
+	 */
+	private void getConnection() {
+		try {
+			connection = new DatabaseDataSourceConnection(dataSource);
+			DatabaseConfig config = connection.getConfig();
+			// Set HSQLDB datatypefactory
+			config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+					new HsqldbDataTypeFactory());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private IDataSet getDataSet() throws Exception {
+		// get insert data
+		File file = new File("test/DonorDataset.xml");
+		return new FlatXmlDataSet(file);
+	}
+
 	@Test
 	/**
 	 * value = should fail when donor is missing required fields.
@@ -202,9 +173,7 @@ public class DonorRepositoryTest {
 		assertNull("Donor Object should null.",
 				donorRepository.findDonorById(2l));
 	}
-	
-			
-		
+
 	@Test
 	/**
 	 * value="should return empty list (instead of a null object) when no match is found."
@@ -219,11 +188,12 @@ public class DonorRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
-		assertEquals("List size should be zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0))).size());
+		assertEquals("List size should be zero.", 0,
+				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+						donorFirstName, donorLastName, bloodGroups,
+						anyBloodGroup, pagingParams).get(0))).size());
 	}
-	
+
 	@Test
 	/**
 	 * value="should fetch all donors that partially match first name."
@@ -237,11 +207,12 @@ public class DonorRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0))).size());
+		assertNotSame("List size should not zero.", 0,
+				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+						donorFirstName, donorLastName, bloodGroups,
+						anyBloodGroup, pagingParams).get(0))).size());
 	}
-	
+
 	@Test
 	/**
 	 * value="should fetch all donors that partially match last name."
@@ -254,13 +225,14 @@ public class DonorRepositoryTest {
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		
+
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0))).size());
+		assertNotSame("List size should not zero.", 0,
+				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+						donorFirstName, donorLastName, bloodGroups,
+						anyBloodGroup, pagingParams).get(0))).size());
 	}
-	
+
 	@Test
 	/**
 	 * value="should fetch all donors with blood groups that match the criteria in List<BloodGroup>."
@@ -275,11 +247,12 @@ public class DonorRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		bloodGroups.add(new BloodGroup("A+"));
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0))).size());
+		assertNotSame("List size should not zero.", 0,
+				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+						donorFirstName, donorLastName, bloodGroups,
+						anyBloodGroup, pagingParams).get(0))).size());
 	}
-	
+
 	@Test
 	/**
 	 * value="should fetch donors with no blood groups when anyBloodGroup.equals(true)."
@@ -294,14 +267,15 @@ public class DonorRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		bloodGroups.add(new BloodGroup("B+"));
 		setPaginationParam(pagingParams);
-		List<Donor> listDonor = (List<Donor>)(donorRepository.findAnyDonor(
+		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0));
-		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0))).size());
+		assertNotSame("List size should not zero.", 0,
+				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+						donorFirstName, donorLastName, bloodGroups,
+						anyBloodGroup, pagingParams).get(0))).size());
 	}
-	
+
 	@Test
 	/**
 	 * value="should not return donors who have been deleted."
@@ -316,15 +290,14 @@ public class DonorRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		bloodGroups.add(new BloodGroup("A+"));
 		setPaginationParam(pagingParams);
-		List<Donor> listDonor = (List<Donor>)(donorRepository.findAnyDonor(
+		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0));
-		for(Donor donor:listDonor){
-				assertFalse("Deleted Donor should not included in the list.",donor.getId()==2?true:false);
+		for (Donor donor : listDonor) {
+			assertFalse("Deleted Donor should not included in the list.",
+					donor.getId() == 2 ? true : false);
 		}
 	}
-
-	
 
 	@Test
 	/**
@@ -358,13 +331,14 @@ public class DonorRepositoryTest {
 	 */
 	public void addDonor_shouldPersist() {
 		Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1l);
-		//DonorBackingForm donorBackingForm = new DonorBackingForm(createNewDonorFromExistDonor);
-		//setBackingFormValue(donorBackingForm);
-		Donor newDonor =  this.copyDonor(createNewDonorFromExistDonor);
+		// DonorBackingForm donorBackingForm = new
+		// DonorBackingForm(createNewDonorFromExistDonor);
+		// setBackingFormValue(donorBackingForm);
+		Donor newDonor = this.copyDonor(createNewDonorFromExistDonor);
 		newDonor.setDonorNumber("000006");
 		donorRepository.addDonor(newDonor);
-		assertTrue("Donor Object should persist.", newDonor
-				.getId() == 0 ? false : true);
+		assertTrue("Donor Object should persist.",
+				newDonor.getId() == 0 ? false : true);
 	}
 
 	@Test
@@ -394,19 +368,19 @@ public class DonorRepositoryTest {
 	 *  method = "addDonor(Donor)"
 	 */
 	public void addDonor_shouldNotPersistLastNameBlank() {
-			setBackingFormValue(donorBackingForm);
-			donorBackingForm.setLastName("");// Here we can pass donor lastname
-												// value is blank.
-			errors = new BindException(donorBackingForm, "donor");
-			donorBackingFormValidator.validate(donorBackingForm, errors);
-			assertTrue(
-					"Donor Last Name is blank. Donor object should not persist.",
-					errors.hasErrors());
-			if (!errors.hasErrors()) {
-				donorRepository.addDonor(donorBackingForm.getDonor());
-				assertTrue("Donor Object should persist.", donorBackingForm
-						.getDonor().getId() == 0 ? false : true);
-			}
+		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setLastName("");// Here we can pass donor lastname
+											// value is blank.
+		errors = new BindException(donorBackingForm, "donor");
+		donorBackingFormValidator.validate(donorBackingForm, errors);
+		assertTrue(
+				"Donor Last Name is blank. Donor object should not persist.",
+				errors.hasErrors());
+		if (!errors.hasErrors()) {
+			donorRepository.addDonor(donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.", donorBackingForm
+					.getDonor().getId() == 0 ? false : true);
+		}
 	}
 
 	@Test
@@ -561,35 +535,38 @@ public class DonorRepositoryTest {
 				donorRepository.updateDonor(donorBackingForm.getDonor()));
 	}
 
-	
 	@Test
 	/**
 	 * value = "should return empty List if search string is less than 2 characters"
 	 *  method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_stringLengthLessthan2() {
-		assertEquals("Search String length is less than 2,List size should be zero.", 
-				donorRepository.findAnyDonorStartsWith("F").size(),0);
+		assertEquals(
+				"Search String length is less than 2,List size should be zero.",
+				donorRepository.findAnyDonorStartsWith("F").size(), 0);
 	}
-	
+
 	@Test
 	/**
 	 * value = "should allow search if search string is 2 or more characters."
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_stringLengthGreaterthan2() {
-		assertNotSame("Search String length is Greater than 2,List size should not zero.",donorRepository.findAnyDonorStartsWith("fi").size(),0);
+		assertNotSame(
+				"Search String length is Greater than 2,List size should not zero.",
+				donorRepository.findAnyDonorStartsWith("fi").size(), 0);
 	}
-	
+
 	@Test
 	/**
 	 * value = "should return empty list (instead of a null object) when no match is found."
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_NoMatchingRecordFound() {
-		assertEquals("List size should be zero,because matching record is not found.",donorRepository.findAnyDonorStartsWith("xx").size(),0);
+		assertEquals(
+				"List size should be zero,because matching record is not found.",
+				donorRepository.findAnyDonorStartsWith("xx").size(), 0);
 	}
-	
 
 	@Test
 	/**
@@ -597,44 +574,45 @@ public class DonorRepositoryTest {
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorNumber() {
-		assertNotSame("List size should not zero,because partically matching donor number is found.",donorRepository.findAnyDonorStartsWith("00").size(),0);
+		assertNotSame(
+				"List size should not zero,because partically matching donor number is found.",
+				donorRepository.findAnyDonorStartsWith("00").size(), 0);
 	}
-	
+
 	@Test
 	/**
 	 * value = "should fetch all donors having a first name that partially matches the search string."
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorFirstNameMatch() {
-		assertNotSame("List size should not zero,because partically matching firstname is found.",donorRepository.findAnyDonorStartsWith("fi").size(),0);
+		assertNotSame(
+				"List size should not zero,because partically matching firstname is found.",
+				donorRepository.findAnyDonorStartsWith("fi").size(), 0);
 	}
-	
-	
+
 	@Test
 	/**
 	 * value = "should fetch all donors having a last name that partially matches the search string."
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void testFindAnyDonorStartWith_searchWithDonorLastNameMatch() {
-		assertNotSame("List size should not zero,because partically matching lastname is found.",donorRepository.findAnyDonorStartsWith("la").size(),0);
+		assertNotSame(
+				"List size should not zero,because partically matching lastname is found.",
+				donorRepository.findAnyDonorStartsWith("la").size(), 0);
 	}
-	
+
 	@Test
 	/**
 	 * value = "should not return donors who have been deleted."
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_softDeleteRecordNotInclude() {
-	List<Donor> listDonor = 	donorRepository.findAnyDonorStartsWith("Fi");
-	for(Donor donor:listDonor){
-		assertNotSame("Donor is deleted from database.",2, donor.getId());
+		List<Donor> listDonor = donorRepository.findAnyDonorStartsWith("Fi");
+		for (Donor donor : listDonor) {
+			assertNotSame("Donor is deleted from database.", 2, donor.getId());
+		}
 	}
-	}
-	
-	
-	
 
-	
 	@Test
 	/**
 	 * value = "Unique number string length should not zero.should generate 12 Digit Unique Number prefix with D-."
@@ -738,7 +716,7 @@ public class DonorRepositoryTest {
 		assertNotNull("Donor object should not null.",
 				donorRepository.findDonorByDonorNumber("000002", true));
 	}
-	
+
 	@Test
 	/**
 	 * value="should return all non-deleted deferral reasons in the database"
@@ -748,11 +726,13 @@ public class DonorRepositoryTest {
 		List<DeferralReason> list = donorRepository.getDeferralReasons();
 		if (list != null && list.size() > 0) {
 			for (DeferralReason deferralReason : list) {
-					assertFalse("Soft Deleted DeferralReason object should not include in list.",deferralReason.getIsDeleted());
+				assertFalse(
+						"Soft Deleted DeferralReason object should not include in list.",
+						deferralReason.getIsDeleted());
 			}
 		}
 	}
-	
+
 	@Test
 	/**
 	 * value="should not return deferral reasons that have been deleted"
@@ -762,90 +742,99 @@ public class DonorRepositoryTest {
 		List<DeferralReason> list = donorRepository.getDeferralReasons();
 		if (list != null && list.size() > 0) {
 			for (DeferralReason deferralReason : list) {
-				//Here Id 7 is set as deleted = true in deferralreason in DonorDataset.xml file
-					assertNotSame("Soft Deleted DeferralReason object should not include in list.",7,deferralReason.getId());
+				// Here Id 7 is set as deleted = true in deferralreason in
+				// DonorDataset.xml file
+				assertNotSame(
+						"Soft Deleted DeferralReason object should not include in list.",
+						7, deferralReason.getId());
 			}
 		}
 	}
-	
+
 	@Test
 	/**
 	 * value="DeferDonor should persist."
 	 * method="deferDonor(String,String,String,String)"
 	 */
-	public void deferDonor_ShouldPersist()throws ParseException {
-				this.userAuthentication();
-				donorRepository.deferDonor("1",
-						"19/07/2015", "3", "");
-				assertTrue("Defer Donor Should persist.",true);
+	public void deferDonor_ShouldPersist() throws ParseException {
+		this.userAuthentication();
+		donorRepository.deferDonor("1", "19/07/2015", "3", "");
+		assertTrue("Defer Donor Should persist.", true);
 	}
-	
+
 	@Test
 	/**
 	 * value="should return non-deleted deferral reasons in the database."
 	 * method="deferDonor(String,String,String,String)"
 	 */
-	public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason(){
-		assertNotNull("Deferral Reason object should not null.",donorRepository.findDeferralReasonUsingId("1"));
+	public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason() {
+		assertNotNull("Deferral Reason object should not null.",
+				donorRepository.findDeferralReasonUsingId("1"));
 	}
-	
+
 	@Test
 	/**
 	 * value="should return null deferral reason where deferral reason is deleted from the database."
 	 * method="deferDonor(String,String,String,String)"
 	 */
-	public void findDeferralReasonById_shouldReturnNullDeferralReason(){
-		assertNull("Deferral Reason object should  null.",donorRepository.findDeferralReasonUsingId("7"));
+	public void findDeferralReasonById_shouldReturnNullDeferralReason() {
+		assertNull("Deferral Reason object should  null.",
+				donorRepository.findDeferralReasonUsingId("7"));
 	}
-	
+
 	@Test
 	/**
 	 * value="DonorDeferral list size should be zero."
 	 * method="getDonorDeferrals(Long)"
 	 */
 	public void getDonorDeferrals_listSizeShouldZero() {
-		assertEquals("List size should be zero.",0, donorRepository.getDonorDeferrals(2l).size());
+		assertEquals("List size should be zero.", 0, donorRepository
+				.getDonorDeferrals(2l).size());
 
 	}
-	
+
 	@Test
 	/**
 	 * value="DonorDeferral list size should not zero."
 	 * method="getDonorDeferrals(Long)"
 	 */
 	public void getDonorDeferrals_listSizeShouldNotZero() {
-		assertNotSame("List size should not zero.",0, donorRepository.getDonorDeferrals(1l).size());
+		assertNotSame("List size should not zero.", 0, donorRepository
+				.getDonorDeferrals(1l).size());
 
 	}
-	
+
 	@Test
 	/**
 	 * value="Method should return true."
 	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
 	 */
 	public void donorRepositoryList_methodShouldReturnTrue() {
-				assertTrue("Defer donor should found.",donorRepository.isCurrentlyDeferred(donorRepository
+		assertTrue("Defer donor should found.",
+				donorRepository.isCurrentlyDeferred(donorRepository
 						.getDonorDeferrals(1l)));
 	}
-	
-	
+
 	@Test
 	/**
 	 * value="Method should return false.Donor Id is exist into donor table."
 	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
 	 */
 	public void donorRepositoryList_methodShouldReturnFalse() {
-				assertFalse("Defer donor should not found.",donorRepository.isCurrentlyDeferred(donorRepository
+		assertFalse("Defer donor should not found.",
+				donorRepository.isCurrentlyDeferred(donorRepository
 						.getDonorDeferrals(4l)));
 	}
-	
+
 	@Test
 	/**
 	 * value="Method should return false.Donor Id is not exist into donor table."
 	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
 	 */
 	public void donorRepositoryList_methodShouldReturnFalseDonorIdNotExistIntoDB() {
-				assertFalse("Defer donor should not found. Because donor id is not exist into donor table.",donorRepository.isCurrentlyDeferred(donorRepository
+		assertFalse(
+				"Defer donor should not found. Because donor id is not exist into donor table.",
+				donorRepository.isCurrentlyDeferred(donorRepository
 						.getDonorDeferrals(15l)));
 	}
 
@@ -855,32 +844,34 @@ public class DonorRepositoryTest {
 	 * method="isCurrentlyDeferred(Donor)"
 	 */
 	public void donorRepositoryDonor_methodShouldReturnTrue() {
-				assertTrue("Defer donor should found.",donorRepository.isCurrentlyDeferred(donorRepository
+		assertTrue("Defer donor should found.",
+				donorRepository.isCurrentlyDeferred(donorRepository
 						.findDonorById(1l)));
 	}
-	
-	
+
 	@Test
 	/**
 	 * value="Method should return false."
 	 * method="isCurrentlyDeferred(Donor)
 	 */
 	public void donorRepositoryDonor_methodShouldReturnFalse() {
-				assertFalse("Defer donor should not found.",donorRepository.isCurrentlyDeferred(donorRepository
+		assertFalse("Defer donor should not found.",
+				donorRepository.isCurrentlyDeferred(donorRepository
 						.findDonorById(4l)));
 	}
-	
+
 	@Test
 	/**
 	 * value="should return last donor derferral date."
 	 * method="getLastDonorDeferralDate(long)"
 	 * 
 	 */
-	public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil(){
-		assertNotNull("should return last donor derferral date", donorRepository.getLastDonorDeferralDate(4l));
+	public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
+		assertNotNull("should return last donor derferral date",
+				donorRepository.getLastDonorDeferralDate(4l));
 	}
-	
-	public void setPaginationParam(Map<String, Object> pagingParams){
+
+	public void setPaginationParam(Map<String, Object> pagingParams) {
 		pagingParams.put("sortColumn", "id");
 		pagingParams.put("start", "0");
 		pagingParams.put("sortColumnId", "0");
@@ -888,7 +879,6 @@ public class DonorRepositoryTest {
 		pagingParams.put("sortDirection", "asc");
 	}
 
-	
 	/**
 	 * Called when insert new record into table.
 	 * 
@@ -954,9 +944,8 @@ public class DonorRepositoryTest {
 		user.setId(userDbId);
 		donorBackingForm.setCreatedBy(user);
 	}
-	
-	
-	public Donor copyDonor(Donor donor){
+
+	public Donor copyDonor(Donor donor) {
 		Donor copyDonor = new Donor();
 		copyDonor.setAddress(donor.getAddress());
 		copyDonor.setAge(donor.getAge());
