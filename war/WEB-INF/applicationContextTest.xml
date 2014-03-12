@@ -56,20 +56,7 @@ as this is the MVC configuration dealing with URLs??? -->
   </bean>
 
     
-  <bean id="dbUnitDatabaseConfig" class="com.github.springtestdbunit.bean.DatabaseConfigBean">
-		<property name="datatypeFactory" ref="hsqldbDefination"/>
-  </bean>
-   
-  <bean id="hsqldbDefination" class="org.dbunit.ext.hsqldb.HsqldbDataTypeFactory"></bean>
-   
  
-<!-- 
-  <bean id="dbUnitDatabaseConfig" class="com.github.springtestdbunit.bean.DatabaseConfigBean">
-		<property name="datatypeFactory" ref="hsqldbDefination"/>
-  </bean>
-
- <bean id="hsqldbDefination" class="util.HsqldbMappingFile"></bean>
- --> 
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
         <property name="driverClass" value="${testdatabase.driver}" />
@@ -77,10 +64,12 @@ as this is the MVC configuration dealing with URLs??? -->
         <property name="user" value="${testdatabase.user}" />
         <property name="password" value="" />
 <!-- these are C3P0 properties -->
+
         <property name="acquireIncrement" value="${database.acquireIncrement}" />
         <property name="minPoolSize" value="${database.minPoolSize}" />
         <property name="maxPoolSize" value="${database.maxPoolSize}" />
         <property name="maxIdleTime" value="${database.maxIdleTime}" />
+     
         
   </bean>
 

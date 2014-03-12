@@ -7,6 +7,10 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,12 +18,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.user.User;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang.StringUtils;
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +44,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -52,12 +68,14 @@ import controller.UtilController;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @WebAppConfiguration
+/*
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
-		DbUnitTestExecutionListener.class})
+		DbUnitTestExecutionListener.class})*/
+		
 
-@DatabaseSetup("classpath:/DonorDataset.xml")
+//@DatabaseSetup("classpath:/DonorDataset.xml")
 public class DonorRepositoryTest {
 	@Autowired
 	private UtilController utilController;
@@ -73,7 +91,9 @@ public class DonorRepositoryTest {
 	private Validator validator;
 	private DonorBackingFormValidator donorBackingFormValidator;
 	private Donor donor;
-
+	@Autowired
+	 private DataSource dataSource; 
+	static IDatabaseConnection connection;
 	/*
 	 We can also read ddl_mysql.sql file using below method. But That file is specifically created for mysql so still facing
 	 some issues.
@@ -85,9 +105,15 @@ public class DonorRepositoryTest {
 		    db.shutdown();
 	}
 	*/
+	
+	
+	
 	@Before
 	public void init() {
-	try{	
+	try{
+		if(connection==null)
+			getConnection();
+		DatabaseOperation.CLEAN_INSERT.execute(connection, getDataSet());  
 		validator = new DonorBackingFormValidator();
 		donorBackingFormValidator = new DonorBackingFormValidator(validator,
 				utilController);
@@ -98,6 +124,31 @@ public class DonorRepositoryTest {
 	}
 	}
 	
+	@After  
+    public void after() throws Exception{  
+        // insert data into db  
+        DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
+    }  
+	/**
+	 * This method is execute once before test case execution start and acquire datasource from spring context and set HSQLDB datatype.
+	 */
+	private void getConnection(){
+		System.out.println(" Inside getConnection() method ");
+		try{
+	         connection = new DatabaseDataSourceConnection(dataSource);
+	         DatabaseConfig config = connection.getConfig();  
+	        // HSQLDB   
+	        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());  
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	    }  
+	      
+	    private IDataSet getDataSet() throws Exception{  
+	        // get insert data  
+	        File file = new File("test/DonorDataset.xml");  
+	        return new FlatXmlDataSet(file);  
+	    }  
 	@Test
 	/**
 	 * value = should fail when donor is missing required fields.
@@ -171,7 +222,6 @@ public class DonorRepositoryTest {
 		assertEquals("List size should be zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0))).size());
-		
 	}
 	
 	@Test
@@ -190,7 +240,6 @@ public class DonorRepositoryTest {
 		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0))).size());
-		
 	}
 	
 	@Test
@@ -210,7 +259,6 @@ public class DonorRepositoryTest {
 		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0))).size());
-		
 	}
 	
 	@Test
@@ -230,7 +278,6 @@ public class DonorRepositoryTest {
 		assertNotSame("List size should not zero.",0,((List<Donor>)(donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams).get(0))).size());
-		
 	}
 	
 	@Test
@@ -289,7 +336,6 @@ public class DonorRepositoryTest {
 		for (Donor donor : listDonor) {
 			assertFalse(donor.getIsDeleted());
 		}
-
 	}
 
 	@Test
@@ -311,7 +357,6 @@ public class DonorRepositoryTest {
 	 *  method = "addDonor(Donor)"
 	 */
 	public void addDonor_shouldPersist() {
-		try{
 		Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1l);
 		//DonorBackingForm donorBackingForm = new DonorBackingForm(createNewDonorFromExistDonor);
 		//setBackingFormValue(donorBackingForm);
@@ -320,9 +365,6 @@ public class DonorRepositoryTest {
 		donorRepository.addDonor(newDonor);
 		assertTrue("Donor Object should persist.", newDonor
 				.getId() == 0 ? false : true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 
 	@Test
@@ -352,7 +394,6 @@ public class DonorRepositoryTest {
 	 *  method = "addDonor(Donor)"
 	 */
 	public void addDonor_shouldNotPersistLastNameBlank() {
-		try {
 			setBackingFormValue(donorBackingForm);
 			donorBackingForm.setLastName("");// Here we can pass donor lastname
 												// value is blank.
@@ -366,9 +407,6 @@ public class DonorRepositoryTest {
 				assertTrue("Donor Object should persist.", donorBackingForm
 						.getDonor().getId() == 0 ? false : true);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Test
