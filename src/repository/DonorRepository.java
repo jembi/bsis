@@ -67,10 +67,14 @@ public class DonorRepository {
   }
 
   public Donor findDonorById(Long donorId) {
-    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
-    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    return query.setParameter("donorId", donorId).getSingleResult();
+	try{
+	    String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
+	    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+	    query.setParameter("isDeleted", Boolean.FALSE);
+	    return query.setParameter("donorId", donorId).getSingleResult();
+  	} catch (NoResultException ex) {
+      return null;
+    }
   }
 
   public Donor findDonorById(String donorId) {
@@ -302,17 +306,21 @@ public class DonorRepository {
   }
 
   private DeferralReason findDeferralReasonById(String deferralReasonId) {
-    String queryString = "SELECT d FROM DeferralReason d WHERE " +
-        "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
-    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
-    query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
-    query.setParameter("isDeleted", false);
-    return query.getSingleResult();
+    try{
+		String queryString = "SELECT d FROM DeferralReason d WHERE " +
+	        "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
+	    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
+	    query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
+	    query.setParameter("isDeleted", false);
+	    return query.getSingleResult();
+  	} catch (NoResultException ex) {
+      return null;
+    }
   }
   
   public DeferralReason findDeferralReasonUsingId(String deferralReasonId) {
 	  return this.findDeferralReasonById(deferralReasonId);
-	  }
+  }
 
   public List<DonorDeferral> getDonorDeferrals(Long donorId) {
     String queryString = "SELECT d from DonorDeferral d WHERE " +
