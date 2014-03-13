@@ -10,6 +10,8 @@ import model.donor.Donor;
 import model.location.Location;
 import model.user.User;
 import model.util.Gender;
+import model.util.Title;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import repository.DonorRepository;
@@ -400,5 +402,15 @@ public void setDonorPanel(String donorPanel) {
         donor.setPreferredContactMethod(null);
       }
     }
+  }
+  
+  public String getTitle() {
+    if (donor == null || donor.getTitle() == null)
+      return null;
+    return donor.getTitle().toString();
+  }
+  
+  public void setTitle(String title) {
+    donor.setTitle(Title.valueOf(title));
   }
 }
