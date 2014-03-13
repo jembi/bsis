@@ -7,12 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.user.Permission;
+import model.user.User;
 import model.user.Role;
+import model.user.Permission;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import viewmodel.UserViewModel;
 import viewmodel.RoleViewModel;
 
 @Repository
@@ -60,6 +62,12 @@ public class RoleRepository {
 		return permission;
 	}
 
+	public List<Permission> getAllPermissionsByName() {
+		TypedQuery<Permission> query = em.createQuery("FROM Permission ORDER BY name ASC",
+				Permission.class);
+		List<Permission> permission = query.getResultList();
+		return permission;
+	}
 	public Role updateRole(Role role) {
 		Role existingRole = findRoleDetailById(role.getId());
 		if (existingRole == null) {
@@ -88,4 +96,5 @@ public class RoleRepository {
 		List<Permission> permission =  query.getResultList();
 		return permission.isEmpty() ? null : permission.get(0);
 	}
+
 }

@@ -18,12 +18,15 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
+import model.donor.DonorConstants;
 import model.donor.DonorStatus;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -32,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import controller.UtilController;
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
 import controller.UtilController;
@@ -85,7 +89,7 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams) {
+      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate) {
 
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -112,7 +116,13 @@ public class DonorRepository {
       firstNameExp = cb.disjunction();
     else
       firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
-
+    
+    Predicate dueToDonateExp;
+    if (!dueToDonate)
+    	dueToDonateExp = cb.disjunction();
+    else
+    	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
+    
     Predicate lastNameExp;
     if (lastName.trim().equals(""))
       lastNameExp = cb.disjunction();
@@ -122,10 +132,10 @@ public class DonorRepository {
     Expression<Boolean> exp2;
     if (StringUtils.isBlank(donorNumber) && 
         StringUtils.isBlank(firstName) &&
-        StringUtils.isBlank(lastName))
-      exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
+        StringUtils.isBlank(lastName) && !dueToDonate)
+      exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
     else
-      exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp));
+      exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
 
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
@@ -301,8 +311,45 @@ public class DonorRepository {
     donorDeferral.setDeferredBy(utilController.getCurrentUser());
     DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
     donorDeferral.setDeferralReason(deferralReason);
+    donorDeferral.setIsVoided(Boolean.FALSE);
     donorDeferral.setDeferralReasonText(deferralReasonText);
     em.persist(donorDeferral);
+  }
+  
+  public void updatedeferDonor(String donorDeferralId,String donorId, String deferUntil,
+      String deferralReasonId, String deferralReasonText) throws ParseException {
+    DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
+    DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
+    Donor donor = findDonorById(donorId);
+    if(donorDeferral != null){
+    	donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
+    	donorDeferral.setDeferredDonor(donor);
+    	donorDeferral.setDeferredBy(utilController.getCurrentUser());
+    	donorDeferral.setDeferralReasonText(deferralReasonText);
+    	donorDeferral.setDeferralReason(deferralReason);
+      em.persist(donorDeferral);
+    }
+    
+    
+    /*Donor donor = findDonorById(donorId);
+    --donorDeferral.setDeferredOn(new Date());
+    donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
+    donorDeferral.setDeferredDonor(donor);
+    donorDeferral.setDeferredBy(utilController.getCurrentUser());
+    DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
+    donorDeferral.setDeferralReason(deferralReason);
+    donorDeferral.setDeferralReasonText(deferralReasonText);*/
+    //em.persist(donorDeferral);
+  }
+  
+  public void cancelDeferDonor(String donorDeferralId) {
+  	DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
+  	if(donorDeferral != null){
+  		donorDeferral.setIsVoided(Boolean.TRUE);
+  		donorDeferral.setVoidedDate(new Date());
+  		donorDeferral.setVoidedBy(utilController.getCurrentUser());
+  	}
+  	em.persist(donorDeferral);
   }
 
   private DeferralReason findDeferralReasonById(String deferralReasonId) {
@@ -324,9 +371,10 @@ public class DonorRepository {
 
   public List<DonorDeferral> getDonorDeferrals(Long donorId) {
     String queryString = "SELECT d from DonorDeferral d WHERE " +
-                         " d.deferredDonor.id=:donorId";
+                         " d.deferredDonor.id=:donorId AND d.isVoided=:isVoided";
     TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
     query.setParameter("donorId", donorId);
+    query.setParameter("isVoided", Boolean.FALSE);
     return query.getResultList();
   }
 
@@ -379,5 +427,15 @@ public class DonorRepository {
 		  }
 	  }
 	  return lastDeferredUntil;
+  }
+  
+  public DonorDeferral getDonorDeferralsId(Long donorDeferralsId) {
+    String queryString = "SELECT d from DonorDeferral d WHERE " +
+                         " id=:donorDeferralsId";
+    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
+    query.setParameter("donorDeferralsId", donorDeferralsId);
+    if(query.getResultList().size() > 0)
+    	return query.getSingleResult();
+    return null;
   }
 }

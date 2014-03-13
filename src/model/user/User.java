@@ -50,6 +50,9 @@ public class User {
   @ManyToMany(fetch=FetchType.EAGER)
   private List<Role> roles;
   
+  @ManyToMany(mappedBy="users")
+  private List<UserRole> userRole;
+  
   @Lob
   private String notes;
 
@@ -179,4 +182,19 @@ public class User {
   public void setRoles(List<Role> roles) {
     this.roles = roles;
   }
+
+	/**
+	 * @return the userRole
+	 */
+	public List<UserRole> getUserRole() {
+		return userRole;
+	}
+
+	/**
+	 * @param userRole the userRole to set
+	 */
+	public void setUserRole(List<UserRole> userRole) {
+		this.userRole = userRole;
+	}
+  
 }

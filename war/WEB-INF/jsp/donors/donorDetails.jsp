@@ -30,7 +30,7 @@
       <label>${donorFields.lastName.displayName}</label>
       <label>${donor.lastName}</label>
     </div>
-  </c:if>
+  </c:if>   
   <c:if test="${donorFields.birthDate.hidden != true }">
     <div>
       <label>${donorFields.birthDate.displayName}</label>

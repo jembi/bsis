@@ -19,5 +19,7 @@
       href="addProductCombinationFormGenerator.html">Create products</a></li>
     <li id="addProductsContent"><a
       href="addProductFormGenerator.html">Add Product</a></li>
+      <li id="recordProductsContent"><a
+      href="recordProductFormGenerator.html">Record Product</a></li>
   </ul>
 </div>
