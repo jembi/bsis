@@ -63,6 +63,16 @@ public class DonorBackingForm {
       donor.setBirthDate(null);
     }
   }
+  
+  public void setBirthDate(String birthDate) {
+    this.birthDate = birthDate;
+    try {
+      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      donor.setBirthDate(null);
+    }
+  }
 
   public DonorViewModel getDonorViewModel() {
     return new DonorViewModel(donor);
