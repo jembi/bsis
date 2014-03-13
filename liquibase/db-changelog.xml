@@ -194,11 +194,11 @@
     	<!-- For issue 38 [Add Donor Title field] -->
 
   <changeSet id="201310251445" author="ankur">
-    <addColumn tableName="donor">
+    <addColumn tableName="Donor">
       <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
     </addColumn>
 
-    <addColumn tableName="donor_aud">
+    <addColumn tableName="Donor_AUD">
       <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
     </addColumn>    
 
