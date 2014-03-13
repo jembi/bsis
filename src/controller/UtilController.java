@@ -411,7 +411,7 @@ public class UtilController {
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
     if (existingDonor != null && existingDonor.getId() != null)
       return true;
     return false;
