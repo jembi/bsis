@@ -16,16 +16,18 @@
   <ul>
     <li id="findOrAddDonorsContent">
       <a href="findDonorFormGenerator.html">
-        Find Donors
+        Donors
       </a>
     </li>
+    <!--
     <li id="addDonorContent">
       <a href="addDonorFormGenerator.html">
         Add Donor
       </a>
     </li>
-    <!-- li id="viewDonorsContent">
+     li id="viewDonorsContent">
       <a href="viewDonors.html">View All Donors</a>
-    </li-->
+    </li>
+    -->
   </ul>
 </div>

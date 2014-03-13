@@ -3,12 +3,16 @@ package model.user;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
@@ -17,49 +21,65 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Role {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(nullable = false, updatable = false, insertable = false)
+	private Long id;
 
-  @Column(length=50)
-  private String name;
+	@Column(length = 50)
+	private String name;
 
-  @ManyToMany(mappedBy="roles")
-  private List<User> users;
+	@ManyToMany(mappedBy = "roles")
+	private List<User> users;
 
-  @ManyToMany(mappedBy="roles", fetch=FetchType.EAGER)
-  private Set<Permission> permissions;
+	@ManyToMany(mappedBy="roles")
+	private List<UserRole> userRole;
 
-  public Long getId() {
-    return id;
-  }
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "Permission_Role", joinColumns = { @JoinColumn(name = "roles_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "permissions_id", referencedColumnName = "id") })
+	private Set<Permission> permissions;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	@Lob
+	private String description;
 
-  public String getName() {
-    return name;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public List<User> getUsers() {
-    return users;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public void setUsers(List<User> users) {
-    this.users = users;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public Set<Permission> getPermissions() {
-    return permissions;
-  }
+	public List<User> getUsers() {
+		return users;
+	}
 
-  public void setPermissions(Set<Permission> permissions) {
-    this.permissions = permissions;
-  }
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	public Set<Permission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(Set<Permission> permissions) {
+		this.permissions = permissions;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

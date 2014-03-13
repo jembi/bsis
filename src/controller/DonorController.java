@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import utils.CustomDateFormatter;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
 import backingform.DonorBackingForm;
@@ -88,7 +89,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('PERM_VIEW_DONOR_INFORMATION')")
+  @PreAuthorize("hasRole('View Donor')")
   public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -191,12 +192,18 @@ public class DonorController {
     ModelAndView mv = new ModelAndView("donors/editDonorForm");
     Donor donor = donorRepository.findDonorById(donorId);
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-    DonorBackingForm form = new DonorBackingForm(donor);
+    DonorBackingForm donorForm = new DonorBackingForm(donor);
+    String dateToken[]=donorForm.getBirthDate().split("/");
+    donorForm.setDayOfMonth(dateToken[0]);
+    donorForm.setMonth(dateToken[1]);
+    donorForm.setYear(dateToken[2]);
     addEditSelectorOptions(mv.getModelMap());
-    mv.addObject("editDonorForm", form);
+    mv.addObject("editDonorForm", donorForm);
     mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
+  
+ 
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
   public ModelAndView addDonorFormGenerator(HttpServletRequest request) {
@@ -224,7 +231,7 @@ public class DonorController {
 
     ModelAndView mv = new ModelAndView();
     boolean success = false;
-
+     form.setBirthDate();
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
@@ -239,7 +246,7 @@ public class DonorController {
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);        
         // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
-        donor.setDonorNumber(utilController.getNextDonorNumber());
+         donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
@@ -301,6 +308,60 @@ public class DonorController {
     mv.addObject("donorId", donorId);
     mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
     return mv;
+  }
+  
+  @RequestMapping(value = "/editDeferDonorFormGenerator", method = RequestMethod.GET)
+  public ModelAndView editDeferDonorFormGenerator(HttpServletRequest request,
+      @RequestParam("donorDeferralId") String donorDeferralId) {
+    ModelAndView mv = new ModelAndView("donors/deferDonorForm");
+    DonorDeferral donorDeferral = donorRepository.getDonorDeferralsId(Long.parseLong(donorDeferralId));
+    if(donorDeferral != null){
+  		mv.addObject("deferralUntilDate", CustomDateFormatter.getDateString(donorDeferral.getDeferredUntil()));
+  		mv.addObject("deferReasonText",donorDeferral.getDeferralReasonText());
+  		mv.addObject("deferReasonId",donorDeferral.getDeferralReason().getId());
+  		mv.addObject("donorId", donorDeferral.getDeferredDonor().getId());
+  		mv.addObject("donorDeferralId", donorDeferral.getId());
+    }
+    mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
+    return mv;
+  }
+  
+  @RequestMapping(value="/updateDeferDonor", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> updateDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId,
+         @RequestParam("donorId") String donorId,
+         @RequestParam("deferUntil") String deferUntil,
+         @RequestParam("deferralReasonId") String deferralReasonId,
+         @RequestParam("deferralReasonText") String deferralReasonText) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.updatedeferDonor(donorDeferralId,donorId, deferUntil, deferralReasonId, deferralReasonText);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
+  }
+  
+  @RequestMapping(value="/cancelDeferDonor", method = RequestMethod.POST)
+  public @ResponseBody Map<String, Object> cancelDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.cancelDeferDonor(donorDeferralId);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
   }
 
   @RequestMapping(value="/deferDonor", method = RequestMethod.POST)
@@ -442,9 +503,31 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
+    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
+  }
+  
+  @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
+  public ModelAndView printDonorLabel(HttpServletRequest request, Model model,
+		  @RequestParam(value="donorNumber") String donorNumber) {
+	  
+	ModelAndView mv = new ModelAndView("zplBarcode");
+	
+	mv.addObject("labelZPL",
+		"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
+		"^XA"+
+		"^MMT"+
+		"^PW360"+
+		"^LL0120"+
+		"^LS0"+
+		"^BY2,3,52^FT63,69^BCN,,Y,N"+
+		"^FD>:" + donorNumber + "^FS"+
+		"^PQ1,0,1,Y^XZ"
+	);
+	
+	return mv;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -499,7 +582,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams);
+        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate());
 
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);

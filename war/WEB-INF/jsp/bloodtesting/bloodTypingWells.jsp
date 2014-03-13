@@ -169,14 +169,14 @@ function autoTab(field,fieldID){
     <c:if test="${!empty collectionsWithUninterpretableResults && fn:length(collectionsWithUninterpretableResults) gt 0}">
       <div class="warningBox ui-state-highlight">
         <img src="images/warning_icon.png" style="height: 50px;" />
-        The following collections have uninterpretable results. Please check the results you have entered.
+        The following donations have uninterpretable results. Please check the results you have entered.
 
         <c:forEach var="collectionId" items="${collectionsWithUninterpretableResults}">
   
           <table class="simpleTable">
             <thead>
               <tr>
-                <th>Collection number</th>
+                <th>Donation Identification Number</th>
               </tr>
             </thead>
             <tbody>
@@ -192,7 +192,7 @@ function autoTab(field,fieldID){
           Are you sure you want to save these results?
           <br />
           <button class="saveUninterpretableResultsButton">
-            Save uninterpretable results also
+            Save all results (including uninterpretable results)
           </button>
 
         </c:forEach>
@@ -207,7 +207,7 @@ function autoTab(field,fieldID){
       <span class="warningText">
         <b>Warning</b>
         <br />
-        The following collections already have blood typing results. Are you sure you want to add blood typing results again?
+        The following donations already have blood typing results. Are you sure you want to add blood typing results again?
         <br />
         Previous data will be overwritten.
       </span>
@@ -215,7 +215,7 @@ function autoTab(field,fieldID){
       <br />
       <br />
       <div>
-        <button class="changeCollectionsButton">Go back and change collections</button>
+        <button class="changeCollectionsButton">Go back and change donations</button>
       </div>
       <br />
       <br />
@@ -223,7 +223,7 @@ function autoTab(field,fieldID){
       <table class="simpleTable">
         <thead>
           <tr>
-            <th>Collection number</th>
+            <th>DIN</th>
             <th>Blood typing status</th>
             <th>Blood ABO</th>
             <th>Blood Rh</th>
@@ -341,16 +341,16 @@ function autoTab(field,fieldID){
       </c:forEach>
     </div>
 
-    <div style="margin-left: 200px;">
+    <div style="margin-left: 30px; margin-top: 50px;">
       <label></label>
       <button type="button" class="saveButton">
         Save
       </button>
       <button type="button" class="changeCollectionsButton">
-        Change collections
+        Change Donations
       </button>
       <button type="button" class="clearFormButton">
-        Clear form
+        Clear Form
       </button>
     </div>
 </div>  
@@ -359,7 +359,7 @@ function autoTab(field,fieldID){
       <thead>
         <tr>
           <th></th>
-          <th style="font-size:80%;">Collection Number</th>
+          <th style="font-size:80%;">DINs</th>
         </tr>
       </thead>
       <tbody>

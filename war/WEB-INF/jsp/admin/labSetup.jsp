@@ -112,6 +112,7 @@ $(document).ready(function(){
                 id="${ttiMechanismSelectorId}">
           <option value="TTI_ELISA">Record on ELISA Plate (with Optical Densities)</option>
           <option value="TTI_WORKSHEETS">Record on worksheets</option>
+          <option value="TTI_RESULT">Import Results from Architect</option>
         </select>
       </div>
 

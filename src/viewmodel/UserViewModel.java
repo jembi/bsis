@@ -1,10 +1,14 @@
 package viewmodel;
 
+import java.util.List;
+
+import model.user.Role;
 import model.user.User;
 
 public class UserViewModel {
 
   private User user;
+  private String userRole="";
 
   public UserViewModel() {
   }
@@ -37,4 +41,23 @@ public class UserViewModel {
   public String toString() {
     return user.getUsername();
   }
+  
+  public List<Role> getRoles() {
+    return user.getRoles();
+  }
+
+	/**
+	 * @return the userRole
+	 */
+	public String getUserRole() {
+		List<Role> roles=user.getRoles();
+		String userRoles="";
+		if(roles.size() > 0){
+			for(Role r:roles){
+				userRole= userRole +","+ r.getName();
+			}
+			userRoles=userRole.substring(1);
+		}
+		return userRoles;
+	}
 }

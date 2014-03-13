@@ -203,4 +203,28 @@ public class ProductTypeRepository {
     }
     return productType;
   }
+  
+  public List<ProductType> getAllParentProductTypes() {
+    TypedQuery<ProductType> query;
+    List<ProductType> productTypes = new ArrayList<ProductType>();
+    query = em.createQuery("SELECT p from ProductType p where p.isDeleted=:isDeleted AND pediProductType_id != null AND p.id!= 1", ProductType.class);
+    query.setParameter("isDeleted", false);
+    productTypes = query.getResultList(); 
+    productTypes.add(getProductTypeByIdList(1).get(0));
+    return productTypes;
+  }
+  
+  public List<ProductType> getProductTypeByIdList(Integer id) {
+    TypedQuery<ProductType> query;
+//    query = em.createQuery("SELECT pt from ProductType pt " +
+//            "where pt.id=:id", ProductType.class);
+
+  query = em.createQuery("SELECT pt from ProductType pt where pt.id IN (SELECT pt1.pediProductType from ProductType pt1 WHERE pt1.id=:id) ", ProductType.class);
+
+    //SELECT * FROM productType WHERE id IN (SELECT pediProductType_id FROM productType WHERE id=2);
+    query.setParameter("id", id);
+    if (query.getResultList().size() == 0)
+      return null;
+    return query.getResultList();
+  }
 }
