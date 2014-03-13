@@ -765,7 +765,7 @@ public class DonorRepositoryTest {
 	@Test
 	/**
 	 * value="should return non-deleted deferral reasons in the database."
-	 * method="deferDonor(String,String,String,String)"
+	 * method="findDeferralReasonById(String)"
 	 */
 	public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason() {
 		assertNotNull("Deferral Reason object should not null.",
@@ -775,7 +775,7 @@ public class DonorRepositoryTest {
 	@Test
 	/**
 	 * value="should return null deferral reason where deferral reason is deleted from the database."
-	 * method="deferDonor(String,String,String,String)"
+	 * method="findDeferralReasonById(String)"
 	 */
 	public void findDeferralReasonById_shouldReturnNullDeferralReason() {
 		assertNull("Deferral Reason object should  null.",
