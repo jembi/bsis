@@ -177,7 +177,7 @@ public class DonorRepositoryTest {
 	@Test
 	/**
 	 * value="should return empty list (instead of a null object) when no match is found."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)"
+	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 * 
 	 */
 	public void findAnyDonor_listSizeShouldZero() {
@@ -191,13 +191,13 @@ public class DonorRepositoryTest {
 		assertEquals("List size should be zero.", 0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams).get(0))).size());
+						anyBloodGroup, pagingParams, false).get(0))).size());
 	}
 
 	@Test
 	/**
 	 * value="should fetch all donors that partially match first name."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)"
+	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroPartialFirstNameMatch() {
 		String searchDonorNumber = "";
@@ -210,13 +210,13 @@ public class DonorRepositoryTest {
 		assertNotSame("List size should not zero.", 0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams).get(0))).size());
+						anyBloodGroup, pagingParams, false).get(0))).size());
 	}
 
 	@Test
 	/**
 	 * value="should fetch all donors that partially match last name."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)"
+	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroPartialLastNameMatch() {
 		String searchDonorNumber = "";
@@ -230,13 +230,13 @@ public class DonorRepositoryTest {
 		assertNotSame("List size should not zero.", 0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams).get(0))).size());
+						anyBloodGroup, pagingParams, false).get(0))).size());
 	}
 
 	@Test
 	/**
 	 * value="should fetch all donors with blood groups that match the criteria in List<BloodGroup>."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)"
+	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroMatchBloodGroup() {
 		String searchDonorNumber = "";
@@ -250,13 +250,13 @@ public class DonorRepositoryTest {
 		assertNotSame("List size should not zero.", 0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams).get(0))).size());
+						anyBloodGroup, pagingParams, false).get(0))).size());
 	}
 
 	@Test
 	/**
 	 * value="should fetch donors with no blood groups when anyBloodGroup.equals(true)."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)"
+	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroAnyBloodGroupMatch() {
 		String searchDonorNumber = "";
@@ -269,17 +269,17 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0));
+				anyBloodGroup, pagingParams, false).get(0));
 		assertNotSame("List size should not zero.", 0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams).get(0))).size());
+						anyBloodGroup, pagingParams, false).get(0))).size());
 	}
 
 	@Test
 	/**
 	 * value="should not return donors who have been deleted."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>)"
+	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 */
 	public void findAnyDonor_deleteObjectShouldNotPartOfList() {
 		String searchDonorNumber = "";
@@ -292,7 +292,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams).get(0));
+				anyBloodGroup, pagingParams, false).get(0));
 		for (Donor donor : listDonor) {
 			assertFalse("Deleted Donor should not included in the list.",
 					donor.getId() == 2 ? true : false);
