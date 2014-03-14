@@ -397,7 +397,7 @@ public class CollectedSampleBackingForm {
 	}
   
   public String getBloodPressureSystolic() {
-		return bloodPressureDiastolic;
+		return bloodPressureSystolic;
 	}
 	
   public void setBloodPressureSystolic(String bloodPressureSystolic) {

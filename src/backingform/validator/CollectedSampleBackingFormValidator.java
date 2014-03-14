@@ -104,12 +104,12 @@ public class CollectedSampleBackingFormValidator implements Validator {
 	 if(!bloodPressureSyStolic.isEmpty()  || !bloodPressureDiastolic.isEmpty())
 	  {
 		 
-		   if(!bloodPressureSyStolic.matches(regex) || !( Integer.parseInt(collectionForm.getBloodPressureSystolic()) >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && Integer.parseInt(collectionForm.getBloodPressureSystolic()) <= CollectionConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE) )
-			  		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a number between 0 to 250.");
+		   if(!bloodPressureSyStolic.matches(regex) || !( Integer.parseInt(collectionForm.getBloodPressureSystolic()) >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && Integer.parseInt(collectionForm.getBloodPressureSystolic()) <= CollectionConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE))
+			  		errors.rejectValue("collectedSample.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a value between 0 to 250.");
 	             
 	
 			  	if(!bloodPressureDiastolic.matches(regex) || !( (Integer.parseInt(collectionForm.getBloodPressureDiastolic()) >= CollectionConstants.BLOOD_PRESSURE_MIN_VALUE && Integer.parseInt( collectionForm.getBloodPressureDiastolic() )<= CollectionConstants.BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE)))
-			  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a number between 0 to 150.");
+			  		errors.rejectValue("collectedSample.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a value between 0 to 150.");
 	  }
 	  return;
 			  
