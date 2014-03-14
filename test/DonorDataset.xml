@@ -201,16 +201,16 @@
 
 	<donordeferral id="1" deferralReasonText="" deferredOn="2014-02-20"
 		deferredUntil="2014-06-20" deferralReason_id="2" deferredBy_id="1"
-		deferredDonor_id="1" />
+		deferredDonor_id="1" isVoided="false"/>
 	<donordeferral id="2" deferralReasonText="" deferredOn="2014-03-01"
 		deferredUntil="2014-05-14" deferralReason_id="2" deferredBy_id="1"
-		deferredDonor_id="1" />
+		deferredDonor_id="1" isVoided="false"/>
 	<donordeferral id="3" deferralReasonText="" deferredOn="2014-01-11"
 		deferredUntil="2014-08-22" deferralReason_id="2" deferredBy_id="1"
-		deferredDonor_id="1" />
+		deferredDonor_id="1" isVoided="false"/>
 	<donordeferral id="4" deferralReasonText="" deferredOn="2014-01-11"
 		deferredUntil="2014-02-22" deferralReason_id="2" deferredBy_id="1"
-		deferredDonor_id="4" />
+		deferredDonor_id="4" isVoided="false"/>
 
 
 </dataset>

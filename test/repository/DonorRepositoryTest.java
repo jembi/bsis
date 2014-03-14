@@ -432,6 +432,9 @@ public class DonorRepositoryTest {
 	 */
 	public void addDonor_ShouldNotPersistBlankGender() {
 		Date date = new Date();
+		donorBackingForm.setDayOfMonth("10");
+		donorBackingForm.setMonth("06");
+		donorBackingForm.setYear("2000");
 		donorBackingForm.setAddress("myaddress");
 		donorBackingForm.setFirstName("firstname");
 		donorBackingForm.setMiddleName("middlename");
@@ -471,7 +474,6 @@ public class DonorRepositoryTest {
 	 *  method = "addDonor(Donor)"
 	 */
 	public void addDonor_shouldNotPersistMinimumAgeIsLessThan16() {
-		donorBirthdate = "10/06/2000";// Calculate Donor age is less than 16.
 		donorBackingForm.setBirthDate(donorBirthdate);
 		// Set Inputvalue.
 		setBackingFormValue(donorBackingForm);
@@ -493,9 +495,10 @@ public class DonorRepositoryTest {
 	 *  method = "addDonor(Donor)"
 	 */
 	public void addDonor_shouldNotPersistMaximumAgeIsGreaterThan65() {
-		donorBirthdate = "24/02/1948";// Calculate Donor age is greater than 65.
-		donorBackingForm.setBirthDate(donorBirthdate);
 		setBackingFormValue(donorBackingForm);
+		donorBackingForm.setDayOfMonth("24");
+		donorBackingForm.setMonth("02");
+		donorBackingForm.setYear("1948");
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
 		assertTrue(
@@ -912,6 +915,9 @@ public class DonorRepositoryTest {
 		donorBackingForm.setState("State");
 		donorBackingForm.setZipcode("361001");
 		donorBackingForm.setBirthDate(donorBirthdate);
+		donorBackingForm.setDayOfMonth("10");
+		donorBackingForm.setMonth("06");
+		donorBackingForm.setYear("2000");
 		donorBackingForm.setBirthDateEstimated(true);
 	}
 
