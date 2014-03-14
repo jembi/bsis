@@ -1,6 +1,7 @@
 package model.collectedsample;
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,6 @@ import constraintvalidator.CollectionBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
-
 import repository.bloodtesting.BloodTypingStatus;
 
 /**
@@ -128,19 +128,19 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private Set<Worksheet> worksheets;
 
  
-  private String haemoglobinCount;
+  private BigDecimal haemoglobinCount;
 
   @Column(name="bloodPressureSystolic")
-  private String bloodPressureSystolic;
+  private Integer bloodPressureSystolic;
   
   @Column(name="bloodPressureDiastolic")
-  private String bloodPressureDiastolic;
+  private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
    */
   
-  private String donorWeight;
+  private BigDecimal donorWeight;
 
   @ManyToOne(optional=true)
   private User donationCreatedBy;
@@ -166,7 +166,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private Boolean isDeleted;
   
   
-  private String donorPulse;
+  private Integer donorPulse;
   
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
@@ -335,27 +335,27 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.ttiStatus = testedStatus;
   }
 
-  public String getHaemoglobinCount() {
+  public BigDecimal getHaemoglobinCount() {
     return haemoglobinCount;
   }
 
-  public void setHaemoglobinCount(String haemoglobinCount) {
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
   
-  public String getBloodPressureSystolic() {
+  public Integer getBloodPressureSystolic() {
 		return bloodPressureSystolic;
 	}
 
-  public void setBloodPressureSystolic(String bloodPressureSystolic) {
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
 		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 
-  public String getDonorWeight() {
+  public BigDecimal getDonorWeight() {
     return donorWeight;
   }
   
-  public void setDonorWeight(String donorWeight) {
+  public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
 
@@ -427,11 +427,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodRh = bloodRh;
   }
 
-  public String getBloodPressureDiastolic() {
+  public Integer getBloodPressureDiastolic() {
 		return bloodPressureDiastolic;
 	}
 
-	public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
 		this.bloodPressureDiastolic = bloodPressureDiastolic;
 	}
 
@@ -443,11 +443,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
 
-	public String getDonorPulse() {
+	public Integer getDonorPulse() {
 		return donorPulse;
 	}
 
-	public void setDonorPulse(String donorPulse) {
+	public void setDonorPulse(Integer donorPulse) {
 		this.donorPulse = donorPulse;
 	}
   

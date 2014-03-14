@@ -95,15 +95,11 @@ public class CollectedSampleBackingFormValidator implements Validator {
 	 String bloodPressureSyStolic="";
 	 if(!StringUtils.isBlank(collectionForm.getBloodPressureSystolic()))
 		 bloodPressureSyStolic = collectionForm.getBloodPressureSystolic();
-	 else 
-		 collectionForm.setBloodPressureSystolic(null);
 	 
 	 String bloodPressureDiastolic="";
 	 if(!StringUtils.isBlank(collectionForm.getBloodPressureDiastolic()))
 		 bloodPressureDiastolic = collectionForm.getBloodPressureDiastolic();
-	 else 
-		 collectionForm.setBloodPressureDiastolic(null);
-     
+	
 	 String regex="[0-9]+"; 
 	 if(!bloodPressureSyStolic.isEmpty()  || !bloodPressureDiastolic.isEmpty())
 	  {
@@ -127,9 +123,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
    	String regex="[0-9]*\\.?[0-9]+";
    	if( !haemoglobinCount.matches(regex) ||! (Float.parseFloat(haemoglobinCount) >= 0 && Float.parseFloat(haemoglobinCount)<= 30))
    		errors.rejectValue("collectedSample.haemoglobinCount","haemoglobinCount.incorrect" ,"Enter a value between 0 and 30.");
-    }else
-    	form.setHaemoglobinCount(null);
- 
+    }
 return;  	
   	
 }
@@ -140,25 +134,24 @@ return;
     	String regex="[0-9]*\\.?[0-9]+";
     	if( !donorWeight.matches(regex) || !(Float.parseFloat(donorWeight) >= 0 && Float.parseFloat(donorWeight)<= 300))
     	errors.rejectValue("collectedSample.donorWeight","donorWeight.incorrect" ,"Enter a value between 0 and 300.");
-     }else
-  	 form.setDonorWeight(null);
+     }
+  	 
  return;
   	
   }
   
   private void validateRangeForDonorPulse(CollectedSampleBackingForm form, Errors errors) {
   	
-  	String donorPulse;
   	
 	 if(!StringUtils.isBlank(form.getDonorPulse())){
    
-	  donorPulse = form.getDonorPulse();
+	  String donorPulse = form.getDonorPulse();
       String regex="[0-9]+";
   	  if( !donorPulse.matches(regex) || !(Integer.parseInt(donorPulse) >= 0 && Integer.parseInt(donorPulse)<= 290))
   		errors.rejectValue("collectedSample.donorPulse","donorPulse.incorrect" ,"Enter a value between 0 to 290.");
-   }else
-	   form.setDonorPulse(null);
-  	return;
+   }
+
+       return;
   	
   }
   

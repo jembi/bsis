@@ -33,6 +33,13 @@ public class CollectedSampleBackingForm {
   private List<String> sites;
   private String dateCollectedFrom;
   private String dateCollectedTo;
+  private String donorPulse;
+  private String haemoglobinCount;
+  private String donorWeight;
+  private String bloodPressureSystolic;
+  private String bloodPressureDiastolic;
+  
+  
 
   private String collectedOn;
 
@@ -365,43 +372,62 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorWeight() {
-		return collectedSample.getDonorWeight();
+		return donorWeight;
 	}
 
   public void setDonorWeight(String donorWeight) {
-		collectedSample.setDonorWeight(donorWeight);
+		this.donorWeight=donorWeight;
 	}
   
 	
 	public String getHaemoglobinCount() {
-		return collectedSample.getHaemoglobinCount();
+		return haemoglobinCount;
 	}
 	
 	public void setHaemoglobinCount(String haemoglobinCount) {
-		collectedSample.setHaemoglobinCount(haemoglobinCount);
+		this.haemoglobinCount = haemoglobinCount;
 	}
 
   public String getDonorPulse() {
-		return collectedSample.getDonorPulse();
+		return donorPulse;
 	}
 
   public void setDonorPulse(String donorPulse) {
-		collectedSample.setDonorPulse(donorPulse);
+		this.donorPulse = donorPulse;
 	}
   
   public String getBloodPressureSystolic() {
-		return  collectedSample.getBloodPressureSystolic();
+		return bloodPressureDiastolic;
 	}
 	
   public void setBloodPressureSystolic(String bloodPressureSystolic) {
-		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+		this.bloodPressureSystolic=bloodPressureSystolic;
 	}
 	
   public String getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic();
+	return bloodPressureDiastolic;
 	}
 
   public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
-		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+	this.bloodPressureDiastolic=bloodPressureDiastolic;
 	}
+  
+  public void setCollectedSample()
+  {
+	  if(!StringUtils.isBlank(donorPulse))
+	  collectedSample.setDonorPulse(new Integer(donorPulse));
+	  
+	  if(!StringUtils.isBlank(donorWeight))
+	  collectedSample.setDonorWeight(new BigDecimal(donorWeight));
+	  
+	  if(!StringUtils.isBlank(haemoglobinCount))
+	  collectedSample.setHaemoglobinCount(new BigDecimal(haemoglobinCount));
+	  
+	  if(!StringUtils.isBlank(bloodPressureSystolic))
+	  collectedSample.setBloodPressureSystolic(new Integer(bloodPressureSystolic));
+	  
+	  if(!StringUtils.isBlank(bloodPressureDiastolic))
+	  collectedSample.setBloodPressureDiastolic(new Integer(bloodPressureDiastolic));
+	  
+  }
 }

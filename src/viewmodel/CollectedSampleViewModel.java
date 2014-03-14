@@ -1,6 +1,7 @@
 package viewmodel;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -156,43 +157,43 @@ public class CollectedSampleViewModel {
       return getBloodAbo() + getBloodRh();
   }
 
-  public String getHaemoglobinCount() {
+  public BigDecimal getHaemoglobinCount() {
 		return collectedSample.getHaemoglobinCount();
 	}
 	
-  public void setHaemoglobinCount(String haemoglobinCount) {
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
 		collectedSample.setHaemoglobinCount(haemoglobinCount);
 	}
   
-  public String getDonorWeight() {
+  public BigDecimal getDonorWeight() {
 		return collectedSample.getDonorWeight();
 	}
 
-  public void setDonorWeight(String donorWeight) {
+  public void setDonorWeight(BigDecimal donorWeight) {
 		collectedSample.setDonorWeight(donorWeight);
 	}
 
-  public String  getDonorPulse() {
+  public Integer  getDonorPulse() {
 		return collectedSample.getDonorPulse();
 	}
 
-  public void setDonorPulse(String donorPulse) {
+  public void setDonorPulse(Integer donorPulse) {
 		collectedSample.setDonorPulse(donorPulse);
   }
 
-  public String getBloodPressureSystolic() {
+  public Integer getBloodPressureSystolic() {
 		return  collectedSample.getBloodPressureSystolic();
   }
 	
-  public void setBloodPressureSystolic(String bloodPressureSystolic) {
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
 		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
   }
   
-  public String  getBloodPressureDiastolic() {
+  public Integer  getBloodPressureDiastolic() {
 		return collectedSample.getBloodPressureDiastolic();
 	}
 
-	public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
 		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
 	}
 	

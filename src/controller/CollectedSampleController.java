@@ -320,6 +320,7 @@ public class CollectedSampleController {
       success = false;
     } else {
       try {
+    	form.setCollectedSample();
         CollectedSample collectedSample = form.getCollectedSample();
         collectedSample.setIsDeleted(false);
         savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
