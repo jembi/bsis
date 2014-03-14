@@ -43,9 +43,7 @@ as this is the MVC configuration dealing with URLs??? -->
   <context:component-scan base-package="tasks" />
   <context:component-scan base-package="utils" />
   <context:component-scan base-package="security" />
-  <!-- 
-   <context:component-scan base-package="util" />
- -->
+
   <bean id="messageSource"
     class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basenames">
