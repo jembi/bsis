@@ -69,9 +69,9 @@ $(document).ready(function() {
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
-		     maxDate : 0,
+		     maxDate : new Date(2020, 12, 31),
 		     dateFormat : "dd/mm/yy",
-		     yearRange : "c-100:c0",
+		     yearRange : "c-100:2020",
 		     onSelect : function(selectedDate) {
 		          $("#lastDonationFromDate").datepicker("option", "maxDate",
 		              selectedDate);
@@ -89,9 +89,9 @@ $(document).ready(function() {
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
-		     maxDate : 0,
+		     maxDate : new Date(2020, 12, 31),
 		     dateFormat : "dd/mm/yy",
-		     yearRange : "c-100:c0",
+		     yearRange : "c-100:2020",
 		     onSelect : function(selectedDate) {
 		          $("#lastDonationToDate").datepicker("option", "minDate",
 		              selectedDate);
@@ -189,6 +189,7 @@ $(document).ready(function() {
 	    	      function(event, content) {
 	    	        $("#${mainContentId}").hide();
 	    	        $("#${childContentId}").hide();
+	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html("");
 	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").show();
 	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html(content);
 	    	      });
@@ -196,7 +197,9 @@ $(document).ready(function() {
 	    	      function(event, content) {
 	    	 			$("#${mainContentId}").hide();
   	        			$("#${childContentId}").show();
+  		    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html("");
   	        			$("#${tabContentId}").find(".findDonorResultsFromDonorComm").hide();
+  	        			$("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
 	    	      });
 	      $("#${tabContentId}").bind("donorFindSuccess",
 	    	      function(event, content) {

@@ -93,7 +93,7 @@ $(document).ready(
           type: "GET",
           success: function(response) {
                      $("#${tabContentId}").trigger("donorSummaryView", response);
-                   }
+                  }
         });
       }
 
