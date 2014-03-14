@@ -196,7 +196,7 @@ public class SequenceNumberRepository {
   lastNumber = seqNumStore.getLastNumber();
   
   } catch (NoResultException ex) {
-  ex.printStackTrace();
+  //ex.printStackTrace();
  
   seqNumStore = new SequenceNumberStore();
   seqNumStore.setTargetTable("Donor");

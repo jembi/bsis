@@ -314,7 +314,6 @@ public class UtilController {
 
   public boolean isFutureDate(Date date){
 	  Date today = new Date();
-	  System.out.println("\tTODAY:"+today);
 	  if(date.after(today)){
 		  return true;
 	  }
