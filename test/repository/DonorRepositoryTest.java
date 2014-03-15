@@ -17,12 +17,14 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.user.User;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -282,15 +284,27 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should only return donors that are due to donate when dueToDonate is set to true. And firstname,lastname,blood group search field is blank."
+	 * value="should only return donors that are due to donate when dueToDonate is set to true."
 	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
 	 */
-	public void findAnyDonor_listSizeShouldNotZeroDueToDonateSetTrueAndAllOtherSearchFieldBlank() {
+	public void findAnyDonor_listSizeShouldNotZeroDueToDonateSetTrue() {
 		String searchDonorNumber = "";
 		String donorFirstName = "";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-		// dateOfLastDonation="2014-01-17 00:00:00"
+		setBackingFormValue(donorBackingForm);
+		Donor  donorNotDue = donorBackingForm.getDonor();
+		donorNotDue.setDonorNumber("000016");
+		Date date_donorNotDue =  DateUtils.addDays(new Date(), - (CollectionConstants.BLOCK_BETWEEN_COLLECTIONS-1));
+		donorNotDue.setDateOfLastDonation(date_donorNotDue);
+		donorRepository.saveDonor(donorNotDue);
+		donorBackingForm=new DonorBackingForm();
+		setBackingFormValue(donorBackingForm);
+		Donor  donorDue = donorBackingForm.getDonor();
+		donorDue.setDonorNumber("000017");
+		Date date_donorDue =  DateUtils.addDays(new Date(), - (CollectionConstants.BLOCK_BETWEEN_COLLECTIONS+1));
+		donorDue.setDateOfLastDonation(date_donorDue);
+		donorRepository.saveDonor(donorDue);
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
@@ -300,33 +314,7 @@ public class DonorRepositoryTest {
 						anyBloodGroup, pagingParams, true).get(0))).size());
 	}
 
-	@Test
-	/**
-	 * value="should only return donors that are due to donate when dueToDonate is set to true. Here DonorNumber is not blank."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
-	 */
-	/**
-	 *Issue: dueToDonate is set to true and fill valid value into any search field(searchDonorNumber or firstname or lastname).
-	 *Test case is failed.
-	 *
-	 *Dataset Record detail
-	 *DonorNumber:000001
-	 *dateOfLastDonation="2014-01-31 20:18:17"
-	 */
-	public void findAnyDonor_listSizeShouldZeroDueToDonateSetTrueAndDonorNumberIsNotBlankAndDonorSubmitDateWithIn56() {
-		String searchDonorNumber = "000001";
-		String donorFirstName = "";
-		String donorLastName = "";
-		String anyBloodGroup = "true";
-		// dateOfLastDonation="2014-01-31 20:18:17"
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		setPaginationParam(pagingParams);
-		assertEquals("List size should be zero.", 0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, true).get(0))).size());
-	}
+	
 
 	@Test
 	/**

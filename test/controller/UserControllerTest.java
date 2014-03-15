@@ -43,7 +43,7 @@ public class UserControllerTest {
 			user.setLastName("technician");
 			userRepository.updateUser(user, true);
 		}catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }
