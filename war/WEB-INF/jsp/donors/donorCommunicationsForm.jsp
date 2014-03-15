@@ -50,9 +50,8 @@ $(document).ready(function() {
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
-		     maxDate : new Date(2020, 12, 31),
 		     dateFormat : "dd/mm/yy",
-		     yearRange : "c-100:2020",
+		     yearRange : "c-100:c+3",
 		     onClose: function(selectedDate,evnt) {
 		         if(selectedDate != null && selectedDate != "" ){
 		        	 $("#lastDonationToDate").datepicker('disable');
@@ -69,9 +68,8 @@ $(document).ready(function() {
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
-		     maxDate : new Date(2020, 12, 31),
 		     dateFormat : "dd/mm/yy",
-		     yearRange : "c-100:2020",
+		     yearRange : "c-100:c+3",
 		     onSelect : function(selectedDate) {
 		          $("#lastDonationFromDate").datepicker("option", "maxDate",
 		              selectedDate);
@@ -89,9 +87,9 @@ $(document).ready(function() {
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
-		     maxDate : new Date(2020, 12, 31),
+		     maxDate : "+60D",
 		     dateFormat : "dd/mm/yy",
-		     yearRange : "c-100:2020",
+		     yearRange : "c-100:c+3",
 		     onSelect : function(selectedDate) {
 		          $("#lastDonationToDate").datepicker("option", "minDate",
 		              selectedDate);
