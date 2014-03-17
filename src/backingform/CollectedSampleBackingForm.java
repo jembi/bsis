@@ -339,7 +339,7 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorIdHidden(String donorId) {
-    if (donorId == null) {
+    if (donorId == null || donorId=="") {
       collectedSample.setDonor(null);
     }
     else {

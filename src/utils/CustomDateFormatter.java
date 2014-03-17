@@ -7,11 +7,11 @@ import java.util.Date;
 
 public class CustomDateFormatter {
 
-  private static String datePattern = "dd/MM/yy"; 
-  private static String datePatternHumanReadable = "dd/MM/yy"; 
+  private static String datePattern = "dd/MM/yyyy"; 
+  private static String datePatternHumanReadable = "dd/MM/yyyy"; 
 
-  private static String dateTimePattern = "dd/MM/yy hh:mm:ss a"; 
-  private static String dateTimePatternHumanReadable = "dd/MM/yy hour:minute:second AM/PM";
+  private static String dateTimePattern = "dd/MM/yyyy hh:mm:ss a"; 
+  private static String dateTimePatternHumanReadable = "dd/MM/yyyy hour:minute:second AM/PM";
 
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
@@ -74,11 +74,11 @@ public class CustomDateFormatter {
   }
 
   public static String getDateErrorMessage() {
-    return "Invalid Date specified. Use " + getDatePatternHumanReadable().toLowerCase();
+    return "Invalid Date specified.";
   }
 
   public static String getDateTimeErrorMessage() {
-    return "Invalid Date specified. Use " + getDatetimepatternhumanreadable().toLowerCase();
+    return "Invalid Date specified.";
   }
 
   public static String getDateString(Date date) {

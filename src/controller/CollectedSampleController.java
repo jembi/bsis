@@ -1,18 +1,24 @@
 package controller;
 
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
+import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import viewmodel.CollectedSampleViewModel;
@@ -60,6 +67,9 @@ public class CollectedSampleController {
   @Autowired
   private UtilController utilController;
 
+  @Autowired
+  private DonorRepository donorRepository;
+  
   public CollectedSampleController() {
   }
 
@@ -306,34 +316,36 @@ public class CollectedSampleController {
       @ModelAttribute("addCollectionForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
-    boolean success = false;
-
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-    mv.addObject("collectionFields", formFields);
-
-    CollectedSample savedCollection = null;
-    if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
-    	form.setCollectedSample();
-        CollectedSample collectedSample = form.getCollectedSample();
-        collectedSample.setIsDeleted(false);
-        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
-        mv.addObject("hasErrors", false);
-        success = true;
-        form = new CollectedSampleBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
+	    ModelAndView mv = new ModelAndView();
+	    boolean success = false;
+	    addEditSelectorOptions(mv.getModelMap());
+	    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+	    mv.addObject("collectionFields", formFields);
+	
+	    CollectedSample savedCollection = null;
+	    if (result.hasErrors()) {
+	      mv.addObject("hasErrors", true);
+	      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	      success = false;
+	    } 
+	    else {
+	      try {
+          form.setCollectedSample();
+	        CollectedSample collectedSample = form.getCollectedSample();
+	        collectedSample.setIsDeleted(false);
+	        
+	        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
+	        mv.addObject("hasErrors", false);
+	        success = true;
+	    
+	        form = new CollectedSampleBackingForm();
+	      } catch (EntityExistsException ex) {
+	        ex.printStackTrace();
+	        success = false;
+	      } catch (Exception ex) {
+	        ex.printStackTrace();
+	        success = false;
+	      }
     }
 
     if (success) {
@@ -342,11 +354,11 @@ public class CollectedSampleController {
       mv.addObject("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
       mv.setViewName("collections/addCollectionSuccess");
     } else {
-      mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addCollectionForm", form);
-      mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
-      mv.setViewName("collections/addCollectionError");
+    	  mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
+	      mv.addObject("firstTimeRender", false);
+	      mv.addObject("addCollectionForm", form);
+	      mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
+	      mv.setViewName("collections/addCollectionError");
     }
 
     mv.addObject("success", success);
@@ -535,5 +547,43 @@ public class CollectedSampleController {
     
     return mv;
   }
+  
+  @RequestMapping("/findLastDonationForDonor.html")  
+  public @ResponseBody  
+  Map<String, String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
+	   
+   CollectedSample collectedSample = form.getCollectedSample();
+   long diffInDays =0;
+   Date dateofLastDonation = null;
+   List<String> message = new ArrayList<String>();
+   
+   Map<String, String> m = new HashMap<String, String>();
+   
+   try{
+	   // if the donor exists
+	   if(donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber()) != null){
+		   Donor donor = donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber());
+		   
+		   // if the donor has donated before
+		   if(donor.getDateOfLastDonation() != null){
+			   dateofLastDonation = donor.getDateOfLastDonation();
+			   Date collectedOnDate = collectedSample.getCollectedOn();
+			   
+			   long diff = collectedOnDate.getTime() - dateofLastDonation.getTime();
+			   diffInDays = diff / (24 * 60 * 60 * 1000);
+			 	
+			   SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			
+			   m.put("diffInDays",String.valueOf(diffInDays));
+			   m.put("dateOfLastDonation",formatter.format(dateofLastDonation).toString());
+			   m.put("collectedOnDate",formatter.format(collectedOnDate).toString());
+		   }  
+	   }
+   }
+   catch(Exception ex){
+	 ex.printStackTrace();
+   }
+   return m;  
+  }  
   
 }
