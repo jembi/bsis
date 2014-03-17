@@ -330,6 +330,7 @@ public class CollectedSampleController {
 	    } 
 	    else {
 	      try {
+          form.setCollectedSample();
 	        CollectedSample collectedSample = form.getCollectedSample();
 	        collectedSample.setIsDeleted(false);
 	        

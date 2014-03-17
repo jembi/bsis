@@ -20,7 +20,6 @@ import javax.persistence.criteria.Root;
 
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
-import model.donor.DonorConstants;
 import model.donor.DonorStatus;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;

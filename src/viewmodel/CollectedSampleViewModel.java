@@ -1,5 +1,6 @@
 package viewmodel;
 
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -172,7 +173,7 @@ public class CollectedSampleViewModel {
 		collectedSample.setDonorWeight(donorWeight);
 	}
 
-  public Integer getDonorPulse() {
+  public Integer  getDonorPulse() {
 		return collectedSample.getDonorPulse();
 	}
 
@@ -188,11 +189,20 @@ public class CollectedSampleViewModel {
 		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
   }
   
-  public Integer getBloodPressureDiastolic() {
+  public Integer  getBloodPressureDiastolic() {
 		return collectedSample.getBloodPressureDiastolic();
 	}
 
 	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
 		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
 	}
+	
+	public String getBloodPressure()
+	{
+		 if(collectedSample.getBloodPressureSystolic()!=null && collectedSample.getBloodPressureDiastolic()!=null)
+		 return collectedSample.getBloodPressureSystolic()+"/"+getBloodPressureDiastolic();
+		 else
+		 return null;
+	}
+	 
 }

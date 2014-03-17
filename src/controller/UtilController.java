@@ -96,6 +96,7 @@ public class UtilController {
     for (FormField ff : formFields) {
       Map<String, Object> fieldProperties = new HashMap<String, Object>();
       fieldProperties.put(FormField.DISPLAY_NAME, ff.getDisplayName());
+      fieldProperties.put(FormField.SHORT_DISPLAY_NAME, ff.getShortDisplayName());
       fieldProperties.put(FormField.DEFAULT_VALUE, ff.getDefaultValue());
       fieldProperties.put(FormField.HIDDEN, ff.getHidden());
       fieldProperties.put(FormField.IS_AUTO_GENERATABLE, ff.getIsAutoGeneratable());

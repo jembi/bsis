@@ -1,5 +1,6 @@
 package model.collectedsample;
 
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
@@ -44,7 +46,6 @@ import constraintvalidator.CollectionBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
-
 import repository.bloodtesting.BloodTypingStatus;
 
 /**
@@ -126,7 +127,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
-  @Column(precision=7, scale=1)
+ 
   private BigDecimal haemoglobinCount;
 
   @Column(name="bloodPressureSystolic")
@@ -138,7 +139,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   /**
    * Limit the number of bytes required to store.
    */
-  @Column(precision=7, scale=1)
+  
   private BigDecimal donorWeight;
 
   @ManyToOne(optional=true)
@@ -164,9 +165,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   private Boolean isDeleted;
   
-  @Column(length=11)
+  
   private Integer donorPulse;
-
+  
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -176,6 +177,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
+
+  
   public String getCollectionNumber() {
     return collectionNumber;
   }

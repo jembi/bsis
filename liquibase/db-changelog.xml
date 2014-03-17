@@ -2239,12 +2239,48 @@
 			<column name="isStaff" value="1"></column>
 			<column name="password" value="superuser"></column>
 			<column name="username" value="superuser"></column>
-	   </insert>
-	   <insert tableName="User_Role">
-	     <column name="users_id" value="1"></column>
-	     <column name="roles_id" value="1"></column>
-	   
-	   </insert>
- 	</changeSet>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="1"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<!-- For issue 71 [Include additional columns in Donation History table] -->
+	<changeSet id="201401151001" author="srikanth">
+		<update tableName="FormField">
+			<column name="displayName" value="DIN" />
+			<where>field = "collectionNumber"</where>
+		</update>
+		<update tableName="FormField">
+			<column name="displayName" value="HGB" />
+			<where>field = "haemoglobinCount"</where>
+		</update>
+		<update tableName="FormField">
+			<column name="displayName" value="HR" />
+			<where>field = "donorPulse"</where>
+		</update>
+		<update tableName="FormField">
+			<column name="displayName" value="WT" />
+			<where>field = "donorWeight"</where>
+		</update>
+
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="bloodPressure"></column>
+			<column name="defaultDisplayName" value="Blood Pressure"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>	
+			<column name="displayName" value="BP"></column>		
+		</insert>
+  </changeSet>
 
 </databaseChangeLog>	
