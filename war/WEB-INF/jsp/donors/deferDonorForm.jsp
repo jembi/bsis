@@ -18,6 +18,8 @@
 
 <script>
 $(document).ready(function(){
+ 	$("#${deferralReasonSelectorId}").val(${deferReasonId});
+	
   function createDatePickerForUntilDate()
   {
 	  $("#${tabContentId}").find(".deferUntil").datepicker({
@@ -56,6 +58,7 @@ $(document).ready(function(){
   <form class="formFormatClass deferDonorForm">
 
     <input name="donorId" type="hidden" value="${donorId}"/>
+    <input name="donorDeferralId" type="hidden" value="${donorDeferralId}"/>
     <div>
       <label>Defer until</label>
       <input name="deferUntil" class="deferUntil" value="${deferralUntilDate}" id="deferUntilId"/>
@@ -72,10 +75,9 @@ $(document).ready(function(){
         </c:forEach>
       </select>
     </div>
-
     <div>
       <label>Deferral details (Optional)</label>
-      <textarea name="deferralReasonText"></textarea>
+      <textarea name="deferralReasonText">${deferReasonText}</textarea>
     </div>
 
   </form>
