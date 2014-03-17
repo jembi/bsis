@@ -298,7 +298,7 @@ public class CollectedSampleController {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
-
+    form.getCollectedSampleIntegerProps();
     ModelAndView mv = new ModelAndView("collections/editCollectionForm");
     mv.addObject("editCollectionForm", form);
     mv.addObject("refreshUrl", getUrl(request));
@@ -393,6 +393,7 @@ public class CollectedSampleController {
     else {
       try {
         form.setIsDeleted(false);
+        form.setCollectedSample();
         CollectedSample existingCollectedSample;
         existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {

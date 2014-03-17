@@ -414,11 +414,11 @@ public class CollectedSampleBackingForm {
   
   public void setCollectedSample()
   {
-	  if(!StringUtils.isBlank(donorPulse))
-	  collectedSample.setDonorPulse(new Integer(donorPulse));
-	  
 	  if(!StringUtils.isBlank(donorWeight))
 	  collectedSample.setDonorWeight(new BigDecimal(donorWeight));
+	  
+	  if(!StringUtils.isBlank(donorPulse))
+	  collectedSample.setDonorPulse(new Integer(donorPulse));
 	  
 	  if(!StringUtils.isBlank(haemoglobinCount))
 	  collectedSample.setHaemoglobinCount(new BigDecimal(haemoglobinCount));
@@ -430,4 +430,33 @@ public class CollectedSampleBackingForm {
 	  collectedSample.setBloodPressureDiastolic(new Integer(bloodPressureDiastolic));
 	  
   }
+  
+  public void getCollectedSampleIntegerProps()
+  {
+	  if(collectedSample.getDonorWeight()!=null)
+     	  donorWeight = collectedSample.getDonorWeight()+"";
+	  else 
+	      donorWeight ="";
+	  
+	  if(collectedSample.getDonorPulse()!=null)
+	       donorPulse = collectedSample.getDonorPulse()+"";
+	  else 
+	      donorPulse ="";
+	  
+	  if(collectedSample.getHaemoglobinCount() != null)
+	       haemoglobinCount = collectedSample.getHaemoglobinCount()+"";
+	  else
+		  haemoglobinCount= "";
+	  
+	  if(collectedSample.getBloodPressureDiastolic() != null)
+	      bloodPressureDiastolic = collectedSample.getBloodPressureDiastolic()+"";
+	  else
+		  bloodPressureDiastolic="";
+	  
+	  if( collectedSample.getBloodPressureSystolic() !=null)
+	      bloodPressureSystolic = collectedSample.getBloodPressureSystolic()+"";
+	  else
+		  bloodPressureDiastolic="";
+  }
+  
 }

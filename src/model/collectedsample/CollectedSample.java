@@ -260,6 +260,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.notes = collectedSample.notes;
     this.haemoglobinCount=collectedSample.haemoglobinCount;
     this.donorPulse = collectedSample.donorPulse;
+    this.donorWeight=collectedSample.donorWeight;
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
   }
