@@ -29,6 +29,7 @@ import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
@@ -82,7 +83,22 @@ public class DonorRepositoryTest {
 			if (connection == null)
 				getConnection();
 			// Insert Data into database using DonorDataset.xml
-			DatabaseOperation.CLEAN_INSERT.execute(connection, getDataSet());
+			IDataSet dataSet = getDataSet();
+			Date today = new Date();
+			Map<String, Object> replacements = new HashMap<String, Object>();
+			replacements.put("DateDonorNotDue", DateUtils.addDays(today,
+					-(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS - 1)));
+			replacements.put("DateDonorDue", DateUtils.addDays(today,
+					-(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS + 1)));
+
+			ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
+			for (String key : replacements.keySet()) {
+				rDataSet.addReplacementObject("${" + key + "}",
+						replacements.get(key));
+			}
+
+			// DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+			DatabaseOperation.INSERT.execute(connection, rDataSet);
 			validator = new DonorBackingFormValidator();
 			donorBackingFormValidator = new DonorBackingFormValidator(
 					validator, utilController);
@@ -96,6 +112,7 @@ public class DonorRepositoryTest {
 	@After
 	public void after() throws Exception {
 		// Remove data from database
+
 		DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
 	}
 
@@ -292,29 +309,26 @@ public class DonorRepositoryTest {
 		String donorFirstName = "";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-		setBackingFormValue(donorBackingForm);
-		Donor  donorNotDue = donorBackingForm.getDonor();
-		donorNotDue.setDonorNumber("000016");
-		Date date_donorNotDue =  DateUtils.addDays(new Date(), - (CollectionConstants.BLOCK_BETWEEN_COLLECTIONS-1));
-		donorNotDue.setDateOfLastDonation(date_donorNotDue);
-		donorRepository.saveDonor(donorNotDue);
-		donorBackingForm=new DonorBackingForm();
-		setBackingFormValue(donorBackingForm);
-		Donor  donorDue = donorBackingForm.getDonor();
-		donorDue.setDonorNumber("000017");
-		Date date_donorDue =  DateUtils.addDays(new Date(), - (CollectionConstants.BLOCK_BETWEEN_COLLECTIONS+1));
-		donorDue.setDateOfLastDonation(date_donorDue);
-		donorRepository.saveDonor(donorDue);
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.", 0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, true).get(0))).size());
+		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams, true).get(0));
+		assertNotSame("List size should not zero.", 0, listDonor.size());
+		boolean isInsert = false;
+		for (Donor donor : listDonor) {
+			if ((donor.getDonorNumber().equals("000004") || donor
+					.getDonorNumber().equals("000017"))) {
+				isInsert = true;
+			} else {
+				isInsert = false;
+				break;
+			}
+		}
+		assertTrue("Donor's Donor Number  should be 000004 and 000017.",
+				isInsert);
 	}
-
-	
 
 	@Test
 	/**
