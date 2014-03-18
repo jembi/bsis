@@ -160,6 +160,8 @@ public class DonorRepositoryTest {
 		Donor deletedDonor = donorRepository.deleteDonor(3l);
 		assertTrue("Delete operation should complete successfully.",
 				deletedDonor.getIsDeleted());
+		assertTrue("Deleted Donor's id value should be 3.",
+				deletedDonor.getId() == 3 ? true : false);
 	}
 
 	@Test
@@ -167,8 +169,10 @@ public class DonorRepositoryTest {
 	 * value=should return donor with given id method=findDonorById(Long)
 	 */
 	public void findDonorById_shouldReturnDonor() {
-		assertNotNull("Donor Object should not null.",
-				donorRepository.findDonorById(1l));
+		Donor findDonor = donorRepository.findDonorById(1l);
+		assertNotNull("Donor Object should not null.", findDonor);
+		assertTrue("Find Donor's id value should be 1",
+				findDonor.getId() == 1 ? true : false);
 	}
 
 	@Test
@@ -226,10 +230,21 @@ public class DonorRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.", 0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, false).get(0))).size());
+		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams, false).get(0)));
+		assertNotSame("List size should not zero.", 0, listDonors.size());
+		boolean isValid = false;
+		for (Donor donor : listDonors) {
+			if (donor.getFirstName().startsWith("fir")) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Donor's First Name should be start with 'fir'.", isValid);
+
 	}
 
 	@Test
@@ -246,10 +261,19 @@ public class DonorRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.", 0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, false).get(0))).size());
+		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams, false).get(0)));
+		assertNotSame("List size should not zero.", 0, listDonors.size());
+		boolean isValid = false;
+		for (Donor donor : listDonors) {
+			if (donor.getLastName().startsWith("las")) {
+				isValid = true;
+			} else {
+				isValid = false;
+			}
+		}
+		assertTrue("Donor's Last Name should be start with 'las'.", isValid);
 	}
 
 	@Test
@@ -268,10 +292,21 @@ public class DonorRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		bloodGroups.add(new BloodGroup("A+"));
 		setPaginationParam(pagingParams);
-		assertNotSame("List size should not zero.", 0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, false).get(0))).size());
+		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams, false).get(0)));
+		assertNotSame("List size should not zero.", 0, listDonors.size());
+		boolean isValid = false;
+		for (Donor donor : listDonors) {
+			if ((donor.getBloodAbo() + donor.getBloodRh()).equals("A+")
+					|| (donor.getBloodAbo() + donor.getBloodRh()).equals("A-")) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Donor's blood group should be 'A+ and A-.'.", isValid);
 	}
 
 	@Test
@@ -293,10 +328,17 @@ public class DonorRepositoryTest {
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams, false).get(0));
-		assertNotSame("List size should not zero.", 0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, false).get(0))).size());
+		assertNotSame("List size should not zero.", 0, listDonor.size());
+		boolean isValid = false;
+		for (Donor donor : listDonor) {
+			if (donor.getId() == 2) {
+				isValid = false;
+				break;
+			} else {
+				isValid = true;
+			}
+		}
+		assertTrue("Deleted Donor should not part of list.", isValid);
 	}
 
 	@Test
@@ -326,7 +368,7 @@ public class DonorRepositoryTest {
 				break;
 			}
 		}
-		assertTrue("Donor's Donor Number  should be 000004 and 000017.",
+		assertTrue("Donor's Donor Number should be 000004 and 000017.",
 				isInsert);
 	}
 
@@ -348,7 +390,8 @@ public class DonorRepositoryTest {
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams, false).get(0));
 		for (Donor donor : listDonor) {
-			assertFalse("Deleted Donor should not included in the list.",
+			assertFalse(
+					"Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
 					donor.getId() == 2 ? true : false);
 		}
 	}
@@ -361,7 +404,8 @@ public class DonorRepositoryTest {
 	public void getAllDonors_shouldReturnNoneDeleteDonor() {
 		List<Donor> listDonor = donorRepository.getAllDonors();
 		for (Donor donor : listDonor) {
-			assertFalse(donor.getIsDeleted());
+			assertFalse("Deleted Donor should not part of donor list.",
+					donor.getIsDeleted());
 		}
 	}
 
@@ -373,8 +417,9 @@ public class DonorRepositoryTest {
 	public void getAllDonors_shouldNotReturnDeletedDonor() {
 		List<Donor> listDonor = donorRepository.getAllDonors();
 		for (Donor donor : listDonor) {
-			// In Dataset DonorId=2 is deleted donor
-			assertNotSame(2, donor.getId());
+			assertNotSame(
+					"Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
+					2, donor.getId());
 		}
 	}
 
@@ -580,6 +625,7 @@ public class DonorRepositoryTest {
 		setBackingUpdateFormValue(donorBackingForm);
 		assertNotNull("Donor Object should update.",
 				donorRepository.updateDonor(donorBackingForm.getDonor()));
+
 	}
 
 	@Test
@@ -615,9 +661,21 @@ public class DonorRepositoryTest {
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_stringLengthGreaterthan2() {
+		List<Donor> searchResultList = donorRepository
+				.findAnyDonorStartsWith("fi");
 		assertNotSame(
 				"Search String length is Greater than 2,List size should not zero.",
-				donorRepository.findAnyDonorStartsWith("fi").size(), 0);
+				searchResultList.size(), 0);
+		boolean isValid = false;
+		for (Donor donor : searchResultList) {
+			if (donor.getFirstName().startsWith("fi")) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Donor's First Name should be start with 'fi'.", isValid);
 	}
 
 	@Test
@@ -639,9 +697,21 @@ public class DonorRepositoryTest {
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorNumber() {
+		List<Donor> searchResultList = donorRepository
+				.findAnyDonorStartsWith("00");
 		assertNotSame(
 				"List size should not zero,because partically matching donor number is found.",
-				donorRepository.findAnyDonorStartsWith("00").size(), 0);
+				searchResultList.size(), 0);
+		boolean isValid = false;
+		for (Donor donor : searchResultList) {
+			if (donor.getDonorNumber().startsWith("00")) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Donor's Donor Number should be start with '00'.", isValid);
 	}
 
 	@Test
@@ -651,9 +721,21 @@ public class DonorRepositoryTest {
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorFirstNameMatch() {
+		List<Donor> searchResultList = donorRepository
+				.findAnyDonorStartsWith("fi");
 		assertNotSame(
 				"List size should not zero,because partically matching firstname is found.",
-				donorRepository.findAnyDonorStartsWith("fi").size(), 0);
+				searchResultList.size(), 0);
+		boolean isValid = false;
+		for (Donor donor : searchResultList) {
+			if (donor.getFirstName().startsWith("fi")) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Donor's First Name should be start with 'fi'.", isValid);
 	}
 
 	@Test
@@ -663,9 +745,21 @@ public class DonorRepositoryTest {
 	 * method = "findAnyDonorStartsWith(String)"
 	 */
 	public void testFindAnyDonorStartWith_searchWithDonorLastNameMatch() {
+		List<Donor> searchResultList = donorRepository
+				.findAnyDonorStartsWith("la");
 		assertNotSame(
 				"List size should not zero,because partically matching lastname is found.",
-				donorRepository.findAnyDonorStartsWith("la").size(), 0);
+				searchResultList.size(), 0);
+		boolean isValid = false;
+		for (Donor donor : searchResultList) {
+			if (donor.getLastName().startsWith("la")) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Donor's Last Name should be start with 'la'.", isValid);
 	}
 
 	@Test
@@ -674,7 +768,8 @@ public class DonorRepositoryTest {
 	 * "findAnyDonorStartsWith(String)"
 	 */
 	public void findAnyDonorStartsWith_softDeleteRecordNotInclude() {
-		List<Donor> listDonor = donorRepository.findAnyDonorStartsWith("Fi");
+		List<Donor> listDonor = donorRepository
+				.findAnyDonorStartsWith("000002");
 		for (Donor donor : listDonor) {
 			assertNotSame("Donor is deleted from database.", 2, donor.getId());
 		}
@@ -741,8 +836,11 @@ public class DonorRepositoryTest {
 	 * method="findDonorByDonorNumber(String,boolean)"
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNotNullDonorDeleteFalse() {
-		assertNotNull("Donor object should not null.",
-				donorRepository.findDonorByDonorNumber("000001", false));
+		Donor findDonor = donorRepository.findDonorByDonorNumber("000001",
+				false);
+		assertNotNull("Donor object should not null.", findDonor);
+		assertTrue("Donor's Donor Number should be '000001'.",
+				(findDonor.getDonorNumber().equals("000001")));
 	}
 
 	@Test
@@ -771,8 +869,11 @@ public class DonorRepositoryTest {
 	 * method="findDonorByDonorNumber(String,boolean)"
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNotNullDonorDeleteTrue() {
-		assertNotNull("Donor object should null.",
-				donorRepository.findDonorByDonorNumber("000002", true));
+		Donor deletedDonor = donorRepository.findDonorByDonorNumber("000002",
+				true);
+		assertNotNull("Donor object should null.", deletedDonor);
+		assertTrue("Donor's donor number should be '000002'.", deletedDonor
+				.getDonorNumber().equals("000002"));
 	}
 
 	@Test

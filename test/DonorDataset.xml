@@ -65,7 +65,7 @@
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="3" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
+		bloodAbo="A" bloodRh="-" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
 		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
 		dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -75,7 +75,7 @@
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
+		bloodAbo="AB" bloodRh="+" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
 		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
