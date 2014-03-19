@@ -76,7 +76,7 @@ $(document).ready(function() {
   
 });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONOR)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -113,3 +113,4 @@ $(document).ready(function() {
   </div>
 
 </div>
+</sec:authorize>

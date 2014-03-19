@@ -85,7 +85,7 @@ public class PermissionConstants {
 	public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
 
 	//page control permissions
-	public static final String VIEW_DONOR_INFORMATION = "View Donors Information";
+	public static final String VIEW_DONOR_INFORMATION = "View Donor Information";
 	public static final String VIEW_DONATION_INFORMATION = "View Donation Information";
 	public static final String VIEW_MOBILE_CLINIC_INFORMATION = "View Mobile Clinic Information";
 	public static final String VIEW_COMPONENT_INFORMATION = "View Component Information";
