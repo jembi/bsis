@@ -12,45 +12,46 @@ import org.apache.commons.lang3.StringUtils;
 
 import viewmodel.DonorViewModel;
 
-public class DonorCommunicationBackingForm  extends DonorBackingForm{
+public class DonorCommunicationsBackingForm {
 
 	private Donor donor;
-	
+
 	private List<BloodGroup> bloodGroups;
-	
+
 	private List<Location> donorPanels;
-	
+
 	private String clinicDate;
-	
+
 	private String lastDonationFromDate;
-	
+
 	private String lastDonationToDate;
-	
+
 	private String anyBloodGroup;
-	
+
 	private boolean createDonorSummaryView;
-	
+
 	private String anyDonorPanel;
 
 	private String donorPanelErrorMessage;
-	
+
 	private String donorBloodGrpErrorMessage;
-	
-	public DonorCommunicationBackingForm() {
+
+	public DonorCommunicationsBackingForm() {
 		donor = new Donor();
 	}
 
-	public DonorCommunicationBackingForm(Donor donor) {
+	public DonorCommunicationsBackingForm(Donor donor) {
 		this.donor = donor;
 	}
-	
+
 	public DonorViewModel getDonorViewModel() {
 		return new DonorViewModel(donor);
 	}
+
 	public String toString() {
 		return donor.toString();
 	}
-	
+
 	public String getDonorPanel() {
 		Location donorPanel = donor.getDonorPanel();
 		if (donorPanel == null || donorPanel.getId() == null)
@@ -67,8 +68,7 @@ public class DonorCommunicationBackingForm  extends DonorBackingForm{
 			try {
 				List<Location> panels = new ArrayList<Location>();
 				String[] donorPanelStr = COMMA_SPLIT_PATTERN.split(donorPanel);
-				for(String donorPanelId : donorPanelStr)
-				{
+				for (String donorPanelId : donorPanelStr) {
 					Location l = new Location();
 					l.setId(Long.parseLong(donorPanelId));
 					panels.add(l);
@@ -81,7 +81,6 @@ public class DonorCommunicationBackingForm  extends DonorBackingForm{
 			}
 		}
 	}
-
 
 	public String getClinicDate() {
 		return clinicDate;
@@ -128,11 +127,11 @@ public class DonorCommunicationBackingForm  extends DonorBackingForm{
 	}
 
 	public void setBloodGroups(List<String> bloodGroups) {
-	    this.bloodGroups = new ArrayList<BloodGroup>();
-	    for (String bg : bloodGroups) {
-	      this.bloodGroups.add(new BloodGroup(bg));
-	    }
-	  }
+		this.bloodGroups = new ArrayList<BloodGroup>();
+		for (String bg : bloodGroups) {
+			this.bloodGroups.add(new BloodGroup(bg));
+		}
+	}
 
 	public boolean getCreateDonorSummaryView() {
 		return createDonorSummaryView;

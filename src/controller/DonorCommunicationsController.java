@@ -36,16 +36,16 @@ import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import viewmodel.DonorViewModel;
-import backingform.DonorCommunicationBackingForm;
+import backingform.DonorCommunicationsBackingForm;
 import backingform.validator.DonorCommunicationsBackingFormValidator;
 
 @Controller
-public class DonorCommunicationController {
+public class DonorCommunicationsController {
 
 	/**
 	 * The Constant LOGGER.
 	 */	
-  private static final Logger LOGGER = Logger.getLogger(DonorCommunicationController.class);
+  private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsController.class);
   @Autowired
   private DonorRepository donorRepository;
 
@@ -58,7 +58,7 @@ public class DonorCommunicationController {
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
   
-  public DonorCommunicationController() {
+  public DonorCommunicationsController() {
   }
 
   @InitBinder
@@ -130,7 +130,7 @@ public class DonorCommunicationController {
   @RequestMapping(value = "/donorCommunicFormGenerator", method = RequestMethod.GET)
   public ModelAndView donorCommunicationFormGenerator(HttpServletRequest request, Model model) {
   
-	DonorCommunicationBackingForm dbform = new DonorCommunicationBackingForm();
+	DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
 
     ModelAndView mv = new ModelAndView("donors/donorCommunicationsForm");
     Map<String, Object> m = model.asMap();
@@ -143,13 +143,13 @@ public class DonorCommunicationController {
     m.put("bloodGroups", BloodGroup.getBloodgroups());
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
-    mv.addObject("donorCommunicationForm", dbform);
+    mv.addObject("donorCommunicationsForm", dbform);
     return mv;
   }
   
   @RequestMapping(value = "/findDonorCommunicationForm", method = RequestMethod.GET)
   public ModelAndView findDonorFromDonorCommunication(HttpServletRequest request,
-      @ModelAttribute("donorCommunicationForm")  @Valid DonorCommunicationBackingForm form,
+      @ModelAttribute("donorCommunicationsForm")  @Valid DonorCommunicationsBackingForm form,
       BindingResult result, Model model) {
     ModelAndView modelAndView = new ModelAndView("donors/donorsCommunicationTable");
     Map<String, Object> m                       = model.asMap();
@@ -190,7 +190,7 @@ public class DonorCommunicationController {
   
   @RequestMapping("/findDonorCommunicationPagination")
   public @ResponseBody Map<String, Object> findDonorCommunicationPagination(HttpServletRequest request,
-      @ModelAttribute("donorCommunicationForm") DonorCommunicationBackingForm form,
+      @ModelAttribute("donorCommunicationsForm") DonorCommunicationsBackingForm form,
       BindingResult result, Model model) {
 	
 	LOGGER.debug("Start DonorCommunicationController:findDonorCommunicationPagination");

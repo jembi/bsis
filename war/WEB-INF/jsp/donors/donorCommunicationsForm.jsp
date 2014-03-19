@@ -232,7 +232,7 @@ $(document).ready(function() {
           <jsp:param name="errorMessage" value="${errorMessage}" />
         </jsp:include>
     </c:if>
-    <form:form method="GET" commandName="donorCommunicationForm" id="${donorCommunicationFormId}"
+    <form:form method="GET" commandName="donorCommunicationsForm" id="${donorCommunicationFormId}"
       class="formFormatClass">
       <div>      
 	      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;width:115px;">

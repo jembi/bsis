@@ -10,7 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import backingform.DonorCommunicationBackingForm;
+import backingform.DonorCommunicationsBackingForm;
 import controller.UtilController;
 
 public class DonorCommunicationsBackingFormValidator implements Validator {
@@ -26,7 +26,7 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Arrays.asList(DonorCommunicationBackingForm.class).contains(
+		return Arrays.asList(DonorCommunicationsBackingForm.class).contains(
 				clazz);
 	}
 
@@ -36,7 +36,7 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 			return;
 		ValidationUtils.invokeValidator(validator, obj, errors);
 
-		DonorCommunicationBackingForm form = (DonorCommunicationBackingForm) obj;
+		DonorCommunicationsBackingForm form = (DonorCommunicationsBackingForm) obj;
 
 		List<Location> donorPanel = form.getDonorPanels();
 		List<BloodGroup> bloodGroups = form.getBloodGroups();
