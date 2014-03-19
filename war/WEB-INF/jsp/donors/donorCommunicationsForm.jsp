@@ -237,16 +237,15 @@ $(document).ready(function() {
       <div>      
 	      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;width:115px;">
 	         <form:label cssStyle="width:175px !important;" path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
-	      </div>
-	      
+	      </div>	      
 	      <div>
 	         <form:select path="donorPanel" id="${donorCommunicationFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
 	          <c:forEach var="donorPanel" items="${donorPanels}">
 	            <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
 	          </c:forEach>
 	        </form:select>
+	         <form:errors class="formError" path="donorPanelErrorMessage" delimiter=", "></form:errors>
 	      </div>
-      
       </div>
      
       <div>
@@ -266,22 +265,21 @@ $(document).ready(function() {
 	      			<form:checkbox  path="bloodGroups" id="case" value="${bloodGroupsVar.value}"  cssClass="case"  />${bloodGroupsVar.value}<br>
 	      		</div>
 	      		</c:forEach>
+	      		
 	       	</div>
-	       	
+	       	<div style="float: left;padding-left:5px;">
+	       	<form:errors class="formError" path="donorBloodGrpErrorMessage" delimiter=", "></form:errors></div>
        	</div>
 	       <div style="clear:both;"></div>
-       	
-       	
        <div>
-      <form:label path="clinicDate" cssStyle="width:175px !important;">Clinic Date</form:label>
-      <form:input path="clinicDate" class="clinicDate"/>
+	      <form:label path="clinicDate" cssStyle="width:175px !important;">Clinic Date</form:label>
+	      <form:input path="clinicDate" class="clinicDate"/>
       </div>
       <div>
-      <form:label path="lastDonationFromDate" cssStyle="width:175px !important;">Last Donation between</form:label>
-      <form:input path="lastDonationFromDate" class="lastDonationFromDate"/>
-      <form:label path="lastDonationToDate" cssStyle="margin-left : 18px;">and</form:label>
-      <form:input path="lastDonationToDate" cssStyle="margin-left :-115px;" class="lastDonationToDate" />
-      
+	      <form:label path="lastDonationFromDate" cssStyle="width:175px !important;">Last Donation between</form:label>
+	      <form:input path="lastDonationFromDate" class="lastDonationFromDate"/>
+	      <form:label path="lastDonationToDate" cssStyle="margin-left : 18px;">and</form:label>
+	      <form:input path="lastDonationToDate" cssStyle="margin-left :-115px;" class="lastDonationToDate" />
       </div>
     </form:form>
     <div class="formFormatClass">
