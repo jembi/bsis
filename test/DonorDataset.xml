@@ -233,6 +233,9 @@
 	<donordeferral id="4" deferralReasonText="" deferredOn="2014-01-11"
 		deferredUntil="2014-02-22" deferralReason_id="2" deferredBy_id="1"
 		deferredDonor_id="4" isVoided="false" />
+		<donordeferral id="5" deferralReasonText="" deferredOn="2014-01-11"
+		deferredUntil="2014-02-27" deferralReason_id="2" deferredBy_id="1"
+		deferredDonor_id="4" isVoided="false" />
 
 
 </dataset>
