@@ -133,7 +133,6 @@ public class DonorRepositoryTest {
 	}
 
 	private IDataSet getDataSet() throws Exception {
-		// insert data
 		File file = new File("test/DonorDataset.xml");
 		return new FlatXmlDataSet(file);
 	}
@@ -146,11 +145,11 @@ public class DonorRepositoryTest {
 	public void saveDonor_shouldPersist() {
 		donorBackingForm = new DonorBackingForm();
 		setBackingFormValue(donorBackingForm);
-		// New DonorNumber which is assigned to Donor Persist Object
+		// New DonorNumber(000005) which is assigned to Donor Persist Object
 		donorBackingForm.setDonorNumber("000005");
 		donorRepository.saveDonor(donorBackingForm.getDonor());
 		assertTrue(
-				"Donor's Id should not zero. Once Donor object should persist,new Id is generated and assigned to persist object.",
+				"Donor's Id should not zero. Once Donor object should persist,new Id is generated and assigned to Donor.",
 				donorBackingForm.getDonor().getId() == 0 ? false : true);
 	}
 
@@ -163,7 +162,7 @@ public class DonorRepositoryTest {
 		Donor deletedDonor = donorRepository.deleteDonor(3l);
 		assertTrue("Delete operation should complete successfully.",
 				deletedDonor.getIsDeleted());
-		assertTrue("Deleted Donor object's id value should be 3.",
+		assertTrue("Deleted Donor's id value should be 3.",
 				deletedDonor.getId() == 3 ? true : false);
 	}
 
@@ -177,7 +176,7 @@ public class DonorRepositoryTest {
 		assertNotNull(
 				"Donor Object should not null.Donor Id is exist into Donor's table.",
 				findDonor);
-		assertTrue("Find Donor's id value should be 1.",
+		assertTrue("Donor's id value should be 1.",
 				findDonor.getId() == 1 ? true : false);
 	}
 
@@ -199,7 +198,7 @@ public class DonorRepositoryTest {
 	 * method=findDonorById(Long)
 	 */
 	public void findDonorById_shouldReturnNullDonorIsDeleted() {
-		// 2 is Deleted Donor's Id.
+		// 2 is Deleted Donor's ID.
 		assertNull(
 				"Donor object should null. Donor's Id is exist into Donor table but it is deleted.",
 				donorRepository.findDonorById(2l));
@@ -221,8 +220,7 @@ public class DonorRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
-		assertEquals(
-				"List size should be zero.Matching records is not found.",
+		assertEquals("List size should be zero.Matching records is not found.",
 				0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
@@ -342,13 +340,14 @@ public class DonorRepositoryTest {
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		// B+ bloodgroup is not exist into Donor's table.
 		bloodGroups.add(new BloodGroup("B+"));
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams, false).get(0));
 		assertNotSame(
-				"Any blood group condition is true. So donor list size should not zero.",
+				"Any blood group condition is true. So Donor's blood group search criteria is not consider. And List size should not zero.",
 				0, listDonor.size());
 	}
 
@@ -402,7 +401,7 @@ public class DonorRepositoryTest {
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
 				anyBloodGroup, pagingParams, false).get(0));
 		for (Donor donor : listDonor) {
-			//2 is deleted donor id
+			// 2 is deleted donor id
 			assertFalse(
 					"Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
 					donor.getId() == 2 ? true : false);
@@ -430,7 +429,7 @@ public class DonorRepositoryTest {
 	public void getAllDonors_shouldNotReturnDeletedDonor() {
 		List<Donor> listDonor = donorRepository.getAllDonors();
 		for (Donor donor : listDonor) {
-			//2 is deleted donor id.
+			// 2 is deleted donor id.
 			assertNotSame(
 					"Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
 					2, donor.getId());
@@ -446,10 +445,12 @@ public class DonorRepositoryTest {
 		// 1 is Donor's Id.
 		Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1l);
 		Donor newDonor = this.copyDonor(createNewDonorFromExistDonor);
-		// New DonorNumber which is assigned to Donor Persist Object.
+		// New DonorNumber(000006) which is assigned to Donor Persist Object.
 		newDonor.setDonorNumber("000006");
 		donorRepository.addDonor(newDonor);
-		assertTrue("Donor Object should persist.",
+
+		assertTrue(
+				"Donor's Id should not zero. Once Donor should persist,new Id is generated and assigned to Donor.",
 				newDonor.getId() == 0 ? false : true);
 	}
 
@@ -503,7 +504,7 @@ public class DonorRepositoryTest {
 	 */
 	public void addDonor_shouldNotPersistDuplicateDonorNumber() {
 		setBackingFormValue(donorBackingForm);
-		// Here we can pass duplicate donor number(000001) and check method
+		// Here we can pass duplicate DonorNumber(000001)
 		donorBackingForm.setDonorNumber("000001");
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
@@ -525,7 +526,7 @@ public class DonorRepositoryTest {
 	 */
 	public void addDonor_shouldNotPersistBlankDonorBlank() {
 		setBackingFormValue(donorBackingForm);
-		// Donor Number value is blank.
+		// DonorNumber value is blank.
 		donorBackingForm.setDonorNumber("");
 		errors = new BindException(donorBackingForm, "donor");
 		donorBackingFormValidator.validate(donorBackingForm, errors);
@@ -695,7 +696,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonorStartsWith_NoMatchingRecordFound() {
 		assertEquals(
-				"List size should be zero,because matching record is not found.",
+				"List size should be zero,because there is no matching record into donor's table which is match with 'xx' value.",
 				donorRepository.findAnyDonorStartsWith("xx").size(), 0);
 	}
 
@@ -777,6 +778,7 @@ public class DonorRepositoryTest {
 	public void findAnyDonorStartsWith_softDeleteRecordNotInclude() {
 		List<Donor> listDonor = donorRepository.findAnyDonorStartsWith("00");
 		for (Donor donor : listDonor) {
+			//2 is Deleted Donor's ID
 			assertNotSame(
 					"Donor Id 2 is deleted from donor table so, that record should not part of list.",
 					2, donor.getId());
@@ -844,13 +846,14 @@ public class DonorRepositoryTest {
 	 * method="findDonorByDonorNumber(String,boolean)"
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNotNullDonorDeleteFalse() {
+		// 000001 DonorNumber
 		Donor findDonor = donorRepository.findDonorByDonorNumber("000001",
 				false);
 		assertNotNull(
 				"Donor object should not null.Because DonorNumber 000001 is exist into donor table",
 				findDonor);
 		assertTrue("Donor's Donor Number should be '000001'.",
-				(findDonor.getDonorNumber().equals("000001")));
+				findDonor.getDonorNumber().equals("000001"));
 	}
 
 	@Test
@@ -918,8 +921,7 @@ public class DonorRepositoryTest {
 		List<DeferralReason> list = donorRepository.getDeferralReasons();
 		if (list != null && list.size() > 0) {
 			for (DeferralReason deferralReason : list) {
-				// Here Id 7 is set as deleted = true in deferralreason in
-				// DonorDataset.xml file
+				// 7 ID is deleted from DeferralReason.
 				assertNotSame(
 						"Soft Deleted DeferralReason object should not include in list.",
 						7, deferralReason.getId());
@@ -961,7 +963,7 @@ public class DonorRepositoryTest {
 	 * method="findDeferralReasonById(String)"
 	 */
 	public void findDeferralReasonById_shouldReturnNullDeferralReason() {
-		// 7 DeferralReason ID is not found.
+		// 7 ID is deleted from DeferralReason.
 		assertNull("Deferral Reason object should null.",
 				donorRepository.findDeferralReasonUsingId("7"));
 	}
@@ -972,7 +974,7 @@ public class DonorRepositoryTest {
 	 * method="getDonorDeferrals(Long)"
 	 */
 	public void getDonorDeferrals_listSizeShouldZero() {
-		// 2 is Donor Id
+		// 2 is Donor ID
 		assertEquals(
 				"Deferral Donor is not found base on donor id so,List size should be zero.",
 				0, donorRepository.getDonorDeferrals(2l).size());
@@ -985,7 +987,7 @@ public class DonorRepositoryTest {
 	 * method="getDonorDeferrals(Long)"
 	 */
 	public void getDonorDeferrals_listSizeShouldNotZero() {
-		// 1 is Donor Id
+		// 1 is Donor ID
 		List<DonorDeferral> listDonorDeferral = donorRepository
 				.getDonorDeferrals(1l);
 		assertNotSame(
@@ -1004,7 +1006,7 @@ public class DonorRepositoryTest {
 	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
 	 */
 	public void isCurrentlyDeferred_list_methodShouldReturnTrue() {
-		// 1 is Donor Id
+		// 1 is Donor ID
 		List<DonorDeferral> listDonorDeferral = donorRepository
 				.getDonorDeferrals(1l);
 		assertTrue("should return true for donor that currently deferred.",
@@ -1018,10 +1020,10 @@ public class DonorRepositoryTest {
 	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
 	 */
 	public void isCurrentlyDeferred_List_ShouldReturnFalse() {
-		// 4 is Donor Id
+		// 4 is Donor ID
 		List<DonorDeferral> listDonorDeferral = donorRepository
 				.getDonorDeferrals(4l);
-		assertFalse("should return false for donor not currently deferred.",
+		assertFalse("should return false for donor that not currently deferred.",
 				donorRepository.isCurrentlyDeferred(listDonorDeferral));
 
 	}
@@ -1029,15 +1031,16 @@ public class DonorRepositoryTest {
 	@Test
 	/**
 	 * value=
-	 * "Method should return false.Donor Id is not exist into donor table."
+	 * "Method should return false.There is no record exist into donordeferral which is match with Donor ID."
 	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
 	 */
-	public void getDonorDeferrals_Donor_ShouldReturnFalseDonorIdNotExistIntoDB() {
-		// 15 Donor Id is not found.
+	public void isCurrentlyDeferred_List_ShouldReturnFalseMatchingRecordNotFound() {
+		// 6 is Donor ID .
+		List<DonorDeferral> listDonorDeferral = donorRepository
+				.getDonorDeferrals(6l);
 		assertFalse(
-				"Defer donor should not found. Because donor id is not exist into donor table.",
-				donorRepository.isCurrentlyDeferred(donorRepository
-						.getDonorDeferrals(15l)));
+				"Defer donor should not found. Because There is no record into donordeferral table which is match with Donor ID.",
+				donorRepository.isCurrentlyDeferred(listDonorDeferral));
 	}
 
 	@Test
@@ -1045,7 +1048,7 @@ public class DonorRepositoryTest {
 	 * value="Method should return true." method="isCurrentlyDeferred(Donor)"
 	 */
 	public void isCurrentlyDeferred_Donor__methodShouldReturnTrue() {
-		// 1 is Donor Id
+		// 1 is Donor ID
 		Donor donor = donorRepository.findDonorById(1l);
 		assertTrue("should return true for donor that currently deferred.",
 				donorRepository.isCurrentlyDeferred(donor));
@@ -1055,11 +1058,11 @@ public class DonorRepositoryTest {
 	/**
 	 * value="Method should return false." method="isCurrentlyDeferred(Donor)
 	 */
-	public void donorRepositoryDonor_methodShouldReturnFalse() {
-		// 4 is Donor Id
+	public void isCurrentlyDeferred_Donor_methodShouldReturnFalse() {
+		// 4 is Donor ID
+		Donor donor = donorRepository.findDonorById(4l);
 		assertFalse("should return false for donor not currently deferred.",
-				donorRepository.isCurrentlyDeferred(donorRepository
-						.findDonorById(4l)));
+				donorRepository.isCurrentlyDeferred(donor));
 	}
 
 	@Test
@@ -1069,12 +1072,12 @@ public class DonorRepositoryTest {
 	 * 
 	 */
 	public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
-		// 4 is Donor Id
+		// 4 is Donor ID
 		Date date = donorRepository.getLastDonorDeferralDate(4l);
 		assertNotNull("should return last donor derferral date", date);
 		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
 		String str = dateFormat.format(date);
-		assertTrue("It should be latest deferralUntil date.",
+		assertTrue("Latest deferal date should be '2014-02-27'.",
 				str.equals("2014-02-27"));
 	}
 
