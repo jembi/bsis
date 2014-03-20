@@ -1075,7 +1075,7 @@ public class DonorRepositoryTest {
 		// 4 is Donor ID
 		Date date = donorRepository.getLastDonorDeferralDate(4l);
 		assertNotNull("should return last donor derferral date", date);
-		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String str = dateFormat.format(date);
 		assertTrue("Latest deferal date should be '2014-02-27'.",
 				str.equals("2014-02-27"));
