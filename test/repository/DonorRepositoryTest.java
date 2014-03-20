@@ -139,7 +139,7 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = should fail when donor is missing required fields. method =
+	 * Should fail when donor is missing required fields. 
 	 * saveDonor(Donor)
 	 */
 	public void saveDonor_shouldPersist() {
@@ -155,7 +155,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=should delete donor from database. method=deleteDonor(long)
+	 * Should delete donor from database
+	 * deleteDonor(long)
 	 */
 	public void deleteDonor_shouldDeleteDonorFromDatabase() {
 		// 3 is Donor's ID.
@@ -168,7 +169,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=should return donor with given id method=findDonorById(Long)
+	 * Should return donor with given id
+	 * findDonorById(Long)
 	 */
 	public void findDonorById_shouldReturnDonor() {
 		// 1 is Donor's ID.
@@ -182,8 +184,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=should return null when Donor with id does not exist
-	 * method=findDonorById(Long)
+	 * Should return null when Donor with id does not exist
+	 * findDonorById(Long)
 	 */
 	public void findDonorById_shouldReturnNull() {
 		// 18 ID is not exist into Donor table.
@@ -194,8 +196,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=should return null when Donor has been deleted
-	 * method=findDonorById(Long)
+	 * Should return null when Donor has been deleted
+	 * findDonorById(Long)
 	 */
 	public void findDonorById_shouldReturnNullDonorIsDeleted() {
 		// 2 is Deleted Donor's ID.
@@ -206,10 +208,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=
-	 * "should return empty list (instead of a null object) when no match is found."
-	 * method=
-	 * "findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should return empty list (instead of a null object) when no match is found.
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 * 
 	 */
 	public void findAnyDonor_listSizeShouldZero() {
@@ -229,8 +229,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should fetch all donors that partially match first name." method=
-	 * "findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should fetch all donors that partially match first name
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroPartialFirstNameMatch() {
 		String searchDonorNumber = "";
@@ -261,8 +261,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should fetch all donors that partially match last name." method=
-	 * "findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should fetch all donors that partially match last name
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroPartialLastNameMatch() {
 		String searchDonorNumber = "";
@@ -292,10 +292,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=
-	 * "should fetch all donors with blood groups that match the criteria in List<BloodGroup>."
-	 * method=
-	 * "findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should fetch all donors with blood groups that match the criteria in List<BloodGroup>
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroMatchBloodGroup() {
 		String searchDonorNumber = "";
@@ -328,10 +326,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=
-	 * "should fetch donors with no blood groups when anyBloodGroup.equals(true)."
-	 * method=
-	 * "findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should fetch donors with no blood groups when anyBloodGroup.equals(true).
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroAnyBloodGroupMatch() {
 		String searchDonorNumber = "";
@@ -353,8 +349,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should only return donors that are due to donate when dueToDonate is set to true."
-	 * method="findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should only return donors that are due to donate when dueToDonate is set to true.
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroDueToDonateSetTrue() {
 		String searchDonorNumber = "";
@@ -385,8 +381,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should not return donors who have been deleted." method=
-	 * "findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)"
+	 * Should not return donors who have been deleted.
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_deleteObjectShouldNotPartOfList() {
 		String searchDonorNumber = "";
@@ -410,8 +406,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return all non-deleted donors in the database."
-	 * method="getAllDonors()"
+	 * Should return all non-deleted donors in the database.
+	 * getAllDonors()
 	 */
 	public void getAllDonors_shouldReturnNoneDeleteDonor() {
 		List<Donor> listDonor = donorRepository.getAllDonors();
@@ -423,8 +419,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should not return donors who have been deleted."
-	 * method="getAllDonors()"
+	 * Should not return donors who have been deleted.
+	 * getAllDonors()
 	 */
 	public void getAllDonors_shouldNotReturnDeletedDonor() {
 		List<Donor> listDonor = donorRepository.getAllDonors();
@@ -438,8 +434,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should create new Donor from existing Donor object." method =
-	 * "addDonor(Donor)"
+	 * Should create new Donor from existing Donor object
+	 * addDonor(Donor)
 	 */
 	public void addDonor_shouldPersist() {
 		// 1 is Donor's Id.
@@ -456,8 +452,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should fail donor is missing required fields(Blank Fist Name)"
-	 * method = "addDonor(Donor)"
+	 * Should fail when donor is missing required fields - no First Name
+	 * addDonor(Donor)
 	 */
 	public void addDonor_shouldNotPersistFirstNameBlank() {
 		setBackingFormValue(donorBackingForm);
@@ -477,8 +473,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should fail donor is missing required fields(Blank Last Name)"
-	 * method = "addDonor(Donor)"
+	 * Should fail when donor is missing required fields - no Last Name
+	 * addDonor(Donor)
 	 */
 	public void addDonor_shouldNotPersistLastNameBlank() {
 		setBackingFormValue(donorBackingForm);
@@ -498,31 +494,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value =
-	 * "should fail donor is missing required fields(Duplicate Donor Number)"
-	 * method = "addDonor(Donor)"
-	 */
-	public void addDonor_shouldNotPersistDuplicateDonorNumber() {
-		setBackingFormValue(donorBackingForm);
-		// Here we can pass duplicate DonorNumber(000001)
-		donorBackingForm.setDonorNumber("000001");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue(
-				"Duplicate Donor Number exist. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
-
-	@Test
-	/**
-	 * value =
-	 * "should fail donor is missing required fields(Blank Donor Number)" method
-	 * = "addDonor(Donor)"
+	 * Should fail when donor is missing required fields - no Donor Number
+	 * addDonor(Donor)
 	 */
 	public void addDonor_shouldNotPersistBlankDonorBlank() {
 		setBackingFormValue(donorBackingForm);
@@ -541,8 +514,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should fail donor is missing required fields(Gender)" method =
-	 * "addDonor(Donor)"
+	 * Should fail when donor is missing required fields - no Gender
+	 * addDonor(Donor)
 	 */
 	public void addDonor_ShouldNotPersistBlankGender() {
 		Date date = new Date();
@@ -584,9 +557,29 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value =
-	 * "should fail donor is missing required fields(Age is less than 16)"
-	 * method = "addDonor(Donor)"
+	 * Should fail when Donor Number already exists
+	 * addDonor(Donor)
+	 */
+	public void addDonor_shouldNotPersistDuplicateDonorNumber() {
+		setBackingFormValue(donorBackingForm);
+		// Here we can pass duplicate DonorNumber(000001)
+		donorBackingForm.setDonorNumber("000001");
+		errors = new BindException(donorBackingForm, "donor");
+		donorBackingFormValidator.validate(donorBackingForm, errors);
+		assertTrue(
+				"Duplicate Donor Number exist. Donor object should not persist.",
+				errors.hasErrors());
+		if (!errors.hasErrors()) {
+			donorRepository.addDonor(donorBackingForm.getDonor());
+			assertTrue("Donor Object should persist.", donorBackingForm
+					.getDonor().getId() == 0 ? false : true);
+		}
+	}
+	
+	@Test
+	/**
+	 * Should fail when donor Age is less than 16
+	 * addDonor(Donor)
 	 */
 	public void addDonor_shouldNotPersistMinimumAgeIsLessThan16() {
 		donorBackingForm.setBirthDate(donorBirthdate);
@@ -605,9 +598,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value =
-	 * "should fail donor is missing required fields(Age is greater than 65)"
-	 * method = "addDonor(Donor)"
+	 * Should fail when donor Age is greater than 65
+	 * addDonor(Donor)
 	 */
 	public void addDonor_shouldNotPersistMaximumAgeIsGreaterThan65() {
 		setBackingFormValue(donorBackingForm);
@@ -628,8 +620,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should update existing Donor with Donor object"
-	 * method="updateDonor(Donor)"
+	 * Should update existing Donor with Donor object
+	 * updateDonor(Donor)
 	 */
 	public void updateDonor_shouldReturnNotNull() {
 		// 1 is Donor Id.
@@ -643,8 +635,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return null when Donor Number does not match an existing Donor"
-	 * method="updateDonor(Donor)"
+	 * Should return null when Donor Number does not match an existing Donor
+	 * updateDonor(Donor)
 	 */
 	public void updateDonor_shouldReturnNull() {
 		Donor editDonor = new Donor();
@@ -657,8 +649,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return empty List if search string is less than 2 characters"
-	 * method = "findAnyDonorStartsWith(String)"
+	 * Should return empty List if search string is less than 2 characters
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_stringLengthLessthan2() {
 		assertEquals(
@@ -668,8 +660,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should allow search if search string is 2 or more characters."
-	 * method = "findAnyDonorStartsWith(String)"
+	 * Should allow search if search string is 2 or more characters
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_stringLengthGreaterthan2() {
 		List<Donor> searchResultList = donorRepository
@@ -691,8 +683,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should return empty list (instead of a null object) when no match is found."
-	 * method = "findAnyDonorStartsWith(String)"
+	 * Should return empty list (instead of a null object) when no match is found
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_NoMatchingRecordFound() {
 		assertEquals(
@@ -702,8 +694,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should fetch all donors having a donor number that partially matches the search string."
-	 * method = "findAnyDonorStartsWith(String)"
+	 * Should fetch all donors having a donor number that partially matches the search string.
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorNumber() {
 		List<Donor> searchResultList = donorRepository
@@ -725,8 +717,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should fetch all donors having a first name that partially matches the search string."
-	 * method = "findAnyDonorStartsWith(String)"
+	 * Should fetch all donors having a first name that partially matches the search string.
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorFirstNameMatch() {
 		List<Donor> searchResultList = donorRepository
@@ -748,9 +740,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value =
-	 * "should fetch all donors having a last name that partially matches the search string."
-	 * method = "findAnyDonorStartsWith(String)"
+	 * Should fetch all donors having a last name that partially matches the search string
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_searchWithDonorLastNameMatch() {
 		List<Donor> searchResultList = donorRepository
@@ -772,8 +763,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should not return donors who have been deleted." method =
-	 * "findAnyDonorStartsWith(String)"
+	 * Should not return donors who have been deleted
+	 * findAnyDonorStartsWith(String)
 	 */
 	public void findAnyDonorStartsWith_softDeleteRecordNotInclude() {
 		List<Donor> listDonor = donorRepository.findAnyDonorStartsWith("00");
@@ -787,9 +778,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value =
-	 * "Unique number string length should not zero.should generate 12 Digit Unique Number prefix with D-."
-	 * method = "generateUniqueDonorNumber()"
+	 * Should generate unique Donor Number "
+	 * generateUniqueDonorNumber()
 	 */
 	public void generateUniqueDonorNumber_nonEmptyString() {
 		assertFalse(
@@ -799,8 +789,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "Donor UniqueNumber total length should be 14." method =
-	 * "generateUniqueDonorNumber()"
+	 * Donor UniqueNumber total length should be 14
+	 * generateUniqueDonorNumber()
 	 */
 	public void generateUniqueDonorNumber_nonEmptyStringLength14() {
 		assertEquals("Unique Donor Number length should be 14.", 14,
@@ -809,10 +799,10 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="List of donor should be persist."
-	 * method="addAllDonors(List<Donor>)"
+	 * Should create new Donors from existing Donor objects
+	 * addAllDonors(List<Donor>)
 	 */
-	public void addDonor_listDonorShouldPersist() {
+	public void addAllDonors_listDonorsShouldPersist() {
 		Donor donor = new Donor();
 		DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
 		donorBackingForm.setDonorNumber("000007");
@@ -842,8 +832,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return donor with given Donor Number"
-	 * method="findDonorByDonorNumber(String,boolean)"
+	 * Should return donor with given Donor Number
+	 * findDonorByDonorNumber(String,boolean)
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNotNullDonorDeleteFalse() {
 		// 000001 DonorNumber
@@ -858,8 +848,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return donor with given Donor Number"
-	 * method="findDonorByDonorNumber(String,boolean)"
+	 * Should return donor with given Donor Number
+	 * findDonorByDonorNumber(String,boolean)
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteFalse() {
 		// 000009 DonorNumber is not exist.
@@ -870,8 +860,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return donor with given Donor Number"
-	 * method="findDonorByDonorNumber(String,boolean)"
+	 * Should return donor with given Donor Number
+	 * findDonorByDonorNumber(String,boolean)
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteTrue() {
 		// 000001 DonorNumber
@@ -882,8 +872,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value = "should return deleted donor because IsDelete true." method =
-	 * "findDonorByDonorNumber(String,boolean)"
+	 * Should return deleted donor because IsDelete true
+	 * findDonorByDonorNumber(String,boolean)
 	 */
 	public void findDonorByDonorNumber_donorObjectShouldNotNullDonorDeleteTrue() {
 		// 000002 Deleted DonorNumber
@@ -898,8 +888,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return all non-deleted deferral reasons in the database"
-	 * method="getDeferralReasons()"
+	 * Should return all non-deleted deferral reasons in the database
+	 * getDeferralReasons()
 	 */
 	public void getDeferralReasons_shouldReturnNonDeletedRecord() {
 		List<DeferralReason> list = donorRepository.getDeferralReasons();
@@ -914,8 +904,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should not return deferral reasons that have been deleted"
-	 * method="getDeferralReasons()"
+	 * Should not return deferral reasons that have been deleted
+	 * getDeferralReasons()"
 	 */
 	public void getDeferralReasons_shouldNotReturnDeferalReason() {
 		List<DeferralReason> list = donorRepository.getDeferralReasons();
@@ -931,8 +921,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="DeferDonor should persist."
-	 * method="deferDonor(String,String,String,String)"
+	 * Should add Deferral for Donor
+	 * deferDonor(String,String,String,String)
 	 */
 	public void deferDonor_ShouldPersist() throws ParseException {
 		this.userAuthentication();
@@ -942,8 +932,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return non-deleted deferral reasons in the database."
-	 * method="findDeferralReasonById(String)"
+	 * Should return non-deleted deferral reasons in the database
+	 * findDeferralReasonById(String)
 	 */
 	public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason() {
 		// 1 is DeferralReason ID.
@@ -958,9 +948,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=
-	 * "should return null deferral reason where deferral reason is deleted from the database."
-	 * method="findDeferralReasonById(String)"
+	 * Should return null deferral reason where deferral reason is deleted from the database
+	 * findDeferralReasonById(String)
 	 */
 	public void findDeferralReasonById_shouldReturnNullDeferralReason() {
 		// 7 ID is deleted from DeferralReason.
@@ -970,8 +959,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="DonorDeferral list size should be zero."
-	 * method="getDonorDeferrals(Long)"
+	 * DonorDeferral list size should be zero
+	 * getDonorDeferrals(Long)
 	 */
 	public void getDonorDeferrals_listSizeShouldZero() {
 		// 2 is Donor ID
@@ -983,8 +972,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="DonorDeferral list size should not zero."
-	 * method="getDonorDeferrals(Long)"
+	 * DonorDeferral list size should not zero
+	 * getDonorDeferrals(Long)
 	 */
 	public void getDonorDeferrals_listSizeShouldNotZero() {
 		// 1 is Donor ID
@@ -1002,8 +991,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="Method should return true."
-	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
+	 * Method should return true
+	 * isCurrentlyDeferred(List<DonorDeferral>)
 	 */
 	public void isCurrentlyDeferred_list_methodShouldReturnTrue() {
 		// 1 is Donor ID
@@ -1016,8 +1005,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="Method should return false.Donor Id is exist into donor table."
-	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
+	 * Method should return false.Donor Id is exist into donor table
+	 * isCurrentlyDeferred(List<DonorDeferral>)
 	 */
 	public void isCurrentlyDeferred_List_ShouldReturnFalse() {
 		// 4 is Donor ID
@@ -1030,9 +1019,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value=
-	 * "Method should return false.There is no record exist into donordeferral which is match with Donor ID."
-	 * method="isCurrentlyDeferred(List<DonorDeferral>)"
+	 * Method should return false.There is no record exist into donordeferral which is match with Donor ID.
+	 * isCurrentlyDeferred(List<DonorDeferral>)
 	 */
 	public void isCurrentlyDeferred_List_ShouldReturnFalseMatchingRecordNotFound() {
 		// 6 is Donor ID .
@@ -1045,7 +1033,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="Method should return true." method="isCurrentlyDeferred(Donor)"
+	 * Method should return true
+	 * isCurrentlyDeferred(Donor)
 	 */
 	public void isCurrentlyDeferred_Donor__methodShouldReturnTrue() {
 		// 1 is Donor ID
@@ -1056,7 +1045,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="Method should return false." method="isCurrentlyDeferred(Donor)
+	 * Method should return false
+	 * isCurrentlyDeferred(Donor)
 	 */
 	public void isCurrentlyDeferred_Donor_methodShouldReturnFalse() {
 		// 4 is Donor ID
@@ -1067,8 +1057,8 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * value="should return last donor derferral date."
-	 * method="getLastDonorDeferralDate(long)"
+	 * Should return last donor derferral date
+	 * getLastDonorDeferralDate(long)
 	 * 
 	 */
 	public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
