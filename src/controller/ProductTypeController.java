@@ -14,6 +14,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.ProductTypeRepository;
+import utils.PermissionConstants;
 
 @Controller
 public class ProductTypeController {
@@ -41,7 +43,6 @@ public class ProductTypeController {
     return reqUrl;
   }
 
-  @RequestMapping(value="productTypeSummary", method=RequestMethod.GET)
   public ModelAndView getProductTypeSummary(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
@@ -53,6 +54,7 @@ public class ProductTypeController {
   }
 
   @SuppressWarnings("unchecked")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   @RequestMapping(value="saveNewProductType", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveNewProductType(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
@@ -81,6 +83,7 @@ public class ProductTypeController {
   
   @SuppressWarnings("unchecked")
   @RequestMapping(value="updateProductType", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public @ResponseBody Map<String, Object> updateProductType(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
@@ -107,6 +110,7 @@ public class ProductTypeController {
   }
   
   @RequestMapping(value="deactivateProductType", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
   public @ResponseBody Map<String, Object> deactivateProductType(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
@@ -116,6 +120,7 @@ public class ProductTypeController {
   }
 
   @RequestMapping(value="activateProductType", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
   public @ResponseBody Map<String, Object> activateProductType(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
@@ -125,6 +130,7 @@ public class ProductTypeController {
   }
 
   @RequestMapping(value="productTypeCombinationSummary", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public ModelAndView getProductTypeCombinationSummary(HttpServletRequest request,
       @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
 
@@ -137,6 +143,7 @@ public class ProductTypeController {
 
   @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewProductTypeCombination", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
   public @ResponseBody Map<String, Object> saveNewProductTypeCombination(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productTypeCombination") String newProductTypeCombinationAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
@@ -163,6 +170,7 @@ public class ProductTypeController {
   }
   
   @RequestMapping(value="deactivateProductTypeCombination", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
   public @ResponseBody Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
       @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
 
@@ -172,6 +180,7 @@ public class ProductTypeController {
   }
 
   @RequestMapping(value="activateProductTypeCombination", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
   public @ResponseBody Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
       @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
 

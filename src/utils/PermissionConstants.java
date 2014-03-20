@@ -66,8 +66,8 @@ public class PermissionConstants {
 	public static final String ISSUE_Components = "Issue Components";
 	
 	// Discars Permissions
-	public static final String DISCARD_COMPONENTS = "Discard Components";
-	public static final String VIEW_DISCARDED_COMPONENTS = "view discarded Components";
+	public static final String DISCARD_COMPONENT = "Discard Component";
+	public static final String VIEW_DISCARDED_COMPONENT = "view discarded Component";
 	
 	// Reporting Permissions
 	public static final String DONATIONS_REPORTING = "Donations Reporting";
@@ -82,7 +82,7 @@ public class PermissionConstants {
 	public static final String MANAGE_DONATION_SITES = "Manage Donation sites";
 	public static final String MANAGE_DONATION_TYPES = "Manage Donation Types";
 	public static final String MANAGE_DONATION_CATEGORIES = "Manage Donation Categories";
-	public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
+	public static final String MANAGE_COMPONENT_COMBINATION = "Manage Component Combination";
 	public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
 	public static final String MANAGE_BLOOD_TYPING_ROLES = "Manage Blood Typing Rules";
 	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";

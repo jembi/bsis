@@ -710,7 +710,7 @@
 	   </insert> 
 	   <insert tableName="Permission">
 	       <column name="id" value="45"></column>
-	       <column name="name" value="Manage Component Combinations"></column>
+	       <column name="name" value="Manage Component Combination"></column>
 	   </insert> 
 	   <insert tableName="Permission">
 	       <column name="id" value="46"></column>
