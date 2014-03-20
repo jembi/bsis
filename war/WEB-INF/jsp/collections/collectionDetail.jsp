@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
 <div class="formFormatClass printableArea">
   <br />
   <div class="collectionBarcode"></div>
@@ -60,7 +60,7 @@
     </div>
   </c:if>
 
-  <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_TEST_OUTCOME)">
     <div>
       <label>${collectionFields.bloodTypingStatus.displayName}</label>
       <label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
@@ -128,3 +128,4 @@
   </div>
   <hr />
 </div>
+</sec:authorize>

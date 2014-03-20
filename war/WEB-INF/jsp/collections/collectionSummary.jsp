@@ -109,7 +109,7 @@
         }
       });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
 
@@ -120,12 +120,12 @@
       <!-- button type="button" class="testResultsForCollectionButton">
         Test results for collection
       </button-->
-      <sec:authorize access="hasRole('Edit Donation')">
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONATION)">
       <button type="button" class="editButton">
         Edit
       </button>
       </sec:authorize>
-      <sec:authorize access="hasRole('Void Donation')">
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DONATION)">
       <button type="button" class="deleteButton">
         Delete
       </button>
@@ -154,3 +154,4 @@
 <div id="${deleteConfirmDialogId}" style="display: none;">
   Are  you sure you want to delete this Collection?
 </div>
+</sec:authorize>

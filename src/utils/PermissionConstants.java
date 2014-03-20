@@ -25,6 +25,12 @@ public class PermissionConstants {
 	public static final String EDIT_DONATION = "Edit Donation";
 	public static final String VOID_DONATION = "Void Donation";
 	
+	//Donation Batch Permissions
+	public static final String ADD_DONATION_BATCH  = "Add Donation Batch";
+	public static final String VIEW_DONATION_BATCH = "View Donation Batch";
+	public static final String EDIT_DONATION_BATCH = "Edit Donation Batch";
+	public static final String VOID_DONATION_BATCH = "Void Donation Batch";
+	
 	// Mobile Clinic Permissions
 	public static final String IMPORT_CLINIC_DATA = "Import Clinic Data";
 	public static final String EXPORT_CLINIC_DATA = "Export Clinic Data";
@@ -34,6 +40,12 @@ public class PermissionConstants {
 	public static final String VIEW_COMPONENT = "View Component";
 	public static final String EDIT_COMPONENT = "Edit Component";
 	public static final String VOID_COMPONENT = "Void Component";
+	
+	//Test Results Permissions
+	public static final String ADD_TEST_OUTCOME  = "Add Test Outcome";
+	public static final String EDIT_TEST_OUTCOME = "Edit Test Outcome";
+	public static final String VIEW_TEST_OUTCOME = "View Test Outcome";
+	public static final String VOID_TEST_OUTCOME  = "Void Test Outcome";
 	
 	// TTI Testing permissions
 	public static final String ADD_TTL_OUTCOMES  = "Add TTI Outcomes";
