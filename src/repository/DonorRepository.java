@@ -242,12 +242,6 @@ public class DonorRepository {
     }
   }
 
-  public static String generateUniqueDonorNumber() {
-    String uniqueDonorNumber;
-    uniqueDonorNumber = "D-" + RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    return uniqueDonorNumber;
-  }
-
   public void addAllDonors(List<Donor> donors) {
     for (Donor donor : donors) {
       updateDonorAutomaticFields(donor);

@@ -280,10 +280,6 @@ public class DonorBackingForm {
     donor.setZipcode(zipcode);
   }
 
-  public void generateDonorNumber() {
-    donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
-  }
-
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
       DateTime dt1 = new DateTime(donor.getBirthDateInferred());

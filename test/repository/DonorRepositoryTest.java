@@ -778,27 +778,6 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * Should generate unique Donor Number "
-	 * generateUniqueDonorNumber()
-	 */
-	public void generateUniqueDonorNumber_nonEmptyString() {
-		assertFalse(
-				"should generate 12 Digit Unique Number prefix with D-.",
-				StringUtils.isEmpty(DonorRepository.generateUniqueDonorNumber()));
-	}
-
-	@Test
-	/**
-	 * Donor UniqueNumber total length should be 14
-	 * generateUniqueDonorNumber()
-	 */
-	public void generateUniqueDonorNumber_nonEmptyStringLength14() {
-		assertEquals("Unique Donor Number length should be 14.", 14,
-				(DonorRepository.generateUniqueDonorNumber()).length());
-	}
-
-	@Test
-	/**
 	 * Should create new Donors from existing Donor objects
 	 * addAllDonors(List<Donor>)
 	 */
