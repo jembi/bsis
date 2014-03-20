@@ -48,14 +48,14 @@ public class PermissionConstants {
 	public static final String VOID_TEST_OUTCOME  = "Void Test Outcome";
 	
 	// TTI Testing permissions
-	public static final String ADD_TTL_OUTCOMES  = "Add TTI Outcomes";
-	public static final String EDIT_TTI_OUTCOMES = "Edit TTI Outcomes";
-	public static final String VIEW_TTI_RESULTS  = "View TTI Results";
+	public static final String ADD_TTI_OUTCOME  = "Add TTI Outcome";
+	public static final String EDIT_TTI_OUTCOME = "Edit TTI Outcome";
+	public static final String VIEW_TTI_OUTCOME  = "View TTI Outcome";
 	
 	// Blood Typing Permissions
-	public static final String StringEDIT_BLOOD_TYPING_OUTCOMES = "Edit Blood Typing Outcomes";
-	public static final String ADD_BLOOD_TYPING_OUTCOMES = "Add Blood Typing Outcomes";
-	public static final String VIEW_BLOOD_TYPING_DOCUMENT = "View Blood Typing Outcomes";
+	public static final String StringEDIT_BLOOD_TYPING_OUTCOMES\ = "Edit Blood Typing Outcome";
+	public static final String ADD_BLOOD_TYPING_OUTCOME = "Add Blood Typing Outcome";
+	public static final String VIEW_BLOOD_TYPING_OUTCOME = "View Blood Typing Outcome";
 	
 	// Blood Bank Staff Permissions
 	public static final String BLOOD_CROSS_MATCH_CHECK = "Blood Cross Match Check";
