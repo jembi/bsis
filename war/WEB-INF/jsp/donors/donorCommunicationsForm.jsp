@@ -142,7 +142,7 @@ $(document).ready(function() {
 	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorResultsFromDonorComm");
 	    	    $.ajax({
 	    	      type : "GET",
-	    	      url : "findDonorCommunicationForm.html",
+	    	      url : "findDonorCommunicationsForm.html",
 	    	      data : donorCommunicationData,
 	    	      success : function(data) {
 	    	    	  var donorSelect = false;
@@ -197,7 +197,7 @@ $(document).ready(function() {
   	        			$("#${childContentId}").show();
   		    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html("");
   	        			$("#${tabContentId}").find(".findDonorResultsFromDonorComm").hide();
-  	        			$("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
+  	        			$("#${tabContentId}").find(".donorCommunicationsTable").trigger("refreshResults");
 	    	      });
 	      $("#${tabContentId}").bind("donorFindSuccess",
 	    	      function(event, content) {
@@ -206,7 +206,7 @@ $(document).ready(function() {
 	      
       function refetchForm() {
     	    $.ajax({
-    	      url: "donorCommunicFormGenerator.html",
+    	      url: "donorCommunicationsFormGenerator.html",
     	      data: {},
     	      type: "GET",
     	      success: function (response) {
@@ -246,15 +246,12 @@ $(document).ready(function() {
 	        </form:select>
 	         <form:errors class="formError" path="donorPanelErrorMessage" delimiter=", "></form:errors>
 	      </div>
-      </div>
-     
+      </div>     
       <div>
-      
 	      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;height:210px;width:115px;">
 	        <form:label cssStyle="width:175px !important;" path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-	      </div>
-	      
-	        <div style="float: left;border: 2px solid #DADADA;border-radius: 7px;width:225px;">
+	      </div>	      
+	      <div style="float: left;border: 2px solid #DADADA;border-radius: 7px;width:225px;">
                 <div >	        
 		        	<form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
 		      		<input type="checkbox" value="all"  id="selectall">All Groups<br/>
@@ -270,17 +267,17 @@ $(document).ready(function() {
 	       	<div style="float: left;padding-left:5px;">
 	       	<form:errors class="formError" path="donorBloodGrpErrorMessage" delimiter=", "></form:errors></div>
        	</div>
-	       <div style="clear:both;"></div>
-       <div>
+	    <div style="clear:both;"></div>
+        <div>
 	      <form:label path="clinicDate" cssStyle="width:175px !important;">Clinic Date</form:label>
 	      <form:input path="clinicDate" class="clinicDate"/>
-      </div>
-      <div>
+        </div>
+        <div>
 	      <form:label path="lastDonationFromDate" cssStyle="width:175px !important;">Last Donation between</form:label>
 	      <form:input path="lastDonationFromDate" class="lastDonationFromDate"/>
 	      <form:label path="lastDonationToDate" cssStyle="margin-left : 18px;">and</form:label>
 	      <form:input path="lastDonationToDate" cssStyle="margin-left :-115px;" class="lastDonationToDate" />
-      </div>
+       </div>
     </form:form>
     <div class="formFormatClass">
       <div>

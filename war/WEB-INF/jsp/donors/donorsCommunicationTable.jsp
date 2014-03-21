@@ -10,7 +10,7 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tableContent-${unique_page_id}</c:set>
-<c:set var="table_id">donorsTable-${unique_page_id}</c:set>
+<c:set var="table_id">donorCommunicationsTable-${unique_page_id}</c:set>
 <c:set var="childContentId">childContentId-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
 <script>
@@ -35,7 +35,7 @@ $(document).ready(
         $("#${tabContentId}").parent().trigger("donorFindSuccess");
       }
    	  textName = getDynamicCSVFileName();
-      var donorsTable = $("#${table_id}").dataTable({
+      var donorCommunicationsTable = $("#${table_id}").dataTable({
         "bJQueryUI" : true,
         "sDom" : '<"H"lrT>t<"F"ip>',
         "bServerSide" : true,
@@ -108,7 +108,7 @@ $(document).ready(
         });
       }
 
-      $("#${tabContentId}").find(".donorsTable").bind("refreshResults", refreshResults);
+      $("#${tabContentId}").find(".donorCommunicationsTable").bind("refreshResults", refreshResults);
 
       $("#${table_id}_filter").find("label").find("input").keyup(function() {
         var searchBox = $("#${table_id}_filter").find("label").find("input");
@@ -144,7 +144,7 @@ $(document).ready(
     </c:when>
 
     <c:otherwise>
-      <table id="${table_id}" class="dataTable donorsTable">
+      <table id="${table_id}" class="dataTable donorCommunicationsTable">
         <thead>
           <tr>
             <th style="display: none"></th>
