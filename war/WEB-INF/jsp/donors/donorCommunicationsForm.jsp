@@ -19,9 +19,9 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="donorCommunicationsFormId">donorCommunicationForm-${unique_page_id}</c:set>
-<c:set var="donorCommunicationsFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="donorCommunicationsFormDonorPanelsId">donorCommunicationFormDonorPanelSelector</c:set>
+<c:set var="donorCommunicationsFormId">donorCommunicationsForm-${unique_page_id}</c:set>
+<c:set var="donorCommunicationsFormBloodGroupSelectorId">donorCommunicationsFormBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="donorCommunicationsFormDonorPanelsId">donorCommunicationsFormDonorPanelSelector-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
@@ -138,12 +138,12 @@ $(document).ready(function() {
 	    	    {
 	    	    	$("#${donorCommunicationsFormId}").find(".anyBloodGroupInput").val("false");
 	    	    }
-	    	    var donorCommunicationData = $("#${donorCommunicationsFormId}").serialize();
+	    	    var donorCommunicationsData = $("#${donorCommunicationsFormId}").serialize();
 	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorsFromDonorCommunications");
 	    	    $.ajax({
 	    	      type : "GET",
 	    	      url : "findDonorCommunicationsForm.html",
-	    	      data : donorCommunicationData,
+	    	      data : donorCommunicationsData,
 	    	      success : function(data) {
 	    	    	  var donorSelect = false;
 	    	    	  var selectedValues = new Array();
@@ -225,7 +225,7 @@ $(document).ready(function() {
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <div style="margin-top:0px !important;">
-  	<b>&nbsp;&nbsp;Donor Communications</b>
+  	<b>Donor Communications</b>
   	</div>
   	<c:if test="${!empty success && !success}">
         <jsp:include page="../common/errorBox.jsp">
@@ -236,10 +236,10 @@ $(document).ready(function() {
       class="formFormatClass">
       <div>      
 	      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;width:115px;">
-	         <form:label cssStyle="width:175px !important;" path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
+	         <form:label cssStyle="width:175px !important;" path="donorPanels">${donorFields.donorPanel.displayName}</form:label>
 	      </div>	      
 	      <div>
-	         <form:select path="donorPanel" id="${donorCommunicationsFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
+	         <form:select path="donorPanels" id="${donorCommunicationsFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
 	          <c:forEach var="donorPanel" items="${donorPanels}">
 	            <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
 	          </c:forEach>
