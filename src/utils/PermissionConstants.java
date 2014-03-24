@@ -41,6 +41,13 @@ public class PermissionConstants {
 	public static final String EDIT_COMPONENT = "Edit Component";
 	public static final String VOID_COMPONENT = "Void Component";
 	
+	//Request Permissions
+	public static final String ADD_REQUEST  = "Add Request";
+	public static final String EDIT_REQUEST  = "Edit Request";
+	public static final String VIEW_REQUEST  = "View Request";
+	public static final String VOID_REQUEST  = "Void Request";
+	
+	
 	//Test Results Permissions
 	public static final String ADD_TEST_OUTCOME  = "Add Test Outcome";
 	public static final String EDIT_TEST_OUTCOME = "Edit Test Outcome";
@@ -59,22 +66,22 @@ public class PermissionConstants {
 	
 	// Blood Bank Staff Permissions
 	public static final String BLOOD_CROSS_MATCH_CHECK = "Blood Cross Match Check";
-	public static final String ISSUE_BLOOD = "Issue Blood";
+	public static final String ISSUE_COMPONENT= "Issue Component";
 	
 	// Inventory Permissions
 	public static final String COMPONET_LABELLING = "Component Labelling";
-	public static final String ISSUE_COMPONENT= "Issue Component";
+	
 	
 	// Discars Permissions
 	public static final String DISCARD_COMPONENT = "Discard Component";
 	public static final String VIEW_DISCARDED_COMPONENT = "view discarded Component";
 	
 	// Reporting Permissions
-	public static final String DONATIONS_REPORTING = "Donations Reporting";
-	public static final String REQUESTS_REPORTING = "Requests Reporting";
-	public static final String TTI_REPORTING = "TTI Reporting";
-	public static final String COMPONENTS_ISSUED_REPORTING = "Components Issued Reporting";
-	public static final String COMPONENTS_DISCARDED_REPORTING = "Components Discarded Reporting";
+	public static final String DONATIONS_REPORTING = "Reporting - Donations";
+	public static final String REQUESTS_REPORTING = "Reporting - Requests";
+	public static final String TTI_REPORTING = "Reporting - TTI Testing";
+	public static final String COMPONENTS_ISSUED_REPORTING = "Reporting - Components";
+	public static final String COMPONENTS_DISCARDED_REPORTING = "Reporting - Discards";
 	
 	// Admin and Super-User Permissions
 	public static final String MANAGE_USERS = "Manage Users";
