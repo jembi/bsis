@@ -19,13 +19,13 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-<c:set var="donorCommunicationFormId">donorCommunicationForm-${unique_page_id}</c:set>
-<c:set var="donorCommunicationFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
-<c:set var="donorCommunicationFormDonorPanelsId">donorCommunicationFormDonorPanelSelector</c:set>
+<c:set var="donorCommunicationsFormId">donorCommunicationForm-${unique_page_id}</c:set>
+<c:set var="donorCommunicationsFormBloodGroupSelectorId">donorCommunicationFormBloodGroupSelector-${unique_page_id}</c:set>
+<c:set var="donorCommunicationsFormDonorPanelsId">donorCommunicationFormDonorPanelSelector</c:set>
 
 <script>
 $(document).ready(function() {
-	$("#${donorCommunicationFormDonorPanelsId}").multiselect({
+	$("#${donorCommunicationsFormDonorPanelsId}").multiselect({
 		    position : {
 		      my : 'left top',
 		      at : 'right center'
@@ -33,12 +33,12 @@ $(document).ready(function() {
 		    noneSelectedText: 'None Selected',
 		    selectedText: function(numSelected, numTotal, selectedValues) {
 		                    if (numSelected == numTotal) {
-		                      $("#${donorCommunicationFormId}").find(".anyDonorPanelInput")
+		                      $("#${donorCommunicationsFormId}").find(".anyDonorPanelInput")
 		                                              .val("true");
 		                      return "Any Donor Panel";
 		                    }
 		                    else {
-		                      $("#${donorCommunicationFormId}").find(".anyDonorPanelInput")
+		                      $("#${donorCommunicationsFormId}").find(".anyDonorPanelInput")
 		                                              .val("false");
 		                      var checkedValues = $.map(selectedValues, function(input) { return input.title; });
 		                      return checkedValues.length ? checkedValues.join(', ') : 'Any Donor Panel';
@@ -46,7 +46,7 @@ $(document).ready(function() {
 		                      
 		                  }
 		  });
-	  $("#${donorCommunicationFormId}").find(".clinicDate").datepicker({
+	  $("#${donorCommunicationsFormId}").find(".clinicDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
@@ -64,7 +64,7 @@ $(document).ready(function() {
 		         }
 		    }
 		   });
-	  $("#${donorCommunicationFormId}").find(".lastDonationToDate").datepicker({
+	  $("#${donorCommunicationsFormId}").find(".lastDonationToDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
@@ -83,7 +83,7 @@ $(document).ready(function() {
 			         }
 			    } 
 		   });
-	  $("#${donorCommunicationFormId}").find(".lastDonationFromDate").datepicker({
+	  $("#${donorCommunicationsFormId}").find(".lastDonationFromDate").datepicker({
 		     changeMonth : true,
 		     changeYear : true,
 		     minDate : -36500,
@@ -110,7 +110,7 @@ $(document).ready(function() {
 			  $('.case').attr('checked', this.checked);
 			  if($("#selectall").is(":checked") == false)
 			  {
-				  $("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("true");
+				  $("#${donorCommunicationsFormId}").find(".anyBloodGroupInput").val("true");
 			  }
 		});
 
@@ -132,14 +132,14 @@ $(document).ready(function() {
 	      }).click(function() {
 	    	    if($(".case:checked").length == 0)
 	    	    {
-	    	    	$("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("true");
+	    	    	$("#${donorCommunicationsFormId}").find(".anyBloodGroupInput").val("true");
 	    	    }
 	    	    else
 	    	    {
-	    	    	$("#${donorCommunicationFormId}").find(".anyBloodGroupInput").val("false");
+	    	    	$("#${donorCommunicationsFormId}").find(".anyBloodGroupInput").val("false");
 	    	    }
-	    	    var donorCommunicationData = $("#${donorCommunicationFormId}").serialize();
-	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorResultsFromDonorComm");
+	    	    var donorCommunicationData = $("#${donorCommunicationsFormId}").serialize();
+	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorsFromDonorCommunications");
 	    	    $.ajax({
 	    	      type : "GET",
 	    	      url : "findDonorCommunicationsForm.html",
@@ -147,7 +147,7 @@ $(document).ready(function() {
 	    	      success : function(data) {
 	    	    	  var donorSelect = false;
 	    	    	  var selectedValues = new Array();
-		    	    	  $('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
+		    	    	  $('#${donorCommunicationsFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
 		    	  			if(this.checked)
 		    	  				{
 			    	  				donorSelect = this.checked;
@@ -167,7 +167,7 @@ $(document).ready(function() {
 		    	    		  if($(".case").length == $(".case:checked").length) {
 		    	  				$("#selectall").attr("checked", "checked");
 		    	    		  }
-		    	    		  $('#${donorCommunicationFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
+		    	    		  $('#${donorCommunicationsFormDonorPanelsId}').multiselect("widget").find(":checkbox").each(function(){
 		    	    			  if(jQuery.inArray(this.value, selectedValues) !=-1)
 		    	    			  {
 		    	    				  if(!this.checked)
@@ -187,16 +187,16 @@ $(document).ready(function() {
 	    	      function(event, content) {
 	    	        $("#${mainContentId}").hide();
 	    	        $("#${childContentId}").hide();
-	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html("");
-	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").show();
-	    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html(content);
+	    	        $("#${tabContentId}").find(".findDonorsFromDonorCommunications").html("");
+	    	        $("#${tabContentId}").find(".findDonorsFromDonorCommunications").show();
+	    	        $("#${tabContentId}").find(".findDonorsFromDonorCommunications").html(content);
 	    	      });
 	      $("#${tabContentId}").bind("donorSummarySuccess",
 	    	      function(event, content) {
 	    	 			$("#${mainContentId}").hide();
   	        			$("#${childContentId}").show();
-  		    	        $("#${tabContentId}").find(".findDonorResultsFromDonorComm").html("");
-  	        			$("#${tabContentId}").find(".findDonorResultsFromDonorComm").hide();
+  		    	        $("#${tabContentId}").find(".findDonorsFromDonorCommunications").html("");
+  	        			$("#${tabContentId}").find(".findDonorsFromDonorCommunications").hide();
   	        			$("#${tabContentId}").find(".donorCommunicationsTable").trigger("refreshResults");
 	    	      });
 	      $("#${tabContentId}").bind("donorFindSuccess",
@@ -232,14 +232,14 @@ $(document).ready(function() {
           <jsp:param name="errorMessage" value="${errorMessage}" />
         </jsp:include>
     </c:if>
-    <form:form method="GET" commandName="donorCommunicationsForm" id="${donorCommunicationFormId}"
+    <form:form method="GET" commandName="donorCommunicationsForm" id="${donorCommunicationsFormId}"
       class="formFormatClass">
       <div>      
 	      <div style="float: left;margin-left:13px;margin-right:85px;margin-top:2px;width:115px;">
 	         <form:label cssStyle="width:175px !important;" path="donorPanel">${donorFields.donorPanel.displayName}</form:label>
 	      </div>	      
 	      <div>
-	         <form:select path="donorPanel" id="${donorCommunicationFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
+	         <form:select path="donorPanel" id="${donorCommunicationsFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
 	          <c:forEach var="donorPanel" items="${donorPanels}">
 	            <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
 	          </c:forEach>
@@ -265,7 +265,7 @@ $(document).ready(function() {
 	      		
 	       	</div>
 	       	<div style="float: left;padding-left:5px;">
-	       	<form:errors class="formError" path="donorBloodGrpErrorMessage" delimiter=", "></form:errors></div>
+	       	<form:errors class="formError" path="bloodGroupErrorMessage" delimiter=", "></form:errors></div>
        	</div>
 	    <div style="clear:both;"></div>
         <div>
@@ -291,6 +291,6 @@ $(document).ready(function() {
       </div>
     </div>
   </div>
-<div class="findDonorResultsFromDonorComm"></div>
+<div class="findDonorsFromDonorCommunications"></div>
 <div id="${childContentId}"></div>
 </div>

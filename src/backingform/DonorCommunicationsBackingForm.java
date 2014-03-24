@@ -34,7 +34,7 @@ public class DonorCommunicationsBackingForm {
 
 	private String donorPanelErrorMessage;
 
-	private String donorBloodGrpErrorMessage;
+	private String bloodGroupErrorMessage;
 
 	public DonorCommunicationsBackingForm() {
 		donor = new Donor();
@@ -157,11 +157,11 @@ public class DonorCommunicationsBackingForm {
 		this.donorPanelErrorMessage = donorPanelErrorMessage;
 	}
 
-	public String getDonorBloodGrpErrorMessage() {
-		return donorBloodGrpErrorMessage;
+	public String getBloodGroupErrorMessage() {
+		return bloodGroupErrorMessage;
 	}
 
-	public void setDonorBloodGrpErrorMessage(String donorBloodGrpErrorMessage) {
-		this.donorBloodGrpErrorMessage = donorBloodGrpErrorMessage;
+	public void setBloodGroupErrorMessage(String bloodGroupErrorMessage) {
+		this.bloodGroupErrorMessage = bloodGroupErrorMessage;
 	}
 }

@@ -19,9 +19,9 @@
         Donors
       </a>
     </li>
-     <li id="donorCommunicationContent">
+     <li id="donorCommunicationsContent">
       <a href="donorCommunicationsFormGenerator.html">
-         Donor <br/> Communnications
+         Donor <br/> Communications
       </a>
     </li>
     <!--

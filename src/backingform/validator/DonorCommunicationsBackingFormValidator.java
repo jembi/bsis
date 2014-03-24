@@ -38,16 +38,16 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 
 		DonorCommunicationsBackingForm form = (DonorCommunicationsBackingForm) obj;
 
-		List<Location> donorPanel = form.getDonorPanels();
+		List<Location> donorPanels = form.getDonorPanels();
 		List<BloodGroup> bloodGroups = form.getBloodGroups();
 
-		if (donorPanel == null || donorPanel.isEmpty()) {
-			errors.rejectValue("donorPanelErrorMessage","donorPanelErrorMessage",
+		if (donorPanels == null || donorPanels.isEmpty()) {
+			errors.rejectValue("donorPanelErrorMessage","donorPanels.empty",
 					"Select 1 or more Donor Panel(s).");
 		}
 
 		if (bloodGroups == null || bloodGroups.isEmpty()) {
-			errors.rejectValue("donorBloodGrpErrorMessage","donorBloodGrpErrorMessage",
+			errors.rejectValue("bloodGroupErrorMessage","bloodGroups.empty",
 					" Select 1 or more Blood Group(s).");
 		}
 	}

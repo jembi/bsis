@@ -133,7 +133,7 @@ public class DonorCommunicationsController {
 		// to ensure custom field names are displayed in the form
 		m.put("donorFields", utilController.getFormFieldsForForm("donor"));
 		m.put("contentLabel", "Find Donors");
-		m.put("refreshUrl", "donorCommunicatiosFormGenerator.html");
+		m.put("refreshUrl", "donorCommunicationsFormGenerator.html");
 		addEditSelectorOptions(mv.getModelMap());
 		mv.addObject("model", m);
 		mv.addObject("donorCommunicationsForm", dbform);
@@ -145,7 +145,7 @@ public class DonorCommunicationsController {
 			HttpServletRequest request,
 			@ModelAttribute("donorCommunicationsForm") @Valid DonorCommunicationsBackingForm form,
 			BindingResult result, Model model) {
-		ModelAndView modelAndView = new ModelAndView("donors/donorsCommunicationTable");
+		ModelAndView modelAndView = new ModelAndView("donors/donorCommunicationsTable");
 		Map<String, Object> m = model.asMap();
 
 		addEditSelectorOptions(m);
@@ -156,7 +156,7 @@ public class DonorCommunicationsController {
 			modelAndView.addObject("errorMessage","Missing information for one or more required fields.");
 			m.put("success", Boolean.FALSE);
 			m.put("requestUrl", getUrl(request));
-			m.put("refreshUrl", "donorCommunicatiosFormGenerator.html");
+			m.put("refreshUrl", "donorCommunicationsFormGenerator.html");
 			modelAndView.addObject("model", m);
 			modelAndView.addObject("success", Boolean.FALSE);
 			return modelAndView;
@@ -187,8 +187,8 @@ public class DonorCommunicationsController {
 			@ModelAttribute("donorCommunicationsForm") DonorCommunicationsBackingForm form,
 			BindingResult result, Model model) {
 
-		LOGGER.debug("Start DonorCommunicationController:findDonorCommunicationPagination");
-		List<Location> donorPanel = form.getDonorPanels();
+		LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
+		List<Location> donorPanels = form.getDonorPanels();
 		String clinicDate = getEligibleDonorDate(form.getClinicDate());
 		String clinicDateToCheckdeferredDonor = form.getClinicDate();
 		String lastDonationFromDate = form.getLastDonationFromDate();
@@ -201,7 +201,7 @@ public class DonorCommunicationsController {
 		pagingParams.put("sortColumn",getSortingColumn(sortColumnId, formFields));
 
 		List<Object> results = new ArrayList<Object>();
-		results = donorCommunicationsRepository.findDonorFromDonorCommunication(donorPanel, clinicDate,lastDonationFromDate, 
+		results = donorCommunicationsRepository.findDonorFromDonorCommunication(donorPanels, clinicDate,lastDonationFromDate, 
 				lastDonationToDate, bloodGroups,form.getAnyBloodGroup(), pagingParams,clinicDateToCheckdeferredDonor);
 
 		@SuppressWarnings("unchecked")
@@ -224,7 +224,7 @@ public class DonorCommunicationsController {
 				cal.add(Calendar.DATE, -56);
 			}
 		} catch (ParseException e) {
-			LOGGER.debug("Start DonorCommunicationController:getEligibleDonorDate:ParseException"+e);
+			LOGGER.debug("Start DonorCommunicationsController:getEligibleDonorDate:ParseException"+e);
 		}
 		return clinicDate != null && !clinicDate.trim().equalsIgnoreCase("") ? curFormater
 				.format(cal.getTime()) : "";
@@ -246,11 +246,11 @@ public class DonorCommunicationsController {
 						try {
 							propertyValue = BeanUtils.getProperty(donor,property);
 						} catch (IllegalAccessException e) {
-							LOGGER.debug("DonorCommunicationController:generateDatatablesMapForDonorCommunications:IllegalAccessException"+e);
+							LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:IllegalAccessException"+e);
 						} catch (InvocationTargetException e) {
-							LOGGER.debug("DonorCommunicationController:generateDatatablesMapForDonorCommunications:InvocationTargetException"+e);
+							LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:InvocationTargetException"+e);
 						} catch (NoSuchMethodException e) {
-							LOGGER.debug("DonorCommunicationController:generateDatatablesMapForDonorCommunications:NoSuchMethodException"+e);
+							LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:NoSuchMethodException"+e);
 						}
 						row.add(propertyValue != null ? propertyValue.toString() : "");
 					}
