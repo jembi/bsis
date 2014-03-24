@@ -63,7 +63,7 @@ public class PermissionConstants {
 	
 	// Inventory Permissions
 	public static final String COMPONET_LABELLING = "Component Labelling";
-	public static final String ISSUE_Components = "Issue Components";
+	public static final String ISSUE_COMPONENT= "Issue Component";
 	
 	// Discars Permissions
 	public static final String DISCARD_COMPONENT = "Discard Component";
