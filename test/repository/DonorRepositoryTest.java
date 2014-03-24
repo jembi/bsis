@@ -133,7 +133,7 @@ public class DonorRepositoryTest {
 	}
 
 	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/DonorDataset.xml");
+		File file = new File("test/dataset/DonorRepositoryDataset.xml");
 		return new FlatXmlDataSet(file);
 	}
 
@@ -184,7 +184,7 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * Should return null when Donor with id does not exist
+	 * Should return null when Donor id does not exist
 	 * findDonorById(Long)
 	 */
 	public void findDonorById_shouldReturnNull() {
@@ -450,173 +450,7 @@ public class DonorRepositoryTest {
 				newDonor.getId() == 0 ? false : true);
 	}
 
-	@Test
-	/**
-	 * Should fail when donor is missing required fields - no First Name
-	 * addDonor(Donor)
-	 */
-	public void addDonor_shouldNotPersistFirstNameBlank() {
-		setBackingFormValue(donorBackingForm);
-		// Here we can pass donor firstname value is blank.
-		donorBackingForm.setFirstName("");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue(
-				"Donor First Name is blank. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
 
-	@Test
-	/**
-	 * Should fail when donor is missing required fields - no Last Name
-	 * addDonor(Donor)
-	 */
-	public void addDonor_shouldNotPersistLastNameBlank() {
-		setBackingFormValue(donorBackingForm);
-		// Here we can pass donor lastname value is blank.
-		donorBackingForm.setLastName("");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue(
-				"Donor Last Name is blank. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
-
-	@Test
-	/**
-	 * Should fail when donor is missing required fields - no Donor Number
-	 * addDonor(Donor)
-	 */
-	public void addDonor_shouldNotPersistBlankDonorBlank() {
-		setBackingFormValue(donorBackingForm);
-		// DonorNumber value is blank.
-		donorBackingForm.setDonorNumber("");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor Number is blank. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
-
-	@Test
-	/**
-	 * Should fail when donor is missing required fields - no Gender
-	 * addDonor(Donor)
-	 */
-	public void addDonor_ShouldNotPersistBlankGender() {
-		Date date = new Date();
-		donorBackingForm.setDayOfMonth("10");
-		donorBackingForm.setMonth("06");
-		donorBackingForm.setYear("2000");
-		donorBackingForm.setAddress("myaddress");
-		donorBackingForm.setFirstName("firstname");
-		donorBackingForm.setMiddleName("middlename");
-		donorBackingForm.setLastName("lastname");
-		donorBackingForm.setIsDeleted(false);
-		donorBackingForm.setCallingName("CallingName");
-		donorBackingForm.setCity("City");
-		donorBackingForm.setCountry("country");
-		donorBackingForm.setCreatedBy(user);
-		donorBackingForm.setCreatedDate(date);
-		donorBackingForm.setLastUpdated(date);
-		donorBackingForm.setLastUpdatedBy(user);
-		donorBackingForm.setDistrict("District");
-		donorBackingForm.setDonorPanel("3");
-		donorBackingForm.setNationalID("1111");
-		donorBackingForm.setNotes("Notes");
-		donorBackingForm.setOtherPhoneNumber("9999999999");
-		donorBackingForm.setPhoneNumber("8888888888");
-		donorBackingForm.setPreferredContactMethod("1");
-		donorBackingForm.setProvince("Province");
-		donorBackingForm.setState("State");
-		donorBackingForm.setZipcode("361001");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue("Donor's Gender is blank. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
-
-	@Test
-	/**
-	 * Should fail when Donor Number already exists
-	 * addDonor(Donor)
-	 */
-	public void addDonor_shouldNotPersistDuplicateDonorNumber() {
-		setBackingFormValue(donorBackingForm);
-		// Here we can pass duplicate DonorNumber(000001)
-		donorBackingForm.setDonorNumber("000001");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue(
-				"Duplicate Donor Number exist. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
-	
-	@Test
-	/**
-	 * Should fail when donor Age is less than 16
-	 * addDonor(Donor)
-	 */
-	public void addDonor_shouldNotPersistMinimumAgeIsLessThan16() {
-		donorBackingForm.setBirthDate(donorBirthdate);
-		setBackingFormValue(donorBackingForm);
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue(
-				"Donor's age is less than 16. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
-
-	@Test
-	/**
-	 * Should fail when donor Age is greater than 65
-	 * addDonor(Donor)
-	 */
-	public void addDonor_shouldNotPersistMaximumAgeIsGreaterThan65() {
-		setBackingFormValue(donorBackingForm);
-		donorBackingForm.setDayOfMonth("24");
-		donorBackingForm.setMonth("02");
-		donorBackingForm.setYear("1948");
-		errors = new BindException(donorBackingForm, "donor");
-		donorBackingFormValidator.validate(donorBackingForm, errors);
-		assertTrue(
-				"Donor's age is greater than 65. Donor object should not persist.",
-				errors.hasErrors());
-		if (!errors.hasErrors()) {
-			donorRepository.addDonor(donorBackingForm.getDonor());
-			assertTrue("Donor Object should persist.", donorBackingForm
-					.getDonor().getId() == 0 ? false : true);
-		}
-	}
 
 	@Test
 	/**
