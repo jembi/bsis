@@ -113,6 +113,7 @@
       });
 </script>
 
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_TEST_OUTCOME)">
 <div id="${editTestResultFormDivId}">
 
   <form:form method="POST" commandName="editTestResultForm"
@@ -187,3 +188,4 @@
     </div>
   </form:form>
 </div>
+</sec:authorize>
