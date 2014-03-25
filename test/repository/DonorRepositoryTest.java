@@ -72,9 +72,6 @@ public class DonorRepositoryTest {
 	String donorBirthdate = null;
 	ApplicationContext applicationContext = null;
 	UserDetailsService userDetailsService;
-	private BindException errors;
-	private Validator validator;
-	private DonorBackingFormValidator donorBackingFormValidator;
 	private Donor donor;
 	@Autowired
 	private DataSource dataSource;
@@ -99,9 +96,6 @@ public class DonorRepositoryTest {
 						replacements.get(key));
 			}
 			DatabaseOperation.INSERT.execute(connection, rDataSet);
-			validator = new DonorBackingFormValidator();
-			donorBackingFormValidator = new DonorBackingFormValidator(
-					validator, utilController);
 			donor = new Donor();
 			donorBackingForm = new DonorBackingForm(donor);
 		} catch (Exception e) {
