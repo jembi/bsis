@@ -139,6 +139,7 @@ $(document).ready(function() {
 	    	    	$("#${donorCommunicationsFormId}").find(".anyBloodGroupInput").val("false");
 	    	    }
 	    	    var donorCommunicationsData = $("#${donorCommunicationsFormId}").serialize();
+	    	    alert("donorCommunicationsData_________"+donorCommunicationsData);
 	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorsFromDonorCommunications");
 	    	    $.ajax({
 	    	      type : "GET",
@@ -239,7 +240,7 @@ $(document).ready(function() {
 	         <form:label cssStyle="width:175px !important;" path="donorPanels">${donorFields.donorPanel.displayName}</form:label>
 	      </div>	      
 	      <div>
-	         <form:select path="donorPanels" id="${donorCommunicationsFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
+	         <form:select path="donorPanel" id="${donorCommunicationsFormDonorPanelsId}" multiple="multiple" class="addDonorFormDonorPanels">
 	          <c:forEach var="donorPanel" items="${donorPanels}">
 	            <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
 	          </c:forEach>
