@@ -74,7 +74,7 @@ public class PermissionConstants {
 	
 	// Discars Permissions
 	public static final String DISCARD_COMPONENT = "Discard Component";
-	public static final String VIEW_DISCARDED_COMPONENT = "view discarded Component";
+	public static final String VIEW_DISCARDS = "View Discards";
 	
 	// Reporting Permissions
 	public static final String DONATIONS_REPORTING = "Reporting - Donations";
@@ -91,7 +91,7 @@ public class PermissionConstants {
 	public static final String MANAGE_DONATION_CATEGORIES = "Manage Donation Categories";
 	public static final String MANAGE_COMPONENT_COMBINATION = "Manage Component Combination";
 	public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
-	public static final String MANAGE_BLOOD_TYPING_ROLES = "Manage Blood Typing Rules";
+	public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
 	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";
 	public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
 	public static final String MANAGE_DONOR_DEFER_REASONS = "Manage Donor Defer Reasons";
@@ -102,6 +102,8 @@ public class PermissionConstants {
 	public static final String MANAGE_FORMS = "Manage Forms";
 	public static final String MANAGE_BACKUP_DATA = "Manage Backup Data";
 	public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
+	public static final String MANAGE_TIPS = "Manage Tips";
+	public static final String MANAGE_REQUESTS = "Manage Requests";
 
 	//page control permissions
 	public static final String VIEW_DONOR_INFORMATION = "View Donor Information";

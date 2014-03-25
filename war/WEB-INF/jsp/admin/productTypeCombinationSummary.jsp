@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
+  <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -119,6 +120,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATION)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
     <div style="  border: thin solid #1075A1;  border-radius: 5px;  margin: 20px;">
@@ -169,3 +171,4 @@ $(document).ready(function() {
 <div id="${activateProductTypeCombinationConfirmDialogId}" style="display: none;">
   Are you sure you want to activate this product type combination?
 </div>
+</sec:authorize>
