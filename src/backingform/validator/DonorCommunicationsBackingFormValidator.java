@@ -23,6 +23,10 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 		this.validator = validator;
 	}
 
+	public DonorCommunicationsBackingFormValidator() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean supports(Class<?> clazz) {

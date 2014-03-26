@@ -47,7 +47,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
   @Autowired
   private UtilController utilController;
   			
-  public List<Object> findDonorFromDonorCommunication(
+  public List<Object> findDonors(
 			List<Location> donorPanel, String clinicDate,
 			String lastDonationFromDate, String lastDonationToDate,
 			List<BloodGroup> bloodGroups, String anyBloodGroup,

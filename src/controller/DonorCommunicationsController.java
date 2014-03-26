@@ -150,6 +150,7 @@ public class DonorCommunicationsController {
 
 		addEditSelectorOptions(m);
 		m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+		form.getDonorPanels();
 		if (result.hasErrors()) {
 			modelAndView.addObject("hasErrors", true);
 			modelAndView = new ModelAndView("donors/donorCommunicationsForm");
@@ -201,7 +202,7 @@ public class DonorCommunicationsController {
 		pagingParams.put("sortColumn",getSortingColumn(sortColumnId, formFields));
 
 		List<Object> results = new ArrayList<Object>();
-		results = donorCommunicationsRepository.findDonorFromDonorCommunication(donorPanels, clinicDate,lastDonationFromDate, 
+		results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate,lastDonationFromDate, 
 				lastDonationToDate, bloodGroups,form.getAnyBloodGroup(), pagingParams,clinicDateToCheckdeferredDonor);
 
 		@SuppressWarnings("unchecked")

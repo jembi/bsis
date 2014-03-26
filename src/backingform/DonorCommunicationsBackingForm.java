@@ -132,7 +132,7 @@ public class DonorCommunicationsBackingForm {
 			this.bloodGroups.add(new BloodGroup(bg));
 		}
 	}
-
+	
 	public boolean getCreateDonorSummaryView() {
 		return createDonorSummaryView;
 	}
