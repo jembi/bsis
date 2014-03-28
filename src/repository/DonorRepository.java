@@ -294,7 +294,7 @@ public class DonorRepository {
     return query.getResultList();
   }
 
-  public void deferDonor(String donorId, String deferUntil,
+  public DonorDeferral deferDonor(String donorId, String deferUntil,
       String deferralReasonId, String deferralReasonText) throws ParseException {
     DonorDeferral donorDeferral = new DonorDeferral();
     Donor donor = findDonorById(donorId);
@@ -307,6 +307,7 @@ public class DonorRepository {
     donorDeferral.setIsVoided(Boolean.FALSE);
     donorDeferral.setDeferralReasonText(deferralReasonText);
     em.persist(donorDeferral);
+    return donorDeferral;
   }
   
   public void updatedeferDonor(String donorDeferralId,String donorId, String deferUntil,
@@ -432,5 +433,25 @@ public class DonorRepository {
     if(query.getResultList().size() > 0)
     	return query.getSingleResult();
     return null;
+  }
+  
+  public void clearData(){
+	  em.createNativeQuery("truncate table user").executeUpdate();
+	  em.createNativeQuery("truncate table donor").executeUpdate();
+	  em.createNativeQuery("truncate table collectedsample").executeUpdate();
+	  em.createNativeQuery("truncate table collectionbatch").executeUpdate();
+	  em.createNativeQuery("truncate table role").executeUpdate();
+	  em.createNativeQuery("truncate table Permission").executeUpdate();
+	  em.createNativeQuery("truncate table user_role").executeUpdate();
+	  em.createNativeQuery("truncate table Permission_Role").executeUpdate();
+	  em.createNativeQuery("truncate table location").executeUpdate();
+	  em.createNativeQuery("truncate table contactmethodtype").executeUpdate();
+	  em.createNativeQuery("truncate table genericconfig").executeUpdate();
+	  em.createNativeQuery("truncate table deferralreason").executeUpdate();
+	  em.createNativeQuery("truncate table bloodbagtype").executeUpdate();
+	  em.createNativeQuery("truncate table donationtype").executeUpdate();
+	  em.createNativeQuery("truncate table producttype").executeUpdate();
+	  em.createNativeQuery("truncate table formfield").executeUpdate();
+	  em.createNativeQuery("truncate table donordeferral").executeUpdate();
   }
 }

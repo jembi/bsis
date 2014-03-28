@@ -27,9 +27,27 @@
 	<Permission_Role roles_id="1" permissions_id="1" />
 
 
-	<location id="1" name="location 1" />
-	<location id="2" name="location 2" />
-	<location id="3" name="location 3" />
+	<location id="1" isCollectionCenter="1" isCollectionSite="0"
+		isDeleted="0" isDonorPanel="0" isMobileSite="0" isUsageSite="0" notes=""
+		name="Lusaka" />
+	<location id="2" isCollectionCenter="1" isCollectionSite="1"
+		isDeleted="0" isDonorPanel="0" isMobileSite="0" isUsageSite="1" notes=""
+		name="Ndola" />
+	<location id="3" isCollectionCenter="1" isCollectionSite="1"
+		isDeleted="0" isDonorPanel="1" isMobileSite="0" isUsageSite="1" notes=""
+		name="Livingstone" />
+	<location id="4" isCollectionCenter="1" isCollectionSite="0"
+		isDeleted="0" isDonorPanel="1" isMobileSite="0" isUsageSite="0" notes=""
+		name="Luanshya" />
+	<location id="5" isCollectionCenter="1" isCollectionSite="1"
+		isDeleted="0" isDonorPanel="0" isMobileSite="0" isUsageSite="1" notes=""
+		name="Kasama" />
+	<location id="6" isCollectionCenter="1" isCollectionSite="0"
+		isDeleted="0" isDonorPanel="0" isMobileSite="0" isUsageSite="0" notes=""
+		name="Chipata" />
+	<location id="7" isCollectionCenter="1" isCollectionSite="1"
+		isDeleted="0" isDonorPanel="1" isMobileSite="0" isUsageSite="1" notes=""
+		name="Chingola" />
 
 
 	<contactmethodtype id="1" contactMethodType="None"
@@ -220,9 +238,9 @@
 		defaultDisplayName="Donor #" field="donorNumber" form="donor" hidden="0"
 		isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
 		maxLength="15" useCurrentTime="0" />
-
-	<donordeferral id="1" deferralReasonText="" deferredOn="${DateDeferredOn}"
-		deferredUntil="${DateDeferredUnit}" deferralReason_id="2" deferredBy_id="1"
+<!-- 
+	<donordeferral id="1" deferralReasonText="" deferredOn="2014-02-20"
+		deferredUntil="2014-06-20" deferralReason_id="2" deferredBy_id="1"
 		deferredDonor_id="1" isVoided="false" />
 	<donordeferral id="2" deferralReasonText="" deferredOn="2014-03-01"
 		deferredUntil="2014-05-14" deferralReason_id="2" deferredBy_id="1"
@@ -234,12 +252,80 @@
 		deferredUntil="2014-02-22" deferralReason_id="2" deferredBy_id="1"
 		deferredDonor_id="4" isVoided="false" />
 	<donordeferral id="5" deferralReasonText=""
-		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredOn}"
+		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
 		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="4" isVoided="false" />
 	<donordeferral id="6" deferralReasonText=""
 		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
-		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="6" isVoided="false" />
-		
+		deferralReason_id="2" deferredBy_id="6" deferredDonor_id="5" isVoided="false" />
+ -->
+	<bloodbagtype id="1" bloodBagType="Single" canPool=""
+		canSplit="" isDeleted="0"></bloodbagtype>
+	<bloodbagtype id="2" bloodBagType="Triple" canPool=""
+		canSplit="" isDeleted="0"></bloodbagtype>
+	<bloodbagtype id="3" bloodBagType="Pedi" canPool=""
+		canSplit="" isDeleted="0"></bloodbagtype>
+
+
+	<donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>
+	<donationtype id="2" donationType="Family" isDeleted="0"></donationtype>
+	<donationtype id="3" donationType="Autologous" isDeleted="0"></donationtype>
+	<donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
+
+
+	<collectionbatch id="1" batchNumber="B0314000000"
+		isDeleted="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
+		notes="Notes" collectionCenter_id="2" collectionSite_id="3"
+		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
+
+
+	<collectedsample id="1" bloodAbo=""
+		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
+		collectedOn="2014-03-25 00:00:00" collectionNumber="D000001"
+		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
+		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
+		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
+		collectionBatch_id="1" collectionCenter_id="2" collectionSite_id="3"
+		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
+		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
+		donorPulse="60"></collectedsample>
+
+	<collectedsample id="2" bloodAbo=""
+		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
+		collectedOn="2014-03-21 00:00:00" collectionNumber="D000002"
+		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
+		isDeleted="1" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
+		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
+		collectionBatch_id="1" collectionCenter_id="2" collectionSite_id="3"
+		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
+		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
+		donorPulse="60"></collectedsample>
+
+	<collectedsample id="3" bloodAbo=""
+		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
+		collectedOn="2014-03-25 00:00:00" collectionNumber="D000003"
+		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
+		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
+		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
+		collectionBatch_id="1" collectionCenter_id="2" collectionSite_id="3"
+		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
+		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
+		donorPulse="60"></collectedsample>
+
+<producttype id="1" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Whole Blood" 
+		productTypeNameShort="Whole Blood" ></producttype>
+
+	<producttype id="2" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Red Cell Concentrate" 
+		productTypeNameShort="RCC" ></producttype>
+
+	<producttype id="3" description="" expiresAfter="365"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Fresh Frozen Plasma" 
+		productTypeNameShort="FFP" ></producttype>
+
+	<producttype id="4" description="" expiresAfter="5"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Platelets" 
+		productTypeNameShort="Platelets" ></producttype>
 
 
 </dataset>
