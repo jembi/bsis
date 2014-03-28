@@ -55,9 +55,9 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
-		Subquery<Long> donorDefferel =   cq.subquery(Long.class);
+		Subquery<Long> donorDeferral =   cq.subquery(Long.class);
 		Root<Donor> root = cq.from(Donor.class);
-		Root<DonorDeferral> rootdonorDefferel = donorDefferel.from(DonorDeferral.class);		
+		Root<DonorDeferral> rootdonorDefferel = donorDeferral.from(DonorDeferral.class);		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		
 		List<Predicate> panelPredicates = new ArrayList<Predicate>();
@@ -68,10 +68,9 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(clinicDate)));				
 				if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {					
-					donorDefferel.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
-					cb.lessThanOrEqualTo(rootdonorDefferel.get("deferredOn").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor)),
+					donorDeferral.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
 					cb.greaterThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(clinicDateToCheckdeferredDonor) ));
-					panelPredicates.add(cb.not(cb.exists(donorDefferel)));
+					panelPredicates.add(cb.not(cb.exists(donorDeferral)));
 				}
 			} catch (ParseException e) {
 				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunication: clinicDate:ParseException"+e);
@@ -80,9 +79,9 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		if(!StringUtils.isBlank(lastDonationFromDate)) {
 			try {
 				panelPredicates.add(cb.greaterThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(lastDonationFromDate)));
-				donorDefferel.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
-				cb.greaterThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(lastDonationFromDate) ));
-				panelPredicates.add(cb.not(cb.exists(donorDefferel)));
+				donorDeferral.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
+				cb.lessThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(lastDonationFromDate) ));
+				panelPredicates.add(cb.not(cb.exists(donorDeferral)));
 			} catch (ParseException e) {
 				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunication:lastDonationFromDate:ParseException"+e);
 			}			
@@ -90,9 +89,9 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		if(!StringUtils.isBlank(lastDonationToDate)) {
 			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), dateFormat.parse(lastDonationToDate)));
-				donorDefferel.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
-				cb.lessThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(lastDonationToDate) ));
-				panelPredicates.add(cb.not(cb.exists(donorDefferel)));
+				donorDeferral.select(rootdonorDefferel.get("id").as(Long.class)).where(cb.equal(rootdonorDefferel.get("deferredDonor"), root), 
+				cb.greaterThanOrEqualTo(rootdonorDefferel.get("deferredUntil").as(Date.class), dateFormat.parse(lastDonationToDate) ));
+				panelPredicates.add(cb.not(cb.exists(donorDeferral)));
 			} catch (ParseException e) {
 				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunication:lastDonationToDate:ParseException"+e);
 			}			

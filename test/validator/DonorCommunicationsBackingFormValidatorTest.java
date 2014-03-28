@@ -13,7 +13,6 @@ import model.location.Location;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -75,7 +74,6 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		
 		errors = new BindException(donorCommunicationsBackingForm, "donorCommunicationsBackingForm");
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
-		Mockito.when(donorCommunicationsBackingForm.getDonorPanel() == null).thenReturn(errors.hasErrors());
 		if(errors.hasErrors())
 		{
 			assertEquals("Number of validation errors are 2 as Donor Panel and Donor BloodGroup both are not selected",2,errors.getErrorCount());

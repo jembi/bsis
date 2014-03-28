@@ -5,6 +5,7 @@ package repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -20,6 +21,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import model.donor.Donor;
+import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
 
@@ -35,9 +37,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import security.LoginUserService;
+import security.V2VUserDetails;
 
 /**
  * Bellow test Cases about findDonors method to check
@@ -59,6 +69,8 @@ public class DonorCommunicationsRepositoryTest {
 	DonorCommunicationsRepository donorCommunicationsRepository;
 	
 	private static final  SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("dd/MM/yyyy"); 
+	ApplicationContext applicationContext = null;
+	UserDetailsService userDetailsService;
 	
 	@Before
 	public void init() {
@@ -106,13 +118,14 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	*should return empty list when no results are found
 	
-	* findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	* nors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	* List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	*/
 	@Test
 	public void findDonors_shouldReturnEmptyListWhenNoResultsFound() {
 		List<Location> donorPanel = new ArrayList<Location>();
 		String clinicDate = "";
+		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
@@ -128,7 +141,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Object> results = new ArrayList<Object>();
 		
 		results = donorCommunicationsRepository.findDonors(donorPanel,clinicDate, lastDonationFromDate, 
-				lastDonationToDate,bloodGroups, anyBloodGroup, pagingParams, "");
+				lastDonationToDate,bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
 		@SuppressWarnings("unchecked")
 		List<Donor> donors = (List<Donor>) results.get(0);
@@ -147,6 +160,7 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldReturnDonorsMatchingGivenCriteria() {
 		List<Location> donorPanel = new ArrayList<Location>();
 		String clinicDate = "";
+		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
@@ -162,7 +176,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Object> results = new ArrayList<Object>();
 		
 		results = donorCommunicationsRepository.findDonors(donorPanel,clinicDate, lastDonationFromDate, 
-				lastDonationToDate,bloodGroups, anyBloodGroup, pagingParams, "");
+				lastDonationToDate,bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 	
 		@SuppressWarnings("unchecked")
 		List<Donor> donors = (List<Donor>) results.get(0);
@@ -198,6 +212,7 @@ public class DonorCommunicationsRepositoryTest {
 			String[] bloodGroupStrArray = { "A+","O+" };
 			//Search with clinicDate '01/03/2014' 
 			String clinicDate = "01/03/2014";
+			String clinicDateToCheckdeferredDonor = "01/03/2014";
 			String lastDonationFromDate = "";
 			String lastDonationToDate = "";
 			String anyBloodGroup = "false";
@@ -210,7 +225,7 @@ public class DonorCommunicationsRepositoryTest {
 			results = donorCommunicationsRepository.findDonors(
 					donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate,
 					lastDonationToDate, bloodGroups, anyBloodGroup,
-					pagingParams, "01/03/2014");
+					pagingParams, clinicDateToCheckdeferredDonor);
 
 			@SuppressWarnings("unchecked")
 			List<Donor> donors = (List<Donor>) results.get(0);
@@ -241,6 +256,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Location> donorPanel = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
+		String clinicDateToCheckdeferredDonor = "";
 		//Search with donor panel id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
@@ -258,7 +274,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Object> results = new ArrayList<Object>();
 		results = donorCommunicationsRepository.findDonors(donorPanel,
 				clinicDate, lastDonationFromDate, lastDonationToDate,
-				bloodGroups, anyBloodGroup, pagingParams, "");
+				bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
 		@SuppressWarnings("unchecked")
 		List<Donor> donors = (List<Donor>) results.get(0);
@@ -299,6 +315,188 @@ public class DonorCommunicationsRepositoryTest {
 		assertTrue("Donor having donorNumber ='00003' is deleted",donorObj.getIsDeleted());
 	}
 
+	@Test
+	/**
+	 *  should not return donors who will be currently deferred when specifying Date Of Last Donation period
+	 *  
+	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
+	 */
+	public void findDonors_shouldNotReturnCurrentlyDeferredDonors() throws ParseException{
+		
+		//Set value for making donor deferral
+		String deferUntil = "07/07/2015";
+		String deferralReasonId = "1";
+		String deferralReasonText = "deferralReasonText";
+		String deferredDonorId = "3";
+		
+		//Set value to find donors
+		List<Location> donorPanel = new ArrayList<Location>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		String clinicDate = "";
+		//Search with donor panel id 3 and 1
+		long[] id = { 1 , 3 };
+		//Search with  BloodGroup 'A+' and 'O+'
+		String[] bloodGroupStrArray = { "A+","O+" };
+		
+		//Search with  lastDonationDate from  '11/02/2014' to  '25/02/2014'
+		String lastDonationFromDate ="11/02/2014";
+		String lastDonationToDate = "25/02/2014";
+		String anyBloodGroup = "false";
+		
+		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
+		donorPanel    =  createDonerPanelListForSearch(id);
+		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		List<Object> results = new ArrayList<Object>();
+
+		results = donorCommunicationsRepository.findDonors(donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate, lastDonationToDate,
+				bloodGroups, anyBloodGroup, pagingParams, clinicDate);
+
+		@SuppressWarnings("unchecked")
+		List<Donor> donorList = (List<Donor>) results.get(0);
+		boolean isvalid = true;
+		for(Donor donor:donorList){
+			List<DonorDeferral> donorDeferralLst = donorRepository.getDonorDeferrals(donor.getId());
+			for(DonorDeferral donorDeferral :donorDeferralLst)
+			{
+				if(donorDeferral.getDeferredUntil().before(DATE_FORMATER.parse(lastDonationToDate))  
+						&& donorDeferral.getDeferredUntil().after(DATE_FORMATER.parse(lastDonationFromDate))){
+					isvalid = false;
+					break;
+				}else{
+					isvalid = true;
+					}
+				assertTrue("Donor's  DeferredUntil date Is less than lastDonationToDate",isvalid);
+			}			
+		}
+
+		List<DonorDeferral> donorDeferralLst = donorRepository.getDonorDeferrals(2L);
+		for(DonorDeferral donorDeferral :donorDeferralLst)
+		{
+			if(donorDeferral.getDeferredUntil().before(DATE_FORMATER.parse(lastDonationToDate))  
+					&& donorDeferral.getDeferredUntil().after(DATE_FORMATER.parse(lastDonationFromDate))){
+				isvalid = false;
+				break;
+			}else{
+				isvalid = true;
+				}
+			assertTrue("Donor's  DeferredUntil date Is not less than lastDonationToDate",isvalid);
+		}			
+		int  donorListSizeBeforeDonorDeffered =donorList.size();		
+			if(donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId)) == null || donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId)).isEmpty())
+			{
+				this.userAuthentication();
+				donorRepository.deferDonor(deferredDonorId, deferUntil, deferralReasonId, deferralReasonText);
+				List<DonorDeferral> donorDeferralLstAfterMakingDonorDeffered = donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId));
+				if(!donorDeferralLstAfterMakingDonorDeffered.isEmpty())
+				{
+					assertSame("Donor having id = 3 is deffered",Long.parseLong(deferredDonorId),donorDeferralLstAfterMakingDonorDeffered.get(0).getDeferredDonor().getId());
+				}
+				results = donorCommunicationsRepository.findDonors(donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate, lastDonationToDate,
+						bloodGroups, anyBloodGroup, pagingParams, clinicDate);
+				
+				int donorListSizeAfterDonorDeffered = ((List<Donor>)results.get(0)).size();
+				assertNotSame("donor list size is not same after donor Deffered",donorListSizeBeforeDonorDeffered,donorListSizeAfterDonorDeffered);
+			}
+	}
+	
+	@Test
+	/**
+	 *  should not return donors who will be deferred on date specified in Clinic Date
+	 *  
+	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
+	 */
+	public void findDonors_shouldNotReturnDonorsDeferredOnClinicDate() throws ParseException{
+		
+		//Set value for making donor deferral
+		String deferUntil = "23/05/2015";
+		String deferralReasonId = "1";
+		String deferralReasonText = "deferralReasonText";
+		String deferredDonorId = "3";
+		
+		//Set value to find donors
+		List<Location> donorPanel = new ArrayList<Location>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		String clinicDate = "22/05/2014";
+		//Search with donor panel id 3 and 1
+		long[] id = { 1 , 3 };
+		//Search with  BloodGroup 'A+' and 'O+'
+		String[] bloodGroupStrArray = { "A+","O+" };
+		
+		String lastDonationFromDate ="";
+		String lastDonationToDate = "";
+		String anyBloodGroup = "false";
+		
+		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
+		donorPanel    =  createDonerPanelListForSearch(id);
+		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		List<Object> results = new ArrayList<Object>();
+
+		results = donorCommunicationsRepository.findDonors(donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate, lastDonationToDate,
+				bloodGroups, anyBloodGroup, pagingParams, clinicDate);
+
+		@SuppressWarnings("unchecked")
+		List<Donor> donorList = (List<Donor>) results.get(0);
+		boolean isvalid = true;
+		for(Donor donor:donorList){
+			List<DonorDeferral> donorDeferralLst = donorRepository.getDonorDeferrals(donor.getId());
+			for(DonorDeferral donorDeferral :donorDeferralLst)
+			{
+				if(donorDeferral.getDeferredUntil().after(DATE_FORMATER.parse(clinicDate))  ){
+					isvalid = false;
+					break;
+				}else{
+					isvalid = true;
+					}
+				assertTrue("Donor's  DeferredUntil date Is less than clinicDate",isvalid);
+			}			
+		}
+
+		List<DonorDeferral> donorDeferralLst = donorRepository.getDonorDeferrals(2L);
+		for(DonorDeferral donorDeferral :donorDeferralLst)
+		{
+			if(donorDeferral.getDeferredUntil().after(DATE_FORMATER.parse(clinicDate)) ){
+				isvalid = false;
+				break;
+			}else{
+				isvalid = true;
+				}
+			assertTrue("Donor's  DeferredUntil date Is grater than clinicDate",isvalid);
+		}			
+		int  donorListSizeBeforeDonorDeffered =donorList.size();		
+			if(donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId)) == null || donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId)).isEmpty())
+			{
+				this.userAuthentication();
+				donorRepository.deferDonor(deferredDonorId, deferUntil, deferralReasonId, deferralReasonText);
+				List<DonorDeferral> donorDeferralLstAfterMakingDonorDeffered = donorRepository.getDonorDeferrals(Long.parseLong(deferredDonorId));
+				if(!donorDeferralLstAfterMakingDonorDeffered.isEmpty())
+				{
+					assertSame("Donor having id = 3 is deffered",Long.parseLong(deferredDonorId),donorDeferralLstAfterMakingDonorDeffered.get(0).getDeferredDonor().getId());
+				}
+				results = donorCommunicationsRepository.findDonors(donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate, lastDonationToDate,
+						bloodGroups, anyBloodGroup, pagingParams, clinicDate);
+				
+				int donorListSizeAfterDonorDeffered = ((List<Donor>)results.get(0)).size();
+				assertNotSame("donor list size is not same after donor Deffered on 23/02/2014(same as search ClinicDate)",donorListSizeBeforeDonorDeffered,donorListSizeAfterDonorDeffered);
+			}
+	}
+	
+	/**
+	 * UserPassword,V2vUserDetails(Principal) and authority detail store into
+	 * SecurityContextHolder.
+	 */
+	public void userAuthentication() {
+		applicationContext = new ClassPathXmlApplicationContext(
+				"file:**/security-v2v-servlet.xml");
+		userDetailsService = applicationContext.getBean(LoginUserService.class);
+		V2VUserDetails userDetails = (V2VUserDetails) userDetailsService
+				.loadUserByUsername("admin");
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+				userDetails, userDetails.getPassword(),
+				userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authToken);
+	}
 	private List<Location> createDonerPanelListForSearch(long[] id) {
 		List<Location> donorPanel = new ArrayList<Location>();
 
@@ -349,6 +547,7 @@ public class DonorCommunicationsRepositoryTest {
 			List<Location> donorPanel = new ArrayList<Location>();
 			List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 			String clinicDate = "";
+			String clinicDateToCheckdeferredDonor = "";
 			String lastDonationFromDate = "";
 			String lastDonationToDate = "";
 			String anyBloodGroup = "true";
@@ -357,7 +556,7 @@ public class DonorCommunicationsRepositoryTest {
 			List<Object> results = new ArrayList<Object>();
 			results = donorCommunicationsRepository.findDonors(donorPanel,
 					clinicDate, lastDonationFromDate, lastDonationToDate,
-					bloodGroups, anyBloodGroup, pagingParams, "");
+					bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 			return  (Long) results.get(1);
 		}
 }
