@@ -36,7 +36,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,19 +86,17 @@ public class DonorRepositoryTest {
 					-(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS - 1)));
 			replacements.put("DateDonorDue", DateUtils.addDays(today,
 					-(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS + 1)));
-			
-			replacements.put("DateDeferredOn", DateUtils.addDays(today,
-					-(2)));
-			replacements.put("DateDeferredUnit", DateUtils.addDays(today,
-					(2)));
-			
+
+			replacements.put("DateDeferredOn", DateUtils.addDays(today, -(2)));
+			replacements.put("DateDeferredUnit", DateUtils.addDays(today, (2)));
+
 			ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
 			for (String key : replacements.keySet()) {
 				rDataSet.addReplacementObject("${" + key + "}",
 						replacements.get(key));
 			}
 			DatabaseOperation.INSERT.execute(connection, rDataSet);
-			
+
 			donor = new Donor();
 			donorBackingForm = new DonorBackingForm(donor);
 		} catch (Exception e) {
@@ -111,7 +108,7 @@ public class DonorRepositoryTest {
 	public void after() throws Exception {
 		// Remove data from database
 		donorRepository.clearData();
-		//DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
+		// DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
 	}
 
 	/**
@@ -443,13 +440,11 @@ public class DonorRepositoryTest {
 		// New DonorNumber(000006) which is assigned to Donor Persist Object.
 		newDonor.setDonorNumber("000006");
 		donorRepository.addDonor(newDonor);
-		System.out.println("Donor ID is:::"+newDonor.getId());
+		System.out.println("Donor ID is:::" + newDonor.getId());
 		assertTrue(
 				"Donor's Id should not zero. Once Donor should persist,new Id is generated and assigned to Donor.",
 				newDonor.getId() == 0 ? false : true);
 	}
-
-
 
 	@Test
 	/**
@@ -602,7 +597,7 @@ public class DonorRepositoryTest {
 	public void findAnyDonorStartsWith_softDeleteRecordNotInclude() {
 		List<Donor> listDonor = donorRepository.findAnyDonorStartsWith("00");
 		for (Donor donor : listDonor) {
-			//2 is Deleted Donor's ID
+			// 2 is Deleted Donor's ID
 			assertNotSame(
 					"Donor Id 2 is deleted from donor table so, that record should not part of list.",
 					2, donor.getId());
@@ -654,8 +649,8 @@ public class DonorRepositoryTest {
 		assertNotNull(
 				"Donor object should not null.Because DonorNumber 000001 is exist into donor table",
 				findDonor);
-		assertTrue("Donor's Donor Number should be '000001'.",
-				findDonor.getDonorNumber().equals("000001"));
+		assertTrue("Donor's Donor Number should be '000001'.", findDonor
+				.getDonorNumber().equals("000001"));
 	}
 
 	@Test
@@ -737,12 +732,14 @@ public class DonorRepositoryTest {
 	 * deferDonor(String,String,String,String)
 	 */
 	public void deferDonor_ShouldPersist() throws ParseException {
-		try{
-		this.userAuthentication();
-		
-		DonorDeferral donorDeferral =  donorRepository.deferDonor("1", "19/07/2015", "3", "");
-		assertTrue("DeferDonor object Should persist.", donorDeferral.getId()!=0?true:false);
-		}catch(Exception e){
+		try {
+			this.userAuthentication();
+
+			DonorDeferral donorDeferral = donorRepository.deferDonor("1",
+					"19/07/2015", "3", "");
+			assertTrue("DeferDonor object Should persist.",
+					donorDeferral.getId() != 0 ? true : false);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -829,7 +826,8 @@ public class DonorRepositoryTest {
 		// 4 is Donor ID
 		List<DonorDeferral> listDonorDeferral = donorRepository
 				.getDonorDeferrals(5l);
-		assertFalse("should return false for donor that not currently deferred.",
+		assertFalse(
+				"should return false for donor that not currently deferred.",
 				donorRepository.isCurrentlyDeferred(listDonorDeferral));
 
 	}
@@ -867,11 +865,12 @@ public class DonorRepositoryTest {
 	 */
 	public void isCurrentlyDeferred_Donor_methodShouldReturnFalse() {
 		// 4 is Donor ID
-		try{
-		Donor donor = donorRepository.findDonorById(4l);
-		assertFalse("should return false for donor not currently deferred.",
-				donorRepository.isCurrentlyDeferred(donor));
-		}catch(Exception e){
+		try {
+			Donor donor = donorRepository.findDonorById(4l);
+			assertFalse(
+					"should return false for donor not currently deferred.",
+					donorRepository.isCurrentlyDeferred(donor));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -884,14 +883,13 @@ public class DonorRepositoryTest {
 	 */
 	public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
 		// 4 is Donor ID
-		Date currentDate =  DateUtils.addDays(new Date(),
-					(2));
+		Date currentDate = DateUtils.addDays(new Date(), (2));
 		Date date = donorRepository.getLastDonorDeferralDate(6l);
 		assertNotNull("should return last donor derferral date", date);
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String str = dateFormat.format(date);
 		String str_currentDate = dateFormat.format(currentDate);
-		assertTrue("Latest deferal date should be '"+str_currentDate+"'.",
+		assertTrue("Latest deferal date should be '" + str_currentDate + "'.",
 				str.equals(str_currentDate));
 	}
 

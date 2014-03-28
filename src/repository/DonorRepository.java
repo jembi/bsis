@@ -26,7 +26,6 @@ import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -34,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import controller.UtilController;
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
 import controller.UtilController;
