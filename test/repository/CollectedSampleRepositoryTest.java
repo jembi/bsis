@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +39,7 @@ import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,15 +148,18 @@ public class CollectedSampleRepositoryTest {
 	public void addCollectedSamples_shouldPersistCollectedSampleList() {
 		List<CollectedSample> collectedSampleList = new ArrayList<CollectedSample>();
 		this.setValue(collectedSample);
-		collectedSample.setCollectionNumber("000001");
+		// D000005 Collection Number
+		collectedSample.setCollectionNumber("D000005");
 		collectedSampleList.add(collectedSample);
 		collectedSample = new CollectedSample();
 		this.setValue(collectedSample);
-		collectedSample.setCollectionNumber("000003");
+		// D000006 Collection Number
+		collectedSample.setCollectionNumber("D000006");
 		collectedSampleList.add(collectedSample);
 		collectedSample = new CollectedSample();
 		this.setValue(collectedSample);
-		collectedSample.setCollectionNumber("000004");
+		// D000007 Collection Number
+		collectedSample.setCollectionNumber("D000007");
 		collectedSampleList.add(collectedSample);
 		List<CollectedSample> returncollectedSampleList = collectedSampleRepository
 				.addAllCollectedSamples(collectedSampleList);
@@ -171,6 +174,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void updateCollectedSample_shouldUpdateExistingCollectedSample() {
 		this.updateValue(collectedSample);
+		// 1 is CollectedSample's ID.
 		collectedSample.setId(1l);
 		CollectedSample UpdatedCollectedSample = collectedSampleRepository
 				.updateCollectedSample(collectedSample);
@@ -188,6 +192,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void updateCollectedSample_shouldReturnNullWhenExistingCollectedSampleIsNull() {
 		this.updateValue(collectedSample);
+		// 11 is Invalid CollectedSample's ID.
 		collectedSample.setId(11l);
 		CollectedSample UpdatedCollectedSample = collectedSampleRepository
 				.updateCollectedSample(collectedSample);
@@ -202,6 +207,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSampleById_ShouldReturnCollectedSampleWithGivenId() {
 		CollectedSample collectedSample = collectedSampleRepository
+		// 1 is CollectedSample's ID.
 				.findCollectedSampleById(1l);
 		assertNotNull(collectedSample);
 		assertTrue("CollectedSample Id's value should be 1.",
@@ -214,7 +220,7 @@ public class CollectedSampleRepositoryTest {
 	 */
 	@Test
 	public void findCollectedSampleById_ShouldReturnNullWhenCollectedSampleDoesNotExist() {
-		// 1 is CollectedSample ID value
+		// 11 is Invalid CollectedSample
 		CollectedSample collectedSample = collectedSampleRepository
 				.findCollectedSampleById(11l);
 		assertNull(collectedSample);
@@ -274,7 +280,8 @@ public class CollectedSampleRepositoryTest {
 	 */
 	@Test
 	public void findCollectedSamples_shouldReturnEmptyListSizeWhenNoMatchIsFound() {
-		String collectionNumber = "-111111";
+		// D000032 is Invalid Collection Number
+		String collectionNumber = "D000032";
 		String dateCollectedFrom = "";
 		String dateCollectedTo = "";
 		boolean includeTestedCollections = false;
@@ -320,6 +327,7 @@ public class CollectedSampleRepositoryTest {
 	 */
 	@Test
 	public void findCollectedSamples_shouldReturnCollectedSamplesWithMatchingDINs() {
+		// D000001 is Collection Number
 		String collectionNumber = "D000001";
 		String dateCollectedFrom = "";
 		String dateCollectedTo = "";
@@ -380,6 +388,7 @@ public class CollectedSampleRepositoryTest {
 		boolean includeTestedCollections = false;
 		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
 		bloodBagTypeIds.add(-1);
+		// 2 is BloodBagType Id
 		bloodBagTypeIds.add(2);
 
 		List<Long> centerIds = new ArrayList<Long>();
@@ -424,6 +433,7 @@ public class CollectedSampleRepositoryTest {
 	 */
 	@Test
 	public void findCollectedSamples_shouldReturnCollectedSampleFromMatchingCollectionCentres() {
+		// D000001 is Collection Number
 		String collectionNumber = "D000001";
 		String dateCollectedFrom = "";
 		String dateCollectedTo = "";
@@ -685,8 +695,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleNotDeleteAndDeletedRecordNotInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
-				.findCollectedSampleByCollectionNumber("D000001",
-						false);
+				.findCollectedSampleByCollectionNumber("D000001", false);
 		assertNotNull("CollectedSample Object should not null.",
 				collectedSample);
 		assertTrue(
@@ -694,7 +703,7 @@ public class CollectedSampleRepositoryTest {
 				collectedSample.getCollectionNumber().equals("D000001") ? true
 						: false);
 	}
-	
+
 	/**
 	 * Should Return CollectedSample Object.
 	 * findCollectedSampleByCollectionNumber(String,DeleteIncludeStatus)
@@ -702,8 +711,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeletedRecordInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
-				.findCollectedSampleByCollectionNumber("D000002",
-						true);
+				.findCollectedSampleByCollectionNumber("D000002", true);
 		assertNotNull("CollectedSample Object should not null.",
 				collectedSample);
 		assertTrue(
@@ -711,31 +719,32 @@ public class CollectedSampleRepositoryTest {
 				collectedSample.getCollectionNumber().equals("D000002") ? true
 						: false);
 	}
+
 	/**
 	 * Should Return null CollectedSample Object.
 	 * findCollectedSampleByCollectionNumber(String,DeleteIncludeStatus)
 	 */
 	@Test
-	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeleteRecordNotInclude(){
+	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeleteRecordNotInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
-				.findCollectedSampleByCollectionNumber("D000002",
-						false);
-		assertNull("CollectedSample Object should  null.",
-				collectedSample);
+				.findCollectedSampleByCollectionNumber("D000002", false);
+		assertNull("CollectedSample Object should  null.", collectedSample);
 	}
-/**
- * It should persist CollectedSample with Worksheet.
- * 	saveToWorksheet(String,List<Integer>,List<Long>,List<Long>,String,String,Boolean,String)
- * @throws Exception
- */
+
+	/**
+	 * It should persist CollectedSample with Worksheet.
+	 * saveToWorksheet(String,List
+	 * <Integer>,List<Long>,List<Long>,String,String,Boolean,String)
+	 * 
+	 * @throws Exception
+	 */
 	@Test
-	public void saveToWorksheet_shouldPersistWorksheet() throws Exception
-	{
+	public void saveToWorksheet_shouldPersistWorksheet() throws Exception {
 		String collectionNumber = "D000001";
 		String dateCollectedFrom = "";
 		String dateCollectedTo = "";
 		boolean includeTestedCollections = false;
-		String worksheetNumber="W0314000000";
+		String worksheetNumber = "W0314000000";
 		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
 		bloodBagTypeIds.add(-1);
 		String[] bloodBagTypeID = { "1", "2", "3" };
@@ -756,122 +765,303 @@ public class CollectedSampleRepositoryTest {
 		for (String site : siteId) {
 			siteIds.add(Long.parseLong(site));
 		}
-		collectedSampleRepository.saveToWorksheet(collectionNumber, bloodBagTypeIds, centerIds, siteIds, dateCollectedFrom, dateCollectedTo, includeTestedCollections, worksheetNumber);
-		assertTrue("It should persist worksheet with collectedSample.",true);
+		collectedSampleRepository.saveToWorksheet(collectionNumber,
+				bloodBagTypeIds, centerIds, siteIds, dateCollectedFrom,
+				dateCollectedTo, includeTestedCollections, worksheetNumber);
+		assertTrue("It should persist worksheet with collectedSample.", true);
 	}
+
 	/**
-	 * Should return Null Worksheet.
-	 * findWorksheet(String)
+	 * Should return Null Worksheet. findWorksheet(String)
 	 */
 	@Test
-	public void findCollectionsInWorksheet_ShouldReturnNullWorksheetWhenWorkSheetNumberNotExist()
-	{
-		
+	public void findCollectionsInWorksheet_ShouldReturnNullWorksheetWhenWorkSheetNumberNotExist() {
+
 		assertNull(collectedSampleRepository.findWorksheet("-1"));
 	}
-	
+
 	/**
-	 * Should return Worksheet object.
-	 * findCollectionsInWorksheet(String)
+	 * Should return Worksheet object. findCollectionsInWorksheet(String)
 	 */
 	@Test
-	public void findCollectionsInWorksheet_ShouldReturnWorksheetWhenWorkSheetNumberExist()
-	{
-		//W0314000000 is worksheetNumber
-		String worksheetnumber="W0314000000";
-		Worksheet worksheet = collectedSampleRepository.findWorksheet(worksheetnumber); 
-		assertNotNull("Should return Worksheet Object.",worksheet);
-		assertTrue("Worksheetnumber value in Worksheet Object should be '"+worksheetnumber+"'",worksheet.getWorksheetNumber().equals(worksheetnumber));
-		
+	public void findCollectionsInWorksheet_ShouldReturnWorksheetWhenWorkSheetNumberExist() {
+		// W0314000000 is worksheetNumber
+		String worksheetnumber = "W0314000000";
+		Worksheet worksheet = collectedSampleRepository
+				.findWorksheet(worksheetnumber);
+		assertNotNull("Should return Worksheet Object.", worksheet);
+		assertTrue("Worksheetnumber value in Worksheet Object should be '"
+				+ worksheetnumber + "'",
+				worksheet.getWorksheetNumber().equals(worksheetnumber));
+
 	}
-	
+
 	/**
 	 * Should return null CollectedSample List.
 	 * findCollectionsInWorksheet(String)
 	 */
 	@Test
-	public void findCollectionsInWorksheet_List_CollectedSample_ShouldReturnNullCollectedListSizeWhenMatchingWorkSheetNotExist(){
-		//Worksheet is not exist into dataset.
-		String worksheetnumber="-1";
-		List<CollectedSample> collectedSampleList = collectedSampleRepository.findCollectionsInWorksheet(worksheetnumber);
-		assertNull("CollectedSample List size should be zero.",collectedSampleList);
+	public void findCollectionsInWorksheet_List_CollectedSample_ShouldReturnNullCollectedListSizeWhenMatchingWorkSheetNotExist() {
+		// Worksheet is not exist into dataset.
+		String worksheetnumber = "-1";
+		List<CollectedSample> collectedSampleList = collectedSampleRepository
+				.findCollectionsInWorksheet(worksheetnumber);
+		assertNull("CollectedSample List size should be zero.",
+				collectedSampleList);
 	}
-	
+
 	/**
-	 * Should return CollectedSample List.
-	 * findCollectionsInWorksheet(String)
+	 * Should return CollectedSample List. findCollectionsInWorksheet(String)
 	 */
 	@Test
-	public void findCollectionsInWorksheet_List_CollectedSample_ShouldReturnCollectedListSizeWhenMatchingWorkSheetExist(){
-		//W0314000000 is worksheetNumber
-				String worksheetnumber="W0314000000";
-		List<CollectedSample> collectedSampleList = collectedSampleRepository.findCollectionsInWorksheet(worksheetnumber);
-		assertTrue("CollectedSample List size should not zero.",collectedSampleList.size()!=0?true:false);
-		for(CollectedSample collectedSample:collectedSampleList){
-			if(collectedSample.getId()!=1){
-				assertTrue("CollectedSample Id's should be 1.",false);
+	public void findCollectionsInWorksheet_List_CollectedSample_ShouldReturnCollectedListSizeWhenMatchingWorkSheetExist() {
+		// W0314000000 is worksheetNumber
+		String worksheetnumber = "W0314000000";
+		List<CollectedSample> collectedSampleList = collectedSampleRepository
+				.findCollectionsInWorksheet(worksheetnumber);
+		assertTrue("CollectedSample List size should not zero.",
+				collectedSampleList.size() != 0 ? true : false);
+		for (CollectedSample collectedSample : collectedSampleList) {
+			if (collectedSample.getId() != 1) {
+				assertTrue("CollectedSample Id's should be 1.", false);
 			}
 		}
 	}
-	
+
 	/**
 	 * Should return empty CollectedSample List.
 	 * findCollectionsInWorksheet(Long)
 	 */
 	@Test
-	public void findCollectionsInWorksheet_List_Object_ShouldReturnNullCollectedListSizeWhenMatchingWorkSheetNotExist(){
-		
-		//10 worksheetID is not exist.
-		long worksheetId=10l;
+	public void findCollectionsInWorksheet_List_Object_ShouldReturnNullCollectedListSizeWhenMatchingWorkSheetNotExist() {
+
+		// 10 worksheetID is not exist.
+		long worksheetId = 10l;
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		setPaginationParam(pagingParams);
 		@SuppressWarnings("unchecked")
-		List<CollectedSample> collectedSampleList = (List<CollectedSample>)(collectedSampleRepository.findCollectionsInWorksheet(worksheetId,pagingParams)).get(0);
-		assertTrue("CollectedSample List size should be zero.",collectedSampleList.size()==0?true:false);
+		List<CollectedSample> collectedSampleList = (List<CollectedSample>) (collectedSampleRepository
+				.findCollectionsInWorksheet(worksheetId, pagingParams)).get(0);
+		assertTrue("CollectedSample List size should be zero.",
+				collectedSampleList.size() == 0 ? true : false);
 	}
-	
+
 	/**
-	 * Should return CollectedSample List.
-	 * findCollectionsInWorksheet(String)
+	 * Should return CollectedSample List. findCollectionsInWorksheet(String)
 	 */
 	@Test
-	public void findCollectionsInWorksheet_List_Object_ShouldReturnCollectedListSizeWhenMatchingWorkSheetExist(){
-		//1 is worksheet ID.
-		long worksheetId=1l;
+	public void findCollectionsInWorksheet_List_Object_ShouldReturnCollectedListSizeWhenMatchingWorkSheetExist() {
+		// 1 is worksheet ID.
+		long worksheetId = 1l;
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		setPaginationParam(pagingParams);
 		@SuppressWarnings("unchecked")
-		List<CollectedSample> collectedSampleList = (List<CollectedSample>)(collectedSampleRepository.findCollectionsInWorksheet(worksheetId,pagingParams)).get(0);
-		assertTrue("CollectedSample List size should not zero.",collectedSampleList.size()!=0?true:false);
-		for(CollectedSample collectedSample:collectedSampleList){
-			if(collectedSample.getId()!=1){
-				assertTrue("CollectedSample Id's should be 1.",false);
+		List<CollectedSample> collectedSampleList = (List<CollectedSample>) (collectedSampleRepository
+				.findCollectionsInWorksheet(worksheetId, pagingParams)).get(0);
+		assertTrue("CollectedSample List size should not zero.",
+				collectedSampleList.size() != 0 ? true : false);
+		for (CollectedSample collectedSample : collectedSampleList) {
+			if (collectedSample.getId() != 1) {
+				assertTrue("CollectedSample Id's should be 1.", false);
 			}
 		}
 	}
+
 	/**
 	 * Should return zero CollectedSample Count
 	 * getTotalCollectionsInWorksheet(long)
 	 */
 	@Test
-	public void getTotalCollectionsInWorksheet_ShouldReturnZeroWhenWorkSheetIdNotExist(){
-		//10 worksheetid is not exist.
-		long worksheetid=10;
-		assertTrue("CollectedSample count should be zero.",(collectedSampleRepository.getTotalCollectUsingWorkSheetId(worksheetid))==0?true:false);
+	public void getTotalCollectionsInWorksheet_ShouldReturnZeroWhenWorkSheetIdNotExist() {
+		// 10 worksheetid is not exist.
+		long worksheetid = 10;
+		assertTrue(
+				"CollectedSample count should be zero.",
+				(collectedSampleRepository
+						.getTotalCollectUsingWorkSheetId(worksheetid)) == 0 ? true
+						: false);
 	}
-	
+
 	/**
-	 * Should return  CollectedSample Count
-	 * getTotalCollectionsInWorksheet(long)
+	 * Should return CollectedSample Count getTotalCollectionsInWorksheet(long)
 	 */
 	@Test
-	public void getTotalCollectionsInWorksheet_ShouldReturnCollectedSampleCountWhenWorkSheetIdExist(){
-		//2 is Worksheet ID.
-		long worksheetid=2;
-		
-		assertTrue("CollectedSample count should be 2.",(collectedSampleRepository.getTotalCollectUsingWorkSheetId(worksheetid))==2?true:false);
+	public void getTotalCollectionsInWorksheet_ShouldReturnCollectedSampleCountWhenWorkSheetIdExist() {
+		// 2 is Worksheet ID.
+		long worksheetid = 2;
+		assertTrue(
+				"CollectedSample count should be 2.",
+				(collectedSampleRepository
+						.getTotalCollectUsingWorkSheetId(worksheetid)) == 2 ? true
+						: false);
 	}
-	
+
+	/**
+	 * CollectedSample List should be empty.
+	 * verifyCollectionNumbers(List<String>)
+	 */
+	@Test
+	public void verifyCollectionNumber_collectedSampleListValueShouldNullWhenMatchingRecordIsNotFound() {
+		List<String> collectedSampleList = new ArrayList<String>();
+		// D000004 Collection Number is not exist.
+		collectedSampleList.add("D000004");
+		List<CollectedSample> returnCollectedSample = collectedSampleRepository
+				.verifyCollectionNumbers(collectedSampleList);
+		for (CollectedSample collectedSample : returnCollectedSample) {
+			assertNull(
+					"CollectedSample List size should empty because matching collection number is not exist.",
+					collectedSample);
+		}
+
+	}
+
+	/**
+	 * CollectedSample List should return. verifyCollectionNumbers(List<String>)
+	 */
+	@Test
+	public void verifyCollectionNumber_CollectedSamplelistShouldNoneEmptyWhenMatchingRecordIsFound() {
+		List<String> collectedSampleList = new ArrayList<String>();
+		// D000001 and D000003 is Collection Number.
+		collectedSampleList.add("D000001");
+		collectedSampleList.add("D000003");
+		List<CollectedSample> returnCollectedSample = collectedSampleRepository
+				.verifyCollectionNumbers(collectedSampleList);
+		assertTrue(
+				"CollectedSample List size should empty because matching collection number is not exist.",
+				returnCollectedSample.size() == 2 ? true : false);
+		for (CollectedSample collectedSample : returnCollectedSample) {
+			assertTrue(
+					"CollectedSample collection number value should not 'D000002'.",
+					collectedSample.getCollectionNumber().equals("D000002") == false ? true
+							: false);
+		}
+	}
+
+	/**
+	 * CollectedSample List should be empty.
+	 * verifyCollectionNumbers(List<String>)
+	 */
+	@Test
+	public void verifyCollectionNumber_collectedSampleListShouldEmptyWhenMatchingRecordIsNotFound() {
+		List<String> collectedSampleList = new ArrayList<String>();
+		List<CollectedSample> returnCollectedSample = collectedSampleRepository
+				.verifyCollectionNumbers(collectedSampleList);
+		assertTrue(
+				"CollectedSample List size should empty because matching collection number list is empty.",
+				returnCollectedSample.size() == 0 ? true : false);
+
+	}
+
+	/**
+	 * Should Return empty List. getCollectedSamples(Date,Date)
+	 */
+	@Ignore
+	public void getCollectedSamples_ShouldReturnEmptyCollectedSampleListWhenFromDateNull() {
+		// TO DO
+	}
+
+	/**
+	 * Should Return empty List. getCollectedSamples(Date,Date)
+	 */
+	@Ignore
+	public void getCollectedSamples_ShouldReturnEmptyCollectedSampleListWhenToDateNull() {
+		// TO DO
+	}
+
+	/**
+	 * Should Return CollectedSample List. getCollectedSamples(Date,Date)
+	 */
+	@Ignore
+	public void getCollectedSamples_ShouldReturnCollectedListWhenMatchingRecordIsFound() {
+		// TO DO
+	}
+
+	/**
+	 * Should Return empty List. getCollectedSamples(Date,Date)
+	 */
+	@Ignore
+	public void getCollectedSamples_ShouldReturnEmptyCollectedListWhenMatchingRecordIsNotFound() {
+		// TO DO
+	}
+
+	/**
+	 * Map should be empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnEmptyMapWhenSearchCriteriaIsNotMention() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithCollectedDuringSpecifiedPeriod() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithCollectionCenter() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithCollectionSite() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry. findNumberOfCollected
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithBloodGroup() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithBloodGroupAndDaily() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithBloodGroupAndMonthly() {
+		// TO DO
+	}
+
+	/**
+	 * Map should not empry.
+	 * findNumberOfCollectedSamples(Date,Date,String,List<String
+	 * >,List<String>,List<String>)
+	 */
+	@Ignore
+	public void findNumberOfCollectedSamples_ShouldReturnMapMatchWithBloodGroupAndyearly() {
+		// TO DO
+	}
+
 	public void setPaginationParam(Map<String, Object> pagingParams) {
 		pagingParams.put("sortColumn", "id");
 		pagingParams.put("start", "0");
