@@ -45,6 +45,7 @@ import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
 import repository.events.CollectionUpdatedEvent;
+import utils.DeleteIncludeStatus;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -165,9 +166,8 @@ public class CollectedSampleRepository {
 		query.setFirstResult(start);
 		query.setMaxResults(length);
 		List<CollectedSample> lists = query.getResultList();
-				
-		return Arrays.asList(lists,
-				getResultCount(queryStr, query));
+
+		return Arrays.asList(lists, getResultCount(queryStr, query));
 	}
 
 	private Long getResultCount(String queryStr, Query query) {
@@ -180,10 +180,11 @@ public class CollectedSampleRepository {
 				"");
 		/**
 		 * Remove order by clause Because It is working fine with MYSQL database
-		 * but create problem when use with HSQLDB. Hibernate is fired exception '
-		 * org.hibernate.exception.SQLGrammarException: invalid ORDER BY
+		 * but create problem when use with HSQLDB. Hibernate is fired exception
+		 * ' org.hibernate.exception.SQLGrammarException: invalid ORDER BY
 		 * expression '
 		 */
+		if(countQueryStr.lastIndexOf("ORDER BY c.")!=-1)
 		countQueryStr = countQueryStr.substring(0,
 				countQueryStr.lastIndexOf("ORDER BY c."));
 		TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
@@ -303,9 +304,9 @@ public class CollectedSampleRepository {
 		}
 
 		Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long, Long>>();
-		for (String bloodGroup : bloodGroups) {
-			resultMap.put(bloodGroup, new HashMap<Long, Long>());
-		}
+			for (String bloodGroup : bloodGroups) {
+				resultMap.put(bloodGroup, new HashMap<Long, Long>());
+			}
 
 		TypedQuery<Object[]> query = em
 				.createQuery(
@@ -334,30 +335,28 @@ public class CollectedSampleRepository {
 		}
 
 		List<Object[]> resultList = query.getResultList();
-
-		for (String bloodGroup : bloodGroups) {
-			Map<Long, Long> m = new HashMap<Long, Long>();
-			Calendar gcal = new GregorianCalendar();
-			Date lowerDate = null;
-			Date upperDate = null;
-			try {
-				lowerDate = resultDateFormat.parse(resultDateFormat
-						.format(dateCollectedFrom));
-				upperDate = resultDateFormat.parse(resultDateFormat
-						.format(dateCollectedTo));
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			for (String bloodGroup : bloodGroups) {
+				Map<Long, Long> m = new HashMap<Long, Long>();
+				Calendar gcal = new GregorianCalendar();
+				Date lowerDate = null;
+				Date upperDate = null;
+				try {
+					lowerDate = resultDateFormat.parse(resultDateFormat
+							.format(dateCollectedFrom));
+					upperDate = resultDateFormat.parse(resultDateFormat
+							.format(dateCollectedTo));
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				gcal.setTime(lowerDate);
+				while (gcal.getTime().before(upperDate)
+						|| gcal.getTime().equals(upperDate)) {
+					m.put(gcal.getTime().getTime(), (long) 0);
+					gcal.add(incrementBy, 1);
+				}
+				resultMap.put(bloodGroup, m);
 			}
-			gcal.setTime(lowerDate);
-			while (gcal.getTime().before(upperDate)
-					|| gcal.getTime().equals(upperDate)) {
-				m.put(gcal.getTime().getTime(), (long) 0);
-				gcal.add(incrementBy, 1);
-			}
-			resultMap.put(bloodGroup, m);
-		}
-
 		for (Object[] result : resultList) {
 			Date d = (Date) result[1];
 			String bloodAbo = (String) result[2];
@@ -386,42 +385,42 @@ public class CollectedSampleRepository {
 	}
 
 	public CollectedSample addCollectedSample(CollectedSample collectedSample) {
-		try{
-		collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-		collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
-		em.persist(collectedSample);
-		em.flush();
-		ApplicationContext applicationContext = ApplicationContextProvider
-				.getApplicationContext();
-		applicationContext.publishEvent(new CollectionUpdatedEvent("10",
-				collectedSample));
-		em.refresh(collectedSample);
+		try {
+			collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+			collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
+			em.persist(collectedSample);
+			em.flush();
+			ApplicationContext applicationContext = ApplicationContextProvider
+					.getApplicationContext();
+			applicationContext.publishEvent(new CollectionUpdatedEvent("10",
+					collectedSample));
+			em.refresh(collectedSample);
 
-		// Add product
-		Product product = new Product();
-		product.setIsDeleted(false);
-		product.setDonationIdentificationNumber(collectedSample
-				.getCollectionNumber());
-		product.setCollectedSample(collectedSample);
-		product.setStatus(ProductStatus.QUARANTINED);
-		product.setCreatedDate(collectedSample.getCreatedDate());
-		product.setCreatedOn(collectedSample.getCollectedOn());
-		product.setCreatedBy(collectedSample.getCreatedBy());
+			// Add product
+			Product product = new Product();
+			product.setIsDeleted(false);
+			product.setDonationIdentificationNumber(collectedSample
+					.getCollectionNumber());
+			product.setCollectedSample(collectedSample);
+			product.setStatus(ProductStatus.QUARANTINED);
+			product.setCreatedDate(collectedSample.getCreatedDate());
+			product.setCreatedOn(collectedSample.getCollectedOn());
+			product.setCreatedBy(collectedSample.getCreatedBy());
 
-		ProductType productType = productRepository
-				.findProductTypeByProductTypeName("Whole Blood");
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(collectedSample.getCollectedOn());
-		cal.add(Calendar.DATE, productType.getExpiresAfter());
-		Date expiresOn = cal.getTime();
+			ProductType productType = productRepository
+					.findProductTypeByProductTypeName("Whole Blood");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(collectedSample.getCollectedOn());
+			cal.add(Calendar.DATE, productType.getExpiresAfter());
+			Date expiresOn = cal.getTime();
 
-		product.setExpiresOn(expiresOn);
-		product.setProductType(productType);
+			product.setExpiresOn(expiresOn);
+			product.setProductType(productType);
 
-		em.persist(product);
-		// em.flush();
-		em.refresh(product);
-		}catch(Exception e){
+			em.persist(product);
+			// em.flush();
+			em.refresh(product);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return collectedSample;
@@ -464,6 +463,33 @@ public class CollectedSampleRepository {
 		}
 		em.flush();
 		return collectedSamples;
+	}
+
+	public CollectedSample findCollectedSampleByCollectionNumber(
+			String collectionNumber, DeleteIncludeStatus deleteIncludeStatus) {
+		String queryString = "";
+		if (deleteIncludeStatus
+				.compareTo(DeleteIncludeStatus.DELETE_RECORD_NOT_INCLUDE) == 0)
+			queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
+		else
+			queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber";
+		TypedQuery<CollectedSample> query = em.createQuery(queryString,
+				CollectedSample.class);
+		if (deleteIncludeStatus
+				.compareTo(DeleteIncludeStatus.DELETE_RECORD_NOT_INCLUDE) == 0)
+			query.setParameter("isDeleted", Boolean.FALSE);
+		query.setParameter("collectionNumber", collectionNumber);
+		CollectedSample c = null;
+		try {
+			c = query.getSingleResult();
+		} catch (NoResultException ex) {
+			LOGGER.error("Inside findCollectedSampleByCollectionNumber::" + ex);
+		} catch (NonUniqueObjectException ex) {
+			LOGGER.error("Inside findCollectedSampleByCollectionNumber::" + ex);
+			LOGGER.error("Multiple collections for collection::"
+					+ collectionNumber);
+		}
+		return c;
 	}
 
 	public CollectedSample findCollectedSampleByCollectionNumber(
@@ -661,28 +687,46 @@ public class CollectedSampleRepository {
 		else
 			return collectedSample;
 	}
-	/**
-	 * This method is clear database table before start new test case or execute new test case. Without clear explicitly data I have faced below errror.
-	 * integrity constraint violation: foreign key no parent; FK50C664CF73AC2B90 table: Product
-	 *  
-	 */
-	 public void clearData(){
-		  em.createNativeQuery("truncate table user").executeUpdate();
-		  em.createNativeQuery("truncate table donor").executeUpdate();
-		  em.createNativeQuery("truncate table collectedsample").executeUpdate();
-		  em.createNativeQuery("truncate table collectionbatch").executeUpdate();
-		  em.createNativeQuery("truncate table role").executeUpdate();
-		  em.createNativeQuery("truncate table Permission").executeUpdate();
-		  em.createNativeQuery("truncate table user_role").executeUpdate();
-		  em.createNativeQuery("truncate table Permission_Role").executeUpdate();
-		  em.createNativeQuery("truncate table location").executeUpdate();
-		  em.createNativeQuery("truncate table contactmethodtype").executeUpdate();
-		  em.createNativeQuery("truncate table genericconfig").executeUpdate();
-		  em.createNativeQuery("truncate table deferralreason").executeUpdate();
-		  em.createNativeQuery("truncate table bloodbagtype").executeUpdate();
-		  em.createNativeQuery("truncate table donationtype").executeUpdate();
-		  em.createNativeQuery("truncate table producttype").executeUpdate();
-		  em.createNativeQuery("truncate table formfield").executeUpdate();
-	  }
-}
 
+	/**
+	 * This method is clear database table before start new test case or execute
+	 * new test case. Without clear explicitly data I have faced below errror.
+	 * integrity constraint violation: foreign key no parent; FK50C664CF73AC2B90
+	 * table: Product
+	 * 
+	 */
+	public void clearData() {
+		em.createNativeQuery("truncate table user").executeUpdate();
+		em.createNativeQuery("truncate table donor").executeUpdate();
+		em.createNativeQuery("truncate table collectedsample").executeUpdate();
+		em.createNativeQuery("truncate table collectionbatch").executeUpdate();
+		em.createNativeQuery("truncate table role").executeUpdate();
+		em.createNativeQuery("truncate table Permission").executeUpdate();
+		em.createNativeQuery("truncate table user_role").executeUpdate();
+		em.createNativeQuery("truncate table Permission_Role").executeUpdate();
+		em.createNativeQuery("truncate table location").executeUpdate();
+		em.createNativeQuery("truncate table contactmethodtype")
+				.executeUpdate();
+		em.createNativeQuery("truncate table genericconfig").executeUpdate();
+		em.createNativeQuery("truncate table deferralreason").executeUpdate();
+		em.createNativeQuery("truncate table bloodbagtype").executeUpdate();
+		em.createNativeQuery("truncate table donationtype").executeUpdate();
+		em.createNativeQuery("truncate table producttype").executeUpdate();
+		em.createNativeQuery("truncate table formfield").executeUpdate();
+	}
+
+	public Date testFromAndToDate(String date, int methodtype) {
+		if (methodtype == 1) {
+			return this.getDateCollectedFromOrDefault(date);
+		} else if (methodtype == 2) {
+			return this.getDateCollectedToOrDefault(date);
+		}
+
+		return null;
+	}
+	
+	public Long getTotalCollectUsingWorkSheetId(long worksheetid){
+		return this.getTotalCollectionsInWorksheet(worksheetid);
+	}
+
+}
