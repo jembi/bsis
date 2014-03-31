@@ -139,7 +139,6 @@ $(document).ready(function() {
 	    	    	$("#${donorCommunicationsFormId}").find(".anyBloodGroupInput").val("false");
 	    	    }
 	    	    var donorCommunicationsData = $("#${donorCommunicationsFormId}").serialize();
-	    	    alert("donorCommunicationsData_________"+donorCommunicationsData);
 	    	    var resultsDiv = $("#${tabContentId}").find(".findDonorsFromDonorCommunications");
 	    	    $.ajax({
 	    	      type : "GET",
