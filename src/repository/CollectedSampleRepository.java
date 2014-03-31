@@ -45,7 +45,6 @@ import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
 import repository.events.CollectionUpdatedEvent;
-import utils.DeleteIncludeStatus;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -466,18 +465,11 @@ public class CollectedSampleRepository {
 	}
 
 	public CollectedSample findCollectedSampleByCollectionNumber(
-			String collectionNumber, DeleteIncludeStatus deleteIncludeStatus) {
-		String queryString = "";
-		if (deleteIncludeStatus
-				.compareTo(DeleteIncludeStatus.DELETE_RECORD_NOT_INCLUDE) == 0)
-			queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
-		else
-			queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber";
+			String collectionNumber,boolean isDeleted) {
+		String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
 		TypedQuery<CollectedSample> query = em.createQuery(queryString,
 				CollectedSample.class);
-		if (deleteIncludeStatus
-				.compareTo(DeleteIncludeStatus.DELETE_RECORD_NOT_INCLUDE) == 0)
-			query.setParameter("isDeleted", Boolean.FALSE);
+		query.setParameter("isDeleted", isDeleted);
 		query.setParameter("collectionNumber", collectionNumber);
 		CollectedSample c = null;
 		try {
@@ -491,7 +483,7 @@ public class CollectedSampleRepository {
 		}
 		return c;
 	}
-
+	/*
 	public CollectedSample findCollectedSampleByCollectionNumber(
 			String collectionNumber) {
 		String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
@@ -533,7 +525,7 @@ public class CollectedSampleRepository {
 		}
 		return c;
 	}
-
+*/
 	public void saveToWorksheet(String collectionNumber,
 			List<Integer> bloodBagTypeIds, List<Long> centerIds,
 			List<Long> siteIds, String dateCollectedFrom,
@@ -641,7 +633,7 @@ public class CollectedSampleRepository {
 				continue;
 			CollectedSample collectedSample = new CollectedSample();
 			collectedSample.setCollectionNumber(collectionNumber);
-			collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
+			collectedSample = findCollectedSampleByCollectionNumber(collectionNumber,false);
 			if (collectedSample != null) {
 				collections.add(collectedSample);
 			} else {
@@ -690,7 +682,7 @@ public class CollectedSampleRepository {
 
 	/**
 	 * This method is clear database table before start new test case or execute
-	 * new test case. Without clear explicitly data I have faced below errror.
+	 * new test case. Without clear explicitly data I have faced below error.
 	 * integrity constraint violation: foreign key no parent; FK50C664CF73AC2B90
 	 * table: Product
 	 * 

@@ -48,7 +48,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import repository.bloodtesting.BloodTypingStatus;
-import utils.DeleteIncludeStatus;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -687,7 +686,7 @@ public class CollectedSampleRepositoryTest {
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleNotDeleteAndDeletedRecordNotInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
 				.findCollectedSampleByCollectionNumber("D000001",
-						DeleteIncludeStatus.DELETE_RECORD_NOT_INCLUDE);
+						false);
 		assertNotNull("CollectedSample Object should not null.",
 				collectedSample);
 		assertTrue(
@@ -704,7 +703,7 @@ public class CollectedSampleRepositoryTest {
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeletedRecordInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
 				.findCollectedSampleByCollectionNumber("D000002",
-						DeleteIncludeStatus.DELETE_RECORD_INCLUDE);
+						true);
 		assertNotNull("CollectedSample Object should not null.",
 				collectedSample);
 		assertTrue(
@@ -720,7 +719,7 @@ public class CollectedSampleRepositoryTest {
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeleteRecordNotInclude(){
 		CollectedSample collectedSample = collectedSampleRepository
 				.findCollectedSampleByCollectionNumber("D000002",
-						DeleteIncludeStatus.DELETE_RECORD_NOT_INCLUDE);
+						false);
 		assertNull("CollectedSample Object should  null.",
 				collectedSample);
 	}
