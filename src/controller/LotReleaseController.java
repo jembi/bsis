@@ -129,7 +129,7 @@ public class LotReleaseController {
 	  
 	ModelAndView mv = new ModelAndView("zplLabel");
 	
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber,false);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber);
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     
     try{
@@ -255,7 +255,7 @@ public class LotReleaseController {
 	  
 	ModelAndView mv = new ModelAndView("zplLabel");
 	
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber,false);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber);
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     
     try{

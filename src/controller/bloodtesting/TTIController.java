@@ -125,7 +125,7 @@ public class TTIController {
 		CollectedSample collectedSample = null;
 		try {
 			collectedSample = collectedSampleRepository
-					.findCollectedSampleByCollectionNumber(collectionNumber,false);
+					.findCollectedSampleByCollectionNumber(collectionNumber);
 		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage() + ex.getStackTrace());
 			success = false;

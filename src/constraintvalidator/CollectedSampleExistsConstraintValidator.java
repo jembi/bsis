@@ -41,7 +41,7 @@ public class CollectedSampleExistsConstraintValidator implements
           return true;
 
         collectedSample = 
-          collectedSampleRepository.findCollectedSampleByCollectionNumber(target.getCollectionNumber(),false);
+          collectedSampleRepository.findCollectedSampleByCollectionNumber(target.getCollectionNumber());
       }
       if (collectedSample != null) {
         return true;

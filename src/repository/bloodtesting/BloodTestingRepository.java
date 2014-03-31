@@ -423,7 +423,7 @@ public class BloodTestingRepository {
 				if (wellType.getRequiresSample()) {
 					String collectionNumber = wellData.get("collectionNumber");
 					CollectedSample collection = collectedSampleRepository
-							.findCollectedSampleByCollectionNumber(collectionNumber,false);
+							.findCollectedSampleByCollectionNumber(collectionNumber);
 					if (collection == null) {
 						addErrorToWell(errorsByWellNumber, wellNumber,
 								"Invalid collection number");
@@ -915,7 +915,7 @@ public class BloodTestingRepository {
 		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
 			
 			CollectedSample cs = collectedSampleRepository
-					.findCollectedSampleByCollectionNumber(ts.getSID(),false);
+					.findCollectedSampleByCollectionNumber(ts.getSID());
 			if (cs != null){
 				
 				try{

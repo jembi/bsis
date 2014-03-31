@@ -304,7 +304,7 @@ public class UtilController {
       collectionNumber = (String) bean.get("collectionNumber");
     if (StringUtils.isNotBlank(collectionNumber)) {
       try {
-        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber,false);
+        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
@@ -420,7 +420,7 @@ public class UtilController {
     String collectionNumber = collection.getCollectionNumber();
     if (StringUtils.isBlank(collectionNumber))
       return false;
-    CollectedSample existingCollection = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber,true);
+    CollectedSample existingCollection = collectedSampleRepository.findCollectionByCollectionNumberIncludeDeleted(collectionNumber);
     if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
       return true;
     return false;
