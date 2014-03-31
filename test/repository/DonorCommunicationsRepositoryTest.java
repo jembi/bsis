@@ -118,7 +118,7 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	*should return empty list when no results are found
 	
-	* nors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	* findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	* List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	*/
 	@Test
