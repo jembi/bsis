@@ -555,7 +555,7 @@ public class ProductRepository {
   }
 
   public void updateExpiryStatus() {
-    String updateExpiryQuery = "UPDATE Product p SET p.status=:status WHERE " +
+    String updateExpiryQuery = "IF EXISTS (SELECT Product) THEN UPDATE Product p SET p.status=:status WHERE " +
                                "p.status=:availableStatus AND " +
                                "p.expiresOn < :today";
     Query query = em.createQuery(updateExpiryQuery);
