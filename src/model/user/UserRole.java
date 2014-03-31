@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
 
-@Entity(name="user_role")
+@Entity
 @Audited
 public class UserRole {
 	
