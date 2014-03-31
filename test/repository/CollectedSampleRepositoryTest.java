@@ -534,7 +534,9 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSamples_shouldReturnCollectedSamplesCollectedDuringSpecifiedPeriod() {
 		String collectionNumber = "";
+		//Donor Collection On Duration
 		String dateCollectedFrom = "20/03/2014";
+		//Donor Collection On Duration
 		String dateCollectedTo = "27/03/2014";
 		boolean includeTestedCollections = false;
 		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
@@ -695,6 +697,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleNotDeleteAndDeletedRecordNotInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
+				//D000001 is Collection Number
 				.findCollectedSampleByCollectionNumber("D000001", false);
 		assertNotNull("CollectedSample Object should not null.",
 				collectedSample);
@@ -711,6 +714,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeletedRecordInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
+				//D000002 is Deleted Collection Number
 				.findCollectedSampleByCollectionNumber("D000002", true);
 		assertNotNull("CollectedSample Object should not null.",
 				collectedSample);
@@ -727,6 +731,7 @@ public class CollectedSampleRepositoryTest {
 	@Test
 	public void findCollectedSampleByCollectionNumber_ShouldNotNullWhenCollectedSampleDeletedAndDeleteRecordNotInclude() {
 		CollectedSample collectedSample = collectedSampleRepository
+				//D000002 is Deleted Collection Number
 				.findCollectedSampleByCollectionNumber("D000002", false);
 		assertNull("CollectedSample Object should  null.", collectedSample);
 	}
@@ -740,10 +745,12 @@ public class CollectedSampleRepositoryTest {
 	 */
 	@Test
 	public void saveToWorksheet_shouldPersistWorksheet() throws Exception {
+		//D000001 is Collection Number
 		String collectionNumber = "D000001";
 		String dateCollectedFrom = "";
 		String dateCollectedTo = "";
 		boolean includeTestedCollections = false;
+		//W0314000000 Worksheet Number
 		String worksheetNumber = "W0314000000";
 		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
 		bloodBagTypeIds.add(-1);
