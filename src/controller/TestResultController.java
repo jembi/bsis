@@ -64,7 +64,7 @@ public class TestResultController {
 
     String collectionNumber = form.getCollectionNumber();
     CollectedSample c = null;
-    c = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+    c = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber,false);
     if (c == null) {
       mv.addObject("collectionFound", false);
     }

@@ -82,11 +82,17 @@ public class CollectedSampleRepository {
   }
 
   public CollectedSample findCollectedSampleById(Long collectedSampleId) {
-    String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.id = :collectedSampleId and c.isDeleted = :isDeleted";
-    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    return query.setParameter("collectedSampleId", collectedSampleId).getSingleResult();
-  }
+		try {
+			String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.id = :collectedSampleId and c.isDeleted = :isDeleted";
+			TypedQuery<CollectedSample> query = em.createQuery(queryString,
+					CollectedSample.class);
+			query.setParameter("isDeleted", Boolean.FALSE);
+			return query.setParameter("collectedSampleId", collectedSampleId)
+					.getSingleResult();
+		} catch (NoResultException noe) {
+			return null;
+		}
+	}
 
   public List<Object> findCollectedSamples(
       String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
@@ -149,6 +155,15 @@ public class CollectedSampleRepository {
     // removing the join fetch is important otherwise Hibernate will complain
     // owner of the fetched association was not present in the select list
     countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH c.donor", "");
+    /**
+	 * Remove order by clause Because It is working fine with MYSQL database
+	 * but create problem when use with HSQLDB. Hibernate is fired exception
+	 * ' org.hibernate.exception.SQLGrammarException: invalid ORDER BY
+	 * expression '
+	 */
+	if(countQueryStr.lastIndexOf("ORDER BY c.")!=-1)
+	countQueryStr = countQueryStr.substring(0,
+			countQueryStr.lastIndexOf("ORDER BY c."));
     TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
@@ -179,13 +194,13 @@ public class CollectedSampleRepository {
     return collectedSamples;
   }
 
-  public void deleteCollectedSample(Long collectedSampleId) {
-    CollectedSample existingCollectedSample = findCollectedSampleById(collectedSampleId);
-    existingCollectedSample.setIsDeleted(Boolean.TRUE);
-    em.merge(existingCollectedSample);
-    em.flush();
-  }
-
+  public CollectedSample deleteCollectedSample(Long collectedSampleId) {
+		CollectedSample existingCollectedSample = findCollectedSampleById(collectedSampleId);
+		existingCollectedSample.setIsDeleted(Boolean.TRUE);
+		em.merge(existingCollectedSample);
+		em.flush();
+		return existingCollectedSample;
+	}
   public List<CollectedSample> findAnyCollectedSampleMatching(String collectionNumber,
       String sampleNumber, String shippingNumber, String dateCollectedFrom,
       String dateCollectedTo, List<String> centers) {
@@ -380,7 +395,25 @@ public class CollectedSampleRepository {
     em.flush();
     return collectedSamples;
   }
-
+  public CollectedSample findCollectedSampleByCollectionNumber(
+			String collectionNumber,boolean isDeleted) {
+		String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
+		TypedQuery<CollectedSample> query = em.createQuery(queryString,
+				CollectedSample.class);
+		query.setParameter("isDeleted", isDeleted);
+		query.setParameter("collectionNumber", collectionNumber);
+		CollectedSample c = null;
+		try {
+			c = query.getSingleResult();
+		} catch (NoResultException ex) {
+			LOGGER.error("Inside findCollectedSampleByCollectionNumber::" + ex);
+		} catch (NonUniqueObjectException ex) {
+			LOGGER.error("Inside findCollectedSampleByCollectionNumber::" + ex);
+			LOGGER.error("Multiple collections for collection::"
+					+ collectionNumber);
+		}
+		return c;
+	}
   public CollectedSample findCollectedSampleByCollectionNumber(
       String collectionNumber) {
     String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
@@ -512,7 +545,7 @@ public class CollectedSampleRepository {
         continue;
       CollectedSample collectedSample = new CollectedSample();
       collectedSample.setCollectionNumber(collectionNumber);
-      collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
+      collectedSample = findCollectedSampleByCollectionNumber(collectionNumber,false);
       if (collectedSample != null) {
         collections.add(collectedSample);
       } else {
@@ -556,4 +589,45 @@ public class CollectedSampleRepository {
   	else 
   		return collectedSample;
   }
+  
+  /**
+	 * This method is clear database table before start new test case or execute
+	 * new test case. Without clear explicitly data I have faced below error.
+	 * integrity constraint violation: foreign key no parent; FK50C664CF73AC2B90
+	 * table: Product
+	 * 
+	 */
+	public void clearData() {
+		em.createNativeQuery("truncate table user").executeUpdate();
+		em.createNativeQuery("truncate table donor").executeUpdate();
+		em.createNativeQuery("truncate table collectedsample").executeUpdate();
+		em.createNativeQuery("truncate table collectionbatch").executeUpdate();
+		em.createNativeQuery("truncate table role").executeUpdate();
+		em.createNativeQuery("truncate table Permission").executeUpdate();
+		em.createNativeQuery("truncate table user_role").executeUpdate();
+		em.createNativeQuery("truncate table Permission_Role").executeUpdate();
+		em.createNativeQuery("truncate table location").executeUpdate();
+		em.createNativeQuery("truncate table contactmethodtype")
+				.executeUpdate();
+		em.createNativeQuery("truncate table genericconfig").executeUpdate();
+		em.createNativeQuery("truncate table deferralreason").executeUpdate();
+		em.createNativeQuery("truncate table bloodbagtype").executeUpdate();
+		em.createNativeQuery("truncate table donationtype").executeUpdate();
+		em.createNativeQuery("truncate table producttype").executeUpdate();
+		em.createNativeQuery("truncate table formfield").executeUpdate();
+	}
+
+	public Date testFromAndToDate(String date, int methodtype) {
+		if (methodtype == 1) {
+			return this.getDateCollectedFromOrDefault(date);
+		} else if (methodtype == 2) {
+			return this.getDateCollectedToOrDefault(date);
+		}
+
+		return null;
+	}
+	
+	public Long getTotalCollectUsingWorkSheetId(long worksheetid){
+		return this.getTotalCollectionsInWorksheet(worksheetid);
+	}
 }
