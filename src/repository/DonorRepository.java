@@ -432,32 +432,5 @@ public class DonorRepository {
     	return query.getSingleResult();
     return null;
   }
-  /**
-	 * This method is clear database table before start new test case or execute
-	 * new test case. Without clear explicitly data I have faced below error.
-	 * integrity constraint violation: foreign key no parent; FK50C664CF73AC2B90
-	 * table: Product 
-	 * Above error is only arise when execute two test case together like 1.CollectedSampleRepositoryTest.java 
-	 * 2. DonorRepositoryTest.java.
-	 * 
-	 */
-  public void clearData(){
-	  em.createNativeQuery("truncate table user").executeUpdate();
-	  em.createNativeQuery("truncate table donor").executeUpdate();
-	  em.createNativeQuery("truncate table collectedsample").executeUpdate();
-	  em.createNativeQuery("truncate table collectionbatch").executeUpdate();
-	  em.createNativeQuery("truncate table role").executeUpdate();
-	  em.createNativeQuery("truncate table Permission").executeUpdate();
-	  em.createNativeQuery("truncate table user_role").executeUpdate();
-	  em.createNativeQuery("truncate table Permission_Role").executeUpdate();
-	  em.createNativeQuery("truncate table location").executeUpdate();
-	  em.createNativeQuery("truncate table contactmethodtype").executeUpdate();
-	  em.createNativeQuery("truncate table genericconfig").executeUpdate();
-	  em.createNativeQuery("truncate table deferralreason").executeUpdate();
-	  em.createNativeQuery("truncate table bloodbagtype").executeUpdate();
-	  em.createNativeQuery("truncate table donationtype").executeUpdate();
-	  em.createNativeQuery("truncate table producttype").executeUpdate();
-	  em.createNativeQuery("truncate table formfield").executeUpdate();
-	  em.createNativeQuery("truncate table donordeferral").executeUpdate();
-  }
+
 }

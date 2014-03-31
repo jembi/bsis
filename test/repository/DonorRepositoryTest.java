@@ -107,8 +107,7 @@ public class DonorRepositoryTest {
 	@After
 	public void after() throws Exception {
 		// Remove data from database
-		donorRepository.clearData();
-		// DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
+		 DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
 	}
 
 	/**
