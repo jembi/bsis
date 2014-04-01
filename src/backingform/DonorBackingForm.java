@@ -63,6 +63,16 @@ public class DonorBackingForm {
       donor.setBirthDate(null);
     }
   }
+  
+  public void setBirthDate(String birthDate) {
+    this.birthDate = birthDate;
+    try {
+      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      donor.setBirthDate(null);
+    }
+  }
 
   public DonorViewModel getDonorViewModel() {
     return new DonorViewModel(donor);
@@ -268,10 +278,6 @@ public class DonorBackingForm {
 
   public void setZipcode(String zipcode) {
     donor.setZipcode(zipcode);
-  }
-
-  public void generateDonorNumber() {
-    donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
   }
 
   public String getAge() {

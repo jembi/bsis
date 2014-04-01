@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 import org.springframework.mock.web.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -22,7 +23,7 @@ public class AdminControllerTest {
     @InjectMocks
     private AdminController adminController;
     
-	@Test
+	@Ignore @Test
 	public void exampleTest() {
     	assertEquals("10 x 5 must be 50", 50, 10*5);
 	}

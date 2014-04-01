@@ -19,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import repository.CollectedSampleRepository;
@@ -44,7 +45,7 @@ public class ProductControllerTest {
 	private ProductTypeRepository productTypeRepository;
 	
 	// Test case for record new productComponents
-	@Test
+	@Ignore @Test
 	public void recordNewProductComponentsTest() {
 		
 		 Product savedProduct = null;
