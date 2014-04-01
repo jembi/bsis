@@ -28,6 +28,10 @@ public class DonorBackingFormValidator implements Validator {
     this.validator = validator;
     this.utilController = utilController;
   }
+  
+  public DonorBackingFormValidator() {
+	  
+	  }
 
   @SuppressWarnings("unchecked")
   @Override
@@ -37,6 +41,8 @@ public class DonorBackingFormValidator implements Validator {
 
   @Override
   public void validate(Object obj, Errors errors) {
+	  try{
+	 
     if (obj == null || validator == null)
       return;
     
@@ -54,6 +60,9 @@ public class DonorBackingFormValidator implements Validator {
     validateBirthDate(form, errors);    
     validateDonorHistory(form, errors);
     utilController.commonFieldChecks(form, "donor", errors);
+	  }catch(Exception e){
+		  e.printStackTrace();
+	  }
   }
 
   //Commented the following method to fix issue 16, now it is unused method

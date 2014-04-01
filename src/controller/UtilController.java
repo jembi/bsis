@@ -274,7 +274,7 @@ public class UtilController {
     }
     else if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
-        donor = donorRepository.findDonorByDonorNumber(donorNumber);
+        donor = donorRepository.findDonorByDonorNumber(donorNumber,false);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
@@ -315,7 +315,6 @@ public class UtilController {
 
   public boolean isFutureDate(Date date){
 	  Date today = new Date();
-	  System.out.println("\tTODAY:"+today);
 	  if(date.after(today)){
 		  return true;
 	  }
@@ -403,7 +402,7 @@ public class UtilController {
     String donorNumber = donor.getDonorNumber();
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
     if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
       return true;
     return false;
@@ -412,7 +411,7 @@ public class UtilController {
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
     if (existingDonor != null && existingDonor.getId() != null)
       return true;
     return false;
