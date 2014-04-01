@@ -17,8 +17,6 @@ public class PermissionConstants {
 	public static final String VOID_DONOR_CODE = "Void Donor Code";
 	public static final String VIEW_DONOR_CODE_GROUP = "View Donor Code Group";
 	
-	
-	
 	// Donation Permissions
 	public static final String ADD_DONATION  = "Add Donation";
 	public static final String VIEW_DONATION = "View Donation";
@@ -47,7 +45,6 @@ public class PermissionConstants {
 	public static final String VIEW_REQUEST  = "View Request";
 	public static final String VOID_REQUEST  = "Void Request";
 	
-	
 	//Test Results Permissions
 	public static final String ADD_TEST_OUTCOME  = "Add Test Outcome";
 	public static final String EDIT_TEST_OUTCOME = "Edit Test Outcome";
@@ -60,7 +57,7 @@ public class PermissionConstants {
 	public static final String VIEW_TTI_OUTCOME  = "View TTI Outcome";
 	
 	// Blood Typing Permissions
-	public static final String StringEDIT_BLOOD_TYPING_OUTCOMES\ = "Edit Blood Typing Outcome";
+	public static final String EDIT_BLOOD_TYPING_OUTCOMES = "Edit Blood Typing Outcome";
 	public static final String ADD_BLOOD_TYPING_OUTCOME = "Add Blood Typing Outcome";
 	public static final String VIEW_BLOOD_TYPING_OUTCOME = "View Blood Typing Outcome";
 	
@@ -89,7 +86,7 @@ public class PermissionConstants {
 	public static final String MANAGE_DONATION_SITES = "Manage Donation sites";
 	public static final String MANAGE_DONATION_TYPES = "Manage Donation Types";
 	public static final String MANAGE_DONATION_CATEGORIES = "Manage Donation Categories";
-	public static final String MANAGE_COMPONENT_COMBINATION = "Manage Component Combination";
+	public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
 	public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
 	public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
 	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";
@@ -116,14 +113,5 @@ public class PermissionConstants {
 	public static final String VIEW_DISCARD_INFORMATION = "View Discard Information";
 	public static final String VIEW_REPORTING_INFORMATION = "View Reporting Information";
 	public static final String VIEW_ADMIN_INFORMATION = "View Admin Information";
-	
-	
-	
-
-	
-	
-	
-	
-	
 
 }
