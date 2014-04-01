@@ -110,7 +110,7 @@ public class ProductTypeController {
   }
   
   @RequestMapping(value="deactivateProductType", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public @ResponseBody Map<String, Object> deactivateProductType(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
@@ -120,7 +120,7 @@ public class ProductTypeController {
   }
 
   @RequestMapping(value="activateProductType", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public @ResponseBody Map<String, Object> activateProductType(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
@@ -143,7 +143,7 @@ public class ProductTypeController {
 
   @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewProductTypeCombination", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public @ResponseBody Map<String, Object> saveNewProductTypeCombination(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("productTypeCombination") String newProductTypeCombinationAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
@@ -170,7 +170,7 @@ public class ProductTypeController {
   }
   
   @RequestMapping(value="deactivateProductTypeCombination", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public @ResponseBody Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
       @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
 
@@ -180,7 +180,7 @@ public class ProductTypeController {
   }
 
   @RequestMapping(value="activateProductTypeCombination", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public @ResponseBody Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
       @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
 

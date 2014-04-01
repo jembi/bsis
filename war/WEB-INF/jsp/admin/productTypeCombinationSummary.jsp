@@ -120,7 +120,7 @@ $(document).ready(function() {
 });
 </script>
 
-<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATION)">
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATIONS)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
     <div style="  border: thin solid #1075A1;  border-radius: 5px;  margin: 20px;">

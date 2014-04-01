@@ -154,7 +154,7 @@
       });
 </script>
 
-<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATION)">
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATIONS)">
 <div id="${tabContentId}">
 
   <c:if test="${!empty success && !success}">

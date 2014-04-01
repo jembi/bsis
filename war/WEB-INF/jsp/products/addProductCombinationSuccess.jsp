@@ -44,7 +44,7 @@ $(document).ready(function() {
 });
 </script>
 
-<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATION)">
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATIONS)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">

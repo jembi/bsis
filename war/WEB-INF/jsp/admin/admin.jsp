@@ -52,12 +52,12 @@
       <a href="configureLocationsFormGenerator.html">Centers/Sites</a>
     </li>
     </sec:authorize>
-    <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATION)">
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATIONS)">
     <li id="productTypesForm">
       <a href="configureProductTypes.html">Product Types</a>
     </li>
     </sec:authorize>
-    <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATION)">
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_COMPONENT_COMBINATIONS)">
     <li id="productTypeCombinationsForm">
       <a href="configureProductTypeCombinations.html">Product Type <br /> Combinations</a>
     </li>

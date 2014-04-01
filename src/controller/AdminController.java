@@ -337,7 +337,7 @@ public class AdminController {
   }
   
   @RequestMapping(value="/configureProductTypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ModelAndView configureProductTypes(
       HttpServletRequest request, HttpServletResponse response) {
 
@@ -348,7 +348,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureProductTypeCombinations", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ModelAndView configureProductTypeCombinations(
       HttpServletRequest request, HttpServletResponse response) {
 
