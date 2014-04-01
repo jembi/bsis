@@ -24,4 +24,9 @@ public class ContactMethodTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
+  
+  public void saveContactMethod(ContactMethodType contactMethodType){
+	  em.persist(contactMethodType);
+	    em.flush();
+  }
 }

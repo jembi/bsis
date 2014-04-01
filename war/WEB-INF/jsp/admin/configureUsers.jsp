@@ -17,11 +17,24 @@
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
 <c:set var="mainContentId">mainContent-${unique_page_id}</c:set>
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
-
+<c:set var="table_id">manageUsersTable-${unique_page_id}</c:set>
 <c:set var="configureUsersFormId">configureUsers-${unique_page_id}</c:set>
 
 <script>
 $(document).ready(function() {
+	
+	 var manageUsersTable = $("#${table_id}").dataTable({
+	        "bJQueryUI" : true,
+	        "sDom" : '<"H"lfrT>t<"F"ip>',
+	        "oTableTools" : {
+	          "aButtons" : [],
+	          "fnRowSelected" : function(node) {
+	                            },
+	          "fnRowDeselected" : function(node) {
+	                            },
+	        },
+	        "bPaginate" : false
+	      });
 
   $("#${tabContentId}").find(".userDiv").click(function() {
     $.ajax({
@@ -31,6 +44,7 @@ $(document).ready(function() {
              success: function (content) {
                          animatedScrollTo($("#${childContentId}"));
                         $("#${childContentId}").html(content);
+                        $("#${mainContentId}").hide();
                        },
               error: function(response) {
                       showErrorMessage("Something went wrong.");          
@@ -78,6 +92,7 @@ $(document).ready(function() {
       success: function (content) {
                   animatedScrollTo($("#${childContentId}"));
                    $("#${childContentId}").html(content);
+                   $("#${mainContentId}").hide();
                 },
        error: function(response) {
                 showErrorMessage("Something went wrong.");          
@@ -89,30 +104,49 @@ $(document).ready(function() {
 </script>
 
 <div id="${tabContentId}" class="formDiv">
+ <b>Manage Users</b>
+ <br />
+ <br/>
+ 
   <div id="${mainContentId}">
-    <b>Configure Users</b>
-    <br />
-    <div class="tipsBox ui-state-highlight">
+   <!--  <div class="tipsBox ui-state-highlight">
       <p>
         Select one of the users below to edit or add a new user. 
       </p>
-    </div>
-    <c:forEach var="user" items="${model.allUsers}">
-      <div class="userDiv">
-        ${user.username}
-        <input name="id" type="hidden" value="${user.id}">
-      </div>
-    </c:forEach>
+    </div> -->
+    <div></div>
+    <table id="${table_id}" class="bloodTestsTable">
+    	<thead>
+	    	<tr>
+	    		<th style="display: none"></th>
+	    		<th>Username</th>
+	    		<th>First Name</th>
+	    		<th>Last Name</th>
+	    		<th>Role(s)</th>
+		    </tr>
+		  </thead>
+		  <tbody> 
+		    <c:forEach var="user" items="${model.allUsers}">
+		     	<tr>
+		     		<td style="display: none">${user.id}</td>
+		     		<td>
+		     			<div class="userDiv">
+		        			${user.username}
+		        			<input name="id" type="hidden" value="${user.id}">
+		     			 </div>
+		     		</td>
+		     		<td>${user.firstName}</td>
+		     		<td>${user.lastName}</td>
+		     		<td>${user.userRole}</td>
+		     	</tr>
+		    </c:forEach>
+	     </tbody>
+   	</table>
     <div>
       <br />
       <button class="addNewUserButton">Add new user</button>
     </div>
   </div>
-
-  <hr />
-  <br />
-  <br />
-  <br />
 
   <div id="${childContentId}"></div>
 

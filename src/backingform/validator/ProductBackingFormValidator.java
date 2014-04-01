@@ -22,6 +22,7 @@ import viewmodel.ProductViewModel;
 import backingform.FindProductBackingForm;
 import backingform.ProductBackingForm;
 import backingform.ProductCombinationBackingForm;
+import backingform.RecordProductBackingForm;
 import controller.UtilController;
 
 public class ProductBackingFormValidator implements Validator {
@@ -41,7 +42,8 @@ public class ProductBackingFormValidator implements Validator {
     return Arrays.asList(FindProductBackingForm.class,
                          ProductBackingForm.class,
                          ProductViewModel.class,
-                         ProductCombinationBackingForm.class).contains(clazz);
+                         ProductCombinationBackingForm.class,
+                         RecordProductBackingForm.class).contains(clazz);
   }
 
   @Override

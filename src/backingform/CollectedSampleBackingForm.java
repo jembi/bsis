@@ -33,6 +33,13 @@ public class CollectedSampleBackingForm {
   private List<String> sites;
   private String dateCollectedFrom;
   private String dateCollectedTo;
+  private String donorPulse;
+  private String haemoglobinCount;
+  private String donorWeight;
+  private String bloodPressureSystolic;
+  private String bloodPressureDiastolic;
+  
+  
 
   private String collectedOn;
 
@@ -364,44 +371,92 @@ public class CollectedSampleBackingForm {
     this.useParametersFromBatch = useParametersFromBatch;
   }
 
-  public BigDecimal getDonorWeight() {
-		return collectedSample.getDonorWeight();
+  public String getDonorWeight() {
+		return donorWeight;
 	}
 
-  public void setDonorWeight(BigDecimal donorWeight) {
-		collectedSample.setDonorWeight(donorWeight);
+  public void setDonorWeight(String donorWeight) {
+		this.donorWeight=donorWeight;
 	}
   
 	
-	public BigDecimal getHaemoglobinCount() {
-		return collectedSample.getHaemoglobinCount();
+	public String getHaemoglobinCount() {
+		return haemoglobinCount;
 	}
 	
-	public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
-		collectedSample.setHaemoglobinCount(haemoglobinCount);
+	public void setHaemoglobinCount(String haemoglobinCount) {
+		this.haemoglobinCount = haemoglobinCount;
 	}
 
-  public Integer getDonorPulse() {
-		return collectedSample.getDonorPulse();
+  public String getDonorPulse() {
+		return donorPulse;
 	}
 
-  public void setDonorPulse(Integer donorPulse) {
-		collectedSample.setDonorPulse(donorPulse);
+  public void setDonorPulse(String donorPulse) {
+		this.donorPulse = donorPulse;
 	}
   
-  public Integer getBloodPressureSystolic() {
-		return  collectedSample.getBloodPressureSystolic();
+  public String getBloodPressureSystolic() {
+		return bloodPressureSystolic;
 	}
 	
-  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+  public void setBloodPressureSystolic(String bloodPressureSystolic) {
+		this.bloodPressureSystolic=bloodPressureSystolic;
 	}
 	
-  public Integer getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic();
+  public String getBloodPressureDiastolic() {
+	return bloodPressureDiastolic;
 	}
 
-  public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+  public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
+	this.bloodPressureDiastolic=bloodPressureDiastolic;
 	}
+  
+  public void setCollectedSample()
+  {
+	  if(!StringUtils.isBlank(donorWeight))
+	  collectedSample.setDonorWeight(new BigDecimal(donorWeight));
+	  
+	  if(!StringUtils.isBlank(donorPulse))
+	  collectedSample.setDonorPulse(new Integer(donorPulse));
+	  
+	  if(!StringUtils.isBlank(haemoglobinCount))
+	  collectedSample.setHaemoglobinCount(new BigDecimal(haemoglobinCount));
+	  
+	  if(!StringUtils.isBlank(bloodPressureSystolic))
+	  collectedSample.setBloodPressureSystolic(new Integer(bloodPressureSystolic));
+	  
+	  if(!StringUtils.isBlank(bloodPressureDiastolic))
+	  collectedSample.setBloodPressureDiastolic(new Integer(bloodPressureDiastolic));
+	  
+  }
+  
+  public void getCollectedSampleIntegerProps()
+  {
+	  if(collectedSample.getDonorWeight()!=null)
+     	  donorWeight = collectedSample.getDonorWeight()+"";
+	  else 
+	      donorWeight ="";
+	  
+	  if(collectedSample.getDonorPulse()!=null)
+	       donorPulse = collectedSample.getDonorPulse()+"";
+	  else 
+	      donorPulse ="";
+	  
+	  if(collectedSample.getHaemoglobinCount() != null)
+	       haemoglobinCount = collectedSample.getHaemoglobinCount()+"";
+	  else
+		  haemoglobinCount= "";
+	  
+	  if(collectedSample.getBloodPressureDiastolic() != null)
+	      bloodPressureDiastolic = collectedSample.getBloodPressureDiastolic()+"";
+	  else
+		  bloodPressureDiastolic="";
+	  
+	  if( collectedSample.getBloodPressureSystolic() !=null)
+	      bloodPressureSystolic = collectedSample.getBloodPressureSystolic()+"";
+	  else
+		  bloodPressureDiastolic="";
+  }
+  
 }

@@ -71,7 +71,7 @@ $(document).ready(
           <tr>
             <th style="display: none"></th>
             <c:if test="${collectedSampleFields.collectionNumber.hidden != true}">
-              <th>${collectedSampleFields.collectionNumber.displayName}</th>
+              <th>${collectedSampleFields.collectionNumber.shortDisplayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.collectedOn.hidden != true}">
               <th>${collectedSampleFields.collectedOn.displayName}</th>
@@ -82,6 +82,19 @@ $(document).ready(
             <c:if test="${collectedSampleFields.donationType.hidden != true}">
               <th>${collectedSampleFields.donationType.displayName}</th>
             </c:if>
+            <c:if test="${collectedSampleFields.donorWeight.hidden != true}">
+              <th>${collectedSampleFields.donorWeight.shortDisplayName}</th>
+            </c:if>
+           <c:if test="${collectedSampleFields.donorPulse.hidden != true}">
+              <th>${collectedSampleFields.donorPulse.shortDisplayName}</th>
+            </c:if>
+            <c:if test="${collectedSampleFields.bloodPressure.hidden != true}">
+              <th>${collectedSampleFields.bloodPressure.shortDisplayName}</th>
+            </c:if>
+            <c:if test="${collectedSampleFields.haemoglobinCount.hidden != true}">
+              <th>${collectedSampleFields.haemoglobinCount.shortDisplayName}</th>
+            </c:if>
+            
           </tr>
         </thead>
         <tbody>
@@ -99,6 +112,18 @@ $(document).ready(
               </c:if>
               <c:if test="${collectedSampleFields.donationType.hidden != true}">
                 <td>${collectedSample.donationType.donationType}</td>
+              </c:if>
+               <c:if test="${collectedSampleFields.donorWeight.hidden != true}">
+                <td>${collectedSample.donorWeight}</td>
+              </c:if>
+              <c:if test="${collectedSampleFields.donorPulse.hidden != true}">
+                <td>${collectedSample.donorPulse}</td>
+              </c:if>
+              <c:if test="${collectedSampleFields.bloodPressure.hidden != true}">
+                <td>${collectedSample.bloodPressure}</td>
+              </c:if>
+              <c:if test="${collectedSampleFields.collectedOn.hidden != true}">
+                <td>${collectedSample.haemoglobinCount}</td>
               </c:if>
             </tr>
           </c:forEach>
