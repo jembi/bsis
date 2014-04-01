@@ -11,6 +11,7 @@ import model.compatibility.CompatibilityTest;
 import model.request.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.RequestRepository;
+import utils.PermissionConstants;
 import backingform.CompatibilityTestBackingForm;
 import backingform.validator.CompatibilityTestBackingFormValidator;
 
@@ -66,6 +68,7 @@ public class CompatibilityTestsController {
   }
 
   @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
   public ModelAndView editCompatibilityTestsFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value="requestId") String requestId) {
@@ -91,6 +94,7 @@ public class CompatibilityTestsController {
   }
 
   @RequestMapping(value = "/addCompatibilityTestForRequest", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
   public ModelAndView
         addCompatibilityTest(HttpServletRequest request,
                  HttpServletResponse response,

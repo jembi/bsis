@@ -14,6 +14,7 @@ import model.collectedsample.LotReleaseConstant;
 import model.product.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,6 +30,7 @@ import repository.DonationTypeRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.bloodtesting.BloodTypingStatus;
+import utils.PermissionConstants;
 import backingform.validator.CollectedSampleBackingFormValidator;
 
 @Controller
@@ -71,6 +73,7 @@ public class LotReleaseController {
   }
   
   @RequestMapping(value = "/lotReleaseFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView lotReleaseFormGenerator(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("lotRelease/lotReleaseForm");
     mv.addObject("requestUrl", getUrl(request));
@@ -80,6 +83,7 @@ public class LotReleaseController {
   }
   
   @RequestMapping(value = "/findlotRelease", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
   public ModelAndView findlotRelease(HttpServletRequest request,HttpServletResponse response,
       @RequestParam(value="dinNumber") String dinNumber)  {
    ModelAndView mv = new ModelAndView("lotRelease/lotReleaseForm");
@@ -124,6 +128,7 @@ public class LotReleaseController {
   }
   
   @RequestMapping(value = "/printLabel", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView printLabel(HttpServletRequest request, Model model,
 		  @RequestParam(value="dinNumber") String dinNumber) {
 	  
@@ -250,6 +255,7 @@ public class LotReleaseController {
   }
   
   @RequestMapping(value = "/printDiscard", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView printDiscard(HttpServletRequest request, Model model,
 		  @RequestParam(value="dinNumber") String dinNumber) {
 	  

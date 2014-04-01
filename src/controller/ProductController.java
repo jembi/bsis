@@ -30,6 +30,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,6 +46,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
+import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 import backingform.FindProductBackingForm;
 import backingform.ProductBackingForm;
@@ -124,6 +126,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public ModelAndView findProductFormGenerator(HttpServletRequest request) {
 
     FindProductBackingForm form = new FindProductBackingForm();
@@ -141,6 +144,7 @@ public class ProductController {
   }
 
   @RequestMapping("/findProduct")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public ModelAndView findProduct(HttpServletRequest request,
       @ModelAttribute("findProductForm") FindProductBackingForm form,
       BindingResult result, Model model) {
@@ -161,6 +165,7 @@ public class ProductController {
    * Form Generator to create Record Product page
    */
   @RequestMapping(value = "/recordProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public ModelAndView recordProductFormGenerator(HttpServletRequest request) {
 
   	RecordProductBackingForm form = new RecordProductBackingForm();
@@ -209,6 +214,7 @@ public class ProductController {
   
   @SuppressWarnings("unchecked")
   @RequestMapping("/findProductPagination")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public @ResponseBody Map<String, Object> findProductPagination(HttpServletRequest request,
       @ModelAttribute("findProductForm") FindProductBackingForm form,
       BindingResult result, Model model) {
@@ -291,6 +297,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/addProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public ModelAndView addProductFormGenerator(HttpServletRequest request,
       Model model) {
 
@@ -309,6 +316,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/addProductCombinationFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ModelAndView addProductCombinationFormGenerator(HttpServletRequest request,
       Model model) {
 
@@ -329,6 +337,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_COMPONENT+"')")
   public ModelAndView editProductFormGenerator(HttpServletRequest request,
       @RequestParam(value="productId") Long productId) {
 
@@ -347,6 +356,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public ModelAndView addProduct(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -399,6 +409,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/addProductCombination", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public ModelAndView addProductCombination(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -458,6 +469,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_COMPONENT+"')")
   public ModelAndView updateProduct(
       HttpServletResponse response,
       @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
@@ -528,6 +540,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteProduct(
       @RequestParam("productId") Long productId) {
@@ -550,6 +563,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/discardProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public ModelAndView discardProductFormGenerator(HttpServletRequest request,
       @RequestParam("productId") String productId) {
     ModelAndView mv = new ModelAndView("products/discardProductForm");
@@ -562,6 +576,7 @@ public class ProductController {
 
 
   @RequestMapping(value = "/discardProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public @ResponseBody Map<String, Object> discardProduct(
       @RequestParam("productId") Long productId,
       @RequestParam("discardReasonId") Integer discardReasonId,
@@ -587,6 +602,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/returnProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public ModelAndView returnProductFormGenerator(HttpServletRequest request,
       @RequestParam("productId") String productId) {
     ModelAndView mv = new ModelAndView("products/returnProductForm");
@@ -598,6 +614,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/splitProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ModelAndView splitProductFormGenerator(HttpServletRequest request,
       @RequestParam("productId") Long productId) {
     ModelAndView mv = new ModelAndView("products/splitProductForm");
@@ -608,6 +625,7 @@ public class ProductController {
 
 
   @RequestMapping(value = "/splitProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public @ResponseBody Map<String, Object> discardProduct(
       @RequestParam("productId") Long productId,
       @RequestParam("numProductsAfterSplitting") Integer numProductsAfterSplitting) {
@@ -632,6 +650,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/viewProductHistory", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public ModelAndView viewProductHistory(HttpServletRequest request, Model model,
       @RequestParam(value = "productId", required = false) Long productId) {
 
@@ -658,6 +677,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/returnProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public @ResponseBody Map<String, Object> returnProduct(
       @RequestParam("productId") Long productId,
       @RequestParam("returnReasonId") Integer returnReasonId,
@@ -720,6 +740,7 @@ public class ProductController {
   }
   
   @RequestMapping("/findProductByPackNumber")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public ModelAndView findProductByPackNumber(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
@@ -738,6 +759,7 @@ public class ProductController {
   }
   @SuppressWarnings("unchecked")
   @RequestMapping("/findProductByPackNumberPagination")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public @ResponseBody Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
@@ -806,6 +828,7 @@ public class ProductController {
   }
   
   @RequestMapping("/recordNewProductComponents")
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public ModelAndView recordNewProductComponents(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
@@ -911,6 +934,7 @@ public class ProductController {
   }
   
   @RequestMapping("/getRecordNewProductComponents")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public ModelAndView getRecordNewProductComponents(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {

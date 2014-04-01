@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import model.collectionbatch.CollectionBatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectionBatchRepository;
 import repository.LocationRepository;
+import utils.PermissionConstants;
 import viewmodel.CollectionBatchViewModel;
 import backingform.CollectionBatchBackingForm;
 import backingform.FindCollectionBatchBackingForm;
@@ -63,6 +65,7 @@ public class CollectionBatchController {
   }
 
   @RequestMapping(value = "/findCollectionBatchFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
 
     FindCollectionBatchBackingForm form = new FindCollectionBatchBackingForm();
@@ -80,6 +83,7 @@ public class CollectionBatchController {
   }
 
   @RequestMapping("/findCollectionBatch")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findCollectionBatch(HttpServletRequest request,
       @ModelAttribute("findCollectionBatchForm") FindCollectionBatchBackingForm form,
       BindingResult result, Model model) {
@@ -121,6 +125,7 @@ public class CollectionBatchController {
   }
 
   @RequestMapping(value = "/addCollectionBatchFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
   public ModelAndView addCollectionBatchFormGenerator(HttpServletRequest request,
       Model model) {
 
@@ -139,6 +144,7 @@ public class CollectionBatchController {
   }
 
   @RequestMapping(value = "/addCollectionBatch", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')") 
   public ModelAndView addCollectionBatch(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -207,6 +213,7 @@ public class CollectionBatchController {
   }
 
   @RequestMapping(value = "/collectionBatchSummary", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView collectionBatchSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "collectionBatchId", required = false) Integer collectionBatchId) {
 

@@ -11,6 +11,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.bloodtesting.BloodTestingRepository;
+import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 
 @Controller
@@ -40,6 +42,7 @@ public class BloodTestingController {
   }
 
   @RequestMapping(value="bloodTestSummary", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public ModelAndView getBloodTestSummary(HttpServletRequest request,
       @RequestParam(value="bloodTestId") Integer bloodTestId) {
 
@@ -53,6 +56,7 @@ public class BloodTestingController {
 
   @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewBloodTest", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public @ResponseBody Map<String, Object> saveNewBloodTest(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("bloodTest") String newBloodTestAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
@@ -79,6 +83,7 @@ public class BloodTestingController {
   }
   
   @RequestMapping(value="deactivateBloodTest", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public @ResponseBody Map<String, Object> deactivateBloodTest(HttpServletRequest request,
       @RequestParam(value="bloodTestId") Integer bloodTestId) {
 
@@ -88,6 +93,7 @@ public class BloodTestingController {
   }
 
   @RequestMapping(value="activateBloodTest", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public @ResponseBody Map<String, Object> activateBloodTest(HttpServletRequest request,
       @RequestParam(value="bloodTestId") Integer bloodTestId) {
 

@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -10,7 +11,7 @@
 
 <link type="text/css" rel="stylesheet" href="css/products.css" media="all" />
 <script type="text/javascript" src="js/products.js"></script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_COMPONENT)">
 <div id="productsTab" class="leftPanel tabs">
   <ul>
     <li id="findOrAddProductsContent"><a
@@ -23,3 +24,4 @@
       href="recordProductFormGenerator.html">Record Product</a></li>
   </ul>
 </div>
+</sec:authorize>

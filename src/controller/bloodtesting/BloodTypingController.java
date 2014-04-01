@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTestingRuleViewModel;
@@ -79,6 +80,7 @@ public class BloodTypingController {
   }
 
   @RequestMapping(value="/addCollectionsToBloodTypingPlate")
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ModelAndView addCollectionsToBloodTypingPlate(HttpServletRequest request,
           HttpServletResponse response,
           @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers) {
@@ -152,7 +154,9 @@ public class BloodTypingController {
   }
 
   @SuppressWarnings("unchecked")
+  
   @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ModelAndView saveBloodTypingTests(HttpServletRequest request,
       HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests,
       @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
@@ -257,6 +261,7 @@ public class BloodTypingController {
   }
 
   @RequestMapping(value="/getBloodTypingStatusForCollections", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public ModelAndView getBloodTypingStatusForCollections(
                         HttpServletRequest request,
                         HttpServletResponse response,
@@ -282,7 +287,7 @@ public class BloodTypingController {
   }
 
   @RequestMapping(value="/showBloodTypingResultsForCollection", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('PERM_VIEW_TEST_INFORMATION')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public ModelAndView showBloodTypingResultsForCollection(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -319,6 +324,7 @@ public class BloodTypingController {
   }
 
   @RequestMapping(value="/showCollectionSummaryForTesting", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public ModelAndView showCollectionSummaryForTesting(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -339,6 +345,7 @@ public class BloodTypingController {
   }
 
   @RequestMapping(value="/saveAdditionalBloodTypingTests", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public @ResponseBody Map<String, Object> saveAdditionalBloodTypingTests(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -381,6 +388,7 @@ public class BloodTypingController {
   }
 
   @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public ModelAndView getBloodTypingRuleSummary(HttpServletRequest request,
       @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
 
@@ -397,6 +405,7 @@ public class BloodTypingController {
 
   @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewBloodTypingRule", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public @ResponseBody Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
@@ -423,6 +432,7 @@ public class BloodTypingController {
   }
   
   @RequestMapping(value="deleteBloodTypingRule", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public @ResponseBody Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
       @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
 

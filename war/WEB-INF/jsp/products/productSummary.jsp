@@ -236,6 +236,7 @@
       });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_COMPONENT)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
 
@@ -243,7 +244,7 @@
       <button type="button" class="doneButton">
         Done
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+     <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_COMPONENT)">
       <button type="button" class="editButton">
         Edit
       </button>
@@ -254,22 +255,28 @@
       <!-- button type="button" class="productLabelButton">
         Product Label
       </button-->
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_COMPONENT)">
       <c:if test="${product.statusAllowsSplitting and not empty product.productType.pediProductType}">
         <button type="button" class="splitProductButton">
           Split product into ${product.productType.pediProductType.productTypeNameShort}
         </button>
       </c:if>
+      </sec:authorize>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).DISCARD_COMPONENT)">
       <button type="button" class="discardButton">
         Discard product
       </button>
+      </sec:authorize>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).DISCARD_COMPONENT)">
       <button type="button" class="returnButton">
         Return product
       </button>
+      </sec:authorize>
       <button type="button" class="productHistoryButton">
         Show product movement details
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
-      <button type="button" class="deleteButton">
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_COMPONENT)">
+       <button type="button" class="deleteButton">
         Delete
       </button>
       </sec:authorize>
@@ -296,3 +303,4 @@
 
 <div id="${deleteConfirmDialogId}" style="display: none;">Are
   you sure you want to delete this Product?</div>
+  </sec:authorize>

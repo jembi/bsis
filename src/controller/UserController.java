@@ -14,6 +14,7 @@ import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.RoleRepository;
 import repository.UserRepository;
+import utils.PermissionConstants;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
 import backingform.validator.UserBackingFormValidator;
@@ -49,6 +51,7 @@ public class UserController {
   }
 
   @RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
   public ModelAndView configureUsersFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -68,6 +71,7 @@ public class UserController {
   }
 
   @RequestMapping(value = "/editUserFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
   public ModelAndView editUserFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "userId", required = false) Integer userId) {
 	 UserBackingForm form = new UserBackingForm();
@@ -98,6 +102,7 @@ public class UserController {
   }
 
   @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
   public ModelAndView
         addUser(HttpServletRequest request,
                  HttpServletResponse response,
@@ -157,6 +162,7 @@ public class UserController {
        return roles;
   }
   @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
   public ModelAndView updateUser(
       HttpServletResponse response,
       @ModelAttribute(value="editUserForm") @Valid UserBackingForm form,

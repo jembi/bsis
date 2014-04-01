@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
@@ -88,6 +89,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_DONATION_SITES)">
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}" class="formFormatClass">
     <b>Configure Locations</b>
@@ -156,3 +158,4 @@ $(document).ready(function() {
   <div id="${childContentId}"></div>
 
 </div>
+</sec:authorize>

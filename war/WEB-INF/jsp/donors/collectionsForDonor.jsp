@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 
@@ -51,6 +52,7 @@ $(document).ready(
     });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
 <div id="${tabContentId}">
 
   <button class="doneButton">Done</button>
@@ -134,3 +136,4 @@ $(document).ready(
   </c:choose>
 
 </div>
+</sec:authorize>

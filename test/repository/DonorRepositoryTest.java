@@ -439,7 +439,6 @@ public class DonorRepositoryTest {
 		// New DonorNumber(000006) which is assigned to Donor Persist Object.
 		newDonor.setDonorNumber("000006");
 		donorRepository.addDonor(newDonor);
-		System.out.println("Donor ID is:::" + newDonor.getId());
 		assertTrue(
 				"Donor's Id should not zero. Once Donor should persist,new Id is generated and assigned to Donor.",
 				newDonor.getId() == 0 ? false : true);
