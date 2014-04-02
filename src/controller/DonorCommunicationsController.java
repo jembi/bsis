@@ -21,6 +21,7 @@ import model.util.BloodGroup;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +37,7 @@ import repository.ContactMethodTypeRepository;
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
 import viewmodel.DonorViewModel;
+import utils.PermissionConstants;
 import backingform.DonorCommunicationsBackingForm;
 import backingform.validator.DonorCommunicationsBackingFormValidator;
 
@@ -122,6 +124,7 @@ public class DonorCommunicationsController {
 	}
 
 	@RequestMapping(value = "/donorCommunicationsFormGenerator", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
 	public ModelAndView donorCommunicationsFormGenerator(
 			HttpServletRequest request, Model model) {
 
@@ -141,6 +144,7 @@ public class DonorCommunicationsController {
 	}
 
 	@RequestMapping(value = "/findDonorCommunicationsForm", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
 	public ModelAndView findDonorCommunications(
 			HttpServletRequest request,
 			@ModelAttribute("donorCommunicationsForm") @Valid DonorCommunicationsBackingForm form,
