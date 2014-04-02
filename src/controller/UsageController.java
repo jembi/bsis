@@ -12,6 +12,7 @@ import model.request.Request;
 import model.usage.ProductUsage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.UsageRepository;
+import utils.PermissionConstants;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
 import backingform.ProductUsageBackingForm;
@@ -68,6 +70,7 @@ public class UsageController {
   }
 
   @RequestMapping(value = "/addUsageFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView addUsageFormGenerator(HttpServletRequest request) {
 
     ProductUsageBackingForm form = new ProductUsageBackingForm();
@@ -89,6 +92,7 @@ public class UsageController {
   }
 
   @RequestMapping(value = "/addUsage", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView addUsage(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -142,6 +146,7 @@ public class UsageController {
   }
 
   @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView addUsageByRequestFormGenerator(HttpServletRequest request) {
 
     ModelAndView mv = new ModelAndView("usage/addUsageByRequestForm");
@@ -156,6 +161,7 @@ public class UsageController {
   }
 
   @RequestMapping(value="/findIssuedProductsForRequest", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView findIssuedProductsForRequest(HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="requestNumber") String requestNumber) {
@@ -180,6 +186,7 @@ public class UsageController {
   }
 
   @RequestMapping(value = "/addUsageForProductFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView addUsageForProductFormGenerator(HttpServletRequest request,
       @RequestParam(value="productId") Long productId) {
 
@@ -202,6 +209,7 @@ public class UsageController {
   }
 
   @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView addUsageForProduct(
       HttpServletRequest request,
       HttpServletResponse response,

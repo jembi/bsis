@@ -1,36 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <dataset>
 	<user id="1" emailId="admin" firstName="admin" isactive="1"
 		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
 
-	<role id="1" name="ROLE_LOGIN" />
-	<role id="2" name="ROLE_VIEW_DONOR_INFORMATION" />
-	<role id="3" name="ROLE_VIEW_TEST_INFORMATION" />
-	<role id="4" name="ROLE_EDIT_INFORMATION" />
-	<role id="5" name="ROLE_EDIT_CONFIGURATION" />
-
-	<Permission id="1" name="PERM_LOGIN" />
-	<Permission id="2" name="PERM_VIEW_DONOR_INFORMATION" />
-	<Permission id="3" name="PERM_VIEW_TEST_INFORMATION" />
-	<Permission id="4" name="PERM_EDIT_INFORMATION" />
-	<Permission id="5" name="PERM_EDIT_CONFIGURATION" />
-
-	<user_role users_id="1" roles_id="1" />
-	<user_role users_id="1" roles_id="2" />
-	<user_role users_id="1" roles_id="3" />
-	<user_role users_id="1" roles_id="4" />
-	<user_role users_id="1" roles_id="5" />
-
-	<Permission_Role roles_id="1" permissions_id="2" />
-	<Permission_Role roles_id="1" permissions_id="3" />
-	<Permission_Role roles_id="1" permissions_id="4" />
-	<Permission_Role roles_id="1" permissions_id="5" />
-	<Permission_Role roles_id="1" permissions_id="1" />
-
-
-	<location id="1" name="location 1" />
-	<location id="2" name="location 2" />
-	<location id="3" name="location 3" />
-
+	<location id="1" name="location 1" isDonorPanel="true" />
+	<location id="2" name="location 2" isDonorPanel="true" />
+	<location id="3" name="location 3" isDonorPanel="true" />
 
 	<contactmethodtype id="1" contactMethodType="None"
 		isDeleted="0" />

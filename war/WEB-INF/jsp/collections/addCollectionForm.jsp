@@ -240,7 +240,7 @@
 
     });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
     <c:if test="${!empty success && !success}">
@@ -451,3 +451,4 @@
 <div id="${addCollectionFormFindDonorDialogId}" style="display: none;">
   <div class="findDonorFormSection"></div> 
 </div>
+</sec:authorize>

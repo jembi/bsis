@@ -34,6 +34,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +49,7 @@ import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.FileUploadUtils;
+import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
@@ -88,6 +90,7 @@ public class TTIController {
 	}
 
 	@RequestMapping(value = "/ttiFormGenerator", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ModelAndView getTTIForm(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("bloodtesting/addTTIForm");
 		mv.addObject("refreshUrl", "ttiFormGenerator.html");
@@ -111,6 +114,7 @@ public class TTIController {
 	}
 
 	@SuppressWarnings("unchecked")
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/saveTTITests", method = RequestMethod.POST)
 	public ModelAndView saveTTITests(HttpServletRequest request,
 			HttpServletResponse response,
@@ -224,6 +228,7 @@ public class TTIController {
 	}
 
 	@RequestMapping(value = "/showTTIResultsForCollection", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
 	public ModelAndView showTTIResultsForCollection(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "collectionId") String collectionId) {
@@ -268,6 +273,7 @@ public class TTIController {
 	}
 
 	@SuppressWarnings("unchecked")
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/saveAdditionalTTITests", method = RequestMethod.POST)
 	public @ResponseBody
 	Map<String, Object> saveAdditionalTTITests(HttpServletRequest request,
@@ -304,6 +310,7 @@ public class TTIController {
 	}
 
 	@RequestMapping(value = "/saveAllTestResults", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public @ResponseBody
 	Map<String, Object> saveAllTestResults(
 			HttpServletRequest request,
@@ -374,6 +381,7 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "saveTTIResultsOnPlate", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ModelAndView saveTTIResultsOnPlate(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "ttiTestId") Long ttiTestId,
@@ -434,6 +442,7 @@ public class TTIController {
 	}
 
 	@RequestMapping(value = "/uploadTTIResultsFormGenerator", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ModelAndView uploadTTIResultsFormGenerator(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("bloodtesting/uploadTTIResults");
 		mv.addObject("refreshUrl", getUrl(request));
@@ -441,6 +450,7 @@ public class TTIController {
 	}
 
 	@RequestMapping(value = "/uploadTTIResultsGenerator", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ModelAndView uploadTTIResultsGenerator(
 			MultipartHttpServletRequest request, HttpServletResponse response)
 			throws IOException, ParseException {
