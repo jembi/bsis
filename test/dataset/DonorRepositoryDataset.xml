@@ -7,18 +7,13 @@
 	<location id="2" name="location 2" isDonorPanel="true" />
 	<location id="3" name="location 3" isDonorPanel="true" />
 
-	<contactmethodtype id="1" contactMethodType="None"
-		isDeleted="0" />
-	<contactmethodtype id="2" contactMethodType="Phone"
-		isDeleted="0" />
-	<contactmethodtype id="3" contactMethodType="SMS"
-		isDeleted="0" />
-	<contactmethodtype id="4" contactMethodType="Email"
-		isDeleted="0" />
-	<contactmethodtype id="5" contactMethodType="Mail"
-		isDeleted="0" />
-	<contactmethodtype id="6" contactMethodType="Do not Contact"
-		isDeleted="0" />
+	<contactmethodtype id="1" contactMethodType="None" isDeleted="0" />
+	<contactmethodtype id="2" contactMethodType="Phone" isDeleted="0" />
+	<contactmethodtype id="3" contactMethodType="SMS" isDeleted="0" />
+	<contactmethodtype id="4" contactMethodType="Email" isDeleted="0" />
+	<contactmethodtype id="5" contactMethodType="Mail" isDeleted="0" />
+	<contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
+	
 	<donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
