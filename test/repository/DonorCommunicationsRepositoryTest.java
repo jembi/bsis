@@ -1,6 +1,3 @@
-/**
- * 
- */
 package repository;
 
 import static org.junit.Assert.assertEquals;
@@ -50,11 +47,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import security.LoginUserService;
 import security.V2VUserDetails;
 
-/**
- * Bellow test Cases about findDonors method to check
- * find donor functionality of Donor Communication
- **/
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @WebAppConfiguration
@@ -78,7 +70,7 @@ public class DonorCommunicationsRepositoryTest {
 		try {
 			if (connection == null)
 				getConnection();
-			// Insert Data into database using DonorDataset.xml
+			// Insert Data into database using DonorCommunicationsRepositoryDataset.xml
 			IDataSet dataSet = getDataSet();
 			DatabaseOperation.INSERT.execute(connection, dataSet);
 		} catch (Exception e) {
@@ -93,7 +85,7 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	/**
-	 * This method is execute once before test case execution start and acquire
+	 * This method is executed once before test case execution start and acquires
 	 * datasource from spring context and create new dbunit IDatabaseConnection.
 	 * This method is also useful to set HSQLDB datatypefactory.
 	 */
@@ -117,13 +109,14 @@ public class DonorCommunicationsRepositoryTest {
 
 	
 	/**
-	*should return empty list when no results are found
-	
+	* should return empty list when no results are found
+	* 
 	* findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	* List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	*/
 	@Test
 	public void findDonors_shouldReturnEmptyListWhenNoResultsFound() {
+		
 		List<Location> donorPanel = new ArrayList<Location>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
@@ -135,10 +128,10 @@ public class DonorCommunicationsRepositoryTest {
 		long[] id = { 4 };
 		//Search with  BloodGroup 'AB-'
 		String[] bloodGroupStrArray = { "AB-" };
-		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
+		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		donorPanel    =  createDonerPanelListForSearch(id);
-		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		donorPanel    =  createDonorPanelList(id);
+		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		List<Object> results = new ArrayList<Object>();
 		
 		results = donorCommunicationsRepository.findDonors(donorPanel,clinicDate, lastDonationFromDate, 
@@ -148,7 +141,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Donor> donors = (List<Donor>) results.get(0);
 		@SuppressWarnings("unused")
 		Long totalRecords = (Long) results.get(1);
-	    assertEquals("List size should be zero due to no search criteria match.",0, donors.size());
+	    assertEquals("List size should be zero, no donors matching search criteria.",0, donors.size());
 	}
 	
 	/**
@@ -159,6 +152,7 @@ public class DonorCommunicationsRepositoryTest {
 	 */
 	@Test
 	public void findDonors_shouldReturnDonorsMatchingGivenCriteria() {
+		
 		List<Location> donorPanel = new ArrayList<Location>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
@@ -170,10 +164,10 @@ public class DonorCommunicationsRepositoryTest {
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
-		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
+		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		donorPanel    =  createDonerPanelListForSearch(id);
-		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		donorPanel    =  createDonorPanelList(id);
+		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		List<Object> results = new ArrayList<Object>();
 		
 		results = donorCommunicationsRepository.findDonors(donorPanel,clinicDate, lastDonationFromDate, 
@@ -182,7 +176,7 @@ public class DonorCommunicationsRepositoryTest {
 		@SuppressWarnings("unchecked")
 		List<Donor> donors = (List<Donor>) results.get(0);
 		
-	    assertNotSame("List size should grater than zero due to search criteria match.",0, donors.size());
+	    assertNotSame("List size should be greater than zero, with donors matching search criteria.",0, donors.size());
 	    
 	    boolean isvalid = false;
 		for(Donor donor:donors){
@@ -194,11 +188,11 @@ public class DonorCommunicationsRepositoryTest {
 				break;
 			}
 		}
-		assertTrue("Donors having blood Group 'O+' or 'A+' and donor panel id '1' or '3'",isvalid);
+		assertTrue("Donors in list should match the DonorPanel and BloodGroup search criteria used.",isvalid);
 	}
 	
 	/**
-	 * Should return donors who are due to donate on clinicDate, 
+	 * Should return donors who are due to donate on clinicDate
 	 *
 	 * findDonorFromDonorCommunication(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
@@ -218,9 +212,9 @@ public class DonorCommunicationsRepositoryTest {
 			String lastDonationToDate = "";
 			String anyBloodGroup = "false";
 			
-			donorPanel    =  createDonerPanelListForSearch(id);
-			bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
-			Map<String, Object> pagingParams = createPagingParamsMapForSearch();
+			donorPanel    =  createDonorPanelList(id);
+			bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
+			Map<String, Object> pagingParams = createPagingParamsMap();
 
 			List<Object> results = new ArrayList<Object>();
 			results = donorCommunicationsRepository.findDonors(
@@ -268,9 +262,9 @@ public class DonorCommunicationsRepositoryTest {
 		String lastDonationToDate = "27/02/2014";
 		String anyBloodGroup = "false";
 
-		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
-		donorPanel    =  createDonerPanelListForSearch(id);
-		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		Map<String, Object> pagingParams = createPagingParamsMap();
+		donorPanel    =  createDonorPanelList(id);
+		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		
 		List<Object> results = new ArrayList<Object>();
 		results = donorCommunicationsRepository.findDonors(donorPanel,
@@ -346,9 +340,9 @@ public class DonorCommunicationsRepositoryTest {
 		String lastDonationToDate = "25/02/2014";
 		String anyBloodGroup = "false";
 		
-		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
-		donorPanel    =  createDonerPanelListForSearch(id);
-		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		Map<String, Object> pagingParams = createPagingParamsMap();
+		donorPanel    =  createDonorPanelList(id);
+		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		List<Object> results = new ArrayList<Object>();
 
 		results = donorCommunicationsRepository.findDonors(donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate, lastDonationToDate,
@@ -430,9 +424,9 @@ public class DonorCommunicationsRepositoryTest {
 		String lastDonationToDate = "";
 		String anyBloodGroup = "false";
 		
-		Map<String, Object> pagingParams = createPagingParamsMapForSearch();
-		donorPanel    =  createDonerPanelListForSearch(id);
-		bloodGroups  =  createBloodGroupListForSearch(bloodGroupStrArray);
+		Map<String, Object> pagingParams = createPagingParamsMap();
+		donorPanel    =  createDonorPanelList(id);
+		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		List<Object> results = new ArrayList<Object>();
 
 		results = donorCommunicationsRepository.findDonors(donorPanel, getEligibleDonorDate(clinicDate), lastDonationFromDate, lastDonationToDate,
@@ -499,7 +493,8 @@ public class DonorCommunicationsRepositoryTest {
 				userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
-	private List<Location> createDonerPanelListForSearch(long[] id) {
+	
+	private List<Location> createDonorPanelList(long[] id) {
 		List<Location> donorPanel = new ArrayList<Location>();
 
 		for (long locId : id) {
@@ -509,7 +504,18 @@ public class DonorCommunicationsRepositoryTest {
 		}
 		return donorPanel;
 	}
-	private Map<String, Object> createPagingParamsMapForSearch() {
+	
+	private List<BloodGroup> createBloodGroupList(String[] bloodGroupStrArray) {
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		for (String bloodGrpStr : bloodGroupStrArray) {
+			BloodGroup bloodGroup = new BloodGroup();
+			bloodGroup = BloodGroup.getBloodgroups().get(bloodGrpStr.toLowerCase());
+			bloodGroups.add(bloodGroup);
+		}
+		return bloodGroups;
+	}
+	
+	private Map<String, Object> createPagingParamsMap() {
 
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		pagingParams.put("sortColumn", "id");
@@ -520,45 +526,34 @@ public class DonorCommunicationsRepositoryTest {
 
 		return pagingParams;
 	}
-	private List<BloodGroup> createBloodGroupListForSearch(
-			String[] bloodGroupStrArray) {
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		for (String bloodGrpStr : bloodGroupStrArray) {
-			BloodGroup bloodGroup = new BloodGroup();
-			bloodGroup = BloodGroup.getBloodgroups().get(bloodGrpStr.toLowerCase());
-			bloodGroups.add(bloodGroup);
-		}
-		return bloodGroups;
-	}
 	
-	 private static String getEligibleDonorDate(String clinicDate) throws ParseException
-	  {
-		  Calendar cal = Calendar.getInstance();
-		  if(!clinicDate.trim().equalsIgnoreCase(""))
-		  {
-			  Date dateObj = DATE_FORMATER.parse(clinicDate);
-			  @SuppressWarnings({ "unused", "deprecation" })
-			  Date clinicDt = new Date(clinicDate);
-			  cal .setTime(dateObj);
-			  cal.add(Calendar.DATE, -56);
-		  }
-		 return !clinicDate.trim().equalsIgnoreCase("") ? DATE_FORMATER.format(cal.getTime()) : "";
-	  }
+	private static String getEligibleDonorDate(String clinicDate) throws ParseException {
+		Calendar cal = Calendar.getInstance();
+		if(!clinicDate.trim().equalsIgnoreCase(""))
+		{
+			 Date dateObj = DATE_FORMATER.parse(clinicDate);
+			 @SuppressWarnings({ "unused", "deprecation" })
+			 Date clinicDt = new Date(clinicDate);
+			 cal .setTime(dateObj);
+			 cal.add(Calendar.DATE, -56);
+		}
+		return !clinicDate.trim().equalsIgnoreCase("") ? DATE_FORMATER.format(cal.getTime()) : "";
+	 }
 	 
 	 private long getDonorListSizeWithoutAnyCriteria() {
-			List<Location> donorPanel = new ArrayList<Location>();
-			List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-			String clinicDate = "";
-			String clinicDateToCheckdeferredDonor = "";
-			String lastDonationFromDate = "";
-			String lastDonationToDate = "";
-			String anyBloodGroup = "true";
-			Map<String, Object> pagingParams = createPagingParamsMapForSearch();
+		List<Location> donorPanel = new ArrayList<Location>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		String clinicDate = "";
+		String clinicDateToCheckdeferredDonor = "";
+		String lastDonationFromDate = "";
+		String lastDonationToDate = "";
+		String anyBloodGroup = "true";
+		Map<String, Object> pagingParams = createPagingParamsMap();
 
-			List<Object> results = new ArrayList<Object>();
-			results = donorCommunicationsRepository.findDonors(donorPanel,
-					clinicDate, lastDonationFromDate, lastDonationToDate,
-					bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
-			return  (Long) results.get(1);
-		}
+		List<Object> results = new ArrayList<Object>();
+		results = donorCommunicationsRepository.findDonors(donorPanel,
+				clinicDate, lastDonationFromDate, lastDonationToDate,
+				bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+		return  (Long) results.get(1);
+	}
 }

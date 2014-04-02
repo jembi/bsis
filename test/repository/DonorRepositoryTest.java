@@ -78,7 +78,7 @@ public class DonorRepositoryTest {
 		try {
 			if (connection == null)
 				getConnection();
-			// Insert Data into database using DonorDataset.xml
+			// Insert Data into database using DonorRepositoryDataset.xml
 			IDataSet dataSet = getDataSet();
 			Date today = new Date();
 			Map<String, Object> replacements = new HashMap<String, Object>();
@@ -111,7 +111,7 @@ public class DonorRepositoryTest {
 	}
 
 	/**
-	 * This method is execute once before test case execution start and acquire
+	 * This method is executed once before test case execution start and acquires
 	 * datasource from spring context and create new dbunit IDatabaseConnection.
 	 * This method is also useful to set HSQLDB datatypefactory.
 	 */
