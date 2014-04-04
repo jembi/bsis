@@ -22,7 +22,7 @@ TEST_RESULTS_TAB = 'Test Results';
 
 
 //Donor Constants
-DONOR_NUMBER = 000001;
+DONOR_NUMBER = '000001';
 DONOR_FIRST_NAME = 'srikanth';
 DONOR_LAST_NAME = '';
 DONOR_ANY_BLOOD_GROUP = true;
