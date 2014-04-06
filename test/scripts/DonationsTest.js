@@ -27,6 +27,42 @@ casper.run(function() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////  TEST 3 - View Donations page  //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+casper.test.begin('View Donations Page',2,function(test){
+  casper.start(WELCOME_URL).viewport(1000,1000);
+
+casper.then(function(){
+    var tabSelector  =     this.evaluate(function(){
+
+          for(var i=1;i<10;i++){
+         var  selector =  "#topPanelTabs li:nth-child("+i+") a";
+          if(document.querySelector(selector).textContent ==='Donations'){
+           return selector;
+       }
+    }
+    return null;
+ });
+
+     test.assertExists(tabSelector);
+     casper.click(tabSelector);
+     casper.waitForText('Find Collections', function success(){
+        test.pass('Donations Page Loaded Successfully') },function timeout(){
+          test.fail('Donations page timeout')},TIMEOUT);
+
+   });
+
+    casper.run(function() {
+    this.echo('Test Successful - View Donations Page', 'INFO');
+       test.done();
+   });
+
+  });
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST 3 - Find Donation Record  //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,8 +73,8 @@ casper.test.begin('Find Donations Record',8,function(test){
 
         casper.click(DONATION_FIND_TAB);
        casper.waitForSelector('.formFormatClass', function success(){
-        test.pass('Donors Page Loaded Successfully') },function timeout(){
-          test.fail('Donors page timeout')},TIMEOUT);
+        test.pass('Donations Page Loaded Successfully') },function timeout(){
+          test.fail('Donations page timeout')},TIMEOUT);
 
        
    
