@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.HashSet;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,7 @@ import model.user.Permission;
 import model.user.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.RoleRepository;
+import utils.PermissionConstants;
 import viewmodel.RoleViewModel;
 import backingform.RoleBackingForm;
 import backingform.validator.DonorBackingFormValidator;
@@ -52,6 +53,7 @@ public class RoleController {
 	}
 
 	@RequestMapping(value = "/configureRolesFormGenerator", method = RequestMethod.GET)
+	  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public ModelAndView configureRolesFormGenerator(HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 
@@ -65,15 +67,16 @@ public class RoleController {
 
 	private void addAllRolesToModel(Map<String, Object> m) {
 		List<RoleViewModel> roles = roleRepository.getAllRoles();
-		m.put("allRules", roles);
+		m.put("allRoles", roles);
 	}
 
 	private void addAllPermissionsToModel(Map<String, Object> m) {
-		List<Permission> permissions = roleRepository.getAllPermissions();
+		List<Permission> permissions = roleRepository.getAllPermissionsByName();
 		m.put("allPermissions", permissions);
 	}
 
 	@RequestMapping(value = "/editRoleFormGenerator", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public ModelAndView editRoleFormGenerator(HttpServletRequest request,
 			Model model,
 			@RequestParam(value = "roleId", required = false) Long roleId) {
@@ -102,6 +105,7 @@ public class RoleController {
 	}
 
 	@RequestMapping(value = "/updateRole", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public ModelAndView updateRole(
 			HttpServletRequest request,
 			HttpServletResponse response,
@@ -161,6 +165,7 @@ public class RoleController {
 	}
 
 	@RequestMapping(value = "/addRole", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public ModelAndView addRole(HttpServletRequest request,
 			HttpServletResponse response,
 			@ModelAttribute("editRoleForm") @Valid RoleBackingForm form,
@@ -181,6 +186,7 @@ public class RoleController {
 	    		Set<Permission> permissions = setPermissions(form.getPermissionValues());
 				Role role =new Role();
 				role.setName(form.getName());
+				role.setDescription(form.getDescription());
 				role.setPermissions(permissions);
 				savedRole = roleRepository.addRole(role);
 				m.put("hasErrors", false);

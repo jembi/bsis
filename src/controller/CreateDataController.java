@@ -31,6 +31,7 @@ import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,6 +49,7 @@ import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
+import utils.PermissionConstants;
 import backingform.CollectedSampleBackingForm;
 import backingform.ProductBackingForm;
 import backingform.RequestBackingForm;
@@ -336,6 +338,7 @@ public class CreateDataController {
       "Woods", "Wright", "Yates", "Young", "Zimmerman" };
 
   @RequestMapping("/admin-createData")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
   public ModelAndView createDataPage(HttpServletRequest request) {
 
     ModelAndView modelAndView = new ModelAndView("createData");

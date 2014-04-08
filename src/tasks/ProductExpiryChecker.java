@@ -17,12 +17,12 @@ public class ProductExpiryChecker {
 
   @Scheduled(fixedDelay=30*60*1000)
   public void run() {
-    System.out.println("Updating Product Expiry Status");
+    //System.out.println("Updating Product Expiry Status");
     long t1 = System.currentTimeMillis();
     productRepository.updateExpiryStatus();
     long t2 = System.currentTimeMillis();
     double timeTaken = (t2-t1) / 1000.0;
-    System.out.println("Time taken: " + timeTaken + " seconds");
+    //System.out.println("Time taken: " + timeTaken + " seconds");
   }
 
 }

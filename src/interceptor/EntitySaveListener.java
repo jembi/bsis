@@ -25,8 +25,8 @@ import org.springframework.stereotype.Component;
 import security.V2VUserDetails;
 
 @Component
-public class EntitySaveListener implements PersistEventListener,
-		MergeEventListener, PreInsertEventListener {
+
+public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,22 +37,19 @@ public class EntitySaveListener implements PersistEventListener,
 	private LocalEntityManagerFactoryBean entityManagerFactory;
 
 	public EntitySaveListener() {
-		System.out.println("listener created here");
-		System.out.println(entityManagerFactory);
+		logger.info("EntitySaveListener created");
 	}
 
 	public void onPersist(PersistEvent event) throws HibernateException {
-		System.out.println("onPersist");
 		if (SecurityContextHolder.getContext() != null
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Object principal = SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 			if (principal != null && principal instanceof V2VUserDetails) {
 				User user = ((V2VUserDetails) principal).getUser();
-				if (event.getObject() instanceof ModificationTracker
-						&& user != null) {
-					ModificationTracker entity = (ModificationTracker) event
-							.getObject();
+				if (event.getObject() instanceof ModificationTracker &&
+				user != null) {
+					ModificationTracker entity = (ModificationTracker) event.getObject();
 					entity.setCreatedDate(new Date());
 					entity.setCreatedBy(user);
 					entity.setLastUpdated(new Date());
@@ -71,7 +68,6 @@ public class EntitySaveListener implements PersistEventListener,
 
 	@Override
 	public void onMerge(MergeEvent event) throws HibernateException {
-		System.out.println("onMerge");
 		if (SecurityContextHolder.getContext() != null
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Object principal = SecurityContextHolder.getContext()

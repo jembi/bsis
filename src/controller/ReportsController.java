@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,7 @@ import repository.ProductRepository;
 import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
+import utils.PermissionConstants;
 import backingform.CollectionsReportBackingForm;
 import backingform.DiscardedProductsReportBackingForm;
 import backingform.IssuedProductsReportBackingForm;
@@ -57,6 +59,7 @@ public class ReportsController {
   private BloodTestingRepository bloodTestingRepository;
   
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
   public ModelAndView inventoryReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/inventoryReportForm");
     utilController.addTipsToModel(model.asMap(), "report.inventory.generate");
@@ -68,6 +71,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value="/generateInventoryReport", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
   public @ResponseBody Map<String, Object> generateInventoryReport(
                   HttpServletRequest request, HttpServletResponse response,
                   @RequestParam(value="status") String status,
@@ -97,6 +101,7 @@ public class ReportsController {
   }
   
   @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public ModelAndView collectionsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/collectionsReport");
     Map<String, Object> m = model.asMap();
@@ -109,6 +114,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/requestsReportFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public ModelAndView requestsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/requestsReport");
     Map<String, Object> m = model.asMap();
@@ -120,6 +126,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/discardedProductsReportFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public ModelAndView discardedProductsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/discardedProductsReport");
     Map<String, Object> m = model.asMap();
@@ -132,6 +139,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/issuedProductsReportFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public ModelAndView issuedProductsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/issuedProductsReport");
     Map<String, Object> m = model.asMap();
@@ -144,6 +152,7 @@ public class ReportsController {
   }
 
   @RequestMapping("/getCollectionsReport")
+  @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public @ResponseBody
   Map<String, Object> getCollectionsReport(
       @ModelAttribute("collectionsReportForm") CollectionsReportBackingForm form,
@@ -198,6 +207,7 @@ public class ReportsController {
   }
 
   @RequestMapping("/getRequestsReport")
+  @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public @ResponseBody
   Map<String, Object> getRequestsReport(
       @ModelAttribute("requestsReportForm") RequestsReportBackingForm form,
@@ -252,6 +262,7 @@ public class ReportsController {
   }
 
   @RequestMapping("/getDiscardedProductsReport")
+  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public @ResponseBody
   Map<String, Object> getDiscardedProductsReport(
       @ModelAttribute("discardedProductsReportForm") DiscardedProductsReportBackingForm form,
@@ -306,6 +317,7 @@ public class ReportsController {
   }
 
   @RequestMapping("/getIssuedProductsReport")
+  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public @ResponseBody
   Map<String, Object> getIssuedProductsReport(
       @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form,
@@ -415,6 +427,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/ttiReportFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public ModelAndView testResultsReportFormGenerator(Model model) {
     ModelAndView mv = new ModelAndView("reports/testResultsReport");
     Map<String, Object> m = model.asMap();
@@ -428,6 +441,7 @@ public class ReportsController {
   }
 
   @RequestMapping("/getTestResultsReport")
+  @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public @ResponseBody
   Map<String, Object> getTestResultsReport(
       @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form,

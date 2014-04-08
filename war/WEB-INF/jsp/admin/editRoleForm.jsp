@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -57,6 +58,7 @@
       });
 </script>
 
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_ROLES)">
 <div id="${tabContentId}">
 
 
@@ -70,7 +72,7 @@
     commandName="editRoleForm">
     <form:hidden path="id" /> 
     <div>
-      <form:label path="name">Role</form:label>
+      <form:label path="name">Role*</form:label>
       <form:input path="name" />
        <form:errors class="formError" path="Role.name"
             delimiter=","></form:errors>
@@ -79,30 +81,39 @@
        <form:label path="description">Description</form:label> 
       <form:input path="role.description"/>
     </div>
+    
     <div>
-      <form:label path="permissionValues">Permissions</form:label>
-      <form:errors class="formError" path="Role.permissions"
-            delimiter=", "></form:errors>
-     
-       <c:forEach var="permissionVar" items="${model.allPermissions}">
-        <div style="padding-left:180px;">
-        <c:set var="idMatch" value="false"></c:set>
-     
-        <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
-        	<c:if test="${permissionRole.id eq permissionVar.id}">
+      <form:label path="Role.permissions">Permissions</form:label>
+      <table style="padding-left:180px">
+       <tr>  <form:errors class="formError" path="Role.permissions" delimiter=", "/></tr>
+       <tr> 
+          <c:set var="count" value="0" /> 
+          <c:forEach var="permissionVar" items="${model.allPermissions}">
+          <c:set var="idMatch" value="false"></c:set>
+          <c:set var="count" value="${count+1}" />
+          <td>
+         <c:forEach var="permissionRole" items="${editRoleForm.role.permissions}">
+            <c:if test="${permissionRole.id eq permissionVar.id}">
         		<c:set var="idMatch" value="true"></c:set>
       		</c:if>
-      	</c:forEach>
+      	 </c:forEach>
      
-      	<c:if test="${idMatch eq 'true'}">
-     		<form:checkbox path="permissionValues" value="${permissionVar.id}" style="width: auto;" checked="checked"/>${permissionVar.name}
-      	</c:if>
-      	<c:if test="${idMatch ne 'true'}">
-      		< form:checkbox path="permissionValues" value="${permissionVar.id}"  style="width: auto;"/>${permissionVar.name}
-      	</c:if>
-      	</div>
-      </c:forEach>
-    </div>
+            	<c:if test="${idMatch eq 'true'}">
+     		    <form:checkbox path="permissionValues" value="${permissionVar.id}"  label="${permissionVar.name}" checked="checked"/>
+      	        </c:if>
+            	<c:if test="${idMatch ne 'true'}">
+      		    < form:checkbox path="permissionValues"  label="${permissionVar.name}"  value="${permissionVar.id}"/>
+             	</c:if>
+         </td>
+      
+      	        <c:if test="${count%2==0}">
+                 </tr><tr>
+             	</c:if>
+            </c:forEach>
+      	
+      </tr>
+      </table>  
+     </div>
     <br />
   	
     <div>
@@ -116,3 +127,4 @@
     </div>
   </form:form>
 </div>
+</sec:authorize>

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -117,6 +118,7 @@
       });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONOR)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -138,6 +140,7 @@
         <div>
           <form:label path="donorNumber">${donorFields.donorNumber.displayName}</form:label>
           <form:label path="donorNumber" >${editDonorForm.donor.donorNumber}</form:label>
+          <form:input path="donorNumber" style="display:none; disabled:true;"/>
           <form:errors class="formError" path="donor.donorNumber" delimiter=", "></form:errors>
         </div>
       </c:if>
@@ -187,18 +190,47 @@
           <form:errors class="formError" path="donor.nationalID" delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${donorFields.birthDate.hidden != true }">
-        <div>
-          <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
-          <form:input path="birthDate" class="birthDate" />
-          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+      
+      <div>
+          <c:if test="${donorFields.birthDate.hidden != true }">
+               <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
+				<form:input style="width:34px" placeholder="Day" path="dayOfMonth"
+					alt="dayOfMonth" title="dayOfMonth" maxlength="2" />
+
+
+				<form:select path="month" name="Month">
+					<form:option value="" label="Month"/>
+					<form:option value="01" label="January"/>
+					<form:option value="02" label="February"/>
+					<form:option value="03" label="March"/>
+					<form:option value="04" label="April"/>
+					<form:option value="05" label="May"/>
+					<form:option value="06" label="June"/>
+					<form:option value="07" label="July"/>
+					<form:option value="08" label="August"/>
+					<form:option value="09" label="September"/>
+					<form:option value="10" label="Octobor"/>
+					<form:option value="11" label="November"/>
+					<form:option value="12" label="December"/>
+				</form:select>
+            
+            <form:input style="width:46px" path="Year" maxlength="4" alt="year"
+					 placeholder="Year" />
+					 
+		      </c:if>   
+
+		   <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
-			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
-			<form:errors class="formError" path="donor.birthDateEstimated" delimiter=", "></form:errors>
-          </c:if>
-          <form:errors class="formError" path="donor.birthDate" delimiter=", "></form:errors>
-        </div>
-      </c:if>
+			<form:checkbox path="birthDateEstimated" class="birthDateEstimated"
+						style="width: auto; position: relative;" />
+					<form:errors class="formError" path="donor.birthDateEstimated"
+						delimiter=", "></form:errors>
+				</c:if>
+				
+				<form:errors class="formError" path="donor.birthDate">
+				</form:errors>
+		</div>
+				
       <c:if test="${donorFields.age.hidden != true }">
         <div>
           <form:label path="age">${donorFields.age.displayName}</form:label>
@@ -331,3 +363,4 @@
   </div>
 
 </div>
+</sec:authorize>

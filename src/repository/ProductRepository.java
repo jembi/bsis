@@ -369,7 +369,7 @@ public class ProductRepository {
   public Product addProduct(Product product) {
     updateProductInternalFields(product);
     em.persist(product);
-    em.flush();
+    //em.flush();
     em.refresh(product);
     return product;
   }
@@ -524,7 +524,7 @@ public class ProductRepository {
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Product> products = query.getResultList();
-    System.out.println("number of products to update: " + products.size());
+    //System.out.println("number of products to update: " + products.size());
     for (Product product : products) {
       updateProductInternalFields(product);
       em.merge(product);
@@ -555,7 +555,7 @@ public class ProductRepository {
   }
 
   public void updateExpiryStatus() {
-    String updateExpiryQuery = "UPDATE Product p SET p.status=:status WHERE " +
+    String updateExpiryQuery = "IF EXISTS (SELECT Product) THEN UPDATE Product p SET p.status=:status WHERE " +
                                "p.status=:availableStatus AND " +
                                "p.expiresOn < :today";
     Query query = em.createQuery(updateExpiryQuery);
@@ -563,7 +563,7 @@ public class ProductRepository {
     query.setParameter("availableStatus", ProductStatus.AVAILABLE);
     query.setParameter("today", new Date());
     int numUpdated = query.executeUpdate();
-    System.out.println("Number of rows updated: " + numUpdated);
+    //System.out.println("Number of rows updated: " + numUpdated);
   }
 
   public List<Product> getProductsFromProductIds(String[] productIds) {
@@ -916,4 +916,44 @@ public class ProductRepository {
     return true;
   }
 
+  public ProductType findProductTypeBySelectedProductType(int productTypeId) {
+    String queryString = "SELECT p FROM ProductType p where p.id = :productTypeId";
+    TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
+    query.setParameter("productTypeId", productTypeId);
+    ProductType productType = null;
+    try {
+    	productType = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return productType;
+  }
+  
+  public ProductType findProductTypeByProductTypeName(String productTypeName) {
+    String queryString = "SELECT p FROM ProductType p where p.productType = :productTypeName";
+    TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
+    query.setParameter("productTypeName", productTypeName);
+    ProductType productType = null;
+    try {
+    	productType = query.getSingleResult();
+    } catch (NoResultException ex) {
+      ex.printStackTrace();
+    }
+    return productType;
+  }
+  
+  public void updateProductByProductId(long productId) {
+  	 String queryString = "SELECT p FROM Product p where p.id = :productId";
+     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+     query.setParameter("productId", productId);
+     Product product = null;
+     try {
+     	product = query.getSingleResult();
+     	product.setStatus(ProductStatus.PROCESSED);
+     	em.merge(product);
+     } catch (NoResultException ex) {
+       ex.printStackTrace();
+     }
+  	
+  }
 }

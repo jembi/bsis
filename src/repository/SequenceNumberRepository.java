@@ -46,7 +46,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       prefix = "C";
       seqNumStore = new SequenceNumberStore();
@@ -97,7 +97,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Request");
@@ -148,7 +148,7 @@ public class SequenceNumberRepository {
     lastNumber = seqNumStore.getLastNumber();
     //prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-    ex.printStackTrace();
+    //ex.printStackTrace();
     valuePresentInTable = false;
     seqNumStore = new SequenceNumberStore();
     seqNumStore.setTargetTable("Donor");
@@ -177,6 +177,47 @@ public class SequenceNumberRepository {
     em.flush();
     return requestNumber;
   }
+  
+  
+  synchronized public String getSequenceNumber(String targetTable,String columnName) {
+      String queryStr = "SELECT s from SequenceNumberStore s " +
+              "where s.targetTable=:targetTable AND " +
+              " s.columnName=:columnName " ;
+  TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
+  query.setParameter("targetTable", targetTable);
+  query.setParameter("columnName", columnName);
+    
+  SequenceNumberStore seqNumStore = null;
+  Long lastNumber = (long)0;
+  
+  
+  try {
+  seqNumStore = query.getSingleResult();
+  lastNumber = seqNumStore.getLastNumber();
+  
+  } catch (NoResultException ex) {
+  //ex.printStackTrace();
+ 
+  seqNumStore = new SequenceNumberStore();
+  seqNumStore.setTargetTable("Donor");
+  seqNumStore.setColumnName("donorNumber");
+
+  
+  }
+  
+  
+  if (lastNumber == 0){
+  	lastNumber ++;
+  }
+  String lastNumberStr = String.format("%06d", lastNumber);
+  
+  String requestNumber = lastNumberStr;
+  
+ 
+   em.flush();
+  return requestNumber;
+}
+
 
   synchronized public List<String> getBatchCollectionNumbers(int numCollections) {
     String queryStr = "SELECT s from SequenceNumberStore s " +
@@ -203,7 +244,7 @@ public class SequenceNumberRepository {
     lastNumber = seqNumStore.getLastNumber();
     prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-    ex.printStackTrace();
+    //ex.printStackTrace();
     valuePresentInTable = false;
     prefix = "C";
     seqNumStore = new SequenceNumberStore();
@@ -258,7 +299,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Request");
@@ -313,7 +354,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      //ex.printStackTrace();
       valuePresentInTable = false;
       prefix = numberPrefix;
       seqNumStore = new SequenceNumberStore();

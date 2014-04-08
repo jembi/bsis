@@ -31,6 +31,18 @@ public class DonorUtils {
     DateTime t2 = new DateTime(new Date());
     return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
   }
+  
+  public static Integer computeDonorAge(Date birthDate) {
+
+	    if (birthDate == null){
+	    	return null;
+	    }
+	    else{
+		    DateTime t1 = new DateTime(birthDate);
+		    DateTime t2 = new DateTime(new Date());
+		    return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
+	    }
+	  }
 
   public static String computeDonorHash(Donor donor) {
     String firstName = donor.getFirstName();

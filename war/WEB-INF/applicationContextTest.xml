@@ -30,9 +30,8 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 
   <!-- Annotations like PreAuthorize, needed here and not in security-v2v-servlet.xml
 as this is the MVC configuration dealing with URLs??? -->
-<!-- 
   <security:global-method-security pre-post-annotations="enabled" />
- -->  
+
   <context:property-placeholder location="classpath:database.properties" />
 
   <!-- Configures the @Controller programming model -->
@@ -55,22 +54,17 @@ as this is the MVC configuration dealing with URLs??? -->
     </property>
   </bean>
 
-    
- 
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
         <property name="driverClass" value="${testdatabase.driver}" />
         <property name="jdbcUrl" value="${testdatabase.url}" />
         <property name="user" value="${testdatabase.user}" />
         <property name="password" value="" />
-<!-- these are C3P0 properties -->
-
+        <!-- these are C3P0 properties -->
         <property name="acquireIncrement" value="${database.acquireIncrement}" />
         <property name="minPoolSize" value="${database.minPoolSize}" />
         <property name="maxPoolSize" value="${database.maxPoolSize}" />
-        <property name="maxIdleTime" value="${database.maxIdleTime}" />
-     
-        
+        <property name="maxIdleTime" value="${database.maxIdleTime}" />        
   </bean>
 
   <!-- persistence unit name comes from persistence.xml -->
@@ -82,9 +76,6 @@ as this is the MVC configuration dealing with URLs??? -->
       <props>
         <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
         <prop key="hibernate.show_sql">false</prop>
-        <!-- 
-        <prop key="hibernate.hbm2ddl.auto">create</prop>
-         -->
         <prop key="javax.persistence.validation.mode">none</prop>
       </props>
     </property>
@@ -107,7 +98,5 @@ as this is the MVC configuration dealing with URLs??? -->
   <task:executor id="executor" pool-size="5"/>
   <task:scheduler id="scheduler" pool-size="5"/>
   <task:annotation-driven scheduler="scheduler" executor="executor"/>
-
- 
 
 </beans>

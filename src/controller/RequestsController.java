@@ -17,6 +17,7 @@ import model.request.Request;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +36,7 @@ import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
+import utils.PermissionConstants;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.ProductViewModel;
 import viewmodel.RequestViewModel;
@@ -84,6 +86,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/requestSummary", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public ModelAndView requestSummaryGenerator(HttpServletRequest request,
       @RequestParam(value = "requestId", required = false) Long requestId) {
 
@@ -114,6 +117,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public ModelAndView findRequestFormGenerator(HttpServletRequest request, Model model) {
 
     FindRequestBackingForm form = new FindRequestBackingForm();
@@ -131,6 +135,7 @@ public class RequestsController {
   }
 
   @RequestMapping("/findRequest")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public ModelAndView findRequest(HttpServletRequest request,
       Model model,
       @ModelAttribute("findRequestForm") FindRequestBackingForm form,
@@ -152,6 +157,7 @@ public class RequestsController {
   }
 
   @RequestMapping("/findRequestPagination")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public @ResponseBody Map<String, Object> findRequestPagination(HttpServletRequest request,
       @ModelAttribute("findRequestForm") FindRequestBackingForm form,
       BindingResult result, Model model) {
@@ -292,6 +298,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/addRequestFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
   public ModelAndView addRequestFormGenerator(HttpServletRequest request) {
 
     RequestBackingForm form = new RequestBackingForm();
@@ -309,6 +316,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
   public ModelAndView editRequestFormGenerator(HttpServletRequest request,
       @RequestParam(value="requestId") Long requestId) {
 
@@ -326,6 +334,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
   public ModelAndView addRequest(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -379,6 +388,7 @@ public class RequestsController {
   }
 
   @RequestMapping(value="/listIssuedProductsForRequest", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public ModelAndView listIssuedProductsForRequest(HttpServletRequest request,
       HttpServletResponse response, Model model,
       @RequestParam(value="requestId") Long requestId) {
@@ -402,6 +412,7 @@ public class RequestsController {
   }
   
   @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
   public ModelAndView updateRequest(
       HttpServletResponse response,
       @ModelAttribute("editRequestForm") @Valid RequestBackingForm form,
@@ -495,6 +506,7 @@ public class RequestsController {
 
 
   @RequestMapping("/findMatchingProductsForRequest")
+  @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
   public ModelAndView findMatchingProductsForRequest(HttpServletRequest request,
       @RequestParam(value="requestId", required=false) Long requestId) {
 
@@ -519,6 +531,7 @@ public class RequestsController {
   }
 
   @RequestMapping("/issueSelectedProducts")
+  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public @ResponseBody Map<String, Object> issueSelectedProducts(
       HttpServletResponse response,
       @RequestParam("requestId") Long requestId,

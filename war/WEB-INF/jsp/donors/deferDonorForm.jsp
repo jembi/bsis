@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -18,6 +19,8 @@
 
 <script>
 $(document).ready(function(){
+ 	$("#${deferralReasonSelectorId}").val(${deferReasonId});
+	
   function createDatePickerForUntilDate()
   {
 	  $("#${tabContentId}").find(".deferUntil").datepicker({
@@ -50,12 +53,13 @@ $(document).ready(function(){
   createDatePickerForUntilDate();
 });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DEFERRAL)">
 <div id="${tabContentId}">
 
   <form class="formFormatClass deferDonorForm">
 
     <input name="donorId" type="hidden" value="${donorId}"/>
+    <input name="donorDeferralId" type="hidden" value="${donorDeferralId}"/>
     <div>
       <label>Defer until</label>
       <input name="deferUntil" class="deferUntil" value="${deferralUntilDate}" id="deferUntilId"/>
@@ -72,12 +76,12 @@ $(document).ready(function(){
         </c:forEach>
       </select>
     </div>
-
     <div>
       <label>Deferral details (Optional)</label>
-      <textarea name="deferralReasonText"></textarea>
+      <textarea name="deferralReasonText">${deferReasonText}</textarea>
     </div>
 
   </form>
 
 </div>
+</sec:authorize>
