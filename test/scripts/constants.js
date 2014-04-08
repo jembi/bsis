@@ -2,10 +2,11 @@ LOGIN_URL = "http://localhost:8080/bsis/login.html";
 WELCOME_URL = 'http://localhost:8080/bsis/welcomePage.html';
 USERNAME= "superuser";
 PASSWORD = "superuser";
-TIMEOUT = 2000;
+TIMEOUT = 3000;
 LOGIN_USERNAME_ID = "j_username" ;
 LOGIN_PASSWORD_ID =  "j_password";
 LOGIN_FORM_ID = 'form#loginAction';
+FORM_CLASS = 'form.formFormatClass';
 
 
 //Tab Constants
@@ -24,21 +25,40 @@ TEST_RESULTS_TAB = 'Test Results';
 
 //Donor Constants
 DONOR_NUMBER = '000001';
-DONOR_FIRST_NAME = 'srikanth';
+DONOR_FIRST_NAME = 'malyala';
 DONOR_LAST_NAME = '';
 DONOR_ANY_BLOOD_GROUP = true;
 DONOR_DUE_TO_DONATE = false;
-DONOR_BIRTH_DAY_OF_MONTH = '13';
-DONOR_BIRTH_YEAR  = '1985';
-DONOR_BIRTH_MONTH = '01';
+DONOR_DAY_OF_MONTH = '13';
+DONOR_YEAR  = '1985';
+DONOR_MONTH = '01';
+DONOR_GENDER = 'male';
 
 
 //Donor Selectors
-DONOR_NUMBER = '#donorNumber';
+DONOR_NUMBER_ID  = '#donorNumber';
+DONOR_FIRST_NAME_ID = '#firstName';
+DONOR_LAST_NAME_ID  = '#lastName';
+DONOR_ANY_BLOOD_GROUP_ID = '#anyBloodGroup';
+DONOR_DUE_TO_DONATE_ID= '#dueToDonate1';
+DONOR_FIND_BUTTON_CLASS = 'button.findDonorButton';
+DONOR_ADD_BUTTON_CLASS  = 'button.addDonorButton';
+DONOR_EDIT_CLASS = '.editButton' ;
+DONOR_DELETE_CLASS = '.deleteButton';
+DONOR_TABLE_CLASS = '.odd';
+DONOR_GENDER_ID = '#gender';
+DONOR_SAVE_CLASS = '.saveDonorButton';
+DONOR_DONE_CLASS = '.doneButton';
+DONOR_DAY_OF_MONTH_ID  = '#dayOfMonth';
+DONOR_YEAR_ID  = '#year';
+DONOR_MONTH_ID = '#month';
 
 //Donation Constants
-COLLECTION_CENTER = 'Lusaka';
-COLLECTION_SITE = 'Ndola';
+DONATION_CENTER = 'Lusaka';
+DONATION_SITE = 'Ndola';
+COLLECTED_ON = '08/04/2014';
+DONATION_IDENTIFICATION_NUMBER = '12345'
+
 
 //DOnation Selectors 
 DONATION_CENTER_CLASS= '.collectionCenterSelector';
