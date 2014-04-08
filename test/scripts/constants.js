@@ -52,6 +52,7 @@ DONOR_DONE_CLASS = '.doneButton';
 DONOR_DAY_OF_MONTH_ID  = '#dayOfMonth';
 DONOR_YEAR_ID  = '#year';
 DONOR_MONTH_ID = '#month';
+DONOR_CLEAR_BUTTON_CLASS = '.clearFormButton ';
 
 //Donation Constants
 DONATION_CENTER = 'Lusaka';
@@ -80,14 +81,12 @@ DONATION_ADD_CLASS= '.addCollectionButton';
 BLOOD_BAG_CLASS = '.bloodBagTypeSelector';
 DONATION_FIND_CLASS ='.findCollectionButton';
 DONATION_CLEAR_FORM_CLASS = '.clearFormButton ';
-
 DONATION_BATCH_NUMBER_ID = '#collectionBatchNumber';
 DONATION_BATCH_ADD_CLASS = '.addCollectionBatchButton';
 DONATION_BATCH_FIND_CLASS = '.findCollectionBatchButton';
 DONATION_BATCH_CENTER_CLASS = '.collectionCenterSelector';
 DONATION_BATCH_SITE_CLASS = '.collectionSiteSelector';
 DONATION_BATCH_FORM_CLEAR_CLASS = '.clearFindFormButton ';
-
 WORKSHEET_TYPE_CLASS = '.worksheetTypeSelector';
 WORKSHEET_NUMBER_ID = '#worksheetNumber';
 WORKSHEET_ADD_CLASS= '.addWorksheetButton';
