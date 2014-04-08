@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import model.donor.Donor;
 import model.location.Location;
 import model.util.BloodGroup;
+import model.collectedsample.CollectionConstants;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -226,7 +227,7 @@ public class DonorCommunicationsController {
 				@SuppressWarnings({ "unused", "deprecation" })
 				Date clinicDt = new Date(clinicDate);
 				cal.setTime(dateObj);
-				cal.add(Calendar.DATE, -56);
+				cal.add(Calendar.DATE,  -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
 			}
 		} catch (ParseException e) {
 			LOGGER.debug("Start DonorCommunicationsController:getEligibleDonorDate:ParseException"+e);
