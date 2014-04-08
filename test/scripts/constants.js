@@ -45,18 +45,26 @@ DONOR_FIRST_NAME_ID = '#firstName';
 DONOR_LAST_NAME_ID  = '#lastName';
 DONOR_ANY_BLOOD_GROUP_ID = '#anyBloodGroup';
 DONOR_DUE_TO_DONATE_ID= '#dueToDonate1';
+
 DONOR_FIND_BUTTON_CLASS = 'button.findDonorButton';
 DONOR_ADD_BUTTON_CLASS  = 'button.addDonorButton';
-DONOR_EDIT_CLASS = '.editButton' ;
-DONOR_DELETE_CLASS = '.deleteButton';
-DONOR_TABLE_CLASS = '.odd';
+DONOR_EDIT_BUTTON_CLASS = '.editButton' ;
+DONOR_DELETE_BUTTON_CLASS = '.deleteButton';
+DONOR_DEFER_BUTTON_CLASS = '.deferDonorButton';
+DONOR_HISTORY_BUTTON_CLASS = '.donorHistoryButton';
+DONOR_SHOW_DEFERRALS_BUTTON_CLASS = '.donorDeferralsButton';
+DONOR_PRINT_BARCODE_BUTTON_CLASS = '.printBarcode';
+DONOR_DONE_BUTTON_CLASS = '.doneButton';
+DONOR_CLEAR_BUTTON_CLASS = '.clearFormButton ';
+DONATION_PRINT_BUTTON_CLASS = '.printButton';
+
 DONOR_GENDER_ID = '#gender';
 DONOR_SAVE_CLASS = '.saveDonorButton';
 DONOR_DONE_CLASS = '.doneButton';
 DONOR_DAY_OF_MONTH_ID  = '#dayOfMonth';
 DONOR_YEAR_ID  = '#year';
 DONOR_MONTH_ID = '#month';
-DONOR_CLEAR_BUTTON_CLASS = '.clearFormButton ';
+
 
 //Donation Constants
 DONATION_CENTER = 'Lusaka';

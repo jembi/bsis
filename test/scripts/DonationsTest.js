@@ -132,10 +132,10 @@ casper.run(function() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////  TEST 3 - Find Donation Record  //////////////////////////////
+///////////////////////////  TEST 3 - Search Donation Record  //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Find Donations Record',9,function(test){
+casper.test.begin('Search  Donation Records',15,function(test){
   
 
  casper.then(function(){
@@ -166,15 +166,34 @@ casper.then(function(){
   casper.then(function(){
 
     casper.click(DONATION_FIND_CLASS);
-     casper.waitForText('print', function success(){
-        test.pass('Search Donation -- Donation Results  Loaded Successfully') },function timeout(){
-          test.fail('Search Donation -- Donation Results  Loading  timeout')},TIMEOUT);
+     casper.waitForSelector(TABLE_CLASS, function success(){
+        test.pass('Search Donation --> Donation Results  Loaded Successfully') },function timeout(){
+          test.fail('Search Donation --> Donation Results  Loading  timeout')},TIMEOUT);
+  });
+
+
+ casper.then(function(){
+   test.assertExists(TABLE_CLASS);
+    casper.click(TABLE_CLASS);
+     casper.waitForSelector(DONATION_EDIT_BUTTON_CLASS, function success(){
+        test.pass('Search Donation --> Donation Summary page  Loaded Successfully') },function timeout(){
+          test.fail('Edit Donation --> Donation Summary page  Loading  timeout')},TIMEOUT);
   });
 
 
 
+casper.then(function(){
+
+  test.assertExists(DONATION_DONE_BUTTON_CLASS);
+  test.assertExists(DONATION_EDIT_BUTTON_CLASS);
+  test.assertExists(DONATION_DELETE_BUTTON_CLASS);
+  test.assertExists(DONATION_PRINT_BUTTON_CLASS);
+  
+
+});
+
 casper.run(function() {
-    this.echo('Test Successful - Find DOnation Record', 'INFO');
+    this.echo('Test Successful - Search DOnation Record', 'INFO');
        test.done();
    });
 
@@ -199,7 +218,7 @@ casper.test.begin('Edit Donations Record',10,function(test){
      casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Edit Donation -- Donation Results  Loaded Successfully') },function timeout(){
           test.fail('Edit Donation -- Donation Results  Loading  timeout')},TIMEOUT);
-    // casper.wait('10000');
+    
   });
 
  
@@ -237,7 +256,7 @@ casper.then(function(){
   });
 
 casper.run(function() {
-    this.echo('Test Successful - Find DOnation Record', 'INFO');
+    this.echo('Test Successful - Edit DOnation Record', 'INFO');
        test.done();
    });
 
@@ -259,7 +278,7 @@ casper.test.begin('Delete  Donations Record',5,function(test){
      casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Delete Donation -- Donation Results  Loaded Successfully') },function timeout(){
           test.fail('Delete Donation -- Donation Results  Loading  timeout')},TIMEOUT);
-    // casper.wait('10000');
+    
   });
 
  

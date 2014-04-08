@@ -136,7 +136,7 @@ casper.run(function() {
 ///////////////////////////  TEST 3 - Search Donor Test   //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Search For  Donor Record',10,function(test){
+casper.test.begin('Search For  Donor Record',18,function(test){
 
    casper.then(function(){
 
@@ -163,25 +163,46 @@ casper.test.begin('Search For  Donor Record',10,function(test){
 
  casper.then(function(){
         casper.click(DONOR_FIND_BUTTON_CLASS);
-        casper.waitForText('print', function success(){
+        casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Search Donor  -- Donor Results  Loaded Successfully') },function timeout(){
           test.fail('Search Donor  --Donors Reslults  timeout')},TIMEOUT);
    
  
     });
 
- 
+
+casper.then(function(){
+
+      test.assertExists(TABLE_CLASS);
+      casper.click(TABLE_CLASS);
+      
+  casper.waitForSelector(DONOR_DONE_BUTTON_CLASS,
+
+  function success(){
+    test.pass('Edit Donor - Donors Summary page Successfully') 
+  },
+
+  function fail(){
+      test.fail('Edit Donor - Donors Summary page  Loading Failed')
+    },TIMEOUT 
+ );
+
+});
+
+casper.then(function(){  
 
 
- // casper.then(function(){
+     test.assertExists(DONOR_EDIT_BUTTON_CLASS);
+     test.assertExists(DONOR_HISTORY_BUTTON_CLASS);     
+     test.assertExists(DONOR_DELETE_BUTTON_CLASS);
+     test.assertExists(DONOR_DEFER_BUTTON_CLASS);  
+     test.assertExists(DONOR_SHOW_DEFERRALS_BUTTON_CLASS);
+     test.assertExists(DONOR_PRINT_BARCODE_BUTTON_CLASS);
+     test.assertExists(DONOR_DONE_BUTTON_CLASS);
 
- //      this.fill('form.formFormatClass', {  
- //           donorNumber : DONOR_NUMBER,
- //           firstName   : DONOR_FIRST_NAME,
- //      });
 
- //    });
 
+    });
 
 
    casper.run(function() {
@@ -216,10 +237,10 @@ casper.test.begin(' Edit Donor Record',8,function(test){
 
 casper.then(function(){
 
-      test.assertExists(DONOR_TABLE_CLASS);
-      casper.click(DONOR_TABLE_CLASS);
+      test.assertExists(TABLE_CLASS);
+      casper.click(TABLE_CLASS);
       
-  casper.waitForSelector(DONOR_EDIT_CLASS,
+  casper.waitForSelector(DONOR_EDIT_BUTTON_CLASS,
 
   function success(){
     test.pass('Edit Donor - Donors Summary page Successfully') 
@@ -236,7 +257,7 @@ casper.then(function(){
 
 casper.then(function(){
 
- casper.click(DONOR_EDIT_CLASS);
+ casper.click(DONOR_EDIT_BUTTON_CLASS);
  casper.waitForText('Edit donor',
 
   function success(){
@@ -303,12 +324,12 @@ casper.then(function(){
  casper.then(function(){
 
     casper.click(DONOR_FIND_BUTTON_CLASS);
-        casper.waitForSelector(DONOR_TABLE_CLASS, function success(){
+        casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Delete Donor -- Donors Page Loaded Successfully') },function timeout(){
           test.fail('Delete Donor -- Donors page Loading timeout')},TIMEOUT);
 
-    casper.click(DONOR_TABLE_CLASS);
-      casper.waitForSelector(DONOR_DELETE_CLASS,
+    casper.click(TABLE_CLASS);
+      casper.waitForSelector(DONOR_DELETE_BUTTON_CLASS,
 
             function success(){
                 test.pass('Delete Donor -- Donors Summary page Successfully') 
@@ -324,8 +345,8 @@ casper.then(function(){
 
 casper.then(function(){
 
-      test.assertExists(DONOR_DELETE_CLASS);
-      casper.click(DONOR_DELETE_CLASS);
+      test.assertExists(DONOR_DELETE_BUTTON_CLASS);
+      casper.click(DONOR_DELETE_BUTTON_CLASS);
 
 
 
