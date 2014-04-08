@@ -72,13 +72,15 @@ public class DonorRepositoryTest {
 	@Autowired
 	private DataSource dataSource;
 	static IDatabaseConnection connection;
+	
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Before
 	public void init() {
 		try {
 			if (connection == null)
 				getConnection();
-			// Insert Data into database using DonorDataset.xml
+			// Insert Data into database using DonorRepositoryDataset.xml
 			IDataSet dataSet = getDataSet();
 			Date today = new Date();
 			Map<String, Object> replacements = new HashMap<String, Object>();
@@ -111,7 +113,7 @@ public class DonorRepositoryTest {
 	}
 
 	/**
-	 * This method is execute once before test case execution start and acquire
+	 * This method is executed once before test case execution start and acquires
 	 * datasource from spring context and create new dbunit IDatabaseConnection.
 	 * This method is also useful to set HSQLDB datatypefactory.
 	 */
@@ -215,9 +217,8 @@ public class DonorRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
-		assertEquals("List size should be zero.Matching records is not found.",
-				0,
-				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+		assertEquals("List size should be zero, no matching search results.",
+				0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
 						anyBloodGroup, pagingParams, false).get(0))).size());
 	}
@@ -884,7 +885,6 @@ public class DonorRepositoryTest {
 		Date currentDate = DateUtils.addDays(new Date(), (2));
 		Date date = donorRepository.getLastDonorDeferralDate(6l);
 		assertNotNull("should return last donor derferral date", date);
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String str = dateFormat.format(date);
 		String str_currentDate = dateFormat.format(currentDate);
 		assertTrue("Latest deferal date should be '" + str_currentDate + "'.",

@@ -684,6 +684,7 @@ public class DonorController {
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorSelectorFormGenerator.html");
+   
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
     return mv;

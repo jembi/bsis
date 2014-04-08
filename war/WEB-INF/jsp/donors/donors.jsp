@@ -20,6 +20,11 @@
         Donors
       </a>
     </li>
+     <li id="donorCommunicationsContent">
+      <a href="donorCommunicationsFormGenerator.html">
+         Donor <br/> Communications
+      </a>
+    </li>
     <!--
     <li id="addDonorContent">
       <a href="addDonorFormGenerator.html">

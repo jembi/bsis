@@ -91,7 +91,7 @@ public class DonorRepository {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
-
+    
     Expression<Boolean> exp1;
     if (anyBloodGroup.equals("true")) {
       exp1 = cb.not(cb.disjunction());
