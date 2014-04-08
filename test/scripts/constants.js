@@ -2,11 +2,15 @@ LOGIN_URL = "http://localhost:8080/bsis/login.html";
 WELCOME_URL = 'http://localhost:8080/bsis/welcomePage.html';
 USERNAME= "superuser";
 PASSWORD = "superuser";
-TIMEOUT = 3000;
+TIMEOUT = '7000';
 LOGIN_USERNAME_ID = "j_username" ;
 LOGIN_PASSWORD_ID =  "j_password";
 LOGIN_FORM_ID = 'form#loginAction';
 FORM_CLASS = 'form.formFormatClass';
+
+
+//Others
+TABLE_CLASS = '.odd';
 
 
 //Tab Constants
@@ -81,28 +85,14 @@ DONATION_ADD_CLASS= '.addCollectionButton';
 BLOOD_BAG_CLASS = '.bloodBagTypeSelector';
 DONATION_FIND_CLASS ='.findCollectionButton';
 DONATION_CLEAR_FORM_CLASS = '.clearFormButton ';
-DONATION_BATCH_NUMBER_ID = '#collectionBatchNumber';
-DONATION_BATCH_ADD_CLASS = '.addCollectionBatchButton';
-DONATION_BATCH_FIND_CLASS = '.findCollectionBatchButton';
-DONATION_BATCH_CENTER_CLASS = '.collectionCenterSelector';
-DONATION_BATCH_SITE_CLASS = '.collectionSiteSelector';
-DONATION_BATCH_FORM_CLEAR_CLASS = '.clearFindFormButton ';
-WORKSHEET_TYPE_CLASS = '.worksheetTypeSelector';
-WORKSHEET_NUMBER_ID = '#worksheetNumber';
-WORKSHEET_ADD_CLASS= '.addWorksheetButton';
-WORKSHEET_FIND_CLASS = '.findWorksheetButton';
-WORKSHEET_CLEAR_CLASS = '.clearFormButton';
-WORKSHEET_CLEAR_FIND_CLASS =  '.clearFindFormButton'
-
-
-DONATION_ADD_TAB = '#addCollectionsContent a';
+DONATION_EDIT_BUTTON_CLASS  = '.editButton';
+DONATION_DONE_BUTTON_CLASS  = '.cancelButton';
+DONATION_DELETE_BUTTON_CLASS = '.deleteButton';
+DONATION_SAVE_BUTTON_CLASS = '.saveCollectionButton';
+DONATION_ADD_TAB =  '#addCollectionsContent a';
 DONATION_FIND_TAB = '#findOrAddCollectionsContent a';
 
-DONATION_ADD_BATCH_TAB = '#createCollectionBatch a';
-DONATION_FIND_BATCH_TAB = '#findCollectionBatchContent a';
 
-WORKSHEET_ADD_TAB = '#addWorksheet a';
-WORKSHEET_FIND_TAB = '#findCollectionsWorksheet a';
 
 
 

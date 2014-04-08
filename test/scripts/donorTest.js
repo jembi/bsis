@@ -222,11 +222,11 @@ casper.then(function(){
   casper.waitForSelector(DONOR_EDIT_CLASS,
 
   function success(){
-    test.pass('Update Donor - Donors Summary page Successfully') 
+    test.pass('Edit Donor - Donors Summary page Successfully') 
   },
 
   function fail(){
-      test.fail('Update Donor - Donors Summary page  Loading Failed')
+      test.fail('Edit Donor - Donors Summary page  Loading Failed')
     },TIMEOUT 
  );
 
