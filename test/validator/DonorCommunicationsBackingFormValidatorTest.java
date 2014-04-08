@@ -1,9 +1,7 @@
-/**
- * 
- */
 package validator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +22,6 @@ import repository.DonorCommunicationsRepository;
 import backingform.DonorCommunicationsBackingForm;
 import backingform.validator.DonorCommunicationsBackingFormValidator;
 import controller.UtilController;
-
-/**
- * Bellow test Cases about findDonorFromDonorCommunication method to check
- * find donor functionality of Donor Communication
- **/
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -56,7 +49,8 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	}
 	
 	/**
-	 *  Should check validation Error for donorPanel and bloodGroup
+	 *  Should fail if no blood group or donor panel is specified
+	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 */
 	@Test
@@ -76,14 +70,15 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Number of validation errors are 2 as Donor Panel and Donor BloodGroup both are not selected",2,errors.getErrorCount());
-			assertEquals("Donor Panel is not selected so should return Donor Panel Validation Error", "Select 1 or more Donor Panel(s).", errors.getFieldError("donorPanelErrorMessage").getDefaultMessage());
-			assertEquals("Donor BloodGroup is not selected so should return BloodGroup Validation Error", " Select 1 or more Blood Group(s).", errors.getFieldError("bloodGroupErrorMessage").getDefaultMessage());
+			assertEquals("Validation fails at 2 points - no donor panel selected and no blood group selected",2,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Donor Panel selected", errors.getFieldError("donorPanelErrorMessage"));
+			assertNotNull("Validation error exists - no Blood Group selected", errors.getFieldError("bloodGroupErrorMessage"));
 		}
 	}
 	
 	/**
-	 *  Should check validation Error for donorPanel
+	 *  Should fail if no donor panel specified
+	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 */
 	@Test
@@ -105,13 +100,14 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Number of validation errors are 1 as Donor Panel is not selected",1,errors.getErrorCount());
-			assertEquals("Donor Panel is not selected so should return Donor Panel Validation Error", "Select 1 or more Donor Panel(s).", errors.getFieldError("donorPanelErrorMessage").getDefaultMessage());
+			assertEquals("Validation fails at 1 points - no donor panel selected",1,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Donor Panel selected", errors.getFieldError("donorPanelErrorMessage"));
 		}
 	}
 	
 	/**
-	 *  Should check validation Error for donorPanel
+	 *  Should fail if no blood group specified
+	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 */
 	@Test
@@ -134,14 +130,14 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Number of validation errors are 1 as Donor BloodGroup is not selected",1,errors.getErrorCount());
-			assertEquals("Donor BloodGroup is not selected so should return BloodGroup Validation Error", " Select 1 or more Blood Group(s).", errors.getFieldError("bloodGroupErrorMessage").getDefaultMessage());
+			assertEquals("Validation fails at 1 points - no blood group selected",1,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Blood Group selected", errors.getFieldError("bloodGroupErrorMessage"));
 		}
 	}
 	
 	
 	private DonorCommunicationsBackingForm setValueInDonorCommunicationsBackingForm(List<Location> donorPanels ,List<String> bloodGroups,
-																												String clinicDate ,String lastDonationFromDate ,String lastDonationToDate ,String anyBloodGroup )
+			String clinicDate ,String lastDonationFromDate ,String lastDonationToDate ,String anyBloodGroup )
 	{
 		DonorCommunicationsBackingForm donorCommunicationsBackingForm = new DonorCommunicationsBackingForm();
 		donorCommunicationsBackingForm.setDonorPanels(donorPanels);
