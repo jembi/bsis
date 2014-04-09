@@ -27,8 +27,8 @@ casper.run(function() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////  TEST 3 - View Donor  page  //////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////  TEST 3 - View Donor  page  ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 casper.test.begin('View Donors Page',2,function(test){
 
@@ -47,7 +47,7 @@ casper.then(function(){
 
      test.assertExists(tabSelector);
      casper.click(tabSelector);
-     casper.waitForText('Find Donors', function success(){
+     casper.waitForText(DONOR_FIND_TEXT, function success(){
         test.pass('Donor Search -- Donors Page Loaded Successfully') },function timeout(){
           test.fail('Donor Search -- Donors page timeout')},TIMEOUT);
 
@@ -82,9 +82,10 @@ casper.then(function(){
 
  casper.then(function(){
 
-      this.fill('form.formFormatClass', {  
-           donorNumber : DONOR_NUMBER,
+      this.fill(DONOR_ADD_FORM, {  
            firstName   : DONOR_FIRST_NAME,
+           lastName    : DONOR_LAST_NAME,
+           gender      : DONOR_GENDER,
            year        : DONOR_YEAR,
            month       : DONOR_MONTH,
            dayOfMonth  : DONOR_DAY_OF_MONTH,
@@ -101,15 +102,19 @@ casper.then(function(){
 
  casper.then(function(){
 
-  casper.waitForText(' Add Donor -- Donor added Successfully',
+  casper.waitForSelector(DONOR_ADD_ANOTHER_BUTTON_CLASS,
 
   function success(){
+     casper.click(DONOR_DONE_BUTTON_CLASS);
+       casper.waitForText(DONOR_FIND_TEXT, function success(){
+        test.pass('Add Donor -- Donors Page Loaded Successfully') },function timeout(){
+          test.fail('Add Donor -- Donors page timeout')},TIMEOUT);
     test.pass('Add Donor -- Donor Added Successfully') 
   },
 
   function fail(){
      casper.click(DONOR_CLEAR_BUTTON_CLASS);
-       casper.waitForText('Find Donors', function success(){
+       casper.waitForText(DONOR_FIND_TEXT, function success(){
         test.pass('Add Donor -- Donors Page Loaded Successfully') },function timeout(){
           test.fail('Add Donor -- Donors page timeout')},TIMEOUT);
 
@@ -119,7 +124,6 @@ casper.then(function(){
     },TIMEOUT 
  );
 });
-
 
 
 casper.run(function() {
@@ -142,7 +146,7 @@ casper.test.begin('Search For  Donor Record',18,function(test){
 
      test.assertExists(tabSelector);
      casper.click(tabSelector);
-     casper.waitForText('Find Donors', function success(){
+     casper.waitForText(DONOR_FIND_TEXT, function success(){
         test.pass('Search Donor -- Donors Page Loaded Successfully') },function timeout(){
           test.fail('Search Donor -- Donors page timeout')},TIMEOUT);
    });
@@ -223,12 +227,12 @@ casper.test.begin(' Edit Donor Record',8,function(test){
 
      test.assertExists(tabSelector);
      casper.click(tabSelector);
-     casper.waitForText('Find Donors', function success(){
+     casper.waitForText(DONOR_FIND_TEXT, function success(){
         test.pass('Edit Donor -- Donors Page Loaded Successfully') },function timeout(){
           test.fail('Edit Donor -- Donors page timeout')},TIMEOUT);
 
      casper.click(DONOR_FIND_BUTTON_CLASS);
-        casper.waitForText('print', function success(){
+        casper.waitForText(PRINT_TEXT, function success(){
         test.pass('Edit Donor  -- Donor Results  Loaded Successfully') },function timeout(){
           test.fail('Edit Donor  --Donors Reslults  timeout')},TIMEOUT);
    
@@ -348,8 +352,11 @@ casper.then(function(){
       test.assertExists(DONOR_DELETE_BUTTON_CLASS);
       casper.click(DONOR_DELETE_BUTTON_CLASS);
 
-
-
+});
+casper.then(function(){
+casper.setFilter("page.confirm", function(msg) {
+    return true;
+  });
 });
 
 casper.run(function() {

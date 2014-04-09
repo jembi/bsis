@@ -11,6 +11,8 @@ FORM_CLASS = 'form.formFormatClass';
 
 //Others
 TABLE_CLASS = '.odd';
+DONE_BUTTON = '.doneButton';
+PRINT_TEXT = 'print';
 
 
 //Tab Constants
@@ -27,16 +29,20 @@ LOT_RELEASE_TAB = 'Lot Release';
 TEST_RESULTS_TAB = 'Test Results';
 
 
+
 //Donor Constants
-DONOR_NUMBER = '000001';
+DONOR_NUMBER = '000003';
 DONOR_FIRST_NAME = 'malyala';
-DONOR_LAST_NAME = '';
+DONOR_LAST_NAME = 'rak';
 DONOR_ANY_BLOOD_GROUP = true;
 DONOR_DUE_TO_DONATE = false;
 DONOR_DAY_OF_MONTH = '13';
 DONOR_YEAR  = '1985';
 DONOR_MONTH = '01';
 DONOR_GENDER = 'male';
+DONOR_FIND_TEXT ='Find Donors';
+
+
 
 
 //Donor Selectors
@@ -64,16 +70,19 @@ DONOR_DONE_CLASS = '.doneButton';
 DONOR_DAY_OF_MONTH_ID  = '#dayOfMonth';
 DONOR_YEAR_ID  = '#year';
 DONOR_MONTH_ID = '#month';
+DONOR_ADD_ANOTHER_BUTTON_CLASS = '.addAnotherDonorButton';
 
+//donor forms
+DONOR_ADD_FORM = 'form[name="addDonorForm"]'
 
 //Donation Constants
-DONATION_CENTER = 'Lusaka';
-DONATION_SITE = 'Ndola';
-COLLECTED_ON = '08/04/2014';
-DONATION_IDENTIFICATION_NUMBER = '12345'
+DONATION_CENTER = '2';
+DONATION_SITE = '2';
+COLLECTED_ON = '09/04/2014 12:00:00 AM';
+DONATION_IDENTIFICATION_NUMBER = Math.round(+new Date()/1000);
 
 
-//DOnation Selectors 
+//Donation Selectors 
 DONATION_CENTER_CLASS= '.collectionCenterSelector';
 DONATION_SITE_CLASS = '.collectionSiteSelector';
 DONATION_FORM_CLEAR_CLASS = '.clearFormButton';
@@ -99,20 +108,27 @@ DONATION_DELETE_BUTTON_CLASS = '.deleteButton';
 DONATION_SAVE_BUTTON_CLASS = '.saveCollectionButton';
 DONATION_ADD_TAB =  '#addCollectionsContent a';
 DONATION_FIND_TAB = '#findOrAddCollectionsContent a';
+DONATION_ADD_ANOTHER_CLASS='.addAnotherCollectionButton';
+
+
+//Product Text Constants
+
+FIND_PRODUCT_TEXT = 'Find Products';
+RECORD_PRODUCT_TEXT = 'Record Product';
+PRODUCT_FIND_TEXT = 'Find Products';
 
 
 
-
-
-//URl Constants
-DONOR_SUMMARY_URL ='http://localhost:8080/bsis/donorSummary.html?donorId=3';
-
-
-
-
-
-//var donor={number : '0002' , name ; 'JOHN'};    [This strategy is not working ]
-
-
-
-
+//Product Selectors
+RECORD_PRODUCT_TAB_SELECTOR = '#recordProductsContent a';
+ADD_PRODUCT_TAB_SELECTOR = '#findOrAddProductsContent a';
+PRODUCT_FIND_BUTTON_CLASS = '.findProductButton';
+PRODUCT_CLEAR_BUTTON_CLASS = '.clearFindFormButton';
+RECORD_NEW_PRODUCT_CLASS = '.recordNewProduct ';
+PRODUCT_DONE_BUTTON_CLASS   = '.doneButton';
+PRODUCT_EDIT_BUTTON_CLASS = '.editButton';
+PRODUCT_DELETE_BUTTON_CLASS = '.deleteButton';
+PRODUCT_PRINT_BUTTON_CLASS = '.printButton'; 
+PRODUCT_DISCARD_BUTTON_CLASS = '.discardButton';
+PRODUCT_RETURN_BUTTON_CLASS  = '.returnButton';
+PRODUCT_MOVEMENT_BUTTON_CLASS =  '.productHistoryButton';
