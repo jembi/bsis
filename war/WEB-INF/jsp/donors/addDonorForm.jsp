@@ -154,7 +154,7 @@
 		</c:if>
 
 		<form:form id="${addDonorFormId}" method="POST"
-			class="formFormatClass" commandName="addDonorForm">
+			class="formFormatClass" commandName="addDonorForm" name="addDonorForm">
 			<c:if test="${!donorFields.donorNumber.autoGenerate}">
 				<c:if test="${donorFields.donorNumber.hidden != true }">
 					<div class="barcodeContainer"></div>

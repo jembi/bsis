@@ -178,7 +178,7 @@ $(document).ready(function() {
       </p>
     </div>
     <form:form method="GET" commandName="findCollectedSampleForm" id="${findCollectionFormId}"
-      class="formFormatClass">
+      class="formFormatClass" name = "findDonationForm">
   
       <div>
         <form:label path="collectionNumber">Donation Identification number</form:label>

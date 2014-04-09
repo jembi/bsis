@@ -31,7 +31,7 @@ $(document).ready(function() {
 <div id="${tabContentId}">
   <div id="${mainContentId}">
 
-    <form class="formFormatClass discardProductForm">
+    <form class="formFormatClass discardProductForm" name="discardProductForm">
 
       <input name="productId" type="hidden" value="${productId}"/>
   

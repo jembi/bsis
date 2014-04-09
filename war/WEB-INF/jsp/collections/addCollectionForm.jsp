@@ -250,7 +250,7 @@
     </c:if>
   
     <form:form method="POST" commandName="addCollectionForm"
-      class="formFormatClass" id="${addCollectionFormId}">
+      class="formFormatClass" id="${addCollectionFormId}" name ="addDonationForm">
       <c:if test="${!collectionFields.collectionNumber.autoGenerate}">
         <c:if test="${collectionFields.collectionNumber.hidden != true }">
           <div class="barcodeContainer" style="display:none"></div>
