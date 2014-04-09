@@ -73,7 +73,7 @@ casper.then(function(){
   test.assertExists(DONOR_DAY_OF_MONTH_ID);
   test.assertExists(DONOR_YEAR_ID); 
   test.assertExists(DONOR_MONTH_ID);
-  test.assertExists(DONOR_GENDER_ID);
+  test.assertExists(DONOR_GENDER_ID); //unable to locate -- ID is dynamic and no class specified
   test.assertExists(DONOR_ADD_BUTTON_CLASS);
 
 
@@ -313,13 +313,13 @@ casper.run(function() {
 ///////////////////////////  TEST 3 - Delete  Donor  Test   //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin(' Delete  Donor Record',5,function(test){
+casper.test.begin(' Delete  Donor Record',6,function(test){
 
 casper.then(function(){
 
      test.assertExists(tabSelector);
      casper.click(tabSelector);
-     casper.waitForText('Find Donors', function success(){
+     casper.waitForText(DONOR_FIND_TEXT, function success(){
         test.pass('Donors Page Loaded Successfully') },function timeout(){
           test.fail('Donors page timeout')},TIMEOUT);
  
@@ -349,15 +349,20 @@ casper.then(function(){
 
 casper.then(function(){
 
-      test.assertExists(DONOR_DELETE_BUTTON_CLASS);
-      casper.click(DONOR_DELETE_BUTTON_CLASS);
-
-});
-casper.then(function(){
-casper.setFilter("page.confirm", function(msg) {
+      test.assertExists(DONOR_DELETE_BUTTON_CLASS)
+        casper.click(DONOR_DELETE_BUTTON_CLASS);
+   casper.setFilter(PAGE_CONFIRM, function() {
     return true;
   });
+
+   casper.waitForText(DONOR_FIND_TEXT, function success(){
+        test.pass('Delete Donor -- Donor Deleted  Successfully') },function timeout(){
+          test.fail('Delete Donor -- Failed in deleting donor')},TIMEOUT);
+
+   
+
 });
+
 
 casper.run(function() {
     this.echo('Test Successful - Delete Donor Record.', 'INFO');

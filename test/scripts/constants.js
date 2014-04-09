@@ -13,7 +13,7 @@ FORM_CLASS = 'form.formFormatClass';
 TABLE_CLASS = '.odd';
 DONE_BUTTON = '.doneButton';
 PRINT_TEXT = 'print';
-
+PAGE_CONFIRM = 'page.confirm';
 
 //Tab Constants
 
@@ -110,6 +110,12 @@ DONATION_ADD_TAB =  '#addCollectionsContent a';
 DONATION_FIND_TAB = '#findOrAddCollectionsContent a';
 DONATION_ADD_ANOTHER_CLASS='.addAnotherCollectionButton';
 
+//Donaton forms
+DONATION_EDIT_FORM= 'form[name="editCollectionForm"]';
+DONATION_ADD_FORM = 'form[name="addDonationForm"]';
+
+//DOnation Texts
+DONATION_FIND_TEXT ='Find Collections';
 
 //Product Text Constants
 
