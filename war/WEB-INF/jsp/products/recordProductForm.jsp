@@ -202,7 +202,7 @@ $(document).ready(function() {
 <!--       </p> -->
 <!--     </div> -->
     <form:form method="GET" commandName="findProductByPackNumberForm" id="${findProductFormId}"
-      class="formFormatClass">
+      class="formFormatClass" name= "recordProductForm">
       <div>
         <form:label path="searchBy">Donation Identification Number </form:label>
         <div class="collectionNumberInput hidableDiv">

@@ -202,7 +202,7 @@ $(document).ready(function() {
       </p>
     </div>
     <form:form method="GET" commandName="findProductForm" id="${findProductFormId}"
-      class="formFormatClass">
+      class="formFormatClass" name="findComponentForm">
       <div>
         <form:label path="searchBy">Find Product by </form:label>
         <!-- need to set id searchBy selector otherwise the

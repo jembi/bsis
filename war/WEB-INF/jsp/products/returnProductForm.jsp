@@ -32,7 +32,7 @@ $(document).ready(function() {
 <div id="${tabContentId}">
   <div id="${mainContentId}">
 
-    <form class="formFormatClass returnProductForm">
+    <form class="formFormatClass returnProductForm" name = "returnProductForm">
 
       <input name="productId" type="hidden" value="${productId}"/>
   

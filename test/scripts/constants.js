@@ -19,7 +19,7 @@ PAGE_CONFIRM = 'page.confirm';
 
  DONOR_TAB = 'Donors';
 DONATION_TAB = 'Donations'
-PRODUCT_TAB = 'Products';
+COMPONENT_TAB = 'Products';
 ADMIN_TAB= 'Admin';
 REQUEST_TAB = 'Requests';
 REPORT_TAB = 'Reports';
@@ -72,8 +72,12 @@ DONOR_YEAR_ID  = '#year';
 DONOR_MONTH_ID = '#month';
 DONOR_ADD_ANOTHER_BUTTON_CLASS = '.addAnotherDonorButton';
 
-//donor forms
+//Form Constants
 DONOR_ADD_FORM = 'form[name="addDonorForm"]'
+COMPONENT_FIND_FORM = 'form[name="findProductForm"]';
+COMPONENT_RECORD_FORM = 'form[name="recordProductForm"]';
+DONATION_EDIT_FORM= 'form[name="editCollectionForm"]';
+DONATION_ADD_FORM = 'form[name="addDonationForm"]';
 
 //Donation Constants
 DONATION_CENTER = '2';
@@ -110,31 +114,32 @@ DONATION_ADD_TAB =  '#addCollectionsContent a';
 DONATION_FIND_TAB = '#findOrAddCollectionsContent a';
 DONATION_ADD_ANOTHER_CLASS='.addAnotherCollectionButton';
 
-//Donaton forms
-DONATION_EDIT_FORM= 'form[name="editCollectionForm"]';
-DONATION_ADD_FORM = 'form[name="addDonationForm"]';
+
 
 //DOnation Texts
 DONATION_FIND_TEXT ='Find Collections';
 
 //Product Text Constants
-
-FIND_PRODUCT_TEXT = 'Find Products';
-RECORD_PRODUCT_TEXT = 'Record Product';
-PRODUCT_FIND_TEXT = 'Find Products';
+COMPONENT_RECORD_TEXT = 'Record Product';
+COMPONENT_FIND_TEXT = 'Find Products';
+COMPONENT_DETAILS_TEXT = 'Product details';
 
 
 
 //Product Selectors
-RECORD_PRODUCT_TAB_SELECTOR = '#recordProductsContent a';
-ADD_PRODUCT_TAB_SELECTOR = '#findOrAddProductsContent a';
-PRODUCT_FIND_BUTTON_CLASS = '.findProductButton';
-PRODUCT_CLEAR_BUTTON_CLASS = '.clearFindFormButton';
-RECORD_NEW_PRODUCT_CLASS = '.recordNewProduct ';
-PRODUCT_DONE_BUTTON_CLASS   = '.doneButton';
-PRODUCT_EDIT_BUTTON_CLASS = '.editButton';
-PRODUCT_DELETE_BUTTON_CLASS = '.deleteButton';
-PRODUCT_PRINT_BUTTON_CLASS = '.printButton'; 
-PRODUCT_DISCARD_BUTTON_CLASS = '.discardButton';
-PRODUCT_RETURN_BUTTON_CLASS  = '.returnButton';
-PRODUCT_MOVEMENT_BUTTON_CLASS =  '.productHistoryButton';
+COMPONENT_RECORD_TAB_SELECTOR = '#recordProductsContent a';
+COMPONENT_ADD_TAB_SELECTOR = '#findOrAddProductsContent a';
+COMPONENT_FIND_BUTTON_CLASS = '.findProductButton';
+COMPONENT_CLEAR_BUTTON_CLASS = '.clearFindFormButton';
+RECORD_NEW_COMPONENT_CLASS = '.recordNewProduct ';
+COMPONENT_DONE_BUTTON_CLASS   = '.doneButton';
+COMPONENT_EDIT_BUTTON_CLASS = '.editButton';
+COMPONENT_DELETE_BUTTON_CLASS = '.deleteButton';
+COMPONENT_PRINT_BUTTON_CLASS = '.printButton'; 
+COMPONENT_DISCARD_BUTTON_CLASS = '.discardButton';
+COMPONENT_RETURN_BUTTON_CLASS  = '.returnButton';
+COMPONENT_MOVEMENT_BUTTON_CLASS =  '.productHistoryButton';
+COMPONENT_SEARCH_BY_CLASS = '.searchBy';
+COMPONENT_STATUS_CLASS = '.productStatusSelector';
+
+
