@@ -28,7 +28,7 @@
 
 <script>
 $(document).ready(function() {
-  $("#${tabContentId}").find(".findProductButton").button({
+  $("#${tabContentId}").find(".viewFormButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
@@ -215,7 +215,7 @@ $(document).ready(function() {
     <div class="formFormatClass">
       <div>
         <label></label>
-        <button type="button" class="findProductButton">
+        <button type="button" class="viewFormButton">
           Find products
         </button>
         <button type="button" class="clearFindFormButton">

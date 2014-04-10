@@ -74,7 +74,7 @@ DONOR_ADD_ANOTHER_BUTTON_CLASS = '.addAnotherDonorButton';
 
 //Form Constants
 DONOR_ADD_FORM = 'form[name="addDonorForm"]'
-COMPONENT_FIND_FORM = 'form[name="findProductForm"]';
+COMPONENT_FIND_FORM = 'form[name="findComponentForm"]';
 COMPONENT_RECORD_FORM = 'form[name="recordProductForm"]';
 DONATION_EDIT_FORM= 'form[name="editCollectionForm"]';
 DONATION_ADD_FORM = 'form[name="addDonationForm"]';
@@ -141,5 +141,6 @@ COMPONENT_RETURN_BUTTON_CLASS  = '.returnButton';
 COMPONENT_MOVEMENT_BUTTON_CLASS =  '.productHistoryButton';
 COMPONENT_SEARCH_BY_CLASS = '.searchBy';
 COMPONENT_STATUS_CLASS = '.productStatusSelector';
+COMPONENT_VIEW_BUTTON_CLASS = '.viewFormButton';
 
 

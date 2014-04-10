@@ -120,7 +120,7 @@
     </jsp:include>
   </c:if>
 
-  <form:form method="POST" commandName="addComponentForm"
+  <form:form method="POST" commandName="addProductForm"
     class="formFormatClass" id="${addProductFormId}">
     <c:if test="${productFields.collectionNumber.hidden != true }">
       <div>

@@ -78,7 +78,7 @@ casper.test.begin('Record Product Test',8,function(test){
 casper.then(function(){
 
   test.assertExists(DONATION_NUMBER_ID);
-  test.assertExists(COMPONENT_FIND_BUTTON_CLASS);
+  test.assertExists(COMPONENT_VIEW_BUTTON_CLASS);
   test.assertExists(COMPONENT_CLEAR_BUTTON_CLASS);
 });
 
@@ -93,7 +93,7 @@ casper.then(function(){
 
 casper.then(function(){
 
-     casper.click(COMPONENT_FIND_BUTTON_CLASS);
+     casper.click(COMPONENT_VIEW_BUTTON_CLASS);
      casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Record Product --> Product Results  Loaded Successfully') },function timeout(){
           test.fail('Record Product --> Product Results  Loading  timeout')},TIMEOUT);
@@ -102,7 +102,8 @@ casper.then(function(){
 
  casper.then(function(){
    test.assertExists(TABLE_CLASS);
-    casper.click(TABLE_CLASS);
+   require('utils').dump(this.getHTML('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable tr:nth-child(1) td:nth-child(3)'));
+    casper.click('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable tr:nth-child(1) td:nth-child(1)');
      casper.waitForSelector(RECORD_NEW_COMPONENT_CLASS, function success(){
         test.pass('Record Product  --> Record Product form  Loaded Successfully') },function timeout(){
           test.fail('Record Product  --> Record Product form  Loading  timeout')},TIMEOUT);
@@ -176,11 +177,13 @@ casper.then(function(){
   });
 
  casper.then(function(){
-   test.assertExists(TABLE_CLASS);
-    casper.click(TABLE_CLASS);
-     casper.waitForText(COMPONENT_DETAILS_TEXT, function success(){
-        test.pass('Search Product  --> Product summary page Loaded Successfully') },function timeout(){
-          test.fail('Search Product  --> Product summary page  Loading  timeout')},TIMEOUT);
+  require('utils').dump(this.getHTML('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable tr:nth-child(2) td:nth-child(3)'));
+   test.assertExists('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable .odd.DTTT_selected td:nth-child(3)');
+    this.click('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable .odd.DTTT_selected td:nth-child(3)');
+    
+    casper.waitForText(COMPONENT_DONE_BUTTON_CLASS, function success(){
+       test.pass('Search Product  --> Product summary page Loaded Successfully') },function timeout(){
+         test.fail('Search Product  --> Product summary page  Loading  timeout')},TIMEOUT);
   });
 
 
