@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -167,7 +168,7 @@ $(document).ready(function() {
       });
 });
 </script>
-
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
     <b>Find Collections</b>
@@ -249,3 +250,4 @@ $(document).ready(function() {
 </div>
   <div id="${childContentId}"></div>
 </div>
+</sec:authorize>

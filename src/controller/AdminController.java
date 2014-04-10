@@ -40,6 +40,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,6 +62,7 @@ import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleViewModel;
 
@@ -142,6 +144,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureFormFieldChange", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
   public @ResponseBody Map<String, ? extends Object>
     configureFormFieldChange(@RequestParam Map<String, String> params) {
 
@@ -202,6 +205,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureBloodTests")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ModelAndView configureBloodTests(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("admin/configureBloodTests");
     List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
@@ -215,6 +219,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureBloodTypingRules")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TYPING_RULES+"')")
   public ModelAndView configureBloodTypingTests(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("admin/configureBloodTypingRules");
     mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
@@ -228,6 +233,7 @@ public class AdminController {
   }
   
   @RequestMapping("/configureForms")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
   public ModelAndView configureForms(HttpServletRequest request,
                               Model model) {
     ModelAndView mv = new ModelAndView("admin/selectFormToConfigure");
@@ -239,6 +245,7 @@ public class AdminController {
   }
 
   @RequestMapping("/createSampleDataFormGenerator")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
   public ModelAndView createSampleDataFormGenerator(
                 HttpServletRequest request, Map<String, Object> params) {
 
@@ -247,6 +254,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/createSampleData", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
   public @ResponseBody Map<String, ? extends Object> createSampleData(
                 HttpServletRequest request,
                 @RequestParam Map<String, String> params) {
@@ -277,6 +285,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureTipsFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")
   public ModelAndView configureTipsFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -290,6 +299,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/labSetupPageGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
   public ModelAndView labSetupFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -301,6 +311,7 @@ public class AdminController {
   }
 
   @SuppressWarnings("unchecked")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
   @RequestMapping(value="/updateLabSetup", method=RequestMethod.POST)
   public @ResponseBody Map<String, Object> updateLabSetup(HttpServletRequest request,
       @RequestParam(value="labSetupParams") String params) {
@@ -326,6 +337,7 @@ public class AdminController {
   }
   
   @RequestMapping(value="/configureProductTypes", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ModelAndView configureProductTypes(
       HttpServletRequest request, HttpServletResponse response) {
 
@@ -336,6 +348,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureProductTypeCombinations", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ModelAndView configureProductTypeCombinations(
       HttpServletRequest request, HttpServletResponse response) {
 
@@ -347,6 +360,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureRequestTypesFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
   public ModelAndView configureRequestTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -360,6 +374,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureCrossmatchTypesFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
   public ModelAndView configureCrossmatchTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -398,6 +413,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/backupData", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BACKUP_DATA+"')")
   public void backupData(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -451,6 +467,7 @@ public class AdminController {
     }
   }
   @RequestMapping(value="/configureDonationTypesFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public ModelAndView configureDonationTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -484,6 +501,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureTips")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')") 
   public ModelAndView configureTips(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
@@ -516,6 +534,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureRequestTypes")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
   public ModelAndView configureRequestTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
@@ -558,6 +577,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureCrossmatchTypes")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
   public ModelAndView configureCrossmatchTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
@@ -595,6 +615,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureBloodBagTypes")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_BAG_TYPES+"')")
   public ModelAndView configureBloodBagTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
@@ -632,6 +653,7 @@ public class AdminController {
   }
 
   @RequestMapping("/configureDonationTypes")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public ModelAndView configureDonationTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
@@ -669,6 +691,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/adminWelcomePageGenerator")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_ADMIN_INFORMATION+"')")
   public ModelAndView adminWelcomePageGenerator(HttpServletRequest request, Model model) {
     ModelAndView mv = new ModelAndView("admin/adminWelcomePage");
     Map<String, Object> m = model.asMap();

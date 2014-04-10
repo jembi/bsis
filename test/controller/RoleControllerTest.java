@@ -10,6 +10,7 @@ import model.user.Permission;
 import model.user.Role;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class RoleControllerTest {
     @Autowired
     RoleRepository roleRepository;
     
-	@Test
+	@Ignore @Test
 	public void addRoleTest() {
 		String permissiondata = "1~2~";
 		String[] splitpermission = permissiondata.split("~");
@@ -57,7 +58,7 @@ public class RoleControllerTest {
 		 roleRepository.addRole(role);
 	}
 	
-	@Test
+	@Ignore @Test
 	public void updateRoleTest() {
 		String permissiondata = "1~2~3~4~";
 		String[] splitpermission = permissiondata.split("~");

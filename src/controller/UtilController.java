@@ -96,6 +96,7 @@ public class UtilController {
     for (FormField ff : formFields) {
       Map<String, Object> fieldProperties = new HashMap<String, Object>();
       fieldProperties.put(FormField.DISPLAY_NAME, ff.getDisplayName());
+      fieldProperties.put(FormField.SHORT_DISPLAY_NAME, ff.getShortDisplayName());
       fieldProperties.put(FormField.DEFAULT_VALUE, ff.getDefaultValue());
       fieldProperties.put(FormField.HIDDEN, ff.getHidden());
       fieldProperties.put(FormField.IS_AUTO_GENERATABLE, ff.getIsAutoGeneratable());
@@ -273,7 +274,7 @@ public class UtilController {
     }
     else if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
-        donor = donorRepository.findDonorByDonorNumber(donorNumber);
+        donor = donorRepository.findDonorByDonorNumber(donorNumber,false);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
@@ -314,7 +315,6 @@ public class UtilController {
 
   public boolean isFutureDate(Date date){
 	  Date today = new Date();
-	  System.out.println("\tTODAY:"+today);
 	  if(date.after(today)){
 		  return true;
 	  }
@@ -402,7 +402,7 @@ public class UtilController {
     String donorNumber = donor.getDonorNumber();
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
     if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
       return true;
     return false;
@@ -411,7 +411,7 @@ public class UtilController {
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumberIncludeDeleted(donorNumber);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
     if (existingDonor != null && existingDonor.getId() != null)
       return true;
     return false;

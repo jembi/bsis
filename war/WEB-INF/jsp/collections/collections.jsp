@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -13,23 +14,35 @@
 
 <div id="collectionsTab" class="leftPanel tabs">
   <ul>
+  	<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
     <li id="findOrAddCollectionsContent">
       <a href="findCollectionFormGenerator.html">Find Collections</a>
     </li>
+    </sec:authorize>  	
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION)">
     <li id="addCollectionsContent">
       <a href="addCollectionFormGenerator.html">Add Collection</a>
     </li>
+    </sec:authorize> 
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
     <li id="findCollectionBatchContent">
       <a href="findCollectionBatchFormGenerator.html">Find Collection Batch</a>
     </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
     <li id="createCollectionBatch">
       <a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
     </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
     <li id="addWorksheet">
       <a href="addWorksheetFormGenerator.html">Add worksheet</a>
     </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
     <li id="findCollectionsWorksheet">
       <a href="findWorksheetFormGenerator.html">Find/Print worksheet</a>
-    </li>
+    </li>    
+    </sec:authorize>
   </ul>
 </div>

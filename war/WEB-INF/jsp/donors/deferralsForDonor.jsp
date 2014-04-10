@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
@@ -29,6 +30,45 @@ $(document).ready(
         },
         "bPaginate" : false
       });
+      
+      $("#${tabContentId}").find(".editDeferDonorButton")
+  			.button({icons: {primary : 'ui-icon-pencil'}})
+  			.click(editDeferDonorDialog);
+      
+      function editDeferDonorDialog() {
+    	  var donorId=this.id;
+    	  
+          $("<div>").dialog({
+            modal: true,
+            open:  function() {
+                     // extra parameters passed as string otherwise POST request sent
+                     $(this).load("editDeferDonorFormGenerator.html?" + $.param({donorDeferralId : donorId}));
+                    },
+            close: function(event, ui) {
+                     $(this).remove();
+                    },
+            title: "Defer donor",
+            height: 400,
+            width: 600,
+            buttons:
+              {
+                 "Update Deferral": function() {
+                                 $(this).dialog("close");
+                                 updateDeferDonor($(this).find(".deferDonorForm"), deferDonorDone);
+                                },
+                  "Cancel Deferral": function() {
+                      $(this).dialog("close");
+                      cancelDeferDonor($(this).find(".deferDonorForm"), deferDonorDone);
+                     			},
+                 "Cancel": function() {
+                              $(this).dialog("close");                                                        
+                            }
+              }
+          });
+         }
+      function deferDonorDone() {
+          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+        }
 
       $("#${tabContentId}").find(".doneButton").button({
         icons : {
@@ -46,8 +86,9 @@ $(document).ready(
       });
 
     });
+	
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DEFERRAL)">
 <div id="${tabContentId}">
 
   <button class="doneButton">Done</button>
@@ -88,6 +129,7 @@ $(document).ready(
             <c:if test="${donorDeferralFields.deferralReasonText.hidden != true}">
               <th>${donorDeferralFields.deferralReasonText.displayName}</th>
             </c:if>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -109,6 +151,7 @@ $(document).ready(
               <c:if test="${donorDeferralFields.deferralReasonText.hidden != true}">
                 <td>${donorDeferral.deferralReasonText}</td>
               </c:if>
+              <td> <button class="editDeferDonorButton" id="${donorDeferral.id}">Edit Deferral</button></td>
             </tr>
           </c:forEach>
         </tbody>
@@ -118,3 +161,4 @@ $(document).ready(
   </c:choose>
 
 </div>
+</sec:authorize>

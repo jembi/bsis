@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 
@@ -51,6 +52,7 @@ $(document).ready(
     });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
 <div id="${tabContentId}">
 
   <button class="doneButton">Done</button>
@@ -71,7 +73,7 @@ $(document).ready(
           <tr>
             <th style="display: none"></th>
             <c:if test="${collectedSampleFields.collectionNumber.hidden != true}">
-              <th>${collectedSampleFields.collectionNumber.displayName}</th>
+              <th>${collectedSampleFields.collectionNumber.shortDisplayName}</th>
             </c:if>
             <c:if test="${collectedSampleFields.collectedOn.hidden != true}">
               <th>${collectedSampleFields.collectedOn.displayName}</th>
@@ -82,6 +84,19 @@ $(document).ready(
             <c:if test="${collectedSampleFields.donationType.hidden != true}">
               <th>${collectedSampleFields.donationType.displayName}</th>
             </c:if>
+            <c:if test="${collectedSampleFields.donorWeight.hidden != true}">
+              <th>${collectedSampleFields.donorWeight.shortDisplayName}</th>
+            </c:if>
+           <c:if test="${collectedSampleFields.donorPulse.hidden != true}">
+              <th>${collectedSampleFields.donorPulse.shortDisplayName}</th>
+            </c:if>
+            <c:if test="${collectedSampleFields.bloodPressure.hidden != true}">
+              <th>${collectedSampleFields.bloodPressure.shortDisplayName}</th>
+            </c:if>
+            <c:if test="${collectedSampleFields.haemoglobinCount.hidden != true}">
+              <th>${collectedSampleFields.haemoglobinCount.shortDisplayName}</th>
+            </c:if>
+            
           </tr>
         </thead>
         <tbody>
@@ -100,6 +115,18 @@ $(document).ready(
               <c:if test="${collectedSampleFields.donationType.hidden != true}">
                 <td>${collectedSample.donationType.donationType}</td>
               </c:if>
+               <c:if test="${collectedSampleFields.donorWeight.hidden != true}">
+                <td>${collectedSample.donorWeight}</td>
+              </c:if>
+              <c:if test="${collectedSampleFields.donorPulse.hidden != true}">
+                <td>${collectedSample.donorPulse}</td>
+              </c:if>
+              <c:if test="${collectedSampleFields.bloodPressure.hidden != true}">
+                <td>${collectedSample.bloodPressure}</td>
+              </c:if>
+              <c:if test="${collectedSampleFields.collectedOn.hidden != true}">
+                <td>${collectedSample.haemoglobinCount}</td>
+              </c:if>
             </tr>
           </c:forEach>
         </tbody>
@@ -109,3 +136,4 @@ $(document).ready(
   </c:choose>
 
 </div>
+</sec:authorize>

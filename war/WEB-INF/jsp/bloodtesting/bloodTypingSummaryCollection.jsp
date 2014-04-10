@@ -192,6 +192,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_BLOOD_TYPING_OUTCOME)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -339,3 +340,4 @@ $(document).ready(function() {
   Invalid values specified for test results. Please check the test results. 
   <br />
 </div>
+</sec:authorize>

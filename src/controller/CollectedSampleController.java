@@ -22,6 +22,7 @@ import model.donor.Donor;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,6 +41,7 @@ import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
+import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
 import backingform.CollectedSampleBackingForm;
 import backingform.FindCollectedSampleBackingForm;
@@ -98,6 +100,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
 
     FindCollectedSampleBackingForm form = new FindCollectedSampleBackingForm();
@@ -115,6 +118,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollection")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView findCollection(HttpServletRequest request,
       @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
@@ -172,6 +176,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollectionPagination")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> findCollectionPagination(HttpServletRequest request,
       @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
@@ -275,6 +280,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/addCollectionFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
   public ModelAndView addCollectionFormGenerator(HttpServletRequest request,
       Model model) {
 
@@ -293,12 +299,13 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       @RequestParam(value="collectionId") Long collectionId) {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
-
+    form.getCollectedSampleIntegerProps();
     ModelAndView mv = new ModelAndView("collections/editCollectionForm");
     mv.addObject("editCollectionForm", form);
     mv.addObject("refreshUrl", getUrl(request));
@@ -310,6 +317,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/addCollection", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
   public ModelAndView addCollection(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -330,6 +338,7 @@ public class CollectedSampleController {
 	    } 
 	    else {
 	      try {
+          form.setCollectedSample();
 	        CollectedSample collectedSample = form.getCollectedSample();
 	        collectedSample.setIsDeleted(false);
 	        
@@ -370,6 +379,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public ModelAndView updateCollectedSample(
       HttpServletResponse response,
       @ModelAttribute("editCollectionForm") @Valid CollectedSampleBackingForm form,
@@ -392,6 +402,7 @@ public class CollectedSampleController {
     else {
       try {
         form.setIsDeleted(false);
+        form.setCollectedSample();
         CollectedSample existingCollectedSample;
         existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {
@@ -439,6 +450,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/deleteCollectedSample", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteCollection(
       @RequestParam("collectedSampleId") Long collectionSampleId) {
@@ -460,6 +472,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/collectionSummary", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView collectionSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
 
@@ -492,6 +505,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value="/saveFindCollectionsResultsToWorksheet", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form,
@@ -548,6 +562,7 @@ public class CollectedSampleController {
   }
   
   @RequestMapping("/findLastDonationForDonor.html")  
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody  
   Map<String, String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
 	   

@@ -17,13 +17,17 @@ public class PermissionConstants {
 	public static final String VOID_DONOR_CODE = "Void Donor Code";
 	public static final String VIEW_DONOR_CODE_GROUP = "View Donor Code Group";
 	
-	
-	
 	// Donation Permissions
 	public static final String ADD_DONATION  = "Add Donation";
 	public static final String VIEW_DONATION = "View Donation";
 	public static final String EDIT_DONATION = "Edit Donation";
 	public static final String VOID_DONATION = "Void Donation";
+	
+	//Donation Batch Permissions
+	public static final String ADD_DONATION_BATCH  = "Add Donation Batch";
+	public static final String VIEW_DONATION_BATCH = "View Donation Batch";
+	public static final String EDIT_DONATION_BATCH = "Edit Donation Batch";
+	public static final String VOID_DONATION_BATCH = "Void Donation Batch";
 	
 	// Mobile Clinic Permissions
 	public static final String IMPORT_CLINIC_DATA = "Import Clinic Data";
@@ -35,34 +39,45 @@ public class PermissionConstants {
 	public static final String EDIT_COMPONENT = "Edit Component";
 	public static final String VOID_COMPONENT = "Void Component";
 	
+	//Request Permissions
+	public static final String ADD_REQUEST  = "Add Request";
+	public static final String EDIT_REQUEST  = "Edit Request";
+	public static final String VIEW_REQUEST  = "View Request";
+	public static final String VOID_REQUEST  = "Void Request";
+	
+	//Test Results Permissions
+	public static final String ADD_TEST_OUTCOME  = "Add Test Outcome";
+	public static final String EDIT_TEST_OUTCOME = "Edit Test Outcome";
+	public static final String VIEW_TEST_OUTCOME = "View Test Outcome";
+	public static final String VOID_TEST_OUTCOME  = "Void Test Outcome";
+	
 	// TTI Testing permissions
-	public static final String ADD_TTL_OUTCOMES  = "Add TTI Outcomes";
-	public static final String EDIT_TTI_OUTCOMES = "Edit TTI Outcomes";
-	public static final String VIEW_TTI_RESULTS  = "View TTI Results";
+	public static final String ADD_TTI_OUTCOME  = "Add TTI Outcome";
+	public static final String EDIT_TTI_OUTCOME = "Edit TTI Outcome";
+	public static final String VIEW_TTI_OUTCOME  = "View TTI Outcome";
 	
 	// Blood Typing Permissions
-	public static final String StringEDIT_BLOOD_TYPING_OUTCOMES = "Edit Blood Typing Outcomes";
-	public static final String ADD_BLOOD_TYPING_OUTCOMES = "Add Blood Typing Outcomes";
-	public static final String VIEW_BLOOD_TYPING_DOCUMENT = "View Blood Typing Outcomes";
+	public static final String EDIT_BLOOD_TYPING_OUTCOMES = "Edit Blood Typing Outcome";
+	public static final String ADD_BLOOD_TYPING_OUTCOME = "Add Blood Typing Outcome";
+	public static final String VIEW_BLOOD_TYPING_OUTCOME = "View Blood Typing Outcome";
 	
 	// Blood Bank Staff Permissions
 	public static final String BLOOD_CROSS_MATCH_CHECK = "Blood Cross Match Check";
-	public static final String ISSUE_BLOOD = "Issue Blood";
+	public static final String ISSUE_COMPONENT= "Issue Component";
 	
 	// Inventory Permissions
-	public static final String COMPONET_LABELLING = "Component Labelling";
-	public static final String ISSUE_Components = "Issue Components";
+	public static final String COMPONENT_LABELLING = "Component Labelling";
 	
-	// Discars Permissions
-	public static final String DISCARD_COMPONENTS = "Discard Components";
-	public static final String VIEW_DISCARDED_COMPONENTS = "view discarded Components";
+	// Discard Permissions
+	public static final String DISCARD_COMPONENT = "Discard Component";
+	public static final String VIEW_DISCARDS = "View Discards";
 	
 	// Reporting Permissions
-	public static final String DONATIONS_REPORTING = "Donations Reporting";
-	public static final String REQUESTS_REPORTING = "Requests Reporting";
-	public static final String TTI_REPORTING = "TTI Reporting";
-	public static final String COMPONENTS_ISSUED_REPORTING = "Components Issued Reporting";
-	public static final String COMPONENTS_DISCARDED_REPORTING = "Components Discarded Reporting";
+	public static final String DONATIONS_REPORTING = "Reporting - Donations";
+	public static final String REQUESTS_REPORTING = "Reporting - Requests";
+	public static final String TTI_REPORTING = "Reporting - TTI Testing";
+	public static final String COMPONENTS_ISSUED_REPORTING = "Reporting - Components";
+	public static final String COMPONENTS_DISCARDED_REPORTING = "Reporting - Discards";
 	
 	// Admin and Super-User Permissions
 	public static final String MANAGE_USERS = "Manage Users";
@@ -72,7 +87,7 @@ public class PermissionConstants {
 	public static final String MANAGE_DONATION_CATEGORIES = "Manage Donation Categories";
 	public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
 	public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
-	public static final String MANAGE_BLOOD_TYPING_ROLES = "Manage Blood Typing Rules";
+	public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
 	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";
 	public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
 	public static final String MANAGE_DONOR_DEFER_REASONS = "Manage Donor Defer Reasons";
@@ -83,26 +98,19 @@ public class PermissionConstants {
 	public static final String MANAGE_FORMS = "Manage Forms";
 	public static final String MANAGE_BACKUP_DATA = "Manage Backup Data";
 	public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
+	public static final String MANAGE_TIPS = "Manage Tips";
+	public static final String MANAGE_REQUESTS = "Manage Requests";
 
-	//page control permissions
-	public static final String VIEW_DONOR_INFORMATION = "View Donors Information";
+	//Page Control Permissions
+	public static final String VIEW_DONOR_INFORMATION = "View Donor Information";
 	public static final String VIEW_DONATION_INFORMATION = "View Donation Information";
 	public static final String VIEW_MOBILE_CLINIC_INFORMATION = "View Mobile Clinic Information";
 	public static final String VIEW_COMPONENT_INFORMATION = "View Component Information";
 	public static final String VIEW_TESTING_INFORMATION = "View Testing Information";
-	public static final String VIEW_BLOOD_BANK_INFORMATION = "View Blook Bank Information";
+	public static final String VIEW_BLOOD_BANK_INFORMATION = "View Blood Bank Information";
 	public static final String VIEW_INVENTORY_INFORMATION = "View Inventory Information";
 	public static final String VIEW_DISCARD_INFORMATION = "View Discard Information";
 	public static final String VIEW_REPORTING_INFORMATION = "View Reporting Information";
 	public static final String VIEW_ADMIN_INFORMATION = "View Admin Information";
-	
-	
-	
-
-	
-	
-	
-	
-	
 
 }

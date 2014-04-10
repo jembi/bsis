@@ -27,6 +27,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,6 +46,7 @@ import repository.GenericConfigRepository;
 import repository.WorksheetRepository;
 import repository.WorksheetTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.WorksheetViewModel;
 import backingform.FindWorksheetBackingForm;
@@ -116,6 +118,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value = "/addWorksheet", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
   public ModelAndView addWorksheet(
       HttpServletRequest request,
       HttpServletResponse response,
@@ -173,6 +176,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/addCollectionsToWorksheet", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
   public ModelAndView addCollectionsToBloodTypingPlate(HttpServletRequest request,
           HttpServletResponse response,
           @RequestParam(value="worksheetId") String worksheetId,
@@ -218,6 +222,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/findWorksheetFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findWorksheetFormGenerator(HttpServletRequest request, Model model) {
     ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
     FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
@@ -229,6 +234,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/findWorksheet", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findWorksheet(HttpServletRequest request,
         HttpServletResponse response, @ModelAttribute(value="findWorksheetForm") FindWorksheetBackingForm form) {
 
@@ -243,6 +249,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value = "/worksheetSummary", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView worksheetSummary(
       HttpServletRequest request,
       @RequestParam("worksheetId") Long worksheetId) {
@@ -262,6 +269,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value = "/deleteWorksheet", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION_BATCH+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteCollection(
       @RequestParam("worksheetId") Long worksheetId) {
@@ -300,6 +308,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value = "/worksheetForTestResultsFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findWorksheetForTestResultsFormGenerator(HttpServletRequest request) {
 
     ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
@@ -317,6 +326,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/editTestResultsForWorksheet", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
   public ModelAndView editTestResultsForWorksheet(HttpServletRequest request,
       @RequestParam(value="worksheetId") Long worksheetId) {
 
@@ -342,6 +352,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/editTestResultsForWorksheetPagination", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
   public @ResponseBody Map<String, Object> editTestResultsForWorksheetPagination(HttpServletRequest request, Model model,
       @RequestParam(value="worksheetId") Long worksheetId) {
 
@@ -436,6 +447,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value = "/findWorksheetToAddCollectionBatchFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findWorksheetToAddCollectionBatchFormGenerator(HttpServletRequest request,
       @RequestParam(value="collectionBatchId") Integer collectionBatchId) {
 
@@ -454,6 +466,7 @@ public class WorksheetController {
   }
 
   @RequestMapping(value="/addCollectionBatchToWorksheet", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
   public ModelAndView addCollectionBatchToWorksheet(HttpServletRequest request,
       @RequestParam(value="collectionBatchId") Integer collectionBatchId,
       @RequestParam(value="worksheetId") Long worksheetId) {

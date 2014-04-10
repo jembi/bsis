@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -119,6 +120,7 @@ $(document).ready(function() {
   });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_BLOOD_TESTS)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
     <div style="  border: thin solid #1075A1;  border-radius: 5px;  margin: 20px;">
@@ -176,3 +178,4 @@ $(document).ready(function() {
 <div id="${activateBloodTestConfirmDialogId}" style="display: none;">
   Are you sure you want to activate this blood test?
 </div>
+</sec:authorize>
