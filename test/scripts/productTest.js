@@ -141,8 +141,8 @@ casper.test.begin('Search Product Test',16,function(test){
 
   casper.then(function(){
           
-          casper.click(COMPONENT_ADD_TAB_SELECTOR);
-           casper.waitForText(COMPONENT_RECORD_TEXT, function success(){
+          casper.click(COMPONENT_FIND_TAB_SELECTOR);
+           casper.waitForText(COMPONENT_FIND_TEXT, function success(){
              test.pass('Search Product --> Find Products  Page Loaded Successfully') },function timeout(){
                 test.fail('Search Products --> FInd Products page loading timeout')},TIMEOUT);
 
@@ -178,10 +178,10 @@ casper.then(function(){
 
  casper.then(function(){
   require('utils').dump(this.getHTML('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable tr:nth-child(2) td:nth-child(3)'));
-   test.assertExists('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable .odd.DTTT_selected td:nth-child(3)');
-    this.click('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable .odd.DTTT_selected td:nth-child(3)');
+   test.assertExists('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable td:nth-child(3)');
+    this.click('.ui-tabs-panel.ui-widget-content.ui-corner-bottom .dataTable.productsTable.DTTT_selectable td:nth-child(3)');
     
-    casper.waitForText(COMPONENT_DONE_BUTTON_CLASS, function success(){
+    casper.waitForSelector(COMPONENT_DONE_BUTTON_CLASS, function success(){
        test.pass('Search Product  --> Product summary page Loaded Successfully') },function timeout(){
          test.fail('Search Product  --> Product summary page  Loading  timeout')},TIMEOUT);
   });
@@ -207,6 +207,37 @@ casper.run(function() {
 });
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////  TEST 3 - Delete Product    //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+casper.test.begin('Delete Product Test',2,function(test){
+
+
+
+
+casper.then(function(){
+      test.assertExists(COMPONENT_DELETE_BUTTON_CLASS);
+     casper.click(COMPONENT_DELETE_BUTTON_CLASS);
+       casper.setFilter(PAGE_CONFIRM, function() {
+    return true;
+  });
+     casper.waitForText(COMPONENT_FIND_TEXT, function success(){
+             test.pass('Search Product --> Find Products  Page Loaded Successfully') },function timeout(){
+                test.fail('Delete Products --> FInd Products page loading timeout')},TIMEOUT);
+
+
+  });
+      
+ 
+
+casper.run(function() {
+    this.echo('Test Successful - Delete  Product .', 'INFO');
+       test.done();
+   });
+
+});
 
 
 

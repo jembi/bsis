@@ -128,7 +128,7 @@ COMPONENT_DETAILS_TEXT = 'Product details';
 
 //Product Selectors
 COMPONENT_RECORD_TAB_SELECTOR = '#recordProductsContent a';
-COMPONENT_ADD_TAB_SELECTOR = '#findOrAddProductsContent a';
+COMPONENT_FIND_TAB_SELECTOR = '#findOrAddProductsContent a';
 COMPONENT_FIND_BUTTON_CLASS = '.findProductButton';
 COMPONENT_CLEAR_BUTTON_CLASS = '.clearFindFormButton';
 RECORD_NEW_COMPONENT_CLASS = '.recordNewProduct ';
