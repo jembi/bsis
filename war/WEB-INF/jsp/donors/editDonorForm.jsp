@@ -183,6 +183,25 @@
           <form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
         </div>
       </c:if>
+      <c:if test="${donorFields.bloodAbo.hidden != true }">
+	    <div>
+	      <form:label path="bloodAbo">${donorFields.bloodGroup.displayName}</form:label>
+          <form:select path="bloodAbo" name="BloodABO" title="ABO">
+			<form:option value="" label=""/>
+			<form:option value="A" label="A"/>
+			<form:option value="B" label="B"/>
+			<form:option value="O" label="O"/>
+			<form:option value="AB" label="AB"/>
+		  </form:select>
+		  <form:select path="bloodRh" name="BloodRh" title="Rh">
+			<form:option value="" label=""/>
+			<form:option value="+" label="+"/>
+			<form:option value="-" label="-"/>
+		  </form:select>
+          <form:errors class="formError" path="donor.bloodAbo" delimiter=", "></form:errors>
+          <form:errors class="formError" path="donor.bloodRh" delimiter=", "></form:errors>
+	    </div>
+	  </c:if>
       <c:if test="${donorFields.nationalID.hidden != true }">
         <div>
           <form:label path="nationalID">${donorFields.nationalID.displayName}</form:label>
