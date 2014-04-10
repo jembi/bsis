@@ -15,6 +15,8 @@ DONE_BUTTON = '.doneButton';
 PRINT_TEXT = 'print';
 PAGE_CONFIRM = 'page.confirm';
 CLEAR_FORM_BUTTON = '.clearFormButton ';
+CHECK_RESULTS_BUTTON_CLASS = '.findCheckResultButton';
+PRINT_DICARD_BUTTON_CLASS = '.printDiscardButton';
 
 //Tab Constant selectors
 COMPONENT_RECORD_TAB_SELECTOR = '#recordProductsContent a';
