@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 <div id="${tabContentId}">
   <div id="${mainContentId}">
-    <form class="formFormatClass">
+    <form class="formFormatClass" name="bloodTypingResultsForm">
       <b>Enter blood typing results</b>
       <div class="tipsBox ui-state-highlight" style="display:none;">
         <p>

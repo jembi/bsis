@@ -67,7 +67,7 @@ casper.test.begin('Record Product Test',8,function(test){
 
   casper.then(function(){
           
-          casper.click(COMPONENT_RECORD_TAB_SELECTOR);
+          casper.click(TEST_RESULTS_FIND_TAB_ID);
            casper.waitForText(COMPONENT_RECORD_TEXT, function success(){
              test.pass('Record Product --> Record Products  Page Loaded Successfully') },function timeout(){
                 test.fail('Record Products --> Record Products page loading timeout')},TIMEOUT);
@@ -114,13 +114,14 @@ casper.then(function(){
      casper.fill(COMPONENT_RECORD_FORM, {
      collectionNumber : '123'
     });
-   });
+ });
+
 casper.then(function(){
 
-     casper.click(COMPONENT_FIND_BUTTON_CLASS);
-     casper.waitForSelector(TABLE_CLASS, function success(){
-        test.pass('Search Product --> Product Results  Loaded Successfully') },function timeout(){
-          test.fail('Search Product --> Product Results  Loading  timeout')},TIMEOUT);
+     casper.click(TEST_RESULTS_FIND_BUTTON_CLASS);
+     casper.waitForSelector(".collectionSummaryForTestingSection formFormatClass", function success(){
+        test.pass('Search Test Results --> Product Results  Loaded Successfully') },function timeout(){
+          test.fail('Search Test Results --> Product Results  Loading  timeout')},TIMEOUT);
 
   });
 

@@ -14,20 +14,13 @@ TABLE_CLASS = '.odd';
 DONE_BUTTON = '.doneButton';
 PRINT_TEXT = 'print';
 PAGE_CONFIRM = 'page.confirm';
+CLEAR_FORM_BUTTON = '.clearFormButton ';
 
-//Tab Constants
-
- DONOR_TAB = 'Donors';
-DONATION_TAB = 'Donations'
-COMPONENT_TAB = 'Products';
-ADMIN_TAB= 'Admin';
-REQUEST_TAB = 'Requests';
-REPORT_TAB = 'Reports';
-USAGE_TAB= 'Usage';
-HOME_TAB = 'Home';
-LOT_RELEASE_TAB = 'Lot Release';
-TEST_RESULTS_TAB = 'Test Results';
-
+//Tab Constant selectors
+COMPONENT_RECORD_TAB_SELECTOR = '#recordProductsContent a';
+COMPONENT_FIND_TAB_SELECTOR = '#findOrAddProductsContent a';
+TEST_RESULTS_FIND_TAB_ID = '#findOrAddTestResultsContent a';
+BLOOD_TYPING_TEST_RESULTS_TAB_ID= '#bloodTypingTestResults a';
 
 
 //Donor Constants
@@ -78,6 +71,8 @@ COMPONENT_FIND_FORM = 'form[name="findComponentForm"]';
 COMPONENT_RECORD_FORM = 'form[name="recordProductForm"]';
 DONATION_EDIT_FORM= 'form[name="editCollectionForm"]';
 DONATION_ADD_FORM = 'form[name="addDonationForm"]';
+TEST_RESULTS_FIND_FORM = 'form[name="findTestResultsForm"]';
+BLOOD_TYPING_RESULTS_ADD_FORM = 'form[name="bloodTypingResultsForm"]';
 
 //Donation Constants
 DONATION_CENTER = '2';
@@ -124,11 +119,7 @@ COMPONENT_RECORD_TEXT = 'Record Product';
 COMPONENT_FIND_TEXT = 'Find Products';
 COMPONENT_DETAILS_TEXT = 'Product details';
 
-
-
 //Product Selectors
-COMPONENT_RECORD_TAB_SELECTOR = '#recordProductsContent a';
-COMPONENT_FIND_TAB_SELECTOR = '#findOrAddProductsContent a';
 COMPONENT_FIND_BUTTON_CLASS = '.findProductButton';
 COMPONENT_CLEAR_BUTTON_CLASS = '.clearFindFormButton';
 RECORD_NEW_COMPONENT_CLASS = '.recordNewProduct ';
@@ -143,4 +134,18 @@ COMPONENT_SEARCH_BY_CLASS = '.searchBy';
 COMPONENT_STATUS_CLASS = '.productStatusSelector';
 COMPONENT_VIEW_BUTTON_CLASS = '.viewFormButton';
 
+
+//Test Results Selectors
+TEST_RESULTS_FIND_BUTTON_CLASS = '.findTestResultButton';
+TEST_RESULTS_CLEAR_BUTTON_CLASS = '.clearFindFormButton';
+COLLECTION_RESULTS_CLASS = '.collectionSummaryForTestingSection ';
+BLOOD_TYPING_RESULTS_CLASS = '.bloodTypingForCollectionSection';
+TTI_RESULTS_CLASS = '.ttiForCollectionSection'; 
+
+//Blood typing Selectors
+
+BLOOD_TYPING_COLLECTION_ADD_BUTTON_CLASS = '.addCollectionsToPlate';
+BLOOD_TYPING_COLLECTION_CHANGE_BUTTON_CLASS = '.changeCollectionsButton';
+BLOOD_TYPING_RESULTS_SaVE_BUTTON_CLASS = '.saveButton';
+BLOOD_TYPING_RESULTS_FOR_MORE_COLLECTIONS_BUTTON_CLASS = '.enterTestResultsForCollectionsButton';
 
