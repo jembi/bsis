@@ -6,6 +6,21 @@ LOGIN_PASSWORD_ID =  "j_password";
 LOGIN_FORM_ID = 'form#loginAction';
 FORM_CLASS = 'form.formFormatClass';
 
+//Page Selectors
+HOME_PAGE_SELECTOR  = 'a[href="#homeLandingPageContent"]';
+DONATION_PAGE_SELECTOR = 'a[href="#collectionsLandingPageContent"]';
+DONOR_PAGE_SELECTOR = 'a[href="#donorsLandingPageContent"]';
+COMPONENT_PAGE_SELECTOR = 'a[href="#productsLandingPageContent"]';
+TESTING_PAGE_SELECTOR = 'a[href="#productsLandingPageContent"]';
+REQUEST_PAGE_SELECTOR = 'a[href="#requestsLandingPageContent"]';
+USAGE_PAGE_SELECTOR = 'a[href="#productsLandingPageContent"]';
+ADMIN_PAGE_SELECTOR = 'a[href="#adminLandingPageContent"]';
+REPORT_PAGE_SELECTOR = 'a[href="#reportsLandingPageContent"]';
+LABELLING_PAGE_SELECTOR = 'a[href="#lotReleasePageContent"]';
+
+
+
+
 //User Constants
 
 SUPER_USER_NAME = "superuser";
