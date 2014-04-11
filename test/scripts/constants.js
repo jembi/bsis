@@ -1,12 +1,28 @@
 LOGIN_URL = "http://localhost:8080/bsis/login.html";
 WELCOME_URL = 'http://localhost:8080/bsis/welcomePage.html';
-USERNAME= "superuser";
-PASSWORD = "superuser";
 TIMEOUT = '7000';
 LOGIN_USERNAME_ID = "j_username" ;
 LOGIN_PASSWORD_ID =  "j_password";
 LOGIN_FORM_ID = 'form#loginAction';
 FORM_CLASS = 'form.formFormatClass';
+
+//User Constants
+
+SUPER_USER_NAME = "superuser";
+SUPER_USER_PASSWORD = "superuser";
+
+//Tab COnstants
+
+HOME_TAB   = 'Home';
+DONATION_TAB = 'Donors';
+DONOR_TAB = 'Donations';
+TEST_RESULTS_TAB = 'Test '
+REQUEST_TAB = 'Requests';
+USAGE_TAB  = 'Usage';
+ADMIN_TAB ='Admin';
+PRODUCT_TAB = "Products";
+LOT_RELEASE_TAB = "Lot Release";
+REPORT_TAB = "Reports";
 
 
 //Others
@@ -26,7 +42,7 @@ BLOOD_TYPING_TEST_RESULTS_TAB_ID= '#bloodTypingTestResults a';
 
 
 //Donor Constants
-DONOR_NUMBER = '000003';
+DONOR_NUMBER = '000004';
 DONOR_FIRST_NAME = 'malyala';
 DONOR_LAST_NAME = 'rak';
 DONOR_ANY_BLOOD_GROUP = true;
@@ -150,4 +166,32 @@ BLOOD_TYPING_COLLECTION_ADD_BUTTON_CLASS = '.addCollectionsToPlate';
 BLOOD_TYPING_COLLECTION_CHANGE_BUTTON_CLASS = '.changeCollectionsButton';
 BLOOD_TYPING_RESULTS_SaVE_BUTTON_CLASS = '.saveButton';
 BLOOD_TYPING_RESULTS_FOR_MORE_COLLECTIONS_BUTTON_CLASS = '.enterTestResultsForCollectionsButton';
+
+
+//Global Methods
+
+function loginTest (USERNAME , PASSWORD){
+casper.test.begin('Login Test to BSIS',1,function(test){
+casper.start(LOGIN_URL).viewport(1600,1000);
+casper.then( function() {
+    this.fillSelectors('form#loginAction', {
+        'input[name="j_username"]':    USERNAME,
+        'input[name="j_password"]':    PASSWORD
+       }, true);
+    
+    casper.waitForText(USERNAME, function() {
+        test.pass('Login successful.')},function() {
+        test.fail('Login failed'); } , 2000);
+       
+    });
+
+
+casper.run(function() {
+    this.echo('Test Successful - Login To BSIS', 'INFO');
+       test.done();
+   });
+
+});
+}
+
 

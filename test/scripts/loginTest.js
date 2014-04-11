@@ -4,27 +4,8 @@
 ///////////////////////////  TEST  1 --> Login Test into BSIS  //////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Login Test to BSIS',1,function(test){
-casper.start(LOGIN_URL).viewport(1600,1000);
-casper.then( function() {
-    this.fillSelectors('form#loginAction', {
-        'input[name="j_username"]':    USERNAME,
-        'input[name="j_password"]':    PASSWORD
-       }, true);
-    
-    casper.waitForText(USERNAME, function() {
-        test.pass('Login successful.')},function() {
-        test.fail('Login failed'); } , 2000);
-       
-    });
+loginTest(SUPER_USER_NAME,SUPER_USER_PASSWORD);
 
-
-casper.run(function() {
-    this.echo('Test Successful - Login To BSIS', 'INFO');
-       test.done();
-   });
-
-});
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST 2 --> Verify the Tabs /////////////////////////////////
