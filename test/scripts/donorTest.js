@@ -1,70 +1,22 @@
 
 
-var tabSelector ;
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST  1 --> Login Test into BSIS  //////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Login Test to BSIS',1,function(test){
-casper.start(LOGIN_URL, function() {
-    this.fillSelectors(LOGIN_FORM_ID, {
-        'input[name="j_username"]':    USERNAME,
-        'input[name="j_password"]':    PASSWORD
-       }, true);
-    
-    casper.waitForText(USERNAME, function() {
-        test.pass('Login successful.')},function() {
-        test.fail('Login failed'); } , 2000);
-       
-    }).viewport(1000, 1000);
-
-casper.run(function() {
-    this.echo('Test Successful - Login To BSIS', 'INFO');
-       test.done();
-   });
-
-});
-
+loginTest(SUPER_USER_NAME,SUPER_USER_PASSWORD);
 
 ////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////  TEST 3 - View Donor  page  ////////////////////////////////
+///////////////////////////  TEST 3 - Assert Donor  page  ////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('View Donors Page',2,function(test){
-
-casper.then(function(){
-    tabSelector  =     this.evaluate(function(){
-
-          for(var i=1;i<10;i++){
-         var  selector =  "#topPanelTabs li:nth-child("+i+") a";
-          if(document.querySelector(selector).textContent ==='Donors'){
-           return selector;
-       }
-    }
-    return null;
- });
-
-
-     test.assertExists(tabSelector);
-     casper.click(tabSelector);
-     casper.waitForText(DONOR_FIND_TEXT, function success(){
-        test.pass('Donor Search -- Donors Page Loaded Successfully') },function timeout(){
-          test.fail('Donor Search -- Donors page timeout')},TIMEOUT);
-
-   });
-
-    casper.run(function() {
-    this.echo('Test Successful - View Donora Page', 'INFO');
-       test.done();
-   });
-
-  });
+assertTabExistsByName(DONOR_TAB);
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST 3 - Add Donor  Test   //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Add   Donor Record',2,function(test){
+casper.test.begin('Add   Donor Record',9,function(test){
 
 casper.then(function(){
 
@@ -73,7 +25,7 @@ casper.then(function(){
   test.assertExists(DONOR_DAY_OF_MONTH_ID);
   test.assertExists(DONOR_YEAR_ID); 
   test.assertExists(DONOR_MONTH_ID);
-  test.assertExists(DONOR_GENDER_ID); //unable to locate -- ID is dynamic and no class specified
+  test.assertExists(DONOR_GENDER_NAME); //unable to locate -- ID is dynamic and no class specified
   test.assertExists(DONOR_ADD_BUTTON_CLASS);
 
 

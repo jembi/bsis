@@ -75,7 +75,7 @@ DONOR_DONE_BUTTON_CLASS = '.doneButton';
 DONOR_CLEAR_BUTTON_CLASS = '.clearFormButton ';
 DONATION_PRINT_BUTTON_CLASS = '.printButton';
 
-DONOR_GENDER_ID = '#gender';
+DONOR_GENDER_NAME= 'select[name="gender"]';
 DONOR_SAVE_CLASS = '.saveDonorButton';
 DONOR_DONE_CLASS = '.doneButton';
 DONOR_DAY_OF_MONTH_ID  = '#dayOfMonth';
