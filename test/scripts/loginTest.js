@@ -24,7 +24,7 @@ casper.test.begin('Test For Verifying Tabs',10,function(test){
         test.assertSelectorHasText('a', USAGE_TAB);
         test.assertSelectorHasText('a', ADMIN_TAB);
         test.assertSelectorHasText('a', PRODUCT_TAB);
-        test.assertSelectorHasText('a', LOT_RELEASE_TAB);
+        test.assertSelectorHasText('a', LABELLING_TAB);
         test.assertSelectorHasText('a', REPORT_TAB);
       
     

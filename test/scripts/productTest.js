@@ -3,61 +3,14 @@ var tabSelector ;
 ///////////////////////////  TEST  1 --> Login Test into BSIS  //////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Login Test to BSIS',1,function(test){
-casper.start(LOGIN_URL, function() {
-    this.fillSelectors(LOGIN_FORM_ID, {
-        'input[name="j_username"]':    USERNAME,
-        'input[name="j_password"]':    PASSWORD
-       }, true);
-    
-    casper.waitForText(USERNAME, function() {
-        test.pass('Login successful.')},function() {
-        test.fail('Login failed'); } , TIMEOUT);
-       
-    }).viewport(1000, 1000);
-
-casper.run(function() {
-    this.echo('Test Successful - Login To BSIS', 'INFO');
-       test.done();
-   });
-
-});
+loginTest(SUPER_USER_NAME,SUPER_USER_PASSWORD);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST 2 --> View Products  page  //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('View Products Page',2,function(test){
-
-casper.then(function(){
-    tabSelector  =     this.evaluate(function(){
-
-          for(var i=1;i<10;i++){
-         var  selector =  "#topPanelTabs li:nth-child("+i+") a";
-          if(document.querySelector(selector).textContent ==='Products'){
-           return selector;
-       }
-    }
-    return null;
- });
-
-
-     test.assertExists(tabSelector);
-     casper.click(tabSelector);
-     casper.waitForText(COMPONENT_FIND_TEXT, function success(){
-        test.pass('product page  --> Products Page Loaded Successfully') },function timeout(){
-          test.fail('product page  --> Products page timeout')},TIMEOUT);
-
-   });
-
-    casper.run(function() {
-    this.echo('Test Successful - View Products Page', 'INFO');
-       test.done();
-   });
-
-  });
-
+assertTabExistsByName(PRODUCT_TAB);
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST 3 - Record Product  Test   //////////////////////////////

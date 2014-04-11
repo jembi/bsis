@@ -1,69 +1,40 @@
-var tabSelector ;
+
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST  1 --> Login Test into BSIS  //////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Login Test to BSIS',1,function(test){
-casper.start(LOGIN_URL, function() {
-    this.fillSelectors(LOGIN_FORM_ID, {
-        'input[name="j_username"]':    USERNAME,
-        'input[name="j_password"]':    PASSWORD
-       }, true);
-    
-    casper.waitForText(USERNAME, function() {
-        test.pass('Login successful.')},function() {
-        test.fail('Login failed'); } , TIMEOUT);
-       
-    }).viewport(1000, 1000);
+loginTest(SUPER_USER_NAME,SUPER_USER_PASSWORD);
 
-casper.run(function() {
-    this.echo('Test Successful - Login To BSIS', 'INFO');
-       test.done();
-   });
+////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////  TEST 3 - Assert Donor  page  ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
-});
+assertTabExistsByName(TEST_RESULTS_TAB);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////  TEST 2 --> Test Results  page  //////////////////////////////
+///////////////////////////  TEST 3 - Assert Left Panel Tabs     //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('View Products Page',4,function(test){
+casper.test.begin('Asserting Left Panel Tabs Test',2,function(test){
 
 casper.then(function(){
-    tabSelector  =     this.evaluate(function(){
-
-          for(var i=1;i<10;i++){
-         var  selector =  "#topPanelTabs li:nth-child("+i+") a";
-          if(document.querySelector(selector).textContent ==='Test Results'){
-           return selector;
-       }
-    }
-    return null;
- });
-
-
-     test.assertExists(tabSelector);
-     casper.click(tabSelector);
-     casper.waitForText(COMPONENT_FIND_TEXT, function success(){
-        test.pass('Test Results page  --> Test results Page Loaded Successfully') },function timeout(){
-          test.fail('Test Results page  --> Test Results page timeout')},TIMEOUT);
-
-   });
-
-     casper.then(function(){
              test.assertExists(BLOOD_TYPING_TEST_RESULTS_TAB_ID);
              test.assertExists(TEST_RESULTS_FIND_TAB_ID);
 
 
      });
 
-    casper.run(function() {
-    this.echo('Test Successful - Test Results Page', 'INFO');
+
+casper.run(function() {
+    this.echo('Test Successful - Asserting Left Panel Tabs .', 'INFO');
        test.done();
    });
 
-  });
+});
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////  TEST 3 - Search Test  Results     //////////////////////////////
@@ -129,7 +100,7 @@ casper.run(function() {
 ///////////////////////////  TEST 3 - Add Blood Typing  Results     //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-casper.test.begin('Add Blood  Typing Results Test',8,function(test){
+casper.test.begin('Add Blood  Typing Results Test',9,function(test){
 
   casper.then(function(){
           

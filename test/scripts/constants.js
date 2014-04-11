@@ -14,14 +14,14 @@ SUPER_USER_PASSWORD = "superuser";
 //Tab COnstants
 
 HOME_TAB   = 'Home';
-DONATION_TAB = 'Donors';
-DONOR_TAB = 'Donations';
-TEST_RESULTS_TAB = 'Test '
+DONATION_TAB = 'Donations';
+DONOR_TAB = 'Donors';
+TEST_RESULTS_TAB = 'Test Results'
 REQUEST_TAB = 'Requests';
 USAGE_TAB  = 'Usage';
 ADMIN_TAB ='Admin';
 PRODUCT_TAB = "Products";
-LOT_RELEASE_TAB = "Lot Release";
+LABELLING_TAB = "Lot Release";
 REPORT_TAB = "Reports";
 
 
@@ -192,6 +192,43 @@ casper.run(function() {
    });
 
 });
+
 }
+
+///Asserting Tabs
+var tabSelector;
+function assertTabExistsByName (TAB_NAME){
+casper.test.begin('View Donors Page',2,function(test){
+casper.then(function(){
+    
+    tabSelector  =   this.evaluate(function(TAB){
+
+       for(var i=1;i<10;i++){
+
+         var  selector =  "#topPanelTabs li:nth-child("+i+") a";
+          if(document.querySelector(selector).textContent == TAB){
+           return selector;
+       }
+    }
+    return null;
+ },{  TAB : TAB_NAME
+ });
+
+       test.assertExists(tabSelector);
+     casper.click(tabSelector);
+     casper.waitForText(DONOR_FIND_TEXT, function success(){
+        test.pass('View Donors Page  -- Donors Page Loaded Successfully') },function timeout(){
+          test.fail('View Donors Page  -- Donors page Loading Timeout')},TIMEOUT);
+
+   });
+
+    casper.run(function() {
+    this.echo('Test Successful - View Donora Page', 'INFO');
+       test.done();
+   });
+
+  });
+}
+
 
 
