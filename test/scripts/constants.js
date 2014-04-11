@@ -117,7 +117,7 @@ NOTES_ID = '#notes';
 DONATION_COLLECTED_ON_ID = '#collectedOn';
 DONATION_ADD_CLASS= '.addCollectionButton';
 BLOOD_BAG_CLASS = '.bloodBagTypeSelector';
-DONATION_FIND_CLASS ='.findCollectionButton';
+DONATION_FIND_BUTTON_CLASS ='.findCollectionButton';
 DONATION_CLEAR_FORM_CLASS = '.clearFormButton ';
 DONATION_EDIT_BUTTON_CLASS  = '.editButton';
 DONATION_DONE_BUTTON_CLASS  = '.cancelButton';
@@ -217,8 +217,8 @@ casper.then(function(){
        test.assertExists(tabSelector);
      casper.click(tabSelector);
      casper.waitForText(DONOR_FIND_TEXT, function success(){
-        test.pass('View Donors Page  -- Donors Page Loaded Successfully') },function timeout(){
-          test.fail('View Donors Page  -- Donors page Loading Timeout')},TIMEOUT);
+        test.pass( TAB_NAME +' Page  --  Page Loaded Successfully') },function timeout(){
+          test.fail( TAB_NAME + '  Page  --  page Loading Timeout')},TIMEOUT);
 
    });
 

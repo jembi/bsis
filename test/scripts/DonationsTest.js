@@ -116,14 +116,14 @@ casper.then(function(){
   test.assertExists(DONATION_SITE_CLASS);
   test.assertExists(BLOOD_BAG_CLASS);
   test.assertExists(DONATION_COLLECTED_FROM_ID);
-  test.assertExists(DONATION_FIND_CLASS);
+  test.assertExists(DONATION_FIND_BUTTON_CLASS);
 
 });
 
 
   casper.then(function(){
 
-    casper.click(DONATION_FIND_CLASS);
+    casper.click(DONATION_FIND_BUTTON_CLASS);
      casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Search Donation --> Donation Results  Loaded Successfully') },function timeout(){
           test.fail('Search Donation --> Donation Results  Loading  timeout')},TIMEOUT);
@@ -151,8 +151,8 @@ casper.then(function(){
 });
 
 casper.then(function(){
- 
-  casper.waitForSelector(DONATION_FIND_CLASS, function success(){
+ casper.click(DONATION_DONE_BUTTON_CLASS)
+  casper.waitForSelector(DONATION_FIND_BUTTON_CLASS, function success(){
      test.pass('Search Donation -- >Donations Page Loaded Successfully') },function timeout(){
           test.fail('Search Donation -->Donations page timeout')},TIMEOUT);
 });
@@ -179,7 +179,7 @@ casper.test.begin('Edit Donations Record',10,function(test){
 
 
   casper.then(function(){
-  test.assertExists(DONATION_FIND_CLASS);
+  test.assertExists(DONATION_FIND_BUTTON_CLASS);
    casper.click(DONATION_FIND_TAB);
      casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Edit Donation -- Donation Results  Loaded Successfully') },function timeout(){
@@ -226,9 +226,10 @@ casper.then(function(){
  casper.then(function(){
    test.assertExists(DONATION_DONE_BUTTON_CLASS);
     casper.click(DONATION_DONE_BUTTON_CLASS);
-     casper.waitForSelector(DONATION_FIND_CLASS, function success(){
+     casper.waitForSelector(DONATION_FIND_BUTTON_CLASS, function success(){
         test.pass('Edit Donation --> FInd Donation  page  Loaded Successfully') },function timeout(){
           test.fail('Edit Donation --> Find Donation page   Loading  timeout')},TIMEOUT);
+
   });
 
 casper.run(function() {
@@ -248,11 +249,13 @@ casper.test.begin('Delete  Donations Record',6,function(test){
 
 
   casper.then(function(){
-   test.assertExists(DONATION_FIND_CLASS);
-    casper.click(DONATION_FIND_CLASS);
+
+   test.assertExists(DONATION_FIND_BUTTON_CLASS);
+    casper.click(DONATION_FIND_BUTTON_CLASS);
      casper.waitForSelector(TABLE_CLASS, function success(){
         test.pass('Delete Donation -- Donation Results  Loaded Successfully') },function timeout(){
           test.fail('Delete Donation -- Donation Results  Loading  timeout')},TIMEOUT);
+  // casper.wait('5000');
     
   });
 
@@ -273,7 +276,7 @@ casper.test.begin('Delete  Donations Record',6,function(test){
     casper.setFilter(PAGE_CONFIRM, function() {
     return true;
   });
-      casper.waitForSelector(DONATION_FIND_CLASS, function success(){
+      casper.waitForSelector(DONATION_FIND_BUTTON_CLASS, function success(){
         test.pass('Delete Donation --> Donation  Deleted Successfully') },function timeout(){
           test.fail('Delete Donation -->  Deleting Donation Failed')},TIMEOUT);
      
