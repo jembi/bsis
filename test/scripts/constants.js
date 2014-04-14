@@ -20,12 +20,6 @@ LABELLING_PAGE_SELECTOR = 'a[href="#lotReleasePageContent"]';
 
 
 
-
-//User Constants
-
-SUPER_USER_NAME = "superuser";
-SUPER_USER_PASSWORD = "superuser";
-
 //Tab COnstants
 
 HOME_TAB   = 'Home';
@@ -48,6 +42,7 @@ PAGE_CONFIRM = 'page.confirm';
 CLEAR_FORM_BUTTON = '.clearFormButton ';
 CHECK_RESULTS_BUTTON_CLASS = '.findCheckResultButton';
 PRINT_DICARD_BUTTON_CLASS = '.printDiscardButton';
+LABELLING_DIN_ID = '#dinNumber';
 
 //Tab Constant selectors
 COMPONENT_RECORD_TAB_SELECTOR = '#recordProductsContent a';
@@ -77,7 +72,7 @@ DONOR_FIRST_NAME_ID = '#firstName';
 DONOR_LAST_NAME_ID  = '#lastName';
 DONOR_ANY_BLOOD_GROUP_ID = '#anyBloodGroup';
 DONOR_DUE_TO_DONATE_ID= '#dueToDonate1';
-
+DONOR_EDIT_TEXT = 'Edit donor';
 DONOR_FIND_BUTTON_CLASS = 'button.findDonorButton';
 DONOR_ADD_BUTTON_CLASS  = 'button.addDonorButton';
 DONOR_EDIT_BUTTON_CLASS = '.editButton' ;
@@ -112,6 +107,7 @@ DONATION_CENTER = '2';
 DONATION_SITE = '2';
 COLLECTED_ON = '09/04/2014 12:00:00 AM';
 DONATION_IDENTIFICATION_NUMBER = Math.round(+new Date()/1000);
+DONATION_NUMBER = '1234';
 
 
 //Donation Selectors 
@@ -121,6 +117,7 @@ DONATION_FORM_CLEAR_CLASS = '.clearFormButton';
 DONATION_TYPE='addCollectionFormDonationType'
 DONOR_WEIGHT_ID = '#donorWeight';
 DONOR_PULSE_ID = '#donorPulse';
+BLOOD_BAG_TYPE = 'select[name="bloodBagType"]';
 BLOOD_PRESSURE_SYSTOLIC_ID = '#bloodPressureSystolic';
 BLOOD_PRESSURE_DIASTOLIC_ID = '#bloodPressureDiastolic';
 DONATION_NUMBER_ID = '#collectionNumber';
@@ -212,8 +209,8 @@ casper.run(function() {
 
 ///Asserting Tabs
 var tabSelector;
-function assertTabExistsByName (TAB_NAME){
-casper.test.begin('View Donors Page',2,function(test){
+function assertTabExistsByName (TAB_NAME , PERMISSION, SELECTOR){
+casper.test.begin('View '+TAB_NAME+' Page',2,function(test){
 casper.then(function(){
     
     tabSelector  =   this.evaluate(function(TAB){
@@ -229,16 +226,25 @@ casper.then(function(){
  },{  TAB : TAB_NAME
  });
 
-       test.assertExists(tabSelector);
+  if(PERMISSION)
+     test.assertExists(tabSelector);
+   else
+     test.assertDoesntExist(tabSelector);
+
+  if(PERMISSION){
      casper.click(tabSelector);
-     casper.waitForText(DONOR_FIND_TEXT, function success(){
+     casper.waitForSelector(SELECTOR, function success(){
         test.pass( TAB_NAME +' Page  --  Page Loaded Successfully') },function timeout(){
           test.fail( TAB_NAME + '  Page  --  page Loading Timeout')},TIMEOUT);
+      }else
+        test.pass('No permission To View -->' +TAB_NAME);
+
+
 
    });
 
     casper.run(function() {
-    this.echo('Test Successful - View Donora Page', 'INFO');
+    this.echo('Test Successful - View '+TAB_NAME + ' Page', 'INFO');
        test.done();
    });
 

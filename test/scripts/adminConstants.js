@@ -1,9 +1,10 @@
-//Credentials
-     USERNAME = 'superuser';
-	 PASSWORD = 'superuser';
+
 
 //superuser Constants 
 
+//Credentials
+     USERNAME = 'Admin';
+	 PASSWORD = 'admin';
 
 	 //page control permissions
 	 VIEW_DONOR_INFORMATION =  true;
@@ -107,10 +108,10 @@
 	 MANAGE_DONOR_CODES =  true;
 	 MANAGE_DIAGNOSES_CODES =  true;
 	 MANAGE_LAB_SETUP =  true;
-	 MANAGE_DATA_SETUP =  true;
+	 MANAGE_DATA_SETUP =  false;
 	 MANAGE_FORMS =  true;
 	 MANAGE_BACKUP_DATA =  true;
-	 MANAGE_BLOOD_TESTS =  true;
+	 MANAGE_BLOOD_TESTS =  false;
 	 MANAGE_TIPS =  true;
 	 MANAGE_REQUESTS =  true;
 
