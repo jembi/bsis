@@ -184,12 +184,12 @@ if(VIEW_COMPONENT)
  else
    test.assertDoesntExist(COMPONENT_DONE_BUTTON_CLASS);
 
- if(VIEW_COMPONENT)
+ if(EDIT_COMPONENT)
    test.assertExists(COMPONENT_EDIT_BUTTON_CLASS);
  else
    test.assertDoesntExist(COMPONENT_EDIT_BUTTON_CLASS);
 
- if(VIEW_COMPONENT)
+ if(VOID_COMPONENT)
    test.assertExists(COMPONENT_DELETE_BUTTON_CLASS);
  else
    test.assertDoesntExist(COMPONENT_DELETE_BUTTON_CLASS);
@@ -199,7 +199,7 @@ if(VIEW_COMPONENT)
  else
    test.assertDoesntExist(COMPONENT_PRINT_BUTTON_CLASS);
 
- if(VIEW_COMPONENT)
+ if(DISCARD_COMPONENT)
    test.assertExists(COMPONENT_DISCARD_BUTTON_CLASS);
  else
    test.assertDoesntExist(COMPONENT_DISCARD_BUTTON_CLASS);
@@ -213,7 +213,7 @@ if(VIEW_COMPONENT)
    test.assertExists(COMPONENT_PRINT_BUTTON_CLASS);
  else
    test.assertDoesntExist(COMPONENT_RETURN_BUTTON_CLASS);
-  
+
 
 });
 

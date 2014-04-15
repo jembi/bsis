@@ -207,17 +207,15 @@
         View Donation History
       </button>
       </sec:authorize>
-      <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DEFERRAL)">
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DEFERRAL)">
       <button class="deferDonorButton">
         Defer Donor
       </button>
       </sec:authorize>
       <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DONOR)">
-      <sec:authorize access="hasRole('Void Donor')">
       <button type="button" class="deleteButton">
         Delete
       </button>
-      </sec:authorize>
       </sec:authorize>
       <button class="printBarcode">
         Print Barcode

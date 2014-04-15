@@ -193,40 +193,40 @@ casper.then(function(){
 //Donor summary page Asssertions
 casper.then(function(){  
 
-  if(VIEW_DONOR)
+  if(EDIT_DONOR)
      test.assertExists(DONOR_EDIT_BUTTON_CLASS);
    else
-     test.assertExists(DONOR_EDIT_BUTTON_CLASS);
+     test.assertDoesntExist(DONOR_EDIT_BUTTON_CLASS);
 
   if(VIEW_DONOR)
      test.assertExists(DONOR_HISTORY_BUTTON_CLASS);  
    else
-     test.assertExists(DONOR_HISTORY_BUTTON_CLASS);  
+     test.assertDoesntExist(DONOR_HISTORY_BUTTON_CLASS);  
 
-  if(VIEW_DONOR)   
+  if(VOID_DONOR)   
      test.assertExists(DONOR_DELETE_BUTTON_CLASS);
    else
-     test.assertExists(DONOR_DELETE_BUTTON_CLASS);
+     test.assertDoesntExist(DONOR_DELETE_BUTTON_CLASS);
 
-  if(VIEW_DONOR)
+  if(VOID_DEFERRAL)
      test.assertExists(DONOR_DEFER_BUTTON_CLASS); 
    else
-     test.assertExists(DONOR_DEFER_BUTTON_CLASS); 
+     test.assertDoesntExist(DONOR_DEFER_BUTTON_CLASS); 
 
-  if(VIEW_DONOR) 
+  if(VIEW_DEFERRAL) 
      test.assertExists(DONOR_SHOW_DEFERRALS_BUTTON_CLASS);
    else
-     test.assertExists(DONOR_SHOW_DEFERRALS_BUTTON_CLASS);
+     test.assertDoesntExist(DONOR_SHOW_DEFERRALS_BUTTON_CLASS);
 
   if(VIEW_DONOR)
      test.assertExists(DONOR_PRINT_BARCODE_BUTTON_CLASS);
    else
-     test.assertExists(DONOR_PRINT_BARCODE_BUTTON_CLASS);
+     test.assertDoesntExist(DONOR_PRINT_BARCODE_BUTTON_CLASS);
 
   if(VIEW_DONOR)
      test.assertExists(DONOR_DONE_BUTTON_CLASS);
    else
-     test.assertExists(DONOR_DONE_BUTTON_CLASS);
+     test.assertDoesntExist(DONOR_DONE_BUTTON_CLASS);
 
 
     });
@@ -250,7 +250,7 @@ casper.then(function(){
 
 if(EDIT_DONOR){
  casper.click(DONOR_EDIT_BUTTON_CLASS);
- casper.waitForText('',
+ casper.waitForSelector(DONOR_SAVE_CLASS,
 
   function success(){
     test.pass('Edit Donor Test --> Edit Donors page Loaded Successfully');
@@ -306,8 +306,12 @@ casper.test.begin(' Delete  Donor Record',2,function(test){
 
 casper.then(function(){
 
-if(VOID_DONOR){
- test.assertExists(DONOR_DELETE_BUTTON_CLASS)
+if(VOID_DONOR)
+ test.assertExists(DONOR_DELETE_BUTTON_CLASS);
+else
+test.assertDoesntExist(DONOR_DELETE_BUTTON_CLASS);
+
+  if(VOID_DONOR){
  casper.click(DONOR_DELETE_BUTTON_CLASS);
      casper.setFilter(PAGE_CONFIRM, function() {
      return true;

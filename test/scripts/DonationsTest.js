@@ -107,7 +107,7 @@ test.assertDoesntExist(NOTES_ID);
 
 if(ADD_DONATION)
 test.assertExists(DONATION_ADD_CLASS);
-esle
+else
 test.assertDoesntExist(DONATION_ADD_CLASS);
 
 if(ADD_DONATION)
@@ -257,22 +257,25 @@ else
   test.assertDoesntExist(DONATION_DONE_BUTTON_CLASS);
 
 
-if(VIEW_DONATION)
+if(EDIT_DONATION)
   test.assertExists(DONATION_EDIT_BUTTON_CLASS);
 else
-  test.assertDoesntExist(DONATION_DONE_BUTTON_CLASS);
+  test.assertDoesntExist(DONATION_EDIT_BUTTON_CLASS);
+  
 
 
-if(VIEW_DONATION)
+if(VOID_DONATION)
   test.assertExists(DONATION_DELETE_BUTTON_CLASS);
 else
-  test.assertDoesntExist(DONATION_DONE_BUTTON_CLASS);
+  test.assertDoesntExist(DONATION_DELETE_BUTTON_CLASS);
+  
 
 
 if(VIEW_DONATION)
   test.assertExists(DONATION_PRINT_BUTTON_CLASS);
 else
-  test.assertDoesntExist(DONATION_DONE_BUTTON_CLASS);
+  test.assertDoesntExist(DONATION_PRINT_BUTTON_CLASS);
+  
 
   
 
