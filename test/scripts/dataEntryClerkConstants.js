@@ -19,14 +19,14 @@
 	 VIEW_ADMIN_INFORMATION = false;
 
  //	Donor Permissions
-	 ADD_DONOR     = true;
-	 VIEW_DONOR    = true;
-     EDIT_DONOR    = true;
-     VOID_DONOR    = true;
-	 ADD_DEFERRAL  = true;
-     VIEW_DEFERRAL = true;
-	 EDIT_DEFERRAL =  true;
-	 VOID_DEFERRAL =  true;
+	 ADD_DONOR     = false;
+	 VIEW_DONOR    = false;
+     EDIT_DONOR    = false;
+     VOID_DONOR    = false;
+	 ADD_DEFERRAL  = false;
+     VIEW_DEFERRAL = false;
+	 EDIT_DEFERRAL =  false;
+	 VOID_DEFERRAL =  false;
 	 ADD_DONOR_CODE  =false;
 	 VIEW_DONOR_CODE =false;
 	 EDIT_DONOR_CODE =false;
