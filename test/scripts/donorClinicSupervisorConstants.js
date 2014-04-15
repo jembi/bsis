@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'donorClinicSupervisor';
-	 PASSWORD = 'donorClinicSupervisor';
+     USERNAME = 'donor_Supervisor';
+	 PASSWORD = 'donor_Supervisor';
 
 //page control permissions
 

@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'bloodbankstaff';
-	 PASSWORD = 'bloodbankstaff';
+     USERNAME = 'blood_bank_staff';
+	 PASSWORD = 'blood_bank_staff';
 
 //page control permissions
 
@@ -31,7 +31,7 @@
 	 VIEW_DONOR_CODE =false;
 	 EDIT_DONOR_CODE =false;
 	 VOID_DONOR_CODE =false;
-	 VIEW_DONOR_CODE_GROUP =falsefalse;
+	 VIEW_DONOR_CODE_GROUP =false;
 
 	
 //Donation Permissions

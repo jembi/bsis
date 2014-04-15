@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'dataentryclerk';
-	 PASSWORD = 'dataentryclerk';
+     USERNAME = 'data_entry_clerk';
+	 PASSWORD = 'data_entry_clerk';
 
 //page control permissions
 

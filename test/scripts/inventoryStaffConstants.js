@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'inventorystaff';
-	 PASSWORD = 'inventorystaff';
+     USERNAME = 'inventory_staff';
+	 PASSWORD = 'inventory_staff';
 
 //page control permissions
 

@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'serologystaff';
-	 PASSWORD = 'serologystaff';
+     USERNAME = 'serology_staff';
+	 PASSWORD = 'serology_staff';
 
 //page control permissions
 

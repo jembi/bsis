@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'ttitestingsupervisor';
-	 PASSWORD = 'ttitestingsupervisor';
+     USERNAME = 'tti_testing_supervisor';
+	 PASSWORD = 'tti_testing_supervisor';
 
 //page control permissions
 

@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'componentStaff';
-	 PASSWORD = 'componentStaff';
+     USERNAME = 'component_Staff';
+	 PASSWORD = 'component_Staff';
 
 //page control permissions
 

@@ -36,14 +36,14 @@ else
   test.assertDoesntExist(DONATION_NUMBER_ID);
 
 if(ADD_COMPONENT)
-  test.assertExists(COMPONENT_VIEW_BUTTON_CLASS);
+  test.assertExists();
 else
-  test.assertDoesntExist(DONATION_NUMBER_ID);
+  test.assertDoesntExist(COMPONENT_VIEW_BUTTON_CLASS);
 
 if(ADD_COMPONENT)
   test.assertExists(COMPONENT_CLEAR_BUTTON_CLASS);
 else
-  test.assertDoesntExist(DONATION_NUMBER_ID);
+  test.assertDoesntExist(COMPONENT_CLEAR_BUTTON_CLASS);
 
 });
 

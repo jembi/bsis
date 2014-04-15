@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'donorcommunicator';
-	 PASSWORD = 'donorcommunicator';
+     USERNAME = 'donor_communications_staff';
+	 PASSWORD = 'donor_communications_staff';
 
 //page control permissions
 

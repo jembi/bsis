@@ -1,9 +1,9 @@
-// Donor Clinic Supervisor
+// Donor Clinic Staff
 
 
 //Credentials
-     USERNAME = 'donoruser';
-	 PASSWORD = 'donoruser';
+     USERNAME = 'donor_clinic_staff';
+	 PASSWORD = 'donor_clinic_staff';
 
 //page control permissions
 

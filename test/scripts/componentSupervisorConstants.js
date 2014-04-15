@@ -2,8 +2,8 @@
 
 
 //Credentials
-     USERNAME = 'componentSupervisor';
-	 PASSWORD = 'componentSupervisor';
+     USERNAME = 'component_Supervisor';
+	 PASSWORD = 'component_Supervisor';
 
 //page control permissions
 

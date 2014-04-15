@@ -2272,7 +2272,7 @@
 	<changeSet id="201402241125" author="srikanth">
 		<delete tableName="User"></delete>
 		
-		<insert tableName="User">
+	<insert tableName="User">
 			<column name="id" value="1"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
 			<column name="firstName" value="superuser"></column>
@@ -2280,13 +2280,240 @@
 			<column name="isAdmin" value="1"></column>
 			<column name="isDeleted" value="0"></column>
 			<column name="isStaff" value="1"></column>
-			<column name="password" value="superuser"></column>
-			<column name="username" value="superuser"></column>
+			<column name="password" value="super_user"></column>
+			<column name="username" value="super_user"></column>
 		</insert>
 		<insert tableName="User_Role">
 			<column name="users_id" value="1"></column>
 			<column name="roles_id" value="1"></column>
 		</insert>
+		<insert tableName="User">
+			<column name="id" value="2"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="Admin"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="admin_user"></column>
+			<column name="username" value="admin_user"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="2"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="3"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="Medical Officer"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="medical_officer"></column>
+			<column name="username" value="medical_officer"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="3"></column>
+			<column name="roles_id" value="3"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="4"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="donorSupervisor"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="donor_supervisor"></column>
+			<column name="username" value="donor_supervisor"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="4"></column>
+			<column name="roles_id" value="4"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="5"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="DonorStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="donor_clinic_staff"></column>
+			<column name="username" value="donor_clinic_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="5"></column>
+			<column name="roles_id" value="5"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="6"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="DonorCommStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="donor_communications_staff"></column>
+			<column name="username" value="donor_communications_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="6"></column>
+			<column name="roles_id" value="6"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="7"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="DonorCounsStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="donor_counselling_staff"></column>
+			<column name="username" value="donor_counselling_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="7"></column>
+			<column name="roles_id" value="7"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="8"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="DataEntryClerk"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="data_entry_clerk"></column>
+			<column name="username" value="data_entry_clerk"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="8"></column>
+			<column name="roles_id" value="8"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="9"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="CompSupervisor"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="component_supervisor"></column>
+			<column name="username" value="component_supervisor"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="9"></column>
+			<column name="roles_id" value="9"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="10"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="CompStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="component_staff"></column>
+			<column name="username" value="component_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="10"></column>
+			<column name="roles_id" value="10"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="11"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="ttiSupervisor"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="tti_testing_supervisor"></column>
+			<column name="username" value="tti_testing_supervisor"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="11"></column>
+			<column name="roles_id" value="11"></column>
+		</insert>
+		
+		<insert tableName="User">
+			<column name="id" value="12"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="ttiStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="tti_testing_staff"></column>
+			<column name="username" value="tti_testing_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="12"></column>
+			<column name="roles_id" value="12"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="13"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="SerSupervisor"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="serology_supervisor"></column>
+			<column name="username" value="serology_supervisor"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="13"></column>
+			<column name="roles_id" value="13"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="14"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="SerologyStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="serology_staff"></column>
+			<column name="username" value="serology_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="14"></column>
+			<column name="roles_id" value="14"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="15"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="InventoryStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="inventory_staff"></column>
+			<column name="username" value="inventory_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="15"></column>
+			<column name="roles_id" value="15"></column>
+		</insert>
+		<insert tableName="User">
+			<column name="id" value="16"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="bloodBankStaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="blood_bank_staff"></column>
+			<column name="username" value="blood_bank_staff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="16"></column>
+			<column name="roles_id" value="16"></column>
+		</insert>
+	
 	</changeSet>
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
