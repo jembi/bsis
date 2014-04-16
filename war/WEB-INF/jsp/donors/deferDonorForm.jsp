@@ -56,7 +56,7 @@ $(document).ready(function(){
 <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DEFERRAL)">
 <div id="${tabContentId}">
 
-  <form class="formFormatClass deferDonorForm">
+  <form class="formFormatClass deferDonorForm" name="deferDonorForm">
 
     <input name="donorId" type="hidden" value="${donorId}"/>
     <input name="donorDeferralId" type="hidden" value="${donorDeferralId}"/>

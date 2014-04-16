@@ -458,33 +458,33 @@
 	    </insert>
 	    <insert tableName="Role">
 	       <column name="id" value="3"></column>
+	       <column name="name" value="Medical Officer"></column>
+	       <column name="description" value="Medical Officer"></column>
+	    </insert>
+	    <insert tableName="Role">
+	       <column name="id" value="4"></column>
 	       <column name="name" value="Donor Clinic Supervisor"></column>
 	       <column name="description" value="Donor Clinic Supervisor "></column>
 	    </insert>
 	    <insert tableName="Role">
-	       <column name="id" value="4"></column>
+	       <column name="id" value="5"></column>
 	       <column name="name" value="Donor Clinic Staff"></column>
 	       <column name="description" value="Donor Clinic Staff"></column>
 	    </insert>
 	    <insert tableName="Role">
-	       <column name="id" value="5"></column>
+	       <column name="id" value="6"></column>
 	       <column name="name" value="Donor Communications Staff"></column>
 	       <column name="description" value="Donor Communications Staff"></column>
 	    </insert>
 	     <insert tableName="Role">
-	       <column name="id" value="6"></column>
+	       <column name="id" value="7"></column>
 	       <column name="name" value="Donor Counselling Staff"></column>
 	       <column name="description" value="Donor Counselling Staff"></column>
 	    </insert>
 	    <insert tableName="Role">
-	       <column name="id" value="7"></column>
+	       <column name="id" value="8"></column>
 	       <column name="name" value="Data Entry Clerk"></column>
 	       <column name="description" value="Data Entry Clerk"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="8"></column>
-	       <column name="name" value="Medical Officer"></column>
-	       <column name="description" value="Medical Officer"></column>
 	    </insert>
 	    <insert tableName="Role">
 	       <column name="id" value="9"></column>
@@ -847,6 +847,10 @@
 	     <column name="permissions_id" value="1"></column>
 	     <column name="roles_id" value="7"></column>
 	  </insert>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="1"></column>
+	     <column name="roles_id" value="8"></column>
+	  </insert>
 	  
 	    <!-- View Donor Permission mapping with Roles -->
 	    
@@ -894,6 +898,10 @@
 	     <column name="permissions_id" value="2"></column>
 	     <column name="roles_id" value="7"></column>
 	  </insert>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="2"></column>
+	     <column name="roles_id" value="8"></column>
+	  </insert>
 	  
 	    <!-- Edit Donor Permission mapping with Roles -->
 	    
@@ -925,6 +933,11 @@
 	     <column name="permissions_id" value="3"></column>
 	     <column name="roles_id" value="7"></column>
 	  </insert>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="3"></column>
+	     <column name="roles_id" value="8"></column>
+	  </insert>
+	  
 	  
 	    <!-- Void Donor Permission mapping with Roles -->
 	  
@@ -956,6 +969,7 @@
 	     <column name="permissions_id" value="4"></column>
 	     <column name="roles_id" value="7"></column>
 	  </insert>
+	
 	  
 	    <!-- Add Deferra; Permission mapping with Roles -->
 	    
@@ -983,6 +997,15 @@
 	     <column name="permissions_id" value="5"></column>
 	     <column name="roles_id" value="6"></column>
 	  </insert>
+	   <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="5"></column>
+	     <column name="roles_id" value="7"></column>
+	  </insert>
+	   <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="5"></column>
+	     <column name="roles_id" value="8"></column>
+	  </insert>
+	  
 	  
 	     <!-- View Deferra; Permission mapping with Roles -->
 	     
@@ -1014,7 +1037,10 @@
 	     <column name="permissions_id" value="6"></column>
 	     <column name="roles_id" value="7"></column>
 	  </insert>
-	   
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="6"></column>
+	     <column name="roles_id" value="8"></column>
+	  </insert>
 	  <!-- Edit Deferral Permission mapping with Roles -->
 	  
 	  <insert tableName="Permission_Role">
@@ -1044,6 +1070,10 @@
 	   <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="7"></column>
 	     <column name="roles_id" value="7"></column>
+	  </insert>
+	   <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="7"></column>
+	     <column name="roles_id" value="8"></column>
 	  </insert>
 
 	 <!-- Void  Deferral Permission mapping with Roles -->
@@ -1162,7 +1192,7 @@
 	     <column name="roles_id" value="4"></column>
 	  </insert>
 	  
-	  <!-- Void Donor Code Gruups Permission mapping with Roles -->
+	  <!-- View Donor Code Gruups Permission mapping with Roles -->
 	   
 	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="13"></column>
@@ -1210,7 +1240,15 @@
 	  </insert>
 	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="13"></column>
+	     <column name="roles_id" value="12"></column>
+	  </insert>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="13"></column>
 	     <column name="roles_id" value="13"></column>
+	  </insert>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="13"></column>
+	     <column name="roles_id" value="14"></column>
 	  </insert>
 	  
 	  <!-- Add Donation Permission mapping with Roles -->
@@ -2090,11 +2128,11 @@
 	  </insert>
 	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="62"></column>
-	     <column name="roles_id" value="8"></column>
+	     <column name="roles_id" value="9"></column>
 	  </insert>
 	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="62"></column>
-	     <column name="roles_id" value="9"></column>
+	     <column name="roles_id" value="10"></column>
 	  </insert>
 	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="63"></column>
@@ -2234,7 +2272,7 @@
 	<changeSet id="201402241125" author="srikanth">
 		<delete tableName="User"></delete>
 		
-		<insert tableName="User">
+	<insert tableName="User">
 			<column name="id" value="1"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
 			<column name="firstName" value="superuser"></column>
@@ -2249,6 +2287,7 @@
 			<column name="users_id" value="1"></column>
 			<column name="roles_id" value="1"></column>
 		</insert>
+			
 	</changeSet>
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->

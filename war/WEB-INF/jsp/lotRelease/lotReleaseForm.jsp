@@ -99,7 +99,7 @@ $(document).ready(function() {
     <div class="formFormatClass">
       <div>
         <label style="width:215px;">Donation Identification Number</label>
-        <input name="dinNumber" />
+        <input name="dinNumber" id="dinNumber" />
       </div>
       <div style="padding-left: 245px;">
         <button class="findCheckResultButton autoWidthButton">

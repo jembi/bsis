@@ -130,7 +130,7 @@
     </c:if>
 
     <form:form id="${editDonorFormId}" method="POST" class="formFormatClass"
-      commandName="editDonorForm">
+      commandName="editDonorForm" name="editDonorFOrm">
       <form:hidden path="id" />
       <div>
         <label><b>Edit donor</b></label>

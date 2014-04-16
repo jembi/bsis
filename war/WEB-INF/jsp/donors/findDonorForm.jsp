@@ -54,6 +54,15 @@ $(document).ready(function() {
     }
   }).click(clearFindForm);
   
+ //Enabling submit button 
+  $('.findDonorButton').attr('disabled', 'disabled');
+  $('#donorNumber, #firstName, #lastName').change(function(){ 
+	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 || $('#lastName').val().trim().length >0 )
+	  $('.findDonorButton').removeAttr('disabled');
+	  else
+		  $('.findDonorButton').attr('disabled', 'disabled');
+  });
+	  
   function clearFindForm() {
     refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
@@ -240,6 +249,11 @@ $(document).ready(function() {
         <form:label path="dueToDonate" style="width: 9.2%;">Due To Donate</form:label>
         <form:checkbox path="dueToDonate" style="width: auto; position: relative; top: 2px;"/>
       </div>
+  
+      <div>
+        <form:label path="exactMatch" style="width: 9.2%;">Include Similar Results</form:label>
+        <form:checkbox path="exactMatch" style="width: auto; position: relative; top: 2px;"/>
+      </div>
 
       <br />
       <br />
@@ -268,7 +282,7 @@ $(document).ready(function() {
 
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
-      commandName="addDonorForm">
+      commandName="addDonorForm" name="addDonorForm">
 
 
       <c:if test="${model.donorFields.firstName.hidden != true }">

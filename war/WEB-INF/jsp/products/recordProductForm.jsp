@@ -28,7 +28,7 @@
 
 <script>
 $(document).ready(function() {
-  $("#${tabContentId}").find(".findProductButton").button({
+  $("#${tabContentId}").find(".viewFormButton").button({
     icons : {
       primary : 'ui-icon-search'
     }
@@ -202,7 +202,7 @@ $(document).ready(function() {
 <!--       </p> -->
 <!--     </div> -->
     <form:form method="GET" commandName="findProductByPackNumberForm" id="${findProductFormId}"
-      class="formFormatClass">
+      class="formFormatClass" name= "recordProductForm">
       <div>
         <form:label path="searchBy">Donation Identification Number </form:label>
         <div class="collectionNumberInput hidableDiv">
@@ -215,7 +215,7 @@ $(document).ready(function() {
     <div class="formFormatClass">
       <div>
         <label></label>
-        <button type="button" class="findProductButton">
+        <button type="button" class="viewFormButton">
           Find products
         </button>
         <button type="button" class="clearFindFormButton">
