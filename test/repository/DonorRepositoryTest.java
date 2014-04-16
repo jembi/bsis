@@ -229,7 +229,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroPartialFirstNameMatch() {
 		String searchDonorNumber = "";
-		String donorFirstName = "fis";
+		String donorFirstName = "fir";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -359,7 +359,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroAnyBloodGroupMatch() {
 		String searchDonorNumber = "";
-		String donorFirstName = "fistname";
+		String donorFirstName = "firstname";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
