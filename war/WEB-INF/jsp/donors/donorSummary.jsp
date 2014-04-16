@@ -207,7 +207,7 @@
         View Donation History
       </button>
       </sec:authorize>
-      <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DEFERRAL)">
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DEFERRAL)">
       <button class="deferDonorButton">
         Defer Donor
       </button>

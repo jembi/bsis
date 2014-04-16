@@ -208,7 +208,7 @@ casper.then(function(){
    else
      test.assertDoesntExist(DONOR_DELETE_BUTTON_CLASS);
 
-  if(VOID_DEFERRAL)
+  if(ADD_DEFERRAL)
      test.assertExists(DONOR_DEFER_BUTTON_CLASS); 
    else
      test.assertDoesntExist(DONOR_DEFER_BUTTON_CLASS); 
