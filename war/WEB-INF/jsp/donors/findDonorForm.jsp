@@ -282,7 +282,7 @@ $(document).ready(function() {
 
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
-      commandName="addDonorForm" name="addDonorForm">
+      commandName="addDonorForm" >
 
 
       <c:if test="${model.donorFields.firstName.hidden != true }">

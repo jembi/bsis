@@ -114,12 +114,12 @@ public class DonorRepository {
       lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
     }
     else{
-       if(firstName.isEmpty())
+       if(firstName.trim().equals(""))
     	   firstNameExp = cb.disjunction();
        else   
            firstNameExp =  cb.like(root.<String>get("firstName"), "%" + firstName + "%");
        
-       if(lastName.isEmpty())
+       if(lastName.trim().equals(""))
     	   lastNameExp = cb.disjunction();
        else
            lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
