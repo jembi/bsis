@@ -259,9 +259,9 @@ public class DonorRepositoryTest {
 	 * Should fetch all donors that fully  match first name
 	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
-	public void findAnyDonor_listSizeShouldNotZeroExactFirstNameMatch() {
+	public void findAnyDonor_listSizeShouldNotZeroFullyFirstNameMatch() {
 		String searchDonorNumber = "";
-		String donorFirstName = "firstname";
+		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -325,7 +325,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroMatchBloodGroup() {
 		String searchDonorNumber = "";
-		String donorFirstName = "firstname";
+		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "false";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -359,7 +359,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroAnyBloodGroupMatch() {
 		String searchDonorNumber = "";
-		String donorFirstName = "firstname";
+		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -382,7 +382,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroDueToDonateSetTrue() {
 		String searchDonorNumber = "";
-		String donorFirstName = "firstname";
+		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
