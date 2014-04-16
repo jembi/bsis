@@ -86,7 +86,7 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate) {
+      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean exactMatch) {
 
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -108,11 +108,23 @@ public class DonorRepository {
 
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
 
-    Predicate firstNameExp;
-    if (firstName.trim().equals(""))
-      firstNameExp = cb.disjunction();
-    else
-      firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
+    Predicate firstNameExp, lastNameExp;
+    if (!exactMatch){
+      firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
+      lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
+    }
+    else{
+       if(firstName.isEmpty())
+    	   firstNameExp = cb.disjunction();
+       else   
+           firstNameExp =  cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+       
+       if(lastName.isEmpty())
+    	   lastNameExp = cb.disjunction();
+       else
+           lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+    }
+
     
     Predicate dueToDonateExp;
     if (!dueToDonate)
@@ -120,11 +132,6 @@ public class DonorRepository {
     else
     	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
-    Predicate lastNameExp;
-    if (lastName.trim().equals(""))
-      lastNameExp = cb.disjunction();
-    else
-      lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
 
     Expression<Boolean> exp2;
     if (StringUtils.isBlank(donorNumber) && 

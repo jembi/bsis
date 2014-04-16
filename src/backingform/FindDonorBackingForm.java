@@ -13,8 +13,8 @@ public class FindDonorBackingForm {
   private List<BloodGroup> bloodGroups;
   private boolean createDonorSummaryView;
   private boolean dueToDonate;
-
   private String anyBloodGroup;
+  private boolean exactMatch;
 
   public String getDonorNumber() {
     return donorNumber;
@@ -74,4 +74,14 @@ public class FindDonorBackingForm {
 	public void setDueToDonate(boolean dueToDonate) {
 		this.dueToDonate = dueToDonate;
 	}
+
+	public boolean isExactMatch() {
+		return exactMatch;
+	}
+
+	public void setExactMatch(boolean exactMatch) {
+		this.exactMatch = exactMatch;
+	}
+
+
 }
