@@ -396,8 +396,8 @@ public class DonorRepositoryTest {
 				0, listDonor.size());
 		boolean isValid = false;
 		for (Donor donor : listDonor) {
-			if ((donor.getDonorNumber().equals("000001") || donor
-					.getDonorNumber().equals("000002"))) {
+			if ((donor.getDonorNumber().equals("000004") || donor
+					.getDonorNumber().equals("000017"))) {
 				isValid = true;
 			} else {
 				isValid = false;
