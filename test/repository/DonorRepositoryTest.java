@@ -256,7 +256,7 @@ public class DonorRepositoryTest {
 	
 	@Test
 	/**
-	 * Should fetch all donors that partially match first name
+	 * Should fetch all donors that fully  match first name
 	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroExactFirstNameMatch() {
