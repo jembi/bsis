@@ -598,7 +598,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate());
+        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate(),form.isExactMatch());
 
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
