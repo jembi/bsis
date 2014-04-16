@@ -219,7 +219,7 @@ public class DonorRepositoryTest {
 				0,
 				((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
 						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, false).get(0))).size());
+						anyBloodGroup, pagingParams, false,true).get(0))).size());
 	}
 
 	@Test
@@ -229,7 +229,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroPartialFirstNameMatch() {
 		String searchDonorNumber = "";
-		String donorFirstName = "fir";
+		String donorFirstName = "fis";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -237,7 +237,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false).get(0)));
+				anyBloodGroup, pagingParams, false,true).get(0)));
 		assertNotSame(
 				"List size should not zero.Matching records is found base on firstname.",
 				0, listDonors.size());
@@ -253,6 +253,39 @@ public class DonorRepositoryTest {
 		assertTrue("Donor's First Name should be start with 'fir'.", isValid);
 
 	}
+	
+	@Test
+	/**
+	 * Should fetch all donors that partially match first name
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
+	 */
+	public void findAnyDonor_listSizeShouldNotZeroExactFirstNameMatch() {
+		String searchDonorNumber = "";
+		String donorFirstName = "firstname";
+		String donorLastName = "";
+		String anyBloodGroup = "true";
+		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		setPaginationParam(pagingParams);
+		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams, false,false).get(0)));
+		assertNotSame(
+				"List size should not zero.Matching records is found base on firstname.",
+				0, listDonors.size());
+		boolean isValid = false;
+		for (Donor donor : listDonors) {
+			if (donor.getFirstName().equals(donorFirstName)) {
+				isValid = true;
+			} else {
+				isValid = false;
+				break;
+			}
+		}
+		assertTrue("Found Donor's with ,"+donorFirstName , isValid);
+
+	}
+
 
 	@Test
 	/**
@@ -270,7 +303,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false).get(0)));
+				anyBloodGroup, pagingParams, false,true).get(0)));
 		assertNotSame(
 				"List size should not zero.Matching records is found base on lastname.",
 				0, listDonors.size());
@@ -292,7 +325,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroMatchBloodGroup() {
 		String searchDonorNumber = "";
-		String donorFirstName = "";
+		String donorFirstName = "firstname";
 		String donorLastName = "";
 		String anyBloodGroup = "false";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -302,7 +335,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false).get(0)));
+				anyBloodGroup, pagingParams, false,true).get(0)));
 		assertNotSame(
 				"List size should not zero.Matching records is found base on bloodgroup criteria.",
 				0, listDonors.size());
@@ -326,7 +359,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroAnyBloodGroupMatch() {
 		String searchDonorNumber = "";
-		String donorFirstName = "";
+		String donorFirstName = "fistname";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -336,7 +369,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false).get(0));
+				anyBloodGroup, pagingParams, false,true).get(0));
 		assertNotSame(
 				"Any blood group condition is true. So Donor's blood group search criteria is not consider. And List size should not zero.",
 				0, listDonor.size());
@@ -349,7 +382,7 @@ public class DonorRepositoryTest {
 	 */
 	public void findAnyDonor_listSizeShouldNotZeroDueToDonateSetTrue() {
 		String searchDonorNumber = "";
-		String donorFirstName = "";
+		String donorFirstName = "firstname";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -357,7 +390,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, true).get(0));
+				anyBloodGroup, pagingParams, true,true).get(0));
 		assertNotSame(
 				"DueToDonate condition is true,matching record should exist and donor list size should not zero.",
 				0, listDonor.size());
@@ -390,7 +423,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false).get(0));
+				anyBloodGroup, pagingParams, false,true).get(0));
 		for (Donor donor : listDonor) {
 			// 2 is deleted donor id
 			assertFalse(
