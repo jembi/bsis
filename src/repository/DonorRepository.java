@@ -87,8 +87,7 @@ public class DonorRepository {
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
       String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean exactMatch) {
-
-    CriteriaBuilder cb = em.getCriteriaBuilder();
+     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
 
@@ -133,14 +132,19 @@ public class DonorRepository {
     	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
 
-    Expression<Boolean> exp2;
-    if (StringUtils.isBlank(donorNumber) && 
-        StringUtils.isBlank(firstName) &&
-        StringUtils.isBlank(lastName) && !dueToDonate)
-      exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
-    else
-      exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
 
+    Expression<Boolean> exp2 = exp1;
+    if(!StringUtils.isBlank(donorNumber))
+ 	  exp2 = cb.and(exp2,donorNumberExp);
+
+    
+       if(!StringUtils.isBlank(firstName))
+    	    exp2 = cb.and(exp2,firstNameExp);
+       
+       if(!StringUtils.isBlank(lastName))
+    	   exp2 = cb.and(exp2,lastNameExp);
+       
+       
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
 
