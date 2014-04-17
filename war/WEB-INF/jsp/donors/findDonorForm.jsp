@@ -251,8 +251,8 @@ $(document).ready(function() {
       </div>
   
       <div>
-        <form:label path="exactMatch" style="width: 9.2%;">Include Similar Results</form:label>
-        <form:checkbox path="exactMatch" style="width: auto; position: relative; top: 2px;"/>
+        <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
+        <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>
       </div>
 
       <br />

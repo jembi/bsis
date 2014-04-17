@@ -86,7 +86,7 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean exactMatch) {
+      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean usePhraseMatch) {
      CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
@@ -108,7 +108,7 @@ public class DonorRepository {
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
 
     Predicate firstNameExp, lastNameExp;
-    if (!exactMatch){
+    if (!usePhraseMatch){
       firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
       lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
     }

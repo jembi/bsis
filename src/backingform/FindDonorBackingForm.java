@@ -14,7 +14,7 @@ public class FindDonorBackingForm {
   private boolean createDonorSummaryView;
   private boolean dueToDonate;
   private String anyBloodGroup;
-  private boolean exactMatch;
+  private boolean usePhraseMatch;
 
   public String getDonorNumber() {
     return donorNumber;
@@ -75,13 +75,14 @@ public class FindDonorBackingForm {
 		this.dueToDonate = dueToDonate;
 	}
 
-	public boolean isExactMatch() {
-		return exactMatch;
+	public boolean isUsePhraseMatch() {
+		return usePhraseMatch;
 	}
 
-	public void setExactMatch(boolean exactMatch) {
-		this.exactMatch = exactMatch;
+	public void setUsePhraseMatch(boolean usePhraseMatch) {
+		this.usePhraseMatch = usePhraseMatch;
 	}
+
 
 
 }
