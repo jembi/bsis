@@ -11,8 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,6 +23,7 @@ import javax.validation.Valid;
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
+import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
@@ -36,7 +39,6 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 
 import constraintvalidator.LocationExists;
-
 import utils.DonorUtils;
 
 @Entity
@@ -169,6 +171,14 @@ public class Donor implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
+  
+  @OneToMany
+  @JoinTable(
+		   name = "DonorDonorCode", 
+		   joinColumns = @JoinColumn(name = "donorId"), 
+		   inverseJoinColumns = @JoinColumn(name = "donorCodeId")
+		 )
+  private List<DonorCode> donorCodes;
 
   public Donor() {
     contactInformation = new ContactInformation();
@@ -253,7 +263,16 @@ public class Donor implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(Donor donor) {
+  
+  public List<DonorCode> getDonorCodes() {
+	return donorCodes;
+  }
+
+public void setDonorCodes(List<DonorCode> donorCodes) {
+	this.donorCodes = donorCodes;
+}
+
+public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
     setDonorNumber(donor.getDonorNumber());
     setFirstName(donor.getFirstName());
