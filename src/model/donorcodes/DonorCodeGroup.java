@@ -1,17 +1,11 @@
 package model.donorcodes;
 
 
-import java.util.Date;
+
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
-
-import org.hibernate.envers.Audited;
 
 
 
@@ -20,8 +14,7 @@ import org.hibernate.envers.Audited;
  *
  */
 @Entity
-@Audited
-public class DonorCodeGroup implements ModificationTracker {
+public class DonorCodeGroup  {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,11 +23,10 @@ public class DonorCodeGroup implements ModificationTracker {
     
     private String donorCodeGroup ;
     
-    @OneToMany(mappedBy = "donorCodeGroup")
+   @OneToMany(mappedBy = "donorCodeGroup",cascade = CascadeType.ALL)
     private List<DonorCode> donorCodes;
     
-    @Valid
-    private RowModificationTracker modificationTracker;
+
 
 	public Long getId() {
 		return id;
@@ -52,58 +44,14 @@ public class DonorCodeGroup implements ModificationTracker {
 		this.donorCodeGroup = donorCodeGroup;
 	}
 
-	@Override
-	public Date getCreatedDate() {
-		return modificationTracker.getCreatedDate();
-	}
-
-	@Override
-	public User getCreatedBy() {
-		return modificationTracker.getCreatedBy();
-	}
-	
-	@Override
-	public Date getLastUpdated() {
-		return modificationTracker.getLastUpdated();
-	}
-
-	@Override
-	public User getLastUpdatedBy() {
-		return modificationTracker.getLastUpdatedBy();
-	}
-
-	@Override
-	public void setLastUpdated(Date lastUpdated) {
-		 modificationTracker.setLastUpdated(lastUpdated);
-		
-	}
-
-	@Override
-	public void setCreatedDate(Date createdDate) {
-		modificationTracker.setCreatedDate(createdDate);
-		
-	}
-
-	@Override
-	public void setCreatedBy(User createdBy) {
-		modificationTracker.setCreatedBy(createdBy);
-		
-	}
-
-	@Override
-	public void setLastUpdatedBy(User lastUpdatedBy) {
-		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-		
-	}
-
 	public List<DonorCode> getDonorCodes() {
-		return donorCodes;
-	}
+	return donorCodes;
+    }
 
-	public void setDonorCodes(List<DonorCode> donorCodes) {
-		this.donorCodes = donorCodes;
-	}
-	
+   public void setDonorCodes(List<DonorCode> donorCodes) {
+	this.donorCodes = donorCodes;
+    }
+
     
    
 }

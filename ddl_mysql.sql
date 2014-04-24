@@ -1592,8 +1592,8 @@
 	PRIMARY KEY(id),
 	FOREIGN KEY (donorCodeGroupId) REFERENCES DonorCodeGroup (id)
 	) ENGINE=INNODB;		
-	
-create table DonorDonorCode (
+
+	create table DonorDonorCode (
      id BIGINT NOT NULL auto_increment,
 	 donorId  BIGINT NOT NULL,
 	 donorCodeId BIGINT NOT NULL ,
@@ -1601,5 +1601,5 @@ create table DonorDonorCode (
      FOREIGN KEY (donorId) REFERENCES Donor(id),
      FOREIGN KEY (donorCodeId) REFERENCES DonorCode(id)
 	) ENGINE=INNODB;
-	
+
         

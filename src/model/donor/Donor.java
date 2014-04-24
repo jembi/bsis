@@ -1,8 +1,10 @@
 package model.donor;
 
 import java.util.Date;
-import java.util.List;
 
+import java.util.HashSet;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,10 +13,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,6 +39,7 @@ import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.mapping.Set;
 import org.hibernate.validator.constraints.Length;
 
 import constraintvalidator.LocationExists;
@@ -172,15 +176,23 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
   
-  @OneToMany
-  @JoinTable(
-		   name = "DonorDonorCode", 
-		   joinColumns = @JoinColumn(name = "donorId"), 
-		   inverseJoinColumns = @JoinColumn(name = "donorCodeId")
-		 )
-  private List<DonorCode> donorCodes;
 
-  public Donor() {
+@NotAudited
+ @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class)
+ @JoinTable(name="donordonorcode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
+         @JoinColumn(name="donorCodeId"))
+private List<DonorCode> donorCodes;
+
+
+public List<DonorCode> getDonorCodes() {
+	return donorCodes;
+}
+
+public void setDonorCodes(List<DonorCode> donorCodes) {
+	this.donorCodes = donorCodes;
+}
+
+public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
   }
@@ -264,13 +276,6 @@ public class Donor implements ModificationTracker {
   }
 
   
-  public List<DonorCode> getDonorCodes() {
-	return donorCodes;
-  }
-
-public void setDonorCodes(List<DonorCode> donorCodes) {
-	this.donorCodes = donorCodes;
-}
 
 public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));

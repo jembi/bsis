@@ -21,6 +21,8 @@ import javax.persistence.criteria.Root;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.donorcodes.DonorCode;
+import model.donorcodes.DonorCodeGroup;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
@@ -57,6 +59,23 @@ public class DonorRepository {
     em.persist(donor);
     em.flush();
   }
+  
+  public void saveDonorCodeGroup(DonorCodeGroup dcg) {
+	    em.merge(dcg);
+	    em.flush();
+	  }
+  
+  public DonorCodeGroup getDonorCodeGroupById(Long id){
+       DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
+       return donorCodeGroup;
+	  
+  }
+	  
+  public void saveDonorCode(DonorCode donorCode) {
+	    em.persist(donorCode);
+	    
+	  }
+  
 
   public Donor deleteDonor(Long donorId) {
     Donor existingDonor = findDonorById(donorId);
@@ -189,6 +208,8 @@ public class DonorRepository {
     em.flush();
     return existingDonor;
   }
+  
+	  
 
   public Donor findDonorByNumber(String donorNumber) {
     try {

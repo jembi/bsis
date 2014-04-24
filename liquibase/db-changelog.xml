@@ -2684,29 +2684,6 @@
 	  
 </changeSet>
 
-<changeSet id="201417040158" author="">
-    <insert tableName="Donor">
-	     <column name="donorNumber" value="1"></column>
-	     <column name="lastName" value="russel"></column>
-	     <column name="firstName" value="peter"></column>
-	     <column name="gender" value="1"></column>
-	     <column name="birthDate" value='1985-04-12'></column>
-	</insert>
-    <insert tableName="DonorCodeGroup">
-	     <column name="id" value="1"></column>
-	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
-	</insert>
-    <insert tableName="DonorCode">
-	     <column name="id" value="1"></column>
-	     <column name="donorCode" value="Do Not Bleed"></column>
-	     <column name="donorCodeGroupId" value="1"></column>
-	</insert>
-   <insert tableName="DonorDonorCode">
-	     <column name="id" value="1"></column>
-	     <column name="donorId" value="1"></column>
-	     <column name="donorCodeId" value="1"></column>
-	</insert>
-   
-  </changeSet>
+
 
 </databaseChangeLog>	
