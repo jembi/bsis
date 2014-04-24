@@ -27,7 +27,6 @@ public class DonorCodeGroup  {
     private List<DonorCode> donorCodes;
     
 
-
 	public Long getId() {
 		return id;
 	}

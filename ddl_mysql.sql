@@ -1599,7 +1599,7 @@
 	 donorCodeId BIGINT NOT NULL ,
    	PRIMARY KEY(id),
      FOREIGN KEY (donorId) REFERENCES Donor(id),
-     FOREIGN KEY (donorCodeId) REFERENCES DonorCode(id)
+     FOREIGN KEY (donorCodeId) REFERENCES DonorCode (id)
 	) ENGINE=INNODB;
 
         
