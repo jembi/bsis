@@ -1,15 +1,16 @@
 package model.donor;
 
 import java.util.Date;
-
 import java.util.HashSet;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,6 +36,8 @@ import model.user.User;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -178,7 +181,8 @@ public class Donor implements ModificationTracker {
   
 
  @NotAudited
- @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class)
+ @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class,fetch = FetchType.EAGER)
+ @Fetch(value = FetchMode.SUBSELECT)
  @JoinTable(name="donordonorcode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
          @JoinColumn(name="donorCodeId"))
 private List<DonorCode> donorCodes;
@@ -293,6 +297,7 @@ public void copy(Donor donor) {
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
     this.donorHash = DonorUtils.computeDonorHash(this);
+    this.donorCodes = donor.getDonorCodes();
   }
 
   public List<CollectedSample> getCollectedSamples() {

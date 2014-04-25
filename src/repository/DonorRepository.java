@@ -1,6 +1,7 @@
 package repository;
 
 import java.text.ParseException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -60,22 +61,7 @@ public class DonorRepository {
     em.flush();
   }
   
-  public void saveDonorCodeGroup(DonorCodeGroup dcg) {
-	    em.merge(dcg);
-	    em.flush();
-	  }
-  
-  public DonorCodeGroup getDonorCodeGroupById(Long id){
-       DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
-       return donorCodeGroup;
-	  
-  }
-	  
-  public void saveDonorCode(DonorCode donorCode) {
-	    em.persist(donorCode);
-	    
-	  }
-  
+
 
   public Donor deleteDonor(Long donorId) {
     Donor existingDonor = findDonorById(donorId);
@@ -202,7 +188,7 @@ public class DonorRepository {
     if (existingDonor == null) {
       return null;
     }
-    existingDonor.copy(donor);
+    existingDonor.copy(donor); 
     existingDonor.setIsDeleted(false);
     em.merge(existingDonor);
     em.flush();
@@ -452,5 +438,55 @@ public class DonorRepository {
     	return query.getSingleResult();
     return null;
   }
+
+  //Donor Code & Code Group Methods
+ 
+
+  public void saveDonorCodeGroup(DonorCodeGroup dcg) {
+	    em.merge(dcg);
+	    em.flush();
+	  }
+
+
+	  
+public void saveDonorCode(DonorCode donorCode) {
+	    
+	   em.persist(donorCode);
+	   em.flush();
+	  }
+
+
+public List<DonorCodeGroup> getDonorCodeGroupsByDonor(Donor donor){
+	List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
+	List<DonorCode> donorCodes = donor.getDonorCodes();
+	for (DonorCode donorCode : donorCodes) 
+		donorCodeGroups.add(donorCode.getDonorCodeGroup());
+	return donorCodeGroups;
+	
+     }
+
+public DonorCodeGroup getDonorCodeGroupById(Long id){
+    DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
+    em.flush();
+    return donorCodeGroup;
+	 
+}
+public List<DonorCode> getAllDonorCodes(){
+	
+	 TypedQuery<DonorCode> query = em.createQuery(
+		        "SELECT dc FROM DonorCode dc", DonorCode.class);
+		    return query.getResultList();
+	
+}
+
+public List<DonorCodeGroup> getAllDonorCodeGroups(){
+	
+	 TypedQuery<DonorCodeGroup> query = em.createQuery(
+		        "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
+		    return query.getResultList();
+	
+}
+
+
 
 }

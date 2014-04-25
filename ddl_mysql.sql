@@ -1579,27 +1579,5 @@
         foreign key (collectedSamples_id) 
         references CollectedSample (id);
         
-   create table DonorCodeGroup (
-     id BIGINT NOT NULL auto_increment,
-     donorCodeGroup VARCHAR(255),
-     PRIMARY KEY(id)
-     )ENGINE=INNODB;
-    
-   create table DonorCode(
-    id BIGINT NOT NULL auto_increment,
-    donorCode VARCHAR(255),
-    donorCodeGroupId BIGINT NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY (donorCodeGroupId) REFERENCES DonorCodeGroup (id)
-	) ENGINE=INNODB;		
-
-	create table DonorDonorCode (
-     id BIGINT NOT NULL auto_increment,
-	 donorId  BIGINT NOT NULL,
-	 donorCodeId BIGINT NOT NULL ,
-   	PRIMARY KEY(id),
-     FOREIGN KEY (donorId) REFERENCES Donor(id),
-     FOREIGN KEY (donorCodeId) REFERENCES DonorCode (id)
-	) ENGINE=INNODB;
-
+   
         

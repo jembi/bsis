@@ -8,6 +8,17 @@
 <div class="formFormatClass printableArea">
   <!-- <br />
    <div class="donorBarcode"></div> -->
+  
+  <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
+  <div>
+      <label>Donor Codes</label>
+      <c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
+         <label>${donorCodeGroup.donorCodeGroup}</label>
+      </c:forEach>
+   
+    </div>
+  </sec:authorize>
+  
   <c:if test="${donorFields.donorNumber.hidden != true }">
     <div>
       <label>${donorFields.donorNumber.displayName}</label>
