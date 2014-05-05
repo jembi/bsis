@@ -10,13 +10,15 @@
    <div class="donorBarcode"></div> -->
   
   <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
-  <div>
-      <label>Donor Codes</label>
+   <div><label>Donor Codes</label> 
       <c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
-         <label>${donorCodeGroup.donorCodeGroup}</label>
-      </c:forEach>
+        <b> <label>${donorCodeGroup.donorCodeGroup}</label></b><br>
+           <label></label>
+           </c:forEach> 
+      </div>
    
-    </div>
+   
+   
   </sec:authorize>
   
   <c:if test="${donorFields.donorNumber.hidden != true }">

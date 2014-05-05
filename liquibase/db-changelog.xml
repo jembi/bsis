@@ -2684,7 +2684,7 @@
 	  
 </changeSet>
 
-<changeSet id="201404251010" author="srikanth">
+<changeSet id="201405041130" author="srikanth">
 
 <sql> 
    create table DonorCodeGroup (
@@ -2705,12 +2705,49 @@
      id BIGINT NOT NULL auto_increment,
 	 donorId  BIGINT NOT NULL,
 	 donorCodeId BIGINT NOT NULL ,
-   	PRIMARY KEY(id),
+	 createdDate TIMESTAMP,
+     lastUpdated TIMESTAMP,
+     createdBy_id SMALLINT,
+     lastUpdatedBy_id SMALLINT,
+   	 PRIMARY KEY(id),
      FOREIGN KEY (donorId) REFERENCES Donor(id),
      FOREIGN KEY (donorCodeId) REFERENCES DonorCode (id)
 	) ENGINE=INNODB;
+	
+	create table DonorDonorCode_AUD (
+        id bigint not null,
+        REV integer not null,
+        REVTYPE tinyint,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
+        primary key (id, REV)
+    ) ENGINE=InnoDB;
 
 </sql>
+	   <insert tableName="donorcodegroup">
+	     <column name="id" value="1"></column>
+	     <column name="donorCodeGroup" value="Test Only"></column>
+	  </insert>
+
+      <insert tableName="donorcodegroup">
+	     <column name="id" value="2"></column>
+	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
+	  </insert>
+      
+       <insert tableName="donorcode">
+	     <column name="id" value="1"></column>
+	     <column name="donorCode" value="Test Only"></column>
+	      <column name="donorCodeGroupId" value="1"></column>   
+	  </insert>
+     
+     <insert tableName="donorcode">
+	     <column name="id" value="2"></column>
+	     <column name="donorCode" value="TTI Reactive"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+     
 
 </changeSet>
 

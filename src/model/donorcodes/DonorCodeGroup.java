@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 
 
 /**
@@ -21,9 +24,11 @@ public class DonorCodeGroup  {
 	@Column(nullable=false, updatable=false, insertable=false)
 	private Long id;
     
+    
     private String donorCodeGroup ;
     
-   @OneToMany(mappedBy = "donorCodeGroup",cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "donorCodeGroup",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+   @Fetch(value = FetchMode.SUBSELECT)
     private List<DonorCode> donorCodes;
     
 
