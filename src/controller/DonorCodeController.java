@@ -68,6 +68,7 @@ public class DonorCodeController {
 	  }
 	  
 	  @RequestMapping(value = "/donorCodesTable", method = RequestMethod.GET)
+	  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_CODE+"')")
 	  public ModelAndView donorCodesTable(HttpServletRequest request,Long donorId){
 		
 		  ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
@@ -79,6 +80,7 @@ public class DonorCodeController {
 	  }
 	  
 	  @RequestMapping(value = "/deleteDonorCode", method = RequestMethod.GET)
+	  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR_CODE+"')")
 	  public ModelAndView deleteDomorCode(@RequestParam(value="id") Long id){
 		  ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
 		  Donor donor = donorRepository.deleteDonorCode(id);

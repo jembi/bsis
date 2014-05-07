@@ -106,10 +106,12 @@ $(document).ready(
 	
 	</script>
 
-<sec:authorize
-	access="hasRole(T(utils.PermissionConstants).EDIT_DONOR_CODE)">
+<sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONOR_CODE)">
 	
      <div id="${donorCodes}" class="formFormatClass">
+       <div>
+        <label><b>Donor Codes</b></label>
+      </div>
 			<c:if test="${donorFields.donorNumber.hidden != true }">
 				<div>
 					<label>${donorFields.donorNumber.displayName}</label>	
@@ -146,13 +148,12 @@ $(document).ready(
 					<input name="donorId" type="hidden" value="${donor.id}" />
 					<form:select path="donorCodeGroupId">
 						<c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
-							<form:option value="${donorCodeGroup.id}">${donorCodeGroup.donorCodeGroup}</form:option>
+	                    	<form:option value="${donorCodeGroup.id}">${donorCodeGroup.donorCodeGroup}</form:option>
 						</c:forEach>
 					</form:select>
 
 					<form:select path="donorCodeId">
-						<c:forEach var="donorCode"
-							items="${donorCodeGroups[0].donorCodes}">
+						<c:forEach var="donorCode"	items="${donorCodeGroups[0].donorCodes}">
 							<form:option value="${donorCode.id}">${donorCode.donorCode}</form:option>
 						</c:forEach>
 					</form:select>        

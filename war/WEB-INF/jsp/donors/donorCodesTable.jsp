@@ -15,7 +15,7 @@
 <c:set var="childContentId">childContentId-${unique_page_id}</c:set>
 <c:set var="noResultsFoundDivId">noResultsFoundDiv-${unique_page_id}</c:set>
 
-<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
+
 
 <script>
 $(document).ready(
@@ -53,6 +53,7 @@ $(document).ready(
      
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR_CODE)">
 <div id="${tabContentId}" class="formDiv">
   <c:choose>
 
