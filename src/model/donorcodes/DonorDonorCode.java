@@ -22,7 +22,7 @@ import model.user.User;
 
 @Entity
 @Audited
-public class DonorDonorCode  {
+public class DonorDonorCode implements ModificationTracker{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,6 +42,10 @@ public class DonorDonorCode  {
 	  @Valid
 	  private RowModificationTracker modificationTracker;
 	
+	  public DonorDonorCode() {
+		    modificationTracker = new RowModificationTracker();
+		  }
+
 	public Long getId() {
 		return id;
 	}

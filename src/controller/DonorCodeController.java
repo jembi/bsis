@@ -44,7 +44,7 @@ public class DonorCodeController {
 		  modelAndView.addObject("donor", donor);
 		  modelAndView.addObject("model", model);
 		  modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-		  modelAndView.addObject("donorCodeGroups",  donorRepository.findAllNotAssignedDonorCodeGroups((donor)));
+		  modelAndView.addObject("donorCodeGroups",  donorRepository.getAllDonorCodeGroups());
 		  
 		  return modelAndView;
 		  
@@ -55,13 +55,14 @@ public class DonorCodeController {
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
 	  public ModelAndView updateDonorCodes(HttpServletRequest request,HttpServletResponse response, 
 			@ModelAttribute("addDonorCodeForm")  DonorCodeBackingForm form){
-		  ModelAndView modelAndView = new ModelAndView("donors/updateDonorCodes");  
+		  ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
 		 DonorDonorCode  donorDonorCode =  new DonorDonorCode();
 		 donorDonorCode.setDonorId(donorRepository.findDonorById(form.getDonorId()));
 		 donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(form.getDonorCodeId()));
 		 donorRepository.saveDonorDonorCode(donorDonorCode);
 		 
-		 modelAndView.addObject("donorCodeGroups",  donorRepository.findAllNotAssignedDonorCodeGroups(donorRepository.findDonorById(form.getDonorId())));
+		 modelAndView.addObject("donorDonorCodes", donorRepository.findAllDonorCodesOfDonor(donorRepository.findDonorById(form.getDonorId())));
+		  modelAndView.addObject("success",true);
 		  return modelAndView;
 		  
 	  }
@@ -88,5 +89,4 @@ public class DonorCodeController {
 	  }
 	  
 	  
-
 }

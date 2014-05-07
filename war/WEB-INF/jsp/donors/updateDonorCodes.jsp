@@ -22,64 +22,89 @@
 <script>
 
 
-  $(document).ready(
-		  
-      function() {
-    	 
-    	  
-    	  fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ;	
-   
-    	  
-   var donorCode = new Array();
-   <c:forEach items="${donorCodeGroups}" var="donorCodeGroup" varStatus="status">
-              donorCode[${status.index}] = new Array();
-    	      
-    	  <c:forEach items="${donorCodeGroup.donorCodes}" var="donorCode" varStatus="innerStatus">
-    	      donorCode[${status.index}] [${innerStatus.index}]= new Array();
-    	      donorCode[${status.index}][${innerStatus.index}][0]= "${donorCode.id}";
-    	      donorCode[${status.index}][${innerStatus.index}][1]= "${donorCode.donorCode}";     
-         </c:forEach>
-    	      
-    </c:forEach>
+$(document).ready(
+	      
+	      function() {
+	       
+	        function notifyParentDone() {
+	              $("#${tabContentId}").parent().trigger("donorSummarySuccess");
+	            }
+	        
+	        fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ; 
+	   
+	        
+	   var donorCode = new Array();
+	   <c:forEach items="${donorCodeGroups}" var="donorCodeGroup" varStatus="status">
+	              donorCode[${status.index}] = new Array();
+	            
+	        <c:forEach items="${donorCodeGroup.donorCodes}" var="donorCode" varStatus="innerStatus">
+	            donorCode[${status.index}] [${innerStatus.index}]= new Array();
+	            donorCode[${status.index}][${innerStatus.index}][0]= "${donorCode.id}";
+	            donorCode[${status.index}][${innerStatus.index}][1]= "${donorCode.donorCode}";     
+	         </c:forEach>
+	            
+	    </c:forEach>
 
-      $('#donorCodeGroupId').change(function(){
-    		  
-    		  $('#donorCodeId').empty();
-    		  var id =  $('#donorCodeGroupId').val()-1;
-    		  
-  		       for(var index=0 ; index < donorCode[id].length; index++ )
-  		    	  $('#donorCodeId').append( new Option( donorCode[id][index][1],  donorCode[id][index][0]) );
-    		  
-    	  });
-       
-        });
-  
-  
-  $("#${donorCodes}").find(".addDonorCodeButton").button({
-      icons : {
-        primary : 'ui-icon-plusthick'
-      }
-    }).click(
-        function() {
-  var donorCode = $("#${updateDonorCodesFormId}").serialize();
-  $.ajax({
-    type: "POST",
-    url: "updateDonorCodes.html",
-    data: donorCode,
-    success: function() {
-    	
-    	 fetchContent("updateDonorCodesFormGenerator.html",
-                 {donorId: "${donor.id}"},
-                 $("#${donorCodes}")
-                );
-             },
-    error: function(response) {
-    	 showErrorMessage("Something went wrong. Please try again.");
-           }
-  });
-                       
- });   
-</script>
+	      $('#donorCodeGroupId').change(function(){
+	          
+	          $('#donorCodeId').empty();
+	          var id =  $('#donorCodeGroupId').val()-1;
+	          
+	             for(var index=0 ; index < donorCode[id].length; index++ )
+	              $('#donorCodeId').append( new Option( donorCode[id][index][1],  donorCode[id][index][0]) );
+	          
+	        });
+	       
+	      
+	  
+	  
+	  $("#${donorCodes}").find(".addDonorCodeButton").button({
+	      icons : {
+	        primary : 'ui-icon-plusthick'
+	      }
+	    }).click(
+	        function() {
+	  var donorCode = $("#${updateDonorCodesFormId}").serialize();
+	  $.ajax({
+	    type: "POST",
+	    url: "updateDonorCodes.html",
+	    data: donorCode,
+	    success: function(jsonResponse) {
+	    	  $("#${tableDiv}").replaceWith(jsonResponse);
+	      
+	             },
+	    error: function(response) {
+	       showErrorMessage("Something went wrong. Please try again.");
+	           }
+	  });
+
+	  
+	}); 
+
+	    $("#${donorCodes}").find(".doneButton").button(
+	      {
+	        icons : {primary : 'ui-icon-check'}}
+	      )
+	  .click(function() {
+		 
+		  $.ajax({
+			  url: "donorSummary.html",
+			  data:   {donorId: "${donor.id}"},
+			  type: "GET",
+			  success: function (response) {
+				  $("#${donorCodes}").html(response);
+				  
+			  },
+			  error: function (response) {
+			  showErrorMessage("Something went wrong. Please try again.");
+			  }
+			  }); 
+	        
+	         });
+
+	});
+	
+	</script>
 
 <sec:authorize
 	access="hasRole(T(utils.PermissionConstants).EDIT_DONOR_CODE)">
@@ -102,15 +127,20 @@
       <label>${donorFields.lastName.displayName}</label>
       <label>${donor.lastName}</label>
     </div>
+    <br>
   </c:if> 
-    <div>
+     <div style="margin-left: 12px;">
         <b><label>Donor Codes</label></b>
-        <div id="${tableDiv}">   </div>
-   </div>
+        </div>
+        <div>
+        <div id="${tableDiv}">   
+        </div>
+  
          	
              <div>
+             <div>
 				<form:form id="${updateDonorCodesFormId}" method="POST"
-					 commandName="addDonorCodeForm">
+					 commandName="addDonorCodeForm" class="formFormatClass">
                      
                     <form:label path="donorId">Add Donor Code</form:label>
 					<input name="donorId" type="hidden" value="${donor.id}" />
@@ -131,20 +161,21 @@
 
 				</form:form>
 			</div>	
-				    <div>
+				   <div style="margin-left: 145px;">
                      <label></label>
 					<button type="button" class="addDonorCodeButton autoWidthButton">
 							Add Donor Code</button>
 					</div>
-					<div></div>
-				<div>
-				<label></label>
+				     <br>
+				 <div style="margin-left: 150px;">
+			
+				
 				<button type="button" class="doneButton">
 							Done</button>
 					
 				</div>
 
-			
+			</div>
 
 </div>
 
