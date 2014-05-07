@@ -21,7 +21,7 @@
 $(document).ready(
     function() {
 
-       $("#${table_id}").dataTable();
+       $("#${table_id}").dataTable({"bJQueryUI" : true});
        
       
        $("#${tabContentId}").find(".deleteButton").button({
@@ -95,7 +95,7 @@ $(document).ready(
                     
                 <td>${donorDonorCode.createdBy}</td>
          
-                <td>${donorDonorCode.lastUpdatedBy}</td>
+                <td>${donorDonorCode.createdDate}</td>
                 
                 <td> <button type="button" id="button-${donorDonorCode.id}" value = "${donorDonorCode.id}" class="deleteButton">
 							Remove</button></td>
