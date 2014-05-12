@@ -325,7 +325,7 @@
 	     </addColumn>
 	    <addForeignKeyConstraint constraintName="fk_voidedBy"
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
-			referencedTableName="user" referencedColumnNames="id"/>
+			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
    
     <changeSet id="201311251525" author="devang">
@@ -2726,23 +2726,23 @@
     ) ENGINE=InnoDB;
 
 </sql>
-	   <insert tableName="donorcodegroup">
+	   <insert tableName="DonorCodeGroup">
 	     <column name="id" value="1"></column>
 	     <column name="donorCodeGroup" value="Test Only"></column>
 	  </insert>
 
-      <insert tableName="donorcodegroup">
+      <insert tableName="DonorCodeGroup">
 	     <column name="id" value="2"></column>
 	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
 	  </insert>
       
-       <insert tableName="donorcode">
+       <insert tableName="DonorCode">
 	     <column name="id" value="1"></column>
 	     <column name="donorCode" value="Test Only"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
      
-     <insert tableName="donorcode">
+     <insert tableName="DonorCode">
 	     <column name="id" value="2"></column>
 	     <column name="donorCode" value="TTI Reactive"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   

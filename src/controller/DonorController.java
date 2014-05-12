@@ -126,7 +126,7 @@ public class DonorController {
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     mv.addObject("tips", tips);
-    mv.addObject("donorCodeGroups", donorRepository.getDonorCodeGroupsByDonor(donor));
+    mv.addObject("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonor(donor));
     return mv;
   }
 

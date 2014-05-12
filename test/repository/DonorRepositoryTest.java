@@ -1015,5 +1015,38 @@ public class DonorRepositoryTest {
 				userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
+        
+        @Test
+	/**
+	 * Test will pass if donor code exists with specified ID 
+	 */
+        public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted(){
+            assertNotNull(donorRepository.findDonorCodeById(1l));
+        }
+        
+        @Test
+	/**
+	 * Test  will pass if donor  code groups exists  
+        */
+        public void getAllDonorCodeGroups_ShouldReturnListSizeGreaterThanZero(){
+            assertTrue(donorRepository.getAllDonorCodeGroups().size()>0);
+        }
+        
+        
+        @Test
+	/**
+	 * Test  will pass if donor donor code groups assigned to donor
+	 */
+       public void findDonorCodeGroupsByDonor_ShouldReturnListGreaterThanZero_WhenDonorCodeGroupsExisted(){
+           assertTrue(donorRepository.findDonorCodeGroupsByDonor(donor).size()>0);
+       }
+       
+       @Test
+	/** 
+	 * Test  will pass if donor codes assigned to donor  
+	 */
+       public void findDonorDonorCodesOfDonor_ShouldReturnListGreaterThanZero_WhenDonorCodesExisted(){
+           assertTrue(donorRepository.findDonorDonorCodesOfDonor(donor).size()>0);
+       }
 
 }

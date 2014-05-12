@@ -462,7 +462,7 @@ public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
 	   em.clear();
 	  }
 
-public List<DonorCodeGroup> getDonorCodeGroupsByDonor(Donor donor){
+public List<DonorCodeGroup> findDonorCodeGroupsByDonor(Donor donor){
 	List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
 	List<DonorCode> donorCodes = donor.getDonorCodes();
 	for (DonorCode donorCode : donorCodes) 
@@ -471,19 +471,20 @@ public List<DonorCodeGroup> getDonorCodeGroupsByDonor(Donor donor){
 	
      }
 
-public DonorCodeGroup getDonorCodeGroupById(Long id){
+/* public DonorCodeGroup getDonorCodeGroupById(Long id){
     DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
     em.flush();
     return donorCodeGroup;
 	 
-}
-public List<DonorCode> getAllDonorCodes(){
+}*/
+
+/*public List<DonorCode> getAllDonorCodes(){
 	
 	 TypedQuery<DonorCode> query = em.createQuery(
 		        "SELECT dc FROM DonorCode dc", DonorCode.class);
 		    return query.getResultList();
 	
-}
+} */
 
 
 public List<DonorCodeGroup> getAllDonorCodeGroups(){
@@ -494,7 +495,7 @@ public List<DonorCodeGroup> getAllDonorCodeGroups(){
 	
 }
 
-public List<DonorCodeGroup> findAllNotAssignedDonorCodeGroups(Donor donor){
+/*public List<DonorCodeGroup> findAllNotAssignedDonorCodeGroups(Donor donor){
 	
 	 TypedQuery<DonorCodeGroup> query = em.createQuery(
 		        "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
@@ -524,7 +525,7 @@ public List<DonorCodeGroup> findAllNotAssignedDonorCodeGroups(Donor donor){
 		    
 		    return donorCodeGroups;
 	
-}
+}*/
 
 
 public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id){
@@ -535,7 +536,7 @@ public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id){
 	
 }
 
-public List<DonorDonorCode > findAllDonorCodesOfDonor(Donor donor){
+public List<DonorDonorCode > findDonorDonorCodesOfDonor(Donor donor){
 	
 	 TypedQuery<DonorDonorCode> query = em.createQuery(
 		        "SELECT dc FROM DonorDonorCode dc where donorId = :donor", DonorDonorCode.class);
