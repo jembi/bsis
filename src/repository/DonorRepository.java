@@ -442,9 +442,10 @@ public class DonorRepository {
   //Donor Code & Code Group Methods
  
 
-  public void saveDonorCodeGroup(DonorCodeGroup dcg) {
-	    em.merge(dcg);
+  public DonorCodeGroup  saveDonorCodeGroup(DonorCodeGroup dcg) {
+	     DonorCodeGroup donorCodeGroup = em.merge(dcg);
 	    em.flush();
+            return donorCodeGroup;
 	  }
 
 
@@ -459,7 +460,6 @@ public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
     
 	   em.persist(donorDonorCode);
 	   em.flush();
-	   em.clear();
 	  }
 
 public List<DonorCodeGroup> findDonorCodeGroupsByDonor(Donor donor){
@@ -471,20 +471,6 @@ public List<DonorCodeGroup> findDonorCodeGroupsByDonor(Donor donor){
 	
      }
 
-/* public DonorCodeGroup getDonorCodeGroupById(Long id){
-    DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
-    em.flush();
-    return donorCodeGroup;
-	 
-}*/
-
-/*public List<DonorCode> getAllDonorCodes(){
-	
-	 TypedQuery<DonorCode> query = em.createQuery(
-		        "SELECT dc FROM DonorCode dc", DonorCode.class);
-		    return query.getResultList();
-	
-} */
 
 
 public List<DonorCodeGroup> getAllDonorCodeGroups(){
@@ -494,38 +480,6 @@ public List<DonorCodeGroup> getAllDonorCodeGroups(){
 		    return query.getResultList();
 	
 }
-
-/*public List<DonorCodeGroup> findAllNotAssignedDonorCodeGroups(Donor donor){
-	
-	 TypedQuery<DonorCodeGroup> query = em.createQuery(
-		        "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
-		   
-	        List<DonorCodeGroup> allDonorCodeGroups = query.getResultList();
-		    List<DonorCodeGroup>  donorCodeGroups = new ArrayList<DonorCodeGroup>();
-		    List<DonorCode>  donorCodes = new ArrayList<DonorCode>();
-		   
-		    for(DonorCodeGroup donorCodeGroup : allDonorCodeGroups){
-		     
-		    	List<DonorCode> alldonorCodes = donorCodeGroup.getDonorCodes();
-		    	for(DonorCode donorCode : alldonorCodes ){
-		    		
-		    		if(!donor.getDonorCodes().contains(donorCode))
-		    		donorCodes.add(donorCode); 
-		    		
-		    			
-		    		
-		    	}
-		    	
-		    	if(donorCodes.size()!=0)
-		    		donorCodeGroups.add(donorCodeGroup);
-		    	
-		    	
-		    }
-		    
-		    
-		    return donorCodeGroups;
-	
-}*/
 
 
 public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id){

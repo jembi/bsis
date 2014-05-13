@@ -72,6 +72,8 @@ public class DonorRepositoryTest {
 	@Autowired
 	private DataSource dataSource;
 	static IDatabaseConnection connection;
+        
+        
 
 	@Before
 	public void init() {
@@ -99,16 +101,19 @@ public class DonorRepositoryTest {
 
 			donor = new Donor();
 			donorBackingForm = new DonorBackingForm(donor);
-		} catch (Exception e) {
+          	} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+        
+        
 	@After
 	public void after() throws Exception {
 		// Remove data from database
 		 DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
 	}
+      
 
 	/**
 	 * This method is execute once before test case execution start and acquire
@@ -936,6 +941,7 @@ public class DonorRepositoryTest {
 		donorBackingForm.setMonth("06");
 		donorBackingForm.setYear("2000");
 		donorBackingForm.setBirthDateEstimated(true);
+               
 	}
 
 	/**
@@ -1016,12 +1022,13 @@ public class DonorRepositoryTest {
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
         
+        
         @Test
 	/**
-	 * Test will pass if donor code exists with specified ID 
+	 * Test passes if donor is assigned with a donor code
 	 */
         public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted(){
-            assertNotNull(donorRepository.findDonorCodeById(1l));
+            assertNotNull("Failed to find donor code by ID 1" ,donorRepository.findDonorCodeById(1l));
         }
         
         @Test
@@ -1029,7 +1036,7 @@ public class DonorRepositoryTest {
 	 * Test  will pass if donor  code groups exists  
         */
         public void getAllDonorCodeGroups_ShouldReturnListSizeGreaterThanZero(){
-            assertTrue(donorRepository.getAllDonorCodeGroups().size()>0);
+            assertTrue("Failed To Load alll donorCodeGroups" ,donorRepository.getAllDonorCodeGroups().size()>0);
         }
         
         
@@ -1037,16 +1044,28 @@ public class DonorRepositoryTest {
 	/**
 	 * Test  will pass if donor donor code groups assigned to donor
 	 */
-       public void findDonorCodeGroupsByDonor_ShouldReturnListGreaterThanZero_WhenDonorCodeGroupsExisted(){
-           assertTrue(donorRepository.findDonorCodeGroupsByDonor(donor).size()>0);
+       public void findDonorCodeGroupsOfDonor_ShouldReturnListGreaterThanZero_WhenDonorCodeGroupsExisted(){
+           Donor existingDonor = donorRepository.findDonorById(1l);
+           assertTrue(" Failed To load donorCodeGroups of donor " ,!donorRepository.findDonorCodeGroupsByDonor(existingDonor).isEmpty());
        }
        
        @Test
 	/** 
-	 * Test  will pass if donor codes assigned to donor  
+	 * Test  passes if donor codes assigned to donor  
 	 */
        public void findDonorDonorCodesOfDonor_ShouldReturnListGreaterThanZero_WhenDonorCodesExisted(){
-           assertTrue(donorRepository.findDonorDonorCodesOfDonor(donor).size()>0);
+           Donor existingDonor = donorRepository.findDonorById(1l);
+           assertTrue(" Failed To load sonorCodes of donor " ,!donorRepository.findDonorDonorCodesOfDonor(existingDonor).isEmpty());
        }
+       
+       @Test
+	/** 
+	 * Test  passes if donor codes assigned to donor  
+	 */
+       public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted(){
+      
+           assertNotNull("Failed to remove DonorDonorCode of Id 1" ,donorRepository.deleteDonorCode(1l));
+       }
+       
 
 }
