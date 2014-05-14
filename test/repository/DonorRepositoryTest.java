@@ -53,6 +53,8 @@ import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
 import controller.UtilController;
+import model.donorcodes.DonorCodeGroup;
+import model.donorcodes.DonorDonorCode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -1022,6 +1024,34 @@ public class DonorRepositoryTest {
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
         
+        @Test
+	/**
+	 * Test passes if DonorCodeGroup is saved in  database
+	 */
+        public void saveDonorCodeGroup_ShouldExistInDatabasae_OnSave(){
+            DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
+            donorCodeGroup.setDonorCodeGroup("Test Only");
+            donorCodeGroup.setDonorCodeGroup(donorBirthdate);
+            donorRepository.saveDonorCodeGroup(donorCodeGroup);
+            assertNotNull("Failed to save DonorCodeGroup object ",donorRepository.getAllDonorCodeGroups().get(1));
+            
+        }
+       
+  
+        
+        @Test
+	/**
+	 * Test passes if DonorDonorCode is saved in database
+	 */
+        public void saveDonorDonorCode_ShouldExistInDatabasae_OnSave(){
+            DonorDonorCode  donorDonorCode =  new DonorDonorCode();
+	    donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(1l));	 
+            donorDonorCode.setDonorId(donorRepository.findDonorById(5l));
+            donorRepository.saveDonorDonorCode(donorDonorCode);
+            assertTrue(!donorRepository.findDonorById(5l).getDonorCodes().isEmpty());
+            
+        }
+       
         
         @Test
 	/**
@@ -1035,7 +1065,7 @@ public class DonorRepositoryTest {
 	/**
 	 * Test  will pass if donor  code groups exists  
         */
-        public void getAllDonorCodeGroups_ShouldReturnListSizeGreaterThanZero(){
+        public void getAllDonorCodeGroups_ShouldNotReturnEmptyList(){
             assertTrue("Failed To Load alll donorCodeGroups" ,donorRepository.getAllDonorCodeGroups().size()>0);
         }
         
@@ -1044,7 +1074,7 @@ public class DonorRepositoryTest {
 	/**
 	 * Test  will pass if donor donor code groups assigned to donor
 	 */
-       public void findDonorCodeGroupsOfDonor_ShouldReturnListGreaterThanZero_WhenDonorCodeGroupsExisted(){
+       public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted(){
            Donor existingDonor = donorRepository.findDonorById(1l);
            assertTrue(" Failed To load donorCodeGroups of donor " ,!donorRepository.findDonorCodeGroupsByDonor(existingDonor).isEmpty());
        }
@@ -1053,7 +1083,7 @@ public class DonorRepositoryTest {
 	/** 
 	 * Test  passes if donor codes assigned to donor  
 	 */
-       public void findDonorDonorCodesOfDonor_ShouldReturnListGreaterThanZero_WhenDonorCodesExisted(){
+       public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted(){
            Donor existingDonor = donorRepository.findDonorById(1l);
            assertTrue(" Failed To load sonorCodes of donor " ,!donorRepository.findDonorDonorCodesOfDonor(existingDonor).isEmpty());
        }
@@ -1062,8 +1092,7 @@ public class DonorRepositoryTest {
 	/** 
 	 * Test  passes if donor codes assigned to donor  
 	 */
-       public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted(){
-      
+       public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted(){      
            assertNotNull("Failed to remove DonorDonorCode of Id 1" ,donorRepository.deleteDonorCode(1l));
        }
        
