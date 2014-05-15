@@ -24,6 +24,12 @@ import utils.PermissionConstants;
 import antlr.collections.List;
 import backingform.DonorBackingForm;
 import backingform.DonorCodeBackingForm;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.DonorCodeBackingFormValidator;
+import javax.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 
 @Controller
@@ -35,6 +41,11 @@ public class DonorCodeController {
 	  @Autowired
 	  private UtilController utilController;
 	  
+         @InitBinder
+         protected void initBinder(WebDataBinder binder) {
+                binder.setValidator(new DonorCodeBackingFormValidator(binder.getValidator(), donorRepository));
+          }
+
 	  @RequestMapping(value = "/updateDonorCodesFormGenerator", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
 	  public ModelAndView updateDonorCodesForm(HttpServletRequest request ,Model model ,@RequestParam(value="donorId") Long donorId){
@@ -54,16 +65,25 @@ public class DonorCodeController {
 	  @RequestMapping(value = "/updateDonorCodes", method = RequestMethod.POST)
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
 	  public ModelAndView updateDonorCodes(HttpServletRequest request,HttpServletResponse response, 
-			@ModelAttribute("addDonorCodeForm")  DonorCodeBackingForm form){
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
-		 DonorDonorCode  donorDonorCode =  new DonorDonorCode();
+			@ModelAttribute("addDonorCodeForm")  @Valid DonorCodeBackingForm form,
+                         BindingResult result){
+	      
+             
+                ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
+                  if (result.hasErrors()) {
+                      modelAndView.addObject("hasErrors", true);
+                      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                     modelAndView.addObject("success",false);
+	             return modelAndView;
+		
+                     }
+	         DonorDonorCode  donorDonorCode =  new DonorDonorCode();
 		 donorDonorCode.setDonorId(donorRepository.findDonorById(form.getDonorId()));
 		 donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(form.getDonorCodeId()));
 		 donorRepository.saveDonorDonorCode(donorDonorCode);
-		 
 		 modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(form.getDonorId())));
-		  modelAndView.addObject("success",true);
-		  return modelAndView;
+	         modelAndView.addObject("success",true);
+	         return modelAndView;
 		  
 	  }
 	  

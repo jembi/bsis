@@ -336,7 +336,7 @@
 	     </addColumn>
 	    <addForeignKeyConstraint constraintName="fk_voidedBy_aud"
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
-			referencedTableName="user" referencedColumnNames="id"/>
+			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
 
    <!-- For issue 64 [Add isDeleted field to BloodTest and BloodTest_AUD Tables] -->
