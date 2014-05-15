@@ -24,15 +24,10 @@
 
 $(document).ready(
 	      
-	      function() {
+        function() {
 	       
-	        function notifyParentDone() {
-	              $("#${tabContentId}").parent().trigger("donorSummarySuccess");
-	            }
-	        
-	        fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ; 
+	   fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ; 
 	   
-	        
 	   var donorCode = new Array();
 	   <c:forEach items="${donorCodeGroups}" var="donorCodeGroup" varStatus="status">
 	              donorCode[${status.index}] = new Array();
@@ -43,16 +38,26 @@ $(document).ready(
 	            donorCode[${status.index}][${innerStatus.index}][1]= "${donorCode.donorCode}";     
 	         </c:forEach>
 	            
-	    </c:forEach>
-
+	    </c:forEach>           
+                $( ".addDonorCodeButton" ).attr('disabled','disabled');
+                $( ".addDonorCodeButton" ).button( "refresh" );
 	      $('#donorCodeGroupId').change(function(){
-	          
-	          $('#donorCodeId').empty();
+	          if ($('#donorCodeGroupId').val().trim().length >  0)
+                  {
+                
+                    $( ".addDonorCodeButton" ).button( "option", { disabled: false } );
+	            $( ".addDonorCodeButton" ).button( "refresh" ); 
+                 $('#donorCodeId').empty();
 	          var id =  $('#donorCodeGroupId').val()-1;
-	          
-	             for(var index=0 ; index < donorCode[id].length; index++ )
+	          for(var index=0 ; index < donorCode[id].length; index++ )
 	              $('#donorCodeId').append( new Option( donorCode[id][index][1],  donorCode[id][index][0]) );
-	          
+                  }else{
+                    $( ".addDonorCodeButton" ).button( "option", { disabled: true } );        $( ".selector" ).button( "refresh" );         
+                     $('#donorCodeId').empty();
+                      $('#donorCodeId').append( new Option( "Donor Codes",""));
+                      
+                  }
+                      
 	        });
 	       
 	      
@@ -69,12 +74,11 @@ $(document).ready(
 	    type: "POST",
 	    url: "updateDonorCodes.html",
 	    data: donorCode,
-	    success: function(jsonResponse) {
-	    	  $("#${tableDiv}").replaceWith(jsonResponse);
-	      
+	    success: function() {
+	    	     fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ;
 	             },
-	    error: function(response) {
-	       showErrorMessage("Something went wrong. Please try again.");
+	    error: function() {
+	       showErrorMessage("OOPS! Donor Code is Already Assigned");
 	           }
 	  });
 
@@ -95,8 +99,8 @@ $(document).ready(
 				  $("#${donorCodes}").html(response);
 				  
 			  },
-			  error: function (response) {
-			  showErrorMessage("Something went wrong. Please try again.");
+			  error: function () {
+			  showErrorMessage("Something went wrong. Please try again");
 			  }
 			  }); 
 	        
@@ -140,31 +144,33 @@ $(document).ready(
   
          	
              <div>
-             <div>
+             <div>             
 				<form:form id="${updateDonorCodesFormId}" method="POST"
 					 commandName="addDonorCodeForm" class="formFormatClass">
                      
                     <form:label path="donorId">Add Donor Code</form:label>
 					<input name="donorId" type="hidden" value="${donor.id}" />
 					<form:select path="donorCodeGroupId">
-						<c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
+                                            <form:option value="">Donor Code Group</form:option>
+                                            <c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
 	                    	<form:option value="${donorCodeGroup.id}">${donorCodeGroup.donorCodeGroup}</form:option>
 						</c:forEach>
 					</form:select>
 
 					<form:select path="donorCodeId">
+                                            <form:option value="">Donor Codes</form:option>
 						<c:forEach var="donorCode"	items="${donorCodeGroups[0].donorCodes}">
 							<form:option value="${donorCode.id}">${donorCode.donorCode}</form:option>
 						</c:forEach>
 					</form:select>        
-					
-				     
+			
 
 				</form:form>
+                                        
 			</div>	
 				   <div style="margin-left: 145px;">
                      <label></label>
-					<button type="button" class="addDonorCodeButton autoWidthButton">
+                     <button name="addDonorCodeButton" type="button" class="addDonorCodeButton">
 							Add Donor Code</button>
 					</div>
 				     <br>
