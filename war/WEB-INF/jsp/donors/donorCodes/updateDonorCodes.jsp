@@ -16,8 +16,7 @@
 <c:set var="childContentId">childContent-${unique_page_id}</c:set>
 <c:set var="tableDiv">tableDiv-${unique_page_id}</c:set>
 <c:set var="donorCodes">donoeCodes-${unique_page_id}</c:set>
-<c:set var="updateDonorCodesFormId">updateDonorCodes-${unique_page_id}</c:set>
-<c:set var="addDonorCodes">AddDonorCodes-${unique_page_id}</c:set>
+<c:set var="addDonorCodeForm">AddDonorCodeForm-${unique_page_id}</c:set>
 
 <script>
 
@@ -27,6 +26,7 @@ $(document).ready(
         function() {
 	       
 	   fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ; 
+           fetchContent("addDonorCodeFormGenerator.html",  {donorId: "${donor.id}"},$("#${addDonorCodeForm}")) ;
 	   
 	   var donorCode = new Array();
 	   <c:forEach items="${donorCodeGroups}" var="donorCodeGroup" varStatus="status">
@@ -69,16 +69,24 @@ $(document).ready(
 	      }
 	    }).click(
 	        function() {
-	  var donorCode = $("#${updateDonorCodesFormId}").serialize();
+	  var donorCode = $("#addDonorCodeForm").serialize();
 	  $.ajax({
 	    type: "POST",
-	    url: "updateDonorCodes.html",
+	    url: "addDonorCodeForm.html",
 	    data: donorCode,
-	    success: function() {
-	    	     fetchContent("donorCodesTable.html",  {donorId: "${donor.id}"},$("#${tableDiv}")) ;
-	             },
-	    error: function() {
-	       showErrorMessage("OOPS! Donor Code is Already Assigned");
+    statusCode: {
+       200: function(response) {
+            $("#${tableDiv}").empty();
+            $("#${tableDiv}").html(response);
+       },
+       400 :function(response){
+            showErrorMessage("OOPS! Donor Code is Already Assigned");
+//            $("#${addDonorCodeForm}").empty();       
+//            $("#${addDonorCodeForm}").html(response);   // Can't load the response here     
+       }
+       },
+	    error: function() {       
+	         showErrorMessage("OOPS! Something Went Wrong");
 	           }
 	  });
 
@@ -142,47 +150,22 @@ $(document).ready(
         <div id="${tableDiv}">   
         </div>
   
+        <div id="${addDonorCodeForm}">
+        </div>
          	
-             <div>
-             <div>             
-				<form:form id="${updateDonorCodesFormId}" method="POST"
-					 commandName="addDonorCodeForm" class="formFormatClass">
-                     
-                    <form:label path="donorId">Add Donor Code</form:label>
-					<input name="donorId" type="hidden" value="${donor.id}" />
-					<form:select path="donorCodeGroupId">
-                                            <form:option value="">Donor Code Group</form:option>
-                                            <c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
-	                    	<form:option value="${donorCodeGroup.id}">${donorCodeGroup.donorCodeGroup}</form:option>
-						</c:forEach>
-					</form:select>
-
-					<form:select path="donorCodeId">
-                                            <form:option value="">Donor Codes</form:option>
-						<c:forEach var="donorCode"	items="${donorCodeGroups[0].donorCodes}">
-							<form:option value="${donorCode.id}">${donorCode.donorCode}</form:option>
-						</c:forEach>
-					</form:select>        
-			
-
-				</form:form>
-                                        
-			</div>	
-				   <div style="margin-left: 145px;">
+        <div>
+             	<div style="margin-left: 145px;">
                      <label></label>
                      <button name="addDonorCodeButton" type="button" class="addDonorCodeButton">
 							Add Donor Code</button>
-					</div>
-				     <br>
-				 <div style="margin-left: 150px;">
-			
-				
-				<button type="button" class="doneButton">
-							Done</button>
-					
-				</div>
+		</div>
+	        <br>
+		
+                <div style="margin-left: 150px;">
+			<button type="button" class="doneButton">Done</button>
+		</div>
 
-			</div>
+	</div>
 
 </div>
 

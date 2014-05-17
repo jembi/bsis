@@ -39,14 +39,12 @@ public class DonorCodeBackingFormValidator implements Validator{
 
     @Override
     public void validate(Object object, Errors errors) {
-        
-        System.out.println("in validation.....");
         if (object == null || validator == null)
              return;
         DonorCodeBackingForm form = (DonorCodeBackingForm) object;
         DonorCode donorCode = donorRepository.findDonorCodeById(form.getDonorCodeId());
        if( donorRepository.findDonorById(form.getDonorId()).getDonorCodes().contains(donorCode))
-           errors.rejectValue("","" ,"Donor Code is already assigned to donor");
+           errors.rejectValue("donorCodeId","" ,"Donor Code is already assigned to donor");
         
     }
     

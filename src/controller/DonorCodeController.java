@@ -21,10 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import repository.DonorRepository;
 import utils.PermissionConstants;
-import antlr.collections.List;
-import backingform.DonorBackingForm;
 import backingform.DonorCodeBackingForm;
-import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.DonorCodeBackingFormValidator;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -48,32 +45,38 @@ public class DonorCodeController {
 
 	  @RequestMapping(value = "/updateDonorCodesFormGenerator", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
-	  public ModelAndView updateDonorCodesForm(HttpServletRequest request ,Model model ,@RequestParam(value="donorId") Long donorId){
-		  ModelAndView modelAndView = new ModelAndView("donors/updateDonorCodes");  
-		  model.addAttribute("addDonorCodeForm", new DonorCodeBackingForm());
+	  public ModelAndView updateDonorCodesForm(HttpServletRequest request  ,@RequestParam(value="donorId") Long donorId){
+		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/updateDonorCodes");  
 		  Donor donor = donorRepository.findDonorById(donorId);
 		  modelAndView.addObject("donor", donor);
-		  modelAndView.addObject("model", model);
-		  modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
-		  modelAndView.addObject("donorCodeGroups",  donorRepository.getAllDonorCodeGroups());
-		  
+		  modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("donor"));	  
 		  return modelAndView;
 		  
 	  }
+           @RequestMapping(value = "/addDonorCodeFormGenerator", method = RequestMethod.GET)
+	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
+              public ModelAndView addDonorCodeFormGenerator(HttpServletRequest request ,Model model ,@RequestParam(value="donorId") Long donorId){
+              ModelAndView modelAndView = new ModelAndView("donors/donorCodes/addDonorCodeForm");  
+	      model.addAttribute("addDonorCodeForm", new DonorCodeBackingForm());
+              modelAndView.addObject("donor",donorRepository.findDonorById(donorId)  );
+              modelAndView.addObject("donorCodeGroups",  donorRepository.getAllDonorCodeGroups());
+              return modelAndView;
+                
+          }
 	  
 	
-	  @RequestMapping(value = "/updateDonorCodes", method = RequestMethod.POST)
-	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
-	  public ModelAndView updateDonorCodes(HttpServletRequest request,HttpServletResponse response, 
+	  @RequestMapping(value = "/addDonorCodeForm", method = RequestMethod.POST)
+	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
+	  public ModelAndView addDonorCode(HttpServletRequest request,HttpServletResponse response, 
 			@ModelAttribute("addDonorCodeForm")  @Valid DonorCodeBackingForm form,
                          BindingResult result){
 	      
              
-                ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
+                ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
                   if (result.hasErrors()) {
-                      modelAndView.addObject("hasErrors", true);
+                      modelAndView.setViewName("donors/donorCodes/addDonorCodeForm");
+                      modelAndView.addObject("addDonorCodeForm",form);          
                       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                     modelAndView.addObject("success",false);
 	             return modelAndView;
 		
                      }
@@ -82,7 +85,6 @@ public class DonorCodeController {
 		 donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(form.getDonorCodeId()));
 		 donorRepository.saveDonorDonorCode(donorDonorCode);
 		 modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(form.getDonorId())));
-	         modelAndView.addObject("success",true);
 	         return modelAndView;
 		  
 	  }
@@ -91,9 +93,8 @@ public class DonorCodeController {
 	  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_CODE+"')")
 	  public ModelAndView donorCodesTable(HttpServletRequest request,Long donorId){
 		
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
+		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
 		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(donorId)));
-		  modelAndView.addObject("success",true);
 		  return modelAndView;
 		  
 		  
@@ -102,10 +103,9 @@ public class DonorCodeController {
 	  @RequestMapping(value = "/deleteDonorCode", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR_CODE+"')")
 	  public ModelAndView deleteDomorCode(@RequestParam(value="id") Long id){
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodesTable");  
+		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
 		  Donor donor = donorRepository.deleteDonorCode(id);
 		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(donor.getId())));
-		  modelAndView.addObject("success",true);
 		  return modelAndView;
 		  
 	  }
