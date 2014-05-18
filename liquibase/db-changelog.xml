@@ -710,7 +710,7 @@
 	   </insert> 
 	   <insert tableName="Permission">
 	       <column name="id" value="45"></column>
-	       <column name="name" value="Manage Component Combination"></column>
+	       <column name="name" value="Manage Component Combinations"></column>
 	   </insert> 
 	   <insert tableName="Permission">
 	       <column name="id" value="46"></column>
@@ -1875,16 +1875,16 @@
 	     <column name="permissions_id" value="42"></column>
 	     <column name="roles_id" value="2"></column>
 	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="42"></column>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="43"></column>
 	     <column name="roles_id" value="1"></column>
 	  </insert>
 	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="43"></column>
 	     <column name="roles_id" value="2"></column>
 	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="43"></column>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="44"></column>
 	     <column name="roles_id" value="1"></column>
 	  </insert>
 	  <insert tableName="Permission_Role">
@@ -1975,7 +1975,15 @@
 	     <column name="permissions_id" value="55"></column>
 	     <column name="roles_id" value="1"></column>
 	  </insert>
-	   <insert tableName="Permission_Role">
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="55"></column>
+	     <column name="roles_id" value="2"></column>
+	  </insert>
+	  <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="56"></column>
+	     <column name="roles_id" value="1"></column>
+	  </insert>
+	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="56"></column>
 	     <column name="roles_id" value="2"></column>
 	  </insert>
