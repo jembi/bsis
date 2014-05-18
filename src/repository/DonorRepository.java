@@ -86,9 +86,8 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate) {
-
-    CriteriaBuilder cb = em.getCriteriaBuilder();
+      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean usePhraseMatch) {
+     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
     
@@ -108,11 +107,23 @@ public class DonorRepository {
 
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
 
-    Predicate firstNameExp;
-    if (firstName.trim().equals(""))
-      firstNameExp = cb.disjunction();
-    else
-      firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
+    Predicate firstNameExp, lastNameExp;
+    if (!usePhraseMatch){
+      firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
+      lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
+    }
+    else{
+       if(firstName.trim().equals(""))
+    	   firstNameExp = cb.disjunction();
+       else   
+           firstNameExp =  cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+       
+       if(lastName.trim().equals(""))
+    	   lastNameExp = cb.disjunction();
+       else
+           lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+    }
+
     
     Predicate dueToDonateExp;
     if (!dueToDonate)
@@ -120,20 +131,21 @@ public class DonorRepository {
     else
     	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
-    Predicate lastNameExp;
-    if (lastName.trim().equals(""))
-      lastNameExp = cb.disjunction();
-    else
-      lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
+      Expression<Boolean> exp2 = exp1;
+    
+     if(!StringUtils.isBlank(donorNumber))
+ 	  exp2 = cb.and(exp2,donorNumberExp);
 
-    Expression<Boolean> exp2;
-    if (StringUtils.isBlank(donorNumber) && 
-        StringUtils.isBlank(firstName) &&
-        StringUtils.isBlank(lastName) && !dueToDonate)
-      exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
-    else
-      exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
-
+    
+       if(!StringUtils.isBlank(firstName))
+    	    exp2 = cb.and(exp2,firstNameExp);
+       
+       if(!StringUtils.isBlank(lastName))
+    	   exp2 = cb.and(exp2,lastNameExp);
+       
+       if (dueToDonate)
+       exp2 = cb.and(exp2,dueToDonateExp);
+       
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
 
