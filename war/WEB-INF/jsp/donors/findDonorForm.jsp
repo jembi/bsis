@@ -54,13 +54,17 @@ $(document).ready(function() {
     }
   }).click(clearFindForm);
   
- //Enabling submit button 
-  $('.findDonorButton').attr('disabled', 'disabled');
-  $('#donorNumber, #firstName, #lastName').change(function(){ 
-	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 || $('#lastName').val().trim().length >0 )
-	  $('.findDonorButton').removeAttr('disabled');
+ 
+// $('.findDonorButton').attr('disabled', 'disabled'); // Issuw in firefox browser
+ $( ".findDonorButton" ).button( "option", { disabled: true } );
+
+  $('#donorNumber, #firstName, #lastName, #donationNumber').keyup(function(){ 
+	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 
+                  || $('#lastName').val().trim().length >0 || $('#donationNumber').val().trim().length >0)
+              $( ".findDonorButton" ).button( "option", { disabled: false } );
 	  else
-		  $('.findDonorButton').attr('disabled', 'disabled');
+               $( ".findDonorButton" ).button( "option", { disabled: true } );
+             $( ".findDonorButton" ).button( "refresh" );
   });
 	  
   function clearFindForm() {
@@ -220,6 +224,10 @@ $(document).ready(function() {
       <div>
         <form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
         <form:input path="donorNumber" />
+      </div>
+       <div>
+        <form:label path="donationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
+        <form:input path="donationNumber" />
       </div>
       <div>
         <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>

@@ -494,6 +494,7 @@ public class DonorController {
     utilController.addTipsToModel(model.asMap(), "donors.finddonor");
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(mv.getModelMap());
@@ -589,6 +590,7 @@ public class DonorController {
     String donorNumber = form.getDonorNumber();
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
+    String donationNumber = form.getDonationNumber();
     List<BloodGroup> bloodGroups = form.getBloodGroups();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
@@ -598,7 +600,8 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate(),form.isUsePhraseMatch());
+            lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate(),form.isUsePhraseMatch(),
+             donationNumber);
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);
