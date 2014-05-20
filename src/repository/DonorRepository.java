@@ -86,25 +86,12 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean usePhraseMatch) {
+      String lastName,  Map<String, Object> pagingParams, Boolean usePhraseMatch) {
      CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
     
-    Expression<Boolean> exp1;
-    if (anyBloodGroup.equals("true")) {
-      exp1 = cb.not(cb.disjunction());
-    }
-    else {
-      List<Predicate> bgPredicates = new ArrayList<Predicate>();
-      for (BloodGroup bg : bloodGroups) {
-        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
-        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
-        bgPredicates.add(cb.and(aboExp, rhExp));
-      }
-      exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
-    }
-
+   
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
 
     Predicate firstNameExp, lastNameExp;
@@ -125,13 +112,8 @@ public class DonorRepository {
     }
 
     
-    Predicate dueToDonateExp;
-    if (!dueToDonate)
-    	dueToDonateExp = cb.disjunction();
-    else
-    	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
-      Expression<Boolean> exp2 = exp1;
+      Expression<Boolean> exp2 =cb.conjunction();
     
      if(!StringUtils.isBlank(donorNumber))
  	  exp2 = cb.and(exp2,donorNumberExp);
@@ -143,8 +125,7 @@ public class DonorRepository {
        if(!StringUtils.isBlank(lastName))
     	   exp2 = cb.and(exp2,lastNameExp);
        
-       if (dueToDonate)
-       exp2 = cb.and(exp2,dueToDonateExp);
+       
        
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
