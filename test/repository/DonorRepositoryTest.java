@@ -448,6 +448,35 @@ public class DonorRepositoryTest {
 					donor.getId() == 2 ? true : false);
 		}
 	}
+	
+	@Test
+	/**
+	 * Should return donor with donation matching DIN
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
+	 */
+	public void findAnyDonor_shouldReturnDonorWithDonationMatchingDIN() {
+		String searchDonorNumber = "";
+		String donorFirstName = "";
+		String donorLastName = "";
+		String anyBloodGroup = "true";
+		String donationIdentificationNumber = "000001";
+		
+		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		bloodGroups.add(new BloodGroup("A+"));
+		setPaginationParam(pagingParams);
+		List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
+				anyBloodGroup, pagingParams, false,true, donationIdentificationNumber).get(0));
+		assertEquals("Should return a single Donor result", 1, donorList.size());
+		boolean isValid = false;
+		if (donorList.get(0).getDonorNumber().equals("000001")) {
+			isValid = true;
+		} else {
+			isValid = false;
+		}
+		assertTrue("Donor with donation matching DIN returned", isValid);
+	}
 
 	@Test
 	/**
