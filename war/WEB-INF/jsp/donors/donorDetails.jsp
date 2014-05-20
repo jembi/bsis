@@ -9,18 +9,19 @@
   <!-- <br />
    <div class="donorBarcode"></div> -->
   
-  <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
-   <div><label>Donor Codes</label> 
-      <c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
-        <b> <label>${donorCodeGroup.donorCodeGroup}</label></b><br>
-           <label></label>
-           </c:forEach> 
-      </div>
-   
-   
-   
-  </sec:authorize>
-  
+   	<div>
+   		<label>Donor Codes</label>
+   		<c:if test="${empty donorCodeGroups}">
+        	<label>-</label>
+      	</c:if>
+      	<c:if test="${not empty donorCodeGroups}">
+	      	<c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
+	        	<label>${donorCodeGroup.donorCodeGroup}</label>
+	        	<br>
+            	<label></label>
+	        </c:forEach>
+        </c:if>
+    </div>
   <c:if test="${donorFields.donorNumber.hidden != true }">
     <div>
       <label>${donorFields.donorNumber.displayName}</label>

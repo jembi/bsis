@@ -80,7 +80,7 @@ $(document).ready(
             $("#${tableDiv}").html(response);
        },
        400 :function(response){
-            showErrorMessage("OOPS! Donor Code is Already Assigned");
+            showErrorMessage("Donor Code is Already Assigned");
 //            $("#${addDonorCodeForm}").empty();       
 //            $("#${addDonorCodeForm}").html(response);   // Can't load the response here     
        }
@@ -143,31 +143,22 @@ $(document).ready(
     </div>
     <br>
   </c:if> 
-     <div style="margin-left: 12px;">
-        <b><label>Donor Codes</label></b>
-        </div>
-        <div>
-        <div id="${tableDiv}">   
-        </div>
-  
-        <div id="${addDonorCodeForm}">
-        </div>
+
+     <div id="${addDonorCodeForm}">
+     </div>
          	
-        <div>
-             	<div style="margin-left: 145px;">
-                     <label></label>
-                     <button name="addDonorCodeButton" type="button" class="addDonorCodeButton">
-							Add Donor Code</button>
-		</div>
-	        <br>
-		
-                <div style="margin-left: 150px;">
-			<button type="button" class="doneButton">Done</button>
-		</div>
-
+     <div>
+        <div style="margin-left: 145px;">
+        <label></label>
+        <button name="addDonorCodeButton" type="button" class="addDonorCodeButton">Add Donor Code</button>
+	 </div>
+     <div>
+        <div id="${tableDiv}">   
+     </div>
+	 <br>
+	 <div style="margin-left: 150px;">
+		<button type="button" class="doneButton">Done</button>
+	 </div>
 	</div>
-
-</div>
-
-
+</div>	
 </sec:authorize>
