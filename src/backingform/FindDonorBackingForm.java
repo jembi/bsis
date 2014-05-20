@@ -15,6 +15,18 @@ public class FindDonorBackingForm {
   private boolean dueToDonate;
   private String anyBloodGroup;
   private boolean usePhraseMatch;
+  private String donationIdentificationNumber;
+
+    public String getDonationIdentificationNumber() {
+        return donationIdentificationNumber;
+    }
+
+    public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+        this.donationIdentificationNumber = donationIdentificationNumber;
+    }
+
+  
+
 
   public String getDonorNumber() {
     return donorNumber;
