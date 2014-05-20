@@ -214,7 +214,8 @@ public class DonorRepositoryTest {
 		String donorFirstName = "xxx";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-                 String donationIdentificationNumber = "";
+        String donationIdentificationNumber = "";
+        
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
@@ -234,7 +235,8 @@ public class DonorRepositoryTest {
 		String donorFirstName = "fir";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-                String donationIdentificationNumber = "";
+        String donationIdentificationNumber = "";
+        
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
@@ -267,7 +269,8 @@ public class DonorRepositoryTest {
 		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-                String donationIdentificationNumber = "";
+        String donationIdentificationNumber = "";
+        
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
@@ -301,7 +304,8 @@ public class DonorRepositoryTest {
 		String donorFirstName = "";
 		String donorLastName = "las";
 		String anyBloodGroup = "true";
-                String donationIdentificationNumber = "";
+        String donationIdentificationNumber = "";
+        
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 
@@ -333,7 +337,8 @@ public class DonorRepositoryTest {
 		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "false";
-                String donorNumber = "";
+		String donationIdentificationNumber = "";
+		
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		bloodGroups.add(new BloodGroup("A+"));
@@ -341,7 +346,7 @@ public class DonorRepositoryTest {
 		setPaginationParam(pagingParams);
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false, true, donorNumber).get(0)));
+				anyBloodGroup, pagingParams, false, true, donationIdentificationNumber).get(0)));
 		assertNotSame(
 				"List size should not zero.Matching records is found base on bloodgroup criteria.",
 				0, listDonors.size());
@@ -368,7 +373,8 @@ public class DonorRepositoryTest {
 		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-                String donationIdentificationNumber = "";
+        String donationIdentificationNumber = "";
+        
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		// B+ bloodgroup is not exist into Donor's table.
@@ -392,13 +398,14 @@ public class DonorRepositoryTest {
 		String donorFirstName = "firstName";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-                String donorNumber = "";
+		String donationIdentificationNumber = "";
+		
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, true,true, donorNumber).get(0));
+				anyBloodGroup, pagingParams, true,true, donationIdentificationNumber).get(0));
 		assertNotSame(
 				"DueToDonate condition is true,matching record should exist and donor list size should not zero.",
 				0, listDonor.size());
@@ -425,14 +432,15 @@ public class DonorRepositoryTest {
 		String donorFirstName = "fir";
 		String donorLastName = "";
 		String anyBloodGroup = "true";
-                 String donorNumber = "";
+		String donationIdentificationNumber = "";
+		
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		bloodGroups.add(new BloodGroup("A+"));
 		setPaginationParam(pagingParams);
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
 				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,true, donorNumber).get(0));
+				anyBloodGroup, pagingParams, false,true, donationIdentificationNumber).get(0));
 		for (Donor donor : listDonor) {
 			// 2 is deleted donor id
 			assertFalse(
