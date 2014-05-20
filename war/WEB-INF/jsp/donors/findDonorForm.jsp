@@ -58,9 +58,9 @@ $(document).ready(function() {
 // $('.findDonorButton').attr('disabled', 'disabled'); // Issuw in firefox browser
  $( ".findDonorButton" ).button( "option", { disabled: true } );
 
-  $('#donorNumber, #firstName, #lastName, #donationNumber').keyup(function(){ 
+  $('#donorNumber, #firstName, #lastName, #donationIdentificationNumber').keyup(function(){ 
 	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 
-                  || $('#lastName').val().trim().length >0 || $('#donationNumber').val().trim().length >0)
+                  || $('#lastName').val().trim().length >0 || $('#donationIdentificationNumber').val().trim().length >0)
               $( ".findDonorButton" ).button( "option", { disabled: false } );
 	  else
                $( ".findDonorButton" ).button( "option", { disabled: true } );
@@ -226,8 +226,8 @@ $(document).ready(function() {
         <form:input path="donorNumber" />
       </div>
        <div>
-        <form:label path="donationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
-        <form:input path="donationNumber" />
+        <form:label path="donationIdentificationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
+        <form:input path="donationIdentificationNumber" />
       </div>
       <div>
         <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>

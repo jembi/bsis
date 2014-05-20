@@ -84,7 +84,7 @@ public class DonorRepository {
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
       String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, 
-              Object> pagingParams,Boolean dueToDonate, Boolean usePhraseMatch, String donationNumber) {
+              Object> pagingParams,Boolean dueToDonate, Boolean usePhraseMatch, String donationIdentificationNumber) {
      CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
@@ -171,12 +171,12 @@ public class DonorRepository {
     Long totalResults = countQuery.getSingleResult().longValue();
     List<Donor> donorResults = query.getResultList();
     boolean looped = false;
-    if(!StringUtils.isBlank(donationNumber)){
+    if(!StringUtils.isBlank(donationIdentificationNumber)){
     List<Donor> uniqueResult = new ArrayList<Donor>();
     looped = true;
     for(Donor donor : donorResults){
         for(CollectedSample collectedSample: donor.getCollectedSamples()){
-            if(collectedSample.getCollectionNumber().equals(donationNumber)){
+            if(collectedSample.getCollectionNumber().equals(donationIdentificationNumber)){
                 uniqueResult.add(donor);
                  return Arrays.asList(uniqueResult,totalResults);
         }
