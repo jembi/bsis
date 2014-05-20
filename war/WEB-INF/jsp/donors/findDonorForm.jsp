@@ -237,27 +237,7 @@ $(document).ready(function() {
         <form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
         <form:input path="lastName" />
       </div>
-      <div>
-        <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-        <form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
-        <form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
-          <form:option value="Unknown" label="Unknown" />
-          <form:option value="A+" label="A+" />
-          <form:option value="A-" label="A-" />
-          <form:option value="B+" label="B+" />
-          <form:option value="B-" label="B-" />
-          <form:option value="AB+" label="AB+" />
-          <form:option value="AB-" label="AB-" />
-          <form:option value="O+" label="O+" />
-          <form:option value="O-" label="O-" />
-        </form:select>
-      </div>
-      
-       <div>
-        <form:label path="dueToDonate" style="width: 9.2%;">Due To Donate</form:label>
-        <form:checkbox path="dueToDonate" style="width: auto; position: relative; top: 2px;"/>
-      </div>
-  
+          
       <div>
         <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
         <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>

@@ -519,7 +519,6 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
@@ -591,7 +590,6 @@ public class DonorController {
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
     String donationIdentificationNumber = form.getDonationIdentificationNumber();
-    List<BloodGroup> bloodGroups = form.getBloodGroups();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
@@ -600,8 +598,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate(),form.isUsePhraseMatch(),
-             donationIdentificationNumber);
+            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);
