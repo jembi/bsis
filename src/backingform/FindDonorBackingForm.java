@@ -12,6 +12,18 @@ public class FindDonorBackingForm {
   private String lastName;
   private boolean createDonorSummaryView;
   private boolean usePhraseMatch;
+  private String donationIdentificationNumber;
+
+    public String getDonationIdentificationNumber() {
+        return donationIdentificationNumber;
+    }
+
+    public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+        this.donationIdentificationNumber = donationIdentificationNumber;
+    }
+
+  
+
 
   public String getDonorNumber() {
     return donorNumber;
