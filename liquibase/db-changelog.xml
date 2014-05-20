@@ -2663,7 +2663,7 @@
 	     <column name="roles_id" value="15"></column>
 	  </insert>
 	  
-	  <!-- Admin & SUper-user Permission Role Mappings For Requests & Tips-->
+	  <!-- Admin & Super-user Permission Role Mappings For Requests & Tips-->
 	  
 	   <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="81"></column>
@@ -2730,7 +2730,6 @@
 	     <column name="id" value="1"></column>
 	     <column name="donorCodeGroup" value="Test Only"></column>
 	  </insert>
-
       <insert tableName="DonorCodeGroup">
 	     <column name="id" value="2"></column>
 	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
@@ -2738,12 +2737,36 @@
       
        <insert tableName="DonorCode">
 	     <column name="id" value="1"></column>
-	     <column name="donorCode" value="Test Only"></column>
+	     <column name="donorCode" value="Blood group antibody"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
-     
      <insert tableName="DonorCode">
 	     <column name="id" value="2"></column>
+	     <column name="donorCode" value="Follow up samples required"></column>
+	      <column name="donorCodeGroupId" value="1"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="3"></column>
+	     <column name="donorCode" value="Lab query"></column>
+	      <column name="donorCodeGroupId" value="1"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="4"></column>
+	     <column name="donorCode" value="Biological false positive"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="5"></column>
+	     <column name="donorCode" value="For counseling – HCV"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="6"></column>
+	     <column name="donorCode" value="For counseling – HIV"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="7"></column>
 	     <column name="donorCode" value="TTI Reactive"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
