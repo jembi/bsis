@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -117,6 +118,7 @@
       });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONOR)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -181,6 +183,25 @@
           <form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
         </div>
       </c:if>
+      <c:if test="${donorFields.bloodAbo.hidden != true }">
+	    <div>
+	      <form:label path="bloodAbo">${donorFields.bloodGroup.displayName}</form:label>
+          <form:select path="bloodAbo" name="BloodABO" title="ABO">
+			<form:option value="" label=""/>
+			<form:option value="A" label="A"/>
+			<form:option value="B" label="B"/>
+			<form:option value="O" label="O"/>
+			<form:option value="AB" label="AB"/>
+		  </form:select>
+		  <form:select path="bloodRh" name="BloodRh" title="Rh">
+			<form:option value="" label=""/>
+			<form:option value="+" label="+"/>
+			<form:option value="-" label="-"/>
+		  </form:select>
+          <form:errors class="formError" path="donor.bloodAbo" delimiter=", "></form:errors>
+          <form:errors class="formError" path="donor.bloodRh" delimiter=", "></form:errors>
+	    </div>
+	  </c:if>
       <c:if test="${donorFields.nationalID.hidden != true }">
         <div>
           <form:label path="nationalID">${donorFields.nationalID.displayName}</form:label>
@@ -361,3 +382,4 @@
   </div>
 
 </div>
+</sec:authorize>

@@ -72,7 +72,10 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.png</url-pattern>
     </servlet-mapping>
-
+ <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.swf</url-pattern>
+    </servlet-mapping>
     <!-- Spring security does not work without the following configuration
          http://stackoverflow.com/questions/16452044/spring-security-j-spring-security-check-not-invoked
      -->

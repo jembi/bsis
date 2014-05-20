@@ -1,6 +1,6 @@
 package model.util;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BloodGroup {
@@ -8,17 +8,17 @@ public class BloodGroup {
   private String abo;
   private String rh;
 
-  static final private Map<String, BloodGroup> bloodgroups = new HashMap<String, BloodGroup>();
+  static final private Map<String, BloodGroup> bloodgroups = new LinkedHashMap<String, BloodGroup>();
   
   static {
-    bloodgroups.put("a+", new BloodGroup("A", "+"));
-    bloodgroups.put("b+", new BloodGroup("B", "+"));
-    bloodgroups.put("ab+", new BloodGroup("AB", "+"));
-    bloodgroups.put("o+", new BloodGroup("O", "+"));
-    bloodgroups.put("a-", new BloodGroup("A", "-"));
-    bloodgroups.put("b-", new BloodGroup("B", "-"));
-    bloodgroups.put("ab-", new BloodGroup("AB", "-"));
-    bloodgroups.put("o-", new BloodGroup("O", "-"));
+		bloodgroups.put("o+", new BloodGroup("O", "+"));
+		bloodgroups.put("o-", new BloodGroup("O", "-"));
+		bloodgroups.put("a+", new BloodGroup("A", "+"));
+		bloodgroups.put("a-", new BloodGroup("A", "-"));
+		bloodgroups.put("b+", new BloodGroup("B", "+"));
+		bloodgroups.put("b-", new BloodGroup("B", "-"));  
+		bloodgroups.put("ab+", new BloodGroup("AB", "+"));
+		bloodgroups.put("ab-", new BloodGroup("AB", "-"));   
   }
 
   public BloodGroup() {
@@ -79,4 +79,8 @@ public class BloodGroup {
   public String getBloodRh() {
     return rh.toString();
   }
+
+public static Map<String, BloodGroup> getBloodgroups() {
+	return bloodgroups;
+}
 }

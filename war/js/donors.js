@@ -58,3 +58,35 @@ function deferDonor(form, successCallback) {
              }
   });
 }
+
+function updateDeferDonor(form, successCallback) {
+	  var donorDeferralFormData = $(form).serialize();
+	  $.ajax({
+	    type: "POST",
+	    url:  "updateDeferDonor.html",
+	    data: donorDeferralFormData,
+	    success: function(jsonResponse) {
+	               successCallback();
+	               showMessage("Donor deferred");
+	             },
+	    error:   function(jsonResponse) {
+	               showErrorMessage("Something went wrong when trying to defer donor.");
+	             }
+	  });
+}
+
+function cancelDeferDonor(form, successCallback) {
+	  var donorDeferralFormData = $(form).serialize();
+	  $.ajax({
+	    type: "POST",
+	    url:  "cancelDeferDonor.html",
+	    data: donorDeferralFormData,
+	    success: function(jsonResponse) {
+	               successCallback();
+	               showMessage("Donor deferred");
+	             },
+	    error:   function(jsonResponse) {
+	               showErrorMessage("Something went wrong when trying to defer donor.");
+	             }
+	  });
+}

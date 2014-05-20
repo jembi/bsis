@@ -12,6 +12,7 @@ import model.location.Location;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.LocationRepository;
+import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
 
 @Controller
@@ -38,6 +40,7 @@ public class LocationsController {
   }
 
   @RequestMapping(value="/configureLocationsFormGenerator", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_SITES+"')")
   public ModelAndView configureLocationsFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -51,6 +54,7 @@ public class LocationsController {
   }
 
   @RequestMapping("/configureLocations")
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_SITES+"')")
   public ModelAndView configureLocations(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {

@@ -12,6 +12,7 @@ public class FormField {
 
   public static final String FIELD = "field";
   public static final String DISPLAY_NAME = "displayName";
+  public static final String SHORT_DISPLAY_NAME="shortDisplayName";
   public static final String DEFAULT_DISPLAY_NAME = "defaultDisplayName";
   public static final String DEFAULT_VALUE = "defaultValue";
 
@@ -91,9 +92,11 @@ public class FormField {
   }
 
   public String getDisplayName() {
-    if (displayName == null || displayName.trim().equals(""))
-      return getDefaultDisplayName();
-    return displayName;
+    return getDefaultDisplayName();
+ }
+  public String getShortDisplayName()
+  {
+	  return displayName;
   }
 
   public String getDefaultDisplayName() {

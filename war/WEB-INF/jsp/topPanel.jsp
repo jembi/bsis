@@ -20,61 +20,69 @@
     <li class="topPanelTab"><a href="#homeLandingPageContent"><span
         class="ui-icon ui-icon-home" style="display: inline-block;"></span>Home</a></li>
 
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR_INFORMATION)"> 
     <c:if test="${labsetup['donorsTabEnabled']}">
-       <sec:authorize access="hasRole('View Donor Information')">
     <li class="topPanelTab"><a href="#donorsLandingPageContent"><span
         class="ui-icon ui-icon-person" style="display: inline-block;"></span>Donors</a></li>
-     </sec:authorize>
     </c:if>
+ </sec:authorize>
 
+  <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_INFORMATION)"> 
     <c:if test="${labsetup['collectionsTabEnabled']}">
-        <sec:authorize access="hasRole('View Donation Information')">
-    <li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
+       <li class="topPanelTab"><a href="#collectionsLandingPageContent"><span
         class="ui-icon ui-icon-disk" style="display: inline-block;"></span>Donations</a></li>
-        </sec:authorize>
     </c:if>
+   </sec:authorize>
 
 
-   
+  <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_COMPONENT_INFORMATION)"> 
     <c:if test="${labsetup['productsTabEnabled']}">
-     <sec:authorize access="hasRole('View Component Information')">
     <li class="topPanelTab"><a href="#productsLandingPageContent"><span
         class="ui-icon ui-icon-cart" style="display: inline-block;"></span>Products</a></li>
-        </sec:authorize>
     </c:if>
+   </sec:authorize>
+  
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_TESTING_INFORMATION)">
     <c:if test="${labsetup['testResultsTabEnabled']}">
-    <sec:authorize access="hasRole('View Testing Information')">
     <li class="topPanelTab"><a href="#testResultsLandingPageContent"><span
         class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Test Results</a></li>
-        </sec:authorize>
     </c:if>
+     </sec:authorize>
     
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_INVENTORY_INFORMATION)">
     <c:if test="${labsetup['lotRelease']}">
     <li class="topPanelTab"><a href="#lotReleasePageContent"><span
         class="ui-icon ui-icon-bookmark" style="display: inline-block;"></span>Lot Release</a></li>
     </c:if>    
+    </sec:authorize>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_BLOOD_BANK_INFORMATION)">
     <c:if test="${labsetup['requestsTabEnabled']}">
     <li class="topPanelTab"><a href="#requestsLandingPageContent"><span
         class="ui-icon ui-icon-tag" style="display: inline-block;"></span>Requests</a></li>
     </c:if>
+  </sec:authorize>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_BLOOD_BANK_INFORMATION)">
     <c:if test="${labsetup['usageTabEnabled']}">
     <li class="topPanelTab"><a href="#usageLandingPageContent"><span
         class="ui-icon ui-icon-transferthick-e-w" style="display: inline-block;"></span>Usage</a></li>
     </c:if>
+    </sec:authorize>
    
-
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_REPORTING_INFORMATION)">
     <c:if test="${labsetup['reportsTabEnabled']}">
     <li class="topPanelTab"><a href="#reportsLandingPageContent"><span
         class="ui-icon ui-icon-clipboard" style="display: inline-block;"></span>Reports</a></li>
     </c:if>
+      </sec:authorize>
 
-    <sec:authorize access="hasRole('View Admin Information')"> 
+   <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_ADMIN_INFORMATION)">
     <li class="topPanelTab"><a href="#adminLandingPageContent"><span
         class="ui-icon ui-icon-gear" style="display: inline-block;"></span>Admin</a></li>
     </sec:authorize>
+ 
     
   </ul>
      
@@ -97,73 +105,76 @@
         Jembi</a>
     </div>
   </div>
-
+ 
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR_INFORMATION)">
   <c:if test="${labsetup['donorsTabEnabled']}">
-  <sec:authorize access="hasRole('View Donor Information')">
-    <div id="donorsLandingPageContent">
+   <div id="donorsLandingPageContent">
       <jsp:include page="donors/donors.jsp" />
     </div>
+     </c:if>
   </sec:authorize>
-  </c:if>
 
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_INFORMATION)">
   <c:if test="${labsetup['collectionsTabEnabled']}">
-  <sec:authorize access="hasRole('View Donation Information')">
   <div id="collectionsLandingPageContent">
     <jsp:include page="collections/collections.jsp" />
   </div>
-  </sec:authorize>
   </c:if>
+    </sec:authorize>
   
 
-  <sec:authorize access="hasRole('View Testing Information')">
+  <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_TESTING_INFORMATION)">
     <c:if test="${labsetup['testResultsTabEnabled']}">
     <div id="testResultsLandingPageContent">
       <jsp:include page="testResults.jsp" />
     </div>
     </c:if>
      </sec:authorize>
-	
+     
+  
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_INVENTORY_INFORMATION)">
   <c:if test="${labsetup['lotRelease']}">
     <div id="lotReleasePageContent">
       <jsp:include page="lotRelease/lotRelease.jsp" />
     </div>
     </c:if>
+    </sec:authorize>
 
+
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_COMPONENT_INFORMATION)">
   <c:if test="${labsetup['productsTabEnabled']}">
-  <sec:authorize access="hasRole('View Component Information')">
   <div id="productsLandingPageContent">
     <jsp:include page="products/products.jsp" />
   </div>
-  </sec:authorize>
+ </c:if>
+ </sec:authorize>
   
-  </c:if>
-  
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_BLOOD_BANK_INFORMATION)">
   <c:if test="${labsetup['requestsTabEnabled']}">
-  <sec:authorize access="hasRole('View Blood Bank Information')">
   <div id="requestsLandingPageContent">
     <jsp:include page="requests/requests.jsp" />
   </div>
-  </sec:authorize>
   </c:if>
-
+  </sec:authorize>
+  
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_BLOOD_BANK_INFORMATION)">
   <c:if test="${labsetup['usageTabEnabled']}">
   <div id="usageLandingPageContent">
     <jsp:include page="usage.jsp" />
   </div>
   </c:if>
+  </sec:authorize>
 
   
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_REPORTING_INFORMATION)">
   <c:if test="${labsetup['reportsTabEnabled']}">
-   <sec:authorize access="hasRole('View Reporting Information')">
   <div id="reportsLandingPageContent">
     <jsp:include page="reports.jsp" />
   </div>
-  </sec:authorize>
   </c:if>
-  
+  </sec:authorize>
 
-    <sec:authorize access="hasRole('View Admin Information')">
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_ADMIN_INFORMATION)">
     <div id="adminLandingPageContent">
       <jsp:include page="admin/admin.jsp" />
     </div>

@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -53,6 +54,15 @@ $(document).ready(function() {
     }
   }).click(clearFindForm);
   
+ //Enabling submit button 
+  $('.findDonorButton').attr('disabled', 'disabled');
+  $('#donorNumber, #firstName, #lastName').change(function(){ 
+	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 || $('#lastName').val().trim().length >0 )
+	  $('.findDonorButton').removeAttr('disabled');
+	  else
+		  $('.findDonorButton').attr('disabled', 'disabled');
+  });
+	  
   function clearFindForm() {
     refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
@@ -192,6 +202,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
   
@@ -233,6 +244,19 @@ $(document).ready(function() {
           <form:option value="O-" label="O-" />
         </form:select>
       </div>
+      
+       <div>
+        <form:label path="dueToDonate" style="width: 9.2%;">Due To Donate</form:label>
+        <form:checkbox path="dueToDonate" style="width: auto; position: relative; top: 2px;"/>
+      </div>
+  
+      <div>
+        <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
+        <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>
+      </div>
+
+      <br />
+      <br />
     </form:form>
 
     <div class="formFormatClass">
@@ -258,7 +282,7 @@ $(document).ready(function() {
 
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
-      commandName="addDonorForm">
+      commandName="addDonorForm" >
 
 
       <c:if test="${model.donorFields.firstName.hidden != true }">
@@ -371,3 +395,4 @@ $(document).ready(function() {
   </div>
 
 </div>
+</sec:authorize>

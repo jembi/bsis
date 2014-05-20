@@ -35,6 +35,8 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import utils.CustomDateFormatter;
+import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
 import backingform.DonorBackingForm;
@@ -78,8 +80,8 @@ public class DonorController {
   }
 
   @RequestMapping("/donors")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_INFORMATION+"')")
   public ModelAndView getDonorsPage(HttpServletRequest request) {
-
     ModelAndView modelAndView = new ModelAndView("donors");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("requestUrl", getUrl(request));
@@ -88,7 +90,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('View Donor')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -128,6 +130,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/viewDonorHistory", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView viewDonorHistory(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -154,6 +157,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/viewDonorDeferrals", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DEFERRAL+"')")
   public ModelAndView viewDonorDeferrals(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
@@ -185,6 +189,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public ModelAndView editDonorFormGenerator(HttpServletRequest request,
       @RequestParam(value="donorId") Long donorId) {
 
@@ -205,6 +210,7 @@ public class DonorController {
  
 
   @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public ModelAndView addDonorFormGenerator(HttpServletRequest request) {
 
     DonorBackingForm form = new DonorBackingForm();
@@ -222,6 +228,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = {"/addDonor", "/findDonor"}, method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public ModelAndView
         addDonor(HttpServletRequest request,
                  HttpServletResponse response,
@@ -301,6 +308,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/deferDonorFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DEFERRAL+"')")
   public ModelAndView deferDonorFormGenerator(HttpServletRequest request,
       @RequestParam("donorId") String donorId) {
     ModelAndView mv = new ModelAndView("donors/deferDonorForm");
@@ -308,8 +316,66 @@ public class DonorController {
     mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
     return mv;
   }
+  
+  @RequestMapping(value = "/editDeferDonorFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DEFERRAL+"')")
+  public ModelAndView editDeferDonorFormGenerator(HttpServletRequest request,
+      @RequestParam("donorDeferralId") String donorDeferralId) {
+    ModelAndView mv = new ModelAndView("donors/deferDonorForm");
+    DonorDeferral donorDeferral = donorRepository.getDonorDeferralsId(Long.parseLong(donorDeferralId));
+    if(donorDeferral != null){
+  		mv.addObject("deferralUntilDate", CustomDateFormatter.getDateString(donorDeferral.getDeferredUntil()));
+  		mv.addObject("deferReasonText",donorDeferral.getDeferralReasonText());
+  		mv.addObject("deferReasonId",donorDeferral.getDeferralReason().getId());
+  		mv.addObject("donorId", donorDeferral.getDeferredDonor().getId());
+  		mv.addObject("donorDeferralId", donorDeferral.getId());
+    }
+    mv.addObject("deferralReasons", donorRepository.getDeferralReasons());
+    return mv;
+  }
+  
+  @RequestMapping(value="/updateDeferDonor", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DEFERRAL+"')")
+  public @ResponseBody Map<String, Object> updateDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId,
+         @RequestParam("donorId") String donorId,
+         @RequestParam("deferUntil") String deferUntil,
+         @RequestParam("deferralReasonId") String deferralReasonId,
+         @RequestParam("deferralReasonText") String deferralReasonText) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.updatedeferDonor(donorDeferralId,donorId, deferUntil, deferralReasonId, deferralReasonText);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
+  }
+  
+  @RequestMapping(value="/cancelDeferDonor", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DEFERRAL+"')")
+  public @ResponseBody Map<String, Object> cancelDeferDonor(HttpServletRequest request,
+         HttpServletResponse response,
+         @RequestParam("donorDeferralId") String donorDeferralId) {
+
+    Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
+
+    try {
+      donorRepository.cancelDeferDonor(donorDeferralId);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    return donorDeferralResult;
+  }
 
   @RequestMapping(value="/deferDonor", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DEFERRAL+"')")
   public @ResponseBody Map<String, Object> deferDonor(HttpServletRequest request,
          HttpServletResponse response,
          @RequestParam("donorId") String donorId,
@@ -330,6 +396,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public ModelAndView updateDonor(
       HttpServletResponse response,
       @ModelAttribute(value="editDonorForm") @Valid DonorBackingForm form,
@@ -389,6 +456,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteDonor(
       @RequestParam("donorId") Long donorId) {
@@ -411,6 +479,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public ModelAndView findDonorFormGenerator(HttpServletRequest request, Model model) {
 
     FindDonorBackingForm form = new FindDonorBackingForm();
@@ -434,6 +503,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public ModelAndView findDonor(HttpServletRequest request,
       @ModelAttribute("findDonorForm") FindDonorBackingForm form,
       BindingResult result, Model model) {
@@ -448,12 +518,14 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
+    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
   }
   
   @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public ModelAndView printDonorLabel(HttpServletRequest request, Model model,
 		  @RequestParam(value="donorNumber") String donorNumber) {
 	  
@@ -526,8 +598,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams);
-
+            lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate(),form.isUsePhraseMatch());
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);
@@ -580,6 +651,7 @@ public class DonorController {
   }
 
   @RequestMapping("/viewDonors")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public ModelAndView viewDonors(@RequestParam Map<String, String> params,
       HttpServletRequest request) {
 
@@ -597,6 +669,7 @@ public class DonorController {
   }
 
   @RequestMapping(value = "/findDonorSelectorFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public ModelAndView findDonorSelectorFormGenerator(HttpServletRequest request, Model model) {
 
     FindDonorBackingForm form = new FindDonorBackingForm();
@@ -610,6 +683,7 @@ public class DonorController {
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorSelectorFormGenerator.html");
+   
     addEditSelectorOptions(mv.getModelMap());
     mv.addObject("model", m);
     return mv;

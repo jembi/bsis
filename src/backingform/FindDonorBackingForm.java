@@ -12,8 +12,9 @@ public class FindDonorBackingForm {
   private String lastName;
   private List<BloodGroup> bloodGroups;
   private boolean createDonorSummaryView;
-
+  private boolean dueToDonate;
   private String anyBloodGroup;
+  private boolean usePhraseMatch;
 
   public String getDonorNumber() {
     return donorNumber;
@@ -65,4 +66,23 @@ public class FindDonorBackingForm {
   public void setCreateDonorSummaryView(boolean createDonorSummaryView) {
     this.createDonorSummaryView = createDonorSummaryView;
   }
+
+	public boolean getDueToDonate() {
+		return dueToDonate;
+	}
+
+	public void setDueToDonate(boolean dueToDonate) {
+		this.dueToDonate = dueToDonate;
+	}
+
+	public boolean isUsePhraseMatch() {
+		return usePhraseMatch;
+	}
+
+	public void setUsePhraseMatch(boolean usePhraseMatch) {
+		this.usePhraseMatch = usePhraseMatch;
+	}
+
+
+
 }
