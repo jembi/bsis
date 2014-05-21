@@ -36,6 +36,8 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 
 import constraintvalidator.LocationExists;
+import model.idtype.IdType;
+import model.preferredlanguage.PreferredLanguage;
 
 import utils.DonorUtils;
 
@@ -170,6 +172,18 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
 
+  @ManyToOne
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  private IdType idType;
+  
+  @ManyToOne
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  private PreferredLanguage  preferredLanguage;
+  
+  private String emailID;
+  
   public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
@@ -515,4 +529,30 @@ public class Donor implements ModificationTracker {
   public void setBirthDateEstimated(Boolean birthDateEstimated) {
 	this.birthDateEstimated = birthDateEstimated;
   }
+
+    public IdType getIdType() {
+        return idType;
+    }
+
+    public void setIdType(IdType idType) {
+        this.idType = idType;
+    }
+
+    public PreferredLanguage getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(PreferredLanguage preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
+    }
+  
+  
 }

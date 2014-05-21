@@ -297,7 +297,7 @@ $(document).ready(function() {
           <form:input path="lastName" value="${firstTimeRender ? model.donorFields.lastName.defaultValue : ''}" />
         </div>
       </c:if>
-      <c:if test="${model.donorFields.callingName.hidden != true }">
+      <c:if test="${model.donorFields.callingName.hidden != true }">    
         <div>
           <form:label path="callingName">${model.donorFields.callingName.displayName}</form:label>
           <form:input path="callingName" value="${firstTimeRender ? model.donorFields.callingName.defaultValue : ''}" />
@@ -388,6 +388,7 @@ $(document).ready(function() {
     <div style="margin-left: 200px;">
       <label></label>
       <button type="button" class="addDonorButton autoWidthButton">
+          <a href="../../../../liquibase/db-changelog.xml"></a>
         Add Donor
       </button> 
     </div>
