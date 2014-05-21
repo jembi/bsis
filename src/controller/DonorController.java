@@ -494,6 +494,7 @@ public class DonorController {
     utilController.addTipsToModel(model.asMap(), "donors.finddonor");
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(mv.getModelMap());
@@ -518,7 +519,6 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
@@ -589,7 +589,7 @@ public class DonorController {
     String donorNumber = form.getDonorNumber();
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
-    List<BloodGroup> bloodGroups = form.getBloodGroups();
+    String donationIdentificationNumber = form.getDonationIdentificationNumber();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
@@ -598,8 +598,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate());
-
+            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);

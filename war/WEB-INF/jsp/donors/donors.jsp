@@ -12,9 +12,9 @@
 <link type="text/css" rel="stylesheet" href="css/donors.css" media="all" />
 <script type="text/javascript" src="js/donors.js"></script>
 <script type="text/javascript" src="js/collections.js"></script>
-<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
 <div id="donorsTab" class="tabs">
   <ul>
+  	<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
     <li id="findOrAddDonorsContent">
       <a href="findDonorFormGenerator.html">
         Donors
@@ -25,6 +25,7 @@
          Donor <br/> Communications
       </a>
     </li>
+    </sec:authorize>
     <!--
     <li id="addDonorContent">
       <a href="addDonorFormGenerator.html">
@@ -37,4 +38,3 @@
     -->
   </ul>
 </div>
-</sec:authorize>

@@ -340,49 +340,46 @@ public class DonorBackingForm {
       return null;
     return donorPanel.getId().toString();
   }
-  
-  
-  
 
-  public String getYear() {
-	return year;
-}
-
-public void setYear(String year) {
-	this.year = year;
-}
-
-public String getMonth() {
-	return month;
-}
-
-public void setMonth(String month) {
-	this.month = month;
-}
-
-public String getDayOfMonth() {
-	return dayOfMonth;
-}
-
-public void setDayOfMonth(String dayOfMonth) {
-	this.dayOfMonth = dayOfMonth;
-}
-
-public void setDonorPanel(String donorPanel) {
-    if (StringUtils.isBlank(donorPanel)) {
-      donor.setDonorPanel(null);
-    }
-    else {
-      Location l = new Location();
-      try {
-        l.setId(Long.parseLong(donorPanel));
-        donor.setDonorPanel(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        donor.setDonorPanel(null);
-      }
-    }
-  }
+  	public String getYear() {
+  		return year;
+	}
+	
+	public void setYear(String year) {
+		this.year = year;
+	}
+	
+	public String getMonth() {
+		return month;
+	}
+	
+	public void setMonth(String month) {
+		this.month = month;
+	}
+	
+	public String getDayOfMonth() {
+		return dayOfMonth;
+	}
+	
+	public void setDayOfMonth(String dayOfMonth) {
+		this.dayOfMonth = dayOfMonth;
+	}
+	
+	public void setDonorPanel(String donorPanel) {
+	    if (StringUtils.isBlank(donorPanel)) {
+	      donor.setDonorPanel(null);
+	    }
+	    else {
+	      Location l = new Location();
+	      try {
+	        l.setId(Long.parseLong(donorPanel));
+	        donor.setDonorPanel(l);
+	      } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        donor.setDonorPanel(null);
+	      }
+	    }
+	}
 
   public String getPreferredContactMethod() {
     ContactMethodType contactMethodType = donor.getPreferredContactMethod();
@@ -407,4 +404,41 @@ public void setDonorPanel(String donorPanel) {
       }
     }
   }
+  
+  public String getBloodAbo() {
+    if (StringUtils.isBlank(donor.getBloodAbo()) || donor.getBloodAbo() == null){
+      return "";
+    }
+    else{
+      return donor.getBloodAbo();
+    }
+  }
+  
+  public void setBloodAbo(String bloodAbo) {
+	  if (StringUtils.isBlank(bloodAbo)){
+		  donor.setBloodAbo(null);
+	  }
+	  else{
+		  donor.setBloodAbo(bloodAbo);
+	  }    
+  }
+  
+  public String getBloodRh() {
+    if (StringUtils.isBlank(donor.getBloodRh()) || donor.getBloodRh() == null){
+      return "";
+    }
+    else{
+      return donor.getBloodRh();
+    }
+  }
+  
+  public void setBloodRh(String bloodRh) {
+	  if (StringUtils.isBlank(bloodRh)){
+		  donor.setBloodRh(null);
+	  }
+	  else{
+		  donor.setBloodRh(bloodRh);
+	  }    
+  }
+
 }

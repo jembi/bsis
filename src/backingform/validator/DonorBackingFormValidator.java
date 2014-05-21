@@ -59,6 +59,7 @@ public class DonorBackingFormValidator implements Validator {
     form.setBirthDate();
     validateBirthDate(form, errors);    
     validateDonorHistory(form, errors);
+    validateBloodGroup(form, errors);
     utilController.commonFieldChecks(form, "donor", errors);
 	  }catch(Exception e){
 		  e.printStackTrace();
@@ -129,4 +130,18 @@ public class DonorBackingFormValidator implements Validator {
 
   private void validateDonorHistory(DonorBackingForm form, Errors errors) {
   }
+  
+  private void validateBloodGroup(DonorBackingForm form, Errors errors) {
+	  String bloodAbo = form.getBloodAbo();
+	  String bloodRh = form.getBloodRh();
+	  
+	  if(bloodAbo.isEmpty() && !bloodRh.isEmpty()){
+		  errors.rejectValue("donor.bloodAbo", "bloodGroup.incomplete", "Both ABO and Rh values are required");
+	  }
+	  if(!bloodAbo.isEmpty() && bloodRh.isEmpty()){
+		  errors.rejectValue("donor.bloodRh", "bloodGroup.incomplete", "Both ABO and Rh values are required");
+	  }
+	  
+  }
+
 }

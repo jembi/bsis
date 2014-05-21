@@ -11,27 +11,38 @@
 
 <link type="text/css" rel="stylesheet" href="css/collections.css" media="all"/>
 <script type="text/javascript" src="js/collections.js"></script>
-<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
+
 <div id="collectionsTab" class="leftPanel tabs">
   <ul>
+  	<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
     <li id="findOrAddCollectionsContent">
       <a href="findCollectionFormGenerator.html">Find Collections</a>
     </li>
+    </sec:authorize>  	
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION)">
     <li id="addCollectionsContent">
       <a href="addCollectionFormGenerator.html">Add Collection</a>
     </li>
+    </sec:authorize> 
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
     <li id="findCollectionBatchContent">
       <a href="findCollectionBatchFormGenerator.html">Find Collection Batch</a>
     </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
     <li id="createCollectionBatch">
       <a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
     </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
     <li id="addWorksheet">
       <a href="addWorksheetFormGenerator.html">Add worksheet</a>
     </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
     <li id="findCollectionsWorksheet">
       <a href="findWorksheetFormGenerator.html">Find/Print worksheet</a>
-    </li>
+    </li>    
+    </sec:authorize>
   </ul>
 </div>
-</sec:authorize>

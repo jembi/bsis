@@ -66,10 +66,9 @@ public class PermissionConstants {
 	public static final String ISSUE_COMPONENT= "Issue Component";
 	
 	// Inventory Permissions
-	public static final String COMPONET_LABELLING = "Component Labelling";
+	public static final String COMPONENT_LABELLING = "Component Labelling";
 	
-	
-	// Discars Permissions
+	// Discard Permissions
 	public static final String DISCARD_COMPONENT = "Discard Component";
 	public static final String VIEW_DISCARDS = "View Discards";
 	
@@ -83,7 +82,7 @@ public class PermissionConstants {
 	// Admin and Super-User Permissions
 	public static final String MANAGE_USERS = "Manage Users";
 	public static final String MANAGE_ROLES = "Manage Roles";
-	public static final String MANAGE_DONATION_SITES = "Manage Donation sites";
+	public static final String MANAGE_DONATION_SITES = "Manage Donation Sites";
 	public static final String MANAGE_DONATION_TYPES = "Manage Donation Types";
 	public static final String MANAGE_DONATION_CATEGORIES = "Manage Donation Categories";
 	public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
@@ -102,7 +101,7 @@ public class PermissionConstants {
 	public static final String MANAGE_TIPS = "Manage Tips";
 	public static final String MANAGE_REQUESTS = "Manage Requests";
 
-	//page control permissions
+	//Page Control Permissions
 	public static final String VIEW_DONOR_INFORMATION = "View Donor Information";
 	public static final String VIEW_DONATION_INFORMATION = "View Donation Information";
 	public static final String VIEW_MOBILE_CLINIC_INFORMATION = "View Mobile Clinic Information";
