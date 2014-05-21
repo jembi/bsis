@@ -2684,48 +2684,80 @@
 	  
 </changeSet>
 
+<!--For Issue #36[Add Donor Codes Functionality] -->
 <changeSet id="201405041130" author="srikanth">
 
-<sql> 
-   create table DonorCodeGroup (
-     id BIGINT NOT NULL auto_increment,
-     donorCodeGroup VARCHAR(255),
-     PRIMARY KEY(id)
-     )ENGINE=INNODB;
+
+       <createTable  tableName="DonorCodeGroup">
+          <column name="id" type="BIGINT" autoIncrement = "true">
+          	<constraints primaryKey="true" nullable="false" />
+          </column>
+           <column name="donorCodeGroup" type="varchar(255)"/> 
+       </createTable>
+      
+     
+       
+      
+     
+       <createTable  tableName="DonorCode">
+          <column name="id" type="BIGINT" autoIncrement="true">
+          	<constraints primaryKey="true" nullable="false" />
+         </column>
+          <column name="donorCode" type="varchar(255)"/> 
+         <column name="donorCodeGroupId" type="BIGINT">
+          	<constraints  nullable="false" />
+         </column>
+      </createTable>
+       <addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
+                                  baseTableName="DonorCode"
+                                  constraintName="fk_DonorCode_DonorCodeGroup"
+                                  referencedColumnNames="id"
+                                  referencedTableName="DonorCodeGroup"/>
+
+       
+      
+      <createTable  tableName="DonorDonorCode">
+         <column name="id" type="BIGINT" autoIncrement="true">
+          	<constraints primaryKey="true" nullable="false" />
+         </column>
+          <column name="donorId" type="BIGINT">
+          	<constraints  nullable="false" />
+          </column>
+          <column name="donorCodeId" type="BIGINT">
+          	<constraints  nullable="false" />
+          </column>
+          <column name="createdDate" type="TIMESTAMP"/>
+          <column name="lastUpdated" type="TIMESTAMP"/>
+          <column name="createdBy_id" type="SMALLINT"/>
+          <column name="lastUpdatedBy_id" type="SMALLINT"/>
+     </createTable>
+        <addForeignKeyConstraint baseColumnNames="donorCodeId"
+                                  baseTableName="DonorDonorCode"
+                                  constraintName="fk_DonorDonorCode_DonorCode"
+                                  referencedColumnNames="id"
+                                  referencedTableName="DonorCode"/>
+        <addForeignKeyConstraint baseColumnNames="donorId"
+                                  baseTableName="DonorDonorCode"
+                                  constraintName="fk_DonorDonorCode_Donor"
+                                  referencedColumnNames="id"
+                                  referencedTableName="Donor"/>
+   
+    <createTable  tableName="DonorDonorCode_AUD">
+         <column name="id" type="BIGINT" autoIncrement="true">
+          	<constraints primaryKey="true" nullable="false" />
+         </column>
+          <column name="REV" type="INT">
+          	<constraints  primaryKey="true" nullable="false" />
+          </column>
+          <column name="REVTYPE" type="TINYINT"/>
+          <column name="createdDate" type="TIMESTAMP"/>
+          <column name="lastUpdated" type="TIMESTAMP"/>
+          <column name="createdBy_id" type="SMALLINT"/>
+          <column name="lastUpdatedBy_id" type="SMALLINT"/>
+    </createTable>
     
-   create table DonorCode(
-    id BIGINT NOT NULL auto_increment,
-    donorCode VARCHAR(255),
-    donorCodeGroupId BIGINT NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY (donorCodeGroupId) REFERENCES DonorCodeGroup (id)
-	) ENGINE=INNODB;		
 
-	create table DonorDonorCode (
-     id BIGINT NOT NULL auto_increment,
-	 donorId  BIGINT NOT NULL,
-	 donorCodeId BIGINT NOT NULL ,
-	 createdDate TIMESTAMP,
-     lastUpdated TIMESTAMP,
-     createdBy_id SMALLINT,
-     lastUpdatedBy_id SMALLINT,
-   	 PRIMARY KEY(id),
-     FOREIGN KEY (donorId) REFERENCES Donor(id),
-     FOREIGN KEY (donorCodeId) REFERENCES DonorCode (id)
-	) ENGINE=INNODB;
-	
-	create table DonorDonorCode_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
 
-</sql>
 	   <insert tableName="DonorCodeGroup">
 	     <column name="id" value="1"></column>
 	     <column name="donorCodeGroup" value="Test Only"></column>
