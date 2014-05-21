@@ -366,7 +366,7 @@ public class CreateDataController {
       donor.setLastName(lastName);
       donor.setGender(gender);
       donor.setBirthDate(getRandomBirthDate());
-      donor.setAddress("address " + i);
+      donor.setHomeAddress("address " + i);
       donor.setCity(cities[random.nextInt(cities.length)]);
       donor.setCountry("Zambia");
       donor.setNotes("notes " + i);

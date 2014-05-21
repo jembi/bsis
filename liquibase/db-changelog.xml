@@ -2695,19 +2695,23 @@
 <!-- For issue 172[Add in additional donor demographic fields] --> 
 <changeSet id="201405200258" author="srikanth">
 
-   <sql> 
-   create table IdType(id BIGINT NOT NULL auto_increment,
-                       idType varchar(255) , 
-                       PRIMARY KEY (`id`));
-   create table PreferredLanguage(id BIGINT NOT NULL auto_increment,
-                       preferredLanguage varchar(255),
-                       PRIMARY KEY (`id`));
-  
+  <createTable  tableName="IdType">
+     <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+     </column>
+     <column name="idType" type="varchar(255)"/> 
+  </createTable>
 
-  </sql>
+  <createTable  tableName="PreferredLanguage">
+     <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+     </column>
+     <column name="preferredLanguage" type="varchar(255)"/> 
+  </createTable>
+
 
   <dropColumn  columnName="phoneNumber" tableName="donor"/>
- <insert tableName="preferredLanguage">
+     <insert tableName="preferredLanguage">
      <column name="id" value="1"></column>
      <column name="preferredLanguage" value="English"></column>
   </insert>
@@ -2848,5 +2852,71 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
  </insert>
+<insert tableName="FormField">
+			<column name="form" value="donor"></column>
+			<column name="FIELD" value="homeAddress"></column>
+			<column name="defaultDisplayName" value="Home Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+ <insert tableName="FormField">
+			<column name="form" value="donor"></column>
+			<column name="FIELD" value="workAddress"></column>
+			<column name="defaultDisplayName" value="Work Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+
+ <insert tableName="FormField">
+			<column name="form" value="donor"></column>
+			<column name="FIELD" value="postalAddress"></column>
+			<column name="defaultDisplayName" value="Postal Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+ <insert tableName="FormField">
+			<column name="form" value="donor"></column>
+			<column name="FIELD" value="emailId"></column>
+			<column name="defaultDisplayName" value="Email"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+
 </changeSet>
 </databaseChangeLog>	

@@ -12,7 +12,6 @@ import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import repository.DonorRepository;
 import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
 public class DonorBackingForm {
@@ -31,6 +30,8 @@ public class DonorBackingForm {
   private Boolean ageFormatCorrect;
 
   private String ageSpecified;
+  
+  
 
   public DonorBackingForm() {
     donor = new Donor();
@@ -120,9 +121,6 @@ public class DonorBackingForm {
     return donor.getGender().toString();
   }
 
-  public String getAddress() {
-    return donor.getAddress();
-  }
 
   public String getCity() {
     return donor.getCity();
@@ -144,9 +142,18 @@ public class DonorBackingForm {
     return donor.getCountry();
   }
 
-  public String getPhoneNumber() {
-    return donor.getPhoneNumber();
+  public String getMobileNumber() {
+    return donor.getMobileNumber();
   }
+  
+   public String getHomeNumber() {
+    return donor.getHomeNumber();
+  }
+
+    public String getWorkNumber() {
+    return donor.getWorkNumber();
+  }
+
 
   public Date getLastUpdated() {
     return donor.getLastUpdated();
@@ -208,9 +215,36 @@ public class DonorBackingForm {
 	  donor.setBirthDateEstimated(birthDateEstimated);
   }
 
-  public void setAddress(String address) {
-    donor.setAddress(address);
+  public void setHomeAddress(String homeAddress) {
+    donor.setHomeAddress(homeAddress);
   }
+  
+  public void setPostalAddress(String postalAddress) {
+    donor.setPostalAddress(postalAddress);
+  }
+
+    
+  public void setWorkAddress(String workAddress) {
+    donor.setWorkAddress(workAddress);
+  }
+  
+public String getHomeAddress() {
+    return donor.getHomeAddress();
+}
+
+public String getPostalAddress() {
+    return donor.getPostalAddress();
+}
+public String getWorkAddress() {
+    return donor.getWorkAddress();
+}
+    
+  
+  public void sPostalAddress(String postalAddress) {
+    donor.setPostalAddress(postalAddress);
+  }
+
+  
 
   public void setCity(String city) {
     donor.setCity(city);
@@ -232,8 +266,16 @@ public class DonorBackingForm {
     donor.setCountry(country);
   }
 
-  public void setPhoneNumber(String contactNumber) {
-    donor.setPhoneNumber(contactNumber);
+  public void setMobileNumber(String mobileNumber) {
+    donor.setMobileNumber(mobileNumber);
+  }
+  
+   public void setHomeNumber(String homeNumber) {
+    donor.setHomeNumber(homeNumber);
+  }
+   
+    public void setWorkNumber(String workNumber) {
+    donor.setWorkNumber(workNumber);
   }
 
   public void setLastUpdated(Date lastUpdated) {
@@ -326,13 +368,6 @@ public class DonorBackingForm {
     donor.setNationalID(nationalID);
   }
 
-  public String getOtherPhoneNumber() {
-    return donor.getOtherPhoneNumber();
-  }
-
-  public void setOtherPhoneNumber(String otherPhoneNumber) {
-    donor.setOtherPhoneNumber(otherPhoneNumber);
-  }
 
   public String getDonorPanel() {
     Location donorPanel = donor.getDonorPanel();
@@ -365,6 +400,14 @@ public class DonorBackingForm {
 		this.dayOfMonth = dayOfMonth;
 	}
 	
+        public String getEmailId(){
+            return donor.getEmailID();
+        }
+        
+        public void setEmailId(String emailId){
+            donor.setEmailID(emailId);
+        }
+        
 	public void setDonorPanel(String donorPanel) {
 	    if (StringUtils.isBlank(donorPanel)) {
 	      donor.setDonorPanel(null);

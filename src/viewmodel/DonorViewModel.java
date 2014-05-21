@@ -76,15 +76,13 @@ public class DonorViewModel {
 	  return donor.getBirthDateEstimated();
   }
 
-  public String getAddress() {
-    return donor.getAddress();
-  }
+  
 
   public String getCity() {
     return donor.getCity();
   }
 
-  public String getProvince() {
+  public String getProvince() { 
     return donor.getProvince();
   }
 
@@ -143,14 +141,30 @@ public class DonorViewModel {
   public DonorStatus getDonorStatus() {
     return donor.getDonorStatus();
   }
+ 
 
-  public String getPhoneNumber() {
-    return donor.getPhoneNumber();
+   public String getMobileNumber() {
+    return donor.getMobileNumber();
+  }
+  
+   public String getHomeNumber() {
+    return donor.getHomeAddress();
   }
 
-  public String getOtherPhoneNumber() {
-    return donor.getOtherPhoneNumber();
+    public String getWorkNumber() {
+    return donor.getWorkNumber();
   }
+
+public String getHomeAddress() {
+    return donor.getHomeAddress();
+}
+
+public String getPostalAddress() {
+    return donor.getPostalAddress();
+}
+public String getWorkAddress() {
+    return donor.getWorkAddress();
+}
 
   public String getNationalID() {
     return donor.getNationalID();

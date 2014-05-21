@@ -939,7 +939,7 @@ public class DonorRepositoryTest {
 	 */
 	public void setBackingFormValue(DonorBackingForm donorBackingForm) {
 		Date date = new Date();
-		donorBackingForm.setAddress("myaddress");
+		donorBackingForm.setHomeAddress("myaddress");
 		donorBackingForm.setFirstName("firstname");
 		donorBackingForm.setMiddleName("middlename");
 		donorBackingForm.setLastName("lastname");
@@ -958,8 +958,8 @@ public class DonorRepositoryTest {
 		donorBackingForm.setDonorPanel("1");
 		donorBackingForm.setNationalID("1111");
 		donorBackingForm.setNotes("Notes");
-		donorBackingForm.setOtherPhoneNumber("9999999999");
-		donorBackingForm.setPhoneNumber("8888888888");
+		donorBackingForm.setMobileNumber("9999999999");
+		donorBackingForm.setWorkNumber("8888888888");
 		donorBackingForm.setPreferredContactMethod("1");
 		donorBackingForm.setProvince("Province");
 		donorBackingForm.setState("State");
@@ -977,7 +977,7 @@ public class DonorRepositoryTest {
 	 * @param donorBackingForm
 	 */
 	public void setBackingUpdateFormValue(DonorBackingForm donorBackingForm) {
-		donorBackingForm.setAddress("address_update");
+		donorBackingForm.setHomeAddress("address_update");
 		donorBackingForm.setFirstName("firstName_update");
 		donorBackingForm.setMiddleName("middlename_update");
 		donorBackingForm.setLastName("lastname_update");
@@ -990,8 +990,8 @@ public class DonorRepositoryTest {
 		donorBackingForm.setDonorPanel("2");
 		donorBackingForm.setNationalID("1212");
 		donorBackingForm.setNotes("Notes_update");
-		donorBackingForm.setOtherPhoneNumber("9878787878");
-		donorBackingForm.setPhoneNumber("874525452");
+		donorBackingForm.setMobileNumber("9878787878");
+		donorBackingForm.setWorkNumber("874525452");
 		donorBackingForm.setPreferredContactMethod("2");
 		donorBackingForm.setProvince("Province_update");
 		donorBackingForm.setState("State_update");
@@ -1003,7 +1003,7 @@ public class DonorRepositoryTest {
 
 	public Donor copyDonor(Donor donor) {
 		Donor copyDonor = new Donor();
-		copyDonor.setAddress(donor.getAddress());
+		copyDonor.setHomeAddress(donor.getHomeAddress());
 		copyDonor.setAge(donor.getAge());
 		copyDonor.setBirthDate(donor.getBirthDate());
 		copyDonor.setBirthDateEstimated(donor.getBirthDateEstimated());
@@ -1024,8 +1024,8 @@ public class DonorRepositoryTest {
 		copyDonor.setMiddleName(donor.getMiddleName());
 		copyDonor.setNationalID(donor.getNationalID());
 		copyDonor.setNotes(donor.getNotes());
-		copyDonor.setOtherPhoneNumber(donor.getOtherPhoneNumber());
-		copyDonor.setPhoneNumber(donor.getPhoneNumber());
+		copyDonor.setMobileNumber(donor.getMobileNumber());
+		copyDonor.setHomeNumber(donor.getHomeNumber());
 		copyDonor.setPreferredContactMethod(donor.getPreferredContactMethod());
 		copyDonor.setProvince(donor.getProvince());
 		copyDonor.setState(donor.getState());
