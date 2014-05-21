@@ -1024,35 +1024,33 @@ public class DonorRepositoryTest {
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
         
-        @Test
+         @Test
 	/**
 	 * Test passes if DonorCodeGroup is saved in  database
 	 */
-        public void saveDonorCodeGroup_ShouldExistInDatabasae_OnSave(){
+        public void saveDonorCodeGroup_shouldPersist(){
             DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
             donorCodeGroup.setDonorCodeGroup("Test Only");
-            donorCodeGroup.setDonorCodeGroup(donorBirthdate);
             donorRepository.saveDonorCodeGroup(donorCodeGroup);
-            assertNotNull("Failed to save DonorCodeGroup object ",donorRepository.getAllDonorCodeGroups().get(1));
+            assertNotNull("Failed to save DonorCodeGroup object ",donorCodeGroup.getId());
             
         }
        
-  
         
         @Test
 	/**
 	 * Test passes if DonorDonorCode is saved in database
 	 */
-        public void saveDonorDonorCode_ShouldExistInDatabasae_OnSave(){
+        public void saveDonorDonorCode_shouldPersist(){
             DonorDonorCode  donorDonorCode =  new DonorDonorCode();
 	    donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(1l));	 
             donorDonorCode.setDonorId(donorRepository.findDonorById(5l));
             donorRepository.saveDonorDonorCode(donorDonorCode);
-            assertTrue(!donorRepository.findDonorById(5l).getDonorCodes().isEmpty());
+            assertNotNull("Failed to save DonorDonorCode object ",donorDonorCode.getId());
             
         }
-       
         
+       
         @Test
 	/**
 	 * Test passes if donor is assigned with a donor code
@@ -1066,7 +1064,7 @@ public class DonorRepositoryTest {
 	 * Test  will pass if donor  code groups exists  
         */
         public void getAllDonorCodeGroups_ShouldNotReturnEmptyList(){
-            assertTrue("Failed To Load alll donorCodeGroups" ,donorRepository.getAllDonorCodeGroups().size()>0);
+            assertTrue("Failed To Load alll donorCodeGroups" ,!donorRepository.getAllDonorCodeGroups().isEmpty());
         }
         
         

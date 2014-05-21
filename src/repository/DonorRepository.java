@@ -442,10 +442,10 @@ public class DonorRepository {
   //Donor Code & Code Group Methods
  
 
-  public DonorCodeGroup  saveDonorCodeGroup(DonorCodeGroup dcg) {
-	     DonorCodeGroup donorCodeGroup = em.merge(dcg);
+  public void  saveDonorCodeGroup(DonorCodeGroup donorCodeGroup) {
+	    em.persist(donorCodeGroup);
 	    em.flush();
-            return donorCodeGroup;
+          
 	  }
 
 
