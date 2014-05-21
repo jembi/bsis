@@ -462,8 +462,9 @@ public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
 	   em.flush();
 	  }
 
-public List<DonorCodeGroup> findDonorCodeGroupsByDonor(Donor donor){
-	List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
+public List<DonorCodeGroup> findDonorCodeGroupsByDonorId(Long donorId){
+	Donor donor = em.find(Donor.class, donorId);
+        List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
 	List<DonorCode> donorCodes = donor.getDonorCodes();
 	for (DonorCode donorCode : donorCodes) 
 		donorCodeGroups.add(donorCode.getDonorCodeGroup());
@@ -490,11 +491,11 @@ public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id){
 	
 }
 
-public List<DonorDonorCode > findDonorDonorCodesOfDonor(Donor donor){
+public List<DonorDonorCode > findDonorDonorCodesOfDonorByDonorId(Long donorId){
 	
 	 TypedQuery<DonorDonorCode> query = em.createQuery(
-		        "SELECT dc FROM DonorDonorCode dc where donorId = :donor", DonorDonorCode.class);
-	 query.setParameter("donor",donor);
+		        "SELECT dc FROM DonorDonorCode dc where donorId = :donorId", DonorDonorCode.class);
+	 query.setParameter("donorId",em.find(Donor.class, donorId));
 	 return query.getResultList();
 }
 

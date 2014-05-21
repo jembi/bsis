@@ -84,7 +84,7 @@ public class DonorCodeController {
 		 donorDonorCode.setDonorId(donorRepository.findDonorById(form.getDonorId()));
 		 donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(form.getDonorCodeId()));
 		 donorRepository.saveDonorDonorCode(donorDonorCode);
-		 modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(form.getDonorId())));
+		 modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(form.getDonorId()));
 	         return modelAndView;
 		  
 	  }
@@ -94,7 +94,7 @@ public class DonorCodeController {
 	  public ModelAndView donorCodesTable(HttpServletRequest request,Long donorId){
 		
 		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
-		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(donorId)));
+		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId));
 		  return modelAndView;
 		  
 		  
@@ -105,7 +105,7 @@ public class DonorCodeController {
 	  public ModelAndView deleteDomorCode(@RequestParam(value="id") Long id){
 		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
 		  Donor donor = donorRepository.deleteDonorCode(id);
-		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonor(donorRepository.findDonorById(donor.getId())));
+		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(donor.getId()));
 		  return modelAndView;
 		  
 	  }

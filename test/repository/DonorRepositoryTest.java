@@ -1073,8 +1073,7 @@ public class DonorRepositoryTest {
 	 * Test  will pass if donor donor code groups assigned to donor
 	 */
        public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted(){
-           Donor existingDonor = donorRepository.findDonorById(1l);
-           assertTrue(" Failed To load donorCodeGroups of donor " ,!donorRepository.findDonorCodeGroupsByDonor(existingDonor).isEmpty());
+           assertTrue(" Failed To load donorCodeGroups of donor " ,!donorRepository.findDonorCodeGroupsByDonorId(1l).isEmpty());
        }
        
        @Test
@@ -1082,8 +1081,7 @@ public class DonorRepositoryTest {
 	 * Test  passes if donor codes assigned to donor  
 	 */
        public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted(){
-           Donor existingDonor = donorRepository.findDonorById(1l);
-           assertTrue(" Failed To load sonorCodes of donor " ,!donorRepository.findDonorDonorCodesOfDonor(existingDonor).isEmpty());
+           assertTrue(" Failed To load sonorCodes of donor " ,!donorRepository.findDonorDonorCodesOfDonorByDonorId(1l).isEmpty());
        }
        
        @Test
