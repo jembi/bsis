@@ -2,31 +2,6 @@
 	<user id="1" emailId="admin" firstName="admin" isactive="1"
 		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
 
-	<role id="1" name="ROLE_LOGIN" />
-	<role id="2" name="ROLE_VIEW_DONOR_INFORMATION" />
-	<role id="3" name="ROLE_VIEW_TEST_INFORMATION" />
-	<role id="4" name="ROLE_EDIT_INFORMATION" />
-	<role id="5" name="ROLE_EDIT_CONFIGURATION" />
-
-	<Permission id="1" name="PERM_LOGIN" />
-	<Permission id="2" name="PERM_VIEW_DONOR_INFORMATION" />
-	<Permission id="3" name="PERM_VIEW_TEST_INFORMATION" />
-	<Permission id="4" name="PERM_EDIT_INFORMATION" />
-	<Permission id="5" name="PERM_EDIT_CONFIGURATION" />
-
-	<user_role users_id="1" roles_id="1" />
-	<user_role users_id="1" roles_id="2" />
-	<user_role users_id="1" roles_id="3" />
-	<user_role users_id="1" roles_id="4" />
-	<user_role users_id="1" roles_id="5" />
-
-	<Permission_Role roles_id="1" permissions_id="2" />
-	<Permission_Role roles_id="1" permissions_id="3" />
-	<Permission_Role roles_id="1" permissions_id="4" />
-	<Permission_Role roles_id="1" permissions_id="5" />
-	<Permission_Role roles_id="1" permissions_id="1" />
-
-
 	<location id="1" isCollectionCenter="1" isCollectionSite="0"
 		isDeleted="0" isDonorPanel="0" isMobileSite="0" isUsageSite="0" notes=""
 		name="Lusaka" />
@@ -62,6 +37,7 @@
 		isDeleted="0" />
 	<contactmethodtype id="6" contactMethodType="Do not Contact"
 		isDeleted="0" />
+		
 	<donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
@@ -251,12 +227,29 @@
 		deferredDonor_id="4" isVoided="false" /> <donordeferral id="6" deferralReasonText="" 
 		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}" deferralReason_id="2" 
 		deferredBy_id="6" deferredDonor_id="5" isVoided="false" /> -->
+	
 	<bloodbagtype id="1" bloodBagType="Single" canPool=""
 		canSplit="" isDeleted="0"></bloodbagtype>
 	<bloodbagtype id="2" bloodBagType="Triple" canPool=""
 		canSplit="" isDeleted="0"></bloodbagtype>
 	<bloodbagtype id="3" bloodBagType="Pedi" canPool=""
 		canSplit="" isDeleted="0"></bloodbagtype>
+		
+	<producttype id="1" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Whole Blood"
+		productTypeNameShort="Whole Blood"></producttype>
+
+	<producttype id="2" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0"
+		productType="Red Cell Concentrate" productTypeNameShort="RCC"></producttype>
+
+	<producttype id="3" description="" expiresAfter="365"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0"
+		productType="Fresh Frozen Plasma" productTypeNameShort="FFP"></producttype>
+
+	<producttype id="4" description="" expiresAfter="5"
+		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Platelets"
+		productTypeNameShort="Platelets"></producttype>
 
 
 	<donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>
@@ -309,21 +302,7 @@
 		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
 		donorPulse="60"></collectedsample>
 
-	<producttype id="1" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Whole Blood"
-		productTypeNameShort="Whole Blood"></producttype>
-
-	<producttype id="2" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0"
-		productType="Red Cell Concentrate" productTypeNameShort="RCC"></producttype>
-
-	<producttype id="3" description="" expiresAfter="365"
-		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0"
-		productType="Fresh Frozen Plasma" productTypeNameShort="FFP"></producttype>
-
-	<producttype id="4" description="" expiresAfter="5"
-		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Platelets"
-		productTypeNameShort="Platelets"></producttype>
+	
 
 
 	<worksheettype id="1" context="RECORD_BLOOD_TYPING_TESTS"

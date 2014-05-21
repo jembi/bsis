@@ -3,6 +3,7 @@ package model.product;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -54,8 +55,9 @@ public class Product implements ModificationTracker {
   @ManyToOne(optional=true, fetch=FetchType.LAZY)
   private CollectedSample collectedSample;
 
-  @ProductTypeExists
-  @ManyToOne
+  //@ProductTypeExists
+  //@ManyToOne
+  @ManyToOne(targetEntity = Product.class, cascade=CascadeType.ALL)
   private ProductType productType;
 
   @Temporal(TemporalType.TIMESTAMP)
