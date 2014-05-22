@@ -2710,13 +2710,15 @@
   </createTable>
 
 
-  <dropColumn  columnName="phoneNumber" tableName="donor"/>
-     <insert tableName="preferredLanguage">
+  <dropColumn  columnName="address" tableName="Donor"/>
+  <dropColumn  columnName="phoneNumber" tableName="Donor"/>
+ 
+ 
+  <insert tableName="preferredLanguage">
      <column name="id" value="1"></column>
      <column name="preferredLanguage" value="English"></column>
   </insert>
-
-   <insert tableName="preferredLanguage">
+  <insert tableName="PreferredLanguage">
      <column name="id" value="2"></column>
      <column name="preferredLanguage" value="Afrikan"></column>
   </insert>
@@ -2733,45 +2735,59 @@
 
  <insert tableName="IdType">
      <column name="id" value="3"></column>
-     <column name="idType" value="Driving License "></column>
+     <column name="idType" value="Driving License"></column>
  </insert>
 
- <addColumn tableName="donor">
-            <column name="emailId" type="varchar(255)" defaultValue=""></column>
+
+
+<addColumn tableName="Donor">
+            <column name="idType_id" type="BIGINT" defaultValue="NULL"></column>
+</addColumn>
+
+ <addForeignKeyConstraint baseColumnNames="idType_id"
+            baseTableName="donor"
+            constraintName="fk_donor_Id"
+            referencedColumnNames="id"
+            referencedTableName="IdType"/>
+
+<addColumn tableName="Donor">
+            <column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
+</addColumn>
+
+
+ <addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
+            baseTableName="Donor"
+            constraintName="fk_donor_preferredLanguage"
+            referencedColumnNames="id"
+            referencedTableName="PreferredLanguage"/>
+
+
+ <addColumn tableName="Donor">
+            <column name="homeAddress" type="varchar(255)" ></column>
  </addColumn>
 
-<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Identification Number" />
-    		<where>field = "collectionNumber"</where>
-		</update>
- <addColumn tableName="donor">
-            <column name="mobileNumber" type="varchar(255)" defaultValue=""></column>
+ <addColumn tableName="Donor">
+            <column name="postalAddress" type="varchar(255)"></column>
  </addColumn>
-
- <addColumn tableName="donor">
-            <column name="homeNumber" type="varchar(255)" defaultValue=""></column>
- </addColumn>
-
-<addColumn tableName="donor">
-            <column name="workNumber" type="varchar(255)" defaultValue=""></column>
+ <addColumn tableName="Donor">
+            <column name="workAddress" type="varchar(255)" ></column>
  </addColumn>
 
 
-<insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="emailId"></column>
-			<column name="defaultDisplayName" value="Email ID"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+<addColumn tableName="Donor">
+            <column name="workNumber" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="homeNumber" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="mobileNumber" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="idNumber" type="varchar(255)" ></column>
+</addColumn>
+
+
 <insert tableName="FormField">
 			<column name="form" value="donor"></column>
 			<column name="FIELD" value="idType"></column>
@@ -2823,7 +2839,7 @@
  <insert tableName="FormField">
 			<column name="form" value="donor"></column>
 			<column name="FIELD" value="homeNumber"></column>
-			<column name="defaultDisplayName" value="Mobile Number"></column>
+			<column name="defaultDisplayName" value="Home Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -2840,7 +2856,7 @@
  <insert tableName="FormField">
 			<column name="form" value="donor"></column>
 			<column name="FIELD" value="workNumber"></column>
-			<column name="defaultDisplayName" value="Mobile Number"></column>
+			<column name="defaultDisplayName" value="Work Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -2903,7 +2919,7 @@
 
  <insert tableName="FormField">
 			<column name="form" value="donor"></column>
-			<column name="FIELD" value="emailId"></column>
+			<column name="FIELD" value="email"></column>
 			<column name="defaultDisplayName" value="Email"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>

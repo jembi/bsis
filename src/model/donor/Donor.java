@@ -100,6 +100,8 @@ public class Donor implements ModificationTracker {
   @Column(length=10)
   private String bloodAbo;
 
+
+  
   @Column(length=10)
   private String bloodRh;
 
@@ -154,6 +156,9 @@ public class Donor implements ModificationTracker {
   @Temporal(TemporalType.TIMESTAMP)
   private Date dateOfLastDonation;
   
+  @Column
+  private String homeAddress;
+  
   /**
    * Never delete the rows. Just mark them as deleted.
    */
@@ -181,8 +186,21 @@ public class Donor implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private PreferredLanguage  preferredLanguage;
-
   
+  private String idNumber;
+  
+  private String mobileNumber;
+
+  private String homeNumber;
+ 
+  private String workNumber;
+
+   private String postalAddress;
+   
+  
+    
+
+  private String workAddress;
   public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
@@ -290,6 +308,7 @@ public class Donor implements ModificationTracker {
     return collectedSamples;
   }
 
+   
   public void setCollectedSamples(List<CollectedSample> collectedSamples) {
     this.collectedSamples = collectedSamples;
   }
@@ -327,32 +346,59 @@ public class Donor implements ModificationTracker {
     return contactInformation.getZipcode();
   }
 
-  public void setHomeAddress(String homeAddress) {
-    contactInformation.setHomeAddress(homeAddress);
-  }
-  
-  public void setPostalAddress(String postalAddress) {
-    contactInformation.setPostalAddress(postalAddress);
-  }
-  
-  public void setWorkAddress(String workAddress) {
-    contactInformation.setWorkAddress(workAddress);
-  }
-  
-  public String getHomeAddress() {
-      return contactInformation.getHomeAddress();
-  }
-  
-  public String getPostalAddress() {
-      return contactInformation.getPostalAddress();
-    
-  }
-  
-  public String getWorkAddress() {
-    return contactInformation.getWorkAddress();
-  }
   
   
+
+   public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getHomeNumber() {
+        return homeNumber;
+    }
+
+    public void setHomeNumber(String homeNumber) {
+        this.homeNumber = homeNumber;
+    }
+
+    public String getWorkNumber() {
+        return workNumber;
+    }
+
+    public void setWorkNumber(String workNumber) {
+        this.workNumber = workNumber;
+    }
+
+    public String getPostalAddress() {
+        return postalAddress;
+    }
+
+    public void setPostalAddress(String postalAddress) {
+        this.postalAddress = postalAddress;
+    }
+
+
+
+    public String getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(String workAddress) {
+        this.workAddress = workAddress;
+    }
+
 
   public void setCity(String city) {
     contactInformation.setCity(city);
@@ -378,29 +424,16 @@ public class Donor implements ModificationTracker {
     contactInformation.setZipcode(zipcode);
   }
 
-  public String getMobileNumber(){
-      return contactInformation.getMobileNumber();
-  }
+
   
-  public String getWorkNumber(){
-      return contactInformation.getWorkNumber();
-  }
-  
-  public String getHomeNumber(){
-      return contactInformation.getWorkNumber();
-  }
-  
-  public void setMobileNumber(String mobileNumber){
-     contactInformation.setMobileNumber(mobileNumber);
-  }
-  
-  public void setHomeNumber(String homeNumber){
-     contactInformation.setMobileNumber(homeNumber);
-  }
- public void setWorkNumber(String workNumber){
-     contactInformation.setMobileNumber(workNumber);
-  }
-  
+ public void setIdNumber(String idNumber){
+     this.idNumber = idNumber;
+ }
+ 
+ public String getIdNumber(){
+     return idNumber;
+ }
+ 
   public Date getLastUpdated() {
     return modificationTracker.getLastUpdated();
   }
@@ -572,13 +605,7 @@ public class Donor implements ModificationTracker {
         this.preferredLanguage = preferredLanguage;
     }
 
-    public String getEmailID() {
-        return contactInformation.getEmailId();
-    }
 
-    public void setEmailID(String emailID) {
-        contactInformation.setEmailId(emailID);
-    }
   
   
 }

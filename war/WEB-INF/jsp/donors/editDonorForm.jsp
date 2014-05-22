@@ -257,12 +257,26 @@
           <form:errors class="formError" path="age" delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${donorFields.address.hidden != true }">
+        <c:if test="${donorFields.homeAddress.hidden != true }">
         <div>
-          <form:label path="address" class="labelForTextArea">${donorFields.address.displayName}</form:label>
-          <form:textarea path="address" />
-          <form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
+          <form:label path="homeAddress" class="labelForTextArea">${donorFields.homeAddress.displayName}</form:label>
+          <form:textarea path="homeAddress" />
+          <form:errors class="formError" path="donor.homeAddress" delimiter=", "></form:errors>
         </div>
+      <c:if test="${donorFields.postalAddress.hidden != true }">
+        <div>
+          <form:label path="homeAddress" class="labelForTextArea">${donorFields.postalAddress.displayName}</form:label>
+          <form:textarea path="postalAddress" />
+          <form:errors class="formError" path="donor.postalAddress" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+            <c:if test="${donorFields.workAddress.hidden != true }">
+        <div>
+          <form:label path="workAddress" class="labelForTextArea">${donorFields.workAddress.displayName}</form:label>
+          <form:textarea path="workAddress" />
+          <form:errors class="formError" path="donor.workAddress" delimiter=", "></form:errors>
+        </div>
+      </c:if>
       </c:if>
       <c:if test="${donorFields.city.hidden != true }">
         <div>
@@ -308,25 +322,34 @@
           </ul>
         </div>
       </c:if>
-      <c:if test="${donorFields.phoneNumber.hidden != true }">
+      <c:if test="${donorFields.mobileNumber.hidden != true }">
         <div>
-          <form:label path="phoneNumber">${donorFields.phoneNumber.displayName}</form:label>
-          <form:input path="phoneNumber" />
+          <form:label path="mobileNumber">${donorFields.mobileNumber.displayName}</form:label>
+          <form:input path="mobileNumber" />
           <ul>
-            <form:errors class="formError" path="donor.phoneNumber" delimiter=", "></form:errors>
+            <form:errors class="formError" path="donor.mobileNumber" delimiter=", "></form:errors>
           </ul>
         </div>
       </c:if>
-      <c:if test="${donorFields.otherPhoneNumber.hidden != true }">
+  
+        <c:if test="${donorFields.homeNumber.hidden != true }">
         <div>
-          <form:label path="otherPhoneNumber">${donorFields.otherPhoneNumber.displayName}</form:label>
-          <form:input path="otherPhoneNumber" />
+          <form:label path="homeNumber">${donorFields.homeNumber.displayName}</form:label>
+          <form:input path="homeNumber" />
           <ul>
-            <form:errors class="formError" path="donor.otherPhoneNumber" delimiter=", "></form:errors>
+            <form:errors class="formError" path="donor.homeNumber" delimiter=", "></form:errors>
           </ul>
         </div>
       </c:if>
-
+      <c:if test="${donorFields.workNumber.hidden != true }">
+        <div>
+          <form:label path="workNumber">${donorFields.workNumber.displayName}</form:label>
+          <form:input path="workNumber" />
+          <ul>
+            <form:errors class="formError" path="donor.workNumber" delimiter=", "></form:errors>
+          </ul>
+        </div>
+      </c:if>
       <c:if test="${donorFields.preferredContactMethod.hidden != true }">
         <div>
           <form:label path="preferredContactMethod">${donorFields.preferredContactMethod.displayName}</form:label>
@@ -340,7 +363,16 @@
           <form:errors class="formError" path="donor.preferredContactMethod" delimiter=", "></form:errors>
         </div>
       </c:if>
-
+       <c:if test="${donorFields.emailId.hidden != true }">
+        <div>
+          <form:label path="emailId">${donorFields.emailId.displayName}</form:label>
+          <form:input path="emailId" />
+          <ul>
+            <form:errors class="formError" path="donor.emailId" delimiter=", "></form:errors>
+          </ul>
+        </div>
+      </c:if>
+        
       <c:if test="${donorFields.donorPanel.hidden != true }">
         <div>
           <form:label path="donorPanel">${donorFields.donorPanel.displayName}</form:label>

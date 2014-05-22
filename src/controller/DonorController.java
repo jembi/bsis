@@ -549,6 +549,8 @@ public class DonorController {
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
+    m.put("languages", donorRepository.getAllLanguages());
+    m.put("idTypes", donorRepository.getAllIdTypes());
   }
 
   /**

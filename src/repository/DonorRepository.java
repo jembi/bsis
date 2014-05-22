@@ -36,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
 import controller.UtilController;
+import model.idtype.IdType;
+import model.preferredlanguage.PreferredLanguage;
 
 @Repository
 @Transactional
@@ -297,6 +299,20 @@ public class DonorRepository {
 	    return donor;
 	  }
 */
+  
+ public List<PreferredLanguage> getAllLanguages(){
+     TypedQuery<PreferredLanguage> query = em.createQuery(
+        "SELECT l FROM PreferredLanguage l",PreferredLanguage.class);
+    return query.getResultList();
+ }
+ 
+ 
+ public List<IdType> getAllIdTypes(){
+     TypedQuery<IdType> query = em.createQuery(
+        "SELECT id FROM IdType id",IdType.class);
+    return query.getResultList();
+ }
+ 
   public List<DeferralReason> getDeferralReasons() {
     String queryString = "SELECT d from DeferralReason d WHERE d.isDeleted=:isDeleted";
     TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);

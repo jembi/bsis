@@ -923,7 +923,23 @@ public class DonorRepositoryTest {
 		assertTrue("Latest deferal date should be '" + str_currentDate + "'.",
 				str.equals(str_currentDate));
 	}
+        
+        @Test
+	/**
+	 * Should return Non EMpty Language List  
+	 */
+        public void getAllLanguages_shuouldReturnNonEmptyList(){
+            assertTrue("Languages List  should not be empty", !donorRepository.getAllLanguages().isEmpty());
+        }
 
+        @Test
+	/**
+	 * Should return Non EMpty ID Types  List  
+	 */
+        public void getAllIdTypes_shuouldReturnNonEmptyList(){
+            assertTrue("IDTypes List  should not be empty", !donorRepository.getAllIdTypes().isEmpty());
+        }
+        
 	public void setPaginationParam(Map<String, Object> pagingParams) {
 		pagingParams.put("sortColumn", "id");
 		pagingParams.put("start", "0");

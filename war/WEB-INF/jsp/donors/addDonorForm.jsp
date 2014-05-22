@@ -126,8 +126,8 @@
 
 						if ("${firstTimeRender}" == "true") {
 							$("#${mainContentId}").find(
-									'textarea[name="address"]').html(
-									"${donorFields.address.defaultValue}");
+									'textarea[name="homeAddress"]').html(
+									"${donorFields.homeAddress.defaultValue}");
 							$("#${mainContentId}").find(
 									'textarea[name="notes"]').html(
 									"${donorFields.notes.defaultValue}");
@@ -139,6 +139,17 @@
 									getPreferredContactMethodSelector(),
 									"${donorFields.preferredContactMethod.defaultValue}");
 						}
+                                                //Hiding IDNumber button if ID type is not selected
+                                                if ($('#idType').val().trim().length === 0)
+                                                $('#idNumber').hide();   
+                                                $('#idType').change(function(){
+                                                              if ($('#idType').val().trim().length > 0)
+                                                                     $('#idNumber').show();
+                                                              else
+                                                                  
+                                                                     $('#idNumber').hide();         
+                                                                                 
+                                                                             });
 
 					});
 </script>
@@ -213,16 +224,8 @@
 					<form:errors class="formError" path="donor.gender" delimiter=", "></form:errors>
 				</div>
 			</c:if>
-			<c:if test="${donorFields.nationalID.hidden != true }">
-				<div>
-					<form:label path="nationalID">${donorFields.nationalID.displayName}</form:label>
-					<form:input path="nationalID"
-						value="${firstTimeRender ? donorFields.nationalID.defaultValue : ''}" />
-					<form:errors class="formError" path="donor.nationalID"
-						delimiter=", "></form:errors>
-				</div>
-			</c:if>
-
+			
+                   
                <div>
                
                <c:if test="${donorFields.birthDate.hidden != true }">
@@ -253,7 +256,7 @@
 		      </c:if>   
 
 		   <c:if test="${donorFields.birthDateEstimated.hidden != true }">
-          	${donorFields.birthDateEstimated.displayName}
+                 	${donorFields.birthDateEstimated.displayName}
 			<form:checkbox path="birthDateEstimated" class="birthDateEstimated"
 						style="width: auto; position: relative;" />
 					<form:errors class="formError" path="donor.birthDateEstimated"
@@ -264,7 +267,7 @@
 			
 				<form:errors class="formError" path="donor.birthDate">
 				</form:errors>
-			</div>
+                   </div>
 
 			<c:if test="${donorFields.age.hidden != true }">
 				<div>
@@ -275,11 +278,51 @@
 					<form:errors class="formError" path="age" delimiter=", "></form:errors>
 				</div>
 			</c:if>
-			<c:if test="${donorFields.address.hidden != true }">
+                  	<c:if test="${donorFields.preferredLanguage.hidden != true }">
+                        <div>
+                          <form:label path="preferredLanguage">${donorFields.preferredLanguage.displayName}</form:label>
+                           <form:select path="preferredLanguage">
+			             <form:option value="" selected="selected">Language</form:option>
+					<c:forEach var="language" items="${languages}">
+						<form:option value="${language.id}">${language.preferredLanguage}</form:option>
+					</c:forEach>
+			  </form:select>
+			 <form:errors class="formError" path="donor.preferredLanguage" delimiter=", "></form:errors>
+                         </div>
+			</c:if>
+                      <c:if test="${donorFields.idType.hidden != true }">
+                            <div>
+                          <form:label path="idType">${donorFields.idType.displayName}</form:label>
+                           <form:select path="idType">
+			             <form:option value="" selected="selected">Select ID Type</form:option>
+					<c:forEach var="idType" items="${idTypes}">
+						<form:option value="${idType.id}">${idType.idType}</form:option>
+					</c:forEach>
+			  </form:select>
+                          <form:input path="idNumber"/>
+			 <form:errors class="formError" path="donor.idNumber" delimiter=", "></form:errors>
+                            </div>
+                       </c:if>
+
+			<c:if test="${donorFields.homeAddress.hidden != true }">
 				<div>
-					<form:label path="address" class="labelForTextArea">${donorFields.address.displayName}</form:label>
-					<form:textarea path="address" />
-					<form:errors class="formError" path="donor.address" delimiter=", "></form:errors>
+					<form:label path="homeAddress" class="labelForTextArea">${donorFields.homeAddress.displayName}</form:label>
+					<form:textarea path="homeAddress" />
+					<form:errors class="formError" path="donor.homeAddress" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+                        <c:if test="${donorFields.postalAddress.hidden != true }">
+				<div>
+					<form:label path="postalAddress" class="labelForTextArea">${donorFields.postalAddress.displayName}</form:label>
+					<form:textarea path="postalAddress" />
+					<form:errors class="formError" path="donor.postalAddress" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+                        <c:if test="${donorFields.workAddress.hidden != true }">
+				<div>
+					<form:label path="workAddress" class="labelForTextArea">${donorFields.workAddress.displayName}</form:label>
+					<form:textarea path="workAddress" />
+					<form:errors class="formError" path="donor.workAddress" delimiter=", "></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.city.hidden != true }">
@@ -332,29 +375,38 @@
 					</ul>
 				</div>
 			</c:if>
-			<c:if test="${donorFields.phoneNumber.hidden != true }">
+			<c:if test="${donorFields.mobileNumber.hidden != true }">
 				<div>
-					<form:label path="phoneNumber">${donorFields.phoneNumber.displayName}</form:label>
-					<form:input path="phoneNumber"
-						value="${firstTimeRender ? donorFields.phoneNumber.defaultValue : ''}" />
+					<form:label path="mobileNumber">${donorFields.mobileNumber.displayName}</form:label>
+					<form:input path="mobileNumber" />
 					<ul>
-						<form:errors class="formError" path="donor.phoneNumber"
+						<form:errors class="formError" path="donor.mobileNumber"
 							delimiter=", "></form:errors>
 					</ul>
 				</div>
 			</c:if>
-			<c:if test="${donorFields.otherPhoneNumber.hidden != true }">
+                        <c:if test="${donorFields.homeNumber.hidden != true }">
 				<div>
-					<form:label path="otherPhoneNumber">${donorFields.otherPhoneNumber.displayName}</form:label>
-					<form:input path="otherPhoneNumber"
-						value="${firstTimeRender ? donorFields.otherPhoneNumber.defaultValue : ''}" />
+					<form:label path="homeNumber">${donorFields.homeNumber.displayName}</form:label>
+					<form:input path="homeNumber" />
 					<ul>
-						<form:errors class="formError" path="donor.otherPhoneNumber"
+						<form:errors class="formError" path="donor.homeNumber"
 							delimiter=", "></form:errors>
 					</ul>
 				</div>
 			</c:if>
-
+                        <c:if test="${donorFields.workNumber.hidden != true }">
+				<div>
+					<form:label path="workNumber">${donorFields.workNumber.displayName}</form:label>
+					<form:input path="workNumber" />
+					<ul>
+						<form:errors class="formError" path="donor.workNumber"
+							delimiter=", "></form:errors>
+					</ul>
+				</div>
+			</c:if>
+                        
+                     
 			<c:if test="${donorFields.preferredContactMethod.hidden != true }">
 				<div>
 					<form:label path="preferredContactMethod">${donorFields.preferredContactMethod.displayName}</form:label>

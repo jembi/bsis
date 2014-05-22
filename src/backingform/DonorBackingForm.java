@@ -7,7 +7,9 @@ import javax.validation.Valid;
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.donor.Donor;
+import model.idtype.IdType;
 import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
@@ -240,12 +242,6 @@ public String getWorkAddress() {
 }
     
   
-  public void sPostalAddress(String postalAddress) {
-    donor.setPostalAddress(postalAddress);
-  }
-
-  
-
   public void setCity(String city) {
     donor.setCity(city);
   }
@@ -321,6 +317,8 @@ public String getWorkAddress() {
   public void setZipcode(String zipcode) {
     donor.setZipcode(zipcode);
   }
+  
+
 
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
@@ -368,7 +366,31 @@ public String getWorkAddress() {
     donor.setNationalID(nationalID);
   }
 
-
+  public void setIdType(IdType idType){
+      donor.setIdType(idType);
+  }
+  
+  public IdType getIdType(){
+      return donor.getIdType();
+  }
+  
+   public void setIdNumber(String idNumber){
+      donor.setIdNumber(idNumber);
+  }
+  
+  public String getIdNumber(){
+      return donor.getIdNumber();
+  }
+  
+  public void setPreferredLanguage(PreferredLanguage preferredLanguage){
+      donor.setPreferredLanguage(preferredLanguage);
+  }
+  
+  public PreferredLanguage getPreferredLanguage(){
+      return donor.getPreferredLanguage();
+  }
+  
+  
   public String getDonorPanel() {
     Location donorPanel = donor.getDonorPanel();
     if (donorPanel == null || donorPanel.getId() == null)
@@ -400,14 +422,8 @@ public String getWorkAddress() {
 		this.dayOfMonth = dayOfMonth;
 	}
 	
-        public String getEmailId(){
-            return donor.getEmailID();
-        }
-        
-        public void setEmailId(String emailId){
-            donor.setEmailID(emailId);
-        }
-        
+
+    
 	public void setDonorPanel(String donorPanel) {
 	    if (StringUtils.isBlank(donorPanel)) {
 	      donor.setDonorPanel(null);

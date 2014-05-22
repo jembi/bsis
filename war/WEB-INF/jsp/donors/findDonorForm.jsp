@@ -189,7 +189,7 @@ $(document).ready(function() {
    }
 
    if ("${firstTimeRender}" == "true") {
-     $("#${mainContentId}").find('textarea[name="address"]').html("${donorFields.address.defaultValue}");
+     $("#${mainContentId}").find('textarea[name="postalAddress"]').html("${donorFields.postalAddress.defaultValue}");
      $("#${mainContentId}").find('textarea[name="notes"]').html("${donorFields.notes.defaultValue}");
      setDefaultValueForSelector(getDonorPanelSelector(), "${donorFields.donorPanel.defaultValue}");
      setDefaultValueForSelector(getGenderSelector(), "${donorFields.gender.defaultValue}");
@@ -360,15 +360,18 @@ $(document).ready(function() {
       <!-- include hidden additional donorFields to ensure values are empty not null -->
       <div style="display:none">
       	<form:input path="middleName" value="${firstTimeRender ? donorFields.middleName.defaultValue : ''}" />
-        <form:textarea path="address" />
+        <form:textarea path="postalAddress" />
         <form:input path="city" value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
         <form:input path="province" value="${firstTimeRender ? donorFields.province.defaultValue : ''}" />
         <form:input path="district" value="${firstTimeRender ? donorFields.district.defaultValue : ''}" />
         <form:input path="state" value="${firstTimeRender ? donorFields.state.defaultValue : ''}" />
         <form:input path="country" value="${firstTimeRender ? donorFields.country.defaultValue : ''}" />
         <form:input path="zipcode" value="${firstTimeRender ? donorFields.zipcode.defaultValue : ''}" />
-        <form:input path="phoneNumber" value="${firstTimeRender ? donorFields.phoneNumber.defaultValue : ''}" />
-        <form:input path="otherPhoneNumber" value="${firstTimeRender ? donorFields.otherPhoneNumber.defaultValue : ''}" />
+        <form:input path="mobileNumber" value="${firstTimeRender ? donorFields.mobileNumber.defaultValue : ''}" />
+        <form:input path="workNumber" value="${firstTimeRender ? donorFields.workNumber.defaultValue : ''}" />
+        <form:input path="homeNumber" value="${firstTimeRender ? donorFields.homeNumber.defaultValue : ''}" />
+       
+
         <form:select path="preferredContactMethod" id="${addDonorFormContactMethodTypesId}"
                      class="addDonorFormPreferredContactMethods">
           <form:option value="" selected="selected">&nbsp;</form:option>

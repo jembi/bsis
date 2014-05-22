@@ -73,12 +73,31 @@
       <label>${donor.bloodGroup}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.address.hidden != true }">
+  <c:if test="${donorFields.homeAddress.hidden != true }">
     <div>
-      <label>${donorFields.address.displayName}</label>
-      <label>${donor.address}</label>
+      <label>${donorFields.homeAddress.displayName}</label>
+      <label>${donor.homeAddress}</label>
     </div>
   </c:if>
+  <c:if test="${donorFields.postalAddress.hidden != true }">
+    <div>
+      <label>${donorFields.postalAddress.displayName}</label>
+      <label>${donor.postalAddress}</label>
+    </div>
+  </c:if>
+  <c:if test="${donorFields.workAddress.hidden != true }">
+    <div>
+      <label>${donorFields.workAddress.displayName}</label>
+      <label>${donor.workAddress}</label>
+    </div>
+  </c:if>
+   <c:if test="${donorFields.mobileNumber.hidden != true }">
+    <div>
+      <label>${donorFields.mobileNumber.displayName}</label>
+      <label>${donor.mobileNumber}</label>
+    </div>
+  </c:if>
+  
   <c:if test="${donorFields.city.hidden != true }">
     <div>
       <label>${donorFields.city.displayName}</label>
