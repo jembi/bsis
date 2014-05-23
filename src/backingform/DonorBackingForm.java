@@ -376,10 +376,7 @@ public String getWorkAddress() {
       donor.setIdType(idType);
   }
   
-  public IdType getIdType(){
-      return donor.getIdType();
-  }
-  
+
    public void setIdNumber(String idNumber){
       donor.setIdNumber(idNumber);
   }
@@ -388,13 +385,9 @@ public String getWorkAddress() {
       return donor.getIdNumber();
   }
   
-  public void setPreferredLanguage(PreferredLanguage preferredLanguage){
-      donor.setPreferredLanguage(preferredLanguage);
-  }
+
   
-  public PreferredLanguage getPreferredLanguage(){
-      return donor.getPreferredLanguage();
-  }
+ 
   
   
   public String getDonorPanel() {
@@ -445,7 +438,57 @@ public String getWorkAddress() {
 	      }
 	    }
 	}
+       
+        
+        public void setIdType(String idType) {
+	    if (StringUtils.isBlank(idType)) {
+	      donor.setDonorPanel(null);
+	    }
+	    else {
+	      IdType type = new IdType();
+	      try {
+	        type.setId(Long.parseLong(idType));
+	        donor.setIdType(type);
+	      } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        donor.setDonorPanel(null);
+	      }
+	    }
+	}
+        
+          
+  public String getIdType() {
+      IdType idType = donor.getIdType();
+        if (idType == null || idType.getId() == null)
+             return null;
+        return idType.getId().toString();
+	}
 
+  public void setPreferredLanguage(String language){
+     
+       if (StringUtils.isBlank(language)) {
+	      donor.setPreferredContactMethod(null);
+	    }
+	    else {
+	      PreferredLanguage preferredLanguage = new PreferredLanguage();
+	      try {
+	        preferredLanguage.setId(Long.parseLong(language));
+	        donor.setPreferredLanguage(preferredLanguage);
+	      } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        donor.setPreferredContactMethod(null);
+	      }
+	    }
+  }
+  
+     public String getPreferredLanguage() {
+      PreferredLanguage preferredLanguage = donor.getPreferredLanguage();
+        if (preferredLanguage == null || preferredLanguage.getId() == null)
+             return null;
+        return preferredLanguage.getId().toString();
+	}
+
+        
   public String getPreferredContactMethod() {
     ContactMethodType contactMethodType = donor.getPreferredContactMethod();
     if (contactMethodType == null || contactMethodType.getId() == null)
