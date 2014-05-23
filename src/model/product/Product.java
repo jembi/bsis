@@ -55,9 +55,9 @@ public class Product implements ModificationTracker {
   @ManyToOne(optional=true, fetch=FetchType.LAZY)
   private CollectedSample collectedSample;
 
-  //@ProductTypeExists
+  @ProductTypeExists
   //@ManyToOne
-  @ManyToOne(targetEntity = Product.class, cascade=CascadeType.ALL)
+  @ManyToOne(targetEntity = Product.class)
   private ProductType productType;
 
   @Temporal(TemporalType.TIMESTAMP)
