@@ -143,22 +143,17 @@ $(document).ready(
     </div>
     <br>
   </c:if> 
-
-     <div id="${addDonorCodeForm}">
-     </div>
-         	
+	 <div id="${tableDiv}"></div>
+     <div id="${addDonorCodeForm}"></div>
+        	
      <div>
         <div style="margin-left: 145px;">
         <label></label>
         <button name="addDonorCodeButton" type="button" class="addDonorCodeButton">Add Donor Code</button>
-	 </div>
-     <div>
-        <div id="${tableDiv}">   
-     </div>
+     <div>  
 	 <br>
-	 <div style="margin-left: 150px;">
+	 <div>
 		<button type="button" class="doneButton">Done</button>
 	 </div>
-	</div>
 </div>	
 </sec:authorize>
