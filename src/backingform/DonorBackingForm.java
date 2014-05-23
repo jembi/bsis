@@ -33,7 +33,6 @@ public class DonorBackingForm {
 
   private String ageSpecified;
   
-  
 
   public DonorBackingForm() {
     donor = new Donor();
@@ -317,8 +316,8 @@ public String getWorkAddress() {
   public void setZipcode(String zipcode) {
     donor.setZipcode(zipcode);
   }
-  
 
+    
 
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
@@ -354,6 +353,13 @@ public String getWorkAddress() {
     }
   }
 
+  public void setEmail(String email){
+      donor.setEmail(email);
+  }
+  
+  public String getEmail(){
+      return donor.getEmail();
+  }
   public Boolean isAgeFormatCorrect() {
     return ageFormatCorrect;
   }

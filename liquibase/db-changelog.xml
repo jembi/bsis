@@ -2765,11 +2765,22 @@
  <addColumn tableName="Donor">
             <column name="homeAddress" type="varchar(255)" ></column>
  </addColumn>
+ <addColumn tableName="Donor_AUD">
+            <column name="homeAddress" type="varchar(255)" ></column>
+ </addColumn>
 
- <addColumn tableName="Donor">
+<addColumn tableName="Donor">
             <column name="postalAddress" type="varchar(255)"></column>
  </addColumn>
+ <addColumn tableName="Donor_AUD">
+            <column name="postalAddress" type="varchar(255)"></column>
+ </addColumn>
+
  <addColumn tableName="Donor">
+            <column name="workAddress" type="varchar(255)" ></column>
+ </addColumn>
+
+<addColumn tableName="Donor_AUD">
             <column name="workAddress" type="varchar(255)" ></column>
  </addColumn>
 
@@ -2777,14 +2788,36 @@
 <addColumn tableName="Donor">
             <column name="workNumber" type="varchar(255)" ></column>
 </addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="workNumber" type="varchar(255)" ></column>
+</addColumn>
+
 <addColumn tableName="Donor">
             <column name="homeNumber" type="varchar(255)" ></column>
 </addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="homeNumber" type="varchar(255)" ></column>
+</addColumn>
+
 <addColumn tableName="Donor">
             <column name="mobileNumber" type="varchar(255)" ></column>
 </addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="mobileNumber" type="varchar(255)" ></column>
+</addColumn>
+
 <addColumn tableName="Donor">
             <column name="idNumber" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="idNumber" type="varchar(255)" ></column>
+</addColumn>
+
+<addColumn tableName="Donor">
+            <column name="email" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="email" type="varchar(255)" ></column>
 </addColumn>
 
 

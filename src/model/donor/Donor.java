@@ -155,9 +155,7 @@ public class Donor implements ModificationTracker {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date dateOfLastDonation;
-  
-  @Column
-  private String homeAddress;
+ 
   
   /**
    * Never delete the rows. Just mark them as deleted.
@@ -188,19 +186,8 @@ public class Donor implements ModificationTracker {
   private PreferredLanguage  preferredLanguage;
   
   private String idNumber;
-  
-  private String mobileNumber;
-
-  private String homeNumber;
  
-  private String workNumber;
-
-   private String postalAddress;
-   
   
-    
-
-  private String workAddress;
   public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
@@ -258,7 +245,7 @@ public class Donor implements ModificationTracker {
 
   public void setMiddleName(String middleName) {
     if (middleName != null)
-      middleName = WordUtils.capitalize(middleName);
+     middleName = WordUtils.capitalize(middleName);
     this.middleName = middleName;
   }
 
@@ -342,6 +329,15 @@ public class Donor implements ModificationTracker {
     return contactInformation.getCountry();
   }
 
+    public String getEmail() {
+        return contactInformation.getEmail();
+    }
+
+    public void setEmail(String email) {
+        contactInformation.setEmail(email);
+    }
+
+  
   public String getZipcode() {
     return contactInformation.getZipcode();
   }
@@ -350,53 +346,53 @@ public class Donor implements ModificationTracker {
   
 
    public String getHomeAddress() {
-        return homeAddress;
+        return contactInformation.getHomeAddress();
     }
 
     public void setHomeAddress(String homeAddress) {
-        this.homeAddress = homeAddress;
+        contactInformation.setHomeAddress(homeAddress);
     }
 
     public String getMobileNumber() {
-        return mobileNumber;
+        return contactInformation.getMobileNumber();
     }
 
     public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+        contactInformation.setMobileNumber(mobileNumber);
     }
 
     public String getHomeNumber() {
-        return homeNumber;
+        return contactInformation.getHomeAddress();
     }
 
     public void setHomeNumber(String homeNumber) {
-        this.homeNumber = homeNumber;
+        contactInformation.setHomeNumber(homeNumber);
     }
 
     public String getWorkNumber() {
-        return workNumber;
+        return contactInformation.getWorkNumber();
     }
 
     public void setWorkNumber(String workNumber) {
-        this.workNumber = workNumber;
+       contactInformation.setWorkNumber(workNumber);
     }
 
     public String getPostalAddress() {
-        return postalAddress;
+        return contactInformation.getPostalAddress();
     }
 
     public void setPostalAddress(String postalAddress) {
-        this.postalAddress = postalAddress;
+        contactInformation.setPostalAddress(postalAddress);
     }
 
 
 
     public String getWorkAddress() {
-        return workAddress;
+        return contactInformation.getWorkAddress();
     }
 
     public void setWorkAddress(String workAddress) {
-        this.workAddress = workAddress;
+        contactInformation.setWorkAddress(workAddress);
     }
 
 
@@ -605,7 +601,7 @@ public class Donor implements ModificationTracker {
         this.preferredLanguage = preferredLanguage;
     }
 
-
+   
   
   
 }

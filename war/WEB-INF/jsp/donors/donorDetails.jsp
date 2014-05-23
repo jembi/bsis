@@ -55,22 +55,36 @@
       </c:if>
     </div>
   </c:if>
+  
   <c:if test="${donorFields.gender.hidden != true }">
     <div>
       <label>${donorFields.gender.displayName}</label>
       <label>${donor.gender}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.nationalID.hidden != true }">
+  <c:if test="${donorFields.idNumber.hidden != true }">
     <div>
-      <label>${donorFields.nationalID.displayName}</label>
-      <label>${donor.nationalID}</label>
+      <label>${donorFields.idNumber.displayName}</label>
+      <label>${donor.idNumber}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.bloodGroup.hidden != true }">
+  <c:if test="${donorFields.mobileNumber.hidden != true }">
     <div>
-      <label>${donorFields.bloodGroup.displayName}</label>
-      <label>${donor.bloodGroup}</label>
+      <label>${donorFields.mobileNumber.displayName}</label>
+      <label>${donor.mobileNumber}</label>
+    </div>
+  </c:if>
+ 
+  <c:if test="${donorFields.workNumber.hidden != true }">
+    <div>
+      <label>${donorFields.workNumber.displayName}</label>
+      <label>${donor.workNumber}</label>
+    </div>
+  </c:if>
+  <c:if test="${donorFields.homeNumber.hidden != true }">
+    <div>
+      <label>${donorFields.homeNumber.displayName}</label>
+      <label>${donor.homeNumber}</label>
     </div>
   </c:if>
   <c:if test="${donorFields.homeAddress.hidden != true }">
@@ -134,16 +148,11 @@
       <label>${donor.zipcode}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.phoneNumber.hidden != true }">
+
+  <c:if test="${donorFields.email.hidden != true }">
     <div>
-      <label>${donorFields.phoneNumber.displayName}</label>
-      <label>${donor.phoneNumber}</label>
-    </div>
-  </c:if>
-  <c:if test="${donorFields.otherPhoneNumber.hidden != true }">
-    <div>
-      <label>${donorFields.otherPhoneNumber.displayName}</label>
-      <label>${donor.otherPhoneNumber}</label>
+      <label>${donorFields.email.displayName}</label>
+      <label>${donor.email}</label>
     </div>
   </c:if>
   <c:if test="${donorFields.preferredContactMethod.hidden != true }">

@@ -363,12 +363,12 @@
           <form:errors class="formError" path="donor.preferredContactMethod" delimiter=", "></form:errors>
         </div>
       </c:if>
-       <c:if test="${donorFields.emailId.hidden != true }">
+       <c:if test="${donorFields.email.hidden != true }">
         <div>
-          <form:label path="emailId">${donorFields.emailId.displayName}</form:label>
-          <form:input path="emailId" />
+          <form:label path="email">${donorFields.email.displayName}</form:label>
+          <form:input path="email" />
           <ul>
-            <form:errors class="formError" path="donor.emailId" delimiter=", "></form:errors>
+            <form:errors class="formError" path="donor.email" delimiter=", "></form:errors>
           </ul>
         </div>
       </c:if>

@@ -8,9 +8,16 @@ import org.hibernate.validator.constraints.Length;
 
 @Embeddable
 public class ContactInformation {
-
-
-
+  
+ 
+  private String mobileNumber;
+  private String homeNumber;
+  private String workNumber;
+  private String email;
+  private String workAddress;
+  private String postalAddress;
+  private String homeAddress;
+  
   @Length(max=25)
   @Column(length=25)
   private String city;
@@ -51,6 +58,7 @@ public class ContactInformation {
 
   }
 
+   
   
 
   public String getCity() {
@@ -101,17 +109,68 @@ public class ContactInformation {
     this.zipcode = zipcode;
   }
 
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getHomeNumber() {
+        return homeNumber;
+    }
+
+    public void setHomeNumber(String homeNumber) {
+        this.homeNumber = homeNumber;
+    }
+
+    public String getWorkNumber() {
+        return workNumber;
+    }
+
+    public void setWorkNumber(String workNumber) {
+        this.workNumber = workNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(String workAddress) {
+        this.workAddress = workAddress;
+    }
+
+    public String getPostalAddress() {
+        return postalAddress;
+    }
+
+    public void setPostalAddress(String postalAddress) {
+        this.postalAddress = postalAddress;
+    }
+
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
   public ContactMethodType getPreferredContactMethod() {
     return preferredContactMethod;
   }
 
   public void setPreferredContactMethod(ContactMethodType preferredContactMethod) {
     this.preferredContactMethod = preferredContactMethod;
-  }
-
-
-
-
-    
+  }   
   
 }

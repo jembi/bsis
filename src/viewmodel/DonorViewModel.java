@@ -1,16 +1,15 @@
 package viewmodel;
 
 import java.util.Date;
-
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.idtype.IdType;
 import model.location.Location;
 import model.user.User;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.omg.CORBA.IDLType;
 import org.springframework.stereotype.Component;
-
 import utils.CustomDateFormatter;
 
 @Component
@@ -106,7 +105,42 @@ public class DonorViewModel {
     Object comments = donor.getNotes();
     return comments == null ? "" : comments.toString();
   }
+  
+  public IdType getIdType(){
+      return donor.getIdType();
+  }
+  
+  public String getIdNumber(){
+      return donor.getIdNumber();
+  }
+  
+  public String getWorkAddress(){
+      return donor.getWorkAddress();
+  }
+  
+  public String getHomeAddress(){
+      return donor.getHomeAddress();
+  }
+  
+  public String getPostalAddress(){
+    return donor.getPostalAddress();
+}
+  
+  public String getMobileNumber(){
+      return donor.getMiddleName();
+  }
 
+  public String getWorkNumber(){
+      return donor.getWorkAddress();
+  }
+  
+  public String getHomeNumber(){
+      return donor.getHomeAddress();
+  }
+  
+  public String getEmail(){
+      return donor.getEmail();
+  }
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(donor.getLastUpdated());
   }
@@ -142,29 +176,6 @@ public class DonorViewModel {
     return donor.getDonorStatus();
   }
  
-
-   public String getMobileNumber() {
-    return donor.getMobileNumber();
-  }
-  
-   public String getHomeNumber() {
-    return donor.getHomeAddress();
-  }
-
-    public String getWorkNumber() {
-    return donor.getWorkNumber();
-  }
-
-public String getHomeAddress() {
-    return donor.getHomeAddress();
-}
-
-public String getPostalAddress() {
-    return donor.getPostalAddress();
-}
-public String getWorkAddress() {
-    return donor.getWorkAddress();
-}
 
   public String getNationalID() {
     return donor.getNationalID();

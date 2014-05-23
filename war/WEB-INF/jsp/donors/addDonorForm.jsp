@@ -146,10 +146,11 @@
                                                               if ($('#idType').val().trim().length > 0)
                                                                      $('#idNumber').show();
                                                               else
-                                                                  
+                                                              {
                                                                      $('#idNumber').hide();         
-                                                                                 
-                                                                             });
+                                                                     $('#idNumber').val('');           
+                                                               }
+                                                             });
 
 					});
 </script>
@@ -299,11 +300,18 @@
 						<form:option value="${idType.id}">${idType.idType}</form:option>
 					</c:forEach>
 			  </form:select>
-                          <form:input path="idNumber"/>
+                          <form:input path="idNumber" placeholder="ID Number"/>
 			 <form:errors class="formError" path="donor.idNumber" delimiter=", "></form:errors>
                             </div>
                        </c:if>
-
+                        
+			<c:if test="${donorFields.email.hidden != true }">
+				<div>
+					<form:label path="email" class="labelForTextArea">${donorFields.email.displayName}</form:label>
+					<form:textarea path="email" />
+					<form:errors class="formError" path="donor.email" delimiter=", "></form:errors>
+				</div>
+			</c:if>
 			<c:if test="${donorFields.homeAddress.hidden != true }">
 				<div>
 					<form:label path="homeAddress" class="labelForTextArea">${donorFields.homeAddress.displayName}</form:label>
@@ -406,7 +414,6 @@
 				</div>
 			</c:if>
                         
-                     
 			<c:if test="${donorFields.preferredContactMethod.hidden != true }">
 				<div>
 					<form:label path="preferredContactMethod">${donorFields.preferredContactMethod.displayName}</form:label>

@@ -370,8 +370,9 @@ $(document).ready(function() {
         <form:input path="mobileNumber" value="${firstTimeRender ? donorFields.mobileNumber.defaultValue : ''}" />
         <form:input path="workNumber" value="${firstTimeRender ? donorFields.workNumber.defaultValue : ''}" />
         <form:input path="homeNumber" value="${firstTimeRender ? donorFields.homeNumber.defaultValue : ''}" />
-       
-
+        <form:textarea  path="homeAddress" value="" />
+        <form:textarea  path="workAddress" value="" />
+        
         <form:select path="preferredContactMethod" id="${addDonorFormContactMethodTypesId}"
                      class="addDonorFormPreferredContactMethods">
           <form:option value="" selected="selected">&nbsp;</form:option>
