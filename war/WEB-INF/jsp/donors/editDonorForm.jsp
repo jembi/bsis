@@ -114,6 +114,19 @@
           $("#${editDonorFormId}").find('input[name="donorNumber"]').keyup(function() {
             updateBarcode($(this).val());
           });
+                                  //Hiding IDNumber button if ID type is not selected
+                                                if ($('#idType').val().trim().length === 0)
+                                                $('#idNumber').hide();   
+                                                $('#idType').change(function(){
+                                                              if ($('#idType').val().trim().length > 0)
+                                                                     $('#idNumber').show();
+                                                              else
+                                                              {
+                                                                     $('#idNumber').hide();         
+                                                                     $('#idNumber').val('');           
+                                                               }
+                                                             });
+
 
       });
 </script>
@@ -257,6 +270,32 @@
           <form:errors class="formError" path="age" delimiter=", "></form:errors>
         </div>
       </c:if>
+        <c:if test="${donorFields.preferredLanguage.hidden != true }">
+                        <div>
+                          <form:label path="preferredLanguage">${donorFields.preferredLanguage.displayName}</form:label>
+                           <form:select path="preferredLanguage">
+			             <form:option value="" selected="selected">Language</form:option>
+					<c:forEach var="language" items="${languages}">
+						<form:option value="${language.id}">${language.preferredLanguage}</form:option>
+					</c:forEach>
+			  </form:select>
+			 <form:errors class="formError" path="donor.preferredLanguage" delimiter=", "></form:errors>
+                         </div>
+			</c:if>
+                      <c:if test="${donorFields.idType.hidden != true }">
+                            <div>
+                          <form:label path="idType">${donorFields.idType.displayName}</form:label>
+                           <form:select path="idType">
+			             <form:option value="" selected="selected">Select ID Type</form:option>
+					<c:forEach var="idType" items="${idTypes}">
+						<form:option value="${idType.id}">${idType.idType}</form:option>
+					</c:forEach>
+			  </form:select>
+                          <form:input path="idNumber" placeholder="ID Number"/>
+			 <form:errors class="formError" path="donor.idNumber" delimiter=", "></form:errors>
+                            </div>
+                       </c:if>
+                        
         <c:if test="${donorFields.homeAddress.hidden != true }">
         <div>
           <form:label path="homeAddress" class="labelForTextArea">${donorFields.homeAddress.displayName}</form:label>

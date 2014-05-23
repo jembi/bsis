@@ -307,7 +307,7 @@
                         
 			<c:if test="${donorFields.email.hidden != true }">
 				<div>
-					<form:label path="email" class="labelForTextArea">${donorFields.email.displayName}</form:label>
+					<form:label path="email">${donorFields.email.displayName}</form:label>
 					<form:input path="email" />
 					<form:errors class="formError" path="donor.email" delimiter=", "></form:errors>
 				</div>

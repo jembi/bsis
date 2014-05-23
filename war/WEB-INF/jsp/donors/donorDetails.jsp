@@ -62,10 +62,22 @@
       <label>${donor.gender}</label>
     </div>
   </c:if>
+  <c:if test="${donorFields.idType.hidden != true }">
+    <div>
+      <label>${donorFields.idType.displayName}</label>
+      <label>${donor.idType.idType}</label>
+    </div>
+  </c:if>
   <c:if test="${donorFields.idNumber.hidden != true }">
     <div>
       <label>${donorFields.idNumber.displayName}</label>
       <label>${donor.idNumber}</label>
+    </div>
+  </c:if>
+   <c:if test="${donorFields.preferredLanguage.hidden != true }">
+    <div>
+      <label>${donorFields.preferredLanguage.displayName}</label>
+      <label>${donor.preferredLanguage.preferredLanguage}</label>
     </div>
   </c:if>
   <c:if test="${donorFields.mobileNumber.hidden != true }">
