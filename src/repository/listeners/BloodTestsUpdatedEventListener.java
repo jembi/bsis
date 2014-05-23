@@ -40,9 +40,6 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
   @Override
   public void onApplicationEvent(BloodTestsUpdatedEvent event) {
-    System.out.println("collection added event listener called");
-    System.out.println("event ID: " + event.getEventId());
-    System.out.println("event context: " + event.getEventContext());
     updateCollectionStatus(event);
     updateDonorStatus(event);
   }

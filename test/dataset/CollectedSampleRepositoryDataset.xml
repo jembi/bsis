@@ -24,7 +24,6 @@
 		isDeleted="0" isDonorPanel="1" isMobileSite="0" isUsageSite="1" notes=""
 		name="Chingola" />
 
-
 	<contactmethodtype id="1" contactMethodType="None"
 		isDeleted="0" />
 	<contactmethodtype id="2" contactMethodType="Phone"
@@ -78,7 +77,6 @@
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
-
 	<donor ID="5" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
@@ -89,8 +87,6 @@
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
-
-
 	<donor ID="6" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
@@ -101,7 +97,6 @@
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
-
 
 	<genericconfig id="1" propertyName="rowHeight"
 		propertyOwner="collectionsWorksheet" propertyValue="30" />
@@ -214,19 +209,6 @@
 		defaultDisplayName="Donor #" field="donorNumber" form="donor" hidden="0"
 		isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
 		maxLength="15" useCurrentTime="0" />
-	<!-- <donordeferral id="1" deferralReasonText="" deferredOn="2014-02-20" 
-		deferredUntil="2014-06-20" deferralReason_id="2" deferredBy_id="1" deferredDonor_id="1" 
-		isVoided="false" /> <donordeferral id="2" deferralReasonText="" deferredOn="2014-03-01" 
-		deferredUntil="2014-05-14" deferralReason_id="2" deferredBy_id="1" deferredDonor_id="1" 
-		isVoided="false" /> <donordeferral id="3" deferralReasonText="" deferredOn="2014-01-11" 
-		deferredUntil="2014-08-22" deferralReason_id="2" deferredBy_id="1" deferredDonor_id="1" 
-		isVoided="false" /> <donordeferral id="4" deferralReasonText="" deferredOn="2014-01-11" 
-		deferredUntil="2014-02-22" deferralReason_id="2" deferredBy_id="1" deferredDonor_id="4" 
-		isVoided="false" /> <donordeferral id="5" deferralReasonText="" deferredOn="${DateDeferredOn}" 
-		deferredUntil="${DateDeferredUnit}" deferralReason_id="2" deferredBy_id="1" 
-		deferredDonor_id="4" isVoided="false" /> <donordeferral id="6" deferralReasonText="" 
-		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}" deferralReason_id="2" 
-		deferredBy_id="6" deferredDonor_id="5" isVoided="false" /> -->
 	
 	<bloodbagtype id="1" bloodBagType="Single" canPool=""
 		canSplit="" isDeleted="0"></bloodbagtype>
@@ -238,36 +220,29 @@
 	<producttype id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Whole Blood"
 		productTypeNameShort="Whole Blood"></producttype>
-
 	<producttype id="2" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0"
 		productType="Red Cell Concentrate" productTypeNameShort="RCC"></producttype>
-
 	<producttype id="3" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0"
 		productType="Fresh Frozen Plasma" productTypeNameShort="FFP"></producttype>
-
 	<producttype id="4" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="1" isDeleted="0" productType="Platelets"
 		productTypeNameShort="Platelets"></producttype>
-
 
 	<donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>
 	<donationtype id="2" donationType="Family" isDeleted="0"></donationtype>
 	<donationtype id="3" donationType="Autologous" isDeleted="0"></donationtype>
 	<donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
 
-
 	<collectionbatch id="1" batchNumber="B0314000000"
 		isDeleted="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		notes="Notes" collectionCenter_id="2" collectionSite_id="3"
 		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
-
 	<collectionbatch id="2" batchNumber="B0314000001"
 		isDeleted="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		notes="Notes" collectionCenter_id="2" collectionSite_id="3"
 		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
-
 
 	<collectedsample id="1" bloodAbo=""
 		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
@@ -279,7 +254,6 @@
 		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
 		donorPulse="60"></collectedsample>
-
 	<collectedsample id="2" bloodAbo=""
 		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
 		collectedOn="2014-03-21 00:00:00" collectionNumber="D000002"
@@ -290,7 +264,6 @@
 		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
 		donorPulse="60"></collectedsample>
-
 	<collectedsample id="3" bloodAbo=""
 		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
 		collectedOn="2014-03-25 00:00:00" collectionNumber="D000003"
@@ -301,9 +274,6 @@
 		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
 		donorPulse="60"></collectedsample>
-
-	
-
 
 	<worksheettype id="1" context="RECORD_BLOOD_TYPING_TESTS"
 		isDeleted="0" worksheettype="Blood Typing"></worksheettype>
@@ -319,14 +289,12 @@
 	<worksheet id="1" isDeleted="0" createdDate="2014-03-31 10:13:38"
 		lastupdated="2014-03-31 10:13:38" notes="notes" workSheetNumber="W0314000000"
 		createdBy_id="1" lastUpdatedBy_id="1" worksheetType_id="1"></worksheet>
-		
-		<worksheet id="2" isDeleted="0" createdDate="2014-03-31 10:13:38"
-		lastupdated="2014-03-31 10:13:38" notes="notes" workSheetNumber="W0314000001"
-		createdBy_id="1" lastUpdatedBy_id="1" worksheetType_id="1"></worksheet>
+	<worksheet id="2" isDeleted="0" createdDate="2014-03-31 10:13:38"
+	lastupdated="2014-03-31 10:13:38" notes="notes" workSheetNumber="W0314000001"
+	createdBy_id="1" lastUpdatedBy_id="1" worksheetType_id="1"></worksheet>
 		
 	<worksheet_collectedsample worksheets_id="1" collectedSamples_id="1"></worksheet_collectedsample>
 	<worksheet_collectedsample worksheets_id="2" collectedSamples_id="3"></worksheet_collectedsample>
-	<worksheet_collectedsample worksheets_id="2" collectedSamples_id="2"></worksheet_collectedsample>	
-
-
+	<worksheet_collectedsample worksheets_id="2" collectedSamples_id="2"></worksheet_collectedsample>
+	
 </dataset>
