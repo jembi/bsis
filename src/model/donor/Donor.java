@@ -193,6 +193,7 @@ public class Donor implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private PreferredLanguage  preferredLanguage;
   
+  @Column(length=20)
   private String idNumber;
  
   
@@ -304,6 +305,7 @@ public class Donor implements ModificationTracker {
     setNationalID(donor.getNationalID());
     setPreferredLanguage(donor.getPreferredLanguage());
     setIdType(donor.getIdType());
+    setIdNumber(donor.getIdNumber());
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
     setWorkAddress(donor.getWorkAddress());
