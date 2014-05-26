@@ -400,7 +400,7 @@ public class Donor implements ModificationTracker {
     }
 
     public String getHomeNumber() {
-        return contactInformation.getHomeAddress();
+        return contactInformation.getHomeNumber();
     }
 
     public void setHomeNumber(String homeNumber) {
