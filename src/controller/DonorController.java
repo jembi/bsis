@@ -276,7 +276,7 @@ public class DonorController {
     
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
-      mv.addObject("donor", getDonorsViewModel(savedDonor));
+      mv.addObject("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
       if(addDonorBool){
     	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
       }
