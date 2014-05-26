@@ -120,8 +120,12 @@ public class DonorViewModel {
     return comments == null ? "" : comments.toString();
   }
   
-  public IdType getIdType(){
-      return donor.getIdType();
+  public String getIdType(){
+	  if (donor.getIdType() == null ||
+	        donor.getIdType().getIdType() == null)
+	      return "";
+	  else
+	      return donor.getIdType().getIdType();
   }
   
   public String getIdNumber(){
@@ -219,8 +223,12 @@ public class DonorViewModel {
   public String getCallingName(){
       return donor.getCallingName();
   }
-  public PreferredLanguage getPreferredLanguage(){
-     return  donor.getPreferredLanguage();
+  public String getPreferredLanguage(){
+	  if (donor.getPreferredLanguage() == null ||
+	        donor.getPreferredLanguage().getPreferredLanguage() == null)
+	      return "";
+	  else
+	      return donor.getPreferredLanguage().getPreferredLanguage();
   }
   
   public String getLastUpdated() {

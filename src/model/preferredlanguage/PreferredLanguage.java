@@ -25,6 +25,7 @@ public class PreferredLanguage  {
     @Column(nullable = false, insertable=false, updatable=false)
     private Long id;
 
+    @Column(length=20)
     private String preferredLanguage;
     
     public Long getId() {
@@ -62,11 +63,6 @@ public class PreferredLanguage  {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.preferredlanguage.PreferredLanguage[ id=" + id + " ]";
     }
     
 }

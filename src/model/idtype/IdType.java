@@ -25,6 +25,7 @@ public class IdType  {
     @Column(nullable = false, insertable=false, updatable=false)
     private Long id;
     
+    @Column(length=20)
     private String idType;
 
     public Long getId() {
@@ -63,11 +64,6 @@ public class IdType  {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.idtype.IdType[ id=" + id + " ]";
     }
     
 }

@@ -101,7 +101,7 @@
   <c:if test="${donorFields.idType.hidden != true }">
     <div>
       <label>${donorFields.idType.displayName}</label>
-      <label>${donor.idType.idType}</label>
+      <label>${donor.idType}</label>
     </div>
   </c:if>
   <c:if test="${donorFields.idNumber.hidden != true }">
@@ -113,7 +113,7 @@
    <c:if test="${donorFields.preferredLanguage.hidden != true }">
     <div>
       <label>${donorFields.preferredLanguage.displayName}</label>
-      <label>${donor.preferredLanguage.preferredLanguage}</label>
+      <label>${donor.preferredLanguage}</label>
     </div>
   </c:if>
 
