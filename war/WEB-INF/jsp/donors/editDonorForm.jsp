@@ -218,8 +218,8 @@
       <c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
         <div>
           <form:label path="dateOfFirstDonation">${donorFields.dateOfFirstDonation.displayName}</form:label>
-          <form:input path="dateOfFirstDonation" class="dateOfFirstDonation"
-                      value="${firstTimeRender ? donorFields.dateOfFirstDonation.defaultValue : ''}" />
+          <form:input path="dateOfFirstDonation" class="dateOfFirstDonation"/>
+          <form:errors class="formError" path="donor.dateOfFirstDonation" delimiter=", "></form:errors>
         </div>
       </c:if>
       <c:if test="${donorFields.address.hidden != true }">
