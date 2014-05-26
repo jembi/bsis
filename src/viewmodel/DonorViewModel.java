@@ -127,6 +127,70 @@ public class DonorViewModel {
     return donor.getPostalAddress();
 }
   
+     public String getWorkAddressCity() {
+        return donor.getWorkAddressCity();
+    }
+
+    public String getWorkAddressProvince() {
+        return donor.getWorkAddressProvince();
+    }
+
+
+    public String getWorkAddressDistrict() {
+        return donor.getWorkAddressDistrict();    }
+
+
+    public String getWorkAddressCountry() {
+        return donor.getWorkAddressCountry();
+    }
+
+  
+
+    public String getWorkAddressZipcode() {
+        return donor.getWorkAddressZipcode();
+    }
+
+  
+ public String getWorkAddressState() {
+        return donor.getWorkAddressState();
+    }
+
+    
+    
+    public String getPostalAddressCity() {
+        return donor.getPostalAddressCity();
+    }
+
+
+    public String getPostalAddressProvince() {
+        return donor.getPostalAddressProvince();
+    }
+    
+ 
+    
+    public String getPostalAddressState(){
+       return donor.getPostalAddressState();
+    }
+
+  
+ 
+
+    public String getPostalAddressDistrict() {
+        return donor.getPostalAddressDistrict();
+    }
+
+   
+
+    public String getPostalAddressCountry() {
+        return donor.getPostalAddressCountry();
+    }
+
+
+
+    public String getPostalAddressZipcode() {
+        return donor.getPostalAddressZipcode();
+    }
+
   public String getMobileNumber(){
       return donor.getMiddleName();
   }

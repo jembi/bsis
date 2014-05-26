@@ -314,7 +314,7 @@
 				<div>
 					<form:label path="city">${donorFields.city.displayName}</form:label>
 					<form:input path="city"
-						value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
+						value="${firstTimeRender ? donorFields.city.defaultValue : ''}"  delimiter=", "/>
 					<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
 				</div>
 			</c:if>
@@ -426,10 +426,9 @@
 			</c:if>
 			<c:if test="${donorFields.city.hidden != true }">
 				<div>
-					<form:label path="city">${donorFields.city.displayName}</form:label>
-					<form:input path="city"
-						value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
-					<form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
+					<form:label path="workAddressCity">${donorFields.city.displayName}</form:label>
+					<form:input path="workAddressCity"/>
+					<form:errors class="formError" path="donor.workAddressCity"></form:errors>
 				</div>
 			</c:if>
 			<c:if test="${donorFields.workAddressProvince.hidden != true }">

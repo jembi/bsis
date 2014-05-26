@@ -302,25 +302,11 @@
           <form:textarea path="homeAddress" />
           <form:errors class="formError" path="donor.homeAddress" delimiter=", "></form:errors>
         </div>
-      <c:if test="${donorFields.postalAddress.hidden != true }">
-        <div>
-          <form:label path="homeAddress" class="labelForTextArea">${donorFields.postalAddress.displayName}</form:label>
-          <form:textarea path="postalAddress" />
-          <form:errors class="formError" path="donor.postalAddress" delimiter=", "></form:errors>
-        </div>
-      </c:if>
-            <c:if test="${donorFields.workAddress.hidden != true }">
-        <div>
-          <form:label path="workAddress" class="labelForTextArea">${donorFields.workAddress.displayName}</form:label>
-          <form:textarea path="workAddress" />
-          <form:errors class="formError" path="donor.workAddress" delimiter=", "></form:errors>
-        </div>
-      </c:if>
       </c:if>
       <c:if test="${donorFields.city.hidden != true }">
         <div>
           <form:label path="city">${donorFields.city.displayName}</form:label>
-          <form:input path="city" />
+          <form:input path="city" value="${firstTimeRender ? donorFields.city.defaultValue : ''}"/>
           <form:errors class="formError" path="donor.city" delimiter=", "></form:errors>
         </div>
       </c:if>
@@ -361,6 +347,120 @@
           </ul>
         </div>
       </c:if>
+        <c:if test="${donorFields.postalAddress.hidden != true }">
+				<div>
+					<form:label path="postalAddress" class="labelForTextArea">${donorFields.postalAddress.displayName}</form:label>
+					<form:textarea path="postalAddress" />
+					<form:errors class="formError" path="donor.postalAddress" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+                        <c:if test="${donorFields.city.hidden != true }">
+				<div>
+					<form:label path="postalAddressCity">${donorFields.city.displayName}</form:label>
+					<form:input path="postalAddressCity"
+						value="${firstTimeRender ? donorFields.postalAddressCity.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.postalAddressCity" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.province.hidden != true }">
+				<div>
+					<form:label path="postalAddressProvince">${donorFields.province.displayName}</form:label>
+					<form:input path="postalAddressProvince"
+						value="${firstTimeRender ? donorFields.province.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.postalAddressProvince" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.district.hidden != true }">
+				<div>
+					<form:label path="postalAddressDistrict">${donorFields.district.displayName}</form:label>
+					<form:input path="postalAddressDistrict"
+						value="${firstTimeRender ? donorFields.postalAddressDistrict.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.postalAddressDistrict" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.state.hidden != true }">
+				<div>
+					<form:label path="postalAddressState">${donorFields.state.displayName}</form:label>
+					<form:input path="postalAddressState"
+						value="${firstTimeRender ? donorFields.postalAddressState.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.postalAddressState" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.country.hidden != true }">
+				<div>
+					<form:label path="postalAddressCountry">${donorFields.country.displayName}</form:label>
+					<form:input path="postalAddressCountry"
+						value="${firstTimeRender ? donorFields.country.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.postalAddressCountry" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.zipcode.hidden != true }">
+				<div>
+					<form:label path="postalAddressZipcode">${donorFields.zipcode.displayName}</form:label>
+					<form:input path="postalAddressZipcode"
+						value="${firstTimeRender ? donorFields.postalAddressZipcode.defaultValue : ''}" />
+					<ul>
+						<form:errors class="formError" path="donor.postalAddressZipcode" delimiter=", "></form:errors>
+					</ul>
+				</div>
+			</c:if>
+                        <c:if test="${donorFields.workAddress.hidden != true }">
+				<div>
+					<form:label path="workAddress" class="labelForTextArea">${donorFields.workAddress.displayName}</form:label>
+					<form:textarea path="workAddress" />
+					<form:errors class="formError" path="donor.workAddress" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.workAddressCity.hidden != true }">
+				<div>
+					<form:label path="workAddressCity">${donorFields.city.displayName}</form:label>
+					<form:input path="workAddressCity"
+						value="${firstTimeRender ? donorFields.workAddressCity.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.workAddressCity" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.workAddressProvince.hidden != true }">
+				<div>
+					<form:label path="workAddressProvince">${donorFields.province.displayName}</form:label>
+					<form:input path="workAddressProvince"
+						value="${firstTimeRender ? donorFields.workAddressProvince.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.workAddressProvince" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.district.hidden != true }">
+				<div>
+					<form:label path="workAddressDistrict">${donorFields.district.displayName}</form:label>
+					<form:input path="workAddressDistrict"
+						value="${firstTimeRender ? donorFields.workAddressDistrict.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.workAddressDistrict" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.state.hidden != true }">
+				<div>
+					<form:label path="workAddressState">${donorFields.state.displayName}</form:label>
+					<form:input path="workAddressState"
+						value="${firstTimeRender ? donorFields.state.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.state" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.country.hidden != true }">
+				<div>
+					<form:label path="workAddressCountry">${donorFields.country.displayName}</form:label>
+					<form:input path="workAddressCountry"
+						value="${firstTimeRender ? donorFields.workAddressCountry.defaultValue : ''}" />
+					<form:errors class="formError" path="donor.workAddressCountry" delimiter=", "></form:errors>
+				</div>
+			</c:if>
+			<c:if test="${donorFields.zipcode.hidden != true }">
+				<div>
+					<form:label path="workAddressZipcode">${donorFields.zipcode.displayName}</form:label>
+					<form:input path="workAddressZipcode"
+						value="${firstTimeRender ? donorFields.workAddressZipcode.defaultValue : ''}" />
+					<ul>
+						<form:errors class="formError" path="donor.workAddressZipcode" delimiter=", "></form:errors>
+					</ul>
+				</div>
+			</c:if>
       <c:if test="${donorFields.mobileNumber.hidden != true }">
         <div>
           <form:label path="mobileNumber">${donorFields.mobileNumber.displayName}</form:label>
