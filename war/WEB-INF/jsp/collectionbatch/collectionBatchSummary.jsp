@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -114,7 +115,7 @@
         }
       });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
 
@@ -122,15 +123,19 @@
       <button type="button" class="cancelButton">
         Done
       </button>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
       <button type="button" class="addCollectionBatchToWorksheetButton">
         Add collections in batch to worksheet
       </button>
+      </sec:authorize>
       <!-- button type="button" class="editButton">
         Edit
       </button-->
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DONATION_BATCH)">
       <button type="button" class="deleteButton">
         Delete
       </button>
+      </sec:authorize>
       <button type="button" class="printButton">
         Print
       </button>
@@ -163,3 +168,4 @@
   Find and select the worksheet you want to add this collection batch to
   <div class="findWorksheetFormSection"></div> 
 </div>
+</sec:authorize>

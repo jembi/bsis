@@ -72,6 +72,8 @@ public class BloodTest implements Comparable<BloodTest> {
   private Boolean isEmptyAllowed;
 
   private Boolean isActive;
+  
+  private Boolean isDeleted;
 
   public Integer getId() {
     return id;
@@ -176,8 +178,18 @@ public class BloodTest implements Comparable<BloodTest> {
   public void setContext(BloodTestContext context) {
     this.context = context;
   }
+  
+  
 
-  @Override
+  public Boolean getIsDeleted() {
+	return isDeleted;
+}
+
+public void setIsDeleted(Boolean isDeleted) {
+	this.isDeleted = isDeleted;
+}
+
+@Override
   public int compareTo(BloodTest o) {
     return this.id.compareTo(o.id);
   }

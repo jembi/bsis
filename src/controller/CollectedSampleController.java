@@ -1,22 +1,28 @@
 package controller;
 
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,8 +38,10 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
+import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
+import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
 import backingform.CollectedSampleBackingForm;
 import backingform.FindCollectedSampleBackingForm;
@@ -61,6 +69,9 @@ public class CollectedSampleController {
   @Autowired
   private UtilController utilController;
 
+  @Autowired
+  private DonorRepository donorRepository;
+  
   public CollectedSampleController() {
   }
 
@@ -89,6 +100,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
 
     FindCollectedSampleBackingForm form = new FindCollectedSampleBackingForm();
@@ -106,6 +118,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollection")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView findCollection(HttpServletRequest request,
       @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
@@ -163,6 +176,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping("/findCollectionPagination")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> findCollectionPagination(HttpServletRequest request,
       @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
@@ -266,6 +280,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/addCollectionFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
   public ModelAndView addCollectionFormGenerator(HttpServletRequest request,
       Model model) {
 
@@ -284,12 +299,13 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
       @RequestParam(value="collectionId") Long collectionId) {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
-
+    form.getCollectedSampleIntegerProps();
     ModelAndView mv = new ModelAndView("collections/editCollectionForm");
     mv.addObject("editCollectionForm", form);
     mv.addObject("refreshUrl", getUrl(request));
@@ -301,44 +317,48 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/addCollection", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
   public ModelAndView addCollection(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addCollectionForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
-    boolean success = false;
+	    ModelAndView mv = new ModelAndView();
+	    boolean success = false;
+	    addEditSelectorOptions(mv.getModelMap());
+	    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+	    mv.addObject("collectionFields", formFields);
+	
+	    CollectedSample savedCollection = null;
+	    if (result.hasErrors()) {
+	      mv.addObject("hasErrors", true);
+	      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	      success = false;
+	    } 
+	    else {
+	      try {
+          form.setCollectedSample();
+	        CollectedSample collectedSample = form.getCollectedSample();
 
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-    mv.addObject("collectionFields", formFields);
+          if(collectedSample.getDonor().getDateOfFirstDonation() == null){
+            collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
+          }
 
-    CollectedSample savedCollection = null;
-    if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
-        CollectedSample collectedSample = form.getCollectedSample();
-        
-        if(collectedSample.getDonor().getDateOfFirstDonation() == null){
-        	collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
-        }
-        
-        collectedSample.setIsDeleted(false);
-        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
-        mv.addObject("hasErrors", false);
-        success = true;
-        form = new CollectedSampleBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
+	        collectedSample.setIsDeleted(false);
+	        
+	        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
+	        mv.addObject("hasErrors", false);
+	        success = true;
+	    
+	        form = new CollectedSampleBackingForm();
+	      } catch (EntityExistsException ex) {
+	        ex.printStackTrace();
+	        success = false;
+	      } catch (Exception ex) {
+	        ex.printStackTrace();
+	        success = false;
+	      }
     }
 
     if (success) {
@@ -347,11 +367,11 @@ public class CollectedSampleController {
       mv.addObject("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
       mv.setViewName("collections/addCollectionSuccess");
     } else {
-      mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addCollectionForm", form);
-      mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
-      mv.setViewName("collections/addCollectionError");
+    	  mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
+	      mv.addObject("firstTimeRender", false);
+	      mv.addObject("addCollectionForm", form);
+	      mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
+	      mv.setViewName("collections/addCollectionError");
     }
 
     mv.addObject("success", success);
@@ -364,6 +384,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public ModelAndView updateCollectedSample(
       HttpServletResponse response,
       @ModelAttribute("editCollectionForm") @Valid CollectedSampleBackingForm form,
@@ -386,6 +407,7 @@ public class CollectedSampleController {
     else {
       try {
         form.setIsDeleted(false);
+        form.setCollectedSample();
         CollectedSample existingCollectedSample;
         existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {
@@ -433,6 +455,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/deleteCollectedSample", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteCollection(
       @RequestParam("collectedSampleId") Long collectionSampleId) {
@@ -454,6 +477,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/collectionSummary", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView collectionSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
 
@@ -486,6 +510,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value="/saveFindCollectionsResultsToWorksheet", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ModelAndView saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form,
@@ -540,5 +565,44 @@ public class CollectedSampleController {
     
     return mv;
   }
+  
+  @RequestMapping("/findLastDonationForDonor.html")  
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
+  public @ResponseBody  
+  Map<String, String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
+	   
+   CollectedSample collectedSample = form.getCollectedSample();
+   long diffInDays =0;
+   Date dateofLastDonation = null;
+   List<String> message = new ArrayList<String>();
+   
+   Map<String, String> m = new HashMap<String, String>();
+   
+   try{
+	   // if the donor exists
+	   if(donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber()) != null){
+		   Donor donor = donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber());
+		   
+		   // if the donor has donated before
+		   if(donor.getDateOfLastDonation() != null){
+			   dateofLastDonation = donor.getDateOfLastDonation();
+			   Date collectedOnDate = collectedSample.getCollectedOn();
+			   
+			   long diff = collectedOnDate.getTime() - dateofLastDonation.getTime();
+			   diffInDays = diff / (24 * 60 * 60 * 1000);
+			 	
+			   SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			
+			   m.put("diffInDays",String.valueOf(diffInDays));
+			   m.put("dateOfLastDonation",formatter.format(dateofLastDonation).toString());
+			   m.put("collectedOnDate",formatter.format(collectedOnDate).toString());
+		   }  
+	   }
+   }
+   catch(Exception ex){
+	 ex.printStackTrace();
+   }
+   return m;  
+  }  
   
 }

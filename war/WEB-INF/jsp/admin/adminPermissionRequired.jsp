@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
@@ -39,7 +40,7 @@
       });
     });
   </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_ADMIN_INFORMATION)">
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
@@ -66,5 +67,7 @@
     </div>
     <div class="bottomPanel"></div>
   </div>
+  </sec:authorize>
 </body>
 </html>
+

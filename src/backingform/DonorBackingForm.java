@@ -3,23 +3,18 @@ package backingform;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.validation.Valid;
-
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.donor.Donor;
 import model.location.Location;
 import model.user.User;
 import model.util.Gender;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-
 import repository.DonorRepository;
 import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
-
 public class DonorBackingForm {
 
   @Valid
@@ -27,6 +22,11 @@ public class DonorBackingForm {
 
   // store a local copy of birthdate string as validation may have failed
   private String birthDate;
+  
+  //to capture date of birth parameters--#11
+  String year;
+  String month;
+  String dayOfMonth;
 
   private Boolean ageFormatCorrect;
 
@@ -51,6 +51,21 @@ public class DonorBackingForm {
     return CustomDateFormatter.getDateString(donor.getBirthDate());
   }
 
+  public void setBirthDate() {
+	
+    if(year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty())
+	  {  
+	donor.setBirthDate(null);
+    return;
+	  }
+	  birthDate = dayOfMonth+"/"+month+"/"+year;
+    try {
+      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+    } catch (ParseException ex) {
+      donor.setBirthDate(null);
+    }
+  }
+  
   public void setBirthDate(String birthDate) {
     this.birthDate = birthDate;
     try {
@@ -267,10 +282,6 @@ public class DonorBackingForm {
     donor.setZipcode(zipcode);
   }
 
-  public void generateDonorNumber() {
-    donor.setDonorNumber(DonorRepository.generateUniqueDonorNumber());
-  }
-
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
       DateTime dt1 = new DateTime(donor.getBirthDateInferred());
@@ -332,21 +343,45 @@ public class DonorBackingForm {
     return donorPanel.getId().toString();
   }
 
-  public void setDonorPanel(String donorPanel) {
-    if (StringUtils.isBlank(donorPanel)) {
-      donor.setDonorPanel(null);
-    }
-    else {
-      Location l = new Location();
-      try {
-        l.setId(Long.parseLong(donorPanel));
-        donor.setDonorPanel(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        donor.setDonorPanel(null);
-      }
-    }
-  }
+  	public String getYear() {
+  		return year;
+	}
+	
+	public void setYear(String year) {
+		this.year = year;
+	}
+	
+	public String getMonth() {
+		return month;
+	}
+	
+	public void setMonth(String month) {
+		this.month = month;
+	}
+	
+	public String getDayOfMonth() {
+		return dayOfMonth;
+	}
+	
+	public void setDayOfMonth(String dayOfMonth) {
+		this.dayOfMonth = dayOfMonth;
+	}
+	
+	public void setDonorPanel(String donorPanel) {
+	    if (StringUtils.isBlank(donorPanel)) {
+	      donor.setDonorPanel(null);
+	    }
+	    else {
+	      Location l = new Location();
+	      try {
+	        l.setId(Long.parseLong(donorPanel));
+	        donor.setDonorPanel(l);
+	      } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        donor.setDonorPanel(null);
+	      }
+	    }
+	}
 
   public String getPreferredContactMethod() {
     ContactMethodType contactMethodType = donor.getPreferredContactMethod();
@@ -371,7 +406,7 @@ public class DonorBackingForm {
       }
     }
   }
-  
+
   public String getDateOfFirstDonation() {
     if (dateOfFirstDonation != null)
       return dateOfFirstDonation;
@@ -390,4 +425,40 @@ public class DonorBackingForm {
     }
   }
   
+  public String getBloodAbo() {
+    if (StringUtils.isBlank(donor.getBloodAbo()) || donor.getBloodAbo() == null){
+      return "";
+    }
+    else{
+      return donor.getBloodAbo();
+    }
+  }
+  
+  public void setBloodAbo(String bloodAbo) {
+	  if (StringUtils.isBlank(bloodAbo)){
+		  donor.setBloodAbo(null);
+	  }
+	  else{
+		  donor.setBloodAbo(bloodAbo);
+	  }    
+  }
+  
+  public String getBloodRh() {
+    if (StringUtils.isBlank(donor.getBloodRh()) || donor.getBloodRh() == null){
+      return "";
+    }
+    else{
+      return donor.getBloodRh();
+    }
+  }
+  
+  public void setBloodRh(String bloodRh) {
+	  if (StringUtils.isBlank(bloodRh)){
+		  donor.setBloodRh(null);
+	  }
+	  else{
+		  donor.setBloodRh(bloodRh);
+	  }    
+  }
+
 }

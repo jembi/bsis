@@ -10,10 +10,20 @@ public class FindDonorBackingForm {
   private String donorNumber;
   private String firstName;
   private String lastName;
-  private List<BloodGroup> bloodGroups;
   private boolean createDonorSummaryView;
+  private boolean usePhraseMatch;
+  private String donationIdentificationNumber;
 
-  private String anyBloodGroup;
+    public String getDonationIdentificationNumber() {
+        return donationIdentificationNumber;
+    }
+
+    public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+        this.donationIdentificationNumber = donationIdentificationNumber;
+    }
+
+  
+
 
   public String getDonorNumber() {
     return donorNumber;
@@ -39,24 +49,6 @@ public class FindDonorBackingForm {
     this.lastName = lastName;
   }
 
-  public List<BloodGroup> getBloodGroups() {
-    return bloodGroups;
-  }
-
-  public void setBloodGroups(List<String> bloodGroups) {
-    this.bloodGroups = new ArrayList<BloodGroup>();
-    for (String bg : bloodGroups) {
-      this.bloodGroups.add(new BloodGroup(bg));
-    }
-  }
-
-  public void setAnyBloodGroup(String anyBloodGroup) {
-    this.anyBloodGroup = anyBloodGroup;
-  }
-
-  public String getAnyBloodGroup() {
-    return anyBloodGroup;
-  }
 
   public boolean getCreateDonorSummaryView() {
     return createDonorSummaryView;
@@ -65,4 +57,16 @@ public class FindDonorBackingForm {
   public void setCreateDonorSummaryView(boolean createDonorSummaryView) {
     this.createDonorSummaryView = createDonorSummaryView;
   }
+
+	
+   public boolean isUsePhraseMatch() {
+		return usePhraseMatch;
+	}
+
+  public void setUsePhraseMatch(boolean usePhraseMatch) {
+		this.usePhraseMatch = usePhraseMatch;
+	}
+
+
+
 }

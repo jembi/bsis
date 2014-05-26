@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<%@ page import="model.collectedsample.CollectionConstants" %>
 <%!public long getCurrentTime() {
     return System.nanoTime();
   }%>
@@ -69,8 +69,25 @@
           }
         }).click(
             function() {
-                addNewCollection($("#${addCollectionFormId}")[0],
-                                      "${tabContentId}", notifyParentSuccess);
+            	var collectedSample = $($("#${addCollectionFormId}")[0]).serialize();
+		       		  $.ajax({  
+						     type : "Get",   
+						     url : "findLastDonationForDonor.html",   
+						     data : collectedSample,  
+						     success : function(response) {  
+						      var noOfDays = response["diffInDays"];
+						      var blockBetweenCollections = <%=CollectionConstants.BLOCK_BETWEEN_COLLECTIONS%>;
+						      if(noOfDays != null && noOfDays <= blockBetweenCollections){
+						    	  generateDeferDonorDialog(response);
+						      }
+						      else {
+						    	  addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+						      }
+						     },  
+						     error : function(e) {  
+						    	 showMessage("Something went wrong."+e);
+						     }  
+						    });  
             });
 
         $("#${addCollectionFormCentersId}").multiselect({
@@ -106,11 +123,6 @@
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
         });
-
-//        var collectedOnDatePicker = $("#${addCollectionFormId}").find(".collectedOn");
-//        if ("${existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
-//          collectedOnDatePicker.datepicker('setDate', new Date());
-//        }
 
         $("#${mainContentId}").find(".clearFormButton").button({
           icons : {
@@ -190,10 +202,45 @@
          toggleCheckboxDisabledState();
 
          $("#${addCollectionFormUseBatchCheckboxId}").change(toggleCheckboxDisabledState);
+		
+         function generateDeferDonorDialog(message) {
+             $("<div>").dialog({
+               modal: true,
+               open:  function() {
+            	   var alertMessage ="";
+            	   if(message["diffInDays"] > 0){
+                   		alertMessage = "Donor last donated on "+message["dateOfLastDonation"]+", "+message["diffInDays"]+" day(s) ago. Allow the donation to be added?";
+                   }
+            	   if(message["diffInDays"] == 0){
+                  		alertMessage = "Donor donated today, "+message["dateOfLastDonation"]+". Allow the donation to be added?";
+           	   	   }
+            	   if(message["diffInDays"] < 0){
+            			alertMessage = "Donor donated on "+message["dateOfLastDonation"]+", "+Math.abs(message["diffInDays"])+" day(s) after the provided donation date ("+message["collectedOnDate"]+"). Allow the donation to be added?";
+          	   	   }
+            	   $(this).append(alertMessage);
+                       },
+               close: function(event, ui) {
+                        $(this).remove();
+                       },
+               title: "Donor Not Due to Donate",
+               height: 200,
+               width: 450,
+               buttons:
+                 {
+                    "Add Donation": function() {
+                    	 			addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+                                    $(this).dialog("close");
+                                   },
+                    "Cancel": function() {
+                    	         $(this).dialog("close");                                                        
+                               }
+                 }
+             });
+            }
 
     });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
     <c:if test="${!empty success && !success}">
@@ -404,3 +451,4 @@
 <div id="${addCollectionFormFindDonorDialogId}" style="display: none;">
   <div class="findDonorFormSection"></div> 
 </div>
+</sec:authorize>

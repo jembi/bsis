@@ -2,7 +2,7 @@ package model.product;
 
 public enum ProductStatus {
 
-  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, SPLIT, USED, UNSAFE, DISCARDED;
+  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, SPLIT, USED, UNSAFE, DISCARDED, PROCESSED;
 
   /**
    * Alternative to valueOf when we want to assign a default status instead

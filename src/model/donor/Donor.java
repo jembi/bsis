@@ -275,6 +275,8 @@ public class Donor implements ModificationTracker {
     setPreferredContactMethod(donor.getPreferredContactMethod());
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
+    setBloodAbo(donor.getBloodAbo());
+    setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
     setDateOfFirstDonation(donor.getDateOfFirstDonation());
   }
@@ -478,8 +480,8 @@ public class Donor implements ModificationTracker {
     return bloodRh;
   }
 
-  public void setBloodRh(String bloodRhd) {
-    this.bloodRh = bloodRhd;
+  public void setBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
   }
 
   public DonorStatus getDonorStatus() {

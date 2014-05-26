@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
@@ -71,6 +72,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_BLOOD_TYPING_OUTCOME)">
 <div id="${tabContentId}">
     <div>
       <button class="doneButton" style="margin-left: 20px;">Return to previous screen</button>
@@ -141,3 +143,4 @@ $(document).ready(function() {
   </div>
 
 </div>
+</sec:authorize>

@@ -76,7 +76,7 @@ $(document).ready(function() {
   
 });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONOR)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -89,7 +89,7 @@ $(document).ready(function() {
     </div>
     <div>
       <div class="summaryPageButtonSection" style="text-align: right;">
-      	<sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+      	<sec:authorize access="hasRole('Edit Donor')">
 	      <button type="button" class="editButton">
 	        Edit
 	      </button>
@@ -113,3 +113,4 @@ $(document).ready(function() {
   </div>
 
 </div>
+</sec:authorize>

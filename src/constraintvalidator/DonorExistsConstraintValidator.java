@@ -41,7 +41,7 @@ public class DonorExistsConstraintValidator implements
            return true;
 
          donor = 
-           donorRepository.findDonorByDonorNumber(target.getDonorNumber());
+           donorRepository.findDonorByDonorNumber(target.getDonorNumber(),false);
        }
        if (donor != null) {
          return true;
