@@ -324,7 +324,7 @@
 			 <form:errors class="formError" path="donor.idNumber" delimiter=", "></form:errors>
                             </div>
                        </c:if>
-                        <c:if test="${donorFields.mobileNumber.hidden != true }">
+                        
 			<c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
 				<div>
 					<form:label path="dateOfFirstDonation">${donorFields.dateOfFirstDonation.displayName}</form:label>
@@ -332,7 +332,7 @@
 						value="${firstTimeRender ? donorFields.dateOfFirstDonation.defaultValue : ''}" />
 				</div>
 			</c:if>
-			<c:if test="${donorFields.address.hidden != true }">
+			<c:if test="${donorFields.mobileNumber.hidden != true }">
 				<div>
 					<form:label path="mobileNumber">${donorFields.mobileNumber.displayName}</form:label>
 					<form:input path="mobileNumber" />
