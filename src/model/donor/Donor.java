@@ -195,6 +195,12 @@ public List<DonorCode> getDonorCodes() {
 public void setDonorCodes(List<DonorCode> donorCodes) {
 	this.donorCodes = donorCodes;
 }
+  
+  /**
+   * Date of first donation
+   */
+  @Temporal(TemporalType.DATE)
+  private Date dateOfFirstDonation;
 
 public Donor() {
     contactInformation = new ContactInformation();
@@ -296,8 +302,11 @@ public void copy(Donor donor) {
     setPreferredContactMethod(donor.getPreferredContactMethod());
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
+    setBloodAbo(donor.getBloodAbo());
+    setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
     this.donorCodes = donor.getDonorCodes();
+    setDateOfFirstDonation(donor.getDateOfFirstDonation());
   }
 
   public List<CollectedSample> getCollectedSamples() {
@@ -499,8 +508,8 @@ public void copy(Donor donor) {
     return bloodRh;
   }
 
-  public void setBloodRh(String bloodRhd) {
-    this.bloodRh = bloodRhd;
+  public void setBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
   }
 
   public DonorStatus getDonorStatus() {
@@ -535,6 +544,14 @@ public void copy(Donor donor) {
     this.donorHash = donorHash;
   }
 
+	public Date getDateOfFirstDonation() {
+		return dateOfFirstDonation;
+	}
+
+	public void setDateOfFirstDonation(Date dateOfFirstDonation) {
+		this.dateOfFirstDonation = dateOfFirstDonation;
+	}
+  
   public Boolean getBirthDateEstimated() {
 	return birthDateEstimated;
   }

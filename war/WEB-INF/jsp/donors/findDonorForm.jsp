@@ -54,6 +54,19 @@ $(document).ready(function() {
     }
   }).click(clearFindForm);
   
+ 
+// $('.findDonorButton').attr('disabled', 'disabled'); // Issuw in firefox browser
+ $( ".findDonorButton" ).button( "option", { disabled: true } );
+
+  $('#donorNumber, #firstName, #lastName, #donationIdentificationNumber').keyup(function(){ 
+	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 
+                  || $('#lastName').val().trim().length >0 || $('#donationIdentificationNumber').val().trim().length >0)
+              $( ".findDonorButton" ).button( "option", { disabled: false } );
+	  else
+               $( ".findDonorButton" ).button( "option", { disabled: true } );
+             $( ".findDonorButton" ).button( "refresh" );
+  });
+	  
   function clearFindForm() {
     refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
@@ -212,6 +225,10 @@ $(document).ready(function() {
         <form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
         <form:input path="donorNumber" />
       </div>
+       <div>
+        <form:label path="donationIdentificationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
+        <form:input path="donationIdentificationNumber" />
+      </div>
       <div>
         <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
         <form:input path="firstName" />
@@ -220,25 +237,10 @@ $(document).ready(function() {
         <form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
         <form:input path="lastName" />
       </div>
+          
       <div>
-        <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-        <form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
-        <form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
-          <form:option value="Unknown" label="Unknown" />
-          <form:option value="A+" label="A+" />
-          <form:option value="A-" label="A-" />
-          <form:option value="B+" label="B+" />
-          <form:option value="B-" label="B-" />
-          <form:option value="AB+" label="AB+" />
-          <form:option value="AB-" label="AB-" />
-          <form:option value="O+" label="O+" />
-          <form:option value="O-" label="O-" />
-        </form:select>
-      </div>
-      
-       <div>
-        <form:label path="dueToDonate" style="width: 9.2%;">Due To Donate</form:label>
-        <form:checkbox path="dueToDonate" style="width: auto; position: relative; top: 2px;"/>
+        <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
+        <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>
       </div>
 
       <br />
@@ -268,7 +270,7 @@ $(document).ready(function() {
 
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
-      commandName="addDonorForm">
+      commandName="addDonorForm" >
 
 
       <c:if test="${model.donorFields.firstName.hidden != true }">

@@ -1,12 +1,12 @@
 package repository;
 
+import controller.UtilController;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -17,7 +17,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
+import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -27,7 +27,6 @@ import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
-
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -35,10 +34,8 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
-import controller.UtilController;
 
 @Repository
 @Transactional
@@ -91,54 +88,44 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate) {
-
-    CriteriaBuilder cb = em.getCriteriaBuilder();
+      String lastName,  Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
+     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
-
-    Expression<Boolean> exp1;
-    if (anyBloodGroup.equals("true")) {
-      exp1 = cb.not(cb.disjunction());
-    }
-    else {
-      List<Predicate> bgPredicates = new ArrayList<Predicate>();
-      for (BloodGroup bg : bloodGroups) {
-        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
-        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
-        bgPredicates.add(cb.and(aboExp, rhExp));
-      }
-      exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
-    }
-
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
+    Predicate firstNameExp, lastNameExp;
+    if (!usePhraseMatch){
+      firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
+      lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
+    }
+    else{
+       if(firstName.trim().equals(""))
+    	   firstNameExp = cb.disjunction();
+       else   
+           firstNameExp =  cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+       
+       if(lastName.trim().equals(""))
+    	   lastNameExp = cb.disjunction();
+       else
+           lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+    }
 
-    Predicate firstNameExp;
-    if (firstName.trim().equals(""))
-      firstNameExp = cb.disjunction();
-    else
-      firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
     
-    Predicate dueToDonateExp;
-    if (!dueToDonate)
-    	dueToDonateExp = cb.disjunction();
-    else
-    	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
-    Predicate lastNameExp;
-    if (lastName.trim().equals(""))
-      lastNameExp = cb.disjunction();
-    else
-      lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
+      Expression<Boolean> exp2 =cb.conjunction();
+    
+     if(!StringUtils.isBlank(donorNumber))
+ 	  exp2 = cb.and(exp2,donorNumberExp); 
 
-    Expression<Boolean> exp2;
-    if (StringUtils.isBlank(donorNumber) && 
-        StringUtils.isBlank(firstName) &&
-        StringUtils.isBlank(lastName) && !dueToDonate)
-      exp2 = cb.or(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
-    else
-      exp2 = cb.and(exp1, cb.or(donorNumberExp, firstNameExp, lastNameExp,dueToDonateExp));
-
+    
+       if(!StringUtils.isBlank(firstName))
+    	    exp2 = cb.and(exp2,firstNameExp);
+       
+       if(!StringUtils.isBlank(lastName))
+    	   exp2 = cb.and(exp2,lastNameExp);
+       
+       
+       
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
 
@@ -166,7 +153,24 @@ public class DonorRepository {
 
     TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
     Long totalResults = countQuery.getSingleResult().longValue();
-    return Arrays.asList(query.getResultList(), totalResults);
+    List<Donor> donorResults = query.getResultList();
+    boolean looped = false;
+    if(!StringUtils.isBlank(donationIdentificationNumber)){
+    List<Donor> uniqueResult = new ArrayList<Donor>();
+    looped = true;
+    for(Donor donor : donorResults){
+        for(CollectedSample collectedSample: donor.getCollectedSamples()){
+            if(collectedSample.getCollectionNumber().equals(donationIdentificationNumber)){
+                uniqueResult.add(donor);
+                 return Arrays.asList(uniqueResult,totalResults);
+        }
+        }
+    }
+   }
+    if(looped == true)
+    return null;
+    return Arrays.asList(donorResults, totalResults);
+    
   }
 
   public List<Donor> getAllDonors() {

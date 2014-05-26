@@ -119,4 +119,12 @@ public class CustomDateFormatter {
   public static String getDatetimepatternhumanreadable() {
     return dateTimePatternHumanReadable;
   }
+  
+  public static String format(Date date){
+	  return getDateString(date);
+  }
+  
+  public static Date parse(String dateStr) throws ParseException{
+	  return getDateFromString(dateStr);
+  }
 }

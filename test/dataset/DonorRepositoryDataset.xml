@@ -7,18 +7,13 @@
 	<location id="2" name="location 2" isDonorPanel="true" />
 	<location id="3" name="location 3" isDonorPanel="true" />
 
-	<contactmethodtype id="1" contactMethodType="None"
-		isDeleted="0" />
-	<contactmethodtype id="2" contactMethodType="Phone"
-		isDeleted="0" />
-	<contactmethodtype id="3" contactMethodType="SMS"
-		isDeleted="0" />
-	<contactmethodtype id="4" contactMethodType="Email"
-		isDeleted="0" />
-	<contactmethodtype id="5" contactMethodType="Mail"
-		isDeleted="0" />
-	<contactmethodtype id="6" contactMethodType="Do not Contact"
-		isDeleted="0" />
+	<contactmethodtype id="1" contactMethodType="None" isDeleted="0" />
+	<contactmethodtype id="2" contactMethodType="Phone" isDeleted="0" />
+	<contactmethodtype id="3" contactMethodType="SMS" isDeleted="0" />
+	<contactmethodtype id="4" contactMethodType="Email" isDeleted="0" />
+	<contactmethodtype id="5" contactMethodType="Mail" isDeleted="0" />
+	<contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
+	
 	<donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
 		city="city" country="country" district="district" otherPhoneNumber="999999999"
@@ -82,6 +77,34 @@
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		nationalID="null" notes="notes" preferredContactMethod_id="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		
+	<bloodbagtype id="1" bloodBagType="Single" canPool=""
+ 		canSplit="" isDeleted="0"></bloodbagtype>
+ 	<bloodbagtype id="2" bloodBagType="Triple" canPool=""
+ 		canSplit="" isDeleted="0"></bloodbagtype>
+ 	<bloodbagtype id="3" bloodBagType="Pedi" canPool=""
+ 		canSplit="" isDeleted="0"></bloodbagtype>
+	
+	<donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>
+ 	<donationtype id="2" donationType="Family" isDeleted="0"></donationtype>
+ 	<donationtype id="3" donationType="Autologous" isDeleted="0"></donationtype>
+ 	<donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
+ 	
+ 	<collectionbatch id="1" batchNumber="B0314000000"
+ 		isDeleted="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
+ 		notes="Notes" collectionCenter_id="2" collectionSite_id="3"
+ 		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
+ 	
+ 	<collectedsample id="1" bloodAbo=""
+ 		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
+ 		collectedOn="2014-03-25 00:00:00" collectionNumber="000001"
+ 		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
+ 		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
+ 		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
+ 		collectionBatch_id="1" collectionCenter_id="2" collectionSite_id="3"
+ 		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
+ 		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
+ 		donorPulse="60"></collectedsample>
 
 
 	<genericconfig id="1" propertyName="rowHeight"
@@ -214,10 +237,9 @@
 	<donordeferral id="6" deferralReasonText=""
 		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
 		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="6" isVoided="false" />
-		
-       
-         <DonorCodeGroup id ="1" donorCodeGroup = "Test Only"/>      
-         <DonorCode id ="1" donorCode = "Test Only" donorCodeGroupId = "1"/>
-         <DonorDonorCode id="1" donorId = "1" donorCodeId = "1"/>
+
+	<DonorCodeGroup id ="1" donorCodeGroup = "Test Only"/>
+	<DonorCode id ="1" donorCode = "Test Only" donorCodeGroupId = "1"/>
+	<DonorDonorCode id="1" donorId = "1" donorCodeId = "1"/>
 
 </dataset>
