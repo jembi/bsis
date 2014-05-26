@@ -408,9 +408,9 @@ public class DonorBackingForm {
   }
   
 	public Integer getNumberOfDonations() {
-    if(numberOfDonations == null){
-        return 0;
-    }
+	    if(donor.getNumberOfDonations() == null){
+	        return 0;
+	    }
 		return donor.getNumberOfDonations();
 	}
 

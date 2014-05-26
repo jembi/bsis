@@ -525,6 +525,7 @@ public class Donor implements ModificationTracker {
 
 	public void setNumberOfDonations(Integer numberOfDonations) {
 		this.numberOfDonations = numberOfDonations;
+	}
 
 	public Date getDateOfFirstDonation() {
 		return dateOfFirstDonation;
