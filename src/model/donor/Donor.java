@@ -1,17 +1,23 @@
 package model.donor;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -21,6 +27,7 @@ import javax.validation.Valid;
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
+import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
@@ -29,14 +36,16 @@ import model.user.User;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.mapping.Set;
 import org.hibernate.validator.constraints.Length;
 
 import constraintvalidator.LocationExists;
-
 import utils.DonorUtils;
 
 @Entity
@@ -170,6 +179,22 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
   
+
+ @NotAudited
+ @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class,fetch = FetchType.EAGER)
+ @Fetch(value = FetchMode.SUBSELECT)
+ @JoinTable(name="donordonorcode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
+         @JoinColumn(name="donorCodeId"))
+private List<DonorCode> donorCodes;
+
+
+public List<DonorCode> getDonorCodes() {
+	return donorCodes;
+}
+
+public void setDonorCodes(List<DonorCode> donorCodes) {
+	this.donorCodes = donorCodes;
+}
   
   /**
    * Date of first donation
@@ -177,7 +202,7 @@ public class Donor implements ModificationTracker {
   @Temporal(TemporalType.DATE)
   private Date dateOfFirstDonation;
 
-  public Donor() {
+public Donor() {
     contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
   }
@@ -260,7 +285,9 @@ public class Donor implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(Donor donor) {
+  
+
+public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
     setDonorNumber(donor.getDonorNumber());
     setFirstName(donor.getFirstName());
@@ -278,6 +305,7 @@ public class Donor implements ModificationTracker {
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
+    this.donorCodes = donor.getDonorCodes();
     setDateOfFirstDonation(donor.getDateOfFirstDonation());
   }
 

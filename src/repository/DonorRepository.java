@@ -21,6 +21,9 @@ import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.donorcodes.DonorCode;
+import model.donorcodes.DonorCodeGroup;
+import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
@@ -54,6 +57,8 @@ public class DonorRepository {
     em.persist(donor);
     em.flush();
   }
+  
+
 
   public Donor deleteDonor(Long donorId) {
     Donor existingDonor = findDonorById(donorId);
@@ -187,12 +192,13 @@ public class DonorRepository {
     if (existingDonor == null) {
       return null;
     }
-    existingDonor.copy(donor);
+    existingDonor.copy(donor); 
     existingDonor.setIsDeleted(false);
     em.merge(existingDonor);
     em.flush();
     return existingDonor;
   }
+  	  
 
   public Donor findDonorByNumber(String donorNumber) {
     try {
@@ -436,5 +442,86 @@ public class DonorRepository {
     	return query.getSingleResult();
     return null;
   }
+
+  //Donor Code & Code Group Methods
+ 
+
+  public void  saveDonorCodeGroup(DonorCodeGroup donorCodeGroup) {
+	    em.persist(donorCodeGroup);
+	    em.flush();
+          
+	  }
+
+
+	  
+public void saveDonorCode(DonorCode donorCode) {
+	    
+	   em.persist(donorCode);
+	   em.flush();
+	  }
+
+public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
+    
+	   em.persist(donorDonorCode);
+	   em.flush();
+	  }
+
+public List<DonorCodeGroup> findDonorCodeGroupsByDonorId(Long donorId){
+	Donor donor = em.find(Donor.class, donorId);
+        List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
+	List<DonorCode> donorCodes = donor.getDonorCodes();
+	DonorCodeGroup donorCodeGroup=null;
+        for (DonorCode donorCode : donorCodes) {
+                donorCodeGroup = donorCode.getDonorCodeGroup();
+                if(!donorCodeGroups.contains(donorCodeGroup))
+		donorCodeGroups.add(donorCodeGroup);
+                
+        }
+	return donorCodeGroups;
+	
+     }
+
+
+
+public List<DonorCodeGroup> getAllDonorCodeGroups(){
+	
+	 TypedQuery<DonorCodeGroup> query = em.createQuery(
+		        "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
+		    return query.getResultList();
+	
+}
+
+
+public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id){
+	
+	 DonorCodeGroup donorCodeGroup =  em.find(DonorCodeGroup.class,id);
+	 em.flush();
+	 return donorCodeGroup.getDonorCodes();
+	
+}
+
+public List<DonorDonorCode > findDonorDonorCodesOfDonorByDonorId(Long donorId){
+	
+	 TypedQuery<DonorDonorCode> query = em.createQuery(
+		        "SELECT dc FROM DonorDonorCode dc where donorId = :donorId", DonorDonorCode.class);
+	 query.setParameter("donorId",em.find(Donor.class, donorId));
+	 return query.getResultList();
+}
+
+public DonorCode findDonorCodeById(Long id){
+	
+	 DonorCode donorCode =  em.find(DonorCode.class,id);
+	 em.flush();
+	 return donorCode;
+	
+}
+
+public Donor deleteDonorCode(Long id){
+	 DonorDonorCode donorDonorCode =  em.find(DonorDonorCode.class,id);
+	Donor donor = donorDonorCode.getDonorId();
+	em.remove(donorDonorCode);
+	em.flush();
+	return donor;
+}
 
 }

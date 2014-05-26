@@ -126,6 +126,7 @@ public class DonorController {
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     mv.addObject("tips", tips);
+    mv.addObject("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
     return mv;
   }
 
@@ -171,7 +172,7 @@ public class DonorController {
       ex.printStackTrace();
       donorDeferralViewModels = Arrays.asList(new DonorDeferralViewModel[0]);
     }
-
+    
     mv.addObject("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
     mv.addObject("allDonorDeferrals", donorDeferralViewModels);
     mv.addObject("refreshUrl", getUrl(request));
@@ -237,7 +238,7 @@ public class DonorController {
 
     ModelAndView mv = new ModelAndView();
     boolean success = false;
-     form.setBirthDate();
+    form.setBirthDate();
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 

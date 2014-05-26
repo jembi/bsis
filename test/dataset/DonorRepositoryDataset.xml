@@ -238,4 +238,8 @@
 		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
 		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="6" isVoided="false" />
 
+	<DonorCodeGroup id ="1" donorCodeGroup = "Test Only"/>
+	<DonorCode id ="1" donorCode = "Test Only" donorCodeGroupId = "1"/>
+	<DonorDonorCode id="1" donorId = "1" donorCodeId = "1"/>
+
 </dataset>

@@ -1578,3 +1578,6 @@
         add constraint FK1BCDFCC2C02466CD 
         foreign key (collectedSamples_id) 
         references CollectedSample (id);
+        
+   
+        

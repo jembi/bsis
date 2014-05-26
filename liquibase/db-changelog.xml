@@ -2696,7 +2696,7 @@
 	     <column name="roles_id" value="15"></column>
 	  </insert>
 	  
-	  <!-- Admin & SUper-user Permission Role Mappings For Requests & Tips-->
+	  <!-- Admin & Super-user Permission Role Mappings For Requests & Tips-->
 	  
 	   <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="81"></column>
@@ -2716,6 +2716,127 @@
 	  </insert>
 	  
 </changeSet>
-  
+
+<!--For Issue #36[Add Donor Codes Functionality] -->
+<changeSet id="201405041130" author="srikanth">
+
+
+       <createTable  tableName="DonorCodeGroup">
+          <column name="id" type="BIGINT" autoIncrement = "true">
+          	<constraints primaryKey="true" nullable="false" />
+          </column>
+           <column name="donorCodeGroup" type="varchar(255)"/> 
+       </createTable>
+      
+     
+       
+      
+     
+       <createTable  tableName="DonorCode">
+          <column name="id" type="BIGINT" autoIncrement="true">
+          	<constraints primaryKey="true" nullable="false" />
+         </column>
+          <column name="donorCode" type="varchar(255)"/> 
+         <column name="donorCodeGroupId" type="BIGINT">
+          	<constraints  nullable="false" />
+         </column>
+      </createTable>
+       <addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
+                                  baseTableName="DonorCode"
+                                  constraintName="fk_DonorCode_DonorCodeGroup"
+                                  referencedColumnNames="id"
+                                  referencedTableName="DonorCodeGroup"/>
+
+       
+      
+      <createTable  tableName="DonorDonorCode">
+         <column name="id" type="BIGINT" autoIncrement="true">
+          	<constraints primaryKey="true" nullable="false" />
+         </column>
+          <column name="donorId" type="BIGINT">
+          	<constraints  nullable="false" />
+          </column>
+          <column name="donorCodeId" type="BIGINT">
+          	<constraints  nullable="false" />
+          </column>
+          <column name="createdDate" type="TIMESTAMP"/>
+          <column name="lastUpdated" type="TIMESTAMP"/>
+          <column name="createdBy_id" type="SMALLINT"/>
+          <column name="lastUpdatedBy_id" type="SMALLINT"/>
+     </createTable>
+        <addForeignKeyConstraint baseColumnNames="donorCodeId"
+                                  baseTableName="DonorDonorCode"
+                                  constraintName="fk_DonorDonorCode_DonorCode"
+                                  referencedColumnNames="id"
+                                  referencedTableName="DonorCode"/>
+        <addForeignKeyConstraint baseColumnNames="donorId"
+                                  baseTableName="DonorDonorCode"
+                                  constraintName="fk_DonorDonorCode_Donor"
+                                  referencedColumnNames="id"
+                                  referencedTableName="Donor"/>
+   
+    <createTable  tableName="DonorDonorCode_AUD">
+         <column name="id" type="BIGINT" autoIncrement="true">
+          	<constraints primaryKey="true" nullable="false" />
+         </column>
+          <column name="REV" type="INT">
+          	<constraints  primaryKey="true" nullable="false" />
+          </column>
+          <column name="REVTYPE" type="TINYINT"/>
+          <column name="createdDate" type="TIMESTAMP"/>
+          <column name="lastUpdated" type="TIMESTAMP"/>
+          <column name="createdBy_id" type="SMALLINT"/>
+          <column name="lastUpdatedBy_id" type="SMALLINT"/>
+    </createTable>
+    
+
+
+	   <insert tableName="DonorCodeGroup">
+	     <column name="id" value="1"></column>
+	     <column name="donorCodeGroup" value="Test Only"></column>
+	  </insert>
+      <insert tableName="DonorCodeGroup">
+	     <column name="id" value="2"></column>
+	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
+	  </insert>
+      
+       <insert tableName="DonorCode">
+	     <column name="id" value="1"></column>
+	     <column name="donorCode" value="Blood group antibody"></column>
+	      <column name="donorCodeGroupId" value="1"></column>   
+	  </insert>
+     <insert tableName="DonorCode">
+	     <column name="id" value="2"></column>
+	     <column name="donorCode" value="Follow up samples required"></column>
+	      <column name="donorCodeGroupId" value="1"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="3"></column>
+	     <column name="donorCode" value="Lab query"></column>
+	      <column name="donorCodeGroupId" value="1"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="4"></column>
+	     <column name="donorCode" value="Biological false positive"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="5"></column>
+	     <column name="donorCode" value="For counseling – HCV"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="6"></column>
+	     <column name="donorCode" value="For counseling – HIV"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+	  <insert tableName="DonorCode">
+	     <column name="id" value="7"></column>
+	     <column name="donorCode" value="TTI Reactive"></column>
+	      <column name="donorCodeGroupId" value="2"></column>   
+	  </insert>
+     
+
+</changeSet>
 
 </databaseChangeLog>	
