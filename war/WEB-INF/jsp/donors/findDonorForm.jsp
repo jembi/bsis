@@ -290,7 +290,7 @@ $(document).ready(function() {
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
       commandName="addDonorForm" >
       
-  <c:if test="${model.donorFields.title.hidden != true }">
+  	  <c:if test="${model.donorFields.title.hidden != true }">
         <div>
           <form:label path="title">${model.donorFields.title.displayName}</form:label>
           <form:select path="title" id="${titleSelectorId}">
