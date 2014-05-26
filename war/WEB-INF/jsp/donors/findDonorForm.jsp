@@ -26,7 +26,7 @@
 <c:set var="addDonorFormId">addDonorForm-${unique_page_id}</c:set>
 
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
-
+<c:set var="titleSelectorId">titleSelector-${unique_page_id}</c:set>
 <script>
 $(document).ready(function() {
 
@@ -108,6 +108,12 @@ $(document).ready(function() {
         $("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
       });
   
+    
+  $("#${titleSelectorId}").multiselect({
+      multiple : false,
+      selectedList : 1,
+      header : false
+    });
   
   
   
@@ -283,8 +289,19 @@ $(document).ready(function() {
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
       commandName="addDonorForm" >
-
-
+      
+  <c:if test="${model.donorFields.title.hidden != true }">
+        <div>
+          <form:label path="title">${model.donorFields.title.displayName}</form:label>
+          <form:select path="title" id="${titleSelectorId}">
+            <form:option value="" label="" />
+            <form:option value="Mr" label="Mr" />
+            <form:option value="Ms" label="Ms" />
+            <form:option value="Mrs" label="Mrs" />
+            <form:option value="Dr" label="Dr" />
+          </form:select>
+        </div>
+      </c:if>
       <c:if test="${model.donorFields.firstName.hidden != true }">
         <div>
           <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>

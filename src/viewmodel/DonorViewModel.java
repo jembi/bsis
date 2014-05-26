@@ -31,7 +31,9 @@ public class DonorViewModel {
   public String getDonorNumber() {
     return donor.getDonorNumber();
   }
-
+  public String getTitle() {
+    return donor.getTitle();
+ }
   public String getFirstName() {
     return donor.getFirstName();
   }
@@ -76,7 +78,9 @@ public class DonorViewModel {
 	  return donor.getBirthDateEstimated();
   }
 
-  
+  public String getMobileNumber(){
+      return donor.getMobileNumber();
+  }
 
   public String getCity() {
     return donor.getCity();
@@ -191,16 +195,12 @@ public class DonorViewModel {
         return donor.getPostalAddressZipcode();
     }
 
-  public String getMobileNumber(){
-      return donor.getMiddleName();
-  }
-
   public String getWorkNumber(){
-      return donor.getWorkAddress();
+      return donor.getWorkNumber();
   }
   
   public String getHomeNumber(){
-      return donor.getHomeAddress();
+      return donor.getHomeNumber();
   }
   
   public String getEmail(){

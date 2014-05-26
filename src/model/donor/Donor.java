@@ -59,6 +59,16 @@ public class Donor implements ModificationTracker {
   private String donorNumber;
 
   /**
+
+	 * Just store the string for the Title. Low selectivity column. No need to
+	 * index it.
+ */
+
+  @Column(length = 15)
+  private String  title;
+
+  
+  /**
    * Find donor by first few characters of first name can be made faster with this index.
    */
   @Column(length=20)
@@ -198,6 +208,14 @@ public class Donor implements ModificationTracker {
   public String getDonorNumber() {
     return donorNumber;
   }
+  
+    public String getTitle() {
+		return title;
+  }
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
   public String getFirstName() {
     return firstName;
@@ -291,6 +309,22 @@ public class Donor implements ModificationTracker {
     setWorkAddress(donor.getWorkAddress());
     setHomeAddress(donor.getHomeAddress());
     setMobileNumber(donor.getMobileNumber());
+    setWorkNumber(donor.getWorkNumber());
+    setHomeNumber(donor.getHomeNumber());
+    setWorkAddressCity(donor.getWorkAddressCity());
+      setWorkAddressCountry(donor.getWorkAddressCountry());
+      setWorkAddressDistrict(donor.getWorkAddressDistrict());
+      setWorkAddressProvince(donor.getWorkAddressProvince());
+      setWorkAddressState(donor.getWorkAddressState());
+      setWorkAddressZipcode(donor.getWorkAddressZipcode());
+      setPostalAddress(donor.getPostalAddress());
+      setPostalAddressCity(donor.getPostalAddressCity());
+      setPostalAddressCountry(donor.getPostalAddressCountry());
+      setPostalAddressDistrict(donor.getPostalAddressDistrict());
+      setPostalAddressProvince(donor.getPostalAddressProvince());
+      setPostalAddressState(donor.getPostalAddressState());
+      setPostalAddressZipcode(donor.getPostalAddressZipcode());
+      
     setEmail(donor.getEmail());
     this.donorHash = DonorUtils.computeDonorHash(this);
   }
@@ -650,7 +684,7 @@ public class Donor implements ModificationTracker {
     }
 
     public void setPostalAddressCity(String postalAddressCity) {
-        contactInformation.setPostalAddress(postalAddressCity);
+        contactInformation.setPostalAddressCity(postalAddressCity);
     }
 
     public String getPostalAddressProvince() {
@@ -669,6 +703,7 @@ public class Donor implements ModificationTracker {
        contactInformation.setPostalAddressDistrict(postalAddressDistrict);
     }
 
+  
     public String getPostalAddressCountry() {
         return contactInformation.getPostalAddressCountry();
     }

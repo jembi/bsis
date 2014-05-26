@@ -95,6 +95,16 @@ public class DonorBackingForm {
   public String getDonorNumber() {
     return donor.getDonorNumber();
   }
+  
+  
+public String getTitle() {
+ return donor.getTitle();
+
+ }
+ public void setTitle(String title) {
+   donor.setTitle(title);
+ }
+
 
   public String getFirstName() {
     return donor.getFirstName();

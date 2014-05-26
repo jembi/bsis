@@ -2820,14 +2820,6 @@
             <column name="email" type="varchar(255)" ></column>
 </addColumn>
 
-
-<addColumn tableName="Donor">
-            <column name="calingName" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="calingName" type="varchar(255)" ></column>
-</addColumn>
-
 <addColumn tableName="Donor">
             <column name="workAddressCity" type="varchar(255)" ></column>
 </addColumn>
@@ -3086,6 +3078,29 @@
  </insert>
 
 
+ <!-- For issue 38 [Add Donor Title field] -->
+       <addColumn tableName="Donor">
+            <column name="title" type="VARCHAR(15)"></column>
+        </addColumn>
 
+        <addColumn tableName="Donor_AUD">
+            <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
+        </addColumn>
+
+        <insert tableName="FormField">
+            <column name="form" value="Donor"></column>
+            <column name="FIELD" value="title"></column>
+            <column name="defaultDisplayName" value="Title"></column>
+            <column name="defaultValue" value=""></column>
+            <column name="maxLength" value="0"></column>
+            <column name="hidden" value="0"></column>
+            <column name="isHidable" value="0"></column>
+            <column name="isRequired" value="0"></column>
+            <column name="canBeOptional" value="1"></column>
+            <column name="autoGenerate" value="0"></column>
+            <column name="isAutoGeneratable" value="0"></column>
+            <column name="useCurrentTime" value="0"></column>
+            <column name="isTimeField" value="0"></column>
+        </insert>
 </changeSet>
 </databaseChangeLog>	
