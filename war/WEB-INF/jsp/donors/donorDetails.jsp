@@ -186,37 +186,37 @@
       <label>${donor.postalAddress}</label>
     </div>
   </c:if>
-<c:if test="${donorFields.postalAddressCity.hidden != true }">
+<c:if test="${donorFields.city.hidden != true }">
     <div>
       <label>${donorFields.city.displayName}</label>
       <label>${donor.postalAddressCity}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.postalAddressProvince.hidden != true }">
+  <c:if test="${donorFields.province.hidden != true }">
     <div>
       <label>${donorFields.province.displayName}</label>
       <label>${donor.postalAddressProvince}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.postalAddressDistrict.hidden != true }">
+  <c:if test="${donorFields.district.hidden != true }">
     <div>
       <label>${donorFields.district.displayName}</label>
       <label>${donor.postalAddressDistrict}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.postalAddressState.hidden != true }">
+  <c:if test="${donorFields.state.hidden != true }">
     <div>
       <label>${donorFields.state.displayName}</label>
       <label>${donor.postalAddressState}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.postalAddressCountry.hidden != true }">
+  <c:if test="${donorFields.country.hidden != true }">
     <div>
       <label>${donorFields.country.displayName}</label>
       <label>${donor.postalAddressCountry}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.postalAddressZipcode.hidden != true }">
+  <c:if test="${donorFields.zipcode.hidden != true }">
     <div>
       <label>${donorFields.zipcode.displayName}</label>
       <label>${donor.postalAddressZipcode}</label>
@@ -230,37 +230,37 @@
       <label>${donor.workAddress}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.workAddressCity.hidden != true }">
+  <c:if test="${donorFields.city.hidden != true }">
     <div>
       <label>${donorFields.city.displayName}</label>
       <label>${donor.workAddressCity}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.workAddressProvince.hidden != true }">
+  <c:if test="${donorFields.province.hidden != true }">
     <div>
       <label>${donorFields.province.displayName}</label>
       <label>${donor.workAddressProvince}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.workAddressDistrict.hidden != true }">
+  <c:if test="${donorFields.district.hidden != true }">
     <div>
       <label>${donorFields.district.displayName}</label>
       <label>${donor.workAddressDistrict}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.workAddressState.hidden != true }">
+  <c:if test="${donorFields.state.hidden != true }">
     <div>
       <label>${donorFields.state.displayName}</label>
       <label>${donor.workAddressState}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.workAddressCountry.hidden != true }">
+  <c:if test="${donorFields.country.hidden != true }">
     <div>
       <label>${donorFields.country.displayName}</label>
       <label>${donor.workAddressCountry}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.workAddressZipcode.hidden != true }">
+  <c:if test="${donorFields.zipcode.hidden != true }">
     <div>
       <label>${donorFields.zipcode.displayName}</label>
       <label>${donor.workAddressZipcode}</label>
