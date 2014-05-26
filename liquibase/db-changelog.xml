@@ -278,10 +278,10 @@
    
     <!-- For issue 39 [Add in Date of first donation field to Donor form] -->
 	<changeSet id="201310251212" author="ankur">
-		<addColumn tableName="donor">
+		<addColumn tableName="Donor">
 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
 		</addColumn>
-		<addColumn tableName="donor_aud">
+		<addColumn tableName="Donor_AUD">
 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
 		</addColumn>		
 		<insert tableName="FormField">
