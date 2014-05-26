@@ -34,6 +34,8 @@ public class DonorBackingForm {
   private String ageSpecified;
   
 
+  private String dateOfFirstDonation;
+  
   public DonorBackingForm() {
     donor = new Donor();
     ageFormatCorrect = null;
@@ -613,6 +615,24 @@ public String getWorkAddress() {
         ex.printStackTrace();
         donor.setPreferredContactMethod(null);
       }
+    }
+  }
+
+  public String getDateOfFirstDonation() {
+    if (dateOfFirstDonation != null)
+      return dateOfFirstDonation;
+    if (dateOfFirstDonation == null)
+      return "";
+    return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
+  }
+
+  public void setDateOfFirstDonation(String dateOfFirstDonation) {
+    this.dateOfFirstDonation = dateOfFirstDonation;
+    try {
+      donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      donor.setDateOfFirstDonation(null);
     }
   }
   

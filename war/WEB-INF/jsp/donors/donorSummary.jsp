@@ -45,6 +45,21 @@
                         );
         });
         
+        
+        $("#${tabContentId}").find(".updateDonorCodesButton").button(
+                {
+                  icons : {
+                    primary : 'ui-icon-pencil'
+                  }
+                }).click(function() {
+                	hideMainContent();
+                	  fetchContent("updateDonorCodesFormGenerator.html",
+                              {donorId: "${donor.id}"},
+                              $("#${tabContentId}")
+                             );
+                	
+        });
+        
         $("#${tabContentId}").find(".printBarcode").button({
             icons : {
               primary : 'ui-icon-print'
@@ -212,12 +227,15 @@
         Defer Donor
       </button>
       </sec:authorize>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONOR_CODE)">
+      <button class="updateDonorCodesButton">
+        Update Donor Codes
+      </button>
+      </sec:authorize>
       <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DONOR)">
-      <sec:authorize access="hasRole('Void Donor')">
       <button type="button" class="deleteButton">
         Delete
       </button>
-      </sec:authorize>
       </sec:authorize>
       <button class="printBarcode">
         Print Barcode

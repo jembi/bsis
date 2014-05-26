@@ -2,7 +2,9 @@ package model.donor;
 
 import constraintvalidator.LocationExists;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,7 +14,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -21,6 +26,7 @@ import javax.validation.Valid;
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
+import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
@@ -36,7 +42,9 @@ import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.mapping.Set;
 import org.hibernate.validator.constraints.Length;
+import constraintvalidator.LocationExists;
 import utils.DonorUtils;
 
 @Entity
@@ -59,7 +67,6 @@ public class Donor implements ModificationTracker {
   private String donorNumber;
 
   /**
-
 	 * Just store the string for the Title. Low selectivity column. No need to
 	 * index it.
  */
@@ -182,8 +189,31 @@ public class Donor implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
+  
 
-@ManyToOne(fetch = FetchType.EAGER)
+ @NotAudited
+ @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class,fetch = FetchType.EAGER)
+ @Fetch(value = FetchMode.SUBSELECT)
+ @JoinTable(name="donordonorcode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
+         @JoinColumn(name="donorCodeId"))
+private List<DonorCode> donorCodes;
+
+
+public List<DonorCode> getDonorCodes() {
+	return donorCodes;
+}
+
+public void setDonorCodes(List<DonorCode> donorCodes) {
+	this.donorCodes = donorCodes;
+}
+  
+  /**
+   * Date of first donation
+   */
+  @Temporal(TemporalType.DATE)
+  private Date dateOfFirstDonation;
+
+  @ManyToOne(fetch = FetchType.EAGER)
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private IdType idType;
@@ -288,7 +318,9 @@ public class Donor implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(Donor donor) {
+  
+
+public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
     setDonorNumber(donor.getDonorNumber());
     setFirstName(donor.getFirstName());
@@ -329,6 +361,8 @@ public class Donor implements ModificationTracker {
       
     setEmail(donor.getEmail());
     this.donorHash = DonorUtils.computeDonorHash(this);
+    this.donorCodes = donor.getDonorCodes();
+    setDateOfFirstDonation(donor.getDateOfFirstDonation());
   }
 
   public List<CollectedSample> getCollectedSamples() {
@@ -617,6 +651,14 @@ public class Donor implements ModificationTracker {
     this.donorHash = donorHash;
   }
 
+	public Date getDateOfFirstDonation() {
+		return dateOfFirstDonation;
+	}
+
+	public void setDateOfFirstDonation(Date dateOfFirstDonation) {
+		this.dateOfFirstDonation = dateOfFirstDonation;
+	}
+  
   public Boolean getBirthDateEstimated() {
 	return birthDateEstimated;
   }

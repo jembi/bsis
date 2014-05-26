@@ -53,6 +53,8 @@ import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
 import controller.UtilController;
+import model.donorcodes.DonorCodeGroup;
+import model.donorcodes.DonorDonorCode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -72,7 +74,6 @@ public class DonorRepositoryTest {
 	@Autowired
 	private DataSource dataSource;
 	static IDatabaseConnection connection;
-	
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Before
@@ -101,16 +102,19 @@ public class DonorRepositoryTest {
 
 			donor = new Donor();
 			donorBackingForm = new DonorBackingForm(donor);
-		} catch (Exception e) {
+          	} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+        
+        
 	@After
 	public void after() throws Exception {
 		// Remove data from database
 		 DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
 	}
+      
 
 	/**
 	 * This method is executed once before test case execution start and acquires
@@ -213,14 +217,14 @@ public class DonorRepositoryTest {
 		String searchDonorNumber = "";
 		String donorFirstName = "xxx";
 		String donorLastName = "";
-		String anyBloodGroup = "true";
+		String donationIdentificationNumber = "";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
+
 		assertEquals("List size should be zero, no matching search results.",
 				0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-						donorFirstName, donorLastName, bloodGroups,
-						anyBloodGroup, pagingParams, false,true).get(0))).size());
+						donorFirstName, donorLastName, pagingParams,
+						true, donationIdentificationNumber).get(0))).size());
 	}
 
 	@Test
@@ -232,13 +236,14 @@ public class DonorRepositoryTest {
 		String searchDonorNumber = "";
 		String donorFirstName = "fir";
 		String donorLastName = "";
-		String anyBloodGroup = "true";
+		String donationIdentificationNumber = "";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
+
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,true).get(0)));
+				searchDonorNumber, donorFirstName, donorLastName, 
+				 pagingParams,true, donationIdentificationNumber).get(0)));
+
 		assertNotSame(
 				"List size should not zero.Matching records is found base on firstname.",
 				0, listDonors.size());
@@ -264,13 +269,14 @@ public class DonorRepositoryTest {
 		String searchDonorNumber = "";
 		String donorFirstName = "firstName";
 		String donorLastName = "";
-		String anyBloodGroup = "true";
+		String donationIdentificationNumber = "";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		setPaginationParam(pagingParams);
+
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,false).get(0)));
+				searchDonorNumber, donorFirstName, donorLastName,
+				 pagingParams,false, donationIdentificationNumber).get(0)));
+
 		assertNotSame(
 				"List size should not zero.Matching records is found base on firstname.",
 				0, listDonors.size());
@@ -297,14 +303,14 @@ public class DonorRepositoryTest {
 		String searchDonorNumber = "";
 		String donorFirstName = "";
 		String donorLastName = "las";
-		String anyBloodGroup = "true";
+		String donationIdentificationNumber = "";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-
 		setPaginationParam(pagingParams);
+
 		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,true).get(0)));
+				searchDonorNumber, donorFirstName, donorLastName
+			        , pagingParams,true, donationIdentificationNumber).get(0)));
+
 		assertNotSame(
 				"List size should not zero.Matching records is found base on lastname.",
 				0, listDonors.size());
@@ -321,95 +327,6 @@ public class DonorRepositoryTest {
 
 	@Test
 	/**
-	 * Should fetch all donors with blood groups that match the criteria in List<BloodGroup>
-	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
-	 */
-	public void findAnyDonor_listSizeShouldNotZeroMatchBloodGroup() {
-		String searchDonorNumber = "";
-		String donorFirstName = "firstName";
-		String donorLastName = "";
-		String anyBloodGroup = "false";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		bloodGroups.add(new BloodGroup("A+"));
-		bloodGroups.add(new BloodGroup("A-"));
-		setPaginationParam(pagingParams);
-		List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,true).get(0)));
-		assertNotSame(
-				"List size should not zero.Matching records is found base on bloodgroup criteria.",
-				0, listDonors.size());
-		boolean isValid = false;
-		for (Donor donor : listDonors) {
-			if ((donor.getBloodAbo() + donor.getBloodRh()).equals("A+")
-					|| (donor.getBloodAbo() + donor.getBloodRh()).equals("A-")) {
-				isValid = true;
-			} else {
-				isValid = false;
-				break;
-			}
-		}
-		assertTrue("Donor's blood group should be 'A+ and A-.'.", isValid);
-	}
-
-	@Test
-	/**
-	 * Should fetch donors with no blood groups when anyBloodGroup.equals(true).
-	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
-	 */
-	public void findAnyDonor_listSizeShouldNotZeroAnyBloodGroupMatch() {
-		String searchDonorNumber = "";
-		String donorFirstName = "firstName";
-		String donorLastName = "";
-		String anyBloodGroup = "true";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		// B+ bloodgroup is not exist into Donor's table.
-		bloodGroups.add(new BloodGroup("B+"));
-		setPaginationParam(pagingParams);
-		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,true).get(0));
-		assertNotSame(
-				"Any blood group condition is true. So Donor's blood group search criteria is not consider. And List size should not zero.",
-				0, listDonor.size());
-	}
-
-	@Test
-	/**
-	 * Should only return donors that are due to donate when dueToDonate is set to true.
-	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
-	 */
-	public void findAnyDonor_listSizeShouldNotZeroDueToDonateSetTrue() {
-		String searchDonorNumber = "";
-		String donorFirstName = "firstName";
-		String donorLastName = "";
-		String anyBloodGroup = "true";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		setPaginationParam(pagingParams);
-		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, true,true).get(0));
-		assertNotSame(
-				"DueToDonate condition is true,matching record should exist and donor list size should not zero.",
-				0, listDonor.size());
-		boolean isValid = false;
-		for (Donor donor : listDonor) {
-			if ((donor.getDonorNumber().equals("000004") || donor
-					.getDonorNumber().equals("000017"))) {
-				isValid = true;
-			} else {
-				isValid = false;
-				break;
-			}
-		}
-		assertTrue("Donor's Donor Number should be 000004 and 000017.", isValid);
-	}
-
-	@Test
-	/**
 	 * Should not return donors who have been deleted.
 	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
 	 */
@@ -417,20 +334,46 @@ public class DonorRepositoryTest {
 		String searchDonorNumber = "";
 		String donorFirstName = "fir";
 		String donorLastName = "";
-		String anyBloodGroup = "true";
+		String donationIdentificationNumber = "";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		bloodGroups.add(new BloodGroup("A+"));
 		setPaginationParam(pagingParams);
+
 		List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-				searchDonorNumber, donorFirstName, donorLastName, bloodGroups,
-				anyBloodGroup, pagingParams, false,true).get(0));
+				searchDonorNumber, donorFirstName, donorLastName
+				, pagingParams,true, donationIdentificationNumber).get(0));
+
 		for (Donor donor : listDonor) {
 			// 2 is deleted donor id
 			assertFalse(
 					"Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
 					donor.getId() == 2 ? true : false);
 		}
+	}
+	
+	@Test
+	/**
+	 * Should return donor with donation matching DIN
+	 * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String, Object>, Boolean)
+	 */
+	public void findAnyDonor_shouldReturnDonorWithDonationMatchingDIN() {
+		String searchDonorNumber = "";
+		String donorFirstName = "";
+		String donorLastName = "";
+		String donationIdentificationNumber = "000001";
+		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		setPaginationParam(pagingParams);
+		
+		List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
+				searchDonorNumber, donorFirstName, donorLastName, 
+				pagingParams, false, donationIdentificationNumber).get(0));
+		assertEquals("Should return a single Donor result", 1, donorList.size());
+		boolean isValid = false;
+		if (donorList.get(0).getDonorNumber().equals("000001")) {
+			isValid = true;
+		} else {
+			isValid = false;
+		}
+		assertTrue("Donor with donation matching DIN returned", isValid);
 	}
 
 	@Test
@@ -985,6 +928,7 @@ public class DonorRepositoryTest {
 		donorBackingForm.setMonth("06");
 		donorBackingForm.setYear("2000");
 		donorBackingForm.setBirthDateEstimated(true);
+               
 	}
 
 	/**
@@ -1064,5 +1008,74 @@ public class DonorRepositoryTest {
 				userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
+        
+         @Test
+	/**
+	 * Test passes if DonorCodeGroup is saved in  database
+	 */
+        public void saveDonorCodeGroup_shouldPersist(){
+            DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
+            donorCodeGroup.setDonorCodeGroup("Test Only");
+            donorRepository.saveDonorCodeGroup(donorCodeGroup);
+            assertNotNull("Failed to save DonorCodeGroup object ",donorCodeGroup.getId());
+            
+        }
+       
+        
+        @Test
+	/**
+	 * Test passes if DonorDonorCode is saved in database
+	 */
+        public void saveDonorDonorCode_shouldPersist(){
+            DonorDonorCode  donorDonorCode =  new DonorDonorCode();
+	    donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(1l));	 
+            donorDonorCode.setDonorId(donorRepository.findDonorById(5l));
+            donorRepository.saveDonorDonorCode(donorDonorCode);
+            assertNotNull("Failed to save DonorDonorCode object ",donorDonorCode.getId());
+            
+        }
+        
+       
+        @Test
+	/**
+	 * Test passes if donor is assigned with a donor code
+	 */
+        public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted(){
+            assertNotNull("Failed to find donor code by ID 1" ,donorRepository.findDonorCodeById(1l));
+        }
+        
+        @Test
+	/**
+	 * Test  will pass if donor  code groups exists  
+        */
+        public void getAllDonorCodeGroups_ShouldNotReturnEmptyList(){
+            assertTrue("Failed To Load alll donorCodeGroups" ,!donorRepository.getAllDonorCodeGroups().isEmpty());
+        }
+        
+        
+        @Test
+	/**
+	 * Test  will pass if donor donor code groups assigned to donor
+	 */
+       public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted(){
+           assertTrue(" Failed To load donorCodeGroups of donor " ,!donorRepository.findDonorCodeGroupsByDonorId(1l).isEmpty());
+       }
+       
+       @Test
+	/** 
+	 * Test  passes if donor codes assigned to donor  
+	 */
+       public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted(){
+           assertTrue(" Failed To load sonorCodes of donor " ,!donorRepository.findDonorDonorCodesOfDonorByDonorId(1l).isEmpty());
+       }
+       
+       @Test
+	/** 
+	 * Test  passes if donor codes assigned to donor  
+	 */
+       public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted(){      
+           assertNotNull("Failed to remove DonorDonorCode of Id 1" ,donorRepository.deleteDonorCode(1l));
+       }
+       
 
 }

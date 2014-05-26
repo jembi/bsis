@@ -340,6 +340,11 @@ public class CollectedSampleController {
 	      try {
           form.setCollectedSample();
 	        CollectedSample collectedSample = form.getCollectedSample();
+
+          if(collectedSample.getDonor().getDateOfFirstDonation() == null){
+            collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
+          }
+
 	        collectedSample.setIsDeleted(false);
 	        
 	        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);

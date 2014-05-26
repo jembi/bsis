@@ -8,6 +8,20 @@
 <div class="formFormatClass printableArea">
   <!-- <br />
    <div class="donorBarcode"></div> -->
+  
+   	<div>
+   		<label>Donor Codes</label>
+   		<c:if test="${empty donorCodeGroups}">
+        	<label>-</label>
+      	</c:if>
+      	<c:if test="${not empty donorCodeGroups}">
+	      	<c:forEach var="donorCodeGroup" items="${donorCodeGroups}">
+	        	<label>${donorCodeGroup.donorCodeGroup}</label>
+	        	<br>
+            	<label></label>
+	        </c:forEach>
+        </c:if>
+    </div>
   <c:if test="${donorFields.donorNumber.hidden != true }">
     <div>
       <label>${donorFields.donorNumber.displayName}</label>
@@ -72,7 +86,12 @@
       </c:if>
     </div>
   </c:if>
-  
+  <c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
+    <div>
+      <label>${donorFields.dateOfFirstDonation.displayName}</label>
+      <label>${donor.dateOfFirstDonation}</label>
+    </div>
+  </c:if>
   <c:if test="${donorFields.gender.hidden != true }">
     <div>
       <label>${donorFields.gender.displayName}</label>

@@ -1,12 +1,12 @@
 package repository;
 
+import controller.UtilController;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -17,14 +17,16 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
+import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.donorcodes.DonorCode;
+import model.donorcodes.DonorCodeGroup;
+import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.util.BloodGroup;
-
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -32,7 +34,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
 import controller.UtilController;
@@ -59,6 +60,8 @@ public class DonorRepository {
     em.persist(donor);
     em.flush();
   }
+  
+
 
   public Donor deleteDonor(Long donorId) {
     Donor existingDonor = findDonorById(donorId);
@@ -88,27 +91,11 @@ public class DonorRepository {
   }
 
   public List<Object> findAnyDonor(String donorNumber, String firstName,
-      String lastName, List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams,Boolean dueToDonate, Boolean usePhraseMatch) {
+      String lastName,  Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
      CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
-    
-    Expression<Boolean> exp1;
-    if (anyBloodGroup.equals("true")) {
-      exp1 = cb.not(cb.disjunction());
-    }
-    else {
-      List<Predicate> bgPredicates = new ArrayList<Predicate>();
-      for (BloodGroup bg : bloodGroups) {
-        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
-        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
-        bgPredicates.add(cb.and(aboExp, rhExp));
-      }
-      exp1 = cb.or(bgPredicates.toArray(new Predicate[0]));
-    }
-
     Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
-
     Predicate firstNameExp, lastNameExp;
     if (!usePhraseMatch){
       firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
@@ -127,16 +114,11 @@ public class DonorRepository {
     }
 
     
-    Predicate dueToDonateExp;
-    if (!dueToDonate)
-    	dueToDonateExp = cb.disjunction();
-    else
-    	dueToDonateExp = cb.lessThanOrEqualTo(root.<Date>get("dateOfLastDonation"),DateUtils.addDays(new Date(), - CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
     
-      Expression<Boolean> exp2 = exp1;
+      Expression<Boolean> exp2 =cb.conjunction();
     
      if(!StringUtils.isBlank(donorNumber))
- 	  exp2 = cb.and(exp2,donorNumberExp);
+ 	  exp2 = cb.and(exp2,donorNumberExp); 
 
     
        if(!StringUtils.isBlank(firstName))
@@ -145,8 +127,7 @@ public class DonorRepository {
        if(!StringUtils.isBlank(lastName))
     	   exp2 = cb.and(exp2,lastNameExp);
        
-       if (dueToDonate)
-       exp2 = cb.and(exp2,dueToDonateExp);
+       
        
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notDeleted, exp2));
@@ -175,7 +156,24 @@ public class DonorRepository {
 
     TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
     Long totalResults = countQuery.getSingleResult().longValue();
-    return Arrays.asList(query.getResultList(), totalResults);
+    List<Donor> donorResults = query.getResultList();
+    boolean looped = false;
+    if(!StringUtils.isBlank(donationIdentificationNumber)){
+    List<Donor> uniqueResult = new ArrayList<Donor>();
+    looped = true;
+    for(Donor donor : donorResults){
+        for(CollectedSample collectedSample: donor.getCollectedSamples()){
+            if(collectedSample.getCollectionNumber().equals(donationIdentificationNumber)){
+                uniqueResult.add(donor);
+                 return Arrays.asList(uniqueResult,totalResults);
+        }
+        }
+    }
+   }
+    if(looped == true)
+    return null;
+    return Arrays.asList(donorResults, totalResults);
+    
   }
 
   public List<Donor> getAllDonors() {
@@ -197,12 +195,13 @@ public class DonorRepository {
     if (existingDonor == null) {
       return null;
     }
-    existingDonor.copy(donor);
+    existingDonor.copy(donor); 
     existingDonor.setIsDeleted(false);
     em.merge(existingDonor);
     em.flush();
     return existingDonor;
   }
+  	  
 
   public Donor findDonorByNumber(String donorNumber) {
     try {
@@ -460,5 +459,86 @@ public class DonorRepository {
     	return query.getSingleResult();
     return null;
   }
+
+  //Donor Code & Code Group Methods
+ 
+
+  public void  saveDonorCodeGroup(DonorCodeGroup donorCodeGroup) {
+	    em.persist(donorCodeGroup);
+	    em.flush();
+          
+	  }
+
+
+	  
+public void saveDonorCode(DonorCode donorCode) {
+	    
+	   em.persist(donorCode);
+	   em.flush();
+	  }
+
+public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
+    
+	   em.persist(donorDonorCode);
+	   em.flush();
+	  }
+
+public List<DonorCodeGroup> findDonorCodeGroupsByDonorId(Long donorId){
+	Donor donor = em.find(Donor.class, donorId);
+        List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
+	List<DonorCode> donorCodes = donor.getDonorCodes();
+	DonorCodeGroup donorCodeGroup=null;
+        for (DonorCode donorCode : donorCodes) {
+                donorCodeGroup = donorCode.getDonorCodeGroup();
+                if(!donorCodeGroups.contains(donorCodeGroup))
+		donorCodeGroups.add(donorCodeGroup);
+                
+        }
+	return donorCodeGroups;
+	
+     }
+
+
+
+public List<DonorCodeGroup> getAllDonorCodeGroups(){
+	
+	 TypedQuery<DonorCodeGroup> query = em.createQuery(
+		        "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
+		    return query.getResultList();
+	
+}
+
+
+public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id){
+	
+	 DonorCodeGroup donorCodeGroup =  em.find(DonorCodeGroup.class,id);
+	 em.flush();
+	 return donorCodeGroup.getDonorCodes();
+	
+}
+
+public List<DonorDonorCode > findDonorDonorCodesOfDonorByDonorId(Long donorId){
+	
+	 TypedQuery<DonorDonorCode> query = em.createQuery(
+		        "SELECT dc FROM DonorDonorCode dc where donorId = :donorId", DonorDonorCode.class);
+	 query.setParameter("donorId",em.find(Donor.class, donorId));
+	 return query.getResultList();
+}
+
+public DonorCode findDonorCodeById(Long id){
+	
+	 DonorCode donorCode =  em.find(DonorCode.class,id);
+	 em.flush();
+	 return donorCode;
+	
+}
+
+public Donor deleteDonorCode(Long id){
+	 DonorDonorCode donorDonorCode =  em.find(DonorDonorCode.class,id);
+	Donor donor = donorDonorCode.getDonorId();
+	em.remove(donorDonorCode);
+	em.flush();
+	return donor;
+}
 
 }
