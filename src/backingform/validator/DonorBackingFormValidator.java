@@ -81,9 +81,9 @@ public class DonorBackingFormValidator implements Validator {
   
   private void validateNumberOfDonations(DonorBackingForm form, Errors errors) {
 
-    Long numberOfDonations = form.getNumberOfDonations();
+    Integer numberOfDonations = form.getNumberOfDonations();
     
-    if (!(numberOfDonations instanceof Long)) {
+    if (!(numberOfDonations instanceof Integer)) {
     	errors.rejectValue("donor.numberOfDonations", "donor.numberOfDonations", "Number Of Donations should be number.");
     }
   }

@@ -171,7 +171,7 @@ public class Donor implements ModificationTracker {
   private List<DonorDeferral> deferrals;
 
   @Column(nullable=false)
-  private Long numberOfDonations;
+  private Integer numberOfDonations;
   
   public Donor() {
     contactInformation = new ContactInformation();
@@ -509,11 +509,11 @@ public class Donor implements ModificationTracker {
     this.donorHash = donorHash;
   }
 
-	public Long getNumberOfDonations() {
+	public Integer getNumberOfDonations() {
 		return numberOfDonations;
 	}
 
-	public void setNumberOfDonations(Long numberOfDonations) {
+	public void setNumberOfDonations(Integer numberOfDonations) {
 		this.numberOfDonations = numberOfDonations;
 	}
   

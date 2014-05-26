@@ -176,11 +176,11 @@ public class DonorViewModel {
     }
   }
   
-  public Long getNumberOfDonations() {
+  public Integer getNumberOfDonations() {
 		return donor.getNumberOfDonations();
 	}
 
-	public void setNumberOfDonations(Long numberOfDonations) {
+	public void setNumberOfDonations(Integer numberOfDonations) {
 		donor.setNumberOfDonations(numberOfDonations);
 	}
 	

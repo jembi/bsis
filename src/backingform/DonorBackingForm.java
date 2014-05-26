@@ -370,13 +370,13 @@ public class DonorBackingForm {
     }
   }
   
-	public Long getNumberOfDonations() {
+	public Integer getNumberOfDonations() {
 		return donor.getNumberOfDonations();
 	}
 
-	public void setNumberOfDonations(Long numberOfDonations) {
+	public void setNumberOfDonations(Integer numberOfDonations) {
 		if(numberOfDonations == null){
-			donor.setNumberOfDonations(Long.valueOf("0"));
+			donor.setNumberOfDonations(0);
 		}
 		else{
 			donor.setNumberOfDonations(numberOfDonations);
