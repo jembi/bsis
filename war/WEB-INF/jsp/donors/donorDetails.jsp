@@ -55,6 +55,12 @@
       </c:if>
     </div>
   </c:if>
+  <c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
+    <div>
+      <label>${donorFields.dateOfFirstDonation.displayName}</label>
+      <label>${donor.dateOfFirstDonation}</label>
+    </div>
+  </c:if>
   <c:if test="${donorFields.gender.hidden != true }">
     <div>
       <label>${donorFields.gender.displayName}</label>

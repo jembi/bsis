@@ -169,6 +169,13 @@ public class Donor implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
+  
+  
+  /**
+   * Date of first donation
+   */
+  @Temporal(TemporalType.DATE)
+  private Date dateOfFirstDonation;
 
   public Donor() {
     contactInformation = new ContactInformation();
@@ -271,6 +278,7 @@ public class Donor implements ModificationTracker {
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
+    setDateOfFirstDonation(donor.getDateOfFirstDonation());
   }
 
   public List<CollectedSample> getCollectedSamples() {
@@ -508,6 +516,14 @@ public class Donor implements ModificationTracker {
     this.donorHash = donorHash;
   }
 
+	public Date getDateOfFirstDonation() {
+		return dateOfFirstDonation;
+	}
+
+	public void setDateOfFirstDonation(Date dateOfFirstDonation) {
+		this.dateOfFirstDonation = dateOfFirstDonation;
+	}
+  
   public Boolean getBirthDateEstimated() {
 	return birthDateEstimated;
   }

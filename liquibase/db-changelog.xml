@@ -227,6 +227,31 @@
 		</addColumn>		
 	</changeSet>
 
+	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
+ 	<changeSet id="201310251212" author="ankur">
+ 		<addColumn tableName="Donor">
+ 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
+ 		</addColumn>
+ 		<addColumn tableName="Donor_AUD">
+ 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
+ 		</addColumn>		
+ 		<insert tableName="FormField">
+ 			<column name="form" value="Donor"></column>
+ 			<column name="FIELD" value="dateOfFirstDonation"></column>
+ 			<column name="defaultDisplayName" value="Date of First Donation"></column>
+ 			<column name="defaultValue" value=""></column>
+ 			<column name="maxLength" value="0"></column>
+ 			<column name="hidden" value="0"></column>
+ 			<column name="isHidable" value="1"></column>
+ 			<column name="isRequired" value="0"></column>
+ 			<column name="canBeOptional" value="1"></column>
+ 			<column name="autoGenerate" value="0"></column>
+ 			<column name="isAutoGeneratable" value="0"></column>
+ 			<column name="useCurrentTime" value="0"></column>
+ 			<column name="isTimeField" value="0"></column>			
+ 		</insert>
+ 	</changeSet>
+
 	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
 	<changeSet id="201311071844" author="Ankur">
 		<addColumn tableName="Product">
