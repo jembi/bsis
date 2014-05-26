@@ -323,6 +323,7 @@ public void setDonorCodes(List<DonorCode> donorCodes) {
 public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
     setDonorNumber(donor.getDonorNumber());
+    setTitle(donor.getTitle());
     setFirstName(donor.getFirstName());
     setMiddleName(donor.getMiddleName());
     setLastName(donor.getLastName());
