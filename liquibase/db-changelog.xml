@@ -2720,9 +2720,88 @@
   </insert>
   <insert tableName="PreferredLanguage">
      <column name="id" value="2"></column>
-     <column name="preferredLanguage" value="Afrikan"></column>
+     <column name="preferredLanguage" value="French"></column> 
   </insert>
-
+<insert tableName="PreferredLanguage">
+     <column name="id" value="3"></column>
+     <column name="preferredLanguage" value="Portuguese"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="4"></column>
+     <column name="preferredLanguage" value="Spanish"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="5"></column>
+     <column name="preferredLanguage" value="Arabic"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="6"></column>
+     <column name="preferredLanguage" value="Berber"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="7"></column>
+     <column name="preferredLanguage" value="Amharic"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="8"></column>
+     <column name="preferredLanguage" value="Tigrinya"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="9"></column>
+     <column name="preferredLanguage" value="Setswana"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="10"></column>
+     <column name="preferredLanguage" value="Swahili"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="11"></column>
+     <column name="preferredLanguage" value="Comorian"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="12"></column>
+     <column name="preferredLanguage" value="Chichewa"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="13"></column>
+     <column name="preferredLanguage" value="Kinyarwanda"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="14"></column>
+     <column name="preferredLanguage" value="Kirundi"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="15"></column>
+     <column name="preferredLanguage" value="Sango"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="16"></column>
+     <column name="preferredLanguage" value="Swati"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="17"></column>
+     <column name="preferredLanguage" value="Malagasy"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="18"></column>
+     <column name="preferredLanguage" value="Seychellois"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="19"></column>
+     <column name="preferredLanguage" value="Mauritian"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="20"></column>
+     <column name="preferredLanguage" value="Shona"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="21"></column>
+     <column name="preferredLanguage" value="Sesotho"></column>
+  </insert>
+<insert tableName="PreferredLanguage">
+     <column name="id" value="22"></column>
+     <column name="preferredLanguage" value="Afrikaans"></column>
+  </insert>
   <insert tableName="IdType">
      <column name="id" value="1"></column>
      <column name="idType" value="Passport"></column>
