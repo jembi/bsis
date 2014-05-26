@@ -5,6 +5,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -141,6 +142,14 @@ public class DonorViewModel {
   public String getEmail(){
       return donor.getEmail();
   }
+  
+  public String getCallingName(){
+      return donor.getCallingName();
+  }
+  public PreferredLanguage getPreferredLanguage(){
+     return  donor.getPreferredLanguage();
+  }
+  
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(donor.getLastUpdated());
   }

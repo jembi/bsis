@@ -1,13 +1,14 @@
 package model.donor;
 
+import constraintvalidator.LocationExists;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,28 +18,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-
 import model.address.ContactInformation;
 import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
 import model.donordeferral.DonorDeferral;
+import model.idtype.IdType;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
-
 import org.apache.commons.lang3.text.WordUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
-
-import constraintvalidator.LocationExists;
-import model.idtype.IdType;
-import model.preferredlanguage.PreferredLanguage;
-
 import utils.DonorUtils;
 
 @Entity
@@ -155,7 +153,7 @@ public class Donor implements ModificationTracker {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date dateOfLastDonation;
- 
+
   
   /**
    * Never delete the rows. Just mark them as deleted.
@@ -175,12 +173,12 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
 
-  @ManyToOne
+@ManyToOne(fetch = FetchType.EAGER)
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private IdType idType;
   
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private PreferredLanguage  preferredLanguage;
@@ -286,8 +284,14 @@ public class Donor implements ModificationTracker {
     setPreferredContactMethod(donor.getPreferredContactMethod());
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
+    setPreferredLanguage(donor.getPreferredLanguage());
+    setIdType(donor.getIdType());
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
+    setWorkAddress(donor.getWorkAddress());
+    setHomeAddress(donor.getHomeAddress());
+    setMobileNumber(donor.getMobileNumber());
+    setEmail(donor.getEmail());
     this.donorHash = DonorUtils.computeDonorHash(this);
   }
 
@@ -602,6 +606,101 @@ public class Donor implements ModificationTracker {
     }
 
    
+      public String getWorkAddressCity() {
+        return contactInformation.getWorkAddressCity();
+    }
+
+    public void setWorkAddressCity(String workAddressCity) {
+        contactInformation.setWorkAddressCity(workAddressCity);
+    }
+
+    public String getWorkAddressProvince() {
+        return contactInformation.getWorkAddressProvince();
+    }
+
+    public void setWorkAddressProvince(String workAdressProvince) {
+        contactInformation.setWorkAddressProvince(workAdressProvince);
+    }
+
+    public String getWorkAddressDistrict() {
+        return contactInformation.getWorkAddressDistrict();    }
+
+    public void setWorkAddressDistrict(String workAddressDistrict) {
+        contactInformation.setWorkAddressDistrict(workAddressDistrict);
+    }
+
+    public String getWorkAddressCountry() {
+        return contactInformation.getWorkAddressCountry();
+    }
+
+    public void setWorkAddressCountry(String workAddressCountry) {
+         contactInformation.setWorkAddressCountry(workAddressCountry);
+    }
+
+    public String getWorkAddressZipcode() {
+        return contactInformation.getWorkAddressZipcode();
+    }
+
+    public void setWorkAddressZipcode(String workAddressZipcode) {
+        contactInformation.setWorkAddressZipcode(workAddressZipcode);
+    }
+
+    public String getPostalAddressCity() {
+        return contactInformation.getPostalAddressCity();
+    }
+
+    public void setPostalAddressCity(String postalAddressCity) {
+        contactInformation.setPostalAddress(postalAddressCity);
+    }
+
+    public String getPostalAddressProvince() {
+        return contactInformation.getPostalAddressProvince();
+    }
+    
+    public void setPostalAddressProvince(String postalAdressProvince) {
+        contactInformation.setPostalAddressProvince(postalAdressProvince);
+    }
+
+    public String getPostalAddressDistrict() {
+        return contactInformation.getPostalAddressDistrict();
+    }
+
+    public void setPostalAddressDistrict(String postalAddressDistrict) {
+       contactInformation.setPostalAddressDistrict(postalAddressDistrict);
+    }
+
+    public String getPostalAddressCountry() {
+        return contactInformation.getPostalAddressCountry();
+    }
+
+    public void setPostalAddressCountry(String postalAddressCountry) {
+        contactInformation.setPostalAddressCountry(postalAddressCountry);
+    }
+
+    public String getPostalAddressZipcode() {
+        return contactInformation.getPostalAddressZipcode();
+    }
+
+    public void setPostalAddressZipcode(String postalAddressZipcode) {
+        contactInformation.setPostalAddressZipcode(postalAddressZipcode);
+    }
+
+    public void setPostalAddressState(String postalAddressState) {
+        contactInformation.setPostalAddressState(postalAddressState);
+    }
+
+    public String getPostalAddressState() {
+        return  contactInformation.getPostalAddressState();
+
+    }
+
+    public String getWorkAddressState() {
+        return contactInformation.getWorkAddressState();
+    }
+
+    public void setWorkAddressState(String workAddressState) {
+        contactInformation.setWorkAddressState(workAddressState);
+    }
   
   
 }

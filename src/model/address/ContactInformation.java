@@ -10,13 +10,6 @@ import org.hibernate.validator.constraints.Length;
 public class ContactInformation {
   
  
-  private String mobileNumber;
-  private String homeNumber;
-  private String workNumber;
-  private String email;
-  private String workAddress;
-  private String postalAddress;
-  private String homeAddress;
   
   @Length(max=25)
   @Column(length=25)
@@ -42,6 +35,27 @@ public class ContactInformation {
   @Column(length=10)
   private String zipcode;
 
+  private String mobileNumber;
+  private String homeNumber;
+  private String workNumber;
+  private String email;
+  private String workAddress;
+  private String postalAddress;
+  private String homeAddress;
+  
+private String workAddressCity;
+private String workAddressProvince;
+private String workAddressDistrict;
+private String workAddressCountry;
+private String workAddressState;
+private String workAddressZipcode;
+
+private String postalAddressCity;
+private String postalAddressProvince;
+private String postalAddressDistrict;
+private String postalAddressCountry;
+private String postalAddressState;
+private String postalAddressZipcode;
 
 
   @ManyToOne
@@ -172,5 +186,105 @@ public class ContactInformation {
   public void setPreferredContactMethod(ContactMethodType preferredContactMethod) {
     this.preferredContactMethod = preferredContactMethod;
   }   
+
+    public String getWorkAddressCity() {
+        return workAddressCity;
+    }
+
+    public void setWorkAddressCity(String workAddressCity) {
+        this.workAddressCity = workAddressCity;
+    }
+
+    public String getWorkAddressProvince() {
+        return workAddressProvince;
+    }
+
+    public void setWorkAddressProvince(String workAddressProvince) {
+        this.workAddressProvince = workAddressProvince;
+    }
+
+    public String getWorkAddressDistrict() {
+        return workAddressDistrict;
+    }
+
+    public void setWorkAddressDistrict(String workAddressDistrict) {
+        this.workAddressDistrict = workAddressDistrict;
+    }
+
+    public String getWorkAddressCountry() {
+        return workAddressCountry;
+    }
+
+    public void setWorkAddressCountry(String workAddressCountry) {
+        this.workAddressCountry = workAddressCountry;
+    }
+
+    public String getWorkAddressZipcode() {
+        return workAddressZipcode;
+    }
+
+    public void setWorkAddressZipcode(String workAddressZipcode) {
+        this.workAddressZipcode = workAddressZipcode;
+    }
+
+    public String getPostalAddressCity() {
+        return postalAddressCity;
+    }
+
+    public void setPostalAddressCity(String postalAddressCity) {
+        this.postalAddressCity = postalAddressCity;
+    }
+
+    public String getPostalAddressProvince() {
+        return postalAddressProvince;
+    }
+
+    public void setPostalAddressProvince(String postalAddressProvince) {
+        this.postalAddressProvince = postalAddressProvince;
+    }
+
+    public String getPostalAddressDistrict() {
+        return postalAddressDistrict;
+    }
+
+    public void setPostalAddressDistrict(String postalAddressDistrict) {
+        this.postalAddressDistrict = postalAddressDistrict;
+    }
+
+    public String getPostalAddressCountry() {
+        return postalAddressCountry;
+    }
+
+    public void setPostalAddressCountry(String postalAddressCountry) {
+        this.postalAddressCountry = postalAddressCountry;
+    }
+
+    public String getPostalAddressZipcode() {
+        return postalAddressZipcode;
+    }
+    
+   public void setPostalAddressZipcode(String postalAddressZipcode) {
+        this.postalAddressZipcode = postalAddressZipcode;
+    }
+    
+    public String getWorkAddressState() {
+        return workAddressState;
+    }
+
+    public void setWorkAddressState(String workAddressState) {
+        this.workAddressState = workAddressState;
+    }
+
+    public String getPostalAddressState() {
+        return postalAddressState;
+    }
+
+    public void setPostalAddressState(String postalAddressState) {
+        this.postalAddressState = postalAddressState;
+    }
+
+  
+  
+  
   
 }

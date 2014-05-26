@@ -316,9 +316,102 @@ public String getWorkAddress() {
   public void setZipcode(String zipcode) {
     donor.setZipcode(zipcode);
   }
+ 
+      public String getWorkAddressCity() {
+        return donor.getWorkAddressCity();
+    }
 
+    public void setWorkAddressCity(String workAddressCity) {
+        donor.setWorkAddressCity(workAddressCity);
+    }
+
+    public String getWorkAddressProvince() {
+        return donor.getWorkAddressProvince();
+    }
+
+    public void setWorkAddressProvince(String workAddressProvince) {
+        donor.setWorkAddressProvince(workAddressProvince);
+    }
+
+    public String getWorkAddressDistrict() {
+        return donor.getWorkAddressDistrict();    }
+
+    public void setWorkAddressDistrict(String workAddressDistrict) {
+        donor.setWorkAddressDistrict(workAddressDistrict);
+    }
+
+    public String getWorkAddressCountry() {
+        return donor.getWorkAddressCountry();
+    }
+
+    public void setWorkAddressCountry(String workAddressCountry) {
+         donor.setWorkAddressCountry(workAddressCountry);
+    }
+
+    public String getWorkAddressZipcode() {
+        return donor.getWorkAddressZipcode();
+    }
+
+    public void setWorkAddressZipcode(String workAddressZipcode) {
+        donor.setWorkAddressZipcode(workAddressZipcode);
+    }
+ public String getWorkAddressState() {
+        return donor.getWorkAddressState();
+    }
+
+    public void setWorkAddressState(String workAddressState) {
+        donor.setWorkAddressState(workAddressState);
+    }
     
+    public String getPostalAddressCity() {
+        return donor.getPostalAddressCity();
+    }
 
+    public void setPostalAddressCity(String postalAddressCity) {
+        donor.setPostalAddressCity(postalAddressCity);
+    }
+
+    public String getPostalAddressProvince() {
+        return donor.getPostalAddressProvince();
+    }
+    
+    public void setPostalAddressState(String postalAddressState) {
+        donor.setPostalAddressState(postalAddressState);
+    }
+    
+    public String getPostalAddressState(){
+       return donor.getPostalAddressState();
+    }
+
+  
+    public void setPostalAddressProvince(String postalAdressProvince) {
+        donor.setPostalAddressProvince(postalAdressProvince);
+    }
+
+    public String getPostalAddressDistrict() {
+        return donor.getPostalAddressDistrict();
+    }
+
+    public void setPostalAddressDistrict(String postalAddressDistrict) {
+       donor.setPostalAddressDistrict(postalAddressDistrict);
+    }
+
+    public String getPostalAddressCountry() {
+        return donor.getPostalAddressCountry();
+    }
+
+    public void setPostalAddressCountry(String postalAddressCountry) {
+        donor.setPostalAddressCountry(postalAddressCountry);
+    }
+
+    public String getPostalAddressZipcode() {
+        return donor.getPostalAddressZipcode();
+    }
+
+    public void setPostalAddressZipcode(String postalAddressZipcode) {
+        donor.setPostalAddressZipcode(postalAddressZipcode);
+    }
+  
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
       DateTime dt1 = new DateTime(donor.getBirthDateInferred());

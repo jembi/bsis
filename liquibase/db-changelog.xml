@@ -2821,6 +2821,96 @@
 </addColumn>
 
 
+<addColumn tableName="Donor">
+            <column name="calingName" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="calingName" type="varchar(255)" ></column>
+</addColumn>
+
+<addColumn tableName="Donor">
+            <column name="workAddressCity" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="workAddressProvince" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="workAddressDistrict" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="workAddressCountry" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="workAddressZipcode" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="workAddressState" type="varchar(255)" ></column>
+</addColumn>
+
+<addColumn tableName="Donor">
+            <column name="postalAddressCity" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="postalAddressProvince" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="postalAddressDistrict" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="postalAddressCountry" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="postalAddressState" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor">
+            <column name="postalAddressZipcode" type="varchar(255)" ></column>
+</addColumn>
+
+
+<addColumn tableName="Donor_AUD">
+            <column name="workAddressCity" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="workAddressProvince" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="workAddressDistrict" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="workAddressCountry" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="workAddressZipcode" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="workAddressState" type="varchar(255)" ></column>
+</addColumn>
+
+
+<addColumn tableName="Donor_AUD">
+            <column name="postalAddressCity" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="postalAddressProvince" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="postalAddressDistrict" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="postalAddressCountry" type="varchar(255)" ></column>
+</addColumn>
+<addColumn tableName="Donor_AUD">
+            <column name="postalAddressState" type="varchar(255)" ></column>
+</addColumn>
+
+<addColumn tableName="Donor_AUD">
+            <column name="postalAddressZipcode" type="varchar(255)" ></column>
+</addColumn>
+
+
+  
+
+
 <insert tableName="FormField">
 			<column name="form" value="donor"></column>
 			<column name="FIELD" value="idType"></column>
@@ -2867,7 +2957,6 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
  </insert>
-
  <insert tableName="FormField">
 			<column name="form" value="donor"></column>
 			<column name="FIELD" value="mobileNumber"></column>
@@ -2899,7 +2988,6 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
  </insert>
-
 
  <insert tableName="FormField">
 			<column name="form" value="donor"></column>
@@ -2980,6 +3068,23 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
  </insert>
+
+ <insert tableName="FormField">
+			<column name="form" value="donor"></column>
+			<column name="FIELD" value="callingName"></column>
+			<column name="defaultDisplayName" value="Calling Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
 
 
 </changeSet>

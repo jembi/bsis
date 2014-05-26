@@ -7,6 +7,7 @@
 package model.preferredlanguage;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class PreferredLanguage  {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, insertable=false, updatable=false)
     private Long id;
 
     private String preferredLanguage;

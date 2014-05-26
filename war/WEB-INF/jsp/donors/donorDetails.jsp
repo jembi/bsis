@@ -32,6 +32,13 @@
       <label>${donor.lastName}</label>
     </div>
   </c:if>   
+  <c:if test="${donorFields.callingName.hidden != true }">
+    <div>
+      <label>${donorFields.callingName.displayName}</label>
+      <label>${donor.callingName}</label>
+    </div>
+  </c:if>   
+
   <c:if test="${donorFields.birthDate.hidden != true }">
     <div>
       <label>${donorFields.birthDate.displayName}</label>
