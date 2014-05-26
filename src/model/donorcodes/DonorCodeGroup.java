@@ -56,6 +56,23 @@ public class DonorCodeGroup  {
 	this.donorCodes = donorCodes;
     }
 
-    
+    @Override
+	    public boolean equals(Object object)
+	    {
+	        boolean isEqual = false;
+
+	        if (object != null && object instanceof DonorCodeGroup )
+	        {
+	        	isEqual = this.id == ((DonorCodeGroup) object).id;
+	        }
+
+	        return isEqual;
+	    }
+	
+		@Override
+	    public int hashCode()
+	    {
+	       return this.id.intValue();
+	    }
    
 }

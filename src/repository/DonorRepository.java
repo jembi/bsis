@@ -466,8 +466,13 @@ public List<DonorCodeGroup> findDonorCodeGroupsByDonorId(Long donorId){
 	Donor donor = em.find(Donor.class, donorId);
         List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
 	List<DonorCode> donorCodes = donor.getDonorCodes();
-	for (DonorCode donorCode : donorCodes) 
-		donorCodeGroups.add(donorCode.getDonorCodeGroup());
+	DonorCodeGroup donorCodeGroup=null;
+        for (DonorCode donorCode : donorCodes) {
+                donorCodeGroup = donorCode.getDonorCodeGroup();
+                if(!donorCodeGroups.contains(donorCodeGroup))
+		donorCodeGroups.add(donorCodeGroup);
+                
+        }
 	return donorCodeGroups;
 	
      }
