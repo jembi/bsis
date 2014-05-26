@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
@@ -11,21 +12,29 @@
 <link type="text/css" rel="stylesheet" href="css/donors.css" media="all" />
 <script type="text/javascript" src="js/donors.js"></script>
 <script type="text/javascript" src="js/collections.js"></script>
-
 <div id="donorsTab" class="tabs">
   <ul>
+  	<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
     <li id="findOrAddDonorsContent">
       <a href="findDonorFormGenerator.html">
-        Find Donors
+        Donors
       </a>
     </li>
+     <li id="donorCommunicationsContent">
+      <a href="donorCommunicationsFormGenerator.html">
+         Donor <br/> Communications
+      </a>
+    </li>
+    </sec:authorize>
+    <!--
     <li id="addDonorContent">
       <a href="addDonorFormGenerator.html">
         Add Donor
       </a>
     </li>
-    <!-- li id="viewDonorsContent">
+     li id="viewDonorsContent">
       <a href="viewDonors.html">View All Donors</a>
-    </li-->
+    </li>
+    -->
   </ul>
 </div>

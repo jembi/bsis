@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
@@ -45,7 +46,7 @@ $(document).ready(function() {
                   $("#${childContentId}").html(response);      
                 },
       error :   function(response) {
-                  showErrorMessage("Something went wrong when trying to fetch collection status.");
+                  showErrorMessage("Something went wrong when trying to fetch donation status.");
                 }
     });
   }
@@ -65,11 +66,11 @@ $(document).ready(function() {
       <img src="images/check_icon.png"
            style="height: 30px; padding-left: 10px; padding-right: 10px;" />
         <span class="successText">
-          Blood Typing tests added successfully for collections.
+          Blood Typing tests added successfully for donations.
         </span>
         <div style="margin-left: 55px;">
-          Please review results below. Perform confirmatory tests for collections as indicated.
-          You may click the collections in the table below to enter secondary test results now.
+          Please review results below. Perform confirmatory tests for donations as indicated.
+          You may click the donations in the table below to enter secondary test results now.
         </div>
     </div>
 
@@ -77,7 +78,7 @@ $(document).ready(function() {
     <br />
 
     <button class="enterTestResultsForCollectionsButton" style="margin:10px;">
-      Enter blood typing tests for more collections
+      Enter blood typing tests for more donations
     </button>
 
     <br />

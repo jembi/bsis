@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
 <div class="formFormatClass printableArea">
   <br />
   <div class="collectionBarcode"></div>
@@ -60,7 +60,7 @@
     </div>
   </c:if>
 
-  <sec:authorize access="hasRole('PERM_VIEW_TEST_INFORMATION')">
+ <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_TEST_OUTCOME)">
     <div>
       <label>${collectionFields.bloodTypingStatus.displayName}</label>
       <label style="width: auto;">${collectedSample.bloodTypingStatus}</label>
@@ -78,6 +78,39 @@
       <label style="width: auto;">${collectedSample.bloodRh eq '+' ? 'POS' : collectedSample.bloodRh eq '-' ? 'NEG' : ''}</label>
     </div>
   </sec:authorize>
+  
+  <c:if test="${collectionFields.donorWeight.hidden != true }">
+    <div>
+      <label>${collectionFields.donorWeight.displayName}</label>
+      <label>${collectedSample.donorWeight}</label>
+    </div>
+  </c:if>
+
+  <c:if test="${collectionFields.donorPulse.hidden != true }">
+    <div>
+      <label>${collectionFields.donorPulse.displayName}</label>
+      <label>${collectedSample.donorPulse}</label>
+    </div>
+  </c:if>
+  <c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+		<div>
+			<label>${collectionFields.haemoglobinCount.displayName}</label>
+		  <label>${collectedSample.haemoglobinCount}</label>
+		</div>
+  </c:if>
+  <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+    <div>
+      <label>${collectionFields.bloodPressureSystolic.displayName}</label>
+      <label>${collectedSample.bloodPressureSystolic}</label>
+    </div>
+  </c:if>
+  
+   <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+    <div>
+      <label>${collectionFields.bloodPressureDiastolic.displayName}</label>
+      <label>${collectedSample.bloodPressureDiastolic}</label>
+    </div>
+  </c:if>
 
   <c:if test="${collectionFields.notes.hidden != true }">
     <div>
@@ -95,3 +128,4 @@
   </div>
   <hr />
 </div>
+</sec:authorize>

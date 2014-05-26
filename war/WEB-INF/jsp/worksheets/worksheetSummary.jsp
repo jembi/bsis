@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
@@ -97,6 +98,7 @@
       });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -104,9 +106,11 @@
       <button type="button" class="cancelButton">
         Done
       </button>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DONATION_BATCH)">
       <button type="button" class="deleteButton">
         Delete
       </button>
+      </sec:authorize>
     </div>
     <div class="worksheetDetails">
       <jsp:include page="worksheetDetail.jsp" />
@@ -126,3 +130,4 @@
 <div id="${deleteConfirmDialogId}" style="display: none;">
   Are  you sure you want to delete this worksheet?
 </div>
+</sec:authorize>

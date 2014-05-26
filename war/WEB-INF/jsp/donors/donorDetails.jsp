@@ -1,12 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
 <div class="formFormatClass printableArea">
-  <br />
-  <div class="donorBarcode"></div>
+  <!-- <br />
+   <div class="donorBarcode"></div> -->
   <c:if test="${donorFields.donorNumber.hidden != true }">
     <div>
       <label>${donorFields.donorNumber.displayName}</label>
@@ -30,7 +31,7 @@
       <label>${donorFields.lastName.displayName}</label>
       <label>${donor.lastName}</label>
     </div>
-  </c:if>
+  </c:if>   
   <c:if test="${donorFields.birthDate.hidden != true }">
     <div>
       <label>${donorFields.birthDate.displayName}</label>
@@ -52,6 +53,12 @@
       <c:if test="${empty donor.age}">
         <label>${donor.age}</label>
       </c:if>
+    </div>
+  </c:if>
+  <c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
+    <div>
+      <label>${donorFields.dateOfFirstDonation.displayName}</label>
+      <label>${donor.dateOfFirstDonation}</label>
     </div>
   </c:if>
   <c:if test="${donorFields.gender.hidden != true }">
@@ -132,11 +139,12 @@
       <label>${donor.preferredContactMethod}</label>
     </div>
   </c:if>
-  <c:if test="${donorFields.donorPanel.hidden != true }">
+  <c:if test="donorFields.donorPanel.hidden != true}">
+  	<c:if test="${not empty donorFields.donorPanel.hidden}">
     <div>
       <label>${donorFields.donorPanel.displayName}</label>
       <label>${donor.donorPanel}</label>
-    </div>
+    </div></c:if>
   </c:if>
   <c:if test="${donorFields.numberOfDonations.hidden != true }">
     <div>
@@ -167,3 +175,4 @@
   </div>
     <hr />
   </div>
+  </sec:authorize>

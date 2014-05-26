@@ -21,7 +21,7 @@
   $(document).ready(
       function() {
 
-        showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
+       // showBarcode($("#${tabContentId}").find(".donorBarcode"), "${donor.donorNumber}");
        // showDonorDeferrals();  display deferral history by default
 
         function notifyParentDone() {
@@ -44,14 +44,22 @@
                          $("#${tabContentId}")
                         );
         });
-
+        
+        $("#${tabContentId}").find(".printBarcode").button({
+            icons : {
+              primary : 'ui-icon-print'
+            }
+          }).click(function() {
+        	  window.open("printDonorLabel.html?"+ $.param({donorNumber : "${donor.donorNumber}"}));
+          });
+        
         $("#${tabContentId}").find(".printButton").button({
           icons : {
             primary : 'ui-icon-print'
           }
         }).click(function() {
           $("#${mainContentId}").find(".printableArea").printArea();
-        });
+        }); 
 
         $("#${tabContentId}").find(".createCollectionButton").button({
           icons : {
@@ -176,6 +184,7 @@
       });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR_INFORMATION)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
 
@@ -183,27 +192,35 @@
       <button class="doneButton">
         Done
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+  <sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONOR)">
       <button class="editButton">
         Edit
       </button>
-      </sec:authorize>
+    </sec:authorize> 
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DEFERRAL)">
       <button class="donorDeferralsButton">
         Show all deferrals
       </button>
+     </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION)">
       <button class="donorHistoryButton">
         View Donation History
       </button>
+      </sec:authorize>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DEFERRAL)">
       <button class="deferDonorButton">
         Defer Donor
       </button>
-      <sec:authorize access="hasRole('PERM_EDIT_INFORMATION')">
+      </sec:authorize>
+      <sec:authorize access="hasRole(T(utils.PermissionConstants).VOID_DONOR)">
+      <sec:authorize access="hasRole('Void Donor')">
       <button type="button" class="deleteButton">
         Delete
       </button>
       </sec:authorize>
-      <button class="printButton">
-        Print
+      </sec:authorize>
+      <button class="printBarcode">
+        Print Barcode
       </button>
     </div>
 
@@ -236,3 +253,4 @@
 <div id="${deleteConfirmDialogId}" style="display: none;">
   Are you sure you want to delete this Donor?
 </div>
+</sec:authorize>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -41,6 +42,7 @@
     });
   </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_ADMIN_INFORMATION)">
   <div class="mainBody">
     <div class="mainContent">
       <div id="v2vHeading">
@@ -52,7 +54,7 @@
           style="display: inline-block;"></span>Sign out</a>
       </div>
       <div class="firstTimeConfigDiv">
-        Looks like you are running Vein-to-Vein for the first time. You need
+        Looks like you are running BSIS for the first time. You need
         to configure this server this server. Please click on configure
         below to begin the configuration process. <br /> <br /> <br />
 
@@ -71,5 +73,6 @@
     </div>
     <div class="bottomPanel"></div>
   </div>
+  </sec:authorize>
 </body>
 </html>

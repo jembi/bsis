@@ -67,11 +67,19 @@ public class LabSetupRepository {
     case TTI_ELISA:
       configProperties.put("ttiElisa", "true");
       configProperties.put("ttiWorksheets", "false");
+      configProperties.put("ttiUploadResult", "false");
       configProperties.put("recordMachineReadingsForTTI", "true");
       break;
     case TTI_WORKSHEETS:
       configProperties.put("ttiElisa", "false");
       configProperties.put("ttiWorksheets", "true");
+      configProperties.put("ttiUploadResult", "false");
+      configProperties.put("recordMachineReadingsForTTI", "false");
+      break;
+    case TTI_RESULT:
+    	configProperties.put("ttiElisa", "false");
+      configProperties.put("ttiWorksheets", "false");
+      configProperties.put("ttiUploadResult", "true");
       configProperties.put("recordMachineReadingsForTTI", "false");
       break;
     }

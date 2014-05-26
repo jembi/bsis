@@ -2,6 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
+  <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%!public long getCurrentTime() {
@@ -66,7 +67,7 @@ $(document).ready(function() {
   <div id="${mainContentId}">
     <form class="formFormatClass">
       <b>Enter blood typing results</b>
-      <div class="tipsBox ui-state-highlight">
+      <div class="tipsBox ui-state-highlight" style="display:none;">
         <p>
           ${tips['bloodtyping.plate.step1']}
         </p>
@@ -81,7 +82,7 @@ $(document).ready(function() {
       <!-- this div is necessary to align the following message with the rest of the labels -->
       <div>
         <label style="width: auto;">
-          Scan or enter collection numbers (maximum ${plate.numColumns}) on the plate from left to right
+          Scan or enter Donation Idenitification Numbers (DINs) (maximum ${plate.numColumns}) on the plate from left to right
         </label>
       </div>
 
@@ -92,11 +93,11 @@ $(document).ready(function() {
             <label>Column ${columnNumber}</label>
             <input name="collectionNumber_${columnNumber}"
                    value="${not empty collection ? collection.collectionNumber : ''}"
-                   placeholder="Collection Number"
+                   placeholder="DIN"
                    class="collectionNumberInput"
                    />
             <c:if test="${empty collection}">
-              <label class="formError" style="width: auto;">Collection does not exist</label>
+              <label class="formError" style="width: auto;">Donation Identification Number does not exist</label>
             </c:if>
           </div>
         </c:forEach>
@@ -107,7 +108,7 @@ $(document).ready(function() {
           <div>
             <label>Column ${columnNumber}</label>
             <input name="collectionNumber_${columnNumber}"
-                   placeholder="Collection Number"
+                   placeholder="Donation Identification Number"
                    class="collectionNumberInput"
                    />
           </div>

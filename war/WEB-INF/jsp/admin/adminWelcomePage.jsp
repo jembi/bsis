@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -14,19 +15,13 @@
 
 <c:set var="unique_page_id"><%=getCurrentTime()%></c:set>
 <c:set var="tabContentId">tabContent-${unique_page_id}</c:set>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_ADMIN_INFORMATION)">
 <div id="${tabContentId}">
   <br />
   <br />
   <div class="tipsBox ui-state-highlight">
-    Use the panel on the left to customize Vein-to-Vein.
+    Use the panel on the left to customize BSIS.
     <br/>
-    <br/>
-    <br/>
-    To access BSIS from another computer visit the following location in a supported web browser (Firefox/Google Chrome)
-    <c:forEach var="serverAddress" items="${model.serverAddresses}">
-      <br />
-      <a href="${serverAddress}" target="_blank"><b>${serverAddress}</b></a>
-    </c:forEach>
   </div>
 </div>
+</sec:authorize>

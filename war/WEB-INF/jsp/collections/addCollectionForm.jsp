@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<%@ page import="model.collectedsample.CollectionConstants" %>
 <%!public long getCurrentTime() {
     return System.nanoTime();
   }%>
@@ -69,8 +69,25 @@
           }
         }).click(
             function() {
-                addNewCollection($("#${addCollectionFormId}")[0],
-                                      "${tabContentId}", notifyParentSuccess);
+            	var collectedSample = $($("#${addCollectionFormId}")[0]).serialize();
+		       		  $.ajax({  
+						     type : "Get",   
+						     url : "findLastDonationForDonor.html",   
+						     data : collectedSample,  
+						     success : function(response) {  
+						      var noOfDays = response["diffInDays"];
+						      var blockBetweenCollections = <%=CollectionConstants.BLOCK_BETWEEN_COLLECTIONS%>;
+						      if(noOfDays != null && noOfDays <= blockBetweenCollections){
+						    	  generateDeferDonorDialog(response);
+						      }
+						      else {
+						    	  addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+						      }
+						     },  
+						     error : function(e) {  
+						    	 showMessage("Something went wrong."+e);
+						     }  
+						    });  
             });
 
         $("#${addCollectionFormCentersId}").multiselect({
@@ -106,11 +123,6 @@
           timeFormat : "hh:mm:ss tt",
           yearRange : "c-100:c0",
         });
-
-//        var collectedOnDatePicker = $("#${addCollectionFormId}").find(".collectedOn");
-//        if ("${existingCollectedSample}" == "false" && collectedOnDatePicker.val() == "") {
-//          collectedOnDatePicker.datepicker('setDate', new Date());
-//        }
 
         $("#${mainContentId}").find(".clearFormButton").button({
           icons : {
@@ -190,10 +202,45 @@
          toggleCheckboxDisabledState();
 
          $("#${addCollectionFormUseBatchCheckboxId}").change(toggleCheckboxDisabledState);
+		
+         function generateDeferDonorDialog(message) {
+             $("<div>").dialog({
+               modal: true,
+               open:  function() {
+            	   var alertMessage ="";
+            	   if(message["diffInDays"] > 0){
+                   		alertMessage = "Donor last donated on "+message["dateOfLastDonation"]+", "+message["diffInDays"]+" day(s) ago. Allow the donation to be added?";
+                   }
+            	   if(message["diffInDays"] == 0){
+                  		alertMessage = "Donor donated today, "+message["dateOfLastDonation"]+". Allow the donation to be added?";
+           	   	   }
+            	   if(message["diffInDays"] < 0){
+            			alertMessage = "Donor donated on "+message["dateOfLastDonation"]+", "+Math.abs(message["diffInDays"])+" day(s) after the provided donation date ("+message["collectedOnDate"]+"). Allow the donation to be added?";
+          	   	   }
+            	   $(this).append(alertMessage);
+                       },
+               close: function(event, ui) {
+                        $(this).remove();
+                       },
+               title: "Donor Not Due to Donate",
+               height: 200,
+               width: 450,
+               buttons:
+                 {
+                    "Add Donation": function() {
+                    	 			addNewCollection($("#${addCollectionFormId}")[0],"${tabContentId}", notifyParentSuccess);
+                                    $(this).dialog("close");
+                                   },
+                    "Cancel": function() {
+                    	         $(this).dialog("close");                                                        
+                               }
+                 }
+             });
+            }
 
     });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION)">
 <div id="${tabContentId}">
   <div id="${mainContentId}">
     <c:if test="${!empty success && !success}">
@@ -206,7 +253,7 @@
       class="formFormatClass" id="${addCollectionFormId}">
       <c:if test="${!collectionFields.collectionNumber.autoGenerate}">
         <c:if test="${collectionFields.collectionNumber.hidden != true }">
-          <div class="barcodeContainer"></div>
+          <div class="barcodeContainer" style="display:none"></div>
           <div>
             <form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
             <form:input path="collectionNumber" value="${firstTimeRender ? collectionFields.collectionNumber.defaultValue : ''}" />
@@ -240,7 +287,7 @@
         </div>
       </c:if>
       <c:if test="${collectionFields.collectedOn.hidden != true }">
-        <c:if test="${collectionFields.collectedOn.isTimeField == false or collectionFields.collectedOn.useCurrentTime == false}">
+        <c:if test="${collectionFields.collectedOn.isTimeField == true or collectionFields.collectedOn.useCurrentTime == true}">
           <div>
             <form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
             <form:input path="collectedOn" class="collectedOn" value="${firstTimeRender ? collectionFields.collectedOn.defaultValue : ''}" />
@@ -336,6 +383,47 @@
           <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
         </div>
       </c:if>
+
+       <c:if test="${collectionFields.donorWeight.hidden != true }">
+        <div>
+          <form:label path="donorWeight">${collectionFields.donorWeight.displayName}</form:label>
+          <form:input path="donorWeight" value="${firstTimeRender ? collectionFields.donorWeight.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorWeight" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+
+      <c:if test="${collectionFields.donorPulse.hidden != true }">
+        <div>
+          <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>
+          <form:input path="donorPulse" value="${firstTimeRender ? collectionFields.donorPulse.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.donorPulse" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      
+      <c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+        <div>
+          <form:label path="haemoglobinCount">${collectionFields.haemoglobinCount.displayName}</form:label>
+          <form:input path="haemoglobinCount" value="${firstTimeRender ? collectionFields.haemoglobinCount.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
+        </div>
+      </c:if>    
+
+       <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+        <div>
+          <form:label path="bloodPressureSystolic">${collectionFields.bloodPressureSystolic.displayName}</form:label>
+          <form:input path="bloodPressureSystolic" value="${firstTimeRender ? collectionFields.bloodPressureSystolic.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.bloodPressureSystolic" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      
+       <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+        <div>
+          <form:label path="bloodPressureDiastolic">${collectionFields.bloodPressureDiastolic.displayName}</form:label>
+          <form:input path="bloodPressureDiastolic" value="${firstTimeRender ? collectionFields.bloodPressureDiastolic.defaultValue : ''}" />
+          <form:errors class="formError" path="collectedSample.bloodPressureDiastolic" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      
       <c:if test="${collectionFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
@@ -344,6 +432,7 @@
             delimiter=", "></form:errors>
         </div>
       </c:if>
+      
       </form:form>
   
       <div style="margin-left: 200px;">
@@ -362,3 +451,4 @@
 <div id="${addCollectionFormFindDonorDialogId}" style="display: none;">
   <div class="findDonorFormSection"></div> 
 </div>
+</sec:authorize>

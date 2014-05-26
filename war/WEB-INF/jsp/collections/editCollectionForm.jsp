@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -157,7 +158,7 @@
 
     });
 </script>
-
+<sec:authorize access="hasRole(T(utils.PermissionConstants).EDIT_DONATION)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -284,6 +285,43 @@
           <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
         </div>
       </c:if>
+      <c:if test="${collectionFields.donorWeight.hidden != true }">
+        <div>
+          <form:label path="donorWeight">${collectionFields.donorWeight.displayName}</form:label>
+          <form:input path="donorWeight" />
+          <form:errors class="formError" path="collectedSample.donorWeight" delimiter=", "></form:errors>
+       </div>
+      </c:if>
+
+      <c:if test="${collectionFields.donorPulse.hidden != true }">
+        <div>
+          <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>
+          <form:input path="donorPulse"/>
+          <form:errors class="formError" path="collectedSample.donorPulse" delimiter=", "></form:errors>
+       </div>
+      </c:if>
+      <c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+        <div>
+          <form:label path="haemoglobinCount">${collectionFields.haemoglobinCount.displayName}</form:label>
+          <form:input path="haemoglobinCount" />
+          <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
+       </div>
+      </c:if>
+      <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+        <div>
+          <form:label path="bloodPressureSystolic">${collectionFields.bloodPressureSystolic.displayName}</form:label>
+          <form:input path="bloodPressureSystolic" />
+          <form:errors class="formError" path="collectedSample.bloodPressureSystolic" delimiter=", "></form:errors>
+        </div>
+      </c:if>
+      
+      <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+        <div>
+          <form:label path="bloodPressureDiastolic">${collectionFields.bloodPressureDiastolic.displayName}</form:label>
+          <form:input path="bloodPressureDiastolic" />
+          <form:errors class="formError" path="collectedSample.bloodPressureDiastolic" delimiter=", "></form:errors>
+        </div>
+      </c:if>
       <c:if test="${collectionFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
@@ -309,3 +347,4 @@
   </div>
   
 </div>
+</sec:authorize>

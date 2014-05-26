@@ -157,6 +157,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_TTI_OUTCOME)">
 <div id="${tabContentId}">
 
   <div id="${mainContentId}">
@@ -313,3 +314,4 @@ $(document).ready(function() {
   </div>
 
 </div>
+</sec:authorize>

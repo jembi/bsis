@@ -1,12 +1,13 @@
 package viewmodel;
 
+
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
-
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
@@ -155,4 +156,53 @@ public class CollectedSampleViewModel {
     else
       return getBloodAbo() + getBloodRh();
   }
+
+  public BigDecimal getHaemoglobinCount() {
+		return collectedSample.getHaemoglobinCount();
+	}
+	
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+		collectedSample.setHaemoglobinCount(haemoglobinCount);
+	}
+  
+  public BigDecimal getDonorWeight() {
+		return collectedSample.getDonorWeight();
+	}
+
+  public void setDonorWeight(BigDecimal donorWeight) {
+		collectedSample.setDonorWeight(donorWeight);
+	}
+
+  public Integer  getDonorPulse() {
+		return collectedSample.getDonorPulse();
+	}
+
+  public void setDonorPulse(Integer donorPulse) {
+		collectedSample.setDonorPulse(donorPulse);
+  }
+
+  public Integer getBloodPressureSystolic() {
+		return  collectedSample.getBloodPressureSystolic();
+  }
+	
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+  }
+  
+  public Integer  getBloodPressureDiastolic() {
+		return collectedSample.getBloodPressureDiastolic();
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+	}
+	
+	public String getBloodPressure()
+	{
+		 if(collectedSample.getBloodPressureSystolic()!=null && collectedSample.getBloodPressureDiastolic()!=null)
+		 return collectedSample.getBloodPressureSystolic()+"/"+getBloodPressureDiastolic();
+		 else
+		 return null;
+	}
+	 
 }

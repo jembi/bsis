@@ -1,5 +1,6 @@
 package model.collectedsample;
 
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 
 import model.bloodbagtype.BloodBagType;
@@ -44,7 +46,6 @@ import constraintvalidator.CollectionBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
-
 import repository.bloodtesting.BloodTypingStatus;
 
 /**
@@ -126,16 +127,19 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
-  @Column(precision=6, scale=2)
+ 
   private BigDecimal haemoglobinCount;
 
-  @Column(precision=6, scale=2)
-  private BigDecimal bloodPressure;
+  @Column(name="bloodPressureSystolic")
+  private Integer bloodPressureSystolic;
+  
+  @Column(name="bloodPressureDiastolic")
+  private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
    */
-  @Column(precision=6, scale=2)
+  
   private BigDecimal donorWeight;
 
   @ManyToOne(optional=true)
@@ -160,7 +164,10 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private TTIStatus ttiStatus;
 
   private Boolean isDeleted;
-
+  
+  
+  private Integer donorPulse;
+  
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -170,6 +177,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
+
+  
   public String getCollectionNumber() {
     return collectionNumber;
   }
@@ -249,6 +258,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
+    this.haemoglobinCount=collectedSample.haemoglobinCount;
+    this.donorPulse = collectedSample.donorPulse;
+    this.donorWeight=collectedSample.donorWeight;
+    this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
+    this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
   }
 
   public List<Product> getProducts() {
@@ -329,19 +343,19 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
+  
+  public Integer getBloodPressureSystolic() {
+		return bloodPressureSystolic;
+	}
 
-  public BigDecimal getBloodPressure() {
-    return bloodPressure;
-  }
-
-  public void setBloodPressure(BigDecimal bloodPressure) {
-    this.bloodPressure = bloodPressure;
-  }
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
+	}
 
   public BigDecimal getDonorWeight() {
     return donorWeight;
   }
-
+  
   public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
@@ -414,11 +428,28 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodRh = bloodRh;
   }
 
-  public String getExtraBloodTypeInformation() {
+  public Integer getBloodPressureDiastolic() {
+		return bloodPressureDiastolic;
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
+	}
+
+	public String getExtraBloodTypeInformation() {
     return extraBloodTypeInformation;
   }
 
   public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
     this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
+
+	public Integer getDonorPulse() {
+		return donorPulse;
+	}
+
+	public void setDonorPulse(Integer donorPulse) {
+		this.donorPulse = donorPulse;
+	}
+  
 }

@@ -72,6 +72,15 @@ public class DonorViewModel {
     }
   }
   
+  public String getDateOfFirstDonation() {
+    Date dateOfFirstDonation = donor.getDateOfFirstDonation();
+    if (dateOfFirstDonation != null) {
+      return CustomDateFormatter.getDateString(dateOfFirstDonation);
+    } else {
+      return "";
+    }
+  }
+  
   public Boolean getBirthDateEstimated(){
 	  return donor.getBirthDateEstimated();
   }

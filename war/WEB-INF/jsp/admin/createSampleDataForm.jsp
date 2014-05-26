@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -54,9 +55,10 @@ $(document).ready(
   });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_DATA_SETUP)">
 <div id="${createSampleDataFormDivId}" class="editFormDiv">
   <div style="font-weight: bold; font-style: italic; margin-top: 20px; margin-bottom: 20px;">
-    Create sample data for testing Vein-to-Vein</div>
+    Create sample data for testing BSIS</div>
   <form id="${createSampleDataFormId}" class="editForm">
     <div>
       <label> No. of donors </label>
@@ -85,3 +87,4 @@ $(document).ready(
     </button>
   </div>
 </div>
+</sec:authorize>

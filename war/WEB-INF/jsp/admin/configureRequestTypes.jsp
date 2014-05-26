@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -33,6 +34,7 @@ $(document).ready(function() {
     console.log(newDiv);
     newDiv.find('input[name="id"]').val("");
     newDiv.find('input[name="requestType"]').val("");
+    newDiv.find('input[name="bulkTransfer"]').removeAttr('checked');
     $("#${configureRequestTypesFormId}").append(newDiv);
   });
 
@@ -47,10 +49,12 @@ $(document).ready(function() {
       var div = $(requestTypeDivs[index]);
       var id = div.find('input[name="id"]').val();
       var requestType = div.find('input[name="requestType"]').val();
+      var bulkTransfer = div.find('input[name="bulkTransfer"]').is(":checked");
       console.log(requestType);
       if (id == undefined || id == null || id === "")
         id = requestType;
-      data[id] = requestType;
+      data[id] = {requestType:requestType,bulkTransfer:bulkTransfer};  
+      
     }
 
     console.log(JSON.stringify(data));
@@ -95,14 +99,21 @@ $(document).ready(function() {
       </p>
     </div>
     <form id="${configureRequestTypesFormId}">
-        <c:forEach var="requestType" items="${model.allRequestTypes}">
-          <div class="requestTypeDiv">
-            <div>
-              <input type="hidden" name="id" value="${requestType.id}" />
-              <input type="text" name="requestType" value="${requestType.requestType}" />
-            </div>
-          </div>
-      </c:forEach>
+    
+        
+       <div class="requestTypeDiv">
+       	<c:forEach var="requestType" items="${model.allRequestTypes}">
+         <div>
+           <input type="hidden" name="id" value="${requestType.id}" />
+           <input type="text" name="requestType" value="${requestType.requestType}" />
+           <c:choose>
+   			 <c:when test="${requestType.bulkTransfer eq true}"> Bulk Transfer <input type="checkbox" name="bulkTransfer" checked="checked"/></c:when>
+			 <c:otherwise> Bulk Transfer <input type="checkbox" name="bulkTransfer"/></c:otherwise>
+		   </c:choose>
+         </div>
+         </c:forEach>
+       </div>
+      
     </form>
       <br />
       <div>

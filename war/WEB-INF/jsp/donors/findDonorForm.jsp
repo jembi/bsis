@@ -2,6 +2,7 @@
   pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   pageContext.setAttribute("newLineChar", "\n");
@@ -53,6 +54,19 @@ $(document).ready(function() {
     }
   }).click(clearFindForm);
   
+ 
+// $('.findDonorButton').attr('disabled', 'disabled'); // Issuw in firefox browser
+ $( ".findDonorButton" ).button( "option", { disabled: true } );
+
+  $('#donorNumber, #firstName, #lastName, #donationIdentificationNumber').keyup(function(){ 
+	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 
+                  || $('#lastName').val().trim().length >0 || $('#donationIdentificationNumber').val().trim().length >0)
+              $( ".findDonorButton" ).button( "option", { disabled: false } );
+	  else
+               $( ".findDonorButton" ).button( "option", { disabled: true } );
+             $( ".findDonorButton" ).button( "refresh" );
+  });
+	  
   function clearFindForm() {
     refetchContent("${model.refreshUrl}", $("#${tabContentId}"));
     $("#${childContentId}").html("");
@@ -192,6 +206,7 @@ $(document).ready(function() {
 });
 </script>
 
+<sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONOR)">
 <div id="${tabContentId}" class="formDiv">
   <div id="${mainContentId}">
   
@@ -210,6 +225,10 @@ $(document).ready(function() {
         <form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
         <form:input path="donorNumber" />
       </div>
+       <div>
+        <form:label path="donationIdentificationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
+        <form:input path="donationIdentificationNumber" />
+      </div>
       <div>
         <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
         <form:input path="firstName" />
@@ -218,21 +237,14 @@ $(document).ready(function() {
         <form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
         <form:input path="lastName" />
       </div>
+          
       <div>
-        <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-        <form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
-        <form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
-          <form:option value="Unknown" label="Unknown" />
-          <form:option value="A+" label="A+" />
-          <form:option value="A-" label="A-" />
-          <form:option value="B+" label="B+" />
-          <form:option value="B-" label="B-" />
-          <form:option value="AB+" label="AB+" />
-          <form:option value="AB-" label="AB-" />
-          <form:option value="O+" label="O+" />
-          <form:option value="O-" label="O-" />
-        </form:select>
+        <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
+        <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>
       </div>
+
+      <br />
+      <br />
     </form:form>
 
     <div class="formFormatClass">
@@ -258,7 +270,7 @@ $(document).ready(function() {
 
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
-      commandName="addDonorForm">
+      commandName="addDonorForm" >
 
 
       <c:if test="${model.donorFields.firstName.hidden != true }">
@@ -283,29 +295,49 @@ $(document).ready(function() {
         <div>
           <form:label path="gender">${model.donorFields.gender.displayName}</form:label>
           <form:select path="gender" id="${genderSelectorId}">
-          	<form:option value="" />
+          	<form:option value="" >Gender</form:option>
             <form:option value="male" label="Male" />
             <form:option value="female" label="Female" />
           </form:select>
         </div>
-      </c:if>
+        </c:if>
       <c:if test="${model.donorFields.nationalID.hidden != true }">
         <div>
           <form:label path="nationalID">${model.donorFields.nationalID.displayName}</form:label>
           <form:input path="nationalID" value="${firstTimeRender ? model.donorFields.nationalID.defaultValue : ''}" />
         </div>
       </c:if>
-      <c:if test="${model.donorFields.birthDate.hidden != true }">
-        <div>
-          <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
-          <form:input path="birthDate" class="birthDate"
-                      value="${firstTimeRender ? model.donorFields.birthDate.defaultValue : ''}" />
-          <c:if test="${donorFields.birthDateEstimated.hidden != true }">
+     
+        <div> 
+        <c:if test="${donorFields.birthDate.hidden != true }">
+       <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
+        <form:input  style="width:34px" placeholder="Day" path="dayOfMonth" alt="dayOfMonth"    maxlength="2"/>
+       
+        <form:select path="month"  name="Month">
+        <form:option value="">Month</form:option> 
+       <form:option value="01">January</form:option>
+       <form:option value="02">February</form:option>
+       <form:option value="03">March</form:option>
+       <form:option value="04">April</form:option>
+       <form:option value="05">May</form:option>
+       <form:option value="06">June</form:option>
+       <form:option value="07">July</form:option>
+       <form:option value="08">August</form:option>
+       <form:option value="09">September</form:option>
+       <form:option value="10">Octobor</form:option>
+       <form:option value="11">November</form:option>
+       <form:option value="12">December</form:option>
+       </form:select>
+       
+        <form:input style="width:46px" path="year" maxlength="4" alt="year" id="year" placeholder="Year" />
+       </c:if> 
+         <c:if test="${donorFields.birthDateEstimated.hidden != true }">
           	${donorFields.birthDateEstimated.displayName}
 			<form:checkbox path="birthDateEstimated" class="birthDateEstimated" style="width: auto; position: relative;"/>
           </c:if>
+ 
         </div>
-      </c:if>
+        
       <c:if test="${model.donorFields.notes.hidden != true }">
         <div>
           <form:label path="notes" class="labelForTextArea">${model.donorFields.notes.displayName}</form:label>
@@ -351,3 +383,4 @@ $(document).ready(function() {
   </div>
 
 </div>
+</sec:authorize>
