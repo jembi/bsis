@@ -2849,7 +2849,7 @@
 </addColumn>
 
  <addForeignKeyConstraint baseColumnNames="idType_id"
-            baseTableName="donor"
+            baseTableName="Donor"
             constraintName="fk_donor_Id"
             referencedColumnNames="id"
             referencedTableName="IdType"/>
