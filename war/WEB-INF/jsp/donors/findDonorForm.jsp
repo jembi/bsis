@@ -231,7 +231,7 @@ $(document).ready(function() {
         <form:label path="donorNumber">${model.donorFields.donorNumber.displayName}</form:label>
         <form:input path="donorNumber" />
       </div>
-       <div>
+      <div>
         <form:label path="donationIdentificationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
         <form:input path="donationIdentificationNumber" />
       </div>
@@ -380,15 +380,15 @@ $(document).ready(function() {
         
         <form:select path="preferredContactMethod" id="${addDonorFormContactMethodTypesId}"
                      class="addDonorFormPreferredContactMethods">
-          <form:option value="" selected="selected">&nbsp;</form:option>
-          <c:forEach var="preferredContactMethod" items="${preferredContactMethods}">
-            <form:option value="${preferredContactMethod.id}">${preferredContactMethod.contactMethodType}</form:option>
-          </c:forEach>
+           <form:option value="" selected="selected">&nbsp;</form:option>
+               <c:forEach var="preferredContactMethod" items="${preferredContactMethods}">
+                   <form:option value="${preferredContactMethod.id}">${preferredContactMethod.contactMethodType}</form:option>
+               </c:forEach>
         </form:select>
         <form:select path="donorPanel" id="${addDonorFormDonorPanelsId}" class="addDonorFormDonorPanels">
-          <form:option value="" selected="selected">&nbsp;</form:option>
-          <c:forEach var="donorPanel" items="${donorPanels}">
-            <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
+           <form:option value="" selected="selected">&nbsp;</form:option>
+               <c:forEach var="donorPanel" items="${donorPanels}">
+           <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
           </c:forEach>
         </form:select>
       </div>
