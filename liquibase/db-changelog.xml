@@ -2739,7 +2739,7 @@
   <dropColumn  columnName="phoneNumber" tableName="Donor"/>
  
  
-  <insert tableName="preferredLanguage">
+  <insert tableName="PreferredLanguage">
      <column name="id" value="1"></column>
      <column name="preferredLanguage" value="English"></column>
   </insert>
