@@ -397,7 +397,6 @@ $(document).ready(function() {
     <div style="margin-left: 200px;">
       <label></label>
       <button type="button" class="addDonorButton autoWidthButton">
-          <a href="../../../../liquibase/db-changelog.xml"></a>
         Add Donor
       </button> 
     </div>
