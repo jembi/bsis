@@ -194,7 +194,7 @@ public class Donor implements ModificationTracker {
  @NotAudited
  @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class,fetch = FetchType.EAGER)
  @Fetch(value = FetchMode.SUBSELECT)
- @JoinTable(name="donordonorcode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
+ @JoinTable(name="DonorDonorCode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
          @JoinColumn(name="donorCodeId"))
 private List<DonorCode> donorCodes;
 
