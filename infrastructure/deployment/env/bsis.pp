@@ -21,16 +21,14 @@ Exec {
 }
 
 # Make sure package index is updated (when referenced by require)
-#exec { "apt-get update":
-#    command => "apt-get update",
-#    user => "root",
-#}
+exec { "apt-get update":
+    command => "apt-get update",
+    user => "root",
+}
 
 # Install required packages
 Package { ensure => "installed" }
-#package { "git-core": ensure => latest }
 package { "git":}
-
 
 #Install MySQL server
 class { 'mysql::server':
@@ -87,17 +85,7 @@ exec { "checkout-develop":
     command => "git checkout develop",
     cwd => "/var/jembi/bsis",
     unless => "test -d /var/bsis/bsis/.git",
-}
-
-#
-exec { "Vumi setup":
-    command => "python setup.py develop",
-    cwd => "/var/praekelt/vumi/",
-    user => "root",
-    subscribe => [
-        Exec['Clone git repository']
-    ],
-    refreshonly => true
+    require	=> Exec["clone-repo"]
 }
 
 

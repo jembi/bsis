@@ -4,6 +4,7 @@
 # puppetlabs/mysql
 # puppetlabs/java
 # example42/tomcat
+# maestrodev/maven
 #
 
 # Variables
@@ -39,4 +40,9 @@ class { "java": }
 
 #Install tomcat
 class { "tomcat": }
+
+# Install Maven
+class { "maven::maven":
+	version => "3.0.3", 
+}
 

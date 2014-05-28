@@ -12,17 +12,6 @@ Vagrant::Config.run do |config|
 
 	config.vm.share_folder "bsis", "/bsis", "../../../"
 
-	#config.vm.synced_folder ".", "/var/jembi/bsis"
-
-	# Ensure packages are up to date
-	config.vm.provision :shell do |shell|
-		shell.inline = "sudo apt-get update"
-		shell.inline = "sudo apt-get install vim -y"
-		shell.inline = "sudo apt-get install libgpm2 -y"
-		shell.inline = "sudo apt-get install python2.7 -y"
-		shell.inline = "sudo apt-get install libpython2.7 -y"
-	end
-
 	#Install required puppet modules
 	config.vm.provision :shell do |shell|
   	    shell.inline = "mkdir -p /etc/puppet/modules;

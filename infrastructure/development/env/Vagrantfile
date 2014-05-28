@@ -11,18 +11,13 @@ Vagrant::Config.run do |config|
 
 	config.vm.share_folder "bsis", "/bsis", "../../../"
 
-	# Ensure packages are up to date
-	config.vm.provision :shell do |shell|
-		shell.inline = "sudo apt-get update"
-		shell.inline = "sudo apt-get install vim -y"
-	end
-
 	#Install required puppet modules
 	config.vm.provision :shell do |shell|
   	    shell.inline = "mkdir -p /etc/puppet/modules;
             puppet module install puppetlabs/mysql;
             puppet module install puppetlabs/java;
-            puppet module install example42/tomcat;"
+            puppet module install example42/tomcat;
+            puppet module install maestrodev/maven"
  	end
 
 	config.vm.provision :puppet do |puppet|
