@@ -1,12 +1,7 @@
 package repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
+import backingform.DonorBackingForm;
+import controller.UtilController;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,11 +11,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.sql.DataSource;
-
+import model.address.Address;
+import model.address.AddressType;
+import model.address.Contact;
+import model.address.ContactMethodType;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
+import model.donorcodes.DonorCodeGroup;
+import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.user.User;
@@ -36,6 +35,15 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,13 +56,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
 import security.LoginUserService;
 import security.V2VUserDetails;
-import backingform.DonorBackingForm;
-import controller.UtilController;
-import model.donorcodes.DonorCodeGroup;
-import model.donorcodes.DonorDonorCode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -898,31 +901,31 @@ public class DonorRepositoryTest {
 	 */
 	public void setBackingFormValue(DonorBackingForm donorBackingForm) {
 		Date date = new Date();
-		donorBackingForm.setHomeAddress("myaddress");
+		donorBackingForm.setHomeAddressLine1("myaddress");
 		donorBackingForm.setFirstName("firstname");
 		donorBackingForm.setMiddleName("middlename");
 		donorBackingForm.setLastName("lastname");
 		donorBackingForm.setIsDeleted(false);
 		donorBackingForm.setGender("male");
 		donorBackingForm.setCallingName("CallingName");
-		donorBackingForm.setCity("City");
-		donorBackingForm.setCountry("country");
+		donorBackingForm.setHomeAddressCity("City");
+		donorBackingForm.setHomeAddressCountry("country");
 		user = new User();
 		user.setId(userDbId);
 		donorBackingForm.setCreatedBy(user);
 		donorBackingForm.setCreatedDate(date);
 		donorBackingForm.setLastUpdated(date);
 		donorBackingForm.setLastUpdatedBy(user);
-		donorBackingForm.setDistrict("District");
+		donorBackingForm.setHomeAddressDistrict("District");
 		donorBackingForm.setDonorPanel("1");
 		donorBackingForm.setNationalID("1111");
 		donorBackingForm.setNotes("Notes");
 		donorBackingForm.setMobileNumber("9999999999");
 		donorBackingForm.setWorkNumber("8888888888");
-		donorBackingForm.setPreferredContactMethod("1");
-		donorBackingForm.setProvince("Province");
-		donorBackingForm.setState("State");
-		donorBackingForm.setZipcode("361001");
+		donorBackingForm.setContactType("1");
+		donorBackingForm.setHomeAddressProvince("Province");
+		donorBackingForm.setHomeAddressState("State");
+		donorBackingForm.setHomeAddressZipcode("361001");
 		donorBackingForm.setBirthDate(donorBirthdate);
 		donorBackingForm.setDayOfMonth("10");
 		donorBackingForm.setMonth("06");
@@ -937,25 +940,26 @@ public class DonorRepositoryTest {
 	 * @param donorBackingForm
 	 */
 	public void setBackingUpdateFormValue(DonorBackingForm donorBackingForm) {
-		donorBackingForm.setHomeAddress("address_update");
+               
+                donorBackingForm.setHomeAddressLine1("address_update");
 		donorBackingForm.setFirstName("firstName_update");
 		donorBackingForm.setMiddleName("middlename_update");
 		donorBackingForm.setLastName("lastname_update");
 		donorBackingForm.setIsDeleted(false);
 		donorBackingForm.setGender("female");
 		donorBackingForm.setCallingName("CallingName_update");
-		donorBackingForm.setCity("City_update");
-		donorBackingForm.setCountry("country_update");
-		donorBackingForm.setDistrict("District_update");
+		donorBackingForm.setHomeAddressCity("City_update");
+		donorBackingForm.setHomeAddressCountry("country_update");
+		donorBackingForm.setHomeAddressDistrict("District_update");
 		donorBackingForm.setDonorPanel("2");
 		donorBackingForm.setNationalID("1212");
 		donorBackingForm.setNotes("Notes_update");
 		donorBackingForm.setMobileNumber("9878787878");
 		donorBackingForm.setWorkNumber("874525452");
-		donorBackingForm.setPreferredContactMethod("2");
-		donorBackingForm.setProvince("Province_update");
-		donorBackingForm.setState("State_update");
-		donorBackingForm.setZipcode("361001");
+		donorBackingForm.setContactType("1");
+		donorBackingForm.setHomeAddressProvince("Province_update");
+		donorBackingForm.setHomeAddressState("State_update");
+		donorBackingForm.setHomeAddressZipcode("361001");
 		user = new User();
 		user.setId(userDbId);
 		donorBackingForm.setCreatedBy(user);
@@ -963,18 +967,33 @@ public class DonorRepositoryTest {
 
 	public Donor copyDonor(Donor donor) {
 		Donor copyDonor = new Donor();
-		copyDonor.setHomeAddress(donor.getHomeAddress());
-		copyDonor.setAge(donor.getAge());
+                Address address = new Address();
+                Contact contact = new Contact();
+                        
+                address.setHomeAddressline1(donor.getAddress().getHomeAddressline1());
+                address.setHomeAddressCity(donor.getAddress().getHomeAddressCity());
+                address.setHomeAddressCountry(donor.getAddress().getHomeAddressCountry());
+                address.setHomeAddressDistrict(donor.getAddress().getHomeAddressDistrict());
+                address.setHomeAddressState(donor.getAddress().getHomeAddressState());
+                address.setHomeAddressProvince(donor.getAddress().getHomeAddressProvince());
+                address.setHomeAddressZipcode(donor.getAddress().getHomeAddressZipcode());
+                
+                contact.setMobileNumber(donor.getContact().getMobileNumber());
+                contact.setHomeNumber(donor.getContact().getHomeNumber());
+                
+                address.setAddressType(donor.getAddress().getAddressType());
+                contact.setContactMethodType(donor.getContact().getContactMethodType());
+                
+                copyDonor.setAddress(address);
+                copyDonor.setContact(contact);
+                
+                copyDonor.setAge(donor.getAge());
 		copyDonor.setBirthDate(donor.getBirthDate());
 		copyDonor.setBirthDateEstimated(donor.getBirthDateEstimated());
 		copyDonor.setBirthDateInferred(donor.getBirthDateInferred());
 		copyDonor.setBloodAbo(donor.getBloodAbo());
 		copyDonor.setCallingName(donor.getCallingName());
-		copyDonor.setCity(donor.getCity());
-		copyDonor.setContactInformation(donor.getContactInformation());
-		copyDonor.setCountry(donor.getCountry());
 		copyDonor.setDateOfLastDonation(donor.getDateOfLastDonation());
-		copyDonor.setDistrict(donor.getDistrict());
 		copyDonor.setDonorHash(donor.getDonorHash());
 		copyDonor.setDonorPanel(donor.getDonorPanel());
 		copyDonor.setDonorStatus(donor.getDonorStatus());
@@ -984,12 +1003,6 @@ public class DonorRepositoryTest {
 		copyDonor.setMiddleName(donor.getMiddleName());
 		copyDonor.setNationalID(donor.getNationalID());
 		copyDonor.setNotes(donor.getNotes());
-		copyDonor.setMobileNumber(donor.getMobileNumber());
-		copyDonor.setHomeNumber(donor.getHomeNumber());
-		copyDonor.setPreferredContactMethod(donor.getPreferredContactMethod());
-		copyDonor.setProvince(donor.getProvince());
-		copyDonor.setState(donor.getState());
-		copyDonor.setZipcode(donor.getZipcode());
 		return copyDonor;
 	}
 

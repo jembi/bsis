@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import javax.validation.Valid;
-import model.address.ContactInformation;
+import model.address.Address;
+import model.address.AddressType;
+import model.address.Contact;
 import model.address.ContactMethodType;
 import model.donor.Donor;
 import model.idtype.IdType;
@@ -16,660 +18,681 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
+
 public class DonorBackingForm {
 
-  @Valid
-  private Donor donor;
+    @Valid
+    private Donor donor;
 
-  // store a local copy of birthdate string as validation may have failed
-  private String birthDate;
-  
-  //to capture date of birth parameters--#11
-  String year;
-  String month;
-  String dayOfMonth;
+    // store a local copy of birthdate string as validation may have failed
+    private String birthDate;
 
-  private Boolean ageFormatCorrect;
+    //to capture date of birth parameters--#11
+    String year;
+    String month;
+    String dayOfMonth;
 
-  private String ageSpecified;
-  
+    private Boolean ageFormatCorrect;
 
-  private String dateOfFirstDonation;
-  
-  public DonorBackingForm() {
-    donor = new Donor();
-    ageFormatCorrect = null;
-  }
+    private String ageSpecified;
 
-  public DonorBackingForm(Donor donor) {
-    this.donor = donor;
-  }
+    private String dateOfFirstDonation;
 
-  public String getBirthDate() {
-    if (birthDate != null)
-      return birthDate;
-    if (donor == null)
-      return "";
-    return CustomDateFormatter.getDateString(donor.getBirthDate());
-  }
+    private Address address;
 
-  public void setBirthDate() {
-	
-    if(year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty())
-	  {  
-	donor.setBirthDate(null);
-    return;
-	  }
-	  birthDate = dayOfMonth+"/"+month+"/"+year;
-    try {
-      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-    } catch (ParseException ex) {
-      donor.setBirthDate(null);
+    private Contact contact;
+
+    public DonorBackingForm() {
+        donor = new Donor();
+        ageFormatCorrect = null;
+        address = new Address();
+        contact = new Contact();
     }
-  }
-  
-  public void setBirthDate(String birthDate) {
-    this.birthDate = birthDate;
-    try {
-      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donor.setBirthDate(null);
+
+    public DonorBackingForm(Donor donor) {
+        this.donor = donor;
     }
-  }
 
-  public DonorViewModel getDonorViewModel() {
-    return new DonorViewModel(donor);
-  }
+    public String getBirthDate() {
+        if (birthDate != null) {
+            return birthDate;
+        }
+        if (donor == null) {
+            return "";
+        }
+        return CustomDateFormatter.getDateString(donor.getBirthDate());
+    }
 
-  public Donor getDonor() {
-    return donor;
-  }
+    public void setBirthDate() {
 
-  public boolean equals(Object obj) {
-    return donor.equals(obj);
-  }
+        if (year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty()) {
+            donor.setBirthDate(null);
+            return;
+        }
+        birthDate = dayOfMonth + "/" + month + "/" + year;
+        try {
+            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+        } catch (ParseException ex) {
+            donor.setBirthDate(null);
+        }
+    }
 
-  public Long getId() {
-    return donor.getId();
-  }
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+        try {
+            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            donor.setBirthDate(null);
+        }
+    }
 
-  public String getDonorNumber() {
-    return donor.getDonorNumber();
-  }
-  
-  
-public String getTitle() {
- return donor.getTitle();
+    public DonorViewModel getDonorViewModel() {
+        return new DonorViewModel(donor);
+    }
 
- }
- public void setTitle(String title) {
-   donor.setTitle(title);
- }
+    public Donor getDonor() {
+        return donor;
+    }
 
+    public boolean equals(Object obj) {
+        return donor.equals(obj);
+    }
 
-  public String getFirstName() {
-    return donor.getFirstName();
-  }
+    public Long getId() {
+        return donor.getId();
+    }
 
-  public String getMiddleName() {
-    return donor.getMiddleName();
-  }
+    public String getDonorNumber() {
+        return donor.getDonorNumber();
+    }
 
-  public String getLastName() {
-    return donor.getLastName();
-  }
+    public String getTitle() {
+        return donor.getTitle();
 
-  public String getCallingName() {
-    return donor.getCallingName();
-  }
+    }
 
-  public Boolean getBirthDateEstimated(){
-	return donor.getBirthDateEstimated();
-  }
-  
-  public String getGender() {
-    if (donor == null || donor.getGender() == null)
-      return null;
-    return donor.getGender().toString();
-  }
+    public void setTitle(String title) {
+        donor.setTitle(title);
+    }
 
+    public String getFirstName() {
+        return donor.getFirstName();
+    }
 
-  public String getCity() {
-    return donor.getCity();
-  }
+    public String getMiddleName() {
+        return donor.getMiddleName();
+    }
 
-  public String getProvince() {
-    return donor.getProvince();
-  }
+    public String getLastName() {
+        return donor.getLastName();
+    }
 
-  public String getDistrict() {
-    return donor.getDistrict();
-  }
+    public String getCallingName() {
+        return donor.getCallingName();
+    }
 
-  public String getState() {
-    return donor.getState();
-  }
+    public Boolean getBirthDateEstimated() {
+        return donor.getBirthDateEstimated();
+    }
 
-  public String getCountry() {
-    return donor.getCountry();
-  }
+    public String getGender() {
+        if (donor == null || donor.getGender() == null) {
+            return null;
+        }
+        return donor.getGender().toString();
+    }
 
-  public String getMobileNumber() {
-    return donor.getMobileNumber();
-  }
-  
-   public String getHomeNumber() {
-    return donor.getHomeNumber();
-  }
+    public Date getLastUpdated() {
+        return donor.getLastUpdated();
+    }
 
-    public String getWorkNumber() {
-    return donor.getWorkNumber();
-  }
+    public Date getCreatedDate() {
+        return donor.getCreatedDate();
+    }
 
+    public String getNotes() {
+        return donor.getNotes();
+    }
 
-  public Date getLastUpdated() {
-    return donor.getLastUpdated();
-  }
+    public Boolean getIsDeleted() {
+        return donor.getIsDeleted();
+    }
 
-  public Date getCreatedDate() {
-    return donor.getCreatedDate();
-  }
+    public User getCreatedBy() {
+        return donor.getCreatedBy();
+    }
 
-  public String getNotes() {
-    return donor.getNotes();
-  }
+    public User getLastUpdatedBy() {
+        return donor.getLastUpdatedBy();
+    }
 
-  public Boolean getIsDeleted() {
-    return donor.getIsDeleted();
-  }
+    public int hashCode() {
+        return donor.hashCode();
+    }
 
-  public User getCreatedBy() {
-    return donor.getCreatedBy();
-  }
+    public void setId(Long id) {
+        donor.setId(id);
+    }
 
-  public User getLastUpdatedBy() {
-    return donor.getLastUpdatedBy();
-  }
+    public void setDonorNumber(String donorNumber) {
+        donor.setDonorNumber(donorNumber);
+    }
 
-  public int hashCode() {
-    return donor.hashCode();
-  }
+    public void setFirstName(String firstName) {
+        donor.setFirstName(firstName);
+    }
 
-  public void setId(Long id) {
-    donor.setId(id);
-  }
+    public void setMiddleName(String middleName) {
+        donor.setMiddleName(middleName);
+    }
 
-  public void setDonorNumber(String donorNumber) {
-    donor.setDonorNumber(donorNumber);
-  }
+    public void setLastName(String lastName) {
+        donor.setLastName(lastName);
+    }
 
-  public void setFirstName(String firstName) {
-    donor.setFirstName(firstName);
-  }
+    public void setCallingName(String callingName) {
+        donor.setCallingName(callingName);
+    }
 
-  public void setMiddleName(String middleName) {
-    donor.setMiddleName(middleName);
-  }
+    public void setGender(String gender) {
+        donor.setGender(Gender.valueOf(gender));
+    }
 
-  public void setLastName(String lastName) {
-    donor.setLastName(lastName);
-  }
+    public void setBirthDateEstimated(Boolean birthDateEstimated) {
+        donor.setBirthDateEstimated(birthDateEstimated);
+    }
 
-  public void setCallingName(String callingName) {
-    donor.setCallingName(callingName);
-  }
+    public void setCreatedDate(Date createdDate) {
+        donor.setCreatedDate(createdDate);
+    }
 
-  public void setGender(String gender) {
-    donor.setGender(Gender.valueOf(gender));
-  }
-  
-  public void setBirthDateEstimated(Boolean birthDateEstimated){
-	  donor.setBirthDateEstimated(birthDateEstimated);
-  }
+    public void setNotes(String notes) {
+        donor.setNotes(notes);
+    }
 
-  public void setHomeAddress(String homeAddress) {
-    donor.setHomeAddress(homeAddress);
-  }
-  
-  public void setPostalAddress(String postalAddress) {
-    donor.setPostalAddress(postalAddress);
-  }
+    public void setIsDeleted(Boolean isDeleted) {
+        donor.setIsDeleted(isDeleted);
+    }
 
+    public void setCreatedBy(User createdBy) {
+        donor.setCreatedBy(createdBy);
+    }
+
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        donor.setLastUpdatedBy(lastUpdatedBy);
+    }
     
-  public void setWorkAddress(String workAddress) {
-    donor.setWorkAddress(workAddress);
-  }
-  
-public String getHomeAddress() {
-    return donor.getHomeAddress();
-}
-
-public String getPostalAddress() {
-    return donor.getPostalAddress();
-}
-public String getWorkAddress() {
-    return donor.getWorkAddress();
-}
-    
-  
-  public void setCity(String city) {
-    donor.setCity(city);
-  }
-
-  public void setProvince(String province) {
-    donor.setProvince(province);
-  }
-
-  public void setDistrict(String district) {
-    donor.setDistrict(district);
-  }
-
-  public void setState(String state) {
-    donor.setState(state);
-  }
-
-  public void setCountry(String country) {
-    donor.setCountry(country);
-  }
-
-  public void setMobileNumber(String mobileNumber) {
-    donor.setMobileNumber(mobileNumber);
-  }
-  
-   public void setHomeNumber(String homeNumber) {
-    donor.setHomeNumber(homeNumber);
-  }
-   
-    public void setWorkNumber(String workNumber) {
-    donor.setWorkNumber(workNumber);
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    donor.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    donor.setCreatedDate(createdDate);
-  }
-
-  public void setNotes(String notes) {
-    donor.setNotes(notes);
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    donor.setIsDeleted(isDeleted);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    donor.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    donor.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public String toString() {
-    return donor.toString();
-  }
-
-  public ContactInformation getContactInformation() {
-    return donor.getContactInformation();
-  }
-
-  public void setContactInformation(ContactInformation contactInformation) {
-    donor.setContactInformation(contactInformation);
-  }
-
-  public String getZipcode() {
-    return donor.getZipcode();
-  }
-
-  public void setZipcode(String zipcode) {
-    donor.setZipcode(zipcode);
-  }
- 
-      public String getWorkAddressCity() {
-        return donor.getWorkAddressCity();
+    public void setLastUpdated(Date lastUpDated){
+        donor.setLastUpdated(lastUpDated);
     }
 
-    public void setWorkAddressCity(String workAddressCity) {
-        donor.setWorkAddressCity(workAddressCity);
+    public String toString() {
+        return donor.toString();
+    }
+
+    public String getAge() {
+        if (donor.getBirthDateInferred() != null) {
+            DateTime dt1 = new DateTime(donor.getBirthDateInferred());
+            DateTime dt2 = new DateTime(new Date());
+            int year1 = dt1.year().get();
+            int year2 = dt2.year().get();
+            return new Integer(year2 - year1).toString();
+        } else {
+            return ageSpecified;
+        }
+    }
+
+    public void setAge(String ageStr) {
+        ageSpecified = ageStr;
+        if (ageStr == null || StringUtils.isBlank(ageStr)) {
+            donor.setBirthDateInferred(null);
+            return;
+        }
+        try {
+            int age = Integer.parseInt(ageStr);
+            DateTime dt = new DateTime(new Date());
+            Calendar c = Calendar.getInstance();
+            c.setTime(dt.toDateMidnight().toDate());
+            c.set(Calendar.MONTH, Calendar.JANUARY);
+            c.set(Calendar.DATE, 1);
+            c.add(Calendar.YEAR, -age);
+            donor.setBirthDateInferred(c.getTime());
+            ageFormatCorrect = true;
+        } catch (NumberFormatException ex) {
+            ageFormatCorrect = false;
+            donor.setBirthDate(null);
+        }
+    }
+
+    public Boolean isAgeFormatCorrect() {
+        return ageFormatCorrect;
+    }
+
+    public String getNationalID() {
+        return donor.getNationalID();
+    }
+
+    public void setNationalID(String nationalID) {
+        donor.setNationalID(nationalID);
+    }
+
+    public void setIdType(IdType idType) {
+        donor.setIdType(idType);
+    }
+
+    public void setIdNumber(String idNumber) {
+        donor.setIdNumber(idNumber);
+    }
+
+    public String getIdNumber() {
+        return donor.getIdNumber();
+    }
+
+    public String getDonorPanel() {
+        Location donorPanel = donor.getDonorPanel();
+        if (donorPanel == null || donorPanel.getId() == null) {
+            return null;
+        }
+        return donorPanel.getId().toString();
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(String dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public void setDonorPanel(String donorPanel) {
+        if (StringUtils.isBlank(donorPanel)) {
+            donor.setDonorPanel(null);
+        } else {
+            Location l = new Location();
+            try {
+                l.setId(Long.parseLong(donorPanel));
+                donor.setDonorPanel(l);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                donor.setDonorPanel(null);
+            }
+        }
+    }
+
+    public void setIdType(String idType) {
+        if (StringUtils.isBlank(idType)) {
+            donor.setDonorPanel(null);
+        } else {
+            IdType type = new IdType();
+            try {
+                type.setId(Long.parseLong(idType));
+                donor.setIdType(type);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                donor.setDonorPanel(null);
+            }
+        }
+    }
+
+    public String getIdType() {
+        IdType idType = donor.getIdType();
+        if (idType == null || idType.getId() == null) {
+            return null;
+        }
+        return idType.getId().toString();
+    }
+
+    public void setPreferredLanguage(String language) {
+
+        if (StringUtils.isBlank(language)) {
+            donor.setPreferredLanguage(null);
+        } else {
+            PreferredLanguage preferredLanguage = new PreferredLanguage();
+            try {
+                preferredLanguage.setId(Long.parseLong(language));
+                donor.setPreferredLanguage(preferredLanguage);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                donor.setPreferredLanguage(null);
+            }
+        }
+    }
+
+    public String getPreferredLanguage() {
+        PreferredLanguage preferredLanguage = donor.getPreferredLanguage();
+        if (preferredLanguage == null || preferredLanguage.getId() == null) {
+            return null;
+        }
+        return preferredLanguage.getId().toString();
+    }
+
+    public String getDateOfFirstDonation() {
+        if (dateOfFirstDonation != null) {
+            return dateOfFirstDonation;
+        }
+        if (dateOfFirstDonation == null) {
+            return "";
+        }
+        return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
+    }
+
+    public void setDateOfFirstDonation(String dateOfFirstDonation) {
+        this.dateOfFirstDonation = dateOfFirstDonation;
+        try {
+            donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            donor.setDateOfFirstDonation(null);
+        }
+    }
+
+    public String getBloodAbo() {
+        if (StringUtils.isBlank(donor.getBloodAbo()) || donor.getBloodAbo() == null) {
+            return "";
+        } else {
+            return donor.getBloodAbo();
+        }
+    }
+
+    public void setBloodAbo(String bloodAbo) {
+        if (StringUtils.isBlank(bloodAbo)) {
+            donor.setBloodAbo(null);
+        } else {
+            donor.setBloodAbo(bloodAbo);
+        }
+    }
+
+    public String getBloodRh() {
+        if (StringUtils.isBlank(donor.getBloodRh()) || donor.getBloodRh() == null) {
+            return "";
+        } else {
+            return donor.getBloodRh();
+        }
+    }
+
+    public void setBloodRh(String bloodRh) {
+        if (StringUtils.isBlank(bloodRh)) {
+            donor.setBloodRh(null);
+        } else {
+            donor.setBloodRh(bloodRh);
+        }
+    }
+
+    /**
+     * Home Address getter & Setters
+     */
+    public String getHomeAddressLine1() {
+        return donor.getAddress().getHomeAddressline1();
+    }
+
+    public String getHomeAddressLine2() {
+        return donor.getAddress().getHomeAddressline2();
+    }
+
+    public String getHomeAddressCity() {
+        return donor.getAddress().getHomeAddressCity();
+    }
+
+    public String getHomeAddressProvince() {
+        return donor.getAddress().getHomeAddressProvince();
+    }
+
+    public String getHomeAddressDistrict() {
+        return donor.getAddress().getHomeAddressDistrict();
+    }
+
+    public String getHomeAddressState() {
+        return donor.getAddress().getHomeAddressState();
+    }
+
+    public String getHomeAddressCountry() {
+        return donor.getAddress().getHomeAddressCountry();
+    }
+
+    public String getHomeAddressZipcode() {
+        return donor.getAddress().getHomeAddressZipcode();
+    }
+
+    public void setHomeAddressLine1(String homeAddressLine1) {
+        address.setHomeAddressline1(homeAddressLine1);
+    }
+
+    public void setHomeAddressLine2(String homeAddressLine1) {
+        address.setHomeAddressline2(homeAddressLine1);
+    }
+
+    public void setHomeAddressCity(String homeAddressCity) {
+        donor.getAddress().setHomeAddressCity(homeAddressCity);
+    }
+    
+    public void setHomeAddressDistrict(String homeAddressDistrict){
+        address.setHomeAddressDistrict(homeAddressDistrict);
+    }
+
+    public void setHomeAddressCountry(String homeAddressCountry) {
+        donor.getAddress().setHomeAddressCity(homeAddressCountry);
+    }
+
+    public void setHomeAddressState(String homeAddressState) {
+        donor.getAddress().setHomeAddressState(homeAddressState);
+    }
+
+    public void setHomeAddressProvince(String homeAddressProvince) {
+        donor.getAddress().setHomeAddressProvince(homeAddressProvince);
+    }
+
+    public void setHomeAddressZipcode(String zipcode) {
+        donor.getAddress().setHomeAddressZipcode(zipcode);
+    }
+
+    /**
+     * Work Address Getters & Setters
+     */
+    public String getWorkAddressline1() {
+        return donor.getAddress().getWorkAddressline1();
+    }
+
+    public String getWorkAddressline2() {
+        return donor.getAddress().getWorkAddressline2();
+    }
+
+    public String getWorkAddressCity() {
+        return donor.getAddress().getWorkAddressCity();
     }
 
     public String getWorkAddressProvince() {
-        return donor.getWorkAddressProvince();
-    }
-
-    public void setWorkAddressProvince(String workAddressProvince) {
-        donor.setWorkAddressProvince(workAddressProvince);
+        return donor.getAddress().getWorkAddressProvince();
     }
 
     public String getWorkAddressDistrict() {
-        return donor.getWorkAddressDistrict();    }
+        return donor.getAddress().getWorkAddressDistrict();
+    }
 
-    public void setWorkAddressDistrict(String workAddressDistrict) {
-        donor.setWorkAddressDistrict(workAddressDistrict);
+    public String getWorkAddressState() {
+        return donor.getAddress().getWorkAddressCountry();
     }
 
     public String getWorkAddressCountry() {
-        return donor.getWorkAddressCountry();
-    }
-
-    public void setWorkAddressCountry(String workAddressCountry) {
-         donor.setWorkAddressCountry(workAddressCountry);
+        return donor.getAddress().getWorkAddressCountry();
     }
 
     public String getWorkAddressZipcode() {
-        return donor.getWorkAddressZipcode();
+        return donor.getAddress().getWorkAddressZipcode();
     }
 
-    public void setWorkAddressZipcode(String workAddressZipcode) {
-        donor.setWorkAddressZipcode(workAddressZipcode);
+    public void setWorkAddressLine1(String workAddressLine1) {
+        address.setWorkAddressline1(workAddressLine1);
     }
- public String getWorkAddressState() {
-        return donor.getWorkAddressState();
+
+    public void setWorkAddressLine2(String workAddressLine2) {
+        address.setWorkAddressline2(workAddressLine2);
+    }
+
+    public void setWorkAddressCity(String workAddressCity) {
+        address.setHomeAddressCity(workAddressCity);
+    }
+
+    public void setWorkAddressProvince(String workAddressProvince) {
+        address.setWorkAddressProvince(workAddressProvince);
     }
 
     public void setWorkAddressState(String workAddressState) {
-        donor.setWorkAddressState(workAddressState);
+        address.setWorkAddressState(workAddressState);
     }
-    
+
+    public void setWorkAddressCountry(String workAddressCountry) {
+        address.setWorkAddressCountry(workAddressCountry);
+    }
+
+    public void setworkAddressZipcode(String workAddressZipcode) {
+        address.setWorkAddressZipcode(workAddressZipcode);
+    }
+
+    /**
+     * Postal Address getters & Setters
+     */
+    public String getPostalAddressLine1() {
+        return donor.getAddress().getPostalAddressline1();
+    }
+
+    public String getPostalAddressLine2() {
+        return donor.getAddress().getPostalAddressline2();
+    }
+
     public String getPostalAddressCity() {
-        return donor.getPostalAddressCity();
+        return donor.getAddress().getPostalAddressCity();
     }
 
     public void setPostalAddressCity(String postalAddressCity) {
-        donor.setPostalAddressCity(postalAddressCity);
+        address.setPostalAddressCity(postalAddressCity);
     }
 
     public String getPostalAddressProvince() {
-        return donor.getPostalAddressProvince();
-    }
-    
-    public void setPostalAddressState(String postalAddressState) {
-        donor.setPostalAddressState(postalAddressState);
-    }
-    
-    public String getPostalAddressState(){
-       return donor.getPostalAddressState();
+        return donor.getAddress().getPostalAddressProvince();
     }
 
-  
-    public void setPostalAddressProvince(String postalAdressProvince) {
-        donor.setPostalAddressProvince(postalAdressProvince);
+    public void setPostalAddressState(String postalAddressState) {
+        donor.getAddress().setPostalAddressState(postalAddressState);
+    }
+
+    public String getPostalAddressState() {
+        return donor.getAddress().getPostalAddressState();
     }
 
     public String getPostalAddressDistrict() {
-        return donor.getPostalAddressDistrict();
+        return donor.getAddress().getPostalAddressDistrict();
+    }
+
+    public void setWorkAddressline1(String workAddressline1) {
+        address.setWorkAddressline1(workAddressline1);
+    }
+
+    public void setWorkAddressline2(String workAddressline2) {
+        address.setWorkAddressline2(workAddressline2);
+    }
+
+    public void setPostalAddressProvince(String postalAdressProvince) {
+        address.setPostalAddressProvince(postalAdressProvince);
     }
 
     public void setPostalAddressDistrict(String postalAddressDistrict) {
-       donor.setPostalAddressDistrict(postalAddressDistrict);
+        address.setPostalAddressDistrict(postalAddressDistrict);
     }
 
     public String getPostalAddressCountry() {
-        return donor.getPostalAddressCountry();
+        return donor.getAddress().getPostalAddressCountry();
     }
 
     public void setPostalAddressCountry(String postalAddressCountry) {
-        donor.setPostalAddressCountry(postalAddressCountry);
+        address.setPostalAddressCountry(postalAddressCountry);
     }
 
     public String getPostalAddressZipcode() {
-        return donor.getPostalAddressZipcode();
+        return donor.getAddress().getPostalAddressZipcode();
     }
 
     public void setPostalAddressZipcode(String postalAddressZipcode) {
-        donor.setPostalAddressZipcode(postalAddressZipcode);
+        address.setPostalAddressZipcode(postalAddressZipcode);
     }
-  
-  public String getAge() {
-    if (donor.getBirthDateInferred() != null) {
-      DateTime dt1 = new DateTime(donor.getBirthDateInferred());
-      DateTime dt2 = new DateTime(new Date());
-      int year1 = dt1.year().get();
-      int year2 = dt2.year().get();
-      return new Integer(year2-year1).toString();
-    } else {
-      return ageSpecified;
+
+    /**
+     * Contact Getters & Setters
+     */
+    public ContactMethodType getContactType() {
+        return donor.getContact().getContactMethodType();
     }
-  }
 
-  public void setAge(String ageStr) {
-    ageSpecified = ageStr;
-    if (ageStr == null || StringUtils.isBlank(ageStr)) {
-      donor.setBirthDateInferred(null);
-      return;
+    public void setContactType(String contactTypeId) {
+        if (StringUtils.isBlank(contactTypeId)) {
+             contact.setContactMethodType(null);
+        } else {
+            ContactMethodType contactType = new ContactMethodType();
+            contactType.setId(Integer.parseInt(contactTypeId));
+            contact.setContactMethodType(contactType);
+        }
     }
-    try {
-      int age = Integer.parseInt(ageStr);
-      DateTime dt = new DateTime(new Date());
-      Calendar c = Calendar.getInstance();
-      c.setTime(dt.toDateMidnight().toDate());
-      c.set(Calendar.MONTH, Calendar.JANUARY);
-      c.set(Calendar.DATE, 1);
-      c.add(Calendar.YEAR, -age);
-      donor.setBirthDateInferred(c.getTime());
-      ageFormatCorrect = true;
-    } catch (NumberFormatException ex) {
-      ageFormatCorrect = false;
-      donor.setBirthDate(null);
+
+    public String getMobileNumber() {
+        return donor.getContact().getMobileNumber();
     }
-  }
 
-  public void setEmail(String email){
-      donor.setEmail(email);
-  }
-  
-  public String getEmail(){
-      return donor.getEmail();
-  }
-  public Boolean isAgeFormatCorrect() {
-    return ageFormatCorrect;
-  }
-
-  public String getNationalID() {
-    return donor.getNationalID();
-  }
-
-  public void setNationalID(String nationalID) {
-    donor.setNationalID(nationalID);
-  }
-
-  public void setIdType(IdType idType){
-      donor.setIdType(idType);
-  }
-  
-
-   public void setIdNumber(String idNumber){
-      donor.setIdNumber(idNumber);
-  }
-  
-  public String getIdNumber(){
-      return donor.getIdNumber();
-  }
-  
-
-  
- 
-  
-  
-  public String getDonorPanel() {
-    Location donorPanel = donor.getDonorPanel();
-    if (donorPanel == null || donorPanel.getId() == null)
-      return null;
-    return donorPanel.getId().toString();
-  }
-
-  	public String getYear() {
-  		return year;
-	}
-	
-	public void setYear(String year) {
-		this.year = year;
-	}
-	
-	public String getMonth() {
-		return month;
-	}
-	
-	public void setMonth(String month) {
-		this.month = month;
-	}
-	
-	public String getDayOfMonth() {
-		return dayOfMonth;
-	}
-	
-	public void setDayOfMonth(String dayOfMonth) {
-		this.dayOfMonth = dayOfMonth;
-	}
-	
-
-    
-	public void setDonorPanel(String donorPanel) {
-	    if (StringUtils.isBlank(donorPanel)) {
-	      donor.setDonorPanel(null);
-	    }
-	    else {
-	      Location l = new Location();
-	      try {
-	        l.setId(Long.parseLong(donorPanel));
-	        donor.setDonorPanel(l);
-	      } catch (NumberFormatException ex) {
-	        ex.printStackTrace();
-	        donor.setDonorPanel(null);
-	      }
-	    }
-	}
-       
-        
-        public void setIdType(String idType) {
-	    if (StringUtils.isBlank(idType)) {
-	      donor.setDonorPanel(null);
-	    }
-	    else {
-	      IdType type = new IdType();
-	      try {
-	        type.setId(Long.parseLong(idType));
-	        donor.setIdType(type);
-	      } catch (NumberFormatException ex) {
-	        ex.printStackTrace();
-	        donor.setDonorPanel(null);
-	      }
-	    }
-	}
-        
-          
-  public String getIdType() {
-      IdType idType = donor.getIdType();
-        if (idType == null || idType.getId() == null)
-             return null;
-        return idType.getId().toString();
-	}
-
-  public void setPreferredLanguage(String language){
-     
-       if (StringUtils.isBlank(language)) {
-	      donor.setPreferredContactMethod(null);
-	    }
-	    else {
-	      PreferredLanguage preferredLanguage = new PreferredLanguage();
-	      try {
-	        preferredLanguage.setId(Long.parseLong(language));
-	        donor.setPreferredLanguage(preferredLanguage);
-	      } catch (NumberFormatException ex) {
-	        ex.printStackTrace();
-	        donor.setPreferredContactMethod(null);
-	      }
-	    }
-  }
-  
-     public String getPreferredLanguage() {
-      PreferredLanguage preferredLanguage = donor.getPreferredLanguage();
-        if (preferredLanguage == null || preferredLanguage.getId() == null)
-             return null;
-        return preferredLanguage.getId().toString();
-	}
-
-        
-  public String getPreferredContactMethod() {
-    ContactMethodType contactMethodType = donor.getPreferredContactMethod();
-    if (contactMethodType == null || contactMethodType.getId() == null)
-      return null;
-    else
-      return contactMethodType.getId().toString();
-  }
-
-  public void setPreferredContactMethod(String contactMethodTypeId) {
-    if (StringUtils.isBlank(contactMethodTypeId)) {
-      donor.setPreferredContactMethod(null);
+    public String getHomeNumber() {
+        return donor.getContact().getHomeNumber();
     }
-    else {
-      ContactMethodType ct = new ContactMethodType();
-      try {
-        ct.setId(Integer.parseInt(contactMethodTypeId));
-        donor.setPreferredContactMethod(ct);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        donor.setPreferredContactMethod(null);
-      }
-    }
-  }
 
-  public String getDateOfFirstDonation() {
-    if (dateOfFirstDonation != null)
-      return dateOfFirstDonation;
-    if (dateOfFirstDonation == null)
-      return "";
-    return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
-  }
+    public String getWorkNumber() {
+        return donor.getContact().getWorkNumber();
+    }
 
-  public void setDateOfFirstDonation(String dateOfFirstDonation) {
-    this.dateOfFirstDonation = dateOfFirstDonation;
-    try {
-      donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donor.setDateOfFirstDonation(null);
+    public void setMobileNumber(String mobileNumber) {
+        contact.setMobileNumber(mobileNumber);
     }
-  }
-  
-  public String getBloodAbo() {
-    if (StringUtils.isBlank(donor.getBloodAbo()) || donor.getBloodAbo() == null){
-      return "";
+
+    public void setHomeNumber(String homeNumber) {
+        contact.setHomeNumber(homeNumber);
     }
-    else{
-      return donor.getBloodAbo();
+
+    public void setWorkNumber(String workNumber) {
+        contact.setWorkNumber(workNumber);
     }
-  }
-  
-  public void setBloodAbo(String bloodAbo) {
-	  if (StringUtils.isBlank(bloodAbo)){
-		  donor.setBloodAbo(null);
-	  }
-	  else{
-		  donor.setBloodAbo(bloodAbo);
-	  }    
-  }
-  
-  public String getBloodRh() {
-    if (StringUtils.isBlank(donor.getBloodRh()) || donor.getBloodRh() == null){
-      return "";
+
+    public void setEmail(String email) {
+        contact.setEmail(email);
     }
-    else{
-      return donor.getBloodRh();
+
+    /**
+     * Address Type Getters & Setters
+     */
+    public AddressType getAddressType() {
+        return donor.getAddress().getAddressType();
     }
-  }
-  
-  public void setBloodRh(String bloodRh) {
-	  if (StringUtils.isBlank(bloodRh)){
-		  donor.setBloodRh(null);
-	  }
-	  else{
-		  donor.setBloodRh(bloodRh);
-	  }    
-  }
+
+    public void setAddressType(String addressTypeID) {
+        if (StringUtils.isBlank(addressTypeID)) {
+            setAddressType(null);
+        } else {
+            AddressType addressType = new AddressType();
+            addressType.setId(Long.parseLong(addressTypeID));
+            address.setAddressType(addressType);
+        }
+
+    }
 
 }

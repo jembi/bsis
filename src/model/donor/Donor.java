@@ -2,7 +2,6 @@ package model.donor;
 
 import constraintvalidator.LocationExists;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,11 +19,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-import model.address.ContactInformation;
-import model.address.ContactMethodType;
+import model.address.Address;
+import model.address.Contact;
 import model.collectedsample.CollectedSample;
 import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
@@ -42,9 +42,7 @@ import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.hibernate.mapping.Set;
 import org.hibernate.validator.constraints.Length;
-import constraintvalidator.LocationExists;
 import utils.DonorUtils;
 
 @Entity
@@ -151,10 +149,6 @@ public class Donor implements ModificationTracker {
   @Column(length=15)
   private String nationalID;
 
-  @Embedded
-  @Valid
-  private ContactInformation contactInformation;
-
   /**
    * Which panel the donor is registered to
    */
@@ -196,7 +190,20 @@ public class Donor implements ModificationTracker {
  @Fetch(value = FetchMode.SUBSELECT)
  @JoinTable(name="donordonorcode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
          @JoinColumn(name="donorCodeId"))
-private List<DonorCode> donorCodes;
+  private List<DonorCode> donorCodes;
+ 
+ @NotAudited
+ @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+ @OneToOne(cascade = CascadeType.ALL)
+ @JoinColumn(name="addressId")
+ private Address address;
+  
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+ @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name="contactId")
+  private Contact contact;
+  
 
 
 public List<DonorCode> getDonorCodes() {
@@ -227,8 +234,8 @@ public void setDonorCodes(List<DonorCode> donorCodes) {
   private String idNumber;
  
   
+  
   public Donor() {
-    contactInformation = new ContactInformation();
     modificationTracker = new RowModificationTracker();
   }
 
@@ -327,13 +334,11 @@ public void copy(Donor donor) {
     setFirstName(donor.getFirstName());
     setMiddleName(donor.getMiddleName());
     setLastName(donor.getLastName());
-    contactInformation.copy(donor.getContactInformation());
     setBirthDate(donor.getBirthDate());
     setBirthDateInferred(donor.getBirthDateInferred());
     setBirthDateEstimated(donor.getBirthDateEstimated());
     setNotes(donor.getNotes());
     setGender(donor.getGender());
-    setPreferredContactMethod(donor.getPreferredContactMethod());
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
     setPreferredLanguage(donor.getPreferredLanguage());
@@ -341,26 +346,6 @@ public void copy(Donor donor) {
     setIdNumber(donor.getIdNumber());
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
-    setWorkAddress(donor.getWorkAddress());
-    setHomeAddress(donor.getHomeAddress());
-    setMobileNumber(donor.getMobileNumber());
-    setWorkNumber(donor.getWorkNumber());
-    setHomeNumber(donor.getHomeNumber());
-    setWorkAddressCity(donor.getWorkAddressCity());
-      setWorkAddressCountry(donor.getWorkAddressCountry());
-      setWorkAddressDistrict(donor.getWorkAddressDistrict());
-      setWorkAddressProvince(donor.getWorkAddressProvince());
-      setWorkAddressState(donor.getWorkAddressState());
-      setWorkAddressZipcode(donor.getWorkAddressZipcode());
-      setPostalAddress(donor.getPostalAddress());
-      setPostalAddressCity(donor.getPostalAddressCity());
-      setPostalAddressCountry(donor.getPostalAddressCountry());
-      setPostalAddressDistrict(donor.getPostalAddressDistrict());
-      setPostalAddressProvince(donor.getPostalAddressProvince());
-      setPostalAddressState(donor.getPostalAddressState());
-      setPostalAddressZipcode(donor.getPostalAddressZipcode());
-      
-    setEmail(donor.getEmail());
     this.donorHash = DonorUtils.computeDonorHash(this);
     this.donorCodes = donor.getDonorCodes();
     setDateOfFirstDonation(donor.getDateOfFirstDonation());
@@ -374,127 +359,6 @@ public void copy(Donor donor) {
   public void setCollectedSamples(List<CollectedSample> collectedSamples) {
     this.collectedSamples = collectedSamples;
   }
-
-  public ContactInformation getContactInformation() {
-    return contactInformation;
-  }
-
-  public void setContactInformation(ContactInformation contactInformation) {
-    this.contactInformation = contactInformation;
-  }
-
-
-  public String getProvince() {
-    return contactInformation.getProvince();
-  }
-
-  public String getDistrict() {
-    return contactInformation.getDistrict();
-  }
-
-  public String getCity() {
-    return contactInformation.getCity();
-  }
-
-  public String getState() {
-    return contactInformation.getState();
-  }
-
-  public String getCountry() {
-    return contactInformation.getCountry();
-  }
-
-    public String getEmail() {
-        return contactInformation.getEmail();
-    }
-
-    public void setEmail(String email) {
-        contactInformation.setEmail(email);
-    }
-
-  
-  public String getZipcode() {
-    return contactInformation.getZipcode();
-  }
-
-  
-  
-
-   public String getHomeAddress() {
-        return contactInformation.getHomeAddress();
-    }
-
-    public void setHomeAddress(String homeAddress) {
-        contactInformation.setHomeAddress(homeAddress);
-    }
-
-    public String getMobileNumber() {
-        return contactInformation.getMobileNumber();
-    }
-
-    public void setMobileNumber(String mobileNumber) {
-        contactInformation.setMobileNumber(mobileNumber);
-    }
-
-    public String getHomeNumber() {
-        return contactInformation.getHomeNumber();
-    }
-
-    public void setHomeNumber(String homeNumber) {
-        contactInformation.setHomeNumber(homeNumber);
-    }
-
-    public String getWorkNumber() {
-        return contactInformation.getWorkNumber();
-    }
-
-    public void setWorkNumber(String workNumber) {
-       contactInformation.setWorkNumber(workNumber);
-    }
-
-    public String getPostalAddress() {
-        return contactInformation.getPostalAddress();
-    }
-
-    public void setPostalAddress(String postalAddress) {
-        contactInformation.setPostalAddress(postalAddress);
-    }
-
-
-
-    public String getWorkAddress() {
-        return contactInformation.getWorkAddress();
-    }
-
-    public void setWorkAddress(String workAddress) {
-        contactInformation.setWorkAddress(workAddress);
-    }
-
-
-  public void setCity(String city) {
-    contactInformation.setCity(city);
-  }
-
-  public void setProvince(String province) {
-    contactInformation.setProvince(province);
-  }
-
-  public void setDistrict(String district) {
-    contactInformation.setDistrict(district);
-  }
-
-  public void setState(String state) {
-    contactInformation.setState(state);
-  }
-
-  public void setCountry(String country) {
-    contactInformation.setCountry(country);
-  }
-
-  public void setZipcode(String zipcode) {
-    contactInformation.setZipcode(zipcode);
-  }
-
 
   
  public void setIdNumber(String idNumber){
@@ -628,13 +492,6 @@ public void copy(Donor donor) {
     this.donorStatus = donorStatus;
   }
 
-  public ContactMethodType getPreferredContactMethod() {
-    return contactInformation.getPreferredContactMethod();
-  }
-
-  public void setPreferredContactMethod(ContactMethodType preferredContactMethod) {
-    contactInformation.setPreferredContactMethod(preferredContactMethod);
-  }
 
   public Integer getAge() {
     return age;
@@ -684,103 +541,22 @@ public void copy(Donor donor) {
         this.preferredLanguage = preferredLanguage;
     }
 
-   
-      public String getWorkAddressCity() {
-        return contactInformation.getWorkAddressCity();
+    public Address getAddress() {
+        return address;
     }
 
-    public void setWorkAddressCity(String workAddressCity) {
-        contactInformation.setWorkAddressCity(workAddressCity);
+    public void setAddress(Address addresss) {
+        this.address = addresss;
     }
 
-    public String getWorkAddressProvince() {
-        return contactInformation.getWorkAddressProvince();
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setWorkAddressProvince(String workAdressProvince) {
-        contactInformation.setWorkAddressProvince(workAdressProvince);
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
-    public String getWorkAddressDistrict() {
-        return contactInformation.getWorkAddressDistrict();    }
-
-    public void setWorkAddressDistrict(String workAddressDistrict) {
-        contactInformation.setWorkAddressDistrict(workAddressDistrict);
-    }
-
-    public String getWorkAddressCountry() {
-        return contactInformation.getWorkAddressCountry();
-    }
-
-    public void setWorkAddressCountry(String workAddressCountry) {
-         contactInformation.setWorkAddressCountry(workAddressCountry);
-    }
-
-    public String getWorkAddressZipcode() {
-        return contactInformation.getWorkAddressZipcode();
-    }
-
-    public void setWorkAddressZipcode(String workAddressZipcode) {
-        contactInformation.setWorkAddressZipcode(workAddressZipcode);
-    }
-
-    public String getPostalAddressCity() {
-        return contactInformation.getPostalAddressCity();
-    }
-
-    public void setPostalAddressCity(String postalAddressCity) {
-        contactInformation.setPostalAddressCity(postalAddressCity);
-    }
-
-    public String getPostalAddressProvince() {
-        return contactInformation.getPostalAddressProvince();
-    }
     
-    public void setPostalAddressProvince(String postalAdressProvince) {
-        contactInformation.setPostalAddressProvince(postalAdressProvince);
-    }
-
-    public String getPostalAddressDistrict() {
-        return contactInformation.getPostalAddressDistrict();
-    }
-
-    public void setPostalAddressDistrict(String postalAddressDistrict) {
-       contactInformation.setPostalAddressDistrict(postalAddressDistrict);
-    }
-
-  
-    public String getPostalAddressCountry() {
-        return contactInformation.getPostalAddressCountry();
-    }
-
-    public void setPostalAddressCountry(String postalAddressCountry) {
-        contactInformation.setPostalAddressCountry(postalAddressCountry);
-    }
-
-    public String getPostalAddressZipcode() {
-        return contactInformation.getPostalAddressZipcode();
-    }
-
-    public void setPostalAddressZipcode(String postalAddressZipcode) {
-        contactInformation.setPostalAddressZipcode(postalAddressZipcode);
-    }
-
-    public void setPostalAddressState(String postalAddressState) {
-        contactInformation.setPostalAddressState(postalAddressState);
-    }
-
-    public String getPostalAddressState() {
-        return  contactInformation.getPostalAddressState();
-
-    }
-
-    public String getWorkAddressState() {
-        return contactInformation.getWorkAddressState();
-    }
-
-    public void setWorkAddressState(String workAddressState) {
-        contactInformation.setWorkAddressState(workAddressState);
-    }
-  
   
 }

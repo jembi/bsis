@@ -1,15 +1,14 @@
 package viewmodel;
 
 import java.util.Date;
+import model.address.AddressType;
+import model.address.ContactMethodType;
 import model.donor.Donor;
 import model.donor.DonorStatus;
-import model.idtype.IdType;
 import model.location.Location;
-import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.omg.CORBA.IDLType;
 import org.springframework.stereotype.Component;
 import utils.CustomDateFormatter;
 
@@ -87,34 +86,7 @@ public class DonorViewModel {
 	  return donor.getBirthDateEstimated();
   }
 
-  public String getMobileNumber(){
-      return donor.getMobileNumber();
-  }
-
-  public String getCity() {
-    return donor.getCity();
-  }
-
-  public String getProvince() { 
-    return donor.getProvince();
-  }
-
-  public String getDistrict() {
-    return donor.getDistrict();
-  }
-
-  public String getState() {
-    return donor.getState();
-  }
-
-  public String getCountry() {
-    return donor.getCountry();
-  }
-
-  public String getZipcode() {
-    return donor.getZipcode();
-  }
-
+ 
   public String getNotes() {
     Object comments = donor.getNotes();
     return comments == null ? "" : comments.toString();
@@ -131,95 +103,7 @@ public class DonorViewModel {
   public String getIdNumber(){
       return donor.getIdNumber();
   }
-  
-  public String getWorkAddress(){
-      return donor.getWorkAddress();
-  }
-  
-  public String getHomeAddress(){
-      return donor.getHomeAddress();
-  }
-  
-  public String getPostalAddress(){
-    return donor.getPostalAddress();
-}
-  
-     public String getWorkAddressCity() {
-        return donor.getWorkAddressCity();
-    }
-
-    public String getWorkAddressProvince() {
-        return donor.getWorkAddressProvince();
-    }
-
-
-    public String getWorkAddressDistrict() {
-        return donor.getWorkAddressDistrict();    }
-
-
-    public String getWorkAddressCountry() {
-        return donor.getWorkAddressCountry();
-    }
-
-  
-
-    public String getWorkAddressZipcode() {
-        return donor.getWorkAddressZipcode();
-    }
-
-  
- public String getWorkAddressState() {
-        return donor.getWorkAddressState();
-    }
-
-    
-    
-    public String getPostalAddressCity() {
-        return donor.getPostalAddressCity();
-    }
-
-
-    public String getPostalAddressProvince() {
-        return donor.getPostalAddressProvince();
-    }
-    
- 
-    
-    public String getPostalAddressState(){
-       return donor.getPostalAddressState();
-    }
-
-  
- 
-
-    public String getPostalAddressDistrict() {
-        return donor.getPostalAddressDistrict();
-    }
-
    
-
-    public String getPostalAddressCountry() {
-        return donor.getPostalAddressCountry();
-    }
-
-
-
-    public String getPostalAddressZipcode() {
-        return donor.getPostalAddressZipcode();
-    }
-
-  public String getWorkNumber(){
-      return donor.getWorkNumber();
-  }
-  
-  public String getHomeNumber(){
-      return donor.getHomeNumber();
-  }
-  
-  public String getEmail(){
-      return donor.getEmail();
-  }
-  
   public String getCallingName(){
       return donor.getCallingName();
   }
@@ -271,13 +155,7 @@ public class DonorViewModel {
     return donor.getNationalID();
   }
 
-  public String getPreferredContactMethod() {
-    if (donor.getPreferredContactMethod() == null ||
-        donor.getPreferredContactMethod().getContactMethodType() == null)
-      return "";
-    else
-      return donor.getPreferredContactMethod().getContactMethodType();
-  }
+  
 
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
@@ -290,5 +168,148 @@ public class DonorViewModel {
       return "";
     }
   }
+  
+  /**
+     * @return 
+     * Home Address Getter Methods
+     */
+    public String getHomeAddressLine1() {
+        return donor.getAddress().getHomeAddressline1();
+    }
+
+    public String getHomeAddressLine2() {
+        return donor.getAddress().getHomeAddressline2();
+    }
+
+    public String getHomeAddressCity() {
+        return donor.getAddress().getHomeAddressCity();
+    }
+
+    public String getHomeAddressProvince() {
+        return donor.getAddress().getHomeAddressProvince();
+    }
+
+    public String getHomeAddressDistrict() {
+        return donor.getAddress().getHomeAddressDistrict();
+    }
+
+    public String getHomeAddressState() {
+        return donor.getAddress().getHomeAddressState();
+    }
+
+    public String getHomeAddressCountry() {
+        return donor.getAddress().getHomeAddressCountry();
+    }
+
+    public String getHomeAddressZipcode() {
+        return donor.getAddress().getHomeAddressZipcode();
+    }
+
+    
+    /**
+     * @return 
+     * Work Address Getters 
+     */
+    public String getWorkAddressline1() {
+        return donor.getAddress().getWorkAddressline1();
+    }
+
+    public String getWorkAddressline2() {
+        return donor.getAddress().getWorkAddressline2();
+    }
+
+    public String getWorkAddressCity() {
+        return donor.getAddress().getWorkAddressCity();
+    }
+
+    public String getWorkAddressProvince() {
+        return donor.getAddress().getWorkAddressProvince();
+    }
+
+    public String getWorkAddressDistrict() {
+        return donor.getAddress().getWorkAddressDistrict();
+    }
+
+    public String getWorkAddressState() {
+        return donor.getAddress().getWorkAddressCountry();
+    }
+
+    public String getWorkAddressCountry() {
+        return donor.getAddress().getWorkAddressCountry();
+    }
+
+    public String getWorkAddressZipcode() {
+        return donor.getAddress().getWorkAddressZipcode();
+    }
+
+    
+    /**
+     * Postal Address getters & Setters
+     */
+    public String getPostalAddressLine1() {
+        return donor.getAddress().getPostalAddressline1();
+    }
+
+    public String getPostalAddressLine2() {
+        return donor.getAddress().getPostalAddressline2();
+    }
+
+    public String getPostalAddressCity() {
+        return donor.getAddress().getPostalAddressCity();
+    }
+
+
+    public String getPostalAddressProvince() {
+        return donor.getAddress().getPostalAddressProvince();
+    }
+
+    
+    public String getPostalAddressState() {
+        return donor.getAddress().getPostalAddressState();
+    }
+    
+    public String getPostalAddressCountry(){
+        return donor.getAddress().getPostalAddressCountry();
+    }
+
+    public String getPostalAddressDistrict() {
+        return donor.getAddress().getPostalAddressDistrict();
+    }
+ 
+    public String getPostalAddressZipcode() {
+        return donor.getAddress().getPostalAddressZipcode();
+    }
+
+    
+    /**
+     * Contact Getters & Setters
+     */
+    public ContactMethodType getContactType() {
+        return donor.getContact().getContactMethodType();
+    }
+
+    
+    public String getMobileNumber() {
+        return donor.getContact().getMobileNumber();
+    }
+
+    public String getHomeNumber() {
+        return donor.getContact().getHomeNumber();
+    }
+
+    public String getWorkNumber() {
+        return donor.getContact().getWorkNumber();
+    }
+
+    
+    /**
+     * Address Type Getters & Setters
+     */
+    public AddressType getAddressType() {
+        return donor.getAddress().getAddressType();
+    }
+
+    
+
   
 }

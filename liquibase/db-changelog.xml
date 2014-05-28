@@ -2747,442 +2747,128 @@
      <column name="id" value="2"></column>
      <column name="preferredLanguage" value="French"></column> 
   </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="3"></column>
-     <column name="preferredLanguage" value="Portuguese"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="4"></column>
-     <column name="preferredLanguage" value="Spanish"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="5"></column>
-     <column name="preferredLanguage" value="Arabic"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="6"></column>
-     <column name="preferredLanguage" value="Berber"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="7"></column>
-     <column name="preferredLanguage" value="Amharic"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="8"></column>
-     <column name="preferredLanguage" value="Tigrinya"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="9"></column>
-     <column name="preferredLanguage" value="Setswana"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="10"></column>
-     <column name="preferredLanguage" value="Swahili"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="11"></column>
-     <column name="preferredLanguage" value="Comorian"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="12"></column>
-     <column name="preferredLanguage" value="Chichewa"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="13"></column>
-     <column name="preferredLanguage" value="Kinyarwanda"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="14"></column>
-     <column name="preferredLanguage" value="Kirundi"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="15"></column>
-     <column name="preferredLanguage" value="Sango"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="16"></column>
-     <column name="preferredLanguage" value="Swati"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="17"></column>
-     <column name="preferredLanguage" value="Malagasy"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="18"></column>
-     <column name="preferredLanguage" value="Seychellois"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="19"></column>
-     <column name="preferredLanguage" value="Mauritian"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="20"></column>
-     <column name="preferredLanguage" value="Shona"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="21"></column>
-     <column name="preferredLanguage" value="Sesotho"></column>
-  </insert>
-<insert tableName="PreferredLanguage">
-     <column name="id" value="22"></column>
-     <column name="preferredLanguage" value="Afrikaans"></column>
-  </insert>
-  <insert tableName="IdType">
-     <column name="id" value="1"></column>
-     <column name="idType" value="Passport"></column>
-  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="3"></column>
+	     <column name="preferredLanguage" value="Portuguese"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="4"></column>
+	     <column name="preferredLanguage" value="Spanish"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="5"></column>
+	     <column name="preferredLanguage" value="Arabic"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="6"></column>
+	     <column name="preferredLanguage" value="Berber"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="7"></column>
+	     <column name="preferredLanguage" value="Amharic"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="8"></column>
+	     <column name="preferredLanguage" value="Tigrinya"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="9"></column>
+	     <column name="preferredLanguage" value="Setswana"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="10"></column>
+	     <column name="preferredLanguage" value="Swahili"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="11"></column>
+	     <column name="preferredLanguage" value="Comorian"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="12"></column>
+	     <column name="preferredLanguage" value="Chichewa"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="13"></column>
+	     <column name="preferredLanguage" value="Kinyarwanda"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="14"></column>
+	     <column name="preferredLanguage" value="Kirundi"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="15"></column>
+	     <column name="preferredLanguage" value="Sango"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="16"></column>
+	     <column name="preferredLanguage" value="Swati"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="17"></column>
+	     <column name="preferredLanguage" value="Malagasy"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="18"></column>
+	     <column name="preferredLanguage" value="Seychellois"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="19"></column>
+	     <column name="preferredLanguage" value="Mauritian"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="20"></column>
+	     <column name="preferredLanguage" value="Shona"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="21"></column>
+	     <column name="preferredLanguage" value="Sesotho"></column>
+	  </insert>
+	<insert tableName="PreferredLanguage">
+	     <column name="id" value="22"></column>
+	     <column name="preferredLanguage" value="Afrikaans"></column>
+	  </insert>
+	  <insert tableName="IdType">
+	     <column name="id" value="1"></column>
+	     <column name="idType" value="Passport"></column>
+	  </insert>
 
- <insert tableName="IdType">
-     <column name="id" value="2"></column>
-     <column name="idType" value="National Id"></column>
-  </insert>
+	 <insert tableName="IdType">
+	     <column name="id" value="2"></column>
+	     <column name="idType" value="National Id"></column>
+	  </insert>
 
- <insert tableName="IdType">
-     <column name="id" value="3"></column>
-     <column name="idType" value="Driving License"></column>
- </insert>
-
-
-
-<addColumn tableName="Donor">
-            <column name="idType_id" type="BIGINT" defaultValue="NULL"></column>
-</addColumn>
-
- <addForeignKeyConstraint baseColumnNames="idType_id"
-            baseTableName="Donor"
-            constraintName="fk_donor_Id"
-            referencedColumnNames="id"
-            referencedTableName="IdType"/>
-
-<addColumn tableName="Donor">
-            <column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
-</addColumn>
+	 <insert tableName="IdType">
+	     <column name="id" value="3"></column>
+	     <column name="idType" value="Driving License"></column>
+	 </insert>
 
 
- <addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
-            baseTableName="Donor"
-            constraintName="fk_donor_preferredLanguage"
-            referencedColumnNames="id"
-            referencedTableName="PreferredLanguage"/>
+
+	<addColumn tableName="Donor">
+	            <column name="idType_id" type="BIGINT" defaultValue="NULL"></column>
+	</addColumn>
+
+	 <addForeignKeyConstraint baseColumnNames="idType_id"
+	            baseTableName="Donor"
+	            constraintName="fk_donor_Id"
+	            referencedColumnNames="id"
+	            referencedTableName="IdType"/>
+
+	<addColumn tableName="Donor">
+	            <column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
+	</addColumn>
 
 
- <addColumn tableName="Donor">
-            <column name="homeAddress" type="varchar(255)" ></column>
- </addColumn>
- <addColumn tableName="Donor_AUD">
-            <column name="homeAddress" type="varchar(255)" ></column>
- </addColumn>
-
-<addColumn tableName="Donor">
-            <column name="postalAddress" type="varchar(255)"></column>
- </addColumn>
- <addColumn tableName="Donor_AUD">
-            <column name="postalAddress" type="varchar(255)"></column>
- </addColumn>
-
- <addColumn tableName="Donor">
-            <column name="workAddress" type="varchar(255)" ></column>
- </addColumn>
-
-<addColumn tableName="Donor_AUD">
-            <column name="workAddress" type="varchar(255)" ></column>
- </addColumn>
+	 <addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
+	            baseTableName="Donor"
+	            constraintName="fk_donor_preferredLanguage"
+	            referencedColumnNames="id"
+	            referencedTableName="PreferredLanguage"/>
 
 
-<addColumn tableName="Donor">
-            <column name="workNumber" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="workNumber" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor">
-            <column name="homeNumber" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="homeNumber" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor">
-            <column name="mobileNumber" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="mobileNumber" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor">
-            <column name="idNumber" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="idNumber" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor">
-            <column name="email" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="email" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor">
-            <column name="workAddressCity" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="workAddressProvince" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="workAddressDistrict" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="workAddressCountry" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="workAddressZipcode" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="workAddressState" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor">
-            <column name="postalAddressCity" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="postalAddressProvince" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="postalAddressDistrict" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="postalAddressCountry" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="postalAddressState" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor">
-            <column name="postalAddressZipcode" type="varchar(255)" ></column>
-</addColumn>
 
 
-<addColumn tableName="Donor_AUD">
-            <column name="workAddressCity" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="workAddressProvince" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="workAddressDistrict" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="workAddressCountry" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="workAddressZipcode" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="workAddressState" type="varchar(255)" ></column>
-</addColumn>
-
-
-<addColumn tableName="Donor_AUD">
-            <column name="postalAddressCity" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="postalAddressProvince" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="postalAddressDistrict" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="postalAddressCountry" type="varchar(255)" ></column>
-</addColumn>
-<addColumn tableName="Donor_AUD">
-            <column name="postalAddressState" type="varchar(255)" ></column>
-</addColumn>
-
-<addColumn tableName="Donor_AUD">
-            <column name="postalAddressZipcode" type="varchar(255)" ></column>
-</addColumn>
-
-
-  
-
-
-<insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="idType"></column>
-			<column name="defaultDisplayName" value="ID Type"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="idNumber"></column>
-			<column name="defaultDisplayName" value="ID Number"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="preferredLanguage"></column>
-			<column name="defaultDisplayName" value="Preferred Language"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="mobileNumber"></column>
-			<column name="defaultDisplayName" value="Mobile Number"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="homeNumber"></column>
-			<column name="defaultDisplayName" value="Home Number"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="workNumber"></column>
-			<column name="defaultDisplayName" value="Work Number"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="homeAddress"></column>
-			<column name="defaultDisplayName" value="Home Address"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="workAddress"></column>
-			<column name="defaultDisplayName" value="Work Address"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="postalAddress"></column>
-			<column name="defaultDisplayName" value="Postal Address"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="email"></column>
-			<column name="defaultDisplayName" value="Email"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
- <insert tableName="FormField">
-			<column name="form" value="donor"></column>
-			<column name="FIELD" value="callingName"></column>
-			<column name="defaultDisplayName" value="Calling Name"></column>
-			<column name="defaultValue" value=""></column>
-			<column name="maxLength" value="0"></column>
-			<column name="hidden" value="0"></column>
-			<column name="isHidable" value="1"></column>
-			<column name="isRequired" value="0"></column>
-			<column name="canBeOptional" value="1"></column>
-			<column name="autoGenerate" value="0"></column>
-			<column name="isAutoGeneratable" value="0"></column>
-			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-
-
- <!-- For issue 38 [Add Donor Title field] -->
+      <!-- For issue 38 [Add Donor Title field] -->
        <addColumn tableName="Donor">
             <column name="title" type="VARCHAR(15)"></column>
         </addColumn>
@@ -3218,10 +2904,6 @@
           </column>
            <column name="donorCodeGroup" type="varchar(255)"/> 
        </createTable>
-      
-     
-       
-      
      
        <createTable  tableName="DonorCode">
           <column name="id" type="BIGINT" autoIncrement="true">
@@ -3329,5 +3011,219 @@
      
 
 </changeSet>
+<!-- For issue 172[Add in additional donor demographic fields] -->
+ <changeSet id ="201405040141" author = "srikanth">
+   
+     <addColumn tableName="Donor">
+			<column name="addressId" type="int" defaultValue="NULL"></column>
+     </addColumn>
+     <addColumn tableName="Donor">
+			<column name="contactId" type="int" defaultValue="NULL"></column>
+     </addColumn>
+     
+
+   <createTable  tableName="Address">
+       <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+       </column>
+
+       <column name="homeAdressline1" type="varchar(255)"/> 
+       <column name="homeAdressline2" type="varchar(255)"/> 
+       <column name="homeAddressCity" type="varchar(255)"/> 
+       <column name="homeAddressProvince" type="varchar(255)"/> 
+       <column name="homeAddressDistrict" type="varchar(255)"/> 
+       <column name="homeAddressState" type="varchar(255)"/> 
+       <column name="homeAddressCountry" type="varchar(255)"/> 
+       <column name="homeAddressZipcode" type="varchar(255)"/> 
+
+	    <column name="workAdressline1" type="varchar(255)"/> 
+	    <column name="workAdressline2" type="varchar(255)"/> 
+	    <column name="workAddressCity" type="varchar(255)"/> 
+	    <column name="workAddressProvince" type="varchar(255)"/> 
+	    <column name="workAddressDistrict" type="varchar(255)"/> 
+	    <column name="workAddressCountry" type="varchar(255)"/> 
+	    <column name="workAddressState" type="varchar(255)"/> 
+	    <column name="workAddressZipcode" type="varchar(255)"/> 
+
+
+       <column name="postalAdressline1" type="varchar(255)"/> 
+       <column name="postalAdressline2" type="varchar(255)"/> 
+       <column name="postalAddressCity" type="varchar(255)"/> 
+       <column name="postalAddressProvince" type="varchar(255)"/> 
+       <column name="postalAddressDistrict" type="varchar(255)"/> 
+       <column name="postalAddressCountry" type="varchar(255)"/> 
+       <column name="postalAddressState" type="varchar(255)"/> 
+       <column name="postalAddressZipcode" type="varchar(255)"/> 
+       <column name="contactID" type = "BIGINT">
+
+             
+  </createTable
+
+
+ <createTable  tableName="Contact">
+       <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+       </column>
+
+       <column name="mobileNumber" type="varchar(255)"/> 
+       <column name="homeNumber" type="varchar(255)"/> 
+       <column name="workNumber" type="varchar(255)"/> 
+       <column name="email" type="varchar(255)"/>
+       <column name="ContactMethodType_id" type="BIGINT"> 
+  </createTable
+
+   <createTable  tableName="AddressType">
+       <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+       </column>
+       <column name="preferredAddressType" type="varchar(255)"/> 
+   </createTable>
+ 
+   <createTable  tableName="ContactMethodType">
+       <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+       </column>
+       <column name="preferredContactType" type="varchar(255)"/> 
+   </createTable>
+
+  <addForeignKeyConstraint constraintName="fk_AddressType_Address"
+			baseTableName="AddressType" baseColumnNames="id"
+			referencedTableName="Address" referencedColumnNames="id"/>
+
+  <addForeignKeyConstraint constraintName="fk_ContactType_Contact"
+			baseTableName="ContactType" baseColumnNames="id"
+			referencedTableName="Contact" referencedColumnNames="id"/>
+  
+
+			
+ <insert tableName="FormField">
+			<column name="form" value="Contact"></column>
+			<column name="FIELD" value="mobileNumber"></column>
+			<column name="defaultDisplayName" value="Mobile Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+ <insert tableName="FormField">
+			<column name="form" value="Contact"></column>
+			<column name="FIELD" value="homeNumber"></column>
+			<column name="defaultDisplayName" value="Home Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+<insert tableName="FormField">
+			<column name="form" value="Contact"></column>
+			<column name="FIELD" value="email"></column>
+			<column name="defaultDisplayName" value="Email"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+ <insert tableName="FormField">
+			<column name="form" value="Contact"></column>
+			<column name="FIELD" value="addressLine1"></column>
+			<column name="defaultDisplayName" value="Work Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+<insert tableName="FormField">
+			<column name="form" value="Address"></column>
+			<column name="FIELD" value="addressLine2"></column>
+			<column name="defaultDisplayName" value="Home Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+ <insert tableName="FormField">
+			<column name="form" value="Address"></column>
+			<column name="FIELD" value="workAddress"></column>
+			<column name="defaultDisplayName" value="Work Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+  <insert tableName="FormField">
+			<column name="form" value="Address"></column>
+			<column name="FIELD" value="homeAddress"></column>
+			<column name="defaultDisplayName" value="Work Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+
+
+ <insert tableName="FormField">
+			<column name="form" value="Address"></column>
+			<column name="FIELD" value="postalAddress"></column>
+			<column name="defaultDisplayName" value="Postal Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+ </insert>
+
+ </changeset>
 
 </databaseChangeLog>	
