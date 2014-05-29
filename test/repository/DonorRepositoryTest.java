@@ -53,6 +53,7 @@ import security.LoginUserService;
 import security.V2VUserDetails;
 import backingform.DonorBackingForm;
 import controller.UtilController;
+import model.donorcodes.DonorCode;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 
@@ -1012,10 +1013,14 @@ public class DonorRepositoryTest {
 	 */
         public void saveDonorDonorCode_shouldPersist(){
             DonorDonorCode  donorDonorCode =  new DonorDonorCode();
-	    donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(1l));	 
-            donorDonorCode.setDonorId(donorRepository.findDonorById(5l));
+            DonorCode donorCode = new DonorCode();
+            Donor donor = new Donor();
+            donor.setId(5l);
+            donorCode.setId(1l);
+	    donorDonorCode.setDonorCodeId(donorCode);	 
+            donorDonorCode.setDonorId(donor);
             donorRepository.saveDonorDonorCode(donorDonorCode);
-            assertNotNull("Failed to save DonorDonorCode object ",donorDonorCode.getId());
+            assertNotNull("Expected : Int but Found : NULL ",donorDonorCode.getId());
             
         }
         
