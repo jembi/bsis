@@ -360,7 +360,7 @@ public class CreateDataController {
       Donor donor = new Donor();
       Address address = new Address();
       Contact contact = new Contact();
-      address.setHomeAddressline1("address " + i);
+      address.setHomeAddressLine1("address " + i);
       address.setHomeAddressCity(cities[random.nextInt(cities.length)]);
       address.setHomeAddressCountry("Zambia");
       donor.setAddress(address);

@@ -3,6 +3,7 @@ package model.donor;
 import constraintvalidator.LocationExists;
 import java.util.Date;
 import java.util.List;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -28,7 +29,7 @@ import model.address.Contact;
 import model.collectedsample.CollectedSample;
 import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
-import model.idtype.IdType;
+import model.idtype.IdNumber;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -194,7 +195,7 @@ public class Donor implements ModificationTracker {
  
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
- @OneToOne(cascade = CascadeType.ALL)
+ @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
  @JoinColumn(name="addressId")
  private Address address;
   
@@ -204,7 +205,12 @@ public class Donor implements ModificationTracker {
   @JoinColumn(name="contactId")
   private Contact contact;
   
-
+ 
+ @NotAudited
+ @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "donorId")
+ @Fetch(value = FetchMode.SUBSELECT)
+  private List<IdNumber> idNumbers; 
 
 public List<DonorCode> getDonorCodes() {
 	return donorCodes;
@@ -220,20 +226,11 @@ public void setDonorCodes(List<DonorCode> donorCodes) {
   @Temporal(TemporalType.DATE)
   private Date dateOfFirstDonation;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  private IdType idType;
   
   @ManyToOne(fetch = FetchType.EAGER)
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private PreferredLanguage  preferredLanguage;
-  
-  @Column(length=20)
-  private String idNumber;
- 
-  
   
   public Donor() {
     modificationTracker = new RowModificationTracker();
@@ -342,8 +339,6 @@ public void copy(Donor donor) {
     setDonorPanel(donor.getDonorPanel());
     setNationalID(donor.getNationalID());
     setPreferredLanguage(donor.getPreferredLanguage());
-    setIdType(donor.getIdType());
-    setIdNumber(donor.getIdNumber());
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
@@ -361,13 +356,7 @@ public void copy(Donor donor) {
   }
 
   
- public void setIdNumber(String idNumber){
-     this.idNumber = idNumber;
- }
  
- public String getIdNumber(){
-     return idNumber;
- }
  
   public Date getLastUpdated() {
     return modificationTracker.getLastUpdated();
@@ -525,14 +514,6 @@ public void copy(Donor donor) {
 	this.birthDateEstimated = birthDateEstimated;
   }
 
-    public IdType getIdType() {
-        return idType;
-    }
-
-    public void setIdType(IdType idType) {
-        this.idType = idType;
-    }
-
     public PreferredLanguage getPreferredLanguage() {
         return preferredLanguage;
     }
@@ -555,6 +536,14 @@ public void copy(Donor donor) {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public List<IdNumber> getIdNumbers() {
+        return idNumbers;
+    }
+
+    public void setIdNumbers(List<IdNumber> idNumbers) {
+        this.idNumbers = idNumbers;
     }
 
     

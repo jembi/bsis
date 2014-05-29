@@ -23,6 +23,42 @@
                 workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
                 postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
                 postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" addressTypeId="1"/>
+        <address id="2" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
+                homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
+                homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
+                workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
+                workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" addressTypeId="1"/>
+        <address id="3" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
+                homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
+                homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
+                workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
+                workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" addressTypeId="1"/>
+        <address id="4" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
+                homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
+                homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
+                workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
+                workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" addressTypeId="1"/>
+        <address id="5" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
+                homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
+                homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
+                workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
+                workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" addressTypeId="1"/>
+        <address id="6" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
+                homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
+                homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
+                workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
+                workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" addressTypeId="1"/>
+        
         <contact id="1"   contactMethodTypeId="1" mobileNumber="798897878"  homeNumber="7578676" workNumber="656567"
                  email="drdfgdc" />
        
@@ -40,7 +76,7 @@
 		donorNumber="000002" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" addressId ="1" contactId ="1"
+		nationalID="null" notes="notes" addressId ="2" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="3" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="-" callingName="callingName" 
@@ -48,7 +84,7 @@
 		donorNumber="000003" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" addressId ="1" contactId ="1"
+		nationalID="null" notes="notes" addressId ="3" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="AB" bloodRh="+" callingName="callingName"
@@ -56,7 +92,7 @@
 		donorNumber="000004" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" addressId ="1" contactId ="1"
+		nationalID="null" notes="notes" addressId ="4" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="5" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" 
@@ -64,7 +100,7 @@
 		donorNumber="000016" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" addressId ="1" contactId ="1"
+		nationalID="null" notes="notes" addressId ="5" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="6" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" 
@@ -72,7 +108,7 @@
 		donorNumber="000017" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" addressId ="1" contactId ="1"
+		nationalID="null" notes="notes" addressId ="6" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 		
 	<bloodbagtype id="1" bloodBagType="Single" canPool=""
@@ -237,8 +273,10 @@
 
 	<PreferredLanguage id="1" preferredLanguage = "English"/>
 	<PreferredLanguage id="2" preferredLanguage = "English"/> 
-	<IdType id="1" idType = "Passport"/>
-	<IdType id="2" idType = "National ID"/>
+	<IdType id="1" idType = "Passport" regExp=""/>
+	<IdType id="2" idType = "National ID" regExp=""/>
+        
+        <IdNumber id="1" donorId="1" idType="1" idNumber="123"/>
 
 	<DonorCodeGroup id ="1" donorCodeGroup = "Test Only"/>
 	<DonorCode id ="1" donorCode = "Test Only" donorCodeGroupId = "1"/>

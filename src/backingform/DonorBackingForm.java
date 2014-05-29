@@ -42,6 +42,7 @@ public class DonorBackingForm {
 
     private Contact contact;
 
+
     public DonorBackingForm() {
         donor = new Donor();
         ageFormatCorrect = null;
@@ -277,18 +278,6 @@ public class DonorBackingForm {
         donor.setNationalID(nationalID);
     }
 
-    public void setIdType(IdType idType) {
-        donor.setIdType(idType);
-    }
-
-    public void setIdNumber(String idNumber) {
-        donor.setIdNumber(idNumber);
-    }
-
-    public String getIdNumber() {
-        return donor.getIdNumber();
-    }
-
     public String getDonorPanel() {
         Location donorPanel = donor.getDonorPanel();
         if (donorPanel == null || donorPanel.getId() == null) {
@@ -336,28 +325,6 @@ public class DonorBackingForm {
         }
     }
 
-    public void setIdType(String idType) {
-        if (StringUtils.isBlank(idType)) {
-            donor.setDonorPanel(null);
-        } else {
-            IdType type = new IdType();
-            try {
-                type.setId(Long.parseLong(idType));
-                donor.setIdType(type);
-            } catch (NumberFormatException ex) {
-                ex.printStackTrace();
-                donor.setDonorPanel(null);
-            }
-        }
-    }
-
-    public String getIdType() {
-        IdType idType = donor.getIdType();
-        if (idType == null || idType.getId() == null) {
-            return null;
-        }
-        return idType.getId().toString();
-    }
 
     public void setPreferredLanguage(String language) {
 
@@ -439,11 +406,11 @@ public class DonorBackingForm {
      * Home Address getter & Setters
      */
     public String getHomeAddressLine1() {
-        return donor.getAddress().getHomeAddressline1();
+        return donor.getAddress().getHomeAddressLine1();
     }
 
     public String getHomeAddressLine2() {
-        return donor.getAddress().getHomeAddressline2();
+        return donor.getAddress().getHomeAddressLine2();
     }
 
     public String getHomeAddressCity() {
@@ -471,15 +438,15 @@ public class DonorBackingForm {
     }
 
     public void setHomeAddressLine1(String homeAddressLine1) {
-        address.setHomeAddressline1(homeAddressLine1);
+        address.setHomeAddressLine1(homeAddressLine1);
     }
 
     public void setHomeAddressLine2(String homeAddressLine1) {
-        address.setHomeAddressline2(homeAddressLine1);
+        address.setHomeAddressLine2(homeAddressLine1);
     }
 
     public void setHomeAddressCity(String homeAddressCity) {
-        donor.getAddress().setHomeAddressCity(homeAddressCity);
+        address.setHomeAddressCity(homeAddressCity);
     }
     
     public void setHomeAddressDistrict(String homeAddressDistrict){
@@ -487,30 +454,30 @@ public class DonorBackingForm {
     }
 
     public void setHomeAddressCountry(String homeAddressCountry) {
-        donor.getAddress().setHomeAddressCity(homeAddressCountry);
+        address.setHomeAddressCountry(homeAddressCountry);
     }
 
     public void setHomeAddressState(String homeAddressState) {
-        donor.getAddress().setHomeAddressState(homeAddressState);
+        address.setHomeAddressState(homeAddressState);
     }
 
     public void setHomeAddressProvince(String homeAddressProvince) {
-        donor.getAddress().setHomeAddressProvince(homeAddressProvince);
+        address.setHomeAddressProvince(homeAddressProvince);
     }
 
     public void setHomeAddressZipcode(String zipcode) {
-        donor.getAddress().setHomeAddressZipcode(zipcode);
+        address.setHomeAddressZipcode(zipcode);
     }
 
     /**
      * Work Address Getters & Setters
      */
-    public String getWorkAddressline1() {
-        return donor.getAddress().getWorkAddressline1();
+    public String getWorkAddressLine1() {
+        return donor.getAddress().getWorkAddressLine1();
     }
 
-    public String getWorkAddressline2() {
-        return donor.getAddress().getWorkAddressline2();
+    public String getWorkAddressLine2() {
+        return donor.getAddress().getWorkAddressLine2();
     }
 
     public String getWorkAddressCity() {
@@ -538,11 +505,11 @@ public class DonorBackingForm {
     }
 
     public void setWorkAddressLine1(String workAddressLine1) {
-        address.setWorkAddressline1(workAddressLine1);
+        address.setWorkAddressLine1(workAddressLine1);
     }
 
     public void setWorkAddressLine2(String workAddressLine2) {
-        address.setWorkAddressline2(workAddressLine2);
+        address.setWorkAddressLine2(workAddressLine2);
     }
 
     public void setWorkAddressCity(String workAddressCity) {
@@ -569,11 +536,11 @@ public class DonorBackingForm {
      * Postal Address getters & Setters
      */
     public String getPostalAddressLine1() {
-        return donor.getAddress().getPostalAddressline1();
+        return donor.getAddress().getPostalAddressLine1();
     }
 
     public String getPostalAddressLine2() {
-        return donor.getAddress().getPostalAddressline2();
+        return donor.getAddress().getPostalAddressLine2();
     }
 
     public String getPostalAddressCity() {
@@ -598,14 +565,6 @@ public class DonorBackingForm {
 
     public String getPostalAddressDistrict() {
         return donor.getAddress().getPostalAddressDistrict();
-    }
-
-    public void setWorkAddressline1(String workAddressline1) {
-        address.setWorkAddressline1(workAddressline1);
-    }
-
-    public void setWorkAddressline2(String workAddressline2) {
-        address.setWorkAddressline2(workAddressline2);
     }
 
     public void setPostalAddressProvince(String postalAdressProvince) {
@@ -675,6 +634,22 @@ public class DonorBackingForm {
 
     public void setEmail(String email) {
         contact.setEmail(email);
+    }
+
+    public Address getAddress() {
+        return donor.getAddress();    
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    
+    public Contact getContact(){
+        return donor.getContact();
+    }
+    
+    public void setContact(Contact contact){
+        this.contact = contact ;
     }
 
     /**

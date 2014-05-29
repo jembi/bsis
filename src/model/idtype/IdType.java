@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package model.idtype;
 
 import java.io.Serializable;
@@ -14,19 +13,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ *This Model Object represents the IdTypes of donor. 
  * @author srikanth
  */
 @Entity
-public class IdType  {
-   
+public class IdType {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, insertable=false, updatable=false)
+    @Column(nullable = false, insertable = false, updatable = false)
     private Long id;
-    
-    @Column(length=20)
+
+    @Column(length = 20)
     private String idType;
+    
+    private String regExp; // stores regular Expression To validate Id Numbers  
+    
 
     public Long getId() {
         return id;
@@ -50,9 +52,16 @@ public class IdType  {
     public void setIdType(String idType) {
         this.idType = idType;
     }
-    
-    
 
+    public String getRegExp() {
+        return regExp;
+    }
+
+    public void setRegExp(String regExp) {
+        this.regExp = regExp;
+    }
+
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -65,5 +74,5 @@ public class IdType  {
         }
         return true;
     }
-    
+
 }

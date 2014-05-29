@@ -92,18 +92,6 @@ public class DonorViewModel {
     return comments == null ? "" : comments.toString();
   }
   
-  public String getIdType(){
-	  if (donor.getIdType() == null ||
-	        donor.getIdType().getIdType() == null)
-	      return "";
-	  else
-	      return donor.getIdType().getIdType();
-  }
-  
-  public String getIdNumber(){
-      return donor.getIdNumber();
-  }
-   
   public String getCallingName(){
       return donor.getCallingName();
   }
@@ -174,11 +162,11 @@ public class DonorViewModel {
      * Home Address Getter Methods
      */
     public String getHomeAddressLine1() {
-        return donor.getAddress().getHomeAddressline1();
+        return donor.getAddress().getHomeAddressLine1();
     }
 
     public String getHomeAddressLine2() {
-        return donor.getAddress().getHomeAddressline2();
+        return donor.getAddress().getHomeAddressLine2();
     }
 
     public String getHomeAddressCity() {
@@ -210,12 +198,12 @@ public class DonorViewModel {
      * @return 
      * Work Address Getters 
      */
-    public String getWorkAddressline1() {
-        return donor.getAddress().getWorkAddressline1();
+    public String getWorkAddressLine1() {
+        return donor.getAddress().getWorkAddressLine1();
     }
 
-    public String getWorkAddressline2() {
-        return donor.getAddress().getWorkAddressline2();
+    public String getWorkAddressLine2() {
+        return donor.getAddress().getWorkAddressLine2();
     }
 
     public String getWorkAddressCity() {
@@ -247,11 +235,11 @@ public class DonorViewModel {
      * Postal Address getters & Setters
      */
     public String getPostalAddressLine1() {
-        return donor.getAddress().getPostalAddressline1();
+        return donor.getAddress().getPostalAddressLine1();
     }
 
     public String getPostalAddressLine2() {
-        return donor.getAddress().getPostalAddressline2();
+        return donor.getAddress().getPostalAddressLine2();
     }
 
     public String getPostalAddressCity() {

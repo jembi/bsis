@@ -2725,6 +2725,7 @@
            	<constraints primaryKey="true" nullable="false" />
      </column>
      <column name="idType" type="varchar(255)"/> 
+      <column name="regExp" type="varchar(255)" defaultValue = "NULL"/>
   </createTable>
 
   <createTable  tableName="PreferredLanguage">
@@ -2827,22 +2828,6 @@
 	     <column name="id" value="22"></column>
 	     <column name="preferredLanguage" value="Afrikaans"></column>
 	  </insert>
-	  <insert tableName="IdType">
-	     <column name="id" value="1"></column>
-	     <column name="idType" value="Passport"></column>
-	  </insert>
-
-	 <insert tableName="IdType">
-	     <column name="id" value="2"></column>
-	     <column name="idType" value="National Id"></column>
-	  </insert>
-
-	 <insert tableName="IdType">
-	     <column name="id" value="3"></column>
-	     <column name="idType" value="Driving License"></column>
-	 </insert>
-
-
 
 	<addColumn tableName="Donor">
 	            <column name="idType_id" type="BIGINT" defaultValue="NULL"></column>
@@ -3021,14 +3006,20 @@
 			<column name="contactId" type="int" defaultValue="NULL"></column>
      </addColumn>
      
+   <createTable  tableName="AddressType">
+       <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+       </column>
+       <column name="preferredAddressType" type="varchar(255)"/> 
+   </createTable>
 
    <createTable  tableName="Address">
        <column name="id" type="BIGINT" autoIncrement = "true">
            	<constraints primaryKey="true" nullable="false" />
        </column>
 
-       <column name="homeAdressline1" type="varchar(255)"/> 
-       <column name="homeAdressline2" type="varchar(255)"/> 
+       <column name="homeAdressLine1" type="varchar(255)"/> 
+       <column name="homeAdressLine2" type="varchar(255)"/> 
        <column name="homeAddressCity" type="varchar(255)"/> 
        <column name="homeAddressProvince" type="varchar(255)"/> 
        <column name="homeAddressDistrict" type="varchar(255)"/> 
@@ -3036,8 +3027,8 @@
        <column name="homeAddressCountry" type="varchar(255)"/> 
        <column name="homeAddressZipcode" type="varchar(255)"/> 
 
-	    <column name="workAdressline1" type="varchar(255)"/> 
-	    <column name="workAdressline2" type="varchar(255)"/> 
+	    <column name="workAdressLine1" type="varchar(255)"/> 
+	    <column name="workAdressLine2" type="varchar(255)"/> 
 	    <column name="workAddressCity" type="varchar(255)"/> 
 	    <column name="workAddressProvince" type="varchar(255)"/> 
 	    <column name="workAddressDistrict" type="varchar(255)"/> 
@@ -3046,19 +3037,21 @@
 	    <column name="workAddressZipcode" type="varchar(255)"/> 
 
 
-       <column name="postalAdressline1" type="varchar(255)"/> 
-       <column name="postalAdressline2" type="varchar(255)"/> 
+       <column name="postalAdressLine1" type="varchar(255)"/> 
+       <column name="postalAdressLine2" type="varchar(255)"/> 
        <column name="postalAddressCity" type="varchar(255)"/> 
        <column name="postalAddressProvince" type="varchar(255)"/> 
        <column name="postalAddressDistrict" type="varchar(255)"/> 
        <column name="postalAddressCountry" type="varchar(255)"/> 
        <column name="postalAddressState" type="varchar(255)"/> 
        <column name="postalAddressZipcode" type="varchar(255)"/> 
-       <column name="contactID" type = "BIGINT">
+       <column name="AddressTypeId" type="BIGINT"> 
+	     	<constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
+       </column>
+       
+  </createTable>
 
-             
-  </createTable
-
+  <dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
 
  <createTable  tableName="Contact">
        <column name="id" type="BIGINT" autoIncrement = "true">
@@ -3069,30 +3062,31 @@
        <column name="homeNumber" type="varchar(255)"/> 
        <column name="workNumber" type="varchar(255)"/> 
        <column name="email" type="varchar(255)"/>
-       <column name="ContactMethodType_id" type="BIGINT"> 
-  </createTable
+       <column name="ContactMethodType_id" type="SMALLINT(6)">
+       	    <constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
+       </column> 
+  </createTable>
 
-   <createTable  tableName="AddressType">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
-       <column name="preferredAddressType" type="varchar(255)"/> 
-   </createTable>
+
+
  
-   <createTable  tableName="ContactMethodType">
-       <column name="id" type="BIGINT" autoIncrement = "true">
+  
+   <createTable tableName="IdNumber">
+   	 <column name="id" type="BIGINT" autoIncrement = "true">
            	<constraints primaryKey="true" nullable="false" />
        </column>
-       <column name="preferredContactType" type="varchar(255)"/> 
+     <column name="donorId" type = "BIGINT">
+	     	<constraints foreignKeyName="donor_fk" references="Donor(id)"/>
+     </column>
+     <column name="idType" type = "BIGINT">
+	     	<constraints foreignKeyName="IdType_fk" references="IdType(id)"/>
+     </column>
+     <column name="idNumber" type="varchar(255)"/>
    </createTable>
 
-  <addForeignKeyConstraint constraintName="fk_AddressType_Address"
-			baseTableName="AddressType" baseColumnNames="id"
-			referencedTableName="Address" referencedColumnNames="id"/>
+  
 
-  <addForeignKeyConstraint constraintName="fk_ContactType_Contact"
-			baseTableName="ContactType" baseColumnNames="id"
-			referencedTableName="Contact" referencedColumnNames="id"/>
+  
   
 
 			
@@ -3224,6 +3218,6 @@
 			<column name="isTimeField" value="0"></column>			
  </insert>
 
- </changeset>
+ </changeSet>
 
 </databaseChangeLog>	

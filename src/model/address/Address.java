@@ -32,8 +32,8 @@ public class Address implements Serializable {
     @JoinColumn(nullable=true,name = "addressTypeId")
     private AddressType addressType;
 
-    private String homeAddressline1;
-    private String homeAddressline2;
+    private String homeAddressLine1;
+    private String homeAddressLine2;
     private String homeAddressCity;
     private String homeAddressProvince;
     private String homeAddressDistrict;
@@ -41,8 +41,8 @@ public class Address implements Serializable {
     private String homeAddressState;
     private String homeAddressZipcode;
     
-    private String workAddressline1;
-    private String workAddressline2;
+    private String workAddressLine1;
+    private String workAddressLine2;
     private String workAddressCity;
     private String workAddressProvince;
     private String workAddressDistrict;
@@ -51,8 +51,8 @@ public class Address implements Serializable {
     private String workAddressZipcode;
 
     
-    private String postalAddressline1;
-    private String postalAddressline2;
+    private String postalAddressLine1;
+    private String postalAddressLine2;
     private String postalAddressCity;
     private String postalAddressProvince;
     private String postalAddressDistrict;
@@ -75,24 +75,25 @@ public class Address implements Serializable {
     public void setAddressType(AddressType addressType) {
         this.addressType = addressType;
     }
+
+    public String getHomeAddressLine1() {
+        return homeAddressLine1;
+    }
+
+    public void setHomeAddressLine1(String homeAddressLine1) {
+        this.homeAddressLine1 = homeAddressLine1;
+    }
+
+    public String getHomeAddressLine2() {
+        return homeAddressLine2;
+    }
+
+    public void setHomeAddressLine2(String homeAddressLine2) {
+        this.homeAddressLine2 = homeAddressLine2;
+    }
     
 
-    public String getHomeAddressline1() {
-        return homeAddressline1;
-    }
-
-    public void setHomeAddressline1(String homeAddressline1) {
-        this.homeAddressline1 = homeAddressline1;
-    }
-
-    public String getHomeAddressline2() {
-        return homeAddressline2;
-    }
-
-    public void setHomeAddressline2(String homeAddressline2) {
-        this.homeAddressline2 = homeAddressline2;
-    }
-
+  
     public String getHomeAddressCity() {
         return homeAddressCity;
     }
@@ -141,22 +142,23 @@ public class Address implements Serializable {
         this.homeAddressZipcode = homeAddressZipcode;
     }
 
-    public String getWorkAddressline1() {
-        return workAddressline1;
+    public String getPostalAddressLine1() {
+        return postalAddressLine1;
     }
 
-    public void setWorkAddressline1(String workAddressline1) {
-        this.workAddressline1 = workAddressline1;
+    public void setPostalAddressLine1(String postalAddressLine1) {
+        this.postalAddressLine1 = postalAddressLine1;
     }
 
-    public String getWorkAddressline2() {
-        return workAddressline2;
+    public String getPostalAddressLine2() {
+        return postalAddressLine2;
     }
 
-    public void setWorkAddressline2(String workAddressline2) {
-        this.workAddressline2 = workAddressline2;
+    public void setPostalAddressLine2(String postalAddressLine2) {
+        this.postalAddressLine2 = postalAddressLine2;
     }
 
+  
     public String getWorkAddressCity() {
         return workAddressCity;
     }
@@ -205,22 +207,23 @@ public class Address implements Serializable {
         this.workAddressZipcode = workAddressZipcode;
     }
 
-    public String getPostalAddressline1() {
-        return postalAddressline1;
+    public String getWorkAddressLine1() {
+        return workAddressLine1;
     }
 
-    public void setPostalAddressline1(String postalAddressline1) {
-        this.postalAddressline1 = postalAddressline1;
+    public void setWorkAddressLine1(String workAddressLine1) {
+        this.workAddressLine1 = workAddressLine1;
     }
 
-    public String getPostalAddressline2() {
-        return postalAddressline2;
+    public String getWorkAddressLine2() {
+        return workAddressLine2;
     }
 
-    public void setPostalAddressline2(String postalAddressline2) {
-        this.postalAddressline2 = postalAddressline2;
+    public void setWorkAddressLine2(String workAddressLine2) {
+        this.workAddressLine2 = workAddressLine2;
     }
 
+  
     public String getPostalAddressCity() {
         return postalAddressCity;
     }
