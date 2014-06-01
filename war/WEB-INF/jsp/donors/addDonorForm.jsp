@@ -329,30 +329,24 @@
 				<div>
 					<form:label path="mobileNumber">${donorFields.mobileNumber.displayName}</form:label>
 					<form:input path="mobileNumber" />
-					<ul>
-						<form:errors class="formError" path="mobileNumber"
-							delimiter=", "></form:errors>
-					</ul>
+				        <form:errors class="formError" path="mobileNumber" delimiter=", "></form:errors>
+					
 				</div>
 			</c:if>
                         <c:if test="${donorFields.homeNumber.hidden != true }">
 				<div>
 					<form:label path="homeNumber">${donorFields.homeNumber.displayName}</form:label>
 					<form:input path="homeNumber" />
-					<ul>
-						<form:errors class="formError" path="homeNumber"
-							delimiter=", "></form:errors>
-					</ul>
+					<form:errors class="formError" path="homeNumber" delimiter=", "></form:errors>
+					
 				</div>
 			</c:if>
                         <c:if test="${donorFields.workNumber.hidden != true }">
 				<div>
 					<form:label path="workNumber">${donorFields.workNumber.displayName}</form:label>
 					<form:input path="workNumber" />
-					<ul>
-						<form:errors class="formError" path="workNumber"
-							delimiter=", "></form:errors>
-					</ul>
+					<form:errors class="formError" path="workNumber" delimiter=", "></form:errors>
+					
 				</div>
 			</c:if>
 			<c:if test="${donorFields.email.hidden != true }">
@@ -458,9 +452,7 @@
 					<form:label path="homeAddressZipcode">${donorFields.zipcode.displayName}</form:label>
 					<form:input path="homeAddressZipcode"
 						value="${firstTimeRender ? donorFields.homeAddressZipcode.defaultValue : ''}" />
-					<ul>
 						<form:errors class="formError" path="homeAddressZipcode" delimiter=", "></form:errors>
-					</ul>
 				</div>
 			</c:if>
                             <c:if test="${donorFields.workAddress.hidden != true }">
@@ -527,9 +519,7 @@
 					<form:label path="postalAddressZipcode">${donorFields.zipcode.displayName}</form:label>
 					<form:input path="postalAddressZipcode"
 						value="${firstTimeRender ? donorFields.postalAddressZipcode.defaultValue : ''}" />
-					<ul>
-						<form:errors class="formError" path="postalAddressZipcode" delimiter=", "></form:errors>
-					</ul>
+				        <form:errors class="formError" path="postalAddressZipcode" delimiter=", "></form:errors>
 				</div>
 			</c:if>
                            <c:if test="${donorFields.workAddress.hidden != true }">
@@ -596,9 +586,7 @@
 					<form:label path="workAddressZipcode">${donorFields.zipcode.displayName}</form:label>
 					<form:input path="workAddressZipcode"
 						value="${firstTimeRender ? donorFields.workAddressZipcode.defaultValue : ''}" />
-					<ul>
 						<form:errors class="formError" path="workAddressZipcode" delimiter=", "></form:errors>
-					</ul>
 				</div>
 			</c:if> 
                       <c:if test="${donorFields.preferredAddressType.hidden != true }">
