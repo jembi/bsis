@@ -27,31 +27,25 @@ import org.hibernate.envers.NotAudited;
  * @author srikanth
  */
 @Entity
-public class IdNumber implements ModificationTracker, Serializable {
+public class IdNumber implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotAudited
+  
     @ManyToOne(targetEntity = Donor.class)
     @JoinColumn(name="donorId",nullable= false)
     private Donor donorId;
 
-    @NotAudited
+
     @ManyToOne(targetEntity = IdType.class)
     @JoinColumn(name="idType",nullable= false)
     private IdType  idType;
 
     private String idNumber;
 
-    @Valid
-    private RowModificationTracker modificationTracker;
-
-    public IdNumber() {
-        modificationTracker = new RowModificationTracker();
-    }
-
+  
     public Long getId() {
         return id;
     }
@@ -92,37 +86,6 @@ public class IdNumber implements ModificationTracker, Serializable {
         return hash;
     }
 
-    public Date getLastUpdated() {
-        return modificationTracker.getLastUpdated();
-    }
-
-    public Date getCreatedDate() {
-        return modificationTracker.getCreatedDate();
-    }
-
-    public User getCreatedBy() {
-        return modificationTracker.getCreatedBy();
-    }
-
-    public User getLastUpdatedBy() {
-        return modificationTracker.getLastUpdatedBy();
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        modificationTracker.setLastUpdated(lastUpdated);
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        modificationTracker.setCreatedDate(createdDate);
-    }
-
-    public void setCreatedBy(User createdBy) {
-        modificationTracker.setCreatedBy(createdBy);
-    }
-
-    public void setLastUpdatedBy(User lastUpdatedBy) {
-        modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-    }
 
     @Override
     public boolean equals(Object object) {

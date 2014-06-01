@@ -3,10 +3,8 @@ package model.donor;
 import constraintvalidator.LocationExists;
 import java.util.Date;
 import java.util.List;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,11 +23,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import model.address.Address;
+import model.address.AddressType;
 import model.address.Contact;
+import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
 import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
-import model.idtype.IdNumber;
+import model.idtype.IdType;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -142,14 +142,7 @@ public class Donor implements ModificationTracker {
 
   @Column(length=50)
   private String donorHash;
-  
-  /**
-   * If the blood center wishes to store a unique id for the donor.
-   * Can help in deduplication.
-   */
-  @Column(length=15)
-  private String nationalID;
-
+ 
   /**
    * Which panel the donor is registered to
    */
@@ -199,18 +192,36 @@ public class Donor implements ModificationTracker {
  @JoinColumn(name="addressId")
  private Address address;
   
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
- @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name="contactId")
-  private Contact contact;
-  
+    @NotAudited
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "contactId")
+    private Contact contact;
+
+    @NotAudited
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true, name = "addressTypeId")
+    private AddressType addressType;
+
+    @NotAudited
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    private ContactMethodType contactMethodType;      
+    
+// @NotAudited
+// @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+// @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "donorId")
+// @Fetch(value = FetchMode.SUBSELECT)
+// private List<IdNumber> idNumbers; 
  
+ @ManyToOne(fetch = FetchType.EAGER)
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "donorId")
- @Fetch(value = FetchMode.SUBSELECT)
-  private List<IdNumber> idNumbers; 
+ private IdType idType;
+ 
+ private String idNumber;
 
 public List<DonorCode> getDonorCodes() {
 	return donorCodes;
@@ -337,13 +348,19 @@ public void copy(Donor donor) {
     setNotes(donor.getNotes());
     setGender(donor.getGender());
     setDonorPanel(donor.getDonorPanel());
-    setNationalID(donor.getNationalID());
     setPreferredLanguage(donor.getPreferredLanguage());
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
     this.donorCodes = donor.getDonorCodes();
     setDateOfFirstDonation(donor.getDateOfFirstDonation());
+    setIdType(donor.getIdType());
+    setAddressType(donor.getAddressType());
+    setContactMethodType(donor.getContactMethodType());
+    setIdNumber(donor.getIdNumber());
+    setContact(donor.getContact());
+    setAddress(donor.getAddress());
+    
   }
 
   public List<CollectedSample> getCollectedSamples() {
@@ -417,14 +434,7 @@ public void copy(Donor donor) {
     this.callingName = callingName;
   }
 
-  public String getNationalID() {
-    return nationalID;
-  }
-
-  public void setNationalID(String nationalID) {
-    this.nationalID = nationalID;
-  }
-
+  
   public List<DonorDeferral> getDeferrals() {
     return deferrals;
   }
@@ -538,14 +548,37 @@ public void copy(Donor donor) {
         this.contact = contact;
     }
 
-    public List<IdNumber> getIdNumbers() {
-        return idNumbers;
+    public IdType getIdType() {
+        return idType;
     }
 
-    public void setIdNumbers(List<IdNumber> idNumbers) {
-        this.idNumbers = idNumbers;
+    public void setIdType(IdType idType) {
+        this.idType = idType;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+    public AddressType getAddressType() {
+        return addressType;
+    }
+
+    public void setAddressType(AddressType addressType) {
+        this.addressType = addressType;
     }
 
     
-  
+    public ContactMethodType getContactMethodType() {
+        return contactMethodType;
+    }
+
+    public void setContactMethodType(ContactMethodType contactMethodType) {
+        this.contactMethodType = contactMethodType;
+    }
+
+    
 }

@@ -15,6 +15,7 @@ import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
+import org.hsqldb.Tokens;
 import org.joda.time.DateTime;
 import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
@@ -41,7 +42,6 @@ public class DonorBackingForm {
     private Address address;
 
     private Contact contact;
-
 
     public DonorBackingForm() {
         donor = new Donor();
@@ -270,14 +270,6 @@ public class DonorBackingForm {
         return ageFormatCorrect;
     }
 
-    public String getNationalID() {
-        return donor.getNationalID();
-    }
-
-    public void setNationalID(String nationalID) {
-        donor.setNationalID(nationalID);
-    }
-
     public String getDonorPanel() {
         Location donorPanel = donor.getDonorPanel();
         if (donorPanel == null || donorPanel.getId() == null) {
@@ -406,35 +398,35 @@ public class DonorBackingForm {
      * Home Address getter & Setters
      */
     public String getHomeAddressLine1() {
-        return donor.getAddress().getHomeAddressLine1();
+        return address.getHomeAddressLine1();
     }
 
     public String getHomeAddressLine2() {
-        return donor.getAddress().getHomeAddressLine2();
+        return address.getHomeAddressLine2();
     }
 
     public String getHomeAddressCity() {
-        return donor.getAddress().getHomeAddressCity();
+        return address.getHomeAddressCity();
     }
 
     public String getHomeAddressProvince() {
-        return donor.getAddress().getHomeAddressProvince();
+        return address.getHomeAddressProvince();
     }
 
     public String getHomeAddressDistrict() {
-        return donor.getAddress().getHomeAddressDistrict();
+        return address.getHomeAddressDistrict();
     }
 
     public String getHomeAddressState() {
-        return donor.getAddress().getHomeAddressState();
+        return address.getHomeAddressState();
     }
 
     public String getHomeAddressCountry() {
-        return donor.getAddress().getHomeAddressCountry();
+        return address.getHomeAddressCountry();
     }
 
     public String getHomeAddressZipcode() {
-        return donor.getAddress().getHomeAddressZipcode();
+        return address.getHomeAddressZipcode();
     }
 
     public void setHomeAddressLine1(String homeAddressLine1) {
@@ -473,47 +465,49 @@ public class DonorBackingForm {
      * Work Address Getters & Setters
      */
     public String getWorkAddressLine1() {
-        return donor.getAddress().getWorkAddressLine1();
+        return address.getWorkAddressLine1();
     }
 
     public String getWorkAddressLine2() {
-        return donor.getAddress().getWorkAddressLine2();
+        return address.getWorkAddressLine2();
     }
 
     public String getWorkAddressCity() {
-        return donor.getAddress().getWorkAddressCity();
+        return address.getWorkAddressCity();
     }
 
     public String getWorkAddressProvince() {
-        return donor.getAddress().getWorkAddressProvince();
+        return address.getWorkAddressProvince();
     }
 
     public String getWorkAddressDistrict() {
-        return donor.getAddress().getWorkAddressDistrict();
+        return address.getWorkAddressDistrict();
     }
 
     public String getWorkAddressState() {
-        return donor.getAddress().getWorkAddressCountry();
+        return address.getWorkAddressCountry();
     }
 
     public String getWorkAddressCountry() {
-        return donor.getAddress().getWorkAddressCountry();
+        return address.getWorkAddressCountry();
     }
 
     public String getWorkAddressZipcode() {
-        return donor.getAddress().getWorkAddressZipcode();
+        return address.getWorkAddressZipcode();
     }
 
     public void setWorkAddressLine1(String workAddressLine1) {
         address.setWorkAddressLine1(workAddressLine1);
     }
-
+    public void setWorkAddressDistrict(String workAddressDistrict) {
+        address.setWorkAddressDistrict(workAddressDistrict);
+    }
     public void setWorkAddressLine2(String workAddressLine2) {
         address.setWorkAddressLine2(workAddressLine2);
     }
 
     public void setWorkAddressCity(String workAddressCity) {
-        address.setHomeAddressCity(workAddressCity);
+        address.setWorkAddressCity(workAddressCity);
     }
 
     public void setWorkAddressProvince(String workAddressProvince) {
@@ -536,15 +530,23 @@ public class DonorBackingForm {
      * Postal Address getters & Setters
      */
     public String getPostalAddressLine1() {
-        return donor.getAddress().getPostalAddressLine1();
+        return address.getPostalAddressLine1();
     }
 
     public String getPostalAddressLine2() {
-        return donor.getAddress().getPostalAddressLine2();
+        return address.getPostalAddressLine2();
+    }
+    
+    public void setPostalAddressLine1(String postalAddressLine1){
+        address.setPostalAddressLine1(postalAddressLine1);
+    }
+    
+    public void setPostalAddressLine2(String postalAddressLine2){
+        address.setPostalAddressLine2(postalAddressLine2);
     }
 
     public String getPostalAddressCity() {
-        return donor.getAddress().getPostalAddressCity();
+        return address.getPostalAddressCity();
     }
 
     public void setPostalAddressCity(String postalAddressCity) {
@@ -552,19 +554,19 @@ public class DonorBackingForm {
     }
 
     public String getPostalAddressProvince() {
-        return donor.getAddress().getPostalAddressProvince();
+        return address.getPostalAddressProvince();
     }
 
     public void setPostalAddressState(String postalAddressState) {
-        donor.getAddress().setPostalAddressState(postalAddressState);
+        address.setPostalAddressState(postalAddressState);
     }
 
     public String getPostalAddressState() {
-        return donor.getAddress().getPostalAddressState();
+        return address.getPostalAddressState();
     }
 
     public String getPostalAddressDistrict() {
-        return donor.getAddress().getPostalAddressDistrict();
+        return address.getPostalAddressDistrict();
     }
 
     public void setPostalAddressProvince(String postalAdressProvince) {
@@ -576,7 +578,7 @@ public class DonorBackingForm {
     }
 
     public String getPostalAddressCountry() {
-        return donor.getAddress().getPostalAddressCountry();
+        return address.getPostalAddressCountry();
     }
 
     public void setPostalAddressCountry(String postalAddressCountry) {
@@ -584,40 +586,25 @@ public class DonorBackingForm {
     }
 
     public String getPostalAddressZipcode() {
-        return donor.getAddress().getPostalAddressZipcode();
+        return address.getPostalAddressZipcode();
     }
 
     public void setPostalAddressZipcode(String postalAddressZipcode) {
         address.setPostalAddressZipcode(postalAddressZipcode);
     }
 
-    /**
-     * Contact Getters & Setters
-     */
-    public ContactMethodType getContactType() {
-        return donor.getContact().getContactMethodType();
-    }
-
-    public void setContactType(String contactTypeId) {
-        if (StringUtils.isBlank(contactTypeId)) {
-             contact.setContactMethodType(null);
-        } else {
-            ContactMethodType contactType = new ContactMethodType();
-            contactType.setId(Integer.parseInt(contactTypeId));
-            contact.setContactMethodType(contactType);
-        }
-    }
+    
 
     public String getMobileNumber() {
-        return donor.getContact().getMobileNumber();
+        return contact.getMobileNumber();
     }
 
     public String getHomeNumber() {
-        return donor.getContact().getHomeNumber();
+        return contact.getHomeNumber();
     }
 
     public String getWorkNumber() {
-        return donor.getContact().getWorkNumber();
+        return contact.getWorkNumber();
     }
 
     public void setMobileNumber(String mobileNumber) {
@@ -635,9 +622,14 @@ public class DonorBackingForm {
     public void setEmail(String email) {
         contact.setEmail(email);
     }
+    
+    public String getEmail(){
+        return contact.getEmail();
+        
+    }
 
     public Address getAddress() {
-        return donor.getAddress();    
+        return address;    
     }
 
     public void setAddress(Address address) {
@@ -645,7 +637,7 @@ public class DonorBackingForm {
     }
     
     public Contact getContact(){
-        return donor.getContact();
+        return contact;
     }
     
     public void setContact(Contact contact){
@@ -655,19 +647,79 @@ public class DonorBackingForm {
     /**
      * Address Type Getters & Setters
      */
-    public AddressType getAddressType() {
-        return donor.getAddress().getAddressType();
+    public String getPreferredAddressType() {
+         AddressType addressType = donor.getAddressType();
+        if (addressType == null || addressType.getId() == null) {
+            return null;
+        }
+        return addressType.getId().toString();
     }
 
-    public void setAddressType(String addressTypeID) {
+    public void setPreferredAddressType(String addressTypeID) {
         if (StringUtils.isBlank(addressTypeID)) {
-            setAddressType(null);
+              donor.setAddressType(null);
         } else {
             AddressType addressType = new AddressType();
             addressType.setId(Long.parseLong(addressTypeID));
-            address.setAddressType(addressType);
+            donor.setAddressType(addressType);
         }
 
     }
+    public String getIdType() {
+        IdType idType = donor.getIdType();
+        if (idType == null || idType.getId() == null) {
+            return null;
+        }
+        return idType.getId().toString();
+    }
+    public void setIdType(String idType){
+         if (StringUtils.isBlank(idType)) {
+              donor.setIdType(null);
+        } else {
+            IdType preferredIdType = new IdType();
+            preferredIdType.setId(Long.parseLong(idType));
+            donor.setIdType(preferredIdType);
+        }
+    }
+    
+    public String getIdNumber(){
+        return donor.getIdNumber();
+    }
+    public void setIdNumber(String idNumber){
+        donor.setIdNumber(idNumber);
+    }
+    public String getPreferredContactMethod(){
+         ContactMethodType contactMethodType = donor.getContactMethodType();
+        if (contactMethodType == null || contactMethodType.getId() == null) {
+            return null;
+        }
+        return contactMethodType.getId().toString();
+    }
+    
+    public void setPreferredContactMethod(String preferredContactMethodId) {
+        if (StringUtils.isBlank(preferredContactMethodId)) {
+              donor.setContactMethodType(null);
+        } else {
+            ContactMethodType contactMethodType  = new ContactMethodType();
+            contactMethodType.setId(Integer.parseInt(preferredContactMethodId));
+            donor.setContactMethodType(contactMethodType);
+        }
 
+    }
+    
+    public String getContactId(){
+             return contact.getId().toString();
+    }
+    
+    public void setContactId(String contactId){
+        contact.setId(Long.parseLong(contactId));
+    }
+    
+    public String getAddressId(){
+        return  address.getId().toString();
+    }
+    
+    public void setAddressId(String addressId){
+        address.setId(Long.parseLong(addressId));
+    }
 }

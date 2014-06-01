@@ -243,7 +243,6 @@ $(document).ready(function() {
         <form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
         <form:input path="lastName" />
       </div>
-          
       <div>
         <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
         <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>
@@ -318,13 +317,6 @@ $(document).ready(function() {
           </form:select>
         </div>
         </c:if>
-      <c:if test="${model.donorFields.nationalID.hidden != true }">
-        <div>
-          <form:label path="nationalID">${model.donorFields.nationalID.displayName}</form:label>
-          <form:input path="nationalID" value="${firstTimeRender ? model.donorFields.nationalID.defaultValue : ''}" />
-        </div>
-      </c:if>
-     
         <div> 
         <c:if test="${donorFields.birthDate.hidden != true }">
        <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
@@ -363,35 +355,6 @@ $(document).ready(function() {
       </c:if>
       
       <!-- include hidden additional donorFields to ensure values are empty not null -->
-      <div style="display:none">
-      	<form:input path="middleName" value="${firstTimeRender ? donorFields.middleName.defaultValue : ''}" />
-        <form:textarea path="postalAddress" />
-        <form:input path="city" value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
-        <form:input path="province" value="${firstTimeRender ? donorFields.province.defaultValue : ''}" />
-        <form:input path="district" value="${firstTimeRender ? donorFields.district.defaultValue : ''}" />
-        <form:input path="state" value="${firstTimeRender ? donorFields.state.defaultValue : ''}" />
-        <form:input path="country" value="${firstTimeRender ? donorFields.country.defaultValue : ''}" />
-        <form:input path="zipcode" value="${firstTimeRender ? donorFields.zipcode.defaultValue : ''}" />
-        <form:input path="mobileNumber" value="${firstTimeRender ? donorFields.mobileNumber.defaultValue : ''}" />
-        <form:input path="workNumber" value="${firstTimeRender ? donorFields.workNumber.defaultValue : ''}" />
-        <form:input path="homeNumber" value="${firstTimeRender ? donorFields.homeNumber.defaultValue : ''}" />
-        <form:textarea  path="homeAddress" value="" />
-        <form:textarea  path="workAddress" value="" />
-        
-        <form:select path="preferredContactMethod" id="${addDonorFormContactMethodTypesId}"
-                     class="addDonorFormPreferredContactMethods">
-           <form:option value="" selected="selected">&nbsp;</form:option>
-               <c:forEach var="preferredContactMethod" items="${preferredContactMethods}">
-                   <form:option value="${preferredContactMethod.id}">${preferredContactMethod.contactMethodType}</form:option>
-               </c:forEach>
-        </form:select>
-        <form:select path="donorPanel" id="${addDonorFormDonorPanelsId}" class="addDonorFormDonorPanels">
-           <form:option value="" selected="selected">&nbsp;</form:option>
-               <c:forEach var="donorPanel" items="${donorPanels}">
-           <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
-          </c:forEach>
-        </form:select>
-      </div>
     </form:form>
     
     <div style="margin-left: 200px;">

@@ -11,13 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.hibernate.envers.Audited;
 
 /**
  *This Model Object represents the IdTypes of donor. 
  * @author srikanth
  */
 @Entity
-public class IdType {
+public class IdType implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

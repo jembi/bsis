@@ -17,6 +17,10 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import model.address.Address;
+import model.address.AddressType;
+import model.address.Contact;
+import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
@@ -26,6 +30,9 @@ import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.idtype.IdNumber;
+import model.idtype.IdType;
+import model.preferredlanguage.PreferredLanguage;
 import model.util.BloodGroup;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,10 +43,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import utils.CustomDateFormatter;
 import utils.DonorUtils;
-import controller.UtilController;
-import model.idtype.IdNumber;
-import model.idtype.IdType;
-import model.preferredlanguage.PreferredLanguage;
 
 @Repository
 @Transactional
@@ -537,7 +540,19 @@ public class DonorRepository {
         return donor;
     }
 
-    public void saveIdNumber(IdNumber idNumber){
+    /**
+     * To be used in adding multiple donor numbers
+     * @param idNumber 
+     */
+   /* public void saveIdNumber(IdNumber idNumber){
         em.persist(idNumber);
+    }*/
+    
+    public List<AddressType> getAllAddressTypes(){
+        TypedQuery<AddressType> query = em.createQuery(
+                "SELECT addressType FROM AddressType addressType", AddressType.class);
+        return query.getResultList();
+
     }
+
 }
