@@ -29,7 +29,6 @@ exec { "apt-get update":
 Package { ensure => "installed" }
 package { "git": }
 
-
 #Install MySQL server
 class { 'mysql::server':
 	root_password => $mysql_root_password

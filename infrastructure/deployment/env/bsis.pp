@@ -8,11 +8,11 @@
 #
 
 # Variables
-# MySQL info should match the values in src/database.properties
 $mysql_root_password = "root"
 $mysql_bsis_user = "bsis"
 $mysql_bsis_user_password = "bsis"
 $mysql_bsis_database_name = "v2v_new"
+$git_branch = "develop"
 
 # defaults for Exec
 Exec {
@@ -20,7 +20,7 @@ Exec {
 	user => "root",
 }
 
-# Make sure package index is updated (when referenced by require)
+# Make sure package index is updated
 exec { "apt-get update":
     command => "apt-get update",
     user => "root",
@@ -28,7 +28,7 @@ exec { "apt-get update":
 
 # Install required packages
 Package { ensure => "installed" }
-package { "git":}
+package { "git": }
 
 #Install MySQL server
 class { 'mysql::server':
@@ -43,65 +43,64 @@ class { "tomcat": }
 
 # Install Maven
 class { "maven::maven":
-	version => "3.0.3", # version to install
-}
-
-# Remove previous deploys
-exec { "clean-database":
-	command => "echo drop database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
-	returns => [0, 1],
-	require	=> Class["mysql::server"]
-}
-
-# Create bsis demo database
-mysql::db { $mysql_bsis_database_name:
-	user 			=> $mysql_bsis_user,
-	password		=> $mysql_bsis_user_password,
-	host			=> "localhost",
-	grant			=> ["all"],
-	require  		=> Exec["clean-database"]
+	version => "3.0.3", 
 }
 
 #Create directory to store codebase
 file {
-"/var/jembi":
+"/git":
 	ensure => "directory",
-	owner => "vagrant";
+	#owner => "vagrant";
 }
 
 #Clone git repository
 exec { "clone-repo":
-    command => "git clone http://github.com/jembi/bsis.git",
-    cwd => "/var/jembi",
-    unless => "test -d /var/bsis/bsis/.git",
-    subscribe => [
-        Package['git-core'],
-        File['/var/jembi']
-    ],
+	cwd => "/git",
+	command => "git clone http://github.com/jembi/bsis.git",
+	#unless => "test -d /git/bsis/.git",
 }
 
-#Change to develop branch
-exec { "checkout-develop":
-    command => "git checkout develop",
-    cwd => "/var/jembi/bsis",
-    unless => "test -d /var/bsis/bsis/.git",
-    require	=> Exec["clone-repo"]
+#Checkout relevant branch
+exec { "checkout-branch":
+	cwd => "/git/bsis",
+	command => "git checkout $git_branch",
+    timeout	=>	3600,
+	require	=> Exec["clone-repo"],
 }
 
+# Remove database
+exec { "clean-database":
+	command => "echo drop database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
+	returns => [0, 1],
+	require	=> Class["mysql::server"],
+}
+
+# Create bsis demo database
+exec { "create-database":
+	command => "echo create database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
+	returns => [0, 1],
+	require	=> Exec["clean-database"],
+}
 
 # Build using maven
 exec { "mvn-build":
-	cwd => "var/jembi/bsis",
+	cwd => "/git/bsis",
 	command => "mvn clean install",
+	timeout	=>	3600,
 	returns => [0, 1],
-	require	=> Class["maven::maven"]
+	require	=> Class["maven::maven"],
 }
 
 # Deploy to tomcat
 exec { "deploy":
-	cwd => "var/jembi/bsis",
-	command => "sudo cp target/bsis.war /var/lib/tomcat7/webapps/",
+	command => "sudo cp /git/bsis/target/bsis.war /var/lib/tomcat6/webapps/",
 	returns => [0, 1],
-	require	=> Exec["mvn-build"]
+	require	=> Exec["mvn-build"],
 }
 
+#Restart tomcat
+exec { "restart-tomcat":
+	command => "sudo /etc/init.d/tomcat6 restart",
+	returns => [0, 1],
+	require	=> Exec["deploy"],
+}
