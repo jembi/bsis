@@ -26,7 +26,7 @@
 <c:set var="addDonorFormId">addDonorForm-${unique_page_id}</c:set>
 
 <c:set var="findDonorFormBloodGroupSelectorId">findDonorFormBloodGroupSelector-${unique_page_id}</c:set>
-
+<c:set var="titleSelectorId">titleSelector-${unique_page_id}</c:set>
 <script>
 $(document).ready(function() {
 
@@ -54,13 +54,17 @@ $(document).ready(function() {
     }
   }).click(clearFindForm);
   
- //Enabling submit button 
-  $('.findDonorButton').attr('disabled', 'disabled');
-  $('#donorNumber, #firstName, #lastName').change(function(){ 
-	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 || $('#lastName').val().trim().length >0 )
-	  $('.findDonorButton').removeAttr('disabled');
+ 
+// $('.findDonorButton').attr('disabled', 'disabled'); // Issuw in firefox browser
+ $( ".findDonorButton" ).button( "option", { disabled: true } );
+
+  $('#donorNumber, #firstName, #lastName, #donationIdentificationNumber').keyup(function(){ 
+	  if ($('#donorNumber').val().trim().length >0 || $('#firstName').val().trim().length >0 
+                  || $('#lastName').val().trim().length >0 || $('#donationIdentificationNumber').val().trim().length >0)
+              $( ".findDonorButton" ).button( "option", { disabled: false } );
 	  else
-		  $('.findDonorButton').attr('disabled', 'disabled');
+               $( ".findDonorButton" ).button( "option", { disabled: true } );
+             $( ".findDonorButton" ).button( "refresh" );
   });
 	  
   function clearFindForm() {
@@ -108,6 +112,12 @@ $(document).ready(function() {
         $("#${tabContentId}").find(".donorsTable").trigger("refreshResults");
       });
   
+    
+  $("#${titleSelectorId}").multiselect({
+      multiple : false,
+      selectedList : 1,
+      header : false
+    });
   
   
   
@@ -189,7 +199,7 @@ $(document).ready(function() {
    }
 
    if ("${firstTimeRender}" == "true") {
-     $("#${mainContentId}").find('textarea[name="address"]').html("${donorFields.address.defaultValue}");
+     $("#${mainContentId}").find('textarea[name="postalAddress"]').html("${donorFields.postalAddress.defaultValue}");
      $("#${mainContentId}").find('textarea[name="notes"]').html("${donorFields.notes.defaultValue}");
      setDefaultValueForSelector(getDonorPanelSelector(), "${donorFields.donorPanel.defaultValue}");
      setDefaultValueForSelector(getGenderSelector(), "${donorFields.gender.defaultValue}");
@@ -222,6 +232,10 @@ $(document).ready(function() {
         <form:input path="donorNumber" />
       </div>
       <div>
+        <form:label path="donationIdentificationNumber">${model.collectedSampleFields.collectionNumber.shortDisplayName}</form:label>
+        <form:input path="donationIdentificationNumber" />
+      </div>
+      <div>
         <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
         <form:input path="firstName" />
       </div>
@@ -229,27 +243,6 @@ $(document).ready(function() {
         <form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
         <form:input path="lastName" />
       </div>
-      <div>
-        <form:label path="bloodGroups">${model.donorFields.bloodGroup.displayName}</form:label>
-        <form:hidden path="anyBloodGroup" class="anyBloodGroupInput" value="true" />
-        <form:select path="bloodGroups" id="${findDonorFormBloodGroupSelectorId}">
-          <form:option value="Unknown" label="Unknown" />
-          <form:option value="A+" label="A+" />
-          <form:option value="A-" label="A-" />
-          <form:option value="B+" label="B+" />
-          <form:option value="B-" label="B-" />
-          <form:option value="AB+" label="AB+" />
-          <form:option value="AB-" label="AB-" />
-          <form:option value="O+" label="O+" />
-          <form:option value="O-" label="O-" />
-        </form:select>
-      </div>
-      
-       <div>
-        <form:label path="dueToDonate" style="width: 9.2%;">Due To Donate</form:label>
-        <form:checkbox path="dueToDonate" style="width: auto; position: relative; top: 2px;"/>
-      </div>
-  
       <div>
         <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>
         <form:checkbox path="usePhraseMatch" style="width: auto; position: relative; top: 2px;"/>
@@ -283,8 +276,19 @@ $(document).ready(function() {
   	   
   	<form:form id="${addDonorFormId}" method="POST" class="formFormatClass"
       commandName="addDonorForm" >
-
-
+      
+  	  <c:if test="${model.donorFields.title.hidden != true }">
+        <div>
+          <form:label path="title">${model.donorFields.title.displayName}</form:label>
+          <form:select path="title" id="${titleSelectorId}">
+            <form:option value="" label="" />
+            <form:option value="Mr" label="Mr" />
+            <form:option value="Ms" label="Ms" />
+            <form:option value="Mrs" label="Mrs" />
+            <form:option value="Dr" label="Dr" />
+          </form:select>
+        </div>
+      </c:if>
       <c:if test="${model.donorFields.firstName.hidden != true }">
         <div>
           <form:label path="firstName">${model.donorFields.firstName.displayName}</form:label>
@@ -297,7 +301,7 @@ $(document).ready(function() {
           <form:input path="lastName" value="${firstTimeRender ? model.donorFields.lastName.defaultValue : ''}" />
         </div>
       </c:if>
-      <c:if test="${model.donorFields.callingName.hidden != true }">
+      <c:if test="${model.donorFields.callingName.hidden != true }">    
         <div>
           <form:label path="callingName">${model.donorFields.callingName.displayName}</form:label>
           <form:input path="callingName" value="${firstTimeRender ? model.donorFields.callingName.defaultValue : ''}" />
@@ -313,13 +317,6 @@ $(document).ready(function() {
           </form:select>
         </div>
         </c:if>
-      <c:if test="${model.donorFields.nationalID.hidden != true }">
-        <div>
-          <form:label path="nationalID">${model.donorFields.nationalID.displayName}</form:label>
-          <form:input path="nationalID" value="${firstTimeRender ? model.donorFields.nationalID.defaultValue : ''}" />
-        </div>
-      </c:if>
-     
         <div> 
         <c:if test="${donorFields.birthDate.hidden != true }">
        <form:label path="birthDate">${donorFields.birthDate.displayName}</form:label>
@@ -358,31 +355,6 @@ $(document).ready(function() {
       </c:if>
       
       <!-- include hidden additional donorFields to ensure values are empty not null -->
-      <div style="display:none">
-      	<form:input path="middleName" value="${firstTimeRender ? donorFields.middleName.defaultValue : ''}" />
-        <form:textarea path="address" />
-        <form:input path="city" value="${firstTimeRender ? donorFields.city.defaultValue : ''}" />
-        <form:input path="province" value="${firstTimeRender ? donorFields.province.defaultValue : ''}" />
-        <form:input path="district" value="${firstTimeRender ? donorFields.district.defaultValue : ''}" />
-        <form:input path="state" value="${firstTimeRender ? donorFields.state.defaultValue : ''}" />
-        <form:input path="country" value="${firstTimeRender ? donorFields.country.defaultValue : ''}" />
-        <form:input path="zipcode" value="${firstTimeRender ? donorFields.zipcode.defaultValue : ''}" />
-        <form:input path="phoneNumber" value="${firstTimeRender ? donorFields.phoneNumber.defaultValue : ''}" />
-        <form:input path="otherPhoneNumber" value="${firstTimeRender ? donorFields.otherPhoneNumber.defaultValue : ''}" />
-        <form:select path="preferredContactMethod" id="${addDonorFormContactMethodTypesId}"
-                     class="addDonorFormPreferredContactMethods">
-          <form:option value="" selected="selected">&nbsp;</form:option>
-          <c:forEach var="preferredContactMethod" items="${preferredContactMethods}">
-            <form:option value="${preferredContactMethod.id}">${preferredContactMethod.contactMethodType}</form:option>
-          </c:forEach>
-        </form:select>
-        <form:select path="donorPanel" id="${addDonorFormDonorPanelsId}" class="addDonorFormDonorPanels">
-          <form:option value="" selected="selected">&nbsp;</form:option>
-          <c:forEach var="donorPanel" items="${donorPanels}">
-            <form:option value="${donorPanel.id}">${donorPanel.name}</form:option>
-          </c:forEach>
-        </form:select>
-      </div>
     </form:form>
     
     <div style="margin-left: 200px;">

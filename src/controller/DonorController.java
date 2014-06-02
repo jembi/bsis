@@ -126,6 +126,7 @@ public class DonorController {
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     mv.addObject("tips", tips);
+    mv.addObject("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
     return mv;
   }
 
@@ -171,7 +172,7 @@ public class DonorController {
       ex.printStackTrace();
       donorDeferralViewModels = Arrays.asList(new DonorDeferralViewModel[0]);
     }
-
+    
     mv.addObject("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
     mv.addObject("allDonorDeferrals", donorDeferralViewModels);
     mv.addObject("refreshUrl", getUrl(request));
@@ -198,6 +199,8 @@ public class DonorController {
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
     DonorBackingForm donorForm = new DonorBackingForm(donor);
     String dateToken[]=donorForm.getBirthDate().split("/");
+    donorForm.setContact(donor.getContact());
+    donorForm.setAddress(donor.getAddress());
     donorForm.setDayOfMonth(dateToken[0]);
     donorForm.setMonth(dateToken[1]);
     donorForm.setYear(dateToken[2]);
@@ -237,7 +240,7 @@ public class DonorController {
 
     ModelAndView mv = new ModelAndView();
     boolean success = false;
-     form.setBirthDate();
+    form.setBirthDate();
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     mv.addObject("donorFields", formFields);
 
@@ -253,7 +256,9 @@ public class DonorController {
         donor.setIsDeleted(false);        
         // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
          donor.setDonorNumber(utilController.getNextDonorNumber());
-        savedDonor = donorRepository.addDonor(donor);
+        donor.setContact(form.getContact());
+        donor.setAddress(form.getAddress());
+         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
         form = new DonorBackingForm();
@@ -275,7 +280,7 @@ public class DonorController {
     
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
-      mv.addObject("donor", getDonorsViewModel(savedDonor));
+      mv.addObject("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
       if(addDonorBool){
     	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
       }
@@ -418,8 +423,10 @@ public class DonorController {
     else {
       try {
         form.setIsDeleted(false);
-        
-        Donor existingDonor = donorRepository.updateDonor(form.getDonor());
+        Donor donor = form.getDonor();
+        donor.setContact(form.getContact());
+        donor.setAddress(form.getAddress());
+        Donor existingDonor = donorRepository.updateDonor(donor);
         if (existingDonor == null) {
           mv.addObject("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -494,6 +501,7 @@ public class DonorController {
     utilController.addTipsToModel(model.asMap(), "donors.finddonor");
     // to ensure custom field names are displayed in the form
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     m.put("contentLabel", "Find Donors");
     m.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(mv.getModelMap());
@@ -518,7 +526,6 @@ public class DonorController {
     m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-    m.put("dueToDonate", form.getDueToDonate());
     addEditSelectorOptions(m);
     modelAndView.addObject("model", m);
     return modelAndView;
@@ -549,6 +556,9 @@ public class DonorController {
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
+    m.put("languages", donorRepository.getAllLanguages());
+    m.put("idTypes", donorRepository.getAllIdTypes());
+    m.put("addressTypes", donorRepository.getAllAddressTypes());
   }
 
   /**
@@ -589,7 +599,7 @@ public class DonorController {
     String donorNumber = form.getDonorNumber();
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
-    List<BloodGroup> bloodGroups = form.getBloodGroups();
+    String donationIdentificationNumber = form.getDonationIdentificationNumber();
 
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
@@ -598,7 +608,7 @@ public class DonorController {
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, bloodGroups, form.getAnyBloodGroup(), pagingParams,form.getDueToDonate(),form.isUsePhraseMatch());
+            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);
