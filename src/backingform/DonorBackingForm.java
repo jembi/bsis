@@ -648,11 +648,11 @@ public class DonorBackingForm {
      * Address Type Getters & Setters
      */
     public String getPreferredAddressType() {
-         AddressType addressType = donor.getAddressType();
-        if (addressType == null || addressType.getId() == null) {
-            return null;
+         
+        if (donor.getAddressType()!=null) {
+           return donor.getAddressType().getId().toString();
         }
-        return addressType.getId().toString();
+        return null;
     }
 
     public void setPreferredAddressType(String addressTypeID) {
@@ -666,11 +666,10 @@ public class DonorBackingForm {
 
     }
     public String getIdType() {
-        IdType idType = donor.getIdType();
-        if (idType == null || idType.getId() == null) {
-            return null;
+        if (donor.getIdType()!=null) {
+            return donor.getIdType().getId().toString();
         }
-        return idType.getId().toString();
+        return null;
     }
     public void setIdType(String idType){
          if (StringUtils.isBlank(idType)) {
@@ -689,11 +688,12 @@ public class DonorBackingForm {
         donor.setIdNumber(idNumber);
     }
     public String getPreferredContactMethod(){
-         ContactMethodType contactMethodType = donor.getContactMethodType();
-        if (contactMethodType == null || contactMethodType.getId() == null) {
-            return null;
+         
+        if (donor.getContactMethodType()!=null) {
+            return donor.getContactMethodType().getId().toString();
         }
-        return contactMethodType.getId().toString();
+        return null;
+        
     }
     
     public void setPreferredContactMethod(String preferredContactMethodId) {
@@ -708,7 +708,9 @@ public class DonorBackingForm {
     }
     
     public String getContactId(){
-             return contact.getId().toString();
+        if(contact.getId()!=null)     
+        return contact.getId().toString();
+        return "";
     }
     
     public void setContactId(String contactId){
@@ -716,7 +718,9 @@ public class DonorBackingForm {
     }
     
     public String getAddressId(){
+        if(address.getId()!=null)
         return  address.getId().toString();
+        return "";
     }
     
     public void setAddressId(String addressId){
