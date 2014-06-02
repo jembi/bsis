@@ -13,57 +13,59 @@
 	<contactmethodtype id="3" contactMethodType="SMS" isDeleted="0" />
 	<contactmethodtype id="4" contactMethodType="Email" isDeleted="0" />
 	<contactmethodtype id="5" contactMethodType="Mail" isDeleted="0" />
-	<contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
+        <contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
+        
+        <AddressType id="1" preferredAddressType="Home Address"/>
+        
 	
+        <address id="1" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
+                homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
+                homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
+                workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
+                workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" />
+        <contact id="1"  mobileNumber="798897878"  homeNumber="7578676" workNumber="656567"
+                 email="drdfgdc" />
 	<donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="O" bloodRh="+" callingName="callingName" address="address"
-		city="city" country="country" district="district" otherPhoneNumber="999999999"
-		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
+		bloodAbo="O" bloodRh="+" callingName="callingName" 
 		dateOfLastDonation="${today}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000001" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" preferredContactMethod_id="1"
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="2" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="O" bloodRh="-" callingName="callingName" address="address"
-		city="city" country="country" district="district" otherPhoneNumber="999999999"
-		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
+		bloodAbo="O" bloodRh="-" callingName="callingName"
 		dateOfLastDonation="${today}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000002" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
 		createdDate="2013-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" preferredContactMethod_id="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
 	<donor ID="3" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
-		city="city" country="country" district="district" otherPhoneNumber="999999999"
-		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
-		dateOfLastDonation="${today}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
+		bloodAbo="A" bloodRh="+" callingName="callingName" 
+                dateOfLastDonation="${today}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000003" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-03-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" preferredContactMethod_id="1"
-		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1" />
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
+		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1"/>
    	<donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
-		city="city" country="country" district="district" otherPhoneNumber="999999999"
-		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
+		bloodAbo="A" bloodRh="+" callingName="callingName" 
 		dateOfLastDonation="${threeMonthsAgo}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000004" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" preferredContactMethod_id="1"
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
 		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="5" age="50" birthDate="1991-06-10" birthDateEstimated="1"
-		bloodAbo="A" bloodRh="+" callingName="callingName" address="address"
-		city="city" country="country" district="district" otherPhoneNumber="999999999"
-		phoneNumber="8888888888" province="province" state="state" zipcode="361001"
-		dateOfLastDonation="${threeMonthsAgo}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
+		bloodAbo="A" bloodRh="+" callingName="callingName" 
+                dateOfLastDonation="${threeMonthsAgo}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000005" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
 		createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		nationalID="null" notes="notes" preferredContactMethod_id="1"
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
 		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1" />
 			
 	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" />

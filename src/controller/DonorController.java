@@ -199,6 +199,8 @@ public class DonorController {
     mv.addObject("donorFields", utilController.getFormFieldsForForm("donor"));
     DonorBackingForm donorForm = new DonorBackingForm(donor);
     String dateToken[]=donorForm.getBirthDate().split("/");
+    donorForm.setContact(donor.getContact());
+    donorForm.setAddress(donor.getAddress());
     donorForm.setDayOfMonth(dateToken[0]);
     donorForm.setMonth(dateToken[1]);
     donorForm.setYear(dateToken[2]);
@@ -254,7 +256,9 @@ public class DonorController {
         donor.setIsDeleted(false);        
         // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
          donor.setDonorNumber(utilController.getNextDonorNumber());
-        savedDonor = donorRepository.addDonor(donor);
+        donor.setContact(form.getContact());
+        donor.setAddress(form.getAddress());
+         savedDonor = donorRepository.addDonor(donor);
         mv.addObject("hasErrors", false);
         success = true;
         form = new DonorBackingForm();
@@ -276,7 +280,7 @@ public class DonorController {
     
     if (success) {
       mv.addObject("donorId", savedDonor.getId());
-      mv.addObject("donor", getDonorsViewModel(savedDonor));
+      mv.addObject("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
       if(addDonorBool){
     	  mv.addObject("addAnotherDonorUrl", "addDonorFormGenerator.html");
       }
@@ -419,8 +423,10 @@ public class DonorController {
     else {
       try {
         form.setIsDeleted(false);
-        
-        Donor existingDonor = donorRepository.updateDonor(form.getDonor());
+        Donor donor = form.getDonor();
+        donor.setContact(form.getContact());
+        donor.setAddress(form.getAddress());
+        Donor existingDonor = donorRepository.updateDonor(donor);
         if (existingDonor == null) {
           mv.addObject("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -550,6 +556,9 @@ public class DonorController {
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
+    m.put("languages", donorRepository.getAllLanguages());
+    m.put("idTypes", donorRepository.getAllIdTypes());
+    m.put("addressTypes", donorRepository.getAllAddressTypes());
   }
 
   /**

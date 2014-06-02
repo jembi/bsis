@@ -60,6 +60,8 @@ public class DonorBackingFormValidator implements Validator {
     validateBirthDate(form, errors);    
     validateDonorHistory(form, errors);
     validateBloodGroup(form, errors);
+    validateContact(form,errors);
+    validateAddress(form,errors);
     utilController.commonFieldChecks(form, "donor", errors);
 	  }catch(Exception e){
 		  e.printStackTrace();
@@ -83,7 +85,7 @@ public class DonorBackingFormValidator implements Validator {
   if(!birthDate.isEmpty())
   if (!(form.getDayOfMonth().matches(regex) && form.getYear().matches(regex)))
   {
-	  errors.rejectValue("donor.birthDate", "birthDate.incorrect", "Invalid Date Specified");
+      errors.rejectValue("donor.birthDate", "birthDate.incorrect", "Invalid Date Specified");
       return false;
   }
   
@@ -127,6 +129,68 @@ public class DonorBackingFormValidator implements Validator {
   
     return true;
   }
+  public void validateContact(DonorBackingForm form ,Errors errors){
+      
+      String workNumber = form.getWorkNumber();
+      if(!StringUtils.isBlank(workNumber)){
+          String regex="[0-9]+";
+  	  if( !workNumber.matches(regex))
+  		errors.rejectValue("workNumber","workNumber.incorrect" ,"Given Input is Not A Number.");
+      }
+      
+      String  mobileNumber = form.getMobileNumber();
+      if(!StringUtils.isBlank(mobileNumber)){
+          String regex="[0-9]+";
+  	  if( !mobileNumber.matches(regex))
+  		errors.rejectValue("mobileNumber","workNumber.incorrect" ,"Given Input is Not A Number.");
+      }
+      
+      String  homeNumber = form.getHomeNumber();
+      if(!StringUtils.isBlank(mobileNumber)){
+          String regex="[0-9]+";
+  	  if( !homeNumber.matches(regex))
+  		errors.rejectValue("homeNumber","workNumber.incorrect" ,"Given Input is Not A Number.");
+      }
+      
+     String email = form.getEmail();
+     if(!StringUtils.isBlank(email)){
+           String regex =  "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+           if( !email.matches(regex))
+  		errors.rejectValue("email","email.incorrect" ,"Given Input is Not In A Proper Format.");
+     
+     
+     }
+
+
+       return;
+  }
+  
+  public void validateAddress(DonorBackingForm form ,Errors errors){
+      
+      String homeAddressZipcode = form.getHomeAddressZipcode();
+      if(!StringUtils.isBlank(homeAddressZipcode)){
+          String regex="[0-9]+";
+  	  if( !homeAddressZipcode.matches(regex))
+  		errors.rejectValue("homeAddressZipcode","workNumber.incorrect" ,"Given Input is Not A Number.");
+      }
+      
+      String workAddressZipcode = form.getWorkAddressZipcode();
+      if(!StringUtils.isBlank(workAddressZipcode)){
+          String regex="[0-9]+";
+  	  if( !workAddressZipcode.matches(regex))
+  		errors.rejectValue("workAddressZipcode","workNumber.incorrect" ,"Given Input is Not A Number.");
+      }
+      
+      String postalAddressZipcode = form.getPostalAddressZipcode();
+      if(!StringUtils.isBlank(postalAddressZipcode)){
+          String regex="[0-9]+";
+  	  if( !postalAddressZipcode.matches(regex))
+  		errors.rejectValue("postalAddressZipcode","workNumber.incorrect" ,"Given Input is Not A Number.");
+      }
+      
+       return;
+  }
+
 
   private void validateDonorHistory(DonorBackingForm form, Errors errors) {
   }
