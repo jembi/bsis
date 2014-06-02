@@ -1,5 +1,8 @@
 package controller;
 
+import backingform.CollectedSampleBackingForm;
+import backingform.ProductBackingForm;
+import backingform.RequestBackingForm;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
-
+import model.address.Address;
+import model.address.Contact;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
@@ -27,7 +30,6 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.Gender;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
@@ -50,9 +51,6 @@ import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import backingform.CollectedSampleBackingForm;
-import backingform.ProductBackingForm;
-import backingform.RequestBackingForm;
 
 @Controller
 public class CreateDataController {
@@ -348,7 +346,6 @@ public class CreateDataController {
   public void createDonors(int numDonors) {
 
     List<Donor> donors = new ArrayList<Donor>();
-
     for (int i = 0; i < numDonors; i++) {
       String firstName = "";
       Gender gender = Gender.male;
@@ -361,14 +358,17 @@ public class CreateDataController {
       }
       String lastName = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
       Donor donor = new Donor();
+      Address address = new Address();
+      Contact contact = new Contact();
+      address.setHomeAddressLine1("address " + i);
+      address.setHomeAddressCity(cities[random.nextInt(cities.length)]);
+      address.setHomeAddressCountry("Zambia");
+      donor.setAddress(address);
       donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
       donor.setFirstName(firstName);
       donor.setLastName(lastName);
       donor.setGender(gender);
       donor.setBirthDate(getRandomBirthDate());
-      donor.setAddress("address " + i);
-      donor.setCity(cities[random.nextInt(cities.length)]);
-      donor.setCountry("Zambia");
       donor.setNotes("notes " + i);
       donor.setIsDeleted(false);
       donors.add(donor);

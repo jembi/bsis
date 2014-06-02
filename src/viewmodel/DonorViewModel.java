@@ -1,16 +1,18 @@
 package viewmodel;
 
 import java.util.Date;
-
+import model.address.Address;
+import model.address.AddressType;
+import model.address.Contact;
+import model.address.ContactMethodType;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.idtype.IdType;
 import model.location.Location;
 import model.user.User;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
-
 import utils.CustomDateFormatter;
 
 @Component
@@ -19,7 +21,7 @@ public class DonorViewModel {
 
   public DonorViewModel() {
   }
-
+  
   public DonorViewModel(Donor donor) {
     this.donor = donor;
   }
@@ -31,7 +33,9 @@ public class DonorViewModel {
   public String getDonorNumber() {
     return donor.getDonorNumber();
   }
-
+  public String getTitle() {
+    return donor.getTitle();
+ }
   public String getFirstName() {
     return donor.getFirstName();
   }
@@ -85,39 +89,23 @@ public class DonorViewModel {
 	  return donor.getBirthDateEstimated();
   }
 
-  public String getAddress() {
-    return donor.getAddress();
-  }
-
-  public String getCity() {
-    return donor.getCity();
-  }
-
-  public String getProvince() {
-    return donor.getProvince();
-  }
-
-  public String getDistrict() {
-    return donor.getDistrict();
-  }
-
-  public String getState() {
-    return donor.getState();
-  }
-
-  public String getCountry() {
-    return donor.getCountry();
-  }
-
-  public String getZipcode() {
-    return donor.getZipcode();
-  }
-
+ 
   public String getNotes() {
     Object comments = donor.getNotes();
     return comments == null ? "" : comments.toString();
   }
-
+  
+  public String getCallingName(){
+      return donor.getCallingName();
+  }
+  public String getPreferredLanguage(){
+	  if (donor.getPreferredLanguage() == null ||
+	        donor.getPreferredLanguage().getPreferredLanguage() == null)
+	      return "";
+	  else
+	      return donor.getPreferredLanguage().getPreferredLanguage();
+  }
+  
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(donor.getLastUpdated());
   }
@@ -152,26 +140,7 @@ public class DonorViewModel {
   public DonorStatus getDonorStatus() {
     return donor.getDonorStatus();
   }
-
-  public String getPhoneNumber() {
-    return donor.getPhoneNumber();
-  }
-
-  public String getOtherPhoneNumber() {
-    return donor.getOtherPhoneNumber();
-  }
-
-  public String getNationalID() {
-    return donor.getNationalID();
-  }
-
-  public String getPreferredContactMethod() {
-    if (donor.getPreferredContactMethod() == null ||
-        donor.getPreferredContactMethod().getContactMethodType() == null)
-      return "";
-    else
-      return donor.getPreferredContactMethod().getContactMethodType();
-  }
+ 
 
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {
@@ -184,5 +153,29 @@ public class DonorViewModel {
       return "";
     }
   }
+  
+  public Address getAddress(){
+      return donor.getAddress();
+  }
+  
+  public Contact getContact(){
+      return donor.getContact();
+  }
+  
+  public  String getIdNumber(){
+      return donor.getIdNumber();
+  }
+  public String getIdType(){
+      return donor.getIdType()!=null?donor.getIdType().getIdType():"";
+  }
+  
+  public String getContactMethodType(){
+    return donor.getContactMethodType()!=null?donor.getContactMethodType().getContactMethodType():"";
+  }
+  
+  public String getPreferredAddressType(){
+     return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
+  }
+  
   
 }
