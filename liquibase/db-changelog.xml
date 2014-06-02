@@ -3267,7 +3267,7 @@
 <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="preferredAddressType"></column>
-			<column name="defaultDisplayName" value="Prefeered Address Type"></column>
+			<column name="defaultDisplayName" value="Preferred Address Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>

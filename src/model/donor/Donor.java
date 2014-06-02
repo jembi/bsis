@@ -342,6 +342,7 @@ public void copy(Donor donor) {
     setFirstName(donor.getFirstName());
     setMiddleName(donor.getMiddleName());
     setLastName(donor.getLastName());
+    setCallingName(donor.getCallingName());
     setBirthDate(donor.getBirthDate());
     setBirthDateInferred(donor.getBirthDateInferred());
     setBirthDateEstimated(donor.getBirthDateEstimated());
