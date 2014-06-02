@@ -335,11 +335,12 @@ public class DonorBackingForm {
     }
 
     public String getPreferredLanguage() {
-        PreferredLanguage preferredLanguage = donor.getPreferredLanguage();
-        if (preferredLanguage == null || preferredLanguage.getId() == null) {
-            return null;
+
+        if (donor.getPreferredLanguage()!=null) {
+            return donor.getPreferredLanguage().getId().toString();
         }
-        return preferredLanguage.getId().toString();
+        return null;
+        
     }
 
     public String getDateOfFirstDonation() {
