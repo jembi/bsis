@@ -343,12 +343,12 @@ public class DonorBackingForm {
     }
 
     public String getDateOfFirstDonation() {
-        if (dateOfFirstDonation != null) {
-            return dateOfFirstDonation;
-        }
-        if (dateOfFirstDonation == null) {
-            return "";
-        }
+//        if (dateOfFirstDonation != null) { // Issue in editing form because of this lines 
+//            return dateOfFirstDonation;
+//        }
+//        if (dateOfFirstDonation == null) {
+//            return "";
+//        }
         return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
     }
 

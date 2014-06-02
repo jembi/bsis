@@ -300,6 +300,14 @@
 					<form:errors class="formError" path="age" delimiter=", "></form:errors>
 				</div>
 			</c:if>
+                                        
+                    <c:if test="${donorFields.dateOfFirstDonation.hidden != true }">
+			<div>
+			  <form:label path="dateOfFirstDonation">${donorFields.dateOfFirstDonation.displayName}</form:label>
+                       	  <form:input path="dateOfFirstDonation" class="dateOfFirstDonation"
+                                      value="${firstTimeRender ? donorFields.dateOfFirstDonation.defaultValue : ''}" />
+                        </div>
+                    </c:if>
                   	<c:if test="${donorFields.preferredLanguage.hidden != true }">
                         <div>
                           <form:label path="preferredLanguage">${donorFields.preferredLanguage.displayName}</form:label>
