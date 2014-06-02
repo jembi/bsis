@@ -38,15 +38,17 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -860,18 +862,156 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should return Non EMpty Language List
+     * Should return List of languages
+     * getAllLanguages()
      */
     public void getAllLanguages_shuouldReturnNonEmptyList() {
-        assertTrue("Languages List  should not be empty", !donorRepository.getAllLanguages().isEmpty());
+        assertTrue("Expected Language List but found Empty List", !donorRepository.getAllLanguages().isEmpty());
+    }
+
+
+    @Test
+    /**
+     * Should return Non EMpty IDType List
+     * getAllIdTypes()
+     */
+    public void getAllIdTypes_shuouldReturnNonEmptyList() {
+        assertTrue("Expected IdType List but Found Empty List",
+                !donorRepository.getAllIdTypes().isEmpty());
+    }
+    
+       @Test
+    /**
+     * Should exist  DonorCodeGroup in database on save
+     * saveDonorCodeGroup(DonorCodeGroup)
+     */
+    public void saveDonorCodeGroup_shouldPersist() {
+        DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
+        donorCodeGroup.setDonorCodeGroup("Test Only");
+        donorRepository.saveDonorCodeGroup(donorCodeGroup);
+        assertNotNull("Expected Integer but Found NULL ", donorCodeGroup.getId());
     }
 
     @Test
     /**
-     * Should return Non EMpty ID Types List
+     * Should exist DonorDonorCode in database on save
+     * saveDonorDonorCode(DonorDonorCode)
      */
-    public void getAllIdTypes_shuouldReturnNonEmptyList() {
-        assertTrue("IDTypes List  should not be empty", !donorRepository.getAllIdTypes().isEmpty());
+    public void saveDonorDonorCode_shouldPersist() {
+        DonorDonorCode donorDonorCode = setDonorDonorCodeObject();
+        donorRepository.saveDonorDonorCode(donorDonorCode);
+        assertNotNull("Expected Integer but Found NULL ", donorDonorCode.getId());
+
+    }
+
+    @Test
+    /**
+     * should return DonorCode using DonorCode id
+     * findDonorCodeById(Long id)
+     */
+    public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted() {
+        assertNotNull("Expected DonorCode but Found NULL", 
+                donorRepository.findDonorCodeById(1l));
+    }
+
+    @Test
+    /**
+     * Should Return  All Donor Code Groups 
+     * getAllDonorCodeGroups()
+     */
+    public void getAllDonorCodeGroups_ShouldNotReturnEmptyList() {
+        assertTrue("Expected DonorCodeGroup List but Found Empty List",
+                !donorRepository.getAllDonorCodeGroups().isEmpty());
+    }
+
+    @Test
+    /**
+     * should return the assigned donor code group list  of donor 
+     * findDonorCodeGroupsByDonorId(Long)
+     * 
+     */
+    public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted() {
+        assertTrue("Expected DonorCodeGroup List but Found Empty List", 
+                !donorRepository.findDonorCodeGroupsByDonorId(1l).isEmpty());
+    }
+
+    @Test
+    /**
+     * Test passes if donor codes assigned to donor
+     */
+    public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted() {
+        assertTrue("Expected DonorDonorCode List but Found Empty List", 
+                !donorRepository.findDonorDonorCodesOfDonorByDonorId(1l).isEmpty());
+    }
+
+    @Test
+    /**
+     * Should Remove the Assigned Donor Code of Donor
+     * deleteDonorCode(Long)
+     */
+    public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted() {
+        assertNotNull("Expected Donor but Found NULL", 
+                donorRepository.deleteDonorCode(1l));
+    }
+
+    @Test
+    /**
+     * Should Return Adddress Details Of Donor
+     * getAddress()
+     */
+    public void getDonorAddress_ShouldReturnNotNull() {
+        assertNotNull("Expected Address  but Found NULL",
+                donorRepository.findDonorById(1l).getAddress());
+    }
+
+    @Test
+    /**
+     * Should Return Contact Details Of Donor
+     * getContact()
+     */
+    public void getDonorContact_ShouldReturnNotNull() {
+        assertNotNull("Expected Contact but Found  NULL",
+                donorRepository.findDonorById(1l).getContact());
+    }
+
+    
+    @Test
+    /**
+     * Should Return List Of Languages
+     * getAllLanguages()
+     */
+    public void getAllLanguages_ShouldReturnNonEmptyList() {
+        assertTrue("Expected : Language List  but Found : Empty List",
+                donorRepository.getAllLanguages().size() > 0);
+    }
+    
+    @Test
+    /**
+     * Should return set of IdTypes
+     * getAllIdTypes()
+     */
+    public void getAllIdTypes_ShouldReturnNonEmptyList() {
+        assertTrue("Expected IDType Set  but FOund Empty Set",
+                donorRepository.getAllIdTypes().size() > 0);
+    }
+    
+    @Test
+    @Ignore
+    /**
+     *Should exists in database on save
+     *saveIdNumber(IdNumber)
+     */
+    public void SaveIdNumber_shouldPersist(){
+        Donor donor = new Donor();
+        donor.setId(1l);
+        IdType idType = new IdType();
+        idType.setId(1l);
+        IdNumber idNumber = new IdNumber();
+        idNumber.setIdNumber("123");
+        idNumber.setDonorId(donor);
+        idNumber.setIdType(idType);
+//        donorRepository.saveIdNumber(idNumber);
+        assertNotNull("Expected : INT but Found :  NULL" ,idNumber.getId());
     }
 
     public void setPaginationParam(Map<String, Object> pagingParams) {
@@ -881,6 +1021,7 @@ public class DonorRepositoryTest {
         pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
     }
+
 
     /**
      * Called when insert new record into table.
@@ -1005,6 +1146,17 @@ public class DonorRepositoryTest {
         copyDonor.setNotes(donor.getNotes());
         return copyDonor;
     }
+    
+    public DonorDonorCode setDonorDonorCodeObject(){
+        DonorDonorCode  donorDonorCode =  new DonorDonorCode();
+        DonorCode donorCode = new DonorCode();
+        Donor donor = new Donor();
+        donor.setId(5l);
+        donorCode.setId(1l);
+        donorDonorCode.setDonorCodeId(donorCode);
+        donorDonorCode.setDonorId(donor);
+        return donorDonorCode;
+    }
 
     /**
      * UserPassword,V2vUserDetails(Principal) and authority detail store into
@@ -1022,134 +1174,4 @@ public class DonorRepositoryTest {
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
-    @Test
-    /**
-     * Test passes if DonorCodeGroup is saved in database
-     */
-    public void saveDonorCodeGroup_shouldPersist() {
-        DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
-        donorCodeGroup.setDonorCodeGroup("Test Only");
-        donorRepository.saveDonorCodeGroup(donorCodeGroup);
-        assertNotNull("Failed to save DonorCodeGroup object ", donorCodeGroup.getId());
-
-    }
-
-    @Test
-    /**
-     * Test passes if DonorDonorCode is saved in database
-     */
-    public void saveDonorDonorCode_shouldPersist() {
-        DonorDonorCode donorDonorCode = new DonorDonorCode();
-        DonorCode donorCode = new DonorCode();
-        Donor donor = new Donor();
-        donor.setId(5l);
-        donorCode.setId(1l);
-        donorDonorCode.setDonorCodeId(donorCode);    
-        donorDonorCode.setDonorId(donor);
-        donorRepository.saveDonorDonorCode(donorDonorCode);
-        assertNotNull("Expected : Int but Found : NULL ",donorDonorCode.getId());
-
-    }
-
-    @Test
-    /**
-     * Test passes if donor is assigned with a donor code
-     */
-    public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted() {
-        assertNotNull("Failed to find donor code by ID 1", donorRepository.findDonorCodeById(1l));
-    }
-
-    @Test
-    /**
-     * Test will pass if donor code groups exists
-     */
-    public void getAllDonorCodeGroups_ShouldNotReturnEmptyList() {
-        assertTrue("Failed To Load alll donorCodeGroups", !donorRepository.getAllDonorCodeGroups().isEmpty());
-    }
-
-    @Test
-    /**
-     * Test will pass if donor donor code groups assigned to donor
-     */
-    public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted() {
-        assertTrue(" Failed To load donorCodeGroups of donor ", !donorRepository.findDonorCodeGroupsByDonorId(1l).isEmpty());
-    }
-
-    @Test
-    /**
-     * Test passes if donor codes assigned to donor
-     */
-    public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted() {
-        assertTrue(" Failed To load sonorCodes of donor ", !donorRepository.findDonorDonorCodesOfDonorByDonorId(1l).isEmpty());
-    }
-
-    @Test
-    /**
-     * Test passes if donor codes assigned to donor
-     */
-    public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted() {
-        assertNotNull("Failed to remove DonorDonorCode of Id 1", donorRepository.deleteDonorCode(1l));
-    }
-
-    @Test
-    /**
-     * Test passes on retrieving address of donor
-     */
-    public void getDonorAddress_ShouldReturnNotNull() {
-        assertNotNull("Expected : Address Type  but Found : NULL",
-                donorRepository.findDonorById(1l).getAddress());
-    }
-
-    @Test
-    /**
-     * Test passes on retrieving Contact of donor
-     */
-    public void getDonorContact_ShouldReturnNotNull() {
-        assertNotNull("Expected : Contact Type but Found : NULL",
-                donorRepository.findDonorById(1l).getContact());
-    }
-
-//    @Test
-//    /**
-//     * Passes if Non Empty Contact List returned
-//     */
-//    public void getDonorIdNumbers_ShouldReturnNotEmptyList() {
-//        assertTrue("Expected : ID Number Set but Found : Empty Set",
-//                donorRepository.findDonorById(1l).getIdNumbers().size() > 0);
-//    }
-
-    @Test
-    /**
-     *Test Passes if non Empty Language List returned 
-     */
-    public void getAllLanguages_ShouldReturnNonEmptyList() {
-        assertTrue("Expected : Languages Set  but FOund : Empty Set",
-                donorRepository.getAllLanguages().size() > 0);
-    }
-    
-    @Test
-    /**
-     *Test Passes if non Empty Language List returned 
-     */
-    public void getAllIdTypes_ShouldReturnNonEmptyList() {
-        assertTrue("Expected : ID Type Set  but FOund : Empty Set",
-                donorRepository.getAllIdTypes().size() > 0);
-    }
-    
-//    @Test
-//    /**
-//     *Test Passes if Id Number saved In database
-//     */
-//    public void SaveIdNumber_shouldPersist(){
-//        Donor donor = new Donor();
-//        donor.setId(1l);
-//        IdType idType = new IdType();
-//        idType.setId(1l);
-//        IdNumber idNumber = new IdNumber();
-//        idNumber.setIdNumber("123");
-//        idNumber.setDonorId(donor);
-//        idNumber.setIdType(idType);
-//        donorRepository.saveIdNumber(idNumber);
-//        assertNotNull("Expected : INT but Found :  NULL" ,idNumber.getId());
-//    }
 }

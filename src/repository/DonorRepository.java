@@ -543,8 +543,7 @@ public class DonorRepository {
     /**
      * To be used in adding multiple donor numbers
      * @param idNumber 
-     */
-   /* public void saveIdNumber(IdNumber idNumber){
+      public void saveIdNumber(IdNumber idNumber){
         em.persist(idNumber);
     }*/
     
