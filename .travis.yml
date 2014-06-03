@@ -9,3 +9,5 @@ branches:
 before_install:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql -e 'create database v2v_new;'
+
+script: mvn clean install
