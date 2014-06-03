@@ -2,6 +2,6 @@ language: java
 
 # whitelist
 branches:
-	only:
-		- master
-		- develop
+  only:
+    - master
+    - develop
