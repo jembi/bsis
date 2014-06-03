@@ -23,16 +23,16 @@ public class PreferredLanguage  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, insertable=false, updatable=false)
-    private Long id;
+    private Integer id;
 
     @Column(length=20)
     private String preferredLanguage;
     
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

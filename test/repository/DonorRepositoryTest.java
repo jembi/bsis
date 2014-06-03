@@ -160,7 +160,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should delete donor from database deleteDonor(long)
+     * Should delete donor from database 
+     * deleteDonor(Long)
      */
     public void deleteDonor_shouldDeleteDonorFromDatabase() {
         // 3 is Donor's ID.
@@ -173,7 +174,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should return donor with given id findDonorById(Long)
+     * Should return donor with given id 
+     * findDonorById(Long)
      */
     public void findDonorById_shouldReturnDonor() {
         // 1 is Donor's ID.
@@ -187,7 +189,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should return null when Donor id does not exist findDonorById(Long)
+     * Should return null when Donor id does not exist 
+     * findDonorById(Long)
      */
     public void findDonorById_shouldReturnNull() {
         // 18 ID is not exist into Donor table.
@@ -198,7 +201,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should return null when Donor has been deleted findDonorById(Long)
+     * Should return null when Donor has been deleted 
+     * findDonorById(Long)
      */
     public void findDonorById_shouldReturnNullDonorIsDeleted() {
         // 2 is Deleted Donor's ID.
@@ -408,7 +412,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should create new Donor from existing Donor object addDonor(Donor)
+     * Should create new Donor from existing Donor object 
+     * addDonor(Donor)
      */
     public void addDonor_shouldPersist() {
         // 1 is Donor's Id.
@@ -424,16 +429,25 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should update existing Donor with Donor object updateDonor(Donor)
+     * Should update existing Donor with Donor object 
+     * updateDonor(Donor)
      */
     public void updateDonor_shouldReturnNotNull() {
         // 1 is Donor Id.
         Donor editDonor = donorRepository.findDonorById(1l);
+        Donor copyDonor = copyDonor(editDonor);
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
-        assertNotNull("Donor Object should update.",
-                donorRepository.updateDonor(donorBackingForm.getDonor()));
-
+        Donor updatedDonor = donorRepository.updateDonor(donorBackingForm.getDonor());
+        assertNotSame("ud types should differ after updating donor",
+                copyDonor.getIdType().getId(), updatedDonor.getIdType().getId());
+        assertNotSame("address types should differ after updating donor",
+                copyDonor.getAddressType().getId(), updatedDonor.getAddressType().getId());
+        assertNotSame("preferred language should differ after updating donor",
+                copyDonor.getPreferredLanguage().getId(), updatedDonor.getPreferredLanguage().getId());
+        assertNotSame("preferred contact  should differ after updating donor",
+                copyDonor.getContactMethodType().getId(), updatedDonor.getContactMethodType().getId());
+        
     }
 
     @Test
@@ -497,8 +511,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should fetch all donors having a donor number that partially matches the
-     * search string. findAnyDonorStartsWith(String)
+     * Should fetch all donors having a donor number that partially matches the search string. 
+     * findAnyDonorStartsWith(String)
      */
     public void findAnyDonorStartsWith_searchWithDonorNumber() {
         List<Donor> searchResultList = donorRepository
@@ -521,7 +535,8 @@ public class DonorRepositoryTest {
     @Test
     /**
      * Should fetch all donors having a first name that partially matches the
-     * search string. findAnyDonorStartsWith(String)
+     * search string. 
+     * findAnyDonorStartsWith(String)
      */
     public void findAnyDonorStartsWith_searchWithDonorFirstNameMatch() {
         List<Donor> searchResultList = donorRepository
@@ -543,8 +558,8 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should fetch all donors having a last name that partially matches the
-     * search string findAnyDonorStartsWith(String)
+     * Should fetch all donors having a last name that partially matches the search string 
+     * findAnyDonorStartsWith(String)
      */
     public void findAnyDonorStartsWith_searchWithDonorLastNameMatch() {
         List<Donor> searchResultList = donorRepository
@@ -777,14 +792,16 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Method should return true isCurrentlyDeferred(List<DonorDeferral>)
+     * should return true if the donor is deferred
+     * isCurrentlyDeferred(List<DonorDeferral>)
      */
+   
     public void isCurrentlyDeferred_list_methodShouldReturnTrue() {
-        // 1 is Donor ID
-        List<DonorDeferral> listDonorDeferral = donorRepository
-                .getDonorDeferrals(1l);
-        assertTrue("should return true for donor that currently deferred.",
-                donorRepository.isCurrentlyDeferred(listDonorDeferral));
+      // 1 is Donor ID
+      List<DonorDeferral> listDonorDeferral = donorRepository
+            .getDonorDeferrals(1l);
+       assertTrue("should return true for donor that currently deferred.",
+            donorRepository.isCurrentlyDeferred(listDonorDeferral));
 
     }
 
@@ -846,7 +863,7 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Should return last donor derferral date getLastDonorDeferralDate(long)
+     * Should return last donor deferral date getLastDonorDeferralDate(long)
      *
      */
     public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
@@ -866,7 +883,7 @@ public class DonorRepositoryTest {
      * getAllLanguages()
      */
     public void getAllLanguages_shuouldReturnNonEmptyList() {
-        assertTrue("Expected Language List but found Empty List", !donorRepository.getAllLanguages().isEmpty());
+        assertTrue("Should return all languages", !donorRepository.getAllLanguages().isEmpty());
     }
 
 
@@ -876,7 +893,7 @@ public class DonorRepositoryTest {
      * getAllIdTypes()
      */
     public void getAllIdTypes_shuouldReturnNonEmptyList() {
-        assertTrue("Expected IdType List but Found Empty List",
+        assertTrue("Should return the list of id Types",
                 !donorRepository.getAllIdTypes().isEmpty());
     }
     
@@ -889,7 +906,7 @@ public class DonorRepositoryTest {
         DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
         donorCodeGroup.setDonorCodeGroup("Test Only");
         donorRepository.saveDonorCodeGroup(donorCodeGroup);
-        assertNotNull("Expected Integer but Found NULL ", donorCodeGroup.getId());
+        assertNotNull("should return ID of donorCodeGroup on save", donorCodeGroup.getId());
     }
 
     @Test
@@ -900,7 +917,7 @@ public class DonorRepositoryTest {
     public void saveDonorDonorCode_shouldPersist() {
         DonorDonorCode donorDonorCode = setDonorDonorCodeObject();
         donorRepository.saveDonorDonorCode(donorDonorCode);
-        assertNotNull("Expected Integer but Found NULL ", donorDonorCode.getId());
+        assertNotNull("Should return DonorDonorCode ID on save", donorDonorCode.getId());
 
     }
 
@@ -910,7 +927,7 @@ public class DonorRepositoryTest {
      * findDonorCodeById(Long id)
      */
     public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted() {
-        assertNotNull("Expected DonorCode but Found NULL", 
+        assertNotNull("should return DonorCode of passing DonorCode Id", 
                 donorRepository.findDonorCodeById(1l));
     }
 
@@ -920,7 +937,7 @@ public class DonorRepositoryTest {
      * getAllDonorCodeGroups()
      */
     public void getAllDonorCodeGroups_ShouldNotReturnEmptyList() {
-        assertTrue("Expected DonorCodeGroup List but Found Empty List",
+        assertTrue("Should return the list of donor code groups",
                 !donorRepository.getAllDonorCodeGroups().isEmpty());
     }
 
@@ -931,16 +948,17 @@ public class DonorRepositoryTest {
      * 
      */
     public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted() {
-        assertTrue("Expected DonorCodeGroup List but Found Empty List", 
+        assertTrue("should return the assigned donor code groups of donor", 
                 !donorRepository.findDonorCodeGroupsByDonorId(1l).isEmpty());
     }
 
     @Test
     /**
-     * Test passes if donor codes assigned to donor
+     * Should return donor codes of donor
+     * findDonorDonorCodesOfDonorByDonorId(
      */
     public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted() {
-        assertTrue("Expected DonorDonorCode List but Found Empty List", 
+        assertTrue("should return the list of donor codes assigned to donor", 
                 !donorRepository.findDonorDonorCodesOfDonorByDonorId(1l).isEmpty());
     }
 
@@ -950,17 +968,17 @@ public class DonorRepositoryTest {
      * deleteDonorCode(Long)
      */
     public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted() {
-        assertNotNull("Expected Donor but Found NULL", 
+        assertNotNull("should unassign the donor code of donor", 
                 donorRepository.deleteDonorCode(1l));
     }
 
     @Test
     /**
-     * Should Return Adddress Details Of Donor
+     * Should Return Address Details Of Donor
      * getAddress()
      */
     public void getDonorAddress_ShouldReturnNotNull() {
-        assertNotNull("Expected Address  but Found NULL",
+        assertNotNull("should return  address of the donor",
                 donorRepository.findDonorById(1l).getAddress());
     }
 
@@ -970,7 +988,7 @@ public class DonorRepositoryTest {
      * getContact()
      */
     public void getDonorContact_ShouldReturnNotNull() {
-        assertNotNull("Expected Contact but Found  NULL",
+        assertNotNull("should return contact details of the donor",
                 donorRepository.findDonorById(1l).getContact());
     }
 
@@ -981,19 +999,30 @@ public class DonorRepositoryTest {
      * getAllLanguages()
      */
     public void getAllLanguages_ShouldReturnNonEmptyList() {
-        assertTrue("Expected : Language List  but Found : Empty List",
+        assertTrue("should return the list of languages ",
                 donorRepository.getAllLanguages().size() > 0);
     }
     
     @Test
     /**
-     * Should return set of IdTypes
+     * Should return list of IdTypes
      * getAllIdTypes()
      */
     public void getAllIdTypes_ShouldReturnNonEmptyList() {
-        assertTrue("Expected IDType Set  but FOund Empty Set",
+        assertTrue("should return the list of  id types",
                 donorRepository.getAllIdTypes().size() > 0);
     }
+    
+    @Test
+    /**
+     * Should return the list of Address Types
+     * getAllAddressTypes()
+     */
+    public void getAllAddressTypes_ShouldReturnNonEmptyList() {
+        assertTrue("should return the list of  Address types",
+                donorRepository.getAllAddressTypes().size() > 0);
+    }
+
     
     @Test
     @Ignore
@@ -1005,7 +1034,7 @@ public class DonorRepositoryTest {
         Donor donor = new Donor();
         donor.setId(1l);
         IdType idType = new IdType();
-        idType.setId(1l);
+        idType.setId(1);
         IdNumber idNumber = new IdNumber();
         idNumber.setIdNumber("123");
         idNumber.setDonorId(donor);
@@ -1054,7 +1083,12 @@ public class DonorRepositoryTest {
         donorBackingForm.setNotes("Notes");
         donorBackingForm.setMobileNumber("9999999999");
         donorBackingForm.setWorkNumber("8888888888");
+        
         donorBackingForm.setPreferredAddressType("1");
+        donorBackingForm.setPreferredContactMethod("1");
+        donorBackingForm.setPreferredLanguage("1");
+        donorBackingForm.setIdType("1");
+        
         donorBackingForm.setHomeAddressProvince("Province");
         donorBackingForm.setHomeAddressState("State");
         donorBackingForm.setHomeAddressZipcode("361001");
@@ -1100,7 +1134,12 @@ public class DonorRepositoryTest {
         donorBackingForm.setNotes("Notes_update");
         donorBackingForm.setMobileNumber("9878787878");
         donorBackingForm.setWorkNumber("874525452");
-        donorBackingForm.setPreferredAddressType("1");
+
+        donorBackingForm.setPreferredAddressType("2");
+        donorBackingForm.setPreferredContactMethod("2");
+        donorBackingForm.setPreferredLanguage("2");
+        donorBackingForm.setIdType("2");
+       
         donorBackingForm.setHomeAddressProvince("Province_update");
         donorBackingForm.setHomeAddressState("State_update");
         donorBackingForm.setHomeAddressZipcode("361001");
@@ -1144,6 +1183,11 @@ public class DonorRepositoryTest {
         copyDonor.setMiddleName(donor.getMiddleName());
         copyDonor.setIdNumber(donor.getIdNumber());
         copyDonor.setNotes(donor.getNotes());
+        
+        copyDonor.setIdType(donor.getIdType());
+        copyDonor.setAddressType(donor.getAddressType());
+        copyDonor.setPreferredLanguage(donor.getPreferredLanguage());
+        copyDonor.setContactMethodType(donor.getContactMethodType());
         return copyDonor;
     }
     

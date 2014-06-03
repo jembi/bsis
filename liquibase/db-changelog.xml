@@ -2721,7 +2721,7 @@
 <changeSet id="201405200258" author="srikanth">
 
   <createTable  tableName="IdType">
-     <column name="id" type="BIGINT" autoIncrement = "true">
+     <column name="id" type="tinyint " autoIncrement = "true">
            	<constraints primaryKey="true" nullable="false" />
      </column>
      <column name="idType" type="varchar(255)"/> 
@@ -2729,7 +2729,7 @@
   </createTable>
 
   <createTable  tableName="PreferredLanguage">
-     <column name="id" type="BIGINT" autoIncrement = "true">
+     <column name="id" type="tinyint" autoIncrement = "true">
            	<constraints primaryKey="true" nullable="false" />
      </column>
      <column name="preferredLanguage" type="varchar(255)"/> 
@@ -2843,14 +2843,14 @@
 	  </insert>
 
 	<addColumn tableName="Donor">
-	            <column name="idType_id" type="BIGINT" defaultValue="NULL">
+	            <column name="idType_id" type="tinyint" defaultValue="NULL">
                           <constraints foreignKeyName="Donor_Idtype_FK" references="IdType(id)"/>
 	            </column>
 	</addColumn>
 
 	
 	<addColumn tableName="Donor">
-	            <column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
+	            <column name="preferredLanguage_id" type="tinyint" defaultValue="NULL"> </column>
 	</addColumn>
 
 
