@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/jembi/bsis.png)](http://travis-ci.org/jembi/bsis)
+
 BSIS
 ====
 
