@@ -23,8 +23,8 @@ Exec {
 # Remove database
 exec { "clean-database":
 	command => "echo drop database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
+	timeout	=>	3600,
 	returns => [0, 1],
-	require	=> Class["mysql::server"],
 }
 
 # Create bsis demo database
@@ -40,7 +40,6 @@ exec { "mvn-build":
 	command => "mvn clean install",
 	timeout	=>	3600,
 	returns => [0, 1],
-	require	=> Class["maven::maven"],
 }
 
 # Deploy to tomcat
