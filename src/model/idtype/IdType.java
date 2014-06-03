@@ -23,7 +23,7 @@ public class IdType implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, insertable = false, updatable = false)
-    private Long id;
+    private Integer id;
 
     @Column(length = 20)
     private String idType;
@@ -31,11 +31,11 @@ public class IdType implements Serializable{
     private String regExp; // stores regular Expression To validate Id Numbers  
     
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

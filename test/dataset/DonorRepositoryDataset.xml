@@ -15,13 +15,15 @@
 	<contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
 	
         <AddressType id="1" preferredAddressType="Home Address"/>
+        <AddressType id="2" preferredAddressType="Work Address"/>
+        <AddressType id="3" preferredAddressType="Postal Address"/>
         
         <address id="1" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
                 homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
                 homeAddressState = "" homeAddressZipcode= "" workAddressline1 = "" workAddressline2= ""
                 workAddressCity = "" workAddressProvince = "" workAddressDistrict= "" workAddressCountry=""
                 workAddressState = "" workAddressZipcode = "" postalAddressline1 = "" postalAddressline2 =""
-                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = ""
+                postalAddressCity = "" postalAddressProvince = "" postalAddressDistrict = "" 
                 postalAddressCountry = "" postalAddressState = "" postalAddressZipcode= "" />
         <address id="2" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
                 homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
@@ -61,54 +63,60 @@
         
         <contact id="1"  mobileNumber="798897878"  homeNumber="7578676" workNumber="656567"
                  email="drdfgdc" />
+        <PreferredLanguage id="1" preferredLanguage = "English"/>
+	<PreferredLanguage id="2" preferredLanguage = "Afrikan"/> 
+	
+        <IdType id="1" idType = "Passport" regExp=""/>
+	<IdType id="2" idType = "National ID" regExp=""/>
+        
        
 	<donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="+" callingName="callingName" 
 		dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000001" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
-		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59" contactMethodType_id="1"
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1" addressTypeId="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" idType_id="1" preferredLanguage_id="1"/>
 	<donor ID="2" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="+" callingName="callingName" 
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000002" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
-		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		idNumber ="123" notes="notes" addressId ="2" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59" contactMethodType_id="1"
+		idNumber ="123" notes="notes" addressId ="2" contactId ="1" addressTypeId="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" idType_id="1" preferredLanguage_id="1"/>
 	<donor ID="3" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="-" callingName="callingName" 
 		dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000003" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
-		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		idNumber ="123" notes="notes" addressId ="3" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59" contactMethodType_id="1"
+		idNumber ="123" notes="notes" addressId ="3" contactId ="1" addressTypeId="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" idType_id="1" preferredLanguage_id="1"/>
 	<donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="AB" bloodRh="+" callingName="callingName"
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000004" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
-		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		idNumber ="123" notes="notes" addressId ="4" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59" contactMethodType_id="1"
+		idNumber ="123" notes="notes" addressId ="4" contactId ="1" addressTypeId="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" idType_id="1" preferredLanguage_id="1"/>
 	<donor ID="5" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" 
                 dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
 		donorNumber="000016" donorStatus="NORMAL" firstName="firstName"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
-		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		idNumber ="123" notes="notes" addressId ="5" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59" contactMethodType_id="1"
+		idNumber ="123" notes="notes" addressId ="5" contactId ="1" addressTypeId="1"
+		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" idType_id="1" preferredLanguage_id="1"/>
 	<donor ID="6" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" 
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
-		donorNumber="000017" donorStatus="NORMAL" firstName="firstName"
+		donorNumber="000017" donorStatus="NORMAL" firstName="firstName" contactMethodType_id="1"
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-		idNumber ="123" notes="notes" addressId ="6" contactId ="1"
+		idNumber ="123" notes="notes" addressId ="6" contactId ="1" addressTypeId="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 		
 	<bloodbagtype id="1" bloodBagType="Single" canPool=""
@@ -271,11 +279,7 @@
 		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
 		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="6" isVoided="false" />
 
-	<PreferredLanguage id="1" preferredLanguage = "English"/>
-	<PreferredLanguage id="2" preferredLanguage = "English"/> 
-	<IdType id="1" idType = "Passport" regExp=""/>
-	<IdType id="2" idType = "National ID" regExp=""/>
-        
+	
 <!--        <IdNumber id="1" donorId="1" idType="1" idNumber="123"/>-->
 
 	<DonorCodeGroup id ="1" donorCodeGroup = "Test Only"/>

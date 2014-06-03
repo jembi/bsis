@@ -325,7 +325,7 @@ public class DonorBackingForm {
         } else {
             PreferredLanguage preferredLanguage = new PreferredLanguage();
             try {
-                preferredLanguage.setId(Long.parseLong(language));
+                preferredLanguage.setId(Integer.parseInt(language));
                 donor.setPreferredLanguage(preferredLanguage);
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
@@ -677,7 +677,7 @@ public class DonorBackingForm {
               donor.setIdType(null);
         } else {
             IdType preferredIdType = new IdType();
-            preferredIdType.setId(Long.parseLong(idType));
+            preferredIdType.setId(Integer.parseInt(idType));
             donor.setIdType(preferredIdType);
         }
     }
