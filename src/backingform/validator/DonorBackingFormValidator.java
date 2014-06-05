@@ -102,7 +102,7 @@ public class DonorBackingFormValidator implements Validator {
     		
             // check for valid date
             if (!CustomDateFormatter.isDateStringValid(birthDate)) {
-                errors.rejectValue("donor.birthDate", "date.futureDate", "Cannot be a future date");
+                errors.rejectValue("donor.birthDate", "date.invalidDate", "Invalid date specified");
                 return false;
             }
     		
