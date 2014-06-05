@@ -97,13 +97,16 @@ public class DonorBackingFormValidator implements Validator {
     }    
     
     try{
-
-    	// if valid date
-    	if (CustomDateFormatter.isDateStringValid(birthDate) && !birthDate.equals("")){
+            
+    	if (!birthDate.equals("")){
     		
+            // check for valid date
+            if (!CustomDateFormatter.isDateStringValid(birthDate)) {
+                errors.rejectValue("donor.birthDate", "date.futureDate", "Cannot be a future date");
+                return false;
+            }
     		
-    		
-    	  Date date = CustomDateFormatter.getDateFromString(birthDate);
+    	          Date date = CustomDateFormatter.getDateFromString(birthDate);
     	  
 		  // verify Birthdate is not in the future
 		  if(utilController.isFutureDate(date)){
