@@ -80,7 +80,7 @@ public class DonorBackingFormValidator implements Validator {
 
   String birthDate = form.getBirthDate();
   
-  String regex="[0-9]+";
+
   
     Boolean isAgeFormatCorrect = form.isAgeFormatCorrect();
     if (isAgeFormatCorrect != null && !isAgeFormatCorrect) {
