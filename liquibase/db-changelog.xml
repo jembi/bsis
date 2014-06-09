@@ -3359,18 +3359,87 @@
 
 
  </changeSet>
- <changeSet id="201406060448" author="srikanth">
+	 <changeSet id="201406060448" author="srikanth">
 
-	   <createTable  tableName="GeneralConfig">
-	     <column name="id" type="int" autoIncrement = "true">
-	           	<constraints primaryKey="true" nullable="false" />
-	     </column>
-	   <column name="name"  type="varchar(255)"/> 
-	   <column name="value" type="varchar(255)"/> 
-	   <column name="ndescription"  type="longtext"/> 
-	   <column name="datatype"  type="smallint"/> 
-	  </createTable>
+		   <createTable  tableName="GeneralConfig">
+		     <column name="id" type="int" autoIncrement = "true">
+		           	<constraints primaryKey="true" nullable="false" />
+		     </column>
+		   <column name="name"  type="varchar(255)"/> 
+		   <column name="value" type="varchar(255)"/> 
+		   <column name="description"  type="longtext"/> 
+		   <column name="datatype"  type="smallint"/> 
+		  </createTable>
+		<insert tableName="GeneralConfig">
+		    <column name="id" value="1"></column>
+		 	<column name="name" value="BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE"></column>
+		 	<column name="value" value="250"></column>
+		    <column name="description" value="Blood Pressure systolic value cannot be more than 250"></column>
+		    <column name="datatype" value="1"></column>
+		 </insert>
+		 <insert tableName="GeneralConfig">
+		 	<column name="id" value="2"></column>
+		 	<column name="name" value="BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE"></column>
+		 	<column name="value" value="150"></column>
+		    <column name="description" value="Blood Pressure diastolic value cannot be less than 0"></column>
+		    <column name="datatype" value="2"></column>
+		 </insert>
+		 <insert tableName="GeneralConfig">
+		 	<column name="id" value="3"></column>
+		 	<column name="name" value="BLOCK_BETWEEN_COLLECTIONS"></column>
+		 	<column name="value" value="56"></column>
+		    <column name="description" value="Donor can donate only after 56 dsya"></column>
+		    <column name="datatype" value="3"></column>
+		 </insert>
+		  <insert tableName="FormField">
+			<column name="form" value="GeneralConfig"></column>
+			<column name="FIELD" value="name"></column>
+			<column name="defaultDisplayName" value="Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+        </insert>
+         <insert tableName="FormField">
+			<column name="form" value="GeneralConfig"></column>
+			<column name="FIELD" value="value"></column>
+			<column name="defaultDisplayName" value="Value"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+        </insert>
+         <insert tableName="FormField">
+			<column name="form" value="GeneralConfig"></column>
+			<column name="FIELD" value="description"></column>
+			<column name="defaultDisplayName" value="Description"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+        </insert>
 
- </changeSet>
 
+
+     </changeSet>
+
+ 
 </databaseChangeLog>	

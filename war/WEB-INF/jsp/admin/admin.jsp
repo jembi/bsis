@@ -22,7 +22,12 @@
       <a href="adminWelcomePageGenerator.html">Admin Home</a>
     </li>
    </sec:authorize>
-   <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_LAB_SETUP)">
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_ADMIN_INFORMATION)">
+    <li id="viewGeneralConfig">
+      <a href="viewGeneralConfig.html">General Configuration</a>
+    </li>
+    </sec:authorize>
+    <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_LAB_SETUP)">
     <li id="labSetupPage">
       <a href="labSetupPageGenerator.html">Lab setup</a>
     </li>
