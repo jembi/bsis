@@ -13,7 +13,7 @@ import java.util.List;
  * @author srikanth
  */
 
-public class GeneralConfig {
+public class GeneralConfigBackingForm {
   
     private List<String> names;
     private List<String> values;

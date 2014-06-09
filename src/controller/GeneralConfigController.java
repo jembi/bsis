@@ -23,16 +23,24 @@ public class GeneralConfigController {
     @Autowired
     private GeneralConfigRepository configRepository;
     
-    @RequestMapping("/configuregeneralProps")
-    public ModelAndView generalConfigFormGenerator(){
-        ModelAndView modelAndView = new ModelAndView("configureGeneralProps");
-        modelAndView.addObject("generalCOnfigs", configRepository.getAll());
-        return modelAndView;
-    }
-    
+    @Autowired
+    private UtilController utilController;
+
     @RequestMapping(value = "/updateGeneralConfigProps", method = RequestMethod.POST)
     public ModelAndView updateGeneralConfig(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject(null, this);
+        //jsp page 
         return null;
+    }
+    
+    
+    @RequestMapping(value = "/viewGeneralConfig" , method = RequestMethod.GET)
+    public ModelAndView viewConfiguration(){
+        ModelAndView modelAndView = new ModelAndView("config/viewGeneralConfig");
+        modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("GeneralConfig"));
+        modelAndView.addObject("config", configRepository.getAll());
+        return modelAndView;
     }
     
 }

@@ -26,7 +26,7 @@ public class GeneralConfig implements Serializable {
     private String name;
     private String value;
     private String description ;
-    private  byte datatype;
+    private byte datatype;
 
     public Integer getId() {
         return id;

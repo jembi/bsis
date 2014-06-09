@@ -6,11 +6,11 @@
 
 package repository;
 
-import backingform.GeneralConfig;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import model.admin.GeneralConfig;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ public class GeneralConfigRepository {
   private EntityManager em;
   
   public List<GeneralConfig> getAll(){
-      TypedQuery<GeneralConfig> query = em.createQuery("select gc from GeneralConfig gs", GeneralConfig.class);
+      TypedQuery<GeneralConfig> query = em.createQuery("select gc from GeneralConfig gc", GeneralConfig.class);
       return query.getResultList();
       
   }
