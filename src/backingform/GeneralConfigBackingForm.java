@@ -14,17 +14,8 @@ import java.util.List;
  */
 
 public class GeneralConfigBackingForm {
-  
-    private List<String> names;
+
     private List<String> values;
-
-    public List<String> getNames() {
-        return names;
-    }
-
-    public void setNames(List<String> names) {
-        this.names = names;
-    }
 
     public List<String> getValues() {
         return values;

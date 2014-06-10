@@ -3372,21 +3372,21 @@
 		  </createTable>
 		<insert tableName="GeneralConfig">
 		    <column name="id" value="1"></column>
-		 	<column name="name" value="BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE"></column>
+		 	<column name="name" value="donation.bpSystolicMax"></column>
 		 	<column name="value" value="250"></column>
 		    <column name="description" value="Blood Pressure systolic value cannot be more than 250"></column>
 		    <column name="datatype" value="1"></column>
 		 </insert>
 		 <insert tableName="GeneralConfig">
 		 	<column name="id" value="2"></column>
-		 	<column name="name" value="BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE"></column>
+		 	<column name="name" value="donation.bpDiastolicMax"></column>
 		 	<column name="value" value="150"></column>
 		    <column name="description" value="Blood Pressure diastolic value cannot be less than 0"></column>
 		    <column name="datatype" value="2"></column>
 		 </insert>
 		 <insert tableName="GeneralConfig">
 		 	<column name="id" value="3"></column>
-		 	<column name="name" value="BLOCK_BETWEEN_COLLECTIONS"></column>
+		 	<column name="name" value="donation.daysBetweenDonations"></column>
 		 	<column name="value" value="56"></column>
 		    <column name="description" value="Donor can donate only after 56 dsya"></column>
 		    <column name="datatype" value="3"></column>

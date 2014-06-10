@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<GeneralConfig id="1" name="BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE" value="250" description="" datatype="1"/>
-	<GeneralConfig id="2" name="BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE" value="150" description="" datatype="2"/>
-        <GeneralConfig id="3" name="BLOCK_BETWEEN_COLLECTIONS" value="56" description="" datatype="3"/>
+	<GeneralConfig id="1" name="donation.bpSystolicMax" value="250" description="" datatype="1"/>
+	<GeneralConfig id="2" name="donation.bpDiastolicMax" value="150" description="" datatype="2"/>
+        <GeneralConfig id="3" name="donation.daysBetweenDonations" value="56" description="" datatype="3"/>
 </dataset>
