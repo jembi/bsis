@@ -51,13 +51,15 @@ public class GeneralConfigController {
    @RequestMapping(value = "/updateGeneralConfigProps", method = RequestMethod.POST)
     public ModelAndView updateGeneralConfig(@ModelAttribute("generalConfigForm") @Valid GeneralConfigBackingForm form,
             BindingResult result, HttpServletRequest request,HttpServletResponse response,Model model) throws IOException{
-       
+        boolean success = false;
+        ModelAndView modelAndView = new ModelAndView("config/viewGeneralConfig");
         if(result.hasErrors()){
              response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }else{
              configRepository.updateAll(form.getConfigs());
+             success = true;
         }
-        ModelAndView modelAndView = new ModelAndView("config/viewGeneralConfig");
+        modelAndView.addObject("success",success);
         modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("GeneralConfig"));
         modelAndView.addObject("config", form.getConfigs());
         model.addAttribute("generalConfigForm", form);

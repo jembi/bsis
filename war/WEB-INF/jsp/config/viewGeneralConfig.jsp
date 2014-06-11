@@ -21,7 +21,6 @@
     <script>
        	$(document).ready(
 	 function() {
-	          $("#successBox").hide();
 	          $("#${tabContentId}").find(".saveConfigButton").button({
 		       icons : {
 		        primary : 'ui-icon-plusthick'
@@ -35,12 +34,10 @@
 				  type: "POST",
 				  success: function (response) {
 					  $("#${tabContentId}").replaceWith(response);
-                                          $("#successBox").show();
 					  
 				  },
 				  error: function (response) {
                                           $("#${tabContentId}").replaceWith(response.responseText);
-                                          $("#successBox").hide();
 
 				  }
 				  }); 
@@ -73,7 +70,14 @@
 </script>
 
 <div id="${tabContentId}" class="formDiv">
+    
+    <c:if test="${!empty success && !success}">
+        <jsp:include page="../common/errorBox.jsp">
+          <jsp:param name="errorMessage" value="Configuration Updatation failed" />
+        </jsp:include>
+    </c:if>
 
+    <c:if test="${!empty success && success}">
      <div class="successBox ui-state-highlight" id="successBox">
       <img src="images/check_icon.png"
            style="height: 30px; padding-left: 10px; padding-right: 10px;" />
@@ -81,6 +85,7 @@
         Configuration Updated  Successfully.
       </span>
     </div>
+    </c:if>
     <form:form commandName="generalConfigForm" class="formFormatClass" method="POST">
         <form:errors class="formError" />
         <div>
