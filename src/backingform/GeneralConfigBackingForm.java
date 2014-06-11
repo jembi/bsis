@@ -7,6 +7,7 @@
 package backingform;
 
 import java.util.List;
+import model.admin.GeneralConfig;
 
 /**
  *
@@ -16,6 +17,8 @@ import java.util.List;
 public class GeneralConfigBackingForm {
 
     private List<String> values;
+    
+    private List<GeneralConfig> configs;
 
     public List<String> getValues() {
         return values;
@@ -23,6 +26,16 @@ public class GeneralConfigBackingForm {
 
     public void setValues(List<String> values) {
         this.values = values;
+    }
+
+
+   
+    public List<GeneralConfig> getConfigs() {
+        return configs;
+    }
+
+    public void setConfigs(List<GeneralConfig> configs) {
+        this.configs = configs;
     }
 
     

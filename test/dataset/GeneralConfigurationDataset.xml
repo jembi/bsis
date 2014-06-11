@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<GeneralConfig id="1" name="donation.bpSystolicMax" value="250" description="" datatype="1"/>
-	<GeneralConfig id="2" name="donation.bpDiastolicMax" value="150" description="" datatype="2"/>
-        <GeneralConfig id="3" name="donation.daysBetweenDonations" value="56" description="" datatype="3"/>
+    
+         <dataType id="1" dataType="Text"/> 
+         <dataType id="2" dataType="Integer"/> 
+         <dataType id="3" dataType="Decimal"/> 
+         <dataType id="4" dataType="Boolean"/> 
+         
+	<GeneralConfig id="1" name="donation.bpSystolicMax" value="250" description="" dataType_id="1"/>
+	<GeneralConfig id="2" name="donation.bpDiastolicMax" value="150" description="" dataType_id="2"/>
+        <GeneralConfig id="3" name="donation.daysBetweenDonations" value="56" description="" dataType_id="3"/>
 </dataset>

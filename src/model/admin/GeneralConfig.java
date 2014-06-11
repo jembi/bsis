@@ -8,9 +8,11 @@ package model.admin;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -26,7 +28,9 @@ public class GeneralConfig implements Serializable {
     private String name;
     private String value;
     private String description ;
-    private byte datatype;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    private DataType dataType;
 
     public Integer getId() {
         return id;
@@ -60,15 +64,14 @@ public class GeneralConfig implements Serializable {
         this.description = description;
     }
 
-    public byte getDatatype() {
-        return datatype;
+    public DataType getDataType() {
+        return dataType;
     }
 
-    public void setDatatype(byte datatype) {
-        this.datatype = datatype;
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
     }
-    
-    
+
 
     @Override
     public int hashCode() {

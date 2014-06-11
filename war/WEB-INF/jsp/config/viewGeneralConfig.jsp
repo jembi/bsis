@@ -21,7 +21,7 @@
     <script>
        	$(document).ready(
 	 function() {
-	              
+	          $("#successBox").hide();
 	          $("#${tabContentId}").find(".saveConfigButton").button({
 		       icons : {
 		        primary : 'ui-icon-plusthick'
@@ -35,10 +35,13 @@
 				  type: "POST",
 				  success: function (response) {
 					  $("#${tabContentId}").replaceWith(response);
+                                          $("#successBox").show();
 					  
 				  },
-				  error: function () {
-				  showErrorMessage("Something went wrong. Please try again");
+				  error: function (response) {
+                                          $("#${tabContentId}").replaceWith(response.responseText);
+                                          $("#successBox").hide();
+
 				  }
 				  }); 
 		        
@@ -71,8 +74,18 @@
 
 <div id="${tabContentId}" class="formDiv">
 
-
+     <div class="successBox ui-state-highlight" id="successBox">
+      <img src="images/check_icon.png"
+           style="height: 30px; padding-left: 10px; padding-right: 10px;" />
+      <span class="successText">
+        Configuration Updated  Successfully.
+      </span>
+    </div>
     <form:form commandName="generalConfigForm" class="formFormatClass" method="POST">
+        <form:errors class="formError" />
+        <div>
+            <label>General Configuration</label>
+        </div>
         <table id="${table_id}" class="dataTable donorsTable" >
             <thead>
                 <tr>
@@ -90,9 +103,7 @@
 
                         <td>${config.name}</td>        
 
-                        <td><form:input path="values" value="${config.value}"/>
-                        
-                        </td>
+                        <td><form:input path="values" value="${config.value}"/></td>
 
                         <td>${config.description}</td>
 

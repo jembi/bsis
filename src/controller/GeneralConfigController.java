@@ -6,6 +6,7 @@
 
 package controller;
 
+import backingform.validator.GeneralConfigFormValidator;
 import backingform.GeneralConfigBackingForm;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +14,14 @@ import static java.util.Collections.list;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.admin.GeneralConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,20 +40,28 @@ public class GeneralConfigController {
     
     @Autowired
     private UtilController utilController;
+    
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(new GeneralConfigFormValidator(binder.getValidator(),configRepository));
+  }
+
+    
 
    @RequestMapping(value = "/updateGeneralConfigProps", method = RequestMethod.POST)
-    public void updateGeneralConfig(@ModelAttribute("generalConfigForm") GeneralConfigBackingForm form,
-            HttpServletRequest request,HttpServletResponse response) throws IOException{
+    public ModelAndView updateGeneralConfig(@ModelAttribute("generalConfigForm") @Valid GeneralConfigBackingForm form,
+            BindingResult result, HttpServletRequest request,HttpServletResponse response,Model model) throws IOException{
        
-        List<String> values = form.getValues();
-        List<GeneralConfig> configs = new ArrayList<GeneralConfig>();
-        int count=0;
-        for(GeneralConfig generalConfig : configRepository.getAll()){
-            generalConfig.setValue(values.get(count++));
-            configs.add(generalConfig);
+        if(result.hasErrors()){
+             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }else{
+             configRepository.updateAll(form.getConfigs());
         }
-       configRepository.updateAll(configs);
-       response.sendRedirect("viewGeneralConfig.html");
+        ModelAndView modelAndView = new ModelAndView("config/viewGeneralConfig");
+        modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("GeneralConfig"));
+        modelAndView.addObject("config", form.getConfigs());
+        model.addAttribute("generalConfigForm", form);
+        return modelAndView;
     }
     
     
