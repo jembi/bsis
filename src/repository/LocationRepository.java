@@ -169,7 +169,14 @@ public class LocationRepository {
     query.setParameter("isDonorPanel", true);
     query.setParameter("isDeleted", false);
     query.setParameter("currentLocation", true);
-    return query.getSingleResult().getId().toString();
+     Location location;
+    try{
+    location = query.getSingleResult();
+    }catch(NoResultException exception){
+        exception.printStackTrace();
+        return "";
+    }
+    return location.getId().toString();
   }
 
   public Location findLocationByName(String locationName) {
