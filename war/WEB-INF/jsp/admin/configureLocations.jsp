@@ -45,6 +45,7 @@ $(document).ready(function() {
       primary : 'ui-icon-disk'
     }
   }).click(function() {
+     
     var data = {};
     var locationDivs = $("#${configureLocationsFormId}").find(".locationDiv");
     for (var index=0; index < locationDivs.length; index++) {
@@ -55,11 +56,13 @@ $(document).ready(function() {
       var isCollectionSite = div.find('input[name="isCollectionSite"]').is(":checked");
       var isUsageSite = div.find('input[name="isUsageSite"]').is(":checked");
       var isDonorPanel = div.find('input[name="isDonorPanel"]').is(":checked");
+      var isCurrentLocation = div.find('input[name="isCurrentLocation"]').is(":checked");
       data[locationId] = {name: locationName,
                           isCollectionCenter: isCollectionCenter,
                           isCollectionSite: isCollectionSite,
                           isUsageSite: isUsageSite,
-                          isDonorPanel: isDonorPanel
+                          isDonorPanel: isDonorPanel,
+                          isCurrentLocation: isCurrentLocation
                          };
     }
 
@@ -140,6 +143,15 @@ $(document).ready(function() {
               <c:if test="${!location.isDonorPanel}">
                 <input type="checkbox" name="isDonorPanel" />
               </c:if>
+                
+              <label for="currentLocation" style="margin-left: 10px;">Current Location</label>
+              <c:if test="${location.isCurrentLocation}">
+                <input type="checkbox" name="isCurrentLocation" id="isCurrentLocation" checked="checked"/>
+              </c:if>
+              <c:if test="${!location.isCurrentLocation}">
+                <input type="checkbox" name="isCurrentLocation" id="isCurrentLocation"/>
+              </c:if>
+
             </div>
           </div>
 

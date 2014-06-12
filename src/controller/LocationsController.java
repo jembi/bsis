@@ -78,6 +78,7 @@ public class LocationsController {
         location.setIsCollectionCenter((Boolean) paramValue.get("isCenter"));
         location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
         location.setIsUsageSite((Boolean) paramValue.get("isUsageSite"));
+        location.setCurrentLocation((Boolean) paramValue.get("isCurrentLocation"));
 
         locations.add(location);
       }

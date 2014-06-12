@@ -355,6 +355,7 @@ $(document).ready(function() {
       </c:if>
       
       <!-- include hidden additional donorFields to ensure values are empty not null -->
+      <form:hidden path="donorPanel"/>
     </form:form>
     
     <div style="margin-left: 200px;">

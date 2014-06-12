@@ -217,7 +217,7 @@ public class DonorController {
   public ModelAndView addDonorFormGenerator(HttpServletRequest request) {
 
     DonorBackingForm form = new DonorBackingForm();
-
+    form.setDonorPanel(locationRepository.getCurrentDonorPanel());
     ModelAndView mv = new ModelAndView("donors/addDonorForm");
     mv.addObject("requestUrl", getUrl(request));
     mv.addObject("firstTimeRender", true);
@@ -494,6 +494,7 @@ public class DonorController {
     model.addAttribute("findDonorForm", form);
    
     DonorBackingForm dbform = new DonorBackingForm();
+    dbform.setDonorPanel(locationRepository.getCurrentDonorPanel());
 
 
     ModelAndView mv = new ModelAndView("donors/findDonorForm");

@@ -3360,4 +3360,14 @@
 
  </changeSet>
 
+<!--For issue #19 - Auto populating donor panel in add donor form  -->
+<changeSet id="" author="srikanth">
+	 <addColumn tableName="Location">
+		<column name="currentLocation" type="TINYINT(1)"/> 
+	 </addColumn>
+     <addColumn tableName="Location_AUD">
+		<column name="currentLocation" type="TINYINT(1)"/> 
+	 </addColumn>
+</changeSet>
+
 </databaseChangeLog>	

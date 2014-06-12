@@ -162,6 +162,16 @@ public class LocationRepository {
     return query.getResultList();
   }
 
+  public String getCurrentDonorPanel() {
+    TypedQuery<Location> query = em.createQuery(
+        "SELECT l from Location l where l.isDonorPanel=:isDonorPanel and l.isDeleted=:isDeleted and l.currentLocation=:currentLocation",
+        Location.class);
+    query.setParameter("isDonorPanel", true);
+    query.setParameter("isDeleted", false);
+    query.setParameter("currentLocation", true);
+    return query.getSingleResult().getId().toString();
+  }
+
   public Location findLocationByName(String locationName) {
     TypedQuery<Location> query = em.createQuery(
         "SELECT l FROM Location l where l.name= :locationName and l.isDeleted= :isDeleted",

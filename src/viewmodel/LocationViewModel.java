@@ -37,4 +37,9 @@ public class LocationViewModel {
   public String getIsDonorPanel() {
     return location.getIsDonorPanel()!=null?location.getIsDonorPanel().toString():"";
   }
+  
+  public String getIsCurrentLocation() {
+    return location.isCurrentLocation()!=null?location.isCurrentLocation().toString():"";
+  }
+  
 }

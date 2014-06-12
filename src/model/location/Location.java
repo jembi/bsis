@@ -28,6 +28,8 @@ public class Location {
   private Boolean isDonorPanel;
 
   private Boolean isDeleted;
+  
+  private Boolean currentLocation;
 
   @Lob
   private String notes;
@@ -41,6 +43,8 @@ public class Location {
     this.isCollectionSite = location.isCollectionSite;
     this.isUsageSite = location.isUsageSite;
     this.notes = location.notes;
+    this.currentLocation = location.currentLocation;
+    
   }
 
   public String getName() {
@@ -118,4 +122,14 @@ public class Location {
   public void setIsDonorPanel(Boolean isDonorPanel) {
     this.isDonorPanel = isDonorPanel;
   }
+
+    public Boolean isCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Boolean currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+  
+  
 }
