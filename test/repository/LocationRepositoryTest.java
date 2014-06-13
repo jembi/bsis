@@ -103,36 +103,36 @@ public class LocationRepositoryTest {
         location.setIsCurrentLocation(true);
         location.setIsDeleted(false);
         locationRepository.saveLocation(location);
-        assertNotNull("Location should exist in databse on save", location.getId());
+        assertNotNull("location should exist in databse on save", location.getId());
     }
     
      /**
-     * should get all locations
-     * 
+     * should return  all the location objects
+     * getAllLocations()
      */
     @Test
     public void findAllLocations_ShouldReturnNonEmptyList(){
-        assertFalse("Should get all locations",
+        assertFalse("Should return  all the locations",
                       locationRepository.getAllLocations().isEmpty());
     }
     
     /**
-     * should get all donor panels
+     * should return  all the donor panels
      * getAllDonorPanels()
      */
     @Test
     public void findAllDonorPanels_ShouldReturnNonEmptyList(){
-        assertTrue("Should get all donor panels",
+        assertTrue("Should return  all the  donor panels",
                       !locationRepository.getAllDonorPanels().isEmpty());
     }
     
     /**
-     * should get all the current location of donor panel 
+     * should return the current location of donor panels
      * getCurrentDonorPanel()
      */
     @Test
     public void getCurrentLocation_ShouldReturnNonEmptyList(){
-        assertFalse("Should get the current location of donor panel",
+        assertFalse("Should return  the current location of donor panels",
                       locationRepository.getCurrentDonorPanel().isEmpty());
     }
 
