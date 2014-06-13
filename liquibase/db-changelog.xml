@@ -3363,10 +3363,10 @@
 <!--For issue #19 - Auto populating donor panel in add donor form  -->
 <changeSet id="201406120331" author="srikanth">
 	 <addColumn tableName="Location">
-		<column name="currentLocation" type="TINYINT(1)"/> 
+		<column name="isCurrentLocation" type="TINYINT(1)"/> 
 	 </addColumn>
      <addColumn tableName="Location_AUD">
-		<column name="currentLocation" type="TINYINT(1)"/> 
+		<column name="isCurrentLocation" type="TINYINT(1)"/> 
 	 </addColumn>
 </changeSet>
 

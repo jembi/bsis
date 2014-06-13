@@ -39,7 +39,7 @@ public class LocationViewModel {
   }
   
   public String getIsCurrentLocation() {
-    return location.isCurrentLocation()!=null?location.isCurrentLocation().toString():"";
+    return location.getIsCurrentLocation()!=null?location.getIsCurrentLocation().toString():"";
   }
   
 }

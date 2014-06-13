@@ -56,44 +56,69 @@ public class LocationsController {
   @RequestMapping("/configureLocations")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_SITES+"')")
   public ModelAndView configureLocations(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureLocations");
-    System.out.println(paramsAsJson);
-    List<Location> locations = new ArrayList<Location>();
-    try {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
-        Location location = new Location();
+            HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(value = "params") String paramsAsJson, Model model) {
+        ModelAndView mv = new ModelAndView("admin/configureLocations");
+        boolean success = true;
+        List<String> errors = new ArrayList<String>();
+        int count = 0;
+        List<Location> locations = new ArrayList<Location>();
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
+            boolean isCurrentLocation = false,isDonorPanel = false;
+            for (String id : params.keySet()) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
+                Location location = new Location();
 
-        if (id.startsWith("newLocation"))
-          location.setId(null);
-        else
-          location.setId(Long.parseLong(id));
+                if (id.startsWith("newLocation")) {
+                    location.setId(null);
+                } else {
+                    location.setId(Long.parseLong(id));
+                }
 
-        location.setName((String) paramValue.get("name"));
-        location.setIsCollectionCenter((Boolean) paramValue.get("isCenter"));
-        location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
-        location.setIsUsageSite((Boolean) paramValue.get("isUsageSite"));
-        location.setCurrentLocation((Boolean) paramValue.get("isCurrentLocation"));
+                location.setName((String) paramValue.get("name"));
+                location.setIsCollectionCenter((Boolean) paramValue.get("isCenter"));
+                location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
+                location.setIsUsageSite((Boolean) paramValue.get("isUsageSite"));
+                isDonorPanel = (Boolean) paramValue.get("isDonorPanel");
+                isCurrentLocation = (Boolean) paramValue.get("isCurrentLocation");
+                if (isCurrentLocation == true) {
+                    count = count + 1;
+                }
+                if (isCurrentLocation == true && isDonorPanel == false) {
+                    errors.add("Ticked Current Location("+ id+") must be  a donor panel");
+                    success = false;
+                }
+                location.setIsDonorPanel(isDonorPanel);
+                location.setIsCurrentLocation(isCurrentLocation);
 
-        locations.add(location);
-      }
-      locationRepository.saveAllLocations(locations);
-      System.out.println(params);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
+                locations.add(location);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
 
-    Map<String, Object> m = model.asMap();
-    addAllLocationsToModel(m);
-    m.put("refreshUrl", "configureLocationsFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
+        Map<String, Object> m = model.asMap();
+        if (count > 1) {
+            errors.add("Only one current location can be Ticked");
+            success = false;
+        }
+        if (success) {
+            locationRepository.saveAllLocations(locations);
+            addAllLocationsToModel(m);
+        } else {
+            model.addAttribute("allLocations", locations);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            mv.addObject("errors", errors);
+        }
+       
+        m.put("refreshUrl", "configureLocationsFormGenerator.html");
+        mv.addObject("model", model);
+        mv.addObject("success",success);
+        return mv;
   }
   
   private void addAllLocationsToModel(Map<String, Object> model) {

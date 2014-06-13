@@ -75,8 +75,7 @@ $(document).ready(function() {
                  showMessage("Centers and Sites Updated Successfully!");
                },
       error:    function(response) {
-                 showErrorMessage("Something went wrong. Please try again later");
-                 console.log(response);
+                 $("#${tabContentId}").replaceWith(response.responseText);
                },
     });
     return false;
@@ -94,6 +93,15 @@ $(document).ready(function() {
 
 <sec:authorize access="hasRole(T(utils.PermissionConstants).MANAGE_DONATION_SITES)">
 <div id="${tabContentId}" class="formDiv">
+   
+    <c:if test="${!empty success && !success}">
+        <c:forEach items="${errors}" var="error">
+            <jsp:include page="../common/errorBox.jsp">
+                <jsp:param name="errorMessage" value="${error}" />
+            </jsp:include>
+        </c:forEach>
+    </c:if>
+
   <div id="${mainContentId}" class="formFormatClass">
     <b>Configure Locations</b>
     <br />
@@ -103,8 +111,8 @@ $(document).ready(function() {
         Edit/Create centers and sites. 
       </p>
     </div>
-
-    <form id="${configureLocationsFormId}">
+    <form:errors />
+    <form id="${configureLocationsFormId}" >
         <c:forEach var="location" items="${model.allLocations}">
 
           <div class="locationDiv">
@@ -144,12 +152,12 @@ $(document).ready(function() {
                 <input type="checkbox" name="isDonorPanel" />
               </c:if>
                 
-              <label for="currentLocation" style="margin-left: 10px;">Current Location</label>
+              <label for="isCurrentLocation" style="margin-left: 10px;">Current Location</label>
               <c:if test="${location.isCurrentLocation}">
-                <input type="checkbox" name="isCurrentLocation" id="isCurrentLocation" checked="checked"/>
+                <input type="checkbox" name="isCurrentLocation"  checked="checked"/>
               </c:if>
               <c:if test="${!location.isCurrentLocation}">
-                <input type="checkbox" name="isCurrentLocation" id="isCurrentLocation"/>
+                <input type="checkbox" name="isCurrentLocation" />
               </c:if>
 
             </div>

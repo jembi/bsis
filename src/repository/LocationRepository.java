@@ -164,11 +164,11 @@ public class LocationRepository {
 
   public String getCurrentDonorPanel() {
     TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isDonorPanel=:isDonorPanel and l.isDeleted=:isDeleted and l.currentLocation=:currentLocation",
+        "SELECT l from Location l where l.isDonorPanel=:isDonorPanel and l.isDeleted=:isDeleted and l.isCurrentLocation=:isCurrentLocation",
         Location.class);
     query.setParameter("isDonorPanel", true);
     query.setParameter("isDeleted", false);
-    query.setParameter("currentLocation", true);
+    query.setParameter("isCurrentLocation", true);
      Location location;
     try{
     location = query.getSingleResult();
