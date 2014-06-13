@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	
+	<Location id="1" name="location 1" isDonorPanel="true" isCurrentLocation = "false" isDeleted = "false"/>
+	<Location id="2" name="location 2" isDonorPanel="true" isCurrentLocation = "false" isDeleted = "false"/>
+	<Location id="3" name="location 3" isDonorPanel="true" isCurrentLocation = "true" isDeleted = "false"/>
+	
+</dataset>
