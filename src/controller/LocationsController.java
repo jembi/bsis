@@ -79,7 +79,7 @@ public class LocationsController {
                 }
 
                 location.setName((String) paramValue.get("name"));
-                location.setIsCollectionCenter((Boolean) paramValue.get("isCenter"));
+                location.setIsCollectionCenter((Boolean) paramValue.get("isCollectionCenter"));
                 location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
                 location.setIsUsageSite((Boolean) paramValue.get("isUsageSite"));
                 isDonorPanel = (Boolean) paramValue.get("isDonorPanel");
