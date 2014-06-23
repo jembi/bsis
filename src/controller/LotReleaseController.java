@@ -309,7 +309,7 @@ public class LotReleaseController {
     	success=true;
     	if(collectedSample.get(0).getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
     			|| collectedSample.get(0).getTTIStatus().equals(TTIStatus.NOT_DONE)
-    			){
+    			||!collectedSample.get(0).getDonor().getDonorCodes().isEmpty()){
     		success=false;
     	}else if(collectedSample.get(0).getDonor()!=null && collectedSample.get(0).getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
