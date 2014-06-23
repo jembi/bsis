@@ -2965,141 +2965,125 @@
 	     <column name="id" value="2"></column>
 	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
 	  </insert>
-      
-      <insert tableName="DonorCode">
-	     <column name="id" value="1"></column>
-	     <column name="donorCode" value="Blood Group Antibody"></column>
-	      <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-     <insert tableName="DonorCode">
-	     <column name="id" value="2"></column>
-	     <column name="donorCode" value="Follow up samples required"></column>
-	      <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-     <insert tableName="DonorCode">
-	     <column name="id" value="3"></column>
-	     <column name="donorCode" value="Lab Query"></column>
-	      <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
 
 	  <insert tableName="DonorCode">
-	     <column name="id" value="4"></column>
+	     <column name="id" value="1"></column>
 	     <column name="donorCode" value="Antibody Identification"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="5"></column>
+	     <column name="id" value="2"></column>
 	     <column name="donorCode" value="TTI confirmation - HIV"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="6"></column>
+	     <column name="id" value="3"></column>
 	     <column name="donorCode" value="TTI confirmation - HCV"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="7"></column>
+	     <column name="id" value="4"></column>
 	     <column name="donorCode" value="TTI confirmation - HBsAg"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="8"></column>
+	     <column name="id" value="5"></column>
 	     <column name="donorCode" value="TTI Confirmation - Syphilis"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="9"></column>
+	     <column name="id" value="6"></column>
 	     <column name="donorCode" value="Blood group confirmation"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="10"></column>
+	     <column name="id" value="7"></column>
 	     <column name="donorCode" value="Possible donor misidentification"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="11"></column>
+	     <column name="id" value="8"></column>
 	     <column name="donorCode" value="Test specimen broken"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="12"></column>
+	     <column name="id" value="9"></column>
 	     <column name="donorCode" value="Insufficient specimen"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="13"></column>
+	     <column name="id" value="10"></column>
 	     <column name="donorCode" value="Positive DAT"></column>
 	      <column name="donorCodeGroupId" value="1"></column>   
 	  </insert>
-
+	  
 	  <insert tableName="DonorCode">
-	     <column name="id" value="14"></column>
+	     <column name="id" value="11"></column>
 	     <column name="donorCode" value="Biological False +ve"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="15"></column>
-	     <column name="donorCode" value="For counseling – HCV"></column>
+	     <column name="id" value="12"></column>
+	     <column name="donorCode" value="For counselling – HCV"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="16"></column>
-	     <column name="donorCode" value="For counseling – HIV"></column>
+	     <column name="id" value="13"></column>
+	     <column name="donorCode" value="For counselling – HIV"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="17"></column>
+	     <column name="id" value="14"></column>
 	     <column name="donorCode" value="For counselling - HBsAg"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="18"></column>
+	     <column name="id" value="15"></column>
 	     <column name="donorCode" value="For counselling - Syphilis"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="19"></column>
+	     <column name="id" value="16"></column>
 	     <column name="donorCode" value="Not counselled - HCV"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="20"></column>
+	     <column name="id" value="17"></column>
 	     <column name="donorCode" value="Not counselled - HIV"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="21"></column>
+	     <column name="id" value="18"></column>
 	     <column name="donorCode" value="Not counselled - HBsAg"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="22"></column>
+	     <column name="id" value="19"></column>
 	     <column name="donorCode" value="Not counselled - Syphilis"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="23"></column>
+	     <column name="id" value="20"></column>
 	     <column name="donorCode" value="Counselled - HCV"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  	  <insert tableName="DonorCode">
-	     <column name="id" value="24"></column>
+	     <column name="id" value="21"></column>
 	     <column name="donorCode" value="Counselled - HIV"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="25"></column>
+	     <column name="id" value="22"></column>
 	     <column name="donorCode" value="Counselled - HBsAg"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="26"></column>
+	     <column name="id" value="23"></column>
 	     <column name="donorCode" value="Counselled - Syphilis"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	  <insert tableName="DonorCode">
-	     <column name="id" value="27"></column>
+	     <column name="id" value="24"></column>
 	     <column name="donorCode" value="High Risk"></column>
 	      <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
