@@ -478,6 +478,48 @@ public class DonorCommunicationsRepositoryTest {
 		assertTrue("Donors in list should not be deferred at date of Clinic Date",isvalid);
 		
 	}
+
+ 	@Test
+	/**
+	 *  Should not return donors having donor codes assigned.
+	 *  
+	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
+	 */
+	public void findDonors_shouldNotReturnDonors_WhenHavingDonorCodes() throws ParseException{
+		
+		//Set values to use for findDonors() method parameters
+		List<Location> donorPanels = new ArrayList<Location>();
+		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		String clinicDate = "";
+		//Search with donor panel id 3 and 1
+		long[] id = { 1 , 3 };
+		//Search with  BloodGroup 'A+' and 'O+'
+		String[] bloodGroupStrArray = { "A+","O+" };
+		
+		//Specify date of last donation period
+		String lastDonationFromDate = "";
+		String lastDonationToDate = "";
+		String anyBloodGroup = "false";
+		
+		Map<String, Object> pagingParams = createPagingParamsMap();
+		donorPanels = createDonorPanelList(id);
+		bloodGroups = createBloodGroupList(bloodGroupStrArray);
+		//List<Object> results = new ArrayList<Object>();
+
+		List<Donor> donors = (List<Donor>) (donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate).get(0));		
+		
+		for (Donor donor : donors) {
+			// Donor with ID=6 has  donr codes.
+			assertFalse(
+					"Donors having donor codes should not be in returned list.",
+					donor.getId() == 6 ? true : false);
+			
+		}
+	}
+
+       
 	
 	/**
 	 * UserPassword,V2vUserDetails(Principal) and authority detail store into

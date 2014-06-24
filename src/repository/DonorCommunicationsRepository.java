@@ -1,12 +1,12 @@
 package repository;
 
+import controller.UtilController;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -17,20 +17,16 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
-import utils.CustomDateFormatter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import controller.UtilController;
+import utils.CustomDateFormatter;
 
 @Repository
 @Transactional
@@ -133,9 +129,16 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		countCriteriaQuery.where(panelPredicates.toArray(new Predicate[0]));
 		countCriteriaQuery.select(cb.countDistinct(countRoot));
 		
+                List<Donor> donors = query.getResultList();
+                List<Donor> copyDonors = new ArrayList<Donor>();
+           
+                for(Donor donor :donors)
+                if(donor.getDonorCodes().isEmpty())
+                        copyDonors.add(donor);
+                
 		TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
 		Long totalResults = countQuery.getSingleResult().longValue();
-		return Arrays.asList(query.getResultList(), totalResults);
+		return Arrays.asList(copyDonors, totalResults);
 	}
 
 }

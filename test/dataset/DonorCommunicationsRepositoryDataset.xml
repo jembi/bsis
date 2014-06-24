@@ -67,6 +67,20 @@
 		createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
 		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1" />
+	<donor ID="6" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+		bloodAbo="A" bloodRh="+" callingName="callingName" 
+                dateOfLastDonation="${threeMonthsAgo}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
+		donorNumber="000006" donorStatus="NORMAL" firstName="firstName"
+		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
+		createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
+		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
+		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1" />
+	
+        
+         <donorcodegroup id="1" donorCodeGroup ="Test Only"/>
+         <donorcode id="1" donorCode="Antibody Identification" donorCodeGroupId="1"/>
+         <donordonorcode id="1" donorId="6" donorCodeId="1"/>
+        
 			
 	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" />
 	<deferralreason id="2" isDeleted="0" reason="Low weight" />
