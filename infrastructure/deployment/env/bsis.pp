@@ -57,6 +57,7 @@ file {
 exec { "clone-repo":
 	cwd => "/git",
 	command => "git clone http://github.com/jembi/bsis.git",
+	timeout	=>	3600,
 	#unless => "test -d /git/bsis/.git",
 }
 
@@ -64,7 +65,7 @@ exec { "clone-repo":
 exec { "checkout-branch":
 	cwd => "/git/bsis",
 	command => "git checkout $git_branch",
-    timeout	=>	3600,
+	timeout	=>	3600,
 	require	=> Exec["clone-repo"],
 }
 
