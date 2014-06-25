@@ -9,7 +9,6 @@ import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectionConstants;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.location.Location;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -79,8 +78,7 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (StringUtils.isNotBlank(errorMessageDonorDeferral))
         errors.rejectValue("collectedSample.donor", "donor.deferral", errorMessageDonorDeferral);
       
-      if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
-        errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
+     
     }
 
     validateRangeForHaemoglobinCount(form,errors);

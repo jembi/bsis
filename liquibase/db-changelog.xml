@@ -3360,4 +3360,11 @@
 
  </changeSet>
 
+<!-- Refactor code to remove donorStatus field(#197) -->
+ <changeSet id="201406251005" author="srikanth">
+
+ 	 <dropColumn columnName="donorStatus" tableName="Donor"/>
+
+ </changeSet>
+
 </databaseChangeLog>	

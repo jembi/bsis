@@ -6,7 +6,6 @@ import model.address.AddressType;
 import model.address.Contact;
 import model.address.ContactMethodType;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.user.User;
@@ -136,11 +135,6 @@ public class DonorViewModel {
     Date dateOfLastDonation = donor.getDateOfLastDonation();
     return CustomDateFormatter.getDateString(dateOfLastDonation);
   }
-
-  public DonorStatus getDonorStatus() {
-    return donor.getDonorStatus();
-  }
- 
 
   public String getAge() {
     if (donor.getBirthDateInferred() != null) {

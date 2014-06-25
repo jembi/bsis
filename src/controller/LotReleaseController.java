@@ -311,7 +311,7 @@ public class LotReleaseController {
     			|| collectedSample.get(0).getTTIStatus().equals(TTIStatus.NOT_DONE)
     			){
     		success=false;
-    	}else if(collectedSample.get(0).getDonor()!=null && collectedSample.get(0).getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
+    	}else if(collectedSample.get(0).getDonor()!=null){
     		success=false;
     	}else if(collectedSample.get(0).getProducts()!=null && !collectedSample.get(0).getProducts().isEmpty() && 
     			(collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 

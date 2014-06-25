@@ -119,10 +119,6 @@ public class Donor implements ModificationTracker {
   @Column(length=10)
   private String bloodRh;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length=20)
-  private DonorStatus donorStatus;
-  
   /**
    * Do not see a need to search by birthdate so need not add an index here.
    */
@@ -482,14 +478,6 @@ public void copy(Donor donor) {
 
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
-  }
-
-  public DonorStatus getDonorStatus() {
-    return donorStatus;
-  }
-
-  public void setDonorStatus(DonorStatus donorStatus) {
-    this.donorStatus = donorStatus;
   }
 
 

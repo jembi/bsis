@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.product.Product;
 import model.util.BloodAbo;
 import model.util.BloodRh;
@@ -48,15 +47,15 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
   }
 
   private void updateDonorStatus(BloodTestsUpdatedEvent event) {
-    CollectedSample collectedSample = event.getCollectedSample();
+/*    CollectedSample collectedSample = event.getCollectedSample();
     Donor donor = collectedSample.getDonor();
 
     String oldBloodAbo = donor.getBloodAbo();
     String newBloodAbo = donor.getBloodAbo();
     String oldBloodRh = donor.getBloodRh();
     String newBloodRh = donor.getBloodRh();
-    DonorStatus oldDonorStatus = donor.getDonorStatus();
-    DonorStatus newDonorStatus = donor.getDonorStatus();
+    DonorStatus oldDonorStatus = null;
+    DonorStatus newDonorStatus = null;
     if (newDonorStatus == null)
       newDonorStatus = DonorStatus.NORMAL;
     if (newBloodAbo == null)
@@ -120,7 +119,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       donor.setBloodRh(newBloodRh);
       donor.setDonorStatus(newDonorStatus);
       em.merge(donor);
-    }
+    }*/
   }
 
   private void updateProductStatus(CollectedSample collectedSample) {

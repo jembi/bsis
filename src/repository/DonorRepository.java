@@ -17,24 +17,16 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import model.address.Address;
 import model.address.AddressType;
-import model.address.Contact;
-import model.address.ContactMethodType;
 import model.collectedsample.CollectedSample;
-import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.donorcodes.DonorCode;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.idtype.IdNumber;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
-import model.util.BloodGroup;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -267,9 +259,9 @@ public class DonorRepository {
     }
 
     private void updateDonorAutomaticFields(Donor donor) {
-        if (donor.getDonorStatus() == null) {
+        /* if (donor.getDonorStatus() == null) {
             donor.setDonorStatus(DonorStatus.NORMAL);
-        }
+        }*/
         if (donor.getBloodAbo() == null) {
             donor.setBloodAbo("");
         }
