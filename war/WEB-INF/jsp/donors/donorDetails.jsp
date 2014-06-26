@@ -154,6 +154,12 @@
           <label>${donor.preferredAddressType}</label>
         </div>
       </c:if>
+      <c:if test="${donorFields.donorPanel.hidden != true}">
+        <div>
+          <label>${donorFields.donorPanel.displayName}</label>
+          <label>${donor.donorPanel}</label>
+        </div>
+      </c:if>
        <c:if test="${donorFields.homeAddress.hidden != true }">
        <div style="margin-left: 5px;">
             <b><label path="">${donorFields.homeAddress.displayName}</label></b>
@@ -315,15 +321,6 @@
         </div>
       </c:if>
 
-      <c:if test="donorFields.donorPanel.hidden != true}">
-        <c:if test="${not empty donorFields.donorPanel.hidden}">
-        <div>
-          <label>${donorFields.donorPanel.displayName}</label>
-          <label>${donor.donorPanel}</label>
-        </div></c:if>
-      </c:if>
-      
-     
       <c:if test="${donorFields.notes.hidden != true }">
         <div>
           <label>${donorFields.notes.displayName}</label>
