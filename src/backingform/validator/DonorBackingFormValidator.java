@@ -146,7 +146,7 @@ public class DonorBackingFormValidator implements Validator {
       }
       
       String  homeNumber = form.getHomeNumber();
-      if(!StringUtils.isBlank(mobileNumber)){
+      if(!StringUtils.isBlank(homeNumber)){
           String regex="[0-9]+";
   	  if( !homeNumber.matches(regex))
   		errors.rejectValue("homeNumber","workNumber.incorrect" ,"Given Input is Not A Number.");
