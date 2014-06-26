@@ -65,7 +65,7 @@ $(document).ready(
           "aButtons" : [{
               "sExtends":    "csv",
               "sButtonText": "Export List",
-              "mColumns": [1,2,3,4,5,6,7 ],
+              "mColumns": [1,2,3,4,5,6,7,8,9,10,11 ],
               "sFileName": textName
               }],
           "fnRowSelected" : function(node) {
@@ -159,8 +159,20 @@ $(document).ready(
             <c:if test="${model.donorFields.lastName.hidden != true}">
               <th>${model.donorFields.lastName.displayName}</th>
             </c:if>
-            <c:if test="${model.donorFields.phoneNumber.hidden != true}">
-              <th>${model.donorFields.phoneNumber.displayName}</th>
+            <c:if test="${model.donorFields.mobileNumber.hidden != true}">
+              <th>${model.donorFields.mobileNumber.displayName}</th>
+            </c:if>
+            <c:if test="${model.donorFields.homeNumber.hidden != true}">
+              <th>${model.donorFields.homeNumber.displayName}</th>
+            </c:if>
+            <c:if test="${model.donorFields.workNumber.hidden != true}">
+              <th>${model.donorFields.workNumber.displayName}</th>
+            </c:if>
+            <c:if test="${model.donorFields.email.hidden != true}">
+              <th>${model.donorFields.email.displayName}</th>
+            </c:if>
+            <c:if test="${model.donorFields.contactMethodType.hidden != true}">
+              <th>${model.donorFields.contactMethodType.displayName}</th>
             </c:if>
             <c:if test="${model.donorFields.dateOfLastDonation.hidden != true}">
               <th>${model.donorFields.dateOfLastDonation.displayName}</th>
@@ -174,32 +186,44 @@ $(document).ready(
           </tr>
         </thead>
         <tbody>
-          <c:forEach var="donor" items="${model.allDonors}">
-            <tr>
-              <td style="display: none">${donor.id}</td>
-              <c:if test="${model.donorFields.donorNumber.hidden != true}">
-                <td>${donor.donorNumber}</td>
-              </c:if>
-              <c:if test="${model.donorFields.firstName.hidden != true}">
-                <td>${donor.firstName}</td>
-              </c:if>
-              <c:if test="${model.donorFields.lastName.hidden != true}">
-                <td>${donor.lastName}</td>
-              </c:if>
-              <c:if test="${model.donorFields.phoneNumber.hidden != true}">
-                <td>${donor.contactInformation.phoneNumber}</td>
-              </c:if>
-              <c:if test="${model.donorFields.dateOfLastDonation.hidden != true}">
-                <td>${donor.dateOfLastDonation}</td>
-              </c:if>
-              <c:if test="${model.donorFields.bloodGroup.hidden != true}">
-                <td>${donor.bloodGroup}</td>
-              </c:if>
-              <c:if test="${model.donorFields.donorPanel.hidden != true}">
-                <td>${donor.donorPanel}</td>
-              </c:if>
-            </tr>
-          </c:forEach>
+            <c:forEach var="donor" items="${model.allDonors}">
+                <tr>
+                    <td style="display: none">${donor.id}</td>
+                    <c:if test="${model.donorFields.donorNumber.hidden != true}">
+                        <td>${donor.donorNumber}</td>
+                    </c:if>
+                    <c:if test="${model.donorFields.firstName.hidden != true}">
+                        <td>${donor.firstName}</td>
+                    </c:if>
+                    <c:if test="${model.donorFields.lastName.hidden != true}">
+                        <td>${donor.lastName}</td>
+                    </c:if>
+                    <c:if test="${model.donorFields.mobileNumber.hidden != true}">
+                        <td>${donor.mbileNumber}</td>
+                    </c:if>
+                    <c:if test="${model.donorFields.homeNumber.hidden != true}">
+                        <td>${donor.contact.homeNumber}</td>
+                     </c:if>
+                     <c:if test="${model.donorFields.workNumber.hidden != true}">
+                        <td>${donor.contact.workNumber}</td>
+                     </c:if>
+                     <c:if test="${model.donorFields.email.hidden != true}">
+                        <td>${donor.contact.email}</td>
+                     </c:if>
+                     <c:if test="${model.donorFields.contactMethodType.hidden != true}">
+                        <td>${donor.contactMethodType}</td>
+                     </c:if>
+                     <c:if test="${model.donorFields.dateOfLastDonation.hidden != true}">
+                        <td>${donor.dateOfLastDonation}</td>
+                    </c:if>
+                    <c:if test="${model.donorFields.bloodGroup.hidden != true}">
+                        <td>${donor.bloodGroup}</td>
+                    </c:if>
+                    <c:if test="${model.donorFields.donorPanel.hidden != true}">
+                        <td>${donor.donorPanel}</td>
+                    </c:if>
+                </tr>
+            </c:forEach>
         </tbody>
       </table>
 

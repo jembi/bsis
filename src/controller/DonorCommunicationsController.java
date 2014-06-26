@@ -244,12 +244,17 @@ public class DonorCommunicationsController {
 
 			List<Object> row = new ArrayList<Object>();
 			row.add(donor.getId().toString());
-			for (String property : Arrays.asList("donorNumber", "firstName","lastName", "phoneNumber", "dateOfLastDonation","bloodGroup", "donorPanel")) {
+			for (String property : Arrays.asList("donorNumber", "firstName","lastName", "mobileNumber","homeNumber","workNumber","email",
+                                                        "contactMethodType","dateOfLastDonation","bloodGroup", "donorPanel")) {
 				if (formFields.containsKey(property)) {
 					Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
 					if (properties.get("hidden").equals(false)) {
 						String propertyValue = property;
 						try {
+                                                     if(property.equals("mobileNumber") || property.equals("homeNumber") || property.equals("workNumber") 
+                                                             || property.equals("email"))
+                                                        propertyValue = BeanUtils.getProperty(donor.getContact(),property);
+                                                     else  
 							propertyValue = BeanUtils.getProperty(donor,property);
 						} catch (IllegalAccessException e) {
 							LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:IllegalAccessException"+e);
