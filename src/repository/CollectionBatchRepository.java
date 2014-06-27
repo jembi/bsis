@@ -70,12 +70,12 @@ public class CollectionBatchRepository {
     return collectionBatch;
   }
 
-  public List<CollectionBatch> findCollectionBatches(String batchNumber,
+  public List<CollectionBatch> findCollectionBatches(String collectionNumber,
       List<Long> centerIds, List<Long> siteIds) {
     String queryStr = "";
-    if (StringUtils.isNotBlank(batchNumber)) {
-      queryStr = "SELECT b from CollectionBatch b " +
-                   "WHERE b.batchNumber=:batchNumber AND " +
+    if (StringUtils.isNotBlank(collectionNumber)) {
+      queryStr = "SELECT b from CollectionBatch b , CollectedSample c " +
+                   "WHERE c.collectionNumber=:collectionNumber AND c.collectionBatch = b.id AND "+
                    "b.collectionCenter.id IN (:centerIds) AND " +
                    "b.collectionSite.id IN (:siteIds) AND " +
                    "b.isDeleted=:isDeleted";
@@ -88,8 +88,8 @@ public class CollectionBatchRepository {
     }
     
     TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
-    if (StringUtils.isNotBlank(batchNumber))
-      query.setParameter("batchNumber", batchNumber);
+    if (StringUtils.isNotBlank(collectionNumber))
+      query.setParameter("collectionNumber", collectionNumber);
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", false);

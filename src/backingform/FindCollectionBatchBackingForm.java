@@ -7,13 +7,13 @@ import model.collectionbatch.CollectionBatch;
 public class FindCollectionBatchBackingForm {
 
   private CollectionBatch collectionBatch;
-
+  private String din;
   private List<String> collectionCenters;
   private List<String> collectionSites;
 
   public FindCollectionBatchBackingForm() {
     collectionBatch = new CollectionBatch();
-  }
+  } 
   
   public CollectionBatch getBatch() {
     return collectionBatch;
@@ -21,14 +21,6 @@ public class FindCollectionBatchBackingForm {
 
   public void setBatch(CollectionBatch batch) {
     this.collectionBatch = batch;
-  }
-
-  public String getBatchNumber() {
-    return collectionBatch.getBatchNumber();
-  }
-
-  public void setBatchNumber(String batchNumber) {
-    collectionBatch.setBatchNumber(batchNumber);
   }
 
   public String getNotes() {
@@ -54,4 +46,14 @@ public class FindCollectionBatchBackingForm {
   public void setCollectionSites(List<String> collectionSites) {
     this.collectionSites = collectionSites;
   }
+
+    public String getDin() {
+        return din;
+    }
+
+    public void setDin(String din) {
+        this.din = din;
+    }
+  
+  
 }

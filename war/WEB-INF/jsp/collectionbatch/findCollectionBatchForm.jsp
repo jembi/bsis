@@ -143,8 +143,8 @@ $(document).ready(function() {
       class="formFormatClass">
   
       <div>
-        <form:label path="batchNumber">Batch number</form:label>
-        <form:input path="batchNumber" placeholder="Batch Number" />
+        <form:label path="din">Donation Identification Number</form:label>
+        <form:input path="din" placeholder="Donation Identifica Number" />
       </div>
   
       <div>

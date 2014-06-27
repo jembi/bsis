@@ -105,7 +105,7 @@ public class CollectionBatchController {
     }
 
     List<CollectionBatch> collectionBatches =
-        collectionBatchRepository.findCollectionBatches(form.getBatchNumber(), centerIds, siteIds);
+        collectionBatchRepository.findCollectionBatches(form.getDin(), centerIds, siteIds);
 
     ModelAndView modelAndView = new ModelAndView("collectionbatch/collectionBatchesTable");
     Map<String, Object> m = model.asMap();
