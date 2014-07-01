@@ -23,10 +23,10 @@
       </c:if>
     </div>
   </c:if>
-  <c:if test="${collectionFields.collectionBatchNumber.hidden != true }">
+  <c:if test="${collectionFields.donationBatchNumber.hidden != true }">
     <div>
-      <label>${collectionFields.collectionBatchNumber.displayName}</label>
-      <label style="width: auto;">${collectedSample.collectionBatchNumber}</label>
+      <label>${collectionFields.donationBatchNumber.displayName}</label>
+      <label style="width: auto;">${collectedSample.donationBatchNumber}</label>
     </div>
   </c:if>
   <c:if test="${collectionFields.donationType.hidden != true }">

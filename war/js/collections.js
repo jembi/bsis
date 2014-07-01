@@ -44,17 +44,17 @@ function getLabelForDonor(donor) {
          + donor.donorNumber;
 }
 
-function addNewCollectionBatch(form, resultDivId, successCallback) {
-  updateCollectionBatchGeneric(form, resultDivId, "addCollectionBatch.html", successCallback);  
+function addNewDonationBatch(form, resultDivId, successCallback) {
+  updateDonationBatchGeneric(form, resultDivId, "addDonationBatch.html", successCallback);  
 }
 
-function updateCollectionBatchGeneric(form, resultDivId, url, successCallback) {
-  var collectionBatch = $(form).serialize();
+function updateDonationBatchGeneric(form, resultDivId, url, successCallback) {
+  var donationBatch = $(form).serialize();
   showLoadingImage($("#" + resultDivId));
   $.ajax({
     type: "POST",
     url: url,
-    data: collectionBatch,
+    data: donationBatch,
     success: function(jsonResponse, data, data1, data2) {
                successCallback();
                $("#" + resultDivId).replaceWith(jsonResponse);

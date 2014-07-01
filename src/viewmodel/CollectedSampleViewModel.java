@@ -119,10 +119,10 @@ public class CollectedSampleViewModel {
     return collectedSample.getTTIStatus().toString();
   }
 
-  public String getCollectionBatchNumber() {
-    if (collectedSample.getCollectionBatch() == null)
+  public String getDonationBatchNumber() {
+    if (collectedSample.getDonationBatch() == null)
       return "";
-    return collectedSample.getCollectionBatch().getBatchNumber();
+    return collectedSample.getDonationBatch().getBatchNumber();
   }
 
   public String getBloodTypingStatus() {

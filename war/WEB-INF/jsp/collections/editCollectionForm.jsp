@@ -119,9 +119,9 @@
               "code128",
               {barWidth: 2, barHeight: 50, fontSize: 15, output: "css"});
         }
-        updateBarcode("${editCollectionForm.collectedSample.collectionNumber}");
+        updateBarcode("${editCollectionForm.collectedSample.donationNumber}");
 
-        $("#${editCollectionFormId}").find('input[name="collectionNumber"]').keyup(function() {
+        $("#${editCollectionFormId}").find('input[name="donationNumber"]').keyup(function() {
           updateBarcode($(this).val());
         });
         
@@ -130,7 +130,7 @@
         }
 
         function getCollectionCenterSelector() {
-          return $("#${tabContentId}").find('select[name="collectionCenter"]').multiselect();
+          return $("#${tabContentId}").find('select[name="donationCenter"]').multiselect();
         }
 
         function getBloodBagTypeSelector() {
@@ -138,7 +138,7 @@
         }
 
         function getCollectionSiteSelector() {
-          return $("#${tabContentId}").find('select[name="collectionSite"]').multiselect();
+          return $("#${tabContentId}").find('select[name="donationSite"]').multiselect();
         }
 
         function toggleCheckboxDisabledState() {
@@ -171,28 +171,28 @@
     <form:form method="POST" commandName="editCollectionForm"
       class="formFormatClass" id="${editCollectionFormId}">
       <form:hidden path="id" />
-      <c:if test="${collectionFields.collectionNumber.hidden != true }">
+      <c:if test="${donationFields.donationNumber.hidden != true }">
           <div class="barcodeContainer"></div>
           <div>
-            <form:label path="collectionNumber">${collectionFields.collectionNumber.displayName}</form:label>
-            <form:input path="collectionNumber" />
+            <form:label path="donationNumber">${donationFields.donationNumber.displayName}</form:label>
+            <form:input path="donationNumber" />
             <form:errors class="formError"
-              path="collectedSample.collectionNumber" delimiter=", "></form:errors>
+              path="collectedSample.donationNumber" delimiter=", "></form:errors>
           </div>
       </c:if>
-      <c:if test="${collectionFields.collectionBatchNumber.hidden != true }">
+      <c:if test="${donationFields.donationBatchNumber.hidden != true }">
         <div>
-          <form:label path="collectionBatchNumber">${collectionFields.collectionBatchNumber.displayName}</form:label>
-          <form:input path="collectionBatchNumber" />
+          <form:label path="donationBatchNumber">${donationFields.donationBatchNumber.displayName}</form:label>
+          <form:input path="donationBatchNumber" />
           <form:errors class="formError"
-            path="collectedSample.collectionBatch" delimiter=", "></form:errors>
+            path="collectedSample.donationBatch" delimiter=", "></form:errors>
           <form:errors class="formError"
-            path="collectedSample.collectionBatchNumber" delimiter=", "></form:errors>
+            path="collectedSample.donationBatchNumber" delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.donor.hidden != true }">
+      <c:if test="${donationFields.donor.hidden != true }">
         <div>
-          <form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
+          <form:label path="donorNumber">${donationFields.donorNumber.displayName}</form:label>
           <form:hidden path="donorIdHidden" />
           <form:input path="donorNumber" class="donorNumber" />
           <form:errors class="formError" path="collectedSample.donorNumber"
@@ -201,17 +201,17 @@
             delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.collectedOn.hidden != true }">
+      <c:if test="${donationFields.collectedOn.hidden != true }">
         <div>
-          <form:label path="collectedOn">${collectionFields.collectedOn.displayName}</form:label>
+          <form:label path="collectedOn">${donationFields.collectedOn.displayName}</form:label>
           <form:input path="collectedOn" class="collectedOn" />
           <form:errors class="formError" path="collectedSample.collectedOn"
             delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.donationType.hidden != true }">
+      <c:if test="${donationFields.donationType.hidden != true }">
         <div>
-          <form:label path="donationType">${collectionFields.donationType.displayName}</form:label>
+          <form:label path="donationType">${donationFields.donationType.displayName}</form:label>
           <form:select path="donationType"
             id="${editCollectionFormDonationTypeId}"
             class="editCollectionFormDonationType">
@@ -224,9 +224,9 @@
             delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.bloodBagType.hidden != true }">
+      <c:if test="${donationFields.bloodBagType.hidden != true }">
         <div>
-          <form:label path="bloodBagType">${collectionFields.bloodBagType.displayName}</form:label>
+          <form:label path="bloodBagType">${donationFields.bloodBagType.displayName}</form:label>
           <form:select path="bloodBagType"
             id="${editCollectionFormBloodBagTypeId}">
             <form:option value="">&nbsp;</form:option>
@@ -239,7 +239,7 @@
         </div>
       </c:if>
   
-      <c:if test="${collectionFields.useParametersFromBatch.hidden != true }">
+      <c:if test="${donationFields.useParametersFromBatch.hidden != true }">
   
         <div>
   
@@ -251,7 +251,7 @@
           </c:if>
 
           <form:label path="useParametersFromBatch" for="${editCollectionFormUseBatchCheckboxId}" style="width: auto;">
-            ${collectionFields.useParametersFromBatch.displayName}
+            ${donationFields.useParametersFromBatch.displayName}
           </form:label>
   
           <form:errors class="formError"
@@ -260,71 +260,71 @@
   
       </c:if>
   
-      <c:if test="${collectionFields.collectionCenter.hidden != true }">
+      <c:if test="${donationFields.donationCenter.hidden != true }">
         <div>
-          <form:label path="collectionCenter">${collectionFields.collectionCenter.displayName}</form:label>
-          <form:select path="collectionCenter" id="${editCollectionFormCentersId}" class="editCollectionFormCenters">
+          <form:label path="donationCenter">${donationFields.donationCenter.displayName}</form:label>
+          <form:select path="donationCenter" id="${editCollectionFormCentersId}" class="editCollectionFormCenters">
             <form:option value="" selected="selected">&nbsp;</form:option>
             <c:forEach var="center" items="${centers}">
               <form:option value="${center.id}">${center.name}</form:option>
             </c:forEach>
           </form:select>
-          <form:errors class="formError" path="collectedSample.collectionCenter" delimiter=", "></form:errors>
+          <form:errors class="formError" path="collectedSample.donationCenter" delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.collectionSite.hidden != true }">
+      <c:if test="${donationFields.donationSite.hidden != true }">
         <div>
-          <form:label path="collectionSite">${collectionFields.collectionSite.displayName}</form:label>
-          <form:select path="collectionSite" id="${editCollectionFormSitesId}"
+          <form:label path="donationSite">${donationFields.donationSite.displayName}</form:label>
+          <form:select path="donationSite" id="${editCollectionFormSitesId}"
             class="editCollectionFormSites">
             <form:option value="" selected="selected">&nbsp;</form:option>
             <c:forEach var="site" items="${sites}">
               <form:option value="${site.id}">${site.name}</form:option>
             </c:forEach>
           </form:select>
-          <form:errors class="formError" path="collectedSample.collectionSite" delimiter=", "></form:errors>
+          <form:errors class="formError" path="collectedSample.donationSite" delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.donorWeight.hidden != true }">
+      <c:if test="${donationFields.donorWeight.hidden != true }">
         <div>
-          <form:label path="donorWeight">${collectionFields.donorWeight.displayName}</form:label>
+          <form:label path="donorWeight">${donationFields.donorWeight.displayName}</form:label>
           <form:input path="donorWeight" />
           <form:errors class="formError" path="collectedSample.donorWeight" delimiter=", "></form:errors>
        </div>
       </c:if>
 
-      <c:if test="${collectionFields.donorPulse.hidden != true }">
+      <c:if test="${donationFields.donorPulse.hidden != true }">
         <div>
-          <form:label path="donorPulse">${collectionFields.donorPulse.displayName}</form:label>
+          <form:label path="donorPulse">${donationFields.donorPulse.displayName}</form:label>
           <form:input path="donorPulse"/>
           <form:errors class="formError" path="collectedSample.donorPulse" delimiter=", "></form:errors>
        </div>
       </c:if>
-      <c:if test="${collectionFields.haemoglobinCount.hidden != true }">
+      <c:if test="${donationFields.haemoglobinCount.hidden != true }">
         <div>
-          <form:label path="haemoglobinCount">${collectionFields.haemoglobinCount.displayName}</form:label>
+          <form:label path="haemoglobinCount">${donationFields.haemoglobinCount.displayName}</form:label>
           <form:input path="haemoglobinCount" />
           <form:errors class="formError" path="collectedSample.haemoglobinCount" delimiter=", "></form:errors>
        </div>
       </c:if>
-      <c:if test="${collectionFields.bloodPressureSystolic.hidden != true }">
+      <c:if test="${donationFields.bloodPressureSystolic.hidden != true }">
         <div>
-          <form:label path="bloodPressureSystolic">${collectionFields.bloodPressureSystolic.displayName}</form:label>
+          <form:label path="bloodPressureSystolic">${donationFields.bloodPressureSystolic.displayName}</form:label>
           <form:input path="bloodPressureSystolic" />
           <form:errors class="formError" path="collectedSample.bloodPressureSystolic" delimiter=", "></form:errors>
         </div>
       </c:if>
       
-      <c:if test="${collectionFields.bloodPressureDiastolic.hidden != true }">
+      <c:if test="${donationFields.bloodPressureDiastolic.hidden != true }">
         <div>
-          <form:label path="bloodPressureDiastolic">${collectionFields.bloodPressureDiastolic.displayName}</form:label>
+          <form:label path="bloodPressureDiastolic">${donationFields.bloodPressureDiastolic.displayName}</form:label>
           <form:input path="bloodPressureDiastolic" />
           <form:errors class="formError" path="collectedSample.bloodPressureDiastolic" delimiter=", "></form:errors>
         </div>
       </c:if>
-      <c:if test="${collectionFields.notes.hidden != true }">
+      <c:if test="${donationFields.notes.hidden != true }">
         <div>
-          <form:label path="notes" class="labelForTextArea">${collectionFields.notes.displayName}</form:label>
+          <form:label path="notes" class="labelForTextArea">${donationFields.notes.displayName}</form:label>
           <form:textarea path="notes" />
           <form:errors class="formError" path="collectedSample.notes"
             delimiter=", "></form:errors>
@@ -335,7 +335,7 @@
       <div style="margin-left: 200px;">
         <label></label>
         <button type="button" class="saveCollectionButton autoWidthButton">
-          Save collection
+          Save donation
         </button>
         <!-- button type="button" class="clearFormButton autoWidthButton">
           Clear form

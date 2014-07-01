@@ -25,13 +25,13 @@
     </li>
     </sec:authorize> 
     <sec:authorize access="hasRole(T(utils.PermissionConstants).VIEW_DONATION_BATCH)">
-    <li id="findCollectionBatchContent">
-      <a href="findCollectionBatchFormGenerator.html">Find Collection Batch</a>
+    <li id="findDonationBatchContent">
+      <a href="findDonationBatchFormGenerator.html">Find Donation Batch</a>
     </li>
     </sec:authorize>
     <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
-    <li id="createCollectionBatch">
-      <a href="addCollectionBatchFormGenerator.html">New Collection Batch</a>
+    <li id="createDonationBatch">
+      <a href="addDonationBatchFormGenerator.html">New Donation Batch</a>
     </li>
     </sec:authorize>
     <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">

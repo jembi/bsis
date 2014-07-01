@@ -26,7 +26,7 @@ import javax.validation.Valid;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
-import model.collectionbatch.CollectionBatch;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -42,7 +42,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.BloodBagTypeExists;
-import constraintvalidator.CollectionBatchExists;
+import constraintvalidator.DonationBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
@@ -145,9 +145,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToOne(optional=true)
   private User donationCreatedBy;
 
-  @CollectionBatchExists
+  @DonationBatchExists
   @ManyToOne(optional=true)
-  private CollectionBatch collectionBatch;
+  private DonationBatch donationBatch;
 
   @Lob
   private String notes;
@@ -254,7 +254,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.setDonationType(collectedSample.getDonationType());
     this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
-    this.collectionBatch = collectedSample.collectionBatch;
+    this.donationBatch = collectedSample.donationBatch;
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
@@ -368,12 +368,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donationCreatedBy = donationCreatedBy;
   }
 
-  public CollectionBatch getCollectionBatch() {
-    return collectionBatch;
+  public DonationBatch getDonationBatch() {
+    return donationBatch;
   }
 
-  public void setCollectionBatch(CollectionBatch collectionBatch) {
-    this.collectionBatch = collectionBatch;
+  public void setDonationBatch(DonationBatch donationBatch) {
+    this.donationBatch = donationBatch;
   }
 
   public DonationType getDonationType() {
@@ -391,8 +391,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   }
 
   public String getCollectionBatchNumber() {
-    if (collectionBatch != null)
-      return collectionBatch.getBatchNumber();
+    if (donationBatch != null)
+      return donationBatch.getBatchNumber();
     return "";
   }
 

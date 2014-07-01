@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import repository.CollectedSampleRepository;
-import repository.CollectionBatchRepository;
+import repository.DonationBatchRepository;
 import repository.GenericConfigRepository;
 import repository.WorksheetRepository;
 import repository.WorksheetTypeRepository;
@@ -60,7 +60,7 @@ public class WorksheetController {
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private CollectionBatchRepository collectionBatchRepository;
+  private DonationBatchRepository donationBatchRepository;
 
   @Autowired
   private WorksheetTypeRepository worksheetTypeRepository;
@@ -449,14 +449,14 @@ public class WorksheetController {
   @RequestMapping(value = "/findWorksheetToAddCollectionBatchFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ModelAndView findWorksheetToAddCollectionBatchFormGenerator(HttpServletRequest request,
-      @RequestParam(value="collectionBatchId") Integer collectionBatchId) {
+      @RequestParam(value="donationBatchId") Integer donationBatchId) {
 
     ModelAndView mv = new ModelAndView("worksheets/findWorksheetForm");
     FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
     mv.addObject("findWorksheetForm", findWorksheetForm);
     mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
     mv.addObject("refreshUrl", getUrl(request));
-    mv.addObject("worksheetResultClickUrl", "addCollectionBatchToWorksheet.html?collectionBatchId=" + collectionBatchId);
+    mv.addObject("worksheetResultClickUrl", "addCollectionBatchToWorksheet.html?donationBatchId=" + donationBatchId);
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "testResults.worksheet");
     mv.addObject("tips", tips);
@@ -468,10 +468,10 @@ public class WorksheetController {
   @RequestMapping(value="/addCollectionBatchToWorksheet", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
   public ModelAndView addCollectionBatchToWorksheet(HttpServletRequest request,
-      @RequestParam(value="collectionBatchId") Integer collectionBatchId,
+      @RequestParam(value="donationBatchId") Integer donationBatchId,
       @RequestParam(value="worksheetId") Long worksheetId) {
     ModelAndView mv = new ModelAndView();
-    Set<String> collectionNumbers = collectionBatchRepository.findCollectionsInBatch(collectionBatchId);
+    Set<String> collectionNumbers = donationBatchRepository.findDonationsInBatch(donationBatchId);
     boolean success = false;
     try {
       worksheetRepository.addCollectionsToWorksheet(worksheetId, collectionNumbers);

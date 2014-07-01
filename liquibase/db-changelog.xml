@@ -3360,4 +3360,64 @@
 
  </changeSet>
 
+<!--Update Donor Code Functionality (#181) : Refactoring collection batch to donation batch -->
+ <changeSet author="srikanth" id="201407010356">
+    <renameTable  newTableName="DonationBatch" oldTableName="CollectionBatch"/>
+    <renameTable  newTableName="DonationBatch_AUD" oldTableName="CollectionBatch_AUD"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CAED1731E"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CB29562D0"/>
+   
+    <renameColumn 
+            columnDataType="BIGINT(20)"
+            newColumnName="donationCenter_id"
+            oldColumnName="collectionCenter_id"
+            tableName="DonationBatch"/>
+   <addForeignKeyConstraint baseColumnNames="donationCenter_id"
+                             baseTableName="DonationBatch"
+                             constraintName="fk_DonationBatch_Center"
+                             referencedColumnNames="id"
+                             referencedTableName="Location"/>
+    <renameColumn 
+            columnDataType="BIGINT(20)"
+            newColumnName="donationSite_id"
+            oldColumnName="collectionSite_id"
+            tableName="DonationBatch"/>
+   <addForeignKeyConstraint baseColumnNames="donationSite_id"
+                             baseTableName="DonationBatch"
+                             constraintName="fk_DonationBatch_Siye"
+                             referencedColumnNames="id"
+                             referencedTableName="Location"/>
+
+    <renameColumn 
+            columnDataType="int"
+            newColumnName="donationCenter_id"
+            oldColumnName="collectionCenter_id"
+            tableName="DonationBatch_AUD"/>
+    <renameColumn 
+            columnDataType="int"
+            newColumnName="donationSite_id"
+            oldColumnName="collectionSite_id"
+            tableName="DonationBatch_AUD"/>
+    <renameColumn 
+            columnDataType="smallint"
+            newColumnName="donationBatch_id"
+            oldColumnName="collectionBatch_id"
+            tableName="CollectedSample"/>
+    <renameColumn 
+            columnDataType="smallint"
+            newColumnName="donationBatch_id"
+            oldColumnName="collectionBatch_id"
+            tableName="CollectedSample_AUD"/>
+
+    <update tableName="FormField">
+        <column name="form" value="DonationBatch"/>
+        <where>form = "CollectionBatch"</where>
+    </update>
+   <update tableName="FormField">
+        <column name="field" value="donationBatchNumber"/>
+        <where>field = "collectionBatchNumber"</where>
+    </update>
+
+</changeSet>
+
 </databaseChangeLog>	

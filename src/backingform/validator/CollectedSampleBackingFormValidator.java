@@ -7,7 +7,7 @@ import java.util.Map;
 
 import model.collectedsample.CollectedSample;
 import model.collectedsample.CollectionConstants;
-import model.collectionbatch.CollectionBatch;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.location.Location;
@@ -158,19 +158,19 @@ return;
   private void inheritParametersFromCollectionBatch(
       CollectedSampleBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {
-      CollectionBatch collectionBatch = form.getCollectionBatch();
-      if (collectionBatch == null) {
-        errors.rejectValue("collectedSample.collectionBatch", "collectionbatch.notspecified", "Collection batch should be specified");
+      DonationBatch donationBatch = form.getDonationBatch();
+      if (donationBatch == null) {
+        errors.rejectValue("collectedSample.donationBatch", "collectionbatch.notspecified", "Collection batch should be specified");
         return;
       }
-      Location center = collectionBatch.getCollectionCenter();
+      Location center = donationBatch.getDonationCenter();
       if (center == null) {
         errors.rejectValue("useParametersFromBatch", "collectionCenter.notspecified",
             "Collection center not present in batch and is required.");
       } else {
         form.setCollectionCenter(center.getId().toString());
       }
-      Location site = collectionBatch.getCollectionSite();
+      Location site = donationBatch.getDonationSite();
       if (site == null) {
         errors.rejectValue("useParametersFromBatch", "collectionSite.notspecified",
             "Collection site not present in batch and is required.");
@@ -200,8 +200,8 @@ return;
       bean = BeanUtils.describe(form);
       Donor donor = utilController.findDonorInForm(bean);
       form.setDonor(donor);
-      CollectionBatch collectionBatch = utilController.findCollectionBatchInForm(bean);
-      form.setCollectionBatch(collectionBatch);
+      DonationBatch donationBatch = utilController.findDonationBatchInForm(bean);
+      form.setDonationBatch(donationBatch);
     } catch (IllegalAccessException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
