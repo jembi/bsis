@@ -173,7 +173,7 @@ $(document).ready(function() {
         <form:label path="exactDate">Date</form:label>
         <form:input path="exactDate" placeholder="Date"/>
         <form:select path="period">
-            <form:option value="2">Exact Day</form:option>
+            <form:option value="1">Exact Day</form:option>
             <form:option value="2">1 Day</form:option>
             <form:option value="8">1 Week</form:option>
             <form:option value="32">1 Month</form:option>
