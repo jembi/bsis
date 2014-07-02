@@ -1,16 +1,14 @@
 package repository;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 import model.collectedsample.CollectedSample;
 import model.donationbatch.DonationBatch;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +69,7 @@ public class DonationBatchRepository {
   }
 
   public List<DonationBatch> findDonationBatches(String collectionNumber,
-      List<Long> centerIds, List<Long> siteIds) {
+      List<Long> centerIds, List<Long> siteIds,Date startDate,Date endDate) {
     String queryStr = "";
     if (StringUtils.isNotBlank(collectionNumber)) {
       queryStr = "SELECT b from DonationBatch b , CollectedSample c " +
@@ -87,9 +85,18 @@ public class DonationBatchRepository {
                  "b.isDeleted=:isDeleted";
     }
     
+    if(!(startDate==null && endDate==null))
+       queryStr += " AND b.modificationTracker.createdDate BETWEEN :startDate AND  :endDate";
+    
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
     if (StringUtils.isNotBlank(collectionNumber))
       query.setParameter("collectionNumber", collectionNumber);
+    
+    if(!(startDate==null && endDate==null)){
+      query.setParameter("startDate", startDate);
+      query.setParameter("endDate", endDate);
+
+     }
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", false);

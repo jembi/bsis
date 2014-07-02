@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+        <user id = "1" emailId = "admin" firstName = "admin" isactive = "1"
+		isAdmin = "1" isDeleted = "0" isStaff = "1" username = "admin" password = "admin" />
+
+	<location id = "1" name = "location 1" isDonorPanel = "1" isCollectionCenter = "1" isCollectionSite = "1"/>
+        
+	<DonationBatch id="1" batchNumber = "B0714000000" isDeleted = "0"
+                       createdDate = "2014-07-02 09:36:26" lastUpdated = "2014-07-02 09:36:26"   createdBy_id = "1" lastUpdatedBy_id = "1"
+                       donationCenter_id = "1" donationSite_id = "1" notes = "1"  />
+
+</dataset>

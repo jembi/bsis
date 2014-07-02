@@ -27,7 +27,7 @@
 
 <script>
 $(document).ready(function() {
-
+  $( "#exactDate" ).datepicker();
   $("#${tabContentId}").find(".findDonationBatchButton").button({
     icons : {
       primary : 'ui-icon-search'
@@ -167,6 +167,17 @@ $(document).ready(function() {
               <form:option value="${site.id}">${site.name}</form:option>
             </c:forEach>
           </form:select>
+      </div>
+          
+      <div>
+        <form:label path="exactDate">Date</form:label>
+        <form:input path="exactDate" placeholder="Date"/>
+        <form:select path="period">
+            <form:option value="2">Exact Day</form:option>
+            <form:option value="2">1 Day</form:option>
+            <form:option value="8">1 Week</form:option>
+            <form:option value="32">1 Month</form:option>
+        </form:select>
       </div>
 
       <br />

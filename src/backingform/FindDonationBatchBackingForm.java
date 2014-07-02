@@ -1,7 +1,7 @@
 package backingform;
 
+import java.util.Date;
 import java.util.List;
-
 import model.donationbatch.DonationBatch;
 
 public class FindDonationBatchBackingForm {
@@ -10,6 +10,8 @@ public class FindDonationBatchBackingForm {
   private String din;
   private List<String> donationCenters;
   private List<String> donationSites;
+  private String exactDate; 
+  private int period;
 
   public FindDonationBatchBackingForm() {
     donationBatch = new DonationBatch();
@@ -54,6 +56,23 @@ public class FindDonationBatchBackingForm {
     public void setDin(String din) {
         this.din = din;
     }
+
+    public String getExactDate() {
+        return exactDate;
+    }
+
+    public void setExactDate(String exactDate) {
+        this.exactDate = exactDate;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
+    }
   
+    
   
 }

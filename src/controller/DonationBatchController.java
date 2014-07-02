@@ -1,18 +1,26 @@
 package controller;
 
+import backingform.DonationBatchBackingForm;
+import backingform.FindDonationBatchBackingForm;
+import backingform.validator.DonationBatchBackingFormValidator;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.donationbatch.DonationBatch;
-
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -25,14 +33,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
+import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
-import backingform.DonationBatchBackingForm;
-import backingform.FindDonationBatchBackingForm;
-import backingform.validator.DonationBatchBackingFormValidator;
 
 @Controller
 public class DonationBatchController {
@@ -103,11 +108,25 @@ public class DonationBatchController {
         siteIds.add(Long.parseLong(site));
       }
     }
+      int period = form.getPeriod();
 
-    System.out.println("mid of code..............");
+      DateFormat formatter;
+      formatter = new SimpleDateFormat("MM/dd/yyyy");
+      Date startDate;
+      Date endDate;
+
+      try {
+          Date exactDate = formatter.parse(form.getExactDate());
+          startDate = DateUtils.addDays(exactDate, -period);
+          endDate = DateUtils.addDays(exactDate, period);
+      } catch (ParseException ex) {
+          startDate = null;
+          endDate = null;
+      }
+
+
     List<DonationBatch> donationBatches =
-        donationBatchRepository.findDonationBatches(form.getDin(), centerIds, siteIds);
-    System.out.println("mid of code1..............");
+        donationBatchRepository.findDonationBatches(form.getDin(), centerIds, siteIds,startDate, endDate);
 
     ModelAndView modelAndView = new ModelAndView("donationbatch/donationBatchesTable");
     Map<String, Object> m = model.asMap();
