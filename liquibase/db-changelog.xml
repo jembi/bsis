@@ -3366,6 +3366,8 @@
     <renameTable  newTableName="DonationBatch_AUD" oldTableName="CollectionBatch_AUD"/>
     <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CAED1731E"/>
     <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CB29562D0"/>
+    <dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33E5D4FEA3"/>
+
    
     <renameColumn 
             columnDataType="BIGINT(20)"
@@ -3408,7 +3410,12 @@
             newColumnName="donationBatch_id"
             oldColumnName="collectionBatch_id"
             tableName="CollectedSample_AUD"/>
-
+    <addForeignKeyConstraint baseColumnNames="donationBatch_id"
+                             baseTableName="CollectedSample"
+                             constraintName="fk_Donation_DonationBatch"
+                             referencedColumnNames="id"
+                             referencedTableName="DonationBatch"/>
+   
     <update tableName="Formfield">
         <column name="form" value="DonationBatch"/>
         <where>form = "CollectionBatch"</where>
