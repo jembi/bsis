@@ -3,22 +3,21 @@ package controller;
 import backingform.DonationBatchBackingForm;
 import backingform.FindDonationBatchBackingForm;
 import backingform.validator.DonationBatchBackingFormValidator;
+import static controller.CollectedSampleController.getCollectionViewModels;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import model.collectedsample.CollectedSample;
 import model.donationbatch.DonationBatch;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +31,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
-import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
 
@@ -127,6 +126,7 @@ public class DonationBatchController {
 
     List<DonationBatch> donationBatches =
         donationBatchRepository.findDonationBatches(form.getDin(), centerIds, siteIds,startDate, endDate);
+      
 
     ModelAndView modelAndView = new ModelAndView("donationbatch/donationBatchesTable");
     Map<String, Object> m = model.asMap();
@@ -222,20 +222,21 @@ public class DonationBatchController {
     return donationBatchViewModel;
   }
 
-  public static List<DonationBatchViewModel> getDonationBatchViewModels(
+  public  List<DonationBatchViewModel> getDonationBatchViewModels(
       List<DonationBatch> donationBatches) {
     if (donationBatches == null)
       return Arrays.asList(new DonationBatchViewModel[0]);
     List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
     for (DonationBatch donationBatch : donationBatches) {
-      donationBatchViewModels.add(new DonationBatchViewModel(donationBatch));
+      Long numberOfDonations = donationBatchRepository.numberOfDonationsInBatch(donationBatch.getId());
+      donationBatchViewModels.add(new DonationBatchViewModel(donationBatch,numberOfDonations));
     }
     return donationBatchViewModels;
   }
 
   @RequestMapping(value = "/donationBatchSummary", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public ModelAndView donationBatchSummaryGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody ModelAndView donationBatchSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donationBatchId", required = false) Integer donationBatchId) {
 
     ModelAndView mv = new ModelAndView("donationbatch/donationBatchSummary");
@@ -256,10 +257,15 @@ public class DonationBatchController {
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "donationBatches.finddonationbatch.donationbatchsummary");
     mv.addObject("tips", tips);
-
+    
+    Map<String, Object> m = model.asMap();
+    List<CollectedSample> donations = donationBatchRepository.findAllDonationsOfBatchById(donationBatchId);
+    
     DonationBatchViewModel donationBatchViewModel = getDonationBatchViewModel(donationBatch);
     mv.addObject("donationBatch", donationBatchViewModel);
-
+    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    m.put("allCollections", getCollectionViewModels(donations));
+    mv.addObject("model",m);
     mv.addObject("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     mv.addObject("donationBatchFields", utilController.getFormFieldsForForm("donationBatch"));

@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -86,7 +87,7 @@ public class DonationBatchRepository {
     }
     
     if(!(startDate==null && endDate==null))
-       queryStr += " AND b.modificationTracker.createdDate BETWEEN :startDate AND  :endDate";
+       queryStr += " AND b.modificationTracker.createdDate BETWEEN :startDate AND :endDate";
     
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
     if (StringUtils.isNotBlank(collectionNumber))
@@ -110,5 +111,17 @@ public class DonationBatchRepository {
       collectionNumbers.add(c.getCollectionNumber());
     }
     return collectionNumbers;
+  }
+  
+  public Long numberOfDonationsInBatch(Integer batchId){
+      TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM CollectedSample c where donationBatch_id = :id", Long.class);
+      query.setParameter("id", batchId);
+      return query.getSingleResult();
+  }
+  
+  public List<CollectedSample> findAllDonationsOfBatchById(Integer batchId){
+      TypedQuery<CollectedSample> query = em.createQuery("SELECT C FROM CollectedSample C where donationBatch_id = :id", CollectedSample.class);
+      query.setParameter("id", batchId);
+      return query.getResultList();
   }
 }

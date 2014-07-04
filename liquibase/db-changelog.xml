@@ -106,9 +106,9 @@
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
 	<changeSet id="201310242025" author="devang">
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="CollectedSample"></column>
-			<column name="FIELD" value="haemoglobinCount"></column>
+			<column name="field" value="haemoglobinCount"></column>
 			<column name="defaultDisplayName" value="Haemoglobin Count"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -119,7 +119,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 		<update tableName="CollectedSample">
 			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
@@ -131,9 +131,9 @@
 
 	<!-- For issue 69 [Allow for entry of donor weight] -->
 	<changeSet id="201310241815" author="devang">
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="CollectedSample"></column>
-			<column name="FIELD" value="donorWeight"></column>
+			<column name="field" value="donorWeight"></column>
 			<column name="defaultDisplayName" value="Donor Weight"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -144,7 +144,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 		<update tableName="CollectedSample">
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
@@ -156,9 +156,9 @@
 	
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
     <changeSet id="201310242001" author="devang">
-        <insert tableName="FormField">
+        <insert tableName="Formfield">
             <column name="form" value="CollectedSample"></column>
-            <column name="FIELD" value="bloodPressureSystolic"></column>
+            <column name="field" value="bloodPressureSystolic"></column>
             <column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
             <column name="defaultValue" value=""></column>
             <column name="maxLength" value="0"></column>
@@ -169,11 +169,11 @@
             <column name="autoGenerate" value="0"></column>
             <column name="isAutoGeneratable" value="0"></column>
             <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>                        
+            <column name="isTimefield" value="0"></column>                        
         </insert>
-        <insert tableName="FormField">
+        <insert tableName="Formfield">
             <column name="form" value="CollectedSample"></column>
-            <column name="FIELD" value="bloodPressureDiastolic"></column>
+            <column name="field" value="bloodPressureDiastolic"></column>
             <column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
             <column name="defaultValue" value=""></column>
             <column name="maxLength" value="0"></column>
@@ -184,7 +184,7 @@
             <column name="autoGenerate" value="0"></column>
             <column name="isAutoGeneratable" value="0"></column>
             <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>                        
+            <column name="isTimefield" value="0"></column>                        
         </insert>                        
         <update tableName="CollectedSample">
             <column name="bloodPressure" type="int" defaultValue="NULL"></column>
@@ -204,9 +204,9 @@
 	
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
 	<changeSet id="201310241926" author="devang">
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="CollectedSample"></column>
-			<column name="FIELD" value="donorPulse"></column>
+			<column name="field" value="donorPulse"></column>
 			<column name="defaultDisplayName" value="Donor Pulse"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -217,7 +217,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 		<addColumn tableName="CollectedSample">
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
@@ -235,9 +235,9 @@
  		<addColumn tableName="Donor_AUD">
  			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
  		</addColumn>		
- 		<insert tableName="FormField">
+ 		<insert tableName="Formfield">
  			<column name="form" value="Donor"></column>
- 			<column name="FIELD" value="dateOfFirstDonation"></column>
+ 			<column name="field" value="dateOfFirstDonation"></column>
  			<column name="defaultDisplayName" value="Date of First Donation"></column>
  			<column name="defaultValue" value=""></column>
  			<column name="maxLength" value="0"></column>
@@ -248,7 +248,7 @@
  			<column name="autoGenerate" value="0"></column>
  			<column name="isAutoGeneratable" value="0"></column>
  			<column name="useCurrentTime" value="0"></column>
- 			<column name="isTimeField" value="0"></column>			
+ 			<column name="isTimefield" value="0"></column>			
  		</insert>
  	</changeSet>
 
@@ -260,9 +260,9 @@
 		<addColumn tableName="Product_AUD">
 			<column name="donationIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="Product"></column>
-			<column name="FIELD" value="donationIdentificationNumber"></column>
+			<column name="field" value="donationIdentificationNumber"></column>
 			<column name="defaultDisplayName" value="Donation Identification Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -273,11 +273,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>	
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="Product"></column>
-			<column name="FIELD" value="numUnits"></column>
+			<column name="field" value="numUnits"></column>
 			<column name="defaultDisplayName" value="Num. Units"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -288,7 +288,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 	</changeSet>
 	
@@ -302,17 +302,17 @@
 	    </addColumn>
 	</changeSet>
 	
-	<!-- Update FormField table to rename Collection info to Donation -->
+	<!-- Update Formfield table to rename Collection info to Donation -->
 	<changeSet id="201311081720" author="danfuterman">
-		<update tableName="FormField">
+		<update tableName="Formfield">
     		<column name="defaultDisplayName" value="Donation Identification Number" />
     		<where>field = "collectionNumber"</where>
 		</update>
-		<update tableName="FormField">
+		<update tableName="Formfield">
     		<column name="defaultDisplayName" value="Donation Site" />
     		<where>field = "collectionSite"</where>
 		</update>
-		<update tableName="FormField">
+		<update tableName="Formfield">
     		<column name="defaultDisplayName" value="Donation Centre" />
     		<where>field = "collectionCenter"</where>
 		</update>
@@ -389,9 +389,9 @@
 	
 	<!-- For issue 117 [for issue role management] -->
 	<changeSet id="201401310210" author="srikanth">
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="Role"></column>
-			<column name="FIELD" value="name"></column>
+			<column name="field" value="name"></column>
 			<column name="defaultDisplayName" value="Role Name"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -402,15 +402,15 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 		</changeSet>
 		
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="201402030408" author="srikanth">
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="user"></column>
-			<column name="FIELD" value="username"></column>
+			<column name="field" value="username"></column>
 			<column name="defaultDisplayName" value="Username"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -421,15 +421,15 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 	</changeSet>
 	
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="201402030415" author="srikanth">
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="user"></column>
-			<column name="FIELD" value="firstName"></column>
+			<column name="field" value="firstName"></column>
 			<column name="defaultDisplayName" value="Firstname"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -440,12 +440,12 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 		
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="user"></column>
-			<column name="FIELD" value="lastname"></column>
+			<column name="field" value="lastname"></column>
 			<column name="defaultDisplayName" value="Lastname"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -456,7 +456,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
 		</insert>
 		
 	</changeSet>
@@ -2286,26 +2286,26 @@
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
 	<changeSet id="201401151001" author="srikanth">
-		<update tableName="FormField">
+		<update tableName="Formfield">
 			<column name="displayName" value="DIN" />
 			<where>field = "collectionNumber"</where>
 		</update>
-		<update tableName="FormField">
+		<update tableName="Formfield">
 			<column name="displayName" value="HGB" />
 			<where>field = "haemoglobinCount"</where>
 		</update>
-		<update tableName="FormField">
+		<update tableName="Formfield">
 			<column name="displayName" value="HR" />
 			<where>field = "donorPulse"</where>
 		</update>
-		<update tableName="FormField">
+		<update tableName="Formfield">
 			<column name="displayName" value="WT" />
 			<where>field = "donorWeight"</where>
 		</update>
 
-		<insert tableName="FormField">
+		<insert tableName="Formfield">
 			<column name="form" value="CollectedSample"></column>
-			<column name="FIELD" value="bloodPressure"></column>
+			<column name="field" value="bloodPressure"></column>
 			<column name="defaultDisplayName" value="Blood Pressure"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -2316,7 +2316,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>	
+			<column name="isTimefield" value="0"></column>	
 			<column name="displayName" value="BP"></column>		
 		</insert>
   </changeSet>
@@ -2872,9 +2872,9 @@
             <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
         </addColumn>
 
-        <insert tableName="FormField">
+        <insert tableName="Formfield">
             <column name="form" value="Donor"></column>
-            <column name="FIELD" value="title"></column>
+            <column name="field" value="title"></column>
             <column name="defaultDisplayName" value="Title"></column>
             <column name="defaultValue" value=""></column>
             <column name="maxLength" value="0"></column>
@@ -2885,7 +2885,7 @@
             <column name="autoGenerate" value="0"></column>
             <column name="isAutoGeneratable" value="0"></column>
             <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>
+            <column name="isTimefield" value="0"></column>
         </insert>
 </changeSet>
 
@@ -3126,9 +3126,9 @@
  </addColumn>
 
  
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="mobileNumber"></column>
+			<column name="field" value="mobileNumber"></column>
 			<column name="defaultDisplayName" value="Mobile Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3139,11 +3139,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="idNumber"></column>
+			<column name="field" value="idNumber"></column>
 			<column name="defaultDisplayName" value="ID Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3154,11 +3154,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="FormField">
+<insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="workNumber"></column>
+			<column name="field" value="workNumber"></column>
 			<column name="defaultDisplayName" value="Work Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3169,12 +3169,12 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
 
-<insert tableName="FormField">
+<insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="callingName"></column>
+			<column name="field" value="callingName"></column>
 			<column name="defaultDisplayName" value="Calling Name"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3185,11 +3185,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="idType"></column>
+			<column name="field" value="idType"></column>
 			<column name="defaultDisplayName" value="Id Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3200,12 +3200,12 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
 
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="homeNumber"></column>
+			<column name="field" value="homeNumber"></column>
 			<column name="defaultDisplayName" value="Home Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3216,12 +3216,12 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
 
-<insert tableName="FormField">
+<insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="email"></column>
+			<column name="field" value="email"></column>
 			<column name="defaultDisplayName" value="Email"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3232,11 +3232,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="addressLine1"></column>
+			<column name="field" value="addressLine1"></column>
 			<column name="defaultDisplayName" value="Address Line1"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3247,11 +3247,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="FormField">
+<insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="addressLine2"></column>
+			<column name="field" value="addressLine2"></column>
 			<column name="defaultDisplayName" value="Address Line2"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3262,11 +3262,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="FormField">
+<insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="preferredAddressType"></column>
+			<column name="field" value="preferredAddressType"></column>
 			<column name="defaultDisplayName" value="Preferred Address Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3277,11 +3277,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="workAddress"></column>
+			<column name="field" value="workAddress"></column>
 			<column name="defaultDisplayName" value="Work Address"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3292,12 +3292,12 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
 
-  <insert tableName="FormField">
+  <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="homeAddress"></column>
+			<column name="field" value="homeAddress"></column>
 			<column name="defaultDisplayName" value="Home Address"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3308,12 +3308,12 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
 
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="postalAddress"></column>
+			<column name="field" value="postalAddress"></column>
 			<column name="defaultDisplayName" value="Postal Address"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3324,11 +3324,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
-  <insert tableName="FormField">
+  <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="contactMethodType"></column>
+			<column name="field" value="contactMethodType"></column>
 			<column name="defaultDisplayName" value="Contact Method Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3339,11 +3339,11 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="FormField">
+ <insert tableName="Formfield">
 			<column name="form" value="Donor"></column>
-			<column name="FIELD" value="preferredLanguage"></column>
+			<column name="field" value="preferredLanguage"></column>
 			<column name="defaultDisplayName" value="Preferred Language"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
@@ -3354,7 +3354,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimefield" value="0"></column>			
  </insert>
 
 
@@ -3409,15 +3409,32 @@
             oldColumnName="collectionBatch_id"
             tableName="CollectedSample_AUD"/>
 
-    <update tableName="FormField">
+    <update tableName="Formfield">
         <column name="form" value="DonationBatch"/>
         <where>form = "CollectionBatch"</where>
     </update>
-   <update tableName="FormField">
+   <update tableName="Formfield">
         <column name="field" value="donationBatchNumber"/>
         <where>field = "collectionBatchNumber"</where>
     </update>
 
 </changeSet>
+<changeSet author="srikanth" id="201407031049">
 
+	<insert tableName="Formfield">
+			<column name="form" value="DonationBatch"></column>
+			<column name="field" value="numberOfDonations"></column>
+			<column name="defaultDisplayName" value="Number Of DOnations"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimefield" value="0"></column>			
+ </insert>
+</changeSet>
 </databaseChangeLog>	

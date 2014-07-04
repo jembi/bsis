@@ -12,8 +12,14 @@ import model.user.User;
 public class DonationBatchViewModel {
 
   private DonationBatch donationBatch;
+  private Long numberOfDonations; 
 
-  public DonationBatchViewModel(DonationBatch donationBatch) {
+  public DonationBatchViewModel(DonationBatch donationBatch, Long numberOfDonations) {
+    this.donationBatch = donationBatch;
+    this.numberOfDonations = numberOfDonations;
+  }
+  
+    public DonationBatchViewModel(DonationBatch donationBatch) {
     this.donationBatch = donationBatch;
   }
 
@@ -65,5 +71,9 @@ public class DonationBatchViewModel {
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();
+  }
+  
+  public Long getNumberOfDonations(){
+      return numberOfDonations;
   }
 }

@@ -107,9 +107,12 @@ $(document).ready(
               <c:if test="${donationBatchFields.collectionCenter.hidden != true}">
                 <th>${donationBatchFields.collectionCenter.displayName}</th>
               </c:if>
-              <c:if test="${donationBatchFields.collectionSite.hidden != true}">
-                <th>${donationBatchFields.collectionSite.displayName}</th>
+              <c:if test="${donationBatchFields.createdDate.hidden != true}">
+                <th>${donationBatchFields.createdDate.displayName}</th>
               </c:if>
+              <c:if test="${donationBatchFields.numberOfDonations.hidden != true}">
+                <th>${donationBatchFields.numberOfDonations.displayName}</th>
+              </c:if>  
             </tr>
           </thead>
           <tbody>
@@ -122,9 +125,12 @@ $(document).ready(
                 <c:if test="${donationBatchFields.collectionCenter.hidden != true}">
                   <td>${donationBatch.donationCenter}</td>
                 </c:if>
-                <c:if test="${donationBatchFields.collectionSite.hidden != true}">
-                  <td>${donationBatch.donationSite}</td>
+                <c:if test="${donationBatchFields.createdDate.hidden != true}">
+                  <td>${donationBatch.createdDate}</td>
                 </c:if>
+               <c:if test="${donationBatchFields.numberOfDonations.hidden != true}">
+                  <td>${donationBatch.numberOfDonations}</td>
+               </c:if>
               </tr>
             </c:forEach>
           </tbody>

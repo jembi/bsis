@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
   pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -49,6 +50,13 @@
           $("#${mainContentId}").find(".printableArea").printArea();
         });
 
+         // child div shows donor information. bind this div to collectionSummaryView event
+      $("#${tabContentId}").bind("collectionSummaryView",
+      function(event, content) {
+        $("#${mainContentId}").hide();
+        $("#${childContentId}").html(content);
+      });
+      
         $("#${tabContentId}").find(".cancelButton").button({
           icons : {
             primary : 'ui-icon-check'
@@ -151,6 +159,7 @@
     </div>
 
     <jsp:include page="donationBatchDetail.jsp" />
+    <jsp:include page="../collections/collectionsTable.jsp" />
 
   </div>
 
