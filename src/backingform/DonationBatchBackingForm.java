@@ -1,17 +1,18 @@
 package backingform;
 
+import java.text.ParseException;
+import java.util.Date;
 import javax.validation.Valid;
-
 import model.donationbatch.DonationBatch;
 import model.location.Location;
-
 import org.apache.commons.lang3.StringUtils;
+import utils.CustomDateFormatter;
 
 public class DonationBatchBackingForm {
 
   @Valid
   private DonationBatch donationBatch;
-
+  
   public DonationBatchBackingForm() {
     donationBatch = new DonationBatch();
   }
@@ -85,6 +86,40 @@ public class DonationBatchBackingForm {
       }
     }
   }
+
+    public String getBatchOpenedOn() {
+        if(donationBatch.getBatchOpenedOn() == null)
+            return CustomDateFormatter.getDateTimeString(new Date());
+        else
+            return CustomDateFormatter.getDateTimeString(donationBatch.getBatchOpenedOn());
+    }
+
+    public void setBatchOpenedOn(String batchOpenedOn) {
+        try {
+            donationBatch.setBatchOpenedOn(CustomDateFormatter.getDateTimeFromString(batchOpenedOn));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            donationBatch.setBatchOpenedOn(null);
+        }
+    }
+
+    public String getBatchClosedOn() {
+         if(donationBatch.getBatchClosedOn() == null)
+            return "";
+        else
+            return CustomDateFormatter.getDateTimeString(donationBatch.getBatchClosedOn());
+    }
+
+    public void setBatchClosedOn(String batchClosedOn) {
+        try {
+            donationBatch.setBatchClosedOn(CustomDateFormatter.getDateTimeFromString(batchClosedOn));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            donationBatch.setBatchClosedOn(null);
+        }
+    }
+    
+    
 
   public String getNotes() {
     return donationBatch.getNotes();

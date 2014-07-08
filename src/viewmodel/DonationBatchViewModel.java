@@ -1,13 +1,12 @@
 package viewmodel;
 
+import java.util.Date;
 import java.util.List;
-
-import utils.CustomDateFormatter;
-
 import model.collectedsample.CollectedSample;
 import model.donationbatch.DonationBatch;
 import model.location.Location;
 import model.user.User;
+import utils.CustomDateFormatter;
 
 public class DonationBatchViewModel {
 
@@ -75,5 +74,12 @@ public class DonationBatchViewModel {
   
   public Long getNumberOfDonations(){
       return numberOfDonations;
+  }
+  
+  public Date getBatchOpenedOn(){
+     return  donationBatch.getBatchOpenedOn();
+  }
+  public Date getBatchClosedOn(){
+      return donationBatch.getBatchClosedOn();
   }
 }

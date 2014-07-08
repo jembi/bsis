@@ -6,10 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import model.collectedsample.CollectedSample;
 import model.donationbatch.DonationBatch;
+import model.donationbatch.DonationBatchSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +71,12 @@ public class DonationBatchRepository {
     em.refresh(donationBatch);
     return donationBatch;
   }
+  
+    public DonationBatch updateDonationBatch(DonationBatch donationBatch) {
+    em.merge(donationBatch);
+    return donationBatch;
+  }
+  
 
   public List<DonationBatch> findDonationBatches(String collectionNumber,
       List<Long> centerIds, List<Long> siteIds,Date startDate,Date endDate) {
@@ -124,4 +133,26 @@ public class DonationBatchRepository {
       query.setParameter("id", batchId);
       return query.getResultList();
   }
+  
+  public void addDonationBatchSession(DonationBatchSession donationBatchSession){
+      em.persist(donationBatchSession);
+  }
+  
+  public void deleteDonateBatchSession(Integer id ){
+         Query query = em.createQuery("DELETE FROM DonationBatchSession where donationBatch_id = :id");
+         query.setParameter("id", id);
+         query.executeUpdate();
+  }
+  
+  public DonationBatchSession getCurrenrDonationBatchSession(){
+         TypedQuery<DonationBatchSession> query = em.createQuery("SELECT dbc from DonationBatchSession dbc",DonationBatchSession.class);
+         try{
+         return query.getSingleResult();
+         }catch(NoResultException exception){
+             exception.printStackTrace();
+             return null;
+         }
+  }
 }
+  
+

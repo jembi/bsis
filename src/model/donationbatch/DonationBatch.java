@@ -49,7 +49,11 @@ public class DonationBatch implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donationBatch")
   private List<CollectedSample> collectionsInBatch;
-
+  
+  private Date batchOpenedOn;
+   
+  private Date batchClosedOn;
+  
   private boolean isDeleted;
 
   @Lob
@@ -117,6 +121,22 @@ public class DonationBatch implements ModificationTracker {
     this.donationSite = donationSite;
   }
 
+    public Date getBatchOpenedOn() {
+        return batchOpenedOn;
+    }
+
+    public void setBatchOpenedOn(Date batchOpenedOn) {
+        this.batchOpenedOn = batchOpenedOn;
+    }
+
+    public Date getBatchClosedOn() {
+        return batchClosedOn;
+    }
+
+    public void setBatchClosedOn(Date batchClosedOn) {
+        this.batchClosedOn = batchClosedOn;
+    }
+
   @Override
   public Date getLastUpdated() {
     return modificationTracker.getLastUpdated();
@@ -156,4 +176,6 @@ public class DonationBatch implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
+  
+
 }

@@ -27,6 +27,24 @@
       <label>${donationBatch.donationSite}</label>
     </div>
   </c:if>
+   <c:if test="${donationBatchFields.collectionSite.hidden != true }">
+    <div>
+      <label>${donationBatchFields.collectionSite.displayName}</label>
+      <label>${donationBatch.donationSite}</label>
+    </div>
+  </c:if>
+   <c:if test="${donationBatchFields.batchOpenedOn.hidden != true }">
+    <div>
+      <label>${donationBatchFields.batchOpenedOn.displayName}</label>
+      <label>${donationBatch.batchOpenedOn}</label>
+    </div>
+  </c:if>
+   <c:if test="${donationBatchFields.batchClosedOn.hidden != true }">
+    <div>
+      <label>${donationBatchFields.batchClosedOn.displayName}</label>
+      <label>${donationBatch.batchClosedOn}</label>
+    </div>
+  </c:if>
   <c:if test="${donationBatchFields.notes.hidden != true }">
     <div>
       <label>${donationBatchFields.notes.displayName}</label>

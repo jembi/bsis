@@ -16,11 +16,20 @@
 <c:set var="addDonationBatchFormSitesId">addDonationBatchFormSites-${unique_page_id}</c:set>
 <c:set var="printButtonId">printButton-${unique_page_id}</c:set>
 
-<script type="text/javascript" src="js/collections.js"></script>
 
 <script>
   $(document).ready(
       function() {
+          
+       $("#${addDonationBatchFormId}").find("#batchOpenedOn").datetimepicker({
+          changeMonth : true,
+          changeYear : true,
+          minDate : -36500,
+          maxDate : 1,
+          dateFormat : "dd/mm/yy",
+          timeFormat : "hh:mm:ss tt",
+          yearRange : "c-100:c0",
+        });
 
         function notifyParentSuccess() {
             // let the parent know we are done
@@ -150,11 +159,19 @@
         <form:errors class="formError" path="donationBatch.donationSite" delimiter=", "></form:errors>
       </div>
     </c:if>
+    <c:if test="${donationBatchFields.batchOpenedOn.hidden != true }">
+      <div>
+        <form:label path="batchOpenedOn">${donationBatchFields.batchOpenedOn.displayName}</form:label>
+        <form:input path="batchOpenedOn" />
+        <form:errors class="formError" path="batchOpenedOn"
+          delimiter=", "></form:errors>
+      </div>
+    </c:if>
     <c:if test="${donationBatchFields.notes.hidden != true }">
       <div>
         <form:label path="notes" class="labelForTextArea">${donationBatchFields.notes.displayName}</form:label>
         <form:textarea path="notes" />
-        <form:errors class="formError" path="donationBatch.notes"
+        <form:errors class="formError" path="donationBatch"
           delimiter=", "></form:errors>
       </div>
     </c:if>

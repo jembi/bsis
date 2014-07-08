@@ -3431,7 +3431,7 @@
 	<insert tableName="Formfield">
 			<column name="form" value="DonationBatch"></column>
 			<column name="field" value="numberOfDonations"></column>
-			<column name="defaultDisplayName" value="Number Of DOnations"></column>
+			<column name="defaultDisplayName" value="Number Of Donations"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -3444,4 +3444,71 @@
 			<column name="isTimefield" value="0"></column>			
  </insert>
 </changeSet>
+
+<changeSet author="srikanth" id="201407041125">
+
+ <insert tableName="Formfield">
+			<column name="form" value="DonationBatch"></column>
+			<column name="field" value="batchOpenedOn"></column>
+			<column name="defaultDisplayName" value="Batch Opened On"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimefield" value="0"></column>			
+ </insert>
+<insert tableName="Formfield">
+			<column name="form" value="DonationBatch"></column>
+			<column name="field" value="batchClosedOn"></column>
+			<column name="defaultDisplayName" value="Batch Closed On"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimefield" value="0"></column>			
+ </insert>
+
+ <addColumn tableName="DonationBatch">
+	<column name="batchOpenedOn" type="DATETIME"/> 
+ </addColumn>
+
+<addColumn tableName="DonationBatch_AUD">
+	<column name="batchOpenedOn" type="DATETIME"/> 
+</addColumn>
+
+ <addColumn tableName="DonationBatch">
+	<column name="batchClosedOn" type="DATETIME"/>
+ </addColumn>
+
+ <addColumn tableName="DonationBatch_AUD">
+	<column name="batchClosedOn" type="DATETIME"/> 
+ </addColumn>
+
+</changeSet>
+
+<changeSet author = "srikanth" id = "201407080226">
+	 <createTable  tableName="DonationBatchSession">
+       <column name="id" type="BIGINT" autoIncrement = "true">
+           	<constraints primaryKey="true" nullable="false" />
+       </column>
+
+       <column name = "donationBatch_id" type = "SMALLINT"/>
+  </createTable>
+   <addForeignKeyConstraint baseColumnNames = "donationBatch_id"
+                             baseTableName = "DonationBatchSession"
+                             constraintName = "BatchSession_FK"
+                             referencedColumnNames = "id"
+                             referencedTableName = "DonationBatch" />
+</changeSet>
+
 </databaseChangeLog>	
