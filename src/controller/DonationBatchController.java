@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
-import model.donationbatch.BatchSessionSingleton;
+import model.donationbatch.DonationBatchSessionSingleton;
 import model.donationbatch.DonationBatch;
 import model.donationbatch.DonationBatchSession;
 import org.apache.commons.lang.time.DateUtils;
@@ -159,11 +159,11 @@ public class DonationBatchController {
     boolean isCurrentlyOpened = false;
     ModelAndView mv = new ModelAndView("donationbatch/addDonationBatchForm");
   
-      if (BatchSessionSingleton.getInstance().getDonationBatch() == null) {
-          BatchSessionSingleton batchSessionSingleton = null;
+      if (DonationBatchSessionSingleton.getInstance().getDonationBatch() == null) {
+          DonationBatchSessionSingleton batchSessionSingleton = null;
           DonationBatchSession donationBatchSession = donationBatchRepository.getCurrenrDonationBatchSession();
           if (donationBatchSession != null) {
-              batchSessionSingleton = BatchSessionSingleton.getInstance();
+              batchSessionSingleton = DonationBatchSessionSingleton.getInstance();
               batchSessionSingleton.setDonationBatch(donationBatchSession.getDonationBatch());
               isCurrentlyOpened = true;
           }
@@ -174,7 +174,7 @@ public class DonationBatchController {
     
     //If batch is already opened , it should return summary page 
     if(isCurrentlyOpened){
-      DonationBatch donationBatch = BatchSessionSingleton.getInstance().getDonationBatch();
+      DonationBatch donationBatch = DonationBatchSessionSingleton.getInstance().getDonationBatch();
       Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donationbatch");
       mv.addObject("donationBatchId", donationBatch.getId());
       mv.addObject("donationBatch", getDonationBatchViewModel(donationBatch));
@@ -235,7 +235,7 @@ public class DonationBatchController {
     }
 
     if (success) {
-      BatchSessionSingleton singleton = BatchSessionSingleton.getInstance();
+      DonationBatchSessionSingleton singleton = DonationBatchSessionSingleton.getInstance();
       singleton.setDonationBatch(savedDonationBatch);
       mv.addObject("donationBatchId", savedDonationBatch.getId());
       mv.addObject("donationBatch", getDonationBatchViewModel(savedDonationBatch));
@@ -277,8 +277,6 @@ public class DonationBatchController {
 
     ModelAndView mv = new ModelAndView("donationbatch/donationBatchSummary");
 
-    mv.addObject("requestUrl", getUrl(request));
-
     DonationBatch donationBatch = null;
     if (donationBatchId != null) {
       donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
@@ -313,7 +311,7 @@ public class DonationBatchController {
            HttpServletResponse response,
            @RequestParam(value = "id",required = true) Integer id,
            @RequestParam(value = "batchClosedOn", required = true ) Date batchClosedOn) throws IOException{
-       BatchSessionSingleton.clear();
+       DonationBatchSessionSingleton.clear();
        donationBatchRepository.deleteDonateBatchSession(id);
        DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(id);
        donationBatch.setBatchClosedOn(batchClosedOn);

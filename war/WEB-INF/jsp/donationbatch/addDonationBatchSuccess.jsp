@@ -72,10 +72,7 @@
                 $("#closeBatchDiv").hide();
 
             });
-            
-            function closeDonationBatch(){
-            
-            }
+        
 
         });
 </script>

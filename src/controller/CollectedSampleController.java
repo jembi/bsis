@@ -47,6 +47,7 @@ import backingform.CollectedSampleBackingForm;
 import backingform.FindCollectedSampleBackingForm;
 import backingform.WorksheetBackingForm;
 import backingform.validator.CollectedSampleBackingFormValidator;
+import model.donationbatch.DonationBatchSessionSingleton;
 
 @Controller
 public class CollectedSampleController {
@@ -346,7 +347,7 @@ public class CollectedSampleController {
           }
 
 	        collectedSample.setIsDeleted(false);
-	        
+	        collectedSample.setDonationBatch(DonationBatchSessionSingleton.getInstance().getDonationBatch());
 	        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
 	        mv.addObject("hasErrors", false);
 	        success = true;

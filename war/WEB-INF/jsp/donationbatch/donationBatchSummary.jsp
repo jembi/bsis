@@ -20,11 +20,6 @@
 <script>
   $(document).ready(
       function() {
-
-        function notifyParentDone() {
-          $("#${tabContentId}").parent().trigger("donationBatchSummarySuccess");
-        }
-
         $("#${tabContentId}").find(".editButton").button(
             {
               icons : {
@@ -57,37 +52,14 @@
         $("#${childContentId}").html(content);
       });
       
-        $("#${tabContentId}").find(".cancelButton").button({
+        $("#${tabContentId}").find(".doneButton").button({
           icons : {
             primary : 'ui-icon-check'
           }
         }).click(function() {
-          notifyParentDone();
+            editCollectionBatchDone();
         });
 
-        $("#${mainContentId}").find(".addCollectionBatchToWorksheetButton")
-                              .button({icons: {primary : 'ui-icon-plusthick'}})
-                              .click(addCollectionBatchToWorksheet);
-
-        function addCollectionBatchToWorksheet() {
-          $("#${addCollectionBatchToWorksheetDialogId}").find(".findWorksheetFormSection")
-                                                        .load("findWorksheetToAddDonationBatchFormGenerator.html?"
-                                                            + $.param({donationBatchId: "${donationBatch.id}"}));
-
-          var addToWorksheetDialog = $("#${addCollectionBatchToWorksheetDialogId}").dialog({
-            modal: true,
-            title: "Select worksheet",
-            height: 600,
-            width: 800,
-            buttons: {
-              "Close" : function() {
-                          $(this).dialog("close");
-                        }
-            }
-          });
-          console.log(addToWorksheetDialog);
-        }
-        
         $("#${tabContentId}").find(".deleteButton").button({
           icons : {
             primary : 'ui-icon-trash'
@@ -111,7 +83,7 @@
 
         function editCollectionBatchDone() {
           emptyChildContent();
-          refetchContent("${refreshUrl}", $("#${tabContentId}"));
+          refetchContent("addDonationBatchFormGenerator.html", $("#${tabContentId}"));
         }
 
         function emptyChildContent() {
@@ -128,14 +100,9 @@
   <div id="${mainContentId}">
 
     <div class="summaryPageButtonSection" style="text-align: right;">
-      <button type="button" class="cancelButton">
+      <button type="button" class="doneButton">
         Done
       </button>
-      <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
-      <button type="button" class="addCollectionBatchToWorksheetButton">
-        Add collections in batch to worksheet
-      </button>
-      </sec:authorize>
       <!-- button type="button" class="editButton">
         Edit
       </button-->

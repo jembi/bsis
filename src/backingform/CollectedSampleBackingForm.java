@@ -307,26 +307,10 @@ public class CollectedSampleBackingForm {
     return collectedSample.getDonor().getDonorNumber();
   }
 
-  public String getDonationBatchNumber() {
-    if (collectedSample == null || collectedSample.getDonationBatch() == null ||
-        collectedSample.getDonationBatch().getBatchNumber() == null
-       )
-      return "";
-    return collectedSample.getDonationBatch().getBatchNumber();
-  }
-
   public void setDonorNumber(String donorNumber) {
     Donor donor = new Donor();
     donor.setDonorNumber(donorNumber);
     collectedSample.setDonor(donor);
-  }
-
-  public void setDonationBatchNumber(String DonationBatchNumber) {
-    if (StringUtils.isNotBlank(DonationBatchNumber)) {
-      DonationBatch DonationBatch = new DonationBatch();
-      DonationBatch.setBatchNumber(DonationBatchNumber);
-      collectedSample.setDonationBatch(DonationBatch);
-    }
   }
 
   public String getDonorIdHidden() {

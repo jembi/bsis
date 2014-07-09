@@ -6,20 +6,20 @@ package model.donationbatch;
  *
  * @author srikanth
  */
-public class BatchSessionSingleton {
+public class DonationBatchSessionSingleton {
     
-    private static volatile  BatchSessionSingleton instance;
+    private static volatile  DonationBatchSessionSingleton instance;
     private static DonationBatch donationBatch = null;
     
-   public static BatchSessionSingleton getInstance(){
+   public static DonationBatchSessionSingleton getInstance(){
        if(instance == null) {
-         instance = new BatchSessionSingleton();
+         instance = new DonationBatchSessionSingleton();
       }
       return instance;
    }
    
    public static void clear(){
-       instance = new BatchSessionSingleton();
+       instance = new DonationBatchSessionSingleton();
        instance.donationBatch = null;
    }
    

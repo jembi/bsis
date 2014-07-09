@@ -262,14 +262,6 @@
           </div>
         </c:if>
       </c:if>
-      <c:if test="${collectionFields.donationBatchNumber.hidden != true }">
-        <div>
-          <form:label path="donationBatchNumber">${collectionFields.donationBatchNumber.displayName}</form:label>
-          <form:input path="donationBatchNumber" value="${firstTimeRender ? collectionFields.donationBatchNumber.defaultValue : ''}" />
-          <form:errors class="formError"
-            path="collectedSample.donationBatch" delimiter=", "></form:errors>
-        </div>
-      </c:if>
       <c:if test="${collectionFields.donor.hidden != true }">
         <div>
           <form:label path="donorNumber">${collectionFields.donorNumber.displayName}</form:label>
