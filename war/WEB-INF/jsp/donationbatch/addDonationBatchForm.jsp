@@ -162,7 +162,7 @@
     <c:if test="${donationBatchFields.batchOpenedOn.hidden != true }">
       <div>
         <form:label path="batchOpenedOn">${donationBatchFields.batchOpenedOn.displayName}</form:label>
-        <form:input path="batchOpenedOn" />
+        <form:input path="batchOpenedOn" placeholder = "Opening Time"/>
         <form:errors class="formError" path="batchOpenedOn"
           delimiter=", "></form:errors>
       </div>

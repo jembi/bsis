@@ -152,7 +152,7 @@
                 <div id="closeBatchDiv">
                     <div>
                         <label path="">${donationBatchFields.batchClosedOn.displayName}</label>
-                        <form:input path="donationBatch.batchClosedOn" />
+                        <form:input path="donationBatch.batchClosedOn" placeholder = "Closing Time" />
                     </div>
 
                     <div>
