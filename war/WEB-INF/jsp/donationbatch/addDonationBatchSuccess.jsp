@@ -25,24 +25,15 @@
                 timeFormat: "hh:mm:ss tt",
                 yearRange: "c-100:c0",
             });
-
-            $("#closeBatchDiv").hide();
-
-            $("#${tabContentId}").find(".printButton").button({
-                icons: {
-                    primary: 'ui-icon-print'
-                }
-            }).click(function() {
-                $("#${mainContentId}").find(".printableArea").printArea();
-            });
-
+            $("#closeButtonDiv").hide();
             $("#${tabContentId}").find(".closeButton").button({
-                icons: {
-                    primary: 'ui-icon-check'
+                   icons: {
+                    primary: 'ui-icon-plusthick'
                 }
             }).click(function() {
 
-                $("#closeBatchDiv").show();
+                $("#closeButtonDiv").show();
+                $(".closeButton").hide();
 
             });
            
@@ -56,7 +47,9 @@
             data: {id : $('input[name="id"]').val(), batchClosedOn : $('input[name="batchClosedOn"]').val()},
             type: "GET",
             success: function (response) {
-                        $("#${tabContentId}").replaceWith(response);
+                        $("#${mainContentId}").remove();
+                        $("#${childContentId}").html(response);
+                        
                      },
             error:   function (response) {
                        showErrorMessage("Something went wrong. Please try again.");
@@ -69,11 +62,27 @@
                     primary: 'ui-icon-plusthick'
                 }
             }).click(function() {
-                $("#closeBatchDiv").hide();
+                $("#closeButtonDiv").hide();
+                $(".closeButton").show();
 
             });
         
+        
+  $("#${tabContentId}").bind("donationBatchSummarySuccess",
+      function() {
+         $.ajax({
+            url: "addDonationBatchFormGenerator.html",
+            type: "GET",
+            success: function (response) {
+                        $("#${tabContentId}").replaceWith(response);
+                     },
+            error:   function (response) {
+                       showErrorMessage("Something went wrong. Please try again.");
+                     }
+            
+      });
 
+        });
         });
 </script>
 <sec:authorize access="hasRole(T(utils.PermissionConstants).ADD_DONATION_BATCH)">
@@ -81,25 +90,20 @@
 
         <div id="${mainContentId}">
             <div class="successBox ui-state-highlight">
-                <img src="images/check_icon.png"
-                     style="height: 30px; padding-left: 10px; padding-right: 10px;" />
+                <img src="images/check_icon.png" />
                 <span class="successText">
-                    Collection batch added successfully.
+                    Donation batch added successfully.
                     <br />
-                    You can view the details below. Click "Add another collection batch" to add another collection batch.
                 </span>
             </div>
-            <div>
-                <div class="summaryPageButtonSection" style="text-align: right;">
-                    <button type="button" class="closeButton">
+            <br>
+             
+            <div class="formFormatClass">
+                <div>
+                   <button type="button" class="closeButton" >
                         Close Batch
                     </button>
-                    <button type="button" class="printButton">
-                        Print
-                    </button>
-                </div>
-            </div>
-            <div class="formFormatClass">
+               </div>
                 <br />
                 <form:hidden path="donationBatch.id"/>
                 <c:if test="${donationBatchFields.batchNumber.hidden != true }">
@@ -135,7 +139,7 @@
                 <c:if test="${donationBatchFields.notes.hidden != true }">
                     <div>
                         <label>${donationBatchFields.notes.displayName}</label>
-                        <label>${donationBatch.notes}</label>
+                          <label>${donationBatch.notes}</label>
                     </div>
                 </c:if>
                 <div>
@@ -146,7 +150,8 @@
                     <label>${donationBatchFields.lastUpdatedBy.displayName}</label>
                     <label style="width: auto;">${donationBatch.lastUpdatedBy}</label>
                 </div>
-                <div id="closeBatchDiv">
+              
+                <div id="closeButtonDiv" class="formFormatClass">
                     <div>
                         <label path="">${donationBatchFields.batchClosedOn.displayName}</label>
                         <form:input path="donationBatch.batchClosedOn" placeholder = "Closing Time" />
@@ -164,4 +169,8 @@
             </div>
 
         </div>
+              <div id="${childContentId}">
+                        
+              </div>
+    </div>
     </sec:authorize>

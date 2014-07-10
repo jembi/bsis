@@ -57,7 +57,7 @@
             primary : 'ui-icon-check'
           }
         }).click(function() {
-            editCollectionBatchDone();
+            donationBatchSummaryViewDone();
         });
 
         $("#${tabContentId}").find(".deleteButton").button({
@@ -81,9 +81,9 @@
               });
         });
 
-        function editCollectionBatchDone() {
+        function donationBatchSummaryViewDone() {
           emptyChildContent();
-          refetchContent("addDonationBatchFormGenerator.html", $("#${tabContentId}"));
+           $("#${tabContentId}").parent().trigger("donationBatchSummarySuccess");
         }
 
         function emptyChildContent() {
