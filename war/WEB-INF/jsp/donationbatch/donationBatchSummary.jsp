@@ -46,11 +46,14 @@
         });
 
          // child div shows donor information. bind this div to collectionSummaryView event
-      $("#${tabContentId}").bind("collectionSummaryView",
+      $("#${tabContentId}").bind("donationSummaryView",
       function(event, content) {
         $("#${mainContentId}").hide();
         $("#${childContentId}").html(content);
+        $("#${tabContentId}").find(".donationTable").trigger("refreshResults");
       });
+      
+     
       
         $("#${tabContentId}").find(".doneButton").button({
           icons : {
@@ -85,6 +88,7 @@
           emptyChildContent();
            $("#${tabContentId}").parent().trigger("donationBatchSummarySuccess");
         }
+        
 
         function emptyChildContent() {
           $("#${childContentId}").remove();
@@ -126,22 +130,22 @@
     </div>
 
     <jsp:include page="donationBatchDetail.jsp" />
-    <jsp:include page="../collections/collectionsTable.jsp" />
+    <jsp:include page="./donationBatchDonationsTable.jsp" />
+      <div id="${childContentId}">
+         
+      </div>
+
 
   </div>
 
   <br />
   <br />
 
-  <div id="${childContentId}"></div>
 </div>
 
 <div id="${deleteConfirmDialogId}" style="display: none;">
   Are  you sure you want to delete this Collection Batch?
 </div>
 
-<div id="${addCollectionBatchToWorksheetDialogId}" style="display: none;">
-  Find and select the worksheet you want to add this collection batch to
-  <div class="findWorksheetFormSection"></div> 
-</div>
+
 </sec:authorize>
