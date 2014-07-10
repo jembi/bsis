@@ -80,15 +80,7 @@ public class DonorBackingFormValidator implements Validator {
 
   String birthDate = form.getBirthDate();
   
-  String regex="[0-9]+";
-  
-  if(!birthDate.isEmpty())
-  if (!(form.getDayOfMonth().matches(regex) && form.getYear().matches(regex)))
-  {
-      errors.rejectValue("donor.birthDate", "birthDate.incorrect", "Invalid Date Specified");
-      return false;
-  }
-  
+
   
     Boolean isAgeFormatCorrect = form.isAgeFormatCorrect();
     if (isAgeFormatCorrect != null && !isAgeFormatCorrect) {
@@ -97,13 +89,16 @@ public class DonorBackingFormValidator implements Validator {
     }    
     
     try{
-
-    	// if valid date
-    	if (CustomDateFormatter.isDateStringValid(birthDate) && !birthDate.equals("")){
+            
+    	if (!birthDate.equals("")){
     		
+            // check for valid date
+            if (!CustomDateFormatter.isDateStringValid(birthDate)) {
+                errors.rejectValue("donor.birthDate", "date.invalidDate", "Invalid date specified");
+                return false;
+            }
     		
-    		
-    	  Date date = CustomDateFormatter.getDateFromString(birthDate);
+    	          Date date = CustomDateFormatter.getDateFromString(birthDate);
     	  
 		  // verify Birthdate is not in the future
 		  if(utilController.isFutureDate(date)){
