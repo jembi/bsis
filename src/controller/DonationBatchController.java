@@ -156,24 +156,9 @@ public class DonationBatchController {
   public ModelAndView addDonationBatchFormGenerator(HttpServletRequest request,
       Model model) {
    
-    boolean isCurrentlyOpened = false;
-    ModelAndView mv = new ModelAndView("donationbatch/addDonationBatchForm");
+      ModelAndView mv = new ModelAndView("donationbatch/addDonationBatchForm");
   
-      if (DonationBatchSessionSingleton.getInstance().getDonationBatch() == null) {
-          DonationBatchSessionSingleton batchSessionSingleton = null;
-          DonationBatchSession donationBatchSession = donationBatchRepository.getCurrenrDonationBatchSession();
-          if (donationBatchSession != null) {
-              batchSessionSingleton = DonationBatchSessionSingleton.getInstance();
-              batchSessionSingleton.setDonationBatch(donationBatchSession.getDonationBatch());
-              isCurrentlyOpened = true;
-          }
-          
-
-      }else
-          isCurrentlyOpened = true;
-    
-    //If batch is already opened , it should return summary page 
-    if(isCurrentlyOpened){
+      if (DonationBatchSessionSingleton.getInstance().getDonationBatch() != null) {
       DonationBatch donationBatch = DonationBatchSessionSingleton.getInstance().getDonationBatch();
       Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donationbatch");
       mv.addObject("donationBatchId", donationBatch.getId());

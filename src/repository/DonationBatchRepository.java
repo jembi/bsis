@@ -14,12 +14,19 @@ import model.collectedsample.CollectedSample;
 import model.donationbatch.DonationBatch;
 import model.donationbatch.DonationBatchSession;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
 public class DonationBatchRepository {
+
+    /**
+     * The Constant LOGGER.
+     */
+    private static final Logger LOGGER = Logger.getLogger(DonorRepository.class);
+    public static final int ID_LENGTH = 12;
 
   @PersistenceContext
   EntityManager em;
@@ -149,7 +156,7 @@ public class DonationBatchRepository {
          try{
          return query.getSingleResult();
          }catch(NoResultException exception){
-             exception.printStackTrace();
+             LOGGER.error("[Execption] " + exception.getMessage());
              return null;
          }
   }

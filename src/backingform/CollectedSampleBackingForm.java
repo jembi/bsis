@@ -396,7 +396,7 @@ public class CollectedSampleBackingForm {
 	this.bloodPressureDiastolic=bloodPressureDiastolic;
 	}
   
-  public void setCollectedSample()
+  public void setCollectedSampleParsedProperties()
   {
 	  if(!StringUtils.isBlank(donorWeight))
 	  collectedSample.setDonorWeight(new BigDecimal(donorWeight));
@@ -415,7 +415,7 @@ public class CollectedSampleBackingForm {
 	  
   }
   
-  public void getCollectedSampleIntegerProps()
+  public void getCollectedSampleParsedProperties()
   {
 	  if(collectedSample.getDonorWeight()!=null)
      	  donorWeight = collectedSample.getDonorWeight()+"";

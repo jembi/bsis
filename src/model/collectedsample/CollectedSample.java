@@ -254,7 +254,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.setDonationType(collectedSample.getDonationType());
     this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
-    this.donationBatch = collectedSample.donationBatch;
     this.collectionCenter = collectedSample.collectionCenter;
     this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;

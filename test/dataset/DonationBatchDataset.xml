@@ -8,5 +8,5 @@
 	<DonationBatch id="1" batchNumber = "B0714000000" isDeleted = "0"
                        createdDate = "2014-07-02 09:36:26" lastUpdated = "2014-07-02 09:36:26"   createdBy_id = "1" lastUpdatedBy_id = "1"
                        donationCenter_id = "1" donationSite_id = "1" notes = "1"  />
-
+        <donationbatchsession id = "1" donationBatch_id = "1" />
 </dataset>
