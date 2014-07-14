@@ -106,7 +106,7 @@
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
 	<changeSet id="201310242025" author="devang">
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="field" value="haemoglobinCount"></column>
 			<column name="defaultDisplayName" value="Haemoglobin Count"></column>
@@ -131,7 +131,7 @@
 
 	<!-- For issue 69 [Allow for entry of donor weight] -->
 	<changeSet id="201310241815" author="devang">
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="field" value="donorWeight"></column>
 			<column name="defaultDisplayName" value="Donor Weight"></column>
@@ -156,7 +156,7 @@
 	
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
     <changeSet id="201310242001" author="devang">
-        <insert tableName="Formfield">
+        <insert tableName="FormField">
             <column name="form" value="CollectedSample"></column>
             <column name="field" value="bloodPressureSystolic"></column>
             <column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
@@ -171,7 +171,7 @@
             <column name="useCurrentTime" value="0"></column>
             <column name="isTimefield" value="0"></column>                        
         </insert>
-        <insert tableName="Formfield">
+        <insert tableName="FormField">
             <column name="form" value="CollectedSample"></column>
             <column name="field" value="bloodPressureDiastolic"></column>
             <column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
@@ -204,7 +204,7 @@
 	
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
 	<changeSet id="201310241926" author="devang">
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="field" value="donorPulse"></column>
 			<column name="defaultDisplayName" value="Donor Pulse"></column>
@@ -235,7 +235,7 @@
  		<addColumn tableName="Donor_AUD">
  			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
  		</addColumn>		
- 		<insert tableName="Formfield">
+ 		<insert tableName="FormField">
  			<column name="form" value="Donor"></column>
  			<column name="field" value="dateOfFirstDonation"></column>
  			<column name="defaultDisplayName" value="Date of First Donation"></column>
@@ -260,7 +260,7 @@
 		<addColumn tableName="Product_AUD">
 			<column name="donationIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="Product"></column>
 			<column name="field" value="donationIdentificationNumber"></column>
 			<column name="defaultDisplayName" value="Donation Identification Number"></column>
@@ -275,7 +275,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
 		</insert>	
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="Product"></column>
 			<column name="field" value="numUnits"></column>
 			<column name="defaultDisplayName" value="Num. Units"></column>
@@ -302,17 +302,17 @@
 	    </addColumn>
 	</changeSet>
 	
-	<!-- Update Formfield table to rename Collection info to Donation -->
+	<!-- Update FormField table to rename Collection info to Donation -->
 	<changeSet id="201311081720" author="danfuterman">
-		<update tableName="Formfield">
+		<update tableName="FormField">
     		<column name="defaultDisplayName" value="Donation Identification Number" />
     		<where>field = "collectionNumber"</where>
 		</update>
-		<update tableName="Formfield">
+		<update tableName="FormField">
     		<column name="defaultDisplayName" value="Donation Site" />
     		<where>field = "collectionSite"</where>
 		</update>
-		<update tableName="Formfield">
+		<update tableName="FormField">
     		<column name="defaultDisplayName" value="Donation Centre" />
     		<where>field = "collectionCenter"</where>
 		</update>
@@ -389,7 +389,7 @@
 	
 	<!-- For issue 117 [for issue role management] -->
 	<changeSet id="201401310210" author="srikanth">
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="Role"></column>
 			<column name="field" value="name"></column>
 			<column name="defaultDisplayName" value="Role Name"></column>
@@ -408,7 +408,7 @@
 		
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="201402030408" author="srikanth">
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="field" value="username"></column>
 			<column name="defaultDisplayName" value="Username"></column>
@@ -427,7 +427,7 @@
 	
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="201402030415" author="srikanth">
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="field" value="firstName"></column>
 			<column name="defaultDisplayName" value="Firstname"></column>
@@ -443,7 +443,7 @@
 			<column name="isTimefield" value="0"></column>			
 		</insert>
 		
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="field" value="lastname"></column>
 			<column name="defaultDisplayName" value="Lastname"></column>
@@ -2286,24 +2286,24 @@
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
 	<changeSet id="201401151001" author="srikanth">
-		<update tableName="Formfield">
+		<update tableName="FormField">
 			<column name="displayName" value="DIN" />
 			<where>field = "collectionNumber"</where>
 		</update>
-		<update tableName="Formfield">
+		<update tableName="FormField">
 			<column name="displayName" value="HGB" />
 			<where>field = "haemoglobinCount"</where>
 		</update>
-		<update tableName="Formfield">
+		<update tableName="FormField">
 			<column name="displayName" value="HR" />
 			<where>field = "donorPulse"</where>
 		</update>
-		<update tableName="Formfield">
+		<update tableName="FormField">
 			<column name="displayName" value="WT" />
 			<where>field = "donorWeight"</where>
 		</update>
 
-		<insert tableName="Formfield">
+		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="field" value="bloodPressure"></column>
 			<column name="defaultDisplayName" value="Blood Pressure"></column>
@@ -2872,7 +2872,7 @@
             <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
         </addColumn>
 
-        <insert tableName="Formfield">
+        <insert tableName="FormField">
             <column name="form" value="Donor"></column>
             <column name="field" value="title"></column>
             <column name="defaultDisplayName" value="Title"></column>
@@ -3126,7 +3126,7 @@
  </addColumn>
 
  
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="mobileNumber"></column>
 			<column name="defaultDisplayName" value="Mobile Number"></column>
@@ -3141,7 +3141,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="idNumber"></column>
 			<column name="defaultDisplayName" value="ID Number"></column>
@@ -3156,7 +3156,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="Formfield">
+<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="workNumber"></column>
 			<column name="defaultDisplayName" value="Work Number"></column>
@@ -3172,7 +3172,7 @@
 			<column name="isTimefield" value="0"></column>			
  </insert>
 
-<insert tableName="Formfield">
+<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="callingName"></column>
 			<column name="defaultDisplayName" value="Calling Name"></column>
@@ -3187,7 +3187,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="idType"></column>
 			<column name="defaultDisplayName" value="Id Type"></column>
@@ -3203,7 +3203,7 @@
 			<column name="isTimefield" value="0"></column>			
  </insert>
 
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="homeNumber"></column>
 			<column name="defaultDisplayName" value="Home Number"></column>
@@ -3219,7 +3219,7 @@
 			<column name="isTimefield" value="0"></column>			
  </insert>
 
-<insert tableName="Formfield">
+<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="email"></column>
 			<column name="defaultDisplayName" value="Email"></column>
@@ -3234,7 +3234,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="addressLine1"></column>
 			<column name="defaultDisplayName" value="Address Line1"></column>
@@ -3249,7 +3249,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="Formfield">
+<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="addressLine2"></column>
 			<column name="defaultDisplayName" value="Address Line2"></column>
@@ -3264,7 +3264,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="Formfield">
+<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="preferredAddressType"></column>
 			<column name="defaultDisplayName" value="Preferred Address Type"></column>
@@ -3279,7 +3279,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="workAddress"></column>
 			<column name="defaultDisplayName" value="Work Address"></column>
@@ -3295,7 +3295,7 @@
 			<column name="isTimefield" value="0"></column>			
  </insert>
 
-  <insert tableName="Formfield">
+  <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="homeAddress"></column>
 			<column name="defaultDisplayName" value="Home Address"></column>
@@ -3311,7 +3311,7 @@
 			<column name="isTimefield" value="0"></column>			
  </insert>
 
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="postalAddress"></column>
 			<column name="defaultDisplayName" value="Postal Address"></column>
@@ -3326,7 +3326,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
-  <insert tableName="Formfield">
+  <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="contactMethodType"></column>
 			<column name="defaultDisplayName" value="Contact Method Type"></column>
@@ -3341,7 +3341,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="field" value="preferredLanguage"></column>
 			<column name="defaultDisplayName" value="Preferred Language"></column>
@@ -3416,11 +3416,11 @@
                              referencedColumnNames="id"
                              referencedTableName="DonationBatch"/>
    
-    <update tableName="Formfield">
+    <update tableName="FormField">
         <column name="form" value="DonationBatch"/>
         <where>form = "CollectionBatch"</where>
     </update>
-   <update tableName="Formfield">
+   <update tableName="FormField">
         <column name="field" value="donationBatchNumber"/>
         <where>field = "collectionBatchNumber"</where>
     </update>
@@ -3428,7 +3428,7 @@
 </changeSet>
 <changeSet author="srikanth" id="201407031049">
 
-	<insert tableName="Formfield">
+	<insert tableName="FormField">
 			<column name="form" value="DonationBatch"></column>
 			<column name="field" value="numberOfDonations"></column>
 			<column name="defaultDisplayName" value="Number Of Donations"></column>
@@ -3447,7 +3447,7 @@
 
 <changeSet author="srikanth" id="201407041125">
 
- <insert tableName="Formfield">
+ <insert tableName="FormField">
 			<column name="form" value="DonationBatch"></column>
 			<column name="field" value="batchOpenedOn"></column>
 			<column name="defaultDisplayName" value="Batch Opened On"></column>
@@ -3462,7 +3462,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimefield" value="0"></column>			
  </insert>
-<insert tableName="Formfield">
+<insert tableName="FormField">
 			<column name="form" value="DonationBatch"></column>
 			<column name="field" value="batchClosedOn"></column>
 			<column name="defaultDisplayName" value="Batch Closed On"></column>
