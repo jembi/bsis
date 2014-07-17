@@ -91,7 +91,7 @@ public class DonorController {
 
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public ModelAndView donorSummaryGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody DonorViewModel donorSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "donorId", required = false) Long donorId) {
 
     ModelAndView mv = new ModelAndView("donors/donorSummary");
@@ -127,7 +127,7 @@ public class DonorController {
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     mv.addObject("tips", tips);
     mv.addObject("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
-    return mv;
+    return donorViewModel;
   }
 
   @RequestMapping(value = "/viewDonorHistory", method = RequestMethod.GET)
