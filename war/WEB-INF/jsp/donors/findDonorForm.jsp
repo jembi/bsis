@@ -30,6 +30,15 @@
 <script>
 $(document).ready(function() {
 
+   $("#${findDonorFormId}").find("#birthDate").datepicker({
+   changeMonth : true,
+   changeYear : true,
+   dateFormat : "dd/mm/yy",
+   minDate    : -36500,
+   maxDate    : -6205,
+   yearRange  : 'c-50:c+20'
+  });
+  
   $("#${tabContentId}").find(".findDonorButton").button({
     icons : {
       primary : 'ui-icon-search'
@@ -177,14 +186,6 @@ $(document).ready(function() {
      header : false
    });
 
-   $("#${addDonorContentId}").find(".birthDate").datepicker({
-     changeMonth : true,
-     changeYear : true,
-     minDate : -36500,
-     maxDate : 0,
-     dateFormat : "dd/mm/yy",
-     yearRange : "c-100:c0",
-   });
 
    function getDonorPanelSelector() {
      return $("#${tabContentId}").find('select[name="donorPanel"]').multiselect();
@@ -242,6 +243,18 @@ $(document).ready(function() {
       <div>
         <form:label path="lastName">${model.donorFields.lastName.displayName}</form:label>
         <form:input path="lastName" />
+      </div>
+       <div>
+        <form:label path="gender">${model.donorFields.gender.displayName}</form:label>
+        <form:select path="gender" id="${genderSelectorId}">
+            <form:option value="not_known" >Gender</form:option>
+            <form:option value="male" label="Male" />
+            <form:option value="female" label="Female" />
+          </form:select>
+      </div>
+       <div>
+        <form:label path="birthDate">${model.donorFields.birthDate.displayName}</form:label>
+        <form:input path="birthDate" />
       </div>
       <div>
         <form:label path="usePhraseMatch" style="width: 9.2%;">Include Similar Results</form:label>

@@ -1,21 +1,24 @@
 package controller;
 
+import backingform.DonorBackingForm;
+import backingform.FindDonorBackingForm;
+import backingform.validator.DonorBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
-import model.util.BloodGroup;
 
+import model.util.Gender;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
@@ -39,9 +41,6 @@ import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
-import backingform.DonorBackingForm;
-import backingform.FindDonorBackingForm;
-import backingform.validator.DonorBackingFormValidator;
 
 @Controller
 public class DonorController {
@@ -600,15 +599,26 @@ public class DonorController {
     String firstName = form.getFirstName();
     String lastName = form.getLastName();
     String donationIdentificationNumber = form.getDonationIdentificationNumber();
-
+    Gender gender = form.getGender();
+    
+    Date birthDate = null;
+         
+      try {
+          if(form.getBirthDate()!="")
+          birthDate = CustomDateFormatter.getDateFromString(form.getBirthDate());
+      } catch (ParseException ex) {
+          ex.printStackTrace();
+      }
+        
+    
     Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     List<Object> results = new ArrayList<Object>();
-    results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
+    results = donorRepository.findAnyDonor(donorNumber, firstName, lastName, gender,birthDate
+            , pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
     @SuppressWarnings("unchecked")
     List<Donor> donors = (List<Donor>) results.get(0);
     System.out.println(donors);

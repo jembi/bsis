@@ -1,15 +1,14 @@
 package backingform;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import model.util.BloodGroup;
+import model.util.Gender;
 
 public class FindDonorBackingForm {
 
   private String donorNumber;
   private String firstName;
   private String lastName;
+  private Gender gender;
+  private String birthDate;
   private boolean createDonorSummaryView;
   private boolean usePhraseMatch;
   private String donationIdentificationNumber;
@@ -38,6 +37,7 @@ public class FindDonorBackingForm {
   }
 
   public void setFirstName(String firstName) {
+       System.out.println("in form" + firstName);
     this.firstName = firstName;
   }
 
@@ -48,6 +48,23 @@ public class FindDonorBackingForm {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthDate() {
+       return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+
+    }
 
 
   public boolean getCreateDonorSummaryView() {

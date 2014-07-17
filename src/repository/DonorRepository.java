@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -34,6 +35,7 @@ import model.idtype.IdNumber;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.BloodGroup;
+import model.util.Gender;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -93,7 +95,8 @@ public class DonorRepository {
     }
 
     public List<Object> findAnyDonor(String donorNumber, String firstName,
-            String lastName, Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
+            String lastName, Gender gender, Date birthDate,
+            Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
         Root<Donor> root = cq.from(Donor.class);
@@ -129,6 +132,17 @@ public class DonorRepository {
         if (!StringUtils.isBlank(lastName)) {
             exp2 = cb.and(exp2, lastNameExp);
         }
+        
+         if (gender.equals(Gender.male) || gender.equals(Gender.female)) {
+            exp2 = cb.and(exp2,cb.equal(root.<String>get("gender"), gender));
+        }
+         
+         if (birthDate != null) {
+                exp2 = cb.and(exp2,cb.equal(root.<java.sql.Date>get("birthDate"),birthDate));
+            
+        }
+        
+
 
         Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
         cq.where(cb.and(notDeleted, exp2));
