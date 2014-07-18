@@ -248,9 +248,9 @@
         <jsp:param name="errorMessage" value="${errorMessage}" />
       </jsp:include>
     </c:if>
-  
     <form:form method="POST" commandName="addCollectionForm"
       class="formFormatClass" id="${addCollectionFormId}">
+        <div> <form:errors path="collectedSample.donationBatch"/></div>
       <c:if test="${!collectionFields.collectionNumber.autoGenerate}">
         <c:if test="${collectionFields.collectionNumber.hidden != true }">
           <div class="barcodeContainer" style="display:none"></div>
