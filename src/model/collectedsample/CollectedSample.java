@@ -1,12 +1,18 @@
 package model.collectedsample;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.CollectionBatchExists;
+import constraintvalidator.DonationTypeExists;
+import constraintvalidator.DonorExists;
+import constraintvalidator.LocationExists;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,9 +26,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.Valid;
-
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -35,17 +39,10 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.user.User;
 import model.worksheet.Worksheet;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import constraintvalidator.BloodBagTypeExists;
-import constraintvalidator.CollectionBatchExists;
-import constraintvalidator.DonationTypeExists;
-import constraintvalidator.DonorExists;
-import constraintvalidator.LocationExists;
 import repository.bloodtesting.BloodTypingStatus;
 
 /**
@@ -55,6 +52,7 @@ import repository.bloodtesting.BloodTypingStatus;
  */
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
 
   @Id

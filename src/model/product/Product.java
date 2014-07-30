@@ -1,8 +1,11 @@
 package model.product;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import constraintvalidator.CollectedSampleExists;
+import constraintvalidator.ProductTypeExists;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,7 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityTest;
 import model.modificationtracker.ModificationTracker;
@@ -28,18 +30,15 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.usage.ProductUsage;
 import model.user.User;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import constraintvalidator.CollectedSampleExists;
-import constraintvalidator.ProductTypeExists;
-
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Product implements ModificationTracker {
 
   @Id
