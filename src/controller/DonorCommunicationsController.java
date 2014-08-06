@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import repository.ContactMethodTypeRepository;
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
@@ -126,46 +124,45 @@ public class DonorCommunicationsController {
 
 	@RequestMapping(value = "/donorCommunicationsFormGenerator", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-	public ModelAndView donorCommunicationsFormGenerator(
+	public @ResponseBody Map<String, Object> donorCommunicationsFormGenerator(
 			HttpServletRequest request, Model model) {
 
 		DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
 
-		ModelAndView mv = new ModelAndView("donors/donorCommunicationsForm");
+                Map<String, Object> map = new  HashMap<String, Object>();
 		Map<String, Object> m = model.asMap();
 		utilController.addTipsToModel(model.asMap(), "donors.finddonor");
 		// to ensure custom field names are displayed in the form
 		m.put("donorFields", utilController.getFormFieldsForForm("donor"));
 		m.put("contentLabel", "Find Donors");
 		m.put("refreshUrl", "donorCommunicationsFormGenerator.html");
-		addEditSelectorOptions(mv.getModelMap());
-		mv.addObject("model", m);
-		mv.addObject("donorCommunicationsForm", dbform);
-		return mv;
+		addEditSelectorOptions(map);
+		map.put("model", m);
+		map.put("donorCommunicationsForm", dbform);
+		return map;
 	}
 
 	@RequestMapping(value = "/findDonorCommunicationsForm", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-	public ModelAndView findDonorCommunications(
+	public @ResponseBody Map<String, Object> findDonorCommunications(
 			HttpServletRequest request,
 			@ModelAttribute("donorCommunicationsForm") @Valid DonorCommunicationsBackingForm form,
 			BindingResult result, Model model) {
-		ModelAndView modelAndView = new ModelAndView("donors/donorCommunicationsTable");
+		 Map<String, Object> map = new  HashMap<String, Object>();
 		Map<String, Object> m = model.asMap();
 
 		addEditSelectorOptions(m);
 		m.put("donorFields", utilController.getFormFieldsForForm("donor"));
 		form.getDonorPanels();
 		if (result.hasErrors()) {
-			modelAndView.addObject("hasErrors", true);
-			modelAndView = new ModelAndView("donors/donorCommunicationsForm");
-			modelAndView.addObject("errorMessage","Missing information for one or more required fields.");
+			map.put("hasErrors", true);
+			map.put("errorMessage","Missing information for one or more required fields.");
 			m.put("success", Boolean.FALSE);
 			m.put("requestUrl", getUrl(request));
 			m.put("refreshUrl", "donorCommunicationsFormGenerator.html");
-			modelAndView.addObject("model", m);
-			modelAndView.addObject("success", Boolean.FALSE);
-			return modelAndView;
+			map.put("model", m);
+			map.put("success", Boolean.FALSE);
+			return map;
 		}
 		form.setCreateDonorSummaryView(true);
 		m.put("requestUrl", getUrl(request));
@@ -174,8 +171,8 @@ public class DonorCommunicationsController {
 		m.put("refreshUrl", getUrl(request));
 		m.put("donorRowClickUrl", "donorSummary.html");
 		m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-		modelAndView.addObject("model", m);
-		return modelAndView;
+		map.put("model", m);
+		return map;
 	}
 
 	public static String getNextPageUrlForDonorCommunication(HttpServletRequest req) {

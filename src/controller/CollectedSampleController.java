@@ -1,25 +1,23 @@
 package controller;
 
-import java.io.PrintWriter;
+import backingform.CollectedSampleBackingForm;
+import backingform.FindCollectedSampleBackingForm;
+import backingform.WorksheetBackingForm;
+import backingform.validator.CollectedSampleBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.collectedsample.CollectedSample;
 import model.donor.Donor;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,22 +31,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
-import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
-import backingform.CollectedSampleBackingForm;
-import backingform.FindCollectedSampleBackingForm;
-import backingform.WorksheetBackingForm;
-import backingform.validator.CollectedSampleBackingFormValidator;
 
 @Controller
+@RequestMapping("/collection")
 public class CollectedSampleController {
 
   @Autowired
@@ -63,8 +55,6 @@ public class CollectedSampleController {
   @Autowired
   private DonationTypeRepository donorTypeRepository;
 
-  @Autowired
-  private GenericConfigRepository genericConfigRepository;
 
   @Autowired
   private UtilController utilController;
@@ -101,31 +91,31 @@ public class CollectedSampleController {
 
   @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
+  public @ResponseBody Map<String, Object> findCollectionFormGenerator(HttpServletRequest request, Model model) {
 
     FindCollectedSampleBackingForm form = new FindCollectedSampleBackingForm();
     model.addAttribute("findCollectedSampleForm", form);
 
-    ModelAndView mv = new ModelAndView("collections/findCollectionForm");
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new  HashMap<String, Object>();
+    addEditSelectorOptions(map);
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "collectedSamples.find");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
   @RequestMapping("/findCollection")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public ModelAndView findCollection(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> findCollection(HttpServletRequest request,
       @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
     List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
 
-    ModelAndView modelAndView = new ModelAndView("collections/collectionsTable");
+    Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     m.put("allCollectedSamples", getCollectionViewModels(collections));
@@ -134,8 +124,8 @@ public class CollectedSampleController {
     m.put("saveToWorksheetUrl", getWorksheetUrl(request));
     addEditSelectorOptions(m);
 
-    modelAndView.addObject("model", m);
-    return modelAndView;
+    map.put("model", m);
+    return map;
   }
 
   private String getWorksheetUrl(HttpServletRequest request) {
@@ -279,60 +269,60 @@ public class CollectedSampleController {
     m.put("sites", locationRepository.getAllCollectionSites());
   }
 
-  @RequestMapping(value = "/addCollectionFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/addForm", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public ModelAndView addCollectionFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> addCollectionFormGenerator(HttpServletRequest request,
       Model model) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
 
-    ModelAndView mv = new ModelAndView("collections/addCollectionForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addCollectionForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new  HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addCollectionForm", form);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectionFields", formFields);
-    return mv;
+    map.put("collectionFields", formFields);
+    return map;
   }
 
-  @RequestMapping(value = "/editCollectionFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/editForm", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public ModelAndView editCollectionFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> editCollectionFormGenerator(HttpServletRequest request,
       @RequestParam(value="collectionId") Long collectionId) {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
     form.getCollectedSampleIntegerProps();
-    ModelAndView mv = new ModelAndView("collections/editCollectionForm");
-    mv.addObject("editCollectionForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("editCollectionForm", form);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectionFields", formFields);
-    return mv;
+    map.put("collectionFields", formFields);
+    return map;
   }
 
-  @RequestMapping(value = "/addCollection", method = RequestMethod.POST)
+  @RequestMapping( method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public ModelAndView addCollection(
+  public @ResponseBody Map<String, Object> addCollection(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addCollectionForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-	    ModelAndView mv = new ModelAndView();
+            Map<String, Object> map = new HashMap<String, Object>();
 	    boolean success = false;
-	    addEditSelectorOptions(mv.getModelMap());
+	    addEditSelectorOptions(map);
 	    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-	    mv.addObject("collectionFields", formFields);
+	    map.put("collectionFields", formFields);
 	
 	    CollectedSample savedCollection = null;
 	    if (result.hasErrors()) {
-	      mv.addObject("hasErrors", true);
+	      map.put("hasErrors", true);
 	      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	      success = false;
 	    } 
@@ -348,7 +338,7 @@ public class CollectedSampleController {
 	        collectedSample.setIsDeleted(false);
 	        
 	        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
-	        mv.addObject("hasErrors", false);
+	        map.put("hasErrors", false);
 	        success = true;
 	    
 	        form = new CollectedSampleBackingForm();
@@ -362,20 +352,18 @@ public class CollectedSampleController {
     }
 
     if (success) {
-      mv.addObject("collectionId", savedCollection.getId());
-      mv.addObject("collectedSample", getCollectionViewModel(savedCollection));
-      mv.addObject("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
-      mv.setViewName("collections/addCollectionSuccess");
+      map.put("collectionId", savedCollection.getId());
+      map.put("collectedSample", getCollectionViewModel(savedCollection));
+      map.put("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
     } else {
-    	  mv.addObject("errorMessage", "Error creating collection. Please fix the errors noted below.");
-	      mv.addObject("firstTimeRender", false);
-	      mv.addObject("addCollectionForm", form);
-	      mv.addObject("refreshUrl", "addCollectionFormGenerator.html");
-	      mv.setViewName("collections/addCollectionError");
+              map.put("errorMessage", "Error creating collection. Please fix the errors noted below.");
+	      map.put("firstTimeRender", false);
+	      map.put("addCollectionForm", form);
+	      map.put("refreshUrl", "addCollectionFormGenerator.html");
     }
 
-    mv.addObject("success", success);
-    return mv;
+    map.put("success", success);
+    return map;
   }
 
   private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
@@ -383,23 +371,23 @@ public class CollectedSampleController {
     return collectionViewModel;
   }
 
-  @RequestMapping(value = "/updateCollection", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public ModelAndView updateCollectedSample(
+  public @ResponseBody Map<String, Object> updateCollectedSample(
       HttpServletResponse response,
       @ModelAttribute("editCollectionForm") @Valid CollectedSampleBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("collections/editCollectionForm");
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     String message = "";
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    mv.addObject("existingCollectedSample", true);
+    map.put("existingCollectedSample", true);
 
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
       message = "Please fix the errors noted";
@@ -411,14 +399,14 @@ public class CollectedSampleController {
         CollectedSample existingCollectedSample;
         existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {
-          mv.addObject("hasErrors", true);
+          map.put("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          mv.addObject("existingCollectedSample", false);
+          map.put("existingCollectedSample", false);
           message = "Collection does not already exist.";
         }
         else {
-          mv.addObject("hasErrors", false);
+          map.put("hasErrors", false);
           success = true;
           message = "Collection Successfully Updated";
         }
@@ -435,12 +423,12 @@ public class CollectedSampleController {
       }
    }
 
-    mv.addObject("editCollectedSampleForm", form);
-    mv.addObject("success", success);
-    mv.addObject("errorMessage", message);
-    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("editCollectedSampleForm", form);
+    map.put("success", success);
+    map.put("errorMessage", message);
+    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-    return mv;
+    return map;
   }
 
   public static List<CollectedSampleViewModel> getCollectionViewModels(
@@ -454,7 +442,7 @@ public class CollectedSampleController {
     return collectionViewModels;
   }
 
-  @RequestMapping(value = "/deleteCollectedSample", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteCollection(
@@ -476,42 +464,42 @@ public class CollectedSampleController {
     return m;
   }
 
-  @RequestMapping(value = "/collectionSummary", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET, params = {"collectionId"})
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public ModelAndView collectionSummaryGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody Map<String, Object> collectionSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
 
-    ModelAndView mv = new ModelAndView("collections/collectionSummary");
+    Map<String, Object> map = new HashMap<String, Object>();
 
-    mv.addObject("requestUrl", getUrl(request));
+    map.put("requestUrl", getUrl(request));
 
     CollectedSample collectedSample = null;
     if (collectedSampleId != null) {
       collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
       if (collectedSample != null) {
-        mv.addObject("existingCollectedSample", true);
+        map.put("existingCollectedSample", true);
       }
       else {
-        mv.addObject("existingCollectedSample", false);
+        map.put("existingCollectedSample", false);
       }
     }
 
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "collections.findcollection.collectionsummary");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
 
     CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
-    mv.addObject("collectedSample", collectionViewModel);
+    map.put("collectedSample", collectionViewModel);
 
-    mv.addObject("refreshUrl", getUrl(request));
+    map.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
-    return mv;
+    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+    return map;
   }
 
   @RequestMapping(value="/saveFindCollectionsResultsToWorksheet", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public ModelAndView saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form,
       BindingResult result, Model model) {
@@ -544,7 +532,7 @@ public class CollectedSampleController {
     }
 
     String worksheetNumber = form.getWorksheetNumber();
-    ModelAndView mv = new ModelAndView("collections/worksheetSaved");
+    Map<String, Object> map = new  HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     m.put("worksheetNumber", worksheetNumber);
     try {
@@ -561,9 +549,9 @@ public class CollectedSampleController {
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
-    mv.addObject("model", m);
+    map.put("model", m);
     
-    return mv;
+    return map;
   }
   
   @RequestMapping("/findLastDonationForDonor.html")  

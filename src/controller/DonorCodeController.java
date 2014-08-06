@@ -2,7 +2,6 @@ package controller;
 
 import backingform.DonorCodeBackingForm;
 import backingform.validator.DonorCodeBackingFormValidator;
-import static com.google.common.io.Files.map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +13,6 @@ import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,7 +26,6 @@ import repository.DonorRepository;
 import utils.PermissionConstants;
 
 
-@Controller("/donorCode")
 public class DonorCodeController {
 	
 	  @Autowired
@@ -54,14 +50,14 @@ public class DonorCodeController {
 		  return modelAndView;
 		  
 	  }
-           @RequestMapping(method = RequestMethod.GET)
+           @RequestMapping(value = "/donorCOde", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
               public @ResponseBody List<DonorCodeGroup> addDonorCodeFormGenerator(){
               return  donorRepository.getAllDonorCodeGroups();
           }
 	  
 	
-	  @RequestMapping(method = RequestMethod.POST)
+	  @RequestMapping(value = "/donorCOde" ,method = RequestMethod.POST)
 	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
 	  public @ResponseBody Map<String, Object> addDonorCode(HttpServletRequest request,HttpServletResponse response, 
 			@ModelAttribute("addDonorCodeForm")  @Valid DonorCodeBackingForm form,
@@ -84,7 +80,7 @@ public class DonorCodeController {
 		  
 	  }
 	  
-	  @RequestMapping(method = RequestMethod.GET,params = {"donorId"})
+	  @RequestMapping(value = "/donorCOde",method = RequestMethod.GET,params = {"donorId"})
 	  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_CODE+"')")
 	  public @ResponseBody List<DonorDonorCode> donorCodesTable(HttpServletRequest request,Long donorId){
 		
@@ -93,7 +89,7 @@ public class DonorCodeController {
 		  
 	  }
 	  
-	  @RequestMapping(method = RequestMethod.DELETE)
+	  @RequestMapping(value = "/donorCOde" , method = RequestMethod.DELETE)
 	  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR_CODE+"')")
 	  public @ResponseBody List<DonorDonorCode> deleteDomorCode(@RequestParam(value="id") Long id){
 		  Donor donor = donorRepository.deleteDonorCode(id);

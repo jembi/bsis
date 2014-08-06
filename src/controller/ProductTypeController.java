@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 
@@ -39,14 +38,14 @@ public class ProductTypeController {
     return reqUrl;
   }
 
-  public ModelAndView getProductTypeSummary(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> getProductTypeSummary(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
-    ModelAndView mv = new ModelAndView ("admin/productTypeSummary");
+    Map<String, Object> map = new HashMap<String, Object> ();
     ProductType productType = productTypeRepository.getProductTypeById(productTypeId);
-    mv.addObject("productType", productType);
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("productType", productType);
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
   @SuppressWarnings("unchecked")
@@ -127,14 +126,14 @@ public class ProductTypeController {
 
   @RequestMapping(value="productTypeCombinationSummary", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView getProductTypeCombinationSummary(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
       @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
 
-    ModelAndView mv = new ModelAndView ("admin/productTypeCombinationSummary");
+    Map<String, Object> map = new HashMap<String, Object> ();
     ProductTypeCombination productTypeCombination = productTypeRepository.getProductTypeCombinationById(productTypeCombinationId);
-    mv.addObject("productTypeCombination", productTypeCombination);
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("productTypeCombination", productTypeCombination);
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
   @SuppressWarnings("unchecked")

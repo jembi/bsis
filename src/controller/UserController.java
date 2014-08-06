@@ -1,14 +1,15 @@
 package controller;
 
+import backingform.UserBackingForm;
+import backingform.validator.UserBackingFormValidator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.user.Role;
 import model.user.User;
 
@@ -24,16 +25,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import repository.RoleRepository;
 import repository.UserRepository;
 import utils.PermissionConstants;
 import viewmodel.UserViewModel;
-import backingform.UserBackingForm;
-import backingform.validator.UserBackingFormValidator;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
   @Autowired
@@ -50,19 +49,19 @@ public class UserController {
     binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController,userRepository));
   }
 
-  @RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="/configureForm", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView configureUsersFormGenerator(
+  public @ResponseBody Map<String, Object> configureUsersFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
-    ModelAndView mv = new ModelAndView("admin/configureUsers");
+    Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     addAllUsersToModel(m);
     m.put("refreshUrl", utilController.getUrl(request));
     m.put("userRoles", roleRepository.getAllRoles());
-    mv.addObject("model", model);
-    return mv;
+    map.put("model", model);
+    return map;
   }
 
   private void addAllUsersToModel(Map<String, Object> m) {
@@ -70,12 +69,12 @@ public class UserController {
     m.put("allUsers", users);
   }
 
-  @RequestMapping(value = "/editUserFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/editForm", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView editUserFormGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody Map<String, Object> editUserFormGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "userId", required = false) Integer userId) {
 	 UserBackingForm form = new UserBackingForm();
-    ModelAndView mv = new ModelAndView("admin/editUserForm");
+    Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     m.put("requestUrl", utilController.getUrl(request));
     if (userId != null) {
@@ -97,18 +96,18 @@ public class UserController {
     m.put("editUserForm", form);
     m.put("refreshUrl", utilController.getUrl(request));
     // to ensure custom field names are displayed in the form
-    mv.addObject("model", m);
-    return mv;
+    map.put("model", m);
+    return map;
   }
 
-  @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView
+  public @ResponseBody Map<String, Object>
         addUser(HttpServletRequest request,
                  HttpServletResponse response,
                  @ModelAttribute("editUserForm") @Valid UserBackingForm form,
                  BindingResult result, Model model) {
-    ModelAndView mv = new ModelAndView("admin/editUserForm");
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     
     String message = "";
@@ -147,8 +146,8 @@ public class UserController {
     m.put("success", success);
     m.put("errorMessage", message);
 
-    mv.addObject("model", m);
-    return mv;
+    map.put("model", m);
+    return map;
   }
    
   public List<Role> assignUserRoles(UserBackingForm userForm)
@@ -161,14 +160,14 @@ public class UserController {
        }
        return roles;
   }
-  @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+  @RequestMapping( method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView updateUser(
+  public Map<String, Object> updateUser(
       HttpServletResponse response,
       @ModelAttribute(value="editUserForm") @Valid UserBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("admin/editUserForm");
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     String message = "";
     Map<String, Object> m = model.asMap();
@@ -223,9 +222,9 @@ public class UserController {
     m.put("success", success);
     m.put("errorMessage", message);
 
-    mv.addObject("model", m);
+    map.put("model", m);
 
-    return mv;
+    return map;
   }
   
 	

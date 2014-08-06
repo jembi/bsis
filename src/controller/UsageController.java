@@ -1,16 +1,16 @@
 package controller;
 
+import backingform.ProductUsageBackingForm;
+import backingform.validator.UsageBackingFormValidator;
+import java.util.HashMap;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.product.Product;
 import model.request.Request;
 import model.usage.ProductUsage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,8 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
@@ -31,8 +30,6 @@ import repository.UsageRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
-import backingform.ProductUsageBackingForm;
-import backingform.validator.UsageBackingFormValidator;
 
 @Controller
 public class UsageController {
@@ -71,20 +68,20 @@ public class UsageController {
 
   @RequestMapping(value = "/addUsageFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageFormGenerator(HttpServletRequest request) {
+  public Map<String, Object> addUsageFormGenerator(HttpServletRequest request) {
 
     ProductUsageBackingForm form = new ProductUsageBackingForm();
 
-    ModelAndView mv = new ModelAndView("usage/addUsageForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addUsageForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addUsageForm", form);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
-    mv.addObject("usageFields", formFields);
-    return mv;
+    map.put("usageFields", formFields);
+    return map;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -93,22 +90,22 @@ public class UsageController {
 
   @RequestMapping(value = "/addUsage", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsage(
+  public Map<String, Object> addUsage(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addUsageForm") @Valid ProductUsageBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
 
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    mv.addObject("usageFields", formFields);
+    map.put("usageFields", formFields);
 
     ProductUsage savedUsage = null;
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
     } else {
@@ -116,7 +113,7 @@ public class UsageController {
         ProductUsage productUsage = form.getUsage();
         productUsage.setIsDeleted(false);
         savedUsage = usageRepository.addUsage(productUsage);
-        mv.addObject("hasErrors", false);
+        map.put("hasErrors", false);
         success = true;
         form = new ProductUsageBackingForm();
       } catch (EntityExistsException ex) {
@@ -129,65 +126,62 @@ public class UsageController {
     }
 
     if (success) {
-      mv.addObject("usageId", savedUsage.getId());
-      mv.addObject("usage",  new ProductUsageViewModel(savedUsage));
-      mv.addObject("addAnotherUsageUrl", "addUsageFormGenerator.html");
-      mv.setViewName("usage/addUsageSuccess");
+      map.put("usageId", savedUsage.getId());
+      map.put("usage",  new ProductUsageViewModel(savedUsage));
+      map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
     } else {
-      mv.addObject("errorMessage", "Error creating usage. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addUsageForm", form);
-      mv.addObject("refreshUrl", "addUsageFormGenerator.html");
-      mv.setViewName("usage/addUsageError");
+      map.put("errorMessage", "Error creating usage. Please fix the errors noted below.");
+      map.put("firstTimeRender", false);
+      map.put("addUsageForm", form);
+      map.put("refreshUrl", "addUsageFormGenerator.html");
     }
 
-    mv.addObject("success", success);
-    return mv;
+    map.put("success", success);
+    return map;
   }
 
   @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageByRequestFormGenerator(HttpServletRequest request) {
+  public Map<String, Object> addUsageByRequestFormGenerator(HttpServletRequest request) {
 
-    ModelAndView mv = new ModelAndView("usage/addUsageByRequestForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
-    mv.addObject("usageFields", formFields);
-    return mv;
+    map.put("usageFields", formFields);
+    return map;
   }
 
   @RequestMapping(value="/findIssuedProductsForRequest", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView findIssuedProductsForRequest(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> findIssuedProductsForRequest(HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="requestNumber") String requestNumber) {
 
-    ModelAndView mv = new ModelAndView();
+    Map<String, Object> map = new HashMap<String, Object>();
 
     Request req = requestRepository.findRequest(requestNumber);
     boolean success = true;
     if (req == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
-      mv.addObject("errorMessage", "Request not found");
+      map.put("errorMessage", "Request not found");
     } else {
-      mv.addObject("request", new RequestViewModel(req));
-      mv.addObject("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
+      map.put("request", new RequestViewModel(req));
+      map.put("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
     }
 
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("success", success);
-    mv.setViewName("usage/addUsageForIssuedProducts");
-    return mv;
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("success", success);
+    return map;
   }
 
   @RequestMapping(value = "/addUsageForProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageForProductFormGenerator(HttpServletRequest request,
+  public Map<String, Object> addUsageForProductFormGenerator(HttpServletRequest request,
       @RequestParam(value="productId") Long productId) {
 
     ProductUsageBackingForm form = new ProductUsageBackingForm();
@@ -195,37 +189,37 @@ public class UsageController {
     Product product = productRepository.findProductById(productId);
     form.setProduct(product);
 
-    ModelAndView mv = new ModelAndView("usage/addUsageForProductForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addUsageForProductForm", form);
-    mv.addObject("productType", product.getProductType().getProductTypeNameShort());
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addUsageForProductForm", form);
+    map.put("productType", product.getProductType().getProductTypeNameShort());
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
-    mv.addObject("usageFields", formFields);
-    return mv;
+    map.put("usageFields", formFields);
+    return map;
   }
 
   @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageForProduct(
+  public @ResponseBody Map<String, Object> addUsageForProduct(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addUsageForProductForm") @Valid ProductUsageBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
 
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    mv.addObject("usageFields", formFields);
+    map.put("usageFields", formFields);
 
     ProductUsage savedUsage = null;
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
     } else {
@@ -233,7 +227,7 @@ public class UsageController {
         ProductUsage productUsage = form.getUsage();
         productUsage.setIsDeleted(false);
         savedUsage = usageRepository.addUsage(productUsage);
-        mv.addObject("hasErrors", false);
+        map.put("hasErrors", false);
         success = true;
         form = new ProductUsageBackingForm();
       } catch (EntityExistsException ex) {
@@ -246,19 +240,17 @@ public class UsageController {
     }
 
     if (success) {
-      mv.addObject("usageId", savedUsage.getId());
-      mv.addObject("usage",  new ProductUsageViewModel(savedUsage));
-      mv.setViewName("usage/addUsageForProductSuccess");
+      map.put("usageId", savedUsage.getId());
+      map.put("usage",  new ProductUsageViewModel(savedUsage));
     } else {
-      mv.addObject("errorMessage", "Error creating usage. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addUsageForm", form);
-      mv.addObject("refreshUrl", "addUsageForProductFormGenerator.html");
-      mv.setViewName("usage/addUsageForProductError");
+      map.put("errorMessage", "Error creating usage. Please fix the errors noted below.");
+      map.put("firstTimeRender", false);
+      map.put("addUsageForm", form);
+      map.put("refreshUrl", "addUsageForProductFormGenerator.html");
     }
 
-    mv.addObject("success", success);
-    return mv;
+    map.put("success", success);
+    return map;
   }
 
 }

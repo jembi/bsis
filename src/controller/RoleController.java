@@ -1,19 +1,20 @@
 package controller;
 
+import backingform.RoleBackingForm;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.RoleBackingFormValidator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.collectedsample.CollectedSample;
 import model.user.Permission;
 import model.user.Role;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,16 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import repository.RoleRepository;
 import utils.PermissionConstants;
 import viewmodel.RoleViewModel;
-import backingform.RoleBackingForm;
-import backingform.validator.DonorBackingFormValidator;
-import backingform.validator.RoleBackingFormValidator;
 
 @Controller
+@RequestMapping("/role")
 public class RoleController {
 
 	@Autowired
@@ -52,17 +49,17 @@ public class RoleController {
 	  binder.setValidator(new RoleBackingFormValidator(binder.getValidator(), utilController,roleRepository));
 	}
 
-	@RequestMapping(value = "/configureRolesFormGenerator", method = RequestMethod.GET)
+	@RequestMapping(value = "/configureForm", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public ModelAndView configureRolesFormGenerator(HttpServletRequest request,
+	public @ResponseBody Map<String, Object> configureRolesFormGenerator(HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 
-		ModelAndView mv = new ModelAndView("admin/configureRoles");
+                Map<String, Object> map = new  HashMap<String, Object>();
 		Map<String, Object> m = model.asMap();
 		addAllRolesToModel(m);
 		m.put("refreshUrl", utilController.getUrl(request));
-		mv.addObject("model", model);
-		return mv;
+		map.put("model", model);
+		return map;
 	}
 
 	private void addAllRolesToModel(Map<String, Object> m) {
@@ -75,14 +72,14 @@ public class RoleController {
 		m.put("allPermissions", permissions);
 	}
 
-	@RequestMapping(value = "/editRoleFormGenerator", method = RequestMethod.GET)
+	@RequestMapping(value = "/editForm", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public ModelAndView editRoleFormGenerator(HttpServletRequest request,
+	public @ResponseBody Map<String, Object> editRoleFormGenerator(HttpServletRequest request,
 			Model model,
 			@RequestParam(value = "roleId", required = false) Long roleId) {
 
 		RoleBackingForm form = new RoleBackingForm();
-		ModelAndView mv = new ModelAndView("admin/editRoleForm");
+                 Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> m = model.asMap();
 		m.put("requestUrl", utilController.getUrl(request));
 		if (roleId != null) {
@@ -100,20 +97,20 @@ public class RoleController {
 		m.put("editRoleForm", form);
 		m.put("refreshUrl", utilController.getUrl(request));
 		// to ensure custom field names are displayed in the form
-		mv.addObject("model", m);
-		return mv;
+		map.put("model", m);
+		return map;
 	}
 
-	@RequestMapping(value = "/updateRole", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public ModelAndView updateRole(
+	public @ResponseBody Map<String, Object> updateRole(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@ModelAttribute(value = "editRoleForm") @Valid RoleBackingForm form,
 			BindingResult result,
 			Model model) {
 		
-		ModelAndView mv = new ModelAndView("admin/editRoleForm");
+                Map<String, Object> map = new HashMap<String, Object>();
 		boolean success = false;
 		String message = "";
 		Map<String, Object> m = model.asMap();
@@ -159,22 +156,22 @@ public class RoleController {
 		m.put("success", success);
 		m.put("errorMessage", message);
 
-		mv.addObject("model", m);
+		map.put("model", m);
 
-		return mv;
+		return map;
 	}
 
-	@RequestMapping(value = "/addRole", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public ModelAndView addRole(HttpServletRequest request,
+	public @ResponseBody Map<String, Object> addRole(HttpServletRequest request,
 			HttpServletResponse response,
 			@ModelAttribute("editRoleForm") @Valid RoleBackingForm form,
 			BindingResult result, Model model) {
 		
-		ModelAndView mv = new ModelAndView("admin/editRoleForm");
-		Map<String, Object> m = model.asMap();
-	    boolean success = false;
-		
+            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> m = model.asMap();
+            boolean success = false;
+
 	    Role savedRole = null;
 	    if (result.hasErrors()) {
 	      m.put("hasErrors", true);
@@ -215,9 +212,9 @@ public class RoleController {
 	    
 
 	    }
-		mv.addObject("model", m);
+		map.put("model", m);
 		m.put("success", success);
-        return mv;
+        return map;
 	}
 
 	private Set<Permission> setPermissions(Set<String> permissionValues) {

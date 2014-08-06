@@ -1,18 +1,18 @@
 package controller;
 
+import backingform.CollectionBatchBackingForm;
+import backingform.FindCollectionBatchBackingForm;
+import backingform.validator.CollectionBatchBackingFormValidator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.collectionbatch.CollectionBatch;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -24,17 +24,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import repository.CollectionBatchRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.CollectionBatchViewModel;
-import backingform.CollectionBatchBackingForm;
-import backingform.FindCollectionBatchBackingForm;
-import backingform.validator.CollectionBatchBackingFormValidator;
 
 @Controller
+@RequestMapping("/collectionBatch")
 public class CollectionBatchController {
 
   @Autowired
@@ -66,25 +63,25 @@ public class CollectionBatchController {
 
   @RequestMapping(value = "/findCollectionBatchFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public ModelAndView findCollectionFormGenerator(HttpServletRequest request, Model model) {
+  public Map<String, Object> findCollectionFormGenerator(HttpServletRequest request, Model model) {
 
     FindCollectionBatchBackingForm form = new FindCollectionBatchBackingForm();
     model.addAttribute("findCollectionBatchForm", form);
 
-    ModelAndView mv = new ModelAndView("collectionbatch/findCollectionBatchForm");
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    addEditSelectorOptions(map);
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "collectionbatch.find");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
   @RequestMapping("/findCollectionBatch")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public ModelAndView findCollectionBatch(HttpServletRequest request,
+  public Map<String, Object> findCollectionBatch(HttpServletRequest request,
       @ModelAttribute("findCollectionBatchForm") FindCollectionBatchBackingForm form,
       BindingResult result, Model model) {
 
@@ -107,7 +104,7 @@ public class CollectionBatchController {
     List<CollectionBatch> collectionBatches =
         collectionBatchRepository.findCollectionBatches(form.getBatchNumber(), centerIds, siteIds);
 
-    ModelAndView modelAndView = new ModelAndView("collectionbatch/collectionBatchesTable");
+    Map<String, Object> modelAndView = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     m.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
     m.put("allCollectionBatches", getCollectionBatchViewModels(collectionBatches));
@@ -115,7 +112,7 @@ public class CollectionBatchController {
 
     addEditSelectorOptions(m);
 
-    modelAndView.addObject("model", m);
+    modelAndView.put("model", m);
     return modelAndView;
   }
 
@@ -124,42 +121,42 @@ public class CollectionBatchController {
     m.put("sites", locationRepository.getAllCollectionSites());
   }
 
-  @RequestMapping(value = "/addCollectionBatchFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/addform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
-  public ModelAndView addCollectionBatchFormGenerator(HttpServletRequest request,
+  public @ResponseBody  Map<String, Object> addCollectionBatchFormGenerator(HttpServletRequest request,
       Model model) {
 
     CollectionBatchBackingForm form = new CollectionBatchBackingForm();
 
-    ModelAndView mv = new ModelAndView("collectionbatch/addCollectionBatchForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addCollectionBatchForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addCollectionBatchForm", form);
+    map.put("refreshUrl", getUrl(request));
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectionbatch");
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectionBatchFields", formFields);
-    return mv;
+    map.put("collectionBatchFields", formFields);
+    return map;
   }
 
-  @RequestMapping(value = "/addCollectionBatch", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')") 
-  public ModelAndView addCollectionBatch(
+  public @ResponseBody Map<String, Object> addCollectionBatch(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addCollectionBatchForm") @Valid CollectionBatchBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
 
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectionBatch");
-    mv.addObject("collectionBatchFields", formFields);
+    map.put("collectionBatchFields", formFields);
 
     CollectionBatch savedCollectionBatch = null;
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
     } else {
@@ -167,7 +164,7 @@ public class CollectionBatchController {
         CollectionBatch collectionBatch = form.getCollectionBatch();
         collectionBatch.setIsDeleted(false);
         savedCollectionBatch = collectionBatchRepository.addCollectionBatch(collectionBatch);
-        mv.addObject("hasErrors", false);
+        map.put("hasErrors", false);
         success = true;
         form = new CollectionBatchBackingForm();
       } catch (EntityExistsException ex) {
@@ -180,20 +177,18 @@ public class CollectionBatchController {
     }
 
     if (success) {
-      mv.addObject("collectionBatchId", savedCollectionBatch.getId());
-      mv.addObject("collectionBatch", getCollectionBatchViewModel(savedCollectionBatch));
-      mv.addObject("addAnotherCollectionBatchUrl", "addCollectionBatchFormGenerator.html");
-      mv.setViewName("collectionbatch/addCollectionBatchSuccess");
+      map.put("collectionBatchId", savedCollectionBatch.getId());
+      map.put("collectionBatch", getCollectionBatchViewModel(savedCollectionBatch));
+      map.put("addAnotherCollectionBatchUrl", "addCollectionBatchFormGenerator.html");
     } else {
-      mv.addObject("errorMessage", "Error creating collection batch. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addCollectionBatchForm", form);
-      mv.addObject("refreshUrl", "addCollectionBatchFormGenerator.html");
-      mv.setViewName("collectionbatch/addCollectionBatchError");
+      map.put("errorMessage", "Error creating collection batch. Please fix the errors noted below.");
+      map.put("firstTimeRender", false);
+      map.put("addCollectionBatchForm", form);
+      map.put("refreshUrl", "addCollectionBatchFormGenerator.html");
     }
-    addEditSelectorOptions(mv.getModelMap());
-    mv.addObject("success", success);
-    return mv;
+    addEditSelectorOptions(map);
+    map.put("success", success);
+    return map;
   }
 
   private CollectionBatchViewModel getCollectionBatchViewModel(CollectionBatch collectionBatch) {
@@ -212,36 +207,36 @@ public class CollectionBatchController {
     return collectionBatchViewModels;
   }
 
-  @RequestMapping(value = "/collectionBatchSummary", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public ModelAndView collectionBatchSummaryGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody Map<String, Object> collectionBatchSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "collectionBatchId", required = false) Integer collectionBatchId) {
 
-    ModelAndView mv = new ModelAndView("collectionbatch/collectionBatchSummary");
+    Map<String, Object> map = new HashMap<String, Object>();
 
-    mv.addObject("requestUrl", getUrl(request));
+    map.put("requestUrl", getUrl(request));
 
     CollectionBatch collectionBatch = null;
     if (collectionBatchId != null) {
       collectionBatch = collectionBatchRepository.findCollectionBatchById(collectionBatchId);
       if (collectionBatch != null) {
-        mv.addObject("existingCollectionBatch", true);
+        map.put("existingCollectionBatch", true);
       }
       else {
-        mv.addObject("existingCollectionBatch", false);
+        map.put("existingCollectionBatch", false);
       }
     }
 
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "collectionBatches.findcollectionbatch.collectionbatchsummary");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
 
     CollectionBatchViewModel collectionBatchViewModel = getCollectionBatchViewModel(collectionBatch);
-    mv.addObject("collectionBatch", collectionBatchViewModel);
+    map.put("collectionBatch", collectionBatchViewModel);
 
-    mv.addObject("refreshUrl", getUrl(request));
+    map.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
-    return mv;
+    map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
+    return map;
   }
 }

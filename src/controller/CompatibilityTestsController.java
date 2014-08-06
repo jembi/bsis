@@ -1,15 +1,15 @@
 package controller;
 
+import backingform.CompatibilityTestBackingForm;
+import backingform.validator.CompatibilityTestBackingFormValidator;
+import java.util.HashMap;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.compatibility.CompatibilityTest;
 import model.request.Request;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,14 +21,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.RequestRepository;
 import utils.PermissionConstants;
-import backingform.CompatibilityTestBackingForm;
-import backingform.validator.CompatibilityTestBackingFormValidator;
 
 @Controller
 public class CompatibilityTestsController {
@@ -69,7 +66,7 @@ public class CompatibilityTestsController {
 
   @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public ModelAndView editCompatibilityTestsFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> editCompatibilityTestsFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value="requestId") String requestId) {
 
@@ -87,21 +84,21 @@ public class CompatibilityTestsController {
     Request productRequest = requestRepository.findRequestById(requestId);
     form.setForRequest(productRequest);
 
-    ModelAndView mv = new ModelAndView("editCompatibilityTestForm");
-    mv.addObject("model", m);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("model", m);
+    return map;
 
   }
 
   @RequestMapping(value = "/addCompatibilityTestForRequest", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public ModelAndView
+  public @ResponseBody  Map<String, Object>
         addCompatibilityTest(HttpServletRequest request,
                  HttpServletResponse response,
                  @ModelAttribute("editCompatibilityTestForm") @Valid CompatibilityTestBackingForm form,
                  BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("editCompatibilityTestForm");
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     String message = "";
 
@@ -140,7 +137,7 @@ public class CompatibilityTestsController {
     m.put("message", message);
     m.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
 
-    mv.addObject("model", m);
-    return mv;
+    map.put("model", m);
+    return map;
   }
 }

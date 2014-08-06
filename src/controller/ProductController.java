@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
@@ -96,69 +95,69 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/productSummary", method = RequestMethod.GET)
-  public ModelAndView productSummaryGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody  Map<String, Object> productSummaryGenerator(HttpServletRequest request, Model model,
       @RequestParam(value = "productId", required = false) Long productId) {
 
-    ModelAndView mv = new ModelAndView("products/productSummary");
-    mv.addObject("requestUrl", getUrl(request));
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
     Product product = null;
     if (productId != null) {
       product = productRepository.findProductById(productId);
       if (product != null) {
-        mv.addObject("existingProduct", true);
+        map.put("existingProduct", true);
       }
       else {
-        mv.addObject("existingProduct", false);
+        map.put("existingProduct", false);
       }
     }
     ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
     Map<String, Object> tips = new HashMap<String, Object>();
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     utilController.addTipsToModel(tips, "products.findproduct.productsummary");
-    mv.addObject("tips", tips);
-    mv.addObject("product", productViewModel);
-    mv.addObject("refreshUrl", getUrl(request));
-    mv.addObject("productStatusChangeReasons",
+    map.put("tips", tips);
+    map.put("product", productViewModel);
+    map.put("refreshUrl", getUrl(request));
+    map.put("productStatusChangeReasons",
         productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
     // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
-    return mv;
+    map.put("productFields", utilController.getFormFieldsForForm("Product"));
+    return map;
   }
 
   @RequestMapping(value = "/findProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView findProductFormGenerator(HttpServletRequest request) {
+  public @ResponseBody Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
 
     FindProductBackingForm form = new FindProductBackingForm();
-    ModelAndView mv = new ModelAndView("products/findProductForm");
-    mv.addObject("findProductForm", form);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("findProductForm", form);
 
     Map<String, Object> tips = new HashMap<String, Object>();
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     utilController.addTipsToModel(tips, "products.find");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
   @RequestMapping("/findProduct")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView findProduct(HttpServletRequest request,
+  public @ResponseBody  Map<String, Object> findProduct(HttpServletRequest request,
       @ModelAttribute("findProductForm") FindProductBackingForm form,
       BindingResult result, Model model) {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
-    ModelAndView mv = new ModelAndView("products/productsTable");
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("allProducts", getProductViewModels(products));
-    mv.addObject("refreshUrl", getUrl(request));
-    mv.addObject("nextPageUrl", getNextPageUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("allProducts", getProductViewModels(products));
+    map.put("refreshUrl", getUrl(request));
+    map.put("nextPageUrl", getNextPageUrl(request));
+    addEditSelectorOptions(map);
 
-    return mv;
+    return map;
   }
 
   /**
@@ -166,20 +165,20 @@ public class ProductController {
    */
   @RequestMapping(value = "/recordProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public ModelAndView recordProductFormGenerator(HttpServletRequest request) {
+  public Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
 
   	RecordProductBackingForm form = new RecordProductBackingForm();
-    ModelAndView mv = new ModelAndView("products/recordProductForm");
-    mv.addObject("findProductByPackNumberForm", form);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("findProductByPackNumberForm", form);
 
     Map<String, Object> tips = new HashMap<String, Object>();
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     utilController.addTipsToModel(tips, "products.find");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
   
   /**
@@ -215,7 +214,7 @@ public class ProductController {
   @SuppressWarnings("unchecked")
   @RequestMapping("/findProductPagination")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> findProductPagination(HttpServletRequest request,
+  public Map<String, Object> findProductPagination(HttpServletRequest request,
       @ModelAttribute("findProductForm") FindProductBackingForm form,
       BindingResult result, Model model) {
 
@@ -253,7 +252,7 @@ public class ProductController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in productsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+  private @ResponseBody  Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
     for (ProductViewModel product : getProductViewModels(products)) {
@@ -298,81 +297,81 @@ public class ProductController {
 
   @RequestMapping(value = "/addProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public ModelAndView addProductFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> addProductFormGenerator(HttpServletRequest request,
       Model model) {
 
     ProductBackingForm form = new ProductBackingForm();
 
-    ModelAndView mv = new ModelAndView("products/addProductForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addProductForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addProductForm", form);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", formFields);
-    return mv;
+    map.put("productFields", formFields);
+    return map;
   }
 
   @RequestMapping(value = "/addProductCombinationFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public ModelAndView addProductCombinationFormGenerator(HttpServletRequest request,
+  public Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request,
       Model model) {
 
     ProductCombinationBackingForm form = new ProductCombinationBackingForm();
 
-    ModelAndView mv = new ModelAndView("products/addProductCombinationForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addProductCombinationForm", form);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addProductCombinationForm", form);
 
-    addOptionsForAddProductCombinationForm(mv.getModelMap());
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    addOptionsForAddProductCombinationForm(map);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", formFields);
-    return mv;
+    map.put("productFields", formFields);
+    return map;
   }
 
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_COMPONENT+"')")
-  public ModelAndView editProductFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> editProductFormGenerator(HttpServletRequest request,
       @RequestParam(value="productId") Long productId) {
 
     Product product = productRepository.findProductById(productId);
     ProductBackingForm form = new ProductBackingForm(product);
 
-    ModelAndView mv = new ModelAndView("products/editProductForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("editProductForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("editProductForm", form);
+    map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", formFields);
-    return mv;
+    map.put("productFields", formFields);
+    return map;
   }
 
   @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public ModelAndView addProduct(
+  public @ResponseBody Map<String, Object> addProduct(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addProductForm") @Valid ProductBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
 
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-    mv.addObject("productFields", formFields);
+    map.put("productFields", formFields);
 
     Product savedProduct = null;
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
     } else {
@@ -380,7 +379,7 @@ public class ProductController {
         Product product = form.getProduct();
         product.setIsDeleted(false);
         savedProduct = productRepository.addProduct(product);
-        mv.addObject("hasErrors", false);
+        map.put("hasErrors", false);
         success = true;
         form = new ProductBackingForm();
       } catch (EntityExistsException ex) {
@@ -393,45 +392,43 @@ public class ProductController {
     }
 
     if (success) {
-      mv.addObject("product", getProductViewModel(savedProduct));
-      mv.addObject("addAnotherProductUrl", "addProductFormGenerator.html");
-      mv.setViewName("products/addProductSuccess");
+      map.put("product", getProductViewModel(savedProduct));
+      map.put("addAnotherProductUrl", "addProductFormGenerator.html");
     } else {
-      mv.addObject("errorMessage", "Error creating product. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addProductForm", form);
-      mv.addObject("refreshUrl", "addProductFormGenerator.html");
-      mv.setViewName("products/addProductError");
+      map.put("errorMessage", "Error creating product. Please fix the errors noted below.");
+      map.put("firstTimeRender", false);
+      map.put("addProductForm", form);
+      map.put("refreshUrl", "addProductFormGenerator.html");
     }
 
-    mv.addObject("success", success);
-    return mv;
+    map.put("success", success);
+    return map;
   }
 
   @RequestMapping(value = "/addProductCombination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public ModelAndView addProductCombination(
+  public @ResponseBody  Map<String, Object> addProductCombination(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addProductCombinationForm") @Valid ProductCombinationBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView();
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
 
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-    mv.addObject("productFields", formFields);
+    map.put("productFields", formFields);
 
     List<Product> savedProducts = null;
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
     } else {
       try {
         savedProducts = productRepository.addProductCombination(form);
-        mv.addObject("hasErrors", false);
+        map.put("hasErrors", false);
         success = true;
         form = new ProductCombinationBackingForm();
       } catch (EntityExistsException ex) {
@@ -445,23 +442,21 @@ public class ProductController {
 
     if (success) {
       // at least one product should be created, all products should have the same collection number
-      mv.addObject("collectionNumber", savedProducts.get(0).getCollectionNumber());
-      mv.addObject("createdProducts", getProductViewModels(savedProducts));
+      map.put("collectionNumber", savedProducts.get(0).getCollectionNumber());
+      map.put("createdProducts", getProductViewModels(savedProducts));
       List<Product> allProductsForCollection = productRepository.findProductsByCollectionNumber(savedProducts.get(0).getCollectionNumber());
-      mv.addObject("allProductsForCollection", getProductViewModels(allProductsForCollection));
-      mv.addObject("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
-      mv.setViewName("products/addProductCombinationSuccess");
+      map.put("allProductsForCollection", getProductViewModels(allProductsForCollection));
+      map.put("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
     } else {
-      mv.addObject("errorMessage", "Error creating product. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      addOptionsForAddProductCombinationForm(mv.getModelMap());
-      mv.addObject("addProductCombinationForm", form);
-      mv.addObject("refreshUrl", "addProductCombinationFormGenerator.html");
-      mv.setViewName("products/addProductCombinationError");
+      map.put("errorMessage", "Error creating product. Please fix the errors noted below.");
+      map.put("firstTimeRender", false);
+      addOptionsForAddProductCombinationForm(map);
+      map.put("addProductCombinationForm", form);
+      map.put("refreshUrl", "addProductCombinationFormGenerator.html");
     }
 
-    mv.addObject("success", success);
-    return mv;
+    map.put("success", success);
+    return map;
   }
 
   private ProductViewModel getProductViewModel(Product product) {
@@ -470,22 +465,22 @@ public class ProductController {
 
   @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_COMPONENT+"')")
-  public ModelAndView updateProduct(
+  public @ResponseBody  Map<String, Object> updateProduct(
       HttpServletResponse response,
       @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView mv = new ModelAndView("products/editProductForm");
+    Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     String message = "";
-    addEditSelectorOptions(mv.getModelMap());
+    addEditSelectorOptions(map);
     // only when the collection is correctly added the existingCollectedSample
     // property will be changed
-    mv.addObject("existingProduct", true);
+    map.put("existingProduct", true);
 
 
     if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
+      map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
       message = "Please fix the errors noted";
@@ -496,14 +491,14 @@ public class ProductController {
         form.setIsDeleted(false);
         Product existingProduct = productRepository.updateProduct(form.getProduct());
         if (existingProduct == null) {
-          mv.addObject("hasErrors", true);
+          map.put("hasErrors", true);
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
           success = false;
-          mv.addObject("existingProduct", false);
+          map.put("existingProduct", false);
           message = "Product does not already exist.";
         }
         else {
-          mv.addObject("hasErrors", false);
+          map.put("hasErrors", false);
           success = true;
           message = "Product Successfully Updated";
         }
@@ -520,12 +515,12 @@ public class ProductController {
       }
    }
 
-    mv.addObject("editProductForm", form);
-    mv.addObject("success", success);
-    mv.addObject("errorMessage", message);
-    mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
+    map.put("editProductForm", form);
+    map.put("success", success);
+    map.put("errorMessage", message);
+    map.put("productFields", utilController.getFormFieldsForForm("Product"));
 
-    return mv;
+    return map;
   }
 
   public static List<ProductViewModel> getProductViewModels(
@@ -564,14 +559,14 @@ public class ProductController {
 
   @RequestMapping(value = "/discardProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public ModelAndView discardProductFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> discardProductFormGenerator(HttpServletRequest request,
       @RequestParam("productId") String productId) {
-    ModelAndView mv = new ModelAndView("products/discardProductForm");
-    mv.addObject("productId", productId);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productId", productId);
     List<ProductStatusChangeReason> statusChangeReasons =
         productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
-    mv.addObject("discardReasons", statusChangeReasons);
-    return mv;
+    map.put("discardReasons", statusChangeReasons);
+    return map;
   }
 
 
@@ -603,24 +598,24 @@ public class ProductController {
 
   @RequestMapping(value = "/returnProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public ModelAndView returnProductFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> returnProductFormGenerator(HttpServletRequest request,
       @RequestParam("productId") String productId) {
-    ModelAndView mv = new ModelAndView("products/returnProductForm");
-    mv.addObject("productId", productId);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productId", productId);
     List<ProductStatusChangeReason> statusChangeReasons =
         productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
-    mv.addObject("returnReasons", statusChangeReasons);
-    return mv;
+    map.put("returnReasons", statusChangeReasons);
+    return map;
   }
 
   @RequestMapping(value = "/splitProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public ModelAndView splitProductFormGenerator(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> splitProductFormGenerator(HttpServletRequest request,
       @RequestParam("productId") Long productId) {
-    ModelAndView mv = new ModelAndView("products/splitProductForm");
-    mv.addObject("productId", productId);
-    mv.addObject("product", getProductViewModel(productRepository.findProduct(productId)));
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productId", productId);
+    map.put("product", getProductViewModel(productRepository.findProduct(productId)));
+    return map;
   }
 
 
@@ -651,29 +646,29 @@ public class ProductController {
 
   @RequestMapping(value = "/viewProductHistory", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView viewProductHistory(HttpServletRequest request, Model model,
+  public Map<String, Object> viewProductHistory(HttpServletRequest request, Model model,
       @RequestParam(value = "productId", required = false) Long productId) {
 
-    ModelAndView mv = new ModelAndView("products/productMovements");
+    Map<String, Object> map = new HashMap<String, Object>();
 
     Product product = null;
     if (productId != null) {
       product = productRepository.findProductById(productId);
       if (product != null) {
-        mv.addObject("existingProduct", true);
+        map.put("existingProduct", true);
       }
       else {
-        mv.addObject("existingProduct", false);
+        map.put("existingProduct", false);
       }
     }
 
     ProductViewModel productViewModel = getProductViewModel(product);
-    mv.addObject("product", productViewModel);
-    mv.addObject("allProductMovements", productRepository.getProductStatusChanges(product));
-    mv.addObject("refreshUrl", getUrl(request));
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("product", productViewModel);
+    map.put("allProductMovements", productRepository.getProductStatusChanges(product));
+    map.put("refreshUrl", getUrl(request));
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
     // to ensure custom field names are displayed in the form
-    return mv;
+    return map;
   }
 
   @RequestMapping(value = "/returnProduct", method = RequestMethod.POST)
@@ -741,26 +736,26 @@ public class ProductController {
   
   @RequestMapping("/findProductByPackNumber")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView findProductByPackNumber(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> findProductByPackNumber(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
-    ModelAndView mv = new ModelAndView("products/recordProductsTable");
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("allProducts", getProductViewModels(products));
-    mv.addObject("refreshUrl", getUrl(request));
-    mv.addObject("nextPageUrl", getNextPageUrlForRecordProduct(request));
-    mv.addObject("addProductForm", form);
-    addEditSelectorOptionsForNewRecord(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("allProducts", getProductViewModels(products));
+    map.put("refreshUrl", getUrl(request));
+    map.put("nextPageUrl", getNextPageUrlForRecordProduct(request));
+    map.put("addProductForm", form);
+    addEditSelectorOptionsForNewRecord(map);
 
-    return mv;
+    return map;
   }
   @SuppressWarnings("unchecked")
   @RequestMapping("/findProductByPackNumberPagination")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request,
+  public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
@@ -788,7 +783,7 @@ public class ProductController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in recordProductTable.jsp.
    */
-  private Map<String, Object> generateRecordProductTablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+  private @ResponseBody  Map<String, Object> generateRecordProductTablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
     for (ProductViewModel product : getProductViewModels(products)) {
@@ -829,7 +824,7 @@ public class ProductController {
   
   @RequestMapping("/recordNewProductComponents")
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public ModelAndView recordNewProductComponents(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> recordNewProductComponents(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
@@ -916,26 +911,26 @@ public class ProductController {
    
     List<Product> products = Arrays.asList(new Product[0]);
    
-    ModelAndView mv = new ModelAndView("products/recordProductsTable");
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("allProducts", getProductViewModels(products));
-    mv.addObject("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
-    mv.addObject("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
-    mv.addObject("addProductForm", form);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("allProducts", getProductViewModels(products));
+    map.put("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
+    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
+    map.put("addProductForm", form);
     
     if(form.getCollectionNumber().contains("-")){
-    	addEditSelectorOptionsForNewRecordByList(mv.getModelMap(),productType2);
+    	addEditSelectorOptionsForNewRecordByList(map,productType2);
   	}
   	else{
-  		 addEditSelectorOptionsForNewRecord(mv.getModelMap());
+  		 addEditSelectorOptionsForNewRecord(map);
   	}
 
-    return mv;
+    return map;
   }
   
   @RequestMapping("/getRecordNewProductComponents")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView getRecordNewProductComponents(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, Model model) {
 
@@ -946,21 +941,21 @@ public class ProductController {
   	}
   	List<Product> products = Arrays.asList(new Product[0]);
   	
-    ModelAndView mv = new ModelAndView("products/recordProductsTable");
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("allProducts", getProductViewModels(products));
-    mv.addObject("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
-    mv.addObject("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
-    mv.addObject("addProductForm", form);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("allProducts", getProductViewModels(products));
+    map.put("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
+    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
+    map.put("addProductForm", form);
     
     if(form.getCollectionNumber().contains("-") && form.getProductTypes() != null){
-    	addEditSelectorOptionsForNewRecordByList(mv.getModelMap(),productType);
+    	addEditSelectorOptionsForNewRecordByList(map,productType);
   	}
   	else{
-  		 addEditSelectorOptionsForNewRecord(mv.getModelMap());
+  		 addEditSelectorOptionsForNewRecord(map);
   	}
     
-    return mv;
+    return map;
   }
   
   private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ProductType productType) {

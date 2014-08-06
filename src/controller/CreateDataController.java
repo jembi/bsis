@@ -337,6 +337,7 @@ public class CreateDataController {
 
   @RequestMapping("/admin-createData")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
+  @Deprecated
   public ModelAndView createDataPage(HttpServletRequest request) {
 
     ModelAndView modelAndView = new ModelAndView("createData");
