@@ -1,5 +1,6 @@
 package controller;
 
+import com.wordnik.swagger.annotations.Api;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import repository.GenericConfigRepository;
 import repository.LoginRepository;
 
 @Controller
+@RequestMapping
+@Api(value = "Account operations")
 public class LoginController {
 
   @Autowired

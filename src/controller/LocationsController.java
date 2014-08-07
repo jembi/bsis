@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.location.Location;
 ;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wordnik.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,8 @@ import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
 
 @Controller
+@RequestMapping
+@Api(value = "Account operations")
 public class LocationsController {
 
   @Autowired

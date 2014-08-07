@@ -36,8 +36,11 @@ import backingform.CollectionsReportBackingForm;
 import backingform.DiscardedProductsReportBackingForm;
 import backingform.IssuedProductsReportBackingForm;
 import backingform.RequestsReportBackingForm;
+import com.wordnik.swagger.annotations.Api;
 
 @Controller
+@RequestMapping
+@Api(value = "Account operations")
 public class ReportsController {
 
   @Autowired

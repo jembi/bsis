@@ -1,23 +1,26 @@
 package controller;
 
+import backingform.DonorBackingForm;
+import backingform.FindDonorBackingForm;
+import backingform.validator.DonorBackingFormValidator;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
@@ -38,11 +40,9 @@ import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
-import backingform.DonorBackingForm;
-import backingform.FindDonorBackingForm;
-import backingform.validator.DonorBackingFormValidator;
 
 @Controller
+@RequestMapping(value = "/donor", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DonorController {
 
 	/**
@@ -89,6 +89,8 @@ public class DonorController {
     return modelAndView;
   }
 
+    
+   @ApiOperation(value = "Find all accounts")
   @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> donorSummaryGenerator(HttpServletRequest request, Model model,

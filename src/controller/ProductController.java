@@ -52,8 +52,11 @@ import backingform.ProductBackingForm;
 import backingform.ProductCombinationBackingForm;
 import backingform.RecordProductBackingForm;
 import backingform.validator.ProductBackingFormValidator;
+import com.wordnik.swagger.annotations.Api;
 
 @Controller
+@RequestMapping
+@Api(value = "Account operations")
 public class ProductController {
 
   @Autowired

@@ -53,7 +53,6 @@ import backingform.FindWorksheetBackingForm;
 import backingform.WorksheetBackingForm;
 import backingform.validator.WorksheetBackingFormValidator;
 
-@Controller
 public class WorksheetController {
 
   @Autowired

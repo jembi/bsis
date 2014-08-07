@@ -169,5 +169,8 @@
     <prop key="mail.store.protocol">imaps</prop>
     <prop key="mail.debug">false</prop>
   </util:properties-->
+  
+  <bean class="com.mangofactory.swagger.configuration.DocumentationConfig" />
 
+<mvc:default-servlet-handler/>
 </beans>

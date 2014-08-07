@@ -2,6 +2,7 @@ package controller;
 
 import backingform.DonorCodeBackingForm;
 import backingform.validator.DonorCodeBackingFormValidator;
+import com.wordnik.swagger.annotations.Api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -25,7 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import repository.DonorRepository;
 import utils.PermissionConstants;
 
-
+@Controller
+@RequestMapping
+@Api(value = "Donor Codes")
 public class DonorCodeController {
 	
 	  @Autowired

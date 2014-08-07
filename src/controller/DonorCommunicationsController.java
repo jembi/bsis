@@ -39,8 +39,11 @@ import viewmodel.DonorViewModel;
 import utils.PermissionConstants;
 import backingform.DonorCommunicationsBackingForm;
 import backingform.validator.DonorCommunicationsBackingFormValidator;
+import com.wordnik.swagger.annotations.Api;
 
 @Controller
+@RequestMapping
+@Api(value = "Donor Communications")
 public class DonorCommunicationsController {
 
 	/**

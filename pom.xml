@@ -491,6 +491,15 @@
 			<artifactId>sqltool</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+                <dependency>
+
+                    <groupId>com.mangofactory</groupId>
+
+                    <artifactId>swagger-springmvc</artifactId>
+
+                    <version>0.5.2</version>
+
+                </dependency>
 		<!-- 
         <dependency>
             <groupId>org.testng</groupId>

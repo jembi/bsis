@@ -2,6 +2,7 @@ package controller;
 
 import backingform.CompatibilityTestBackingForm;
 import backingform.validator.CompatibilityTestBackingFormValidator;
+import com.wordnik.swagger.annotations.Api;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityExistsException;
@@ -28,6 +29,8 @@ import repository.RequestRepository;
 import utils.PermissionConstants;
 
 @Controller
+@RequestMapping
+@Api(value = "compatable")
 public class CompatibilityTestsController {
 
   @Autowired

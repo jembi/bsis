@@ -87,10 +87,10 @@ public class DonorBackingForm {
             donor.setBirthDate(null);
         }
     }
-
-    public DonorViewModel getDonorViewModel() {
-        return new DonorViewModel(donor);
-    }
+//
+//    public DonorViewModel getDonorViewModel() {
+//        return new DonorViewModel(donor);
+//    }
 
     public Donor getDonor() {
         return donor;

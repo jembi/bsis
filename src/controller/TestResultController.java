@@ -1,6 +1,7 @@
 package controller;
 
 import backingform.FindTestResultBackingForm;
+import com.wordnik.swagger.annotations.Api;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import repository.CollectedSampleRepository;
 import utils.PermissionConstants;
 
 @Controller
+@RequestMapping
+@Api(value = "Account operations")
 public class TestResultController {
 
   @Autowired
