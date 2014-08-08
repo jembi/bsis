@@ -31,7 +31,7 @@
   <!-- Annotations like PreAuthorize, needed here and not in security-v2v-servlet.xml
        as this is the MVC configuration dealing with URLs??? -->
   <security:global-method-security pre-post-annotations="enabled" />
-  <context:property-placeholder location="classpath:database.properties" />
+  <context:property-placeholder location="classpath:database.properties, classpath:swagger.properties" />
 
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven>
@@ -115,6 +115,10 @@
   <task:executor id="executor" pool-size="5"/>
   <task:scheduler id="scheduler" pool-size="5"/>
   <task:annotation-driven scheduler="scheduler" executor="executor"/>
+  
+  <!--swagger configuration--> 
+  <bean class="com.mangofactory.swagger.configuration.DocumentationConfig" />
+  <mvc:default-servlet-handler/>
 
 
   <!-- Following part is for sending and receiving emails. Not using it right now. -->
@@ -170,7 +174,6 @@
     <prop key="mail.debug">false</prop>
   </util:properties-->
   
-  <bean class="com.mangofactory.swagger.configuration.DocumentationConfig" />
+  
 
-<mvc:default-servlet-handler/>
 </beans>
