@@ -17,7 +17,6 @@
   <http auto-config="true" use-expressions="true">
     <intercept-url pattern="/login.html*" access="isAnonymous()" />
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />
-    <intercept-url pattern="/*" access="isFullyAuthenticated()" />
     <form-login login-page="/login.html"
                 default-target-url="/welcomePage.html"
                 authentication-failure-url="/login.html?error=true"
