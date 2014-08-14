@@ -43,15 +43,16 @@ public class DonorCodeController {
                 binder.setValidator(new DonorCodeBackingFormValidator(binder.getValidator(), donorRepository));
           }
 
-	 @Deprecated 
+	 
          @RequestMapping(value = "/updateDonorCodesFormGenerator", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
-	  public ModelAndView updateDonorCodesForm(HttpServletRequest request  ,@RequestParam(value="donorId") Long donorId){
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/updateDonorCodes");  
-		  Donor donor = donorRepository.findDonorById(donorId);
-		  modelAndView.addObject("donor", donor);
-		  modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("donor"));	  
-		  return modelAndView;
+	  public @ResponseBody Map<String, Object>  updateDonorCodesForm(HttpServletRequest request  ,@RequestParam(value="donorId") Long donorId){
+                  
+                  Map<String, Object> map = new HashMap<String, Object>();
+                  Donor donor = donorRepository.findDonorById(donorId);
+		  map.put("donor", donor);
+		  map.put("donorFields", utilController.getFormFieldsForForm("donor"));	  
+		  return map;
 		  
 	  }
            @RequestMapping(value = "/donorCOde", method = RequestMethod.GET)

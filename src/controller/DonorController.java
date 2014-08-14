@@ -512,16 +512,16 @@ public class DonorController {
     return map;
   }
 
-  @Deprecated
+  
   @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public ModelAndView findDonor(HttpServletRequest request,
+  public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
       @ModelAttribute("findDonorForm") FindDonorBackingForm form,
       BindingResult result, Model model) {
 
-    ModelAndView modelAndView = new ModelAndView("donors/donorsTable");
+    
 
-    Map<String, Object> m = model.asMap();
+    Map<String, Object> m = new HashMap<String, Object>();
     m.put("requestUrl", getUrl(request));
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
@@ -530,8 +530,7 @@ public class DonorController {
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
     addEditSelectorOptions(m);
-    modelAndView.addObject("model", m);
-    return modelAndView;
+    return m;
   }
   
   @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
