@@ -17,7 +17,6 @@ import model.donordeferral.DonorDeferral;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +73,7 @@ public class DeferralController {
     @RequestMapping(value = "/viewDonorDeferrals", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
     public @ResponseBody
-    Map<String, Object> viewDonorDeferrals(HttpServletRequest request, Model model,
+    Map<String, Object> viewDonorDeferrals(HttpServletRequest request,
             @RequestParam(value = "donorId", required = false) Long donorId) {
 
         Map<String, Object> map = new HashMap<String, Object>();
