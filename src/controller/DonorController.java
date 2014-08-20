@@ -3,6 +3,8 @@ package controller;
 import backingform.DonorBackingForm;
 import backingform.FindDonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -36,6 +37,7 @@ import utils.PermissionConstants;
 import viewmodel.DonorViewModel;
 
 @Controller
+@RequestMapping("donor")
 public class DonorController {
 
     /**
@@ -83,7 +85,7 @@ public class DonorController {
     return modelAndView;
   }*/
     
-  @RequestMapping(value = "/donorSummary", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> donorSummaryGenerator(HttpServletRequest request,
       @RequestParam(value = "donorId", required = false) Long donorId) {
@@ -123,7 +125,7 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/viewDonorHistory", method = RequestMethod.GET)
+  @RequestMapping(value = "/history", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> viewDonorHistory(HttpServletRequest request,
       @RequestParam(value = "donorId", required = false) Long donorId) {
@@ -149,7 +151,25 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/editDonorFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/addForm", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
+  public @ResponseBody Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    DonorBackingForm form = new DonorBackingForm();
+
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addDonorForm", form);
+     map.put("refreshUrl", getUrl(request));
+    addEditSelectorOptions(map);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
+    // to ensure custom field names are displayed in the form
+     map.put("donorFields", formFields);
+    return map;
+  }
+
+  @RequestMapping(value = "/editForm", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String, Object> editDonorFormGenerator(HttpServletRequest request,
       @RequestParam(value="donorId") Long donorId) {
@@ -170,32 +190,36 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/addDonorFormGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
-  public @ResponseBody Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
+  
+  @RequestMapping(value = "/findForm", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
+  public @ResponseBody Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
 
+    FindDonorBackingForm form = new FindDonorBackingForm();
+    form.setCreateDonorSummaryView(true);
+    DonorBackingForm dbform = new DonorBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
-    DonorBackingForm form = new DonorBackingForm();
-
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
-    map.put("addDonorForm", form);
-     map.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
+    map.put("findDonorForm", form);
+    utilController.addTipsToModel(map, "donors.finddonor");
     // to ensure custom field names are displayed in the form
-     map.put("donorFields", formFields);
+    map.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("contentLabel", "Find Donors");
+    map.put("refreshUrl", "findDonorFormGenerator.html");
+    addEditSelectorOptions(map);
+    map.put("addDonorForm", dbform);
     return map;
   }
 
-    @RequestMapping(value = {"/addDonor", "/findDonor"}, method = RequestMethod.POST)
+  
+    @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
     public @ResponseBody
     Map<String, Object>
             addDonor(HttpServletRequest request,
                     HttpServletResponse response,
                     @ModelAttribute("addDonorForm") @Valid DonorBackingForm form,
-                    BindingResult result) {
+                     BindingResult result) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
@@ -265,13 +289,7 @@ public class DonorController {
     return map;
   }
 
-  private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
-  }
-
- 
-  @RequestMapping(value = "/updateDonor", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String,Object>  updateDonor(
       HttpServletResponse response,
@@ -333,7 +351,7 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/deleteDonor", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteDonor(
@@ -356,45 +374,7 @@ public class DonorController {
     return m;
   }
 
-  @RequestMapping(value = "/findDonorFormGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
-
-    FindDonorBackingForm form = new FindDonorBackingForm();
-    form.setCreateDonorSummaryView(true);
-    DonorBackingForm dbform = new DonorBackingForm();
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("findDonorForm", form);
-    utilController.addTipsToModel(map, "donors.finddonor");
-    // to ensure custom field names are displayed in the form
-    map.put("donorFields", utilController.getFormFieldsForForm("donor"));
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("contentLabel", "Find Donors");
-    map.put("refreshUrl", "findDonorFormGenerator.html");
-    addEditSelectorOptions(map);
-    map.put("addDonorForm", dbform);
-    return map;
-  }
-
-  @RequestMapping(value = "/findDonor", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
-      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
-      BindingResult result) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("requestUrl", getUrl(request));
-    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
-    m.put("contentLabel", "Find Donors");
-    m.put("nextPageUrl", getNextPageUrl(request));
-    m.put("refreshUrl", getUrl(request));
-    m.put("donorRowClickUrl", "donorSummary.html");
-    m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-    addEditSelectorOptions(m);
-    return m;
-  }
-  
-  @RequestMapping(value = "/printDonorLabel", method = RequestMethod.GET)
+  @RequestMapping(value = "/printLabel",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> printDonorLabel(HttpServletRequest request,
 		  @RequestParam(value="donorNumber") String donorNumber) {
@@ -415,14 +395,31 @@ public class DonorController {
 	return map;
   }
 
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("donorPanels", locationRepository.getAllDonorPanels());
-    m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
-    m.put("languages", donorRepository.getAllLanguages());
-    m.put("idTypes", donorRepository.getAllIdTypes());
-    m.put("addressTypes", donorRepository.getAllAddressTypes());
-  }
 
+  @RequestMapping(value = "/list", method = RequestMethod.GET)
+  public @ResponseBody Map<String, Object> findDonorPagination(HttpServletRequest request,
+      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
+      BindingResult result) {
+
+
+    String donorNumber = form.getDonorNumber();
+    String firstName = form.getFirstName();
+    String lastName = form.getLastName();
+    String donationIdentificationNumber = form.getDonationIdentificationNumber();
+
+    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+
+    List<Object> results = new ArrayList<Object>();
+    results = donorRepository.findAnyDonor(donorNumber, firstName,
+            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
+    List<Donor> donors = (List<Donor>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+    return generateDatatablesMap(donors, totalRecords, formFields);
+  }
+  
   /**
    * Get column name from column id, depends on sequence of columns in donorsTable.jsp
    */
@@ -450,32 +447,6 @@ public class DonorController {
       return "id";
     else
       return sortColumnMap.get(sortColumn);
-  }
-
-  @RequestMapping(value = "/findDonorPagination", method = RequestMethod.POST)
-  public @ResponseBody Map<String, Object> findDonorPagination(HttpServletRequest request,
-      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
-      BindingResult result) {
-
-
-    String donorNumber = form.getDonorNumber();
-    String firstName = form.getFirstName();
-    String lastName = form.getLastName();
-    String donationIdentificationNumber = form.getDonationIdentificationNumber();
-
-    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
-    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
-
-    List<Object> results = new ArrayList<Object>();
-    results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
-    @SuppressWarnings("unchecked")
-    List<Donor> donors = (List<Donor>) results.get(0);
-    System.out.println(donors);
-    Long totalRecords = (Long) results.get(1);
-    return generateDatatablesMap(donors, totalRecords, formFields);
   }
   
   /**
@@ -521,6 +492,34 @@ public class DonorController {
     donorsMap.put("iTotalDisplayRecords", totalRecords);
     return donorsMap;
   }
+  
+    private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("donorPanels", locationRepository.getAllDonorPanels());
+    m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
+    m.put("languages", donorRepository.getAllLanguages());
+    m.put("idTypes", donorRepository.getAllIdTypes());
+    m.put("addressTypes", donorRepository.getAllAddressTypes());
+  }
+    
+
+  @RequestMapping(value = "/find", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
+  public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
+      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
+      BindingResult result) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("requestUrl", getUrl(request));
+    m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+    m.put("contentLabel", "Find Donors");
+    m.put("nextPageUrl", getNextPageUrl(request));
+    m.put("refreshUrl", getUrl(request));
+    m.put("donorRowClickUrl", "donorSummary.html");
+    m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
+    addEditSelectorOptions(m);
+    return m;
+  }
+  
 
   /**
    * The method is not used anywhere in the application 
@@ -577,6 +576,12 @@ public class DonorController {
     return donorViewModels;
   }
 
+  private DonorViewModel getDonorsViewModel(Donor donor) {
+    DonorViewModel donorViewModel = new DonorViewModel(donor);
+    return donorViewModel;
+  }
+
+ 
   public static String getNextPageUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString().replaceFirst("findDonor.html", "findDonorPagination.html");
     String queryString = req.getQueryString();   // d=789

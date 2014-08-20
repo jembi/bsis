@@ -28,8 +28,7 @@ import repository.DonorRepository;
 import utils.PermissionConstants;
 
 @Controller
-@RequestMapping
-@Api(value = "Donor Codes")
+@RequestMapping("donorcode")
 public class DonorCodeController {
 	
 	  @Autowired
@@ -44,7 +43,7 @@ public class DonorCodeController {
           }
 
 	 
-         @RequestMapping(value = "/updateDonorCodesFormGenerator", method = RequestMethod.GET)
+         @RequestMapping(value = "/updateForm", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
 	  public @ResponseBody Map<String, Object>  updateDonorCodesForm(HttpServletRequest request  ,@RequestParam(value="donorId") Long donorId){
                   
@@ -55,14 +54,14 @@ public class DonorCodeController {
 		  return map;
 		  
 	  }
-           @RequestMapping(value = "/donorCOde", method = RequestMethod.GET)
+           @RequestMapping(method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
               public @ResponseBody List<DonorCodeGroup> addDonorCodeFormGenerator(){
               return  donorRepository.getAllDonorCodeGroups();
           }
 	  
 	
-	  @RequestMapping(value = "/donorCOde" ,method = RequestMethod.POST)
+	  @RequestMapping(method = RequestMethod.POST)
 	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
 	  public @ResponseBody Map<String, Object> addDonorCode(HttpServletRequest request,HttpServletResponse response, 
 			@ModelAttribute("addDonorCodeForm")  @Valid DonorCodeBackingForm form,
@@ -85,7 +84,7 @@ public class DonorCodeController {
 		  
 	  }
 	  
-	  @RequestMapping(value = "/donorCOde",method = RequestMethod.GET,params = {"donorId"})
+	  @RequestMapping(method = RequestMethod.GET,params = {"donorId"})
 	  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_CODE+"')")
 	  public @ResponseBody List<DonorDonorCode> donorCodesTable(HttpServletRequest request,Long donorId){
 		
@@ -94,7 +93,7 @@ public class DonorCodeController {
 		  
 	  }
 	  
-	  @RequestMapping(value = "/donorCOde" , method = RequestMethod.DELETE)
+	  @RequestMapping(method = RequestMethod.DELETE)
 	  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR_CODE+"')")
 	  public @ResponseBody List<DonorDonorCode> deleteDomorCode(@RequestParam(value="id") Long id){
 		  Donor donor = donorRepository.deleteDonorCode(id);

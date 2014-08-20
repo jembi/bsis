@@ -31,6 +31,7 @@ import viewmodel.DonorDeferralViewModel;
  * @author srikanth
  */
 @Controller
+@RequestMapping("deferral")
 public class DeferralController {
 
     @Autowired
@@ -39,7 +40,7 @@ public class DeferralController {
     @Autowired
     private UtilController utilController;
 
-    @RequestMapping(value = "/deferDonorFormGenerator", method = RequestMethod.GET)
+    @RequestMapping(value = "/addForm", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> deferDonorFormGenerator(HttpServletRequest request,
@@ -51,7 +52,7 @@ public class DeferralController {
         return map;
     }
 
-    @RequestMapping(value = "/editDeferDonorFormGenerator", method = RequestMethod.GET)
+    @RequestMapping(value = "/editForm", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> editDeferDonorFormGenerator(HttpServletRequest request,
@@ -70,7 +71,7 @@ public class DeferralController {
         return map;
     }
 
-    @RequestMapping(value = "/viewDonorDeferrals", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> viewDonorDeferrals(HttpServletRequest request,
@@ -95,7 +96,7 @@ public class DeferralController {
         return map;
     }
 
-    @RequestMapping(value = "/deferDonor", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> deferDonor(HttpServletRequest request,
@@ -117,7 +118,7 @@ public class DeferralController {
         return donorDeferralResult;
     }
 
-    @RequestMapping(value = "/updateDeferDonor", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> updateDeferDonor(HttpServletRequest request,
@@ -140,7 +141,7 @@ public class DeferralController {
         return donorDeferralResult;
     }
 
-    @RequestMapping(value = "/cancelDeferDonor", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> cancelDeferDonor(HttpServletRequest request,
