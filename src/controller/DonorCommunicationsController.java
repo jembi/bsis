@@ -1,5 +1,9 @@
 package controller;
 
+import backingform.DonorCommunicationsBackingForm;
+import backingform.validator.DonorCommunicationsBackingFormValidator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wordnik.swagger.annotations.Api;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,15 +14,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
+import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.location.Location;
 import model.util.BloodGroup;
-import model.collectedsample.CollectionConstants;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import repository.ContactMethodTypeRepository;
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
-import viewmodel.DonorViewModel;
 import utils.PermissionConstants;
-import backingform.DonorCommunicationsBackingForm;
-import backingform.validator.DonorCommunicationsBackingFormValidator;
-import com.wordnik.swagger.annotations.Api;
+import viewmodel.DonorViewModel;
 
 @Controller
-@RequestMapping
-@Api(value = "Donor Communications")
+@RequestMapping("donorcommunication")
 public class DonorCommunicationsController {
 
 	/**
@@ -59,9 +56,6 @@ public class DonorCommunicationsController {
 	@Autowired
 	private LocationRepository locationRepository;
 
-	@Autowired
-	private ContactMethodTypeRepository contactMethodTypeRepository;
-
 	public DonorCommunicationsController() {
 	}
 
@@ -71,110 +65,52 @@ public class DonorCommunicationsController {
 				.getValidator(), utilController));
 	}
 
-	public static String getUrl(HttpServletRequest req) {
-		String reqUrl = req.getRequestURL().toString();
-		String queryString = req.getQueryString(); // d=789
-		if (queryString != null) {
-			reqUrl += "?" + queryString;
-		}
-		return reqUrl;
-	}
 
-	private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
-		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-		for (Donor donor : donors) {
-			donorViewModels.add(new DonorViewModel(donor));
-		}
-		return donorViewModels;
-	}
 
-	private void addEditSelectorOptions(Map<String, Object> m) {
-		m.put("donorPanels", locationRepository.getAllDonorPanels());
-		m.put("bloodGroups", BloodGroup.getBloodgroups());
-	}
-
-	/**
-	 * Get column name from column id, depends on sequence of columns in
-	 * donorsCommunicationTable.jsp
-	 */
-	private String getSortingColumn(int columnId,
-			Map<String, Map<String, Object>> formFields) {
-
-		List<String> visibleFields = new ArrayList<String>();
-		visibleFields.add("id");
-		for (String field : Arrays.asList("donorNumber", "firstName","lastName", "gender", "bloodGroup", "birthDate")) {
-			Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
-			if (fieldProperties.get("hidden").equals(false))
-				visibleFields.add(field);
-		}
-
-		Map<String, String> sortColumnMap = new HashMap<String, String>();
-		sortColumnMap.put("id", "id");
-		sortColumnMap.put("donorNumber", "donorNumber");
-		sortColumnMap.put("firstName", "firstName");
-		sortColumnMap.put("lastName", "lastName");
-		sortColumnMap.put("phoneNumber", "phoneNumber");
-		sortColumnMap.put("dateOfLastDonation", "dateOfLastDonation");
-		sortColumnMap.put("bloodGroup", "bloodAbo");
-		sortColumnMap.put("donorPanel", "donorPanel");
-		String sortColumn = visibleFields.get(columnId);
-
-		if (sortColumnMap.get(sortColumn) == null)
-			return "id";
-		else
-			return sortColumnMap.get(sortColumn);
-	}
-
-	@RequestMapping(value = "/donorCommunicationsFormGenerator", method = RequestMethod.GET)
+	@RequestMapping(value="/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
 	public @ResponseBody Map<String, Object> donorCommunicationsFormGenerator(
-			HttpServletRequest request, Model model) {
+			HttpServletRequest request) {
 
 		DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
-
+                ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> map = new  HashMap<String, Object>();
-		Map<String, Object> m = model.asMap();
-		utilController.addTipsToModel(model.asMap(), "donors.finddonor");
+		utilController.addTipsToModel(map, "donors.finddonor");
 		// to ensure custom field names are displayed in the form
-		m.put("donorFields", utilController.getFormFieldsForForm("donor"));
-		m.put("contentLabel", "Find Donors");
-		m.put("refreshUrl", "donorCommunicationsFormGenerator.html");
+		map.put("donorFields", utilController.getFormFieldsForForm("donor"));
+		map.put("contentLabel", "Find Donors");
+		map.put("refreshUrl", "donorCommunicationsFormGenerator.html");
 		addEditSelectorOptions(map);
-		map.put("model", m);
 		map.put("donorCommunicationsForm", dbform);
 		return map;
 	}
 
-	@RequestMapping(value = "/findDonorCommunicationsForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/find", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
 	public @ResponseBody Map<String, Object> findDonorCommunications(
 			HttpServletRequest request,
 			@ModelAttribute("donorCommunicationsForm") @Valid DonorCommunicationsBackingForm form,
-			BindingResult result, Model model) {
-		 Map<String, Object> map = new  HashMap<String, Object>();
-		Map<String, Object> m = model.asMap();
-
-		addEditSelectorOptions(m);
-		m.put("donorFields", utilController.getFormFieldsForForm("donor"));
+			BindingResult result) {
+		Map<String, Object> map = new  HashMap<String, Object>();
+		addEditSelectorOptions(map);
+		map.put("donorFields", utilController.getFormFieldsForForm("donor"));
 		form.getDonorPanels();
 		if (result.hasErrors()) {
 			map.put("hasErrors", true);
 			map.put("errorMessage","Missing information for one or more required fields.");
-			m.put("success", Boolean.FALSE);
-			m.put("requestUrl", getUrl(request));
-			m.put("refreshUrl", "donorCommunicationsFormGenerator.html");
-			map.put("model", m);
+			map.put("success", Boolean.FALSE);
+			map.put("requestUrl", getUrl(request));
+			map.put("refreshUrl", "donorCommunicationsFormGenerator.html");
 			map.put("success", Boolean.FALSE);
 			return map;
 		}
 		form.setCreateDonorSummaryView(true);
-		m.put("requestUrl", getUrl(request));
-		m.put("contentLabel", "Find Donors");
-		m.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
-		m.put("refreshUrl", getUrl(request));
-		m.put("donorRowClickUrl", "donorSummary.html");
-		m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-		map.put("model", m);
+		map.put("requestUrl", getUrl(request));
+		map.put("contentLabel", "Find Donors");
+		map.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
+		map.put("refreshUrl", getUrl(request));
+		map.put("donorRowClickUrl", "donorSummary.html");
+		map.put("createDonorSummaryView", form.getCreateDonorSummaryView());
 		return map;
 	}
 
@@ -187,11 +123,11 @@ public class DonorCommunicationsController {
 		return reqUrl;
 	}
 
-	@RequestMapping("/findDonorCommunicationsPagination")
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody
 	Map<String, Object> findDonorCommunicationsPagination(HttpServletRequest request,
 			@ModelAttribute("donorCommunicationsForm") DonorCommunicationsBackingForm form,
-			BindingResult result, Model model) {
+			BindingResult result) {
 
 		LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
 		List<Location> donorPanels = form.getDonorPanels();
@@ -268,5 +204,59 @@ public class DonorCommunicationsController {
 		donorsMap.put("iTotalRecords", totalRecords);
 		donorsMap.put("iTotalDisplayRecords", totalRecords);
 		return donorsMap;
+	}
+        
+        	public static String getUrl(HttpServletRequest req) {
+		String reqUrl = req.getRequestURL().toString();
+		String queryString = req.getQueryString(); // d=789
+		if (queryString != null) {
+			reqUrl += "?" + queryString;
+		}
+		return reqUrl;
+	}
+
+	private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
+		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+		for (Donor donor : donors) {
+			donorViewModels.add(new DonorViewModel(donor));
+		}
+		return donorViewModels;
+	}
+
+	private void addEditSelectorOptions(Map<String, Object> m) {
+		m.put("donorPanels", locationRepository.getAllDonorPanels());
+		m.put("bloodGroups", BloodGroup.getBloodgroups());
+	}
+
+	/**
+	 * Get column name from column id, depends on sequence of columns in
+	 * donorsCommunicationTable.jsp
+	 */
+	private String getSortingColumn(int columnId,
+			Map<String, Map<String, Object>> formFields) {
+
+		List<String> visibleFields = new ArrayList<String>();
+		visibleFields.add("id");
+		for (String field : Arrays.asList("donorNumber", "firstName","lastName", "gender", "bloodGroup", "birthDate")) {
+			Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+			if (fieldProperties.get("hidden").equals(false))
+				visibleFields.add(field);
+		}
+
+		Map<String, String> sortColumnMap = new HashMap<String, String>();
+		sortColumnMap.put("id", "id");
+		sortColumnMap.put("donorNumber", "donorNumber");
+		sortColumnMap.put("firstName", "firstName");
+		sortColumnMap.put("lastName", "lastName");
+		sortColumnMap.put("phoneNumber", "phoneNumber");
+		sortColumnMap.put("dateOfLastDonation", "dateOfLastDonation");
+		sortColumnMap.put("bloodGroup", "bloodAbo");
+		sortColumnMap.put("donorPanel", "donorPanel");
+		String sortColumn = visibleFields.get(columnId);
+
+		if (sortColumnMap.get(sortColumn) == null)
+			return "id";
+		else
+			return sortColumnMap.get(sortColumn);
 	}
 }
