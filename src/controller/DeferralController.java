@@ -41,7 +41,7 @@ public class DeferralController {
     @Autowired
     private UtilController utilController;
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> deferDonorFormGenerator(HttpServletRequest request,

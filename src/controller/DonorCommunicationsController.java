@@ -64,7 +64,7 @@ public class DonorCommunicationsController {
 
 
 
-	@RequestMapping(value="/form", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
 	public @ResponseBody Map<String, Object> donorCommunicationsFormGenerator(
 			HttpServletRequest request) {

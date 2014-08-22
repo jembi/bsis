@@ -152,7 +152,7 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/add",method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public @ResponseBody Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
 
