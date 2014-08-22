@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,12 +44,12 @@ public class DonorCodeController {
           }
 
 	 
-         @RequestMapping(value = "/updateForm", method = RequestMethod.GET)
+         @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
-	  public @ResponseBody Map<String, Object>  updateDonorCodesForm(HttpServletRequest request  ,@RequestParam(value="donorId") Long donorId){
+	  public @ResponseBody Map<String, Object>  updateDonorCodesForm(HttpServletRequest request  ,@PathVariable  Long id){
                   
                   Map<String, Object> map = new HashMap<String, Object>();
-                  Donor donor = donorRepository.findDonorById(donorId);
+                  Donor donor = donorRepository.findDonorById(id);
 		  map.put("donor", donor);
 		  map.put("donorFields", utilController.getFormFieldsForForm("donor"));	  
 		  return map;
@@ -63,7 +64,7 @@ public class DonorCodeController {
 	
 	  @RequestMapping(method = RequestMethod.POST)
 	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
-	  public @ResponseBody Map<String, Object> addDonorCode(HttpServletRequest request,HttpServletResponse response, 
+	  public @ResponseBody Map<String, Object> addDonorCode(HttpServletResponse response,
 			@ModelAttribute("addDonorCodeForm")  @Valid DonorCodeBackingForm form,
                          BindingResult result){
               Map<String, Object> map = new HashMap<String, Object>();
@@ -84,16 +85,16 @@ public class DonorCodeController {
 		  
 	  }
 	  
-	  @RequestMapping(method = RequestMethod.GET,params = {"donorId"})
+	  @RequestMapping(value = "{id}", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_CODE+"')")
-	  public @ResponseBody List<DonorDonorCode> donorCodesTable(HttpServletRequest request,Long donorId){
+	  public @ResponseBody List<DonorDonorCode> donorCodesTable(@PathVariable Long id){
 		
-		  return   donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId);
+		  return   donorRepository.findDonorDonorCodesOfDonorByDonorId(id);
 		  
 		  
 	  }
 	  
-	  @RequestMapping(method = RequestMethod.DELETE)
+	  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR_CODE+"')")
 	  public @ResponseBody List<DonorDonorCode> deleteDomorCode(@RequestParam(value="id") Long id){
 		  Donor donor = donorRepository.deleteDonorCode(id);

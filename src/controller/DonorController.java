@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,16 +86,16 @@ public class DonorController {
     return modelAndView;
   }*/
     
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(value = {"{id}"}, method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> donorSummaryGenerator(HttpServletRequest request,
-      @RequestParam(value = "donorId", required = false) Long donorId) {
+      @PathVariable Long id ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("requestUrl", getUrl(request));
     Donor donor = null;
-    if (donorId != null) {
-      donor = donorRepository.findDonorById(donorId);
+    if (id != null) {
+      donor = donorRepository.findDonorById(id);
     }
 
     DonorViewModel donorViewModel = getDonorsViewModel(donor);
@@ -108,14 +109,14 @@ public class DonorController {
     // include donor deferral status
     List<DonorDeferral> donorDeferrals = null;
     try {
-      donorDeferrals = donorRepository.getDonorDeferrals(donorId);  
+      donorDeferrals = donorRepository.getDonorDeferrals(id);  
     } catch (Exception ex) {
       ex.printStackTrace();
     }
     Boolean isCurrentlyDeferred = donorRepository.isCurrentlyDeferred(donorDeferrals);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if(isCurrentlyDeferred){
-    	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(donorId));
+    	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
     }
     
     Map<String, Object> tips = new HashMap<String, Object>();
@@ -125,15 +126,15 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/history", method = RequestMethod.GET)
+  @RequestMapping(value = "/{id}/history", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> viewDonorHistory(HttpServletRequest request,
-      @RequestParam(value = "donorId", required = false) Long donorId) {
+      @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = null;
-    if (donorId != null) {
-      donor = donorRepository.findDonorById(donorId);
+    if (id != null) {
+      donor = donorRepository.findDonorById(id);
       if (donor != null) {
         map.put("existingDonor", true);
       }
@@ -151,7 +152,7 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/addForm", method = RequestMethod.GET)
+  @RequestMapping(value = "/add",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public @ResponseBody Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
 
@@ -169,13 +170,13 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/editForm", method = RequestMethod.GET)
+  @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String, Object> editDonorFormGenerator(HttpServletRequest request,
-      @RequestParam(value="donorId") Long donorId) {
+      @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Donor donor = donorRepository.findDonorById(donorId);
+    Donor donor = donorRepository.findDonorById(id);
     map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     DonorBackingForm donorForm = new DonorBackingForm(donor);
     String dateToken[]=donorForm.getBirthDate().split("/");
@@ -191,7 +192,7 @@ public class DonorController {
   }
 
   
-  @RequestMapping(value = "/findForm", method = RequestMethod.GET)
+  @RequestMapping(value = "/find", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
 
@@ -351,16 +352,16 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(method = RequestMethod.DELETE)
+  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteDonor(
-      @RequestParam("donorId") Long donorId) {
+      @PathVariable Long id) {
 
     boolean success = true;
     String errMsg = "";
     try {
-      donorRepository.deleteDonor(donorId);
+      donorRepository.deleteDonor(id);
     } catch (Exception ex) {
     	LOGGER.error("Internal Exception");
     	LOGGER.error(ex.getMessage());    	      
@@ -374,10 +375,10 @@ public class DonorController {
     return m;
   }
 
-  @RequestMapping(value = "/printLabel",method = RequestMethod.GET)
+  @RequestMapping(value = "{donorNumber}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> printDonorLabel(HttpServletRequest request,
-		  @RequestParam(value="donorNumber") String donorNumber) {
+		  @PathVariable String donorNumber) {
 	  
         Map<String, Object> map = new HashMap<String, Object>();	
 	map.put("labelZPL",
@@ -502,7 +503,7 @@ public class DonorController {
   }
     
 
-  @RequestMapping(value = "/find", method = RequestMethod.GET)
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
       @ModelAttribute("findDonorForm") FindDonorBackingForm form,
