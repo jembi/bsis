@@ -27,6 +27,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -219,7 +220,7 @@ public class DonorController {
     Map<String, Object>
             addDonor(HttpServletRequest request,
                     HttpServletResponse response,
-                    @ModelAttribute("addDonorForm") @Valid DonorBackingForm form,
+                     @ModelAttribute("addDonorForm") @Valid @RequestBody DonorBackingForm form,
                      BindingResult result) {
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -294,7 +295,7 @@ public class DonorController {
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String,Object>  updateDonor(
       HttpServletResponse response,
-      @ModelAttribute(value="editDonorForm") @Valid DonorBackingForm form,
+      @ModelAttribute("editDonorForm") @Valid @RequestBody DonorBackingForm form,
       BindingResult result) {
 
     Map<String, Object> map = new HashMap<String, Object>();
