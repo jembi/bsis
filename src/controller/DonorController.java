@@ -220,12 +220,11 @@ public class DonorController {
     Map<String, Object>
             addDonor(HttpServletRequest request,
                     HttpServletResponse response,
-                     @ModelAttribute("addDonorForm") @Valid @RequestBody DonorBackingForm form,
+                     @Valid @RequestBody DonorBackingForm form,
                      BindingResult result) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
-        form.setBirthDate();
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
         map.put("donorFields", formFields);
 
@@ -295,7 +294,7 @@ public class DonorController {
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String,Object>  updateDonor(
       HttpServletResponse response,
-      @ModelAttribute("editDonorForm") @Valid @RequestBody DonorBackingForm form,
+     @Valid @RequestBody DonorBackingForm form,
       BindingResult result) {
 
     Map<String, Object> map = new HashMap<String, Object>();

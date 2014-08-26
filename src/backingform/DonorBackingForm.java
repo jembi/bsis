@@ -74,6 +74,7 @@ public class DonorBackingForm {
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
         } catch (ParseException ex) {
+            ex.printStackTrace();
             donor.setBirthDate(null);
         }
     }
