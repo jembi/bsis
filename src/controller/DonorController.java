@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,12 +60,15 @@ public class DonorController {
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
   
+  private WebDataBinder binder;
+  
   public DonorController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new DonorBackingFormValidator(binder.getValidator(), utilController));
+    this.binder = binder;
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -216,20 +220,19 @@ public class DonorController {
   
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
-    public @ResponseBody
+    public @ResponseBody 
     Map<String, Object>
             addDonor(HttpServletRequest request,
                     HttpServletResponse response,
-                     @Valid @RequestBody DonorBackingForm form,
-                     BindingResult result) {
+                     @Valid  @RequestBody DonorBackingForm form) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
         map.put("donorFields", formFields);
-
         Donor savedDonor = null;
-        if (result.hasErrors()) {
+         
+        if (binder.getBindingResult().hasErrors()) {
             addEditSelectorOptions(map);
             map.put("hasErrors", true);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -245,7 +248,6 @@ public class DonorController {
                 savedDonor = donorRepository.addDonor(donor);
                 map.put("hasErrors", false);
                 success = true;
-                form = new DonorBackingForm();
             } catch (EntityExistsException ex) {
                 ex.printStackTrace();
                 success = false;
@@ -255,47 +257,27 @@ public class DonorController {
             }
         }
 
-    // check if method originates from /addDonor or /findDonor
-    // if true - addDonor, if false - findDonor
-    Boolean addDonorBool = false;
-    if (request.getServletPath().contains("addDonor")){
-    	addDonorBool = true;
-    }
     
     if (success) {
       map.put("donorId", savedDonor.getId());
       map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
-      if(addDonorBool){
-    	  map.put("addAnotherDonorUrl", "addDonorFormGenerator.html");
-      }
-      else {
-    	 map.put("addAnotherDonorUrl", "findDonorFormGenerator.html");
-    	 map.put("refreshUrl", "findDonorFormGenerator.html");
-      }
+     
     } else {
       map.put("errorMessage", "Error creating donor. Please fix the errors noted below.");
       map.put("firstTimeRender", false);
       map.put("addDonorForm", form);
-      if(addDonorBool){
-    	   map.put("addAnotherDonorUrl", "addDonorFormGenerator.html");
-      }
-      else {
-    	map.put("addAnotherDonorUrl", "findDonorFormGenerator.html");
-    	map.put("refreshUrl", "findDonorFormGenerator.html");
-      }
      
     }
 
    map.put("success", success);
-    return map;
+   return map;
   }
 
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String,Object>  updateDonor(
       HttpServletResponse response,
-     @Valid @RequestBody DonorBackingForm form,
-      BindingResult result) {
+     @Valid @RequestBody DonorBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
@@ -304,7 +286,7 @@ public class DonorController {
     // property will be changed
     map.put("existingDonor", true);
 
-    if (result.hasErrors()) {
+    if (binder.getBindingResult().hasErrors()) {
       map.put("hasErrors", true);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       success = false;
