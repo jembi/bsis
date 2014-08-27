@@ -286,13 +286,7 @@ public class DonorController {
     // property will be changed
     map.put("existingDonor", true);
 
-    if (binder.getBindingResult().hasErrors()) {
-      map.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-      message = "Please fix the errors noted";
-    }
-    else {
+    if (!binder.getBindingResult().hasErrors()) {
       try {
         form.setIsDeleted(false);
         Donor donor = form.getDonor();
@@ -577,12 +571,13 @@ public class DonorController {
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public String handleMethodArgumentNotValidException(
+    public Map<String, String> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException errors) {
-        String errorMessage = "";
+        Map<String, String> errorMap = new HashMap<String, String>();
+        errorMap.put("hasErrors", "true");
         for (ObjectError error : errors.getBindingResult().getAllErrors()){
-                errorMessage  = errorMessage + error.getDefaultMessage();
+                errorMap.put(error.getCode(), error.getDefaultMessage());
             }
-        return errorMessage;
+        return errorMap;
     }
 }
