@@ -20,11 +20,15 @@ import model.donordeferral.DonorDeferral;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
@@ -232,12 +237,8 @@ public class DonorController {
         map.put("donorFields", formFields);
         Donor savedDonor = null;
          
-        if (binder.getBindingResult().hasErrors()) {
-            addEditSelectorOptions(map);
-            map.put("hasErrors", true);
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            success = false;
-        } else {
+        if (!binder.getBindingResult().hasErrors()) 
+        {
             try {
                 Donor donor = form.getDonor();
                 donor.setIsDeleted(false);
@@ -266,7 +267,6 @@ public class DonorController {
       map.put("errorMessage", "Error creating donor. Please fix the errors noted below.");
       map.put("firstTimeRender", false);
       map.put("addDonorForm", form);
-     
     }
 
    map.put("success", success);
@@ -573,4 +573,16 @@ public class DonorController {
     }
     return reqUrl;
   }
+  
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException errors) {
+        String errorMessage = "";
+        for (ObjectError error : errors.getBindingResult().getAllErrors()){
+                errorMessage  = errorMessage + error.getDefaultMessage();
+            }
+        return errorMessage;
+    }
 }
