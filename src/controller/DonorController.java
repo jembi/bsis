@@ -65,15 +65,12 @@ public class DonorController {
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
   
-  private WebDataBinder binder;
-  
   public DonorController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(new DonorBackingFormValidator(binder.getValidator(), utilController));
-    this.binder = binder;
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -236,9 +233,7 @@ public class DonorController {
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
         map.put("donorFields", formFields);
         Donor savedDonor = null;
-         
-        if (!binder.getBindingResult().hasErrors()) 
-        {
+        
             try {
                 Donor donor = form.getDonor();
                 donor.setIsDeleted(false);
@@ -256,7 +251,7 @@ public class DonorController {
                 ex.printStackTrace();
                 success = false;
             }
-        }
+        
 
     
     if (success) {
@@ -286,7 +281,6 @@ public class DonorController {
     // property will be changed
     map.put("existingDonor", true);
 
-    if (!binder.getBindingResult().hasErrors()) {
       try {
         form.setIsDeleted(false);
         Donor donor = form.getDonor();
@@ -316,7 +310,6 @@ public class DonorController {
         success = false;
         message = "Internal Error. Please try again or report a Problem.";
       }
-   }
 
     map.put("editDonorForm", form);
     map.put("success", success);
@@ -375,8 +368,7 @@ public class DonorController {
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public @ResponseBody Map<String, Object> findDonorPagination(HttpServletRequest request,
-      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
-      BindingResult result) {
+      FindDonorBackingForm form) {
 
 
     String donorNumber = form.getDonorNumber();
@@ -482,8 +474,7 @@ public class DonorController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
-      @ModelAttribute("findDonorForm") FindDonorBackingForm form,
-      BindingResult result) {
+      @ModelAttribute("findDonorForm") FindDonorBackingForm form) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("requestUrl", getUrl(request));
