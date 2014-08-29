@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -568,8 +569,8 @@ public class DonorController {
             MethodArgumentNotValidException errors) {
         Map<String, String> errorMap = new HashMap<String, String>();
         errorMap.put("hasErrors", "true");
-        for (ObjectError error : errors.getBindingResult().getAllErrors()){
-                errorMap.put(error.getCode(), error.getDefaultMessage());
+        for (FieldError error : errors.getBindingResult().getFieldErrors()){
+                errorMap.put(error.getField(), error.getDefaultMessage());
             }
         return errorMap;
     }
