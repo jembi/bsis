@@ -346,8 +346,7 @@ public class DonorController {
 
   @RequestMapping(value = "{donorNumber}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> printDonorLabel(HttpServletRequest request,
-		  @PathVariable String donorNumber) {
+  public @ResponseBody Map<String, Object> printDonorLabel(@PathVariable String donorNumber) {
 	  
         Map<String, Object> map = new HashMap<String, Object>();	
 	map.put("labelZPL",
@@ -367,26 +366,31 @@ public class DonorController {
 
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public @ResponseBody Map<String, Object> findDonorPagination(HttpServletRequest request,
-      FindDonorBackingForm form) {
+  public @ResponseBody  List<Donor> findDonorPagination(
+                  @RequestParam(value="firstName",required=false) String firstName,
+                  @RequestParam(value="lastName",required=false) String lastName,
+                  @RequestParam(value="donorNumber",required=false)String donorNumber,
+                  @RequestParam(value="usePhraseMatch",required=false) boolean usePhraseMatch,
+                  @RequestParam(value="donationIdentificationNumber",required=false) String donationIdentificationNumber){
 
 
-    String donorNumber = form.getDonorNumber();
-    String firstName = form.getFirstName();
-    String lastName = form.getLastName();
-    String donationIdentificationNumber = form.getDonationIdentificationNumber();
-
-    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+  
+    Map<String, Object> pagingParams = new HashMap<String, Object>();
+        pagingParams.put("sortColumn", "id");
+        pagingParams.put("start", "0");
+        pagingParams.put("length", "10");
+        pagingParams.put("sortDirection", "asc");
+        
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
-    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+    //int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    pagingParams.put("sortColumn", getSortingColumn(0, formFields));
 
     List<Object> results = new ArrayList<Object>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, pagingParams, form.isUsePhraseMatch(), donationIdentificationNumber);
+            lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
     List<Donor> donors = (List<Donor>) results.get(0);
-    Long totalRecords = (Long) results.get(1);
-    return generateDatatablesMap(donors, totalRecords, formFields);
+    //Long totalRecords = (Long) results.get(1);
+     return donors ;
   }
   
   /**
