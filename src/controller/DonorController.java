@@ -267,7 +267,7 @@ public class DonorController {
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public @ResponseBody Map<String,Object>  updateDonor(
       HttpServletResponse response,
-     @Valid @RequestBody DonorBackingForm form) {
+      @Valid @RequestBody DonorBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
@@ -362,8 +362,8 @@ public class DonorController {
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public @ResponseBody  List<Donor> findDonorPagination(
-                  @RequestParam(value="firstName",required=false) String firstName,
-                  @RequestParam(value="lastName",required=false) String lastName,
+                  @RequestParam(value="firstName",required=false, defaultValue ="" ) String firstName,
+                  @RequestParam(value="lastName",required=false, defaultValue ="") String lastName,
                   @RequestParam(value="donorNumber",required=false)String donorNumber,
                   @RequestParam(value="usePhraseMatch",required=false) boolean usePhraseMatch,
                   @RequestParam(value="donationIdentificationNumber",required=false) String donationIdentificationNumber){
