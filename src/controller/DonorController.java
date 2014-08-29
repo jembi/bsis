@@ -1,10 +1,7 @@
 package controller;
 
 import backingform.DonorBackingForm;
-import backingform.FindDonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mangofactory.swagger.annotations.ApiIgnore;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -203,11 +198,11 @@ public class DonorController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
 
-    FindDonorBackingForm form = new FindDonorBackingForm();
-    form.setCreateDonorSummaryView(true);
+  //  FindDonorBackingForm form = new FindDonorBackingForm();
+  //form.setCreateDonorSummaryView(true);
     DonorBackingForm dbform = new DonorBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("findDonorForm", form);
+   // map.put("findDonorForm", form);
     utilController.addTipsToModel(map, "donors.finddonor");
     // to ensure custom field names are displayed in the form
     map.put("donorFields", utilController.getFormFieldsForForm("donor"));
@@ -474,7 +469,9 @@ public class DonorController {
     m.put("addressTypes", donorRepository.getAllAddressTypes());
   }
     
-
+/*
+    commented on issue #209[Expoosing Rest services]
+    
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
@@ -491,6 +488,7 @@ public class DonorController {
     addEditSelectorOptions(m);
     return m;
   }
+    */
   
 
   /**
