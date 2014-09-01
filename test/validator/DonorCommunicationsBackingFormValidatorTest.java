@@ -1,4 +1,7 @@
-package validator;
+/**
+ * Commented on issue #209[Adapt Bsis To Expose Rest Services]
+ * 
+ * package validator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +27,7 @@ import backingform.validator.DonorCommunicationsBackingFormValidator;
 import controller.UtilController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@ContextConfiguration(locations = "file:**applicationContextTest.xml")
 @WebAppConfiguration
 public class DonorCommunicationsBackingFormValidatorTest {
 	
@@ -52,7 +55,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	 *  Should fail if no blood group or donor panel is specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
-	 */
+	 
 	@Test
 	public void validate_shouldFailIfNoBloodGroupAndDonorPanelSpecified() {
 		
@@ -80,7 +83,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	 *  Should fail if no donor panel specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
-	 */
+	 
 	@Test
 	public void validate_shouldFailIfNoDonorPanelSpecified() {
 		
@@ -109,7 +112,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	 *  Should fail if no blood group specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
-	 */
+	 
 	@Test
 	public void validate_shouldFailIfNoBloodGroupSpecified() {
 		
@@ -161,3 +164,4 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		return donorPanel;
 	}
 }
+* */

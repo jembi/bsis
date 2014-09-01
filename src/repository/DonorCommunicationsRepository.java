@@ -50,7 +50,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
   public List<Object> findDonors(
 			List<Location> donorPanel, String clinicDate,
 			String lastDonationFromDate, String lastDonationToDate,
-			List<BloodGroup> bloodGroups, String anyBloodGroup,
+			List<BloodGroup> bloodGroups, boolean anyBloodGroup,
 			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -99,7 +99,8 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 			panelPredicates.add(cb.not(cb.exists(donorDeferral)));	
 		}
 		
-	    if(bloodGroups != null && !bloodGroups.isEmpty() &&  !anyBloodGroup.equals("true")){
+          
+	    if(bloodGroups != null && !bloodGroups.isEmpty() &&  !anyBloodGroup){
 	      List<Predicate> bgPredicates = new ArrayList<Predicate>();
 	      for (BloodGroup bg : bloodGroups) {
 	        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());

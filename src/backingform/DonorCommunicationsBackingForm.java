@@ -1,3 +1,7 @@
+/**
+ * 
+ * commented on issue #209 [Adapt BSIS to Expose Rest Services]**
+ * 
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -168,3 +172,4 @@ public class DonorCommunicationsBackingForm {
 		this.bloodGroupErrorMessage = bloodGroupErrorMessage;
 	}
 }
+*/
