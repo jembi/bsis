@@ -362,7 +362,7 @@ public class DonorController {
 
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public @ResponseBody  List<Donor> findDonorPagination(
+  public @ResponseBody  Map<String, Object> findDonorPagination(
                   @RequestParam(value="firstName",required=false, defaultValue ="" ) String firstName,
                   @RequestParam(value="lastName",required=false, defaultValue ="") String lastName,
                   @RequestParam(value="donorNumber",required=false)String donorNumber,
@@ -385,8 +385,8 @@ public class DonorController {
     results = donorRepository.findAnyDonor(donorNumber, firstName,
             lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
     List<Donor> donors = (List<Donor>) results.get(0);
-    //Long totalRecords = (Long) results.get(1);
-     return donors ;
+    Long totalRecords = (Long) results.get(1);
+     return generateDatatablesMap(donors, totalRecords, formFields) ;
   }
   
   /**
@@ -569,9 +569,12 @@ public class DonorController {
             MethodArgumentNotValidException errors) {
         Map<String, String> errorMap = new HashMap<String, String>();
         errorMap.put("hasErrors", "true");
+        errorMap.put("errorMessage", errors.getMessage());
+        errors.printStackTrace();
         for (FieldError error : errors.getBindingResult().getFieldErrors()){
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
+      
         return errorMap;
     }
 }
