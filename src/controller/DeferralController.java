@@ -101,10 +101,10 @@ public class DeferralController {
     public @ResponseBody
     Map<String, Object> deferDonor(
             HttpServletResponse response,
-            @RequestParam("donorId") String donorId,
-            @RequestParam("deferUntil") String deferUntil,
-            @RequestParam("deferralReasonId") String deferralReasonId,
-            @RequestParam("deferralReasonText") String deferralReasonText) {
+            @RequestParam(value = "donorId" , required = true) String donorId,
+            @RequestParam(value = "deferUntil", required = false) String deferUntil,
+            @RequestParam(value = "deferralReasonId", required = false) String deferralReasonId,
+            @RequestParam(value = "deferralReasonText", required = false) String deferralReasonText) {
 
         Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
 
