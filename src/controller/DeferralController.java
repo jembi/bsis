@@ -102,8 +102,8 @@ public class DeferralController {
     Map<String, Object> deferDonor(
             HttpServletResponse response,
             @RequestParam(value = "donorId" , required = true) String donorId,
-            @RequestParam(value = "deferUntil", required = false) String deferUntil,
-            @RequestParam(value = "deferralReasonId", required = false) String deferralReasonId,
+            @RequestParam(value = "deferUntil", required = true) String deferUntil,
+            @RequestParam(value = "deferralReasonId", required = true) String deferralReasonId,
             @RequestParam(value = "deferralReasonText", required = false) String deferralReasonText) {
 
         Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
@@ -122,7 +122,7 @@ public class DeferralController {
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> updateDeferDonor( HttpServletResponse response,
-            @RequestParam("donorDeferralId") String donorDeferralId,
+            @RequestParam(value = "donorDeferralId",  required = true) String donorDeferralId,
             @RequestParam("donorId") String donorId,
             @RequestParam("deferUntil") String deferUntil,
             @RequestParam("deferralReasonId") String deferralReasonId,
