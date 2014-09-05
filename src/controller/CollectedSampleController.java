@@ -1,14 +1,10 @@
 package controller;
 
 import backingform.CollectedSampleBackingForm;
-import backingform.FindCollectedSampleBackingForm;
-import backingform.WorksheetBackingForm;
 import backingform.validator.CollectedSampleBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,20 +13,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
-import model.donor.Donor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
@@ -89,12 +87,9 @@ public class CollectedSampleController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/findCollectionFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public @ResponseBody Map<String, Object> findCollectionFormGenerator(HttpServletRequest request, Model model) {
-
-    FindCollectedSampleBackingForm form = new FindCollectedSampleBackingForm();
-    model.addAttribute("findCollectedSampleForm", form);
+  public @ResponseBody Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
 
     Map<String, Object> map = new  HashMap<String, Object>();
     addEditSelectorOptions(map);
@@ -107,27 +102,33 @@ public class CollectedSampleController {
     return map;
   }
 
-  @RequestMapping("/findCollection")
+  /**
+ * issue - #209[Adapt_Bsis_To_Expose_Rest_Services]
+ * Reason - duplicate method (see findCollectionPagination method) 
+  @RequestMapping(value = "/findCollection" , method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> findCollection(HttpServletRequest request,
-      @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form) {
 
     List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    m.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    m.put("allCollectedSamples", getCollectionViewModels(collections));
-    m.put("refreshUrl", getUrl(request));
-    m.put("nextPageUrl", getNextPageUrl(request));
-    m.put("saveToWorksheetUrl", getWorksheetUrl(request));
-    addEditSelectorOptions(m);
+    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("allCollectedSamples", getCollectionViewModels(collections));
+    map.put("refreshUrl", getUrl(request));
+    map.put("nextPageUrl", getNextPageUrl(request));
+    map.put("saveToWorksheetUrl", getWorksheetUrl(request));
+    addEditSelectorOptions(map);
 
-    map.put("model", m);
+    map.put("model", map);
     return map;
   }
-
+  */
+  
+/**
+ * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
+ * Reason - worksheet concepts are not used in later versions
+ * 
   private String getWorksheetUrl(HttpServletRequest request) {
     String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveFindCollectionsResultsToWorksheet.html");
     String queryString = request.getQueryString();   // d=789
@@ -136,6 +137,7 @@ public class CollectedSampleController {
     }
     return worksheetUrl;
   }
+  */
 
   /**
    * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
@@ -165,52 +167,59 @@ public class CollectedSampleController {
       return sortColumnMap.get(sortColumn);
   }
 
-  @RequestMapping("/findCollectionPagination")
+  @RequestMapping(value = "/findCollectionPagination", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> findCollectionPagination(HttpServletRequest request,
-      @ModelAttribute("findCollectedSampleForm") FindCollectedSampleBackingForm form,
-      BindingResult result, Model model) {
-
-    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+     @RequestParam(value = "collectionNumber", required = true)  String collectionNumber,
+     @RequestParam(value = "centers",required = true)  List<String> centers,
+     @RequestParam(value = "sites",required = true)  List<String> sites,
+     @RequestParam(value = "bloodBagTypes",required = true)  List<String> bloodBagTypes,
+     @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
+     @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
+     @RequestParam(value = "includeTestedCollections",required = true)  boolean includeTestedCollections){
+   
+      Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+      pagingParams.put("sortColumn", "id");
+      pagingParams.put("start", "0");
+      pagingParams.put("length", "10");
+      pagingParams.put("sortDirection", "asc");
+      
     int sortColumnId = (Integer) pagingParams.get("sortColumnId");
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+  
     pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
-
-    String collectionNumber = form.getCollectionNumber();
-    boolean includeUntestedCollections = form.getIncludeTestedCollections();
     if (collectionNumber != null)
       collectionNumber = collectionNumber.trim();
-    String dateCollectedFrom = form.getDateCollectedFrom();
-    String dateCollectedTo = form.getDateCollectedTo();
 
     List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
     bloodBagTypeIds.add(-1);
-    if (form.getBloodBagTypes() != null) {
-      for (String bloodBagTypeId : form.getBloodBagTypes()) {
+    
+    if (bloodBagTypes != null) {
+      for (String bloodBagTypeId : bloodBagTypes) {
         bloodBagTypeIds.add(Integer.parseInt(bloodBagTypeId));
       }
     }
 
     List<Long> centerIds = new ArrayList<Long>();
     centerIds.add((long) -1);
-    if (form.getCollectionCenters() != null) {
-      for (String center : form.getCollectionCenters()) {
+    if (centers != null) {
+      for (String center : centers) {
         centerIds.add(Long.parseLong(center));
       }
     }
 
     List<Long> siteIds = new ArrayList<Long>();
     siteIds.add((long) -1);
-    if (form.getCollectionSites() != null) {
-      for (String site : form.getCollectionSites()) {
+    if (sites!= null) {
+      for (String site : sites) {
         siteIds.add(Long.parseLong(site));
       }
     }
 
     List<Object> results = collectedSampleRepository.findCollectedSamples(
-                                        form.getCollectionNumber(),
+                                        collectionNumber,
                                         bloodBagTypeIds, centerIds, siteIds,
-                                        dateCollectedFrom, dateCollectedTo, includeUntestedCollections, pagingParams);
+                                        dateCollectedFrom, dateCollectedTo, includeTestedCollections, pagingParams);
 
     @SuppressWarnings("unchecked")
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
@@ -269,10 +278,9 @@ public class CollectedSampleController {
     m.put("sites", locationRepository.getAllCollectionSites());
   }
 
-  @RequestMapping(value = "/addForm", method = RequestMethod.GET)
+  @RequestMapping(value = "/addform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public @ResponseBody Map<String, Object> addCollectionFormGenerator(HttpServletRequest request,
-      Model model) {
+  public @ResponseBody Map<String, Object> addCollectionFormGenerator(HttpServletRequest request) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
 
@@ -288,7 +296,7 @@ public class CollectedSampleController {
     return map;
   }
 
-  @RequestMapping(value = "/editForm", method = RequestMethod.GET)
+  @RequestMapping(value = "/editform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public @ResponseBody Map<String, Object> editCollectionFormGenerator(HttpServletRequest request,
       @RequestParam(value="collectionId") Long collectionId) {
@@ -309,10 +317,7 @@ public class CollectedSampleController {
   @RequestMapping( method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
   public @ResponseBody Map<String, Object> addCollection(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addCollectionForm") @Valid CollectedSampleBackingForm form,
-      BindingResult result, Model model) {
+      @RequestBody @Valid CollectedSampleBackingForm form) {
 
             Map<String, Object> map = new HashMap<String, Object>();
 	    boolean success = false;
@@ -321,12 +326,7 @@ public class CollectedSampleController {
 	    map.put("collectionFields", formFields);
 	
 	    CollectedSample savedCollection = null;
-	    if (result.hasErrors()) {
-	      map.put("hasErrors", true);
-	      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	      success = false;
-	    } 
-	    else {
+	    
 	      try {
           form.setCollectedSample();
 	        CollectedSample collectedSample = form.getCollectedSample();
@@ -345,11 +345,8 @@ public class CollectedSampleController {
 	      } catch (EntityExistsException ex) {
 	        ex.printStackTrace();
 	        success = false;
-	      } catch (Exception ex) {
-	        ex.printStackTrace();
-	        success = false;
-	      }
-    }
+	      } 
+    
 
     if (success) {
       map.put("collectionId", savedCollection.getId());
@@ -375,8 +372,7 @@ public class CollectedSampleController {
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public @ResponseBody Map<String, Object> updateCollectedSample(
       HttpServletResponse response,
-      @ModelAttribute("editCollectionForm") @Valid CollectedSampleBackingForm form,
-      BindingResult result, Model model) {
+      @RequestBody  @Valid CollectedSampleBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
@@ -386,13 +382,8 @@ public class CollectedSampleController {
     // property will be changed
     map.put("existingCollectedSample", true);
 
-    if (result.hasErrors()) {
-      map.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-      message = "Please fix the errors noted";
-    }
-    else {
+   
+    
       try {
         form.setIsDeleted(false);
         form.setCollectedSample();
@@ -415,13 +406,8 @@ public class CollectedSampleController {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         success = false;
         message = "Collection Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
-   }
+      } 
+   
 
     map.put("editCollectedSampleForm", form);
     map.put("success", success);
@@ -442,7 +428,7 @@ public class CollectedSampleController {
     return collectionViewModels;
   }
 
-  @RequestMapping(method = RequestMethod.DELETE)
+  @RequestMapping(method = RequestMethod.DELETE) 
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION+"')")
   public @ResponseBody
   Map<String, ? extends Object> deleteCollection(
@@ -466,7 +452,7 @@ public class CollectedSampleController {
 
   @RequestMapping(method = RequestMethod.GET, params = {"collectionId"})
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public @ResponseBody Map<String, Object> collectionSummaryGenerator(HttpServletRequest request, Model model,
+  public @ResponseBody Map<String, Object> collectionSummaryGenerator(HttpServletRequest request,
       @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -497,12 +483,14 @@ public class CollectedSampleController {
     return map;
   }
 
+  /**
+ * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
+ * Reason - no worksheets
   @RequestMapping(value="/saveFindCollectionsResultsToWorksheet", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
       HttpServletResponse response,
-      @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form) {
 
     String collectionNumber = form.getCollectionNumber();
     if (collectionNumber != null)
@@ -533,8 +521,7 @@ public class CollectedSampleController {
 
     String worksheetNumber = form.getWorksheetNumber();
     Map<String, Object> map = new  HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    m.put("worksheetNumber", worksheetNumber);
+    map.put("worksheetNumber", worksheetNumber);
     try {
       collectedSampleRepository.saveToWorksheet(
                                         form.getCollectionNumber(),
@@ -542,19 +529,23 @@ public class CollectedSampleController {
                                         dateCollectedFrom, dateCollectedTo,
                                         form.getIncludeTestedCollections(),
                                         worksheetNumber);
-      m.put("success", true);
+      map.put("success", true);
     } catch (Exception ex) {
       ex.printStackTrace();
-      m.put("success", false);
+      map.put("success", false);
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
-    map.put("model", m);
+    map.put("model", map);
     
     return map;
   }
-  
-  @RequestMapping("/findLastDonationForDonor.html")  
+  */
+  /**
+   * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
+   * Reason - not sure is this method going to be included in later versions
+   *
+  @RequestMapping(value = "/findLastDonationForDonor", method = RequestMethod.GET)  
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody  
   Map<String, String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
@@ -592,5 +583,21 @@ public class CollectedSampleController {
    }
    return m;  
   }  
+  */
+  @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Map<String, String> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException errors) {
+        Map<String, String> errorMap = new HashMap<String, String>();
+        errorMap.put("hasErrors", "true");
+        errorMap.put("errorMessage", errors.getMessage());
+        errors.printStackTrace();
+        for (FieldError error : errors.getBindingResult().getFieldErrors()){
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+      
+        return errorMap;
+    }
   
 }

@@ -1,3 +1,7 @@
+/*
+*issue - #209[Adapt BSIS To Expose rest Services]
+*Reason - woksheets concept is not used in later versions
+*
 package controller;
 
 import java.io.IOException;
@@ -386,7 +390,7 @@ public class WorksheetController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in collectionsTable.jsp.
    * @param bloodTests 
-   */
+   
   private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, List<BloodTest> bloodTests, Long totalRecords) {
 
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
@@ -484,3 +488,4 @@ public class WorksheetController {
     return mv;
   }
 }
+*/

@@ -21,9 +21,6 @@ import org.springframework.validation.Validator;
 import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import backingform.CollectedSampleBackingForm;
-import backingform.DonorBackingForm;
-import backingform.FindCollectedSampleBackingForm;
-import backingform.WorksheetBackingForm;
 import controller.UtilController;
 
 public class CollectedSampleBackingFormValidator implements Validator {
@@ -40,11 +37,9 @@ public class CollectedSampleBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(FindCollectedSampleBackingForm.class,
-                         CollectedSampleBackingForm.class,
+    return Arrays.asList(CollectedSampleBackingForm.class,
                          CollectedSample.class,
-                         CollectedSampleViewModel.class,
-                         WorksheetBackingForm.class
+                         CollectedSampleViewModel.class
                          ).contains(clazz);
   }
 
