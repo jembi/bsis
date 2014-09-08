@@ -170,24 +170,22 @@ public class CollectedSampleController {
   @RequestMapping(value = "/findCollectionPagination", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public @ResponseBody Map<String, Object> findCollectionPagination(HttpServletRequest request,
-     @RequestParam(value = "collectionNumber", required = true)  String collectionNumber,
-     @RequestParam(value = "centers",required = true)  List<String> centers,
-     @RequestParam(value = "sites",required = true)  List<String> sites,
-     @RequestParam(value = "bloodBagTypes",required = true)  List<String> bloodBagTypes,
+     @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
+     @RequestParam(value = "centers",required = false)  List<String> centers,
+     @RequestParam(value = "sites",required = false)  List<String> sites,
+     @RequestParam(value = "bloodBagTypes",required = false)  List<String> bloodBagTypes,
      @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
      @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
      @RequestParam(value = "includeTestedCollections",required = true)  boolean includeTestedCollections){
    
-      Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+      Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");
       pagingParams.put("start", "0");
       pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
       
-    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("CollectedSample");
   
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
     if (collectionNumber != null)
       collectionNumber = collectionNumber.trim();
 

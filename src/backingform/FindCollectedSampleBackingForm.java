@@ -1,6 +1,6 @@
 /**
  * issue - #209{Adapt Bsis To Expose rest Services}
- * Reason - Not required in later versions as get requests should not be bindied to be objects
+ * Reason - Not required in later versions as get requests should not be binded to be objects
  *
 package backingform;
 
