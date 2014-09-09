@@ -2,6 +2,7 @@ package model.user;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.List;
 import java.util.Set;
@@ -32,14 +33,13 @@ public class Role {
 	private String name;
 
 	@ManyToMany(mappedBy = "roles")
+        @JsonIgnore
 	private List<User> users;
 
-	@ManyToMany(mappedBy="roles")
-	private List<UserRole> userRole;
-
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Permission_Role", joinColumns = { @JoinColumn(name = "roles_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "permissions_id", referencedColumnName = "id") })
-	@JsonIgnore
+       @JsonIgnore
         private Set<Permission> permissions;
 
 	@Lob

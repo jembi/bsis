@@ -1,33 +1,26 @@
 package controller;
 
+import com.wordnik.swagger.annotations.Api;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import model.location.Location;
-;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wordnik.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
 
 @Controller
-@RequestMapping
-@Api(value = "Account operations")
 public class LocationsController {
 
   @Autowired
@@ -44,29 +37,23 @@ public class LocationsController {
 
   @RequestMapping(value="/configureLocationsFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_SITES+"')")
-  public ModelAndView configureLocationsFormGenerator(
+  public @ResponseBody Map<String, Object> configureLocationsFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
-    ModelAndView mv = new ModelAndView("admin/configureLocations");
-    Map<String, Object> m = model.asMap();
-    addAllLocationsToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllLocationsToModel(map);
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
-  @RequestMapping("/configureLocations")
+  @RequestMapping(value = "/configureLocations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_SITES+"')")
-  public ModelAndView configureLocations(
+  public @ResponseBody Map<String, Object>  configureLocations(
       HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureLocations");
-    System.out.println(paramsAsJson);
+      @RequestBody Map<String, Object> params) {
     List<Location> locations = new ArrayList<Location>();
     try {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
       for (String id : params.keySet()) {
         @SuppressWarnings("unchecked")
         Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
@@ -91,11 +78,10 @@ public class LocationsController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    Map<String, Object> m = model.asMap();
-    addAllLocationsToModel(m);
-    m.put("refreshUrl", "configureLocationsFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllLocationsToModel(map);
+    map.put("refreshUrl", "configureLocationsFormGenerator.html");
+    return map;
   }
   
   private void addAllLocationsToModel(Map<String, Object> model) {

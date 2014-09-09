@@ -1,7 +1,6 @@
 package controller;
 
 import backingform.RoleBackingForm;
-import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.RoleBackingFormValidator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,21 +11,24 @@ import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import model.collectedsample.CollectedSample;
 import model.user.Permission;
 import model.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import repository.RoleRepository;
 import utils.PermissionConstants;
 import viewmodel.RoleViewModel;
@@ -51,53 +53,46 @@ public class RoleController {
 
 	@RequestMapping(value = "/configureForm", method = RequestMethod.GET)
 	  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public @ResponseBody Map<String, Object> configureRolesFormGenerator(HttpServletRequest request,
-			HttpServletResponse response, Model model) {
+	public @ResponseBody Map<String, Object> configureRolesFormGenerator(HttpServletRequest request) {
 
                 Map<String, Object> map = new  HashMap<String, Object>();
-		Map<String, Object> m = model.asMap();
-		addAllRolesToModel(m);
-		m.put("refreshUrl", utilController.getUrl(request));
-		map.put("model", model);
+		addAllRolesToModel(map);
+		map.put("refreshUrl", utilController.getUrl(request));
 		return map;
 	}
 
-	private void addAllRolesToModel(Map<String, Object> m) {
+	private void addAllRolesToModel(Map<String, Object> map) {
 		List<RoleViewModel> roles = roleRepository.getAllRoles();
-		m.put("allRoles", roles);
+		map.put("allRoles", roles);
 	}
 
-	private void addAllPermissionsToModel(Map<String, Object> m) {
+	private void addAllPermissionsToModel(Map<String, Object> map) {
 		List<Permission> permissions = roleRepository.getAllPermissionsByName();
-		m.put("allPermissions", permissions);
+		map.put("allPermissions", permissions);
 	}
 
 	@RequestMapping(value = "/editForm", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public @ResponseBody Map<String, Object> editRoleFormGenerator(HttpServletRequest request,
-			Model model,
 			@RequestParam(value = "roleId", required = false) Long roleId) {
 
 		RoleBackingForm form = new RoleBackingForm();
-                 Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Object> m = model.asMap();
-		m.put("requestUrl", utilController.getUrl(request));
+                Map<String, Object> map = new HashMap<String, Object>();
+		map.put("requestUrl", utilController.getUrl(request));
 		if (roleId != null) {
 			form.setId(roleId);
 			Role role = roleRepository.findRoleDetailById(roleId);
 			form.setName(role.getName());
 			form.setRole(role);
-			m.put("existingRole", true);
+			map.put("existingRole", true);
 		} else {
-			form = new RoleBackingForm();
-			m.put("existingRole", false);
+			map.put("existingRole", false);
 
 		}
-		addAllPermissionsToModel(m);
-		m.put("editRoleForm", form);
-		m.put("refreshUrl", utilController.getUrl(request));
+		addAllPermissionsToModel(map);
+		map.put("editRoleForm", form);
+		map.put("refreshUrl", utilController.getUrl(request));
 		// to ensure custom field names are displayed in the form
-		map.put("model", m);
 		return map;
 	}
 
@@ -106,21 +101,13 @@ public class RoleController {
 	public @ResponseBody Map<String, Object> updateRole(
 			HttpServletRequest request,
 			HttpServletResponse response,
-			@ModelAttribute(value = "editRoleForm") @Valid RoleBackingForm form,
-			BindingResult result,
-			Model model) {
+                        @Valid @RequestBody RoleBackingForm form) {
 		
                 Map<String, Object> map = new HashMap<String, Object>();
 		boolean success = false;
 		String message = "";
-		Map<String, Object> m = model.asMap();
-		m.put("existingRole", true);
-		 if (result.hasErrors()) {
-		      m.put("hasErrors", true);
-		      message = "Error Updating  Role. Please fix the errors noted below.";
-		      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		      success = false;
-		    } else
+		map.put("existingRole", true);
+		
 		try {
 
 			Set<Permission> permissions = setPermissions(form.getPermissionValues());
@@ -129,13 +116,13 @@ public class RoleController {
 			role.setPermissions(permissions);
         	Role existingRole = roleRepository.updateRole(role);
 			if (existingRole == null) {
-				m.put("hasErrors", true);
+				map.put("hasErrors", true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				success = false;
-				m.put("existingRole", false);
+				map.put("existingRole", false);
 				message = "Role does not already exist.";
 			} else {
-				m.put("hasErrors", false);
+				map.put("hasErrors", false);
 				success = true;
 				message = "Role Successfully Updated";
 			}
@@ -148,16 +135,13 @@ public class RoleController {
 			ex.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			success = false;
-			message = "Internal Error. Please try again or report a Problem.";
+			message = "Internal Error. Please try again or report a Problemap.";
 		}
 
-		addAllPermissionsToModel(m);
-		m.put("editRoleForm", form);
-		m.put("success", success);
-		m.put("errorMessage", message);
-
-		map.put("model", m);
-
+		addAllPermissionsToModel(map);
+		map.put("editRoleForm", form);
+		map.put("success", success);
+		map.put("errorMessage", message);
 		return map;
 	}
 
@@ -165,28 +149,22 @@ public class RoleController {
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public @ResponseBody Map<String, Object> addRole(HttpServletRequest request,
 			HttpServletResponse response,
-			@ModelAttribute("editRoleForm") @Valid RoleBackingForm form,
-			BindingResult result, Model model) {
+                        @Valid @RequestBody RoleBackingForm form) {
 		
             Map<String, Object> map = new HashMap<String, Object>();
-            Map<String, Object> m = model.asMap();
             boolean success = false;
 
 	    Role savedRole = null;
-	    if (result.hasErrors()) {
-	      m.put("hasErrors", true);
-	      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	      success = false;
-	    } else {
+	  
 			try {
 				
-	    		Set<Permission> permissions = setPermissions(form.getPermissionValues());
+                        	Set<Permission> permissions = setPermissions(form.getPermissionValues());
 				Role role =new Role();
 				role.setName(form.getName());
 				role.setDescription(form.getDescription());
 				role.setPermissions(permissions);
 				savedRole = roleRepository.addRole(role);
-				m.put("hasErrors", false);
+				map.put("hasErrors", false);
 				success = true;
 				form = new RoleBackingForm();
 			} catch (EntityExistsException ex) {
@@ -196,31 +174,27 @@ public class RoleController {
 				ex.printStackTrace();
 				success = false;
 			}
-		}
-		addAllPermissionsToModel(m);
+		addAllPermissionsToModel(map);
 
-		if (success) {
-			m.put("editRoleForm", form);
-			m.put("existingRole", false);
-			m.put("refreshUrl", "configureRolesFormGenerator.html");
-		
-	    } else {
-	    
-	    	m.put("editRoleForm", form);
-	    	m.put("refreshUrl", "admin/editRoleForm");
-	     	m.put("errorMessage", "Error creating new Role. Please fix the errors noted below.");
-	    
+            if (success) {
+                map.put("editRoleForm", form);
+                map.put("existingRole", false);
+                map.put("refreshUrl", "configureRolesFormGenerator.html");
 
-	    }
-		map.put("model", m);
-		m.put("success", success);
+            } else {
+
+                map.put("editRoleForm", form);
+                map.put("refreshUrl", "admin/editRoleForm");
+                map.put("errorMessage", "Error creating new Role. Please fix the errors noted below.");
+
+            }
+		map.put("success", success);
         return map;
 	}
 
 	private Set<Permission> setPermissions(Set<String> permissionValues) {
          Set<Permission> permissions = new HashSet<Permission>();
 		for (String permissionId : permissionValues) {
-		    System.out.println("\tpermissionId: "+permissionId);
 			if(!permissionId.equals("")){
 			Permission permission = roleRepository
 					.findPermissionByPermissionId(Long.parseLong(permissionId));
@@ -229,4 +203,19 @@ public class RoleController {
 		}
 		return permissions;
 	}
+        
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Map<String, String> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException errors) {
+        Map<String, String> errorMap = new HashMap<String, String>();
+        errorMap.put("hasErrors", "true");
+        errorMap.put("errorMessage", errors.getMessage());
+        errors.printStackTrace();
+        for (FieldError error : errors.getBindingResult().getFieldErrors()) {
+            errorMap.put(error.getField(), error.getDefaultMessage());
+        }
+        return errorMap;
+    }
 }

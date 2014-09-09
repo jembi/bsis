@@ -1,5 +1,8 @@
 package model.user;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,7 +16,8 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class Permission {
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+public class Permission implements Serializable{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
