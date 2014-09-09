@@ -22,6 +22,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,182 +37,180 @@ import viewmodel.UserViewModel;
 @RequestMapping("/user")
 public class UserController {
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  @Autowired
-  private UtilController utilController;
+    @Autowired
+    private UtilController utilController;
 
-  @Autowired
-  private RoleRepository roleRepository;
-  
-  @InitBinder
-  protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController,userRepository));
-  }
+    @Autowired
+    private RoleRepository roleRepository;
 
-  @RequestMapping(value="/configureForm", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public @ResponseBody Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController, userRepository));
+    }
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllUsersToModel(map);
-    map.put("refreshUrl", utilController.getUrl(request));
-    map.put("userRoles", roleRepository.getAllRoles());
-    return map;
-  }
+    @RequestMapping(value = "/configure", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public @ResponseBody
+    Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
 
-  private void addAllUsersToModel(Map<String, Object> m) {
-    List<UserViewModel> users = userRepository.getAllUsers();
-    m.put("allUsers", users);
-  }
-
-  @RequestMapping(value = "/editForm", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public @ResponseBody Map<String, Object> editUserFormGenerator(HttpServletRequest request,
-      @RequestParam(value = "userId", required = false) Integer userId) {
-	 UserBackingForm form = new UserBackingForm();
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", utilController.getUrl(request));
-    if (userId != null) {
-      form.setId(userId);
-      User user = userRepository.findUserById(userId);
-      if (user != null) {
-        form = new UserBackingForm(user);
-        form.setCurrentPassword(user.getPassword());
+        Map<String, Object> map = new HashMap<String, Object>();
+        addAllUsersToModel(map);
+        map.put("refreshUrl", utilController.getUrl(request));
         map.put("userRoles", roleRepository.getAllRoles());
-        map.put("existingUser", true);
-      }
-      else {
-    	form = new UserBackingForm();
-        map.put("existingUser", false);
-      }
+        return map;
     }
-    map.put("allRoles",roleRepository.getAllRoles());
-    map.put("userRoles", form.getRoles());
-    map.put("editUserForm", form);
-    map.put("refreshUrl", utilController.getUrl(request));
-    // to ensure custom field names are displayed in the form
-    return map;
-  }
 
-  @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public @ResponseBody Map<String, Object>
-        addUser(HttpServletRequest request,
-                 HttpServletResponse response,
-                 @Valid UserBackingForm form) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
-    
-    String message = "";
-   
-      try {
-        User user = form.getUser();
-        user.setIsDeleted(false);
-        user.setRoles(assignUserRoles(form));
-        user.setIsActive(true);
-        userRepository.addUser(user);
-        map.put("hasErrors", false);
-        success = true;
-        message = "User Successfully Added";
-        form = new UserBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "User Already exists.";
+    private void addAllUsersToModel(Map<String, Object> m) {
+        List<UserViewModel> users = userRepository.getAllUsers();
+        m.put("allUsers", users);
     }
-    map.put("allRoles", roleRepository.getAllRoles());
-    map.put("editUserForm", form);
-    map.put("existingUser", false);
-    map.put("refreshUrl", "editUserFormGenerator.html");
-    map.put("success", success);
-    map.put("errorMessage", message);
 
-    return map;
-  }
-   
-  public List<Role> assignUserRoles(UserBackingForm userForm)
-  {
-	   List<String> userRoles=userForm.getUserRoles();
-       List<Role> roles=new ArrayList<Role>();
-       for(String roleId : userRoles)
-       {
-       	roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
-       }
-       return roles;
-  }
-  @RequestMapping( method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public Map<String, Object> updateUser(
-      HttpServletResponse response,
-      @Valid UserBackingForm form) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
-    String message = "";
-    // only when the collection is correctly added the existingCollectedSample
-    // property will be changed
-    map.put("existingUser", true);
-  
-   
-      try {
-        form.setIsDeleted(false);
-        User user = form.getUser();
-        if (form.isModifyPassword())
-          user.setPassword(form.getPassword());
-        else
-        	user.setPassword(form.getCurrentPassword());
-        user.setRoles(assignUserRoles(form));
-        user.setIsActive(true);
-        User existingUser = userRepository.updateUser(user, true);
-        if (existingUser == null) {
-          map.put("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-          success = false;
-          map.put("existingUser", false);
-      }
-        else {
-          map.put("hasErrors", false);
-          success = true;
-          message = "User Successfully Updated";
+    @RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public @ResponseBody
+    Map<String, Object> editUserFormGenerator(HttpServletRequest request,
+            @PathVariable Integer id) {
+        UserBackingForm form = new UserBackingForm();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("requestUrl", utilController.getUrl(request));
+        if (id != null) {
+            form.setId(id);
+            User user = userRepository.findUserById(id);
+            if (user != null) {
+                form = new UserBackingForm(user);
+                form.setCurrentPassword(user.getPassword());
+                map.put("userRoles", roleRepository.getAllRoles());
+                map.put("existingUser", true);
+            } else {
+                form = new UserBackingForm();
+                map.put("existingUser", false);
+            }
         }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "User Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-     
-   }
-    
- //   m.put("userRoles", form.getUserRole());
-    map.put("editUserForm", form);
-    map.put("success", success);
-    map.put("errorMessage", message);
+        map.put("allRoles", roleRepository.getAllRoles());
+        map.put("userRoles", form.getRoles());
+        map.put("editUserForm", form);
+        map.put("refreshUrl", utilController.getUrl(request));
+        // to ensure custom field names are displayed in the form
+        return map;
+    }
 
-    return map;
-  }
-  
-	
-	
-	public String userRole(Integer id) {
-		String userRole = "";
-		User user=userRepository.findUserById(id);
-		List<Role> roles=user.getRoles();
-		if(roles!=null && roles.size() > 0){
-			for(Role r:roles){
-				userRole= userRole +" "+ r.getId();
-			}
-			
-		}
-		return userRole;
-	}
-        
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public @ResponseBody
+    Map<String, Object>
+            addUser(HttpServletRequest request,
+                    HttpServletResponse response,
+                    @Valid UserBackingForm form) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
+
+        String message = "";
+
+        try {
+            User user = form.getUser();
+            user.setIsDeleted(false);
+            user.setRoles(assignUserRoles(form));
+            user.setIsActive(true);
+            userRepository.addUser(user);
+            map.put("hasErrors", false);
+            success = true;
+            message = "User Successfully Added";
+            form = new UserBackingForm();
+        } catch (EntityExistsException ex) {
+            ex.printStackTrace();
+            success = false;
+            message = "User Already exists.";
+        }
+        map.put("allRoles", roleRepository.getAllRoles());
+        map.put("editUserForm", form);
+        map.put("existingUser", false);
+        map.put("refreshUrl", "editUserFormGenerator.html");
+        map.put("success", success);
+        map.put("errorMessage", message);
+
+        return map;
+    }
+
+    public List<Role> assignUserRoles(UserBackingForm userForm) {
+        List<String> userRoles = userForm.getUserRoles();
+        List<Role> roles = new ArrayList<Role>();
+        for (String roleId : userRoles) {
+            roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
+        }
+        return roles;
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public Map<String, Object> updateUser(
+            HttpServletResponse response,
+            @Valid UserBackingForm form) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
+        String message = "";
+    // only when the collection is correctly added the existingCollectedSample
+        // property will be changed
+        map.put("existingUser", true);
+
+        try {
+            form.setIsDeleted(false);
+            User user = form.getUser();
+            if (form.isModifyPassword()) {
+                user.setPassword(form.getPassword());
+            } else {
+                user.setPassword(form.getCurrentPassword());
+            }
+            user.setRoles(assignUserRoles(form));
+            user.setIsActive(true);
+            User existingUser = userRepository.updateUser(user, true);
+            if (existingUser == null) {
+                map.put("hasErrors", true);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                success = false;
+                map.put("existingUser", false);
+            } else {
+                map.put("hasErrors", false);
+                success = true;
+                message = "User Successfully Updated";
+            }
+        } catch (EntityExistsException ex) {
+            ex.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            success = false;
+            message = "User Already exists.";
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            success = false;
+            message = "Internal Error. Please try again or report a Problem.";
+
+        }
+
+        //   m.put("userRoles", form.getUserRole());
+        map.put("editUserForm", form);
+        map.put("success", success);
+        map.put("errorMessage", message);
+
+        return map;
+    }
+
+    public String userRole(Integer id) {
+        String userRole = "";
+        User user = userRepository.findUserById(id);
+        List<Role> roles = user.getRoles();
+        if (roles != null && roles.size() > 0) {
+            for (Role r : roles) {
+                userRole = userRole + " " + r.getId();
+            }
+
+        }
+        return userRole;
+    }
+
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -221,10 +220,10 @@ public class UserController {
         errorMap.put("hasErrors", "true");
         errorMap.put("errorMessage", errors.getMessage());
         errors.printStackTrace();
-        for (FieldError error : errors.getBindingResult().getFieldErrors()){
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-      
+        for (FieldError error : errors.getBindingResult().getFieldErrors()) {
+            errorMap.put(error.getField(), error.getDefaultMessage());
+        }
+
         return errorMap;
     }
 }

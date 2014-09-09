@@ -20,7 +20,6 @@ import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class User {
 
   @Id

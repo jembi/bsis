@@ -23,6 +23,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,8 +52,9 @@ public class RoleController {
 	  binder.setValidator(new RoleBackingFormValidator(binder.getValidator(), utilController,roleRepository));
 	}
 
-	@RequestMapping(value = "/configureForm", method = RequestMethod.GET)
-	  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
+
+        @RequestMapping(value = "/configure", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public @ResponseBody Map<String, Object> configureRolesFormGenerator(HttpServletRequest request) {
 
                 Map<String, Object> map = new  HashMap<String, Object>();
@@ -71,17 +73,17 @@ public class RoleController {
 		map.put("allPermissions", permissions);
 	}
 
-	@RequestMapping(value = "/editForm", method = RequestMethod.GET)
+	@RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public @ResponseBody Map<String, Object> editRoleFormGenerator(HttpServletRequest request,
-			@RequestParam(value = "roleId", required = false) Long roleId) {
+			@PathVariable Long id) {
 
 		RoleBackingForm form = new RoleBackingForm();
                 Map<String, Object> map = new HashMap<String, Object>();
 		map.put("requestUrl", utilController.getUrl(request));
-		if (roleId != null) {
-			form.setId(roleId);
-			Role role = roleRepository.findRoleDetailById(roleId);
+		if (id != null) {
+			form.setId(id);
+			Role role = roleRepository.findRoleDetailById(id);
 			form.setName(role.getName());
 			form.setRole(role);
 			map.put("existingRole", true);

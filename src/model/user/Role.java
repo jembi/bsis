@@ -21,7 +21,6 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Role {
 
 	@Id
