@@ -389,18 +389,18 @@ public class BloodTypingController {
 
   @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
-  public ModelAndView getBloodTypingRuleSummary(HttpServletRequest request,
-      @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
+  public @ResponseBody Map<String, Object> getBloodTypingRuleSummary(HttpServletRequest request,
+      @RequestParam(value="bloodTypingRuleId", required = true) Integer ruleId) {
 
-    ModelAndView mv = new ModelAndView ("admin/bloodTypingRuleSummary");
+    Map<String, Object> map = new HashMap<String, Object>();
     BloodTestingRuleViewModel bloodTypingRule;
     bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(ruleId));
-    mv.addObject("bloodTypingRule", bloodTypingRule);
-    mv.addObject("refreshUrl", getUrl(request));
+    map.put("bloodTypingRule", bloodTypingRule);
+    map.put("refreshUrl", getUrl(request));
     List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
-    mv.addObject("bloodTypingTests", bloodTypingTests);
-    mv.addObject("bloodTypingTestsMap", getBloodTypingTestsAsMap(bloodTypingTests));
-    return mv;
+    map.put("bloodTypingTests", bloodTypingTests);
+    map.put("bloodTypingTestsMap", getBloodTypingTestsAsMap(bloodTypingTests));
+    return map;
   }
 
   @SuppressWarnings("unchecked")
