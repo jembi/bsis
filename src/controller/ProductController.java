@@ -1,5 +1,11 @@
 package controller;
 
+import backingform.ProductCombinationBackingForm;
+import backingform.RecordProductBackingForm;
+import backingform.validator.ProductBackingFormValidator;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
@@ -10,12 +16,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.product.ProductStatus;
@@ -23,37 +27,25 @@ import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
-import backingform.FindProductBackingForm;
-import backingform.ProductBackingForm;
-import backingform.ProductCombinationBackingForm;
-import backingform.RecordProductBackingForm;
-import backingform.validator.ProductBackingFormValidator;
-import com.wordnik.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("product")
@@ -131,9 +123,7 @@ public class ProductController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public @ResponseBody Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
 
-    FindProductBackingForm form = new FindProductBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("findProductForm", form);
 
     Map<String, Object> tips = new HashMap<String, Object>();
     addEditSelectorOptions(map);
@@ -151,7 +141,7 @@ public class ProductController {
    */
   @RequestMapping(value = "/recordform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
+  public @ResponseBody Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
 
   	RecordProductBackingForm form = new RecordProductBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
@@ -171,7 +161,7 @@ public class ProductController {
   
   @RequestMapping(value = "/addProductCombinationFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request
+  public @ResponseBody Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request
       ) {
 
     ProductCombinationBackingForm form = new ProductCombinationBackingForm();
@@ -246,40 +236,48 @@ public class ProductController {
   }
 
   
-  @SuppressWarnings("unchecked")
-  @RequestMapping(value = "/findProductPagination", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public Map<String, Object> findProductPagination(HttpServletRequest request,
-      @ModelAttribute("findProductForm") FindProductBackingForm form) {
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/findProductPagination", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
+    public Map<String, Object> findProductPagination(HttpServletRequest request,
+            @RequestParam(value = "searchBy") String searchBy,
+            @RequestParam(value = "productNumber") String productNumber,
+            @RequestParam(value = "collectionNumber") String collectionNumber,
+            @RequestParam(value = "productTypes") List<String> productTypes,
+            @RequestParam(value = "status") List<String> status,
+            @RequestParam(value = "dateExpiresFrom") String dateExpiresFrom,
+            @RequestParam(value = "dateExpiresTo") String dateExpiresTo) {
 
-    List<Product> products = Arrays.asList(new Product[0]);
+        List<Product> products = Arrays.asList(new Product[0]);
 
-    String searchBy = form.getSearchBy();
+        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        pagingParams.put("sortColumn", "id");
+        pagingParams.put("start", "0");
+        pagingParams.put("length", "10");
+        pagingParams.put("sortDirection", "asc");
+        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
+        int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+        pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
-    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+        List<Object> results = new ArrayList<Object>();
+        if (searchBy.equals("collectionNumber")) {
+            results = productRepository.findProductByCollectionNumber(
+                    collectionNumber, status,
+                    pagingParams);
+        } else if (searchBy.equals("productType")) {
+            List<Integer> productTypeIds = new ArrayList<Integer>();
+            productTypeIds.add(-1);
+            for (String productTypeId : productTypes) {
+                productTypeIds.add(Integer.parseInt(productTypeId));
+            }
+            results = productRepository.findProductByProductTypes(
+                    productTypeIds, status, pagingParams);
+        }
 
-    List<Object> results = new ArrayList<Object>();
-    if (searchBy.equals("collectionNumber")) {
-      results = productRepository.findProductByCollectionNumber(
-          form.getCollectionNumber(), form.getStatus(),
-          pagingParams);
-    } else if (searchBy.equals("productType")) {
-      List<Integer> productTypeIds = new ArrayList<Integer>();
-      productTypeIds.add(-1);
-      for (String productTypeId : form.getProductTypes()) {
-        productTypeIds.add(Integer.parseInt(productTypeId));
-      }
-      results = productRepository.findProductByProductTypes(
-          productTypeIds, form.getStatus(), pagingParams);
+        products = (List<Product>) results.get(0);
+        Long totalRecords = (Long) results.get(1);
+        return generateDatatablesMap(products, totalRecords, formFields);
     }
-
-    products = (List<Product>) results.get(0);
-    Long totalRecords = (Long) results.get(1);
-    return generateDatatablesMap(products, totalRecords, formFields);
-  }
 
   public static List<ProductViewModel> getProductViewModels(
       List<Product> products) {
@@ -463,10 +461,13 @@ public class ProductController {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
-    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
+      Map<String, Object> pagingParams = new HashMap<String, Object>();
+      pagingParams.put("sortColumn", "id");
+      pagingParams.put("start", "0");
+      pagingParams.put("length", "10");
+      pagingParams.put("sortDirection", "asc");
+      
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
     List<Object> results = new ArrayList<Object>();
     List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
@@ -481,7 +482,7 @@ public class ProductController {
   }
   
  
-  @RequestMapping(value = "/recordNewProductComponents", method = RequestMethod.GET)
+  @RequestMapping(value = "/recordNewProductComponents", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public @ResponseBody Map<String, Object> recordNewProductComponents(HttpServletRequest request,
       @RequestBody RecordProductBackingForm form) {
@@ -589,11 +590,12 @@ public class ProductController {
   @RequestMapping(value = "/getRecordNewProductComponents", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public @ResponseBody Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
-      @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form) {
+      @RequestParam(value = "productTypes") List<String> productTypes,
+      @RequestParam(value = "collectionNumber") String collectionNumber) {
 
   	ProductType productType = null;
-  	if(form.getProductTypes() != null){
-	  	String productTypeName = form.getProductTypes().get(form.getProductTypes().size()-1);
+  	if(productTypes!= null){
+	  	String productTypeName = productTypes.get(productTypes.size()-1);
 	  	productType = productRepository.findProductTypeByProductTypeName(productTypeName);
   	}
   	List<Product> products = Arrays.asList(new Product[0]);
@@ -601,11 +603,10 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
-    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
-    map.put("addProductForm", form);
+    map.put("refreshUrl", getUrlForNewProduct(request, collectionNumber));
+    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,collectionNumber));
     
-    if(form.getCollectionNumber().contains("-") && form.getProductTypes() != null){
+    if(collectionNumber.contains("-") && productTypes != null){
     	addEditSelectorOptionsForNewRecordByList(map,productType);
   	}
   	else{

@@ -1,6 +1,5 @@
 package backingform.validator;
 
-import backingform.FindProductBackingForm;
 import backingform.ProductBackingForm;
 import backingform.ProductCombinationBackingForm;
 import backingform.RecordProductBackingForm;
@@ -36,8 +35,7 @@ public class ProductBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(FindProductBackingForm.class,
-                         ProductBackingForm.class,
+    return Arrays.asList(ProductBackingForm.class,
                          ProductViewModel.class,
                          ProductCombinationBackingForm.class,
                          RecordProductBackingForm.class).contains(clazz);
