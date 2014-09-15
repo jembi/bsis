@@ -359,8 +359,8 @@ public class DonorRepository {
         //em.persist(donorDeferral);
     }
 
-    public void cancelDeferDonor(String donorDeferralId) {
-        DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
+    public void cancelDeferDonor(Long donorDeferralId) {
+        DonorDeferral donorDeferral = getDonorDeferralsId(donorDeferralId);
         if (donorDeferral != null) {
             donorDeferral.setIsVoided(Boolean.TRUE);
             donorDeferral.setVoidedDate(new Date());

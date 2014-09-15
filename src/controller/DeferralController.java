@@ -144,7 +144,7 @@ public class DeferralController {
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DEFERRAL + "')")
     public @ResponseBody
     Map<String, Object> cancelDeferDonor(HttpServletResponse response,
-            @PathVariable String  id) {
+            @PathVariable Long  id) {
 
         Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
 
