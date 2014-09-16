@@ -3,7 +3,6 @@ package controller;
 import backingform.CollectedSampleBackingForm;
 import backingform.ProductBackingForm;
 import backingform.RequestBackingForm;
-import com.wordnik.swagger.annotations.Api;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +54,6 @@ import utils.PermissionConstants;
 
 @Controller
 @RequestMapping
-@Api(value = "Create data operations")
 public class CreateDataController {
 
   @Autowired

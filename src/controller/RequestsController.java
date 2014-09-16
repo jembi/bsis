@@ -41,11 +41,9 @@ import viewmodel.RequestViewModel;
 import backingform.FindRequestBackingForm;
 import backingform.RequestBackingForm;
 import backingform.validator.RequestBackingFormValidator;
-import com.wordnik.swagger.annotations.Api;
 
 @Controller
 @RequestMapping
-@Api(value = "Account operations")
 public class RequestsController {
 
   @Autowired

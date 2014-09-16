@@ -2,7 +2,6 @@ package controller;
 
 import backingform.ProductUsageBackingForm;
 import backingform.validator.UsageBackingFormValidator;
-import com.wordnik.swagger.annotations.Api;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityExistsException;
@@ -34,7 +33,6 @@ import viewmodel.RequestViewModel;
 
 @Controller
 @RequestMapping
-@Api(value = "Account operations")
 public class UsageController {
 
   @Autowired

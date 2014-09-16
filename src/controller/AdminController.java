@@ -3,7 +3,6 @@ package controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wordnik.swagger.annotations.Api;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,7 +69,6 @@ import viewmodel.BloodTestingRuleViewModel;
 
 @Controller
 @RequestMapping
-@Api(value = "Account operations")
 public class AdminController {
 	
 	private static final Logger LOGGER = Logger.getLogger(AdminController.class);

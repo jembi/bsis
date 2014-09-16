@@ -1,7 +1,6 @@
 package controller;
 
 import backingform.validator.CollectedSampleBackingFormValidator;
-import com.wordnik.swagger.annotations.Api;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,7 +29,6 @@ import utils.PermissionConstants;
 
 @Controller
 @RequestMapping
-@Api(value = "Account operations")
 public class LotReleaseController {
 
   @Autowired
