@@ -12,11 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.user.Role;
 import model.user.User;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,15 +23,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import repository.RoleRepository;
 import repository.UserRepository;
 import utils.PermissionConstants;
 import viewmodel.UserViewModel;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -53,7 +50,7 @@ public class UserController {
 
     @RequestMapping(value = "/configure", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -70,7 +67,7 @@ public class UserController {
 
     @RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> editUserFormGenerator(HttpServletRequest request,
             @PathVariable Integer id) {
         UserBackingForm form = new UserBackingForm();
@@ -99,7 +96,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public @ResponseBody
+    public 
     Map<String, Object>
             addUser(HttpServletRequest request,
                     HttpServletResponse response,
@@ -213,7 +210,7 @@ public class UserController {
 
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
+    
     public Map<String, String> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException errors) {
         Map<String, String> errorMap = new HashMap<String, String>();

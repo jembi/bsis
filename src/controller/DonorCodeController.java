@@ -12,28 +12,19 @@ import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 import repository.DonorRepository;
 import utils.PermissionConstants;
 
-@Controller
+@RestController
 @RequestMapping("donorcode")
 public class DonorCodeController {
 
@@ -50,7 +41,7 @@ public class DonorCodeController {
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR_CODE + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> updateDonorCodesForm(HttpServletRequest request, @PathVariable Long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -63,14 +54,14 @@ public class DonorCodeController {
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
-    public @ResponseBody
+    public 
     List<DonorCodeGroup> addDonorCodeFormGenerator() {
         return donorRepository.getAllDonorCodeGroups();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> addDonorCode(HttpServletResponse response,
        @RequestBody @Valid DonorCodeBackingForm form) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -86,7 +77,7 @@ public class DonorCodeController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_CODE + "')")
-    public @ResponseBody
+    public 
     List<DonorDonorCode> donorCodesTable(@PathVariable Long id) {
 
         return donorRepository.findDonorDonorCodesOfDonorByDonorId(id);
@@ -95,7 +86,7 @@ public class DonorCodeController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONOR_CODE + "')")
-    public @ResponseBody
+    public 
     List<DonorDonorCode> deleteDomorCode(@RequestParam(value = "id") Long id) {
         Donor donor = donorRepository.deleteDonorCode(id);
         return donorRepository.findDonorDonorCodesOfDonorByDonorId(donor.getId());

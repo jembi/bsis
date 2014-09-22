@@ -16,9 +16,7 @@ import model.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,14 +25,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import repository.RoleRepository;
 import utils.PermissionConstants;
 import viewmodel.RoleViewModel;
 
-@Controller
+@RestController
 @RequestMapping("/role")
 public class RoleController {
 
@@ -55,7 +52,7 @@ public class RoleController {
 
         @RequestMapping(value = "/configure", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public @ResponseBody Map<String, Object> configureRolesFormGenerator(HttpServletRequest request) {
+	public  Map<String, Object> configureRolesFormGenerator(HttpServletRequest request) {
 
                 Map<String, Object> map = new  HashMap<String, Object>();
 		addAllRolesToModel(map);
@@ -75,7 +72,7 @@ public class RoleController {
 
 	@RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public @ResponseBody Map<String, Object> editRoleFormGenerator(HttpServletRequest request,
+	public  Map<String, Object> editRoleFormGenerator(HttpServletRequest request,
 			@PathVariable Long id) {
 
 		RoleBackingForm form = new RoleBackingForm();
@@ -100,7 +97,7 @@ public class RoleController {
 
 	@RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public @ResponseBody Map<String, Object> updateRole(
+	public  Map<String, Object> updateRole(
 			HttpServletRequest request,
 			HttpServletResponse response,
                         @Valid @RequestBody RoleBackingForm form) {
@@ -149,7 +146,7 @@ public class RoleController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
-	public @ResponseBody Map<String, Object> addRole(HttpServletRequest request,
+	public  Map<String, Object> addRole(HttpServletRequest request,
 			HttpServletResponse response,
                         @Valid @RequestBody RoleBackingForm form) {
 		
@@ -208,7 +205,7 @@ public class RoleController {
         
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
+    
     public Map<String, String> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException errors) {
         Map<String, String> errorMap = new HashMap<String, String>();

@@ -6,15 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import model.collectedsample.CollectedSample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.CollectedSampleRepository;
 import utils.PermissionConstants;
 
-@Controller
+@RestController
 @RequestMapping("testresult")
 public class TestResultController {
 
@@ -29,7 +28,7 @@ public class TestResultController {
 
   @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
 
 
     Map<String, Object> map = new  HashMap<String, Object>();
@@ -55,7 +54,7 @@ public class TestResultController {
 
   @RequestMapping(value = "collectionnumber/{collectionNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> findTestResult(HttpServletRequest request,
+  public  Map<String, Object> findTestResult(HttpServletRequest request,
       @PathVariable String collectionNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();

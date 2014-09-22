@@ -13,7 +13,6 @@ import model.request.Request;
 import model.usage.ProductUsage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
@@ -31,8 +30,7 @@ import utils.PermissionConstants;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
 
-@Controller
-@RequestMapping
+@RestController
 public class UsageController {
 
   @Autowired
@@ -158,7 +156,7 @@ public class UsageController {
 
   @RequestMapping(value="/findIssuedProductsForRequest", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> findIssuedProductsForRequest(HttpServletRequest request,
+  public  Map<String, Object> findIssuedProductsForRequest(HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="requestNumber") String requestNumber) {
 
@@ -205,7 +203,7 @@ public class UsageController {
 
   @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> addUsageForProduct(
+  public  Map<String, Object> addUsageForProduct(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addUsageForProductForm") @Valid ProductUsageBackingForm form,

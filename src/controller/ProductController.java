@@ -31,7 +31,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,14 +39,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 
-@Controller
+@RestController
 @RequestMapping("product")
 public class ProductController {
 
@@ -90,7 +89,7 @@ public class ProductController {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  public @ResponseBody  Map<String, Object> productSummaryGenerator(HttpServletRequest request, 
+  public   Map<String, Object> productSummaryGenerator(HttpServletRequest request, 
       @RequestParam(value = "productId", required = false) Long productId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -121,7 +120,7 @@ public class ProductController {
 
   @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -141,7 +140,7 @@ public class ProductController {
    */
   @RequestMapping(value = "/recordform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
 
   	RecordProductBackingForm form = new RecordProductBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
@@ -161,7 +160,7 @@ public class ProductController {
   
   @RequestMapping(value = "/addProductCombinationFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request
+  public  Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request
       ) {
 
     ProductCombinationBackingForm form = new ProductCombinationBackingForm();
@@ -184,7 +183,7 @@ public class ProductController {
  
   @RequestMapping(value = "/addProductCombination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody  Map<String, Object> addProductCombination(
+  public   Map<String, Object> addProductCombination(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addProductCombinationForm") @Valid ProductCombinationBackingForm form) {
@@ -292,7 +291,7 @@ public class ProductController {
 
   @RequestMapping(method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
-  public @ResponseBody
+  public 
   Map<String, ? extends Object> deleteProduct(
       @PathVariable Long id) {
 
@@ -315,7 +314,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/discardform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> discardProductFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> discardProductFormGenerator(HttpServletRequest request,
       @PathVariable String id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productId", id);
@@ -328,7 +327,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/discard", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> discardProduct(
+  public  Map<String, Object> discardProduct(
       @PathVariable Long id,
       @RequestParam("discardReasonId") Integer discardReasonId,
       @RequestParam("discardReasonText") String discardReasonText) {
@@ -354,7 +353,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/returnform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> returnProductFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> returnProductFormGenerator(HttpServletRequest request,
       @PathVariable String id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productId", id);
@@ -366,7 +365,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/splitform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> splitProductFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> splitProductFormGenerator(HttpServletRequest request,
       @PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productId", id);
@@ -377,7 +376,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/split", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> discardProduct(
+  public  Map<String, Object> discardProduct(
       @PathVariable Long id,
       @RequestParam("numProductsAfterSplitting") Integer numProductsAfterSplitting) {
 
@@ -402,7 +401,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/history", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> viewProductHistory(HttpServletRequest request, 
+  public  Map<String, Object> viewProductHistory(HttpServletRequest request, 
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -429,7 +428,7 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/return", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> returnProduct(
+  public  Map<String, Object> returnProduct(
       @PathVariable  Long id,
       @RequestParam("returnReasonId") Integer returnReasonId,
       @RequestParam("returnReasonText") String returnReasonText) {
@@ -484,7 +483,7 @@ public class ProductController {
  
   @RequestMapping(value = "/recordNewProductComponents", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> recordNewProductComponents(HttpServletRequest request,
+  public  Map<String, Object> recordNewProductComponents(HttpServletRequest request,
       @RequestBody RecordProductBackingForm form) {
 
       ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
@@ -589,7 +588,7 @@ public class ProductController {
   
   @RequestMapping(value = "/getRecordNewProductComponents", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
+  public  Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
       @RequestParam(value = "productTypes") List<String> productTypes,
       @RequestParam(value = "collectionNumber") String collectionNumber) {
 
@@ -689,7 +688,7 @@ public class ProductController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in productsTable.jsp.
    */
-  private @ResponseBody  Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+  private   Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
     for (ProductViewModel product : getProductViewModels(products)) {
@@ -768,7 +767,7 @@ public class ProductController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in recordProductTable.jsp.
    */
-  private @ResponseBody  Map<String, Object> generateRecordProductTablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+  private   Map<String, Object> generateRecordProductTablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
     for (ProductViewModel product : getProductViewModels(products)) {
@@ -813,7 +812,7 @@ public class ProductController {
    @Deprecated
   @RequestMapping(value = "/updateProduct",method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_COMPONENT+"')")
-  public @ResponseBody  Map<String, Object> updateProduct(
+  public   Map<String, Object> updateProduct(
       HttpServletResponse response,
       @ModelAttribute("editProductForm") @Valid ProductBackingForm form,
       BindingResult result, ) {
@@ -877,7 +876,7 @@ public class ProductController {
    @Deprecated
   @RequestMapping("/findProduct")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody  Map<String, Object> findProduct(HttpServletRequest request,
+  public   Map<String, Object> findProduct(HttpServletRequest request,
       @ModelAttribute("findProductForm") FindProductBackingForm form,
       BindingResult result, ) {
 
@@ -901,7 +900,7 @@ public class ProductController {
    @Deprecated
   @RequestMapping(value = "/addProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> addProductFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> addProductFormGenerator(HttpServletRequest request,
       ) {
 
     ProductBackingForm form = new ProductBackingForm();
@@ -923,7 +922,7 @@ public class ProductController {
    @Deprecated
   @RequestMapping(value = "/editProductFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> editProductFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> editProductFormGenerator(HttpServletRequest request,
       @RequestParam(value="productId") Long productId) {
 
     Product product = productRepository.findProductById(productId);
@@ -948,7 +947,7 @@ public class ProductController {
    @Deprecated
   @RequestMapping(value = "findProductByPackNumber", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> findProductByPackNumber(HttpServletRequest request,
+  public  Map<String, Object> findProductByPackNumber(HttpServletRequest request,
       @ModelAttribute("findProductByPackNumberForm") RecordProductBackingForm form,
       BindingResult result, ) {
 
@@ -971,7 +970,7 @@ public class ProductController {
    *@Deprecated
   @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> addProduct(
+  public  Map<String, Object> addProduct(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addProductForm") @Valid ProductBackingForm form,

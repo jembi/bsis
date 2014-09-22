@@ -1,5 +1,9 @@
 package controller;
 
+import backingform.CollectionsReportBackingForm;
+import backingform.DiscardedProductsReportBackingForm;
+import backingform.IssuedProductsReportBackingForm;
+import backingform.RequestsReportBackingForm;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,22 +13,18 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import repository.CollectedSampleRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
@@ -32,13 +32,8 @@ import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import backingform.CollectionsReportBackingForm;
-import backingform.DiscardedProductsReportBackingForm;
-import backingform.IssuedProductsReportBackingForm;
-import backingform.RequestsReportBackingForm;
 
-@Controller
-@RequestMapping
+@RestController
 public class ReportsController {
 
   @Autowired
@@ -73,7 +68,7 @@ public class ReportsController {
 
   @RequestMapping(value="/generateInventoryReport", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
-  public @ResponseBody Map<String, Object> generateInventoryReport(
+  public  Map<String, Object> generateInventoryReport(
                   HttpServletRequest request, HttpServletResponse response,
                   @RequestParam(value="status") String status,
                   @RequestParam(value="centers") String centers
@@ -154,7 +149,7 @@ public class ReportsController {
 
   @RequestMapping("/getCollectionsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getCollectionsReport(
       @ModelAttribute("collectionsReportForm") CollectionsReportBackingForm form,
       BindingResult result, Model model) {
@@ -209,7 +204,7 @@ public class ReportsController {
 
   @RequestMapping("/getRequestsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getRequestsReport(
       @ModelAttribute("requestsReportForm") RequestsReportBackingForm form,
       BindingResult result, Model model) {
@@ -264,7 +259,7 @@ public class ReportsController {
 
   @RequestMapping("/getDiscardedProductsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getDiscardedProductsReport(
       @ModelAttribute("discardedProductsReportForm") DiscardedProductsReportBackingForm form,
       BindingResult result, Model model) {
@@ -319,7 +314,7 @@ public class ReportsController {
 
   @RequestMapping("/getIssuedProductsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getIssuedProductsReport(
       @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form,
       BindingResult result, Model model) {
@@ -443,7 +438,7 @@ public class ReportsController {
 
   @RequestMapping("/getTestResultsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getTestResultsReport(
       @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form,
       BindingResult result, Model model) {

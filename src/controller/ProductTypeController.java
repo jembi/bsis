@@ -8,17 +8,16 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 
-@Controller
+@RestController
 @RequestMapping("producttype")
 public class ProductTypeController {
 
@@ -37,7 +36,7 @@ public class ProductTypeController {
     return reqUrl;
   }
 
-  public @ResponseBody Map<String, Object> getProductTypeSummary(HttpServletRequest request,
+  public  Map<String, Object> getProductTypeSummary(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
@@ -49,7 +48,7 @@ public class ProductTypeController {
 
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
     @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody
+    public 
     Map<String, Object>  saveNewProductType(HttpServletResponse response,
              @RequestBody Map<String, Object> productType) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -66,7 +65,7 @@ public class ProductTypeController {
 
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> updateProductType(HttpServletResponse response,
             @RequestBody Map<String, Object> productType) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -82,7 +81,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> deactivateProductType(HttpServletRequest request,
+  public  Map<String, Object> deactivateProductType(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();
@@ -92,7 +91,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> activateProductType(HttpServletRequest request,
+  public  Map<String, Object> activateProductType(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();
@@ -102,7 +101,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="Combination/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
+  public  Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
@@ -114,7 +113,7 @@ public class ProductTypeController {
 
     @RequestMapping(value = "Combination", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> saveNewProductTypeCombination(HttpServletResponse response,
             @RequestBody Map<String, Object> productType) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -130,7 +129,7 @@ public class ProductTypeController {
   
   @RequestMapping(value="/Combination/{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
+  public Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -140,7 +139,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="/Combination/{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
+  public  Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object>();

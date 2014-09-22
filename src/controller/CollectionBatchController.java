@@ -13,26 +13,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.collectionbatch.CollectionBatch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import repository.CollectionBatchRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.CollectionBatchViewModel;
 
-@Controller
+@RestController
 @RequestMapping("/collectionbatch")
 public class CollectionBatchController {
 
@@ -65,7 +59,7 @@ public class CollectionBatchController {
 
   @RequestMapping(value = "/findCollectionBatchFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public @ResponseBody Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
@@ -80,7 +74,7 @@ public class CollectionBatchController {
 
   @RequestMapping(value = "/findCollectionBatch", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public @ResponseBody Map<String, Object> findCollectionBatch(HttpServletRequest request,
+  public  Map<String, Object> findCollectionBatch(HttpServletRequest request,
           @RequestParam(value = "batchNumber", required = false) String batchNumber,
           @RequestParam(value = "collectionCenters", required = false) List<String> collectionCenters,
           @RequestParam(value = "collectionSites", required = false) List<String> collectionSites ) {
@@ -121,7 +115,7 @@ public class CollectionBatchController {
 
   @RequestMapping(value = "/addform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
-  public @ResponseBody  Map<String, Object> addCollectionBatchFormGenerator(HttpServletRequest request) {
+  public   Map<String, Object> addCollectionBatchFormGenerator(HttpServletRequest request) {
 
     CollectionBatchBackingForm form = new CollectionBatchBackingForm();
 
@@ -139,7 +133,7 @@ public class CollectionBatchController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')") 
-  public @ResponseBody Map<String, Object> addCollectionBatch(
+  public  Map<String, Object> addCollectionBatch(
       HttpServletRequest request,
       HttpServletResponse response,
       @RequestBody @Valid CollectionBatchBackingForm form) {
@@ -197,7 +191,7 @@ public class CollectionBatchController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public @ResponseBody Map<String, Object> collectionBatchSummaryGenerator(HttpServletRequest request,
+  public  Map<String, Object> collectionBatchSummaryGenerator(HttpServletRequest request,
       @RequestParam(value = "collectionBatchId", required = true) Integer collectionBatchId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
