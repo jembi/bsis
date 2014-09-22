@@ -101,17 +101,4 @@ public class DonorCodeController {
         return donorRepository.findDonorDonorCodesOfDonorByDonorId(donor.getId());
     }
 
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Map<String, String> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException errors) {
-        Map<String, String> errorMap = new HashMap<String, String>();
-        errorMap.put("hasErrors", "true");
-        for (FieldError error : errors.getBindingResult().getFieldErrors()) {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-        }
-        return errorMap;
-    }
-
 }
