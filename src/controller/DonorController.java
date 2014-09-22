@@ -316,6 +316,7 @@ public class DonorController {
   ResponseEntity<Map<String, Object>> deleteDonor(
       @PathVariable Long id) {
 
+    HttpStatus httpStatus = HttpStatus.NO_CONTENT;
     boolean success = true;
     String errMsg = "";
     try {
@@ -325,12 +326,13 @@ public class DonorController {
     	LOGGER.error(ex.getMessage());    	      
       success = false;
       errMsg = "Internal Server Error";
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", success);
     m.put("errMsg", errMsg);
-    return  new ResponseEntity<Map<String, Object>>(m, HttpStatus.OK);
+    return  new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
 
   @RequestMapping(value = "{donorNumber}/print",method = RequestMethod.GET)

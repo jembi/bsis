@@ -30,6 +30,8 @@ import model.producttype.ProductTypeCombination;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -183,14 +185,14 @@ public class ProductController {
  
   @RequestMapping(value = "/addProductCombination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public   Map<String, Object> addProductCombination(
+  public  ResponseEntity< Map<String, Object>> addProductCombination(
       HttpServletRequest request,
       HttpServletResponse response,
       @ModelAttribute("addProductCombinationForm") @Valid ProductCombinationBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
-
+    HttpStatus httpStatus = HttpStatus.CREATED;
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     map.put("productFields", formFields);
@@ -224,10 +226,11 @@ public class ProductController {
       addOptionsForAddProductCombinationForm(map);
       map.put("addProductCombinationForm", form);
       map.put("refreshUrl", "addProductCombinationFormGenerator.html");
+      httpStatus = HttpStatus.BAD_REQUEST;
     }
 
     map.put("success", success);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   private ProductViewModel getProductViewModel(Product product) {
@@ -291,10 +294,10 @@ public class ProductController {
 
   @RequestMapping(method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
-  public 
-  Map<String, ? extends Object> deleteProduct(
+  public ResponseEntity<Map<String, ? extends Object>> deleteProduct(
       @PathVariable Long id) {
 
+    HttpStatus httpStatus = HttpStatus.NO_CONTENT;
     boolean success = true;
     String errMsg = "";
     try {
@@ -304,12 +307,13 @@ public class ProductController {
       System.err.println(ex.getMessage());
       success = false;
       errMsg = "Internal Server Error";
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", success);
     m.put("errMsg", errMsg);
-    return m;
+    return new ResponseEntity<Map<String, ? extends Object>>(m, httpStatus);
   }
 
   @RequestMapping(value = "{id}/discardform", method = RequestMethod.GET)

@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.collectionbatch.CollectionBatch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -133,14 +134,12 @@ public class CollectionBatchController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')") 
-  public  Map<String, Object> addCollectionBatch(
-      HttpServletRequest request,
-      HttpServletResponse response,
+  public  ResponseEntity<Map<String, Object>> addCollectionBatch(
       @RequestBody @Valid CollectionBatchBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
-
+    HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectionBatch");
     map.put("collectionBatchFields", formFields);
 
@@ -167,10 +166,11 @@ public class CollectionBatchController {
       map.put("firstTimeRender", false);
       map.put("addCollectionBatchForm", form);
       map.put("refreshUrl", "addCollectionBatchFormGenerator.html");
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
     addEditSelectorOptions(map);
     map.put("success", success);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   private CollectionBatchViewModel getCollectionBatchViewModel(CollectionBatch collectionBatch) {

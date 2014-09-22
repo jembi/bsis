@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -308,7 +310,7 @@ public class CollectedSampleController {
 
   @RequestMapping( method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public  Map<String, Object> addCollection(
+  public  ResponseEntity<Map<String, Object>> addCollection(
       @RequestBody @Valid CollectedSampleBackingForm form) {
 
             Map<String, Object> map = new HashMap<String, Object>();
@@ -349,10 +351,11 @@ public class CollectedSampleController {
 	      map.put("firstTimeRender", false);
 	      map.put("addCollectionForm", form);
 	      map.put("refreshUrl", "addCollectionFormGenerator.html");
+              return new ResponseEntity<Map<String, Object>>(map, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     map.put("success", success);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
   private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
@@ -362,11 +365,11 @@ public class CollectedSampleController {
 
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public  Map<String, Object> updateCollectedSample(
-      HttpServletResponse response,
+  public  ResponseEntity<Map<String, Object>> updateCollectedSample(
       @RequestBody  @Valid CollectedSampleBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
+    HttpStatus httpStatus = HttpStatus.CREATED;
     boolean success = false;
     String message = "";
     addEditSelectorOptions(map);
@@ -383,7 +386,7 @@ public class CollectedSampleController {
         existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
         if (existingCollectedSample == null) {
           map.put("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          httpStatus = HttpStatus.BAD_REQUEST;
           success = false;
           map.put("existingCollectedSample", false);
           message = "Collection does not already exist.";
@@ -395,7 +398,7 @@ public class CollectedSampleController {
         }
       } catch (EntityExistsException ex) {
         ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        httpStatus = HttpStatus.BAD_REQUEST;
         success = false;
         message = "Collection Already exists.";
       } 
@@ -406,7 +409,7 @@ public class CollectedSampleController {
     map.put("errorMessage", message);
     map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   public static List<CollectedSampleViewModel> getCollectionViewModels(
@@ -423,9 +426,10 @@ public class CollectedSampleController {
   @RequestMapping(method = RequestMethod.DELETE) 
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION+"')")
   public 
-  Map<String, ? extends Object> deleteCollection(
+  ResponseEntity<Map<String, ? extends Object>> deleteCollection(
       @RequestParam("collectedSampleId") Long collectionSampleId) {
 
+    HttpStatus httpStatus = HttpStatus.NO_CONTENT;  
     boolean success = true;
     String errMsg = "";
     try {
@@ -434,12 +438,13 @@ public class CollectedSampleController {
       ex.printStackTrace();
       success = false;
       errMsg = "Internal Server Error";
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", success);
     m.put("errMsg", errMsg);
-    return m;
+    return new ResponseEntity<Map<String, ? extends Object>>(m, httpStatus);
   }
 
   @RequestMapping(method = RequestMethod.GET, params = {"collectionId"})
