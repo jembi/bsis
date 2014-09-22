@@ -9,19 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 
-@Controller
+@RestController
 @RequestMapping("bloodtest")
 public class BloodTestingController {
 
@@ -42,7 +40,7 @@ public class BloodTestingController {
 
   @RequestMapping(method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> getBloodTestSummary(HttpServletRequest request,
+  public Map<String, Object> getBloodTestSummary(HttpServletRequest request,
       @RequestParam(value="bloodTestId") Integer bloodTestId) {
       
     Map<String, Object> map = new HashMap<String, Object>();  
@@ -55,7 +53,7 @@ public class BloodTestingController {
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public @ResponseBody Map<String, Object> saveNewBloodTest(HttpServletRequest request,
+  public Map<String, Object> saveNewBloodTest(HttpServletRequest request,
       HttpServletResponse response, @RequestBody Map<String, Object> newBloodTestAsMap) {
     Map<String, Object> m = new HashMap<String, Object>();
     ObjectMapper mapper = new ObjectMapper();
@@ -71,7 +69,7 @@ public class BloodTestingController {
   
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public @ResponseBody Map<String, Object> deactivateBloodTest(HttpServletRequest request,
+  public Map<String, Object> deactivateBloodTest(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();
@@ -81,7 +79,7 @@ public class BloodTestingController {
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public @ResponseBody Map<String, Object> activateBloodTest(HttpServletRequest request,
+  public Map<String, Object> activateBloodTest(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();

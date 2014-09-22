@@ -1,5 +1,10 @@
 package controller.bloodtesting;
 
+import au.com.bytecode.opencsv.CSVReader;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controller.UtilController;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,31 +22,24 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TSVFileHeaderName;
 import model.bloodtesting.UploadTTIResultConstant;
 import model.collectedsample.CollectedSample;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
@@ -51,10 +49,8 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
-import au.com.bytecode.opencsv.CSVReader;
-import controller.UtilController;
 
-@Controller
+@RestController
 public class TTIController {
 
 	private static final Logger LOGGER = Logger.getLogger(TTIController.class);
@@ -89,7 +85,7 @@ public class TTIController {
 
 	@RequestMapping(value = "/ttiFormGenerator", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public @ResponseBody Map<String, Object> getTTIForm(HttpServletRequest request) {
+	public Map<String, Object> getTTIForm(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("refreshUrl", "ttiFormGenerator.html");
 		map.put("ttiFormFields",
@@ -114,7 +110,7 @@ public class TTIController {
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/saveTTITests", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveTTITests(HttpServletRequest request,
+	public Map<String, Object> saveTTITests(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam("collectionNumber") String collectionNumber,
 			@RequestParam("ttiInput") String ttiInput) {
@@ -225,7 +221,7 @@ public class TTIController {
 
 	@RequestMapping(value = "/showTTIResultsForCollection", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
-	public @ResponseBody Map<String, Object> showTTIResultsForCollection(HttpServletRequest request,
+	public Map<String, Object> showTTIResultsForCollection(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "collectionId") String collectionId) {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -353,7 +349,7 @@ public class TTIController {
          * Reason _ No worksheet concept
          * 
 	@RequestMapping(value = "/ttiWellsWorksheetFormGenerator", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> ttiWellsWorksheetFormGenerator(
+	public Map<String, Object> ttiWellsWorksheetFormGenerator(
 			HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("ttiTests", bloodTestingRepository.getBloodTTITests());
@@ -362,7 +358,7 @@ public class TTIController {
 	}
 
 	@RequestMapping(value = "/ttiWellsWorksheetGenerator", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> ttiWellsWorksheetGenerator(HttpServletRequest request,
+	public Map<String, Object> ttiWellsWorksheetGenerator(HttpServletRequest request,
 			@RequestParam(value = "ttiTestId") Integer ttiTestId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("plate", bloodTestingRepository.getPlate("tti"));
@@ -379,7 +375,7 @@ public class TTIController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "saveTTIResultsOnPlate", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public @ResponseBody Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
+	public Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "ttiTestId") Long ttiTestId,
 			@RequestParam(value = "ttiResults") String ttiResults) {
@@ -449,7 +445,7 @@ public class TTIController {
 
 	@RequestMapping(value = "/uploadTTIResultsGenerator", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public @ResponseBody Map<String, Object> uploadTTIResultsGenerator(
+	public Map<String, Object> uploadTTIResultsGenerator(
 			MultipartHttpServletRequest request, HttpServletResponse response)
 			throws IOException, ParseException {
 

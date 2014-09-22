@@ -1,5 +1,9 @@
 package controller.bloodtesting;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controller.UtilController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,26 +12,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.collectedsample.CollectedSample;
-
 import org.apache.commons.lang3.StringUtils;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
@@ -36,9 +32,8 @@ import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
-import controller.UtilController;
 
-@Controller
+@RestController
 public class BloodTypingController {
 
   @Autowired
@@ -85,7 +80,7 @@ public class BloodTypingController {
 
   @RequestMapping(value="/addCollectionsToBloodTypingPlate")
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> addCollectionsToBloodTypingPlate(HttpServletRequest request,
+  public Map<String, Object> addCollectionsToBloodTypingPlate(HttpServletRequest request,
           HttpServletResponse response,
           @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers) {
 
@@ -159,7 +154,7 @@ public class BloodTypingController {
   
   @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> saveBloodTypingTests(HttpServletRequest request,
+  public Map<String, Object> saveBloodTypingTests(HttpServletRequest request,
       HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests,
       @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
       @RequestParam(value="refreshUrl") String refreshUrl,
@@ -262,7 +257,7 @@ public class BloodTypingController {
 
   @RequestMapping(value="/getBloodTypingStatusForCollections", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> getBloodTypingStatusForCollections(
+  public Map<String, Object> getBloodTypingStatusForCollections(
                         HttpServletRequest request,
                         HttpServletResponse response,
                         @RequestParam(value="collectionIds") String collectionIdsParam
@@ -287,7 +282,7 @@ public class BloodTypingController {
 
   @RequestMapping(value="/showBloodTypingResultsForCollection", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> showBloodTypingResultsForCollection(
+  public Map<String, Object> showBloodTypingResultsForCollection(
       HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="collectionId") String collectionId) {
@@ -320,7 +315,7 @@ public class BloodTypingController {
 
   @RequestMapping(value="/showCollectionSummaryForTesting", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> showCollectionSummaryForTesting(
+  public Map<String, Object> showCollectionSummaryForTesting(
       HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="collectionId") String collectionId) {
@@ -337,7 +332,7 @@ public class BloodTypingController {
 
   @RequestMapping(value="/saveAdditionalBloodTypingTests", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> saveAdditionalBloodTypingTests(
+  public Map<String, Object> saveAdditionalBloodTypingTests(
       HttpServletRequest request,
       HttpServletResponse response,
       @RequestParam(value="collectionId") String collectionId,
@@ -380,7 +375,7 @@ public class BloodTypingController {
 
   @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
-  public @ResponseBody Map<String, Object> getBloodTypingRuleSummary(HttpServletRequest request,
+  public Map<String, Object> getBloodTypingRuleSummary(HttpServletRequest request,
       @RequestParam(value="bloodTypingRuleId", required = true) Integer ruleId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -397,7 +392,7 @@ public class BloodTypingController {
   @SuppressWarnings("unchecked")
   @RequestMapping(value="saveNewBloodTypingRule", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public @ResponseBody Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
+  public Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {
     Map<String, Object> m = new HashMap<String, Object>();
     ObjectMapper mapper = new ObjectMapper();
@@ -424,7 +419,7 @@ public class BloodTypingController {
   
   @RequestMapping(value="deleteBloodTypingRule", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public @ResponseBody Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
+  public Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
       @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
 
     Map<String, Object> m = new HashMap<String, Object>();
