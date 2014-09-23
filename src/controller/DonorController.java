@@ -214,9 +214,9 @@ public class DonorController {
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
     public  
     ResponseEntity<Map<String, Object>>
-            addDonor(HttpServletRequest request,
-                     @Valid  @RequestBody DonorBackingForm form) {
+            addDonor(@Valid  @RequestBody DonorBackingForm form) {
 
+        HttpStatus httpStatus = HttpStatus.CREATED;
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
@@ -236,9 +236,12 @@ public class DonorController {
             } catch (EntityExistsException ex) {
                 ex.printStackTrace();
                 success = false;
+                httpStatus = HttpStatus.CONFLICT;
+                
             } catch (Exception ex) {
                 ex.printStackTrace();
                 success = false;
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             }
         
 
@@ -254,15 +257,15 @@ public class DonorController {
     }
 
    map.put("success", success);
-   return new ResponseEntity<Map<String, Object>>(map,HttpStatus.CREATED);
+   return new ResponseEntity<Map<String, Object>>(map,httpStatus);
   }
 
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public  ResponseEntity<Map<String,Object>>  updateDonor(
-      HttpServletResponse response,
-      @Valid @RequestBody DonorBackingForm form) {
+  public  ResponseEntity<Map<String,Object>>  
+        updateDonor(@Valid @RequestBody DonorBackingForm form) {
 
+    HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     String message = "";
@@ -278,7 +281,7 @@ public class DonorController {
         Donor existingDonor = donorRepository.updateDonor(donor);
         if (existingDonor == null) {
           map.put("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          httpStatus = HttpStatus.BAD_REQUEST;
           success = false;
           map.put("existingDonor", false);
           message = "Donor does not already exist.";
@@ -288,14 +291,9 @@ public class DonorController {
           success = true;
           message = "Donor Successfully Updated";
         }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Donor Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         success = false;
         message = "Internal Error. Please try again or report a Problem.";
       }
@@ -307,7 +305,7 @@ public class DonorController {
     map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     addEditSelectorOptions(map);
 
-    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.CREATED);
+    return new ResponseEntity<Map<String, Object>>(map,httpStatus);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
