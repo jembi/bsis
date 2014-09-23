@@ -368,48 +368,37 @@ public class CollectedSampleController {
   public  ResponseEntity<Map<String, Object>> updateCollectedSample(
       @RequestBody  @Valid CollectedSampleBackingForm form) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    HttpStatus httpStatus = HttpStatus.CREATED;
-    boolean success = false;
-    String message = "";
-    addEditSelectorOptions(map);
+      Map<String, Object> map = new HashMap<String, Object>();
+      HttpStatus httpStatus = HttpStatus.OK;
+      boolean success = false;
+      String message = "";
+      addEditSelectorOptions(map);
     // only when the collection is correctly added the existingCollectedSample
-    // property will be changed
-    map.put("existingCollectedSample", true);
+      // property will be changed
+      map.put("existingCollectedSample", true);
 
-   
-    
-      try {
-        form.setIsDeleted(false);
-        form.setCollectedSample();
-        CollectedSample existingCollectedSample;
-        existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
-        if (existingCollectedSample == null) {
+      form.setIsDeleted(false);
+      form.setCollectedSample();
+      CollectedSample existingCollectedSample;
+      existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+      if (existingCollectedSample == null) {
           map.put("hasErrors", true);
           httpStatus = HttpStatus.BAD_REQUEST;
           success = false;
           map.put("existingCollectedSample", false);
           message = "Collection does not already exist.";
-        }
-        else {
+      } else {
           map.put("hasErrors", false);
           success = true;
           message = "Collection Successfully Updated";
-        }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        httpStatus = HttpStatus.BAD_REQUEST;
-        success = false;
-        message = "Collection Already exists.";
-      } 
-   
+      }
 
-    map.put("editCollectedSampleForm", form);
-    map.put("success", success);
-    map.put("errorMessage", message);
-    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+      map.put("editCollectedSampleForm", form);
+      map.put("success", success);
+      map.put("errorMessage", message);
+      map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   public static List<CollectedSampleViewModel> getCollectionViewModels(
