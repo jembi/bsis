@@ -1,5 +1,10 @@
+/**
+ * 
+ * commented on issue #209 [Adapt BSIS to Expose Rest Services]**
+ * 
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -17,7 +22,8 @@ public class DonorCommunicationsBackingForm {
 	private Donor donor;
 
 	private List<BloodGroup> bloodGroups;
-
+        
+        @JsonIgnore
 	private List<Location> donorPanels;
 
 	private String clinicDate;
@@ -44,6 +50,7 @@ public class DonorCommunicationsBackingForm {
 		this.donor = donor;
 	}
 
+        @JsonIgnore
 	public DonorViewModel getDonorViewModel() {
 		return new DonorViewModel(donor);
 	}
@@ -165,3 +172,4 @@ public class DonorCommunicationsBackingForm {
 		this.bloodGroupErrorMessage = bloodGroupErrorMessage;
 	}
 }
+*/

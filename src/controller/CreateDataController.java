@@ -34,8 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
@@ -52,7 +52,7 @@ import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 
-@Controller
+@RestController
 public class CreateDataController {
 
   @Autowired
@@ -337,6 +337,7 @@ public class CreateDataController {
 
   @RequestMapping("/admin-createData")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
+  @Deprecated
   public ModelAndView createDataPage(HttpServletRequest request) {
 
     ModelAndView modelAndView = new ModelAndView("createData");

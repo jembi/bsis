@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
@@ -27,6 +28,7 @@ public class CollectedSampleBackingForm {
 
   @NotNull
   @Valid
+  @JsonIgnore
   private CollectedSample collectedSample;
 
   private List<String> centers;
@@ -52,6 +54,7 @@ public class CollectedSampleBackingForm {
     collectedSample = new CollectedSample();
   }
 
+ 
   public CollectedSampleBackingForm(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -61,7 +64,7 @@ public class CollectedSampleBackingForm {
   }
 
   public CollectedSample getCollectedSample() {
-    return this.collectedSample;
+    return collectedSample;
   }
 
   public List<String> getCenters() {
@@ -110,6 +113,7 @@ public class CollectedSampleBackingForm {
     this.dateCollectedTo = dateCollectedTo;
   }
 
+  @JsonIgnore
   public void setCollection(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -130,6 +134,7 @@ public class CollectedSampleBackingForm {
     return collectedSample.getId();
   }
 
+  @JsonIgnore
   public Donor getDonor() {
     return collectedSample.getDonor();
   }
@@ -172,10 +177,12 @@ public class CollectedSampleBackingForm {
     return collectedSample.getCreatedDate();
   }
 
+  @JsonIgnore
   public User getCreatedBy() {
     return collectedSample.getCreatedBy();
   }
 
+  @JsonIgnore
   public User getLastUpdatedBy() {
     return collectedSample.getLastUpdatedBy();
   }
@@ -355,6 +362,7 @@ public class CollectedSampleBackingForm {
     }
   }
 
+  @JsonIgnore
   public CollectionBatch getCollectionBatch() {
     return collectedSample.getCollectionBatch();
   }

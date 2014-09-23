@@ -143,7 +143,7 @@ public class DonorCommunicationsRepositoryTest {
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false ;
 		//Search with donor panel id 4
 		long[] id = { 4 };
 		//Search with  BloodGroup 'AB-'
@@ -174,7 +174,7 @@ public class DonorCommunicationsRepositoryTest {
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 		//Search with donor panel id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
@@ -226,7 +226,7 @@ public class DonorCommunicationsRepositoryTest {
 		String clinicDateToCheckdeferredDonor = CustomDateFormatter.format(new Date());
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 		
 		donorPanels   =  createDonorPanelList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
@@ -274,7 +274,7 @@ public class DonorCommunicationsRepositoryTest {
 		//Search with lastDonationDate period
 		String lastDonationFromDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (-365)));
 		String lastDonationToDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (0)));
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 
 		Map<String, Object> pagingParams = createPagingParamsMap();
 		donorPanels    =  createDonorPanelList(id);
@@ -322,7 +322,7 @@ public class DonorCommunicationsRepositoryTest {
 		//Specify date of last donation period
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
 		donorPanels = createDonorPanelList(id);
@@ -364,7 +364,7 @@ public class DonorCommunicationsRepositoryTest {
 		//Specify date of last donation period
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
 		donorPanels = createDonorPanelList(id);
@@ -410,7 +410,7 @@ public class DonorCommunicationsRepositoryTest {
 		//Specify date of last donation period
 		String lastDonationFromDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (-30)));
 		String lastDonationToDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (30)));
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
 		donorPanels = createDonorPanelList(id);
@@ -455,7 +455,7 @@ public class DonorCommunicationsRepositoryTest {
 		
 		String lastDonationFromDate ="";
 		String lastDonationToDate = "";
-		String anyBloodGroup = "false";
+		boolean anyBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
 		donorPanels    =  createDonorPanelList(id);
@@ -543,7 +543,7 @@ public class DonorCommunicationsRepositoryTest {
 		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
-		String anyBloodGroup = "true";
+		boolean anyBloodGroup = true;
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
 		List<Object> results = new ArrayList<Object>();

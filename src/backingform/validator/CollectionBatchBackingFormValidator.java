@@ -11,7 +11,6 @@ import org.springframework.validation.Validator;
 
 import viewmodel.CollectionBatchViewModel;
 import backingform.CollectionBatchBackingForm;
-import backingform.FindCollectionBatchBackingForm;
 import controller.UtilController;
 
 public class CollectionBatchBackingFormValidator implements Validator {
@@ -30,8 +29,8 @@ public class CollectionBatchBackingFormValidator implements Validator {
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(CollectionBatchBackingForm.class,
-        FindCollectionBatchBackingForm.class, CollectionBatch.class,
-        CollectionBatchViewModel.class).contains(clazz);
+                         CollectionBatch.class,
+                         CollectionBatchViewModel.class).contains(clazz);
   }
 
   @Override

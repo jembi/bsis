@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,14 +16,13 @@ import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
-import org.hsqldb.Tokens;
 import org.joda.time.DateTime;
 import utils.CustomDateFormatter;
-import viewmodel.DonorViewModel;
 
 public class DonorBackingForm {
 
     @Valid
+    @JsonIgnore
     private Donor donor;
 
     // store a local copy of birthdate string as validation may have failed
@@ -74,6 +74,7 @@ public class DonorBackingForm {
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
         } catch (ParseException ex) {
+            ex.printStackTrace();
             donor.setBirthDate(null);
         }
     }
@@ -87,10 +88,10 @@ public class DonorBackingForm {
             donor.setBirthDate(null);
         }
     }
-
-    public DonorViewModel getDonorViewModel() {
-        return new DonorViewModel(donor);
-    }
+//
+//    public DonorViewModel getDonorViewModel() {
+//        return new DonorViewModel(donor);
+//    }
 
     public Donor getDonor() {
         return donor;
@@ -160,10 +161,12 @@ public class DonorBackingForm {
         return donor.getIsDeleted();
     }
 
+    @JsonIgnore
     public User getCreatedBy() {
         return donor.getCreatedBy();
     }
 
+    @JsonIgnore
     public User getLastUpdatedBy() {
         return donor.getLastUpdatedBy();
     }
@@ -629,6 +632,7 @@ public class DonorBackingForm {
         
     }
 
+    @JsonIgnore
     public Address getAddress() {
         return address;    
     }
@@ -637,10 +641,12 @@ public class DonorBackingForm {
         this.address = address;
     }
     
+    @JsonIgnore
     public Contact getContact(){
         return contact;
     }
     
+
     public void setContact(Contact contact){
         this.contact = contact ;
     }

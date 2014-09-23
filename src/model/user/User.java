@@ -1,8 +1,10 @@
 package model.user;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +15,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 
@@ -48,6 +49,7 @@ public class User {
   private Boolean isDeleted;
 
   @ManyToMany(fetch=FetchType.EAGER)
+  @JsonIgnore
   private List<Role> roles;
   
   @ManyToMany(mappedBy="users")

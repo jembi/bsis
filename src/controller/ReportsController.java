@@ -1,5 +1,9 @@
 package controller;
 
+import backingform.CollectionsReportBackingForm;
+import backingform.DiscardedProductsReportBackingForm;
+import backingform.IssuedProductsReportBackingForm;
+import backingform.RequestsReportBackingForm;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,22 +13,15 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.CollectedSampleRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
@@ -32,12 +29,8 @@ import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import backingform.CollectionsReportBackingForm;
-import backingform.DiscardedProductsReportBackingForm;
-import backingform.IssuedProductsReportBackingForm;
-import backingform.RequestsReportBackingForm;
 
-@Controller
+@RestController
 public class ReportsController {
 
   @Autowired
@@ -60,19 +53,18 @@ public class ReportsController {
   
   @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
-  public ModelAndView inventoryReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("reports/inventoryReportForm");
-    utilController.addTipsToModel(model.asMap(), "report.inventory.generate");
-    utilController.addTipsToModel(model.asMap(), "report.inventory.productinventorychart");
-    Map<String, Object> m = model.asMap();
-    m.put("centers", locationRepository.getAllCenters());
-    mv.addObject("model", m);
-    return mv;
+  public Map<String, Object> inventoryReportFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    utilController.addTipsToModel(map, "report.inventory.generate");
+    utilController.addTipsToModel(map, "report.inventory.productinventorychart");
+    map.put("centers", locationRepository.getAllCenters());
+    map.put("model", map);
+    return map;
   }
 
   @RequestMapping(value="/generateInventoryReport", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
-  public @ResponseBody Map<String, Object> generateInventoryReport(
+  public  Map<String, Object> generateInventoryReport(
                   HttpServletRequest request, HttpServletResponse response,
                   @RequestParam(value="status") String status,
                   @RequestParam(value="centers") String centers
@@ -102,66 +94,58 @@ public class ReportsController {
   
   @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
-  public ModelAndView collectionsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("reports/collectionsReport");
-    Map<String, Object> m = model.asMap();
-    utilController.addTipsToModel(model.asMap(), "report.collections.collectionsreport");
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("sites", locationRepository.getAllCollectionSites());
-    mv.addObject("collectionsReportForm", new CollectionsReportBackingForm());
-    mv.addObject("model", model);
-    return mv;
+  public Map<String, Object> collectionsReportFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    utilController.addTipsToModel(map, "report.collections.collectionsreport");
+    map.put("centers", locationRepository.getAllCenters());
+    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("collectionsReportForm", new CollectionsReportBackingForm());
+    return map;
   }
 
   @RequestMapping(value = "/requestsReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
-  public ModelAndView requestsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("reports/requestsReport");
-    Map<String, Object> m = model.asMap();
-    utilController.addTipsToModel(model.asMap(), "report.requests.requestsreport");
-    m.put("sites", locationRepository.getAllUsageSites());
-    mv.addObject("requestsReportForm", new RequestsReportBackingForm());
-    mv.addObject("model", model);
-    return mv;
+  public Map<String, Object> requestsReportFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    utilController.addTipsToModel(map, "report.requests.requestsreport");
+    map.put("sites", locationRepository.getAllUsageSites());
+    map.put("requestsReportForm", new RequestsReportBackingForm());
+    return map;
   }
 
   @RequestMapping(value = "/discardedProductsReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
-  public ModelAndView discardedProductsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("reports/discardedProductsReport");
-    Map<String, Object> m = model.asMap();
-    utilController.addTipsToModel(m, "report.products.discardedproductsreport");
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("sites", locationRepository.getAllCollectionSites());
-    mv.addObject("discardedProductsReportForm", new DiscardedProductsReportBackingForm());
-    mv.addObject("model", m);
-    return mv;
+  public Map<String, Object> discardedProductsReportFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    utilController.addTipsToModel(map, "report.products.discardedproductsreport");
+    map.put("centers", locationRepository.getAllCenters());
+    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("discardedProductsReportForm", new DiscardedProductsReportBackingForm());
+    map.put("model", map);
+    return map;
   }
 
   @RequestMapping(value = "/issuedProductsReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
-  public ModelAndView issuedProductsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("reports/issuedProductsReport");
-    Map<String, Object> m = model.asMap();
-    utilController.addTipsToModel(m, "report.products.issuedproductsreport");
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("sites", locationRepository.getAllCollectionSites());
-    mv.addObject("issuedProductsReportForm", new IssuedProductsReportBackingForm());
-    mv.addObject("model", m);
-    return mv;
+  public Map<String, Object> issuedProductsReportFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    utilController.addTipsToModel(map, "report.products.issuedproductsreport");
+    map.put("centers", locationRepository.getAllCenters());
+    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("issuedProductsReportForm", new IssuedProductsReportBackingForm());
+    return map;
   }
 
   @RequestMapping("/getCollectionsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getCollectionsReport(
-      @ModelAttribute("collectionsReportForm") CollectionsReportBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("collectionsReportForm") CollectionsReportBackingForm form ) {
 
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
 
     try {
 
@@ -193,30 +177,29 @@ public class ReportsController {
       else if (form.getAggregationCriteria().equals("yearly"))
         interval = interval * 365;
   
-      m.put("interval", interval);
-      m.put("numCollections", numCollections);
+      map.put("interval", interval);
+      map.put("numCollections", numCollections);
 
-      m.put("dateCollectedFromUTC", dateFrom.getTime());
-      m.put("dateCollectedToUTC", dateTo.getTime());
+      map.put("dateCollectedFromUTC", dateFrom.getTime());
+      map.put("dateCollectedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
       // TODO Auto-generated catch block
       ex.printStackTrace();
     }
-    return m;
+    return map;
   }
 
   @RequestMapping("/getRequestsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getRequestsReport(
-      @ModelAttribute("requestsReportForm") RequestsReportBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("requestsReportForm") RequestsReportBackingForm form) {
 
     String dateCollectedFrom = form.getDateRequestedFrom();
     String dateCollectedTo = form.getDateRequestedTo();
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
 
     try {
 
@@ -248,30 +231,29 @@ public class ReportsController {
       else if (form.getAggregationCriteria().equals("yearly"))
         interval = interval * 365;
   
-      m.put("interval", interval);
-      m.put("numRequests", numRequests);
+      map.put("interval", interval);
+      map.put("numRequests", numRequests);
 
-      m.put("dateRequestedFromUTC", dateFrom.getTime());
-      m.put("dateRequestedToUTC", dateTo.getTime());
+      map.put("dateRequestedFromUTC", dateFrom.getTime());
+      map.put("dateRequestedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
       // TODO Auto-generated catch block
       ex.printStackTrace();
     }
-    return m;
+    return map;
   }
 
   @RequestMapping("/getDiscardedProductsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getDiscardedProductsReport(
-      @ModelAttribute("discardedProductsReportForm") DiscardedProductsReportBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("discardedProductsReportForm") DiscardedProductsReportBackingForm form) {
 
     String dateCollectedFrom = form.getDateCollectedFrom();
     String dateCollectedTo = form.getDateCollectedTo();
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
 
     try {
 
@@ -303,30 +285,29 @@ public class ReportsController {
       else if (form.getAggregationCriteria().equals("yearly"))
         interval = interval * 365;
   
-      m.put("interval", interval);
-      m.put("numDiscardedProducts", numDiscardedProducts);
+      map.put("interval", interval);
+      map.put("numDiscardedProducts", numDiscardedProducts);
 
-      m.put("dateCollectedFromUTC", dateFrom.getTime());
-      m.put("dateCollectedToUTC", dateTo.getTime());
+      map.put("dateCollectedFromUTC", dateFrom.getTime());
+      map.put("dateCollectedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
       // TODO Auto-generated catch block
       ex.printStackTrace();
     }
-    return m;
+    return map;
   }
 
   @RequestMapping("/getIssuedProductsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getIssuedProductsReport(
-      @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form) {
 
     String dateCollectedFrom = form.getDateIssuedFrom();
     String dateCollectedTo = form.getDateIssuedTo();
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
 
     try {
 
@@ -358,17 +339,17 @@ public class ReportsController {
       else if (form.getAggregationCriteria().equals("yearly"))
         interval = interval * 365;
   
-      m.put("interval", interval);
-      m.put("numIssuedProducts", numIssuedProducts);
+      map.put("interval", interval);
+      map.put("numIssuedProducts", numIssuedProducts);
 
-      m.put("dateIssuedFromUTC", dateFrom.getTime());
-      m.put("dateIssuedToUTC", dateTo.getTime());
+      map.put("dateIssuedFromUTC", dateFrom.getTime());
+      map.put("dateIssuedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
       // TODO Auto-generated catch block
       ex.printStackTrace();
     }
-    return m;
+    return map;
   }
 
   private Date dateSubtract(Date dateTo, int field, int amount) {
@@ -428,30 +409,27 @@ public class ReportsController {
 
   @RequestMapping(value = "/ttiReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
-  public ModelAndView testResultsReportFormGenerator(Model model) {
-    ModelAndView mv = new ModelAndView("reports/testResultsReport");
-    Map<String, Object> m = model.asMap();
-    m.put("ttiTests", bloodTestingRepository.getTTITests());
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("sites", locationRepository.getAllCollectionSites());
-    utilController.addTipsToModel(m, "report.collections.testresultsreport");
-    mv.addObject("testResultsReportForm", new TestResultsReportBackingForm());
-    mv.addObject("model", model);
-    return mv;
+  public Map<String, Object> testResultsReportFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("ttiTests", bloodTestingRepository.getTTITests());
+    map.put("centers", locationRepository.getAllCenters());
+    map.put("sites", locationRepository.getAllCollectionSites());
+    utilController.addTipsToModel(map, "report.collections.testresultsreport");
+    map.put("testResultsReportForm", new TestResultsReportBackingForm());
+    return map;
   }
 
   @RequestMapping("/getTestResultsReport")
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
-  public @ResponseBody
+  public 
   Map<String, Object> getTestResultsReport(
-      @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form,
-      BindingResult result, Model model) {
+      @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form) {
 
     List<String> ttiTests = form.getTtiTests();
     String dateTestedFrom = form.getDateTestedFrom();
     String dateTestedTo = form.getDateTestedTo();
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
 
     try {
 
@@ -483,15 +461,15 @@ public class ReportsController {
       else if (form.getAggregationCriteria().equals("yearly"))
         interval = interval * 365;
   
-      m.put("interval", interval);
-      m.put("numTestResults", numTestResults);
-      m.put("dateTestedFromUTC", dateFrom.getTime());
-      m.put("dateTestedToUTC", dateTo.getTime());
+      map.put("interval", interval);
+      map.put("numTestResults", numTestResults);
+      map.put("dateTestedFromUTC", dateFrom.getTime());
+      map.put("dateTestedToUTC", dateTo.getTime());
     } catch (ParseException e) {
       e.printStackTrace();
     }
 
-    return m;
+    return map;
   }
 
 }

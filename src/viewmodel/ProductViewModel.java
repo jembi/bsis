@@ -1,5 +1,6 @@
 package viewmodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ import utils.CustomDateFormatter;
 
 public class ProductViewModel {
 
+ @JsonIgnore
   private Product product;
 
   public ProductViewModel() {
@@ -104,6 +106,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getCreatedDate());
   }
 
+  @JsonIgnore
   public String getCreatedBy() {
     User user = product.getCreatedBy();
     if (user == null || user.getUsername() == null)
@@ -111,6 +114,7 @@ public class ProductViewModel {
     return user.getUsername();
   }
 
+  @JsonIgnore
   public String getLastUpdatedBy() {
     User user = product.getLastUpdatedBy();
     if (user == null || user.getUsername() == null)
@@ -122,6 +126,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getIssuedOn());
   }
 
+  @JsonIgnore
   public RequestViewModel getIssuedTo() {
     ProductStatus status = product.getStatus();
     if (status == null)

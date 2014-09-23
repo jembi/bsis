@@ -2,24 +2,19 @@ package controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import model.collectedsample.CollectedSample;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.CollectedSampleRepository;
 import utils.PermissionConstants;
-import backingform.FindTestResultBackingForm;
 
-@Controller
+@RestController
+@RequestMapping("testresult")
 public class TestResultController {
 
   @Autowired
@@ -31,23 +26,21 @@ public class TestResultController {
   public TestResultController() {
   }
 
-  @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ModelAndView findTestResultFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
 
-    FindTestResultBackingForm form = new FindTestResultBackingForm();
 
-    ModelAndView mv = new ModelAndView("testresults/findTestResultForm");
-    mv.addObject("findTestResultForm", form);
+    Map<String, Object> map = new  HashMap<String, Object>();
 
     Map<String, Object> tips = new HashMap<String, Object>();
     utilController.addTipsToModel(tips, "testResults.find");
-    mv.addObject("tips", tips);
+    map.put("tips", tips);
 
     // to ensure custom field names are displayed in the form
-    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -59,23 +52,21 @@ public class TestResultController {
     return reqUrl;
   }
 
-  @RequestMapping("/findTestResult")
+  @RequestMapping(value = "collectionnumber/{collectionNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ModelAndView findTestResult(HttpServletRequest request,
-      @ModelAttribute("findTestResultForm") FindTestResultBackingForm form) {
+  public  Map<String, Object> findTestResult(HttpServletRequest request,
+      @PathVariable String collectionNumber ) {
 
-    ModelAndView mv = new ModelAndView("testresults/testResultsForCollection");
-
-    String collectionNumber = form.getCollectionNumber();
+    Map<String, Object> map = new HashMap<String, Object>();
     CollectedSample c = null;
     c = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
     if (c == null) {
-      mv.addObject("collectionFound", false);
+      map.put("collectionFound", false);
     }
     else {
-      mv.addObject("collectionFound", true);
-      mv.addObject("collectionId", c.getId());
+      map.put("collectionFound", true);
+      map.put("collectionId", c.getId());
     }
-    return mv;
+    return map;
   }
 }

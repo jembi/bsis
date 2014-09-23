@@ -1,31 +1,24 @@
 package controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 
-@Controller
+@RestController
+@RequestMapping("producttype")
 public class ProductTypeController {
 
   @Autowired
@@ -43,150 +36,115 @@ public class ProductTypeController {
     return reqUrl;
   }
 
-  public ModelAndView getProductTypeSummary(HttpServletRequest request,
+  public  Map<String, Object> getProductTypeSummary(HttpServletRequest request,
       @RequestParam(value="productTypeId") Integer productTypeId) {
 
-    ModelAndView mv = new ModelAndView ("admin/productTypeSummary");
+    Map<String, Object> map = new HashMap<String, Object> ();
     ProductType productType = productTypeRepository.getProductTypeById(productTypeId);
-    mv.addObject("productType", productType);
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    map.put("productType", productType);
+    map.put("refreshUrl", getUrl(request));
+    return map;
   }
 
-  @SuppressWarnings("unchecked")
+    @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
+    @RequestMapping(method = RequestMethod.POST)
+    public 
+    Map<String, Object>  saveNewProductType(HttpServletResponse response,
+             @RequestBody Map<String, Object> productType) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
+        productTypeRepository.saveNewProductTypeCombination(productType);
+        success = true;
+        if (!success) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        map.put("succcess", true);
+        return map;
+    }
+    
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
+    public 
+    Map<String, Object> updateProductType(HttpServletResponse response,
+            @RequestBody Map<String, Object> productType) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
+        productTypeRepository.saveNewProductTypeCombination(productType);
+        success = true;
+        if (!success) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        map.put("succcess", true);
+        return map;
+    }
+
+  @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
+  public  Map<String, Object> deactivateProductType(HttpServletRequest request,
+      @PathVariable Integer id) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    productTypeRepository.deactivateProductType(id);
+    return m;
+  }
+
+  @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
+  public  Map<String, Object> activateProductType(HttpServletRequest request,
+      @PathVariable Integer id) {
+
+    Map<String, Object> m = new HashMap<String, Object>();
+    productTypeRepository.activateProductType(id);
+    return m;
+  }
+
+  @RequestMapping(value="Combination/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  @RequestMapping(value="saveNewProductType", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> saveNewProductType(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
-    Map<String, Object> m = new HashMap<String, Object>();
-    ObjectMapper mapper = new ObjectMapper();
-    boolean success = false;
-    try {
-      Map<String, Object> newProductTypeAsMap;
-      newProductTypeAsMap = mapper.readValue(newProductTypeAsJsonStr, HashMap.class);
-      productTypeRepository.saveNewProductType(newProductTypeAsMap);
-      success = true;
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+  public  Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
+      @PathVariable Integer id) {
+
+    Map<String, Object> map = new HashMap<String, Object> ();
+    ProductTypeCombination productTypeCombination = productTypeRepository.getProductTypeCombinationById(id);
+    map.put("productTypeCombination", productTypeCombination);
+    map.put("refreshUrl", getUrl(request));
+    return map;
+  }
+
+    @RequestMapping(value = "Combination", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
+    public 
+    Map<String, Object> saveNewProductTypeCombination(HttpServletResponse response,
+            @RequestBody Map<String, Object> productType) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
+        productTypeRepository.saveNewProductTypeCombination(productType);
+        success = true;
+        if (!success) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        map.put("succcess", true);
+        return map;
     }
-    if (!success)
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    return m;
-  }
   
-  @SuppressWarnings("unchecked")
-  @RequestMapping(value="updateProductType", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> updateProductType(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam("productType") String newProductTypeAsJsonStr) {
-    Map<String, Object> m = new HashMap<String, Object>();
-    ObjectMapper mapper = new ObjectMapper();
-    boolean success = false;
-    try {
-      Map<String, Object> newProductTypeAsMap;
-      newProductTypeAsMap = mapper.readValue(newProductTypeAsJsonStr, HashMap.class);
-      productTypeRepository.updateProductType(newProductTypeAsMap);
-      success = true;
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    if (!success)
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    return m;
-  }
-  
-  @RequestMapping(value="deactivateProductType", method=RequestMethod.POST)
+  @RequestMapping(value="/Combination/{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> deactivateProductType(HttpServletRequest request,
-      @RequestParam(value="productTypeId") Integer productTypeId) {
+  public Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
+      @PathVariable Integer id) {
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    productTypeRepository.deactivateProductType(productTypeId);
-    return m;
+    Map<String, Object> map = new HashMap<String, Object>();
+    productTypeRepository.deactivateProductTypeCombination(id);
+    return map;
   }
 
-  @RequestMapping(value="activateProductType", method=RequestMethod.POST)
+  @RequestMapping(value="/Combination/{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> activateProductType(HttpServletRequest request,
-      @RequestParam(value="productTypeId") Integer productTypeId) {
+  public  Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
+      @PathVariable Integer id) {
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    productTypeRepository.activateProductType(productTypeId);
-    return m;
-  }
-
-  @RequestMapping(value="productTypeCombinationSummary", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public ModelAndView getProductTypeCombinationSummary(HttpServletRequest request,
-      @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
-
-    ModelAndView mv = new ModelAndView ("admin/productTypeCombinationSummary");
-    ProductTypeCombination productTypeCombination = productTypeRepository.getProductTypeCombinationById(productTypeCombinationId);
-    mv.addObject("productTypeCombination", productTypeCombination);
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
-  }
-
-  @SuppressWarnings("unchecked")
-  @RequestMapping(value="saveNewProductTypeCombination", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> saveNewProductTypeCombination(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam("productTypeCombination") String newProductTypeCombinationAsJsonStr) {
-    Map<String, Object> m = new HashMap<String, Object>();
-    ObjectMapper mapper = new ObjectMapper();
-    boolean success = false;
-    try {
-      Map<String, Object> newProductTypeCombinationAsMap;
-      newProductTypeCombinationAsMap = mapper.readValue(newProductTypeCombinationAsJsonStr, HashMap.class);
-      productTypeRepository.saveNewProductTypeCombination(newProductTypeCombinationAsMap);
-      success = true;
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    if (!success)
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    return m;
-  }
-  
-  @RequestMapping(value="deactivateProductTypeCombination", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
-      @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    productTypeRepository.deactivateProductTypeCombination(productTypeCombinationId);
-    return m;
-  }
-
-  @RequestMapping(value="activateProductTypeCombination", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
-      @RequestParam(value="productTypeCombinationId") Integer productTypeCombinationId) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    productTypeRepository.activateProductTypeCombination(productTypeCombinationId);
-    return m;
+    Map<String, Object> map = new HashMap<String, Object>();
+    productTypeRepository.activateProductTypeCombination(id);
+    return map;
   }
 
 

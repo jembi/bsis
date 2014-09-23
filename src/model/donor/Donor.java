@@ -1,5 +1,8 @@
 package model.donor;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.LocationExists;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +51,7 @@ import utils.DonorUtils;
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Donor implements ModificationTracker {
 
   @Id

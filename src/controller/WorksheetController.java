@@ -1,3 +1,7 @@
+/*
+*issue - #209[Adapt BSIS To Expose rest Services]
+*Reason - woksheets concept is not used in later versions
+*
 package controller;
 
 import java.io.IOException;
@@ -23,9 +27,9 @@ import model.collectedsample.CollectedSample;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -53,7 +57,6 @@ import backingform.FindWorksheetBackingForm;
 import backingform.WorksheetBackingForm;
 import backingform.validator.WorksheetBackingFormValidator;
 
-@Controller
 public class WorksheetController {
 
   @Autowired
@@ -387,7 +390,7 @@ public class WorksheetController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in collectionsTable.jsp.
    * @param bloodTests 
-   */
+   
   private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, List<BloodTest> bloodTests, Long totalRecords) {
 
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
@@ -485,3 +488,4 @@ public class WorksheetController {
     return mv;
   }
 }
+*/

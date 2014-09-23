@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
@@ -16,9 +17,9 @@ import model.producttype.ProductTypeCombination;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import utils.CustomDateFormatter;
 
@@ -28,6 +29,7 @@ public class ProductCombinationBackingForm {
 
   @NotNull
   @Valid
+  @JsonIgnore
   private Product product;
 
   private String createdOn;
@@ -56,10 +58,12 @@ public class ProductCombinationBackingForm {
     return product.getId();
   }
 
+  @JsonIgnore
   public CollectedSample getCollectedSample() {
     return product.getCollectedSample();
   }
 
+  
   public Date getLastUpdated() {
     return product.getLastUpdated();
   }
@@ -68,10 +72,12 @@ public class ProductCombinationBackingForm {
     return product.getCreatedDate();
   }
 
+  @JsonIgnore
   public User getCreatedBy() {
     return product.getCreatedBy();
   }
 
+  @JsonIgnore
   public User getLastUpdatedBy() {
     return product.getLastUpdatedBy();
   }

@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
 
@@ -10,254 +11,253 @@ import model.user.User;
 
 public class UserBackingForm {
 
-  @Valid
-  private User user;
+    @Valid
+    @JsonIgnore
+    private User user;
 
-  private boolean modifyPassword;
-  private List<String> userRoles;
-  private String userConfirPassword;
-  private String currentPassword;
-  private String roleAdmin;
-  private String roleDonorLab;
-  private String roleTestLab;
-  private String roleUser;
-  
+    private boolean modifyPassword;
+    private List<String> userRoles;
+    private String userConfirPassword;
+    private String currentPassword;
+    private String roleAdmin;
+    private String roleDonorLab;
+    private String roleTestLab;
+    private String roleUser;
 
-  public UserBackingForm() {
-    setUser(new User());
-  }
+    public UserBackingForm() {
+        setUser(new User());
+    }
 
-  public UserBackingForm(User user) {
-    this.setUser(user);
-  }
+    public UserBackingForm(User user) {
+        this.setUser(user);
+    }
 
-  public boolean equals(Object obj) {
-    return getUser().equals(obj);
-  }
+    public boolean equals(Object obj) {
+        return getUser().equals(obj);
+    }
 
-  public Integer getId() {
-    return getUser().getId();
-  }
-  
+    public Integer getId() {
+        return getUser().getId();
+    }
 
-public String getUsername() {
-    return getUser().getUsername();
-  }
+    public String getUsername() {
+        return getUser().getUsername();
+    }
 
-  public String getPassword() {
-    return getUser().getPassword();
-  }
+    public String getPassword() {
+        return getUser().getPassword();
+    }
 
-  public String getFirstName() {
-    return getUser().getFirstName();
-  }
+    public String getFirstName() {
+        return getUser().getFirstName();
+    }
 
-  public String getLastName() {
-    return getUser().getLastName();
-  }
+    public String getLastName() {
+        return getUser().getLastName();
+    }
 
-  public String getEmailId() {
-    return getUser().getEmailId();
-  }
+    public String getEmailId() {
+        return getUser().getEmailId();
+    }
 
-  public Boolean getIsStaff() {
-    return getUser().getIsStaff();
-  }
+    public Boolean getIsStaff() {
+        return getUser().getIsStaff();
+    }
 
-  public Boolean getIsActive() {
-    return getUser().getIsActive();
-  }
+    public Boolean getIsActive() {
+        return getUser().getIsActive();
+    }
 
-  public Boolean getIsAdmin() {
-    return getUser().getIsAdmin();
-  }
+    public Boolean getIsAdmin() {
+        return getUser().getIsAdmin();
+    }
 
-  public Date getLastLogin() {
-    return getUser().getLastLogin();
-  }
+    public Date getLastLogin() {
+        return getUser().getLastLogin();
+    }
 
-  public String getNotes() {
-    return getUser().getNotes();
-  }
+    public String getNotes() {
+        return getUser().getNotes();
+    }
 
-  public Boolean getIsDeleted() {
-    return getUser().getIsDeleted();
-  }
+    public Boolean getIsDeleted() {
+        return getUser().getIsDeleted();
+    }
 
-  public int hashCode() {
-    return getUser().hashCode();
-  }
+    public int hashCode() {
+        return getUser().hashCode();
+    }
 
-  public void setId(Integer id) {
-    getUser().setId(id);
-  }
+    public void setId(Integer id) {
+        getUser().setId(id);
+    }
 
-  public void setUsername(String username) {
-    getUser().setUsername(username);
-  }
+    public void setUsername(String username) {
+        getUser().setUsername(username);
+    }
 
-  public void setPassword(String password) {
-    getUser().setPassword(password);
-  }
+    public void setPassword(String password) {
+        getUser().setPassword(password);
+    }
 
-  public void setFirstName(String firstName) {
-    getUser().setFirstName(firstName);
-  }
+    public void setFirstName(String firstName) {
+        getUser().setFirstName(firstName);
+    }
 
-  public void setLastName(String lastName) {
-    getUser().setLastName(lastName);
-  }
+    public void setLastName(String lastName) {
+        getUser().setLastName(lastName);
+    }
 
-  public void setEmailId(String emailId) {
-    getUser().setEmailId(emailId);
-  }
+    public void setEmailId(String emailId) {
+        getUser().setEmailId(emailId);
+    }
 
-  public void setIsStaff(Boolean isStaff) {
-    getUser().setIsStaff(isStaff);
-  }
+    public void setIsStaff(Boolean isStaff) {
+        getUser().setIsStaff(isStaff);
+    }
 
-  public void setIsActive(Boolean isActive) {
-    getUser().setIsActive(isActive);
-  }
+    public void setIsActive(Boolean isActive) {
+        getUser().setIsActive(isActive);
+    }
 
-  public void setIsSuperuser(Boolean isAdmin) {
-    getUser().setIsSuperuser(isAdmin);
-  }
+    public void setIsSuperuser(Boolean isAdmin) {
+        getUser().setIsSuperuser(isAdmin);
+    }
 
-  public void setLastLogin(Date lastLogin) {
-    getUser().setLastLogin(lastLogin);
-  }
+    public void setLastLogin(Date lastLogin) {
+        getUser().setLastLogin(lastLogin);
+    }
 
-  public void setNotes(String notes) {
-    getUser().setNotes(notes);
-  }
+    public void setNotes(String notes) {
+        getUser().setNotes(notes);
+    }
 
-  public void setIsDeleted(Boolean isDeleted) {
-    getUser().setIsDeleted(isDeleted);
-  }
+    public void setIsDeleted(Boolean isDeleted) {
+        getUser().setIsDeleted(isDeleted);
+    }
 
-  public void setIsAdmin(Boolean isAdmin) {
-    getUser().setIsAdmin(isAdmin);
-  }
+    public void setIsAdmin(Boolean isAdmin) {
+        getUser().setIsAdmin(isAdmin);
+    }
 
-  public String toString() {
-    return getUser().toString();
-  }
+    public String toString() {
+        return getUser().toString();
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
-  
-  
- public boolean isModifyPassword() {
-	return modifyPassword;
-}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-public void setModifyPassword(boolean modifyPassword) {
-	this.modifyPassword = modifyPassword;
-}
+    public boolean isModifyPassword() {
+        return modifyPassword;
+    }
 
-public List<Role> getRoles() {
-    return user.getRoles();
-  }
-  
-  public List<String> getUserRoles() {
-		return userRoles;
-  }
+    public void setModifyPassword(boolean modifyPassword) {
+        this.modifyPassword = modifyPassword;
+    }
 
-	/**
-	 * @return the userConfirPassword
-	 */
-	public String getUserConfirPassword() {
-		return userConfirPassword;
-	}
+    public List<Role> getRoles() {
+        return user.getRoles();
+    }
 
-	/**
-	 * @param userConfirPassword the userConfirPassword to set
-	 */
-	public void setUserConfirPassword(String userConfirPassword) {
-		this.userConfirPassword = userConfirPassword;
-	}
+    @JsonIgnore
+    public List<String> getUserRoles() {
+        return userRoles;
+    }
 
-	/**
-	 * @return the currentPassword
-	 */
-	public String getCurrentPassword() {
-		return currentPassword;
-	}
+    /**
+     * @return the userConfirPassword
+     */
+    public String getUserConfirPassword() {
+        return userConfirPassword;
+    }
 
-	/**
-	 * @param currentPassword the currentPassword to set
-	 */
-	public void setCurrentPassword(String currentPassword) {
-		this.currentPassword = currentPassword;
-	}
+    /**
+     * @param userConfirPassword the userConfirPassword to set
+     */
+    public void setUserConfirPassword(String userConfirPassword) {
+        this.userConfirPassword = userConfirPassword;
+    }
 
-	/**
-	 * @return the roleAdmin
-	 */
-	public String getRoleAdmin() {
-		return roleAdmin;
-	}
+    /**
+     * @return the currentPassword
+     */
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
 
-	/**
-	 * @param roleAdmin the roleAdmin to set
-	 */
-	public void setRoleAdmin(String roleAdmin) {
-		this.roleAdmin = roleAdmin;
-	}
+    /**
+     * @param currentPassword the currentPassword to set
+     */
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
 
-	/**
-	 * @return the roleDonorLab
-	 */
-	public String getRoleDonorLab() {
-		return roleDonorLab;
-	}
+    /**
+     * @return the roleAdmin
+     */
+    public String getRoleAdmin() {
+        return roleAdmin;
+    }
 
-	/**
-	 * @param roleDonorLab the roleDonorLab to set
-	 */
-	public void setRoleDonorLab(String roleDonorLab) {
-		this.roleDonorLab = roleDonorLab;
-	}
+    /**
+     * @param roleAdmin the roleAdmin to set
+     */
+    public void setRoleAdmin(String roleAdmin) {
+        this.roleAdmin = roleAdmin;
+    }
 
-	/**
-	 * @return the roleTestLab
-	 */
-	public String getRoleTestLab() {
-		return roleTestLab;
-	}
+    /**
+     * @return the roleDonorLab
+     */
+    public String getRoleDonorLab() {
+        return roleDonorLab;
+    }
 
-	/**
-	 * @param roleTestLab the roleTestLab to set
-	 */
-	public void setRoleTestLab(String roleTestLab) {
-		this.roleTestLab = roleTestLab;
-	}
+    /**
+     * @param roleDonorLab the roleDonorLab to set
+     */
+    public void setRoleDonorLab(String roleDonorLab) {
+        this.roleDonorLab = roleDonorLab;
+    }
 
-	/**
-	 * @return the roleUser
-	 */
-	public String getRoleUser() {
-		return roleUser;
-	}
+    /**
+     * @return the roleTestLab
+     */
+    public String getRoleTestLab() {
+        return roleTestLab;
+    }
 
-	/**
-	 * @param roleUser the roleUser to set
-	 */
-	public void setRoleUser(String roleUser) {
-		this.roleUser = roleUser;
-	}
+    /**
+     * @param roleTestLab the roleTestLab to set
+     */
+    public void setRoleTestLab(String roleTestLab) {
+        this.roleTestLab = roleTestLab;
+    }
 
-	/**
-	 * @param userRole the userRole to set
-	 */
-	public void setUserRoles(List<String> userRoles) {
-		this.userRoles = userRoles;
-	}
-  
+    /**
+     * @return the roleUser
+     */
+    public String getRoleUser() {
+        return roleUser;
+    }
+
+    /**
+     * @param roleUser the roleUser to set
+     */
+    public void setRoleUser(String roleUser) {
+        this.roleUser = roleUser;
+    }
+
+    /**
+     * @param userRole the userRole to set
+     */
+    public void setUserRoles(List<String> userRoles) {
+        this.userRoles = userRoles;
+    }
+
 }

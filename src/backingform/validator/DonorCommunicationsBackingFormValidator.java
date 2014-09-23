@@ -1,3 +1,7 @@
+/*
+* - commented on issue #209 [Adapt BSIS to Expose Rest Services]
+
+
 package backingform.validator;
 
 import java.util.Arrays;
@@ -10,7 +14,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import backingform.DonorCommunicationsBackingForm;
 import controller.UtilController;
 
 public class DonorCommunicationsBackingFormValidator implements Validator {
@@ -56,3 +59,4 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 		}
 	}
 }
+*/

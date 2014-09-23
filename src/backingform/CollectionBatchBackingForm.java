@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.Valid;
 
 import model.collectionbatch.CollectionBatch;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 public class CollectionBatchBackingForm {
 
   @Valid
+  @JsonIgnore
   private CollectionBatch collectionBatch;
 
   public CollectionBatchBackingForm() {
