@@ -1,3 +1,6 @@
+/*
+* issue #209 [Adapt BSIS To Expose Rest Services]
+*
 package backingform;
 
 import java.util.Arrays;
@@ -66,3 +69,4 @@ public class CollectionsReportBackingForm {
     this.bloodGroups = bloodGroups;
   }
 }
+*/

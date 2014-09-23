@@ -1,9 +1,5 @@
 package controller;
 
-import backingform.CollectionsReportBackingForm;
-import backingform.DiscardedProductsReportBackingForm;
-import backingform.IssuedProductsReportBackingForm;
-import backingform.RequestsReportBackingForm;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -99,7 +94,6 @@ public class ReportsController {
     utilController.addTipsToModel(map, "report.collections.collectionsreport");
     map.put("centers", locationRepository.getAllCenters());
     map.put("sites", locationRepository.getAllCollectionSites());
-    map.put("collectionsReportForm", new CollectionsReportBackingForm());
     return map;
   }
 
@@ -109,7 +103,6 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.requests.requestsreport");
     map.put("sites", locationRepository.getAllUsageSites());
-    map.put("requestsReportForm", new RequestsReportBackingForm());
     return map;
   }
 
@@ -120,7 +113,6 @@ public class ReportsController {
     utilController.addTipsToModel(map, "report.products.discardedproductsreport");
     map.put("centers", locationRepository.getAllCenters());
     map.put("sites", locationRepository.getAllCollectionSites());
-    map.put("discardedProductsReportForm", new DiscardedProductsReportBackingForm());
     map.put("model", map);
     return map;
   }
@@ -132,18 +124,20 @@ public class ReportsController {
     utilController.addTipsToModel(map, "report.products.issuedproductsreport");
     map.put("centers", locationRepository.getAllCenters());
     map.put("sites", locationRepository.getAllCollectionSites());
-    map.put("issuedProductsReportForm", new IssuedProductsReportBackingForm());
     return map;
   }
 
-  @RequestMapping("/getCollectionsReport")
+  @RequestMapping(value = "/getCollectionsReport", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public 
   Map<String, Object> getCollectionsReport(
-      @ModelAttribute("collectionsReportForm") CollectionsReportBackingForm form ) {
+          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
+          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+          @RequestParam(value = "centers", required = false) List<String> centers,
+          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-    String dateCollectedFrom = form.getDateCollectedFrom();
-    String dateCollectedTo = form.getDateCollectedTo();
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -168,13 +162,13 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numCollections = collectionRepository
           .findNumberOfCollectedSamples(dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
+              aggregationCriteria, centers, sites, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
-      if (form.getAggregationCriteria().equals("monthly"))
+      if (aggregationCriteria.equals("monthly"))
         interval = interval * 30;
-      else if (form.getAggregationCriteria().equals("yearly"))
+      else if (aggregationCriteria.equals("yearly"))
         interval = interval * 365;
   
       map.put("interval", interval);
@@ -190,14 +184,17 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping("/getRequestsReport")
+  @RequestMapping(value = "/getRequestsReport", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public 
   Map<String, Object> getRequestsReport(
-      @ModelAttribute("requestsReportForm") RequestsReportBackingForm form) {
+          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
+          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+          @RequestParam(value = "centers", required = false) List<String> centers,
+          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-    String dateCollectedFrom = form.getDateRequestedFrom();
-    String dateCollectedTo = form.getDateRequestedTo();
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -222,13 +219,13 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numRequests = requestRepository
           .findNumberOfRequests(dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getSites(), form.getBloodGroups());
+              aggregationCriteria, sites, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
-      if (form.getAggregationCriteria().equals("monthly"))
+      if (aggregationCriteria.equals("monthly"))
         interval = interval * 30;
-      else if (form.getAggregationCriteria().equals("yearly"))
+      else if (aggregationCriteria.equals("yearly"))
         interval = interval * 365;
   
       map.put("interval", interval);
@@ -244,14 +241,17 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping("/getDiscardedProductsReport")
+  @RequestMapping(value = "/getDiscardedProductsReport", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public 
   Map<String, Object> getDiscardedProductsReport(
-      @ModelAttribute("discardedProductsReportForm") DiscardedProductsReportBackingForm form) {
+          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
+          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+          @RequestParam(value = "centers", required = false) List<String> centers,
+          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-    String dateCollectedFrom = form.getDateCollectedFrom();
-    String dateCollectedTo = form.getDateCollectedTo();
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -276,13 +276,13 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
           .findNumberOfDiscardedProducts(dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
+              aggregationCriteria, centers, sites, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
-      if (form.getAggregationCriteria().equals("monthly"))
+      if (aggregationCriteria.equals("monthly"))
         interval = interval * 30;
-      else if (form.getAggregationCriteria().equals("yearly"))
+      else if (aggregationCriteria.equals("yearly"))
         interval = interval * 365;
   
       map.put("interval", interval);
@@ -298,15 +298,18 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping("/getIssuedProductsReport")
+  @RequestMapping(value = "/getIssuedProductsReport", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public 
   Map<String, Object> getIssuedProductsReport(
-      @ModelAttribute("issuedProductsReportForm") IssuedProductsReportBackingForm form) {
+          @RequestParam(value = "dateIssuedFrom", required = false) String dateCollectedFrom,
+          @RequestParam(value = "dateIssuedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+          @RequestParam(value = "centers", required = false) List<String> centers,
+          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-    String dateCollectedFrom = form.getDateIssuedFrom();
-    String dateCollectedTo = form.getDateIssuedTo();
-
+  
     Map<String, Object> map = new HashMap<String, Object>();
 
     try {
@@ -330,13 +333,13 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numIssuedProducts = productRepository
           .findNumberOfIssuedProducts(dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getCenters(), form.getSites(), form.getBloodGroups());
+              aggregationCriteria, centers, sites, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
-      if (form.getAggregationCriteria().equals("monthly"))
+      if (aggregationCriteria.equals("monthly"))
         interval = interval * 30;
-      else if (form.getAggregationCriteria().equals("yearly"))
+      else if (aggregationCriteria.equals("yearly"))
         interval = interval * 365;
   
       map.put("interval", interval);
@@ -359,54 +362,7 @@ public class ReportsController {
     return gcal.getTime();
   }
 
-  public static class TestResultsReportBackingForm {
-
-    private List<String> ttiTests;
-    private String dateTestedFrom;
-    private String dateTestedTo;
-    private String aggregationCriteria;
-    private List<String> centers;
-    private List<String> sites;
-    
-    public String getDateTestedFrom() {
-      return dateTestedFrom;
-    }
-    public String getDateTestedTo() {
-      return dateTestedTo;
-    }
-    public String getAggregationCriteria() {
-      return aggregationCriteria;
-    }
-    public List<String> getCenters() {
-      return centers;
-    }
-    public List<String> getSites() {
-      return sites;
-    }
-    public void setDateTestedFrom(String dateTestedFrom) {
-      this.dateTestedFrom = dateTestedFrom;
-    }
-    public void setDateTestedTo(String dateTestedTo) {
-      this.dateTestedTo = dateTestedTo;
-    }
-    public void setAggregationCriteria(String aggregationCriteria) {
-      this.aggregationCriteria = aggregationCriteria;
-    }
-    public void setCenters(List<String> centers) {
-      this.centers = centers;
-    }
-    public void setSites(List<String> sites) {
-      this.sites = sites;
-    }
-    public List<String> getTtiTests() {
-      return ttiTests;
-    }
-    public void setTtiTests(List<String> ttiTests) {
-      this.ttiTests = ttiTests;
-    }
-
-  }
-
+ 
   @RequestMapping(value = "/ttiReportFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public Map<String, Object> testResultsReportFormGenerator() {
@@ -415,19 +371,21 @@ public class ReportsController {
     map.put("centers", locationRepository.getAllCenters());
     map.put("sites", locationRepository.getAllCollectionSites());
     utilController.addTipsToModel(map, "report.collections.testresultsreport");
-    map.put("testResultsReportForm", new TestResultsReportBackingForm());
     return map;
   }
 
-  @RequestMapping("/getTestResultsReport")
+  @RequestMapping(value = "/getTestResultsReport", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public 
   Map<String, Object> getTestResultsReport(
-      @ModelAttribute("testResultsReportForm") TestResultsReportBackingForm form) {
+          @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
+          @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
+          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+          @RequestParam(value = "centers", required = false) List<String> centers,
+          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) {
 
-    List<String> ttiTests = form.getTtiTests();
-    String dateTestedFrom = form.getDateTestedFrom();
-    String dateTestedTo = form.getDateTestedTo();
+   
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -451,14 +409,14 @@ public class ReportsController {
   
       Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
           .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
-              form.getAggregationCriteria(), form.getCenters(), form.getSites());
+              aggregationCriteria, centers, sites);
   
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
-      if (form.getAggregationCriteria().equals("monthly"))
+      if (aggregationCriteria.equals("monthly"))
         interval = interval * 30;
-      else if (form.getAggregationCriteria().equals("yearly"))
+      else if (aggregationCriteria.equals("yearly"))
         interval = interval * 365;
   
       map.put("interval", interval);
