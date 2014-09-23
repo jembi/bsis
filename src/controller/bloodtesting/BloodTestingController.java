@@ -2,12 +2,13 @@ package controller.bloodtesting;
 
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,50 +41,39 @@ public class BloodTestingController {
 
   @RequestMapping(method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public Map<String, Object> getBloodTestSummary(HttpServletRequest request,
-      @RequestParam(value="bloodTestId") Integer bloodTestId) {
+  public Map<String, Object> getBloodTestSummary(@RequestParam(value="bloodTestId") Integer bloodTestId) {
       
     Map<String, Object> map = new HashMap<String, Object>();  
     BloodTestViewModel bloodTest;
     bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(bloodTestId));
     map.put("bloodTest", bloodTest);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public Map<String, Object> saveNewBloodTest(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object>> saveNewBloodTest(HttpServletRequest request,
       HttpServletResponse response, @RequestBody Map<String, Object> newBloodTestAsMap) {
-    Map<String, Object> m = new HashMap<String, Object>();
-    ObjectMapper mapper = new ObjectMapper();
-    boolean success = false;
-    
+      Map<String, Object> m = new HashMap<String, Object>();
       bloodTestingRepository.saveNewBloodTest(newBloodTestAsMap);
-      success = true;
-   
-    if (!success)
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    return m;
+      return new ResponseEntity<Map<String, Object>>(m, HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public Map<String, Object> deactivateBloodTest(HttpServletRequest request,
-      @PathVariable Integer id) {
+  public ResponseEntity<Map<String, Object>> deactivateBloodTest(@PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     bloodTestingRepository.deactivateBloodTest(id);
-    return m;
+    return new ResponseEntity<Map<String, Object>>(m, HttpStatus.CREATED);
   }
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public Map<String, Object> activateBloodTest(HttpServletRequest request,
-      @PathVariable Integer id) {
+  public ResponseEntity<Map<String, Object>> activateBloodTest(@PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     bloodTestingRepository.activateBloodTest(id);
-    return m;
+    return new ResponseEntity<Map<String, Object>>(m, HttpStatus.CREATED);
   }
 }

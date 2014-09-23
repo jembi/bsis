@@ -19,6 +19,8 @@ import model.bloodtesting.BloodTestType;
 import model.collectedsample.CollectedSample;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -154,12 +156,13 @@ public class BloodTypingController {
   
   @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
-  public Map<String, Object> saveBloodTypingTests(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam(value="bloodTypingTests") String bloodTypingTests,
+  public ResponseEntity<Map<String, Object>> saveBloodTypingTests(
+      @RequestParam(value="bloodTypingTests") String bloodTypingTests,
       @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
       @RequestParam(value="refreshUrl") String refreshUrl,
       @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
+    HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
     List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
     map.put("collectionNumbers", StringUtils.join(collectionNumbers, ","));
@@ -218,10 +221,10 @@ public class BloodTypingController {
       map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      httpStatus = HttpStatus.BAD_REQUEST;
     }
 
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   private Map<Long, Map<Long, String>> parseBloodTestResults(
@@ -284,8 +287,8 @@ public class BloodTypingController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> showBloodTypingResultsForCollection(
       HttpServletRequest request,
-      HttpServletResponse response,
       @RequestParam(value="collectionId") String collectionId) {
+      
     Map<String, Object> map = new HashMap<String, Object>();
     collectionId = collectionId.trim();
     Long collectedSampleId = Long.parseLong(collectionId);
@@ -332,15 +335,13 @@ public class BloodTypingController {
 
   @RequestMapping(value="/saveAdditionalBloodTypingTests", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
-  public Map<String, Object> saveAdditionalBloodTypingTests(
-      HttpServletRequest request,
-      HttpServletResponse response,
+  public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestParam(value="collectionId") String collectionId,
       @RequestParam(value="saveTestsData") String saveTestsDataStr,
       @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
     Map<String, Object> m = new HashMap<String, Object>();
-
+    HttpStatus httpStatus = HttpStatus.CREATED;
     try {
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
@@ -356,7 +357,7 @@ public class BloodTypingController {
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
       System.out.println(errorMap);
       if (errorMap != null && !errorMap.isEmpty()) {
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        httpStatus = HttpStatus.BAD_REQUEST;
         @SuppressWarnings("unchecked")
         Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(Long.parseLong(collectionId));
         if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
@@ -367,10 +368,10 @@ public class BloodTypingController {
 
     } catch (Exception ex) {
       ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    return m;
+    return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
 
   @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)

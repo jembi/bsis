@@ -32,11 +32,12 @@ import model.collectedsample.CollectedSample;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -110,11 +111,11 @@ public class TTIController {
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/saveTTITests", method = RequestMethod.POST)
-	public Map<String, Object> saveTTITests(HttpServletRequest request,
-			HttpServletResponse response,
+	public ResponseEntity<Map<String, Object>> saveTTITests(
 			@RequestParam("collectionNumber") String collectionNumber,
 			@RequestParam("ttiInput") String ttiInput) {
 
+                HttpStatus httpStatus = HttpStatus.CREATED;        
 		boolean success = true;
 		String errorMessage = "";
 		Map<Long, Map<Long, String>> errorMap = null;
@@ -185,14 +186,14 @@ public class TTIController {
 			List<BloodTestViewModel> ttiTests = getBasicTTITests();
 			map.put("allTTITests", ttiTests);
 
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			httpStatus = HttpStatus.BAD_REQUEST;
 		}
 
 		map.put("addAnotherTTIUrl", "ttiFormGenerator.html");
 		map.put("refreshUrl", "ttiFormGenerator.html");
 		map.put("success", success);
 		map.put("errorMessage", errorMessage);
-		return map;
+		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -263,13 +264,12 @@ public class TTIController {
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/saveAdditionalTTITests", method = RequestMethod.POST)
-	public @ResponseBody
-	Map<String, Object> saveAdditionalTTITests(HttpServletRequest request,
-			HttpServletResponse response,
+	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
 			@RequestParam(value = "collectionId") String collectionId,
 			@RequestParam(value = "saveTestsData") String saveTestsDataStr) {
 
-		Map<String, Object> m = new HashMap<String, Object>();
+		HttpStatus httpStatus = HttpStatus.CREATED;
+                Map<String, Object> m = new HashMap<String, Object>();
 
 		try {
 			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
@@ -288,18 +288,18 @@ public class TTIController {
 			Map<String, Object> errorMap = (Map<String, Object>) results
 					.get("errors");
 			if (errorMap != null && !errorMap.isEmpty())
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				httpStatus = HttpStatus.BAD_REQUEST;
 		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage() + ex.getStackTrace());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 
-		return m;
+		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
 
 	@RequestMapping(value = "/saveAllTestResults", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public @ResponseBody
+	public 
 	Map<String, Object> saveAllTestResults(
 			HttpServletRequest request,
 			HttpServletResponse response,
@@ -445,11 +445,12 @@ public class TTIController {
 
 	@RequestMapping(value = "/uploadTTIResultsGenerator", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public Map<String, Object> uploadTTIResultsGenerator(
+	public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(
 			MultipartHttpServletRequest request, HttpServletResponse response)
 			throws IOException, ParseException {
 
-		Map<String, Object> map = new HashMap<String, Object>();
+		HttpStatus httpStatus = HttpStatus.CREATED;
+                Map<String, Object> map = new HashMap<String, Object>();
 		MultipartFile tsvFile = null;
 		String fileName, uploadPath;
 		boolean success = true;
@@ -461,7 +462,7 @@ public class TTIController {
 				map.put("errorMessage", UploadTTIResultConstant.MESSAGE1);
 				success = false;
 				map.put("success", success);
-				return map;
+				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
 			}
 			if (iterator.hasNext()) {
 				tsvFile = request.getFile(iterator.next());
@@ -481,7 +482,7 @@ public class TTIController {
 				map.put("errorMessage",UploadTTIResultConstant.MESSAGE2);
 				success = false;
 				map.put("success", success);
-				return map;
+				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
 			}
 			
 			String fileWithExt= FileUploadUtils.splitFilePath(fileName);
@@ -494,9 +495,10 @@ public class TTIController {
 			ex.printStackTrace();
 			success = false;
 			map.put("success", success);
+                        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		
-		return map;
+		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
 	}
 
