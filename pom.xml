@@ -242,11 +242,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
@@ -388,11 +383,6 @@
 			<version>2.0.3</version>
 		</dependency>	
 		<dependency>	
-			<groupId>turbine</groupId>	
-			<artifactId>turbine</artifactId>	
-			<version>2.1</version>	
-		</dependency>
-		<dependency>	
 			<groupId>net.sf.opencsv</groupId>	
 			<artifactId>opencsv</artifactId>
 			<version>2.0</version>
@@ -432,11 +422,6 @@
 		    </exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>0.8.0.RELEASE</version>
-		</dependency>
-		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.2.8</version>
@@ -451,13 +436,5 @@
                     <artifactId>swagger-springmvc</artifactId>
                     <version>0.6.5</version>
                 </dependency>
-		<!-- 
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.8</version>
-            <scope>test</scope>
-        </dependency>
-      	-->
 	</dependencies>
 </project>
