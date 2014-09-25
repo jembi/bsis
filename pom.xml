@@ -12,7 +12,7 @@
 		<webapp.name>bsis</webapp.name>
 		<cxf-version>2.2.10</cxf-version>
                 <spring-version>4.1.0.RELEASE</spring-version>
-                <spring-security-version>3.1.2.RELEASE</spring-security-version>
+                <spring-security-version>3.2.5.RELEASE</spring-security-version>
                 <hibernate-version>4.3.6.Final</hibernate-version>
 		<liquibase.propertyFile>liquibase/liquibase.properties</liquibase.propertyFile>
 	</properties>
