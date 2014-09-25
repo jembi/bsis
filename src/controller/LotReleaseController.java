@@ -15,20 +15,18 @@ import model.collectedsample.LotReleaseConstant;
 import model.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.CollectedSampleRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
 
-@Controller
-@RequestMapping
+@RestController
 public class LotReleaseController {
 
   @Autowired
@@ -58,7 +56,7 @@ public class LotReleaseController {
   
   @RequestMapping(value = "/lotReleaseFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> lotReleaseFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> lotReleaseFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new  HashMap<String, Object>();
     map.put("requestUrl", getUrl(request));
     map.put("firstTimeRender", true);
@@ -68,7 +66,7 @@ public class LotReleaseController {
   
   @RequestMapping(value = "/findlotRelease", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
-  public @ResponseBody Map<String, Object> findlotRelease(HttpServletRequest request,HttpServletResponse response,
+  public  Map<String, Object> findlotRelease(HttpServletRequest request,HttpServletResponse response,
       @RequestParam(value="dinNumber") String dinNumber)  {
     Map<String, Object> map = new  HashMap<String, Object>();
     boolean success = true;
@@ -113,7 +111,7 @@ public class LotReleaseController {
   
   @RequestMapping(value = "/printLabel", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> printLabel(HttpServletRequest request, Model model,
+  public  Map<String, Object> printLabel(HttpServletRequest request, Model model,
 		  @RequestParam(value="dinNumber") String dinNumber) {
 	  
 	 Map<String, Object> map = new  HashMap<String, Object>();
@@ -240,7 +238,7 @@ public class LotReleaseController {
   
   @RequestMapping(value = "/printDiscard", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> printDiscard(HttpServletRequest request, Model model,
+  public  Map<String, Object> printDiscard(HttpServletRequest request, Model model,
 		  @RequestParam(value="dinNumber") String dinNumber) {
 	  
 	 Map<String, Object> map = new  HashMap<String, Object>();

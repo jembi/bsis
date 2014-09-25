@@ -18,29 +18,23 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.DonorViewModel;
 
-@Controller
+@RestController
 @RequestMapping("donor")
 public class DonorController {
 
@@ -91,7 +85,7 @@ public class DonorController {
     
   @RequestMapping(value = {"{id}"}, method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> donorSummaryGenerator(HttpServletRequest request,
+  public  ResponseEntity<Map<String, Object>> donorSummaryGenerator(HttpServletRequest request,
       @PathVariable Long id ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -126,12 +120,12 @@ public class DonorController {
     utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
     map.put("tips", tips);
     map.put("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
   @RequestMapping(value = "/{id}/history", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public @ResponseBody Map<String, Object> viewDonorHistory(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object>> viewDonorHistory(HttpServletRequest request,
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -152,12 +146,12 @@ public class DonorController {
     map.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
-  public @ResponseBody Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
+  public Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     DonorBackingForm form = new DonorBackingForm();
@@ -175,7 +169,7 @@ public class DonorController {
 
   @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public @ResponseBody Map<String, Object> editDonorFormGenerator(HttpServletRequest request,
+  public Map<String, Object> editDonorFormGenerator(HttpServletRequest request,
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -197,7 +191,7 @@ public class DonorController {
   
   @RequestMapping(value = "/find", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
+  public Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
 
   //  FindDonorBackingForm form = new FindDonorBackingForm();
   //form.setCreateDonorSummaryView(true);
@@ -218,12 +212,11 @@ public class DonorController {
   
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
-    public @ResponseBody 
-    Map<String, Object>
-            addDonor(HttpServletRequest request,
-                    HttpServletResponse response,
-                     @Valid  @RequestBody DonorBackingForm form) {
+    public  
+    ResponseEntity<Map<String, Object>>
+            addDonor(@Valid  @RequestBody DonorBackingForm form) {
 
+        HttpStatus httpStatus = HttpStatus.CREATED;
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
@@ -243,9 +236,12 @@ public class DonorController {
             } catch (EntityExistsException ex) {
                 ex.printStackTrace();
                 success = false;
+                httpStatus = HttpStatus.CONFLICT;
+                
             } catch (Exception ex) {
                 ex.printStackTrace();
                 success = false;
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             }
         
 
@@ -261,15 +257,15 @@ public class DonorController {
     }
 
    map.put("success", success);
-   return map;
+   return new ResponseEntity<Map<String, Object>>(map,httpStatus);
   }
 
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public @ResponseBody Map<String,Object>  updateDonor(
-      HttpServletResponse response,
-      @Valid @RequestBody DonorBackingForm form) {
+  public  ResponseEntity<Map<String,Object>>  
+        updateDonor(@Valid @RequestBody DonorBackingForm form) {
 
+    HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
     String message = "";
@@ -285,7 +281,7 @@ public class DonorController {
         Donor existingDonor = donorRepository.updateDonor(donor);
         if (existingDonor == null) {
           map.put("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          httpStatus = HttpStatus.BAD_REQUEST;
           success = false;
           map.put("existingDonor", false);
           message = "Donor does not already exist.";
@@ -295,14 +291,9 @@ public class DonorController {
           success = true;
           message = "Donor Successfully Updated";
         }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Donor Already exists.";
       } catch (Exception ex) {
         ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         success = false;
         message = "Internal Error. Please try again or report a Problem.";
       }
@@ -314,15 +305,16 @@ public class DonorController {
     map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     addEditSelectorOptions(map);
 
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map,httpStatus);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
-  public @ResponseBody
-  Map<String, ? extends Object> deleteDonor(
+  public 
+  ResponseEntity<Map<String, Object>> deleteDonor(
       @PathVariable Long id) {
 
+    HttpStatus httpStatus = HttpStatus.NO_CONTENT;
     boolean success = true;
     String errMsg = "";
     try {
@@ -332,17 +324,18 @@ public class DonorController {
     	LOGGER.error(ex.getMessage());    	      
       success = false;
       errMsg = "Internal Server Error";
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", success);
     m.put("errMsg", errMsg);
-    return m;
+    return  new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
 
   @RequestMapping(value = "{donorNumber}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> printDonorLabel(@PathVariable String donorNumber) {
+  public  Map<String, Object> printDonorLabel(@PathVariable String donorNumber) {
 	  
         Map<String, Object> map = new HashMap<String, Object>();	
 	map.put("labelZPL",
@@ -362,7 +355,7 @@ public class DonorController {
 
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public @ResponseBody  Map<String, Object> findDonorPagination(
+  public Map<String, Object> findDonorPagination(
                   @RequestParam(value="firstName",required=false, defaultValue ="" ) String firstName,
                   @RequestParam(value="lastName",required=false, defaultValue ="") String lastName,
                   @RequestParam(value="donorNumber",required=false)String donorNumber,
@@ -475,7 +468,7 @@ public class DonorController {
     
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> findDonor(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object> findDonor(HttpServletRequest request,
       @ModelAttribute("findDonorForm") FindDonorBackingForm form) {
 
     Map<String, Object> m = new HashMap<String, Object>();
@@ -521,7 +514,7 @@ public class DonorController {
   @Deprecated
   @RequestMapping(value = "/findDonorSelectorFormGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public @ResponseBody Map<String, Object> findDonorSelectorFormGenerator(HttpServletRequest request) {
+  public ResponseEntity<Map<String, Object> findDonorSelectorFormGenerator(HttpServletRequest request) {
 
     FindDonorBackingForm form = new FindDonorBackingForm();
     form.setCreateDonorSummaryView(false);
@@ -535,7 +528,7 @@ public class DonorController {
     map.put("refreshUrl", "findDonorSelectorFormGenerator.html");
    
     addEditSelectorOptions(map);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 */
   
@@ -561,20 +554,5 @@ public class DonorController {
     }
     return reqUrl;
   }
-  
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Map<String, String> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException errors) {
-        Map<String, String> errorMap = new HashMap<String, String>();
-        errorMap.put("hasErrors", "true");
-        errorMap.put("errorMessage", errors.getMessage());
-        errors.printStackTrace();
-        for (FieldError error : errors.getBindingResult().getFieldErrors()){
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-      
-        return errorMap;
-    }
+ 
 }

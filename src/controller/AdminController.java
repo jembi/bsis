@@ -37,19 +37,13 @@ import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import repository.BloodBagTypeRepository;
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
@@ -67,8 +61,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleViewModel;
 
-@Controller
-@RequestMapping
+@RestController
 public class AdminController {
 	
 	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
@@ -131,7 +124,7 @@ public class AdminController {
   }
 
   @RequestMapping("/getFormToConfigure")
-  public @ResponseBody Map<String, Object> getFormToConfigure(HttpServletRequest request,
+  public  Map<String, Object> getFormToConfigure(HttpServletRequest request,
           @RequestParam(value="formToConfigure", required=false) String formToConfigure) {
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -144,7 +137,7 @@ public class AdminController {
 
   @RequestMapping(value="/configureFormFieldChange", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public @ResponseBody Map<String, ? extends Object>
+  public  Map<String, ? extends Object>
     configureFormFieldChange(@RequestParam Map<String, String> params) {
 
     boolean success = true;
@@ -205,7 +198,7 @@ public class AdminController {
 
   @RequestMapping(value = "/configureBloodTests", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public @ResponseBody Map<String, Object> configureBloodTests(HttpServletRequest request) {
+  public  Map<String, Object> configureBloodTests(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
     for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
@@ -219,7 +212,7 @@ public class AdminController {
 
   @RequestMapping(value = "/configureBloodTypingRules", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TYPING_RULES+"')")
-  public @ResponseBody Map<String, Object> configureBloodTypingTests(HttpServletRequest request) {
+  public  Map<String, Object> configureBloodTypingTests(HttpServletRequest request) {
      Map<String, Object> map = new HashMap<String, Object>();
     map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
     List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
@@ -233,7 +226,7 @@ public class AdminController {
   
   @RequestMapping(value = "/configureForms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public @ResponseBody Map<String, Object> configureForms(HttpServletRequest request,
+  public  Map<String, Object> configureForms(HttpServletRequest request,
                               Model model) {
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -249,7 +242,7 @@ public class AdminController {
    *
   @RequestMapping("/createSampleDataFormGenerator")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  public @ResponseBody Map<String, Object> createSampleDataFormGenerator(
+  public  Map<String, Object> createSampleDataFormGenerator(
                 HttpServletRequest request, Map<String, Object> params) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -259,7 +252,7 @@ public class AdminController {
 
   @RequestMapping(value="/createSampleData", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  public @ResponseBody Map<String, ? extends Object> createSampleData(
+  public  Map<String, ? extends Object> createSampleData(
                 HttpServletRequest request,
                 @RequestParam Map<String, String> params) {
 
@@ -290,7 +283,7 @@ public class AdminController {
 
   @RequestMapping(value="/configureTipsFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")
-  public @ResponseBody Map<String, Object> configureTipsFormGenerator(
+  public  Map<String, Object> configureTipsFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
@@ -304,7 +297,7 @@ public class AdminController {
 
   @RequestMapping(value="/labSetupPageGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
-  public @ResponseBody Map<String, Object> labSetupFormGenerator(
+  public  Map<String, Object> labSetupFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
@@ -317,7 +310,7 @@ public class AdminController {
   @SuppressWarnings("unchecked")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
   @RequestMapping(value="/updateLabSetup", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> updateLabSetup(HttpServletRequest request,
+  public  Map<String, Object> updateLabSetup(HttpServletRequest request,
       @RequestParam(value="labSetupParams") String params) {
 
     ObjectMapper mapper = new ObjectMapper();
@@ -342,7 +335,7 @@ public class AdminController {
   
   @RequestMapping(value="/configureProductTypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> configureProductTypes(
+  public  Map<String, Object> configureProductTypes(
       HttpServletRequest request, HttpServletResponse response) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -353,7 +346,7 @@ public class AdminController {
 
   @RequestMapping(value="/configureProductTypeCombinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public @ResponseBody Map<String, Object> configureProductTypeCombinations(
+  public  Map<String, Object> configureProductTypeCombinations(
       HttpServletRequest request, HttpServletResponse response) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -365,7 +358,7 @@ public class AdminController {
 
   @RequestMapping(value="/configureRequestTypesFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public @ResponseBody Map<String, Object> configureRequestTypesFormGenerator(
+  public  Map<String, Object> configureRequestTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -378,7 +371,7 @@ public class AdminController {
 
   @RequestMapping(value="/configureCrossmatchTypesFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public @ResponseBody Map<String, Object> configureCrossmatchTypesFormGenerator(
+  public  Map<String, Object> configureCrossmatchTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
@@ -391,7 +384,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/configureBloodBagTypesFormGenerator", method=RequestMethod.GET)
-  public @ResponseBody Map<String, Object> configureBloodBagTypesFormGenerator(
+  public  Map<String, Object> configureBloodBagTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
@@ -404,7 +397,7 @@ public class AdminController {
   }
 
   @RequestMapping(value="/backupDataFormGenerator", method=RequestMethod.GET)
-  public @ResponseBody Map<String, Object> backupDataFormGenerator(
+  public  Map<String, Object> backupDataFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
 
@@ -471,7 +464,7 @@ public class AdminController {
   }
   @RequestMapping(value="/configureDonationTypesFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public @ResponseBody Map<String, Object> configureDonationTypesFormGenerator(
+  public  Map<String, Object> configureDonationTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -502,7 +495,7 @@ public class AdminController {
 
   @RequestMapping(value = "/configureTips", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')") 
-  public @ResponseBody Map<String, Object> configureTips(
+  public  Map<String, Object> configureTips(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -533,7 +526,7 @@ public class AdminController {
 
   @RequestMapping(value = "/configureRequestTypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public @ResponseBody Map<String, Object> configureRequestTypes(
+  public  Map<String, Object> configureRequestTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -574,7 +567,7 @@ public class AdminController {
 
   @RequestMapping(value = "/configureCrossmatchTypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public @ResponseBody Map<String, Object> configureCrossmatchTypes(
+  public  Map<String, Object> configureCrossmatchTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson, Model model) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -612,7 +605,7 @@ public class AdminController {
 
     @RequestMapping(value = "/configureBloodBagTypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> configureBloodBagTypes(
             HttpServletRequest request, HttpServletResponse response,
             @RequestBody Map<String, String> params) {
@@ -646,7 +639,7 @@ public class AdminController {
 
   @RequestMapping(value = "/configureDonationTypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public @ResponseBody Map<String, Object> configureDonationTypes(
+  public  Map<String, Object> configureDonationTypes(
       HttpServletRequest request, HttpServletResponse response,
     @RequestBody  Map<String,String> params) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -680,7 +673,7 @@ public class AdminController {
 
   @RequestMapping(value="/adminWelcomePageGenerator", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_ADMIN_INFORMATION+"')")
-  public @ResponseBody Map<String, Object> adminWelcomePageGenerator(HttpServletRequest request) {
+  public  Map<String, Object> adminWelcomePageGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<InetAddress> wirelessAddresses = getServerNetworkAddresses();
     List<String> serverAddresses = new ArrayList<String>();
@@ -723,20 +716,4 @@ public class AdminController {
     return listOfServerAddresses;
   }
   
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Map<String, String> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException errors) {
-        Map<String, String> errorMap = new HashMap<String, String>();
-        errorMap.put("hasErrors", "true");
-        errorMap.put("errorMessage", errors.getMessage());
-        errors.printStackTrace();
-        for (FieldError error : errors.getBindingResult().getFieldErrors()){
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-      
-        return errorMap;
-    }
-
 }

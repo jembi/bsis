@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.RequestRepository;
 import utils.PermissionConstants;
 
-@Controller
-@RequestMapping
+@RestController
 public class CompatibilityTestsController {
 
   @Autowired
@@ -67,7 +67,7 @@ public class CompatibilityTestsController {
 
   @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public @ResponseBody Map<String, Object> editCompatibilityTestsFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> editCompatibilityTestsFormGenerator(HttpServletRequest request,
       Model model,
       @RequestParam(value="requestId") String requestId) {
 
@@ -93,7 +93,7 @@ public class CompatibilityTestsController {
 
   @RequestMapping(value = "/addCompatibilityTestForRequest", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public @ResponseBody  Map<String, Object>
+  public   Map<String, Object>
         addCompatibilityTest(HttpServletRequest request,
                  HttpServletResponse response,
                  @ModelAttribute("editCompatibilityTestForm") @Valid CompatibilityTestBackingForm form,

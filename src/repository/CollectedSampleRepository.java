@@ -32,7 +32,6 @@ import model.producttype.ProductType;
 import model.util.BloodGroup;
 import model.worksheet.Worksheet;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.NonUniqueObjectException;
@@ -179,7 +178,7 @@ public class CollectedSampleRepository {
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
     List<CollectedSample> collectedSamples = query.getResultList();
-    if (CollectionUtils.isEmpty(collectedSamples)) {
+    if (collectedSamples.isEmpty()) {
       return new ArrayList<CollectedSample>();
     }
     return collectedSamples;

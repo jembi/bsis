@@ -1,6 +1,5 @@
 package controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,16 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 import model.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
 
-@Controller
+@RestController
 @RequestMapping("location")
 public class LocationsController {
 
@@ -37,7 +35,7 @@ public class LocationsController {
 
     @RequestMapping(value = "/configure", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> configureLocationsFormGenerator(
             HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -48,7 +46,7 @@ public class LocationsController {
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-    public @ResponseBody
+    public 
     Map<String, Object> configureLocations(
             HttpServletRequest request, HttpServletResponse response,
             @RequestBody Map<String, Object> params) {
