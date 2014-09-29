@@ -11,21 +11,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 import javax.sql.DataSource;
 import model.address.Address;
-import model.address.AddressType;
 import model.address.Contact;
-import model.address.ContactMethodType;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.idtype.IdNumber;
-import model.idtype.IdType;
 import model.user.User;
-import model.util.BloodGroup;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.database.DatabaseConfig;
@@ -37,9 +33,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -185,26 +178,24 @@ public class DonorRepositoryTest {
                 findDonor.getId() == 1 ? true : false);
     }
 
-    @Test
+    
     /**
-     * Should return null when Donor id does not exist findDonorById(Long)
+     * Expects NoResultException to be thrown  when Donor id does not exist findDonorById(Long)
      */
+    @Test(expected = NoResultException.class)
     public void findDonorById_shouldReturnNull() {
         // 18 ID is not exist into Donor table.
-        assertNull(
-                "Donor's Object should null. Donor Id is not exist into Donor's table.",
-                donorRepository.findDonorById(18l));
+        donorRepository.findDonorById(18l);
     }
 
-    @Test
+    
     /**
-     * Should return null when Donor has been deleted findDonorById(Long)
+     *  Expects NoResultException to be thrown when Donor has been deleted findDonorById(Long)
      */
+    @Test(expected = NoResultException.class)
     public void findDonorById_shouldReturnNullDonorIsDeleted() {
         // 2 is Deleted Donor's ID.
-        assertNull(
-                "Donor object should null. Donor's Id is exist into Donor table but it is deleted.",
-                donorRepository.findDonorById(2l));
+        donorRepository.findDonorById(2l);
     }
 
     @Test
@@ -436,18 +427,18 @@ public class DonorRepositoryTest {
 
     }
 
-    @Test
+    
     /**
-     * Should return null when Donor Number does not match an existing Donor
+     * Expects NoResultException to be thrown  when Donor Number does not match an existing Donor
      * updateDonor(Donor)
      */
+    @Test(expected = NoResultException.class)
     public void updateDonor_shouldReturnNull() {
         Donor editDonor = new Donor();
         editDonor.setId(-1l);
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
-        assertNull("Donor Object should null.",
-                donorRepository.updateDonor(donorBackingForm.getDonor()));
+        donorRepository.updateDonor(donorBackingForm.getDonor());
     }
 
     @Test
@@ -628,28 +619,25 @@ public class DonorRepositoryTest {
                 .getDonorNumber().equals("000001"));
     }
 
-    @Test
     /**
-     * Should return donor with given Donor Number
+     * Expects NoResultException to be thrown when donor not exists
      * findDonorByDonorNumber(String,boolean)
      */
+    @Test(expected = NoResultException.class)
     public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteFalse() {
         // 000009 DonorNumber is not exist.
-        assertNull(
-                "Donor object should null.Because DonorNumber is not exist into database.",
-                donorRepository.findDonorByDonorNumber("000014", false));
+        donorRepository.findDonorByDonorNumber("000014", false);
     }
 
-    @Test
+
     /**
-     * Should return donor with given Donor Number
+     * Expects NoResultException to be thrown when donor with given donor number doesn't exist
      * findDonorByDonorNumber(String,boolean)
      */
+    @Test(expected = NoResultException.class)
     public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteTrue() {
-        // 000001 DonorNumber
-        assertNull(
-                "Donor object should null. Because Donor's Donor Number is exist into database table but that record is not deleted.",
-                donorRepository.findDonorByDonorNumber("000001", true));
+        //000001 donor number
+        donorRepository.findDonorByDonorNumber("000001", true);
     }
 
     @Test
@@ -734,15 +722,15 @@ public class DonorRepositoryTest {
 
     }
 
-    @Test
+    
     /**
      * Should return null deferral reason where deferral reason is deleted from
      * the database findDeferralReasonById(String)
      */
+    @Test(expected = NoResultException.class)
     public void findDeferralReasonById_shouldReturnNullDeferralReason() {
         // 7 ID is deleted from DeferralReason.
-        assertNull("Deferral Reason object should null.",
-                donorRepository.findDeferralReasonUsingId("7"));
+        donorRepository.findDeferralReasonUsingId("7");
     }
 
     @Test

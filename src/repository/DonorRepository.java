@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -67,15 +68,12 @@ public class DonorRepository {
 
     }
 
-    public Donor findDonorById(Long donorId) {
-        try {
+    public Donor findDonorById(Long donorId) throws NoResultException{
             String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
             TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
             query.setParameter("isDeleted", Boolean.FALSE);
             return query.setParameter("donorId", donorId).getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
+    
     }
 
     public Donor findDonorById(String donorId) {
@@ -178,7 +176,7 @@ public class DonorRepository {
         return query.getResultList();
     }
 
-    public Donor addDonor(Donor donor) {
+    public Donor addDonor(Donor donor)throws PersistenceException{
         updateDonorAutomaticFields(donor);
         em.persist(donor);
         em.flush();
@@ -197,26 +195,20 @@ public class DonorRepository {
         return existingDonor;
     }
 
-    public Donor findDonorByNumber(String donorNumber) {
-        try {
+    public Donor findDonorByNumber(String donorNumber) throws NoResultException{
             String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
             TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
             query.setParameter("isDeleted", Boolean.FALSE);
             return query.setParameter("donorNumber", donorNumber).getSingleResult();
-        } catch (NoResultException ex) {
-            ex.printStackTrace();
-            return null;
-        }
     }
 
-    public List<Donor> findAnyDonorStartsWith(String term) {
+    public List<Donor> findAnyDonorStartsWith(String term)throws NoResultException {
 
         term = term.trim();
         if (term.length() < 2) {
             return Arrays.asList(new Donor[0]);
         }
 
-        try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
             Root<Donor> root = cq.from(Donor.class);
@@ -245,10 +237,7 @@ public class DonorRepository {
                 return donors;
             }
             return new ArrayList<Donor>();
-        } catch (NoResultException ex) {
-            ex.printStackTrace();
-            return null;
-        }
+   
     }
 
     public void addAllDonors(List<Donor> donors) {
@@ -272,16 +261,13 @@ public class DonorRepository {
         donor.setDonorHash(DonorUtils.computeDonorHash(donor));
     }
 
-    public Donor findDonorByDonorNumber(String donorNumber, boolean isDelete) {
+    public Donor findDonorByDonorNumber(String donorNumber, boolean isDelete)throws NoResultException{
         Donor donor = null;
-        try {
-            String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
-            TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-            query.setParameter("isDeleted", isDelete);
-            donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
-        } catch (Exception e) {
-            // e.printStackTrace();
-        }
+        String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
+        TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
+        query.setParameter("isDeleted", isDelete);
+        donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
+
         return donor;
     }
 
@@ -369,24 +355,21 @@ public class DonorRepository {
         em.persist(donorDeferral);
     }
 
-    private DeferralReason findDeferralReasonById(String deferralReasonId) {
-        try {
+    private DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException{
             String queryString = "SELECT d FROM DeferralReason d WHERE "
                     + "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
             TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
             query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
             query.setParameter("isDeleted", false);
             return query.getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
+     
     }
 
     public DeferralReason findDeferralReasonUsingId(String deferralReasonId) {
         return this.findDeferralReasonById(deferralReasonId);
     }
 
-    public List<DonorDeferral> getDonorDeferrals(Long donorId) {
+    public List<DonorDeferral> getDonorDeferrals(Long donorId) throws NoResultException{
         String queryString = "SELECT d from DonorDeferral d WHERE "
                 + " d.deferredDonor.id=:donorId AND d.isVoided=:isVoided";
         TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);

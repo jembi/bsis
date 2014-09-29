@@ -8,9 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
@@ -103,13 +101,10 @@ public class DonorController {
     map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     
     
-    // include donor deferral status
-    List<DonorDeferral> donorDeferrals = null;
-    try {
-      donorDeferrals = donorRepository.getDonorDeferrals(id);  
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
+      // include donor deferral status
+      List<DonorDeferral> donorDeferrals = null;
+      donorDeferrals = donorRepository.getDonorDeferrals(id);
+
     Boolean isCurrentlyDeferred = donorRepository.isCurrentlyDeferred(donorDeferrals);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if(isCurrentlyDeferred){
@@ -212,91 +207,61 @@ public class DonorController {
   
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
-    public  
-    ResponseEntity<Map<String, Object>>
-            addDonor(@Valid  @RequestBody DonorBackingForm form) {
+    public
+            ResponseEntity<Map<String, Object>>
+            addDonor(@Valid @RequestBody DonorBackingForm form) {
 
         HttpStatus httpStatus = HttpStatus.CREATED;
         Map<String, Object> map = new HashMap<String, Object>();
-        boolean success = false;
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
         map.put("donorFields", formFields);
         Donor savedDonor = null;
-        
-            try {
-                Donor donor = form.getDonor();
-                donor.setIsDeleted(false);
-                // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
-                donor.setDonorNumber(utilController.getNextDonorNumber());
-                donor.setContact(form.getContact());
-                donor.setAddress(form.getAddress());
-                savedDonor = donorRepository.addDonor(donor);
-                map.put("hasErrors", false);
-                success = true;
-            } catch (EntityExistsException ex) {
-                ex.printStackTrace();
-                success = false;
-                httpStatus = HttpStatus.CONFLICT;
-                
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                success = false;
-                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
-        
 
-    
-    if (success) {
-      map.put("donorId", savedDonor.getId());
-      map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
-     
-    } else {
-      map.put("errorMessage", "Error creating donor. Please fix the errors noted below.");
-      map.put("firstTimeRender", false);
-      map.put("addDonorForm", form);
+        Donor donor = form.getDonor();
+        donor.setIsDeleted(false);
+        // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
+        donor.setDonorNumber(utilController.getNextDonorNumber());
+        donor.setContact(form.getContact());
+        donor.setAddress(form.getAddress());
+        savedDonor = donorRepository.addDonor(donor);
+        map.put("hasErrors", false);
+
+        map.put("donorId", savedDonor.getId());
+        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
+
+        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
     }
-
-   map.put("success", success);
-   return new ResponseEntity<Map<String, Object>>(map,httpStatus);
-  }
 
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public  ResponseEntity<Map<String,Object>>  
         updateDonor(@Valid @RequestBody DonorBackingForm form) {
 
-    HttpStatus httpStatus = HttpStatus.OK;
-    Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
-    String message = "";
+      HttpStatus httpStatus = HttpStatus.OK;
+      Map<String, Object> map = new HashMap<String, Object>();
+      boolean success = false;
+      String message = "";
     // only when the collection is correctly added the existingCollectedSample
-    // property will be changed
-    map.put("existingDonor", true);
+      // property will be changed
+      map.put("existingDonor", true);
 
-      try {
-        form.setIsDeleted(false);
-        Donor donor = form.getDonor();
-        donor.setContact(form.getContact());
-        donor.setAddress(form.getAddress());
-        Donor existingDonor = donorRepository.updateDonor(donor);
-        if (existingDonor == null) {
+      form.setIsDeleted(false);
+      Donor donor = form.getDonor();
+      donor.setContact(form.getContact());
+      donor.setAddress(form.getAddress());
+      Donor existingDonor = donorRepository.updateDonor(donor);
+      if (existingDonor == null) {
           map.put("hasErrors", true);
           httpStatus = HttpStatus.BAD_REQUEST;
           success = false;
           map.put("existingDonor", false);
           message = "Donor does not already exist.";
-        }
-        else {
+      } else {
           map.put("hasErrors", false);
           success = true;
           message = "Donor Successfully Updated";
-        }
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
       }
+
 
     map.put("editDonorForm", form);
     map.put("success", success);
@@ -317,15 +282,7 @@ public class DonorController {
     HttpStatus httpStatus = HttpStatus.NO_CONTENT;
     boolean success = true;
     String errMsg = "";
-    try {
-      donorRepository.deleteDonor(id);
-    } catch (Exception ex) {
-    	LOGGER.error("Internal Exception");
-    	LOGGER.error(ex.getMessage());    	      
-      success = false;
-      errMsg = "Internal Server Error";
-      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    }
+    donorRepository.deleteDonor(id);
 
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", success);
