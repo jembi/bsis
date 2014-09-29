@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -50,16 +52,13 @@ public class CollectionBatchRepository {
     return query.setParameter("batchNumber", batchNumber).getSingleResult();
   }
 
-  public CollectionBatch findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber) {
+  public CollectionBatch
+         findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber)throws NoResultException, NonUniqueResultException{
     String queryString = "SELECT b FROM CollectionBatch b " +
         "WHERE b.batchNumber = :batchNumber";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     CollectionBatch batch = null;
-    try {
-      batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
+    batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
     return batch;
   }
 

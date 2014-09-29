@@ -3,6 +3,7 @@ package controller;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,6 @@ public class GlobalControllerExceptionHandler {
     for (FieldError error : errors.getBindingResult().getFieldErrors()) {
         errorMap.put(error.getField(), error.getDefaultMessage());
     }
-
     return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
@@ -59,5 +59,19 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.NOT_FOUND);
   }
   
-   
+ /**
+    * Thrown when the application calls Query.uniqueResult() and the query 
+    * returned more than one result. Unlike all other Hibernate exceptions, this one is recoverable!
+  */
+  @ExceptionHandler(NonUniqueResultException .class)
+  public ResponseEntity<Map<String, String>> handleNonUniqueResultException (
+        NoResultException errors) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", errors.getMessage());
+    errors.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+  
 }
