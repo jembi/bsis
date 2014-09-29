@@ -276,18 +276,10 @@ public class DonorController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
   public 
-  ResponseEntity<Map<String, Object>> deleteDonor(
+  ResponseEntity deleteDonor(
       @PathVariable Long id) {
-
-    HttpStatus httpStatus = HttpStatus.NO_CONTENT;
-    boolean success = true;
-    String errMsg = "";
     donorRepository.deleteDonor(id);
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return  new ResponseEntity<Map<String, Object>>(m, httpStatus);
+    return  new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "{donorNumber}/print",method = RequestMethod.GET)

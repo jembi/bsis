@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import model.producttype.ProductType;
@@ -51,7 +52,7 @@ public class ProductTypeRepository {
     return false;
   }
 
-  public ProductType getProductTypeById(Integer id) {
+  public ProductType getProductTypeById(Integer id) throws NoResultException, NonUniqueResultException{
     TypedQuery<ProductType> query;
     query = em.createQuery("SELECT pt from ProductType pt " +
             "where pt.id=:id", ProductType.class);
@@ -61,7 +62,7 @@ public class ProductTypeRepository {
     return query.getSingleResult();
   }
 
-  public void saveNewProductType(Map<String, Object> newProductTypeAsMap) {
+  public void saveNewProductType(Map<String, Object> newProductTypeAsMap) throws PersistenceException{
     ProductType productType = new ProductType();
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
     productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
@@ -94,7 +95,7 @@ public class ProductTypeRepository {
     em.persist(productType);
   }
 
-  public void deactivateProductType(Integer productTypeId) {
+  public void deactivateProductType(Integer productTypeId){
     ProductType productType = getProductTypeById(productTypeId);
     productType.setIsDeleted(true);
     em.merge(productType);
@@ -122,7 +123,8 @@ public class ProductTypeRepository {
     return query.getResultList();
   }
 
-  public ProductTypeCombination getProductTypeCombinationById(Integer id) {
+  public ProductTypeCombination getProductTypeCombinationById(Integer id)
+          throws NoResultException, NonUniqueResultException{
     TypedQuery<ProductTypeCombination> query;
     query = em.createQuery("SELECT pt from ProductTypeCombination pt " +
             "where pt.id=:id", ProductTypeCombination.class);
@@ -132,7 +134,7 @@ public class ProductTypeRepository {
     return query.getSingleResult();
   }
 
-  public void updateProductType(Map<String, Object> newProductTypeAsMap) {
+  public void updateProductType(Map<String, Object> newProductTypeAsMap){
     String productTypeId = (String) newProductTypeAsMap.get("id");
     ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
@@ -188,19 +190,13 @@ public class ProductTypeRepository {
     em.persist(productTypeCombination);
   }
 
-  public ProductType getProductTypeByName(String productTypeName) {
+  public ProductType getProductTypeByName(String productTypeName) throws NoResultException, NonUniqueResultException{
     TypedQuery<ProductType> query;
     query = em.createQuery("SELECT pt from ProductType pt " +
             "where pt.productType=:productTypeName", ProductType.class);
     query.setParameter("productTypeName", productTypeName);
     ProductType productType = null;
-    try {
-      productType = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    } catch (NonUniqueResultException ex) {
-      ex.printStackTrace();
-    }
+    productType = query.getSingleResult();
     return productType;
   }
   

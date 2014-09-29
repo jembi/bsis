@@ -59,7 +59,7 @@ public class DonorRepository {
         em.flush();
     }
 
-    public Donor deleteDonor(Long donorId) {
+    public Donor deleteDonor(Long donorId){
         Donor existingDonor = findDonorById(donorId);
         existingDonor.setIsDeleted(Boolean.TRUE);
         em.merge(existingDonor);
