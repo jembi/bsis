@@ -5,12 +5,18 @@ import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
+import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -71,6 +77,86 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("errorMessage", errors.getMessage());
     errors.printStackTrace();
     return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+  //Service layer Exceptions
+  
+  /**
+  *  Exception thrown on a type mismatch when trying to set a bean property.
+  */
+  @ExceptionHandler(NoSuchRequestHandlingMethodException.class)
+  public ResponseEntity<Map<String, String>> handleNoSuchRequestHandlingMethodException(
+        NoSuchRequestHandlingMethodException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.NOT_FOUND);
+  }
+  
+  /**
+  *   Exception thrown when a request handler does not support a specific request method.
+  */
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  public ResponseEntity<Map<String, String>> handleHttpRequestMethodNotSupportedException(
+        NoSuchRequestHandlingMethodException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.METHOD_NOT_ALLOWED);
+  }
+  
+  /**
+  *  Exception thrown when a client POSTs, PUTs, or PATCHes content of a type not supported   by request handler.
+  */
+  @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+  public ResponseEntity<Map<String, String>> handleHttpMediaTypeNotSupportedException(
+        HttpMediaTypeNotSupportedException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+  }
+  
+  /**
+  *  indicates a missing parameter.
+  */
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseEntity<Map<String, String>> handleMissingServletRequestParameterException(
+        MissingServletRequestParameterException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
+  }
+  
+  /**
+  *   Exception thrown when no suitable editor or converter can be found for a bean property.
+  */
+  @ExceptionHandler(ConversionNotSupportedException.class)
+  public ResponseEntity<Map<String, String>> handleConversionNotSupportedException(
+        ConversionNotSupportedException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+  /**
+  *  Exception thrown on a type mismatch when trying to set a bean property.
+  */
+  @ExceptionHandler(TypeMismatchException.class)
+  public ResponseEntity<Map<String, String>> TypeMismatchException(
+        TypeMismatchException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_GATEWAY);
   }
   
   
