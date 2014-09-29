@@ -623,21 +623,23 @@ public class DonorRepositoryTest {
      * Expects NoResultException to be thrown when donor not exists
      * findDonorByDonorNumber(String,boolean)
      */
-    @Test(expected = NoResultException.class)
+    @Test
     public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteFalse() {
         // 000009 DonorNumber is not exist.
-        donorRepository.findDonorByDonorNumber("000014", false);
+         assertNull("Donor with donor number 000014 should return null",
+        donorRepository.findDonorByDonorNumber("000014", false));
     }
 
 
     /**
-     * Expects NoResultException to be thrown when donor with given donor number doesn't exist
+     * Expects null  when donor with given donor number doesn't exist
      * findDonorByDonorNumber(String,boolean)
      */
-    @Test(expected = NoResultException.class)
+    @Test
     public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteTrue() {
         //000001 donor number
-        donorRepository.findDonorByDonorNumber("000001", true);
+        assertNull("Donor with donor number 000001 should return null",
+        donorRepository.findDonorByDonorNumber("000001", true));
     }
 
     @Test

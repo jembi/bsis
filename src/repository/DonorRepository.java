@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
@@ -261,17 +262,21 @@ public class DonorRepository {
         donor.setDonorHash(DonorUtils.computeDonorHash(donor));
     }
 
-    public Donor findDonorByDonorNumber(String donorNumber, boolean isDelete)throws NoResultException{
+    public Donor findDonorByDonorNumber(String donorNumber, boolean isDelete) {
         Donor donor = null;
         String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
         TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
         query.setParameter("isDeleted", isDelete);
+        try{
         donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
-
+        }
+        catch(Exception exception)
+        {
+        }
         return donor;
     }
 
-    /*
+    /*y
      public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
      String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber";
      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
