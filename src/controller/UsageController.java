@@ -12,6 +12,8 @@ import model.product.Product;
 import model.request.Request;
 import model.usage.ProductUsage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -89,11 +91,8 @@ public class UsageController {
 
   @RequestMapping(value = "/addUsage", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public Map<String, Object> addUsage(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addUsageForm") @Valid ProductUsageBackingForm form,
-      BindingResult result, Model model) {
+  public ResponseEntity<Map<String, Object>> addUsage(
+      @Valid ProductUsageBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
@@ -102,41 +101,19 @@ public class UsageController {
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     map.put("usageFields", formFields);
 
-    ProductUsage savedUsage = null;
-    if (result.hasErrors()) {
-      map.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
-        ProductUsage productUsage = form.getUsage();
-        productUsage.setIsDeleted(false);
-        savedUsage = usageRepository.addUsage(productUsage);
-        map.put("hasErrors", false);
-        success = true;
-        form = new ProductUsageBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
-    }
+      ProductUsage savedUsage = null;
 
-    if (success) {
+      ProductUsage productUsage = form.getUsage();
+      productUsage.setIsDeleted(false);
+      savedUsage = usageRepository.addUsage(productUsage);
+      map.put("hasErrors", false);
+      form = new ProductUsageBackingForm();
+
       map.put("usageId", savedUsage.getId());
       map.put("usage",  new ProductUsageViewModel(savedUsage));
       map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
-    } else {
-      map.put("errorMessage", "Error creating usage. Please fix the errors noted below.");
-      map.put("firstTimeRender", false);
-      map.put("addUsageForm", form);
-      map.put("refreshUrl", "addUsageFormGenerator.html");
-    }
 
-    map.put("success", success);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
@@ -203,11 +180,8 @@ public class UsageController {
 
   @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  Map<String, Object> addUsageForProduct(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addUsageForProductForm") @Valid ProductUsageBackingForm form,
-      BindingResult result, Model model) {
+  public  ResponseEntity<Map<String, Object>> addUsageForProduct(
+       @Valid ProductUsageBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
@@ -216,40 +190,20 @@ public class UsageController {
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     map.put("usageFields", formFields);
 
-    ProductUsage savedUsage = null;
-    if (result.hasErrors()) {
-      map.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
-        ProductUsage productUsage = form.getUsage();
-        productUsage.setIsDeleted(false);
-        savedUsage = usageRepository.addUsage(productUsage);
-        map.put("hasErrors", false);
-        success = true;
-        form = new ProductUsageBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
-    }
+      ProductUsage savedUsage = null;
 
-    if (success) {
+      ProductUsage productUsage = form.getUsage();
+      productUsage.setIsDeleted(false);
+      savedUsage = usageRepository.addUsage(productUsage);
+      map.put("hasErrors", false);
+      success = true;
+      form = new ProductUsageBackingForm();
+
       map.put("usageId", savedUsage.getId());
-      map.put("usage",  new ProductUsageViewModel(savedUsage));
-    } else {
-      map.put("errorMessage", "Error creating usage. Please fix the errors noted below.");
-      map.put("firstTimeRender", false);
-      map.put("addUsageForm", form);
-      map.put("refreshUrl", "addUsageForProductFormGenerator.html");
-    }
-
+      map.put("usage", new ProductUsageViewModel(savedUsage));
+    
     map.put("success", success);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
 }

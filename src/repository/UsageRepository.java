@@ -66,20 +66,24 @@ public class UsageRepository {
     query.setParameter("useIndications", useIndications);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    try {
-      Date from = (dateUsedFrom == null || dateUsedFrom.equals("")) ? dateFormat
-          .parse("31/12/1970") : dateFormat.parse(dateUsedFrom);
+      Date from = null;
+      try {
+          from = (dateUsedFrom == null || dateUsedFrom.equals("")) ? dateFormat
+                  .parse("31/12/1970") : dateFormat.parse(dateUsedFrom);
+      } catch (ParseException ex) {
+          ex.printStackTrace();
+      }
       query.setParameter("dateUsedFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
-      Date to = (dateUsedTo == null || dateUsedTo.equals("")) ? dateFormat
-          .parse(dateFormat.format(new Date())) : dateFormat.parse(dateUsedTo);
+   
+      Date to = null;
+      try {
+          to = (dateUsedTo == null || dateUsedTo.equals("")) ? dateFormat
+                  .parse(dateFormat.format(new Date())) : dateFormat.parse(dateUsedTo);
+      } catch (ParseException ex) {
+          ex.printStackTrace();
+      }
       query.setParameter("dateUsedTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+   
 
     List<ProductUsage> resultList = query.getResultList();
     return resultList;
