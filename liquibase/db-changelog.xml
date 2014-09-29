@@ -3359,5 +3359,24 @@
 
 
  </changeSet>
+ 
+ 	<!-- Add new teststaff user with TTI Testing Staff role  -->
+	<changeSet id="201409292305" author="danfuterman">		
+		<insert tableName="User">
+			<column name="id" value="2"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="teststaff"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="teststaff"></column>
+			<column name="username" value="teststaff"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="2"></column>
+			<column name="roles_id" value="12"></column>
+		</insert>
+	</changeSet>
 
 </databaseChangeLog>	
