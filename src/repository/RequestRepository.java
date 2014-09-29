@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import controller.UtilController;
+import javax.persistence.NonUniqueResultException;
 
 @Repository
 @Transactional
@@ -63,23 +64,20 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public Request findRequest(String requestNumber) {
+  public Request findRequest(String requestNumber)throws NoResultException, NonUniqueResultException{
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
-      try {
-        request = query.getSingleResult();
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-      }
+      request = query.getSingleResult();
+     
     }
     return request;
   }
 
-  public Request findRequestWithIssuedProducts(String requestNumber) {
+  public Request findRequestWithIssuedProducts(String requestNumber)throws NoResultException, NonUniqueResultException{
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
@@ -87,11 +85,7 @@ public class RequestRepository {
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
-      try {
-        request = query.getSingleResult();
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-      }
+      request = query.getSingleResult();
     }
     return request;
   }
@@ -288,40 +282,35 @@ public class RequestRepository {
     return productRequest;
   }
 
-  private Date getDateRequestedAfterOrDefault(String requestedAfter) {
+  private Date getDateRequestedAfterOrDefault(String requestedAfter) throws ParseException {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date from = null;
-    try {
+      Date from = null;
       from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
-          .parse("31/12/1970") : dateFormat.parse(requestedAfter);
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
-    return from;      
+              .parse("31/12/1970") : dateFormat.parse(requestedAfter);
+      return from;
   }
 
   private Date getDateRequiredByOrDefault(String dateRequiredBy) {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date to = null;
-    try {
-      if (StringUtils.isBlank(dateRequiredBy)) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, 365);
-        to = cal.getTime();
-      }
-      else {
-        to = dateFormat.parse(dateRequiredBy);
-      }
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
-    return to;      
+        Date to = null;
+        if (StringUtils.isBlank(dateRequiredBy)) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DATE, 365);
+            to = cal.getTime();
+        } else {
+        try {
+            to = dateFormat.parse(dateRequiredBy);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        }
+    return to ;
   }
 
   public List<Object> findRequests(String requestNumber, List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) {
+      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams)  {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(requestNumber)) {
@@ -353,7 +342,11 @@ public class RequestRepository {
     else {
       query.setParameter("productTypeIds", productTypeIds);
       query.setParameter("requestSiteIds", requestSiteIds);
-      query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
+        try {
+            query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
       query.setParameter("requiredBy", getDateRequiredByOrDefault(requiredBy));
       if (!includeSatisfiedRequests)
         query.setParameter("fulfilled", Boolean.FALSE);
@@ -513,7 +506,7 @@ public class RequestRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,
       Date dateRequestedTo, String aggregationCriteria,
-      List<String> sites, List<String> bloodGroups) {
+      List<String> sites, List<String> bloodGroups){
 
     List<Long> siteIds = new ArrayList<Long>();
     if (sites != null) {
@@ -558,15 +551,14 @@ public class RequestRepository {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
       Date lowerDate = null;
-      Date upperDate = null;
-      try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
-      } catch (ParseException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-      }
-      gcal.setTime(lowerDate);
+        Date upperDate = null;
+        try {
+            lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
+            upperDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
+         } catch (ParseException ex) {
+             ex.printStackTrace();
+        }
+        gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
         gcal.add(incrementBy, 1);
@@ -582,8 +574,12 @@ public class RequestRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
-        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Date formattedDate = null;
+        try {
+            formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
           Long newVal = m.get(utcTime) + (Long) result[0];
@@ -591,10 +587,6 @@ public class RequestRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
     }
     return resultMap;
   }
