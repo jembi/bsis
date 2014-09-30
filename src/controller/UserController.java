@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,7 +96,7 @@ public class UserController {
     Map<String, Object>
             addUser(HttpServletRequest request,
                     HttpServletResponse response,
-                    @Valid UserBackingForm form) {
+                    @Valid @RequestBody UserBackingForm form) {
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
 
@@ -139,7 +140,7 @@ public class UserController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public Map<String, Object> updateUser(
             HttpServletResponse response,
-            @Valid UserBackingForm form) {
+            @Valid @RequestBody UserBackingForm form) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
