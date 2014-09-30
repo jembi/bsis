@@ -313,45 +313,22 @@ public class RequestsController {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
 
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     map.put("requestFields", formFields);
 
-    Request savedRequest = null;
-   
-      try {
-        Request productRequest = form.getRequest();
-        productRequest.setIsDeleted(false);
-        savedRequest = requestRepository.addRequest(productRequest);
-        map.put("hasErrors", false);
-        success = true;
-        form = new RequestBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        httpStatus = HttpStatus.CONFLICT;
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        success = false;
-      }
-    
+      Request savedRequest = null;
 
-    if (success) {
+      Request productRequest = form.getRequest();
+      productRequest.setIsDeleted(false);
+      savedRequest = requestRepository.addRequest(productRequest);
+      map.put("hasErrors", false);
+      form = new RequestBackingForm();
       map.put("requestId", savedRequest.getId());
-      map.put("request",  new RequestViewModel(savedRequest));
+      map.put("request", new RequestViewModel(savedRequest));
       map.put("addAnotherRequestUrl", "addRequestFormGenerator.html");
-    } else {
-      map.put("errorMessage", "Error creating request. Please fix the errors noted below.");
-      map.put("firstTimeRender", false);
-      map.put("addRequestForm", form);
-      map.put("refreshUrl", "addRequestFormGenerator.html");
-    }
-
-    map.put("success", success);
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   @RequestMapping(value="/listIssuedProductsForRequest", method=RequestMethod.GET)
@@ -382,7 +359,6 @@ public class RequestsController {
     // property will be changed
     map.put("existingRequest", true);
    
-      try {
         form.setIsDeleted(false);
         Request existingRequest = requestRepository.updateRequest(form.getRequest());
         if (existingRequest == null) {
@@ -397,17 +373,7 @@ public class RequestsController {
           success = true;
           message = "Request Successfully Updated";
         }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        httpStatus = HttpStatus.CONFLICT;
-        success = false;
-        message = "Request Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
+      
    
 
     map.put("editRequestForm", form);
@@ -431,25 +397,10 @@ public class RequestsController {
 
   @RequestMapping(value = "/deleteRequest", method = RequestMethod.DELETE)
   public 
-  ResponseEntity<Map<String, ? extends Object>> deleteProduct(
+  HttpStatus deleteProduct(
       @RequestParam("requestId") Long requestId) {
-
-    HttpStatus httpStatus = HttpStatus.NO_CONTENT;
-    boolean success = true;
-    String errMsg = "";
-    try {
-      requestRepository.deleteRequest(requestId);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return new ResponseEntity<Map<String, ? extends Object>>(m, httpStatus);
+    requestRepository.deleteRequest(requestId);
+    return HttpStatus.NO_CONTENT;
   }
 
 
