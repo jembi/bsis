@@ -147,7 +147,7 @@ public class GlobalControllerExceptionHandler {
   }
   
   /**
-  *  Exception thrown on a type mismatch when trying to set a bean property.
+  *  Thrown by HttpMessageConverter implementations when the read method fails..
   */
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Map<String, String>> handleHttpMessageNotReadableException(
