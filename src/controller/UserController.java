@@ -144,42 +144,29 @@ public class UserController {
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
         String message = "";
-    // only when the collection is correctly added the existingCollectedSample
+        // only when the collection is correctly added the existingCollectedSample
         // property will be changed
         map.put("existingUser", true);
 
-        try {
-            form.setIsDeleted(false);
-            User user = form.getUser();
-            if (form.isModifyPassword()) {
-                user.setPassword(form.getPassword());
-            } else {
-                user.setPassword(form.getCurrentPassword());
-            }
-            user.setRoles(assignUserRoles(form));
-            user.setIsActive(true);
-            User existingUser = userRepository.updateUser(user, true);
-            if (existingUser == null) {
-                map.put("hasErrors", true);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                success = false;
-                map.put("existingUser", false);
-            } else {
-                map.put("hasErrors", false);
-                success = true;
-                message = "User Successfully Updated";
-            }
-        } catch (EntityExistsException ex) {
-            ex.printStackTrace();
+        form.setIsDeleted(false);
+        User user = form.getUser();
+        if (form.isModifyPassword()) {
+            user.setPassword(form.getPassword());
+        } else {
+            user.setPassword(form.getCurrentPassword());
+        }
+        user.setRoles(assignUserRoles(form));
+        user.setIsActive(true);
+        User existingUser = userRepository.updateUser(user, true);
+        if (existingUser == null) {
+            map.put("hasErrors", true);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             success = false;
-            message = "User Already exists.";
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            success = false;
-            message = "Internal Error. Please try again or report a Problem.";
-
+            map.put("existingUser", false);
+        } else {
+            map.put("hasErrors", false);
+            success = true;
+            message = "User Successfully Updated";
         }
 
         //   m.put("userRoles", form.getUserRole());
