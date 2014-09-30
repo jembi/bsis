@@ -13,17 +13,12 @@ import javax.validation.Valid;
 import model.user.Role;
 import model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import repository.RoleRepository;
 import repository.UserRepository;
@@ -208,19 +203,4 @@ public class UserController {
         return userRole;
     }
 
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    
-    public Map<String, String> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException errors) {
-        Map<String, String> errorMap = new HashMap<String, String>();
-        errorMap.put("hasErrors", "true");
-        errorMap.put("errorMessage", errors.getMessage());
-        errors.printStackTrace();
-        for (FieldError error : errors.getBindingResult().getFieldErrors()) {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-        }
-
-        return errorMap;
-    }
 }
