@@ -17,7 +17,7 @@ public class UserBackingForm {
 
     private boolean modifyPassword;
     private List<String> userRoles;
-    private String userConfirPassword;
+    private String userConfirmPassword;
     private String currentPassword;
     private String roleAdmin;
     private String roleDonorLab;
@@ -164,23 +164,23 @@ public class UserBackingForm {
         return user.getRoles();
     }
 
-    @JsonIgnore
+  
     public List<String> getUserRoles() {
         return userRoles;
     }
 
     /**
-     * @return the userConfirPassword
+     * @return the userConfirmPassword
      */
-    public String getUserConfirPassword() {
-        return userConfirPassword;
+    public String getUserConfirmPassword() {
+        return userConfirmPassword;
     }
 
     /**
-     * @param userConfirPassword the userConfirPassword to set
+     * @param userConfirmPassword the userConfirPassword to set
      */
-    public void setUserConfirPassword(String userConfirPassword) {
-        this.userConfirPassword = userConfirPassword;
+    public void setUserConfirmPassword(String userConfirmPassword) {
+        this.userConfirmPassword = userConfirmPassword;
     }
 
     /**
