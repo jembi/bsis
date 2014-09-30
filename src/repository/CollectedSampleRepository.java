@@ -414,7 +414,12 @@ public class CollectedSampleRepository {
     CollectedSample c = null;
     try{
     c = query.getSingleResult();
-    }catch(Exception ex){}
+    }catch(NoResultException ex){
+       return null;
+    }
+    catch(NonUniqueResultException ex){
+        ex.printStackTrace();
+     }
     return c;
   }
 

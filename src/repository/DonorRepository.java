@@ -270,11 +270,16 @@ public class DonorRepository {
         try{
         donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
         }
-        catch(Exception exception)
-        {
+        catch(NoResultException ex){
+            return null;
         }
-        return donor;
+        catch(NonUniqueResultException ex){
+            ex.printStackTrace();
+        }
+       return donor;
     }
+    
+
 
     /*y
      public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
