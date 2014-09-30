@@ -183,7 +183,7 @@ public class DonorRepositoryTest {
      * Expects NoResultException to be thrown  when Donor id does not exist findDonorById(Long)
      */
     @Test(expected = NoResultException.class)
-    public void findDonorById_shouldReturnNull() {
+    public void findDonorById_shouldExpectNoResultException() {
         // 18 ID is not exist into Donor table.
         donorRepository.findDonorById(18l);
     }
@@ -193,7 +193,7 @@ public class DonorRepositoryTest {
      *  Expects NoResultException to be thrown when Donor has been deleted findDonorById(Long)
      */
     @Test(expected = NoResultException.class)
-    public void findDonorById_shouldReturnNullDonorIsDeleted() {
+    public void findDonorById_shouldExpectNoResultExceptionWhenDonorIsDeleted() {
         // 2 is Deleted Donor's ID.
         donorRepository.findDonorById(2l);
     }
@@ -433,7 +433,7 @@ public class DonorRepositoryTest {
      * updateDonor(Donor)
      */
     @Test(expected = NoResultException.class)
-    public void updateDonor_shouldReturnNull() {
+    public void updateDonor_shouldExpectNoResultException() {
         Donor editDonor = new Donor();
         editDonor.setId(-1l);
         donorBackingForm = new DonorBackingForm(editDonor);
@@ -620,7 +620,7 @@ public class DonorRepositoryTest {
     }
 
     /**
-     * Expects NoResultException to be thrown when donor not exists
+     * Expects null when donor not exists
      * findDonorByDonorNumber(String,boolean)
      */
     @Test
@@ -730,7 +730,7 @@ public class DonorRepositoryTest {
      * the database findDeferralReasonById(String)
      */
     @Test(expected = NoResultException.class)
-    public void findDeferralReasonById_shouldReturnNullDeferralReason() {
+    public void findDeferralReasonById_shouldExpectNoResultExceptionWhenDeferralReason() {
         // 7 ID is deleted from DeferralReason.
         donorRepository.findDeferralReasonUsingId("7");
     }
