@@ -53,10 +53,10 @@ public class UserBackingFormValidator implements Validator {
   
  
   private void comparePassword(UserBackingForm form, Errors errors) {
-	if( (form.getPassword()==null||form.getPassword().isEmpty() ) && (form.getUserConfirPassword()==null||form.getUserConfirPassword().isEmpty()) )
+	if( (form.getPassword()==null||form.getPassword().isEmpty() ) && (form.getUserConfirmPassword()==null||form.getUserConfirmPassword().isEmpty()) )
   	    errors.rejectValue("user.password","user.incorrect" ,"Password cannot be blank");
   	    else
-  	if(!form.getPassword().equals(form.getUserConfirPassword())){
+  	if(!form.getPassword().equals(form.getUserConfirmPassword())){
   		errors.rejectValue("user.password","user.incorrect" ,"Passwords do not match");
   	}
   
