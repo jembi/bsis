@@ -28,7 +28,7 @@ import utils.PermissionConstants;
 import viewmodel.CollectionBatchViewModel;
 
 @RestController
-@RequestMapping("/collectionbatch")
+@RequestMapping("/donationbatch")
 public class CollectionBatchController {
 
   @Autowired
@@ -58,7 +58,7 @@ public class CollectionBatchController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/findCollectionBatchFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
 
@@ -73,7 +73,7 @@ public class CollectionBatchController {
     return map;
   }
 
-  @RequestMapping(value = "/findCollectionBatch", method = RequestMethod.GET)
+  @RequestMapping(value = "/find", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  Map<String, Object> findCollectionBatch(HttpServletRequest request,
           @RequestParam(value = "batchNumber", required = false) String batchNumber,

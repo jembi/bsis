@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +53,7 @@ import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
+@RequestMapping("tti")
 public class TTIController {
 
 	private static final Logger LOGGER = Logger.getLogger(TTIController.class);
@@ -84,7 +86,7 @@ public class TTIController {
 		return reqUrl;
 	}
 
-	@RequestMapping(value = "/ttiFormGenerator", method = RequestMethod.GET)
+	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> getTTIForm(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -110,7 +112,7 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/saveTTITests", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveTests", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveTTITests(
 			@RequestParam("collectionNumber") String collectionNumber,
 			@RequestParam("ttiInput") String ttiInput) {
@@ -220,11 +222,10 @@ public class TTIController {
 		return ttiInputMap;
 	}
 
-	@RequestMapping(value = "/showTTIResultsForCollection", method = RequestMethod.GET)
+	@RequestMapping(value = "/results/{collectionId}", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
 	public Map<String, Object> showTTIResultsForCollection(HttpServletRequest request,
-			HttpServletResponse response,
-			@RequestParam(value = "collectionId") String collectionId) {
+			@PathVariable String collectionId) {
                 Map<String, Object> map = new HashMap<String, Object>();
 		collectionId = collectionId.trim();
 		Long collectedSampleId = Long.parseLong(collectionId);
@@ -263,7 +264,7 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/saveAdditionalTTITests", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveadditionaltests", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
 			@RequestParam(value = "collectionId") String collectionId,
 			@RequestParam(value = "saveTestsData") String saveTestsDataStr) {
@@ -297,7 +298,7 @@ public class TTIController {
 		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
 
-	@RequestMapping(value = "/saveAllTestResults", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveAlltestresults", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public 
 	Map<String, Object> saveAllTestResults(
@@ -373,7 +374,7 @@ public class TTIController {
         */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "saveTTIResultsOnPlate", method = RequestMethod.POST)
+	@RequestMapping(value = "saveresultsonplate", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
 			HttpServletResponse response,
@@ -443,7 +444,7 @@ public class TTIController {
 	}
         * */
 
-	@RequestMapping(value = "/uploadTTIResultsGenerator", method = RequestMethod.POST)
+	@RequestMapping(value = "/uploadresults", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(
 			MultipartHttpServletRequest request, HttpServletResponse response)

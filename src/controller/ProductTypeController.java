@@ -18,7 +18,7 @@ import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("producttype")
+@RequestMapping("componenttype")
 public class ProductTypeController {
 
   @Autowired
