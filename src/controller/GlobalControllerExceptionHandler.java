@@ -1,6 +1,7 @@
 package controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.NoResultException;
@@ -134,6 +135,20 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
+    /**
+  * Thrown to indicate that the application has attempted to convert a
+    string to one of the numeric types, but that the string does not have the appropriate format.
+  */
+  @ExceptionHandler(NumberFormatException.class)
+  public ResponseEntity<Map<String, String>> handleNumberFormatException(
+        NumberFormatException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
   /**
   *  Exception thrown on a type mismatch when trying to set a bean property.
   */
@@ -147,6 +162,36 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_GATEWAY);
   }
   
+   /**
+  * Specialized sub-class of JsonMappingException that is used when the underlying problem appears 
+    to be that of bad formatting of a value to deserialize.
+  */
+  @ExceptionHandler(InvalidFormatException.class)
+  public ResponseEntity<Map<String, String>> handleInvalidFormatException(
+        InvalidFormatException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
+  }
+  
+    /**
+  * Checked exception used to signal fatal problems with mapping of content.
+  * One additional feature is the ability to denote relevant path of references (during serialization/deserialization) to help in troubleshooting.
+  */
+  @ExceptionHandler(JsonMappingException.class)
+  public ResponseEntity<Map<String, String>> handleJsonMappingException(
+        JsonMappingException error) {
+    Map<String, String> errorMap = new HashMap<String, String>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("errorMessage", error.getMessage());
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+
+
   /**
   *  Thrown by HttpMessageConverter implementations when the read method fails..
   */
@@ -166,34 +211,6 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(HttpMessageNotWritableException.class)
   public ResponseEntity<Map<String, String>> handleHttpMessageNotWritableException(
         HttpMessageNotWritableException error) {
-    Map<String, String> errorMap = new HashMap<String, String>();
-    errorMap.put("hasErrors", "true");
-    errorMap.put("errorMessage", error.getMessage());
-    error.printStackTrace();
-    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-  
-  /**
-  * Thrown to indicate that the application has attempted to convert a
-    string to one of the numeric types, but that the string does not have the appropriate format.
-  */
-  @ExceptionHandler(NumberFormatException.class)
-  public ResponseEntity<Map<String, String>> handleNumberFormatException(
-        NumberFormatException error) {
-    Map<String, String> errorMap = new HashMap<String, String>();
-    errorMap.put("hasErrors", "true");
-    errorMap.put("errorMessage", error.getMessage());
-    error.printStackTrace();
-    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-  
-  /**
-  * Checked exception used to signal fatal problems with mapping of content.
-  * One additional feature is the ability to denote relevant path of references (during serialization/deserialization) to help in troubleshooting.
-  */
-  @ExceptionHandler(JsonMappingException.class)
-  public ResponseEntity<Map<String, String>> handleJsonMappingException(
-        JsonMappingException error) {
     Map<String, String> errorMap = new HashMap<String, String>();
     errorMap.put("hasErrors", "true");
     errorMap.put("errorMessage", error.getMessage());
