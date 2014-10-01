@@ -1,11 +1,14 @@
 package model.producttype;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +21,7 @@ import org.hibernate.envers.NotAudited;
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class ProductType {
 
   @Id
@@ -38,7 +42,7 @@ public class ProductType {
   private ProductTypeTimeUnits expiresAfterUnits;
 
   @NotAudited
-  @ManyToMany(mappedBy="productTypes")
+  @ManyToMany(mappedBy="productTypes", fetch = FetchType.EAGER)
   private Set<ProductTypeCombination> productTypeCombinations;
 
   /**
