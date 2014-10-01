@@ -370,7 +370,7 @@ public class AdminController {
     return map;
   }
 
-  @RequestMapping(value="/crossmatchypes", method=RequestMethod.GET)
+  @RequestMapping(value="/crossmatchtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
   public  Map<String, Object> configureCrossmatchTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
