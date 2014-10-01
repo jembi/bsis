@@ -264,13 +264,7 @@ public class UtilController {
 
     Donor donor = null;
     if (donorId != null && !donorId.isEmpty()) {
-      try {
         donor = donorRepository.findDonorById(donorId);
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-      }
     }
     else if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
@@ -327,7 +321,6 @@ public class UtilController {
     Map<String, String> config = getConfigProperty("donationRequirements");
     String errorMessage = "";
     if (config.get("ageLimitsEnabled").equals("true")) {
-      try {
         Integer minAge = Integer.parseInt(config.get("minimumAge"));
         Integer maxAge = Integer.parseInt(config.get("maximumAge"));
         Integer donorAge = DonorUtils.computeDonorAge(birthDate);
@@ -339,9 +332,7 @@ public class UtilController {
             errorMessage = "Donor age must be between " + minAge + " and " + maxAge + " years.";
           }
         }
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-      }
+     
     }
     return errorMessage;
   }
@@ -459,11 +450,7 @@ public class UtilController {
 
   public Product findProductById(String productId) {
     Product product = null;
-    try {
-      product = productRepository.findProductById(Long.parseLong(productId));
-    } catch (NumberFormatException ex) {
-      ex.printStackTrace();
-    }
+    product = productRepository.findProductById(Long.parseLong(productId));
     return product;
   }
 

@@ -163,13 +163,13 @@ public class GlobalControllerExceptionHandler {
   *  Thrown by HttpMessageConverter implementations when the write method fails.
   */
   @ExceptionHandler(HttpMessageNotWritableException.class)
-  public ResponseEntity<Map<String, String>> handleHttpMessageNotWritableException(
-        HttpMessageNotWritableException error) {
+  public ResponseEntity<Map<String, String>> handleNumberFormatException(
+        NumberFormatException error) {
     Map<String, String> errorMap = new HashMap<String, String>();
     errorMap.put("hasErrors", "true");
     errorMap.put("errorMessage", error.getMessage());
     error.printStackTrace();
-    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_GATEWAY);
+    return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
   

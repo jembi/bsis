@@ -66,13 +66,8 @@ public class ProductTypeRepository {
     ProductType productType = new ProductType();
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
     productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
-    try {
-      Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
-      productType.setExpiresAfter(expiresAfter);
-    } catch (NumberFormatException ex) {
-      productType.setExpiresAfter(0);
-      ex.printStackTrace();
-    }
+    Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
+    productType.setExpiresAfter(expiresAfter);
     productType.setDescription("");
     Boolean hasBloodGroup = Boolean.valueOf((String) newProductTypeAsMap.get("hasBloodGroup"));
     productType.setHasBloodGroup(hasBloodGroup);
@@ -139,13 +134,8 @@ public class ProductTypeRepository {
     ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
     productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
-    try {
-      Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
-      productType.setExpiresAfter(expiresAfter);
-    } catch (NumberFormatException ex) {
-      productType.setExpiresAfter(0);
-      ex.printStackTrace();
-    }
+    Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
+    productType.setExpiresAfter(expiresAfter);
     ProductTypeTimeUnits expiresAfterUnits;
     expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
     productType.setExpiresAfterUnits(expiresAfterUnits);

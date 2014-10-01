@@ -486,11 +486,7 @@ public class RequestRepository {
 
   public Request findRequestById(String requestId) {
     Request request = null;
-    try {
-      request = findRequestById(Long.parseLong(requestId));
-    } catch (NumberFormatException ex) {
-      ex.printStackTrace();
-    }
+    request = findRequestById(Long.parseLong(requestId));
     return request;
   }
 
