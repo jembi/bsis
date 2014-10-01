@@ -49,7 +49,6 @@ public class User {
   private Boolean isDeleted;
 
   @ManyToMany(fetch=FetchType.EAGER)
-  @JsonIgnore
   private List<Role> roles;
   
   @ManyToMany(mappedBy="users")
