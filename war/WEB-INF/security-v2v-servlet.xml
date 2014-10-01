@@ -13,15 +13,150 @@
   <http pattern="/**/*.js" security="none" />
   <http pattern="/**/*.png" security="none" />
 
-  <!-- isAnonymous() is an expression processed by spring security -->
+  <!-- Enable stateless access to REST services using Basic authentication -->
+  <http pattern="/donor/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/donor/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donor/**" access="isFullyAuthenticated()" />
+  </http>
+
+  <http pattern="/donation/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/donation/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donation/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/configure/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/configure/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/configure/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/bloodtest/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/bloodtest/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/bloodtest/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/donationbatch/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/donationbatch/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donationbatch/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/deferral/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/deferral/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/deferral/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/donorcode/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/donorcode/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donorcode/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/donorcommunication/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/donorcommunication/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donorcommunication/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/location/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/location/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/location/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/component/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/component/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/component/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/componenttype/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/componenttype/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/componenttype/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/compatibilitytests/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/compatibilitytests/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/compatibilitytests/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/lotrelease/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/lotrelease/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/lotrelease/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/role/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/role/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/role/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/reports/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/reports/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/reports/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/requests/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/requests/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/requests/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/usage/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/usage/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/usage/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/testresult/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/testresult/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/testresult/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/user/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/user/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/user/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <!-- Enable stateful access to swagger-ui  -->
   <http auto-config="true" use-expressions="true">
     <intercept-url pattern="/login.html*" access="isAnonymous()" />
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />
     <form-login login-page="/login.html"
-                default-target-url="/welcomePage.html"
+                default-target-url="/api.html"
                 authentication-failure-url="/login.html?error=true"
                 always-use-default-target="true" />
-  </http>
+  </http>   
+  
 
   <authentication-manager>
     <authentication-provider user-service-ref="userDetailsService" />
