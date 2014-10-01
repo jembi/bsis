@@ -187,9 +187,9 @@ public class GlobalControllerExceptionHandler {
         TypeMismatchException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("errorMessage", error.getPropertyName() + "with value " +error.getValue() 
-            + "is not compatable to" + error.getRequiredType());
-    errorMap.put("userMessage", "Please check thr input with value " + error.getValue() );
+    errorMap.put("developerMessage", "value '" +error.getValue() 
+            + "' is not compatable to" + error.getRequiredType());
+    errorMap.put("userMessage", "Please check thr input  value '" + error.getValue()+ "'" );
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
@@ -215,24 +215,6 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
-    /**
-  * Checked exception used to signal fatal problems with mapping of content.
-  * One additional feature is the ability to denote relevant path of references (during serialization/deserialization) to help in troubleshooting.
-  */
-  @ExceptionHandler(JsonMappingException.class)
-  public ResponseEntity<Map<String, Object>> handleJsonMappingException(
-        JsonMappingException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
-    errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "Error converting Object to Json or Json to object");
-    errorMap.put("userMessage", "");
-    errorMap.put("moreInfo", error.getMessage());
-    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
-    error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-  
-
 
   /**
   *  Thrown by HttpMessageConverter implementations when the read method fails..
@@ -242,7 +224,8 @@ public class GlobalControllerExceptionHandler {
         HttpMessageNotReadableException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "Error reading request data");
+    errorMap.put("developerMessage", "Error parsing  Json request to corresponding object."
+            + " please form the correct JSON String " );
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
@@ -258,7 +241,7 @@ public class GlobalControllerExceptionHandler {
         HttpMessageNotWritableException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "Error writing Response data");
+    errorMap.put("developerMessage", "Error parsing Object  to JSON response");
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -266,5 +249,4 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
-
 }
