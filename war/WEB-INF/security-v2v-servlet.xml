@@ -21,18 +21,18 @@
     <intercept-url pattern="/donor/**" access="isFullyAuthenticated()" />
   </http>
 
-  <http pattern="/collection/**" create-session="never" use-expressions="true">
+  <http pattern="/donation/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
-    <intercept-url pattern="/collection/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/collection/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/donation/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donation/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/admin-controller/**" create-session="never" use-expressions="true">
+  <http pattern="/configure/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
-    <intercept-url pattern="/admin-controller/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/admin-controller/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/configure/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/configure/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/bloodtest/**" create-session="never" use-expressions="true">
@@ -42,11 +42,11 @@
     <intercept-url pattern="/bloodtest/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/collectionbatch/**" create-session="never" use-expressions="true">
+  <http pattern="/donationbatch/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
-    <intercept-url pattern="/collectionbatch/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/collectionbatch/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/donationbatch/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donationbatch/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/deferral/**" create-session="never" use-expressions="true">
@@ -77,18 +77,32 @@
     <intercept-url pattern="/location/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/product/**" create-session="never" use-expressions="true">
+  <http pattern="/component/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
-    <intercept-url pattern="/product/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/product/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/component/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/component/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/producttype/**" create-session="never" use-expressions="true">
+  <http pattern="/componenttype/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
-    <intercept-url pattern="/producttype/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/producttype/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/componenttype/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/componenttype/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/compatibilitytests/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/compatibilitytests/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/compatibilitytests/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/lotrelease/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/lotrelease/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/lotrelease/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/role/**" create-session="never" use-expressions="true">
@@ -96,6 +110,27 @@
     <session-management />
     <intercept-url pattern="/role/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/role/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/reports/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/reports/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/reports/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/requests/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/requests/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/requests/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/usage/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/usage/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/usage/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/testresult/**" create-session="never" use-expressions="true">
