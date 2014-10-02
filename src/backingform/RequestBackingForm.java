@@ -1,11 +1,10 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
@@ -14,9 +13,7 @@ import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.BloodGroup;
 import model.util.Gender;
-
 import org.apache.commons.lang3.StringUtils;
-
 import repository.RequestRepository;
 import utils.CustomDateFormatter;
 
@@ -73,6 +70,7 @@ public class RequestBackingForm {
     return request.getNotes();
   }
 
+  @JsonIgnore
   public RowModificationTracker getModificationTracker() {
     return request.getModificationTracker();
   }
@@ -196,6 +194,7 @@ public class RequestBackingForm {
     }
   }
 
+  @JsonIgnore
   public void setIssuedProducts(List<Product> issuedProducts) {
     request.setIssuedProducts(issuedProducts);
   }
@@ -204,6 +203,7 @@ public class RequestBackingForm {
     request.setRequestNumber(RequestRepository.generateUniqueRequestNumber());
   }
 
+  @JsonIgnore
   public Request getRequest() {
     return request;
   }
