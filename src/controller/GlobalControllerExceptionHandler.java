@@ -215,6 +215,27 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
+  
+  /**
+  *   Thrown when an application attempts to use null in a case where an object is required. These include:
+  *   Calling the instance method of a null object.
+  *   Accessing or modifying the field of a null object.
+  *   Taking the length of null as if it were an array.
+  *   Accessing or modifying the slots of null as if it were an array.
+  *   Throwing null as if it were a Throwable value.
+  */
+  @ExceptionHandler(NullPointerException.class)
+  public ResponseEntity<Map<String, Object>> handleNullPointerException(
+        NullPointerException error) {
+    Map<String, Object> errorMap = new HashMap<String, Object>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("developerMessage", error.getMessage());
+    errorMap.put("userMessage", "");
+    errorMap.put("moreInfo", "");
+    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
   /**
   *  Thrown by HttpMessageConverter implementations when the read method fails..
