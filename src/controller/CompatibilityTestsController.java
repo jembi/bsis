@@ -4,24 +4,20 @@ import backingform.CompatibilityTestBackingForm;
 import backingform.validator.CompatibilityTestBackingFormValidator;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.compatibility.CompatibilityTest;
 import model.request.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
@@ -29,6 +25,7 @@ import repository.RequestRepository;
 import utils.PermissionConstants;
 
 @RestController
+@RequestMapping("compatibility")
 public class CompatibilityTestsController {
 
   @Autowired
@@ -65,15 +62,13 @@ public class CompatibilityTestsController {
     utilController.addTipsToModel(m, "requests.addcompatibilityresult");
   }
 
-  @RequestMapping(value="/editCompatibilityTestFormGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="{requestId}/edit", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public  Map<String, Object> editCompatibilityTestsFormGenerator(HttpServletRequest request,
-      Model model,
-      @RequestParam(value="requestId") String requestId) {
+  public  ResponseEntity<Map<String, Object>> editCompatibilityTestsFormGenerator(
+         @PathVariable String requestId) {
 
-    Map<String, Object> m = model.asMap();
+    Map<String, Object> m = new HashMap<String, Object>();
     addEditSelectorOptions(m);
-    m.put("refreshUrl", getUrl(request));
     m.put("crossmatchForRequest", true);
     // to ensure custom field names are displayed in the form
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("CompatibilityTest");
@@ -84,61 +79,26 @@ public class CompatibilityTestsController {
 
     Request productRequest = requestRepository.findRequestById(requestId);
     form.setForRequest(productRequest);
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("model", m);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(m, HttpStatus.OK);
 
   }
 
-  @RequestMapping(value = "/addCompatibilityTestForRequest", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public   Map<String, Object>
-        addCompatibilityTest(HttpServletRequest request,
-                 HttpServletResponse response,
-                 @ModelAttribute("editCompatibilityTestForm") @Valid CompatibilityTestBackingForm form,
-                 BindingResult result, Model model) {
+  public  ResponseEntity<Map<String, Object>>
+        addCompatibilityTest(@Valid @RequestBody CompatibilityTestBackingForm form) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
-    String message = "";
+      Map<String, Object> map = new HashMap<String, Object>();
+      addEditSelectorOptions(map);
+      CompatibilityTest crossmatchTest = form.getCompatibilityTest();
+      crossmatchTest.setIsDeleted(false);
+      compatibilityTestRepository.addCompatibilityTest(crossmatchTest);
+      form = new CompatibilityTestBackingForm();
+      map.put("editCompatibilityTestForm", form);
+      map.put("existingCompatibilityTest", false);
+      map.put("refreshUrl", "editCompatibilityTestFormGenerator.html");
+      map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
 
-    Map<String, Object> m = model.asMap();
-    addEditSelectorOptions(m);
-
-    if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
-      success = false;
-      message = "Please fix the errors noted above.";
-    } else {
-      try {
-        CompatibilityTest crossmatchTest = form.getCompatibilityTest();
-        crossmatchTest.setIsDeleted(false);
-        compatibilityTestRepository.addCompatibilityTest(crossmatchTest);
-        m.put("hasErrors", false);
-        success = true;
-        message = "Crossmatch test successfully added";
-        form = new CompatibilityTestBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "Compatibility Test already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
-    }
-
-    m.put("editCompatibilityTestForm", form);
-    m.put("existingCompatibilityTest", false);
-    m.put("refreshUrl", "editCompatibilityTestFormGenerator.html");
-    m.put("success", success);
-    m.put("message", message);
-    m.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
-
-    map.put("model", m);
-    return map;
+      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

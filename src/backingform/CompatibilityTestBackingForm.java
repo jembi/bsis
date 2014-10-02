@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -34,10 +35,12 @@ public class CompatibilityTestBackingForm {
     return compatibilityTest.getCreatedDate();
   }
 
+  @JsonIgnore
   public User getCreatedBy() {
     return compatibilityTest.getCreatedBy();
   }
 
+  @JsonIgnore
   public User getLastUpdatedBy() {
     return compatibilityTest.getLastUpdatedBy();
   }
@@ -66,6 +69,7 @@ public class CompatibilityTestBackingForm {
     compatibilityTest.setId(id);
   }
 
+  @JsonIgnore
   public Request getForRequest() {
     return compatibilityTest.getForRequest();
   }
@@ -88,6 +92,7 @@ public class CompatibilityTestBackingForm {
     compatibilityTest.setForRequest(request);
   }
 
+  @JsonIgnore
   public Product getTestedProduct() {
     return compatibilityTest.getTestedProduct();
   }
@@ -168,6 +173,7 @@ public class CompatibilityTestBackingForm {
     compatibilityTest.setNotes(notes);
   }
 
+  @JsonIgnore
   public CompatibilityTest getCompatibilityTest() {
     return compatibilityTest;
   }
