@@ -8,25 +8,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.LotReleaseConstant;
 import model.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.CollectedSampleRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
 
 @RestController
+@RequestMapping("lotrelease")
 public class LotReleaseController {
 
   @Autowired
@@ -53,7 +54,9 @@ public class LotReleaseController {
     }
     return reqUrl;
   }
-  
+  /*
+  *Not Required to expose dummy method which returns nothing
+  *
   @RequestMapping(value = "/lotReleaseFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  Map<String, Object> lotReleaseFormGenerator(HttpServletRequest request) {
@@ -63,11 +66,11 @@ public class LotReleaseController {
     map.put("refreshUrl", getUrl(request));
     return map;
   }
-  
-  @RequestMapping(value = "/findlotRelease", method=RequestMethod.GET)
+  */
+  @RequestMapping(value = "/find/{dinNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
-  public  Map<String, Object> findlotRelease(HttpServletRequest request,HttpServletResponse response,
-      @RequestParam(value="dinNumber") String dinNumber)  {
+  public ResponseEntity<Map<String, Object>> findlotRelease(HttpServletRequest request,
+          @PathVariable String dinNumber)  {
     Map<String, Object> map = new  HashMap<String, Object>();
     boolean success = true;
     boolean discard = false;
@@ -76,14 +79,14 @@ public class LotReleaseController {
     	map.put("errorMessage", "Please Enter the Donation Identification Number.");
     	success=false;
     	map.put("success", success);
-    	return map;
+    	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
     }
     
     if(collectedSample == null || collectedSample.size() == 0){
     	map.put("errorMessage", "Donation Identification Number does not exist.");
     	success=false;
     	map.put("success", success);
-    	return map;
+    	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
     }
    
     discard = checkCollectionForDiscard(map,collectedSample);
@@ -106,21 +109,18 @@ public class LotReleaseController {
     map.put("refreshUrl", getUrl(request));
     map.put("success", success);
     map.put("discard", discard);
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/printLabel", method = RequestMethod.GET)
+  @RequestMapping(value = "/printLabel/{dinNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  Map<String, Object> printLabel(HttpServletRequest request, Model model,
-		  @RequestParam(value="dinNumber") String dinNumber) {
+  public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable String dinNumber) {
 	  
 	 Map<String, Object> map = new  HashMap<String, Object>();
 	
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber);
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     
-    try{
-        
         String bloodABO = collectedSample.getBloodAbo();
         String inverse = "";
         String bloodRh = "";
@@ -228,25 +228,20 @@ public class LotReleaseController {
     				"^PQ1,0,1,Y^XZ}$"
     		);
     		*/
-    }
-    catch (Exception e){
-    	e.printStackTrace();
-    }
     
-    return map;
+    
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/printDiscard", method = RequestMethod.GET)
+  @RequestMapping(value = "/printDiscard/{dinNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  Map<String, Object> printDiscard(HttpServletRequest request, Model model,
-		  @RequestParam(value="dinNumber") String dinNumber) {
+  public  ResponseEntity<Map<String, Object>> printDiscard(@PathVariable String dinNumber) {
 	  
 	 Map<String, Object> map = new  HashMap<String, Object>();
 	
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber);
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     
-    try{
         
         String collectionDate = df.format(collectedSample.getCollectedOn());        	
 
@@ -275,12 +270,9 @@ public class LotReleaseController {
     		"^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
     		"^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ" 
     		);
-    }
-    catch (Exception e){
-    	e.printStackTrace();
-    }
+   
     
-    return map;
+     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
 
