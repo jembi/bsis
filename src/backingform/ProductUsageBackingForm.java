@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -30,6 +31,7 @@ public class ProductUsageBackingForm {
     this.usage = usage;
   }
 
+  @JsonIgnore
   public ProductUsage getUsage() {
     return usage;
   }
@@ -46,10 +48,12 @@ public class ProductUsageBackingForm {
     return usage.getCreatedDate();
   }
 
+  @JsonIgnore
   public User getCreatedBy() {
     return usage.getCreatedBy();
   }
-
+  
+  @JsonIgnore
   public User getLastUpdatedBy() {
     return usage.getLastUpdatedBy();
   }
@@ -86,10 +90,12 @@ public class ProductUsageBackingForm {
     return usage.getNotes();
   }
 
+  @JsonIgnore
   public Product getProduct() {
     return usage.getProduct();
   }
 
+  @JsonIgnore
   public RowModificationTracker getModificationTracker() {
     return usage.getModificationTracker();
   }
