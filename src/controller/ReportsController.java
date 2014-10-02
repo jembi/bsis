@@ -12,6 +12,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +28,7 @@ import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 
 @RestController
+@RequestMapping("report")
 public class ReportsController {
 
   @Autowired
@@ -46,7 +49,7 @@ public class ReportsController {
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
   
-  @RequestMapping(value = "/inventoryReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
   public Map<String, Object> inventoryReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -57,7 +60,7 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value="/generateInventoryReport", method=RequestMethod.GET)
+  @RequestMapping(value="/inventory/generate", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
   public  Map<String, Object> generateInventoryReport(
                   HttpServletRequest request, HttpServletResponse response,
@@ -87,7 +90,7 @@ public class ReportsController {
     return data;
   }
   
-  @RequestMapping(value = "/collectionsReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/donations/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public Map<String, Object> collectionsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -97,7 +100,7 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value = "/requestsReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/requests/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public Map<String, Object> requestsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -106,7 +109,7 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value = "/discardedProductsReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/components/discard/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public Map<String, Object> discardedProductsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -117,7 +120,7 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value = "/issuedProductsReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/components/issued/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public Map<String, Object> issuedProductsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -127,10 +130,10 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value = "/getCollectionsReport", method = RequestMethod.GET)
+  @RequestMapping(value = "/donations/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public 
-  Map<String, Object> getCollectionsReport(
+  ResponseEntity<Map<String, Object>> getCollectionsReport(
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -139,7 +142,8 @@ public class ReportsController {
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
 
-    Map<String, Object> map = new HashMap<String, Object>();
+      HttpStatus httpStatus = HttpStatus.OK;
+      Map<String, Object> map = new HashMap<String, Object>();
 
     try {
 
@@ -178,16 +182,21 @@ public class ReportsController {
       map.put("dateCollectedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
-      // TODO Auto-generated catch block
-      ex.printStackTrace();
+       map.put("hasErrors", true);
+       map.put("developerMessage", ex.getMessage());
+       map.put("errorMessage", "");
+       map.put("moreInfo", "");
+       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+       ex.printStackTrace();
+    
     }
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
-  @RequestMapping(value = "/getRequestsReport", method = RequestMethod.GET)
+  @RequestMapping(value = "/requests/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public 
-  Map<String, Object> getRequestsReport(
+  ResponseEntity<Map<String, Object>> getRequestsReport(
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -195,7 +204,7 @@ public class ReportsController {
           @RequestParam(value = "sites", required = false) List<String> sites,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-
+    HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
 
     try {
@@ -235,16 +244,20 @@ public class ReportsController {
       map.put("dateRequestedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
-      // TODO Auto-generated catch block
-      ex.printStackTrace();
+       map.put("hasErrors", true);
+       map.put("developerMessage", ex.getMessage());
+       map.put("errorMessage", "");
+       map.put("moreInfo", "");
+       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+       ex.printStackTrace();
     }
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
-  @RequestMapping(value = "/getDiscardedProductsReport", method = RequestMethod.GET)
+  @RequestMapping(value = "/components/discard/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public 
-  Map<String, Object> getDiscardedProductsReport(
+  ResponseEntity<Map<String, Object>> getDiscardedProductsReport(
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -252,7 +265,7 @@ public class ReportsController {
           @RequestParam(value = "sites", required = false) List<String> sites,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-
+    HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
 
     try {
@@ -292,16 +305,20 @@ public class ReportsController {
       map.put("dateCollectedToUTC", dateTo.getTime());
 
     } catch (ParseException ex) {
-      // TODO Auto-generated catch block
-      ex.printStackTrace();
+       map.put("hasErrors", true);
+       map.put("developerMessage", ex.getMessage());
+       map.put("errorMessage", "");
+       map.put("moreInfo", "");
+       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+       ex.printStackTrace();
     }
-    return map;
+   return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
-  @RequestMapping(value = "/getIssuedProductsReport", method = RequestMethod.GET)
+  @RequestMapping(value = "/components/issued/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public 
-  Map<String, Object> getIssuedProductsReport(
+  ResponseEntity<Map<String, Object>> getIssuedProductsReport(
           @RequestParam(value = "dateIssuedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateIssuedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -309,7 +326,7 @@ public class ReportsController {
           @RequestParam(value = "sites", required = false) List<String> sites,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
 
-  
+    HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
 
     try {
@@ -348,11 +365,15 @@ public class ReportsController {
       map.put("dateIssuedFromUTC", dateFrom.getTime());
       map.put("dateIssuedToUTC", dateTo.getTime());
 
-    } catch (ParseException ex) {
-      // TODO Auto-generated catch block
-      ex.printStackTrace();
+   } catch (ParseException ex) {
+       map.put("hasErrors", true);
+       map.put("developerMessage", ex.getMessage());
+       map.put("errorMessage", "");
+       map.put("moreInfo", "");
+       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+       ex.printStackTrace();
     }
-    return map;
+   return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   private Date dateSubtract(Date dateTo, int field, int amount) {
@@ -363,7 +384,7 @@ public class ReportsController {
   }
 
  
-  @RequestMapping(value = "/ttiReportFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/tti/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public Map<String, Object> testResultsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -374,10 +395,10 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value = "/getTestResultsReport", method = RequestMethod.GET)
+  @RequestMapping(value = "/testresult/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public 
-  Map<String, Object> getTestResultsReport(
+   ResponseEntity<Map<String, Object>> getTestResultsReport(
           @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
           @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -387,6 +408,7 @@ public class ReportsController {
 
    
 
+    HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
 
     try {
@@ -423,11 +445,15 @@ public class ReportsController {
       map.put("numTestResults", numTestResults);
       map.put("dateTestedFromUTC", dateFrom.getTime());
       map.put("dateTestedToUTC", dateTo.getTime());
-    } catch (ParseException e) {
-      e.printStackTrace();
+    } catch (ParseException ex) {
+       map.put("hasErrors", true);
+       map.put("developerMessage", ex.getMessage());
+       map.put("errorMessage", "");
+       map.put("moreInfo", "");
+       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+       ex.printStackTrace();
     }
-
-    return map;
+   return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
 }
