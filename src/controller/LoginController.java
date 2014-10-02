@@ -3,6 +3,7 @@ package controller;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -10,6 +11,7 @@ import repository.GenericConfigRepository;
 import repository.LoginRepository;
 
 @RestController
+@RequestMapping("login")
 public class LoginController {
 
   @Autowired
@@ -18,7 +20,7 @@ public class LoginController {
   @Autowired
   private GenericConfigRepository genericConfigRepository;
 
-  @RequestMapping("/login")
+  @RequestMapping(method = RequestMethod.GET)
   public ModelAndView login(HttpServletRequest request,
       @RequestParam(value="error", required=false) boolean error) {
     ModelAndView mv = new ModelAndView("login");
@@ -27,7 +29,7 @@ public class LoginController {
     return mv;
   }
 
-  @RequestMapping("/welcomePage")
+  @RequestMapping(value = "/welcomePage", method = RequestMethod.GET)
   public ModelAndView welcomePage(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("welcomePage");
     // for showing the version number on the home page. see welcomePage.jsp and topPanel.jsp.
