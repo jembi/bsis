@@ -129,7 +129,6 @@ public class UserController {
         map.put("existingUser", false);
         map.put("refreshUrl", "editUserFormGenerator.html");
         map.put("success", success);
-        map.put("errorMessage", message);
 
         return map;
     }
