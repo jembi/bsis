@@ -8,9 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import org.apache.commons.beanutils.BeanUtils;
@@ -210,11 +208,12 @@ public class CollectedSampleController {
       }
     }
 
-    List<Object> results = collectedSampleRepository.findCollectedSamples(
-                                        collectionNumber,
-                                        bloodBagTypeIds, centerIds, siteIds,
-                                        dateCollectedFrom, dateCollectedTo, includeTestedCollections, pagingParams);
-
+    List<Object> results;
+          results = collectedSampleRepository.findCollectedSamples(
+                  collectionNumber,
+                  bloodBagTypeIds, centerIds, siteIds,
+                  dateCollectedFrom, dateCollectedTo, includeTestedCollections, pagingParams);
+  
     @SuppressWarnings("unchecked")
     List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
     Long totalRecords = (Long) results.get(1);
@@ -313,49 +312,27 @@ public class CollectedSampleController {
   public  ResponseEntity<Map<String, Object>> addCollection(
       @RequestBody @Valid CollectedSampleBackingForm form) {
 
-            Map<String, Object> map = new HashMap<String, Object>();
-	    boolean success = false;
-	    addEditSelectorOptions(map);
-	    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-	    map.put("collectionFields", formFields);
+      Map<String, Object> map = new HashMap<String, Object>();
+      addEditSelectorOptions(map);
+      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+      map.put("collectionFields", formFields);
+      CollectedSample savedCollection = null;
+      form.setCollectedSample();
+      CollectedSample collectedSample = form.getCollectedSample();
+
+         if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
+          collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
+      }
+
+      collectedSample.setIsDeleted(false);
+      savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
+      map.put("hasErrors", false);
+      form = new CollectedSampleBackingForm();
 	
-	    CollectedSample savedCollection = null;
-	    
-	      try {
-          form.setCollectedSample();
-	        CollectedSample collectedSample = form.getCollectedSample();
-
-          if(collectedSample.getDonor().getDateOfFirstDonation() == null){
-            collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
-          }
-
-	        collectedSample.setIsDeleted(false);
-	        
-	        savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
-	        map.put("hasErrors", false);
-	        success = true;
-	    
-	        form = new CollectedSampleBackingForm();
-	      } catch (EntityExistsException ex) {
-	        ex.printStackTrace();
-	        success = false;
-	      } 
-    
-
-    if (success) {
       map.put("collectionId", savedCollection.getId());
       map.put("collectedSample", getCollectionViewModel(savedCollection));
       map.put("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
-    } else {
-              map.put("errorMessage", "Error creating collection. Please fix the errors noted below.");
-	      map.put("firstTimeRender", false);
-	      map.put("addCollectionForm", form);
-	      map.put("refreshUrl", "addCollectionFormGenerator.html");
-              return new ResponseEntity<Map<String, Object>>(map, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    map.put("success", success);
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
   private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {

@@ -264,15 +264,12 @@ public class DonorCommunicationsController {
 
         List<Location> panels = new ArrayList<Location>();
 
-        try {
             for (String donorPanelId : donorPanels) {
                 Location l = new Location();
                 l.setId(Long.parseLong(donorPanelId));
                 panels.add(l);
             }
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-        }
+      
         return panels;
     }
 

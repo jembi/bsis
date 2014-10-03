@@ -81,8 +81,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> deactivateProductType(HttpServletRequest request,
-      @PathVariable Integer id) {
+  public  Map<String, Object> deactivateProductType(@PathVariable Integer id) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     productTypeRepository.deactivateProductType(id);

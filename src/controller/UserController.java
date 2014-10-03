@@ -13,20 +13,15 @@ import javax.validation.Valid;
 import model.user.Role;
 import model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import repository.RoleRepository;
 import repository.UserRepository;
@@ -151,42 +146,29 @@ public class UserController {
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
         String message = "";
-    // only when the collection is correctly added the existingCollectedSample
+        // only when the collection is correctly added the existingCollectedSample
         // property will be changed
         map.put("existingUser", true);
 
-        try {
-            form.setIsDeleted(false);
-            User user = form.getUser();
-            if (form.isModifyPassword()) {
-                user.setPassword(form.getPassword());
-            } else {
-                user.setPassword(form.getCurrentPassword());
-            }
-            user.setRoles(assignUserRoles(form));
-            user.setIsActive(true);
-            User existingUser = userRepository.updateUser(user, true);
-            if (existingUser == null) {
-                map.put("hasErrors", true);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                success = false;
-                map.put("existingUser", false);
-            } else {
-                map.put("hasErrors", false);
-                success = true;
-                message = "User Successfully Updated";
-            }
-        } catch (EntityExistsException ex) {
-            ex.printStackTrace();
+        form.setIsDeleted(false);
+        User user = form.getUser();
+        if (form.isModifyPassword()) {
+            user.setPassword(form.getPassword());
+        } else {
+            user.setPassword(form.getCurrentPassword());
+        }
+        user.setRoles(assignUserRoles(form));
+        user.setIsActive(true);
+        User existingUser = userRepository.updateUser(user, true);
+        if (existingUser == null) {
+            map.put("hasErrors", true);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             success = false;
-            message = "User Already exists.";
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            success = false;
-            message = "Internal Error. Please try again or report a Problem.";
-
+            map.put("existingUser", false);
+        } else {
+            map.put("hasErrors", false);
+            success = true;
+            message = "User Successfully Updated";
         }
 
         //   m.put("userRoles", form.getUserRole());
@@ -217,19 +199,4 @@ public class UserController {
         return userRepository.findUser(userName);
     }
 
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    
-    public Map<String, String> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException errors) {
-        Map<String, String> errorMap = new HashMap<String, String>();
-        errorMap.put("hasErrors", "true");
-        errorMap.put("errorMessage", errors.getMessage());
-        errors.printStackTrace();
-        for (FieldError error : errors.getBindingResult().getFieldErrors()) {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-        }
-
-        return errorMap;
-    }
 }

@@ -543,19 +543,13 @@ public class AdminController {
         @SuppressWarnings("unchecked")
         Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
 				
-        RequestType rt = new RequestType();
+          RequestType rt = new RequestType();
 
-        rt.setRequestType((String) paramValue.get("requestType"));
-        rt.setBulkTransfer((Boolean) paramValue.get("bulkTransfer"));
-        
-        try {
+          rt.setRequestType((String) paramValue.get("requestType"));
+          rt.setBulkTransfer((Boolean) paramValue.get("bulkTransfer"));
           rt.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-        	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          rt.setId(null);
-        }
-        rt.setIsDeleted(false);
-        allRequestTypes.add(rt);
+          rt.setIsDeleted(false);
+          allRequestTypes.add(rt);
       }
       requestTypesRepository.saveAllRequestTypes(allRequestTypes);
       LOGGER.debug(params);
@@ -583,12 +577,7 @@ public class AdminController {
       for (String id : params.keySet()) {
         String crossmatchType = (String) params.get(id);
         CrossmatchType ct = new CrossmatchType();
-        try {
-          ct.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          ct.setId(null);
-        }
+        ct.setId(Integer.parseInt(id));
         ct.setCrossmatchType(crossmatchType);
         ct.setIsDeleted(false);
         allCrossmatchTypes.add(ct);
@@ -615,27 +604,16 @@ public class AdminController {
             @RequestBody Map<String, String> params) {
         Map<String, Object> map = new HashMap<String, Object>();
         List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
-        try {
             for (String id : params.keySet()) {
                 String bloodBagType = (String) params.get(id);
                 BloodBagType bt = new BloodBagType();
-                try {
-                    bt.setId(Integer.parseInt(id));
-                } catch (NumberFormatException ex) {
-                    LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-                    bt.setId(null);
-                }
+                bt.setId(Integer.parseInt(id));
                 bt.setBloodBagType(bloodBagType);
                 bt.setIsDeleted(false);
                 allBloodBagTypes.add(bt);
             }
             bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
             LOGGER.debug(params);
-        } catch (Exception ex) {
-            LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-
         addAllBloodBagTypesToModel(map);
         map.put("refreshUrl", "configureBloodBagTypesFormGenerator.html");
         return map;
@@ -648,16 +626,11 @@ public class AdminController {
     @RequestBody  Map<String,String> params) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<DonationType> allDonationTypes = new ArrayList<DonationType>();
-    try {
       for (String id : params.keySet()) {
         String donationType = (String) params.get(id);
         DonationType dt = new DonationType();
-        try {
           dt.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          dt.setId(null);
-        }
+      
         dt.setDonationType(donationType);
         dt.setIsDeleted(false);
 
@@ -665,11 +638,7 @@ public class AdminController {
       }
       donationTypesRepository.saveAllDonationTypes(allDonationTypes);
       LOGGER.debug(params);
-    } catch (Exception ex) {
-      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
+   
     addAllDonationTypesToModel(map);
     map.put("refreshUrl", "configureDonationTypesFormGenerator.html");
     return map;

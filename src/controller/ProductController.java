@@ -191,45 +191,23 @@ public class ProductController {
       @ModelAttribute("addProductCombinationForm") @Valid ProductCombinationBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
     HttpStatus httpStatus = HttpStatus.CREATED;
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     map.put("productFields", formFields);
 
-    List<Product> savedProducts = null;
- 
-      try {
-        savedProducts = productRepository.addProductCombination(form);
-        map.put("hasErrors", false);
-        success = true;
-        form = new ProductCombinationBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
-    
-
-    if (success) {
+      List<Product> savedProducts = null;
+      savedProducts = productRepository.addProductCombination(form);
+      map.put("hasErrors", false);
+      form = new ProductCombinationBackingForm();
+   
       // at least one product should be created, all products should have the same collection number
       map.put("collectionNumber", savedProducts.get(0).getCollectionNumber());
       map.put("createdProducts", getProductViewModels(savedProducts));
       List<Product> allProductsForCollection = productRepository.findProductsByCollectionNumber(savedProducts.get(0).getCollectionNumber());
       map.put("allProductsForCollection", getProductViewModels(allProductsForCollection));
       map.put("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
-    } else {
-      map.put("errorMessage", "Error creating product. Please fix the errors noted below.");
-      map.put("firstTimeRender", false);
-      addOptionsForAddProductCombinationForm(map);
-      map.put("addProductCombinationForm", form);
-      map.put("refreshUrl", "addProductCombinationFormGenerator.html");
-      httpStatus = HttpStatus.BAD_REQUEST;
-    }
-
-    map.put("success", success);
+   
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
@@ -294,26 +272,11 @@ public class ProductController {
 
   @RequestMapping(method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
-  public ResponseEntity<Map<String, ? extends Object>> deleteProduct(
+  public ResponseEntity deleteProduct(
       @PathVariable Long id) {
 
-    HttpStatus httpStatus = HttpStatus.NO_CONTENT;
-    boolean success = true;
-    String errMsg = "";
-    try {
-      productRepository.deleteProduct(id);
-    } catch (Exception ex) {
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return new ResponseEntity<Map<String, ? extends Object>>(m, httpStatus);
+    productRepository.deleteProduct(id);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "{id}/discardform", method = RequestMethod.GET)
@@ -331,28 +294,16 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/discard", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public  Map<String, Object> discardProduct(
+  public  ResponseEntity discardProduct(
       @PathVariable Long id,
       @RequestParam("discardReasonId") Integer discardReasonId,
       @RequestParam("discardReasonText") String discardReasonText) {
 
-    boolean success = true;
-    String errMsg = "";
-    try {
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
       productRepository.discardProduct(id, statusChangeReason, discardReasonText);
-    } catch (Exception ex) {
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "{id}/returnform", method = RequestMethod.GET)

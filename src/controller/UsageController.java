@@ -104,7 +104,6 @@ public class UsageController {
         map.put("usageFields", formFields);
 
         ProductUsage savedUsage = null;
-
         ProductUsage productUsage = form.getUsage();
         productUsage.setIsDeleted(false);
         savedUsage = usageRepository.addUsage(productUsage);
@@ -112,10 +111,10 @@ public class UsageController {
         form = new ProductUsageBackingForm();
 
         map.put("usageId", savedUsage.getId());
-        map.put("usage", new ProductUsageViewModel(savedUsage));
+        map.put("usage",  new ProductUsageViewModel(savedUsage));
         map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
 
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
@@ -181,29 +180,31 @@ public class UsageController {
     return map;
   }
 
-    @RequestMapping(value = "for/product", method = RequestMethod.POST)
+    @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
     public ResponseEntity<Map<String, Object>> addUsageForProduct(
             @Valid @RequestBody ProductUsageBackingForm form) {
 
         Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
 
         addEditSelectorOptions(map);
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
         map.put("usageFields", formFields);
 
         ProductUsage savedUsage = null;
-
         ProductUsage productUsage = form.getUsage();
         productUsage.setIsDeleted(false);
         savedUsage = usageRepository.addUsage(productUsage);
         map.put("hasErrors", false);
+        success = true;
         form = new ProductUsageBackingForm();
 
         map.put("usageId", savedUsage.getId());
         map.put("usage", new ProductUsageViewModel(savedUsage));
-
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-    }
+      
+        map.put("success", success);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+  }
 
 }

@@ -315,28 +315,22 @@ public class RequestsController {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
-    boolean success = false;
 
-        addEditSelectorOptions(map);
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-        map.put("requestFields", formFields);
+    addEditSelectorOptions(map);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+    map.put("requestFields", formFields);
 
-        Request savedRequest = null;
-
-        Request productRequest = form.getRequest();
-        productRequest.setIsDeleted(false);
-        savedRequest = requestRepository.addRequest(productRequest);
-        map.put("hasErrors", false);
-        success = true;
-        form = new RequestBackingForm();
-
-        map.put("requestId", savedRequest.getId());
-        map.put("request", new RequestViewModel(savedRequest));
-        map.put("addAnotherRequestUrl", "addRequestFormGenerator.html");
-
-        map.put("success", success);
-        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-    }
+    Request savedRequest = null;
+    Request productRequest = form.getRequest();
+    productRequest.setIsDeleted(false);
+    savedRequest = requestRepository.addRequest(productRequest);
+    map.put("hasErrors", false);
+    form = new RequestBackingForm();
+    map.put("requestId", savedRequest.getId());
+    map.put("request", new RequestViewModel(savedRequest));
+    map.put("addAnotherRequestUrl", "addRequestFormGenerator.html");
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+  }
 
   @RequestMapping(value="/components/issued/list", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
@@ -362,7 +356,8 @@ public class RequestsController {
       boolean success = false;
       String message = "";
       addEditSelectorOptions(map);
-    // only when the collection is correctly added the existingCollectedSample
+      // only when the collection is correctly added the existingCollectedSample
+
       // property will be changed
       map.put("existingRequest", true);
 
@@ -379,7 +374,6 @@ public class RequestsController {
           success = true;
           message = "Request Successfully Updated";
       }
-
 
     map.put("editRequestForm", form);
     map.put("success", success);
@@ -404,10 +398,8 @@ public class RequestsController {
   public 
   HttpStatus deleteProduct(
       @RequestParam("requestId") Long requestId) {
-
-      requestRepository.deleteRequest(requestId);
-
-      return HttpStatus.OK;
+    requestRepository.deleteRequest(requestId);
+    return HttpStatus.NO_CONTENT;
   }
 
 
@@ -447,9 +439,7 @@ public class RequestsController {
       return HttpStatus.OK;
   }
   
-  /**
-  * 
-  *
+  /*
   @RequestMapping("/findRequest")
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public  Map<String, Object> findRequest(HttpServletRequest request,
@@ -471,6 +461,6 @@ public class RequestsController {
     return map;
 
   }
-  * */
+  */
   
 }

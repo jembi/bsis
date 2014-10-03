@@ -51,6 +51,9 @@ import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.PessimisticLockException;
 
 @Repository
 @Transactional
@@ -339,17 +342,13 @@ public class ProductRepository {
     return em.find(Product.class, productId);
   }
 
-  public Product findProductById(Long productId) {
+  public Product findProductById(Long productId)throws NoResultException{
     String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productId", productId);
     Product product = null;
-    try {
-      product = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    product = query.getSingleResult();
     return product;
   }
 
@@ -373,7 +372,7 @@ public class ProductRepository {
     return product;
   }
 
-  public void deleteProduct(Long productId) {
+  public void deleteProduct(Long productId) throws IllegalArgumentException{
     Product existingProduct = findProductById(productId);
     existingProduct.setIsDeleted(Boolean.TRUE);
     em.merge(existingProduct);
@@ -833,13 +832,17 @@ public class ProductRepository {
   }
 
   @SuppressWarnings("unchecked")
-  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws ParseException, JsonParseException, JsonMappingException, IOException {
+  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws PessimisticLockException {
     List<Product> products = new ArrayList<Product>();
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
 
     Map<String, String> expiryDateByProductType = null;
-    expiryDateByProductType = mapper.readValue(expiresOn, HashMap.class);
+      try {
+          expiryDateByProductType = mapper.readValue(expiresOn, HashMap.class);
+      } catch (IOException ex) {
+          ex.printStackTrace();
+      }
 
     ProductTypeCombination productTypeCombination;
     productTypeCombination = productTypeRepository.getProductTypeCombinationById(Integer.parseInt(form.getProductTypeCombination()));
@@ -849,7 +852,11 @@ public class ProductRepository {
       product.setProductType(productType);
       product.setCreatedOn(form.getProduct().getCreatedOn());
       String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());
-      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
+        try {
+            product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
       product.setIsDeleted(false);
       updateProductInternalFields(product);
       em.persist(product);
