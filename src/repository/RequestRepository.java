@@ -208,18 +208,14 @@ public class RequestRepository {
     return request;
   }
 
-  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) {
+  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) throws NoResultException, NonUniqueResultException{
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber",
             Request.class);
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
-    try {
-      request = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    request = query.getSingleResult();
     return request;
   }
 
