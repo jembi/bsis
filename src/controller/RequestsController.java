@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -310,7 +311,7 @@ public class RequestsController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
-  public ResponseEntity<Map<String, Object>> addRequest(@Valid RequestBackingForm form) {
+  public ResponseEntity<Map<String, Object>> addRequest(@Valid @RequestBody RequestBackingForm form) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
@@ -353,7 +354,7 @@ public class RequestsController {
   
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
-  public  ResponseEntity<Map<String, Object>> updateRequest(@Valid RequestBackingForm form) {
+  public  ResponseEntity<Map<String, Object>> updateRequest(@Valid @RequestBody RequestBackingForm form) {
 
    
       HttpStatus httpStatus = HttpStatus.OK;
