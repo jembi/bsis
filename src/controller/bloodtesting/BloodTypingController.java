@@ -36,6 +36,7 @@ import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
+@RequestMapping("bloodtype")
 public class BloodTypingController {
 
   @Autowired
@@ -80,7 +81,7 @@ public class BloodTypingController {
   }
   * */
 
-  @RequestMapping(value="/addCollectionsToBloodTypingPlate")
+  @RequestMapping(value="/addCollectionsToBloodTypingPlate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> addCollectionsToBloodTypingPlate(HttpServletRequest request,
           HttpServletResponse response,
@@ -154,7 +155,7 @@ public class BloodTypingController {
 
   @SuppressWarnings("unchecked")
   
-  @RequestMapping(value="/saveBloodTypingTests", method=RequestMethod.POST)
+  @RequestMapping(value="/saveTests", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTests(
       @RequestParam(value="bloodTypingTests") String bloodTypingTests,
@@ -258,11 +259,9 @@ public class BloodTypingController {
     return bloodTestResultsMap;
   }
 
-  @RequestMapping(value="/getBloodTypingStatusForCollections", method=RequestMethod.GET)
+  @RequestMapping(value="/getStatusForCollections", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingStatusForCollections(
-                        HttpServletRequest request,
-                        HttpServletResponse response,
                         @RequestParam(value="collectionIds") String collectionIdsParam
                         ) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -283,7 +282,7 @@ public class BloodTypingController {
     return map;
   }
 
-  @RequestMapping(value="/showBloodTypingResultsForCollection", method=RequestMethod.GET)
+  @RequestMapping(value="/showResultsForCollection", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> showBloodTypingResultsForCollection(
       HttpServletRequest request,
@@ -333,7 +332,7 @@ public class BloodTypingController {
     return map;
   }
 
-  @RequestMapping(value="/saveAdditionalBloodTypingTests", method=RequestMethod.POST)
+  @RequestMapping(value="/saveAdditionalTests", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestParam(value="collectionId") String collectionId,
@@ -374,7 +373,7 @@ public class BloodTypingController {
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
 
-  @RequestMapping(value="bloodTypingRuleSummary", method=RequestMethod.GET)
+  @RequestMapping(value="ruleSummary", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingRuleSummary(HttpServletRequest request,
       @RequestParam(value="bloodTypingRuleId", required = true) Integer ruleId) {
@@ -391,7 +390,7 @@ public class BloodTypingController {
   }
 
   @SuppressWarnings("unchecked")
-  @RequestMapping(value="saveNewBloodTypingRule", method=RequestMethod.POST)
+  @RequestMapping(value="saveNewRule", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
       HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {
@@ -418,7 +417,7 @@ public class BloodTypingController {
     return m;
   }
   
-  @RequestMapping(value="deleteBloodTypingRule", method=RequestMethod.POST)
+  @RequestMapping(value="deleteRule", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
       @RequestParam(value="bloodTypingRuleId") Integer ruleId) {

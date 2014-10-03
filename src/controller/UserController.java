@@ -14,6 +14,8 @@ import model.user.Role;
 import model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -122,7 +124,6 @@ public class UserController {
         map.put("existingUser", false);
         map.put("refreshUrl", "editUserFormGenerator.html");
         map.put("success", success);
-        map.put("errorMessage", message);
 
         return map;
     }
@@ -189,6 +190,13 @@ public class UserController {
 
         }
         return userRole;
+    }
+    
+    @RequestMapping(method = RequestMethod.GET)
+    public User getUserDetails(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName(); //get logged in username
+        return userRepository.findUser(userName);
     }
 
 }

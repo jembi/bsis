@@ -39,6 +39,7 @@ public class ProductViewModel {
     return product.getId();
   }
 
+  @JsonIgnore
   public CollectedSample getCollectedSample() {
     return product.getCollectedSample();
   }
@@ -67,6 +68,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
   }
 
+  @JsonIgnore
   public String getCollectionNumber() {
     if (getProduct() == null || getProduct().getCollectedSample() == null ||
         getProduct().getCollectedSample().getCollectionNumber() == null
@@ -141,6 +143,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getDiscardedOn());
   }
 
+  @JsonIgnore
   public String getBloodGroup() {
     if (product == null || product.getCollectedSample() == null ||
         product.getCollectedSample().getCollectionNumber() == null

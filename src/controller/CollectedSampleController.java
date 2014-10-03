@@ -32,7 +32,7 @@ import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
-@RequestMapping("/collection")
+@RequestMapping("/donation")
 public class CollectedSampleController {
 
   @Autowired
@@ -73,7 +73,7 @@ public class CollectedSampleController {
   }
 
   private String getNextPageUrl(HttpServletRequest request) {
-    String reqUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "findCollectionPagination.html");
+    String reqUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "search.html");
     String queryString = request.getQueryString();   // d=789
     if (queryString != null) {
         reqUrl += "?"+queryString;
@@ -161,7 +161,7 @@ public class CollectedSampleController {
       return sortColumnMap.get(sortColumn);
   }
 
-  @RequestMapping(value = "/findCollectionPagination", method = RequestMethod.GET)
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findCollectionPagination(HttpServletRequest request,
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
 import model.address.Address;
 import model.address.Contact;
 import model.bloodbagtype.BloodBagType;
@@ -33,10 +32,8 @@ import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
@@ -50,9 +47,9 @@ import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
-import utils.PermissionConstants;
 
 @RestController
+@RequestMapping("createdata")
 public class CreateDataController {
 
   @Autowired
@@ -335,6 +332,10 @@ public class CreateDataController {
       "Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
       "Woods", "Wright", "Yates", "Young", "Zimmerman" };
 
+  /**
+   * 
+   * #209 - method do nothing
+   *
   @RequestMapping("/admin-createData")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
   @Deprecated
@@ -343,6 +344,7 @@ public class CreateDataController {
     ModelAndView modelAndView = new ModelAndView("createData");
     return modelAndView;
   }
+  */
 
   public void createDonors(int numDonors) {
 

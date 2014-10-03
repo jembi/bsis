@@ -377,7 +377,7 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public void issueProductsToRequest(Long requestId, String productsToIssue) throws Exception {
+  public void issueProductsToRequest(Long requestId, String productsToIssue) throws RuntimeException {
     Request request = findRequestById(requestId);
     productsToIssue = productsToIssue.replaceAll("\"", "");
     productsToIssue = productsToIssue.replaceAll("\\[", "");
@@ -392,7 +392,7 @@ public class RequestRepository {
       // between the time when matching products are searched and selected
       // for issuing
       if (!canIssueProduct(product, request))
-        throw new Exception("Could not issue products");
+        throw new RuntimeException("Could not issue products");
     }
 
     for (String productId : productIds) {

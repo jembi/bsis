@@ -28,7 +28,7 @@ import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +49,7 @@ import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 
 @RestController
-@RequestMapping("product")
+@RequestMapping("component")
 public class ProductController {
 
   @Autowired
@@ -82,7 +82,7 @@ public class ProductController {
   }
 
   public static String getNextPageUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findProduct.html", "findProductPagination.html");
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findProduct.html", "search.html");
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
         reqUrl += "?"+queryString;
@@ -217,7 +217,7 @@ public class ProductController {
 
   
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/findProductPagination", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
     public Map<String, Object> findProductPagination(HttpServletRequest request,
             @RequestParam(value = "searchBy") String searchBy,
@@ -436,7 +436,7 @@ public class ProductController {
   }
   
  
-  @RequestMapping(value = "/recordNewProductComponents", method = RequestMethod.POST)
+  @RequestMapping(value = "/record/new", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  Map<String, Object> recordNewProductComponents(HttpServletRequest request,
       @RequestBody RecordProductBackingForm form) {
@@ -541,7 +541,7 @@ public class ProductController {
     return map;
   }
   
-  @RequestMapping(value = "/getRecordNewProductComponents", method = RequestMethod.GET)
+  @RequestMapping(value = "/record", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
       @RequestParam(value = "productTypes") List<String> productTypes,
@@ -704,7 +704,7 @@ public class ProductController {
   
   public static String getNextPageUrlForNewRecordProduct(HttpServletRequest req,String qString) {
   	String reqUrl ="";
-  	if(req.getRequestURI().contains("recordNewProductComponents")){
+  	if(req.getRequestURI().contains("recordnewcomponents")){
   		reqUrl = req.getRequestURL().toString().replaceFirst("recordNewProductComponents.html", "findProductByPackNumberPagination.html");
   	}
   	else{
