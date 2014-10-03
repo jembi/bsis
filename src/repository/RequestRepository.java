@@ -90,20 +90,14 @@ public class RequestRepository {
     return request;
   }
 
-  public Request findRequestById(Long requestId) {
-    Request request = null;
-    if (requestId != null) {
+  public Request findRequestById(Long requestId) throws NoResultException, NonUniqueResultException{
       String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
                            "r.id = :requestId and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      List<Request> requests = query.setParameter("requestId", requestId)
-          .getResultList();
-      if (requests != null && requests.size() > 0) {
-        request = requests.get(0);
-      }
-    }
-    return request;
+      Request request = query.setParameter("requestId", requestId)
+          .getSingleResult();
+      return request;
   }
 
   public ArrayList<Request> getAllRequests() {
@@ -202,7 +196,7 @@ public class RequestRepository {
     return resultList;
   }
 
-  public Request findRequestByRequestNumber(String requestNumber) {
+  public Request findRequestByRequestNumber(String requestNumber) throws NoResultException, NonUniqueResultException{
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted",
@@ -210,11 +204,7 @@ public class RequestRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
-    try {
-      request = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    request = query.getSingleResult();
     return request;
   }
 
