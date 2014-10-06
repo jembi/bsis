@@ -16,7 +16,6 @@ import model.location.Location;
 import model.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Range;
 import utils.CustomDateFormatter;
 
 public class CollectedSampleBackingForm {
