@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -16,6 +17,7 @@ import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import utils.CustomDateFormatter;
 
@@ -29,8 +31,17 @@ public class DonorBackingForm {
     private String birthDate;
 
     //to capture date of birth parameters--#11
+    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+    @NotBlank
     String year;
+    
+    @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
+    @NotBlank
     String month;
+    
+    @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
+    @NotBlank
     String dayOfMonth;
 
     private Boolean ageFormatCorrect;
@@ -39,8 +50,10 @@ public class DonorBackingForm {
 
     private String dateOfFirstDonation;
 
+    @Valid
     private Address address;
 
+    @Valid
     private Contact contact;
 
     public DonorBackingForm() {
@@ -65,11 +78,6 @@ public class DonorBackingForm {
     }
 
     public void setBirthDate() {
-
-        if (year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty()) {
-            donor.setBirthDate(null);
-            return;
-        }
         birthDate = dayOfMonth + "/" + month + "/" + year;
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));

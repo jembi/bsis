@@ -6,18 +6,13 @@
 package model.address;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.envers.NotAudited;
+import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -33,10 +28,16 @@ public class Contact implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String mobileNumber;
+    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String homeNumber;
+    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String workNumber;
+    
+    @Email
     private String email;
 
     public Long getId() {

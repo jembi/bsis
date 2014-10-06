@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -39,6 +40,7 @@ public class Address implements Serializable {
     private String homeAddressDistrict;
     private String homeAddressCountry;
     private String homeAddressState;
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String homeAddressZipcode;
     
     private String workAddressLine1;
@@ -48,6 +50,7 @@ public class Address implements Serializable {
     private String workAddressDistrict;
     private String workAddressCountry;
     private String workAddressState;
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String workAddressZipcode;
 
     
@@ -58,6 +61,7 @@ public class Address implements Serializable {
     private String postalAddressDistrict;
     private String postalAddressCountry;
     private String postalAddressState;
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String postalAddressZipcode;
 
     public Long getId() {
