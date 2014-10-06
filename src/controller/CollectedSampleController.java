@@ -296,7 +296,6 @@ public class CollectedSampleController {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
-    form.getCollectedSampleIntegerProps();
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("editCollectionForm", form);
     map.put("refreshUrl", getUrl(request));
@@ -317,7 +316,6 @@ public class CollectedSampleController {
       Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
       map.put("collectionFields", formFields);
       CollectedSample savedCollection = null;
-      form.setCollectedSample();
       CollectedSample collectedSample = form.getCollectedSample();
 
          if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
@@ -355,7 +353,6 @@ public class CollectedSampleController {
       map.put("existingCollectedSample", true);
 
       form.setIsDeleted(false);
-      form.setCollectedSample();
       CollectedSample existingCollectedSample;
       existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
       if (existingCollectedSample == null) {
