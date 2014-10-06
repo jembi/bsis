@@ -486,7 +486,7 @@ public class DonorRepository {
 
     }
 
-    public List<DonorCodeGroup> getAllDonorCodeGroups() {
+    public List<DonorCodeGroup> getAllDonorCodeGroups(){
 
         TypedQuery<DonorCodeGroup> query = em.createQuery(
                 "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
@@ -494,7 +494,7 @@ public class DonorRepository {
 
     }
 
-    public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id) {
+    public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id) throws IllegalArgumentException{
 
         DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
         em.flush();
@@ -502,7 +502,7 @@ public class DonorRepository {
 
     }
 
-    public List<DonorDonorCode> findDonorDonorCodesOfDonorByDonorId(Long donorId) {
+    public List<DonorDonorCode> findDonorDonorCodesOfDonorByDonorId(Long donorId){
 
         TypedQuery<DonorDonorCode> query = em.createQuery(
                 "SELECT dc FROM DonorDonorCode dc where donorId = :donorId", DonorDonorCode.class);
@@ -510,7 +510,7 @@ public class DonorRepository {
         return query.getResultList();
     }
 
-    public DonorCode findDonorCodeById(Long id) {
+    public DonorCode findDonorCodeById(Long id) throws IllegalArgumentException{
 
         DonorCode donorCode = em.find(DonorCode.class, id);
         em.flush();
@@ -518,7 +518,7 @@ public class DonorRepository {
 
     }
 
-    public Donor deleteDonorCode(Long id) {
+    public Donor deleteDonorCode(Long id) throws IllegalArgumentException {
         DonorDonorCode donorDonorCode = em.find(DonorDonorCode.class, id);
         Donor donor = donorDonorCode.getDonorId();
         em.remove(donorDonorCode);
