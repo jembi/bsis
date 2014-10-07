@@ -1,8 +1,8 @@
 package model.donorcodes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.Valid;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -24,27 +23,26 @@ import model.user.User;
 @Audited
 public class DonorDonorCode implements ModificationTracker{
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable=false, updatable=false, insertable=false)
-	private Long id;
-	
-    @NotAudited
-	@ManyToOne
-	@JoinColumn(name="donorId",nullable= false,updatable = false)
-	private Donor donorId;
-	
-    @NotAudited
-	@ManyToOne
-    @JoinColumn(name="donorCodeId",nullable= false,updatable = false)
-	private DonorCode donorCodeId;
+    @Column(nullable = false, updatable = false, insertable = false)
+    private Long id;
 
-	  @Valid
-	  private RowModificationTracker modificationTracker;
-	
-	  public DonorDonorCode() {
-		    modificationTracker = new RowModificationTracker();
-		  }
+    @NotAudited
+    @ManyToOne
+    @JoinColumn(name = "donorId", nullable = false, updatable = false)
+    private Donor donorId;
+
+    @NotAudited
+    @ManyToOne
+    @JoinColumn(name = "donorCodeId", nullable = false, updatable = false)
+    private DonorCode donorCodeId;
+
+    private RowModificationTracker modificationTracker;
+
+    public DonorDonorCode() {
+        modificationTracker = new RowModificationTracker();
+    }
 
 	public Long getId() {
 		return id;
@@ -80,12 +78,12 @@ public class DonorDonorCode implements ModificationTracker{
 	    return modificationTracker.getCreatedDate();
 	  }
 
-	
+	@JsonIgnore
 	public User getCreatedBy() {
 	    return modificationTracker.getCreatedBy();
 	  }
 
-	
+	@JsonIgnore
 	public User getLastUpdatedBy() {
 	    return modificationTracker.getLastUpdatedBy();
 	  }
