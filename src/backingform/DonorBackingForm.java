@@ -54,6 +54,7 @@ public class DonorBackingForm {
         this.donor = donor;
     }
 
+    @JsonIgnore
     public String getBirthDate() {
         if (birthDate != null) {
             return birthDate;
@@ -714,6 +715,7 @@ public class DonorBackingForm {
 
     }
     
+   @JsonIgnore
     public String getContactId(){
         if(contact.getId()!=null)     
         return contact.getId().toString();
@@ -724,6 +726,7 @@ public class DonorBackingForm {
         contact.setId(Long.parseLong(contactId));
     }
     
+    @JsonIgnore
     public String getAddressId(){
         if(address.getId()!=null)
         return  address.getId().toString();
