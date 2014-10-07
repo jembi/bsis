@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,7 +33,7 @@ import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
-@RequestMapping("/donation")
+@RequestMapping("/donations")
 public class CollectedSampleController {
 
   @Autowired
@@ -72,96 +73,184 @@ public class CollectedSampleController {
     return reqUrl;
   }
 
-  private String getNextPageUrl(HttpServletRequest request) {
-    String reqUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "search.html");
-    String queryString = request.getQueryString();   // d=789
-    if (queryString != null) {
-        reqUrl += "?"+queryString;
+  /**
+   * Datatables on the client side expects a json response for rendering data from the server
+   * in jquery datatables. Remember of columns is important and should match the column headings
+   * in collectionsTable.jsp.
+   */
+  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+    Map<String, Object> collectionsMap = new HashMap<String, Object>();
+
+    ArrayList<Object> collectionList = new ArrayList<Object>();
+
+    for (CollectedSampleViewModel collection : getCollectionViewModels(collectedSamples)) {
+
+      List<Object> row = new ArrayList<Object>();
+      
+      row.add(collection.getId().toString());
+
+      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "collectionCenter", "collectionSite")) {
+        if (formFields.containsKey(property)) {
+          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          if (properties.get("hidden").equals(false)) {
+            String propertyValue = property;
+            try {
+              propertyValue = BeanUtils.getProperty(collection, property);
+            } catch (IllegalAccessException e) {
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              e.printStackTrace();
+            }
+            row.add(propertyValue.toString());
+          }
+        }
+      }
+
+      collectionList.add(row);
     }
-    return reqUrl;
+    collectionsMap.put("aaData", collectionList);
+    collectionsMap.put("iTotalRecords", totalRecords);
+    collectionsMap.put("iTotalDisplayRecords", totalRecords);
+    return collectionsMap;
   }
 
-  @RequestMapping(value = "/findform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
+  private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("centers", locationRepository.getAllCenters());
+    m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
+    m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
+    m.put("sites", locationRepository.getAllCollectionSites());
+  }
+
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
+  public  Map<String, Object> addCollectionFormGenerator(HttpServletRequest request) {
+
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
 
     Map<String, Object> map = new  HashMap<String, Object>();
+    map.put("requestUrl", getUrl(request));
+    map.put("firstTimeRender", true);
+    map.put("addCollectionForm", form);
+    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "collectedSamples.find");
-    map.put("tips", tips);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("refreshUrl", getUrl(request));
+    map.put("collectionFields", formFields);
     return map;
   }
 
-  /**
- * issue - #209[Adapt_Bsis_To_Expose_Rest_Services]
- * Reason - duplicate method (see findCollectionPagination method) 
-  @RequestMapping(value = "/findCollection" , method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> findCollection(HttpServletRequest request,
-      @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form) {
+  @RequestMapping(value = "{id}/edit/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
+  public  Map<String, Object> editCollectionFormGenerator(HttpServletRequest request,
+      @PathVariable Long id) {
 
-    List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
-
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(id);
+    CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
+    form.getCollectedSampleIntegerProps();
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("allCollectedSamples", getCollectionViewModels(collections));
+    map.put("editCollectionForm", form);
     map.put("refreshUrl", getUrl(request));
-    map.put("nextPageUrl", getNextPageUrl(request));
-    map.put("saveToWorksheetUrl", getWorksheetUrl(request));
     addEditSelectorOptions(map);
-
-    map.put("model", map);
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+    // to ensure custom field names are displayed in the form
+    map.put("collectionFields", formFields);
     return map;
   }
-  */
-  
-/**
- * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
- * Reason - worksheet concepts are not used in later versions
- * 
-  private String getWorksheetUrl(HttpServletRequest request) {
-    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveFindCollectionsResultsToWorksheet.html");
-    String queryString = request.getQueryString();   // d=789
-    if (queryString != null) {
-        worksheetUrl += "?" + queryString;
-    }
-    return worksheetUrl;
-  }
-  */
 
-  /**
-   * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
-   */
-  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
+  @RequestMapping( method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
+  public  ResponseEntity<Map<String, Object>> addCollection(
+      @RequestBody @Valid CollectedSampleBackingForm form) {
 
-    List<String> visibleFields = new ArrayList<String>();
-    visibleFields.add("id");
-    for (String field : Arrays.asList("collectionNumber", "collectedOn","bloodBagType", "collectionCenter", "collectionSite")) {
-      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
-      if (fieldProperties.get("hidden").equals(false))
-        visibleFields.add(field);
-    }
+      Map<String, Object> map = new HashMap<String, Object>();
+      addEditSelectorOptions(map);
+      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+      map.put("collectionFields", formFields);
+      CollectedSample savedCollection = null;
+      form.setCollectedSample();
+      CollectedSample collectedSample = form.getCollectedSample();
 
-    Map<String, String> sortColumnMap = new HashMap<String, String>();
-    sortColumnMap.put("id", "id");
-    sortColumnMap.put("collectionNumber", "collectionNumber");
-    sortColumnMap.put("collectedOn", "collectedOn");
-    sortColumnMap.put("bloodBagType", "bloodBagType.bloodBagType");
-    sortColumnMap.put("collectionCenter", "collectionCenter.name");
-    sortColumnMap.put("collectionSite", "collectionSite.name");
-    String sortColumn = visibleFields.get(columnId);
+         if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
+          collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
+      }
 
-    if (sortColumnMap.get(sortColumn) == null)
-      return "id";
-    else
-      return sortColumnMap.get(sortColumn);
+      collectedSample.setIsDeleted(false);
+      savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
+      map.put("hasErrors", false);
+      form = new CollectedSampleBackingForm();
+	
+      map.put("collectionId", savedCollection.getId());
+      map.put("collectedSample", getCollectionViewModel(savedCollection));
+      map.put("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
+      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
-  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
+    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
+    return collectionViewModel;
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
+  public  HttpStatus updateCollectedSample(
+      @RequestBody  @Valid CollectedSampleBackingForm form, @PathVariable Long id) {
+      form.setId(id);
+      form.setIsDeleted(false);
+      form.setCollectedSample();
+      collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+      return HttpStatus.OK;
+  }
+
+  public static List<CollectedSampleViewModel> getCollectionViewModels(
+      List<CollectedSample> collections) {
+    if (collections == null)
+      return Arrays.asList(new CollectedSampleViewModel[0]);
+    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
+    for (CollectedSample collection : collections) {
+      collectionViewModels.add(new CollectedSampleViewModel(collection));
+    }
+    return collectionViewModels;
+  }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION + "')")
+    public HttpStatus deleteCollection(
+            @PathVariable Long id) {
+        collectedSampleRepository.deleteCollectedSample(id);
+        return HttpStatus.OK;
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
+    public Map<String, Object> collectionSummaryGenerator(
+            @PathVariable Long id) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        CollectedSample collectedSample = null;
+        if (id != null) {
+            collectedSample = collectedSampleRepository.findCollectedSampleById(id);
+            if (collectedSample != null) {
+                map.put("existingCollectedSample", true);
+            } else {
+                map.put("existingCollectedSample", false);
+            }
+        }
+
+        Map<String, Object> tips = new HashMap<String, Object>();
+        utilController.addTipsToModel(tips, "collections.findcollection.collectionsummary");
+        map.put("tips", tips);
+
+        CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
+        map.put("collectedSample", collectionViewModel);
+
+      
+        return map;
+    }
+    
+     @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findCollectionPagination(HttpServletRequest request,
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
@@ -219,231 +308,6 @@ public class CollectedSampleController {
     Long totalRecords = (Long) results.get(1);
 
     return generateDatatablesMap(collectedSamples, totalRecords, formFields);
-  }
-
-  /**
-   * Datatables on the client side expects a json response for rendering data from the server
-   * in jquery datatables. Remember of columns is important and should match the column headings
-   * in collectionsTable.jsp.
-   */
-  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> collectionsMap = new HashMap<String, Object>();
-
-    ArrayList<Object> collectionList = new ArrayList<Object>();
-
-    for (CollectedSampleViewModel collection : getCollectionViewModels(collectedSamples)) {
-
-      List<Object> row = new ArrayList<Object>();
-      
-      row.add(collection.getId().toString());
-
-      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "collectionCenter", "collectionSite")) {
-        if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
-          if (properties.get("hidden").equals(false)) {
-            String propertyValue = property;
-            try {
-              propertyValue = BeanUtils.getProperty(collection, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-              e.printStackTrace();
-            }
-            row.add(propertyValue.toString());
-          }
-        }
-      }
-
-      collectionList.add(row);
-    }
-    collectionsMap.put("aaData", collectionList);
-    collectionsMap.put("iTotalRecords", totalRecords);
-    collectionsMap.put("iTotalDisplayRecords", totalRecords);
-    return collectionsMap;
-  }
-
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
-    m.put("sites", locationRepository.getAllCollectionSites());
-  }
-
-  @RequestMapping(value = "/addform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public  Map<String, Object> addCollectionFormGenerator(HttpServletRequest request) {
-
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
-
-    Map<String, Object> map = new  HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
-    map.put("addCollectionForm", form);
-    map.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-    // to ensure custom field names are displayed in the form
-    map.put("collectionFields", formFields);
-    return map;
-  }
-
-  @RequestMapping(value = "/editform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public  Map<String, Object> editCollectionFormGenerator(HttpServletRequest request,
-      @RequestParam(value="collectionId") Long collectionId) {
-
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectionId);
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
-    form.getCollectedSampleIntegerProps();
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("editCollectionForm", form);
-    map.put("refreshUrl", getUrl(request));
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-    // to ensure custom field names are displayed in the form
-    map.put("collectionFields", formFields);
-    return map;
-  }
-
-  @RequestMapping( method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public  ResponseEntity<Map<String, Object>> addCollection(
-      @RequestBody @Valid CollectedSampleBackingForm form) {
-
-      Map<String, Object> map = new HashMap<String, Object>();
-      addEditSelectorOptions(map);
-      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-      map.put("collectionFields", formFields);
-      CollectedSample savedCollection = null;
-      form.setCollectedSample();
-      CollectedSample collectedSample = form.getCollectedSample();
-
-         if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
-          collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
-      }
-
-      collectedSample.setIsDeleted(false);
-      savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
-      map.put("hasErrors", false);
-      form = new CollectedSampleBackingForm();
-	
-      map.put("collectionId", savedCollection.getId());
-      map.put("collectedSample", getCollectionViewModel(savedCollection));
-      map.put("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
-      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
-  }
-
-  private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
-    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
-    return collectionViewModel;
-  }
-
-  @RequestMapping(method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public  ResponseEntity<Map<String, Object>> updateCollectedSample(
-      @RequestBody  @Valid CollectedSampleBackingForm form) {
-
-      Map<String, Object> map = new HashMap<String, Object>();
-      HttpStatus httpStatus = HttpStatus.OK;
-      boolean success = false;
-      String message = "";
-      addEditSelectorOptions(map);
-    // only when the collection is correctly added the existingCollectedSample
-      // property will be changed
-      map.put("existingCollectedSample", true);
-
-      form.setIsDeleted(false);
-      form.setCollectedSample();
-      CollectedSample existingCollectedSample;
-      existingCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
-      if (existingCollectedSample == null) {
-          map.put("hasErrors", true);
-          httpStatus = HttpStatus.BAD_REQUEST;
-          success = false;
-          map.put("existingCollectedSample", false);
-          message = "Collection does not already exist.";
-      } else {
-          map.put("hasErrors", false);
-          success = true;
-          message = "Collection Successfully Updated";
-      }
-
-      map.put("editCollectedSampleForm", form);
-      map.put("success", success);
-      map.put("errorMessage", message);
-      map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
-
-      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-  }
-
-  public static List<CollectedSampleViewModel> getCollectionViewModels(
-      List<CollectedSample> collections) {
-    if (collections == null)
-      return Arrays.asList(new CollectedSampleViewModel[0]);
-    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
-    for (CollectedSample collection : collections) {
-      collectionViewModels.add(new CollectedSampleViewModel(collection));
-    }
-    return collectionViewModels;
-  }
-
-  @RequestMapping(method = RequestMethod.DELETE) 
-  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONATION+"')")
-  public 
-  ResponseEntity<Map<String, ? extends Object>> deleteCollection(
-      @RequestParam("collectedSampleId") Long collectionSampleId) {
-
-    HttpStatus httpStatus = HttpStatus.NO_CONTENT;  
-    boolean success = true;
-    String errMsg = "";
-    try {
-      collectedSampleRepository.deleteCollectedSample(collectionSampleId);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      success = false;
-      errMsg = "Internal Server Error";
-      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return new ResponseEntity<Map<String, ? extends Object>>(m, httpStatus);
-  }
-
-  @RequestMapping(method = RequestMethod.GET, params = {"collectionId"})
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> collectionSummaryGenerator(HttpServletRequest request,
-      @RequestParam(value = "collectionId", required = false) Long collectedSampleId) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    map.put("requestUrl", getUrl(request));
-
-    CollectedSample collectedSample = null;
-    if (collectedSampleId != null) {
-      collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-      if (collectedSample != null) {
-        map.put("existingCollectedSample", true);
-      }
-      else {
-        map.put("existingCollectedSample", false);
-      }
-    }
-
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "collections.findcollection.collectionsummary");
-    map.put("tips", tips);
-
-    CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
-    map.put("collectedSample", collectionViewModel);
-
-    map.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
-    return map;
   }
 
   /**
@@ -547,5 +411,100 @@ public class CollectedSampleController {
    return m;  
   }  
   */
+  /*
+  issue - #209[Commented out as un being unused]
+ *
+  private String getNextPageUrl(HttpServletRequest request) {
+    String reqUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "search.html");
+    String queryString = request.getQueryString();   // d=789
+    if (queryString != null) {
+        reqUrl += "?"+queryString;
+    }
+    return reqUrl;
+  }
   
+  
+
+  @RequestMapping(value = "/findform", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
+  public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
+
+    Map<String, Object> map = new  HashMap<String, Object>();
+    addEditSelectorOptions(map);
+    Map<String, Object> tips = new HashMap<String, Object>();
+    utilController.addTipsToModel(tips, "collectedSamples.find");
+    map.put("tips", tips);
+    // to ensure custom field names are displayed in the form
+    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("refreshUrl", getUrl(request));
+    return map;
+  }
+*/
+  /**
+ * issue - #209[Adapt_Bsis_To_Expose_Rest_Services]
+ * Reason - duplicate method (see findCollectionPagination method) 
+  @RequestMapping(value = "/findCollection" , method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
+  public  Map<String, Object> findCollection(HttpServletRequest request,
+      @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form) {
+
+    List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("allCollectedSamples", getCollectionViewModels(collections));
+    map.put("refreshUrl", getUrl(request));
+    map.put("nextPageUrl", getNextPageUrl(request));
+    map.put("saveToWorksheetUrl", getWorksheetUrl(request));
+    addEditSelectorOptions(map);
+
+    map.put("model", map);
+    return map;
+  }
+  */
+  
+/**
+ * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
+ * Reason - worksheet concepts are not used in later versions
+ * 
+  private String getWorksheetUrl(HttpServletRequest request) {
+    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveFindCollectionsResultsToWorksheet.html");
+    String queryString = request.getQueryString();   // d=789
+    if (queryString != null) {
+        worksheetUrl += "?" + queryString;
+    }
+    return worksheetUrl;
+  }
+  */
+
+  /**
+   * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
+   
+  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
+
+    List<String> visibleFields = new ArrayList<String>();
+    visibleFields.add("id");
+    for (String field : Arrays.asList("collectionNumber", "collectedOn","bloodBagType", "collectionCenter", "collectionSite")) {
+      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      if (fieldProperties.get("hidden").equals(false))
+        visibleFields.add(field);
+    }
+
+    Map<String, String> sortColumnMap = new HashMap<String, String>();
+    sortColumnMap.put("id", "id");
+    sortColumnMap.put("collectionNumber", "collectionNumber");
+    sortColumnMap.put("collectedOn", "collectedOn");
+    sortColumnMap.put("bloodBagType", "bloodBagType.bloodBagType");
+    sortColumnMap.put("collectionCenter", "collectionCenter.name");
+    sortColumnMap.put("collectionSite", "collectionSite.name");
+    String sortColumn = visibleFields.get(columnId);
+
+    if (sortColumnMap.get(sortColumn) == null)
+      return "id";
+    else
+      return sortColumnMap.get(sortColumn);
+  }
+
+ 
+*/
 }

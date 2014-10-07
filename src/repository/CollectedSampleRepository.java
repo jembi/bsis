@@ -67,7 +67,7 @@ public class CollectedSampleRepository {
     em.flush();
   }
 
-  public CollectedSample updateCollectedSample(CollectedSample collectedSample) {
+  public CollectedSample updateCollectedSample(CollectedSample collectedSample) throws NoResultException{
     CollectedSample existingCollectedSample = findCollectedSampleById(collectedSample.getId());
     if (existingCollectedSample == null) {
       return null;
@@ -84,7 +84,11 @@ public class CollectedSampleRepository {
     String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.id = :collectedSampleId and c.isDeleted = :isDeleted";
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
+    try{
     return query.setParameter("collectedSampleId", collectedSampleId).getSingleResult();
+    }catch(NoResultException ex){
+        throw new NoResultException("No Donation Exists with ID :" + collectedSampleId);
+    }
   }
 
   public List<Object> findCollectedSamples(

@@ -1,6 +1,7 @@
 package viewmodel;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class CollectedSampleViewModel {
     return collectedSample.getCollectionNumber();
   }
 
+  @JsonIgnore
   public Donor getDonor() {
     return collectedSample.getDonor();
   }
