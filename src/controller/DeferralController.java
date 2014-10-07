@@ -6,8 +6,8 @@
 package controller;
 
 import static controller.DonorController.getUrl;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.donordeferral.DonorDeferral;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ import viewmodel.DonorDeferralViewModel;
  * @author srikanth
  */
 @RestController
-@RequestMapping("deferral")
+@RequestMapping("deferrals")
 public class DeferralController {
 
     @Autowired
@@ -40,11 +41,11 @@ public class DeferralController {
     @Autowired
     private UtilController utilController;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "form/{donorId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
     Map<String, Object> deferDonorFormGenerator(HttpServletRequest request,
-            @RequestParam("donorId") String donorId) {
+            @PathVariable String donorId) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("donorId", donorId);
@@ -52,7 +53,7 @@ public class DeferralController {
         return map;
     }
 
-    @RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/edit/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
     public 
     Map<String, Object> editDeferDonorFormGenerator(HttpServletRequest request,
@@ -79,73 +80,57 @@ public class DeferralController {
         Map<String, Object> map = new HashMap<String, Object>();
         List<DonorDeferral> donorDeferrals = null;
         List<DonorDeferralViewModel> donorDeferralViewModels;
-        try {
-            donorDeferrals = donorRepository.getDonorDeferrals(id);
-            donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            donorDeferralViewModels = Arrays.asList(new DonorDeferralViewModel[0]);
-        }
-
+        donorDeferrals = donorRepository.getDonorDeferrals(id);
+        donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
         map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
         map.put("allDonorDeferrals", donorDeferralViewModels);
         map.put("refreshUrl", getUrl(request));
-        // to ensure custom field names are displayed in the form
-        map.put("donorDeferralFields", utilController.getFormFieldsForForm("donorDeferral"));
         return map;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
-    Map<String, Object> deferDonor(
+    HttpStatus deferDonor(
             HttpServletResponse response,
             @RequestParam(value = "donorId" , required = true) String donorId,
             @RequestParam(value = "deferUntil", required = true) String deferUntil,
             @RequestParam(value = "deferralReasonId", required = true) String deferralReasonId,
             @RequestParam(value = "deferralReasonText", required = false) String deferralReasonText) {
 
-        Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
-
         try {
             donorRepository.deferDonor(donorId, deferUntil, deferralReasonId, deferralReasonText);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (ParseException ex) {
+          ex.printStackTrace();
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-
-        return donorDeferralResult;
+        return HttpStatus.CREATED;
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-    public 
-    Map<String, Object> updateDeferDonor( HttpServletResponse response,
-            @RequestParam(value = "donorDeferralId",  required = true) String donorDeferralId,
+    public HttpStatus updateDeferDonor(HttpServletResponse response,
+            @PathVariable String id,
             @RequestParam("donorId") String donorId,
             @RequestParam("deferUntil") String deferUntil,
             @RequestParam("deferralReasonId") String deferralReasonId,
             @RequestParam("deferralReasonText") String deferralReasonText) {
 
-        Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
-
         try {
-            donorRepository.updatedeferDonor(donorDeferralId, donorId, deferUntil, deferralReasonId, deferralReasonText);
+            donorRepository.updatedeferDonor(id, donorId, deferUntil, deferralReasonId, deferralReasonText);
         } catch (Exception ex) {
             ex.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        return donorDeferralResult;
+        return HttpStatus.OK;
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DEFERRAL + "')")
     public 
-    Map<String, Object> cancelDeferDonor(HttpServletResponse response,
+    HttpStatus cancelDeferDonor(HttpServletResponse response,
             @PathVariable Long  id) {
-
-        Map<String, Object> donorDeferralResult = new HashMap<String, Object>();
 
         try {
             donorRepository.cancelDeferDonor(id);
@@ -154,7 +139,7 @@ public class DeferralController {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        return donorDeferralResult;
+        return HttpStatus.OK;
     }
 
     private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
