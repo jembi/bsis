@@ -177,7 +177,8 @@ public class DonorController {
     return map;
   }
 
-  
+  /**
+   * issue - $209 [Commented as it is being duplicate method - refer /donor]
   @RequestMapping(value = "/find", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public Map<String, Object> findDonorFormGenerator(HttpServletRequest reques) {
@@ -195,7 +196,7 @@ public class DonorController {
     map.put("addDonorForm", dbform);
     return map;
   }
-
+*/
   
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
