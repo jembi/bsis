@@ -152,7 +152,7 @@ public class DonorController {
     map.put("requestUrl", getUrl(request));
     map.put("firstTimeRender", true);
     map.put("addDonorForm", form);
-     map.put("refreshUrl", getUrl(request));
+    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     return map;
   }
@@ -225,36 +225,16 @@ public class DonorController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public  ResponseEntity<Map<String,Object>>  
+  public  HttpStatus 
         updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
-
-      HttpStatus httpStatus = HttpStatus.OK;
-      Map<String, Object> map = new HashMap<String, Object>();
-      boolean success = false;
-      String message = "";
-    // only when the collection is correctly added the existingCollectedSample
-      // property will be changed
-      map.put("existingDonor", true);
 
       form.setIsDeleted(false);
       Donor donor = form.getDonor();
       donor.setId(id);
       donor.setContact(form.getContact());
       donor.setAddress(form.getAddress());
-      Donor existingDonor = donorRepository.updateDonor(donor);
-      if (existingDonor == null) {
-          map.put("hasErrors", true);
-          httpStatus = HttpStatus.BAD_REQUEST;
-          success = false;
-          map.put("existingDonor", false);
-          message = "Donor does not already exist.";
-      } else {
-          map.put("hasErrors", false);
-          success = true;
-          message = "Donor Successfully Updated";
-      }
-
-    return new ResponseEntity<Map<String, Object>>(map,httpStatus);
+      donorRepository.updateDonor(donor);
+      return HttpStatus.OK;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
