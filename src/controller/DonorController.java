@@ -98,7 +98,6 @@ public class DonorController {
 
     map.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     
     
       // include donor deferral status
@@ -140,7 +139,6 @@ public class DonorController {
     map.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
     map.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -156,9 +154,6 @@ public class DonorController {
     map.put("addDonorForm", form);
      map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
-    // to ensure custom field names are displayed in the form
-     map.put("donorFields", formFields);
     return map;
   }
 
@@ -169,7 +164,6 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     DonorBackingForm donorForm = new DonorBackingForm(donor);
     String dateToken[]=donorForm.getBirthDate().split("/");
     donorForm.setContact(donor.getContact());
@@ -195,8 +189,6 @@ public class DonorController {
    // map.put("findDonorForm", form);
     utilController.addTipsToModel(map, "donors.finddonor");
     // to ensure custom field names are displayed in the form
-    map.put("donorFields", utilController.getFormFieldsForForm("donor"));
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     map.put("contentLabel", "Find Donors");
     map.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(map);
@@ -213,8 +205,6 @@ public class DonorController {
 
         HttpStatus httpStatus = HttpStatus.CREATED;
         Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
-        map.put("donorFields", formFields);
         Donor savedDonor = null;
 
         Donor donor = form.getDonor();
@@ -267,7 +257,6 @@ public class DonorController {
     map.put("success", success);
     addEditSelectorOptions(map);
     map.put("errorMessage", message);
-    map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     addEditSelectorOptions(map);
 
     return new ResponseEntity<Map<String, Object>>(map,httpStatus);
