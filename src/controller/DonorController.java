@@ -254,13 +254,6 @@ public class DonorController {
           message = "Donor Successfully Updated";
       }
 
-
-    map.put("editDonorForm", form);
-    map.put("success", success);
-    addEditSelectorOptions(map);
-    map.put("errorMessage", message);
-    addEditSelectorOptions(map);
-
     return new ResponseEntity<Map<String, Object>>(map,httpStatus);
   }
 
