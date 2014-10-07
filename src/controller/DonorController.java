@@ -33,7 +33,7 @@ import utils.PermissionConstants;
 import viewmodel.DonorViewModel;
 
 @RestController
-@RequestMapping("donor")
+@RequestMapping("donors")
 public class DonorController {
 
     /**
@@ -142,7 +142,7 @@ public class DonorController {
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(value ="form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
 
@@ -157,7 +157,7 @@ public class DonorController {
     return map;
   }
 
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+  @RequestMapping(value = "/{id}/edit/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public Map<String, Object> editDonorFormGenerator(HttpServletRequest request,
       @PathVariable Long id) {
@@ -223,10 +223,10 @@ public class DonorController {
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
     }
 
-  @RequestMapping(method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public  ResponseEntity<Map<String,Object>>  
-        updateDonor(@Valid @RequestBody DonorBackingForm form) {
+        updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
 
       HttpStatus httpStatus = HttpStatus.OK;
       Map<String, Object> map = new HashMap<String, Object>();
@@ -238,6 +238,7 @@ public class DonorController {
 
       form.setIsDeleted(false);
       Donor donor = form.getDonor();
+      donor.setId(id);
       donor.setContact(form.getContact());
       donor.setAddress(form.getAddress());
       Donor existingDonor = donorRepository.updateDonor(donor);
