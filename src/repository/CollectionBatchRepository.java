@@ -44,12 +44,16 @@ public class CollectionBatchRepository {
     return query.setParameter("batchId", batchId).getSingleResult();
   }
 
-  public CollectionBatch findCollectionBatchByBatchNumber(String batchNumber) {
+  public CollectionBatch findCollectionBatchByBatchNumber(String batchNumber) throws NoResultException,NonUniqueResultException {
     String queryString = "SELECT b FROM CollectionBatch b " +
         "WHERE b.batchNumber = :batchNumber and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
+    try{
     return query.setParameter("batchNumber", batchNumber).getSingleResult();
+    }catch(NoResultException ex){
+        throw new NoResultException("No DonatchBatch Exists with ID :"+ batchNumber);
+    }
   }
 
   public CollectionBatch
