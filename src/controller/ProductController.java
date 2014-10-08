@@ -49,7 +49,7 @@ import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 
 @RestController
-@RequestMapping("component")
+@RequestMapping("components")
 public class ProductController {
 
   @Autowired
@@ -90,22 +90,14 @@ public class ProductController {
     return reqUrl;
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
   public   Map<String, Object> productSummaryGenerator(HttpServletRequest request, 
-      @RequestParam(value = "productId", required = false) Long productId) {
+      @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("requestUrl", getUrl(request));
-    Product product = null;
-    if (productId != null) {
-      product = productRepository.findProductById(productId);
-      if (product != null) {
-        map.put("existingProduct", true);
-      }
-      else {
-        map.put("existingProduct", false);
-      }
-    }
+    Product product = productRepository.findProductById(id);
+     
     ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
     Map<String, Object> tips = new HashMap<String, Object>();
     addEditSelectorOptions(map);
@@ -114,9 +106,7 @@ public class ProductController {
     map.put("product", productViewModel);
     map.put("refreshUrl", getUrl(request));
     map.put("productStatusChangeReasons",
-        productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
-    // to ensure custom field names are displayed in the form
-    map.put("productFields", utilController.getFormFieldsForForm("Product"));
+    productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
     return map;
   }
 
@@ -140,7 +130,7 @@ public class ProductController {
   /**
    * Form Generator to create Record Product page
    */
-  @RequestMapping(value = "/recordform", method = RequestMethod.GET)
+  @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
 
@@ -158,9 +148,7 @@ public class ProductController {
     return map;
   }
   
-
-  
-  @RequestMapping(value = "/addProductCombinationFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/combination/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request
       ) {
@@ -181,9 +169,8 @@ public class ProductController {
     return map;
   }
 
-  
  
-  @RequestMapping(value = "/addProductCombination", method = RequestMethod.POST)
+  @RequestMapping(value = "/Combination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity< Map<String, Object>> addProductCombination(
       HttpServletRequest request,
@@ -193,9 +180,7 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-    map.put("productFields", formFields);
-
+   
       List<Product> savedProducts = null;
       savedProducts = productRepository.addProductCombination(form);
       map.put("hasErrors", false);
@@ -272,11 +257,11 @@ public class ProductController {
 
   @RequestMapping(method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
-  public ResponseEntity deleteProduct(
+  public HttpStatus deleteProduct(
       @PathVariable Long id) {
-
-    productRepository.deleteProduct(id);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
+ 
+      productRepository.deleteProduct(id);
+      return HttpStatus.NO_CONTENT;
   }
 
   @RequestMapping(value = "{id}/discardform", method = RequestMethod.GET)
@@ -286,7 +271,7 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productId", id);
     List<ProductStatusChangeReason> statusChangeReasons =
-        productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
+    productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
     map.put("discardReasons", statusChangeReasons);
     return map;
   }
@@ -313,7 +298,7 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productId", id);
     List<ProductStatusChangeReason> statusChangeReasons =
-        productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
+    productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
     map.put("returnReasons", statusChangeReasons);
     return map;
   }
@@ -335,81 +320,50 @@ public class ProductController {
       @PathVariable Long id,
       @RequestParam("numProductsAfterSplitting") Integer numProductsAfterSplitting) {
 
-    boolean success = true;
-    String errMsg = "";
-    try {
-      success = productRepository.splitProduct(id, numProductsAfterSplitting);
-      if (!success)
-        errMsg = "Product cannot be split";
-    } catch (Exception ex) {
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
+      boolean success = true;
+      String errMsg = "";
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+      success = productRepository.splitProduct(id, numProductsAfterSplitting);
+      if (!success) {
+          errMsg = "Product cannot be split";
+      }
+
+      Map<String, Object> m = new HashMap<String, Object>();
+      m.put("success", success);
+      m.put("errMsg", errMsg);
+      return m;
   }
 
   @RequestMapping(value = "{id}/history", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public  Map<String, Object> viewProductHistory(HttpServletRequest request, 
+  public  Map<String, Object> viewProductHistory(
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-
-    Product product = null;
-    if (id != null) {
-      product = productRepository.findProductById(id);
-      if (product != null) {
-        map.put("existingProduct", true);
-      }
-      else {
-        map.put("existingProduct", false);
-      }
-    }
-
+    Product product = productRepository.findProductById(id);
     ProductViewModel productViewModel = getProductViewModel(product);
     map.put("product", productViewModel);
     map.put("allProductMovements", productRepository.getProductStatusChanges(product));
-    map.put("refreshUrl", getUrl(request));
-    map.put("productFields", utilController.getFormFieldsForForm("product"));
-    // to ensure custom field names are displayed in the form
     return map;
   }
 
   @RequestMapping(value = "{id}/return", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public  Map<String, Object> returnProduct(
+  public  HttpStatus returnProduct(
       @PathVariable  Long id,
       @RequestParam("returnReasonId") Integer returnReasonId,
       @RequestParam("returnReasonText") String returnReasonText) {
 
-    boolean success = true;
-    String errMsg = "";
-    try {
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(returnReasonId);
       productRepository.returnProduct(id, statusChangeReason, returnReasonText);
-    } catch (Exception ex) {
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+      return HttpStatus.OK;
   }
 
   
   @SuppressWarnings("unchecked")
-  @RequestMapping(value = "collectionNumber-{collectionNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "collectionNumber/{collectionNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String collectionNumber) {
 
