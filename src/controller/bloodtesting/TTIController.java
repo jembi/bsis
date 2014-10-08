@@ -53,7 +53,7 @@ import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
-@RequestMapping("tti")
+@RequestMapping("ttitests")
 public class TTIController {
 
 	private static final Logger LOGGER = Logger.getLogger(TTIController.class);
@@ -112,7 +112,7 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/saveTests", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveTTITests(
 			@RequestParam("collectionNumber") String collectionNumber,
 			@RequestParam("ttiInput") String ttiInput) {
@@ -264,7 +264,7 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/saveadditionaltests", method = RequestMethod.POST)
+	@RequestMapping(value = "/additional", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
 			@RequestParam(value = "collectionId") String collectionId,
 			@RequestParam(value = "saveTestsData") String saveTestsDataStr) {
@@ -298,24 +298,28 @@ public class TTIController {
 		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
 
-	@RequestMapping(value = "/saveAlltestresults", method = RequestMethod.POST)
+	@RequestMapping(value = "/results", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public 
-	Map<String, Object> saveAllTestResults(
-			HttpServletRequest request,
-			HttpServletResponse response,
+	ResponseEntity<Map<String, Object>> saveAllTestResults(
 			@RequestParam(value = "saveTestsData") String saveTestsDataStr,
 			@RequestParam(value = "saveUninterpretableResults") boolean saveUninterpretableResults) {
 
 		Map<String, Object> m = new HashMap<String, Object>();
-
-		try {
+                HttpStatus httpStatus = HttpStatus.OK;
 
 			Map<Long, Map<Long, String>> testResultsMap = new HashMap<Long, Map<Long, String>>();
 			ObjectMapper mapper = new ObjectMapper();
 			@SuppressWarnings("unchecked")
-			Map<String, Map<String, String>> saveTestsData = mapper.readValue(
-					saveTestsDataStr, HashMap.class);
+			Map<String, Map<String, String>> saveTestsData;
+            try {
+                saveTestsData = mapper.readValue(
+                        saveTestsDataStr, HashMap.class);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+                return new ResponseEntity<Map<String, Object>>(m, httpStatus);
+            }
 			for (String collectionIdStr : saveTestsData.keySet()) {
 				Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 				Map<String, String> testsForCollection = saveTestsData
@@ -336,13 +340,10 @@ public class TTIController {
 					.get("errors");
 
 			if (errorMap != null && !errorMap.isEmpty())
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		} catch (Exception ex) {
-			LOGGER.error(ex.getMessage() + ex.getStackTrace());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}
+			    httpStatus = HttpStatus.BAD_REQUEST;
+		
 
-		return m;
+		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
         
         /**
@@ -374,7 +375,7 @@ public class TTIController {
         */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "saveresultsonplate", method = RequestMethod.POST)
+	@RequestMapping(value = "results/onplate", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
 			HttpServletResponse response,
@@ -444,7 +445,7 @@ public class TTIController {
 	}
         * */
 
-	@RequestMapping(value = "/uploadresults", method = RequestMethod.POST)
+	@RequestMapping(value = "results/upload", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(
 			MultipartHttpServletRequest request, HttpServletResponse response)

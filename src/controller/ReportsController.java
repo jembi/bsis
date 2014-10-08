@@ -28,7 +28,7 @@ import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("report")
+@RequestMapping("reports")
 public class ReportsController {
 
   @Autowired

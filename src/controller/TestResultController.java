@@ -14,7 +14,7 @@ import repository.CollectedSampleRepository;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("testresult")
+@RequestMapping("testresults")
 public class TestResultController {
 
   @Autowired

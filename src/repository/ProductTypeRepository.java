@@ -124,8 +124,6 @@ public class ProductTypeRepository {
     query = em.createQuery("SELECT pt from ProductTypeCombination pt " +
             "where pt.id=:id", ProductTypeCombination.class);
     query.setParameter("id", id);
-    if (query.getResultList().size() == 0)
-      return null;
     return query.getSingleResult();
   }
 

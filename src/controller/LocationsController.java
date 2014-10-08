@@ -18,7 +18,7 @@ import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
 
 @RestController
-@RequestMapping("location")
+@RequestMapping("locations")
 public class LocationsController {
 
   @Autowired

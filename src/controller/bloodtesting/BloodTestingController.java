@@ -21,7 +21,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 
 @RestController
-@RequestMapping("bloodtest")
+@RequestMapping("bloodtests")
 public class BloodTestingController {
 
   @Autowired
@@ -39,41 +39,38 @@ public class BloodTestingController {
     return reqUrl;
   }
 
-  @RequestMapping(method=RequestMethod.GET)
+  @RequestMapping(value = "{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public Map<String, Object> getBloodTestSummary(@RequestParam(value="bloodTestId") Integer bloodTestId) {
+  public Map<String, Object> getBloodTestSummary(@PathVariable Integer id) {
       
     Map<String, Object> map = new HashMap<String, Object>();  
     BloodTestViewModel bloodTest;
-    bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(bloodTestId));
+    bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(id));
     map.put("bloodTest", bloodTest);
     return map;
   }
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity<Map<String, Object>> saveNewBloodTest(HttpServletRequest request,
-      HttpServletResponse response, @RequestBody Map<String, Object> newBloodTestAsMap) {
-      Map<String, Object> m = new HashMap<String, Object>();
+  public ResponseEntity saveNewBloodTest(
+      @RequestBody Map<String, Object> newBloodTestAsMap) {
       bloodTestingRepository.saveNewBloodTest(newBloodTestAsMap);
-      return new ResponseEntity<Map<String, Object>>(m, HttpStatus.CREATED);
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
   
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity<Map<String, Object>> deactivateBloodTest(@PathVariable Integer id) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
+  public ResponseEntity deactivateBloodTest(@PathVariable Integer id) {
     bloodTestingRepository.deactivateBloodTest(id);
-    return new ResponseEntity<Map<String, Object>>(m, HttpStatus.CREATED);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity<Map<String, Object>> activateBloodTest(@PathVariable Integer id) {
+  public ResponseEntity activateBloodTest(@PathVariable Integer id) {
 
-    Map<String, Object> m = new HashMap<String, Object>();
+   
     bloodTestingRepository.activateBloodTest(id);
-    return new ResponseEntity<Map<String, Object>>(m, HttpStatus.CREATED);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

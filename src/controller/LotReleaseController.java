@@ -27,7 +27,7 @@ import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("lotrelease")
+@RequestMapping("lotreleases")
 public class LotReleaseController {
 
   @Autowired
