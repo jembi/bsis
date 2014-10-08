@@ -1,4 +1,4 @@
-package controller;
+ package controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,18 +7,18 @@ import javax.servlet.http.HttpServletResponse;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("componenttype")
+@RequestMapping("componenttypes")
 public class ProductTypeController {
 
   @Autowired
@@ -36,66 +36,48 @@ public class ProductTypeController {
     return reqUrl;
   }
 
-  public  Map<String, Object> getProductTypeSummary(HttpServletRequest request,
-      @RequestParam(value="productTypeId") Integer productTypeId) {
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  public  Map<String, Object> getProductTypeSummary(@PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
-    ProductType productType = productTypeRepository.getProductTypeById(productTypeId);
+    ProductType productType = productTypeRepository.getProductTypeById(id);
     map.put("productType", productType);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
     @RequestMapping(method = RequestMethod.POST)
     public 
-    Map<String, Object>  saveNewProductType(HttpServletResponse response,
+    HttpStatus saveNewProductType(
              @RequestBody Map<String, Object> productType) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        boolean success = false;
+       
         productTypeRepository.saveNewProductTypeCombination(productType);
-        success = true;
-        if (!success) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        map.put("succcess", true);
-        return map;
+        return HttpStatus.NO_CONTENT;
     }
     
-
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
-    public 
-    Map<String, Object> updateProductType(HttpServletResponse response,
+    public HttpStatus updateProductType(
             @RequestBody Map<String, Object> productType) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        boolean success = false;
         productTypeRepository.saveNewProductTypeCombination(productType);
-        success = true;
-        if (!success) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        map.put("succcess", true);
-        return map;
+        return HttpStatus.NO_CONTENT;
     }
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> deactivateProductType(@PathVariable Integer id) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
+  public  HttpStatus deactivateProductType(@PathVariable Integer id) {
+   
     productTypeRepository.deactivateProductType(id);
-    return m;
+    return HttpStatus.NO_CONTENT;
   }
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> activateProductType(HttpServletRequest request,
+  public  HttpStatus activateProductType(HttpServletRequest request,
       @PathVariable Integer id) {
 
-    Map<String, Object> m = new HashMap<String, Object>();
     productTypeRepository.activateProductType(id);
-    return m;
+    return HttpStatus.NO_CONTENT;
   }
 
   @RequestMapping(value="Combination/{id}", method=RequestMethod.GET)
@@ -113,37 +95,29 @@ public class ProductTypeController {
     @RequestMapping(value = "Combination", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public 
-    Map<String, Object> saveNewProductTypeCombination(HttpServletResponse response,
+    HttpStatus saveNewProductTypeCombination(HttpServletResponse response,
             @RequestBody Map<String, Object> productType) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        boolean success = false;
+
         productTypeRepository.saveNewProductTypeCombination(productType);
-        success = true;
-        if (!success) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        map.put("succcess", true);
-        return map;
+        return HttpStatus.NO_CONTENT;
     }
   
   @RequestMapping(value="/Combination/{id}/deactivate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public Map<String, Object> deactivateProductTypeCombination(HttpServletRequest request,
+  public HttpStatus deactivateProductTypeCombination(HttpServletRequest request,
       @PathVariable Integer id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
     productTypeRepository.deactivateProductTypeCombination(id);
-    return map;
+    return HttpStatus.NO_CONTENT;
   }
 
   @RequestMapping(value="/Combination/{id}/activate", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> activateProductTypeCombination(HttpServletRequest request,
+  public  HttpStatus activateProductTypeCombination(HttpServletRequest request,
       @PathVariable Integer id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    productTypeRepository.activateProductTypeCombination(id);
-    return map;
+     productTypeRepository.activateProductTypeCombination(id);
+     return HttpStatus.NO_CONTENT;
   }
 
 
