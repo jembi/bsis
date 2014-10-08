@@ -103,7 +103,7 @@ public class UsageRepository {
     em.flush();
   }
 
-  public ProductUsage findUsageById(Long usageId) {
+  public ProductUsage findUsageById(Long usageId) throws IllegalArgumentException{
     return em.find(ProductUsage.class, usageId);
   }
 

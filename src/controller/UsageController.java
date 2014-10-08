@@ -4,9 +4,7 @@ import backingform.ProductUsageBackingForm;
 import backingform.validator.UsageBackingFormValidator;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.product.Product;
 import model.request.Request;
@@ -15,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +30,7 @@ import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
 
 @RestController
-@RequestMapping("usage")
+@RequestMapping("usages")
 public class UsageController {
 
   @Autowired
@@ -116,7 +111,9 @@ public class UsageController {
 
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
-
+/**
+ * issue - isue #209 
+ * eson - duplicate method refer end point "/add/form"
   @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public Map<String, Object> addUsageByRequestFormGenerator(HttpServletRequest request) {
@@ -131,31 +128,19 @@ public class UsageController {
     map.put("usageFields", formFields);
     return map;
   }
-
+*/
   @RequestMapping(value="/find/components/{requestNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> findIssuedProductsForRequest(HttpServletRequest request,
-      HttpServletResponse response,
+  public  ResponseEntity<Map<String, Object>> findIssuedProductsForRequest(
       @PathVariable String requestNumber) {
-
-    HttpStatus httpStatus =  HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
-
     Request req = requestRepository.findRequest(requestNumber);
-    boolean success = true;
-    if (req == null) {
-      httpStatus =  HttpStatus.BAD_REQUEST;
-      success = false;
-      map.put("errorMessage", "Request not found");
-    } else {
-      map.put("request", new RequestViewModel(req));
-      map.put("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
-    }
-
+    map.put("request", new RequestViewModel(req));
+    map.put("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
     map.put("productFields", utilController.getFormFieldsForForm("product"));
-    map.put("success", success);
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
+  
 
   @RequestMapping(value = "/components/usage/add/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
@@ -180,7 +165,7 @@ public class UsageController {
     return map;
   }
 
-    @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/forproduct", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
     public ResponseEntity<Map<String, Object>> addUsageForProduct(
             @Valid @RequestBody ProductUsageBackingForm form) {
