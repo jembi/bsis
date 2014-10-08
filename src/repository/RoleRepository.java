@@ -2,20 +2,18 @@ package repository;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import model.user.User;
-import model.user.Role;
 import model.user.Permission;
+import model.user.Role;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import viewmodel.UserViewModel;
 import viewmodel.RoleViewModel;
+
 
 @Repository
 @Transactional
@@ -34,25 +32,27 @@ public class RoleRepository {
 		return userViewModels;
 	}
 
-	public Role findRoleByName(String name) {
-		System.out.println("role not empty....");
+	public Role findRoleByName(String name){
 		String queryString = "SELECT r FROM Role r WHERE r.name = :roleName";
 		TypedQuery<Role> query = em.createQuery(queryString, Role.class);
 		query.setParameter("roleName", name);
-		List<Role> resultList = query.getResultList();
-		return resultList.isEmpty() ? null : resultList.get(0);
+                try{
+		return query.getSingleResult();
+                }catch(NoResultException ex){
+                    return null;
+                }
+                catch(NonUniqueResultException ex){
+                    throw new NonUniqueResultException("More than on erole exists with name :"+ name);
+                }
 	}
 	
-	public Role findRoleDetailById(Long id) {
-		if (id == null) {
-			return null;
-		}
+	public Role findRoleDetailById(Long id) throws NoResultException, NonUniqueResultException {
+	
 		String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";
 		TypedQuery<Role> query = em.createQuery(queryString, Role.class)
 				.setMaxResults(1);
 		query.setParameter("roleId", id);
-		List<Role> resultList = query.getResultList();
-		return resultList.isEmpty() ? null : resultList.get(0);
+		return query.getSingleResult();
 	}
 
 	public List<Permission> getAllPermissions() {
@@ -81,7 +81,7 @@ public class RoleRepository {
 		return existingRole;
 	}
 	
-	public Role addRole(Role role) {
+	public Role addRole(Role role) throws IllegalArgumentException{
 	    em.merge(role);
 	    em.flush();
 	    
