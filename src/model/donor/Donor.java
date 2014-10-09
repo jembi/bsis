@@ -192,13 +192,13 @@ public class Donor implements ModificationTracker {
  
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
- @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+ @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
  @JoinColumn(name="addressId")
  private Address address;
   
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "contactId")
     private Contact contact;
 
