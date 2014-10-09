@@ -189,6 +189,8 @@ public class DonorRepository {
         if (existingDonor == null) {
             return null;
         }
+        donor.getAddress().setId(existingDonor.getAddress().getId());
+        donor.getContact().setId(existingDonor.getContact().getId());
         existingDonor.copy(donor);
         existingDonor.setIsDeleted(false);
         em.merge(existingDonor);
