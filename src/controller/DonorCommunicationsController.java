@@ -33,7 +33,7 @@ import utils.PermissionConstants;
 import viewmodel.DonorViewModel;
 
 @RestController
-@RequestMapping("donorcommunication")
+@RequestMapping("donorcommunications")
 public class DonorCommunicationsController {
 
     /**
@@ -57,7 +57,7 @@ public class DonorCommunicationsController {
         binder.registerCustomEditor(BloodGroup.class, null, null);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
     public @ResponseBody
     Map<String, Object> donorCommunicationsFormGenerator(
@@ -115,7 +115,7 @@ public class DonorCommunicationsController {
         return reqUrl;
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> findDonorCommunicationsPagination(
             @RequestParam(value="bloodGroups",required=true ) List<BloodGroup> bloodGroups,
