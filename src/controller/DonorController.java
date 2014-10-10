@@ -108,27 +108,14 @@ public class DonorController {
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/{id}/history", method = RequestMethod.GET)
+  @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public ResponseEntity<Map<String, Object>> viewDonorHistory(HttpServletRequest request,
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Donor donor = null;
-    if (id != null) {
-      donor = donorRepository.findDonorById(id);
-      if (donor != null) {
-        map.put("existingDonor", true);
-      }
-      else {
-        map.put("existingDonor", false);
-      }
-    }
-
-    DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
-    map.put("donor", donorViewModel);
+    Donor donor = donorRepository.findDonorById(id);
     map.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
-    // to ensure custom field names are displayed in the form
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -194,8 +181,6 @@ public class DonorController {
 
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);
-        // Set the DonorNumber, It was set in the validate method of DonorBackingFormValidator.java
-        donor.setDonorNumber(utilController.getNextDonorNumber());
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
         savedDonor = donorRepository.addDonor(donor);
@@ -209,7 +194,7 @@ public class DonorController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public  HttpStatus 
+  public  ResponseEntity
         updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
 
       form.setIsDeleted(false);
@@ -218,7 +203,7 @@ public class DonorController {
       donor.setContact(form.getContact());
       donor.setAddress(form.getAddress());
       donorRepository.updateDonor(donor);
-      return HttpStatus.OK;
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -251,7 +236,7 @@ public class DonorController {
   }
 
 
-  @RequestMapping(value = "/list", method = RequestMethod.GET)
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
   public Map<String, Object> findDonorPagination(
                   @RequestParam(value="firstName",required=false, defaultValue ="" ) String firstName,
                   @RequestParam(value="lastName",required=false, defaultValue ="") String lastName,
