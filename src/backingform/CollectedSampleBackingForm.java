@@ -54,7 +54,6 @@ public class CollectedSampleBackingForm {
     collectedSample = new CollectedSample();
   }
 
- 
   public CollectedSampleBackingForm(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -169,23 +168,6 @@ public class CollectedSampleBackingForm {
       return bloodBagType.getId().toString();
   }
 
-  public Date getLastUpdated() {
-    return collectedSample.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return collectedSample.getCreatedDate();
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return collectedSample.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return collectedSample.getLastUpdatedBy();
-  }
 
   public String getNotes() {
     return collectedSample.getNotes();
@@ -273,22 +255,6 @@ public class CollectedSampleBackingForm {
         collectedSample.setBloodBagType(null);
       }
     }
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    collectedSample.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    collectedSample.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    collectedSample.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    collectedSample.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public void setNotes(String notes) {
