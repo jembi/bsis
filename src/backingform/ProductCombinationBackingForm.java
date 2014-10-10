@@ -63,24 +63,6 @@ public class ProductCombinationBackingForm {
     return product.getCollectedSample();
   }
 
-  
-  public Date getLastUpdated() {
-    return product.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return product.getCreatedDate();
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return product.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return product.getLastUpdatedBy();
-  }
 
   public String getNotes() {
     return product.getNotes();
@@ -114,21 +96,6 @@ public class ProductCombinationBackingForm {
     return expiresOn;
   }
 
-  public void setLastUpdated(Date lastUpdated) {
-    product.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    product.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    product.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    product.setLastUpdatedBy(lastUpdatedBy);
-  }
 
   public void setNotes(String notes) {
     product.setNotes(notes);
