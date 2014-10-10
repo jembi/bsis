@@ -23,7 +23,7 @@ public class DonorCodeViewModel {
         this.donorDonorCode = donorDonorCode;
     }
     
-    public Long donorCodeId(){
+    public Long getDonorCodeId(){
         return donorDonorCode.getDonorCode().getId();
     }
     
