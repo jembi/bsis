@@ -27,40 +27,7 @@ public class CompatibilityTestBackingForm {
     compatibilityTest = new CompatibilityTest();
   }
 
-  public Date getLastUpdated() {
-    return compatibilityTest.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return compatibilityTest.getCreatedDate();
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return compatibilityTest.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return compatibilityTest.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    compatibilityTest.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    compatibilityTest.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    compatibilityTest.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    compatibilityTest.setLastUpdatedBy(lastUpdatedBy);
-  }
-
+  
   public Long getId() {
     return compatibilityTest.getId();
   }
