@@ -137,8 +137,7 @@ public class ProductController {
   
   @RequestMapping(value = "/combination/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> addProductCombinationFormGenerator(HttpServletRequest request
-      ) {
+  public  Map<String, Object> addProductCombinationFormGenerator() {
 
     ProductCombinationBackingForm form = new ProductCombinationBackingForm();
 
@@ -157,9 +156,7 @@ public class ProductController {
   @RequestMapping(value = "/Combination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity< Map<String, Object>> addProductCombination(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addProductCombinationForm") @Valid ProductCombinationBackingForm form) {
+      @Valid @RequestBody ProductCombinationBackingForm form) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;

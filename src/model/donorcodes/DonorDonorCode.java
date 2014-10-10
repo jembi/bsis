@@ -31,12 +31,12 @@ public class DonorDonorCode implements ModificationTracker{
     @NotAudited
     @ManyToOne
     @JoinColumn(name = "donorId", nullable = false, updatable = false)
-    private Donor donorId;
+    private Donor donor;
 
     @NotAudited
     @ManyToOne
     @JoinColumn(name = "donorCodeId", nullable = false, updatable = false)
-    private DonorCode donorCodeId;
+    private DonorCode donorCode;
 
     private RowModificationTracker modificationTracker;
 
@@ -52,21 +52,22 @@ public class DonorDonorCode implements ModificationTracker{
 		this.id = id;
 	}
 
-	public Donor getDonorId() {
-		return donorId;
-	}
+    public Donor getDonor() {
+        return donor;
+    }
 
-	public void setDonorId(Donor donorId) {
-		this.donorId = donorId;
-	}
+    public void setDonor(Donor donor) {
+        this.donor = donor;
+    }
 
-	public DonorCode getDonorCodeId() {
-		return donorCodeId;
-	}
+    public DonorCode getDonorCode() {
+        return donorCode;
+    }
 
-	public void setDonorCodeId(DonorCode donorCodeId) {
-		this.donorCodeId = donorCodeId;
-	}
+    public void setDonorCode(DonorCode donorCode) {
+        this.donorCode = donorCode;
+    }
+
 
 
 	public Date getLastUpdated() {

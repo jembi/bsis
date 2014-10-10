@@ -522,7 +522,7 @@ public class DonorRepository {
 
     public Donor deleteDonorCode(Long id) {
         DonorDonorCode donorDonorCode = em.find(DonorDonorCode.class, id);
-        Donor donor = donorDonorCode.getDonorId();
+        Donor donor = donorDonorCode.getDonor();
         em.remove(donorDonorCode);
         em.flush();
         return donor;

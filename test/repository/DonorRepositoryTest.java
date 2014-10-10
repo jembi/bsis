@@ -1033,8 +1033,8 @@ public class DonorRepositoryTest {
      */
     public void saveDonorDonorCode_shouldPersist() {
         DonorDonorCode donorDonorCode = new DonorDonorCode();
-        donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(1l));
-        donorDonorCode.setDonorId(donorRepository.findDonorById(5l));
+        donorDonorCode.setDonorCode(donorRepository.findDonorCodeById(1l));
+        donorDonorCode.setDonor(donorRepository.findDonorById(5l));
         donorRepository.saveDonorDonorCode(donorDonorCode);
         assertNotNull("Failed to save DonorDonorCode object ", donorDonorCode.getId());
 

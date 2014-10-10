@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import repository.DonorRepository;
 import utils.PermissionConstants;
+import viewmodel.DonorCodeViewModel;
 import viewmodel.DonorViewModel;
 
 @RestController
@@ -50,18 +53,19 @@ public class DonorCodeController {
     @RequestMapping(value = "{id}" ,method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
     public 
-    Map<String, Object> addDonorCode(@PathVariable Long donorId,
+    ResponseEntity<Map <String, Object>> addDonorCode(@PathVariable Long donorId,
         @PathVariable Long id) {
         Map<String, Object> map = new HashMap<String, Object>();
         DonorDonorCode donorDonorCode = new DonorDonorCode();
-        donorDonorCode.setDonorId(donorRepository.findDonorById(donorId));
+        donorDonorCode.setDonor(donorRepository.findDonorById(donorId));
         DonorCode donorCode = donorRepository.findDonorCodeById(id);
-        donorDonorCode.setDonorCodeId(donorCode);
+        donorDonorCode.setDonorCode(donorCode);
         if( donorRepository.findDonorById(donorId).getDonorCodes().contains(donorCode))
            throw new EntityExistsException("Donor Code is already assigned to donor");
         donorRepository.saveDonorDonorCode(donorDonorCode);
-        map.put("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId));
-        return map;
+        List<DonorDonorCode>  donorDonorCodes = donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId);
+        map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
+        return new ResponseEntity<Map<String , Object>>(map , HttpStatus.OK);
 
     }
 
@@ -72,7 +76,7 @@ public class DonorCodeController {
 
         HashMap<String, Object> map = new HashMap<String, Object>();
         List<DonorDonorCode>  donorDonorCodes = donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId);
-        map.put("donordonorcodes", donorDonorCodes);
+        map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
         return new ResponseEntity<Map<String , Object>>(map , HttpStatus.OK);
 
     }
@@ -84,8 +88,21 @@ public class DonorCodeController {
         HashMap<String, Object> map = new HashMap<String, Object>();
         Donor donor = donorRepository.deleteDonorCode(id);
         List<DonorDonorCode> donorDonorCodes = donorRepository.findDonorDonorCodesOfDonorByDonorId(donor.getId());
-        map.put("donordonorcodes", donorDonorCodes);
+        map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
+   
+   
+    public static List<DonorCodeViewModel> getDonorCodeViewModels(
+            List<DonorDonorCode> donorDonorCodes) {
+        if (donorDonorCodes == null) {
+            return Arrays.asList(new DonorCodeViewModel[0]);
+        }
+        List<DonorCodeViewModel> collectionViewModels = new ArrayList<DonorCodeViewModel>();
+        for (DonorDonorCode donorDonorCode : donorDonorCodes) {
+            collectionViewModels.add(new DonorCodeViewModel(donorDonorCode));
+        }
+        return collectionViewModels;
     }
 
 }
