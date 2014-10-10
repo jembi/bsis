@@ -192,19 +192,27 @@ public class DonorController {
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
     }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public  ResponseEntity
-        updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR + "')")
+    public ResponseEntity<Map<String, Object>>
+            updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
 
-      form.setIsDeleted(false);
-      Donor donor = form.getDonor();
-      donor.setId(id);
-      donor.setContact(form.getContact());
-      donor.setAddress(form.getAddress());
-      donorRepository.updateDonor(donor);
-      return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+        HttpStatus httpStatus = HttpStatus.OK;
+        Map<String, Object> map = new HashMap<String, Object>();
+        Donor updatedDonor = null;
+
+        form.setIsDeleted(false);
+        Donor donor = form.getDonor();
+        donor.setId(id);
+        donor.setContact(form.getContact());
+        donor.setAddress(form.getAddress());
+
+        updatedDonor = donorRepository.updateDonor(donor);
+
+        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+
+    }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
