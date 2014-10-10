@@ -317,7 +317,7 @@ public class DonorRepository {
     }
 
     public DonorDeferral deferDonor(String donorId, String deferUntil,
-            String deferralReasonId, String deferralReasonText) throws ParseException {
+        String deferralReasonId, String deferralReasonText) throws ParseException, PersistenceException {
         DonorDeferral donorDeferral = new DonorDeferral();
         Donor donor = findDonorById(donorId);
         donorDeferral.setDeferredOn(new Date());
