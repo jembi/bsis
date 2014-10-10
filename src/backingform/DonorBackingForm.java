@@ -146,13 +146,6 @@ public class DonorBackingForm {
         return donor.getGender().toString();
     }
 
-    public Date getLastUpdated() {
-        return donor.getLastUpdated();
-    }
-
-    public Date getCreatedDate() {
-        return donor.getCreatedDate();
-    }
 
     public String getNotes() {
         return donor.getNotes();
@@ -162,15 +155,7 @@ public class DonorBackingForm {
         return donor.getIsDeleted();
     }
 
-    @JsonIgnore
-    public User getCreatedBy() {
-        return donor.getCreatedBy();
-    }
 
-    @JsonIgnore
-    public User getLastUpdatedBy() {
-        return donor.getLastUpdatedBy();
-    }
 
     public int hashCode() {
         return donor.hashCode();
@@ -208,9 +193,6 @@ public class DonorBackingForm {
         donor.setBirthDateEstimated(birthDateEstimated);
     }
 
-    public void setCreatedDate(Date createdDate) {
-        donor.setCreatedDate(createdDate);
-    }
 
     public void setNotes(String notes) {
         donor.setNotes(notes);
@@ -220,17 +202,8 @@ public class DonorBackingForm {
         donor.setIsDeleted(isDeleted);
     }
 
-    public void setCreatedBy(User createdBy) {
-        donor.setCreatedBy(createdBy);
-    }
-
-    public void setLastUpdatedBy(User lastUpdatedBy) {
-        donor.setLastUpdatedBy(lastUpdatedBy);
-    }
     
-    public void setLastUpdated(Date lastUpDated){
-        donor.setLastUpdated(lastUpDated);
-    }
+
 
     public String toString() {
         return donor.toString();

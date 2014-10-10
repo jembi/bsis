@@ -895,10 +895,11 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressLine1("homeAddressLine1");
         user = new User();
         user.setId(userDbId);
-        donorBackingForm.setCreatedBy(user);
-        donorBackingForm.setCreatedDate(date);
-        donorBackingForm.setLastUpdated(date);
-        donorBackingForm.setLastUpdatedBy(user);
+        // issue - $209
+//        donorBackingForm.setCreatedBy(user);
+//        donorBackingForm.setCreatedDate(date);
+//        donorBackingForm.setLastUpdated(date);
+//        donorBackingForm.setLastUpdatedBy(user);
         donorBackingForm.setHomeAddressDistrict("District");
         donorBackingForm.setDonorPanel("1");
         donorBackingForm.setIdNumber("1111");
@@ -957,7 +958,7 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressZipcode("361001");
         user = new User();
         user.setId(userDbId);
-        donorBackingForm.setCreatedBy(user);
+//        donorBackingForm.setCreatedBy(user);
     }
 
     public Donor copyDonor(Donor donor) {
