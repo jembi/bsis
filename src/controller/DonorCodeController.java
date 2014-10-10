@@ -98,11 +98,11 @@ public class DonorCodeController {
         if (donorDonorCodes == null) {
             return Arrays.asList(new DonorCodeViewModel[0]);
         }
-        List<DonorCodeViewModel> collectionViewModels = new ArrayList<DonorCodeViewModel>();
+        List<DonorCodeViewModel> DonorCodeViewModel = new ArrayList<DonorCodeViewModel>();
         for (DonorDonorCode donorDonorCode : donorDonorCodes) {
-            collectionViewModels.add(new DonorCodeViewModel(donorDonorCode));
+            DonorCodeViewModel.add(new DonorCodeViewModel(donorDonorCode));
         }
-        return collectionViewModels;
+        return DonorCodeViewModel;
     }
 
 }

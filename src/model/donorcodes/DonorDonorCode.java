@@ -44,13 +44,13 @@ public class DonorDonorCode implements ModificationTracker{
         modificationTracker = new RowModificationTracker();
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Donor getDonor() {
         return donor;
@@ -69,44 +69,45 @@ public class DonorDonorCode implements ModificationTracker{
     }
 
 
+    public Date getLastUpdated() {
+        return modificationTracker.getLastUpdated();
+    }
 
-	public Date getLastUpdated() {
-	    return modificationTracker.getLastUpdated();
-	  }
+    public Date getCreatedDate() {
+        return modificationTracker.getCreatedDate();
+    }
 
-	
-	  public Date getCreatedDate() {
-	    return modificationTracker.getCreatedDate();
-	  }
+    @JsonIgnore
+    public User getCreatedBy() {
+        return modificationTracker.getCreatedBy();
+    }
 
-	@JsonIgnore
-	public User getCreatedBy() {
-	    return modificationTracker.getCreatedBy();
-	  }
-
-	@JsonIgnore
-	public User getLastUpdatedBy() {
-	    return modificationTracker.getLastUpdatedBy();
-	  }
+    @JsonIgnore
+    public User getLastUpdatedBy() {
+        return modificationTracker.getLastUpdatedBy();
+    }
 
 
-	  public void setLastUpdated(Date lastUpdated) {
-	    modificationTracker.setLastUpdated(lastUpdated);
-	  }
+    @Override
+    public void setLastUpdated(Date lastUpdated) {
+        modificationTracker.setLastUpdated(lastUpdated);
+    }
 
-	  public void setCreatedDate(Date createdDate) {
-	    modificationTracker.setCreatedDate(createdDate);
-	  }
+    @Override
+    public void setCreatedDate(Date createdDate) {
+        modificationTracker.setCreatedDate(createdDate);
+    }
 
-	  public void setCreatedBy(User createdBy) {
-	    modificationTracker.setCreatedBy(createdBy);
-	  }
+    @Override
+    public void setCreatedBy(User createdBy) {
+        modificationTracker.setCreatedBy(createdBy);
+    }
+
+    @Override
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+    }
 
 
-	  public void setLastUpdatedBy(User lastUpdatedBy) {
-	    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-	  }
-
-	
 	
 }
