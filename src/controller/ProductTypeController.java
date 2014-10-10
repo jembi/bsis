@@ -88,7 +88,6 @@ public class ProductTypeController {
     Map<String, Object> map = new HashMap<String, Object> ();
     ProductTypeCombination productTypeCombination = productTypeRepository.getProductTypeCombinationById(id);
     map.put("productTypeCombination", productTypeCombination);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 

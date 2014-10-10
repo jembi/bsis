@@ -74,11 +74,7 @@ public class BloodTypingController {
   public Map<String, Object> getBloodTypingWorksheet(HttpServletRequest request) {
     Map<String, Object> map = new Map<String, Object>("bloodtesting/bloodTypingWorksheetForm");
 
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
-    map.put("tips", tips);
     map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
-    map.put("refreshUrl", "bloodTypingWorksheetGenerator.html");
 
     return map;
   }
@@ -109,11 +105,8 @@ public class BloodTypingController {
     map.put("collectionNumbers", StringUtils.join(collectionNumbers,","));
     map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
 
-    Map<String, Object> tips = new HashMap<String, Object>();
     if (numErrors > 0 || numValid == 0) {
       map.put("success", false);
-      map.put("refreshUrl", "bloodTypingWorksheetGenerator.html");
-      utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       map.put("errorMessage", "Please fix the errors noted. Some collections do not exist.");
     } else {
@@ -137,14 +130,11 @@ public class BloodTypingController {
       map.put("bloodTypingTests", bloodTypingTestsMap);
 
       map.put("success", true);
-      map.put("refreshUrl", getUrl(request));
       map.put("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
-      utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
     }
 
-    map.put("tips", tips);
     return map;
   }
 
@@ -163,7 +153,6 @@ public class BloodTypingController {
   public ResponseEntity<Map<String, Object>> saveBloodTypingTests(
       @RequestParam(value="bloodTypingTests") String bloodTypingTests,
       @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
-      @RequestParam(value="refreshUrl") String refreshUrl,
       @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
@@ -187,8 +176,6 @@ public class BloodTypingController {
     }
     if (errorMap != null && !errorMap.isEmpty())
       success = false;
-    Map<String, Object> tips = new HashMap<String, Object>();
-
 
     if (success) {
       List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
@@ -215,12 +202,10 @@ public class BloodTypingController {
       map.put("errorMap", errorMap);
       map.put("bloodTypingTests", bloodTypingTests);
       map.put("success", success);
-      map.put("refreshUrl", refreshUrl);
       map.put("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
       map.put("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
       map.put("collectionsByCollectionId", results.get("collections"));
 
-      utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
@@ -377,7 +362,6 @@ public class BloodTypingController {
     BloodTestingRuleViewModel bloodTypingRule;
     bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
     map.put("bloodTypingRule", bloodTypingRule);
-    map.put("refreshUrl", getUrl(request));
     List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     map.put("bloodTypingTests", bloodTypingTests);
     map.put("bloodTypingTestsMap", getBloodTypingTestsAsMap(bloodTypingTests));

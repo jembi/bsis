@@ -130,10 +130,7 @@ public class CollectedSampleController {
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
 
     Map<String, Object> map = new  HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addCollectionForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
@@ -151,7 +148,6 @@ public class CollectedSampleController {
     form.getCollectedSampleIntegerProps();
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("editCollectionForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
@@ -238,10 +234,6 @@ public class CollectedSampleController {
                 map.put("existingCollectedSample", false);
             }
         }
-
-        Map<String, Object> tips = new HashMap<String, Object>();
-        utilController.addTipsToModel(tips, "collections.findcollection.collectionsummary");
-        map.put("tips", tips);
 
         CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
         map.put("collectedSample", collectionViewModel);
@@ -431,12 +423,8 @@ public class CollectedSampleController {
 
     Map<String, Object> map = new  HashMap<String, Object>();
     addEditSelectorOptions(map);
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "collectedSamples.find");
-    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
     map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 */
@@ -453,7 +441,6 @@ public class CollectedSampleController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     map.put("allCollectedSamples", getCollectionViewModels(collections));
-    map.put("refreshUrl", getUrl(request));
     map.put("nextPageUrl", getNextPageUrl(request));
     map.put("saveToWorksheetUrl", getWorksheetUrl(request));
     addEditSelectorOptions(map);

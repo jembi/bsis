@@ -95,16 +95,11 @@ public class ProductController {
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
     Product product = productRepository.findProductById(id);
      
     ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
-    Map<String, Object> tips = new HashMap<String, Object>();
     addEditSelectorOptions(map);
-    utilController.addTipsToModel(tips, "products.findproduct.productsummary");
-    map.put("tips", tips);
     map.put("product", productViewModel);
-    map.put("refreshUrl", getUrl(request));
     map.put("productStatusChangeReasons",
     productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
     return map;
@@ -116,13 +111,9 @@ public class ProductController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    Map<String, Object> tips = new HashMap<String, Object>();
     addEditSelectorOptions(map);
-    utilController.addTipsToModel(tips, "products.find");
-    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
     map.put("productFields", utilController.getFormFieldsForForm("product"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -138,13 +129,9 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("findProductByPackNumberForm", form);
 
-    Map<String, Object> tips = new HashMap<String, Object>();
     addEditSelectorOptions(map);
-    utilController.addTipsToModel(tips, "products.find");
-    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
     map.put("productFields", utilController.getFormFieldsForForm("product"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
   
@@ -156,12 +143,9 @@ public class ProductController {
     ProductCombinationBackingForm form = new ProductCombinationBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addProductCombinationForm", form);
 
     addOptionsForAddProductCombinationForm(map);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
@@ -481,7 +465,6 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("refreshUrl", getUrlForNewProduct(request,form.getCollectionNumber()));
     map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
     map.put("addProductForm", form);
     
@@ -511,7 +494,6 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("refreshUrl", getUrlForNewProduct(request, collectionNumber));
     map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,collectionNumber));
     
     if(collectionNumber.contains("-") && productTypes != null){
@@ -794,7 +776,6 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("refreshUrl", getUrl(request));
     map.put("nextPageUrl", getNextPageUrl(request));
     addEditSelectorOptions(map);
 
@@ -815,10 +796,7 @@ public class ProductController {
     ProductBackingForm form = new ProductBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addProductForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
@@ -838,9 +816,7 @@ public class ProductController {
     ProductBackingForm form = new ProductBackingForm(product);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
     map.put("editProductForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
     // to ensure custom field names are displayed in the form
@@ -865,7 +841,6 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("refreshUrl", getUrl(request));
     map.put("nextPageUrl", getNextPageUrlForRecordProduct(request));
     map.put("addProductForm", form);
     addEditSelectorOptionsForNewRecord(map);
@@ -919,9 +894,7 @@ public class ProductController {
       map.put("addAnotherProductUrl", "addProductFormGenerator.html");
     } else {
       map.put("errorMessage", "Error creating product. Please fix the errors noted below.");
-      map.put("firstTimeRender", false);
       map.put("addProductForm", form);
-      map.put("refreshUrl", "addProductFormGenerator.html");
     }
 
     map.put("success", success);

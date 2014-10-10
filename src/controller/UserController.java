@@ -55,7 +55,6 @@ public class UserController {
 
         Map<String, Object> map = new HashMap<String, Object>();
         addAllUsersToModel(map);
-        map.put("refreshUrl", utilController.getUrl(request));
         map.put("userRoles", roleRepository.getAllRoles());
         return map;
     }
@@ -69,7 +68,6 @@ public class UserController {
             @PathVariable Integer id) {
         UserBackingForm form = new UserBackingForm();
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("requestUrl", utilController.getUrl(request));
         if (id != null) {
             form.setId(id);
             User user = userRepository.findUserById(id);
@@ -86,7 +84,6 @@ public class UserController {
         map.put("allRoles", roleRepository.getAllRoles());
         map.put("userRoles", form.getRoles());
         map.put("editUserForm", form);
-        map.put("refreshUrl", utilController.getUrl(request));
         // to ensure custom field names are displayed in the form
         return map;
     }

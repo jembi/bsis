@@ -61,9 +61,6 @@ public class LotReleaseController {
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  Map<String, Object> lotReleaseFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new  HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
   */
@@ -104,9 +101,6 @@ public class LotReleaseController {
     }
     
     map.put("dinNumber", dinNumber);
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
-    map.put("refreshUrl", getUrl(request));
     map.put("success", success);
     map.put("discard", discard);
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);

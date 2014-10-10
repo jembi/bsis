@@ -90,10 +90,8 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> getTTIForm(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("refreshUrl", "ttiFormGenerator.html");
 		map.put("ttiFormFields",
 				utilController.getFormFieldsForForm("TTIForm"));
-		map.put("firstTimeRender", true);
 
 		List<BloodTestViewModel> ttiTests = getBasicTTITests();
 		map.put("allTTITests", ttiTests);
@@ -183,7 +181,6 @@ public class TTIController {
 			errorMessage = "There were errors adding tests. Please verify the values of all tests.";
 			map.put("ttiFormFields",
 					utilController.getFormFieldsForForm("TTIForm"));
-			map.put("firstTimeRender", false);
 
 			List<BloodTestViewModel> ttiTests = getBasicTTITests();
 			map.put("allTTITests", ttiTests);
@@ -192,7 +189,6 @@ public class TTIController {
 		}
 
 		map.put("addAnotherTTIUrl", "ttiFormGenerator.html");
-		map.put("refreshUrl", "ttiFormGenerator.html");
 		map.put("success", success);
 		map.put("errorMessage", errorMessage);
 		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
@@ -258,7 +254,6 @@ public class TTIController {
 			allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
 		}
 		map.put("allTTITests", allTTITestsMap);
-		map.put("refreshUrl", getUrl(request));
 		return map;
 	}
 
@@ -355,7 +350,6 @@ public class TTIController {
 			HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("ttiTests", bloodTestingRepository.getBloodTTITests());
-		map.put("refreshUrl", getUrl(request));
 		return map;
 	}
 
@@ -440,7 +434,6 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ModelAndView uploadTTIResultsFormGenerator(HttpServletRequest request) {
 		ModelAndView map = new ModelAndView("bloodtesting/uploadTTIResults");
-		map.put("refreshUrl", getUrl(request));
 		return map;
 	}
         * */
@@ -460,7 +453,6 @@ public class TTIController {
 		try{
 			Iterator<String> iterator = request.getFileNames();
 			if (!iterator.hasNext()) {
-				map.put("refreshUrl", getUrl(request));
 				map.put("errorMessage", UploadTTIResultConstant.MESSAGE1);
 				success = false;
 				map.put("success", success);
@@ -480,7 +472,6 @@ public class TTIController {
 					.split(UploadTTIResultConstant.FILE_SPLIT);
 			if (StringUtils.isBlank(tsvFilestr.toString())	|| 
 					!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
-				map.put("refreshUrl", getUrl(request));
 				map.put("errorMessage",UploadTTIResultConstant.MESSAGE2);
 				success = false;
 				map.put("success", success);
@@ -560,7 +551,6 @@ public class TTIController {
 						+ UploadTTIResultConstant.FAIL_ROW;
 				map.put("SuccessRows", successRows);
 				map.put("FailedRows", failedRows);
-				map.put("refreshUrl", getUrl(request));
 			} catch (FileNotFoundException e) {
 				LOGGER.error("File Not Found:" + e);
 			}

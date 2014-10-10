@@ -30,16 +30,10 @@ public class TestResultController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public  Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
 
-
     Map<String, Object> map = new  HashMap<String, Object>();
-
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "testResults.find");
-    map.put("tips", tips);
 
     // to ensure custom field names are displayed in the form
     map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 

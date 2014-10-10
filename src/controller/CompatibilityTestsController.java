@@ -96,7 +96,6 @@ public class CompatibilityTestsController {
       form = new CompatibilityTestBackingForm();
       map.put("editCompatibilityTestForm", form);
       map.put("existingCompatibilityTest", false);
-      map.put("refreshUrl", "editCompatibilityTestFormGenerator.html");
       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

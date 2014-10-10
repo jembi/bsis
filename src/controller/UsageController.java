@@ -72,10 +72,7 @@ public class UsageController {
     ProductUsageBackingForm form = new ProductUsageBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addUsageForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
@@ -119,9 +116,6 @@ public class UsageController {
   public Map<String, Object> addUsageByRequestFormGenerator(HttpServletRequest request) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
@@ -153,11 +147,8 @@ public class UsageController {
     form.setProduct(product);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addUsageForProductForm", form);
     map.put("productType", product.getProductType().getProductTypeNameShort());
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form

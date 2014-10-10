@@ -71,12 +71,8 @@ public class CollectionBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "collectionbatch.find");
-    map.put("tips", tips);
     // to ensure custom field names are displayed in the form
     map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 */
@@ -109,7 +105,6 @@ public class CollectionBatchController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
     map.put("allCollectionBatches", getCollectionBatchViewModels(collectionBatches));
-    map.put("refreshUrl", getUrl(request));
 
     addEditSelectorOptions(map);
 
@@ -124,10 +119,7 @@ public class CollectionBatchController {
     CollectionBatchBackingForm form = new CollectionBatchBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addCollectionBatchForm", form);
-    map.put("refreshUrl", getUrl(request));
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectionbatch");
     addEditSelectorOptions(map);
     // to ensure custom field names are displayed in the form
@@ -152,11 +144,7 @@ public class CollectionBatchController {
       @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
     CollectionBatch  collectionBatch = collectionBatchRepository.findCollectionBatchById(id);
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "collectionBatches.findcollectionbatch.collectionbatchsummary");
-    map.put("tips", tips);
     CollectionBatchViewModel collectionBatchViewModel = getCollectionBatchViewModel(collectionBatch);
     map.put("collectionBatch", collectionBatchViewModel);
 

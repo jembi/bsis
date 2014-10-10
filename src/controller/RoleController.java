@@ -50,7 +50,6 @@ public class RoleController {
 
                 Map<String, Object> map = new  HashMap<String, Object>();
 		addAllRolesToModel(map);
-		map.put("refreshUrl", utilController.getUrl(request));
 		return map;
 	}
 
@@ -71,7 +70,6 @@ public class RoleController {
 
 		RoleBackingForm form = new RoleBackingForm();
                 Map<String, Object> map = new HashMap<String, Object>();
-		map.put("requestUrl", utilController.getUrl(request));
 		if (id != null) {
 			form.setId(id);
 			Role role = roleRepository.findRoleDetailById(id);
@@ -84,7 +82,6 @@ public class RoleController {
 		}
 		addAllPermissionsToModel(map);
 		map.put("editRoleForm", form);
-		map.put("refreshUrl", utilController.getUrl(request));
 		// to ensure custom field names are displayed in the form
 		return map;
 	}

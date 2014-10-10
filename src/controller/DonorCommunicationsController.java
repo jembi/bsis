@@ -70,7 +70,6 @@ public class DonorCommunicationsController {
         // to ensure custom field names are displayed in the form
         map.put("donorFields", utilController.getFormFieldsForForm("donor"));
         map.put("contentLabel", "Find Donors");
-        map.put("refreshUrl", "donorCommunicationsFormGenerator.html");
         addEditSelectorOptions(map);
        // map.put("donorCommunicationsForm", dbform);
         return map;
@@ -91,16 +90,12 @@ public class DonorCommunicationsController {
 //            map.put("hasErrors", true);
 //            map.put("errorMessage", "Missing information for one or more required fields.");
 //            map.put("success", Boolean.FALSE);
-//            map.put("requestUrl", getUrl(request));
-//            map.put("refreshUrl", "donorCommunicationsFormGenerator.html");
 //            map.put("success", Boolean.FALSE);
 //            return map;
 //        }
 //        form.setCreateDonorSummaryView(true);
-//        map.put("requestUrl", getUrl(request));
 //        map.put("contentLabel", "Find Donors");
 //        map.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
-//        map.put("refreshUrl", getUrl(request));
 //        map.put("donorRowClickUrl", "donorSummary.html");
 //        map.put("createDonorSummaryView", form.getCreateDonorSummaryView());
 //        return map;

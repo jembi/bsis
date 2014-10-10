@@ -84,7 +84,6 @@ public class DeferralController {
         donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
         map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
         map.put("allDonorDeferrals", donorDeferralViewModels);
-        map.put("refreshUrl", getUrl(request));
         return map;
     }
 

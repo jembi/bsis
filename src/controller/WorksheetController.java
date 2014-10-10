@@ -105,10 +105,7 @@ public class WorksheetController {
     WorksheetBackingForm form = new WorksheetBackingForm();
 
     ModelAndView mv = new ModelAndView("worksheets/addWorksheetForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
     mv.addObject("addWorksheetForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
     addEditSelectorOptions(mv.getModelMap());
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("worksheet");
     // to ensure custom field names are displayed in the form
@@ -164,9 +161,7 @@ public class WorksheetController {
       mv.setViewName("worksheets/addWorksheetSuccess");
     } else {
       mv.addObject("errorMessage", "Error creating worksheet. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
       mv.addObject("addWorksheetForm", form);
-      mv.addObject("refreshUrl", "addWorksheetFormGenerator.html");
       mv.setViewName("worksheets/addWorksheetError");
     }
 
@@ -232,7 +227,6 @@ public class WorksheetController {
     mv.addObject("findWorksheetForm", findWorksheetForm);
     mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
     mv.addObject("worksheetResultClickUrl", "worksheetSummary.html");
-    mv.addObject("refreshUrl", getUrl(request));
     return mv;
   }
 
@@ -246,7 +240,6 @@ public class WorksheetController {
     mv.addObject("allWorksheets", getWorksheetViewModels(worksheets));
     mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
     mv.addObject("worksheetResultClickUrl", form.getWorksheetResultClickUrl());
-    mv.addObject("refreshUrl", getUrl(request));
     mv.setViewName("worksheets/worksheetsTable");
     return mv;
   }
@@ -261,7 +254,6 @@ public class WorksheetController {
     mv.addObject("worksheet", getWorksheetViewModel(worksheet));
     mv.addObject("allCollectedSamples", sortCollectionsInWorksheet(worksheet));
     mv.addObject("bloodTests", worksheetRepository.getBloodTestsInWorksheet(worksheet));
-    mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("worksheetId", worksheet.getId());
     mv.addObject("worksheetFields", utilController.getFormFieldsForForm("worksheet"));
 
@@ -318,11 +310,7 @@ public class WorksheetController {
     FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
     mv.addObject("findWorksheetForm", findWorksheetForm);
     mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
-    mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("worksheetResultClickUrl", "editTestResultsForWorksheet.html");
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "testResults.worksheet");
-    mv.addObject("tips", tips);
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     return mv;
@@ -458,11 +446,7 @@ public class WorksheetController {
     FindWorksheetBackingForm findWorksheetForm = new FindWorksheetBackingForm();
     mv.addObject("findWorksheetForm", findWorksheetForm);
     mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
-    mv.addObject("refreshUrl", getUrl(request));
     mv.addObject("worksheetResultClickUrl", "addCollectionBatchToWorksheet.html?collectionBatchId=" + collectionBatchId);
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "testResults.worksheet");
-    mv.addObject("tips", tips);
     List<String> propertyOwners = Arrays.asList(ConfigPropertyConstants.COLLECTIONS_WORKSHEET);
     mv.addObject("worksheetConfig", genericConfigRepository.getConfigProperties(propertyOwners));
     return mv;

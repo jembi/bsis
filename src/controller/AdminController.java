@@ -129,8 +129,6 @@ public class AdminController {
           @RequestParam(value="formToConfigure", required=false) String formToConfigure) {
     Map<String, Object> map = new HashMap<String, Object>();
 
-    map.put("requestUrl", getUrl(request));
-    map.put("refreshUrl", getUrl(request));
     map.put("formName", formToConfigure);
     map.put("formFields", formFieldRepository.getFormFields(formToConfigure));
     return map;
@@ -207,7 +205,6 @@ public class AdminController {
     }
     map.put("bloodTests", bloodTests);
     map.put("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -221,7 +218,6 @@ public class AdminController {
       rules.add(new BloodTestingRuleViewModel(rule));
     }
     map.put("bloodTypingRules", rules);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
   
@@ -231,8 +227,7 @@ public class AdminController {
                               Model model) {
     Map<String, Object> map = new HashMap<String, Object>();
 
-    Map<String, Object> m = model.asMap();
-    m.put("requestUrl", getUrl(request));    
+    Map<String, Object> m = model.asMap();   
     map.put("model", m);
     return map;
   }
@@ -276,7 +271,6 @@ public class AdminController {
       errMsg = "Internal Server Error";
     }
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("requestUrl", getUrl(request));
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
@@ -291,7 +285,6 @@ public class AdminController {
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     addAllTipsToModel(m);
-    m.put("refreshUrl", getUrl(request));
     map.put("model", model);
     return map;
   }
@@ -304,7 +297,6 @@ public class AdminController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -341,7 +333,6 @@ public class AdminController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productTypes", productTypesRepository.getAllProductTypesIncludeDeleted());
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -353,7 +344,6 @@ public class AdminController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productTypeCombinations", productTypesRepository.getAllProductTypeCombinationsIncludeDeleted());
     map.put("productTypes", productTypesRepository.getAllProductTypes());
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -365,7 +355,6 @@ public class AdminController {
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     addAllRequestTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
     map.put("model", model);
     return map;
   }
@@ -379,7 +368,6 @@ public class AdminController {
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     addAllCrossmatchTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
     map.put("model", model);
     return map;
   }
@@ -392,7 +380,6 @@ public class AdminController {
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
     addAllBloodBagTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
     map.put("model", model);
     return map;
   }
@@ -407,7 +394,6 @@ public class AdminController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
     map.put("model", model);
     return map;
   }
@@ -473,7 +459,6 @@ public class AdminController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addAllDonationTypesToModel(map);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -524,7 +509,6 @@ public class AdminController {
     }
 
     addAllTipsToModel(map);
-    map.put("refreshUrl", "configureTipsFormGenerator.html");
     return map;
   }
 
@@ -559,7 +543,6 @@ public class AdminController {
     }
 
     addAllRequestTypesToModel(map);
-    map.put("refreshUrl", "configureRequestTypesFormGenerator.html");
     return map;
   }
 
@@ -591,7 +574,6 @@ public class AdminController {
 
     Map<String, Object> m = model.asMap();
     addAllCrossmatchTypesToModel(m);
-    m.put("refreshUrl", "configureCrossmatchTypesFormGenerator.html");
     map.put("model", model);
     return map;
   }
@@ -615,7 +597,6 @@ public class AdminController {
             bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
             LOGGER.debug(params);
         addAllBloodBagTypesToModel(map);
-        map.put("refreshUrl", "configureBloodBagTypesFormGenerator.html");
         return map;
     }
 
@@ -640,7 +621,6 @@ public class AdminController {
       LOGGER.debug(params);
    
     addAllDonationTypesToModel(map);
-    map.put("refreshUrl", "configureDonationTypesFormGenerator.html");
     return map;
   }
 

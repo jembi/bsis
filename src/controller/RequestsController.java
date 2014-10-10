@@ -102,16 +102,10 @@ public class RequestsController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    map.put("requestUrl", getUrl(request));
-
     Request productRequest = requestRepository.findRequestById(id);
 
     RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
     map.put("request", requestViewModel);
-    map.put("refreshUrl", getUrl(request));
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "requests.findpending.requestsummary");
-    map.put("tips", tips);
     return map;
   }
 
@@ -123,10 +117,6 @@ public class RequestsController {
     addEditSelectorOptions(map);
     // to ensure custom field names are displayed in the form
     map.put("requestFields", utilController.getFormFieldsForForm("request"));
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "requests.findpending");
-    map.put("tips", tips);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -270,10 +260,7 @@ public class RequestsController {
     RequestBackingForm form = new RequestBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addRequestForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     // to ensure custom field names are displayed in the form
@@ -291,7 +278,6 @@ public class RequestsController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("editRequestForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
     // to ensure custom field names are displayed in the form
@@ -371,9 +357,6 @@ public class RequestsController {
     map.put("requestId", id);
     List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(id);
     map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "requests.findpending.findmatchingproducts");
-    map.put("tips", tips);
     map.put("allProducts", products);
     map.put("labProperties", genericConfigRepository.getConfigProperties("labsetup"));
     return map;
@@ -404,7 +387,6 @@ public class RequestsController {
     Map<String, Object> m = model.asMap();
     m.put("requestFields", utilController.getFormFieldsForForm("request"));
     m.put("allRequests", getRequestViewModels(productRequests));
-    m.put("refreshUrl", getUrl(request));
     m.put("nextPageUrl", getNextPageUrl(request));
     addEditSelectorOptions(m);
 

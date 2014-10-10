@@ -76,7 +76,6 @@ public class DonorController {
   public ModelAndView getDonorsPage(HttpServletRequest request) {
     ModelAndView modelAndView = new ModelAndView("donors");
     Map<String, Object> model = new HashMap<String, Object>();
-    model.put("requestUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
   }*/
@@ -87,18 +86,13 @@ public class DonorController {
       @PathVariable Long id ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("requestUrl", getUrl(request));
     Donor donor = null;
     if (id != null) {
       donor = donorRepository.findDonorById(id);
     }
 
     DonorViewModel donorViewModel = getDonorsViewModel(donor);
-    map.put("donor", donorViewModel);
-
-    map.put("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    
+    map.put("donor", donorViewModel);    
     
       // include donor deferral status
       List<DonorDeferral> donorDeferrals = null;
@@ -110,9 +104,6 @@ public class DonorController {
     	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
     }
     
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "donors.finddonor.donorsummary");
-    map.put("tips", tips);
     map.put("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
@@ -137,7 +128,6 @@ public class DonorController {
     DonorViewModel donorViewModel = getDonorsViewModels(Arrays.asList(donor)).get(0);
     map.put("donor", donorViewModel);
     map.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
-    map.put("refreshUrl", getUrl(request));
     // to ensure custom field names are displayed in the form
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
@@ -149,10 +139,7 @@ public class DonorController {
     Map<String, Object> map = new HashMap<String, Object>();
     DonorBackingForm form = new DonorBackingForm();
 
-    map.put("requestUrl", getUrl(request));
-    map.put("firstTimeRender", true);
     map.put("addDonorForm", form);
-    map.put("refreshUrl", getUrl(request));
     addEditSelectorOptions(map);
     return map;
   }
@@ -173,7 +160,6 @@ public class DonorController {
     donorForm.setYear(dateToken[2]);
     addEditSelectorOptions(map);
     map.put("editDonorForm", donorForm);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
 
@@ -188,10 +174,8 @@ public class DonorController {
     DonorBackingForm dbform = new DonorBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
    // map.put("findDonorForm", form);
-    utilController.addTipsToModel(map, "donors.finddonor");
     // to ensure custom field names are displayed in the form
     map.put("contentLabel", "Find Donors");
-    map.put("refreshUrl", "findDonorFormGenerator.html");
     addEditSelectorOptions(map);
     map.put("addDonorForm", dbform);
     return map;
@@ -385,11 +369,9 @@ public class DonorController {
       @ModelAttribute("findDonorForm") FindDonorBackingForm form) {
 
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("requestUrl", getUrl(request));
     m.put("donorFields", utilController.getFormFieldsForForm("donor"));
     m.put("contentLabel", "Find Donors");
     m.put("nextPageUrl", getNextPageUrl(request));
-    m.put("refreshUrl", getUrl(request));
     m.put("donorRowClickUrl", "donorSummary.html");
     m.put("createDonorSummaryView", form.getCreateDonorSummaryView());
     addEditSelectorOptions(m);
@@ -412,12 +394,10 @@ public class DonorController {
     List<Donor> allDonors = donorRepository.getAllDonors();
     ModelAndView modelAndView = new ModelAndView("donorsTable");
     Map<String, Object> model = new HashMap<String, Object>();
-    model.put("requestUrl", getUrl(request));
 
     model.put("allDonors", getDonorsViewModels(allDonors));
     model.put("donorFields", utilController.getFormFieldsForForm("donor"));
     model.put("contentLabel", "View All Donors");
-    model.put("refreshUrl", getUrl(request));
     modelAndView.addObject("model", model);
     return modelAndView;
   }
@@ -438,7 +418,6 @@ public class DonorController {
     // to ensure custom field names are displayed in the form
     map.put("donorFields", utilController.getFormFieldsForForm("donor"));
     map.put("contentLabel", "Find Donors");
-    map.put("refreshUrl", "findDonorSelectorFormGenerator.html");
    
     addEditSelectorOptions(map);
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
