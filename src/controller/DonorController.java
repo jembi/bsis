@@ -209,16 +209,22 @@ public class DonorController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
-  public  HttpStatus 
+  public  ResponseEntity<Map<String, Object>> 
         updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
+	  
+	  HttpStatus httpStatus = HttpStatus.OK;
+      Map<String, Object> map = new HashMap<String, Object>();
+      Donor updatedDonor = null;
 
       form.setIsDeleted(false);
       Donor donor = form.getDonor();
       donor.setId(id);
       donor.setContact(form.getContact());
       donor.setAddress(form.getAddress());
-      donorRepository.updateDonor(donor);
-      return HttpStatus.OK;
+      updatedDonor = donorRepository.updateDonor(donor);      
+
+      map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
