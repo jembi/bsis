@@ -584,14 +584,14 @@ public class DonorRepositoryTest {
         listAllDonor.add(donorBackingForm.getDonor());
         donor = new Donor();
         donorBackingForm = new DonorBackingForm(donor);
-        donorBirthdate = "11/06/1991";
+        donorBirthdate = "06/11/1991";
         donorBackingForm.setBirthDate(donorBirthdate);
         donorBackingForm.setDonorNumber("000008");
         setBackingFormValue(donorBackingForm);
         listAllDonor.add(donorBackingForm.getDonor());
         donor = new Donor();
         donorBackingForm = new DonorBackingForm(donor);
-        donorBirthdate = "12/06/1991";
+        donorBirthdate = "06/12/1991";
         donorBackingForm.setBirthDate(donorBirthdate);
         donorBackingForm.setDonorNumber("000009");
         setBackingFormValue(donorBackingForm);
@@ -700,7 +700,7 @@ public class DonorRepositoryTest {
             this.userAuthentication();
 
             DonorDeferral donorDeferral = donorRepository.deferDonor("1",
-                    "19/07/2015", "3", "");
+                    "07/19/2015", "3", "");
             assertTrue("DeferDonor object Should persist.",
                     donorDeferral.getId() != 0 ? true : false);
         } catch (Exception e) {
