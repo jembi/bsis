@@ -10,6 +10,7 @@ import model.address.AddressType;
 import model.address.Contact;
 import model.address.ContactMethodType;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
@@ -52,6 +53,11 @@ public class DonorBackingForm {
 
     public DonorBackingForm(Donor donor) {
         this.donor = donor;
+    }
+    
+    @JsonIgnore
+    public DonorStatus getDonorStatus() {
+        return donor.getDonorStatus();
     }
 
     @JsonIgnore
