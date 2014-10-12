@@ -151,6 +151,51 @@ public class DonorBackingForm {
         }
         return donor.getGender().toString();
     }
+    
+    @JsonIgnore
+    public Date getLastUpdated() {
+        return donor.getLastUpdated();
+    }
+
+    @JsonIgnore
+    public Date getCreatedDate() {
+        return donor.getCreatedDate();
+    }
+    
+    @JsonIgnore
+    public User getCreatedBy() {
+        return donor.getCreatedBy();
+    }
+
+    @JsonIgnore
+    public User getLastUpdatedBy() {
+        return donor.getLastUpdatedBy();
+    }
+    
+    public void setCreatedDate(Date createdDate) {
+        donor.setCreatedDate(createdDate);
+    }
+    
+    public void setCreatedBy(User createdBy) {
+        donor.setCreatedBy(createdBy);
+    }
+
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        donor.setLastUpdatedBy(lastUpdatedBy);
+    }
+    
+    public void setLastUpdated(Date lastUpDated){
+        donor.setLastUpdated(lastUpDated);
+    }
+    
+    @JsonIgnore
+    public Date getDateOfLastDonation() {
+	    return donor.getDateOfLastDonation();
+	}
+	
+	public void setDateOfLastDonation(Date dateOfLastDonation) {
+	    donor.setDateOfLastDonation(dateOfLastDonation);
+	}
 
 
     public String getNotes() {
