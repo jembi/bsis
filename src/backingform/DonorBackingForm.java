@@ -727,7 +727,8 @@ public class DonorBackingForm {
     public void setIdNumber(String idNumber){
         donor.setIdNumber(idNumber);
     }
-    public String getPreferredContactMethod(){
+    
+    public String getContactMethodType(){
          
         if (donor.getContactMethodType()!=null) {
             return donor.getContactMethodType().getId().toString();
@@ -736,7 +737,7 @@ public class DonorBackingForm {
         
     }
     
-    public void setPreferredContactMethod(String preferredContactMethodId) {
+    public void setContactMethodType(String preferredContactMethodId) {
         if (StringUtils.isBlank(preferredContactMethodId)) {
               donor.setContactMethodType(null);
         } else {
