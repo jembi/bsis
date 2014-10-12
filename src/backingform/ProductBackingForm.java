@@ -58,6 +58,22 @@ public class ProductBackingForm {
     else
       return productType.getId().toString();
   }
+  
+  public Date getLastUpdated() {
+    return product.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return product.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return product.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return product.getLastUpdatedBy();
+  }
 
   public String getNotes() {
     return product.getNotes();
@@ -109,6 +125,22 @@ public class ProductBackingForm {
     if (getProduct() == null)
       return "";
     return CustomDateFormatter.getDateString(product.getExpiresOn());
+  }
+  
+  public void setLastUpdated(Date lastUpdated) {
+    product.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    product.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    product.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    product.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public void setNotes(String notes) {

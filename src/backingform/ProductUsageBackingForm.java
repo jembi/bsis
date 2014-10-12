@@ -40,6 +40,23 @@ public class ProductUsageBackingForm {
     this.usage = usage;
   }
 
+  public Date getLastUpdated() {
+    return usage.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return usage.getCreatedDate();
+  }
+
+  @JsonIgnore
+  public User getCreatedBy() {
+    return usage.getCreatedBy();
+  }
+  
+  @JsonIgnore
+  public User getLastUpdatedBy() {
+    return usage.getLastUpdatedBy();
+  }
 
   public Long getId() {
     return usage.getId();
@@ -91,6 +108,21 @@ public class ProductUsageBackingForm {
     return usage.hashCode();
   }
 
+  public void setLastUpdated(Date lastUpdated) {
+    usage.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    usage.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    usage.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    usage.setLastUpdatedBy(lastUpdatedBy);
+  }
 
   public void setId(Long id) {
     usage.setId(id);
