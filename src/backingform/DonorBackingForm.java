@@ -422,6 +422,14 @@ public class DonorBackingForm {
             donor.setBloodRh(bloodRh);
         }
     }
+    
+    @JsonIgnore
+    public String getBloodGroup() {
+	    if (StringUtils.isBlank(donor.getBloodAbo()) || StringUtils.isBlank(donor.getBloodRh()))
+	      return "";
+	    else
+	      return donor.getBloodAbo() + donor.getBloodRh();
+	}
 
     /**
      * Home Address getter & Setters
