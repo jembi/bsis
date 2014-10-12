@@ -128,8 +128,8 @@ public class DonorViewModel {
     return user.getUsername();
   }
 
-  public Location getDonorPanel() {
-    return donor.getDonorPanel();
+  public String getDonorPanel() {
+    return donor.getDonorPanel().getId().toString();
   }
 
   public String getDateOfLastDonation() {
