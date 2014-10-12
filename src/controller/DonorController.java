@@ -244,7 +244,8 @@ public class DonorController {
   }
 
 
-  @RequestMapping(value = "/search", method = RequestMethod.GET)
+
+  /*@RequestMapping(value = "/list", method = RequestMethod.GET)
   public Map<String, Object> findDonorPagination(
                   @RequestParam(value="firstName",required=false, defaultValue ="" ) String firstName,
                   @RequestParam(value="lastName",required=false, defaultValue ="") String lastName,
@@ -270,6 +271,38 @@ public class DonorController {
     List<Donor> donors = (List<Donor>) results.get(0);
     Long totalRecords = (Long) results.get(1);
      return generateDatatablesMap(donors, totalRecords, formFields) ;
+  }
+  */
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
+  public Map<String, Object> findDonors(
+          @RequestParam(value="firstName",required=false, defaultValue ="" ) String firstName,
+          @RequestParam(value="lastName",required=false, defaultValue ="") String lastName,
+          @RequestParam(value="donorNumber",required=false)String donorNumber,
+          @RequestParam(value="usePhraseMatch",required=false) boolean usePhraseMatch,
+          @RequestParam(value="donationIdentificationNumber",required=false) String donationIdentificationNumber){
+
+	Map<String, Object> map = new HashMap<String, Object>();
+	  
+	Map<String, Object> pagingParams = new HashMap<String, Object>();
+      pagingParams.put("sortColumn", "id");
+      pagingParams.put("start", "0");
+      pagingParams.put("length", "10");
+      pagingParams.put("sortDirection", "asc");
+    
+    List<Donor> results = new ArrayList<Donor>();
+    results = donorRepository.findAnyDonor(donorNumber, firstName,
+            lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
+    
+    List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
+    
+    for(Donor donor : results){
+    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
+    	donors.add(donorViewModel);
+    }
+
+    map.put("donors", donors);
+    return map;
   }
   
   /**

@@ -84,7 +84,7 @@ public class DonorRepository {
         return findDonorById(Long.parseLong(donorId));
     }
 
-    public List<Object> findAnyDonor(String donorNumber, String firstName,
+    public List<Donor> findAnyDonor(String donorNumber, String firstName,
             String lastName, Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -158,7 +158,7 @@ public class DonorRepository {
                 for (CollectedSample collectedSample : donor.getCollectedSamples()) {
                     if (collectedSample.getCollectionNumber().equals(donationIdentificationNumber)) {
                         uniqueResult.add(donor);
-                        return Arrays.asList(uniqueResult, totalResults);
+                        return uniqueResult;
                     }
                 }
             }
@@ -166,7 +166,8 @@ public class DonorRepository {
         if (looped == true) {
             return null;
         }
-        return Arrays.asList(donorResults, totalResults);
+        //return Arrays.asList(donorResults, totalResults);
+        return donorResults;
 
     }
 
