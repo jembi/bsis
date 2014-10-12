@@ -27,10 +27,12 @@ public class CompatibilityTestBackingForm {
     compatibilityTest = new CompatibilityTest();
   }
 
+  @JsonIgnore
   public Date getLastUpdated() {
     return compatibilityTest.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return compatibilityTest.getCreatedDate();
   }

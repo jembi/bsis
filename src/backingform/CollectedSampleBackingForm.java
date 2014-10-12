@@ -40,9 +40,6 @@ public class CollectedSampleBackingForm {
   private String donorWeight;
   private String bloodPressureSystolic;
   private String bloodPressureDiastolic;
-  
-  
-
   private String collectedOn;
 
   // setting this to false is required as the use parameters from batch
@@ -168,10 +165,12 @@ public class CollectedSampleBackingForm {
       return bloodBagType.getId().toString();
   }
   
+  @JsonIgnore
   public Date getLastUpdated() {
     return collectedSample.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return collectedSample.getCreatedDate();
   }
@@ -185,8 +184,6 @@ public class CollectedSampleBackingForm {
   public User getLastUpdatedBy() {
     return collectedSample.getLastUpdatedBy();
   }
-
-
 
   public String getNotes() {
     return collectedSample.getNotes();
