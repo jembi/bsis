@@ -70,7 +70,8 @@ public class DonorViewModel {
   public String getBirthDate() {
     Date birthDate = donor.getBirthDate();
     if (birthDate != null) {
-      return CustomDateFormatter.getDateString(birthDate);
+      //return CustomDateFormatter.getDateString(birthDate);
+    	return birthDate.toString();
     } else {
       return "";
     }
@@ -127,7 +128,7 @@ public class DonorViewModel {
       return "";
     return user.getUsername();
   }
-
+  
   public String getDonorPanel() {
     return donor.getDonorPanel().getId().toString();
   }
