@@ -129,8 +129,8 @@ public class DonorViewModel {
     return user.getUsername();
   }
   
-  public String getDonorPanel() {
-    return donor.getDonorPanel().getId().toString();
+  public Location getDonorPanel() {
+    return donor.getDonorPanel();
   }
 
   public String getDateOfLastDonation() {

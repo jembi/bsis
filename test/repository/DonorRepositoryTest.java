@@ -15,6 +15,7 @@ import javax.persistence.NoResultException;
 import javax.sql.DataSource;
 import model.address.Address;
 import model.address.Contact;
+import model.location.Location;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
@@ -881,6 +882,8 @@ public class DonorRepositoryTest {
      */
     public void setBackingFormValue(DonorBackingForm donorBackingForm) {
         Date date = new Date();
+        Location l = new Location();
+        l.setId(Long.parseLong("1"));
         donorBackingForm.setAddress(new Address());
         donorBackingForm.setContact(new Contact());
         donorBackingForm.setHomeAddressLine1("myaddress");
@@ -895,13 +898,8 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressLine1("homeAddressLine1");
         user = new User();
         user.setId(userDbId);
-        // issue - $209
-//        donorBackingForm.setCreatedBy(user);
-//        donorBackingForm.setCreatedDate(date);
-//        donorBackingForm.setLastUpdated(date);
-//        donorBackingForm.setLastUpdatedBy(user);
         donorBackingForm.setHomeAddressDistrict("District");
-        donorBackingForm.setDonorPanel("1");
+        donorBackingForm.setDonorPanel(l);
         donorBackingForm.setIdNumber("1111");
         donorBackingForm.setNotes("Notes");
         donorBackingForm.setMobileNumber("9999999999");
@@ -936,6 +934,9 @@ public class DonorRepositoryTest {
         } else {
             donorBackingForm.setContact(new Contact());
         }
+        
+        Location l = new Location();
+        l.setId(Long.parseLong("2"));
 
         donorBackingForm.setHomeAddressLine1("address_update");
         donorBackingForm.setFirstName("firstName_update");
@@ -947,7 +948,7 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressCity("City_update");
         donorBackingForm.setHomeAddressCountry("country_update");
         donorBackingForm.setHomeAddressDistrict("District_update");
-        donorBackingForm.setDonorPanel("2");
+        donorBackingForm.setDonorPanel(l);
         donorBackingForm.setIdNumber("1212");
         donorBackingForm.setNotes("Notes_update");
         donorBackingForm.setMobileNumber("9878787878");
@@ -956,9 +957,6 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressProvince("Province_update");
         donorBackingForm.setHomeAddressState("State_update");
         donorBackingForm.setHomeAddressZipcode("361001");
-        user = new User();
-        user.setId(userDbId);
-//        donorBackingForm.setCreatedBy(user);
     }
 
     public Donor copyDonor(Donor donor) {

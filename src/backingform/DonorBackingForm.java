@@ -43,12 +43,15 @@ public class DonorBackingForm {
     private Address address;
 
     private Contact contact;
+    
+    private Location donorPanel;
 
     public DonorBackingForm() {
         donor = new Donor();
         ageFormatCorrect = null;
         address = new Address();
         contact = new Contact();
+        donorPanel = new Location();
     }
 
     public DonorBackingForm(Donor donor) {
@@ -73,11 +76,20 @@ public class DonorBackingForm {
 
     public void setBirthDate() {
 
-        if (year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty()) {
+    	if (birthDate != null){
+    		try {
+                donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+                donor.setBirthDate(null);
+            }
+    		return;
+    	}
+    	else if (year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty()) {
             donor.setBirthDate(null);
             return;
         }
-        birthDate = dayOfMonth + "/" + month + "/" + year;
+        birthDate =  month + "/" + dayOfMonth + "/" + year;
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
         } catch (ParseException ex) {
@@ -298,14 +310,6 @@ public class DonorBackingForm {
         return ageFormatCorrect;
     }
 
-    public String getDonorPanel() {
-        Location donorPanel = donor.getDonorPanel();
-        if (donorPanel == null || donorPanel.getId() == null) {
-            return null;
-        }
-        return donorPanel.getId().toString();
-    }
-
     public String getYear() {
         return year;
     }
@@ -329,22 +333,43 @@ public class DonorBackingForm {
     public void setDayOfMonth(String dayOfMonth) {
         this.dayOfMonth = dayOfMonth;
     }
-
+    
+    /* original get/set DonorPanel methods - based on using id's, not objects
+    public String getDonorPanel() {
+        Location donorPanel = donor.getDonorPanel();
+        if (donorPanel == null || donorPanel.getId() == null) {
+            return null;
+        }
+        
+        return donorPanel.getId().toString();
+    }
+    
     public void setDonorPanel(String donorPanel) {
         if (StringUtils.isBlank(donorPanel)) {
             donor.setDonorPanel(null);
+            this.donorPanel = null;
         } else {
             Location l = new Location();
             try {
                 l.setId(Long.parseLong(donorPanel));
                 donor.setDonorPanel(l);
+                this.donorPanel = l;
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
                 donor.setDonorPanel(null);
-            }
+            } 
         }
     }
-
+    */
+    
+    public Location getDonorPanel(){
+        return donorPanel;
+    }
+    
+    public void setDonorPanel(Location donorPanel){
+        this.donorPanel = donorPanel;
+        donor.setDonorPanel(donorPanel);
+    }
 
     public void setPreferredLanguage(String language) {
 
@@ -678,7 +703,6 @@ public class DonorBackingForm {
     public Contact getContact(){
         return contact;
     }
-    
 
     public void setContact(Contact contact){
         this.contact = contact ;
