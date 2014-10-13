@@ -183,6 +183,7 @@ public class DonorController {
         donor.setIsDeleted(false);
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
+        donor.setDonorNumber(utilController.getNextDonorNumber());
         savedDonor = donorRepository.addDonor(donor);
         map.put("hasErrors", false);
 
