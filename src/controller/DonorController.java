@@ -30,6 +30,7 @@ import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
+import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
 
 @RestController
@@ -274,6 +275,22 @@ public class DonorController {
      return generateDatatablesMap(donors, totalRecords, formFields) ;
   }
   */
+   @RequestMapping(value = "{id}/deferrals" , method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
+    public 
+    Map<String, Object> viewDonorDeferrals(@PathVariable Long id) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<DonorDeferral> donorDeferrals = null;
+        List<DonorDeferralViewModel> donorDeferralViewModels;
+        donorDeferrals = donorRepository.getDonorDeferrals(id);
+        donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
+        map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
+        map.put("allDonorDeferrals", donorDeferralViewModels);
+        return map;
+    }
+    
+    
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public Map<String, Object> findDonors(
@@ -458,6 +475,14 @@ public class DonorController {
     }
     return donorViewModels;
   }
+
+      private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
+        List<DonorDeferralViewModel> donorDeferralViewModels = new ArrayList<DonorDeferralViewModel>();
+        for (DonorDeferral donorDeferral : donorDeferrals) {
+            donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
+        }
+        return donorDeferralViewModels;
+    }
 
   private DonorViewModel getDonorsViewModel(Donor donor) {
     DonorViewModel donorViewModel = new DonorViewModel(donor);

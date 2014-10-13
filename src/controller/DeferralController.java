@@ -69,7 +69,7 @@ public class DeferralController {
         map.put("deferralReasons", donorRepository.getDeferralReasons());
         return map;
     }
-
+/** - Ambiguous  method - refer donor controller - #209
     @RequestMapping( method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
     public 
@@ -84,7 +84,7 @@ public class DeferralController {
         map.put("allDonorDeferrals", donorDeferralViewModels);
         return map;
     }
-
+*/
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
