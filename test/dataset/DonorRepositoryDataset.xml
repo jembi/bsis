@@ -15,6 +15,7 @@
 	<contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
 	
         <AddressType id="1" preferredAddressType="Home Address"/>
+        <AddressType id="2" preferredAddressType="Work Address"/>
         
         <address id="1" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
                 homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 

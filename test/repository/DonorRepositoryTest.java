@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.sql.DataSource;
 import model.address.Address;
+import model.address.AddressType;
 import model.address.Contact;
 import model.location.Location;
 import model.collectedsample.CollectionConstants;
@@ -884,6 +885,8 @@ public class DonorRepositoryTest {
         Date date = new Date();
         Location l = new Location();
         l.setId(Long.parseLong("1"));
+        AddressType a = new AddressType();
+        a.setId(Long.parseLong("1"));
         donorBackingForm.setAddress(new Address());
         donorBackingForm.setContact(new Contact());
         donorBackingForm.setHomeAddressLine1("myaddress");
@@ -904,7 +907,7 @@ public class DonorRepositoryTest {
         donorBackingForm.setNotes("Notes");
         donorBackingForm.setMobileNumber("9999999999");
         donorBackingForm.setWorkNumber("8888888888");
-        donorBackingForm.setPreferredAddressType("1");
+        donorBackingForm.setPreferredAddressType(a);
         donorBackingForm.setHomeAddressProvince("Province");
         donorBackingForm.setHomeAddressState("State");
         donorBackingForm.setHomeAddressZipcode("361001");
@@ -937,6 +940,8 @@ public class DonorRepositoryTest {
         
         Location l = new Location();
         l.setId(Long.parseLong("2"));
+        AddressType a = new AddressType();
+        a.setId(Long.parseLong("2"));
 
         donorBackingForm.setHomeAddressLine1("address_update");
         donorBackingForm.setFirstName("firstName_update");
@@ -953,7 +958,7 @@ public class DonorRepositoryTest {
         donorBackingForm.setNotes("Notes_update");
         donorBackingForm.setMobileNumber("9878787878");
         donorBackingForm.setWorkNumber("874525452");
-        donorBackingForm.setPreferredAddressType("1");
+        donorBackingForm.setPreferredAddressType(a);
         donorBackingForm.setHomeAddressProvince("Province_update");
         donorBackingForm.setHomeAddressState("State_update");
         donorBackingForm.setHomeAddressZipcode("361001");
