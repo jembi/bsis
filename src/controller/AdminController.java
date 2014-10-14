@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -199,7 +198,7 @@ public class AdminController {
 
   @RequestMapping(value = "/bloodtests", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public  Map<String, Object> configureBloodTests(HttpServletRequest request) {
+  public  Map<String, Object> configureBloodTests() {
     Map<String, Object> map = new HashMap<String, Object>();
     List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
     for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
@@ -212,7 +211,7 @@ public class AdminController {
 
   @RequestMapping(value = "/bloodtypingrules", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TYPING_RULES+"')")
-  public  Map<String, Object> configureBloodTypingTests(HttpServletRequest request) {
+  public  Map<String, Object> configureBloodTypingTests() {
      Map<String, Object> map = new HashMap<String, Object>();
     map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
     List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
@@ -225,12 +224,9 @@ public class AdminController {
   
   @RequestMapping(value = "/forms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public  Map<String, Object> configureForms(HttpServletRequest request,
-                              Model model) {
+  public  Map<String, Object> configureForms() {
     Map<String, Object> map = new HashMap<String, Object>();
-
-    Map<String, Object> m = model.asMap();   
-    map.put("model", m);
+    map.put("model", map);
     return map;
   }
 
@@ -251,7 +247,6 @@ public class AdminController {
   @RequestMapping(value="/createsampledata", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
   public  Map<String, ? extends Object> createSampleData(
-                HttpServletRequest request,
                 @RequestParam Map<String, String> params) {
 
     boolean success = true;
@@ -280,22 +275,16 @@ public class AdminController {
 
   @RequestMapping(value="/tipsform", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")
-  public  Map<String, Object> configureTipsFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureTipsFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    addAllTipsToModel(m);
-    map.put("model", model);
+    addAllTipsToModel(map);
     return map;
   }
 
   @RequestMapping(value="/labsetuppage", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
-  public  Map<String, Object> labSetupFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> labSetupFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
@@ -351,38 +340,26 @@ public class AdminController {
 
   @RequestMapping(value="/requesttypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public  Map<String, Object> configureRequestTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureRequestTypesFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    addAllRequestTypesToModel(m);
-    map.put("model", model);
+    addAllRequestTypesToModel(map);
     return map;
   }
 
   @RequestMapping(value="/crossmatchtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public  Map<String, Object> configureCrossmatchTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureCrossmatchTypesFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    addAllCrossmatchTypesToModel(m);
-    map.put("model", model);
+    addAllCrossmatchTypesToModel(map);
     return map;
   }
 
   @RequestMapping(value="/packtypes", method=RequestMethod.GET)
-  public  Map<String, Object> configureBloodBagTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureBloodBagTypesFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    addAllBloodBagTypesToModel(m);
-    map.put("model", model);
+    addAllBloodBagTypesToModel(map);
     return map;
   }
 
@@ -552,7 +529,7 @@ public class AdminController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
   public  Map<String, Object> configureCrossmatchTypes(
       HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
+      @RequestParam(value="params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<String, Object>();
     LOGGER.debug(paramsAsJson);
     List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
@@ -574,9 +551,7 @@ public class AdminController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    Map<String, Object> m = model.asMap();
-    addAllCrossmatchTypesToModel(m);
-    map.put("model", model);
+    addAllCrossmatchTypesToModel(map);
     return map;
   }
 
