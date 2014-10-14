@@ -37,8 +37,11 @@ import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -577,7 +580,11 @@ public class AdminController {
     return map;
   }
 
-    @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
+  /**
+   * 
+   * Not used anywhere - #209 
+   *
+  @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public 
     Map<String, Object> configureBloodBagTypes(
@@ -597,6 +604,31 @@ public class AdminController {
             LOGGER.debug(params);
         addAllBloodBagTypesToModel(map);
         return map;
+    }
+    */
+   @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+    public ResponseEntity<BloodBagType> getPackTypeById(@PathVariable Integer id){
+        BloodBagType packType = bloodBagTypesRepository.getBloodBagTypeById(id);
+        return new ResponseEntity(packType, HttpStatus.NO_CONTENT);
+    }
+  
+    
+    
+    @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+    public ResponseEntity savePackType(@RequestBody BloodBagType packType){
+        bloodBagTypesRepository.saveBloodBagType(packType);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+  
+    @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+    public ResponseEntity<BloodBagType> updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
+        
+        packType.setId(id);
+        packType = bloodBagTypesRepository.updateBloodBagType(packType);
+        return new ResponseEntity<BloodBagType>(packType, HttpStatus.OK);
     }
 
   @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)

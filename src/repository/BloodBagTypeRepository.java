@@ -24,6 +24,7 @@ public class BloodBagTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
+
   
   public BloodBagType getBloodBagType(String checkBloodBagType) {
     TypedQuery<BloodBagType> query;
@@ -57,5 +58,14 @@ public class BloodBagTypeRepository {
         }
     }
     em.flush();
+  }
+  
+  public void saveBloodBagType(BloodBagType packType){
+      em.persist(packType);
+      
+  }
+  
+  public BloodBagType updateBloodBagType(BloodBagType packType){
+      return em.merge(packType);
   }
 }
