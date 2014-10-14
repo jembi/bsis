@@ -9,6 +9,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
+import model.address.ContactMethodType;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
@@ -174,8 +175,9 @@ public class DonorViewModel {
       return donor.getIdType()!=null?donor.getIdType().getIdType():"";
   }
   
-  public String getContactMethodType(){
-    return donor.getContactMethodType()!=null?donor.getContactMethodType().getContactMethodType():"";
+  public ContactMethodType getContactMethodType(){
+    //return donor.getContactMethodType()!=null?donor.getContactMethodType().getContactMethodType():"";
+	  return donor.getContactMethodType();
   }
   
   public String getPreferredAddressType(){

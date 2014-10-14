@@ -41,12 +41,10 @@ public class DonorBackingForm {
     private String dateOfFirstDonation;
 
     private Address address;
-
     private Contact contact;
-    
     private Location donorPanel;
-    
     private PreferredLanguage preferredLanguage;
+    private ContactMethodType contactMethodType;
 
     public DonorBackingForm() {
         donor = new Donor();
@@ -55,6 +53,7 @@ public class DonorBackingForm {
         contact = new Contact();
         donorPanel = new Location();
         preferredLanguage = new PreferredLanguage();
+        contactMethodType = new ContactMethodType();
     }
 
     public DonorBackingForm(Donor donor) {
@@ -766,6 +765,7 @@ public class DonorBackingForm {
         donor.setIdNumber(idNumber);
     }
     
+    /* original get/set ContactMethodType methods - based on using id's, not objects
     public String getContactMethodType(){
          
         if (donor.getContactMethodType()!=null) {
@@ -785,6 +785,18 @@ public class DonorBackingForm {
         }
 
     }
+    */
+    
+    public ContactMethodType getContactMethodType(){
+        return contactMethodType;
+    }
+    
+    public void setContactMethodType(ContactMethodType contactMethodType){
+        this.contactMethodType = contactMethodType;
+        donor.setContactMethodType(contactMethodType);
+    }
+    
+    
     
    @JsonIgnore
     public String getContactId(){
