@@ -15,7 +15,6 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Permission implements Serializable{
 
   @Id

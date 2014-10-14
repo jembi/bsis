@@ -25,11 +25,11 @@ public class RoleRepository {
 	public List<RoleViewModel> getAllRoles() {
 		TypedQuery<Role> query = em.createQuery("FROM Role", Role.class);
 		List<Role> roles = query.getResultList();
-		List<RoleViewModel> userViewModels = new ArrayList<RoleViewModel>();
+		List<RoleViewModel> roleViewModels = new ArrayList<RoleViewModel>();
 		for (Role role : roles) {
-			userViewModels.add(new RoleViewModel(role));
+			roleViewModels.add(new RoleViewModel(role));
 		}
-		return userViewModels;
+		return roleViewModels;
 	}
 
 	public Role findRoleByName(String name){
@@ -87,6 +87,10 @@ public class RoleRepository {
 	    
 	    return role;
 	  }
+        public void deleteRole(Long id){
+            Role role = findRoleDetailById(id);
+            em.remove(role);
+        }
 
 	public Permission findPermissionByPermissionId(long permissionId) {
 		// TODO Auto-generated method stub
