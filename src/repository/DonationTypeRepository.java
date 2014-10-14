@@ -45,6 +45,9 @@ public class DonationTypeRepository {
     return query.getSingleResult();
   }
 
+ /*
+  issue - #209 - Not used anywhere
+  *
   public void saveAllDonationTypes(List<DonationType> allDonationTypes) {
     for (DonationType dt: allDonationTypes) {
       if (dt.getId() == null)
@@ -58,6 +61,15 @@ public class DonationTypeRepository {
       }
       em.flush();
     }
+  }
+  */
+  
+  public void saveDonationType(DonationType donationType){
+      em.persist(donationType);
+  }
+  
+  public DonationType updateDonationType(DonationType donationType){
+      return em.merge(donationType);
   }
 
 }

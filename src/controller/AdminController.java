@@ -631,6 +631,10 @@ public class AdminController {
         return new ResponseEntity<BloodBagType>(packType, HttpStatus.OK);
     }
 
+    /**
+     * 
+     * issue - $209 -- Not used anywhere 
+     *
   @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public  Map<String, Object> configureDonationTypes(
@@ -654,6 +658,39 @@ public class AdminController {
     addAllDonationTypesToModel(map);
     return map;
   }
+  */
+  
+  
+  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
+  public  ResponseEntity getDonationType(@PathVariable Integer id) {
+      
+      DonationType donationType = donationTypesRepository.getDonationTypeById(id);
+      return new ResponseEntity(donationType, HttpStatus.CREATED);
+
+  }
+    
+  
+  @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
+  public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
+      
+      donationTypesRepository.saveDonationType(donationType);
+      return new ResponseEntity(HttpStatus.CREATED);
+
+  }
+  
+  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
+  public  ResponseEntity updateDonationType(@RequestBody DonationType donationType) {
+      
+      donationType = donationTypesRepository.updateDonationType(donationType);
+      return new ResponseEntity(donationType , HttpStatus.OK);
+
+  }
+  
+  
+  
 
 /**
  * 
