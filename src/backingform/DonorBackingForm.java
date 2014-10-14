@@ -45,6 +45,8 @@ public class DonorBackingForm {
     private Contact contact;
     
     private Location donorPanel;
+    
+    private PreferredLanguage preferredLanguage;
 
     public DonorBackingForm() {
         donor = new Donor();
@@ -52,6 +54,7 @@ public class DonorBackingForm {
         address = new Address();
         contact = new Contact();
         donorPanel = new Location();
+        preferredLanguage = new PreferredLanguage();
     }
 
     public DonorBackingForm(Donor donor) {
@@ -371,6 +374,7 @@ public class DonorBackingForm {
         donor.setDonorPanel(donorPanel);
     }
 
+    /* original get/set PreferredLanguage methods - based on using id's, not objects
     public void setPreferredLanguage(String language) {
 
         if (StringUtils.isBlank(language)) {
@@ -394,6 +398,16 @@ public class DonorBackingForm {
         }
         return null;
         
+    }
+    */
+    
+    public PreferredLanguage getPreferredLanguage(){
+        return preferredLanguage;
+    }
+    
+    public void setPreferredLanguage(PreferredLanguage preferredLanguage){
+        this.preferredLanguage = preferredLanguage;
+        donor.setPreferredLanguage(preferredLanguage);
     }
 
     public String getDateOfFirstDonation() {

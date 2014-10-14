@@ -9,6 +9,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -99,12 +100,15 @@ public class DonorViewModel {
   public String getCallingName(){
       return donor.getCallingName();
   }
-  public String getPreferredLanguage(){
-	  if (donor.getPreferredLanguage() == null ||
+  
+  public PreferredLanguage getPreferredLanguage(){
+	  /*if (donor.getPreferredLanguage() == null ||
 	        donor.getPreferredLanguage().getPreferredLanguage() == null)
 	      return "";
 	  else
-	      return donor.getPreferredLanguage().getPreferredLanguage();
+	  		return donor.getPreferredLanguage().getPreferredLanguage();
+	  */
+		  return donor.getPreferredLanguage();
   }
   
   public String getLastUpdated() {
