@@ -45,6 +45,7 @@ public class DonorBackingForm {
     private Location donorPanel;
     private PreferredLanguage preferredLanguage;
     private ContactMethodType contactMethodType;
+    private IdType idType;
 
     public DonorBackingForm() {
         donor = new Donor();
@@ -54,6 +55,7 @@ public class DonorBackingForm {
         donorPanel = new Location();
         preferredLanguage = new PreferredLanguage();
         contactMethodType = new ContactMethodType();
+        idType = new IdType();
     }
 
     public DonorBackingForm(Donor donor) {
@@ -742,6 +744,8 @@ public class DonorBackingForm {
         }
 
     }
+    
+    /* original get/set ContactMethodType methods - based on using id's, not objects
     public String getIdType() {
         if (donor.getIdType()!=null) {
             return donor.getIdType().getId().toString();
@@ -756,6 +760,15 @@ public class DonorBackingForm {
             preferredIdType.setId(Long.parseLong(idType));
             donor.setIdType(preferredIdType);
         }
+    }
+    */ 
+    public IdType getIdType(){
+        return idType;
+    }
+    
+    public void setIdType(IdType idType){
+        this.idType = idType;
+        donor.setIdType(idType);
     }
     
     public String getIdNumber(){

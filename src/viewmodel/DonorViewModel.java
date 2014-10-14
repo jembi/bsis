@@ -171,8 +171,9 @@ public class DonorViewModel {
   public  String getIdNumber(){
       return donor.getIdNumber();
   }
-  public String getIdType(){
-      return donor.getIdType()!=null?donor.getIdType().getIdType():"";
+  public IdType getIdType(){
+      //return donor.getIdType()!=null?donor.getIdType().getIdType():"";
+      return donor.getIdType();
   }
   
   public ContactMethodType getContactMethodType(){
