@@ -126,4 +126,10 @@ public class UserRepository {
     query.setParameter("roleId", id);
     return query.getSingleResult();
   }
+  
+  public void deleteUserById(Integer id)throws NoResultException, IllegalArgumentException{
+      User user = findUserById(id);
+      em.remove(user);
+      
+  }
 }

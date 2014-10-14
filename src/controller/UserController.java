@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.user.Role;
 import model.user.User;
@@ -48,7 +46,7 @@ public class UserController {
         binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController, userRepository));
     }
 
-    @RequestMapping(value = "/configure", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public 
     Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
@@ -59,32 +57,15 @@ public class UserController {
         return map;
     }
 
-
-
-    @RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public 
-    Map<String, Object> editUserFormGenerator(HttpServletRequest request,
-            @PathVariable Integer id) {
+    Map<String, Object> editUserFormGenerator() {
         UserBackingForm form = new UserBackingForm();
         Map<String, Object> map = new HashMap<String, Object>();
-        if (id != null) {
-            form.setId(id);
-            User user = userRepository.findUserById(id);
-            if (user != null) {
-                form = new UserBackingForm(user);
-                form.setCurrentPassword(user.getPassword());
-                map.put("userRoles", roleRepository.getAllRoles());
-                map.put("existingUser", true);
-            } else {
-                form = new UserBackingForm();
-                map.put("existingUser", false);
-            }
-        }
         map.put("allRoles", roleRepository.getAllRoles());
         map.put("userRoles", form.getRoles());
         map.put("editUserForm", form);
-        // to ensure custom field names are displayed in the form
         return map;
     }
 
@@ -100,7 +81,6 @@ public class UserController {
             userRepository.addUser(user);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
@@ -124,11 +104,20 @@ public class UserController {
     }
     
 
-    @RequestMapping(value = "/current", method = RequestMethod.GET)
+    @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public User getUserDetails(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName(); //get logged in username
         return userRepository.findUser(userName);
+    }
+    
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public ResponseEntity deleteUser(@PathVariable Integer id){
+        
+        userRepository.deleteUserById(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
     
        private void addAllUsersToModel(Map<String, Object> m) {
