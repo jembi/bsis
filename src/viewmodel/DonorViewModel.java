@@ -182,7 +182,8 @@ public class DonorViewModel {
   }
   
   public String getPreferredAddressType(){
-     return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
+     //return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
+	 return donor.getAddressType();
   }
   
   

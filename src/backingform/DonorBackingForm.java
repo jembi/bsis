@@ -46,6 +46,7 @@ public class DonorBackingForm {
     private PreferredLanguage preferredLanguage;
     private ContactMethodType contactMethodType;
     private IdType idType;
+    private AddressType addressType;
 
     public DonorBackingForm() {
         donor = new Donor();
@@ -56,6 +57,7 @@ public class DonorBackingForm {
         preferredLanguage = new PreferredLanguage();
         contactMethodType = new ContactMethodType();
         idType = new IdType();
+        addressType = new AddressType();
     }
 
     public DonorBackingForm(Donor donor) {
@@ -723,9 +725,7 @@ public class DonorBackingForm {
         this.contact = contact ;
     }
 
-    /**
-     * Address Type Getters & Setters
-     */
+    /* original get/set AddressType methods - based on using id's, not objects
     public String getPreferredAddressType() {
          
         if (donor.getAddressType()!=null) {
@@ -744,8 +744,18 @@ public class DonorBackingForm {
         }
 
     }
+    */
+    public AddressType getPreferredAddressType(){
+        return addressType;
+    }
     
-    /* original get/set ContactMethodType methods - based on using id's, not objects
+    public void setPreferredAddressType(AddressType addressType){
+        this.addressType = addressType;
+        donor.setAddressType(addressType);
+    }
+    
+    
+    /* original get/set IdType methods - based on using id's, not objects
     public String getIdType() {
         if (donor.getIdType()!=null) {
             return donor.getIdType().getId().toString();
