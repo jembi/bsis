@@ -62,7 +62,6 @@ import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleViewModel;
 
 @RestController
-@RequestMapping("configure")
 public class AdminController {
 	
 	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
@@ -326,7 +325,7 @@ public class AdminController {
     return m;
   }
   
-  @RequestMapping(value="/producttypes", method=RequestMethod.GET)
+  @RequestMapping(value="/componenttypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  Map<String, Object> configureProductTypes(
       HttpServletRequest request, HttpServletResponse response) {
@@ -336,7 +335,7 @@ public class AdminController {
     return map;
   }
 
-  @RequestMapping(value="/producttypecombinations", method=RequestMethod.GET)
+  @RequestMapping(value="/componenttypecombinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  Map<String, Object> configureProductTypeCombinations(
       HttpServletRequest request, HttpServletResponse response) {
@@ -372,7 +371,7 @@ public class AdminController {
     return map;
   }
 
-  @RequestMapping(value="/bloodbagtypes", method=RequestMethod.GET)
+  @RequestMapping(value="/packtypes", method=RequestMethod.GET)
   public  Map<String, Object> configureBloodBagTypesFormGenerator(
       HttpServletRequest request, HttpServletResponse response,
       Model model) {
@@ -578,7 +577,7 @@ public class AdminController {
     return map;
   }
 
-    @RequestMapping(value = "/bloodbagtypes", method = RequestMethod.POST)
+    @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public 
     Map<String, Object> configureBloodBagTypes(
