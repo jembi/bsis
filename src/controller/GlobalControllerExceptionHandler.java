@@ -32,8 +32,8 @@ public class GlobalControllerExceptionHandler {
         MethodArgumentNotValidException errors) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "There are validation issues,  provide corect inputs");
-    errorMap.put("userMessage", "Please provde vorrect inputs");
+    errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
+    errorMap.put("userMessage", "Please provide valid inputs");
     errorMap.put("moreInfo", errors.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     errors.printStackTrace();
