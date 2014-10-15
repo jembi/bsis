@@ -586,14 +586,14 @@ public class DonorRepositoryTest {
         listAllDonor.add(donorBackingForm.getDonor());
         donor = new Donor();
         donorBackingForm = new DonorBackingForm(donor);
-        donorBirthdate = "06/11/1991";
+        donorBirthdate = "11/06/1991";
         donorBackingForm.setBirthDate(donorBirthdate);
         donorBackingForm.setDonorNumber("000008");
         setBackingFormValue(donorBackingForm);
         listAllDonor.add(donorBackingForm.getDonor());
         donor = new Donor();
         donorBackingForm = new DonorBackingForm(donor);
-        donorBirthdate = "06/12/1991";
+        donorBirthdate = "12/06/1991";
         donorBackingForm.setBirthDate(donorBirthdate);
         donorBackingForm.setDonorNumber("000009");
         setBackingFormValue(donorBackingForm);
@@ -887,6 +887,7 @@ public class DonorRepositoryTest {
         l.setId(Long.parseLong("1"));
         AddressType a = new AddressType();
         a.setId(Long.parseLong("1"));
+        donorBirthdate = "11/06/1991";
         donorBackingForm.setAddress(new Address());
         donorBackingForm.setContact(new Contact());
         donorBackingForm.setHomeAddressLine1("myaddress");
@@ -942,7 +943,6 @@ public class DonorRepositoryTest {
         l.setId(Long.parseLong("2"));
         AddressType a = new AddressType();
         a.setId(Long.parseLong("2"));
-
         donorBackingForm.setHomeAddressLine1("address_update");
         donorBackingForm.setFirstName("firstName_update");
         donorBackingForm.setMiddleName("middlename_update");
