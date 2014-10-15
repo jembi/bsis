@@ -437,7 +437,7 @@ public class CreateDataController {
       CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
-      collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
+      collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
       collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
       collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
 

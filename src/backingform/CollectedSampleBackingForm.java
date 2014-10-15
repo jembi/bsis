@@ -157,12 +157,12 @@ public class CollectedSampleBackingForm {
       return donationType.getId().toString();
   }
 
-  public String getBloodBagType() {
-    BloodBagType bloodBagType = collectedSample.getBloodBagType();
-    if (bloodBagType == null || bloodBagType.getId() == null)
+  public String getPackType() {
+    BloodBagType packType = collectedSample.getBloodBagType();
+    if (packType == null || packType.getId() == null)
       return null;
     else
-      return bloodBagType.getId().toString();
+      return packType.getId().toString();
   }
   
   @JsonIgnore
@@ -257,14 +257,14 @@ public class CollectedSampleBackingForm {
     }
   }
 
-  public void setBloodBagType(String bloodBagTypeId) {
-    if (StringUtils.isBlank(bloodBagTypeId)) {
+  public void setPackType(String packTypeId) {
+    if (StringUtils.isBlank(packTypeId)) {
       collectedSample.setBloodBagType(null);
     }
     else {
       BloodBagType bt = new BloodBagType();
       try {
-        bt.setId(Integer.parseInt(bloodBagTypeId));
+        bt.setId(Integer.parseInt(packTypeId));
         collectedSample.setBloodBagType(bt);
       } catch (Exception ex) {
         ex.printStackTrace();
