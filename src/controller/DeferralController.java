@@ -33,7 +33,7 @@ import viewmodel.DonorDeferralViewModel;
  * @author srikanth
  */
 @RestController
-@RequestMapping("donors/{donorId}/deferrals")
+@RequestMapping("deferrals")
 public class DeferralController {
 
     @Autowired

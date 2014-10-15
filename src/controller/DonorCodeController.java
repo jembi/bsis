@@ -24,7 +24,7 @@ import viewmodel.DonorCodeViewModel;
 import viewmodel.DonorViewModel;
 
 @RestController
-@RequestMapping("donors/{donorId}/donorcodes")
+@RequestMapping("donorcodes")
 public class DonorCodeController {
 
     @Autowired
