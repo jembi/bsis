@@ -70,9 +70,6 @@ public class BloodTestingController {
       return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
   
-  
-  
-  
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity deactivateBloodTest(@PathVariable Integer id) {

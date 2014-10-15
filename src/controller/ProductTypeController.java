@@ -1,5 +1,6 @@
  package controller;
 
+import backingform.ProductTypeCombinationBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,9 +116,10 @@ public class ProductTypeController {
 
     @RequestMapping(value = "combinations", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-    public 
-    ResponseEntity saveProductTypeCombination(HttpServletResponse response,
-            @RequestBody ProductTypeCombination productTypeCombination) {
+    public
+            ResponseEntity saveProductTypeCombination(@RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm) {
+        ProductTypeCombination productTypeCombination
+                = productTypeCombinationBackingForm.getProductTypeCombination();
 
         productTypeRepository.saveComponentTypeCombination(productTypeCombination);
         return new ResponseEntity(HttpStatus.CREATED);
@@ -127,15 +129,18 @@ public class ProductTypeController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public 
     ResponseEntity updateProductTypeCombination(HttpServletResponse response,
-            @RequestBody ProductTypeCombination productTypeCombination, @PathVariable Integer id) {
+            @RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm
+            , @PathVariable Integer id) {
+       ProductTypeCombination productTypeCombination = 
+              productTypeCombinationBackingForm.getProductTypeCombination();
         productTypeCombination.setId(id);
         productTypeRepository.saveComponentTypeCombination(productTypeCombination);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
   
   @RequestMapping(value="/combinations/{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public ResponseEntity deactivateProductTypeCombination(HttpServletRequest request,
+  public ResponseEntity deactivateProductTypeCombination(
       @PathVariable Integer id) {
 
     productTypeRepository.deactivateProductTypeCombination(id);
@@ -144,7 +149,7 @@ public class ProductTypeController {
 
   @RequestMapping(value="/combinations/{id}/activate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity activateProductTypeCombination(HttpServletRequest request,
+  public  ResponseEntity activateProductTypeCombination(
       @PathVariable Integer id) {
 
      productTypeRepository.activateProductTypeCombination(id);
@@ -162,5 +167,7 @@ public class ProductTypeController {
       return productTypeViewModels;
       
   }
+  
+  
 
 }
