@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
+import viewmodel.ProductTypeCombinationViewModel;
 import viewmodel.ProductTypeViewModel;
-import viewmodel.ProductViewModel;
 
 @RestController
 @RequestMapping("componenttypes")
@@ -96,13 +96,11 @@ public class ProductTypeController {
 
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> configureProductTypeCombinations() {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("productTypeCombinations", productTypeRepository.getAllProductTypeCombinationsIncludeDeleted());
-    map.put("productTypes", productTypeRepository.getAllProductTypes());
-    return map;
+  public List<ProductTypeCombinationViewModel> configureProductTypeCombinations() {
+    List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
+    return getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted);
   }
+  
   @RequestMapping(value="Combinations/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
@@ -110,7 +108,7 @@ public class ProductTypeController {
 
     Map<String, Object> map = new HashMap<String, Object> ();
     ProductTypeCombination productTypeCombination = productTypeRepository.getProductTypeCombinationById(id);
-    map.put("productTypeCombination", productTypeCombination);
+    map.put("productTypeCombination", new ProductTypeCombinationViewModel(productTypeCombination));
     return map;
   }
 
@@ -156,18 +154,27 @@ public class ProductTypeController {
      return new ResponseEntity(HttpStatus.CREATED);
   }
   
-  public List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
+  public  List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
       
       List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
       for(ProductType productType : productTypes)
-      {
           productTypeViewModels.add(new ProductTypeViewModel(productType));
           
-      }
       return productTypeViewModels;
       
   }
   
   
+  public  List<ProductTypeCombinationViewModel> 
+        getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeConminations){
+      
+      List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
+              = new ArrayList<ProductTypeCombinationViewModel> ();
+      for(ProductTypeCombination productTypeCombination : productTypeConminations)
+          productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+          
+      return productTypeCombinationViewModels;
+      
+  }
 
 }

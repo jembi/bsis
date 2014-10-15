@@ -3,6 +3,11 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import controller.ProductTypeController;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
 /**
@@ -32,6 +37,17 @@ public class ProductTypeCombinationViewModel {
     
     public String getCombinationName(){
         return productTypeCombination.getCombinationName();
+    }
+    
+    public List<ProductTypeViewModel> getProductTypeViewModels(){
+        return getProductTypeViewModels(productTypeCombination.getProductTypes());
+    }
+
+    private List<ProductTypeViewModel> getProductTypeViewModels(Set<ProductType> productTypes) {
+      List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
+      for(ProductType productType : productTypes)
+          productTypeViewModels.add(new ProductTypeViewModel(productType));
+      return productTypeViewModels;
     }
     
 }
