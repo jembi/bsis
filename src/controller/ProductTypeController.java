@@ -1,6 +1,8 @@
  package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
+import viewmodel.ProductTypeViewModel;
+import viewmodel.ProductViewModel;
 
 @RestController
 @RequestMapping("componenttypes")
@@ -39,11 +43,10 @@ public class ProductTypeController {
   
   @RequestMapping( method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> configureProductTypes() {
+  public  List<ProductTypeViewModel> configureProductTypes() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("productTypes", productTypeRepository.getAllProductTypesIncludeDeleted());
-    return map;
+    List<ProductType> productTypes = productTypeRepository.getAllProductTypesIncludeDeleted();
+    return getProductTypeViewModels(productTypes);
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -51,7 +54,7 @@ public class ProductTypeController {
 
     Map<String, Object> map = new HashMap<String, Object> ();
     ProductType productType = productTypeRepository.getProductTypeById(id);
-    map.put("productType", productType);
+    map.put("productType", new ProductTypeViewModel(productType));
     return map;
   }
 
@@ -146,6 +149,18 @@ public class ProductTypeController {
 
      productTypeRepository.activateProductTypeCombination(id);
      return new ResponseEntity(HttpStatus.CREATED);
+  }
+  
+  public List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
+      
+      List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
+      for(ProductType productType : productTypes)
+      {
+          productTypeViewModels.add(new ProductTypeViewModel(productType));
+          
+      }
+      return productTypeViewModels;
+      
   }
 
 }
