@@ -317,9 +317,11 @@ public class DonorController {
     
     List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
     
-    for(Donor donor : results){
-    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
-    	donors.add(donorViewModel);
+    if (results != null){
+	    for(Donor donor : results){
+	    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
+	    	donors.add(donorViewModel);
+	    }
     }
 
     map.put("donors", donors);
