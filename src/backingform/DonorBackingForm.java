@@ -334,47 +334,6 @@ public class DonorBackingForm {
     public Boolean isAgeFormatCorrect() {
         return ageFormatCorrect;
     }
-
-    
-    
-    /* original get/set DonorPanel methods - based on using id's, not objects
-    public String getDonorPanel() {
-        Location donorPanel = donor.getDonorPanel();
-        if (donorPanel == null || donorPanel.getId() == null) {
-            return null;
-        }
-        
-        return donorPanel.getId().toString();
-    }
-    
-    public void setDonorPanel(String donorPanel) {
-        if (StringUtils.isBlank(donorPanel)) {
-            donor.setDonorPanel(null);
-            this.donorPanel = null;
-        } else {
-            Location l = new Location();
-            try {
-                l.setId(Long.parseLong(donorPanel));
-                donor.setDonorPanel(l);
-                this.donorPanel = l;
-            } catch (NumberFormatException ex) {
-                ex.printStackTrace();
-                donor.setDonorPanel(null);
-            } 
-        }
-    }
-    */
-    
-    /*
-    public Location getDonorPanel(){
-        return donorPanel;
-    }
-    
-    public void setDonorPanel(Location donorPanel){
-        this.donorPanel = donorPanel;
-        donor.setDonorPanel(donorPanel);
-    }
-    */
     
     public String getDonorPanel() {
         Location donorPanel = donor.getDonorPanel();
@@ -399,39 +358,6 @@ public class DonorBackingForm {
             } 
         }
     }
-
-    /* original get/set PreferredLanguage methods - based on using id's, not objects
-    public void setPreferredLanguage(String language) {
-
-        if (StringUtils.isBlank(language)) {
-            donor.setPreferredLanguage(null);
-        } else {
-            PreferredLanguage preferredLanguage = new PreferredLanguage();
-            try {
-                preferredLanguage.setId(Long.parseLong(language));
-                donor.setPreferredLanguage(preferredLanguage);
-            } catch (NumberFormatException ex) {
-                ex.printStackTrace();
-                donor.setPreferredLanguage(null);
-            }
-        }
-    }
-
-    public String getPreferredLanguage() {
-
-        if (donor.getPreferredLanguage()!=null) {
-            return donor.getPreferredLanguage().getId().toString();
-        }
-        return null;
-        
-    }
-    
-    
-    @JsonIgnore
-    public PreferredLanguage getPreferredLanguage(){
-        return preferredLanguage;
-    }
-    */
     
     public String getPreferredLanguage() {
 
@@ -443,8 +369,17 @@ public class DonorBackingForm {
     }
     
     public void setPreferredLanguage(PreferredLanguage preferredLanguage){
-        //this.preferredLanguage = preferredLanguage;
-        donor.setPreferredLanguage(preferredLanguage);
+    	if (preferredLanguage == null){
+    		donor.setPreferredLanguage(null);
+    	}
+    	else if (preferredLanguage.getId() == null){
+    		donor.setPreferredLanguage(null);
+    	}
+    	else{
+    		PreferredLanguage pl  = new PreferredLanguage();
+	        pl.setId(preferredLanguage.getId());
+	        donor.setPreferredLanguage(pl);
+    	}
     }
 
     public String getDateOfFirstDonation() {
@@ -758,32 +693,6 @@ public class DonorBackingForm {
     public void setContact(Contact contact){
         this.contact = contact ;
     }
-
-    /* original get/set AddressType methods - based on using id's, not objects
-    public String getPreferredAddressType() {
-         
-        if (donor.getAddressType()!=null) {
-           return donor.getAddressType().getId().toString();
-        }
-        return null;
-    }
-
-    public void setPreferredAddressType(String addressTypeID) {
-        if (StringUtils.isBlank(addressTypeID)) {
-              donor.setAddressType(null);
-        } else {
-            AddressType addressType = new AddressType();
-            addressType.setId(Long.parseLong(addressTypeID));
-            donor.setAddressType(addressType);
-        }
-
-    }
-    
-    @JsonIgnore
-    public AddressType getPreferredAddressType(){
-        return addressType;
-    }
-    */
     
     public String getPreferredAddressType() {
         
@@ -794,33 +703,8 @@ public class DonorBackingForm {
     }
     
     public void setPreferredAddressType(AddressType addressType){
-        //this.addressType = addressType;
         donor.setAddressType(addressType);
     }
-    
-    
-    /* original get/set IdType methods - based on using id's, not objects
-    public String getIdType() {
-        if (donor.getIdType()!=null) {
-            return donor.getIdType().getId().toString();
-        }
-        return null;
-    }
-    public void setIdType(String idType){
-         if (StringUtils.isBlank(idType)) {
-              donor.setIdType(null);
-        } else {
-            IdType preferredIdType = new IdType();
-            preferredIdType.setId(Long.parseLong(idType));
-            donor.setIdType(preferredIdType);
-        }
-    }
-    
-    @JsonIgnore
-    public IdType getIdType(){
-        return idType;
-    }
-    */
     
     public String getIdType() {
         if (donor.getIdType()==null || donor.getIdType().getId() == null) {
@@ -830,8 +714,17 @@ public class DonorBackingForm {
     }
     
     public void setIdType(IdType idType){
-        //this.idType = idType;
-        donor.setIdType(idType);
+    	if(idType == null){
+    		donor.setIdType(null);
+    	}
+    	else if(idType.getId() == null){
+    		donor.setIdType(null);
+    	}
+    	else{
+	    	IdType idt = new IdType();
+	    	idt.setId(idType.getId());
+	        donor.setIdType(idt);
+    	}
     }
     
     public String getIdNumber(){
@@ -840,34 +733,6 @@ public class DonorBackingForm {
     public void setIdNumber(String idNumber){
         donor.setIdNumber(idNumber);
     }
-    
-    /* original get/set ContactMethodType methods - based on using id's, not objects
-    public String getContactMethodType(){
-         
-        if (donor.getContactMethodType()!=null) {
-            return donor.getContactMethodType().getId().toString();
-        }
-        return null;
-        
-    }
-    
-    public void setContactMethodType(String preferredContactMethodId) {
-        if (StringUtils.isBlank(preferredContactMethodId)) {
-              donor.setContactMethodType(null);
-        } else {
-            ContactMethodType contactMethodType  = new ContactMethodType();
-            contactMethodType.setId(Integer.parseInt(preferredContactMethodId));
-            donor.setContactMethodType(contactMethodType);
-        }
-
-    }
-    
-    
-    @JsonIgnore
-    public ContactMethodType getContactMethodType(){
-        return contactMethodType;
-    }
-    */
     
     public String getContactMethodType(){
         
@@ -879,11 +744,18 @@ public class DonorBackingForm {
     }
     
     public void setContactMethodType(ContactMethodType contactMethodType){
-        //this.contactMethodType = contactMethodType;
-        donor.setContactMethodType(contactMethodType);
-    }
-    
-    
+    	if (contactMethodType == null){
+    		donor.setContactMethodType(null);
+    	}
+    	else if (contactMethodType.getId() == null){
+    		donor.setContactMethodType(null);
+    	}
+    	else{
+	    	ContactMethodType cmt  = new ContactMethodType();
+	        cmt.setId(contactMethodType.getId());
+	        donor.setContactMethodType(cmt);
+    	}
+    }    
     
    @JsonIgnore
     public String getContactId(){
