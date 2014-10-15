@@ -676,7 +676,6 @@ public class DonorBackingForm {
         
     }
 
-    @JsonIgnore
     public Address getAddress() {
         return address;    
     }
@@ -685,7 +684,6 @@ public class DonorBackingForm {
         this.address = address;
     }
     
-    @JsonIgnore
     public Contact getContact(){
         return contact;
     }
