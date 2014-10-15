@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.DonorRepository;
 import utils.PermissionConstants;
@@ -30,7 +31,8 @@ public class DonorCodeController {
     @Autowired
     private DonorRepository donorRepository;
 
-
+/**
+ * issue #209 - Not required
     @RequestMapping(value = "update/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR_CODE + "')")
     public 
@@ -42,19 +44,20 @@ public class DonorCodeController {
         return map;
 
     }
-
-    @RequestMapping(value = "add/form", method = RequestMethod.GET)
+*/
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
     public 
     List<DonorCodeGroup> addDonorCodeFormGenerator() {
         return donorRepository.getAllDonorCodeGroups();
     }
 
-    @RequestMapping(value = "{id}" ,method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
     public 
-    ResponseEntity<Map <String, Object>> addDonorCode(@PathVariable Long donorId,
-        @PathVariable Long id) {
+    ResponseEntity<Map <String, Object>> addDonorCode(
+            @RequestParam(value = "id") Long id,
+            @RequestParam(value = "donorId") Long donorId) {
         Map<String, Object> map = new HashMap<String, Object>();
         DonorDonorCode donorDonorCode = new DonorDonorCode();
         donorDonorCode.setDonor(donorRepository.findDonorById(donorId));
@@ -69,7 +72,7 @@ public class DonorCodeController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value ="{donorId}" , method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_CODE + "')")
     public 
     ResponseEntity<Map <String, Object>> donorCodesTable(@PathVariable Long donorId) {
