@@ -77,9 +77,7 @@ public class AdminController {
   @Autowired
   LocationRepository locationRepository;
 
-  @Autowired
-  ProductTypeRepository productTypesRepository;
-
+ 
   @Autowired
   BloodBagTypeRepository bloodBagTypesRepository;
 
@@ -317,26 +315,10 @@ public class AdminController {
     return m;
   }
   
-  @RequestMapping(value="/componenttypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> configureProductTypes(
-      HttpServletRequest request, HttpServletResponse response) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("productTypes", productTypesRepository.getAllProductTypesIncludeDeleted());
-    return map;
-  }
 
-  @RequestMapping(value="/componenttypecombinations", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> configureProductTypeCombinations(
-      HttpServletRequest request, HttpServletResponse response) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("productTypeCombinations", productTypesRepository.getAllProductTypeCombinationsIncludeDeleted());
-    map.put("productTypes", productTypesRepository.getAllProductTypes());
-    return map;
-  }
+
 
   @RequestMapping(value="/requesttypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
