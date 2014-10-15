@@ -2,10 +2,12 @@ package controller.bloodtesting;
 
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import model.bloodtesting.BloodTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
@@ -38,7 +39,18 @@ public class BloodTestingController {
     }
     return reqUrl;
   }
-
+  
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  public  Map<String, Object> configureBloodTests() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
+      bloodTests.add(new BloodTestViewModel(bt));
+    }
+    map.put("bloodTests", bloodTests);
+    return map;
+  }
   @RequestMapping(value = "{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public Map<String, Object> getBloodTestSummary(@PathVariable Integer id) {
@@ -54,18 +66,21 @@ public class BloodTestingController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity saveNewBloodTest(
       @RequestBody Map<String, Object> newBloodTestAsMap) {
-      bloodTestingRepository.saveNewBloodTest(newBloodTestAsMap);
+      bloodTestingRepository.saveBloodTest(newBloodTestAsMap);
       return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
   
-  @RequestMapping(value="{id}/deactivate", method=RequestMethod.POST)
+  
+  
+  
+  @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity deactivateBloodTest(@PathVariable Integer id) {
     bloodTestingRepository.deactivateBloodTest(id);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @RequestMapping(value="{id}/activate", method=RequestMethod.POST)
+  @RequestMapping(value="{id}/activate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity activateBloodTest(@PathVariable Integer id) {
 

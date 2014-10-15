@@ -596,6 +596,8 @@ public class BloodTestingRepository {
 		return query.getSingleResult();
 	}
 
+        /**
+         * Not Used Anywhere
 	public void saveNewBloodTypingRule(
 			Map<String, Object> newBloodTypingRuleAsMap) {
 
@@ -628,6 +630,17 @@ public class BloodTestingRepository {
 		rule.setIsActive(true);
 		em.persist(rule);
 	}
+        */
+     public void saveBloodTypingRule(
+            BloodTestingRule bloodTestingRule) {
+        em.persist(bloodTestingRule);
+    }
+
+    public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule) 
+    throws IllegalAccessException{
+        return em.merge(bloodTestingRule);
+
+    }
 
 	public void deleteBloodTestingRule(Integer ruleId) {
 		String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
@@ -638,7 +651,7 @@ public class BloodTestingRepository {
 		em.flush();
 	}
 
-	public void saveNewBloodTest(Map<String, Object> newBloodTestAsMap) {
+	public void saveBloodTest(Map<String, Object> newBloodTestAsMap) {
 		BloodTest bt = new BloodTest();
 		bt.setTestName((String) newBloodTestAsMap.get("testName"));
 		bt.setTestNameShort((String) newBloodTestAsMap.get("testNameShort"));

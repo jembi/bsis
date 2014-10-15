@@ -27,8 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
-import model.bloodtesting.BloodTest;
-import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
 import model.tips.Tips;
@@ -55,10 +53,7 @@ import repository.LocationRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
-import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
-import viewmodel.BloodTestViewModel;
-import viewmodel.BloodTestingRuleViewModel;
 
 @RestController
 public class AdminController {
@@ -85,8 +80,6 @@ public class AdminController {
   @Autowired
   CrossmatchTypeRepository crossmatchTypesRepository;
 
-  @Autowired
-  BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   WorksheetTypeRepository worksheetTypeRepository;
@@ -189,31 +182,9 @@ public class AdminController {
     return m;
   }
 
-  @RequestMapping(value = "/bloodtests", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public  Map<String, Object> configureBloodTests() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
-      bloodTests.add(new BloodTestViewModel(bt));
-    }
-    map.put("bloodTests", bloodTests);
-    map.put("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
-    return map;
-  }
 
-  @RequestMapping(value = "/bloodtypingrules", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TYPING_RULES+"')")
-  public  Map<String, Object> configureBloodTypingTests() {
-     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
-    List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
-    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-      rules.add(new BloodTestingRuleViewModel(rule));
-    }
-    map.put("bloodTypingRules", rules);
-    return map;
-  }
+
+
   
   @RequestMapping(value = "/forms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
