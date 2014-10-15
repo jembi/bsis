@@ -42,22 +42,12 @@ public class DonorBackingForm {
 
     private Address address;
     private Contact contact;
-    private Location donorPanel;
-    private PreferredLanguage preferredLanguage;
-    private ContactMethodType contactMethodType;
-    private IdType idType;
-    private AddressType addressType;
 
     public DonorBackingForm() {
         donor = new Donor();
         ageFormatCorrect = null;
         address = new Address();
         contact = new Contact();
-        donorPanel = new Location();
-        preferredLanguage = new PreferredLanguage();
-        contactMethodType = new ContactMethodType();
-        idType = new IdType();
-        addressType = new AddressType();
     }
 
     public DonorBackingForm(Donor donor) {
@@ -69,7 +59,30 @@ public class DonorBackingForm {
         return donor.getDonorStatus();
     }
 
-    @JsonIgnore
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(String dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+    
     public String getBirthDate() {
         if (birthDate != null) {
             return birthDate;
@@ -105,13 +118,19 @@ public class DonorBackingForm {
     }
 
     public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-        try {
-            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-            donor.setBirthDate(null);
-        }
+    	// if birthDate is an empty string or is null, try set it using dayOfMonth, month and year values
+    	if (birthDate.equals("") || birthDate == null){
+    		setBirthDate();
+    	}
+    	else{
+	        this.birthDate = birthDate;
+	        try {
+	            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+	        } catch (ParseException ex) {
+	            ex.printStackTrace();
+	            donor.setBirthDate(null);
+	        }
+    	}
     }
 //
 //    public DonorViewModel getDonorViewModel() {
@@ -316,29 +335,7 @@ public class DonorBackingForm {
         return ageFormatCorrect;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getDayOfMonth() {
-        return dayOfMonth;
-    }
-
-    public void setDayOfMonth(String dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
-    }
+    
     
     /* original get/set DonorPanel methods - based on using id's, not objects
     public String getDonorPanel() {
@@ -368,6 +365,7 @@ public class DonorBackingForm {
     }
     */
     
+    /*
     public Location getDonorPanel(){
         return donorPanel;
     }
@@ -375,6 +373,31 @@ public class DonorBackingForm {
     public void setDonorPanel(Location donorPanel){
         this.donorPanel = donorPanel;
         donor.setDonorPanel(donorPanel);
+    }
+    */
+    
+    public String getDonorPanel() {
+        Location donorPanel = donor.getDonorPanel();
+        if (donorPanel == null || donorPanel.getId() == null) {
+            return null;
+        }
+        
+        return donorPanel.getId().toString();
+    }
+    
+    public void setDonorPanel(Location donorPanel) {
+        if (donorPanel == null || donorPanel.getId() == null) {
+            donor.setDonorPanel(null);
+        } else {
+            Location l = new Location();
+            try {
+                l.setId(donorPanel.getId());
+                donor.setDonorPanel(l);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                donor.setDonorPanel(null);
+            } 
+        }
     }
 
     /* original get/set PreferredLanguage methods - based on using id's, not objects
@@ -402,14 +425,25 @@ public class DonorBackingForm {
         return null;
         
     }
-    */
     
+    
+    @JsonIgnore
     public PreferredLanguage getPreferredLanguage(){
         return preferredLanguage;
     }
+    */
+    
+    public String getPreferredLanguage() {
+
+        if (donor.getPreferredLanguage()==null || donor.getPreferredLanguage().getId() == null) {
+        	return null;
+        }
+        return donor.getPreferredLanguage().getId().toString();
+        
+    }
     
     public void setPreferredLanguage(PreferredLanguage preferredLanguage){
-        this.preferredLanguage = preferredLanguage;
+        //this.preferredLanguage = preferredLanguage;
         donor.setPreferredLanguage(preferredLanguage);
     }
 
@@ -744,13 +778,23 @@ public class DonorBackingForm {
         }
 
     }
-    */
+    
+    @JsonIgnore
     public AddressType getPreferredAddressType(){
         return addressType;
     }
+    */
+    
+    public String getPreferredAddressType() {
+        
+        if (donor.getAddressType()==null  || donor.getAddressType().getId() == null) {
+            return null;
+        }
+        return donor.getAddressType().getId().toString();
+    }
     
     public void setPreferredAddressType(AddressType addressType){
-        this.addressType = addressType;
+        //this.addressType = addressType;
         donor.setAddressType(addressType);
     }
     
@@ -771,13 +815,22 @@ public class DonorBackingForm {
             donor.setIdType(preferredIdType);
         }
     }
-    */ 
+    
+    @JsonIgnore
     public IdType getIdType(){
         return idType;
     }
+    */
+    
+    public String getIdType() {
+        if (donor.getIdType()==null || donor.getIdType().getId() == null) {
+            return null;
+        }
+        return donor.getIdType().getId().toString();
+    }
     
     public void setIdType(IdType idType){
-        this.idType = idType;
+        //this.idType = idType;
         donor.setIdType(idType);
     }
     
@@ -808,14 +861,25 @@ public class DonorBackingForm {
         }
 
     }
-    */
     
+    
+    @JsonIgnore
     public ContactMethodType getContactMethodType(){
         return contactMethodType;
     }
+    */
+    
+    public String getContactMethodType(){
+        
+        if (donor.getContactMethodType()==null || donor.getContactMethodType().getId() == null) {
+            return null;
+        }
+        return donor.getContactMethodType().getId().toString();
+        
+    }
     
     public void setContactMethodType(ContactMethodType contactMethodType){
-        this.contactMethodType = contactMethodType;
+        //this.contactMethodType = contactMethodType;
         donor.setContactMethodType(contactMethodType);
     }
     
