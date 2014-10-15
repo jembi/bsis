@@ -5,13 +5,11 @@
  */
 package controller;
 
-import static controller.DonorController.getUrl;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.donordeferral.DonorDeferral;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.DonorRepository;
-import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 
@@ -40,17 +37,20 @@ public class DeferralController {
     private DonorRepository donorRepository;
 
 
-    @RequestMapping(value = "formdata/", method = RequestMethod.GET)
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
-    Map<String, Object> deferDonorFormGenerator(@PathVariable String donorId) {
+    Map<String, Object> deferDonorFormGenerator() {
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("donorId", donorId);
         map.put("deferralReasons", donorRepository.getDeferralReasons());
         return map;
     }
 
+    /**
+     * 
+     * Not Used anywhere - #209 
+     *
     @RequestMapping(value = "edit/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
     public 
@@ -69,8 +69,9 @@ public class DeferralController {
         map.put("deferralReasons", donorRepository.getDeferralReasons());
         return map;
     }
-/** - Ambiguous  method - refer donor controller - #209
-    @RequestMapping( method = RequestMethod.GET)
+   */
+ 
+    @RequestMapping(value = "{donorId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
     public 
     Map<String, Object> viewDonorDeferrals(@PathVariable Long donorId) {
@@ -84,11 +85,12 @@ public class DeferralController {
         map.put("allDonorDeferrals", donorDeferralViewModels);
         return map;
     }
-*/
+
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
-    HttpStatus deferDonor(HttpServletResponse response, @PathVariable String donorId,
+    ResponseEntity deferDonor(
+            @RequestParam("donorId") String donorId,
             @RequestParam(value = "deferUntil", required = true) String deferUntil,
             @RequestParam(value = "deferralReasonId", required = true) String deferralReasonId,
             @RequestParam(value = "deferralReasonText", required = false) String deferralReasonText) {
@@ -97,16 +99,16 @@ public class DeferralController {
             donorRepository.deferDonor(donorId, deferUntil, deferralReasonId, deferralReasonText);
         } catch (ParseException ex) {
           ex.printStackTrace();
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return HttpStatus.CREATED;
+       return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-    public HttpStatus updateDeferDonor(HttpServletResponse response,
-            @PathVariable String donorId,
+    public ResponseEntity updateDeferDonor(
             @PathVariable String id,
+            @RequestParam(value = "donorId") String donorId,
             @RequestParam("deferUntil") String deferUntil,
             @RequestParam("deferralReasonId") String deferralReasonId,
             @RequestParam("deferralReasonText") String deferralReasonText) {
@@ -115,10 +117,10 @@ public class DeferralController {
             donorRepository.updatedeferDonor(id, donorId, deferUntil, deferralReasonId, deferralReasonText);
         } catch (Exception ex) {
             ex.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return HttpStatus.OK;
+         return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
