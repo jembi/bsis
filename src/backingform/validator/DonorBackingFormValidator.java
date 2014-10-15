@@ -81,12 +81,14 @@ public class DonorBackingFormValidator implements Validator {
   
   String regex="[0-9]+";
   
+  /* #209 - commented out - no longer making use of setting birthDate using day,month,year values
   if(!birthDate.isEmpty())
   if (!(form.getDayOfMonth().matches(regex) && form.getYear().matches(regex)))
   {
       errors.rejectValue("donor.birthDate", "birthDate.incorrect", "Invalid Date Specified");
       return false;
   }
+  */
   
   
     Boolean isAgeFormatCorrect = form.isAgeFormatCorrect();
