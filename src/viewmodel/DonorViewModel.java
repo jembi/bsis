@@ -9,7 +9,6 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
-import model.address.ContactMethodType;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
@@ -72,8 +71,7 @@ public class DonorViewModel {
   public String getBirthDate() {
     Date birthDate = donor.getBirthDate();
     if (birthDate != null) {
-      //return CustomDateFormatter.getDateString(birthDate);
-    	return birthDate.toString();
+      return CustomDateFormatter.getDateString(birthDate);
     } else {
       return "";
     }
