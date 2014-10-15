@@ -119,7 +119,7 @@ public class CollectedSampleController {
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("centers", locationRepository.getAllCenters());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("bloodBagTypes", bloodBagTypeRepository.getAllBloodBagTypes());
+    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes());
     m.put("sites", locationRepository.getAllCollectionSites());
   }
 
@@ -130,11 +130,11 @@ public class CollectedSampleController {
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
 
     Map<String, Object> map = new  HashMap<String, Object>();
-    map.put("addCollectionForm", form);
+    map.put("addDonationForm", form);
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
-    map.put("collectionFields", formFields);
+    map.put("donationFields", formFields);
     return map;
   }
 
@@ -147,11 +147,11 @@ public class CollectedSampleController {
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
     form.getCollectedSampleIntegerProps();
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("editCollectionForm", form);
+    map.put("editDonationForm", form);
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
     // to ensure custom field names are displayed in the form
-    map.put("collectionFields", formFields);
+    map.put("donationFields", formFields);
     return map;
   }
 
@@ -163,7 +163,7 @@ public class CollectedSampleController {
       Map<String, Object> map = new HashMap<String, Object>();
       addEditSelectorOptions(map);
       Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
-      map.put("collectionFields", formFields);
+      map.put("donationFields", formFields);
       CollectedSample savedCollection = null;
       form.setCollectedSample();
       CollectedSample collectedSample = form.getCollectedSample();
@@ -177,9 +177,8 @@ public class CollectedSampleController {
       map.put("hasErrors", false);
       form = new CollectedSampleBackingForm();
 	
-      map.put("collectionId", savedCollection.getId());
-      map.put("collectedSample", getCollectionViewModel(savedCollection));
-      map.put("addAnotherCollectionUrl", "addCollectionFormGenerator.html");
+      map.put("donationId", savedCollection.getId());
+      map.put("donation", getCollectionViewModel(savedCollection));
       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
@@ -229,14 +228,14 @@ public class CollectedSampleController {
         if (id != null) {
             collectedSample = collectedSampleRepository.findCollectedSampleById(id);
             if (collectedSample != null) {
-                map.put("existingCollectedSample", true);
+                map.put("existingDonation", true);
             } else {
-                map.put("existingCollectedSample", false);
+                map.put("existingDonation", false);
             }
         }
 
         CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
-        map.put("collectedSample", collectionViewModel);
+        map.put("donation", collectionViewModel);
 
       
         return map;
