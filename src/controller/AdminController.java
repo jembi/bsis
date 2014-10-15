@@ -31,7 +31,6 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
-import model.requesttype.RequestType;
 import model.tips.Tips;
 import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.log4j.Logger;
@@ -53,8 +52,6 @@ import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LabSetupRepository;
 import repository.LocationRepository;
-import repository.ProductTypeRepository;
-import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
@@ -84,8 +81,6 @@ public class AdminController {
   @Autowired
   DonationTypeRepository donationTypesRepository;
 
-  @Autowired
-  RequestTypeRepository requestTypesRepository;
 
   @Autowired
   CrossmatchTypeRepository crossmatchTypesRepository;
@@ -320,13 +315,6 @@ public class AdminController {
 
 
 
-  @RequestMapping(value="/requesttypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public  Map<String, Object> configureRequestTypesFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllRequestTypesToModel(map);
-    return map;
-  }
 
   @RequestMapping(value="/crossmatchtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
@@ -415,8 +403,7 @@ public class AdminController {
   }
   @RequestMapping(value="/donationtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  Map<String, Object> configureDonationTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response) {
+  public  Map<String, Object> configureDonationTypesFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addAllDonationTypesToModel(map);
@@ -431,9 +418,6 @@ public class AdminController {
     m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
   }
 
-  private void addAllRequestTypesToModel(Map<String, Object> m) {
-    m.put("allRequestTypes", requestTypesRepository.getAllRequestTypes());
-  }
 
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
     m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
@@ -472,40 +456,7 @@ public class AdminController {
     addAllTipsToModel(map);
     return map;
   }
-
-  @RequestMapping(value = "/requesttypes", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public  Map<String, Object> configureRequestTypes(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    LOGGER.debug(paramsAsJson);
-    List<RequestType> allRequestTypes = new ArrayList<RequestType>();
-    try {      
-    	@SuppressWarnings("unchecked")
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
-				
-          RequestType rt = new RequestType();
-
-          rt.setRequestType((String) paramValue.get("requestType"));
-          rt.setBulkTransfer((Boolean) paramValue.get("bulkTransfer"));
-          rt.setId(Integer.parseInt(id));
-          rt.setIsDeleted(false);
-          allRequestTypes.add(rt);
-      }
-      requestTypesRepository.saveAllRequestTypes(allRequestTypes);
-      LOGGER.debug(params);
-    } catch (Exception ex) {
-    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
-    addAllRequestTypesToModel(map);
-    return map;
-  }
+ 
 
   @RequestMapping(value = "/crossmatchtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")

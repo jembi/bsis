@@ -38,7 +38,7 @@ public class RequestTypeRepository {
     return false;
   }
 
-  public RequestType getRequestTypeById(Integer requestTypeId) {
+  public RequestType getRequestTypeById(Integer requestTypeId) throws NoResultException{
     TypedQuery<RequestType> query;
     query = em.createQuery("SELECT r from RequestType r " +
             "where r.id=:id AND r.isDeleted=:isDeleted", RequestType.class);
@@ -48,7 +48,8 @@ public class RequestTypeRepository {
       return null;
     return query.getSingleResult();
   }
-
+/**
+ * issue - #209 - Not used anywhere
   public void saveAllRequestTypes(List<RequestType> allRequestTypes) {
     for (RequestType rt: allRequestTypes) {
         RequestType existingRequestType = getRequestTypeById(rt.getId());
@@ -63,6 +64,16 @@ public class RequestTypeRepository {
         }
     }
     em.flush();
+  }
+  */
+  
+  public void saveRequestType(RequestType requestType){
+      em.persist(requestType);
+  }
+  
+  public RequestType updateRequestType(RequestType requestType)
+          throws IllegalArgumentException{
+      return  em.merge(requestType);
   }
 
   public RequestType getRequestTypeByName(String requestTypeName)throws NoResultException, NonUniqueResultException {
