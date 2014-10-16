@@ -1,5 +1,6 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.bloodtesting.BloodTest;
 
 /**
@@ -8,6 +9,7 @@ import model.bloodtesting.BloodTest;
  */
 public class BloodTestBackingForm {
 
+    @JsonIgnore
     private BloodTest bloodTest;
 
     private Integer numberOfConfirmatoryTests;
