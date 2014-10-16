@@ -2,6 +2,7 @@ package controller.bloodtesting;
 
 
 
+import backingform.BloodTestBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,8 +66,8 @@ public class BloodTestingController {
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity saveNewBloodTest(
-      @RequestBody Map<String, Object> newBloodTestAsMap) {
-      bloodTestingRepository.saveBloodTest(newBloodTestAsMap);
+      @RequestBody BloodTestBackingForm form) {
+      bloodTestingRepository.saveBloodTest(form);
       return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
   
