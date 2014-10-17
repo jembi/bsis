@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.rules.BloodTestingRule;
@@ -80,19 +79,9 @@ public class BloodTypingController {
   }
   * */
   
-    @RequestMapping(method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TYPING_RULES+"')")
-  public  Map<String, Object> configureBloodTypingTests() {
-     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
-    List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
-    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-      rules.add(new BloodTestingRuleViewModel(rule));
-    }
-    map.put("bloodTypingRules", rules);
-    return map;
-  }
 
+  /**
+   * issue - #209 Not required
   @RequestMapping(value="/addCollectionsToBloodTypingPlate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> addCollectionsToBloodTypingPlate(HttpServletRequest request,
@@ -150,7 +139,7 @@ public class BloodTypingController {
 
     return map;
   }
-
+*/
   public List<BloodTestViewModel> getBloodTestsOnPlate() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
@@ -161,7 +150,7 @@ public class BloodTypingController {
 
   @SuppressWarnings("unchecked")
   
-  @RequestMapping(value = "test", method=RequestMethod.POST)
+  @RequestMapping(value = "results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTests(
       @RequestParam(value="bloodTypingTests") String bloodTypingTests,
@@ -259,13 +248,12 @@ public class BloodTypingController {
     return bloodTestResultsMap;
   }
 
-  @RequestMapping(value="/test/status/donation/{id}", method=RequestMethod.GET)
+  @RequestMapping(value="/status/{donationIds}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingStatusForCollections(
-                        @PathVariable String id
-                        ) {
+                        @PathVariable String donationIds) {
     Map<String, Object> map = new HashMap<String, Object>();
-    String[] collectionIds = id.split(",");
+    String[] collectionIds = donationIds.split(",");
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForCollections(Arrays.asList(collectionIds));
     List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
@@ -282,14 +270,14 @@ public class BloodTypingController {
     return map;
   }
 
-  @RequestMapping(value="test/results/donation/{id}", method=RequestMethod.GET)
+  @RequestMapping(value="/results/{donationid}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> showBloodTypingResultsForCollection(
-      @PathVariable Long id) {
+      @PathVariable Long donationid) {
       
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(id);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(id);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(donationid);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(donationid);
     map.put("collection", new CollectedSampleViewModel(collectedSample));
     map.put("collectionId", collectedSample.getId());
     map.put("bloodTypingOutputForCollection", ruleResult);
@@ -310,7 +298,9 @@ public class BloodTypingController {
     map.put("allBloodTypingTests", allBloodTypingTestsMap);
     return map;
   }
-
+  
+/**
+ * issue - #209 refer COllection sample end points
   @RequestMapping(value="/test/donation/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public Map<String, Object> showCollectionSummaryForTesting(
@@ -322,8 +312,8 @@ public class BloodTypingController {
     map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
     return map;
   }
-
-  @RequestMapping(value="/test/addiional", method=RequestMethod.POST)
+*/
+  @RequestMapping(value="/results/addiional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestParam(value="collectionId") String collectionId,
@@ -365,6 +355,19 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
+
+    @RequestMapping(value = "rules", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TYPING_RULES + "')")
+    public Map<String, Object> configureBloodTypingTests() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
+        List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
+        for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
+            rules.add(new BloodTestingRuleViewModel(rule));
+        }
+        map.put("bloodTypingRules", rules);
+        return map;
+    }
 
   @RequestMapping(value="rules/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
