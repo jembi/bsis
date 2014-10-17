@@ -25,7 +25,9 @@ public class TestResultController {
 
   public TestResultController() {
   }
-
+/*
+  isssue - #209
+  Reason - Dummy method
   @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public  Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
@@ -36,7 +38,7 @@ public class TestResultController {
     map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
     return map;
   }
-
+*/
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
@@ -46,7 +48,7 @@ public class TestResultController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "collectionnumber/{collectionNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "{collectionNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public  Map<String, Object> findTestResult(HttpServletRequest request,
       @PathVariable String collectionNumber ) {
