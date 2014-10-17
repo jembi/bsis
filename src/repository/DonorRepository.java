@@ -316,6 +316,32 @@ public class DonorRepository {
         query.setParameter("isDeleted", false);
         return query.getResultList();
     }
+    
+    public DonorDeferral deferDonor(DonorDeferral deferral)throws PersistenceException{
+        em.persist(deferral);
+        em.flush();
+        return deferral;
+    }
+
+    public DonorDeferral updateDeferral(DonorDeferral deferral) {
+    	DonorDeferral existingDeferral = findDeferralById(deferral.getId());
+        if (existingDeferral == null) {
+            return null;
+        }
+        existingDeferral.copy(deferral);
+        em.merge(existingDeferral);
+        em.flush();
+        return existingDeferral;
+    }
+    
+	public DonorDeferral findDeferralById(Long deferralId) throws NoResultException{
+	        String queryString = "SELECT d from DonorDeferral d WHERE "
+		            + " d.id = :deferralId AND d.isVoided=:isVoided";
+		    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
+	        query.setParameter("deferralId", deferralId);
+	        query.setParameter("isVoided", false);
+	        return query.getSingleResult();
+	}
 
     public DonorDeferral deferDonor(String donorId, String deferUntil,
         String deferralReasonId, String deferralReasonText) throws ParseException, PersistenceException {
