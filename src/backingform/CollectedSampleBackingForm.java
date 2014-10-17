@@ -41,6 +41,7 @@ public class CollectedSampleBackingForm {
   private String bloodPressureSystolic;
   private String bloodPressureDiastolic;
   private String collectedOn;
+  private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
   // may be hidden by the user in which case we will get a null pointer
@@ -109,7 +110,6 @@ public class CollectedSampleBackingForm {
     this.dateCollectedTo = dateCollectedTo;
   }
 
-  @JsonIgnore
   public void setCollection(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -130,7 +130,6 @@ public class CollectedSampleBackingForm {
     return collectedSample.getId();
   }
 
-  @JsonIgnore
   public Donor getDonor() {
     return collectedSample.getDonor();
   }
@@ -305,11 +304,7 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorNumber() {
-    if (collectedSample == null || collectedSample.getDonor() == null ||
-        collectedSample.getDonor().getDonorNumber() == null
-       )
-      return "";
-    return collectedSample.getDonor().getDonorNumber();
+    return donorNumber;
   }
 
   public String getCollectionBatchNumber() {
@@ -321,11 +316,9 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorNumber(String donorNumber) {
-    Donor donor = new Donor();
-    donor.setDonorNumber(donorNumber);
-    collectedSample.setDonor(donor);
+	this.donorNumber = donorNumber;
   }
-
+  
   public void setCollectionBatchNumber(String collectionBatchNumber) {
     if (StringUtils.isNotBlank(collectionBatchNumber)) {
       CollectionBatch collectionBatch = new CollectionBatch();
@@ -334,6 +327,7 @@ public class CollectedSampleBackingForm {
     }
   }
 
+  @JsonIgnore
   public String getDonorIdHidden() {
     if (collectedSample == null)
       return null;
@@ -343,6 +337,7 @@ public class CollectedSampleBackingForm {
     return donor.getId().toString();
   }
 
+  @JsonIgnore
   public void setDonorIdHidden(String donorId) {
     if (donorId == null || donorId=="") {
       collectedSample.setDonor(null);
