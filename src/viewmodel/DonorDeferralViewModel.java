@@ -3,6 +3,7 @@ package viewmodel;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import utils.CustomDateFormatter;
+import model.user.User;
 
 public class DonorDeferralViewModel {
 
@@ -33,9 +34,10 @@ public class DonorDeferralViewModel {
   }
 
   public String getDeferredBy() {
-    if (donorDeferral.getDeferredBy() == null)
+	User user = donorDeferral.getDeferredBy();
+    if (user == null || user.getUsername() == null)
       return "";
-    return donorDeferral.getDeferredBy().getUsername();
+    return user.getUsername();
   }
   
   public String getVoidedDate() {
