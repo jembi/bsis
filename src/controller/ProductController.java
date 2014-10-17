@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,9 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
@@ -35,7 +34,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,36 +103,35 @@ public class ProductController {
     return map;
   }
 
-  @RequestMapping(value = "/findform", method = RequestMethod.GET)
+  @RequestMapping(value = "form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
-
     Map<String, Object> map = new HashMap<String, Object>();
-
     addEditSelectorOptions(map);
-    // to ensure custom field names are displayed in the form
-    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    List<ProductStatusChangeReason> statusChangeReasons =
+    productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
+    map.put("returnReasons", statusChangeReasons);
+    map.put("findProductByPackNumberForm",  new RecordProductBackingForm());
     return map;
   }
 
   
   /**
-   * Form Generator to create Record Product page
-   */
+   * issue - #209 
+   * Reason - duplicate end point refer /form
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  Map<String, Object> recordProductFormGenerator(HttpServletRequest request) {
 
-  	RecordProductBackingForm form = new RecordProductBackingForm();
+  	RecordProductBackingForm form =new RecordProductBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("findProductByPackNumberForm", form);
 
     addEditSelectorOptions(map);
     // to ensure custom field names are displayed in the form
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     return map;
   }
-  
+  */
   @RequestMapping(value = "/combination/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  Map<String, Object> addProductCombinationFormGenerator() {
@@ -146,14 +143,12 @@ public class ProductController {
 
     addOptionsForAddProductCombinationForm(map);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-    // to ensure custom field names are displayed in the form
-    map.put("productFields", formFields);
+
     return map;
   }
 
  
-  @RequestMapping(value = "/Combination", method = RequestMethod.POST)
+  @RequestMapping(value = "/combination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity< Map<String, Object>> addProductCombination(
       @Valid @RequestBody ProductCombinationBackingForm form) {
@@ -236,7 +231,7 @@ public class ProductController {
     return productViewModels;
   }
 
-  @RequestMapping(method = RequestMethod.DELETE)
+  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
   public HttpStatus deleteProduct(
       @PathVariable Long id) {
@@ -244,7 +239,9 @@ public class ProductController {
       productRepository.deleteProduct(id);
       return HttpStatus.NO_CONTENT;
   }
-
+  /**
+   * issue - #209 
+   * Reason - duplicate end point refer /form
   @RequestMapping(value = "{id}/discardform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  Map<String, Object> discardProductFormGenerator(HttpServletRequest request,
@@ -256,9 +253,9 @@ public class ProductController {
     map.put("discardReasons", statusChangeReasons);
     return map;
   }
+*/
 
-
-  @RequestMapping(value = "{id}/discard", method = RequestMethod.POST)
+  @RequestMapping(value = "{id}/discard", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  ResponseEntity discardProduct(
       @PathVariable Long id,
@@ -271,7 +268,9 @@ public class ProductController {
 
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
-
+  /**
+   * issue - #209 
+   * Reason - duplicate end point refer /form
   @RequestMapping(value = "{id}/returnform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  Map<String, Object> returnProductFormGenerator(HttpServletRequest request,
@@ -283,7 +282,11 @@ public class ProductController {
     map.put("returnReasons", statusChangeReasons);
     return map;
   }
-
+*/
+  
+    /**
+   * issue - #209 
+   * Reason - duplicate refer get /component
   @RequestMapping(value = "{id}/splitform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  Map<String, Object> splitProductFormGenerator(HttpServletRequest request,
@@ -294,25 +297,19 @@ public class ProductController {
     return map;
   }
 
-
-  @RequestMapping(value = "{id}/split", method = RequestMethod.POST)
+*/
+  @RequestMapping(value = "{id}/split", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  Map<String, Object> discardProduct(
+  public  ResponseEntity discardProduct(
       @PathVariable Long id,
       @RequestParam("numProductsAfterSplitting") Integer numProductsAfterSplitting) {
 
       boolean success = true;
-      String errMsg = "";
-
       success = productRepository.splitProduct(id, numProductsAfterSplitting);
-      if (!success) {
-          errMsg = "Product cannot be split";
-      }
-
-      Map<String, Object> m = new HashMap<String, Object>();
-      m.put("success", success);
-      m.put("errMsg", errMsg);
-      return m;
+      if(!success)
+          return new ResponseEntity(HttpStatus.BAD_GATEWAY);
+      
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "{id}/history", method = RequestMethod.GET)
@@ -328,7 +325,7 @@ public class ProductController {
     return map;
   }
 
-  @RequestMapping(value = "{id}/return", method = RequestMethod.POST)
+  @RequestMapping(value = "{id}/return", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  HttpStatus returnProduct(
       @PathVariable  Long id,
@@ -339,14 +336,14 @@ public class ProductController {
       statusChangeReason.setId(returnReasonId);
       productRepository.returnProduct(id, statusChangeReason, returnReasonText);
 
-      return HttpStatus.OK;
+      return HttpStatus.NO_CONTENT;
   }
 
   
   @SuppressWarnings("unchecked")
-  @RequestMapping(value = "collectionNumber/{collectionNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "{donatonNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String collectionNumber) {
+  public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String donatonNumber) {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
@@ -362,7 +359,7 @@ public class ProductController {
     List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
     
       results = productRepository.findProductByCollectionNumber(
-          collectionNumber, status,
+          donatonNumber, status,
           pagingParams);
 
     products = (List<Product>) results.get(0);
@@ -371,7 +368,7 @@ public class ProductController {
   }
   
  
-  @RequestMapping(value = "/record/new", method = RequestMethod.POST)
+  @RequestMapping(value = "/record", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  Map<String, Object> recordNewProductComponents(HttpServletRequest request,
       @RequestBody RecordProductBackingForm form) {
@@ -395,15 +392,18 @@ public class ProductController {
       if(!status.equalsIgnoreCase("PROCESSED")){
       if(noOfUnits > 0 ){
       	
-      	for(int i=1; i <= noOfUnits ; i++){
-      		try{
-	        	Product product = new Product();
-	          product.setIsDeleted(false);
-	          product.setDonationIdentificationNumber(createdPackNumber+"-"+i);
-	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
-	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
-	          
+      	   for (int i = 1; i <= noOfUnits; i++) {
+              Product product = new Product();
+              product.setIsDeleted(false);
+              product.setDonationIdentificationNumber(createdPackNumber + "-" + i);
+              DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+              Date createdOn = null, expiresOn = null;
+              try {
+                  createdOn = formatter.parse(form.getDateExpiresFrom());
+                  expiresOn = formatter.parse(form.getDateExpiresTo());
+              } catch (ParseException ex) {
+                  ex.printStackTrace();
+              }
 	          product.setCreatedOn(createdOn);
 	          product.setExpiresOn(expiresOn);
 	          ProductType productType = new ProductType();
@@ -418,24 +418,22 @@ public class ProductController {
 
 		        // Once product save successfully update selected product status with processed
 		        productRepository.updateProductByProductId(productId);
-		        
-		      } catch (EntityExistsException ex) {
-		        ex.printStackTrace();
-		      } catch (Exception ex) {
-		        ex.printStackTrace();
-		      }
+		
       	}
       }
-      else{
-      	
-      	try{
-	        	Product product = new Product();
-	          product.setIsDeleted(false);
-	          product.setDonationIdentificationNumber(createdPackNumber);
-	          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	          Date createdOn = formatter.parse(form.getDateExpiresFrom());
-	          Date expiresOn = formatter.parse(form.getDateExpiresTo());
-	          
+      else {
+
+          Product product = new Product();
+          product.setIsDeleted(false);
+          product.setDonationIdentificationNumber(createdPackNumber);
+          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+          Date createdOn = null, expiresOn = null;
+          try {
+              createdOn = formatter.parse(form.getDateExpiresFrom());
+              expiresOn = formatter.parse(form.getDateExpiresTo());
+          } catch (ParseException ex) {
+              ex.printStackTrace();
+          }
 	          product.setCreatedOn(createdOn);
 	          product.setExpiresOn(expiresOn);
 	          ProductType productType = new ProductType();
@@ -446,14 +444,9 @@ public class ProductController {
 	          collectedSample.setId(collectedSampleID);
 	          product.setCollectedSample(collectedSample);
 	          product.setStatus(ProductStatus.QUARANTINED);
-		        productRepository.addProduct(product);
-		        productRepository.updateProductByProductId(productId);
+		  productRepository.addProduct(product);
+		   productRepository.updateProductByProductId(productId);
 		        
-		      } catch (EntityExistsException ex) {
-		        ex.printStackTrace();
-		      } catch (Exception ex) {
-		        ex.printStackTrace();
-		      }
 	    	}
       }
    
@@ -475,11 +468,11 @@ public class ProductController {
     return map;
   }
   
-  @RequestMapping(value = "/record", method = RequestMethod.GET)
+  @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
       @RequestParam(value = "productTypes") List<String> productTypes,
-      @RequestParam(value = "collectionNumber") String collectionNumber) {
+      @RequestParam(value = "donationNumber") String donationNumber) {
 
   	ProductType productType = null;
   	if(productTypes!= null){
@@ -489,11 +482,10 @@ public class ProductController {
   	List<Product> products = Arrays.asList(new Product[0]);
   	
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,collectionNumber));
+    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,donationNumber));
     
-    if(collectionNumber.contains("-") && productTypes != null){
+    if(donationNumber.contains("-") && productTypes != null){
     	addEditSelectorOptionsForNewRecordByList(map,productType);
   	}
   	else{
