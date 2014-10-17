@@ -481,13 +481,13 @@ public class DonorController {
     return donorViewModels;
   }
 
-      private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
-        List<DonorDeferralViewModel> donorDeferralViewModels = new ArrayList<DonorDeferralViewModel>();
-        for (DonorDeferral donorDeferral : donorDeferrals) {
-            donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
-        }
-        return donorDeferralViewModels;
+  private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
+    List<DonorDeferralViewModel> donorDeferralViewModels = new ArrayList<DonorDeferralViewModel>();
+    for (DonorDeferral donorDeferral : donorDeferrals) {
+        donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
     }
+    return donorDeferralViewModels;
+  }
 
   private DonorViewModel getDonorsViewModel(Donor donor) {
     DonorViewModel donorViewModel = new DonorViewModel(donor);
