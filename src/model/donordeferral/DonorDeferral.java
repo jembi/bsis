@@ -149,5 +149,18 @@ public class DonorDeferral {
 	public void setVoidedDate(Date voidedDate) {
 		this.voidedDate = voidedDate;
 	}
+	
+	public void copy(DonorDeferral deferral) {
+	    assert (deferral.getId().equals(this.getId()));
+	    setDeferredDonor(deferral.getDeferredDonor());
+	    setDeferredOn(deferral.getDeferredOn());
+	    setDeferredUntil(deferral.getDeferredUntil());
+	    setDeferralReason(deferral.getDeferralReason());
+	    setDeferralReasonText(deferral.getDeferralReasonText());
+	    setDeferredBy(deferral.getDeferredBy());
+	    setIsVoided(deferral.getIsVoided());
+	    setVoidedBy(deferral.getVoidedBy());
+	    setVoidedDate(deferral.getVoidedDate());	   
+	 }
   
 }
