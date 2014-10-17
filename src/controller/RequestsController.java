@@ -109,6 +109,11 @@ public class RequestsController {
     return map;
   }
 
+  /**
+   * 
+   *issue - #209 
+   * Reason - duplicate method refer /form
+   *
   @RequestMapping(value = "find/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public  Map<String, Object> findRequestFormGenerator(HttpServletRequest request) {
@@ -119,7 +124,7 @@ public class RequestsController {
     map.put("requestFields", utilController.getFormFieldsForForm("request"));
     return map;
   }
-
+*/
  
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -253,21 +258,19 @@ public class RequestsController {
     return collectionsMap;
   }
 
-  @RequestMapping(value = "/add/form", method = RequestMethod.GET)
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
   public  Map<String, Object> addRequestFormGenerator(HttpServletRequest request) {
-
     RequestBackingForm form = new RequestBackingForm();
-
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addRequestForm", form);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-    // to ensure custom field names are displayed in the form
-    map.put("requestFields", formFields);
     return map;
   }
-
+ 
+  /*
+    issue - dupicat eend point , refer /form
+ 
   @RequestMapping(value = "{id}/edit/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
   public  Map<String, Object> editRequestFormGenerator(HttpServletRequest request,
@@ -284,7 +287,7 @@ public class RequestsController {
     map.put("requestFields", formFields);
     return map;
   }
-
+*/
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
   public ResponseEntity<Map<String, Object>> addRequest(@Valid @RequestBody RequestBackingForm form) {
@@ -304,7 +307,7 @@ public class RequestsController {
     return new ResponseEntity < Map<String, Object> > (map, httpStatus);
   }
 
-  @RequestMapping(value="{id}/components/issued/list", method=RequestMethod.GET)
+  @RequestMapping(value="{id}/issuedcomponents", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  Map<String, Object> listIssuedProductsForRequest(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -339,18 +342,18 @@ public class RequestsController {
     return requestViewModels;
   }
 
-  @RequestMapping(method = RequestMethod.DELETE)
+  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   public 
-  ResponseEntity deleteProduct(
-      @RequestParam("requestId") Long requestId) {
-    requestRepository.deleteRequest(requestId);
+  ResponseEntity deleteRequest(
+      @RequestParam("id") Long id) {
+    requestRepository.deleteRequest(id);
      return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
 
-  @RequestMapping(value = "{id}/components/matching/find", method = RequestMethod.GET)
+  @RequestMapping(value = "{id}/matchingcomponents", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public  Map<String, Object> findMatchingProductsForRequest(HttpServletRequest request,
+  public  Map<String, Object> findMatchingProductsForRequest(
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -362,14 +365,13 @@ public class RequestsController {
     return map;
   }
 
-  @RequestMapping(value = "/components/issue", method = RequestMethod.GET)
+  @RequestMapping(value = "{id}/issuecomponent", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  ResponseEntity issueSelectedProducts(
-      HttpServletResponse response,
-      @RequestParam("requestId") Long requestId,
-      @RequestParam("productsToIssue") String productsToIssue) {
+      @PathVariable Long id,
+      @RequestParam String componentName) {
    
-       requestRepository.issueProductsToRequest(requestId, productsToIssue);
+       requestRepository.issueProductsToRequest(id, componentName);
        return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
   
