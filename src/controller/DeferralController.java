@@ -5,6 +5,7 @@
  */
 package controller;
 
+import backingform.DeferralBackingForm;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +13,14 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import model.donordeferral.DonorDeferral;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,19 +93,22 @@ public class DeferralController {
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
-    ResponseEntity deferDonor(
-            @RequestParam("donorId") String donorId,
-            @RequestParam(value = "deferUntil", required = true) String deferUntil,
-            @RequestParam(value = "deferralReasonId", required = true) String deferralReasonId,
-            @RequestParam(value = "deferralReasonText", required = false) String deferralReasonText) {
+    ResponseEntity deferDonor(@Valid @RequestBody DeferralBackingForm form) {
+    	
+    	HttpStatus httpStatus = HttpStatus.CREATED;
+        Map<String, Object> map = new HashMap<String, Object>();
+    	DonorDeferral savedDeferral = null;
 
-        try {
-            donorRepository.deferDonor(donorId, deferUntil, deferralReasonId, deferralReasonText);
-        } catch (ParseException ex) {
-          ex.printStackTrace();
-          return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-       return new ResponseEntity(HttpStatus.CREATED);
+    	DonorDeferral deferral = form.getDonorDeferral();
+    	deferral.setIsVoided(false);
+    	savedDeferral = donorRepository.deferDonor(deferral);
+        map.put("hasErrors", false);
+
+        map.put("deferralId", savedDeferral.getId());
+        map.put("deferral", getDonorDeferralViewModel(donorRepository.findDeferralById(savedDeferral.getId())));
+
+        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.PUT)
@@ -131,6 +138,11 @@ public class DeferralController {
 
             donorRepository.cancelDeferDonor(id);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    
+    private DonorDeferralViewModel getDonorDeferralViewModel(DonorDeferral donorDeferral) {
+    	DonorDeferralViewModel donorDeferralViewModel = new DonorDeferralViewModel(donorDeferral);
+        return donorDeferralViewModel;
     }
 
     private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
