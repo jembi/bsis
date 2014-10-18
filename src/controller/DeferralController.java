@@ -113,21 +113,21 @@ public class DeferralController {
 
     @RequestMapping(value="{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-    public ResponseEntity updateDeferDonor(
-            @PathVariable String id,
-            @RequestParam(value = "donorId") String donorId,
-            @RequestParam("deferUntil") String deferUntil,
-            @RequestParam("deferralReasonId") String deferralReasonId,
-            @RequestParam("deferralReasonText") String deferralReasonText) {
+    public ResponseEntity updateDeferral(@Valid @RequestBody DeferralBackingForm form, @PathVariable Long id) {
 
-        try {
-            donorRepository.updatedeferDonor(id, donorId, deferUntil, deferralReasonId, deferralReasonText);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-         return new ResponseEntity(HttpStatus.OK);
+		 HttpStatus httpStatus = HttpStatus.OK;
+	     Map<String, Object> map = new HashMap<String, Object>();
+	     DonorDeferral updatedDeferral = null;
+	     
+	     DonorDeferral deferral = form.getDonorDeferral();
+	     deferral.setIsVoided(false);
+	     deferral.setId(id);
+	     
+	     updatedDeferral = donorRepository.updateDeferral(deferral);
+	
+	     map.put("deferral", getDonorDeferralViewModel(donorRepository.findDeferralById(updatedDeferral.getId())));
+	     
+	     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
