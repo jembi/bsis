@@ -34,7 +34,7 @@ public class DonorDeferralViewModel {
   }
 
   public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(donorDeferral.getCreatedDate());
+    return CustomDateFormatter.getDateString(donorDeferral.getCreatedDate());
   }
 
   public String getCreatedBy() {
