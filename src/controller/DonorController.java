@@ -252,9 +252,11 @@ public class DonorController {
     return  new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @RequestMapping(value = "{donorNumber}/print",method = RequestMethod.GET)
+  @RequestMapping(value = "{id}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
-  public  Map<String, Object> printDonorLabel(@PathVariable String donorNumber) {
+  public  Map<String, Object> printDonorLabel(@PathVariable Long id) {
+	  
+	  String donorNumber = donorRepository.findDonorById(id).getDonorNumber();
 	  
         Map<String, Object> map = new HashMap<String, Object>();	
 	map.put("labelZPL",
