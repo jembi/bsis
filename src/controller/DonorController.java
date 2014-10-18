@@ -34,6 +34,7 @@ import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.CollectedSampleViewModel;
+import utils.CustomDateFormatter;
 
 @RestController
 @RequestMapping("donors")
@@ -121,10 +122,10 @@ public class DonorController {
     List<CollectedSample> donations = donor.getCollectedSamples();
     
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
-    map.put("deferredUntil",donorRepository.getLastDonorDeferralDate(id));
+    map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
 	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
-	    map.put("dateOfFirstDonation",donations.get(0).getCollectedOn());
+	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
 	    map.put("totalDonations",donations.size());
     }
     else {
@@ -132,7 +133,6 @@ public class DonorController {
 	    map.put("dateOfFirstDonation","");
 	    map.put("totalDonations",0);
     }
-    //map.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
