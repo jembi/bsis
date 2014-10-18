@@ -698,7 +698,15 @@ public class DonorRepositoryTest {
      * Should add Deferral for Donor deferDonor(String,String,String,String)
      */
     public void deferDonor_ShouldPersist() throws ParseException {
-        try {
+    	DonorDeferral donorDeferral = new DonorDeferral();
+    	donorDeferral.setDeferredDonor(donorRepository.findDonorById(1l));
+    	donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
+    	donorDeferral.setDeferralReason(donorRepository.findDeferralReasonUsingId("3"));
+        donorRepository.deferDonor(donorDeferral);
+        assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0 ? true : false);
+    	
+    	/*
+    	try {
             this.userAuthentication();
 
             DonorDeferral donorDeferral = donorRepository.deferDonor("1",
@@ -708,6 +716,7 @@ public class DonorRepositoryTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 
     @Test
