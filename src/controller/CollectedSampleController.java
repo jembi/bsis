@@ -198,7 +198,7 @@ public class CollectedSampleController {
       return HttpStatus.OK;
   }
 
-  public static List<CollectedSampleViewModel> getCollectionViewModels(
+  private List<CollectedSampleViewModel> getCollectionViewModels(
       List<CollectedSample> collections) {
     if (collections == null)
       return Arrays.asList(new CollectedSampleViewModel[0]);
