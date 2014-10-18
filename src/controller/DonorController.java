@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import model.donor.Donor;
+import model.collectedsample.CollectedSample;
 import model.donordeferral.DonorDeferral;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -32,6 +33,7 @@ import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorViewModel;
+import viewmodel.CollectedSampleViewModel;
 
 @RestController
 @RequestMapping("donors")
@@ -108,6 +110,31 @@ public class DonorController {
     map.put("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
+  
+  @RequestMapping(value = "/{id}/overview", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
+  public ResponseEntity<Map<String, Object>> viewDonorOverview(HttpServletRequest request,
+      @PathVariable Long id) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    Donor donor = donorRepository.findDonorById(id);
+    List<CollectedSample> donations = donor.getCollectedSamples();
+    
+    map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
+    map.put("deferredUntil",donorRepository.getLastDonorDeferralDate(id));
+    if(donations.size() > 0){
+	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
+	    map.put("dateOfFirstDonation",donations.get(0).getCollectedOn());
+	    map.put("totalDonations",donations.size());
+    }
+    else {
+    	map.put("lastDonation", "");
+	    map.put("dateOfFirstDonation","");
+	    map.put("totalDonations",0);
+    }
+    //map.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
+    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
+  }
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
@@ -116,7 +143,7 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("allCollectedSamples", CollectedSampleController.getCollectionViewModels(donor.getCollectedSamples()));
+    map.put("allCollectedSamples", getCollectionViewModels(donor.getCollectedSamples()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -492,6 +519,22 @@ public class DonorController {
   private DonorViewModel getDonorsViewModel(Donor donor) {
     DonorViewModel donorViewModel = new DonorViewModel(donor);
     return donorViewModel;
+  }
+  
+  private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
+    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
+    return collectionViewModel;
+  }
+
+  private List<CollectedSampleViewModel> getCollectionViewModels(
+      List<CollectedSample> collections) {
+    if (collections == null)
+      return Arrays.asList(new CollectedSampleViewModel[0]);
+    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
+    for (CollectedSample collection : collections) {
+      collectionViewModels.add(new CollectedSampleViewModel(collection));
+    }
+    return collectionViewModels;
   }
 
  
