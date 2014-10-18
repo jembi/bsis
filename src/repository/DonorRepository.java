@@ -378,29 +378,17 @@ public class DonorRepository {
             return false;
         }
 
-        boolean currentlyDeferred = false;
-
         DateTime dt = new DateTime().toDateMidnight().toDateTime();
         Date today = new Date(dt.getMillis());
 
         for (DonorDeferral donorDeferral : donorDeferrals) {
-            Date deferredOn = donorDeferral.getCreatedDate();
             Date deferredUntil = donorDeferral.getDeferredUntil();
-            if (deferredOn == null || deferredUntil == null) {
-                currentlyDeferred = true;
-                break;
-            }
-            if (today.after(deferredOn) && today.before(deferredUntil)) {
-                currentlyDeferred = true;
-                break;
-            }
-            if (today.equals(deferredOn) || today.equals(deferredUntil)) {
-                currentlyDeferred = true;
-                break;
-            }
+            if(deferredUntil.equals(today) || deferredUntil.after(today) && donorDeferral.getIsVoided() != true){
+            	return true;
+            }            
         }
 
-        return currentlyDeferred;
+        return false;
     }
 
     public boolean isCurrentlyDeferred(Donor donor) {
