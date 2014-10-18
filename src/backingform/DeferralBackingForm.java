@@ -40,34 +40,24 @@ public class DeferralBackingForm {
         return deferral.getId();
     }
     
-    /*
     @JsonIgnore
-    public Date getDeferredOn() {
-        return deferral.getDeferredOn();
+    public Date getLastUpdated() {
+        return deferral.getLastUpdated();
     }
-    */
-    
-    public String getDeferredOn() {
-    	if (deferral.getDeferredOn() == null) {
-            return "";
-        }
-        return CustomDateFormatter.getDateString(deferral.getDeferredOn());
-    }
-    
-    public void setDeferredOn(String deferredOn) {
-    	if (deferredOn != null){
-    		try {
-                deferral.setDeferredOn(CustomDateFormatter.getDateFromString(deferredOn));
-            } catch (ParseException ex) {
-                ex.printStackTrace();
-                deferral.setDeferredOn(null);
-            }
-    	}
+
+    @JsonIgnore
+    public Date getCreatedDate() {
+        return deferral.getCreatedDate();
     }
     
     @JsonIgnore
-    public User getDeferredBy() {
-        return deferral.getDeferredBy();
+    public User getCreatedBy() {
+        return deferral.getCreatedBy();
+    }
+
+    @JsonIgnore
+    public User getLastUpdatedBy() {
+        return deferral.getLastUpdatedBy();
     }
 
     @JsonIgnore

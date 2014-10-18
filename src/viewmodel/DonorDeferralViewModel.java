@@ -17,10 +17,6 @@ public class DonorDeferralViewModel {
     return donorDeferral.getId();
   }
 
-  public String getDeferredOn() {
-    return CustomDateFormatter.getDateString(donorDeferral.getDeferredOn());
-  }
-
   public String getDeferredUntil() {
     return CustomDateFormatter.getDateString(donorDeferral.getDeferredUntil());
   }
@@ -33,8 +29,23 @@ public class DonorDeferralViewModel {
     return donorDeferral.getDeferralReasonText();
   }
 
-  public String getDeferredBy() {
-	User user = donorDeferral.getDeferredBy();
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(donorDeferral.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateTimeString(donorDeferral.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = donorDeferral.getCreatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = donorDeferral.getLastUpdatedBy();
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();

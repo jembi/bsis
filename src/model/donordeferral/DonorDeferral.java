@@ -2,15 +2,20 @@ package model.donordeferral;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 
 import model.donor.Donor;
 import model.user.User;
@@ -19,7 +24,8 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class DonorDeferral {
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+public class DonorDeferral implements ModificationTracker{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,13 +36,12 @@ public class DonorDeferral {
   private Donor deferredDonor;
 
   @Temporal(TemporalType.DATE)
-  private Date deferredOn;
-
-  @Temporal(TemporalType.DATE)
   private Date deferredUntil;
 
+  /*
   @ManyToOne
-  private User deferredBy;
+  private User createdBy;
+  */
 
   @ManyToOne
   private DeferralReason deferralReason;
@@ -51,6 +56,13 @@ public class DonorDeferral {
   
   @Temporal(TemporalType.DATE)
   private Date voidedDate;
+  
+  @Valid
+  private RowModificationTracker modificationTracker;
+  
+  public DonorDeferral(){
+	modificationTracker = new RowModificationTracker();
+  }
 
   public Long getId() {
     return id;
@@ -66,14 +78,6 @@ public class DonorDeferral {
 
   public void setDeferredDonor(Donor deferredDonor) {
     this.deferredDonor = deferredDonor;
-  }
-
-  public Date getDeferredOn() {
-    return deferredOn;
-  }
-
-  public void setDeferredOn(Date deferredOn) {
-    this.deferredOn = deferredOn;
   }
 
   public Date getDeferredUntil() {
@@ -92,14 +96,6 @@ public class DonorDeferral {
     this.deferralReason = deferralReason;
   }
 
-  public User getDeferredBy() {
-    return deferredBy;
-  }
-
-  public void setDeferredBy(User deferredBy) {
-    this.deferredBy = deferredBy;
-  }
-
   public String getDeferralReasonText() {
     return deferralReasonText;
   }
@@ -108,6 +104,38 @@ public class DonorDeferral {
     this.deferralReasonText = deferralReasonText;
   }
 
+  public Date getLastUpdated() {
+    return modificationTracker.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    modificationTracker.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+  
 	/**
 	 * @return the isVoided
 	 */
@@ -153,11 +181,9 @@ public class DonorDeferral {
 	public void copy(DonorDeferral deferral) {
 	    assert (deferral.getId().equals(this.getId()));
 	    setDeferredDonor(deferral.getDeferredDonor());
-	    setDeferredOn(deferral.getDeferredOn());
 	    setDeferredUntil(deferral.getDeferredUntil());
 	    setDeferralReason(deferral.getDeferralReason());
 	    setDeferralReasonText(deferral.getDeferralReasonText());
-	    setDeferredBy(deferral.getDeferredBy());
 	    setIsVoided(deferral.getIsVoided());
 	    setVoidedBy(deferral.getVoidedBy());
 	    setVoidedDate(deferral.getVoidedDate());	   
