@@ -701,22 +701,9 @@ public class DonorRepositoryTest {
     	DonorDeferral donorDeferral = new DonorDeferral();
     	donorDeferral.setDeferredDonor(donorRepository.findDonorById(1l));
     	donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
-    	donorDeferral.setDeferralReason(donorRepository.findDeferralReasonUsingId("3"));
+    	donorDeferral.setDeferralReason(donorRepository.findDeferralReasonById("3"));
         donorRepository.deferDonor(donorDeferral);
         assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0 ? true : false);
-    	
-    	/*
-    	try {
-            this.userAuthentication();
-
-            DonorDeferral donorDeferral = donorRepository.deferDonor("1",
-                    "07/19/2015", "3", "");
-            assertTrue("DeferDonor object Should persist.",
-                    donorDeferral.getId() != 0 ? true : false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
     }
 
     @Test
@@ -727,7 +714,7 @@ public class DonorRepositoryTest {
     public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason() {
         // 1 is DeferralReason ID.
         DeferralReason deferralReason = donorRepository
-                .findDeferralReasonUsingId("1");
+                .findDeferralReasonById("1");
         assertNotNull("DeferralReason's object should not null.",
                 deferralReason);
         assertTrue("Deferral's Reason Id should be 1.",
@@ -743,7 +730,7 @@ public class DonorRepositoryTest {
     @Test(expected = NoResultException.class)
     public void findDeferralReasonById_shouldExpectNoResultExceptionWhenDeferralReason() {
         // 7 ID is deleted from DeferralReason.
-        donorRepository.findDeferralReasonUsingId("7");
+        donorRepository.findDeferralReasonById("7");
     }
 
     @Test

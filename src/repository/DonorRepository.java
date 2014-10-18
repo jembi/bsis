@@ -353,7 +353,7 @@ public class DonorRepository {
         em.persist(donorDeferral);
     }
 
-    private DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException{
+    public DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException{
             String queryString = "SELECT d FROM DeferralReason d WHERE "
                     + "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
             TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
@@ -361,10 +361,6 @@ public class DonorRepository {
             query.setParameter("isDeleted", false);
             return query.getSingleResult();
      
-    }
-
-    public DeferralReason findDeferralReasonUsingId(String deferralReasonId) {
-        return this.findDeferralReasonById(deferralReasonId);
     }
 
     public List<DonorDeferral> getDonorDeferrals(Long donorId) throws NoResultException{
