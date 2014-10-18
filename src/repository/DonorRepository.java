@@ -343,47 +343,6 @@ public class DonorRepository {
 	        return query.getSingleResult();
 	}
 
-    public DonorDeferral deferDonor(String donorId, String deferUntil,
-        String deferralReasonId, String deferralReasonText) throws ParseException, PersistenceException {
-        DonorDeferral donorDeferral = new DonorDeferral();
-        Donor donor = findDonorById(donorId);
-        donorDeferral.setDeferredOn(new Date());
-        donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
-        donorDeferral.setDeferredDonor(donor);
-        donorDeferral.setDeferredBy(utilController.getCurrentUser());
-        DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
-        donorDeferral.setDeferralReason(deferralReason);
-        donorDeferral.setIsVoided(Boolean.FALSE);
-        donorDeferral.setDeferralReasonText(deferralReasonText);
-        em.persist(donorDeferral);
-        return donorDeferral;
-    }
-
-    public void updatedeferDonor(String donorDeferralId, String donorId, String deferUntil,
-            String deferralReasonId, String deferralReasonText) throws ParseException {
-        DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
-        DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
-        Donor donor = findDonorById(donorId);
-        if (donorDeferral != null) {
-            donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
-            donorDeferral.setDeferredDonor(donor);
-            donorDeferral.setDeferredBy(utilController.getCurrentUser());
-            donorDeferral.setDeferralReasonText(deferralReasonText);
-            donorDeferral.setDeferralReason(deferralReason);
-            em.persist(donorDeferral);
-        }
-
-        /*Donor donor = findDonorById(donorId);
-         --donorDeferral.setDeferredOn(new Date());
-         donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
-         donorDeferral.setDeferredDonor(donor);
-         donorDeferral.setDeferredBy(utilController.getCurrentUser());
-         DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
-         donorDeferral.setDeferralReason(deferralReason);
-         donorDeferral.setDeferralReasonText(deferralReasonText);*/
-        //em.persist(donorDeferral);
-    }
-
     public void cancelDeferDonor(Long donorDeferralId) {
         DonorDeferral donorDeferral = getDonorDeferralsId(donorDeferralId);
         if (donorDeferral != null) {
@@ -429,7 +388,7 @@ public class DonorRepository {
         Date today = new Date(dt.getMillis());
 
         for (DonorDeferral donorDeferral : donorDeferrals) {
-            Date deferredOn = donorDeferral.getDeferredOn();
+            Date deferredOn = donorDeferral.getCreatedDate();
             Date deferredUntil = donorDeferral.getDeferredUntil();
             if (deferredOn == null || deferredUntil == null) {
                 currentlyDeferred = true;
