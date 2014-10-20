@@ -199,6 +199,7 @@ public class ProductController {
         //pagingParams.put("start", "0");
         //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
+        
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
         int sortColumnId = (Integer) pagingParams.get("sortColumnId");
         pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
@@ -369,9 +370,7 @@ public class ProductController {
     //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
 
     List<Product> results = new ArrayList<Product>();
-    //List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
     List<ProductStatus> status = Arrays.asList(ProductStatus.values());
-    System.out.println("\tPRODUCTSTATUS: " + status);
     
       results = productRepository.findProductByCollectionNumber(
           donationNumber, status,
