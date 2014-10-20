@@ -370,8 +370,8 @@ public class ProductController {
  
   @RequestMapping(value = "/record", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  Map<String, Object> recordNewProductComponents(HttpServletRequest request,
-      @RequestBody RecordProductBackingForm form) {
+  public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
+       @RequestBody @Valid RecordProductBackingForm form) {
 
       ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
       String collectionNumber = form.getCollectionNumber();
@@ -403,6 +403,7 @@ public class ProductController {
                   expiresOn = formatter.parse(form.getDateExpiresTo());
               } catch (ParseException ex) {
                   ex.printStackTrace();
+                  return  new ResponseEntity<Map<String, Object>>(HttpStatus.INTERNAL_SERVER_ERROR);
               }
 	          product.setCreatedOn(createdOn);
 	          product.setExpiresOn(expiresOn);
@@ -455,7 +456,7 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
+    //map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
     map.put("addProductForm", form);
     
     if(form.getCollectionNumber().contains("-")){
@@ -465,7 +466,7 @@ public class ProductController {
   		 addEditSelectorOptionsForNewRecord(map);
   	}
 
-    return map;
+ return  new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
