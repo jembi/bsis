@@ -454,10 +454,10 @@ public class ProductController {
     List<Product> products = Arrays.asList(new Product[0]);
    
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("productFields", utilController.getFormFieldsForForm("product"));
+//    map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
     //map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
-    map.put("addProductForm", form);
+    //map.put("addProductForm", form);
     
     if(form.getCollectionNumber().contains("-")){
     	addEditSelectorOptionsForNewRecordByList(map,productType2);
