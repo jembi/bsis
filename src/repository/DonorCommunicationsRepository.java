@@ -52,7 +52,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 			String lastDonationFromDate, String lastDonationToDate,
 			List<BloodGroup> bloodGroups, boolean anyBloodGroup,
 			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) {
-
+	  
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
 		Subquery<Long> donorDeferral =   cq.subquery(Long.class);
@@ -109,6 +109,18 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 	      }
 	      panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
 	    }
+	    // If anyBloodGroup set to TRUE, use list of all blood groups (i.e. will not return donors who have NO blood group)
+	    else if(anyBloodGroup){
+	    	List<Predicate> bgPredicates = new ArrayList<Predicate>();
+		    for (BloodGroup bg : BloodGroup.getAllBloodGroups()) {
+		      System.out.println("\tANY BLOODGROUP: " + bg);
+		      Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
+		      Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
+		      bgPredicates.add(cb.and(aboExp, rhExp));
+		    }
+		    panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
+	    }
+	    
 	    panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
 		cq.where(panelPredicates.toArray(new Predicate[0]));
 
