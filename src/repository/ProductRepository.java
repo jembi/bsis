@@ -162,8 +162,8 @@ public class ProductRepository {
     return product;
   }
 
-  public List<Object> findProductByCollectionNumber(
-      String collectionNumber, List<String> status, Map<String, Object> pagingParams) {
+  public List<Product> findProductByCollectionNumber(
+      String collectionNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
     String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
@@ -181,7 +181,7 @@ public class ProductRepository {
     }
 
     query = em.createQuery(queryStr, Product.class);
-    query.setParameter("status", statusStringToProductStatus(status));
+    query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
 
@@ -191,21 +191,12 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
-  }
-
-  private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
-    List<ProductStatus> productStatusList = new ArrayList<ProductStatus>();
-    if (statusList != null) {
-      for (String status : statusList) {
-        productStatusList.add(ProductStatus.lookup(status));
-      }
-    }
-    return productStatusList;
+    //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
+    return query.getResultList();
   }
   
-  public List<Object> findProductByProductTypes(
-      List<Integer> productTypeIds, List<String> status,
+  public List<Product> findProductByProductTypes(
+      List<Integer> productTypeIds, List<ProductStatus> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
@@ -224,7 +215,7 @@ public class ProductRepository {
     }
 
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("status", statusStringToProductStatus(status));
+    query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypeIds", productTypeIds);
 
@@ -234,7 +225,8 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
+    //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
+    return query.getResultList();
   }
 
   private Long getResultCount(String queryStr, Query query) {
