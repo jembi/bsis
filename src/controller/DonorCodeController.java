@@ -1,11 +1,13 @@
 package controller;
 
+import backingform.DonorCodeBackingForm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
 import model.donor.Donor;
 import model.donorcodes.DonorCode;
 import model.donorcodes.DonorCodeGroup;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,12 +59,12 @@ public class DonorCodeController {
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
     public 
     ResponseEntity<Map <String, Object>> addDonorCode(
-            @RequestParam(value = "id") Long id,
-            @RequestParam(value = "donorId") Long donorId) {
+            @Valid @RequestBody DonorCodeBackingForm formObject) {
         Map<String, Object> map = new HashMap<String, Object>();
         DonorDonorCode donorDonorCode = new DonorDonorCode();
+        Long donorId = formObject.getDonorId();
         donorDonorCode.setDonor(donorRepository.findDonorById(donorId));
-        DonorCode donorCode = donorRepository.findDonorCodeById(id);
+        DonorCode donorCode = donorRepository.findDonorCodeById(formObject.getDonorCodeId());
         donorDonorCode.setDonorCode(donorCode);
         if( donorRepository.findDonorById(donorId).getDonorCodes().contains(donorCode))
            throw new EntityExistsException("Donor Code is already assigned to donor");
@@ -96,7 +99,7 @@ public class DonorCodeController {
     }
    
    
-    public static List<DonorCodeViewModel> getDonorCodeViewModels(
+    private  List<DonorCodeViewModel> getDonorCodeViewModels(
             List<DonorDonorCode> donorDonorCodes) {
         if (donorDonorCodes == null) {
             return Arrays.asList(new DonorCodeViewModel[0]);
