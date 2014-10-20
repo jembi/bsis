@@ -111,6 +111,9 @@ public class ProductController {
     List<ProductStatusChangeReason> statusChangeReasons =
     productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
     map.put("returnReasons", statusChangeReasons);
+    statusChangeReasons =
+    productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
+    map.put("discardReasons", statusChangeReasons);
     map.put("findProductByPackNumberForm",  new RecordProductBackingForm());
     return map;
   }
@@ -182,9 +185,9 @@ public class ProductController {
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
     public Map<String, Object> findProductPagination(HttpServletRequest request,
             @RequestParam(value = "searchBy") String searchBy,
-            @RequestParam(value = "productNumber") String productNumber,
-            @RequestParam(value = "collectionNumber") String collectionNumber,
-            @RequestParam(value = "productTypes") List<String> productTypes,
+            @RequestParam(value = "componentNumber") String productNumber,
+            @RequestParam(value = "donationIdentificationNumber") String collectionNumber,
+            @RequestParam(value = "componentTypes") List<String> productTypes,
             @RequestParam(value = "status") List<String> status,
             @RequestParam(value = "dateExpiresFrom") String dateExpiresFrom,
             @RequestParam(value = "dateExpiresTo") String dateExpiresTo) {
@@ -494,8 +497,8 @@ public class ProductController {
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
-      @RequestParam(value = "productTypes") List<String> productTypes,
-      @RequestParam(value = "donationNumber") String donationNumber) {
+      @RequestParam(value = "componentTypes") List<String> productTypes,
+      @RequestParam(value = "donationIdentificationNumber") String donationIdentificationNumber) {
 
   	ProductType productType = null;
   	if(productTypes!= null){
@@ -506,9 +509,9 @@ public class ProductController {
   	
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("allProducts", getProductViewModels(products));
-    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,donationNumber));
+    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,donationIdentificationNumber));
     
-    if(donationNumber.contains("-") && productTypes != null){
+    if(donationIdentificationNumber.contains("-") && productTypes != null){
     	addEditSelectorOptionsForNewRecordByList(map,productType);
   	}
   	else{
@@ -519,10 +522,10 @@ public class ProductController {
   }
   
    private void addOptionsForAddProductCombinationForm(Map<String, Object> m) {
-    m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("componentTypes", productTypeRepository.getAllProductTypes());
 
     List<ProductTypeCombination> productTypeCombinations = productTypeRepository.getAllProductTypeCombinations();
-    m.put("productTypeCombinations", productTypeCombinations);
+    m.put("componentTypeCombinations", productTypeCombinations);
 
     ObjectMapper mapper = new ObjectMapper();
     Map<Integer, String> productTypeCombinationsMap = new HashMap<Integer, String>();
@@ -543,7 +546,7 @@ public class ProductController {
         e.printStackTrace();
       }
     }
-    m.put("productTypeCombinationsMap", productTypeCombinationsMap);
+    m.put("componentTypeCombinationsMap", productTypeCombinationsMap);
   }
   
   public static String getNextPageUrlForRecordProduct(HttpServletRequest req) {
@@ -631,14 +634,14 @@ public class ProductController {
   }
   
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("componentTypes", productTypeRepository.getAllProductTypes());
   }
   
   private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ProductType productType) {
-    m.put("productTypes", productTypeRepository.getProductTypeByIdList(productType.getId()));
+    m.put("componentTypes", productTypeRepository.getProductTypeByIdList(productType.getId()));
   }
   private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
-    m.put("productTypes", productTypeRepository.getAllParentProductTypes());
+    m.put("componentTypes", productTypeRepository.getAllParentProductTypes());
   }
   
   public static String getUrlForNewProduct(HttpServletRequest req,String qString) {
