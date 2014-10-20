@@ -341,9 +341,9 @@ public class ProductController {
 
   
   @SuppressWarnings("unchecked")
-  @RequestMapping(value = "{donatonNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String donatonNumber) {
+  public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String donationNumber) {
 
     List<Product> products = Arrays.asList(new Product[0]);
 
@@ -359,7 +359,7 @@ public class ProductController {
     List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
     
       results = productRepository.findProductByCollectionNumber(
-          donatonNumber, status,
+          donationNumber, status,
           pagingParams);
 
     products = (List<Product>) results.get(0);
