@@ -189,21 +189,24 @@ public class ProductController {
             @RequestParam(value = "dateExpiresFrom") String dateExpiresFrom,
             @RequestParam(value = "dateExpiresTo") String dateExpiresTo) {
 
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();    	
+    	
         List<Product> products = Arrays.asList(new Product[0]);
 
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
-        pagingParams.put("start", "0");
-        pagingParams.put("length", "10");
+        //pagingParams.put("start", "0");
+        //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
         int sortColumnId = (Integer) pagingParams.get("sortColumnId");
         pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
-        List<Object> results = new ArrayList<Object>();
+        List<Product> results = new ArrayList<Product>();
         if (searchBy.equals("collectionNumber")) {
             results = productRepository.findProductByCollectionNumber(
-                    collectionNumber, status,
+                    collectionNumber, statusStringToProductStatus(status),
                     pagingParams);
         } else if (searchBy.equals("productType")) {
             List<Integer> productTypeIds = new ArrayList<Integer>();
@@ -212,12 +215,20 @@ public class ProductController {
                 productTypeIds.add(Integer.parseInt(productTypeId));
             }
             results = productRepository.findProductByProductTypes(
-                    productTypeIds, status, pagingParams);
+                    productTypeIds, statusStringToProductStatus(status), pagingParams);
         }
 
-        products = (List<Product>) results.get(0);
-        Long totalRecords = (Long) results.get(1);
-        return generateDatatablesMap(products, totalRecords, formFields);
+        List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+        
+        if (results != null){
+    	    for(Product product : results){
+    	    	ProductViewModel productViewModel = getProductViewModel(product);
+    	    	components.add(productViewModel);
+    	    }
+        }
+
+        map.put("components", components);
+        return map;
     }
 
   public static List<ProductViewModel> getProductViewModels(
@@ -345,26 +356,38 @@ public class ProductController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String donationNumber) {
 
-    List<Product> products = Arrays.asList(new Product[0]);
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  
+	  List<Product> products = Arrays.asList(new Product[0]);
 
       Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");
-      pagingParams.put("start", "0");
-      pagingParams.put("length", "10");
+      //pagingParams.put("start", "0");
+      //pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
       
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
+    //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
 
-    List<Object> results = new ArrayList<Object>();
-    List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
+    List<Product> results = new ArrayList<Product>();
+    //List<String> status = Arrays.asList("QUARANTINED", "AVAILABLE", "EXPIRED", "UNSAFE", "ISSUED", "USED", "SPLIT", "DISCARDED", "PROCESSED");
+    List<ProductStatus> status = Arrays.asList(ProductStatus.values());
+    System.out.println("\tPRODUCTSTATUS: " + status);
     
       results = productRepository.findProductByCollectionNumber(
           donationNumber, status,
           pagingParams);
+    
+    List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+    
+    if (results != null){
+	    for(Product product : results){
+	    	ProductViewModel productViewModel = getProductViewModel(product);
+	    	components.add(productViewModel);
+	    }
+    }
 
-    products = (List<Product>) results.get(0);
-    Long totalRecords = (Long) results.get(1);
-    return generateRecordProductTablesMap(products, totalRecords, formFields);
+    map.put("components", components);
+    return map;
   }
   
  
@@ -685,6 +708,16 @@ public class ProductController {
     productsMap.put("iTotalRecords", totalRecords);
     productsMap.put("iTotalDisplayRecords", totalRecords);
     return productsMap;
+  }
+  
+  private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
+    List<ProductStatus> productStatusList = new ArrayList<ProductStatus>();
+    if (statusList != null) {
+      for (String status : statusList) {
+        productStatusList.add(ProductStatus.lookup(status));
+      }
+    }
+    return productStatusList;
   }
   
   /**
