@@ -120,9 +120,9 @@ public class DonorCommunicationsController {
             @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) {
        
        LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
-       String eligiblaeClinicDate = getEligibleDonorDate(clinicDate);
+       String eligibleClinicDate = getEligibleDonorDate(clinicDate);
 
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
+       Map<String, Object> map = new HashMap<String, Object>();
 
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
@@ -130,18 +130,21 @@ public class DonorCommunicationsController {
         //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
         
-        List<Object> results = new ArrayList<Object>();
-        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), eligiblaeClinicDate, lastDonationFromDate,
+        List<Donor> results = new ArrayList<Donor>();
+        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), eligibleClinicDate, lastDonationFromDate,
                 lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, pagingParams, clinicDate);
         
-        System.out.println("\tDONOR COMMS RESULTS: " + results);
-
-        @SuppressWarnings("unchecked")
-        List<Donor> donors = (List<Donor>) results.get(0);
-        Long totalRecords = (Long) results.get(1);
+        List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
         
-            return generateDatatablesMapForDonorCommunications(donors,
-                    totalRecords, formFields);
+        if (results != null){
+    	    for(Donor donor : results){
+    	    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
+    	    	donors.add(donorViewModel);
+    	    }
+        }
+
+        map.put("donors", donors);
+        return map;
        
     }
 
@@ -214,6 +217,11 @@ public class DonorCommunicationsController {
         }
         return donorViewModels;
     }
+    
+    private DonorViewModel getDonorsViewModel(Donor donor) {
+	    DonorViewModel donorViewModel = new DonorViewModel(donor);
+	    return donorViewModel;
+	}
 
     private void addEditSelectorOptions(Map<String, Object> m) {
         m.put("donorPanels", locationRepository.getAllDonorPanels());
