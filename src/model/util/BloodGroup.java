@@ -2,6 +2,7 @@ package model.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Collection;
 
 public class BloodGroup {
 
@@ -80,7 +81,11 @@ public class BloodGroup {
     return rh.toString();
   }
 
-public static Map<String, BloodGroup> getBloodgroups() {
+  public static Map<String, BloodGroup> getBloodgroups() {
 	return bloodgroups;
-}
+  }
+  
+  public static Collection<BloodGroup> getAllBloodGroups() {
+	return bloodgroups.values();
+  }
 }
