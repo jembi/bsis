@@ -126,8 +126,8 @@ public class DonorCommunicationsController {
 
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
-        pagingParams.put("start", "0");
-        pagingParams.put("length", "10");
+        //pagingParams.put("start", "0");
+        //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
         
         List<Object> results = new ArrayList<Object>();
