@@ -47,7 +47,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
   @Autowired
   private UtilController utilController;
   			
-  public List<Object> findDonors(
+  public List<Donor> findDonors(
 			List<Location> donorPanel, String clinicDate,
 			String lastDonationFromDate, String lastDonationToDate,
 			List<BloodGroup> bloodGroups, boolean anyBloodGroup,
@@ -147,8 +147,10 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		countCriteriaQuery.select(cb.countDistinct(countRoot));
 		
 		TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
-		Long totalResults = countQuery.getSingleResult().longValue();
-		return Arrays.asList(query.getResultList(), totalResults);
+		
+		List<Donor> donorResults = query.getResultList();
+		
+		return donorResults;
 	}
 
 }
