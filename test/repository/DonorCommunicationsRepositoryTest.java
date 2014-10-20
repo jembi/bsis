@@ -154,8 +154,8 @@ public class DonorCommunicationsRepositoryTest {
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		
 		assertEquals("List size should be zero, no matching search results.",
-				0,	((List<Donor>) (donorCommunicationsRepository.findDonors(donorPanels,clinicDate, lastDonationFromDate, 
-						lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).get(0))).size());
+				0,	donorCommunicationsRepository.findDonors(donorPanels,clinicDate, lastDonationFromDate, 
+						lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).size());
 	}
 	
 	/**
@@ -183,18 +183,15 @@ public class DonorCommunicationsRepositoryTest {
 
 		donorPanels    =  createDonorPanelList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
-		List<Object> results = new ArrayList<Object>();
+		List<Donor> results = new ArrayList<Donor>();
 		
 		results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
 				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
-	
-		@SuppressWarnings("unchecked")
-		List<Donor> donors = (List<Donor>) results.get(0);
 		
-	    assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
+	    assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 	    
 	    boolean isvalid = true;
-		for(Donor donor:donors){
+		for(Donor donor:results){
 			if(!((donor.getBloodAbo()+donor.getBloodRh()).equals("O+")  || (donor.getBloodAbo()+donor.getBloodRh()).equals("A+"))
 					&& (donor.getDonorPanel().getId() == 3 || donor.getDonorPanel().getId() == 1))
 			{
@@ -232,17 +229,14 @@ public class DonorCommunicationsRepositoryTest {
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		List<Object> results = new ArrayList<Object>();
+		List<Donor> results = new ArrayList<Donor>();
 		results = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
-		@SuppressWarnings("unchecked")
-		List<Donor> donors = (List<Donor>) results.get(0);
-		
-		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
+		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 		
 		boolean isvalid = true;
-		for(Donor donor:donors){
+		for(Donor donor:results){
 			if(donor.getDateOfLastDonation().after(CustomDateFormatter.parse(getEligibleDonationDate(clinicDate))))
 			{
 				isvalid = false;
@@ -280,17 +274,14 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels    =  createDonorPanelList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		
-		List<Object> results = new ArrayList<Object>();
+		List<Donor> results = new ArrayList<Donor>();
 		results = donorCommunicationsRepository.findDonors(donorPanels,	clinicDate, lastDonationFromDate, lastDonationToDate,
 				bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
-		@SuppressWarnings("unchecked")
-		List<Donor> donors = (List<Donor>) results.get(0);
-		
-		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
+		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 		
 		boolean isvalid = true;
-		for(Donor donor:donors){
+		for(Donor donor:results){
 			if(donor.getDateOfLastDonation().after(CustomDateFormatter.parse(lastDonationToDate))  
 					|| donor.getDateOfLastDonation().before(CustomDateFormatter.parse(lastDonationFromDate)))
 			{
@@ -329,8 +320,8 @@ public class DonorCommunicationsRepositoryTest {
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		//List<Object> results = new ArrayList<Object>();
 
-		List<Donor> donors = (List<Donor>) (donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
-				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate).get(0));		
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate);		
 		
 		for (Donor donor : donors) {
 			// Donor with ID=5 is set as deleted
@@ -370,8 +361,8 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels = createDonorPanelList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> donors = (List<Donor>) (donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
-				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate).get(0));	
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate);	
 		
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
 		
@@ -416,8 +407,8 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels = createDonorPanelList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> donors = (List<Donor>) (donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
-				lastDonationToDate,	bloodGroups, anyBloodGroup, pagingParams, clinicDate).get(0));	
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+				lastDonationToDate,	bloodGroups, anyBloodGroup, pagingParams, clinicDate);	
 		
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
 		
@@ -461,8 +452,8 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels    =  createDonorPanelList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 
-		List<Donor> donors = (List<Donor>) (donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
-				lastDonationToDate,	bloodGroups, anyBloodGroup, pagingParams, clinicDate).get(0));	
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+				lastDonationToDate,	bloodGroups, anyBloodGroup, pagingParams, clinicDate);	
 
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
 		
@@ -546,10 +537,10 @@ public class DonorCommunicationsRepositoryTest {
 		boolean anyBloodGroup = true;
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		List<Object> results = new ArrayList<Object>();
+		List<Donor> results = new ArrayList<Donor>();
 		results = donorCommunicationsRepository.findDonors(donorPanel,
 				clinicDate, lastDonationFromDate, lastDonationToDate,
 				bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
-		return  (Long) results.get(1);
+		return  (long) results.size();
 	}
 }
