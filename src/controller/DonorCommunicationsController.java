@@ -64,12 +64,11 @@ public class DonorCommunicationsController {
             HttpServletRequest request) {
 
        // DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
-        ObjectMapper mapper = new ObjectMapper();
+
         Map<String, Object> map = new HashMap<String, Object>();
-        utilController.addTipsToModel(map, "donors.finddonor");
+
         // to ensure custom field names are displayed in the form
         map.put("donorFields", utilController.getFormFieldsForForm("donor"));
-        map.put("contentLabel", "Find Donors");
         addEditSelectorOptions(map);
        // map.put("donorCommunicationsForm", dbform);
         return map;
@@ -113,7 +112,7 @@ public class DonorCommunicationsController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> findDonorCommunicationsPagination(
-            @RequestParam(value="bloodGroups",required=true ) List<BloodGroup> bloodGroups,
+            @RequestParam(value="bloodGroups",required=true ) List<String> bloodGroups,
             @RequestParam(value="donorPanels",required=true) List<String> donorPanels,
             @RequestParam(value="clinicDate",required=false ) String clinicDate,
             @RequestParam(value="lastDonationFromDate",required=false ) String lastDonationFromDate,
@@ -131,10 +130,11 @@ public class DonorCommunicationsController {
         pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
         
-        
         List<Object> results = new ArrayList<Object>();
         results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), eligiblaeClinicDate, lastDonationFromDate,
-                lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate);
+                lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, pagingParams, clinicDate);
+        
+        System.out.println("\tDONOR COMMS RESULTS: " + results);
 
         @SuppressWarnings("unchecked")
         List<Donor> donors = (List<Donor>) results.get(0);
@@ -259,13 +259,25 @@ public class DonorCommunicationsController {
 
         List<Location> panels = new ArrayList<Location>();
 
-            for (String donorPanelId : donorPanels) {
-                Location l = new Location();
-                l.setId(Long.parseLong(donorPanelId));
-                panels.add(l);
-            }
-      
+        for (String donorPanelId : donorPanels) {
+            Location l = new Location();
+            l.setId(Long.parseLong(donorPanelId));
+            panels.add(l);
+        }
+        
         return panels;
+    }
+    
+    public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
+
+        List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
+
+        for (String bloodGroup : bloodGroups) {
+        	BloodGroup bg = new BloodGroup(bloodGroup);
+            bloodGroupsList.add(bg);
+        }
+
+        return bloodGroupsList;
     }
 
 }
