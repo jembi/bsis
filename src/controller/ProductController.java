@@ -45,6 +45,7 @@ import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
+import viewmodel.ProductTypeViewModel;
 
 @RestController
 @RequestMapping("components")
@@ -244,6 +245,17 @@ public class ProductController {
       productViewModels.add(new ProductViewModel(product));
     }
     return productViewModels;
+  }
+  
+  public static List<ProductTypeViewModel> getProductTypeViewModels(
+      List<ProductType> productTypes) {
+    if (productTypes == null)
+      return Arrays.asList(new ProductTypeViewModel[0]);
+    List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel>();
+    for (ProductType productType : productTypes) {
+    	productTypeViewModels.add(new ProductTypeViewModel(productType));
+    }
+    return productTypeViewModels;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -634,14 +646,14 @@ public class ProductController {
   }
   
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("componentTypes", productTypeRepository.getAllProductTypes());
+    m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getAllProductTypes()));
   }
   
   private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ProductType productType) {
-    m.put("componentTypes", productTypeRepository.getProductTypeByIdList(productType.getId()));
+    m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getProductTypeByIdList(productType.getId())));
   }
   private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
-    m.put("componentTypes", productTypeRepository.getAllParentProductTypes());
+    m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getAllParentProductTypes()));
   }
   
   public static String getUrlForNewProduct(HttpServletRequest req,String qString) {
