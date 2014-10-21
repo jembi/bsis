@@ -185,13 +185,12 @@ public class ProductController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
     public Map<String, Object> findProductPagination(HttpServletRequest request,
-            @RequestParam(value = "searchBy") String searchBy,
-            @RequestParam(value = "componentNumber") String productNumber,
-            @RequestParam(value = "donationIdentificationNumber") String collectionNumber,
-            @RequestParam(value = "componentTypes") List<String> productTypes,
-            @RequestParam(value = "status") List<String> status,
-            @RequestParam(value = "dateExpiresFrom") String dateExpiresFrom,
-            @RequestParam(value = "dateExpiresTo") String dateExpiresTo) {
+            @RequestParam(value = "componentNumber", required=false, defaultValue ="") String productNumber,
+            @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String collectionNumber,
+            @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<String> componentTypes,
+            @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
+            @RequestParam(value = "dateExpiresFrom", required=false) String dateExpiresFrom,
+            @RequestParam(value = "dateExpiresTo", required=false) String dateExpiresTo) {
 
     	
     	Map<String, Object> map = new HashMap<String, Object>();    	
@@ -203,25 +202,17 @@ public class ProductController {
         //pagingParams.put("start", "0");
         //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
-        
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
-        int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-        pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
         List<Product> results = new ArrayList<Product>();
-        if (searchBy.equals("collectionNumber")) {
-            results = productRepository.findProductByCollectionNumber(
-                    collectionNumber, statusStringToProductStatus(status),
-                    pagingParams);
-        } else if (searchBy.equals("productType")) {
-            List<Integer> productTypeIds = new ArrayList<Integer>();
-            productTypeIds.add(-1);
-            for (String productTypeId : productTypes) {
-                productTypeIds.add(Integer.parseInt(productTypeId));
-            }
-            results = productRepository.findProductByProductTypes(
-                    productTypeIds, statusStringToProductStatus(status), pagingParams);
+        
+        List<Integer> componentTypeIds = new ArrayList<Integer>();
+        for (String componentTypeId : componentTypes) {
+        	componentTypeIds.add(Integer.parseInt(componentTypeId));
         }
+        
+        results = productRepository.findAnyProduct(
+                collectionNumber, componentTypeIds, statusStringToProductStatus(status),
+                pagingParams);
 
         List<ProductViewModel> components = new ArrayList<ProductViewModel>();
         
