@@ -159,6 +159,8 @@ public class DonorController {
     return map;
   }
 
+  /**
+   * issue - #209 Not used anywhere
   @RequestMapping(value = "/{id}/edit/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR+"')")
   public Map<String, Object> editDonorFormGenerator(HttpServletRequest request,
@@ -177,7 +179,7 @@ public class DonorController {
     map.put("editDonorForm", donorForm);
     return map;
   }
-
+*/
   /**
    * issue - $209 [Commented as it is being duplicate method - refer /donor]
   @RequestMapping(value = "/find", method = RequestMethod.GET)
