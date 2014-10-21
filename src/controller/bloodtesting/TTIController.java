@@ -267,7 +267,7 @@ public class TTIController {
 		HttpStatus httpStatus = HttpStatus.CREATED;
                 Map<String, Object> m = new HashMap<String, Object>();
 
-		try {
+		
 			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
 			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 			ObjectMapper mapper = new ObjectMapper();
@@ -284,10 +284,6 @@ public class TTIController {
 					.get("errors");
 			if (errorMap != null && !errorMap.isEmpty())
 				httpStatus = HttpStatus.BAD_REQUEST;
-		} catch (Exception ex) {
-			LOGGER.error(ex.getMessage() + ex.getStackTrace());
-			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
 
 		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
