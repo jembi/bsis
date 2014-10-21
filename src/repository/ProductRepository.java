@@ -163,32 +163,49 @@ public class ProductRepository {
     return product;
   }
   
-  public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, Map<String, Object> pagingParams){
+  public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
+		  String donationDateFrom, String donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Product> query;
-	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
-	                      "p.status IN :status AND " +
+	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +     
 	                      "p.isDeleted= :isDeleted ";
 	    
+	    if(status != null && !status.isEmpty()){
+	    	queryStr += "AND p.status IN :status ";
+	    }	
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
 	    	queryStr += "AND p.collectedSample.collectionNumber = :donationIdentificationNumber ";
 	    }
-	    
 	    if(productTypes != null && !productTypes.isEmpty()){
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
 	    }	    
+	    if(donationDateFrom != null && !donationDateFrom.equals("")){
+	    	queryStr += "AND p.collectedSample.collectedOn >= :donationDateFrom ";
+	    }
+	    if(donationDateTo != null && !donationDateTo.equals("")){
+	    	queryStr += "AND p.collectedSample.collectedOn <= :donationDateTo ";
+	    }
 	    
 	    if (pagingParams.containsKey("sortColumn")) {
-	      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+	    	queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
 	    }
 	
 	    query = em.createQuery(queryStr, Product.class);
-	    query.setParameter("status", status);
 	    query.setParameter("isDeleted", Boolean.FALSE);
+	    
+	    if(status != null && !status.isEmpty()){
+	    	query.setParameter("status", status);
+	    }
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
 	    	query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
 	    }
 	    if (productTypes != null && !productTypes.isEmpty()) {
 	    	query.setParameter("productTypeIds", productTypes);
+	    }
+	    if(donationDateFrom != null && !donationDateFrom.equals("")){
+	    	query.setParameter("donationDateFrom", donationDateFrom);
+	    }
+	    if(donationDateTo != null && !donationDateTo.equals("")){
+	    	query.setParameter("donationDateTo", donationDateTo);
 	    }
 	
 	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);

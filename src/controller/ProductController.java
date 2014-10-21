@@ -189,8 +189,8 @@ public class ProductController {
             @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String collectionNumber,
             @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<String> componentTypes,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
-            @RequestParam(value = "dateExpiresFrom", required=false) String dateExpiresFrom,
-            @RequestParam(value = "dateExpiresTo", required=false) String dateExpiresTo) {
+            @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") String donationDateFrom,
+            @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) {
 
     	
     	Map<String, Object> map = new HashMap<String, Object>();    	
@@ -212,7 +212,7 @@ public class ProductController {
         
         results = productRepository.findAnyProduct(
                 collectionNumber, componentTypeIds, statusStringToProductStatus(status),
-                pagingParams);
+                donationDateFrom, donationDateTo, pagingParams);
 
         List<ProductViewModel> components = new ArrayList<ProductViewModel>();
         
