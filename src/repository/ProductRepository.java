@@ -54,6 +54,7 @@ import backingform.ProductCombinationBackingForm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PessimisticLockException;
+import org.apache.commons.lang3.StringUtils;
 
 @Repository
 @Transactional
@@ -160,6 +161,43 @@ public class ProductRepository {
       }
     }
     return product;
+  }
+  
+  public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, Map<String, Object> pagingParams){
+	  	TypedQuery<Product> query;
+	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+	                      "p.status IN :status AND " +
+	                      "p.isDeleted= :isDeleted ";
+	    
+	    if(!StringUtils.isBlank(donationIdentificationNumber)){
+	    	queryStr += "AND p.collectedSample.collectionNumber = :donationIdentificationNumber ";
+	    }
+	    
+	    if(productTypes != null && !productTypes.isEmpty()){
+	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
+	    }	    
+	    
+	    if (pagingParams.containsKey("sortColumn")) {
+	      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+	    }
+	
+	    query = em.createQuery(queryStr, Product.class);
+	    query.setParameter("status", status);
+	    query.setParameter("isDeleted", Boolean.FALSE);
+	    if(!StringUtils.isBlank(donationIdentificationNumber)){
+	    	query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
+	    }
+	    if (productTypes != null && !productTypes.isEmpty()) {
+	    	query.setParameter("productTypeIds", productTypes);
+	    }
+	
+	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+	
+	    query.setFirstResult(start);
+	    query.setMaxResults(length);
+
+	    return query.getResultList();
   }
 
   public List<Product> findProductByCollectionNumber(
