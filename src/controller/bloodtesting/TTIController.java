@@ -1,6 +1,7 @@
 package controller.bloodtesting;
 
 import au.com.bytecode.opencsv.CSVReader;
+import backingform.TTITestResultBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -157,15 +159,15 @@ public class TTIController {
 		}
 
 		if (success) {
-			List<BloodTest> allTTITests = bloodTestingRepository.getTTITests();
-			Map<String, BloodTest> allTTITestsMap = new HashMap<String, BloodTest>();
-			for (BloodTest ttiTest : allTTITests) {
-				allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
-			}
-			map.put("allTTITests", allTTITestsMap);
-			map.put("collectionFields",
-					utilController.getFormFieldsForForm("collectedSample"));
-			map.put("collections", results.get("collections"));
+//			List<BloodTest> allTTITests = bloodTestingRepository.getTTITests();
+//			Map<String, BloodTest> allTTITestsMap = new HashMap<String, BloodTest>();
+//			for (BloodTest ttiTest : allTTITests) {
+//				allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
+//			}
+//			map.put("allTTITests", allTTITestsMap);
+//			map.put("collectionFields",
+//					utilController.getFormFieldsForForm("collectedSample"));
+//			map.put("collections", results.get("collections"));
 
 			Map<Long, BloodTestingRuleResult> ruleResultsForCollections;
 			ruleResultsForCollections = (Map<Long, BloodTestingRuleResult>) results
@@ -179,18 +181,17 @@ public class TTIController {
 			map.put("errorMap", errorMap);
 			map.put("success", success);
 			errorMessage = "There were errors adding tests. Please verify the values of all tests.";
-			map.put("ttiFormFields",
-					utilController.getFormFieldsForForm("TTIForm"));
-
-			List<BloodTestViewModel> ttiTests = getBasicTTITests();
-			map.put("allTTITests", ttiTests);
-
+//			map.put("ttiFormFields",
+//					utilController.getFormFieldsForForm("TTIForm"));
+//
+//			List<BloodTestViewModel> ttiTests = getBasicTTITests();
+//			map.put("allTTITests", ttiTests);
+                        map.put("errorMessage", errorMessage);
 			httpStatus = HttpStatus.BAD_REQUEST;
 		}
 
 		map.put("addAnotherTTIUrl", "ttiFormGenerator.html");
 		map.put("success", success);
-		map.put("errorMessage", errorMessage);
 		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 	}
 
@@ -261,8 +262,7 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/additional", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
-			@RequestParam(value = "collectionId") String collectionId,
-			@RequestParam(value = "saveTestsData") String saveTestsDataStr) {
+			@RequestBody TTITestResultBackingForm formData) {
 
 		HttpStatus httpStatus = HttpStatus.CREATED;
                 Map<String, Object> m = new HashMap<String, Object>();
@@ -271,13 +271,12 @@ public class TTIController {
 			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
 			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, String> saveTestsData = mapper.readValue(
-					saveTestsDataStr, HashMap.class);
+			Map<String, String> saveTestsData = formData.getTestResult();
 			for (String testIdStr : saveTestsData.keySet()) {
 				saveTestsDataWithLong.put(Long.parseLong(testIdStr),
 						saveTestsData.get(testIdStr));
 			}
-			ttiTestResultsMap.put(Long.parseLong(collectionId),
+			ttiTestResultsMap.put(formData.getDonationId(),
 					saveTestsDataWithLong);
 			Map<String, Object> results = bloodTestingRepository
 					.saveBloodTestingResults(ttiTestResultsMap, true);
