@@ -245,17 +245,17 @@ public class CollectedSampleController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findCollectionPagination(HttpServletRequest request,
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
-     @RequestParam(value = "centers",required = false)  List<String> centers,
-     @RequestParam(value = "sites",required = false)  List<String> sites,
-     @RequestParam(value = "bloodBagTypes",required = false)  List<String> bloodBagTypes,
+     @RequestParam(value = "centers",required = false)  List<Long> centerIds,
+     @RequestParam(value = "sites",required = false)  List<Long> siteIds,
+     @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
      @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
      @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
      @RequestParam(value = "includeTestedCollections",required = true)  boolean includeTestedCollections){
    
       Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");
-      pagingParams.put("start", "0");
-      pagingParams.put("length", "10");
+//      pagingParams.put("start", "0");
+//      pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
       
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("CollectedSample");
@@ -263,30 +263,10 @@ public class CollectedSampleController {
     if (collectionNumber != null)
       collectionNumber = collectionNumber.trim();
 
-    List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
-    bloodBagTypeIds.add(-1);
-    
-    if (bloodBagTypes != null) {
-      for (String bloodBagTypeId : bloodBagTypes) {
-        bloodBagTypeIds.add(Integer.parseInt(bloodBagTypeId));
-      }
-    }
 
-    List<Long> centerIds = new ArrayList<Long>();
-    centerIds.add((long) -1);
-    if (centers != null) {
-      for (String center : centers) {
-        centerIds.add(Long.parseLong(center));
-      }
-    }
-
-    List<Long> siteIds = new ArrayList<Long>();
-    siteIds.add((long) -1);
-    if (sites!= null) {
-      for (String site : sites) {
-        siteIds.add(Long.parseLong(site));
-      }
-    }
+   /* bloodBagTypeIds.add(-1);
+    centerIds.add((long)-1);
+    siteIds.add((long)-1);*/
 
     List<Object> results;
           results = collectedSampleRepository.findCollectedSamples(

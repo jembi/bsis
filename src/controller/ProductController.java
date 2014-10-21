@@ -187,7 +187,7 @@ public class ProductController {
     public Map<String, Object> findProductPagination(HttpServletRequest request,
             @RequestParam(value = "componentNumber", required=false, defaultValue ="") String productNumber,
             @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String collectionNumber,
-            @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<String> componentTypes,
+            @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Integer> componentTypeIds,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
             @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") String donationDateFrom,
             @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) {
@@ -195,8 +195,6 @@ public class ProductController {
     	
     	Map<String, Object> map = new HashMap<String, Object>();    	
     	
-        List<Product> products = Arrays.asList(new Product[0]);
-
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
         //pagingParams.put("start", "0");
@@ -204,11 +202,6 @@ public class ProductController {
         pagingParams.put("sortDirection", "asc");
 
         List<Product> results = new ArrayList<Product>();
-        
-        List<Integer> componentTypeIds = new ArrayList<Integer>();
-        for (String componentTypeId : componentTypes) {
-        	componentTypeIds.add(Integer.parseInt(componentTypeId));
-        }
         
         results = productRepository.findAnyProduct(
                 collectionNumber, componentTypeIds, statusStringToProductStatus(status),
