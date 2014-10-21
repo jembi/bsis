@@ -1,5 +1,6 @@
 package controller.bloodtesting;
 
+import backingform.BloodTypingResultBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -232,7 +233,7 @@ public class BloodTypingController {
           if (StringUtils.isBlank(testId))
             continue;
           testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
-        }
+        } 
       } 
     } catch (JsonParseException e) {
       // TODO Auto-generated catch block
@@ -316,37 +317,28 @@ public class BloodTypingController {
   @RequestMapping(value="/results/addiional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
-      @RequestParam(value="collectionId") String collectionId,
-      @RequestParam(value="saveTestsData") String saveTestsDataStr,
-      @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
+      @RequestBody BloodTypingResultBackingForm formData) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
     
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
-      ObjectMapper mapper = new ObjectMapper();
       @SuppressWarnings("unchecked")
       Map<String, String> saveTestsData = null;
-      try {
-          saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
-      } catch (IOException ex) {
-          ex.printStackTrace();
-          httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-          return new ResponseEntity<Map<String, Object>>(m, httpStatus);
-      }
+      saveTestsData = formData.getTypingResult();
       for (String testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
-      bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, saveUninterpretableResults);
+      bloodTypingTestResultsMap.put(formData.getDonationId(), saveTestsDataWithLong);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, formData.isSaveUninterpretableResults());
       @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
       System.out.println(errorMap);
       if (errorMap != null && !errorMap.isEmpty()) {
         httpStatus = HttpStatus.BAD_REQUEST;
         @SuppressWarnings("unchecked")
-        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(Long.parseLong(collectionId));
+        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(formData.getDonationId());
         if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
           m.put("uninterpretable", true);
         else
