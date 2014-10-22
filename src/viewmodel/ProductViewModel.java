@@ -44,7 +44,7 @@ public class ProductViewModel {
     return product.getCollectedSample();
   }
 
-  public ProductTypeViewModel getProductTypeViewModel() {
+  public ProductTypeViewModel getProductType() {
     return new ProductTypeViewModel(product.getProductType());
   }
   
