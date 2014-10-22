@@ -178,10 +178,10 @@ public class ProductRepository {
 	    if(productTypes != null && !productTypes.isEmpty()){
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
 	    }	    
-	    if(donationDateFrom != null && !donationDateFrom.equals("")){
+	    if(donationDateFrom != null){
 	    	queryStr += "AND p.collectedSample.collectedOn >= :donationDateFrom ";
 	    }
-	    if(donationDateTo != null && !donationDateTo.equals("")){
+	    if(donationDateTo != null){
 	    	queryStr += "AND p.collectedSample.collectedOn <= :donationDateTo ";
 	    }
 	    
@@ -201,10 +201,10 @@ public class ProductRepository {
 	    if (productTypes != null && !productTypes.isEmpty()) {
 	    	query.setParameter("productTypeIds", productTypes);
 	    }
-	    if(donationDateFrom != null && !donationDateFrom.equals("")){
+	    if(donationDateFrom != null){
 	    	query.setParameter("donationDateFrom", donationDateFrom);
 	    }
-	    if(donationDateTo != null && !donationDateTo.equals("")){
+	    if(donationDateTo != null){
 	    	query.setParameter("donationDateTo", donationDateTo);
 	    }
 	
