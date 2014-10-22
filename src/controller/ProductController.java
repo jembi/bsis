@@ -46,6 +46,7 @@ import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 import viewmodel.ProductTypeViewModel;
+import utils.CustomDateFormatter;
 
 @RestController
 @RequestMapping("components")
@@ -202,10 +203,29 @@ public class ProductController {
         pagingParams.put("sortDirection", "asc");
 
         List<Product> results = new ArrayList<Product>();
+        Date dateFrom = null;
+        Date dateTo = null;
+        
+        if(!donationDateFrom.equals("")){
+	        try {
+	        	dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
+	        }
+	        catch (ParseException ex){
+	            ex.printStackTrace();
+	        }
+        }
+        if(!donationDateTo.equals("")){
+	        try {
+	        	dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
+	        }
+	        catch (ParseException ex){
+	            ex.printStackTrace();
+	        }
+        }
         
         results = productRepository.findAnyProduct(
                 collectionNumber, componentTypeIds, statusStringToProductStatus(status),
-                donationDateFrom, donationDateTo, pagingParams);
+                dateFrom, dateTo, pagingParams);
 
         List<ProductViewModel> components = new ArrayList<ProductViewModel>();
         

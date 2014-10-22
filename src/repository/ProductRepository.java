@@ -164,7 +164,7 @@ public class ProductRepository {
   }
   
   public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
-		  String donationDateFrom, String donationDateTo, Map<String, Object> pagingParams){
+		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Product> query;
 	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +     
 	                      "p.isDeleted= :isDeleted ";
@@ -213,7 +213,7 @@ public class ProductRepository {
 	
 	    query.setFirstResult(start);
 	    query.setMaxResults(length);
-
+	    
 	    return query.getResultList();
   }
 
