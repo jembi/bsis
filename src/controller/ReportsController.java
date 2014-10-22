@@ -139,13 +139,12 @@ public class ReportsController {
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "centers", required = false) List<String> centers,
           @RequestParam(value = "sites", required = false) List<String> sites,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
 
       HttpStatus httpStatus = HttpStatus.OK;
       Map<String, Object> map = new HashMap<String, Object>();
 
-    try {
 
       Date dateTo;
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
@@ -181,15 +180,6 @@ public class ReportsController {
       map.put("dateCollectedFromUTC", dateFrom.getTime());
       map.put("dateCollectedToUTC", dateTo.getTime());
 
-    } catch (ParseException ex) {
-       map.put("hasErrors", true);
-       map.put("developerMessage", ex.getMessage());
-       map.put("errorMessage", "");
-       map.put("moreInfo", "");
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-       ex.printStackTrace();
-    
-    }
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
@@ -202,12 +192,10 @@ public class ReportsController {
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "centers", required = false) List<String> centers,
           @RequestParam(value = "sites", required = false) List<String> sites,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
-
-    try {
 
       Date dateTo;
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
@@ -243,14 +231,6 @@ public class ReportsController {
       map.put("dateRequestedFromUTC", dateFrom.getTime());
       map.put("dateRequestedToUTC", dateTo.getTime());
 
-    } catch (ParseException ex) {
-       map.put("hasErrors", true);
-       map.put("developerMessage", ex.getMessage());
-       map.put("errorMessage", "");
-       map.put("moreInfo", "");
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-       ex.printStackTrace();
-    }
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
@@ -263,12 +243,11 @@ public class ReportsController {
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "centers", required = false) List<String> centers,
           @RequestParam(value = "sites", required = false) List<String> sites,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
 
-    try {
 
       Date dateTo;
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
@@ -304,14 +283,6 @@ public class ReportsController {
       map.put("dateCollectedFromUTC", dateFrom.getTime());
       map.put("dateCollectedToUTC", dateTo.getTime());
 
-    } catch (ParseException ex) {
-       map.put("hasErrors", true);
-       map.put("developerMessage", ex.getMessage());
-       map.put("errorMessage", "");
-       map.put("moreInfo", "");
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-       ex.printStackTrace();
-    }
    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
@@ -324,12 +295,10 @@ public class ReportsController {
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "centers", required = false) List<String> centers,
           @RequestParam(value = "sites", required = false) List<String> sites,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
+          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
-
-    try {
 
       Date dateTo;
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
@@ -365,14 +334,6 @@ public class ReportsController {
       map.put("dateIssuedFromUTC", dateFrom.getTime());
       map.put("dateIssuedToUTC", dateTo.getTime());
 
-   } catch (ParseException ex) {
-       map.put("hasErrors", true);
-       map.put("developerMessage", ex.getMessage());
-       map.put("errorMessage", "");
-       map.put("moreInfo", "");
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-       ex.printStackTrace();
-    }
    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
@@ -404,14 +365,12 @@ public class ReportsController {
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "centers", required = false) List<String> centers,
           @RequestParam(value = "sites", required = false) List<String> sites,
-          @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) {
+          @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) throws ParseException {
 
    
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
-
-    try {
 
       Date dateTo;
       if (dateTestedTo == null || dateTestedTo.equals(""))
@@ -445,14 +404,7 @@ public class ReportsController {
       map.put("numTestResults", numTestResults);
       map.put("dateTestedFromUTC", dateFrom.getTime());
       map.put("dateTestedToUTC", dateTo.getTime());
-    } catch (ParseException ex) {
-       map.put("hasErrors", true);
-       map.put("developerMessage", ex.getMessage());
-       map.put("errorMessage", "");
-       map.put("moreInfo", "");
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-       ex.printStackTrace();
-    }
+
    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
