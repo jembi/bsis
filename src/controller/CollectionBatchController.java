@@ -80,24 +80,10 @@ public class CollectionBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  Map<String, Object> findCollectionBatch(HttpServletRequest request,
           @RequestParam(value = "batchNumber", required = false) String batchNumber,
-          @RequestParam(value = "collectionCenters", required = false) List<String> collectionCenters,
-          @RequestParam(value = "collectionSites", required = false) List<String> collectionSites ) {
+          @RequestParam(value = "collectionCenters", required = false) List<Long> centerIds,
+          @RequestParam(value = "collectionSites", required = false) List<Long> siteIds ) {
 
-    List<Long> centerIds = new ArrayList<Long>();
-    centerIds.add((long) -1);
-    if (collectionCenters != null) {
-      for (String center : collectionCenters) {
-        centerIds.add(Long.parseLong(center));
-      }
-    }
 
-    List<Long> siteIds = new ArrayList<Long>();
-    siteIds.add((long) -1);
-    if (collectionSites != null) {
-      for (String site : collectionSites) {
-        siteIds.add(Long.parseLong(site));
-      }
-    }
 
     List<CollectionBatch> collectionBatches =
         collectionBatchRepository.findCollectionBatches(batchNumber, centerIds, siteIds);
