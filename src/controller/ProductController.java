@@ -565,8 +565,9 @@ public class ProductController {
   }
   
   /**
+   * issue - #209 - Not used anywhere
    * Get column name from column id, depends on sequence of columns in productsTable.jsp
-   */
+   *
   private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
     List<String> visibleFields = new ArrayList<String>();
@@ -599,7 +600,7 @@ public class ProductController {
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in productsTable.jsp.
-   */
+   *
   private   Map<String, Object> generateDatatablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> productsMap = new HashMap<String, Object>();
     ArrayList<Object> productList = new ArrayList<Object>();
@@ -638,7 +639,7 @@ public class ProductController {
     productsMap.put("iTotalDisplayRecords", totalRecords);
     return productsMap;
   }
-  
+  */
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getAllProductTypes()));
   }

@@ -1,10 +1,8 @@
 package controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +13,6 @@ import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.location.Location;
 import model.util.BloodGroup;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -162,6 +159,9 @@ public class DonorCommunicationsController {
                 .format(cal.getTime()) : "";
     }
 
+    /**
+     * issue - #209 - Not used anyehere
+     *
     private Map<String, Object> generateDatatablesMapForDonorCommunications(List<Donor> donors, Long totalRecords,
             Map<String, Map<String, Object>> formFields) {
         Map<String, Object> donorsMap = new HashMap<String, Object>();
@@ -195,7 +195,7 @@ public class DonorCommunicationsController {
         donorsMap.put("iTotalDisplayRecords", totalRecords);
         return donorsMap;
     }
-
+*/
     public static String getUrl(HttpServletRequest req) {
         String reqUrl = req.getRequestURL().toString();
         String queryString = req.getQueryString(); // d=789
@@ -205,6 +205,9 @@ public class DonorCommunicationsController {
         return reqUrl;
     }
 
+     /**
+     * issue - #209 - Not used anyehere
+     *
     private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
         List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
         for (Donor donor : donors) {
@@ -212,7 +215,7 @@ public class DonorCommunicationsController {
         }
         return donorViewModels;
     }
-    
+    */
     private DonorViewModel getDonorsViewModel(Donor donor) {
 	    DonorViewModel donorViewModel = new DonorViewModel(donor);
 	    return donorViewModel;
@@ -224,9 +227,11 @@ public class DonorCommunicationsController {
     }
 
     /**
+     * issue - #209 - Not used anyehere
+     *
      * Get column name from column id, depends on sequence of columns in
      * donorsCommunicationTable.jsp
-     */
+     *
     private String getSortingColumn(int columnId,
             Map<String, Map<String, Object>> formFields) {
 
@@ -256,7 +261,7 @@ public class DonorCommunicationsController {
             return sortColumnMap.get(sortColumn);
         }
     }
-
+*/
 
     public List<Location> setLocations(List<String> donorPanels) {
 
