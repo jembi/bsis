@@ -1,7 +1,6 @@
 package repository;
 
 import controller.UtilController;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,7 +35,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import utils.CustomDateFormatter;
 import utils.DonorUtils;
 
 @Repository

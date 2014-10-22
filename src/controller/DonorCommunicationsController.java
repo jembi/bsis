@@ -1,6 +1,5 @@
 package controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -117,7 +116,7 @@ public class DonorCommunicationsController {
             @RequestParam(value="clinicDate",required=false ) String clinicDate,
             @RequestParam(value="lastDonationFromDate",required=false ) String lastDonationFromDate,
             @RequestParam(value="lastDonationToDate",required=false ) String lastDonationToDate,
-            @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) {
+            @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) throws ParseException{
        
        LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
        String eligibleClinicDate = getEligibleDonorDate(clinicDate);
@@ -148,11 +147,10 @@ public class DonorCommunicationsController {
        
     }
 
-    private static String getEligibleDonorDate(String clinicDate) {
+    private static String getEligibleDonorDate(String clinicDate) throws ParseException {
 
         SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
-        try {
             if (clinicDate != null && !clinicDate.trim().equalsIgnoreCase("")) {
                 Date dateObj = curFormater.parse(clinicDate);
                 @SuppressWarnings({"unused", "deprecation"})
@@ -160,9 +158,6 @@ public class DonorCommunicationsController {
                 cal.setTime(dateObj);
                 cal.add(Calendar.DATE, -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
             }
-        } catch (ParseException e) {
-            LOGGER.debug("Start DonorCommunicationsController:getEligibleDonorDate:ParseException" + e);
-        }
         return clinicDate != null && !clinicDate.trim().equalsIgnoreCase("") ? curFormater
                 .format(cal.getTime()) : "";
     }

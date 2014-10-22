@@ -93,7 +93,7 @@ public class CollectedSampleRepository {
 
   public List<Object> findCollectedSamples(
       String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
-      String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) {
+      String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(collectionNumber)) {
@@ -216,34 +216,28 @@ public class CollectedSampleRepository {
     return resultList;
   }
 
-  private Date getDateCollectedFromOrDefault(String dateCollectedFrom) {
+  private Date getDateCollectedFromOrDefault(String dateCollectedFrom) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date from = null;
-              try {
-                  from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
+    Date from = 
+             (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
                           .parse("31/12/1970") : dateFormat.parse(dateCollectedFrom);
-              } catch (ParseException ex) {
-                  LOGGER.error("Inside getDateCollectedFromOrDefault::"+ex);
-              }
+              
  
     return from;      
   }
 
-  private Date getDateCollectedToOrDefault(String dateCollectedTo){
+  private Date getDateCollectedToOrDefault(String dateCollectedTo) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date to = null;
-              try {
                   to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
                           dateFormat.parse(dateCollectedTo);
-              } catch (ParseException ex) {
-                  LOGGER.error("Inside getDateCollectedToOrDefault::"+ex);
-              }
+              
     return to;      
   }
 
   public Map<String, Map<Long, Long>> findNumberOfCollectedSamples(Date dateCollectedFrom,
       Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups){
+      List<String> centers, List<String> sites, List<String> bloodGroups)throws ParseException{
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -297,14 +291,8 @@ public class CollectedSampleRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = null;
-      Date upperDate = null;
-        try {
-            lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-            upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
-        } catch (ParseException ex) {
-           ex.printStackTrace();
-        }
+      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -322,11 +310,7 @@ public class CollectedSampleRepository {
       if (m == null)
         continue;
         Date formattedDate = null;
-        try {
-            formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
+        formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
           Long newVal = m.get(utcTime) + (Long) result[0];
@@ -375,7 +359,7 @@ public class CollectedSampleRepository {
   }
 
   public List<CollectedSample> findCollectedSampleByCenters(
-      List<Long> centerIds, String dateCollectedFrom, String dateCollectedTo) {
+      List<Long> centerIds, String dateCollectedFrom, String dateCollectedTo)throws ParseException{
     TypedQuery<CollectedSample> query = em
         .createQuery(
             "SELECT c FROM CollectedSample c WHERE " +

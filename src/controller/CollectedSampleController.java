@@ -3,6 +3,7 @@ package controller;
 import backingform.CollectedSampleBackingForm;
 import backingform.validator.CollectedSampleBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -243,14 +244,14 @@ public class CollectedSampleController {
     
      @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> findCollectionPagination(HttpServletRequest request,
+  public  Map<String, Object> findCollectionPagination(
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
      @RequestParam(value = "centers",required = false)  List<Long> centerIds,
      @RequestParam(value = "sites",required = false)  List<Long> siteIds,
      @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
      @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
      @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
-     @RequestParam(value = "includeTestedCollections",required = true)  boolean includeTestedCollections){
+     @RequestParam(value = "includeTestedCollections",required = true)  boolean includeTestedCollections)throws  ParseException{
    
       Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");

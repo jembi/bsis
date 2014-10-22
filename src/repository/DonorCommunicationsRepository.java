@@ -51,7 +51,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 			List<Location> donorPanel, String clinicDate,
 			String lastDonationFromDate, String lastDonationToDate,
 			List<BloodGroup> bloodGroups, boolean anyBloodGroup,
-			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) {
+			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) throws ParseException {
 	  
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -65,32 +65,23 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		}
 		
 		if(!StringUtils.isBlank(lastDonationFromDate)) {
-			try {
 				panelPredicates.add(cb.greaterThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationFromDate)));
-			} catch (ParseException e) {
-				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunication:lastDonationFromDate:ParseException"+e);
-			}			
+					
 		}
 		if(!StringUtils.isBlank(lastDonationToDate)) {
-			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationToDate)));
-			} catch (ParseException e) {
-				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunications:lastDonationToDate:ParseException"+e);
-			}			
+					
 		}	
 		
 		// Id Clinic Date is specified, Donors should not be deferred on that date
 		if(!StringUtils.isBlank(clinicDate)) {
-			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(clinicDate)));				
 				if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {					
 					donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root), 
 					cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor) ));
 					panelPredicates.add(cb.not(cb.exists(donorDeferral)));
 				}
-			} catch (ParseException e) {
-				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunications:clinicDate:ParseException"+e);
-			}
+			
 		}
 		// If Clinic Date is not specified, Donors should not be currently deferred
 		else{

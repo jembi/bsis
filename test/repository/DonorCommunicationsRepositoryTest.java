@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -134,7 +136,7 @@ public class DonorCommunicationsRepositoryTest {
 	* List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	*/
 	@Test
-	public void findDonors_shouldReturnEmptyListWhenNoResultsFound() {
+	public void findDonors_shouldReturnEmptyListWhenNoResultsFound() throws ParseException {
 		
 		//Set values to use for findDonors() method parameters
 		List<Location> donorPanels = new ArrayList<Location>();
@@ -152,10 +154,10 @@ public class DonorCommunicationsRepositoryTest {
 
 		donorPanels    =  createDonorPanelList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
-		
-		assertEquals("List size should be zero, no matching search results.",
-				0,	donorCommunicationsRepository.findDonors(donorPanels,clinicDate, lastDonationFromDate, 
-						lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).size());
+                assertEquals("List size should be zero, no matching search results.",
+                        0, donorCommunicationsRepository.findDonors(donorPanels,clinicDate, lastDonationFromDate,
+                                lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).size());
+            
 	}
 	
 	/**
@@ -165,7 +167,7 @@ public class DonorCommunicationsRepositoryTest {
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	@Test
-	public void findDonors_shouldReturnDonorsMatchingGivenCriteria() {
+	public void findDonors_shouldReturnDonorsMatchingGivenCriteria()throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
 		List<Location> donorPanels = new ArrayList<Location>();
@@ -185,9 +187,8 @@ public class DonorCommunicationsRepositoryTest {
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		List<Donor> results = new ArrayList<Donor>();
 		
-		results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
-				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
-		
+                results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate,
+                        lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 	    assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 	    
 	    boolean isvalid = true;
@@ -527,7 +528,7 @@ public class DonorCommunicationsRepositoryTest {
 		else return "";
 	 }
 	 
-	 private long getDonorListSizeWithoutAnyCriteria() {
+	 private long getDonorListSizeWithoutAnyCriteria() throws ParseException {
 		List<Location> donorPanel = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
@@ -538,9 +539,10 @@ public class DonorCommunicationsRepositoryTest {
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
 		List<Donor> results = new ArrayList<Donor>();
-		results = donorCommunicationsRepository.findDonors(donorPanel,
-				clinicDate, lastDonationFromDate, lastDonationToDate,
-				bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+                results = donorCommunicationsRepository.findDonors(donorPanel,
+                        clinicDate, lastDonationFromDate, lastDonationToDate,
+                        bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+            
 		return  (long) results.size();
 	}
 }
