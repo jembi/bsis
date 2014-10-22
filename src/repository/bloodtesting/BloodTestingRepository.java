@@ -11,11 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,7 +36,6 @@ import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
 import model.user.User;
-import model.worksheet.WorksheetType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -892,7 +889,7 @@ public class BloodTestingRepository {
 	public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
 			List<String> ttiTests, Date dateCollectedFrom,
 			Date dateCollectedTo, String aggregationCriteria,
-			List<String> centers, List<String> sites) {
+			List<String> centers, List<String> sites) throws ParseException {
 		TypedQuery<Object[]> query = em
 				.createQuery(
 						"SELECT count(t), c.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.collectedSample c WHERE "
@@ -962,17 +959,11 @@ public class BloodTestingRepository {
 		List<Object[]> resultList = query.getResultList();
 
 		Calendar gcal = new GregorianCalendar();
-		Date lowerDate = null;
-		Date upperDate = null;
-		try {
-			lowerDate = resultDateFormat.parse(resultDateFormat
+		Date lowerDate =  resultDateFormat.parse(resultDateFormat
 					.format(dateCollectedFrom));
-			upperDate = resultDateFormat.parse(resultDateFormat
+		Date upperDate =  resultDateFormat.parse(resultDateFormat
 					.format(dateCollectedTo));
-		} catch (ParseException e1) {
-			LOGGER.error(e1.getMessage() + e1.getStackTrace());
-		}
-
+	
 		// initialize the counter map storing (date, count) for each blood test
 		// counts should be set to 0
 		for (String bloodTestName : resultMap.keySet()) {
@@ -987,7 +978,6 @@ public class BloodTestingRepository {
 
 		for (Object[] result : resultList) {
 			Date d = (Date) result[1];
-			try {
 				Date formattedDate = resultDateFormat.parse(resultDateFormat
 						.format(d));
 				System.out.println(formattedDate);
@@ -999,9 +989,7 @@ public class BloodTestingRepository {
 				} else {
 					m.put(utcTime, (Long) result[0]);
 				}
-			} catch (ParseException e) {
-				LOGGER.error(e.getMessage() + e.getStackTrace());
-			}
+			
 		}
 		return resultMap;
 	}
