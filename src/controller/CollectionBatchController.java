@@ -89,10 +89,7 @@ public class CollectionBatchController {
         collectionBatchRepository.findCollectionBatches(batchNumber, centerIds, siteIds);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
     map.put("allCollectionBatches", getCollectionBatchViewModels(collectionBatches));
-
-    addEditSelectorOptions(map);
 
     return map;
   }
