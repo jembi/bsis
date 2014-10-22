@@ -40,7 +40,7 @@ public class MatchingProductViewModel {
   }
 
   public ProductTypeViewModel getProductType() {
-    return productViewModel.getProductTypeViewModel();
+    return productViewModel.getProductType();
   }
 
   public String getLastUpdated() {
