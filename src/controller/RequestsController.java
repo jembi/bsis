@@ -3,6 +3,7 @@ package controller;
 import backingform.RequestBackingForm;
 import backingform.validator.RequestBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -135,7 +136,7 @@ public class RequestsController {
           @RequestParam(value = "requiredBy", required = false) String requiredBy,
           @RequestParam(value = "requestSites", required = false) List<String> requestSites,
           @RequestParam(value = "productTypes", required = false) List<String> productTypes,
-          @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) {
+          @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) throws ParseException {
 
       Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");

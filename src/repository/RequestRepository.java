@@ -138,7 +138,7 @@ public class RequestRepository {
   public List<Request> findAnyRequestMatching(String requestNumber,
       String dateRequestedFrom, String dateRequestedTo,
       String dateRequiredFrom, String dateRequiredTo, List<String> sites,
-      List<String> productTypes, List<String> statuses) {
+      List<String> productTypes, List<String> statuses) throws ParseException {
 
     TypedQuery<Request> query = em
         .createQuery(
@@ -160,37 +160,24 @@ public class RequestRepository {
     query.setParameter("statuses", statuses);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    try {
       Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
           .parse("31/12/1970") : dateFormat.parse(dateRequestedFrom);
       query.setParameter("dateRequestedFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
       Date to = (dateRequestedTo == null || dateRequestedTo.equals("")) ? dateFormat
           .parse(dateFormat.format(new Date())) : dateFormat
           .parse(dateRequestedTo);
       query.setParameter("dateRequestedTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    try {
+      
+/*
+      //dupliate code
       Date from = (dateRequiredFrom == null || dateRequiredFrom.equals("")) ? dateFormat
           .parse("31/12/1970") : dateFormat.parse(dateRequiredFrom);
       query.setParameter("dateRequiredFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
       Date to = (dateRequiredTo == null || dateRequiredTo.equals("")) ? dateFormat
           .parse(dateFormat.format(new Date())) : dateFormat
           .parse(dateRequiredTo);
       query.setParameter("dateRequiredTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+*/
 
     List<Request> resultList = query.getResultList();
     return resultList;
@@ -276,7 +263,7 @@ public class RequestRepository {
       return from;
   }
 
-  private Date getDateRequiredByOrDefault(String dateRequiredBy) {
+  private Date getDateRequiredByOrDefault(String dateRequiredBy) throws ParseException {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date to = null;
         if (StringUtils.isBlank(dateRequiredBy)) {
@@ -285,18 +272,14 @@ public class RequestRepository {
             cal.add(Calendar.DATE, 365);
             to = cal.getTime();
         } else {
-        try {
             to = dateFormat.parse(dateRequiredBy);
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
         }
     return to ;
   }
 
   public List<Object> findRequests(String requestNumber, List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams)  {
+      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) throws ParseException  {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(requestNumber)) {
@@ -328,11 +311,7 @@ public class RequestRepository {
     else {
       query.setParameter("productTypeIds", productTypeIds);
       query.setParameter("requestSiteIds", requestSiteIds);
-        try {
-            query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
+      query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
       query.setParameter("requiredBy", getDateRequiredByOrDefault(requiredBy));
       if (!includeSatisfiedRequests)
         query.setParameter("fulfilled", Boolean.FALSE);
@@ -488,7 +467,7 @@ public class RequestRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,
       Date dateRequestedTo, String aggregationCriteria,
-      List<String> sites, List<String> bloodGroups){
+      List<String> sites, List<String> bloodGroups) throws ParseException{
 
     List<Long> siteIds = new ArrayList<Long>();
     if (sites != null) {
@@ -532,15 +511,10 @@ public class RequestRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = null;
-        Date upperDate = null;
-        try {
-            lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
-            upperDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
-         } catch (ParseException ex) {
-             ex.printStackTrace();
-        }
-        gcal.setTime(lowerDate);
+      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
+      
+      gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
         gcal.add(incrementBy, 1);
@@ -556,12 +530,7 @@ public class RequestRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-        Date formattedDate = null;
-        try {
-            formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
+        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
           Long newVal = m.get(utcTime) + (Long) result[0];

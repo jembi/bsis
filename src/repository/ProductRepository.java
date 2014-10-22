@@ -34,8 +34,6 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.util.BloodGroup;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -51,8 +49,6 @@ import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.PessimisticLockException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -621,7 +617,7 @@ public class ProductRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
       Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) {
+      List<String> centers, List<String> sites, List<String> bloodGroups) throws ParseException {
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -682,14 +678,8 @@ public class ProductRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = null;
-      Date upperDate = null;
-      try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
-      } catch (ParseException e1) {
-        e1.printStackTrace();
-      }
+      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -706,7 +696,7 @@ public class ProductRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
+ 
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
@@ -715,9 +705,7 @@ public class ProductRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+      
     }
 
     return resultMap;
@@ -725,7 +713,7 @@ public class ProductRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
       Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) {
+      List<String> centers, List<String> sites, List<String> bloodGroups) throws ParseException {
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -807,7 +795,6 @@ public class ProductRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
@@ -816,9 +803,7 @@ public class ProductRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+  
     }
 
     return resultMap;
@@ -879,7 +864,7 @@ public class ProductRepository {
   }
 
   @SuppressWarnings("unchecked")
-  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws PessimisticLockException {
+  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws PessimisticLockException, ParseException {
     List<Product> products = new ArrayList<Product>();
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
@@ -899,11 +884,7 @@ public class ProductRepository {
       product.setProductType(productType);
       product.setCreatedOn(form.getProduct().getCreatedOn());
       String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());
-        try {
-            product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
+      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
       product.setIsDeleted(false);
       updateProductInternalFields(product);
       em.persist(product);

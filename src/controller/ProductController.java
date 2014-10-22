@@ -156,7 +156,7 @@ public class ProductController {
   @RequestMapping(value = "/combination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity< Map<String, Object>> addProductCombination(
-      @Valid @RequestBody ProductCombinationBackingForm form) {
+      @Valid @RequestBody ProductCombinationBackingForm form) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
