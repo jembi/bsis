@@ -399,7 +399,7 @@ public class DonorRepository {
     public Date getLastDonorDeferralDate(Long donorId) {
         List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
 
-        if (deferrals == null) {
+        if (deferrals == null || deferrals.isEmpty()) {
             return null;
         }
 
