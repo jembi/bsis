@@ -191,7 +191,7 @@ public class ProductController {
             @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Integer> componentTypeIds,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
             @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") String donationDateFrom,
-            @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) {
+            @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) throws ParseException {
 
     	
     	Map<String, Object> map = new HashMap<String, Object>();    	
@@ -207,20 +207,10 @@ public class ProductController {
         Date dateTo = null;
         
         if(!donationDateFrom.equals("")){
-	        try {
 	        	dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
-	        }
-	        catch (ParseException ex){
-	            ex.printStackTrace();
-	        }
         }
         if(!donationDateTo.equals("")){
-	        try {
 	        	dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
-	        }
-	        catch (ParseException ex){
-	            ex.printStackTrace();
-	        }
         }
         
         results = productRepository.findAnyProduct(

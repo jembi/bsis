@@ -2,6 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.NoResultException;
@@ -264,6 +265,22 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "Error parsing Object  to JSON response");
     errorMap.put("userMessage", "");
+    errorMap.put("moreInfo", error.getMessage());
+    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+   /**
+    *  Signals that an error has been reached unexpectedly while parsing.
+   */
+  @ExceptionHandler(ParseException.class)
+  public ResponseEntity<Map<String, Object>> handleParseException(
+        ParseException error) {
+    Map<String, Object> errorMap = new HashMap<String, Object>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("developerMessage", error.getCause());
+    errorMap.put("userMessage", error.getCause());
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
