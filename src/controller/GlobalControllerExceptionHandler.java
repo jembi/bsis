@@ -279,12 +279,12 @@ public class GlobalControllerExceptionHandler {
         ParseException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", error.getCause());
-    errorMap.put("userMessage", error.getCause());
+    errorMap.put("developerMessage", error.getMessage() + "at position " + error.getErrorOffset());
+    errorMap.put("userMessage", error.getMessage());
     errorMap.put("moreInfo", error.getMessage());
-    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
+    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
 }
