@@ -92,7 +92,7 @@ public class ProductControllerTest {
 			        productRepository.addProduct(product);
 	
 			        // Once product save successfully update selected product status with processed
-			        productRepository.updateProductByProductId(productId);
+			        productRepository.setProductStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();
@@ -124,7 +124,7 @@ public class ProductControllerTest {
 		          product.setCollectedSample(collectedSample);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			        productRepository.addProduct(product);
-			        productRepository.updateProductByProductId(productId);
+			        productRepository.setProductStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();

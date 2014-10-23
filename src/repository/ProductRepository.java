@@ -976,7 +976,7 @@ public class ProductRepository {
     return productType;
   }
   
-  public void updateProductByProductId(long productId) {
+  public void setProductStatusToProcessed(long productId) {
   	 String queryString = "SELECT p FROM Product p where p.id = :productId";
      TypedQuery<Product> query = em.createQuery(queryString, Product.class);
      query.setParameter("productId", productId);

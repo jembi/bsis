@@ -444,7 +444,7 @@ public class ProductController {
 		        productRepository.addProduct(product);
 
 		        // Once product save successfully update selected product status with processed
-		        productRepository.updateProductByProductId(productId);
+		        productRepository.setProductStatusToProcessed(productId);
 		
       	}
       }
@@ -468,7 +468,7 @@ public class ProductController {
           product.setCollectedSample(collectedSample);
           product.setStatus(ProductStatus.QUARANTINED);
 		  productRepository.addProduct(product);
-		   productRepository.updateProductByProductId(productId);
+		   productRepository.setProductStatusToProcessed(productId);
 		        
 	    	}
       }
