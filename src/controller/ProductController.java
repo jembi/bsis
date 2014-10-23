@@ -402,7 +402,7 @@ public class ProductController {
   @RequestMapping(value = "/record", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
-       @RequestBody @Valid RecordProductBackingForm form) {
+       @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
       ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
       String collectionNumber = form.getCollectionNumber();
@@ -429,13 +429,8 @@ public class ProductController {
               product.setDonationIdentificationNumber(createdPackNumber + "-" + i);
               DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
               Date createdOn = null, expiresOn = null;
-              try {
-                  createdOn = formatter.parse(form.getDateExpiresFrom());
-                  expiresOn = formatter.parse(form.getDateExpiresTo());
-              } catch (ParseException ex) {
-                  ex.printStackTrace();
-                  return  new ResponseEntity<Map<String, Object>>(HttpStatus.INTERNAL_SERVER_ERROR);
-              }
+              createdOn = formatter.parse(form.getDateExpiresFrom());
+              expiresOn = formatter.parse(form.getDateExpiresTo());
 	          product.setCreatedOn(createdOn);
 	          product.setExpiresOn(expiresOn);
 	          ProductType productType = new ProductType();
@@ -460,22 +455,18 @@ public class ProductController {
           product.setDonationIdentificationNumber(createdPackNumber);
           DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
           Date createdOn = null, expiresOn = null;
-          try {
-              createdOn = formatter.parse(form.getDateExpiresFrom());
-              expiresOn = formatter.parse(form.getDateExpiresTo());
-          } catch (ParseException ex) {
-              ex.printStackTrace();
-          }
-	          product.setCreatedOn(createdOn);
-	          product.setExpiresOn(expiresOn);
-	          ProductType productType = new ProductType();
-	          productType.setProductType(form.getProductTypes().get(0));
-	          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-	          product.setProductType(productType);
-	          CollectedSample collectedSample = new CollectedSample();
-	          collectedSample.setId(collectedSampleID);
-	          product.setCollectedSample(collectedSample);
-	          product.setStatus(ProductStatus.QUARANTINED);
+          createdOn = formatter.parse(form.getDateExpiresFrom());
+          expiresOn = formatter.parse(form.getDateExpiresTo());
+          product.setCreatedOn(createdOn);
+          product.setExpiresOn(expiresOn);
+          ProductType productType = new ProductType();
+          productType.setProductType(form.getProductTypes().get(0));
+          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
+          product.setProductType(productType);
+          CollectedSample collectedSample = new CollectedSample();
+          collectedSample.setId(collectedSampleID);
+          product.setCollectedSample(collectedSample);
+          product.setStatus(ProductStatus.QUARANTINED);
 		  productRepository.addProduct(product);
 		   productRepository.updateProductByProductId(productId);
 		        
