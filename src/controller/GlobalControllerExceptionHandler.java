@@ -230,7 +230,7 @@ public class GlobalControllerExceptionHandler {
         NullPointerException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", error.getMessage());
+    errorMap.put("developerMessage", "OOps! Null Pointer Exception" + error.getStackTrace()[0]);
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", "");
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
