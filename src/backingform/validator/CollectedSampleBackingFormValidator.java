@@ -125,14 +125,14 @@ public class CollectedSampleBackingFormValidator implements Validator {
         errors.rejectValue("useParametersFromBatch", "collectionCenter.notspecified",
             "Collection center not present in batch and is required.");
       } else {
-        form.setCollectionCenter(center.getId().toString());
+        form.setCollectionCenter(center);
       }
       Location site = collectionBatch.getCollectionSite();
       if (site == null) {
         errors.rejectValue("useParametersFromBatch", "collectionSite.notspecified",
             "Collection site not present in batch and is required.");
       } else {
-        form.setCollectionSite(site.getId().toString());
+        form.setCollectionSite(site);
       }
     }
   }
