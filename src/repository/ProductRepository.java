@@ -950,44 +950,29 @@ public class ProductRepository {
     return true;
   }
 
-  public ProductType findProductTypeBySelectedProductType(int productTypeId) {
+  public ProductType findProductTypeBySelectedProductType(int productTypeId) throws NoResultException{
     String queryString = "SELECT p FROM ProductType p where p.id = :productTypeId";
     TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
     query.setParameter("productTypeId", productTypeId);
-    ProductType productType = null;
-    try {
-    	productType = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    ProductType productType =  productType = query.getSingleResult();
     return productType;
   }
   
-  public ProductType findProductTypeByProductTypeName(String productTypeName) {
+  public ProductType findProductTypeByProductTypeName(String productTypeName) throws NoResultException{
     String queryString = "SELECT p FROM ProductType p where p.productType = :productTypeName";
     TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
     query.setParameter("productTypeName", productTypeName);
-    ProductType productType = null;
-    try {
-    	productType = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    ProductType productType = productType = query.getSingleResult();
     return productType;
   }
   
-  public void setProductStatusToProcessed(long productId) {
+  public void setProductStatusToProcessed(long productId) throws NoResultException {
   	 String queryString = "SELECT p FROM Product p where p.id = :productId";
      TypedQuery<Product> query = em.createQuery(queryString, Product.class);
      query.setParameter("productId", productId);
      Product product = null;
-     try {
      	product = query.getSingleResult();
      	product.setStatus(ProductStatus.PROCESSED);
      	em.merge(product);
-     } catch (NoResultException ex) {
-       ex.printStackTrace();
-     }
-  	
   }
 }

@@ -2,7 +2,6 @@ package controller;
 
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import javax.validation.Valid;
 import model.donor.Donor;
 import model.collectedsample.CollectedSample;
 import model.donordeferral.DonorDeferral;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +42,7 @@ public class DonorController {
      * The Constant LOGGER.
      */
   private static final Logger LOGGER = Logger.getLogger(DonorController.class);
- 
+
   @Autowired
   private DonorRepository donorRepository;
 
@@ -360,8 +358,10 @@ public class DonorController {
   }
   
   /**
+   *issue - #209 - Not used anywhere 
+   *
    * Get column name from column id, depends on sequence of columns in donorsTable.jsp
-   */
+   *
   private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
     List<String> visibleFields = new ArrayList<String>();
@@ -392,7 +392,7 @@ public class DonorController {
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in donorsTable.jsp.
-   */
+   *
   private Map<String, Object> generateDatatablesMap(List<Donor> donors, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> donorsMap = new HashMap<String, Object>();
     ArrayList<Object> donorList = new ArrayList<Object>();
@@ -431,7 +431,7 @@ public class DonorController {
     donorsMap.put("iTotalDisplayRecords", totalRecords);
     return donorsMap;
   }
-  
+ */ 
     private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
