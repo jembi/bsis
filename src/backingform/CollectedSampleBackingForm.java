@@ -406,12 +406,18 @@ public class CollectedSampleBackingForm {
     
     @JsonIgnore
     public String getTTIStatus() {
-        return collectedSample.getTTIStatus().toString();
-    }
+	    if(collectedSample.getTTIStatus()!=null)
+	    	return collectedSample.getTTIStatus().toString();
+	    else
+	        return "";
+	}
     
     @JsonIgnore
     public String getBloodTypingStatus() {
-        return collectedSample.getBloodTypingStatus().toString();
+        if(collectedSample.getBloodTypingStatus()!=null)
+	    	return collectedSample.getBloodTypingStatus().toString();
+	    else
+	        return "";
     }
     
     @JsonIgnore
