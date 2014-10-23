@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.address;
 
 import java.io.Serializable;
@@ -12,13 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import model.donor.Donor;
+import javax.validation.constraints.Pattern;
 
-/**
- *
- * @author srikanth
- * This Entity is used to save the address of donor
- */
 @Entity
 public class Address implements Serializable {
 
@@ -34,6 +24,7 @@ public class Address implements Serializable {
     private String homeAddressDistrict;
     private String homeAddressCountry;
     private String homeAddressState;
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String homeAddressZipcode;
     
     private String workAddressLine1;
@@ -43,9 +34,9 @@ public class Address implements Serializable {
     private String workAddressDistrict;
     private String workAddressCountry;
     private String workAddressState;
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String workAddressZipcode;
 
-    
     private String postalAddressLine1;
     private String postalAddressLine2;
     private String postalAddressCity;
@@ -53,6 +44,7 @@ public class Address implements Serializable {
     private String postalAddressDistrict;
     private String postalAddressCountry;
     private String postalAddressState;
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String postalAddressZipcode;
 
     public Long getId() {
@@ -62,7 +54,6 @@ public class Address implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public String getHomeAddressLine1() {
         return homeAddressLine1;
@@ -79,9 +70,7 @@ public class Address implements Serializable {
     public void setHomeAddressLine2(String homeAddressLine2) {
         this.homeAddressLine2 = homeAddressLine2;
     }
-    
 
-  
     public String getHomeAddressCity() {
         return homeAddressCity;
     }
@@ -266,8 +255,6 @@ public class Address implements Serializable {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
-
 
     @Override
     public boolean equals(Object object) {

@@ -437,15 +437,15 @@ public class CreateDataController {
       CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
-      collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
-      collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
-      collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
+      collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
+      collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()));
+      collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()));
 
       String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
       collection.setCollectedOn(collectionDate);
       collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
       collection.setNotes("notes sample " + i);
-      collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()).getId().toString());
+      collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()));
       collection.setIsDeleted(false);
 
       collectedSamples.add(collection.getCollectedSample());

@@ -146,7 +146,6 @@ public class CollectedSampleController {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(id);
     CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
-    form.getCollectedSampleIntegerProps();
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("editDonationForm", form);
     addEditSelectorOptions(map);
@@ -166,7 +165,6 @@ public class CollectedSampleController {
       Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
       map.put("donationFields", formFields);
       CollectedSample savedCollection = null;
-      form.setCollectedSample();
       CollectedSample collectedSample = form.getCollectedSample();
 
          if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
@@ -187,16 +185,23 @@ public class CollectedSampleController {
     CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
     return collectionViewModel;
   }
-
+  
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public  HttpStatus updateCollectedSample(
-      @RequestBody  @Valid CollectedSampleBackingForm form, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>>
+  	  updateCollectedSample(@RequestBody  @Valid CollectedSampleBackingForm form, @PathVariable Long id) {
+	  
+	  HttpStatus httpStatus = HttpStatus.OK;
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  CollectedSample updatedCollectedSample = null;
+	  
       form.setId(id);
       form.setIsDeleted(false);
-      form.setCollectedSample();
-      collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
-      return HttpStatus.OK;
+      updatedCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+            
+      map.put("donation", getCollectionViewModel(collectedSampleRepository.findCollectedSampleById(updatedCollectedSample.getId())));
+      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+
   }
 
   private List<CollectedSampleViewModel> getCollectionViewModels(

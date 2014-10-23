@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.address;
 
 import java.io.Serializable;
@@ -10,12 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-/**
- *
- * @author srikanth
- * This Entity is used to store the Contact Numbers of Donors
- */
+import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class Contact implements Serializable {
@@ -25,10 +17,16 @@ public class Contact implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String mobileNumber;
+    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String homeNumber;
+    
+    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String workNumber;
+    
+    @Email
     private String email;
 
     public Long getId() {
@@ -39,7 +37,6 @@ public class Contact implements Serializable {
         this.id = id;
     }
 
-    
     public String getMobileNumber() {
         return mobileNumber;
     }
@@ -72,7 +69,6 @@ public class Contact implements Serializable {
         this.email = email;
     }
 
-    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

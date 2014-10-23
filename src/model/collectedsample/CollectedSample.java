@@ -43,6 +43,7 @@ import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.validator.constraints.Range;
 import repository.bloodtesting.BloodTypingStatus;
 
 /**
@@ -125,19 +126,22 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
- 
+  @Range(min = 0, max = 30)
   private BigDecimal haemoglobinCount;
 
   @Column(name="bloodPressureSystolic")
+  @Range(min = 0, max = 250)
   private Integer bloodPressureSystolic;
   
   @Column(name="bloodPressureDiastolic")
+  @Range(min = 0, max = 150)
   private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
    */
   
+  @Range(min = 0, max = 300)
   private BigDecimal donorWeight;
 
   @ManyToOne(optional=true)
@@ -163,7 +167,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   private Boolean isDeleted;
   
-  
+  @Range(min =0 ,max = 290)
   private Integer donorPulse;
   
   public CollectedSample() {
