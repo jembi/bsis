@@ -34,15 +34,12 @@ public class DonorBackingForm {
     //to capture date of birth parameters--#11
     
     @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    @NotBlank
     String year;
     
     @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
-    @NotBlank
     String month;
     
     @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
-    @NotBlank
     String dayOfMonth;
 
     private Boolean ageFormatCorrect;
