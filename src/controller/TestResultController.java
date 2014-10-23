@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import model.collectedsample.CollectedSample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,6 @@ public class TestResultController {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
-
-  @Autowired
-  private UtilController utilController;
 
   public TestResultController() {
   }
@@ -48,21 +47,13 @@ public class TestResultController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "{collectionNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public  Map<String, Object> findTestResult(HttpServletRequest request,
-      @PathVariable String collectionNumber ) {
+  public ResponseEntity findTestResult(@PathVariable String donationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample c = null;
-    c = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
-    if (c == null) {
-      map.put("collectionFound", false);
-    }
-    else {
-      map.put("collectionFound", true);
-      map.put("collectionId", c.getId());
-    }
-    return map;
+    CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationNumber);
+    map.put("collectionId", c.getId());
+    return new ResponseEntity(map, HttpStatus.OK);
   }
 }

@@ -394,20 +394,13 @@ public class CollectedSampleRepository {
   }
 
   public CollectedSample findCollectedSampleByCollectionNumber(
-      String collectionNumber) {
+      String collectionNumber)throws NoResultException, NonUniqueResultException{
     String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
     CollectedSample c = null;
-    try{
     c = query.getSingleResult();
-    }catch(NoResultException ex){
-       return null;
-    }
-    catch(NonUniqueResultException ex){
-        ex.printStackTrace();
-     }
     return c;
   }
 
