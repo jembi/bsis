@@ -489,7 +489,7 @@ public class ProductController {
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
-      @RequestParam(value = "componentTypes") List<String> productTypes,
+      @RequestParam(value = "componentTypeNames") List<String> productTypes,
       @RequestParam(value = "donationIdentificationNumber") String donationIdentificationNumber) {
 
   	ProductType productType = null;
