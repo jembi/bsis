@@ -9,6 +9,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -98,12 +99,15 @@ public class DonorViewModel {
   public String getCallingName(){
       return donor.getCallingName();
   }
-  public String getPreferredLanguage(){
-	  if (donor.getPreferredLanguage() == null ||
+  
+  public PreferredLanguage getPreferredLanguage(){
+	  /*if (donor.getPreferredLanguage() == null ||
 	        donor.getPreferredLanguage().getPreferredLanguage() == null)
 	      return "";
 	  else
-	      return donor.getPreferredLanguage().getPreferredLanguage();
+	  		return donor.getPreferredLanguage().getPreferredLanguage();
+	  */
+		  return donor.getPreferredLanguage();
   }
   
   public String getLastUpdated() {
@@ -127,7 +131,7 @@ public class DonorViewModel {
       return "";
     return user.getUsername();
   }
-
+  
   public Location getDonorPanel() {
     return donor.getDonorPanel();
   }
@@ -165,16 +169,19 @@ public class DonorViewModel {
   public  String getIdNumber(){
       return donor.getIdNumber();
   }
-  public String getIdType(){
-      return donor.getIdType()!=null?donor.getIdType().getIdType():"";
+  public IdType getIdType(){
+      //return donor.getIdType()!=null?donor.getIdType().getIdType():"";
+      return donor.getIdType();
   }
   
-  public String getContactMethodType(){
-    return donor.getContactMethodType()!=null?donor.getContactMethodType().getContactMethodType():"";
+  public ContactMethodType getContactMethodType(){
+    //return donor.getContactMethodType()!=null?donor.getContactMethodType().getContactMethodType():"";
+	  return donor.getContactMethodType();
   }
   
-  public String getPreferredAddressType(){
-     return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
+  public AddressType getPreferredAddressType(){
+     //return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
+	 return donor.getAddressType();
   }
   
   

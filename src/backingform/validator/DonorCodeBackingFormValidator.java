@@ -1,9 +1,9 @@
-/*
+/**
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */
-
+ *
+issue - $209 - Not used anywhere
 package backingform.validator;
 
 import backingform.DonorCodeBackingForm;
@@ -18,7 +18,7 @@ import repository.DonorRepository;
 /**
  *
  * @author srikanth
- */
+ *
 public class DonorCodeBackingFormValidator implements Validator{
     
   private Validator validator;
@@ -49,3 +49,4 @@ public class DonorCodeBackingFormValidator implements Validator{
     }
     
 }
+*/

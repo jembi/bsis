@@ -1,11 +1,8 @@
 package controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +13,6 @@ import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.location.Location;
 import model.util.BloodGroup;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +29,7 @@ import utils.PermissionConstants;
 import viewmodel.DonorViewModel;
 
 @RestController
-@RequestMapping("donorcommunication")
+@RequestMapping("donorcommunications")
 public class DonorCommunicationsController {
 
     /**
@@ -57,20 +53,18 @@ public class DonorCommunicationsController {
         binder.registerCustomEditor(BloodGroup.class, null, null);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
     public @ResponseBody
     Map<String, Object> donorCommunicationsFormGenerator(
             HttpServletRequest request) {
 
        // DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
-        ObjectMapper mapper = new ObjectMapper();
+
         Map<String, Object> map = new HashMap<String, Object>();
-        utilController.addTipsToModel(map, "donors.finddonor");
+
         // to ensure custom field names are displayed in the form
         map.put("donorFields", utilController.getFormFieldsForForm("donor"));
-        map.put("contentLabel", "Find Donors");
-        map.put("refreshUrl", "donorCommunicationsFormGenerator.html");
         addEditSelectorOptions(map);
        // map.put("donorCommunicationsForm", dbform);
         return map;
@@ -91,16 +85,12 @@ public class DonorCommunicationsController {
 //            map.put("hasErrors", true);
 //            map.put("errorMessage", "Missing information for one or more required fields.");
 //            map.put("success", Boolean.FALSE);
-//            map.put("requestUrl", getUrl(request));
-//            map.put("refreshUrl", "donorCommunicationsFormGenerator.html");
 //            map.put("success", Boolean.FALSE);
 //            return map;
 //        }
 //        form.setCreateDonorSummaryView(true);
-//        map.put("requestUrl", getUrl(request));
 //        map.put("contentLabel", "Find Donors");
 //        map.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
-//        map.put("refreshUrl", getUrl(request));
 //        map.put("donorRowClickUrl", "donorSummary.html");
 //        map.put("createDonorSummaryView", form.getCreateDonorSummaryView());
 //        return map;
@@ -115,46 +105,49 @@ public class DonorCommunicationsController {
         return reqUrl;
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> findDonorCommunicationsPagination(
-            @RequestParam(value="bloodGroups",required=true ) List<BloodGroup> bloodGroups,
+            @RequestParam(value="bloodGroups",required=true ) List<String> bloodGroups,
             @RequestParam(value="donorPanels",required=true) List<String> donorPanels,
             @RequestParam(value="clinicDate",required=false ) String clinicDate,
             @RequestParam(value="lastDonationFromDate",required=false ) String lastDonationFromDate,
             @RequestParam(value="lastDonationToDate",required=false ) String lastDonationToDate,
-            @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) {
+            @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) throws ParseException{
        
        LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
-       String eligiblaeClinicDate = getEligibleDonorDate(clinicDate);
+       String eligibleClinicDate = getEligibleDonorDate(clinicDate);
 
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donor");
+       Map<String, Object> map = new HashMap<String, Object>();
 
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
-        pagingParams.put("start", "0");
-        pagingParams.put("length", "10");
+        //pagingParams.put("start", "0");
+        //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
         
+        List<Donor> results = new ArrayList<Donor>();
+        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), eligibleClinicDate, lastDonationFromDate,
+                lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, pagingParams, clinicDate);
         
-        List<Object> results = new ArrayList<Object>();
-        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), eligiblaeClinicDate, lastDonationFromDate,
-                lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate);
+        List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
+        
+        if (results != null){
+    	    for(Donor donor : results){
+    	    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
+    	    	donors.add(donorViewModel);
+    	    }
+        }
 
-        @SuppressWarnings("unchecked")
-        List<Donor> donors = (List<Donor>) results.get(0);
-        Long totalRecords = (Long) results.get(1);
-        
-            return generateDatatablesMapForDonorCommunications(donors,
-                    totalRecords, formFields);
+        map.put("donors", donors);
+        return map;
        
     }
 
-    private static String getEligibleDonorDate(String clinicDate) {
+    private static String getEligibleDonorDate(String clinicDate) throws ParseException {
 
         SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
-        try {
             if (clinicDate != null && !clinicDate.trim().equalsIgnoreCase("")) {
                 Date dateObj = curFormater.parse(clinicDate);
                 @SuppressWarnings({"unused", "deprecation"})
@@ -162,13 +155,13 @@ public class DonorCommunicationsController {
                 cal.setTime(dateObj);
                 cal.add(Calendar.DATE, -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS));
             }
-        } catch (ParseException e) {
-            LOGGER.debug("Start DonorCommunicationsController:getEligibleDonorDate:ParseException" + e);
-        }
         return clinicDate != null && !clinicDate.trim().equalsIgnoreCase("") ? curFormater
                 .format(cal.getTime()) : "";
     }
 
+    /**
+     * issue - #209 - Not used anyehere
+     *
     private Map<String, Object> generateDatatablesMapForDonorCommunications(List<Donor> donors, Long totalRecords,
             Map<String, Map<String, Object>> formFields) {
         Map<String, Object> donorsMap = new HashMap<String, Object>();
@@ -202,7 +195,7 @@ public class DonorCommunicationsController {
         donorsMap.put("iTotalDisplayRecords", totalRecords);
         return donorsMap;
     }
-
+*/
     public static String getUrl(HttpServletRequest req) {
         String reqUrl = req.getRequestURL().toString();
         String queryString = req.getQueryString(); // d=789
@@ -212,6 +205,9 @@ public class DonorCommunicationsController {
         return reqUrl;
     }
 
+     /**
+     * issue - #209 - Not used anyehere
+     *
     private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
         List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
         for (Donor donor : donors) {
@@ -219,6 +215,11 @@ public class DonorCommunicationsController {
         }
         return donorViewModels;
     }
+    */
+    private DonorViewModel getDonorsViewModel(Donor donor) {
+	    DonorViewModel donorViewModel = new DonorViewModel(donor);
+	    return donorViewModel;
+	}
 
     private void addEditSelectorOptions(Map<String, Object> m) {
         m.put("donorPanels", locationRepository.getAllDonorPanels());
@@ -226,9 +227,11 @@ public class DonorCommunicationsController {
     }
 
     /**
+     * issue - #209 - Not used anyehere
+     *
      * Get column name from column id, depends on sequence of columns in
      * donorsCommunicationTable.jsp
-     */
+     *
     private String getSortingColumn(int columnId,
             Map<String, Map<String, Object>> formFields) {
 
@@ -258,19 +261,31 @@ public class DonorCommunicationsController {
             return sortColumnMap.get(sortColumn);
         }
     }
-
+*/
 
     public List<Location> setLocations(List<String> donorPanels) {
 
         List<Location> panels = new ArrayList<Location>();
 
-            for (String donorPanelId : donorPanels) {
-                Location l = new Location();
-                l.setId(Long.parseLong(donorPanelId));
-                panels.add(l);
-            }
-      
+        for (String donorPanelId : donorPanels) {
+            Location l = new Location();
+            l.setId(Long.parseLong(donorPanelId));
+            panels.add(l);
+        }
+        
         return panels;
+    }
+    
+    public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
+
+        List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
+
+        for (String bloodGroup : bloodGroups) {
+        	BloodGroup bg = new BloodGroup(bloodGroup);
+            bloodGroupsList.add(bg);
+        }
+
+        return bloodGroupsList;
     }
 
 }

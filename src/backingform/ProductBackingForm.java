@@ -15,6 +15,8 @@ import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import utils.CustomDateFormatter;
 
 public class ProductBackingForm {
@@ -58,19 +60,23 @@ public class ProductBackingForm {
     else
       return productType.getId().toString();
   }
-
+  
+  @JsonIgnore
   public Date getLastUpdated() {
     return product.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return product.getCreatedDate();
   }
 
+  @JsonIgnore
   public User getCreatedBy() {
     return product.getCreatedBy();
   }
 
+  @JsonIgnore
   public User getLastUpdatedBy() {
     return product.getLastUpdatedBy();
   }
@@ -126,7 +132,7 @@ public class ProductBackingForm {
       return "";
     return CustomDateFormatter.getDateString(product.getExpiresOn());
   }
-
+  
   public void setLastUpdated(Date lastUpdated) {
     product.setLastUpdated(lastUpdated);
   }

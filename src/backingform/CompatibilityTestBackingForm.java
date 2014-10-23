@@ -27,10 +27,12 @@ public class CompatibilityTestBackingForm {
     compatibilityTest = new CompatibilityTest();
   }
 
+  @JsonIgnore
   public Date getLastUpdated() {
     return compatibilityTest.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return compatibilityTest.getCreatedDate();
   }
@@ -61,6 +63,7 @@ public class CompatibilityTestBackingForm {
     compatibilityTest.setLastUpdatedBy(lastUpdatedBy);
   }
 
+  
   public Long getId() {
     return compatibilityTest.getId();
   }

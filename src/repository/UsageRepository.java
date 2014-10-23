@@ -17,7 +17,6 @@ import model.usage.ProductUsage;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 @Repository
 @Transactional
@@ -46,7 +45,7 @@ public class UsageRepository {
   }
 
   public List<ProductUsage> findAnyUsageMatching(String productNumber,
-      String dateUsedFrom, String dateUsedTo, List<String> useIndications) {
+      String dateUsedFrom, String dateUsedTo, List<String> useIndications) throws ParseException {
 
     TypedQuery<ProductUsage> query = em.createQuery(
         "SELECT u FROM ProductUsage u WHERE "
@@ -62,22 +61,13 @@ public class UsageRepository {
     query.setParameter("useIndications", useIndications);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-      Date from = null;
-      try {
-          from = (dateUsedFrom == null || dateUsedFrom.equals("")) ? dateFormat
+      Date from = (dateUsedFrom == null || dateUsedFrom.equals("")) ? dateFormat
                   .parse("31/12/1970") : dateFormat.parse(dateUsedFrom);
-      } catch (ParseException ex) {
-          ex.printStackTrace();
-      }
+  
       query.setParameter("dateUsedFrom", from);
    
-      Date to = null;
-      try {
-          to = (dateUsedTo == null || dateUsedTo.equals("")) ? dateFormat
+      Date to = (dateUsedTo == null || dateUsedTo.equals("")) ? dateFormat
                   .parse(dateFormat.format(new Date())) : dateFormat.parse(dateUsedTo);
-      } catch (ParseException ex) {
-          ex.printStackTrace();
-      }
       query.setParameter("dateUsedTo", to);
    
 
@@ -103,7 +93,7 @@ public class UsageRepository {
     em.flush();
   }
 
-  public ProductUsage findUsageById(Long usageId) {
+  public ProductUsage findUsageById(Long usageId) throws IllegalArgumentException{
     return em.find(ProductUsage.class, usageId);
   }
 

@@ -3,6 +3,7 @@ package viewmodel;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import utils.CustomDateFormatter;
+import model.user.User;
 
 public class DonorDeferralViewModel {
 
@@ -14,10 +15,6 @@ public class DonorDeferralViewModel {
 
   public Long getId() {
     return donorDeferral.getId();
-  }
-
-  public String getDeferredOn() {
-    return CustomDateFormatter.getDateString(donorDeferral.getDeferredOn());
   }
 
   public String getDeferredUntil() {
@@ -32,10 +29,26 @@ public class DonorDeferralViewModel {
     return donorDeferral.getDeferralReasonText();
   }
 
-  public String getDeferredBy() {
-    if (donorDeferral.getDeferredBy() == null)
+  public String getLastUpdated() {
+    return CustomDateFormatter.getDateTimeString(donorDeferral.getLastUpdated());
+  }
+
+  public String getCreatedDate() {
+    return CustomDateFormatter.getDateString(donorDeferral.getCreatedDate());
+  }
+
+  public String getCreatedBy() {
+    User user = donorDeferral.getCreatedBy();
+    if (user == null || user.getUsername() == null)
       return "";
-    return donorDeferral.getDeferredBy().getUsername();
+    return user.getUsername();
+  }
+
+  public String getLastUpdatedBy() {
+    User user = donorDeferral.getLastUpdatedBy();
+    if (user == null || user.getUsername() == null)
+      return "";
+    return user.getUsername();
   }
   
   public String getVoidedDate() {

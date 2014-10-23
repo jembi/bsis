@@ -15,6 +15,7 @@
 	<contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0" />
 	
         <AddressType id="1" preferredAddressType="Home Address"/>
+        <AddressType id="2" preferredAddressType="Work Address"/>
         
         <address id="1" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2" homeAddressCity="homecity"
                 homeAddressProvince = ""  homeAddressDistrict = "" homeAddressCountry ="" 
@@ -252,24 +253,24 @@
 		isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
 		maxLength="15" useCurrentTime="0" />
 
-	<donordeferral id="1" deferralReasonText="" deferredOn="${DateDeferredOn}"
-		deferredUntil="${DateDeferredUnit}" deferralReason_id="2" deferredBy_id="1"
+	<donordeferral id="1" deferralReasonText="" createdDate="${DateDeferredOn}"
+		deferredUntil="${DateDeferredUnit}" deferralReason_id="2" createdBy_id="1"
 		deferredDonor_id="1" isVoided="false" />
-	<donordeferral id="2" deferralReasonText="" deferredOn="2014-03-01"
-		deferredUntil="2014-05-14" deferralReason_id="2" deferredBy_id="1"
+	<donordeferral id="2" deferralReasonText="" createdDate="2014-03-01"
+		deferredUntil="2014-05-14" deferralReason_id="2" createdBy_id="1"
 		deferredDonor_id="1" isVoided="false" />
-	<donordeferral id="3" deferralReasonText="" deferredOn="2014-01-11"
-		deferredUntil="2014-08-22" deferralReason_id="2" deferredBy_id="1"
+	<donordeferral id="3" deferralReasonText="" createdDate="2014-01-11"
+		deferredUntil="2014-08-22" deferralReason_id="2" createdBy_id="1"
 		deferredDonor_id="1" isVoided="false" />
-	<donordeferral id="4" deferralReasonText="" deferredOn="2014-01-11"
-		deferredUntil="2014-02-22" deferralReason_id="2" deferredBy_id="1"
+	<donordeferral id="4" deferralReasonText="" createdDate="2014-01-11"
+		deferredUntil="2014-02-22" deferralReason_id="2" createdBy_id="1"
 		deferredDonor_id="4" isVoided="false" />
 	<donordeferral id="5" deferralReasonText=""
-		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredOn}"
-		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="4" isVoided="false" />
+		createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredOn}"
+		deferralReason_id="2" createdBy_id="1" deferredDonor_id="4" isVoided="false" />
 	<donordeferral id="6" deferralReasonText=""
-		deferredOn="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
-		deferralReason_id="2" deferredBy_id="1" deferredDonor_id="6" isVoided="false" />
+		createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
+		deferralReason_id="2" createdBy_id="1" deferredDonor_id="6" isVoided="false" />
 
 	<PreferredLanguage id="1" preferredLanguage = "English"/>
 	<PreferredLanguage id="2" preferredLanguage = "English"/> 

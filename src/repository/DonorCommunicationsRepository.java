@@ -47,12 +47,12 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
   @Autowired
   private UtilController utilController;
   			
-  public List<Object> findDonors(
+  public List<Donor> findDonors(
 			List<Location> donorPanel, String clinicDate,
 			String lastDonationFromDate, String lastDonationToDate,
 			List<BloodGroup> bloodGroups, boolean anyBloodGroup,
-			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) {
-
+			Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) throws ParseException {
+	  
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
 		Subquery<Long> donorDeferral =   cq.subquery(Long.class);
@@ -65,32 +65,23 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		}
 		
 		if(!StringUtils.isBlank(lastDonationFromDate)) {
-			try {
 				panelPredicates.add(cb.greaterThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationFromDate)));
-			} catch (ParseException e) {
-				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunication:lastDonationFromDate:ParseException"+e);
-			}			
+					
 		}
 		if(!StringUtils.isBlank(lastDonationToDate)) {
-			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationToDate)));
-			} catch (ParseException e) {
-				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunications:lastDonationToDate:ParseException"+e);
-			}			
+					
 		}	
 		
 		// Id Clinic Date is specified, Donors should not be deferred on that date
 		if(!StringUtils.isBlank(clinicDate)) {
-			try {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(clinicDate)));				
 				if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {					
 					donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root), 
 					cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor) ));
 					panelPredicates.add(cb.not(cb.exists(donorDeferral)));
 				}
-			} catch (ParseException e) {
-				LOGGER.debug("DonorCommunicationsRepository:findDonorFromDonorCommunications:clinicDate:ParseException"+e);
-			}
+			
 		}
 		// If Clinic Date is not specified, Donors should not be currently deferred
 		else{
@@ -109,6 +100,18 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 	      }
 	      panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
 	    }
+	    // If anyBloodGroup set to TRUE, use list of all blood groups (i.e. will not return donors who have NO blood group)
+	    else if(anyBloodGroup){
+	    	List<Predicate> bgPredicates = new ArrayList<Predicate>();
+		    for (BloodGroup bg : BloodGroup.getAllBloodGroups()) {
+		      System.out.println("\tANY BLOODGROUP: " + bg);
+		      Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
+		      Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
+		      bgPredicates.add(cb.and(aboExp, rhExp));
+		    }
+		    panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
+	    }
+	    
 	    panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
 		cq.where(panelPredicates.toArray(new Predicate[0]));
 
@@ -135,8 +138,10 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		countCriteriaQuery.select(cb.countDistinct(countRoot));
 		
 		TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
-		Long totalResults = countQuery.getSingleResult().longValue();
-		return Arrays.asList(query.getResultList(), totalResults);
+		
+		List<Donor> donorResults = query.getResultList();
+		
+		return donorResults;
 	}
 
 }

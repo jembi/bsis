@@ -1,7 +1,6 @@
 package repository;
 
 import controller.UtilController;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,7 +35,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import utils.CustomDateFormatter;
 import utils.DonorUtils;
 
 @Repository
@@ -84,7 +82,7 @@ public class DonorRepository {
         return findDonorById(Long.parseLong(donorId));
     }
 
-    public List<Object> findAnyDonor(String donorNumber, String firstName,
+    public List<Donor> findAnyDonor(String donorNumber, String firstName,
             String lastName, Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -158,7 +156,7 @@ public class DonorRepository {
                 for (CollectedSample collectedSample : donor.getCollectedSamples()) {
                     if (collectedSample.getCollectionNumber().equals(donationIdentificationNumber)) {
                         uniqueResult.add(donor);
-                        return Arrays.asList(uniqueResult, totalResults);
+                        return uniqueResult;
                     }
                 }
             }
@@ -166,7 +164,8 @@ public class DonorRepository {
         if (looped == true) {
             return null;
         }
-        return Arrays.asList(donorResults, totalResults);
+        //return Arrays.asList(donorResults, totalResults);
+        return donorResults;
 
     }
 
@@ -189,6 +188,8 @@ public class DonorRepository {
         if (existingDonor == null) {
             return null;
         }
+        donor.getAddress().setId(existingDonor.getAddress().getId());
+        donor.getContact().setId(existingDonor.getContact().getId());
         existingDonor.copy(donor);
         existingDonor.setIsDeleted(false);
         em.merge(existingDonor);
@@ -313,47 +314,32 @@ public class DonorRepository {
         query.setParameter("isDeleted", false);
         return query.getResultList();
     }
-
-    public DonorDeferral deferDonor(String donorId, String deferUntil,
-            String deferralReasonId, String deferralReasonText) throws ParseException {
-        DonorDeferral donorDeferral = new DonorDeferral();
-        Donor donor = findDonorById(donorId);
-        donorDeferral.setDeferredOn(new Date());
-        donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
-        donorDeferral.setDeferredDonor(donor);
-        donorDeferral.setDeferredBy(utilController.getCurrentUser());
-        DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
-        donorDeferral.setDeferralReason(deferralReason);
-        donorDeferral.setIsVoided(Boolean.FALSE);
-        donorDeferral.setDeferralReasonText(deferralReasonText);
-        em.persist(donorDeferral);
-        return donorDeferral;
+    
+    public DonorDeferral deferDonor(DonorDeferral deferral)throws PersistenceException{
+        em.persist(deferral);
+        em.flush();
+        return deferral;
     }
 
-    public void updatedeferDonor(String donorDeferralId, String donorId, String deferUntil,
-            String deferralReasonId, String deferralReasonText) throws ParseException {
-        DonorDeferral donorDeferral = getDonorDeferralsId(Long.parseLong(donorDeferralId));
-        DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
-        Donor donor = findDonorById(donorId);
-        if (donorDeferral != null) {
-            donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
-            donorDeferral.setDeferredDonor(donor);
-            donorDeferral.setDeferredBy(utilController.getCurrentUser());
-            donorDeferral.setDeferralReasonText(deferralReasonText);
-            donorDeferral.setDeferralReason(deferralReason);
-            em.persist(donorDeferral);
+    public DonorDeferral updateDeferral(DonorDeferral deferral) {
+    	DonorDeferral existingDeferral = findDeferralById(deferral.getId());
+        if (existingDeferral == null) {
+            return null;
         }
-
-        /*Donor donor = findDonorById(donorId);
-         --donorDeferral.setDeferredOn(new Date());
-         donorDeferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferUntil));
-         donorDeferral.setDeferredDonor(donor);
-         donorDeferral.setDeferredBy(utilController.getCurrentUser());
-         DeferralReason deferralReason = findDeferralReasonById(deferralReasonId);
-         donorDeferral.setDeferralReason(deferralReason);
-         donorDeferral.setDeferralReasonText(deferralReasonText);*/
-        //em.persist(donorDeferral);
+        existingDeferral.copy(deferral);
+        em.merge(existingDeferral);
+        em.flush();
+        return existingDeferral;
     }
+    
+	public DonorDeferral findDeferralById(Long deferralId) throws NoResultException{
+	        String queryString = "SELECT d from DonorDeferral d WHERE "
+		            + " d.id = :deferralId AND d.isVoided=:isVoided";
+		    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
+	        query.setParameter("deferralId", deferralId);
+	        query.setParameter("isVoided", false);
+	        return query.getSingleResult();
+	}
 
     public void cancelDeferDonor(Long donorDeferralId) {
         DonorDeferral donorDeferral = getDonorDeferralsId(donorDeferralId);
@@ -365,7 +351,7 @@ public class DonorRepository {
         em.persist(donorDeferral);
     }
 
-    private DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException{
+    public DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException{
             String queryString = "SELECT d FROM DeferralReason d WHERE "
                     + "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
             TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
@@ -373,10 +359,6 @@ public class DonorRepository {
             query.setParameter("isDeleted", false);
             return query.getSingleResult();
      
-    }
-
-    public DeferralReason findDeferralReasonUsingId(String deferralReasonId) {
-        return this.findDeferralReasonById(deferralReasonId);
     }
 
     public List<DonorDeferral> getDonorDeferrals(Long donorId) throws NoResultException{
@@ -394,29 +376,17 @@ public class DonorRepository {
             return false;
         }
 
-        boolean currentlyDeferred = false;
-
         DateTime dt = new DateTime().toDateMidnight().toDateTime();
         Date today = new Date(dt.getMillis());
 
         for (DonorDeferral donorDeferral : donorDeferrals) {
-            Date deferredOn = donorDeferral.getDeferredOn();
             Date deferredUntil = donorDeferral.getDeferredUntil();
-            if (deferredOn == null || deferredUntil == null) {
-                currentlyDeferred = true;
-                break;
-            }
-            if (today.after(deferredOn) && today.before(deferredUntil)) {
-                currentlyDeferred = true;
-                break;
-            }
-            if (today.equals(deferredOn) || today.equals(deferredUntil)) {
-                currentlyDeferred = true;
-                break;
-            }
+            if(deferredUntil.equals(today) || deferredUntil.after(today) && donorDeferral.getIsVoided() != true){
+            	return true;
+            }            
         }
 
-        return currentlyDeferred;
+        return false;
     }
 
     public boolean isCurrentlyDeferred(Donor donor) {
@@ -427,7 +397,7 @@ public class DonorRepository {
     public Date getLastDonorDeferralDate(Long donorId) {
         List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
 
-        if (deferrals == null) {
+        if (deferrals == null || deferrals.isEmpty()) {
             return null;
         }
 
@@ -520,7 +490,7 @@ public class DonorRepository {
 
     public Donor deleteDonorCode(Long id) {
         DonorDonorCode donorDonorCode = em.find(DonorDonorCode.class, id);
-        Donor donor = donorDonorCode.getDonorId();
+        Donor donor = donorDonorCode.getDonor();
         em.remove(donorDonorCode);
         em.flush();
         return donor;

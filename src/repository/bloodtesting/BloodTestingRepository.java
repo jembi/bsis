@@ -1,5 +1,6 @@
 package repository.bloodtesting;
 
+import backingform.BloodTestBackingForm;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,11 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,7 +36,6 @@ import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
 import model.user.User;
-import model.worksheet.WorksheetType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -596,6 +594,8 @@ public class BloodTestingRepository {
 		return query.getSingleResult();
 	}
 
+        /**
+         * Not Used Anywhere
 	public void saveNewBloodTypingRule(
 			Map<String, Object> newBloodTypingRuleAsMap) {
 
@@ -628,6 +628,17 @@ public class BloodTestingRepository {
 		rule.setIsActive(true);
 		em.persist(rule);
 	}
+        */
+     public void saveBloodTypingRule(
+            BloodTestingRule bloodTestingRule) {
+        em.persist(bloodTestingRule);
+    }
+
+    public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule) 
+    throws IllegalAccessException{
+        return em.merge(bloodTestingRule);
+
+    }
 
 	public void deleteBloodTestingRule(Integer ruleId) {
 		String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
@@ -637,8 +648,9 @@ public class BloodTestingRepository {
 		query.executeUpdate();
 		em.flush();
 	}
-
-	public void saveNewBloodTest(Map<String, Object> newBloodTestAsMap) {
+/**
+ * not used duplicate method - issue #209
+	public void saveBloodTest(Map<String, Object> newBloodTestAsMap) {
 		BloodTest bt = new BloodTest();
 		bt.setTestName((String) newBloodTestAsMap.get("testName"));
 		bt.setTestNameShort((String) newBloodTestAsMap.get("testNameShort"));
@@ -749,6 +761,105 @@ public class BloodTestingRepository {
 			em.persist(ttiUnsafeRule);
 		}
 	}
+        */
+        
+	public void saveBloodTest(BloodTestBackingForm form) {
+		BloodTest bt = form.getBloodTest();
+		BloodTestCategory category = BloodTestCategory
+				.valueOf(form.getBloodTestCategory());
+		bt.setCategory(category);
+		bt.setIsEmptyAllowed(false);
+		bt.setNegativeResults("");
+		bt.setPositiveResults("");
+		bt.setValidResults("+,-");
+		bt.setRankInCategory(1);
+		bt.setIsActive(true);
+		if (category.equals(BloodTestCategory.BLOODTYPING)) {
+			bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
+			bt.setContext(genericConfigRepository
+					.getCurrentBloodTypingContext());
+			em.persist(bt);
+		} else {
+			bt.setBloodTestType(BloodTestType.BASIC_TTI);
+			bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
+			Integer numConfirmtatoryTests = 0;
+			if (form.getNumberOfConfirmatoryTests()!=null)
+				numConfirmtatoryTests = form.getNumberOfConfirmatoryTests();
+			List<Integer> pendingTestIds = new ArrayList<Integer>();
+			em.persist(bt);
+			em.refresh(bt);
+
+			BloodTestingRule ttiSafeRule = new BloodTestingRule();
+			ttiSafeRule.setBloodTestsIds("" + bt.getId());
+			ttiSafeRule.setPattern("-");
+			ttiSafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+			ttiSafeRule.setNewInformation(TTIStatus.TTI_SAFE.toString());
+			ttiSafeRule.setExtraInformation("");
+			ttiSafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
+			ttiSafeRule.setCategory(BloodTestCategory.TTI);
+			ttiSafeRule.setSubCategory(BloodTestSubCategory.TTI);
+			ttiSafeRule.setPendingTestsIds("");
+			ttiSafeRule.setMarkSampleAsUnsafe(false);
+			ttiSafeRule.setIsActive(true);
+			em.persist(ttiSafeRule);
+
+			for (int i = 1; i <= numConfirmtatoryTests; ++i) {
+				BloodTest confirmatoryBloodTest = new BloodTest();
+				confirmatoryBloodTest.setTestName(bt.getTestName()
+						+ " Confirmatory " + i);
+				confirmatoryBloodTest.setTestNameShort(bt.getTestNameShort()
+						+ " Conf " + i);
+				confirmatoryBloodTest.setCategory(category);
+				confirmatoryBloodTest
+						.setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+				confirmatoryBloodTest
+						.setContext(BloodTestContext.RECORD_TTI_TESTS);
+				confirmatoryBloodTest.setIsEmptyAllowed(false);
+				confirmatoryBloodTest.setNegativeResults("");
+				confirmatoryBloodTest.setPositiveResults("");
+				confirmatoryBloodTest.setValidResults("+,-");
+				confirmatoryBloodTest.setRankInCategory(1);
+				confirmatoryBloodTest.setIsActive(true);
+				em.persist(confirmatoryBloodTest);
+				em.refresh(confirmatoryBloodTest);
+				pendingTestIds.add(i);
+
+				BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
+				confirmatoryTestRule.setBloodTestsIds(""
+						+ confirmatoryBloodTest.getId());
+				confirmatoryTestRule.setPattern("+");
+				confirmatoryTestRule
+						.setCollectionFieldChanged(CollectionField.TTISTATUS);
+				confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE
+						.toString());
+				confirmatoryTestRule.setExtraInformation("");
+				confirmatoryTestRule
+						.setContext(BloodTestContext.RECORD_TTI_TESTS);
+				confirmatoryTestRule.setCategory(BloodTestCategory.TTI);
+				confirmatoryTestRule.setSubCategory(BloodTestSubCategory.TTI);
+				confirmatoryTestRule.setPendingTestsIds("");
+				confirmatoryTestRule.setMarkSampleAsUnsafe(false);
+				confirmatoryTestRule.setIsActive(true);
+				em.persist(confirmatoryTestRule);
+			}
+
+			BloodTestingRule ttiUnsafeRule = new BloodTestingRule();
+			ttiUnsafeRule.setBloodTestsIds("" + bt.getId());
+			ttiUnsafeRule.setPattern("+");
+			ttiUnsafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+			ttiUnsafeRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
+			ttiUnsafeRule.setExtraInformation("");
+			ttiUnsafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
+			ttiUnsafeRule.setCategory(BloodTestCategory.TTI);
+			ttiUnsafeRule.setSubCategory(BloodTestSubCategory.TTI);
+			ttiUnsafeRule.setPendingTestsIds(StringUtils.join(pendingTestIds,
+					","));
+			ttiUnsafeRule.setMarkSampleAsUnsafe(false);
+			ttiUnsafeRule.setIsActive(true);
+			em.persist(ttiUnsafeRule);
+		}
+	}
+
 
 	public void deactivateBloodTest(Integer bloodTestId) {
 		BloodTest bt = findBloodTestById(bloodTestId);
@@ -778,7 +889,7 @@ public class BloodTestingRepository {
 	public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
 			List<String> ttiTests, Date dateCollectedFrom,
 			Date dateCollectedTo, String aggregationCriteria,
-			List<String> centers, List<String> sites) {
+			List<String> centers, List<String> sites) throws ParseException {
 		TypedQuery<Object[]> query = em
 				.createQuery(
 						"SELECT count(t), c.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.collectedSample c WHERE "
@@ -848,17 +959,11 @@ public class BloodTestingRepository {
 		List<Object[]> resultList = query.getResultList();
 
 		Calendar gcal = new GregorianCalendar();
-		Date lowerDate = null;
-		Date upperDate = null;
-		try {
-			lowerDate = resultDateFormat.parse(resultDateFormat
+		Date lowerDate =  resultDateFormat.parse(resultDateFormat
 					.format(dateCollectedFrom));
-			upperDate = resultDateFormat.parse(resultDateFormat
+		Date upperDate =  resultDateFormat.parse(resultDateFormat
 					.format(dateCollectedTo));
-		} catch (ParseException e1) {
-			LOGGER.error(e1.getMessage() + e1.getStackTrace());
-		}
-
+	
 		// initialize the counter map storing (date, count) for each blood test
 		// counts should be set to 0
 		for (String bloodTestName : resultMap.keySet()) {
@@ -873,7 +978,6 @@ public class BloodTestingRepository {
 
 		for (Object[] result : resultList) {
 			Date d = (Date) result[1];
-			try {
 				Date formattedDate = resultDateFormat.parse(resultDateFormat
 						.format(d));
 				System.out.println(formattedDate);
@@ -885,9 +989,7 @@ public class BloodTestingRepository {
 				} else {
 					m.put(utcTime, (Long) result[0]);
 				}
-			} catch (ParseException e) {
-				LOGGER.error(e.getMessage() + e.getStackTrace());
-			}
+			
 		}
 		return resultMap;
 	}

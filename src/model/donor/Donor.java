@@ -192,7 +192,7 @@ public class Donor implements ModificationTracker {
  
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
- @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+ @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  @JoinColumn(name="addressId")
  private Address address;
   
@@ -341,7 +341,6 @@ public void setDonorCodes(List<DonorCode> donorCodes) {
 
 public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
-    setDonorNumber(donor.getDonorNumber());
     setTitle(donor.getTitle());
     setFirstName(donor.getFirstName());
     setMiddleName(donor.getMiddleName());

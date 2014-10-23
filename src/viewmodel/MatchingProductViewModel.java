@@ -4,7 +4,6 @@ import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.product.Product;
-import model.producttype.ProductType;
 
 public class MatchingProductViewModel {
 
@@ -40,7 +39,7 @@ public class MatchingProductViewModel {
     return productViewModel.getCollectedSample();
   }
 
-  public ProductType getProductType() {
+  public ProductTypeViewModel getProductType() {
     return productViewModel.getProductType();
   }
 

@@ -76,17 +76,17 @@
 	<deferralreason id="6" isDeleted="0" reason="Travel history" />
 	<deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" />
 	
-	<donordeferral id="1" deferralReasonText="" deferredOn="${today}"
-		deferredUntil="${sixMonthsAhead}" deferralReason_id="1" deferredBy_id="1"
+	<donordeferral id="1" deferralReasonText="" createdDate="${today}"
+		deferredUntil="${sixMonthsAhead}" deferralReason_id="1" createdBy_id="1"
 		deferredDonor_id="1"/>
-	<donordeferral id="2" deferralReasonText="" deferredOn="${oneMonthAgo}"
-		deferredUntil="${twoWeeksAgo}" deferralReason_id="1" deferredBy_id="1"
+	<donordeferral id="2" deferralReasonText="" createdDate="${oneMonthAgo}"
+		deferredUntil="${twoWeeksAgo}" deferralReason_id="1" createdBy_id="1"
 		deferredDonor_id="1"/>
-	<donordeferral id="3" deferralReasonText="" deferredOn="${oneMonthAgo}"
-		deferredUntil="${twoWeeksAgo}" deferralReason_id="1" deferredBy_id="1"
+	<donordeferral id="3" deferralReasonText="" createdDate="${oneMonthAgo}"
+		deferredUntil="${twoWeeksAgo}" deferralReason_id="1" createdBy_id="1"
 		deferredDonor_id="3"/>
-	<donordeferral id="4" deferralReasonText="" deferredOn="${oneMonthAgo}"
-		deferredUntil="${twoWeeksAgo}" deferralReason_id="1" deferredBy_id="1"
+	<donordeferral id="4" deferralReasonText="" createdDate="${oneMonthAgo}"
+		deferredUntil="${twoWeeksAgo}" deferralReason_id="1" createdBy_id="1"
 		deferredDonor_id="4"/>
 	 	
 </dataset>

@@ -1,5 +1,6 @@
 package viewmodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
 
 import model.bloodtesting.BloodTest;
@@ -7,6 +8,7 @@ import model.worksheet.WorksheetType;
 
 public class BloodTestViewModel {
 
+  @JsonIgnore
   private BloodTest rawBloodTest;
 
   public BloodTestViewModel(BloodTest rawBloodTest) {

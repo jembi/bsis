@@ -62,7 +62,7 @@ public class CompatibilityTestsController {
     utilController.addTipsToModel(m, "requests.addcompatibilityresult");
   }
 
-  @RequestMapping(value="{requestId}/edit", method=RequestMethod.GET)
+  @RequestMapping(value="{requestId}/edit/form", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
   public  ResponseEntity<Map<String, Object>> editCompatibilityTestsFormGenerator(
          @PathVariable String requestId) {
@@ -96,9 +96,6 @@ public class CompatibilityTestsController {
       form = new CompatibilityTestBackingForm();
       map.put("editCompatibilityTestForm", form);
       map.put("existingCompatibilityTest", false);
-      map.put("refreshUrl", "editCompatibilityTestFormGenerator.html");
-      map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
-
       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

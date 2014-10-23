@@ -2,6 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.NoResultException;
@@ -32,8 +33,8 @@ public class GlobalControllerExceptionHandler {
         MethodArgumentNotValidException errors) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "There are validation issues,  provide corect inputs");
-    errorMap.put("userMessage", "Please provde vorrect inputs");
+    errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
+    errorMap.put("userMessage", "Please provide valid inputs");
     errorMap.put("moreInfo", errors.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     errors.printStackTrace();
@@ -268,6 +269,22 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+   /**
+    *  Signals that an error has been reached unexpectedly while parsing.
+   */
+  @ExceptionHandler(ParseException.class)
+  public ResponseEntity<Map<String, Object>> handleParseException(
+        ParseException error) {
+    Map<String, Object> errorMap = new HashMap<String, Object>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("developerMessage", error.getMessage() + "at position " + error.getErrorOffset());
+    errorMap.put("userMessage", error.getMessage());
+    errorMap.put("moreInfo", error.getMessage());
+    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
 }

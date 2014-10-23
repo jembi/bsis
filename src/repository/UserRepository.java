@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -23,7 +25,7 @@ public class UserRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public User updateUser(User user, boolean modifyPassword) {
+  public User updateUser(User user, boolean modifyPassword){
     User existingUser = findUserById(user.getId());
     if (existingUser == null) {
       return null;
@@ -38,19 +40,17 @@ public class UserRepository {
     return existingUser;
   }
 
-  public User findUserById(Integer id) {
+  public User findUserById(Integer id) throws NoResultException, NonUniqueResultException{
     if (id == null)
       return null;
     String queryString = "SELECT u FROM User u WHERE u.id = :userId and u.isDeleted = :isDeleted";
     TypedQuery<User> query = em.createQuery(queryString, User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("userId", id);
-    if (query.getResultList().size() == 0)
-      return null;
     return query.getSingleResult();
   }
 
-  public void deleteUser(String username) {
+  public void deleteUser(String username)throws IllegalArgumentException {
     User existingUser = findUser(username);
     existingUser.setIsDeleted(Boolean.TRUE);
     em.merge(existingUser);
@@ -65,8 +65,6 @@ public class UserRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     List<User> userList = query.setParameter("username", username)
         .getResultList();
-    System.out.println(userList);
-    System.out.println(userList.size());
     if (userList != null && userList.size() > 0) {
       return userList.get(0);
     }
@@ -120,14 +118,18 @@ public class UserRepository {
 	return roles;
   }
   
-  public Role findRoleById(Long id) {
+  public Role findRoleById(Long id) throws NoResultException, NonUniqueResultException{
     if (id == null)
       return null;
     String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";
     TypedQuery<Role> query = em.createQuery(queryString, Role.class);
     query.setParameter("roleId", id);
-    if (query.getResultList().size() == 0)
-      return null;
     return query.getSingleResult();
+  }
+  
+  public void deleteUserById(Integer id)throws NoResultException, IllegalArgumentException{
+      User user = findUserById(id);
+      em.remove(user);
+      
   }
 }

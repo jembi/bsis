@@ -31,9 +31,8 @@ public class CollectedSampleBackingForm {
   private List<String> sites;
   private String dateCollectedFrom;
   private String dateCollectedTo;
-  
-  
   private String collectedOn;
+  private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
   // may be hidden by the user in which case we will get a null pointer
@@ -44,7 +43,6 @@ public class CollectedSampleBackingForm {
     collectedSample = new CollectedSample();
   }
 
- 
   public CollectedSampleBackingForm(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -103,7 +101,6 @@ public class CollectedSampleBackingForm {
     this.dateCollectedTo = dateCollectedTo;
   }
 
-  @JsonIgnore
   public void setCollection(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -124,7 +121,6 @@ public class CollectedSampleBackingForm {
     return collectedSample.getId();
   }
 
-  @JsonIgnore
   public Donor getDonor() {
     return collectedSample.getDonor();
   }
@@ -151,18 +147,20 @@ public class CollectedSampleBackingForm {
       return donationType.getId().toString();
   }
 
-  public String getBloodBagType() {
-    BloodBagType bloodBagType = collectedSample.getBloodBagType();
-    if (bloodBagType == null || bloodBagType.getId() == null)
+  public String getPackType() {
+    BloodBagType packType = collectedSample.getBloodBagType();
+    if (packType == null || packType.getId() == null)
       return null;
     else
-      return bloodBagType.getId().toString();
+      return packType.getId().toString();
   }
-
+  
+  @JsonIgnore
   public Date getLastUpdated() {
     return collectedSample.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return collectedSample.getCreatedDate();
   }
@@ -249,14 +247,14 @@ public class CollectedSampleBackingForm {
     }
   }
 
-  public void setBloodBagType(String bloodBagTypeId) {
-    if (StringUtils.isBlank(bloodBagTypeId)) {
+  public void setPackType(String packTypeId) {
+    if (StringUtils.isBlank(packTypeId)) {
       collectedSample.setBloodBagType(null);
     }
     else {
       BloodBagType bt = new BloodBagType();
       try {
-        bt.setId(Integer.parseInt(bloodBagTypeId));
+        bt.setId(Integer.parseInt(packTypeId));
         collectedSample.setBloodBagType(bt);
       } catch (Exception ex) {
         ex.printStackTrace();
@@ -264,7 +262,7 @@ public class CollectedSampleBackingForm {
       }
     }
   }
-
+  
   public void setLastUpdated(Date lastUpdated) {
     collectedSample.setLastUpdated(lastUpdated);
   }
@@ -297,11 +295,7 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorNumber() {
-    if (collectedSample == null || collectedSample.getDonor() == null ||
-        collectedSample.getDonor().getDonorNumber() == null
-       )
-      return "";
-    return collectedSample.getDonor().getDonorNumber();
+    return donorNumber;
   }
 
   public String getCollectionBatchNumber() {
@@ -313,11 +307,9 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorNumber(String donorNumber) {
-    Donor donor = new Donor();
-    donor.setDonorNumber(donorNumber);
-    collectedSample.setDonor(donor);
+	this.donorNumber = donorNumber;
   }
-
+  
   public void setCollectionBatchNumber(String collectionBatchNumber) {
     if (StringUtils.isNotBlank(collectionBatchNumber)) {
       CollectionBatch collectionBatch = new CollectionBatch();
@@ -326,6 +318,7 @@ public class CollectedSampleBackingForm {
     }
   }
 
+  @JsonIgnore
   public String getDonorIdHidden() {
     if (collectedSample == null)
       return null;
@@ -335,6 +328,7 @@ public class CollectedSampleBackingForm {
     return donor.getId().toString();
   }
 
+  @JsonIgnore
   public void setDonorIdHidden(String donorId) {
     if (donorId == null || donorId=="") {
       collectedSample.setDonor(null);

@@ -1,5 +1,6 @@
 package controller.bloodtesting;
 
+import backingform.BloodTypingResultBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,15 +14,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +39,7 @@ import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
-@RequestMapping("bloodtype")
+@RequestMapping("bloodtypes")
 public class BloodTypingController {
 
   @Autowired
@@ -71,16 +74,15 @@ public class BloodTypingController {
   public Map<String, Object> getBloodTypingWorksheet(HttpServletRequest request) {
     Map<String, Object> map = new Map<String, Object>("bloodtesting/bloodTypingWorksheetForm");
 
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
-    map.put("tips", tips);
     map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
-    map.put("refreshUrl", "bloodTypingWorksheetGenerator.html");
 
     return map;
   }
   * */
+  
 
+  /**
+   * issue - #209 Not required
   @RequestMapping(value="/addCollectionsToBloodTypingPlate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> addCollectionsToBloodTypingPlate(HttpServletRequest request,
@@ -106,11 +108,8 @@ public class BloodTypingController {
     map.put("collectionNumbers", StringUtils.join(collectionNumbers,","));
     map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
 
-    Map<String, Object> tips = new HashMap<String, Object>();
     if (numErrors > 0 || numValid == 0) {
       map.put("success", false);
-      map.put("refreshUrl", "bloodTypingWorksheetGenerator.html");
-      utilController.addTipsToModel(tips, "bloodtyping.plate.step1");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       map.put("errorMessage", "Please fix the errors noted. Some collections do not exist.");
     } else {
@@ -134,17 +133,14 @@ public class BloodTypingController {
       map.put("bloodTypingTests", bloodTypingTestsMap);
 
       map.put("success", true);
-      map.put("refreshUrl", getUrl(request));
       map.put("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
-      utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
     }
 
-    map.put("tips", tips);
     return map;
   }
-
+*/
   public List<BloodTestViewModel> getBloodTestsOnPlate() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
@@ -155,12 +151,11 @@ public class BloodTypingController {
 
   @SuppressWarnings("unchecked")
   
-  @RequestMapping(value="/saveTests", method=RequestMethod.POST)
+  @RequestMapping(value = "results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTests(
       @RequestParam(value="bloodTypingTests") String bloodTypingTests,
       @RequestParam(value="collectionNumbers[]") List<String> collectionNumbers,
-      @RequestParam(value="refreshUrl") String refreshUrl,
       @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
@@ -184,9 +179,6 @@ public class BloodTypingController {
     }
     if (errorMap != null && !errorMap.isEmpty())
       success = false;
-    Map<String, Object> tips = new HashMap<String, Object>();
-
-    System.out.println(errorMap);
 
     if (success) {
       List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
@@ -213,12 +205,10 @@ public class BloodTypingController {
       map.put("errorMap", errorMap);
       map.put("bloodTypingTests", bloodTypingTests);
       map.put("success", success);
-      map.put("refreshUrl", refreshUrl);
       map.put("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
       map.put("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
       map.put("collectionsByCollectionId", results.get("collections"));
 
-      utilController.addTipsToModel(tips, "bloodtyping.plate.step2");
       map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
@@ -243,7 +233,7 @@ public class BloodTypingController {
           if (StringUtils.isBlank(testId))
             continue;
           testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
-        }
+        } 
       } 
     } catch (JsonParseException e) {
       // TODO Auto-generated catch block
@@ -259,13 +249,12 @@ public class BloodTypingController {
     return bloodTestResultsMap;
   }
 
-  @RequestMapping(value="/getStatusForCollections", method=RequestMethod.GET)
+  @RequestMapping(value="/status/{donationIds}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingStatusForCollections(
-                        @RequestParam(value="collectionIds") String collectionIdsParam
-                        ) {
+                        @PathVariable String donationIds) {
     Map<String, Object> map = new HashMap<String, Object>();
-    String[] collectionIds = collectionIdsParam.split(",");
+    String[] collectionIds = donationIds.split(",");
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForCollections(Arrays.asList(collectionIds));
     List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
@@ -282,17 +271,14 @@ public class BloodTypingController {
     return map;
   }
 
-  @RequestMapping(value="/showResultsForCollection", method=RequestMethod.GET)
+  @RequestMapping(value="/results/{donationid}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> showBloodTypingResultsForCollection(
-      HttpServletRequest request,
-      @RequestParam(value="collectionId") String collectionId) {
+      @PathVariable Long donationid) {
       
     Map<String, Object> map = new HashMap<String, Object>();
-    collectionId = collectionId.trim();
-    Long collectedSampleId = Long.parseLong(collectionId);
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(collectedSampleId);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(donationid);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(donationid);
     map.put("collection", new CollectedSampleViewModel(collectedSample));
     map.put("collectionId", collectedSample.getId());
     map.put("bloodTypingOutputForCollection", ruleResult);
@@ -311,121 +297,117 @@ public class BloodTypingController {
       allBloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
     map.put("allBloodTypingTests", allBloodTypingTestsMap);
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
-
-  @RequestMapping(value="/showCollectionSummaryForTesting", method=RequestMethod.GET)
+  
+/**
+ * issue - #209 refer COllection sample end points
+  @RequestMapping(value="/test/donation/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public Map<String, Object> showCollectionSummaryForTesting(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @RequestParam(value="collectionId") String collectionId) {
+      @PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
-    collectionId = collectionId.trim();
-    Long collectedSampleId = Long.parseLong(collectionId);
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(id);
     map.put("collection", new CollectedSampleViewModel(collectedSample));
     map.put("collectionId", collectedSample.getId());
     map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
-
-  @RequestMapping(value="/saveAdditionalTests", method=RequestMethod.POST)
+*/
+  @RequestMapping(value="/results/addiional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
-      @RequestParam(value="collectionId") String collectionId,
-      @RequestParam(value="saveTestsData") String saveTestsDataStr,
-      @RequestParam(value="saveUninterpretableResults") boolean saveUninterpretableResults) {
+      @RequestBody BloodTypingResultBackingForm formData) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
-    try {
+    
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
-      ObjectMapper mapper = new ObjectMapper();
       @SuppressWarnings("unchecked")
-      Map<String, String> saveTestsData = mapper.readValue(saveTestsDataStr, HashMap.class);
+      Map<String, String> saveTestsData = null;
+      saveTestsData = formData.getTypingResult();
       for (String testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
       }
-      bloodTypingTestResultsMap.put(Long.parseLong(collectionId), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, saveUninterpretableResults);
+      bloodTypingTestResultsMap.put(formData.getDonationId(), saveTestsDataWithLong);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, formData.isSaveUninterpretableResults());
       @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
       System.out.println(errorMap);
       if (errorMap != null && !errorMap.isEmpty()) {
         httpStatus = HttpStatus.BAD_REQUEST;
         @SuppressWarnings("unchecked")
-        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(Long.parseLong(collectionId));
+        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(formData.getDonationId());
         if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
           m.put("uninterpretable", true);
         else
           m.put("invalidResults", true);
       }
 
-    } catch (Exception ex) {
-      ex.printStackTrace();
-       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    }
-
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
 
-  @RequestMapping(value="ruleSummary", method=RequestMethod.GET)
+    @RequestMapping(value = "rules", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TYPING_RULES + "')")
+    public Map<String, Object> configureBloodTypingTests() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
+        List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
+        for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
+            rules.add(new BloodTestingRuleViewModel(rule));
+        }
+        map.put("bloodTypingRules", rules);
+        return map;
+    }
+
+  @RequestMapping(value="rules/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingRuleSummary(HttpServletRequest request,
-      @RequestParam(value="bloodTypingRuleId", required = true) Integer ruleId) {
+      @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     BloodTestingRuleViewModel bloodTypingRule;
-    bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(ruleId));
+    bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
     map.put("bloodTypingRule", bloodTypingRule);
-    map.put("refreshUrl", getUrl(request));
     List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
     map.put("bloodTypingTests", bloodTypingTests);
     map.put("bloodTypingTestsMap", getBloodTypingTestsAsMap(bloodTypingTests));
     return map;
   }
 
-  @SuppressWarnings("unchecked")
-  @RequestMapping(value="saveNewRule", method=RequestMethod.POST)
+  @RequestMapping(value="rules", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public Map<String, Object> saveNewBloodTypingRule(HttpServletRequest request,
-      HttpServletResponse response, @RequestParam("newBloodTypingRule") String newBloodTypingRuleAsJsonStr) {
-    Map<String, Object> m = new HashMap<String, Object>();
-    ObjectMapper mapper = new ObjectMapper();
-    boolean success = false;
-    try {
-      Map<String, Object> newBloodTypingRuleAsMap;
-      newBloodTypingRuleAsMap = mapper.readValue(newBloodTypingRuleAsJsonStr, HashMap.class);
-      bloodTestingRepository.saveNewBloodTypingRule(newBloodTypingRuleAsMap);
-      success = true;
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    if (!success)
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    return m;
+  public ResponseEntity saveNewBloodTypingRule(
+        @RequestBody BloodTestingRule bloodTestingRule) {
+      
+         bloodTestingRepository.saveBloodTypingRule(bloodTestingRule);
+         return new ResponseEntity(HttpStatus.CREATED);
+  
   }
   
-  @RequestMapping(value="deleteRule", method=RequestMethod.POST)
+  @RequestMapping(value="rules/{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public Map<String, Object> deleteBloodTypingRule(HttpServletRequest request,
-      @RequestParam(value="bloodTypingRuleId") Integer ruleId) {
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    bloodTestingRepository.deleteBloodTestingRule(ruleId);
-    return m;
+  public ResponseEntity updateNewBloodTypingRule(
+        @RequestBody BloodTestingRule bloodTestingRule, @PathVariable Integer id) {
+      
+         bloodTestingRule.setId(id);
+         bloodTestingRepository.saveBloodTypingRule(bloodTestingRule);
+         return new ResponseEntity(HttpStatus.CREATED);
+  
   }
+  
+  
+  @RequestMapping(value = "/rules/{id}", method=RequestMethod.DELETE)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  public ResponseEntity deleteBloodTypingRule(HttpServletRequest request,
+      @PathVariable Integer id) {
+
+    bloodTestingRepository.deleteBloodTestingRule(id);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+  
+  
 
   private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
     Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();

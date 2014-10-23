@@ -40,10 +40,12 @@ public class ProductUsageBackingForm {
     this.usage = usage;
   }
 
+  @JsonIgnore
   public Date getLastUpdated() {
     return usage.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return usage.getCreatedDate();
   }

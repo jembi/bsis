@@ -18,7 +18,7 @@ import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
 
 @RestController
-@RequestMapping("location")
+@RequestMapping("locations")
 public class LocationsController {
 
   @Autowired
@@ -40,7 +40,6 @@ public class LocationsController {
             HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         addAllLocationsToModel(map);
-        map.put("refreshUrl", getUrl(request));
         return map;
     }
 
@@ -79,7 +78,6 @@ public class LocationsController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addAllLocationsToModel(map);
-    map.put("refreshUrl", "configureLocationsFormGenerator.html");
     return map;
   }
   

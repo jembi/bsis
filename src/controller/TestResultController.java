@@ -14,7 +14,7 @@ import repository.CollectedSampleRepository;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("testresult")
+@RequestMapping("testresults")
 public class TestResultController {
 
   @Autowired
@@ -25,24 +25,20 @@ public class TestResultController {
 
   public TestResultController() {
   }
-
+/*
+  isssue - #209
+  Reason - Dummy method
   @RequestMapping(value = "/findform", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public  Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
 
-
     Map<String, Object> map = new  HashMap<String, Object>();
-
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "testResults.find");
-    map.put("tips", tips);
 
     // to ensure custom field names are displayed in the form
     map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("refreshUrl", getUrl(request));
     return map;
   }
-
+*/
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
@@ -52,7 +48,7 @@ public class TestResultController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "collectionnumber/{collectionNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "{collectionNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public  Map<String, Object> findTestResult(HttpServletRequest request,
       @PathVariable String collectionNumber ) {

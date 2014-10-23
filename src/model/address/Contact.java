@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.address;
 
 import java.io.Serializable;
@@ -13,12 +8,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-
-/**
- *
- * @author srikanth
- * This Entity is used to store the Contact Numbers of Donors
- */
 
 @Entity
 public class Contact implements Serializable {
@@ -48,7 +37,6 @@ public class Contact implements Serializable {
         this.id = id;
     }
 
-    
     public String getMobileNumber() {
         return mobileNumber;
     }
@@ -81,7 +69,6 @@ public class Contact implements Serializable {
         this.email = email;
     }
 
-    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

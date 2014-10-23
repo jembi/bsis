@@ -62,12 +62,13 @@ public class ProductCombinationBackingForm {
   public CollectedSample getCollectedSample() {
     return product.getCollectedSample();
   }
-
   
+  @JsonIgnore
   public Date getLastUpdated() {
     return product.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return product.getCreatedDate();
   }

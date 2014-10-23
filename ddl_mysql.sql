@@ -346,12 +346,14 @@
 
     create table DonorDeferral (
         id bigint not null auto_increment,
+        deferredDonor_id bigint,
         deferralReasonText longtext,
-        deferredOn date,
         deferredUntil date,
         deferralReason_id SMALLINT,
-        deferredBy_id SMALLINT,
-        deferredDonor_id bigint,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -359,12 +361,14 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
+        deferredDonor_id bigint,
         deferralReasonText longtext,
-        deferredOn date,
         deferredUntil date,
         deferralReason_id SMALLINT,
-        deferredBy_id SMALLINT,
-        deferredDonor_id bigint,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -1226,9 +1230,9 @@
         references Donor (id);
 
     alter table DonorDeferral 
-        add index FKC7E323D1ED3A012D (deferredBy_id), 
+        add index FKC7E323D1ED3A012D (createdBy_id), 
         add constraint FKC7E323D1ED3A012D 
-        foreign key (deferredBy_id) 
+        foreign key (createdBy_id) 
         references User (id);
 
     alter table DonorDeferral 

@@ -34,8 +34,6 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.util.BloodGroup;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -51,9 +49,8 @@ import utils.CustomDateFormatter;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.PessimisticLockException;
+import org.apache.commons.lang3.StringUtils;
 
 @Repository
 @Transactional
@@ -161,9 +158,63 @@ public class ProductRepository {
     }
     return product;
   }
+  
+  public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
+		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
+	  	TypedQuery<Product> query;
+	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +     
+	                      "p.isDeleted= :isDeleted ";
+	    
+	    if(status != null && !status.isEmpty()){
+	    	queryStr += "AND p.status IN :status ";
+	    }	
+	    if(!StringUtils.isBlank(donationIdentificationNumber)){
+	    	queryStr += "AND p.collectedSample.collectionNumber = :donationIdentificationNumber ";
+	    }
+	    if(productTypes != null && !productTypes.isEmpty()){
+	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
+	    }	    
+	    if(donationDateFrom != null){
+	    	queryStr += "AND p.collectedSample.collectedOn >= :donationDateFrom ";
+	    }
+	    if(donationDateTo != null){
+	    	queryStr += "AND p.collectedSample.collectedOn <= :donationDateTo ";
+	    }
+	    
+	    if (pagingParams.containsKey("sortColumn")) {
+	    	queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+	    }
+	
+	    query = em.createQuery(queryStr, Product.class);
+	    query.setParameter("isDeleted", Boolean.FALSE);
+	    
+	    if(status != null && !status.isEmpty()){
+	    	query.setParameter("status", status);
+	    }
+	    if(!StringUtils.isBlank(donationIdentificationNumber)){
+	    	query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
+	    }
+	    if (productTypes != null && !productTypes.isEmpty()) {
+	    	query.setParameter("productTypeIds", productTypes);
+	    }
+	    if(donationDateFrom != null){
+	    	query.setParameter("donationDateFrom", donationDateFrom);
+	    }
+	    if(donationDateTo != null){
+	    	query.setParameter("donationDateTo", donationDateTo);
+	    }
+	
+	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+	
+	    query.setFirstResult(start);
+	    query.setMaxResults(length);
+	    
+	    return query.getResultList();
+  }
 
-  public List<Object> findProductByCollectionNumber(
-      String collectionNumber, List<String> status, Map<String, Object> pagingParams) {
+  public List<Product> findProductByCollectionNumber(
+      String collectionNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
     String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
@@ -181,7 +232,7 @@ public class ProductRepository {
     }
 
     query = em.createQuery(queryStr, Product.class);
-    query.setParameter("status", statusStringToProductStatus(status));
+    query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
 
@@ -191,21 +242,12 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
-  }
-
-  private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
-    List<ProductStatus> productStatusList = new ArrayList<ProductStatus>();
-    if (statusList != null) {
-      for (String status : statusList) {
-        productStatusList.add(ProductStatus.lookup(status));
-      }
-    }
-    return productStatusList;
+    //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
+    return query.getResultList();
   }
   
-  public List<Object> findProductByProductTypes(
-      List<Integer> productTypeIds, List<String> status,
+  public List<Product> findProductByProductTypes(
+      List<Integer> productTypeIds, List<ProductStatus> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
@@ -224,7 +266,7 @@ public class ProductRepository {
     }
 
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("status", statusStringToProductStatus(status));
+    query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypeIds", productTypeIds);
 
@@ -234,7 +276,8 @@ public class ProductRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
+    //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
+    return query.getResultList();
   }
 
   private Long getResultCount(String queryStr, Query query) {
@@ -574,7 +617,7 @@ public class ProductRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
       Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) {
+      List<String> centers, List<String> sites, List<String> bloodGroups) throws ParseException {
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -635,14 +678,8 @@ public class ProductRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = null;
-      Date upperDate = null;
-      try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
-      } catch (ParseException e1) {
-        e1.printStackTrace();
-      }
+      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -659,7 +696,7 @@ public class ProductRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
+ 
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
@@ -668,9 +705,7 @@ public class ProductRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+      
     }
 
     return resultMap;
@@ -678,7 +713,7 @@ public class ProductRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
       Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) {
+      List<String> centers, List<String> sites, List<String> bloodGroups) throws ParseException {
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -760,7 +795,6 @@ public class ProductRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
@@ -769,9 +803,7 @@ public class ProductRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+  
     }
 
     return resultMap;
@@ -832,7 +864,7 @@ public class ProductRepository {
   }
 
   @SuppressWarnings("unchecked")
-  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws PessimisticLockException {
+  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws PessimisticLockException, ParseException {
     List<Product> products = new ArrayList<Product>();
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
@@ -852,11 +884,7 @@ public class ProductRepository {
       product.setProductType(productType);
       product.setCreatedOn(form.getProduct().getCreatedOn());
       String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());
-        try {
-            product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
+      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
       product.setIsDeleted(false);
       updateProductInternalFields(product);
       em.persist(product);
@@ -922,44 +950,29 @@ public class ProductRepository {
     return true;
   }
 
-  public ProductType findProductTypeBySelectedProductType(int productTypeId) {
+  public ProductType findProductTypeBySelectedProductType(int productTypeId) throws NoResultException{
     String queryString = "SELECT p FROM ProductType p where p.id = :productTypeId";
     TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
     query.setParameter("productTypeId", productTypeId);
-    ProductType productType = null;
-    try {
-    	productType = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    ProductType productType =  productType = query.getSingleResult();
     return productType;
   }
   
-  public ProductType findProductTypeByProductTypeName(String productTypeName) {
+  public ProductType findProductTypeByProductTypeName(String productTypeName) throws NoResultException{
     String queryString = "SELECT p FROM ProductType p where p.productType = :productTypeName";
     TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
     query.setParameter("productTypeName", productTypeName);
-    ProductType productType = null;
-    try {
-    	productType = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    ProductType productType = productType = query.getSingleResult();
     return productType;
   }
   
-  public void updateProductByProductId(long productId) {
+  public void setProductStatusToProcessed(long productId) throws NoResultException {
   	 String queryString = "SELECT p FROM Product p where p.id = :productId";
      TypedQuery<Product> query = em.createQuery(queryString, Product.class);
      query.setParameter("productId", productId);
      Product product = null;
-     try {
      	product = query.getSingleResult();
      	product.setStatus(ProductStatus.PROCESSED);
      	em.merge(product);
-     } catch (NoResultException ex) {
-       ex.printStackTrace();
-     }
-  	
   }
 }
