@@ -1,14 +1,19 @@
 package controller;
 
+import backingform.LocationBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +38,7 @@ public class LocationsController {
     return reqUrl;
   }
 
-    @RequestMapping(value = "/configure", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
     public 
     Map<String, Object> configureLocationsFormGenerator(
@@ -46,39 +51,44 @@ public class LocationsController {
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
     public 
-    Map<String, Object> configureLocations(
-            HttpServletRequest request, HttpServletResponse response,
-            @RequestBody Map<String, Object> params) {
-        List<Location> locations = new ArrayList<Location>();
-        try {
-            for (String id : params.keySet()) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
-                Location location = new Location();
-
-                if (id.startsWith("newLocation")) {
-                    location.setId(null);
-                } else {
-                    location.setId(Long.parseLong(id));
-                }
-
-                location.setName((String) paramValue.get("name"));
-                location.setIsCollectionCenter((Boolean) paramValue.get("isCenter"));
-                location.setIsCollectionSite((Boolean) paramValue.get("isCollectionSite"));
-                location.setIsUsageSite((Boolean) paramValue.get("isUsageSite"));
-
-                locations.add(location);
-            }
-            locationRepository.saveAllLocations(locations);
-            System.out.println(params);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllLocationsToModel(map);
-    return map;
+    ResponseEntity addLocation(
+            @RequestBody @Valid LocationBackingForm formData) {
+        
+        Location location = formData.getLocation();
+        locationRepository.saveLocation(location);
+        return new ResponseEntity(HttpStatus.CREATED);
+        
+  }
+   
+    @RequestMapping(value = "{id}" , method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+    public 
+    ResponseEntity updateLocation(@PathVariable Long id,
+            @RequestBody @Valid LocationBackingForm formData) {
+        Location location = formData.getLocation();
+        Location updatedLocation = locationRepository.updateLocation(id, location);
+        return new ResponseEntity(updatedLocation, HttpStatus.OK);
+        
+  }
+   
+   @RequestMapping(value = "{id}" , method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+    public 
+    ResponseEntity getLocationById(@PathVariable Long id) {
+        
+        Location location = locationRepository.getLocation(id);
+        return new ResponseEntity(new LocationViewModel(location), HttpStatus.OK);
+        
+  }
+    
+    @RequestMapping(value = "{id}" , method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+    public 
+    ResponseEntity deleteLocation(@PathVariable Long id) {
+        
+        locationRepository.deleteLocation(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        
   }
   
   private void addAllLocationsToModel(Map<String, Object> model) {
