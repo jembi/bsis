@@ -33,6 +33,7 @@ public class CollectedSampleBackingForm {
   private String dateCollectedFrom;
   private String dateCollectedTo;
   private String collectedOn;
+  private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
   // may be hidden by the user in which case we will get a null pointer
@@ -287,11 +288,7 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorNumber() {
-      if (collectedSample == null || collectedSample.getDonor() == null ||
-        collectedSample.getDonor().getDonorNumber() == null
-       )
-      return "";
-     return collectedSample.getDonor().getDonorNumber();
+    return donorNumber;
   }
 
   public String getCollectionBatchNumber() {
@@ -303,9 +300,7 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorNumber(String donorNumber) {
-    Donor donor = new Donor();
-    donor.setDonorNumber(donorNumber);
-    collectedSample.setDonor(donor);
+	this.donorNumber = donorNumber;
   }
   
   public void setCollectionBatchNumber(String collectionBatchNumber) {
