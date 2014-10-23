@@ -53,7 +53,6 @@ public class LocationsController {
     public 
     ResponseEntity addLocation(
             @RequestBody @Valid LocationBackingForm formData) {
-        
         Location location = formData.getLocation();
         locationRepository.saveLocation(location);
         return new ResponseEntity(HttpStatus.CREATED);
@@ -65,9 +64,11 @@ public class LocationsController {
     public 
     ResponseEntity updateLocation(@PathVariable Long id,
             @RequestBody @Valid LocationBackingForm formData) {
+        Map<String, Object> map = new HashMap<String, Object>();
         Location location = formData.getLocation();
         Location updatedLocation = locationRepository.updateLocation(id, location);
-        return new ResponseEntity(updatedLocation, HttpStatus.OK);
+        map.put("location", updatedLocation);
+        return new ResponseEntity(map, HttpStatus.OK);
         
   }
    
@@ -76,8 +77,10 @@ public class LocationsController {
     public 
     ResponseEntity getLocationById(@PathVariable Long id) {
         
+        Map<String, Object> map = new HashMap<String, Object>();
         Location location = locationRepository.getLocation(id);
-        return new ResponseEntity(new LocationViewModel(location), HttpStatus.OK);
+        map.put("location", new LocationViewModel(location));
+        return new ResponseEntity(location, HttpStatus.OK);
         
   }
     
