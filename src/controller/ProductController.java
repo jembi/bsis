@@ -414,81 +414,76 @@ public class ProductController {
       }
       String sortName = productType2.getProductTypeNameShort();
       int noOfUnits = form.getNoOfUnits();
-      //long hiddenCollectedSampleID =Long.parseLong(request.getParameter("hiddenCollectedSampleID"));
-      long collectedSampleID = form.getCollectedSampleID();
-      
+      long collectedSampleID = form.getCollectedSampleID();      
       String createdPackNumber = collectionNumber +"-"+sortName;
       
       // Add New product
       if(!status.equalsIgnoreCase("PROCESSED")){
-      if(noOfUnits > 0 ){
-      	
-      	   for (int i = 1; i <= noOfUnits; i++) {
-              Product product = new Product();
-              product.setIsDeleted(false);
-              product.setDonationIdentificationNumber(createdPackNumber + "-" + i);
-              DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-              Date createdOn = null, expiresOn = null;
-              createdOn = formatter.parse(form.getDateExpiresFrom());
-              expiresOn = formatter.parse(form.getDateExpiresTo());
-	          product.setCreatedOn(createdOn);
-	          product.setExpiresOn(expiresOn);
-	          ProductType productType = new ProductType();
-	          productType.setProductType(form.getProductTypes().get(0));
-	          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-	          product.setProductType(productType);
-	          CollectedSample collectedSample = new CollectedSample();
-	          collectedSample.setId(collectedSampleID);
-	          product.setCollectedSample(collectedSample);
-	          product.setStatus(ProductStatus.QUARANTINED);
-		        productRepository.addProduct(product);
-
-		        // Once product save successfully update selected product status with processed
-		        productRepository.setProductStatusToProcessed(productId);
-		
-      	}
-      }
-      else {
-
-          Product product = new Product();
-          product.setIsDeleted(false);
-          product.setDonationIdentificationNumber(createdPackNumber);
-          DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-          Date createdOn = null, expiresOn = null;
-          createdOn = formatter.parse(form.getDateExpiresFrom());
-          expiresOn = formatter.parse(form.getDateExpiresTo());
-          product.setCreatedOn(createdOn);
-          product.setExpiresOn(expiresOn);
-          ProductType productType = new ProductType();
-          productType.setProductType(form.getProductTypes().get(0));
-          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-          product.setProductType(productType);
-          CollectedSample collectedSample = new CollectedSample();
-          collectedSample.setId(collectedSampleID);
-          product.setCollectedSample(collectedSample);
-          product.setStatus(ProductStatus.QUARANTINED);
-		  productRepository.addProduct(product);
-		   productRepository.setProductStatusToProcessed(productId);
-		        
-	    	}
+	      if(noOfUnits > 0 ){
+	      	
+	      	   for (int i = 1; i <= noOfUnits; i++) {
+	              Product product = new Product();
+	              product.setIsDeleted(false);
+	              product.setDonationIdentificationNumber(createdPackNumber + "-" + i);
+	              DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	              Date createdOn = null, expiresOn = null;
+	              createdOn = formatter.parse(form.getDateExpiresFrom());
+	              expiresOn = formatter.parse(form.getDateExpiresTo());
+		          product.setCreatedOn(createdOn);
+		          product.setExpiresOn(expiresOn);
+		          ProductType productType = new ProductType();
+		          productType.setProductType(form.getProductTypes().get(0));
+		          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
+		          product.setProductType(productType);
+		          CollectedSample collectedSample = new CollectedSample();
+		          collectedSample.setId(collectedSampleID);
+		          product.setCollectedSample(collectedSample);
+		          product.setStatus(ProductStatus.QUARANTINED);
+			      productRepository.addProduct(product);
+			      // Set source component status to PROCESSED
+			      productRepository.setProductStatusToProcessed(productId);
+			
+	      	   }
+	      }
+	      else {
+	
+			  Product product = new Product();
+			  product.setIsDeleted(false);
+			  product.setDonationIdentificationNumber(createdPackNumber);
+			  DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			  Date createdOn = null, expiresOn = null;
+			  createdOn = formatter.parse(form.getDateExpiresFrom());
+			  expiresOn = formatter.parse(form.getDateExpiresTo());
+			  product.setCreatedOn(createdOn);
+			  product.setExpiresOn(expiresOn);
+			  ProductType productType = new ProductType();
+			  productType.setProductType(form.getProductTypes().get(0));
+			  productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
+			  product.setProductType(productType);
+			  CollectedSample collectedSample = new CollectedSample();
+			  collectedSample.setId(collectedSampleID);
+			  product.setCollectedSample(collectedSample);
+			  product.setStatus(ProductStatus.QUARANTINED);
+			  productRepository.addProduct(product);
+			  // Set source component status to PROCESSED
+			  productRepository.setProductStatusToProcessed(productId);
+			        
+		  }
       }
    
     List<Product> products = Arrays.asList(new Product[0]);
    
     Map<String, Object> map = new HashMap<String, Object>();
-//    map.put("productFields", utilController.getFormFieldsForForm("product"));
     map.put("allProducts", getProductViewModels(products));
-    //map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,form.getCollectionNumber()));
-    //map.put("addProductForm", form);
     
     if(form.getCollectionNumber().contains("-")){
     	addEditSelectorOptionsForNewRecordByList(map,productType2);
   	}
   	else{
-  		 addEditSelectorOptionsForNewRecord(map);
+  		addEditSelectorOptionsForNewRecord(map);
   	}
 
- return  new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+    return  new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
