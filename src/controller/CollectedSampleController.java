@@ -185,16 +185,23 @@ public class CollectedSampleController {
     CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
     return collectionViewModel;
   }
-
+  
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public  HttpStatus updateCollectedSample(
-      @RequestBody  @Valid CollectedSampleBackingForm form, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>>
+  	  updateCollectedSample(@RequestBody  @Valid CollectedSampleBackingForm form, @PathVariable Long id) {
+	  
+	  HttpStatus httpStatus = HttpStatus.OK;
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  CollectedSample updatedCollectedSample = null;
+	  
       form.setId(id);
       form.setIsDeleted(false);
-      form.setCollectedSample();
-      collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
-      return HttpStatus.OK;
+      updatedCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+            
+      map.put("donation", getCollectionViewModel(collectedSampleRepository.findCollectedSampleById(updatedCollectedSample.getId())));
+      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+
   }
 
   private List<CollectedSampleViewModel> getCollectionViewModels(
