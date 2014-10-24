@@ -50,7 +50,7 @@ public class Product implements ModificationTracker {
   // imported from another location. In such a case the corresponding collection
   // field is allowed to be null.
   @CollectedSampleExists
-  @ManyToOne(optional=true, fetch=FetchType.LAZY)
+  @ManyToOne(optional=true, fetch=FetchType.EAGER)
   private CollectedSample collectedSample;
 
   @ProductTypeExists
