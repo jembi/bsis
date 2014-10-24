@@ -64,56 +64,55 @@ public class LotReleaseController {
     return map;
   }
   */
-  @RequestMapping(value = "/find/{dinNumber}", method=RequestMethod.GET)
+  @RequestMapping(value = "/find/{donationIdentificationNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
   public ResponseEntity<Map<String, Object>> findlotRelease(HttpServletRequest request,
-          @PathVariable String dinNumber)  {
+          @PathVariable String donationIdentificationNumber)  {
     Map<String, Object> map = new  HashMap<String, Object>();
     boolean success = true;
     boolean discard = false;
-    List<CollectedSample> collectedSample = collectedSampleRepository.findLotReleseById(dinNumber);
-    if(dinNumber.isEmpty()){
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+    if(donationIdentificationNumber.isEmpty()){
     	map.put("errorMessage", "Please Enter the Donation Identification Number.");
     	success=false;
     	map.put("success", success);
     	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
     }
     
-    if(collectedSample == null || collectedSample.size() == 0){
+    if(collectedSample == null){
     	map.put("errorMessage", "Donation Identification Number does not exist.");
     	success=false;
     	map.put("success", success);
     	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
     }
    
-    discard = checkCollectionForDiscard(map,collectedSample);
+    discard = checkCollectionForDiscard(collectedSample);
 
     if(!discard){
     
-	    success = checkCollectionNumber(map, collectedSample);
+	    success = checkCollectionNumber(collectedSample);
 	    
 	    if(!success){
-	    	map.put("errorMessage", "Cannot print pack label for DIN "+dinNumber);
+	    	map.put("errorMessage", "Cannot print pack label for DIN "+donationIdentificationNumber);
 	    }
     }
     else{
     	success=false;
     }
     
-    map.put("dinNumber", dinNumber);
-    map.put("success", success);
-    map.put("discard", discard);
+    map.put("donationIdentificationNumber", donationIdentificationNumber);
+    map.put("printPackLabel", success);
+    map.put("printDiscardLabel", discard);
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/printLabel/{dinNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/printLabel/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable String dinNumber) {
+  public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable String donationIdentificationNumber) {
 	  
-	 Map<String, Object> map = new  HashMap<String, Object>();
-	
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber);
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	    Map<String, Object> map = new  HashMap<String, Object>();
+	    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     
         String bloodABO = collectedSample.getBloodAbo();
         String inverse = "";
@@ -136,8 +135,7 @@ public class LotReleaseController {
     	c.add(Calendar.DATE,35);
     	expiryDate = df.format(c.getTime());
 
-    	
-    	    map.put("labelZPL",
+    	map.put("labelZPL",
     			         "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ" +
     			         "^XA" +
     			         "^MMT" +
@@ -173,7 +171,7 @@ public class LotReleaseController {
     			         "^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
     			         "^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0" +
     	    			 "^BY2,3,42^FT285,111^BCN,,Y,N"+
-    	    			 "^FD>:" + dinNumber + "^FS"+
+    	    			 "^FD>:" + donationIdentificationNumber + "^FS"+
     	    			 inverse +
     			         "^PQ1,0,1,Y^XZ"
     			         );
@@ -217,7 +215,7 @@ public class LotReleaseController {
     				"^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS"+
     				"^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0"+
     				"^BY2,3,42^FT285,111^BCN,,Y,N"+
-    				"^FD>:" + dinNumber + "^FS"+
+    				"^FD>:" + donationIdentificationNumber + "^FS"+
     				//inverse +
     				"^PQ1,0,1,Y^XZ}$"
     		);
@@ -227,17 +225,15 @@ public class LotReleaseController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/printDiscard/{dinNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/printDiscard/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> printDiscard(@PathVariable String dinNumber) {
+  public  ResponseEntity<Map<String, Object>> printDiscard(@PathVariable String donationIdentificationNumber) {
 	  
 	 Map<String, Object> map = new  HashMap<String, Object>();
 	
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(dinNumber);
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    
-        
-        String collectionDate = df.format(collectedSample.getCollectedOn());        	
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
+    String collectionDate = df.format(collectedSample.getCollectedOn());        	
 
     // Generate ZPL label
     map.put("labelZPL",	
@@ -260,7 +256,7 @@ public class LotReleaseController {
     		"^FO18,357^GB748,0,8^FS"+
     		"^FT52,749^A0N,28,28^FH\\^FDIf found contact the BTS immediately at (000) 000-0000^FS" +
     		"^BY2,3,52^FT408,135^BCN,,Y,N" +
-    		"^FD>:" + dinNumber + "^FS" +
+    		"^FD>:" + donationIdentificationNumber + "^FS" +
     		"^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
     		"^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ" 
     		);
@@ -270,38 +266,37 @@ public class LotReleaseController {
   }
 
 
-	private boolean checkCollectionNumber(Map map,
-			List<CollectedSample> collectedSample) {
+	private boolean checkCollectionNumber(CollectedSample collectedSample) {
 		boolean success=false;
 		if(collectedSample != null){
     	success=true;
-    	if(collectedSample.get(0).getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
-    			|| collectedSample.get(0).getTTIStatus().equals(TTIStatus.NOT_DONE)
+    	if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
+    			|| collectedSample.getTTIStatus().equals(TTIStatus.NOT_DONE)
     			){
     		success=false;
-    	}else if(collectedSample.get(0).getDonor()!=null && collectedSample.get(0).getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
+    	}else if(collectedSample.getDonor()!=null && collectedSample.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
-    	}else if(collectedSample.get(0).getProducts()!=null && !collectedSample.get(0).getProducts().isEmpty() && 
-    			(collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
-    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
-    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
-    			|| collectedSample.get(0).getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
+    	}else if(collectedSample.getProducts()!=null && !collectedSample.getProducts().isEmpty() && 
+    			(collectedSample.getProducts().getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
+    			|| collectedSample.getProducts().getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
+    			|| collectedSample.getProducts().getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
+    			|| collectedSample.getProducts().getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
     		success=false;
-    	}else if(collectedSample.get(0).getBloodTestResults()!=null 
-    			&& !collectedSample.get(0).getBloodTestResults().isEmpty() 
-    			&& !collectedSample.get(0).getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
+    	}else if(collectedSample.getBloodTestResults()!=null 
+    			&& !collectedSample.getBloodTestResults().isEmpty() 
+    			&& !collectedSample.getBloodTestResults().getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}
-    	else if(collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
-    			|| collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
-    			|| collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
-    			|| collectedSample.get(0).getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
+    	else if(collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
+    			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
+    			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
+    			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
     			){
     		success = false;
     	}
     	// TODO: improve deferrals check - should only flag donors that are CURRENTLY deferred 
-    	/*else if(collectedSample.get(0).getDonor().getDeferrals()!=null 
-    			&& ! collectedSample.get(0).getDonor().getDeferrals().isEmpty()){
+    	/*else if(collectedSample.getDonor().getDeferrals()!=null 
+    			&& ! collectedSample.getDonor().getDeferrals().isEmpty()){
     		success=false;
     	}
     	*/
@@ -312,13 +307,13 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private boolean checkCollectionForDiscard(Map map, List<CollectedSample> collectedSample){
+	private boolean checkCollectionForDiscard(CollectedSample collectedSample){
 		boolean discard = false;
 		
-		if(collectedSample.get(0).getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
+		if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
     		discard=true;
     	}
-		for(Product product : collectedSample.get(0).getProducts()){ 
+		for(Product product : collectedSample.getProducts()){ 
 			if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)){
 				discard = true;
 			}
