@@ -546,9 +546,10 @@ public class AdminController {
   @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public  ResponseEntity getDonationType(@PathVariable Integer id) {
-      
+      Map<String, Object> map = new HashMap<String, Object>();
       DonationType donationType = donationTypesRepository.getDonationTypeById(id);
-      return new ResponseEntity(donationType, HttpStatus.CREATED);
+      map.put("donationType", donationType);
+      return new ResponseEntity(map, HttpStatus.OK);
 
   }
     
@@ -556,7 +557,7 @@ public class AdminController {
   @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
-      
+       
       donationTypesRepository.saveDonationType(donationType);
       return new ResponseEntity(HttpStatus.CREATED);
 
@@ -566,9 +567,11 @@ public class AdminController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public  ResponseEntity updateDonationType(@PathVariable Integer id,
           @RequestBody DonationType donationType) {
+      Map<String, Object> map = new HashMap<String, Object>();
       donationType.setId(id);
       donationType = donationTypesRepository.updateDonationType(donationType);
-      return new ResponseEntity(donationType , HttpStatus.OK);
+      map.put("donationType", donationType);
+      return new ResponseEntity(map , HttpStatus.OK);
 
   }
   
