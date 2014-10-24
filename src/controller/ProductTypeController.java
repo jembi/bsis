@@ -1,5 +1,6 @@
  package controller;
 
+import backingform.ComponentTypeBackingForm;
 import backingform.ProductTypeCombinationBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,20 +63,24 @@ public class ProductTypeController {
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity saveComponentTypeByID(@RequestBody ProductType componentType) {
+  public  ResponseEntity saveComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm dataObject) {
 
+      ProductType componentType = dataObject.getProductType();
       productTypeRepository.saveComponentType(componentType);
       return new ResponseEntity(HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity updatedComponentTypeByID(@RequestBody ProductType componentType,
+  public  ResponseEntity updatedComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm dataObject,
   @PathVariable Integer id) {
 
+      Map<String, Object> map = new HashMap<String, Object>();
+      ProductType componentType = dataObject.getProductType();
       componentType.setId(id);
-      productTypeRepository.updateComponentType(componentType);
-      return new ResponseEntity(HttpStatus.CREATED);
+      componentType = productTypeRepository.updateComponentType(componentType);
+      map.put("componentType", componentType);
+      return new ResponseEntity(map, HttpStatus.CREATED);
   }
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
