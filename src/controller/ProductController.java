@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
@@ -46,6 +47,7 @@ import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 import viewmodel.ProductTypeViewModel;
+import viewmodel.ProductStatusChangeViewModel;
 import utils.CustomDateFormatter;
 
 @RestController
@@ -229,6 +231,16 @@ public class ProductController {
         map.put("components", components);
         return map;
     }
+    
+	public static List<ProductStatusChangeViewModel> getProductStatusChangeViewModels(List<ProductStatusChange> productStatusChanges) {
+	    if (productStatusChanges == null)
+	      return Arrays.asList(new ProductStatusChangeViewModel[0]);
+	    List<ProductStatusChangeViewModel> productStatusChangeViewModels = new ArrayList<ProductStatusChangeViewModel>();
+	    for (ProductStatusChange productStatusChange : productStatusChanges) {
+	    	productStatusChangeViewModels.add(new ProductStatusChangeViewModel(productStatusChange));
+	    }
+	    return productStatusChangeViewModels;
+	}
 
   public static List<ProductViewModel> getProductViewModels(
       List<Product> products) {
@@ -342,7 +354,10 @@ public class ProductController {
     Product product = productRepository.findProductById(id);
     ProductViewModel productViewModel = getProductViewModel(product);
     map.put("product", productViewModel);
-    map.put("allProductMovements", productRepository.getProductStatusChanges(product));
+    List<ProductStatusChange> productStatusChangeList = productRepository.getProductStatusChanges(product);
+    List<ProductStatusChangeViewModel> productStatusChanges = getProductStatusChangeViewModels(productStatusChangeList);
+    
+    map.put("productStatusChanges", productStatusChanges);
     return map;
   }
 
