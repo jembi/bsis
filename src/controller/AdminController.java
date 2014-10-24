@@ -488,8 +488,10 @@ public class AdminController {
    @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public ResponseEntity<BloodBagType> getPackTypeById(@PathVariable Integer id){
+        Map<String, Object> map = new HashMap<String, Object>();
         BloodBagType packType = bloodBagTypesRepository.getBloodBagTypeById(id);
-        return new ResponseEntity(packType, HttpStatus.NO_CONTENT);
+        map.put("packtype", packType);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
   
     
@@ -503,11 +505,12 @@ public class AdminController {
   
     @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity<BloodBagType> updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
-        
+    public ResponseEntity updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
+        Map<String, Object> map = new HashMap<String, Object>();
         packType.setId(id);
         packType = bloodBagTypesRepository.updateBloodBagType(packType);
-        return new ResponseEntity<BloodBagType>(packType, HttpStatus.OK);
+        map.put("packtype", packType);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     /**
