@@ -564,8 +564,9 @@ public class AdminController {
   
   @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity updateDonationType(@RequestBody DonationType donationType) {
-      
+  public  ResponseEntity updateDonationType(@PathVariable Integer id,
+          @RequestBody DonationType donationType) {
+      donationType.setId(id);
       donationType = donationTypesRepository.updateDonationType(donationType);
       return new ResponseEntity(donationType , HttpStatus.OK);
 
