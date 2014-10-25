@@ -141,6 +141,20 @@ public class BloodTypingController {
   }
 */
   
+  	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
+	public Map<String, Object> getBloodTypingForm(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<BloodTestViewModel> basicBloodTypingTests = getBasicBloodTypingTests();
+		map.put("basicBloodTypingTests", basicBloodTypingTests);
+		
+		List<BloodTestViewModel> advancedBloodTypingTests = getAdvancedBloodTypingTests();
+		map.put("advancedBloodTypingTests", advancedBloodTypingTests);
+	
+		return map;
+	}
+  
   public List<BloodTestViewModel> getBasicBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
