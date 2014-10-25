@@ -95,8 +95,11 @@ public class TTIController {
 		map.put("ttiFormFields",
 				utilController.getFormFieldsForForm("TTIForm"));
 
-		List<BloodTestViewModel> ttiTests = getBasicTTITests();
-		map.put("allTTITests", ttiTests);
+		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
+		map.put("basicTTITests", basicTTITests);
+		
+		List<BloodTestViewModel> confirmatoryTTITests = getConfirmatoryTTITests();
+		map.put("confirmatoryTTITests", confirmatoryTTITests);
 
 		return map;
 	}
@@ -105,6 +108,15 @@ public class TTIController {
 		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
 		for (BloodTest rawBloodTest : bloodTestingRepository
 				.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+			tests.add(new BloodTestViewModel(rawBloodTest));
+		}
+		return tests;
+	}
+	
+	public List<BloodTestViewModel> getConfirmatoryTTITests() {
+		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+		for (BloodTest rawBloodTest : bloodTestingRepository
+				.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
 			tests.add(new BloodTestViewModel(rawBloodTest));
 		}
 		return tests;
