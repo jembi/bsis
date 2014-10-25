@@ -134,14 +134,13 @@ public class BloodTypingController {
 
       map.put("success", true);
       map.put("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
-      map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
     }
 
     return map;
   }
 */
-  public List<BloodTestViewModel> getBloodTestsOnPlate() {
+  public List<BloodTestViewModel> getBasicBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       tests.add(new BloodTestViewModel(rawBloodTest));
@@ -209,7 +208,6 @@ public class BloodTypingController {
       map.put("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
       map.put("collectionsByCollectionId", results.get("collections"));
 
-      map.put("bloodTestsOnPlate", getBloodTestsOnPlate());
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
       httpStatus = HttpStatus.BAD_REQUEST;
