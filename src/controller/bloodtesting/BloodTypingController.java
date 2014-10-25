@@ -39,7 +39,7 @@ import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
-@RequestMapping("bloodtypes")
+@RequestMapping("bloodgroupingtests")
 public class BloodTypingController {
 
   @Autowired
