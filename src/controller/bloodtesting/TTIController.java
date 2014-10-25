@@ -243,14 +243,12 @@ public class TTIController {
 		// tests
 		BloodTestingRuleResult ruleResult = bloodTestingRepository
 				.getAllTestsStatusForCollection(collectedSampleId);
-		map.put("collection",
-				new CollectedSampleViewModel(collectedSample));
-		map.put("collectionId", collectedSample.getId());
+		map.put("donation", new CollectedSampleViewModel(collectedSample));
+		//map.put("collectionId", collectedSample.getId());
 		map.put("ttiOutputForCollection", ruleResult);
 		//map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-		map.put("recordMachineReadingsForTTI",
-				utilController.recordMachineResultsForTTI());
+		//map.put("recordMachineReadingsForTTI", utilController.recordMachineResultsForTTI());
 
 		return map;
 	}
