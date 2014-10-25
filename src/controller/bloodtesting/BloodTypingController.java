@@ -140,6 +140,7 @@ public class BloodTypingController {
     return map;
   }
 */
+  
   public List<BloodTestViewModel> getBasicBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
@@ -148,6 +149,14 @@ public class BloodTypingController {
     return tests;
   }
 
+  public List<BloodTestViewModel> getAdvancedBloodTypingTests() {
+    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
+      tests.add(new BloodTestViewModel(rawBloodTest));
+    }
+    return tests;
+  }
+  
   @SuppressWarnings("unchecked")
   
   @RequestMapping(value = "results", method=RequestMethod.POST)
