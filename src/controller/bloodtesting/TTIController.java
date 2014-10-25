@@ -245,7 +245,7 @@ public class TTIController {
 				.getAllTestsStatusForCollection(collectedSampleId);
 		map.put("donation", new CollectedSampleViewModel(collectedSample));
 		//map.put("collectionId", collectedSample.getId());
-		map.put("ttiOutputForCollection", ruleResult);
+		map.put("overview", ruleResult);
 		//map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
 		//map.put("recordMachineReadingsForTTI", utilController.recordMachineResultsForTTI());
