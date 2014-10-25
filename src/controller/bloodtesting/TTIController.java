@@ -92,8 +92,7 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> getTTIForm(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("ttiFormFields",
-				utilController.getFormFieldsForForm("TTIForm"));
+		//map.put("ttiFormFields", utilController.getFormFieldsForForm("TTIForm"));
 
 		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
 		map.put("basicTTITests", basicTTITests);
@@ -248,8 +247,7 @@ public class TTIController {
 				new CollectedSampleViewModel(collectedSample));
 		map.put("collectionId", collectedSample.getId());
 		map.put("ttiOutputForCollection", ruleResult);
-		map.put("collectionFields",
-				utilController.getFormFieldsForForm("collectedSample"));
+		//map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
 		map.put("recordMachineReadingsForTTI",
 				utilController.recordMachineResultsForTTI());
