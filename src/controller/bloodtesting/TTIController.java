@@ -252,19 +252,6 @@ public class TTIController {
 		map.put("recordMachineReadingsForTTI",
 				utilController.recordMachineResultsForTTI());
 
-		List<BloodTest> ttiTests = bloodTestingRepository.getTTITests();
-		Map<String, BloodTest> ttiTestsMap = new LinkedHashMap<String, BloodTest>();
-		for (BloodTest ttiTest : ttiTests) {
-			ttiTestsMap.put(ttiTest.getId().toString(), ttiTest);
-		}
-		map.put("allTTITests", ttiTestsMap);
-
-		List<BloodTest> allTTITests = bloodTestingRepository.getTTITests();
-		Map<String, BloodTest> allTTITestsMap = new TreeMap<String, BloodTest>();
-		for (BloodTest ttiTest : allTTITests) {
-			allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
-		}
-		map.put("allTTITests", allTTITestsMap);
 		return map;
 	}
 
