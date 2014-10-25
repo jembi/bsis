@@ -183,7 +183,7 @@ public class BloodTypingController {
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
     List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
-    map.put("collectionNumbers", StringUtils.join(collectionNumbers, ","));
+    //map.put("collectionNumbers", StringUtils.join(collectionNumbers, ","));
     map.put("collections", collections);
 
     Map<Long, Map<Long, String>> bloodTypingTestResults = parseBloodTestResults(bloodTypingTests);
@@ -203,13 +203,6 @@ public class BloodTypingController {
       success = false;
 
     if (success) {
-      List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
-      Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
-      for (BloodTest allBloodTypingTest : allBloodTypingTests) {
-        allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
-      }
-      map.put("allBloodTypingTests", allBloodTypingTestsMap);
-      map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
       map.put("collectionsByCollectionId", results.get("collections"));
 
       List<String> collectionIds = new ArrayList<String>();
@@ -225,9 +218,7 @@ public class BloodTypingController {
       // errors found
       map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
       map.put("errorMap", errorMap);
-      map.put("bloodTypingTests", bloodTypingTests);
       map.put("success", success);
-      map.put("changeCollectionsUrl", "bloodTypingWorksheetGenerator.html");
       map.put("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
       map.put("collectionsByCollectionId", results.get("collections"));
 
@@ -277,13 +268,7 @@ public class BloodTypingController {
     Map<String, Object> map = new HashMap<String, Object>();
     String[] collectionIds = donationIds.split(",");
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForCollections(Arrays.asList(collectionIds));
-    List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
-    Map<String, BloodTest> allBloodTypingTestsMap = new HashMap<String, BloodTest>();
-    for (BloodTest allBloodTypingTest : allBloodTypingTests) {
-      allBloodTypingTestsMap.put(allBloodTypingTest.getId().toString(), allBloodTypingTest);
-    }
-    map.put("allBloodTypingTests", allBloodTypingTestsMap);
-    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+
     // depend on the getBloodTypingTestStatus() method to return collections, blood typing output as
     // a linked hashmap so that iteration is done in the same order as the collections in the well
     map.put("collections", results.get("collections"));
@@ -300,24 +285,10 @@ public class BloodTypingController {
     Map<String, Object> map = new HashMap<String, Object>();
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(donationid);
     BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(donationid);
-    map.put("collection", new CollectedSampleViewModel(collectedSample));
-    map.put("collectionId", collectedSample.getId());
-    map.put("bloodTypingOutputForCollection", ruleResult);
-    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
+    map.put("donation", new CollectedSampleViewModel(collectedSample));
+    //map.put("collectionId", collectedSample.getId());
+    map.put("overview", ruleResult);
 
-    List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
-    Map<String, BloodTest> bloodTypingTestsMap = new LinkedHashMap<String, BloodTest>();
-    for (BloodTest bloodTypingTest : bloodTypingTests) {
-      bloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
-    }
-    map.put("allBloodTypingTests", bloodTypingTestsMap);
-
-    List<BloodTest> allBloodTypingTests = bloodTestingRepository.getBloodTypingTests();
-    Map<String, BloodTest> allBloodTypingTestsMap = new TreeMap<String, BloodTest>();
-    for (BloodTest bloodTypingTest : allBloodTypingTests) {
-      allBloodTypingTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
-    }
-    map.put("allBloodTypingTests", allBloodTypingTestsMap);
     return map;
   }
   
