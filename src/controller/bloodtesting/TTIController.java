@@ -255,7 +255,7 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/additional", method = RequestMethod.POST)
+	@RequestMapping(value = "/results/additional", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
 			@RequestBody TTITestResultBackingForm formData) {
 
