@@ -261,23 +261,36 @@ public class BloodTypingController {
     return bloodTestResultsMap;
   }
 
-  @RequestMapping(value="/status/{donationIds}", method=RequestMethod.GET)
+  @RequestMapping(value="/batchresults/{donationIds}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingStatusForCollections(
                         @PathVariable String donationIds) {
     Map<String, Object> map = new HashMap<String, Object>();
     String[] collectionIds = donationIds.split(",");
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForCollections(Arrays.asList(collectionIds));
+    
+    LinkedHashMap<String, CollectedSample> collections = (LinkedHashMap<String, CollectedSample>)results.get("collections");
 
     // depend on the getBloodTypingTestStatus() method to return collections, blood typing output as
     // a linked hashmap so that iteration is done in the same order as the collections in the well
-    map.put("collections", results.get("collections"));
-    map.put("bloodTypingOutput", results.get("bloodTestingResults"));
+    map.put("collections", getCollectionViewModels(collections));
+    map.put("overview", results.get("bloodTestingResults"));
     map.put("success", true);
     return map;
   }
+  
+  private Map<String, CollectedSampleViewModel> getCollectionViewModels(LinkedHashMap<String, CollectedSample> collections) {
+    if (collections == null)
+      return null;
+    Map<String, CollectedSampleViewModel> collectionViewModels = new LinkedHashMap<String, CollectedSampleViewModel>();    
+    for (Map.Entry<String, CollectedSample> entry : collections.entrySet())
+    {
+        collectionViewModels.put(entry.getKey(), new CollectedSampleViewModel(entry.getValue()));
+    }
+    return collectionViewModels;
+  }
 
-  @RequestMapping(value="/results/{donationid}", method=RequestMethod.GET)
+  @RequestMapping(value="/results/{donationId}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> showBloodTypingResultsForCollection(
       @PathVariable Long donationid) {
@@ -306,7 +319,7 @@ public class BloodTypingController {
     return map;
   }
 */
-  @RequestMapping(value="/results/addiional", method=RequestMethod.POST)
+  @RequestMapping(value="/results/additional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestBody BloodTypingResultBackingForm formData) {
