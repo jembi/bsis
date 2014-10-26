@@ -241,48 +241,31 @@ public class BloodTypingController {
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
     CollectedSample collection = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
-    //map.put("collectionNumbers", StringUtils.join(collectionNumbers, ","));
-    map.put("collection", collection);
 
     Map<Long, String> bloodTypingTestResults = form.getBloodTypingTestResults();
     Map<Long, Map<Long, String>> errorMap = null;
     map.put("bloodTypingTestResults", bloodTypingTestResults);
     boolean success = true;
     Map<String, Object> results = null;
-    try {
-      results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getBloodTypingTestResults(), form.getSaveUninterpretableResults());
-      if (results != null)
-        errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      success = false;
-    }
+    results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getBloodTypingTestResults(), form.getSaveUninterpretableResults());
+    if (results != null)
+      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     if (errorMap != null && !errorMap.isEmpty())
       success = false;
 
     if (success) {
-      map.put("collectionsByCollectionId", results.get("collection"));
-
-      /*List<String> collectionIds = new ArrayList<String>();
-      for (CollectedSample collection : collections) {
-        collectionIds.add(collection.getId().toString());
-      }
-      map.put("collectionIds", StringUtils.join(collectionIds, ","));
-      */
-
-      map.put("bloodTypingOutput", results.get("bloodTestingResults"));
+      map.put("collection",  new CollectedSampleViewModel((CollectedSample)results.get("collection")));
+      map.put("overview", results.get("bloodTestingResults"));
       map.put("success", success);
     }
     else {
       // errors found
-      //map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
       map.put("errorMap", errorMap);
       map.put("success", success);
       map.put("uninterpretableResults", results.get("uninterpretableResults"));
-      map.put("collection", results.get("collection"));
-
+      map.put("collection", new CollectedSampleViewModel((CollectedSample)results.get("collection")));
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
-      map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
+      map.put("errorMessage", "There were errors adding tests.");      
       httpStatus = HttpStatus.BAD_REQUEST;
     }
 
