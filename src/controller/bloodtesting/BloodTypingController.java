@@ -261,7 +261,7 @@ public class BloodTypingController {
       success = false;
 
     if (success) {
-      map.put("collectionsByCollectionId", results.get("collections"));
+      map.put("collectionsByCollectionId", results.get("collection"));
 
       /*List<String> collectionIds = new ArrayList<String>();
       for (CollectedSample collection : collections) {
@@ -275,11 +275,11 @@ public class BloodTypingController {
     }
     else {
       // errors found
-      map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
+      //map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
       map.put("errorMap", errorMap);
       map.put("success", success);
-      map.put("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
-      map.put("collectionsByCollectionId", results.get("collections"));
+      map.put("uninterpretableResults", results.get("uninterpretableResults"));
+      map.put("collection", results.get("collection"));
 
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
