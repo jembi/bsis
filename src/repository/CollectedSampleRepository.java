@@ -507,6 +507,18 @@ public class CollectedSampleRepository {
   }
   */
 
+  public CollectedSample verifyCollectionNumber(String collectionNumber) {
+	  CollectedSample collection = new CollectedSample();
+	  CollectedSample collectedSample = new CollectedSample();
+	  collectedSample.setCollectionNumber(collectionNumber);
+	  collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
+	  if (collectedSample != null) {
+	    return collectedSample;
+	  } else {
+	    return null;
+	  }
+  }
+  
   public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
     List<CollectedSample> collections = new ArrayList<CollectedSample>();
     for (String collectionNumber : collectionNumbers) {
