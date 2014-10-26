@@ -173,8 +173,8 @@ public class BloodTypingController {
     return tests;
   }
   
+  /* issue - #209 Method replaced by saveBloodTypingTestResult (method saves the results for a single donation, rather than multiple donations)
   @SuppressWarnings("unchecked")
-  
   @RequestMapping(value = "results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTests(
@@ -231,9 +231,40 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
-  
-  
-  @RequestMapping(value = "results/save", method=RequestMethod.POST)
+
+  private Map<Long, Map<Long, String>> parseBloodTestResults(
+      String bloodTestingResults) {
+    ObjectMapper mapper = new ObjectMapper();
+    System.out.println(bloodTestingResults);
+    Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long,String>>();
+    try {
+      @SuppressWarnings("unchecked")
+      Map<String, Map<String, String>> generatedMap = mapper.readValue(bloodTestingResults, HashMap.class);
+      for (String collectionId : generatedMap.keySet()) {
+        Map<Long, String> testResults = new HashMap<Long, String>();
+        bloodTestResultsMap.put(Long.parseLong(collectionId), testResults);
+        for (String testId : generatedMap.get(collectionId).keySet()) {
+          if (StringUtils.isBlank(testId))
+            continue;
+          testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
+        } 
+      } 
+    } catch (JsonParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    System.out.println(bloodTestResultsMap);
+    return bloodTestResultsMap;
+  }
+  */
+
+  @RequestMapping(value = "/results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTestResult(
 		@RequestBody @Valid BloodTypingResultBackingForm form) {
@@ -271,37 +302,6 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   } 
-  
-  private Map<Long, Map<Long, String>> parseBloodTestResults(
-      String bloodTestingResults) {
-    ObjectMapper mapper = new ObjectMapper();
-    System.out.println(bloodTestingResults);
-    Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long,String>>();
-    try {
-      @SuppressWarnings("unchecked")
-      Map<String, Map<String, String>> generatedMap = mapper.readValue(bloodTestingResults, HashMap.class);
-      for (String collectionId : generatedMap.keySet()) {
-        Map<Long, String> testResults = new HashMap<Long, String>();
-        bloodTestResultsMap.put(Long.parseLong(collectionId), testResults);
-        for (String testId : generatedMap.get(collectionId).keySet()) {
-          if (StringUtils.isBlank(testId))
-            continue;
-          testResults.put(Long.parseLong(testId), generatedMap.get(collectionId).get(testId));
-        } 
-      } 
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    System.out.println(bloodTestResultsMap);
-    return bloodTestResultsMap;
-  }
 
   @RequestMapping(value="/batchresults/{donationIds}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
