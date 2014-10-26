@@ -335,11 +335,11 @@ public class BloodTypingController {
   @RequestMapping(value="/results/{donationId}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> showBloodTypingResultsForCollection(
-      @PathVariable Long donationid) {
+      @PathVariable Long donationId) {
       
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(donationid);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(donationid);
+    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(donationId);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(donationId);
     map.put("donation", new CollectedSampleViewModel(collectedSample));
     //map.put("collectionId", collectedSample.getId());
     map.put("overview", ruleResult);
