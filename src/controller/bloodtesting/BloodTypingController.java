@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
@@ -37,6 +38,7 @@ import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
+import backingform.BloodTypingResultBackingForm;
 
 @RestController
 @RequestMapping("bloodgroupingtests")
@@ -229,7 +231,64 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
+  
+  
+  @RequestMapping(value = "results/save", method=RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
+  public ResponseEntity<Map<String, Object>> saveBloodTypingTestResult(
+		@RequestBody @Valid BloodTypingResultBackingForm form) {
 
+    HttpStatus httpStatus = HttpStatus.CREATED;
+    Map<String, Object> map = new HashMap<String, Object>();
+    CollectedSample collection = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+    //map.put("collectionNumbers", StringUtils.join(collectionNumbers, ","));
+    map.put("collection", collection);
+
+    Map<Long, String> bloodTypingTestResults = form.getBloodTypingTestResults();
+    Map<Long, Map<Long, String>> errorMap = null;
+    map.put("bloodTypingTestResults", bloodTypingTestResults);
+    boolean success = true;
+    Map<String, Object> results = null;
+    try {
+      results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getBloodTypingTestResults(), form.getSaveUninterpretableResults());
+      if (results != null)
+        errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      success = false;
+    }
+    if (errorMap != null && !errorMap.isEmpty())
+      success = false;
+
+    if (success) {
+      map.put("collectionsByCollectionId", results.get("collections"));
+
+      /*List<String> collectionIds = new ArrayList<String>();
+      for (CollectedSample collection : collections) {
+        collectionIds.add(collection.getId().toString());
+      }
+      map.put("collectionIds", StringUtils.join(collectionIds, ","));
+      */
+
+      map.put("bloodTypingOutput", results.get("bloodTestingResults"));
+      map.put("success", success);
+    }
+    else {
+      // errors found
+      map.put("plate", bloodTestingRepository.getPlate("bloodtyping"));
+      map.put("errorMap", errorMap);
+      map.put("success", success);
+      map.put("collectionsWithUninterpretableResults", results.get("collectionsWithUninterpretableResults"));
+      map.put("collectionsByCollectionId", results.get("collections"));
+
+      map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
+      map.put("errorMessage", "There were errors adding tests. Please verify the results in the wells highlighted in red.");      
+      httpStatus = HttpStatus.BAD_REQUEST;
+    }
+
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+  } 
+  
   private Map<Long, Map<Long, String>> parseBloodTestResults(
       String bloodTestingResults) {
     ObjectMapper mapper = new ObjectMapper();
@@ -330,13 +389,13 @@ public class BloodTypingController {
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
       @SuppressWarnings("unchecked")
-      Map<String, String> saveTestsData = null;
-      saveTestsData = formData.getTypingResult();
-      for (String testIdStr : saveTestsData.keySet()) {
-        saveTestsDataWithLong.put(Long.parseLong(testIdStr), saveTestsData.get(testIdStr));
+      Map<Long, String> saveTestsData = null;
+      saveTestsData = formData.getBloodTypingTestResults();
+      for (Long testIdStr : saveTestsData.keySet()) {
+        saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
       }
       bloodTypingTestResultsMap.put(formData.getDonationId(), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, formData.isSaveUninterpretableResults());
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, formData.getSaveUninterpretableResults());
       @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
       System.out.println(errorMap);
