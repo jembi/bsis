@@ -11,7 +11,8 @@ import java.util.Map;
 public class BloodTypingResultBackingForm {
     
     private Long donationId;
-    private Map<String, String> typingResult;
+    private String donationIdentificationNumber; 
+    private Map<Long, String> bloodTypingTestResults;
     private boolean saveUninterpretableResults;
 
     public Long getDonationId() {
@@ -21,16 +22,24 @@ public class BloodTypingResultBackingForm {
     public void setDonationId(Long donationId) {
         this.donationId = donationId;
     }
-
-    public Map<String, String> getTypingResult() {
-        return typingResult;
+    
+    public String getDonationIdentificationNumber() {
+        return donationIdentificationNumber;
     }
 
-    public void setTypingResult(Map<String, String> typingResult) {
-        this.typingResult = typingResult;
+    public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+        this.donationIdentificationNumber = donationIdentificationNumber;
     }
 
-    public boolean isSaveUninterpretableResults() {
+    public Map<Long, String> getBloodTypingTestResults() {
+        return bloodTypingTestResults;
+    }
+
+    public void setBloodTypingTestResults(Map<Long, String> bloodTypingTestResults) {
+        this.bloodTypingTestResults = bloodTypingTestResults;
+    }
+
+    public boolean getSaveUninterpretableResults() {
         return saveUninterpretableResults;
     }
 
