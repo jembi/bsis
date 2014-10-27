@@ -1,17 +1,12 @@
-
-
 package backingform;
 
 import java.util.Map;
 
-/**
- *
- * @author srikanth
- */
 public class TTITestResultBackingForm {
     
     private Long donationId;
-    private Map<String, String> testResult;
+    private String donationIdentificationNumber; 
+    private Map<String, String> ttiTestResults;
 
     public Long getDonationId() {
         return donationId;
@@ -20,13 +15,21 @@ public class TTITestResultBackingForm {
     public void setDonationId(Long donationId) {
         this.donationId = donationId;
     }
-
-    public Map<String, String> getTestResult() {
-        return testResult;
+    
+    public String getDonationIdentificationNumber() {
+        return donationIdentificationNumber;
     }
 
-    public void setTestResult(Map<String, String> testResult) {
-        this.testResult = testResult;
+    public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+        this.donationIdentificationNumber = donationIdentificationNumber;
     }
 
+    public Map<String, String> getTTITestResults() {
+        return ttiTestResults;
+    }
+
+    public void setTTITestResults(Map<String, String> ttiTestResults) {
+        this.ttiTestResults = ttiTestResults;
+    }
+    
 }

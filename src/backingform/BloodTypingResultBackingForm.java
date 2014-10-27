@@ -1,13 +1,7 @@
-
-
 package backingform;
 
 import java.util.Map;
 
-/**
- *
- * @author srikanth
- */
 public class BloodTypingResultBackingForm {
     
     private Long donationId;
@@ -46,9 +40,5 @@ public class BloodTypingResultBackingForm {
     public void setSaveUninterpretableResults(boolean saveUninterpretableResults) {
         this.saveUninterpretableResults = saveUninterpretableResults;
     }
-    
-    
-    
-    
-    
+  
 }
