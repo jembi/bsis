@@ -1,6 +1,7 @@
 package controller.bloodtesting;
 
 import backingform.BloodTypingResultBackingForm;
+import backingform.BloodTypingRuleBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -370,18 +371,15 @@ public class BloodTypingController {
     BloodTestingRuleViewModel bloodTypingRule;
     bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
     map.put("bloodTypingRule", bloodTypingRule);
-    List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
-    map.put("bloodTypingTests", bloodTypingTests);
-    map.put("bloodTypingTestsMap", getBloodTypingTestsAsMap(bloodTypingTests));
     return map;
   }
 
   @RequestMapping(value="rules", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity saveNewBloodTypingRule(
-        @RequestBody BloodTestingRule bloodTestingRule) {
+        @RequestBody BloodTypingRuleBackingForm form) {
       
-         bloodTestingRepository.saveBloodTypingRule(bloodTestingRule);
+         bloodTestingRepository.saveBloodTypingRule(form.getTypingRule());
          return new ResponseEntity(HttpStatus.CREATED);
   
   }
@@ -389,11 +387,14 @@ public class BloodTypingController {
   @RequestMapping(value="rules/{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity updateNewBloodTypingRule(
-        @RequestBody BloodTestingRule bloodTestingRule, @PathVariable Integer id) {
+        @RequestBody BloodTypingRuleBackingForm form, @PathVariable Integer id) {
       
-         bloodTestingRule.setId(id);
-         bloodTestingRepository.saveBloodTypingRule(bloodTestingRule);
-         return new ResponseEntity(HttpStatus.CREATED);
+         Map<String, Object> map = new HashMap<String, Object>();
+         form.setId(id);
+         BloodTestingRule typingRule = form.getTypingRule();
+         bloodTestingRepository.updateBloodTypingRule(typingRule);
+         map.put("bloodtest", new  BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id)));
+         return new ResponseEntity(map, HttpStatus.OK);
   
   }
   
@@ -408,7 +409,8 @@ public class BloodTypingController {
   }
   
   
-
+/**
+ * issue - #225 not used anywhere
   private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
     Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();
     for (BloodTest bt : bloodTypingTests) {
@@ -416,4 +418,5 @@ public class BloodTypingController {
     }
     return bloodTypingTestsMap;
   }
+ */
 }

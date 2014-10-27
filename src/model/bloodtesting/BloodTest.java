@@ -180,7 +180,7 @@ public class BloodTest implements Comparable<BloodTest> {
   }
   
   
-
+  
   public Boolean getIsDeleted() {
 	return isDeleted;
 }

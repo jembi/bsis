@@ -1,6 +1,6 @@
 package viewmodel;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,6 @@ import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestingRule;
 
-import org.apache.commons.lang3.StringUtils;
 
 public class BloodTestingRuleViewModel {
 
@@ -96,10 +95,18 @@ public class BloodTestingRuleViewModel {
     return subCategory;
   }
 
+  @JsonIgnore
   public Map<Integer, String> getPatternMap() {
     return patternMap;
   }
+  
+  public String  getPendingTestsIds() {
+      return rule.getPendingTestsIds();
+  }
 
+
+  /**
+   * issue - #225 
   public List<Integer> getPendingTestsIds() {
     List<Integer> pendingTestIds = new ArrayList<Integer>();
     if (rule.getPendingTestsIds() == null)
@@ -111,4 +118,9 @@ public class BloodTestingRuleViewModel {
     }
     return pendingTestIds;
   }
+   
+  */
+  
+
+  
 }

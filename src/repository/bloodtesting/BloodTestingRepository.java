@@ -631,13 +631,12 @@ public class BloodTestingRepository {
         */
      public void saveBloodTypingRule(
             BloodTestingRule bloodTestingRule) {
+         bloodTestingRule.setIsActive(Boolean.TRUE);
         em.persist(bloodTestingRule);
     }
 
-    public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule) 
-    throws IllegalAccessException{
+    public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule){
         return em.merge(bloodTestingRule);
-
     }
 
 	public void deleteBloodTestingRule(Integer ruleId) {
