@@ -6,7 +6,7 @@ public class TTITestResultBackingForm {
     
     private Long donationId;
     private String donationIdentificationNumber; 
-    private Map<String, String> ttiTestResults;
+    private Map<Long, String> ttiTestResults;
 
     public Long getDonationId() {
         return donationId;
@@ -24,11 +24,11 @@ public class TTITestResultBackingForm {
         this.donationIdentificationNumber = donationIdentificationNumber;
     }
 
-    public Map<String, String> getTTITestResults() {
+    public Map<Long, String> getTTITestResults() {
         return ttiTestResults;
     }
 
-    public void setTTITestResults(Map<String, String> ttiTestResults) {
+    public void setTTITestResults(Map<Long, String> ttiTestResults) {
         this.ttiTestResults = ttiTestResults;
     }
     
