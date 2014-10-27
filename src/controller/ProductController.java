@@ -439,7 +439,7 @@ public class ProductController {
 	      	   for (int i = 1; i <= noOfUnits; i++) {
 	              Product product = new Product();
 	              product.setIsDeleted(false);
-	              product.setDonationIdentificationNumber(createdPackNumber + "-" + i);
+	              product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
 	              DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	              Date createdOn = null, expiresOn = null;
 	              createdOn = formatter.parse(form.getDateExpiresFrom());
@@ -464,7 +464,7 @@ public class ProductController {
 	
 			  Product product = new Product();
 			  product.setIsDeleted(false);
-			  product.setDonationIdentificationNumber(createdPackNumber);
+			  product.setComponentIdentificationNumber(createdPackNumber);
 			  DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			  Date createdOn = null, expiresOn = null;
 			  createdOn = formatter.parse(form.getDateExpiresFrom());
@@ -518,7 +518,7 @@ public class ProductController {
     map.put("allProducts", getProductViewModels(products));
     map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,donationIdentificationNumber));
     
-    if(donationIdentificationNumber.contains("-") && productTypes != null){
+    if(productTypes != null){
     	addEditSelectorOptionsForNewRecordByList(map,productType);
   	}
   	else{

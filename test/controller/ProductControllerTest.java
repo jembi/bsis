@@ -72,7 +72,7 @@ public class ProductControllerTest {
 	      		try{
 		        	Product product = new Product();
 		          product.setIsDeleted(false);
-		          product.setDonationIdentificationNumber(createdPackNumber+"-"+i);
+		          product.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
 		          System.out.println("after :"+ productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
 		          c.add(Calendar.MINUTE, productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
@@ -106,7 +106,7 @@ public class ProductControllerTest {
 	      	try{
 		        	Product product = new Product();
 		          product.setIsDeleted(false);
-		          product.setDonationIdentificationNumber(createdPackNumber);
+		          product.setComponentIdentificationNumber(createdPackNumber);
 
 		          Calendar c=new GregorianCalendar();
 		          System.out.println("after :"+ productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
