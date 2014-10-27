@@ -162,8 +162,8 @@ public class ProductViewModel {
                  .contains(product.getStatus());
   }
   
-  public String getDonationIdentificationNumber() {
-    return product.getDonationIdentificationNumber();
+  public String getComponentIdentificationNumber() {
+    return product.getComponentIdentificationNumber();
   }
   
 }
