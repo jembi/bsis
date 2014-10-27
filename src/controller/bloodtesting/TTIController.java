@@ -124,8 +124,8 @@ public class TTIController {
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Map<String, Object>> saveTTITests(
+	@RequestMapping(value = "/results", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> saveTTITestResults(
 			@RequestBody @Valid TTITestResultBackingForm form) {
 
 		Map<Long, String> ttiTestResults = form.getTTITestResults();
@@ -240,6 +240,7 @@ public class TTIController {
 		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
 
+	/* #209 Method replaced by saveTTITests (method saves the results for a single donation, rather than multiple donations)
 	@RequestMapping(value = "/results", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public 
@@ -287,6 +288,7 @@ public class TTIController {
 
 		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
+	*/
         
         /**
          *issue $209[Adapt BSIS to expos rest Services] 
