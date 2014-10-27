@@ -2,11 +2,9 @@ package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestCategory;
 
-/**
- *
- * @author srikanth
- */
+
 public class BloodTestBackingForm {
 
     @JsonIgnore
@@ -14,14 +12,16 @@ public class BloodTestBackingForm {
 
     private Integer numberOfConfirmatoryTests;
 
-    private String bloodTestCategory;
-
     public BloodTestBackingForm() {
         bloodTest = new BloodTest();
     }
 
     public BloodTest getBloosTest() {
         return bloodTest;
+    }
+    
+    public void setId(Integer id){
+        bloodTest.setId(id);
     }
 
     public void setBloosTest(BloodTest bloodTest) {
@@ -60,12 +60,28 @@ public class BloodTestBackingForm {
         bloodTest.setTestNameShort(testNameShort);
     }
 
-    public String getBloodTestCategory() {
-        return bloodTestCategory;
+    public void setCategory(String Category) {
+        bloodTest.setCategory(BloodTestCategory.valueOf(Category));
     }
-
-    public void setBloodTestCategory(String bloodTestCategory) {
-        this.bloodTestCategory = bloodTestCategory;
+    
+    public void setvalidResults(String validResults){
+        bloodTest.setValidResults(validResults);
+    }
+    
+    public void setIsActive(Boolean isActive){
+        bloodTest.setIsActive(isActive);
+    }
+    
+    public void setNegativeResults(String negativeResults){
+        bloodTest.setNegativeResults(negativeResults);
+    }
+    
+    public void setPositiveResults(String positiveResults){
+        bloodTest.setNegativeResults(positiveResults);
+    }
+    
+    public void setRankInCategory(Integer rankInCategory){
+        bloodTest.setRankInCategory(rankInCategory);
     }
 
 }

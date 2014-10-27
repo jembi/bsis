@@ -765,15 +765,13 @@ public class BloodTestingRepository {
         
 	public void saveBloodTest(BloodTestBackingForm form) {
 		BloodTest bt = form.getBloodTest();
-		BloodTestCategory category = BloodTestCategory
-				.valueOf(form.getBloodTestCategory());
-		bt.setCategory(category);
 		bt.setIsEmptyAllowed(false);
-		bt.setNegativeResults("");
-		bt.setPositiveResults("");
-		bt.setValidResults("+,-");
+//		bt.setNegativeResults("");
+//		bt.setPositiveResults("");
+//		bt.setValidResults("+,-");
 		bt.setRankInCategory(1);
 		bt.setIsActive(true);
+                BloodTestCategory category = bt.getCategory();
 		if (category.equals(BloodTestCategory.BLOODTYPING)) {
 			bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
 			bt.setContext(genericConfigRepository
@@ -859,6 +857,14 @@ public class BloodTestingRepository {
 			em.persist(ttiUnsafeRule);
 		}
 	}
+        
+        /**
+         * TODO - To be improved
+         * issue - #225
+         */
+        public BloodTest updateBloodTest(BloodTestBackingForm backingObject){
+            return em.merge(backingObject.getBloodTest());
+        }
 
 
 	public void deactivateBloodTest(Integer bloodTestId) {
@@ -872,6 +878,8 @@ public class BloodTestingRepository {
 		bt.setIsActive(true);
 		em.merge(bt);
 	}
+        
+       
 
 	public List<BloodTestingRule> getTTIRules(boolean onlyActiveRules) {
 		String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category";
