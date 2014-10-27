@@ -2,11 +2,11 @@ package backingform;
 
 import java.util.Map;
 
-public class BloodTypingResultBackingForm {
+public class TestResultBackingForm {
     
     private Long donationId;
     private String donationIdentificationNumber; 
-    private Map<Long, String> bloodTypingTestResults;
+    private Map<Long, String> testResults;
     private boolean saveUninterpretableResults;
 
     public Long getDonationId() {
@@ -25,12 +25,12 @@ public class BloodTypingResultBackingForm {
         this.donationIdentificationNumber = donationIdentificationNumber;
     }
 
-    public Map<Long, String> getBloodTypingTestResults() {
-        return bloodTypingTestResults;
+    public Map<Long, String> getTestResults() {
+        return testResults;
     }
 
-    public void setBloodTypingTestResults(Map<Long, String> bloodTypingTestResults) {
-        this.bloodTypingTestResults = bloodTypingTestResults;
+    public void setTestResults(Map<Long, String> testResults) {
+        this.testResults = testResults;
     }
 
     public boolean getSaveUninterpretableResults() {
