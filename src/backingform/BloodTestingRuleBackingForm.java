@@ -10,12 +10,12 @@ import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.CollectionField;
 
 
-public class BloodTypingRuleBackingForm {
+public class BloodTestingRuleBackingForm {
 
    @JsonIgnore
     private BloodTestingRule typingRule;
     
-    public BloodTypingRuleBackingForm() {
+    public BloodTestingRuleBackingForm() {
         typingRule = new BloodTestingRule();
     }
 

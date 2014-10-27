@@ -1,7 +1,7 @@
 package controller.bloodtesting;
 
 import backingform.BloodTypingResultBackingForm;
-import backingform.BloodTypingRuleBackingForm;
+import backingform.BloodTestingRuleBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -364,20 +364,19 @@ public class BloodTypingController {
 
   @RequestMapping(value="rules/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
-  public Map<String, Object> getBloodTypingRuleSummary(HttpServletRequest request,
-      @PathVariable Integer id) {
+  public Map<String, Object> getBloodTypingRuleSummary(@PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    BloodTestingRuleViewModel bloodTypingRule;
-    bloodTypingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
-    map.put("bloodTypingRule", bloodTypingRule);
+    BloodTestingRuleViewModel bloodTestingRule;
+    bloodTestingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
+    map.put("bloodTypingRule", bloodTestingRule);
     return map;
   }
 
   @RequestMapping(value="rules", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity saveNewBloodTypingRule(
-        @RequestBody BloodTypingRuleBackingForm form) {
+  public ResponseEntity saveBloodTypingRule(
+        @RequestBody BloodTestingRuleBackingForm form) {
       
          bloodTestingRepository.saveBloodTypingRule(form.getTypingRule());
          return new ResponseEntity(HttpStatus.CREATED);
@@ -387,7 +386,7 @@ public class BloodTypingController {
   @RequestMapping(value="rules/{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity updateNewBloodTypingRule(
-        @RequestBody BloodTypingRuleBackingForm form, @PathVariable Integer id) {
+        @RequestBody BloodTestingRuleBackingForm form, @PathVariable Integer id) {
       
          Map<String, Object> map = new HashMap<String, Object>();
          form.setId(id);
