@@ -1,6 +1,6 @@
 package controller.bloodtesting;
 
-import backingform.BloodTypingResultBackingForm;
+import backingform.TestResultBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,6 @@ import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
-import backingform.BloodTypingResultBackingForm;
 
 @RestController
 @RequestMapping("bloodgroupingtests")
@@ -267,18 +266,18 @@ public class BloodTypingController {
   @RequestMapping(value = "/results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTestResults(
-		@RequestBody @Valid BloodTypingResultBackingForm form) {
+		@RequestBody @Valid TestResultBackingForm form) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
     CollectedSample collection = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
 
-    Map<Long, String> bloodTypingTestResults = form.getBloodTypingTestResults();
+    Map<Long, String> bloodTypingTestResults = form.getTestResults();
     Map<Long, Map<Long, String>> errorMap = null;
     map.put("bloodTypingTestResults", bloodTypingTestResults);
     boolean success = true;
     Map<String, Object> results = null;
-    results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getBloodTypingTestResults(), form.getSaveUninterpretableResults());
+    results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getTestResults(), form.getSaveUninterpretableResults());
     if (results != null)
       errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     if (errorMap != null && !errorMap.isEmpty())
@@ -363,7 +362,7 @@ public class BloodTypingController {
   @RequestMapping(value="/results/additional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
-      @RequestBody BloodTypingResultBackingForm formData) {
+      @RequestBody TestResultBackingForm formData) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
@@ -372,7 +371,7 @@ public class BloodTypingController {
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
       @SuppressWarnings("unchecked")
       Map<Long, String> saveTestsData = null;
-      saveTestsData = formData.getBloodTypingTestResults();
+      saveTestsData = formData.getTestResults();
       for (Long testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
       }

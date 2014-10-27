@@ -1,7 +1,7 @@
 package controller.bloodtesting;
 
 import au.com.bytecode.opencsv.CSVReader;
-import backingform.TTITestResultBackingForm;
+import backingform.TestResultBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -126,9 +126,9 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/results", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveTTITestResults(
-			@RequestBody @Valid TTITestResultBackingForm form) {
+			@RequestBody @Valid TestResultBackingForm form) {
 
-		Map<Long, String> ttiTestResults = form.getTTITestResults();
+		Map<Long, String> ttiTestResults = form.getTestResults();
         HttpStatus httpStatus = HttpStatus.CREATED;        
 		boolean success = true;
 		String errorMessage = "";
@@ -139,7 +139,7 @@ public class TTIController {
 
 		Map<String, Object> results = null;
 		
-		results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getTTITestResults(), true);
+		results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getTestResults(), true);
 	    if (results != null)
 	      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
 	    if (errorMap != null && !errorMap.isEmpty())
@@ -214,7 +214,7 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/results/additional", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
-			@RequestBody TTITestResultBackingForm formData) {
+			@RequestBody TestResultBackingForm formData) {
 
 		HttpStatus httpStatus = HttpStatus.CREATED;
                 Map<String, Object> m = new HashMap<String, Object>();
@@ -223,7 +223,7 @@ public class TTIController {
 			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
 			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 			ObjectMapper mapper = new ObjectMapper();
-			Map<Long, String> saveTestsData = formData.getTTITestResults();
+			Map<Long, String> saveTestsData = formData.getTestResults();
 			for (Long testIdStr : saveTestsData.keySet()) {
 				saveTestsDataWithLong.put(testIdStr,
 						saveTestsData.get(testIdStr));
