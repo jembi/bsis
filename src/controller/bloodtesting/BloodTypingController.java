@@ -285,20 +285,19 @@ public class BloodTypingController {
       success = false;
 
     if (success) {
-      map.put("collection",  new CollectedSampleViewModel((CollectedSample)results.get("collection")));
       map.put("overview", results.get("bloodTestingResults"));
-      map.put("success", success);
     }
     else {
       // errors found
       map.put("errorMap", errorMap);
-      map.put("success", success);
       map.put("uninterpretableResults", results.get("uninterpretableResults"));
-      map.put("collection", new CollectedSampleViewModel((CollectedSample)results.get("collection")));
       map.put("bloodTypingConfig", genericConfigRepository.getConfigProperties("bloodTyping"));
       map.put("errorMessage", "There were errors adding tests.");      
       httpStatus = HttpStatus.BAD_REQUEST;
     }
+    
+    map.put("collection",  new CollectedSampleViewModel((CollectedSample)results.get("collection")));
+    map.put("success", success);
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   } 
