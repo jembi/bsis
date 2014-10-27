@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repository.CollectedSampleRepository;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
@@ -56,6 +57,9 @@ public class ProductController {
 
   @Autowired
   private ProductRepository productRepository;
+  
+  @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
   private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
@@ -419,39 +423,48 @@ public class ProductController {
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
        @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
-      ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
-      String collectionNumber = form.getCollectionNumber();
-      String status = form.getStatus().get(0);
-      long productId = form.getProductID();
+      ProductType productType2 = form.getChildComponentType();
+      CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(Long.valueOf(form.getParentComponentId()));
+      String collectionNumber = collectedSample.getCollectionNumber();
+      Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
+      ProductStatus status = parentComponent.getStatus();
+      long productId = Long.valueOf(form.getParentComponentId());
       
-      if(collectionNumber.contains("-")){
+      /*if(collectionNumber.contains("-")){
       	collectionNumber = collectionNumber.split("-")[0];
       }
+      */
       String sortName = productType2.getProductTypeNameShort();
-      int noOfUnits = form.getNoOfUnits();
-      long collectedSampleID = form.getCollectedSampleID();      
+      int noOfUnits = form.getNumUnits();
+      long collectedSampleID = collectedSample.getId();      
       String createdPackNumber = collectionNumber +"-"+sortName;
       
       // Add New product
-      if(!status.equalsIgnoreCase("PROCESSED")){
+      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
 	      if(noOfUnits > 0 ){
 	      	
 	      	   for (int i = 1; i <= noOfUnits; i++) {
 	              Product product = new Product();
 	              product.setIsDeleted(false);
 	              product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
+	              /** TODO: AUTOGENERATE THESE VALUES
 	              DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	              Date createdOn = null, expiresOn = null;
 	              createdOn = formatter.parse(form.getDateExpiresFrom());
 	              expiresOn = formatter.parse(form.getDateExpiresTo());
 		          product.setCreatedOn(createdOn);
 		          product.setExpiresOn(expiresOn);
+		          */
+	              /*
 		          ProductType productType = new ProductType();
 		          productType.setProductType(form.getProductTypes().get(0));
 		          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-		          product.setProductType(productType);
+		          */
+		          product.setProductType(productType2);
+		          /*
 		          CollectedSample collectedSample = new CollectedSample();
 		          collectedSample.setId(collectedSampleID);
+		          */
 		          product.setCollectedSample(collectedSample);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			      productRepository.addProduct(product);
@@ -465,18 +478,24 @@ public class ProductController {
 			  Product product = new Product();
 			  product.setIsDeleted(false);
 			  product.setComponentIdentificationNumber(createdPackNumber);
+			  /** TODO: AUTOGENERATE THESE VALUES
 			  DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			  Date createdOn = null, expiresOn = null;
 			  createdOn = formatter.parse(form.getDateExpiresFrom());
 			  expiresOn = formatter.parse(form.getDateExpiresTo());
 			  product.setCreatedOn(createdOn);
 			  product.setExpiresOn(expiresOn);
+			  */
+			  /*
 			  ProductType productType = new ProductType();
 			  productType.setProductType(form.getProductTypes().get(0));
 			  productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-			  product.setProductType(productType);
+			  */
+			  product.setProductType(productType2);
+			  /*
 			  CollectedSample collectedSample = new CollectedSample();
 			  collectedSample.setId(collectedSampleID);
+			  */
 			  product.setCollectedSample(collectedSample);
 			  product.setStatus(ProductStatus.QUARANTINED);
 			  productRepository.addProduct(product);
@@ -491,12 +510,14 @@ public class ProductController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("allProducts", getProductViewModels(products));
     
+    /*
     if(form.getCollectionNumber().contains("-")){
     	addEditSelectorOptionsForNewRecordByList(map,productType2);
   	}
   	else{
   		addEditSelectorOptionsForNewRecord(map);
   	}
+  	*/
 
     return  new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
