@@ -173,7 +173,7 @@ public class BloodTypingController {
     return tests;
   }
   
-  /* issue - #209 Method replaced by saveBloodTypingTestResult (method saves the results for a single donation, rather than multiple donations)
+  /* issue - #209 Method replaced by saveBloodTypingTestResults (method saves the results for a single donation, rather than multiple donations)
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
@@ -266,7 +266,7 @@ public class BloodTypingController {
 
   @RequestMapping(value = "/results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
-  public ResponseEntity<Map<String, Object>> saveBloodTypingTestResult(
+  public ResponseEntity<Map<String, Object>> saveBloodTypingTestResults(
 		@RequestBody @Valid BloodTypingResultBackingForm form) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
