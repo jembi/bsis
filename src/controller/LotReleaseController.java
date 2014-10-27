@@ -28,7 +28,7 @@ import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("lotreleases")
+@RequestMapping("labels")
 public class LotReleaseController {
 
   @Autowired
@@ -68,7 +68,7 @@ public class LotReleaseController {
     return map;
   }
   */
-  @RequestMapping(value = "/find/{donationIdentificationNumber}", method=RequestMethod.GET)
+  @RequestMapping(value = "/status/{donationIdentificationNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
   public ResponseEntity<Map<String, Object>> findlotRelease(HttpServletRequest request,
           @PathVariable String donationIdentificationNumber)  {
@@ -113,7 +113,7 @@ public class LotReleaseController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/printLabel/{donationIdentificationNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/print/packlabel/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable String donationIdentificationNumber) {
 	  
@@ -244,7 +244,7 @@ public class LotReleaseController {
 	    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/printDiscard/{donationIdentificationNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/print/discardlabel/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> printDiscard(@PathVariable String donationIdentificationNumber) {
 	  
