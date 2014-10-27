@@ -4,9 +4,44 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import model.producttype.ProductType;
 
 public class RecordProductBackingForm {
-
+	
+	@NotBlank
+    private String parentComponentId;
+	
+	@NotNull
+    private ProductType childComponentType;
+	
+	@NotNull
+    private Integer numUnits;
+	
+	public String getParentComponentId() {
+        return parentComponentId;
+    }
+	
+	public void setParentComponentId(String parentComponentId){
+		this.parentComponentId = parentComponentId;
+	}
+	
+	public ProductType getChildComponentType() {
+        return childComponentType;
+    }
+	
+	public void setChildComponentType(ProductType childComponentType){
+		this.childComponentType = childComponentType;
+	}
+	
+	public Integer getNumUnits() {
+        return numUnits;
+    }
+	
+	public void setNumUnits(Integer numUnits){
+		this.numUnits = numUnits;
+	}
+	
+/*
     private String searchBy;
 
     @NotBlank
@@ -115,5 +150,5 @@ public class RecordProductBackingForm {
     public void setProductID(Long productID) {
         this.productID = productID;
     }
-
+*/
 }
