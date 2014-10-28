@@ -53,7 +53,7 @@ public class RoleController {
 		return map;
 	}
 
-	@RequestMapping(value = "form", method = RequestMethod.GET)
+	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public  Map<String, Object> editRoleFormGenerator() {
                 Map<String, Object> map = new HashMap<String, Object>();
