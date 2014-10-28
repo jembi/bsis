@@ -51,6 +51,7 @@ public class CollectionBatch implements ModificationTracker {
   private List<CollectedSample> collectionsInBatch;
 
   private boolean isDeleted;
+  private boolean isClosed;
 
   @Lob
   private String notes;
@@ -99,6 +100,14 @@ public class CollectionBatch implements ModificationTracker {
 
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+  
+  public boolean getIsClosed() {
+    return isClosed;
+  }
+
+  public void setIsClosed(boolean isClosed) {
+    this.isClosed = isClosed;
   }
 
   public Location getCollectionCenter() {

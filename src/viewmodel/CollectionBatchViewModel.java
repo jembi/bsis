@@ -65,4 +65,8 @@ public class CollectionBatchViewModel {
       return "";
     return user.getUsername();
   }
+  
+  public Boolean getIsClosed() {
+    return collectionBatch.getIsClosed();
+  }
 }
