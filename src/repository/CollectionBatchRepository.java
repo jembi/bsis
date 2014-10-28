@@ -88,29 +88,19 @@ public class CollectionBatchRepository {
     return collectionBatch;
   }
 
-  public List<CollectionBatch> findCollectionBatches(String batchNumber,
+  public List<CollectionBatch> findCollectionBatches(boolean isClosed,
       List<Long> centerIds, List<Long> siteIds) {
-    String queryStr = "";
-    if (StringUtils.isNotBlank(batchNumber)) {
-      queryStr = "SELECT b from CollectionBatch b " +
-                   "WHERE b.batchNumber=:batchNumber AND " +
-                   "b.collectionCenter.id IN (:centerIds) AND " +
-                   "b.collectionSite.id IN (:siteIds) AND " +
-                   "b.isDeleted=:isDeleted";
-    }
-    else {
-      queryStr = "SELECT b from CollectionBatch b " +
-                 "WHERE b.collectionCenter.id IN (:centerIds) AND " +
-                 "b.collectionSite.id IN (:siteIds) AND " +
-                 "b.isDeleted=:isDeleted";
-    }
+    String queryStr = "SELECT b from CollectionBatch b " +
+         "WHERE b.collectionCenter.id IN (:centerIds) AND " +
+         "b.collectionSite.id IN (:siteIds) AND " +
+         "b.isDeleted=:isDeleted AND " + 
+         "b.isClosed=:isClosed";
     
     TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
-    if (StringUtils.isNotBlank(batchNumber))
-      query.setParameter("batchNumber", batchNumber);
     query.setParameter("centerIds", centerIds);
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", false);
+    query.setParameter("isClosed", isClosed);
     return query.getResultList();
   }
 
