@@ -70,9 +70,9 @@ public class GlobalControllerExceptionHandler {
         NoResultException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "No object/entity fetched, but expected one");
+    errorMap.put("developerMessage",error.getMessage());
     errorMap.put("userMessage", "");
-    errorMap.put("moreInfo",error.getMessage());
+    errorMap.put("moreInfo",error.getStackTrace()[1]);
     errorMap.put("errorCode", HttpStatus.NOT_FOUND);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.NOT_FOUND);
@@ -174,7 +174,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", error.getMessage());
     errorMap.put("userMessage", "");
-    errorMap.put("moreInfo","");
+    errorMap.put("moreInfo",error.getStackTrace()[1]);
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -232,7 +232,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "Null Pointer Exception: " + error.getStackTrace()[0]);
     errorMap.put("userMessage", "");
-    errorMap.put("moreInfo", "");
+    errorMap.put("moreInfo", error.getStackTrace()[1]);
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
