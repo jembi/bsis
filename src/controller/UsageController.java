@@ -65,7 +65,7 @@ public class UsageController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/add/form", method = RequestMethod.GET)
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public Map<String, Object> addUsageFormGenerator(HttpServletRequest request) {
 
@@ -135,7 +135,8 @@ public class UsageController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-
+/**
+ * dupiv=cate - method - #209
   @RequestMapping(value = "/components/usage/add/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public Map<String, Object> addUsageForProductFormGenerator(HttpServletRequest request,
@@ -155,7 +156,7 @@ public class UsageController {
     map.put("usageFields", formFields);
     return map;
   }
-
+*/
     @RequestMapping(value = "/forproduct", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
     public ResponseEntity<Map<String, Object>> addUsageForProduct(
