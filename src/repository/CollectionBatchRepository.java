@@ -56,6 +56,7 @@ public class CollectionBatchRepository {
     }
   }
 
+  /*
   public CollectionBatch
          findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber)throws NoResultException, NonUniqueResultException{
     String queryString = "SELECT b FROM CollectionBatch b " +
@@ -64,6 +65,20 @@ public class CollectionBatchRepository {
     CollectionBatch batch = null;
     batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
     return batch;
+  }
+  */
+  
+  public CollectionBatch
+	  findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber){
+	String queryString = "SELECT b FROM CollectionBatch b " +
+	 "WHERE b.batchNumber = :batchNumber";
+	TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
+	CollectionBatch batch = null;
+	try{
+	batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
+	}catch(Exception ex){}
+	return batch;
+	
   }
 
   public CollectionBatch addCollectionBatch(CollectionBatch collectionBatch) {
