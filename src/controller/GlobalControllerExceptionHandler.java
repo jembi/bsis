@@ -57,7 +57,6 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo","");
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
