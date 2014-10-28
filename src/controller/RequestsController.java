@@ -127,7 +127,6 @@ public class RequestsController {
   }
 */
  
-
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
   public  Map<String, Object> findRequestPagination(
@@ -328,8 +327,8 @@ public class RequestsController {
 
       form.setId(id);
       form.setIsDeleted(false);
-      requestRepository.updateRequest(form.getRequest());
-      return new ResponseEntity(HttpStatus.NO_CONTENT);
+      Request request = requestRepository.updateRequest(form.getRequest());
+      return new ResponseEntity(new RequestViewModel(request), HttpStatus.OK);
   }
 
   private List<RequestViewModel> getRequestViewModels(
