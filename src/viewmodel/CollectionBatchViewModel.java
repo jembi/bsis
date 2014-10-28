@@ -13,12 +13,11 @@ public class CollectionBatchViewModel {
 
   private CollectionBatch collectionBatch;
 
+  public CollectionBatchViewModel() {
+  }
+  
   public CollectionBatchViewModel(CollectionBatch collectionBatch) {
     this.collectionBatch = collectionBatch;
-  }
-
-  public CollectionBatch getCollectionBatch() {
-    return collectionBatch;
   }
 
   public Integer getId() {
