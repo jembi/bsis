@@ -34,6 +34,7 @@ public class RequestBackingForm {
     this.setRequest(request);
   }
 
+
   public Long getId() {
     return request.getId();
   }
@@ -75,6 +76,7 @@ public class RequestBackingForm {
     return request.getModificationTracker();
   }
 
+/**
   public String getProductType() {
     ProductType productType = request.getProductType();
     if (productType == null || productType.getId() == null)
@@ -98,11 +100,11 @@ public class RequestBackingForm {
       return null;
     return site.getId().toString();
   }
-
+*/
   public Boolean getIsDeleted() {
     return request.getIsDeleted();
   }
-
+  
   public void setId(Long id) {
     request.setId(id);
   }
@@ -145,26 +147,12 @@ public class RequestBackingForm {
     request.setNotes(notes);
   }
 
-  public void setProductType(String productTypeId) {
-    if (StringUtils.isBlank(productTypeId)) {
-      request.setProductType(null);
-    }
-    else {
-      ProductType pt = new ProductType();
-      pt.setId(Integer.parseInt(productTypeId));
-      request.setProductType(pt);
-    }
+  public void setProductType(ComponentTypeBackingForm productType) {
+    request.setProductType(productType.getProductType());
   }
 
-  public void setRequestType(String requestTypeId) {
-    if (StringUtils.isBlank(requestTypeId)) {
-      request.setRequestType(null);
-    }
-    else {
-      RequestType rt = new RequestType();
-      rt.setId(Integer.parseInt(requestTypeId));
-      request.setRequestType(rt);
-    }
+  public void setRequestType(RequestType requestType) {
+      request.setRequestType(requestType);
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -183,15 +171,8 @@ public class RequestBackingForm {
     request.setModificationTracker(modificationTracker);
   }
 
-  public void setRequestSite(String requestSite) {
-    if (requestSite == null) {
-      request.setRequestSite(null);
-    }
-    else {
-      Location l = new Location();
-      l.setId(Long.parseLong(requestSite));
-      request.setRequestSite(l);
-    }
+  public void setRequestSite(LocationBackingForm requestSite) {
+      request.setRequestSite(requestSite.getLocation());
   }
 
   @JsonIgnore
