@@ -500,7 +500,7 @@ public class AdminController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public ResponseEntity savePackType(@RequestBody BloodBagType packType){
         bloodBagTypesRepository.saveBloodBagType(packType);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(packType, HttpStatus.NO_CONTENT);
     }
   
     @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
@@ -559,7 +559,7 @@ public class AdminController {
   public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
        
       donationTypesRepository.saveDonationType(donationType);
-      return new ResponseEntity(HttpStatus.CREATED);
+      return new ResponseEntity(donationType, HttpStatus.CREATED);
 
   }
   
