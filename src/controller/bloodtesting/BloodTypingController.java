@@ -1,7 +1,6 @@
 package controller.bloodtesting;
 
 import backingform.BloodTypingResultBackingForm;
-import backingform.BloodTestingRuleBackingForm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +16,6 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
-import model.bloodtesting.rules.BloodTestingRule;
 import model.collectedsample.CollectedSample;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,6 @@ import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
-import viewmodel.BloodTestingRuleViewModel;
 import viewmodel.CollectedSampleViewModel;
 
 @RestController
@@ -348,65 +345,6 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
-
-    @RequestMapping(value = "rules", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TYPING_RULES + "')")
-    public Map<String, Object> configureBloodTypingTests() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
-        List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
-        for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-            rules.add(new BloodTestingRuleViewModel(rule));
-        }
-        map.put("bloodTypingRules", rules);
-        return map;
-    }
-
-  @RequestMapping(value="rules/{id}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
-  public Map<String, Object> getBloodTypingRuleSummary(@PathVariable Integer id) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    BloodTestingRuleViewModel bloodTestingRule;
-    bloodTestingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
-    map.put("bloodTypingRule", bloodTestingRule);
-    return map;
-  }
-
-  @RequestMapping(value="rules", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity saveBloodTypingRule(
-        @RequestBody BloodTestingRuleBackingForm form) {
-      
-         bloodTestingRepository.saveBloodTypingRule(form.getTypingRule());
-         return new ResponseEntity(HttpStatus.CREATED);
-  
-  }
-  
-  @RequestMapping(value="rules/{id}", method=RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity updateNewBloodTypingRule(
-        @RequestBody BloodTestingRuleBackingForm form, @PathVariable Integer id) {
-      
-         Map<String, Object> map = new HashMap<String, Object>();
-         form.setId(id);
-         BloodTestingRule typingRule = form.getTypingRule();
-         bloodTestingRepository.updateBloodTypingRule(typingRule);
-         map.put("bloodtest", new  BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id)));
-         return new ResponseEntity(map, HttpStatus.OK);
-  
-  }
-  
-  
-  @RequestMapping(value = "/rules/{id}", method=RequestMethod.DELETE)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity deleteBloodTypingRule(HttpServletRequest request,
-      @PathVariable Integer id) {
-
-    bloodTestingRepository.deleteBloodTestingRule(id);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-  
   
 /**
  * issue - #225 not used anywhere
