@@ -91,10 +91,10 @@ public class CollectionBatchRepository {
   public List<CollectionBatch> findCollectionBatches(Boolean isClosed,
       List<Long> centerIds, List<Long> siteIds) {
     String queryStr = "SELECT b from CollectionBatch b WHERE b.isDeleted=:isDeleted ";
-    if(!centerIds.isEmpty() && centerIds != null){
+    if(!centerIds.isEmpty()){
     	queryStr += "AND b.collectionCenter.id IN (:centerIds) ";
     }
-    if(!siteIds.isEmpty() && siteIds != null){
+    if(!siteIds.isEmpty()){
     	queryStr += "AND b.collectionSite.id IN (:siteIds) ";
     }
     if(isClosed != null){
@@ -103,10 +103,10 @@ public class CollectionBatchRepository {
     
     TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
     query.setParameter("isDeleted", false);
-    if(!centerIds.isEmpty() && centerIds != null){
+    if(!centerIds.isEmpty()){
     	query.setParameter("centerIds", centerIds);
     }
-    if(!siteIds.isEmpty() && siteIds != null){
+    if(!siteIds.isEmpty()){
     	query.setParameter("siteIds", siteIds);
     }
     if(isClosed != null){
