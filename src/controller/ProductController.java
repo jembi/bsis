@@ -112,7 +112,7 @@ public class ProductController {
     return map;
   }
 
-  @RequestMapping(value = "form", method = RequestMethod.GET)
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();

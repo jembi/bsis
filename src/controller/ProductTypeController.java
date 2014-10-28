@@ -101,7 +101,7 @@ public class ProductTypeController {
     return getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted);
   }
   
-  @RequestMapping(value="Combinations/{id}", method=RequestMethod.GET)
+  @RequestMapping(value="/combinations/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
       @PathVariable Integer id) {
@@ -112,7 +112,7 @@ public class ProductTypeController {
     return map;
   }
 
-    @RequestMapping(value = "combinations", method = RequestMethod.POST)
+    @RequestMapping(value = "/combinations", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public
             ResponseEntity saveProductTypeCombination(@RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm) {
@@ -123,7 +123,7 @@ public class ProductTypeController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
     
-    @RequestMapping(value = "combinations/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/combinations/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public 
     ResponseEntity updateProductTypeCombination(HttpServletResponse response,
