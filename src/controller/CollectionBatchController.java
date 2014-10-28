@@ -79,7 +79,7 @@ public class CollectionBatchController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  Map<String, Object> findCollectionBatch(HttpServletRequest request,
-          @RequestParam(value = "isClosed", required = false) boolean isClosed,
+          @RequestParam(value = "isClosed", required = false) Boolean isClosed,
           @RequestParam(value = "collectionCenters", required = false) List<Long> centerIds,
           @RequestParam(value = "collectionSites", required = false) List<Long> siteIds ) {
 
