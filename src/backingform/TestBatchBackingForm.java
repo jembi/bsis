@@ -14,5 +14,15 @@ public class TestBatchBackingForm {
     public void setLastDIN(String lastDIN) {
         this.lastDIN = lastDIN;
     }
+
+    public String getFirstDIN() {
+        return firstDIN;
+    }
+
+    public String getLastDIN() {
+        return lastDIN;
+    }
+    
+    
     
 }
