@@ -23,6 +23,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.LocationExists;
+import model.testbatch.TestBatch;
 
 
 @Entity
@@ -49,6 +50,10 @@ public class CollectionBatch implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectionBatch")
   private List<CollectedSample> collectionsInBatch;
+  
+  
+  @ManyToOne
+  private TestBatch testBatch;
 
   private boolean isDeleted;
 
@@ -116,6 +121,15 @@ public class CollectionBatch implements ModificationTracker {
   public void setCollectionSite(Location collectionSite) {
     this.collectionSite = collectionSite;
   }
+  
+  public TestBatch getTestBatch() {
+     return testBatch;
+   }
+
+  public void setTestBatch(TestBatch testBatch) {
+     this.testBatch = testBatch;
+   }
+
 
   @Override
   public Date getLastUpdated() {
@@ -156,4 +170,7 @@ public class CollectionBatch implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
+
+
+  
 }
