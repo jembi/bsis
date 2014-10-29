@@ -55,7 +55,7 @@ public class TestBatchRepository {
 	    TypedQuery<TestBatch> query = em.createQuery(
 	        "SELECT t FROM TestBatch t WHERE t.isDeleted= :isDeleted",
 	        TestBatch.class);
-	    query.setParameter("isDeleted", false);
+	    query.setParameter("isDeleted", 0);
 	    return query.getResultList();
 	  }
 
