@@ -4,6 +4,7 @@ import backingform.TestBatchBackingForm;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.testbatch.TestBatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,15 @@ public class TestBatchController {
     private SequenceNumberRepository sequenceNumberRepository;
 
 
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  public ResponseEntity findAndAddTestBatchFormGenerator() {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    List<TestBatch> allTestBatch = testBatchRepository.getAllTestBatch();
+    map.put("allTestBatch", allTestBatch);
+    return new ResponseEntity(map, HttpStatus.OK);
+  }
+  
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addTestBatch(@RequestBody TestBatchBackingForm form) {
         
@@ -55,7 +65,6 @@ public class TestBatchController {
     public String getNextTestBatchNumber() {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
-    
     
 
 }
