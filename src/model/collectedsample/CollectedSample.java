@@ -37,6 +37,7 @@ import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
+import model.testbatch.TestBatch;
 import model.user.User;
 import model.worksheet.Worksheet;
 import org.hibernate.annotations.Index;
@@ -170,6 +171,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Range(min =0 ,max = 290)
   private Integer donorPulse;
   
+  @ManyToOne(optional=true)
+  private TestBatch testBatch;
+ 
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -442,16 +446,26 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return extraBloodTypeInformation;
   }
 
-  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
-  }
+    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+        this.extraBloodTypeInformation = extraBloodTypeInformation;
+    }
 
-	public Integer getDonorPulse() {
-		return donorPulse;
-	}
+    public Integer getDonorPulse() {
+        return donorPulse;
+    }
 
-	public void setDonorPulse(Integer donorPulse) {
-		this.donorPulse = donorPulse;
-	}
-  
+    public void setDonorPulse(Integer donorPulse) {
+        this.donorPulse = donorPulse;
+    }
+
+    public TestBatch getTestBatch() {
+        return testBatch;
+    }
+
+    public void setTestBatch(TestBatch testBatch) {
+        this.testBatch = testBatch;
+    }
+    
+    
+
 }
