@@ -3374,8 +3374,8 @@
     	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
     </createTable>
     </changeSet>
-    <changeSet id="201411140419" author="srikanth">
-	    <addColumn tableName="CollectionBatch">
+    <changeSet id="201311131239" author="nikita">
+	    <addColumn tableName="CollectedSample">
 	    	<column name="testBatch_id" type="smallint(6)"></column>
 	    </addColumn>
 	    <addForeignKeyConstraint constraintName="testBatch_id_FK" 
@@ -3384,8 +3384,8 @@
 	    						 baseTableName="CollectedSample" 
 	    						 referencedColumnNames="id"/>
     </changeSet>
-    <changeSet id="201411140420" author="srikanth">
-     <addColumn tableName="CollectionBatch_AUD">
+    <changeSet id="201311130633" author="nikita">
+     <addColumn tableName="CollectedSample_AUD">
 	    	<column name="testBatch_id" type="smallint(6)"></column>
 	    </addColumn>
 	    <addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
