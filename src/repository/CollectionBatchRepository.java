@@ -28,7 +28,7 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchByIdEager(Integer batchId) {
-    String queryString = "SELECT b FROM CollectionBatch b LEFT JOIN FETCH b.collectionCenter LEFT JOIN FETCH b.collectionSite " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch LEFT JOIN FETCH b.collectionCenter LEFT JOIN FETCH b.collectionSite " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -37,7 +37,7 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchById(Integer batchId) {
-    String queryString = "SELECT b FROM CollectionBatch b " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -45,17 +45,18 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchByBatchNumber(String batchNumber) throws NoResultException,NonUniqueResultException {
-    String queryString = "SELECT b FROM CollectionBatch b " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch " +
         "WHERE b.batchNumber = :batchNumber and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     try{
     return query.setParameter("batchNumber", batchNumber).getSingleResult();
     }catch(NoResultException ex){
-        throw new NoResultException("No DonatchBatch Exists with ID :"+ batchNumber);
+        throw new NoResultException("No DonationBatch Exists with ID :"+ batchNumber);
     }
   }
 
+  /*
   public CollectionBatch
          findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber)throws NoResultException, NonUniqueResultException{
     String queryString = "SELECT b FROM CollectionBatch b " +
@@ -65,6 +66,20 @@ public class CollectionBatchRepository {
     batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
     return batch;
   }
+  */
+  
+  public CollectionBatch
+	  findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber){
+	String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch " +
+	 "WHERE b.batchNumber = :batchNumber";
+	TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
+	CollectionBatch batch = null;
+	try{
+	batch = query.setParameter("batchNumber", batchNumber).getSingleResult();
+	}catch(Exception ex){}
+	return batch;
+	
+  }
 
   public CollectionBatch addCollectionBatch(CollectionBatch collectionBatch) {
     em.persist(collectionBatch);
@@ -73,29 +88,31 @@ public class CollectionBatchRepository {
     return collectionBatch;
   }
 
-  public List<CollectionBatch> findCollectionBatches(String batchNumber,
+  public List<CollectionBatch> findCollectionBatches(Boolean isClosed,
       List<Long> centerIds, List<Long> siteIds) {
-    String queryStr = "";
-    if (StringUtils.isNotBlank(batchNumber)) {
-      queryStr = "SELECT b from CollectionBatch b " +
-                   "WHERE b.batchNumber=:batchNumber AND " +
-                   "b.collectionCenter.id IN (:centerIds) AND " +
-                   "b.collectionSite.id IN (:siteIds) AND " +
-                   "b.isDeleted=:isDeleted";
+    String queryStr = "SELECT distinct b from CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch WHERE b.isDeleted=:isDeleted ";
+    if(!centerIds.isEmpty()){
+    	queryStr += "AND b.collectionCenter.id IN (:centerIds) ";
     }
-    else {
-      queryStr = "SELECT b from CollectionBatch b " +
-                 "WHERE b.collectionCenter.id IN (:centerIds) AND " +
-                 "b.collectionSite.id IN (:siteIds) AND " +
-                 "b.isDeleted=:isDeleted";
+    if(!siteIds.isEmpty()){
+    	queryStr += "AND b.collectionSite.id IN (:siteIds) ";
+    }
+    if(isClosed != null){
+    	queryStr +=    "AND b.isClosed=:isClosed";
     }
     
     TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
-    if (StringUtils.isNotBlank(batchNumber))
-      query.setParameter("batchNumber", batchNumber);
-    query.setParameter("centerIds", centerIds);
-    query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", false);
+    if(!centerIds.isEmpty()){
+    	query.setParameter("centerIds", centerIds);
+    }
+    if(!siteIds.isEmpty()){
+    	query.setParameter("siteIds", siteIds);
+    }
+    if(isClosed != null){
+    	query.setParameter("isClosed", isClosed);
+    }
+    
     return query.getResultList();
   }
 

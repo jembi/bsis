@@ -95,4 +95,12 @@ public class CollectionBatchBackingForm {
   public void setNotes(String notes) {
     collectionBatch.setNotes(notes);
   }
+  
+  public Boolean getIsClosed() {
+    return collectionBatch.getIsClosed();
+  }
+
+  public void setIsClosed(Boolean isClosed) {
+	collectionBatch.setIsClosed(isClosed);
+  }
 }

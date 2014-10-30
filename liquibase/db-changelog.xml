@@ -3357,6 +3357,16 @@
 			<column name="isTimeField" value="0"></column>			
  </insert>
  </changeSet>
+ 
+ <!-- Add in 'isClosed' field to collectionBatch tables -->
+ <changeSet id="201410281957" author="danfuterman">
+	<addColumn tableName="CollectionBatch">
+		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+	</addColumn>
+	<addColumn tableName="CollectionBatch_AUD">
+		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+	</addColumn>		
+ </changeSet>
 
 <!-- For issue 229 [Create testBatch table]  -->
    <changeSet id="201311122005" author="nikita">

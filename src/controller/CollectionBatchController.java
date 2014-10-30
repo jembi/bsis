@@ -79,14 +79,19 @@ public class CollectionBatchController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  Map<String, Object> findCollectionBatch(HttpServletRequest request,
-          @RequestParam(value = "batchNumber", required = false) String batchNumber,
+          @RequestParam(value = "isClosed", required = false) Boolean isClosed,
           @RequestParam(value = "collectionCenters", required = false) List<Long> centerIds,
           @RequestParam(value = "collectionSites", required = false) List<Long> siteIds ) {
 
-
+	if(centerIds == null){
+		centerIds = new ArrayList<Long>();
+	}
+	if(siteIds == null){
+		siteIds = new ArrayList<Long>();
+	}
 
     List<CollectionBatch> collectionBatches =
-        collectionBatchRepository.findCollectionBatches(batchNumber, centerIds, siteIds);
+        collectionBatchRepository.findCollectionBatches(isClosed, centerIds, siteIds);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("allCollectionBatches", getCollectionBatchViewModels(collectionBatches));
