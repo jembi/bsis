@@ -1,6 +1,8 @@
 package repository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import static java.util.Collections.list;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -16,6 +18,7 @@ import model.testbatch.TestBatchStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import viewmodel.TestBatchViewModel;
 
 @Repository
 @Transactional
@@ -66,36 +69,38 @@ public class TestBatchRepository {
         return testBatch;
     }
 
-  public List<Object> findCollectedSamplesByTestBatch(
-	      String testBatchNumber, String createdAfterDate,
+  public List<TestBatchViewModel> findTestBatches(
+	      String status, String createdAfterDate,
 	      String createdBeforeDate,Map<String, Object> pagingParams) {
 
-	    String queryStr = "";
-	    if (StringUtils.isNotBlank(testBatchNumber)) {
-	      queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.testBatch WHERE " +
-	                 "c.testBatch.batchNumber = :testBatchNumber AND " +
-	                 "c.isDeleted=:isDeleted AND " +
-	                 "c.testBatch.isDeleted=:isDeletedTestBatch";
-	    } 
+	    String queryStr =  "SELECT * FROM testbatch where status = :status "
+                    + " or createdDate BETWEEN :createdAfterDate AND :createdBeforeDate";
 	    
-	    TypedQuery<CollectedSample> query;
+	  
 	    if (pagingParams.containsKey("sortColumn")) {
-	      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+	      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
 	    }
+            
+           Query query = em.createNativeQuery(queryStr, TestBatch.class);
 	    
-	    query = em.createQuery(queryStr, CollectedSample.class);
-	    query.setParameter("isDeleted", Boolean.FALSE);
-	    query.setParameter("isDeletedTestBatch", 0);
-	    query.setParameter("testBatchNumber", testBatchNumber);
-	    
+            query.setParameter("status", status);
+            query.setParameter("createdAfterDate", createdAfterDate);
+	    query.setParameter("createdBeforeDate", createdBeforeDate);
 	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
 	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
 
 	    query.setFirstResult(start);
 	    query.setMaxResults(length);
 
-	    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
-	  }
+            List<TestBatch> testBatches = query.getResultList();
+            List<TestBatchViewModel> viewModels = new ArrayList<TestBatchViewModel>();
+        for (TestBatch testBatch : testBatches) {
+
+            viewModels.add(new TestBatchViewModel(testBatch));
+        }
+
+        return viewModels;
+    }
   
   private Long getResultCount(String queryStr, Query query) {
 	    String countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)");

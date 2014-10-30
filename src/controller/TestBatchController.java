@@ -57,20 +57,17 @@ public class TestBatchController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity findTestBatchPagination(
-            @RequestParam("firstDIN") String firstDIN,
-            @RequestParam("lastDIN") String lastDIN,
-            @RequestParam("testBatchNumber") String testBatchNumber,
-            @RequestParam("createdBeforeDate") String createdBeforeDate,
-            @RequestParam("createdAfterDate") String createdAfterDate) {
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "createdBeforeDate", required = false) String createdBeforeDate,
+            @RequestParam(value = "createdAfterDate", required = false) String createdAfterDate) {
 
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
         pagingParams.put("sortDirection", "asc");
         
-         List<Object> results = testBatchRepository.findCollectedSamplesByTestBatch(
-	    		testBatchNumber,
+         List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,
 	    		createdAfterDate, createdBeforeDate, pagingParams);
-        return new ResponseEntity(results, HttpStatus.OK);
+        return new ResponseEntity(testBatches, HttpStatus.OK);
 
     }
     
