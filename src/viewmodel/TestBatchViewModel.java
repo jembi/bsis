@@ -7,12 +7,17 @@ import java.util.List;
 import model.collectionbatch.CollectionBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+import org.hibernate.Hibernate;
 
 
 public class TestBatchViewModel {
 
    
     private TestBatch testBatch;
+
+    public TestBatchViewModel(TestBatch testBatch) {
+        this.testBatch = testBatch;
+    }
     
     public Long getId(){
         return testBatch.getId();
