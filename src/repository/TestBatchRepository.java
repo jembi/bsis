@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -56,6 +57,14 @@ public class TestBatchRepository {
 	    query.setParameter("isDeleted", 0);
 	    return query.getResultList();
 	  }
+  
+    public TestBatch findtestBatchById(Long id) throws NoResultException{
+        TypedQuery<TestBatch> query = em.createQuery(
+                "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
+        query.setParameter("id", id);
+        TestBatch testBatch = query.getSingleResult();
+        return testBatch;
+    }
 
   public List<Object> findCollectedSamplesByTestBatch(
 	      String testBatchNumber, String createdAfterDate,
