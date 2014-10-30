@@ -1,5 +1,7 @@
 package model.testbatch;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -24,6 +26,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class TestBatch implements ModificationTracker {
 
 	@Id
