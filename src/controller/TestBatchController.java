@@ -8,6 +8,7 @@ import model.testbatch.TestBatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
+import utils.PermissionConstants;
 import viewmodel.TestBatchViewModel;
 
 @RestController
@@ -30,6 +32,7 @@ public class TestBatchController {
 
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -39,6 +42,7 @@ public class TestBatchController {
   }
   
     @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
     public ResponseEntity addTestBatch(@RequestBody TestBatchBackingForm form) {
         
         testBatchRepository.saveTestBatch(form.getDonationBatchNumbers(), getNextTestBatchNumber());
@@ -46,6 +50,7 @@ public class TestBatchController {
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)
+    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
     public ResponseEntity getTestBatchById(@PathVariable Long id){
         
         Map<String, Object> map = new HashMap<String, Object>();
@@ -56,6 +61,7 @@ public class TestBatchController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
     public ResponseEntity findTestBatchPagination(
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "createdBeforeDate", required = false) String createdBeforeDate,
