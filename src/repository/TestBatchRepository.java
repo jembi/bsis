@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import model.collectedsample.CollectedSample;
+import model.collectionbatch.CollectionBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import org.apache.commons.lang3.StringUtils;
@@ -23,29 +24,26 @@ public class TestBatchRepository {
   private EntityManager em;
 
  
-  public void saveTestBatch(String firstDIN , String lastDIN ,String testBatchNumber) {
+  public void saveTestBatch(List<String> donationBatchNumbers, String testBatchNumber) {
 	  TestBatch testBatch = new TestBatch();
 	  testBatch.setIsDeleted(0);
 	  testBatch.setBatchNumber(testBatchNumber);
 	  testBatch.setStatus(TestBatchStatus.OPEN);
-	  updateCollectedSampleWithTestBatch(firstDIN , lastDIN ,  testBatch);
+	  updateCollectedSampleWithTestBatch(donationBatchNumbers, testBatch);
   }
   
-  public void updateCollectedSampleWithTestBatch(String firstDIN , String lastDIN , TestBatch testBatch)
-  {
-	  	String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber >= :firstDIN and c.collectionNumber<= :lastDIN and c.isDeleted= :isDeleted";
-		TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
-		query.setParameter("isDeleted", false);
-		query.setParameter("firstDIN", firstDIN);
-		query.setParameter("lastDIN", lastDIN);
+  public void updateCollectedSampleWithTestBatch(List<String> donationBatchNumbers, TestBatch testBatch){
+	  	String queryString = "SELECT cb FROM CollectionBatch cb WHERE cb.batchNumber  IN :donationBatchNumbers";
+		TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
+		query.setParameter("donationBatchNumbers", donationBatchNumbers);
 		
-		List<CollectedSample> collectedSamples = query.getResultList();
-		if (!collectedSamples.isEmpty()) {
-		 
-			for(CollectedSample collectedSample : collectedSamples){
-				em.persist(testBatch);
-				collectedSample.setTestBatch(testBatch);
-				em.merge(collectedSample);
+		
+		List<CollectionBatch> donationBatches = query.getResultList();
+		if (!donationBatches.isEmpty()) {
+		        em.persist(testBatch);
+			for(CollectionBatch donationBatch : donationBatches){
+				donationBatch.setTestBatch(testBatch);
+				em.merge(donationBatch); 
 			}
 		}
 		

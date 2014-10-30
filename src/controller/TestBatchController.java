@@ -39,7 +39,7 @@ public class TestBatchController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addTestBatch(@RequestBody TestBatchBackingForm form) {
         
-        testBatchRepository.saveTestBatch(form.getFirstDIN(), form.getLastDIN(), getNextTestBatchNumber());
+        testBatchRepository.saveTestBatch(form.getDonationBatchNumbers(), getNextTestBatchNumber());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 

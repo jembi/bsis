@@ -1,28 +1,17 @@
-
 package backingform;
 
+import java.util.List;
+
 public class TestBatchBackingForm {
-  
-    
-    private String firstDIN;
-    private String lastDIN;
 
-    public void setFirstDIN(String firstDIN) {
-        this.firstDIN = firstDIN;
+    private List<String> donationBatchNumbers;
+
+    public List<String> getDonationBatchNumbers() {
+        return donationBatchNumbers;
     }
 
-    public void setLastDIN(String lastDIN) {
-        this.lastDIN = lastDIN;
+    public void setDonationBatchNumbers(List<String> donationBatchNumbers) {
+        this.donationBatchNumbers = donationBatchNumbers;
     }
 
-    public String getFirstDIN() {
-        return firstDIN;
-    }
-
-    public String getLastDIN() {
-        return lastDIN;
-    }
-    
-    
-    
 }
