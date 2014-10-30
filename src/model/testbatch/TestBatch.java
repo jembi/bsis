@@ -1,7 +1,6 @@
 package model.testbatch;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,14 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-
-import org.hibernate.envers.Audited;
-
+import model.collectionbatch.CollectionBatch;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
+import org.hibernate.envers.Audited;
 
 
 @Entity
@@ -46,6 +46,9 @@ public class TestBatch implements ModificationTracker {
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TestBatchStatus status;
+        
+        @OneToMany(mappedBy = "testBatch")
+        private CollectionBatch collectionBatches;
 
 
 	public TestBatch() {
@@ -123,5 +126,15 @@ public class TestBatch implements ModificationTracker {
 	public void setLastUpdatedBy(User lastUpdatedBy) {
 		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
 	}
+
+        public CollectionBatch getCollectionBatches() {
+                return collectionBatches;
+        }
+
+        public void setCollectionBatches(CollectionBatch collectionBatches) {
+                this.collectionBatches = collectionBatches;
+        }
+        
+        
 
 }
