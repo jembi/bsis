@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +49,7 @@ public class TestBatch implements ModificationTracker {
 	@Column(length=20)
 	private TestBatchStatus status;
         
-        @OneToMany(mappedBy = "testBatch")
+        @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
         private List<CollectionBatch> collectionBatches;
 
 
