@@ -1,6 +1,7 @@
 package model.testbatch;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -48,7 +49,7 @@ public class TestBatch implements ModificationTracker {
 	private TestBatchStatus status;
         
         @OneToMany(mappedBy = "testBatch")
-        private CollectionBatch collectionBatches;
+        private List<CollectionBatch> collectionBatches;
 
 
 	public TestBatch() {
@@ -127,14 +128,13 @@ public class TestBatch implements ModificationTracker {
 		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
 	}
 
-        public CollectionBatch getCollectionBatches() {
+        public List<CollectionBatch> getCollectionBatches() {
                 return collectionBatches;
         }
 
-        public void setCollectionBatches(CollectionBatch collectionBatches) {
+        public void setCollectionBatches(List<CollectionBatch> collectionBatches) {
                 this.collectionBatches = collectionBatches;
         }
-        
-        
+
 
 }
