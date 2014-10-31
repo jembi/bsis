@@ -9,9 +9,7 @@ import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import org.hibernate.Hibernate;
 
-
 public class TestBatchViewModel {
-
    
     private TestBatch testBatch;
 
@@ -23,11 +21,11 @@ public class TestBatchViewModel {
         return testBatch.getId();
     }
     
-    public TestBatchStatus gettestBatchStatus(){
+    public TestBatchStatus getStatus(){
         return testBatch.getStatus();
     }
     
-    public String getTestBatchNuumber(){
+    public String getBatchNumber(){
         return testBatch.getBatchNumber();
     }
     
@@ -35,19 +33,18 @@ public class TestBatchViewModel {
         return testBatch.getNotes();
     }
     
-    public  List<CollectionBatchViewModel> getCollectionBatchViewModels(){
+    public  List<CollectionBatchViewModel> getCollectionBatches(){
         return getCollectionBatchViewModels(testBatch.getCollectionBatches());
     }
     
-      public static List<CollectionBatchViewModel> getCollectionBatchViewModels(
-      List<CollectionBatch> collectionBatches) {
-    if (collectionBatches == null)
-      return Arrays.asList(new CollectionBatchViewModel[0]);
-    List<CollectionBatchViewModel> collectionBatchViewModels = new ArrayList<CollectionBatchViewModel>();
-    for (CollectionBatch collectionBatch : collectionBatches) {
-      collectionBatchViewModels.add(new CollectionBatchViewModel(collectionBatch));
-    }
-    return collectionBatchViewModels;
-  }
+    public static List<CollectionBatchViewModel> getCollectionBatchViewModels(List<CollectionBatch> collectionBatches) {
+	    if (collectionBatches == null)
+	      return Arrays.asList(new CollectionBatchViewModel[0]);
+	    List<CollectionBatchViewModel> collectionBatchViewModels = new ArrayList<CollectionBatchViewModel>();
+	    for (CollectionBatch collectionBatch : collectionBatches) {
+	      collectionBatchViewModels.add(new CollectionBatchViewModel(collectionBatch));
+	    }
+	    return collectionBatchViewModels;
+	}
 
 }
