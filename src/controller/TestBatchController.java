@@ -19,6 +19,7 @@ import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
 import utils.PermissionConstants;
 import viewmodel.TestBatchViewModel;
+import model.testbatch.TestBatchStatus;
 
 @RestController
 @RequestMapping("testbatches")
@@ -36,8 +37,7 @@ public class TestBatchController {
   public ResponseEntity findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    List<TestBatch> allTestBatch = testBatchRepository.getAllTestBatch();
-    map.put("allTestBatch", allTestBatch);
+    map.put("status", TestBatchStatus.values());
     return new ResponseEntity(map, HttpStatus.OK);
   }
   
