@@ -45,7 +45,7 @@ public class TestBatchController {
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
     public ResponseEntity addTestBatch(@RequestBody TestBatchBackingForm form) {
         
-        testBatchRepository.saveTestBatch(form.getDonationBatchNumbers(), getNextTestBatchNumber());
+        testBatchRepository.saveTestBatch(form.getCollectionBatchIds(), getNextTestBatchNumber());
         return new ResponseEntity(HttpStatus.CREATED);
     }
     
