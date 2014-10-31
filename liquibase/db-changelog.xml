@@ -3404,9 +3404,9 @@
 	    						 baseTableName="CollectionBatch_AUD" 
 	    						 referencedColumnNames="id"/>
     </changeSet>
-    <changeSet id="201311130733" author="nikita">
+    <changeSet id="201311130733" author="srikanth">
     <createTable tableName="TestBatch_AUD">
-    	<column name="id" type="smallint(6)" autoIncrement="true">
+    	<column name="id" type="smallint(6)">
     		<constraints primaryKey="true" nullable="false"/>
     	</column>
     	<column name="batchNumber" type="varchar(20)"></column>
@@ -3417,7 +3417,9 @@
     	<column name="status" type="varchar(20)"></column>
     	<column name="createdBy_id" type="smallint(6)"></column>
     	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
-    	<column name="REV" type="int(11)"></column>
+    	<column name="REV" type="INT">
+          	<constraints  primaryKey="true" nullable="false" />
+        </column>
     	<column name="REVTYPE" type="tinyint(4)"></column>
     </createTable>
     </changeSet>

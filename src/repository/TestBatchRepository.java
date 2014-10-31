@@ -68,6 +68,12 @@ public class TestBatchRepository {
         TestBatch testBatch = query.getSingleResult();
         return testBatch;
     }
+    
+    public TestBatch updateTestBatch(TestBatch testBatch){
+      TestBatch existingTestBatch = findtestBatchById(testBatch.getId());
+      existingTestBatch.setStatus(testBatch.getStatus());
+      return em.merge(existingTestBatch);
+    }  
 
   public List<TestBatchViewModel> findTestBatches(
 	      String status, String createdAfterDate,

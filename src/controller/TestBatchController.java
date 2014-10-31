@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,17 @@ public class TestBatchController {
         return new ResponseEntity(map, HttpStatus.OK);
         
     }
+    
+    @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    public ResponseEntity updateTestBatch(@PathVariable Long id,
+            @RequestBody TestBatchBackingForm form){
+        
+        TestBatch testBatch = form.getTestBatch();
+        testBatch = testBatchRepository.updateTestBatch(testBatch);
+        return new ResponseEntity(new TestBatchViewModel(testBatch), HttpStatus.OK);
+        
+    }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
@@ -80,6 +92,5 @@ public class TestBatchController {
     public String getNextTestBatchNumber() {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
-    
 
 }
