@@ -28,18 +28,18 @@ public class TestBatchRepository {
   private EntityManager em;
 
  
-  public void saveTestBatch(List<String> donationBatchNumbers, String testBatchNumber) {
+  public void saveTestBatch(List<Integer> donationBatchIds, String testBatchNumber) {
 	  TestBatch testBatch = new TestBatch();
 	  testBatch.setIsDeleted(0);
 	  testBatch.setBatchNumber(testBatchNumber);
 	  testBatch.setStatus(TestBatchStatus.OPEN);
-	  updateCollectedSampleWithTestBatch(donationBatchNumbers, testBatch);
+	  updateCollectedSampleWithTestBatch(donationBatchIds, testBatch);
   }
   
-  public void updateCollectedSampleWithTestBatch(List<String> donationBatchNumbers, TestBatch testBatch){
-	  	String queryString = "SELECT cb FROM CollectionBatch cb WHERE cb.batchNumber  IN :donationBatchNumbers";
+  public void updateCollectedSampleWithTestBatch(List<Integer> donationBatchIds, TestBatch testBatch){
+	  	String queryString = "SELECT cb FROM CollectionBatch cb WHERE cb.id  IN :donationBatchIds";
 		TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
-		query.setParameter("donationBatchNumbers", donationBatchNumbers);
+		query.setParameter("donationBatchIds", donationBatchIds);
 		
 		
 		List<CollectionBatch> donationBatches = query.getResultList();
