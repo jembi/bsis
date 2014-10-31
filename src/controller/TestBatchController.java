@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +45,8 @@ public class TestBatchController {
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
     public ResponseEntity addTestBatch(@RequestBody TestBatchBackingForm form) {
         
-        testBatchRepository.saveTestBatch(form.getCollectionBatchIds(), getNextTestBatchNumber());
-        return new ResponseEntity(HttpStatus.CREATED);
+        TestBatch testBatch = testBatchRepository.saveTestBatch(form.getCollectionBatchIds(), getNextTestBatchNumber());
+        return new ResponseEntity(new TestBatchViewModel(testBatch), HttpStatus.CREATED);
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)

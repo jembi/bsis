@@ -28,12 +28,13 @@ public class TestBatchRepository {
   private EntityManager em;
 
  
-  public void saveTestBatch(List<Integer> donationBatchIds, String testBatchNumber) {
+  public TestBatch saveTestBatch(List<Integer> donationBatchIds, String testBatchNumber) {
 	  TestBatch testBatch = new TestBatch();
 	  testBatch.setIsDeleted(0);
 	  testBatch.setBatchNumber(testBatchNumber);
 	  testBatch.setStatus(TestBatchStatus.OPEN);
 	  updateCollectedSampleWithTestBatch(donationBatchIds, testBatch);
+          return  testBatch;
   }
   
   public void updateCollectedSampleWithTestBatch(List<Integer> donationBatchIds, TestBatch testBatch){
