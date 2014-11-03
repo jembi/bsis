@@ -2,28 +2,31 @@ package model.collectionbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.LocationExists;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 import model.collectedsample.CollectedSample;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.testbatch.TestBatch;
 import model.user.User;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+
+import constraintvalidator.LocationExists;
+import javax.persistence.FetchType;
+import model.testbatch.TestBatch;
 
 
 @Entity
@@ -54,7 +57,6 @@ public class CollectionBatch implements ModificationTracker {
   
   
   @ManyToOne
-  @JoinColumn(updatable = false)
   private TestBatch testBatch;
 
   private boolean isDeleted;
