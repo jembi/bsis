@@ -28,23 +28,18 @@ public class TestBatchRepository {
   private EntityManager em;
 
  
-  public TestBatch saveTestBatch(List<Integer> donationBatchIds, String testBatchNumber) {
-	  TestBatch testBatch = new TestBatch();
+  public TestBatch saveTestBatch(TestBatch testBatch, String testBatchNumber) {
 	  testBatch.setIsDeleted(false);
 	  testBatch.setBatchNumber(testBatchNumber);
 	  testBatch.setStatus(TestBatchStatus.OPEN);
-	  updateCollectedSampleWithTestBatch(donationBatchIds, testBatch);
+	  updateCollectedSampleWithTestBatch(testBatch);
           return  testBatch;
   }
   
-  public void updateCollectedSampleWithTestBatch(List<Integer> donationBatchIds, TestBatch testBatch){
-	  	String queryString = "SELECT cb FROM CollectionBatch cb WHERE cb.id  IN :donationBatchIds";
-		TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
-		query.setParameter("donationBatchIds", donationBatchIds);
+  public void updateCollectedSampleWithTestBatch(TestBatch testBatch){
 		
-		
-		List<CollectionBatch> donationBatches = query.getResultList();
-		if (!donationBatches.isEmpty()) {
+		List<CollectionBatch> donationBatches = testBatch.getCollectionBatches();
+		if (donationBatches != null && !donationBatches.isEmpty()) {
 		        em.persist(testBatch);
 			for(CollectionBatch donationBatch : donationBatches){
 				donationBatch.setTestBatch(testBatch);

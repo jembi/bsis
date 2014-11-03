@@ -1,25 +1,30 @@
 package controller;
 
 import backingform.TestBatchBackingForm;
+import backingform.validator.TestBatchBackingFormValidator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repository.CollectionBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
 import utils.PermissionConstants;
 import viewmodel.TestBatchViewModel;
-import model.testbatch.TestBatchStatus;
 
 @RestController
 @RequestMapping("testbatches")
@@ -28,9 +33,17 @@ public class TestBatchController {
     @Autowired
     private TestBatchRepository testBatchRepository;
     
+    
+    @Autowired
+    private CollectionBatchRepository collectionBatchRepository;
+    
     @Autowired
     private SequenceNumberRepository sequenceNumberRepository;
-
+    
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new TestBatchBackingFormValidator(binder.getValidator(), collectionBatchRepository));
+    }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
@@ -43,9 +56,9 @@ public class TestBatchController {
   
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-    public ResponseEntity addTestBatch(@RequestBody TestBatchBackingForm form) {
+    public ResponseEntity addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
         
-        TestBatch testBatch = testBatchRepository.saveTestBatch(form.getCollectionBatchIds(), getNextTestBatchNumber());
+        TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
         return new ResponseEntity(new TestBatchViewModel(testBatch), HttpStatus.CREATED);
     }
     

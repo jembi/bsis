@@ -25,6 +25,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.LocationExists;
+import java.util.Collections;
 import javax.persistence.FetchType;
 import model.testbatch.TestBatch;
 
@@ -53,7 +54,7 @@ public class CollectionBatch implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectionBatch", fetch = FetchType.EAGER)
-  private List<CollectedSample> collectionsInBatch;
+  private List<CollectedSample> collectionsInBatch = Collections.EMPTY_LIST;
   
   
   @ManyToOne
