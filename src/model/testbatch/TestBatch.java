@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -40,7 +39,7 @@ public class TestBatch implements ModificationTracker {
 	@Lob
 	private String notes;
 
-	private Integer isDeleted;
+	private Boolean isDeleted;
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length=20, unique=true)
@@ -76,13 +75,13 @@ public class TestBatch implements ModificationTracker {
 		this.notes = notes;
 	}
 
-	public Integer getIsDeleted() {
-		return isDeleted;
-	}
+        public Boolean isIsDeleted() {
+                return isDeleted;
+        }
 
-	public void setIsDeleted(Integer isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+        public void setIsDeleted(Boolean isDeleted) {
+                this.isDeleted = isDeleted;
+        }
 
 	public String getBatchNumber() {
 		return batchNumber;

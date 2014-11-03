@@ -30,7 +30,7 @@ public class TestBatchRepository {
  
   public TestBatch saveTestBatch(List<Integer> donationBatchIds, String testBatchNumber) {
 	  TestBatch testBatch = new TestBatch();
-	  testBatch.setIsDeleted(0);
+	  testBatch.setIsDeleted(false);
 	  testBatch.setBatchNumber(testBatchNumber);
 	  testBatch.setStatus(TestBatchStatus.OPEN);
 	  updateCollectedSampleWithTestBatch(donationBatchIds, testBatch);
@@ -58,7 +58,7 @@ public class TestBatchRepository {
 	    TypedQuery<TestBatch> query = em.createQuery(
 	        "SELECT t FROM TestBatch t WHERE t.isDeleted= :isDeleted",
 	        TestBatch.class);
-	    query.setParameter("isDeleted", 0);
+	    query.setParameter("isDeleted", false);
 	    return query.getResultList();
 	  }
   
@@ -120,4 +120,5 @@ public class TestBatchRepository {
 	    }
 	    return countQuery.getSingleResult().longValue();
 	  }  
+
 }
