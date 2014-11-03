@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import repository.CollectionBatchRepository;
 import repository.LocationRepository;
@@ -117,13 +118,12 @@ public class CollectionBatchController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')") 
-  public  HttpStatus addCollectionBatch(
+  public  ResponseEntity addCollectionBatch(
       @RequestBody @Valid CollectionBatchBackingForm form) {
         CollectionBatch collectionBatch = form.getCollectionBatch();
         collectionBatch.setIsDeleted(false);
         collectionBatchRepository.addCollectionBatch(collectionBatch);
-        form = new CollectionBatchBackingForm();
-        return HttpStatus.CREATED;
+        return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
