@@ -109,6 +109,8 @@ public class TestBatchRepository {
         return viewModels;
     }
   
+  /**
+   * issue - #229 un used method
   private Long getResultCount(String queryStr, Query query) {
 	    String countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)");
 	    // removing the join fetch is important otherwise Hibernate will complain
@@ -120,5 +122,12 @@ public class TestBatchRepository {
 	    }
 	    return countQuery.getSingleResult().longValue();
 	  }  
-
+*/
+  
+  public void deleteTestBatch(Long id){
+      
+      TestBatch testBatch = findtestBatchById(id);
+      testBatch.setIsDeleted(false);
+      em.merge(testBatch);
+  }
 }

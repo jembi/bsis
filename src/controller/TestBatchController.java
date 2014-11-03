@@ -88,6 +88,13 @@ public class TestBatchController {
 
     }
     
+    @RequestMapping(method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    public ResponseEntity deleteTestBatchById(Long id){
+        testBatchRepository.deleteTestBatch(id);
+        return  new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    
     public String getNextTestBatchNumber() {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
