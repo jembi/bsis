@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import model.collectionbatch.CollectionBatch;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import repository.CollectionBatchRepository;
 import repository.LocationRepository;
@@ -125,6 +123,17 @@ public class CollectionBatchController {
         collectionBatchRepository.addCollectionBatch(collectionBatch);
         return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.CREATED);
   }
+  
+  
+  @RequestMapping(value = "{id}",method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
+  public ResponseEntity updateCollectionBatch(@PathVariable Long id,
+          @RequestBody @Valid CollectionBatchBackingForm form){
+      
+      CollectionBatch collectionBatch = collectionBatchRepository.updateCollectionBatch(form.getCollectionBatch());
+      return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.OK);
+  }
+  
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
@@ -160,6 +169,5 @@ public class CollectionBatchController {
     }
     return collectionBatchViewModels;
   }
-
   
 }

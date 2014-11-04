@@ -184,6 +184,13 @@ public class CollectionBatch implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
+  
+  public void copy(CollectionBatch collectionBatch){
+      
+      this.setCollectionCenter(collectionBatch.getCollectionCenter());
+      this.setCollectionSite(collectionBatch.getCollectionSite());
+      this.setNotes(collectionBatch.getNotes());
+  }
 
 
   

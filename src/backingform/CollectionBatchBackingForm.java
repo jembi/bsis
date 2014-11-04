@@ -29,6 +29,10 @@ public class CollectionBatchBackingForm {
   public void setId(Integer id) {
     collectionBatch.setId(id);
   }
+  
+  public Integer getId(){
+      return collectionBatch.getId();
+  }
 
   public String getBatchNumber() {
     return collectionBatch.getBatchNumber();

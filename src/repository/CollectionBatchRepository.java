@@ -81,12 +81,18 @@ public class CollectionBatchRepository {
 	
   }
 
-  public CollectionBatch addCollectionBatch(CollectionBatch collectionBatch) {
+  public void addCollectionBatch(CollectionBatch collectionBatch) {
     em.persist(collectionBatch);
     em.flush();
     em.refresh(collectionBatch);
-    return collectionBatch;
   }
+  
+  public CollectionBatch updateCollectionBatch(CollectionBatch collectionBatch)throws IllegalArgumentException{
+      CollectionBatch existingBatch = findCollectionBatchById(collectionBatch.getId());
+      existingBatch.copy(collectionBatch);
+      return em.merge(existingBatch);
+  }
+  
 
   public List<CollectionBatch> findCollectionBatches(Boolean isClosed,
       List<Long> centerIds, List<Long> siteIds) {
