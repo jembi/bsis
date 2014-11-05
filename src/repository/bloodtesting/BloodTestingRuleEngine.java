@@ -200,6 +200,7 @@ public class BloodTestingRuleEngine {
     String bloodRh = "";
 
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setCollectedSample(collectedSample);
     BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
 
     int numBloodTypingTests = 0;
