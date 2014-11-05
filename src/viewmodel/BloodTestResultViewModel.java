@@ -9,6 +9,10 @@ public class BloodTestResultViewModel {
     
     private BloodTestResult testResult;
 
+    public BloodTestResult getTestResult() {
+        return testResult;
+    }
+
     public void setTestResult(BloodTestResult testResult) {
         this.testResult = testResult;
     }
