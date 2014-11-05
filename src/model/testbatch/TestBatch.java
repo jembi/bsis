@@ -131,13 +131,12 @@ public class TestBatch implements ModificationTracker {
 		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
 	}
 
-        public List<CollectionBatch> getCollectionBatches() {
-                return collectionBatches;
-        }
+    public List<CollectionBatch> getCollectionBatches() {
+            return collectionBatches;
+    }
 
-        public void setCollectionBatches(List<CollectionBatch> collectionBatches) {
-                this.collectionBatches = collectionBatches;
-        }
-
+    public void setCollectionBatches(List<CollectionBatch> collectionBatches) {
+            this.collectionBatches = collectionBatches;
+    }
 
 }
