@@ -95,9 +95,13 @@ public class TestBatchController {
         pagingParams.put("sortColumn", "id");
         pagingParams.put("sortDirection", "asc");
         
-         List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,
+        List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,
 	    		createdAfterDate, createdBeforeDate, pagingParams);
-        return new ResponseEntity(testBatches, HttpStatus.OK);
+         
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("testBatches", testBatches);
+
+        return new ResponseEntity(map, HttpStatus.OK);
 
     }
     
