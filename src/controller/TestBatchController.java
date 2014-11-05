@@ -5,7 +5,10 @@ import backingform.validator.TestBatchBackingFormValidator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.ArrayList;
 import javax.validation.Valid;
+import model.collectionbatch.CollectionBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
 import utils.PermissionConstants;
 import viewmodel.TestBatchViewModel;
+import viewmodel.CollectionBatchViewModel;
 
 @RestController
 @RequestMapping("testbatches")
@@ -32,7 +36,6 @@ public class TestBatchController {
 
     @Autowired
     private TestBatchRepository testBatchRepository;
-    
     
     @Autowired
     private CollectionBatchRepository collectionBatchRepository;
@@ -51,6 +54,7 @@ public class TestBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
+    map.put("donationBatches", getCollectionBatchViewModels(collectionBatchRepository.findUnassignedCollectionBatches()));
     return new ResponseEntity(map, HttpStatus.OK);
   }
   
@@ -115,5 +119,16 @@ public class TestBatchController {
     public String getNextTestBatchNumber() {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
+    
+    public static List<CollectionBatchViewModel> getCollectionBatchViewModels(
+	      List<CollectionBatch> collectionBatches) {
+	    if (collectionBatches == null)
+	      return Arrays.asList(new CollectionBatchViewModel[0]);
+	    List<CollectionBatchViewModel> collectionBatchViewModels = new ArrayList<CollectionBatchViewModel>();
+	    for (CollectionBatch collectionBatch : collectionBatches) {
+	      collectionBatchViewModels.add(new CollectionBatchViewModel(collectionBatch));
+	    }
+	    return collectionBatchViewModels;
+	}
 
 }
