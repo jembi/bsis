@@ -57,7 +57,7 @@ public class TestBatchRepository {
 	    return query.getResultList();
 	  }
   
-    public TestBatch findtestBatchById(Long id) throws NoResultException{
+    public TestBatch findTestBatchById(Long id) throws NoResultException{
         TypedQuery<TestBatch> query = em.createQuery(
                 "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
         query.setParameter("id", id);
@@ -66,7 +66,7 @@ public class TestBatchRepository {
     }
     
     public TestBatch updateTestBatch(TestBatch testBatch){
-      TestBatch existingTestBatch = findtestBatchById(testBatch.getId());
+      TestBatch existingTestBatch = findTestBatchById(testBatch.getId());
       existingTestBatch.setStatus(testBatch.getStatus());
       return em.merge(existingTestBatch);
     }  
@@ -121,7 +121,7 @@ public class TestBatchRepository {
   
   public void deleteTestBatch(Long id){
       
-      TestBatch testBatch = findtestBatchById(id);
+      TestBatch testBatch = findTestBatchById(id);
       testBatch.setIsDeleted(false);
       em.merge(testBatch);
   }

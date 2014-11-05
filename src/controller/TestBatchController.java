@@ -71,7 +71,7 @@ public class TestBatchController {
     public ResponseEntity getTestBatchById(@PathVariable Long id){
         
         Map<String, Object> map = new HashMap<String, Object>();
-        TestBatch testBatch = testBatchRepository.findtestBatchById(id);
+        TestBatch testBatch = testBatchRepository.findTestBatchById(id);
         map.put("testBatch", new TestBatchViewModel(testBatch));
         return new ResponseEntity(map, HttpStatus.OK);
         
