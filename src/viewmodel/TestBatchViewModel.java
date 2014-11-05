@@ -9,6 +9,8 @@ import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import org.hibernate.Hibernate;
 
+import utils.CustomDateFormatter;
+
 public class TestBatchViewModel {
    
     private TestBatch testBatch;
@@ -16,6 +18,12 @@ public class TestBatchViewModel {
     public TestBatchViewModel(TestBatch testBatch) {
         this.testBatch = testBatch;
     }
+    
+	public String getCreatedDate() {
+		if (testBatch.getCreatedDate() == null)
+		      return "";
+		return CustomDateFormatter.getDateTimeString(testBatch.getCreatedDate());
+	}
     
     public Long getId(){
         return testBatch.getId();
@@ -27,6 +35,14 @@ public class TestBatchViewModel {
     
     public String getBatchNumber(){
         return testBatch.getBatchNumber();
+    }
+    
+    public Integer getNumSamples(){
+    	Integer count = 0;
+    	for(CollectionBatch cb: testBatch.getCollectionBatches()){
+    		count += cb.getCollectionsInBatch().size();
+    	}
+    	return count;
     }
     
     public String getNotes(){
