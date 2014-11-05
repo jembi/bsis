@@ -55,12 +55,12 @@ public class TestResultController {
   }
   */
 
-  @RequestMapping(value = "{donationNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ResponseEntity findTestResult(@PathVariable String donationNumber ) {
+  public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationNumber);
+    CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
     BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForCollection(c.getId());
     map.put("donation", new CollectedSampleViewModel(c));
     map.put("overview", results);
