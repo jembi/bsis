@@ -121,6 +121,19 @@ public class CollectionBatchRepository {
     
     return query.getResultList();
   }
+  
+  public List<CollectionBatch> findUnassignedCollectionBatches() {
+    String queryStr = "SELECT distinct b from CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch WHERE b.isDeleted=:isDeleted " +
+    	"AND b.isClosed=:isClosed " + 
+    	"AND b.testBatch=null";
+
+    TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
+    query.setParameter("isDeleted", false);
+    query.setParameter("isClosed", false);
+   
+    
+    return query.getResultList();
+  }
 
   public Set<String> findCollectionsInBatch(Integer batchId) {
     CollectionBatch collectionBatch = findCollectionBatchByIdEager(batchId);
