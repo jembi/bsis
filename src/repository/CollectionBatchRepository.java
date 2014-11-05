@@ -1,8 +1,7 @@
 package repository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -134,13 +133,13 @@ public class CollectionBatchRepository {
     
     return query.getResultList();
   }
-
-  public Set<String> findCollectionsInBatch(Integer batchId) {
+  
+  public List<CollectedSample> findCollectionsInBatch(Integer batchId) {
     CollectionBatch collectionBatch = findCollectionBatchByIdEager(batchId);
-    Set<String> collectionNumbers = new HashSet<String>();
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
     for (CollectedSample c : collectionBatch.getCollectionsInBatch()) {
-      collectionNumbers.add(c.getCollectionNumber());
+    	collectedSamples.add(c);
     }
-    return collectionNumbers;
+    return collectedSamples;
   }
 }
