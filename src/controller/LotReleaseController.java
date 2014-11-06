@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -80,7 +81,7 @@ public class LotReleaseController {
     List<Map<String, Object>> components = getComponentstatus(collectedSample, products);
     
     componentMap.put("donationNumber", donationIdentificationNumber);
-    componentMap.put("components", components);
+    componentMap.put("components", new HashSet(components));
     
     return new ResponseEntity (componentMap, HttpStatus.OK);
   }
