@@ -3,6 +3,7 @@ package controller;
 import backingform.validator.CollectedSampleBackingFormValidator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -70,15 +71,18 @@ public class LotReleaseController {
   */
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
-  public ResponseEntity<Map<String, Object>> findlotRelease(HttpServletRequest request,
+  public ResponseEntity findlotRelease(HttpServletRequest request,
           @PathVariable String donationIdentificationNumber)  {
-    
+        Map<String, Object> componentMap = new HashMap<String, Object>();
+
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
     List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
-   
-    Map<String, Object> components = getComponentstatus(collectedSample, products);
+    List<Map<String, Object>> components = getComponentstatus(collectedSample, products);
     
-    return new ResponseEntity<Map<String, Object>>(components, HttpStatus.OK);
+    componentMap.put("donationNumber", donationIdentificationNumber);
+    componentMap.put("components", components);
+    
+    return new ResponseEntity (componentMap, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
@@ -306,23 +310,27 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private Map<String, Object> getComponentstatus(CollectedSample collectedSample, List<Product> products){
+	private List<Map<String, Object>> getComponentstatus(CollectedSample collectedSample, List<Product> products){
 		
-                Map<String, Object> productStatus = new HashMap<String, Object>();
-                
-		if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
+               
+           List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
+	     if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
+                  Map<String, Object> productStatus = new HashMap<String, Object>();
     		for(Product product : products){
                     productStatus.put("componentId", product.getId());
                     productStatus.put("componentName", product.getProductType().getProductType());
                     productStatus.put("discardPackLabel", true);
                     productStatus.put("printPackLabel", false);
+                    productStatus.put("size", products.size());
+                    productsList.add(productStatus);
                 }
                 
-                return productStatus;
+                return productsList;
     	}
             else {
 
                 for (Product product : products) {
+                    Map<String, Object> productStatus = new HashMap<String, Object>();
                     productStatus.put("componentId", product.getId());
                     productStatus.put("componentName", product.getProductType().getProductType());
                     if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
@@ -331,11 +339,13 @@ public class LotReleaseController {
                     } else {
                         productStatus.put("discardPackLabel", false);
                         productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
+                         productStatus.put("size2", products.size());
                     }
+                     productsList.add(productStatus);
 
                 }
             }
-        return productStatus;
+        return productsList;
 
     }
         
