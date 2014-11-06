@@ -314,19 +314,27 @@ public class LotReleaseController {
     		for(Product product : products){
                     productStatus.put("componentId", product.getId());
                     productStatus.put("componentName", product.getProductType().getProductType());
-                    productStatus.put("discard", true);
+                    productStatus.put("discardPackLabel", true);
+                    productStatus.put("printPackLabel", false);
                 }
-    	}
-        for (Product product : products) {
-             productStatus.put("componentId", product.getId());
-            productStatus.put("componentName", product.getProductType().getProductType());
-            if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) 
-                productStatus.put("discard", true);
-            else
-                productStatus.put("discard", false);
                 
-        }
-        
+                return productStatus;
+    	}
+            else {
+
+                for (Product product : products) {
+                    productStatus.put("componentId", product.getId());
+                    productStatus.put("componentName", product.getProductType().getProductType());
+                    if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
+                        productStatus.put("discardPackLabel", true);
+                        productStatus.put("printPackLabel", false);
+                    } else {
+                        productStatus.put("discardPackLabel", false);
+                        productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
+                    }
+
+                }
+            }
         return productStatus;
 
     }
