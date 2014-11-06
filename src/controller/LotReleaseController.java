@@ -78,20 +78,6 @@ public class LotReleaseController {
     
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
     List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
-    
-    if(donationIdentificationNumber.isEmpty()){
-    	map.put("errorMessage", "Please Enter the Donation Identification Number.");
-    	success=false;
-    	map.put("success", success);
-    	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
-    }
-    
-    if(collectedSample == null){
-    	map.put("errorMessage", "Donation Identification Number does not exist.");
-    	success=false;
-    	map.put("success", success);
-    	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
-    }
    
     discard = checkCollectionForDiscard(collectedSample, products);
 
