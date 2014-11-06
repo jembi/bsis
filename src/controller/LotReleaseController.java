@@ -321,7 +321,6 @@ public class LotReleaseController {
                     productStatus.put("componentName", product.getProductType().getProductType());
                     productStatus.put("discardPackLabel", true);
                     productStatus.put("printPackLabel", false);
-                    productStatus.put("size", products.size());
                     productsList.add(productStatus);
                 }
                 
@@ -339,7 +338,6 @@ public class LotReleaseController {
                     } else {
                         productStatus.put("discardPackLabel", false);
                         productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
-                         productStatus.put("size2", products.size());
                     }
                      productsList.add(productStatus);
 
