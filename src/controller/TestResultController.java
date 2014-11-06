@@ -72,7 +72,7 @@ public class TestResultController {
     CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
     BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForCollection(c.getId());
     map.put("donation", new CollectedSampleViewModel(c));
-    map.put("overview", results);
+    map.put("testResults", results);
     return new ResponseEntity(map, HttpStatus.OK);
   }
   
@@ -93,7 +93,7 @@ public class TestResultController {
 	    List<BloodTestingRuleResult> ruleResults =
 	    		bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
 	
-		map.put("testresults", ruleResults);
+		map.put("testResults", ruleResults);
 	
 		return new ResponseEntity(map, HttpStatus.OK);
   }
