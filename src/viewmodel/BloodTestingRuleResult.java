@@ -30,7 +30,7 @@ public class BloodTestingRuleResult {
 
   private Map<String, String> availableTestResults;
 
-  private Map<String, BloodTestResult> recentTestResults;
+  private Map<String, BloodTestResultViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
 
@@ -180,11 +180,11 @@ public class BloodTestingRuleResult {
     this.ttiUninterpretable = ttiUninterpretable;
   }
 
-  public Map<String, BloodTestResult> getRecentTestResults() {
+  public Map<String, BloodTestResultViewModel> getRecentTestResults() {
     return recentTestResults;
   }
 
-  public void setRecentTestResults(Map<String, BloodTestResult> recentTestResults) {
+  public void setRecentTestResults(Map<String, BloodTestResultViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
 }
