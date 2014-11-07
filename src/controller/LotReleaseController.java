@@ -280,7 +280,10 @@ public class LotReleaseController {
     		success=false;
     	}else if(collectedSample.getDonor()!=null && collectedSample.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
-    	}else if(collectedSample.getProducts()!=null && !collectedSample.getProducts().isEmpty() && 
+    	}
+    	// TODO: improve product & blood test checks, or remove if not relevant
+    	/*
+    	else if(collectedSample.getProducts()!=null && !collectedSample.getProducts().isEmpty() && 
     			(collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
     			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
     			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
@@ -291,6 +294,7 @@ public class LotReleaseController {
     			&& !collectedSample.getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}
+    	*/
     	else if(collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
     			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
     			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
