@@ -2264,7 +2264,7 @@
  	</changeSet>
   
     <!-- For issue 134 Remove existing users and add in new Super User  -->
-	<changeSet id="201402241125" author="srikanth">
+	<changeSet id="201411071127" author="srikanth">
 		<delete tableName="User"></delete>
 		
 		<insert tableName="User">
@@ -2275,7 +2275,7 @@
 			<column name="isAdmin" value="1"></column>
 			<column name="isDeleted" value="0"></column>
 			<column name="isStaff" value="1"></column>
-			<column name="password" value="superuser"></column>
+			<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
 			<column name="username" value="superuser"></column>
 		</insert>
 		<insert tableName="User_Role">
