@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import model.collectedsample.CollectedSample;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import viewmodel.CollectedSampleViewModel;
 
 public class BloodTestingRuleResult {
+	
+  private CollectedSampleViewModel collectedSample;
 
   private Set<String> allBloodAboChanges;
 
@@ -26,7 +30,7 @@ public class BloodTestingRuleResult {
 
   private Map<String, String> availableTestResults;
 
-  private Map<String, BloodTestResult> recentTestResults;
+  private Map<String, BloodTestResultViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
 
@@ -46,6 +50,14 @@ public class BloodTestingRuleResult {
   private boolean ttiUninterpretable;
 
   public BloodTestingRuleResult() {
+  }
+  
+  public CollectedSampleViewModel getCollectedSample() {
+    return collectedSample;
+  }
+
+  public void setCollectedSample(CollectedSample collectedSample) {
+    this.collectedSample = new CollectedSampleViewModel(collectedSample);
   }
   
   public Set<String> getAllBloodAboChanges() {
@@ -168,11 +180,11 @@ public class BloodTestingRuleResult {
     this.ttiUninterpretable = ttiUninterpretable;
   }
 
-  public Map<String, BloodTestResult> getRecentTestResults() {
+  public Map<String, BloodTestResultViewModel> getRecentTestResults() {
     return recentTestResults;
   }
 
-  public void setRecentTestResults(Map<String, BloodTestResult> recentTestResults) {
+  public void setRecentTestResults(Map<String, BloodTestResultViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
 }

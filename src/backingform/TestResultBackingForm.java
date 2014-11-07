@@ -4,19 +4,10 @@ import java.util.Map;
 
 public class TestResultBackingForm {
     
-    private Long donationId;
     private String donationIdentificationNumber; 
     private Map<Long, String> testResults;
     private boolean saveUninterpretableResults;
 
-    public Long getDonationId() {
-        return donationId;
-    }
-
-    public void setDonationId(Long donationId) {
-        this.donationId = donationId;
-    }
-    
     public String getDonationIdentificationNumber() {
         return donationIdentificationNumber;
     }

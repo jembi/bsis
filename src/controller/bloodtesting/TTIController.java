@@ -122,6 +122,7 @@ public class TTIController {
 		return tests;
 	}
 
+	/* #229 - replaced with TestResultController.saveTestResults()
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/results", method = RequestMethod.POST)
@@ -139,7 +140,7 @@ public class TTIController {
 
 		Map<String, Object> results = null;
 		
-		results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getTestResults(), true);
+		results = bloodTestingRepository.saveBloodTestingResults(collectedSample.getId(), form.getTestResults(), true);
 	    if (results != null)
 	      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
 	    if (errorMap != null && !errorMap.isEmpty())
@@ -160,6 +161,7 @@ public class TTIController {
 		map.put("success", success);
 		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 	}
+	*/
 
 	/* #209 - unused method, was used by previous version of saveTTITests() method
 	@SuppressWarnings("unchecked")
@@ -214,7 +216,7 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/results/additional", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
-			@RequestBody TestResultBackingForm formData) {
+			@RequestBody TestResultBackingForm form) {
 
 		HttpStatus httpStatus = HttpStatus.CREATED;
                 Map<String, Object> m = new HashMap<String, Object>();
@@ -223,12 +225,14 @@ public class TTIController {
 			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
 			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 			ObjectMapper mapper = new ObjectMapper();
-			Map<Long, String> saveTestsData = formData.getTestResults();
+			Map<Long, String> saveTestsData = form.getTestResults();
 			for (Long testIdStr : saveTestsData.keySet()) {
 				saveTestsDataWithLong.put(testIdStr,
 						saveTestsData.get(testIdStr));
 			}
-			ttiTestResultsMap.put(formData.getDonationId(),
+                        CollectedSample collectedSample = 
+                                collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+			ttiTestResultsMap.put(collectedSample.getId(),
 					saveTestsDataWithLong);
 			Map<String, Object> results = bloodTestingRepository
 					.saveBloodTestingResults(ttiTestResultsMap, true);

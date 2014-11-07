@@ -1,5 +1,7 @@
 package model.collectionbatch;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import java.util.List;
 
@@ -23,10 +25,14 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.LocationExists;
+import java.util.Collections;
+import javax.persistence.FetchType;
+import model.testbatch.TestBatch;
 
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class CollectionBatch implements ModificationTracker {
 
   @Id
@@ -47,8 +53,12 @@ public class CollectionBatch implements ModificationTracker {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="collectionBatch")
-  private List<CollectedSample> collectionsInBatch;
+  @OneToMany(mappedBy="collectionBatch", fetch = FetchType.EAGER)
+  private List<CollectedSample> collectionsInBatch = Collections.EMPTY_LIST;
+  
+  
+  @ManyToOne
+  private TestBatch testBatch;
 
   private boolean isDeleted;
   private boolean isClosed;
@@ -125,6 +135,15 @@ public class CollectionBatch implements ModificationTracker {
   public void setCollectionSite(Location collectionSite) {
     this.collectionSite = collectionSite;
   }
+  
+  public TestBatch getTestBatch() {
+     return testBatch;
+   }
+
+  public void setTestBatch(TestBatch testBatch) {
+     this.testBatch = testBatch;
+   }
+
 
   @Override
   public Date getLastUpdated() {
@@ -165,4 +184,14 @@ public class CollectionBatch implements ModificationTracker {
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
+  
+  public void copy(CollectionBatch collectionBatch){
+      
+      this.setCollectionCenter(collectionBatch.getCollectionCenter());
+      this.setCollectionSite(collectionBatch.getCollectionSite());
+      this.setNotes(collectionBatch.getNotes());
+  }
+
+
+  
 }

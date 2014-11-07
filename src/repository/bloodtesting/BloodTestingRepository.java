@@ -45,6 +45,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
+import repository.CollectionBatchRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.events.ApplicationContextProvider;
@@ -63,6 +64,9 @@ public class BloodTestingRepository {
 
 	@Autowired
 	private CollectedSampleRepository collectedSampleRepository;
+	
+	@Autowired
+	private CollectionBatchRepository collectionBatchRepository;	
 
 	@Autowired
 	private BloodTestingRuleEngine ruleEngine;
@@ -389,6 +393,25 @@ public class BloodTestingRepository {
 		results.put("collections", collectedSamplesMap);
 		results.put("bloodTestingResults", bloodTypingResultsForCollections);
 		return results;
+	}
+	
+	public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
+			List<Integer> donationBatchIds) {
+
+		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
+
+		for (Integer donationBatchId : donationBatchIds) {
+			List<CollectedSample> collectedSamples = collectionBatchRepository.findCollectionsInBatch(donationBatchId);
+			
+			for (CollectedSample collectedSample : collectedSamples) {
+
+			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
+					collectedSample, new HashMap<Long, String>());
+			bloodTestingRuleResults.add(ruleResult);
+			}
+		}
+		
+		return bloodTestingRuleResults;
 	}
 
 	public BloodTestingRuleResult getAllTestsStatusForCollection(

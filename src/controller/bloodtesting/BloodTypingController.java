@@ -263,6 +263,7 @@ public class BloodTypingController {
   }
   */
 
+  /* #229 - replaced with TestResultController.saveTestResults()
   @RequestMapping(value = "/results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTestResults(
@@ -277,7 +278,7 @@ public class BloodTypingController {
     map.put("bloodTypingTestResults", bloodTypingTestResults);
     boolean success = true;
     Map<String, Object> results = null;
-    results = bloodTestingRepository.saveBloodTestingResults(form.getDonationId(), form.getTestResults(), form.getSaveUninterpretableResults());
+    results = bloodTestingRepository.saveBloodTestingResults(collection.getId(), form.getTestResults(), form.getSaveUninterpretableResults());
     if (results != null)
       errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
     if (errorMap != null && !errorMap.isEmpty())
@@ -299,7 +300,8 @@ public class BloodTypingController {
     map.put("success", success);
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-  } 
+  }
+  */ 
 
   @RequestMapping(value="/batchresults/{donationIds}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
@@ -362,7 +364,7 @@ public class BloodTypingController {
   @RequestMapping(value="/results/additional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
-      @RequestBody TestResultBackingForm formData) {
+      @RequestBody TestResultBackingForm form) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
@@ -371,19 +373,20 @@ public class BloodTypingController {
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
       @SuppressWarnings("unchecked")
       Map<Long, String> saveTestsData = null;
-      saveTestsData = formData.getTestResults();
+      saveTestsData = form.getTestResults();
+       CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
       for (Long testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
       }
-      bloodTypingTestResultsMap.put(formData.getDonationId(), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, formData.getSaveUninterpretableResults());
+      bloodTypingTestResultsMap.put(collectedSample.getId(), saveTestsDataWithLong);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
       @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
       System.out.println(errorMap);
       if (errorMap != null && !errorMap.isEmpty()) {
         httpStatus = HttpStatus.BAD_REQUEST;
         @SuppressWarnings("unchecked")
-        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(formData.getDonationId());
+        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(collectedSample.getId());
         if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
           m.put("uninterpretable", true);
         else
