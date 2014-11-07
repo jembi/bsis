@@ -263,6 +263,7 @@ public class BloodTypingController {
   }
   */
 
+  /* #229 - replaced with TestResultController.saveTestResults()
   @RequestMapping(value = "/results", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveBloodTypingTestResults(
@@ -299,7 +300,8 @@ public class BloodTypingController {
     map.put("success", success);
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-  } 
+  }
+  */ 
 
   @RequestMapping(value="/batchresults/{donationIds}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")

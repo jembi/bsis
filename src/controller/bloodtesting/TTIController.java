@@ -122,6 +122,7 @@ public class TTIController {
 		return tests;
 	}
 
+	/* #229 - replaced with TestResultController.saveTestResults()
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/results", method = RequestMethod.POST)
@@ -160,6 +161,7 @@ public class TTIController {
 		map.put("success", success);
 		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 	}
+	*/
 
 	/* #209 - unused method, was used by previous version of saveTTITests() method
 	@SuppressWarnings("unchecked")
