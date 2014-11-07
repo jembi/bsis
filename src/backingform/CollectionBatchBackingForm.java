@@ -26,12 +26,12 @@ public class CollectionBatchBackingForm {
     this.collectionBatch = collectionBatch;
   }
 
-  public Integer getId() {
-    return collectionBatch.getId();
-  }
-
   public void setId(Integer id) {
     collectionBatch.setId(id);
+  }
+  
+  public Integer getId(){
+      return collectionBatch.getId();
   }
 
   public String getBatchNumber() {
@@ -42,50 +42,16 @@ public class CollectionBatchBackingForm {
     collectionBatch.setBatchNumber(batchNumber);
   }
 
-  public String getCollectionCenter() {
-    Location center = collectionBatch.getCollectionCenter();
-    if (center == null || center.getId() == null)
-      return null;
-    return center.getId().toString();
-  }
-
-  public String getCollectionSite() {
-    Location site = collectionBatch.getCollectionSite();
-    if (site == null || site.getId() == null)
-      return null;
-    return site.getId().toString();
-  }
-
-  public void setCollectionCenter(String center) {
-    if (StringUtils.isBlank(center)) {
-      collectionBatch.setCollectionCenter(null);
-    }
-    else {
+  public void setCollectionCenter(Long center) {
       Location l = new Location();
-      try {
-        l.setId(Long.parseLong(center));
-        collectionBatch.setCollectionCenter(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectionBatch.setCollectionCenter(null);
-      }
-    }
+      l.setId(center);
+      collectionBatch.setCollectionCenter(l);
   }
 
-  public void setCollectionSite(String collectionSite) {
-    if (StringUtils.isBlank(collectionSite)) {
-      collectionBatch.setCollectionSite(null);
-    }
-    else {
+  public void setCollectionSite(Long collectionSite) {
       Location l = new Location();
-      try {
-        l.setId(Long.parseLong(collectionSite));
-        collectionBatch.setCollectionSite(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectionBatch.setCollectionSite(null);
-      }
-    }
+      l.setId(collectionSite);
+      collectionBatch.setCollectionSite(l);
   }
 
   public String getNotes() {
