@@ -78,7 +78,7 @@ public class LotReleaseController {
 
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
     List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
-    List<Map<String, Object>> components = getComponentstatus(collectedSample, products);
+    List<Map<String, Object>> components = getComponentLabellingStatus(collectedSample, products);
     
     componentMap.put("donationNumber", donationIdentificationNumber);
     componentMap.put("components", new HashSet(components));
@@ -315,7 +315,7 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private List<Map<String, Object>> getComponentstatus(CollectedSample collectedSample, List<Product> products){
+	private List<Map<String, Object>> getComponentLabellingStatus(CollectedSample collectedSample, List<Product> products){
 		
                
            List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
