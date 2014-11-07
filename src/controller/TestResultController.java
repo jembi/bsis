@@ -76,8 +76,8 @@ public class TestResultController {
     return new ResponseEntity(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/results/list", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public ResponseEntity findTestResultsForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
@@ -97,4 +97,5 @@ public class TestResultController {
 	
 		return new ResponseEntity(map, HttpStatus.OK);
   }
+
 }
