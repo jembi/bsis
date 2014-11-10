@@ -3488,8 +3488,7 @@
 	     <column name="permissions_id" value="83"></column>
 	     <column name="roles_id" value="14"></column>
 	  </insert>
-	  </insert>
-	     <insert tableName="Permission_Role">
+	  <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="83"></column>
 	     <column name="roles_id" value="15"></column>
 	  </insert>
