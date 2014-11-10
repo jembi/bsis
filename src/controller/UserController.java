@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,6 +77,10 @@ public class UserController {
             addUser(@Valid @RequestBody UserBackingForm form) {
         
             User user = form.getUser();
+            String password = user.getPassword();
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(password);
+            user.setPassword(hashedPassword);
             user.setIsDeleted(false);
             user.setRoles(assignUserRoles(form));
             user.setIsActive(true);

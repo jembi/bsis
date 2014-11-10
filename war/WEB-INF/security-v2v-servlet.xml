@@ -186,8 +186,12 @@
   </http>   
   
 
+  <beans:bean id='bCryptPasswordEncoder' class='org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder'/>
+
   <authentication-manager>
-    <authentication-provider user-service-ref="userDetailsService" />
+    <authentication-provider user-service-ref="userDetailsService" >
+        <password-encoder ref="bCryptPasswordEncoder"/>
+    </authentication-provider>
   </authentication-manager>
 
   <beans:bean id="userDetailsService" class="security.LoginUserService">
