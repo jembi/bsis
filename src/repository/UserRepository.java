@@ -27,9 +27,6 @@ public class UserRepository {
 
   public User updateUser(User user, boolean modifyPassword){
     User existingUser = findUserById(user.getId());
-    if (existingUser == null) {
-      return null;
-    }
     existingUser.copy(user);
     if (modifyPassword)
 	    existingUser.setRoles(user.getRoles());	
