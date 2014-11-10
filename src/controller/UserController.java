@@ -104,12 +104,30 @@ public class UserController {
     }
     
     
+    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "')")
+    public ResponseEntity updateLoginUserInfo(
+            @Valid @RequestBody UserBackingForm form) {
+
+        User user = form.getUser();
+        user.setIsDeleted(false);
+        user.setId(getLoginUser().getId());
+        if (form.isModifyPassword()) {
+            user.setPassword(form.getPassword());
+        } else {
+            user.setPassword(form.getCurrentPassword());
+        } 
+        user.setIsActive(true);
+        userRepository.updateBasicUserInfo(user);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+    
+            
     @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "' )" )
-    public User getUserDetails(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName(); //get logged in username
-        return userRepository.findUser(userName);
+    public ResponseEntity getUserDetails(){
+        User user =  getLoginUser();
+        return new ResponseEntity(user, HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -145,6 +163,12 @@ public class UserController {
 
         }
         return userRole;
+    }
+    
+    public User getLoginUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName(); //get logged in username
+        return userRepository.findUser(userName);
     }
 
 
