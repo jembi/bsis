@@ -39,6 +39,16 @@ public class UserRepository {
 	    em.flush();
     return existingUser;
   }
+  
+  public User updateBasicUserInfo(User user, boolean modifyPassword){
+      User existingUser = findUserById(user.getId());
+      existingUser.setFirstName(user.getFirstName());
+      existingUser.setLastName(user.getLastName());
+      existingUser.setEmailId(user.getEmailId());
+      if(modifyPassword)
+          existingUser.setPassword(user.getPassword());
+      return em.merge(existingUser);
+  }
 
   public User findUserById(Integer id) throws NoResultException, NonUniqueResultException{
     if (id == null)
