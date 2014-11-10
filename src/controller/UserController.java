@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_USERS + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public 
     Map<String, Object> editUserFormGenerator() {
         UserBackingForm form = new UserBackingForm();
