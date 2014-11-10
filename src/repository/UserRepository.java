@@ -27,10 +27,10 @@ public class UserRepository {
 
   public User updateUser(User user, boolean modifyPassword){
     User existingUser = findUserById(user.getId());
-    existingUser.copy(user);
-    if (modifyPassword)
-	    existingUser.setRoles(user.getRoles());	
-	    existingUser.setPassword(user.getPassword());
+      existingUser.copy(user);
+      if (modifyPassword) {
+          existingUser.setPassword(user.getPassword());
+      }
 	    existingUser.setIsDeleted(false);
 	    em.merge(existingUser);
 	    em.flush();
