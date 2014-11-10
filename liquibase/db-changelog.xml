@@ -3424,8 +3424,8 @@
     </createTable>
     </changeSet>
 
-     <!-- Add AUTHENTICATED pernission level to the system -->
- <changeSet id="201411101128" author="rikanth">
+     <!-- Add AUTHENTICATED permission level to the system -->
+ <changeSet id="201411101128" author="srikanth">
 
  	 <insert tableName="Permission">
 	       <column name="id" value="83"> </column>
@@ -3487,6 +3487,16 @@
 	     <insert tableName="Permission_Role">
 	     <column name="permissions_id" value="83"></column>
 	     <column name="roles_id" value="14"></column>
+	  </insert>
+	  </insert>
+	     <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="83"></column>
+	     <column name="roles_id" value="15"></column>
+	  </insert>
+	  </insert>
+	     <insert tableName="Permission_Role">
+	     <column name="permissions_id" value="83"></column>
+	     <column name="roles_id" value="16"></column>
 	  </insert>
  </changeSet>
 </databaseChangeLog>	
