@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller.bloodtesting;
 
 import backingform.BloodTestingRuleBackingForm;
@@ -26,7 +21,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestingRuleViewModel;
 
 @RestController
-@RequestMapping("/bloodtests/rules")
+@RequestMapping("/bloodtestrules")
 public class BloodTestingRuleController {
 
     @Autowired

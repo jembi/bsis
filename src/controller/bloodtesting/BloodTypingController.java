@@ -312,7 +312,7 @@ public class BloodTypingController {
     return map;
   }
 */
-  @RequestMapping(value="/results/addiional", method=RequestMethod.POST)
+  @RequestMapping(value="/results/additional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestBody BloodTypingResultBackingForm formData) {
@@ -346,14 +346,4 @@ public class BloodTypingController {
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
   
-/**
- * issue - #225 not used anywhere
-  private Map<Integer, BloodTest> getBloodTypingTestsAsMap(List<BloodTest> bloodTypingTests) {
-    Map<Integer, BloodTest> bloodTypingTestsMap = new HashMap<Integer, BloodTest>();
-    for (BloodTest bt : bloodTypingTests) {
-      bloodTypingTestsMap.put(bt.getId(), bt);
-    }
-    return bloodTypingTestsMap;
-  }
- */
 }

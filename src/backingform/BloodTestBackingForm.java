@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 
-
 public class BloodTestBackingForm {
 
     @JsonIgnore
@@ -16,7 +15,7 @@ public class BloodTestBackingForm {
         bloodTest = new BloodTest();
     }
 
-    public BloodTest getBloosTest() {
+    public BloodTest getBloodTest() {
         return bloodTest;
     }
     
@@ -24,7 +23,7 @@ public class BloodTestBackingForm {
         bloodTest.setId(id);
     }
 
-    public void setBloosTest(BloodTest bloodTest) {
+    public void setBloodTest(BloodTest bloodTest) {
         this.bloodTest = bloodTest;
     }
 
@@ -36,16 +35,8 @@ public class BloodTestBackingForm {
         return bloodTest.getTestNameShort();
     }
 
-    public BloodTest getBloodTest() {
-        return bloodTest;
-    }
-
     public Integer getNumberOfConfirmatoryTests() {
         return numberOfConfirmatoryTests;
-    }
-
-    public void setBloodTest(BloodTest bloodTest) {
-        this.bloodTest = bloodTest;
     }
 
     public void setNumberOfConfirmatoryTests(Integer numberOfConfirmatoryTests) {
@@ -60,11 +51,11 @@ public class BloodTestBackingForm {
         bloodTest.setTestNameShort(testNameShort);
     }
 
-    public void setCategory(String Category) {
+    public void setBloodTestCategory(String Category) {
         bloodTest.setCategory(BloodTestCategory.valueOf(Category));
     }
     
-    public void setvalidResults(String validResults){
+    public void setValidResults(String validResults){
         bloodTest.setValidResults(validResults);
     }
     

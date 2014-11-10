@@ -1,18 +1,14 @@
-
-
 package backingform;
 
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.producttype.ProductTypeTimeUnits;
 
-/**
- *
- * @author srikanth
- */
 public class ComponentTypeBackingForm {
     
+	@JsonIgnore
     private ProductType productType;
     
     public ComponentTypeBackingForm(){
@@ -31,31 +27,31 @@ public class ComponentTypeBackingForm {
         productType.setId(id);
     }
     
-    public void setproductTypeName(String productTypeName){
+    public void setProductType(String productTypeName){
         productType.setProductType(productTypeName);
     }
     
-    public void setproductTypeNameShort(String productTypeNameShort){
+    public void setProductTypeNameShort(String productTypeNameShort){
         productType.setProductTypeNameShort(productTypeNameShort);
     }
     
-    public void setexpiresAfter(Integer expiresAfter){
+    public void setExpiresAfter(Integer expiresAfter){
         productType.setExpiresAfter(expiresAfter);
     }
     
-    public void setdescription(String description){
+    public void setExpiresAfterUnits(String productTypeTimeUnits){
+        productType.setExpiresAfterUnits(ProductTypeTimeUnits.valueOf(productTypeTimeUnits));
+    }
+    
+    public void setDescription(String description){
         productType.setDescription(description);
     }
     
-    public void sethasBloodGroup(Boolean hasBloodGroup){
+    public void setHasBloodGroup(Boolean hasBloodGroup){
         productType.setHasBloodGroup(hasBloodGroup);
-    }
+    }    
     
-    public void setexpiresAfterUnits(ProductTypeTimeUnits productTypeTimeUnits){
-        productType.setExpiresAfterUnits(productTypeTimeUnits);
-    }
-    
-    public void setproductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations){
+    public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations){
         productType.setProductTypeCombinations(productTypeCombinations);
     }
 }

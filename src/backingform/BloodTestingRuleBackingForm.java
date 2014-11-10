@@ -1,5 +1,3 @@
-
-
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,10 +7,9 @@ import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.CollectionField;
 
-
 public class BloodTestingRuleBackingForm {
 
-   @JsonIgnore
+    @JsonIgnore
     private BloodTestingRule typingRule;
     
     public BloodTestingRuleBackingForm() {
@@ -35,11 +32,9 @@ public class BloodTestingRuleBackingForm {
         typingRule.setPendingTestsIds(pendingTestsIds);
     }
     
-    
     public void setCategory(String category){
         typingRule.setCategory(BloodTestCategory.valueOf(category));
-    }
-    
+    } 
     
     public void setCollectionFieldChanged(String collectionField){
         typingRule.setCollectionFieldChanged(CollectionField.valueOf(collectionField));
@@ -61,7 +56,7 @@ public class BloodTestingRuleBackingForm {
         typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory));
     }
     
-    public void setisActive(Boolean isActive){
+    public void setIsActive(Boolean isActive){
         typingRule.setIsActive(isActive);
     }
     
@@ -77,5 +72,4 @@ public class BloodTestingRuleBackingForm {
         typingRule.setBloodTestsIds(bloodTestIds);
     }
     
-
 }

@@ -63,20 +63,20 @@ public class ProductTypeController {
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity saveComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm dataObject) {
+  public  ResponseEntity saveComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form) {
 
-      ProductType componentType = dataObject.getProductType();
+      ProductType componentType = form.getProductType();
       productTypeRepository.saveComponentType(componentType);
       return new ResponseEntity(HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity updatedComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm dataObject,
+  public  ResponseEntity updatedComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form,
   @PathVariable Integer id) {
 
       Map<String, Object> map = new HashMap<String, Object>();
-      ProductType componentType = dataObject.getProductType();
+      ProductType componentType = form.getProductType();
       componentType.setId(id);
       componentType = productTypeRepository.updateComponentType(componentType);
       map.put("componentType", componentType);
