@@ -98,12 +98,12 @@ public class UserController {
         } 
         user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
-        userRepository.updateUser(user, true);
+        userRepository.updateUser(user);
     
         return new ResponseEntity(user, HttpStatus.OK);
     }
     
-
+    
     @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "' )" )
     public User getUserDetails(){
