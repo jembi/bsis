@@ -64,7 +64,7 @@ public class ProductTypeController {
   public  ResponseEntity saveComponentTypeByID(@RequestBody ProductType componentType) {
 
       productTypeRepository.saveComponentType(componentType);
-      return new ResponseEntity(HttpStatus.CREATED);
+      return new ResponseEntity( new ProductTypeViewModel(componentType), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
@@ -73,8 +73,8 @@ public class ProductTypeController {
   @PathVariable Integer id) {
 
       componentType.setId(id);
-      productTypeRepository.updateComponentType(componentType);
-      return new ResponseEntity(HttpStatus.CREATED);
+      componentType = productTypeRepository.updateComponentType(componentType);
+      return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.OK);
   }
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)

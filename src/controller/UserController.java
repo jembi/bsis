@@ -79,7 +79,7 @@ public class UserController {
             user.setRoles(assignUserRoles(form));
             user.setIsActive(true);
             userRepository.addUser(user);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -100,7 +100,7 @@ public class UserController {
         user.setIsActive(true);
         userRepository.updateUser(user, true);
     
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(user, HttpStatus.OK);
     }
     
 
