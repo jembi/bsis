@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_USERS + "')")
     public 
     Map<String, Object> editUserFormGenerator() {
         UserBackingForm form = new UserBackingForm();
@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+   @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_USERS + "', '" + PermissionConstants.AUTHENTICATED + "' )")
     public ResponseEntity updateUser(
             @Valid @RequestBody UserBackingForm form,
             @PathVariable Integer id) {
@@ -105,7 +105,7 @@ public class UserController {
     
 
     @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_USERS + "', '" + PermissionConstants.AUTHENTICATED+ "' )" )
     public User getUserDetails(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName(); //get logged in username

@@ -112,5 +112,8 @@ public class PermissionConstants {
 	public static final String VIEW_DISCARD_INFORMATION = "View Discard Information";
 	public static final String VIEW_REPORTING_INFORMATION = "View Reporting Information";
 	public static final String VIEW_ADMIN_INFORMATION = "View Admin Information";
+        public static final String AUTHENTICATED = "Authenticated";
+        
+        
 
 }
