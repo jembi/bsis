@@ -3,8 +3,10 @@ package controller;
 import backingform.validator.CollectedSampleBackingFormValidator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,8 @@ import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.LotReleaseConstant;
 import model.product.Product;
+import model.product.ProductStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,55 +74,27 @@ public class LotReleaseController {
   */
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
-  public ResponseEntity<Map<String, Object>> findlotRelease(HttpServletRequest request,
+  public ResponseEntity findlotRelease(HttpServletRequest request,
           @PathVariable String donationIdentificationNumber)  {
-    Map<String, Object> map = new  HashMap<String, Object>();
-    boolean success = true;
-    boolean discard = false;
-    
+        Map<String, Object> componentMap = new HashMap<String, Object>();
+
     CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
     List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
+    List<Map<String, Object>> components = getComponentLabellingStatus(collectedSample, products);
     
-    if(donationIdentificationNumber.isEmpty()){
-    	map.put("errorMessage", "Please Enter the Donation Identification Number.");
-    	success=false;
-    	map.put("success", success);
-    	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
-    }
+    componentMap.put("donationNumber", donationIdentificationNumber);
+    componentMap.put("components", new HashSet(components));
     
-    if(collectedSample == null){
-    	map.put("errorMessage", "Donation Identification Number does not exist.");
-    	success=false;
-    	map.put("success", success);
-    	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
-    }
-   
-    discard = checkCollectionForDiscard(collectedSample, products);
-
-    if(!discard){
-    
-	    success = checkCollectionNumber(collectedSample);
-	    
-	    if(!success){
-	    	map.put("errorMessage", "Cannot print pack label for DIN "+donationIdentificationNumber);
-	    }
-    }
-    else{
-    	success=false;
-    }
-    
-    map.put("donationIdentificationNumber", donationIdentificationNumber);
-    map.put("printPackLabel", success);
-    map.put("printDiscardLabel", discard);
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity (componentMap, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/print/packlabel/{donationIdentificationNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable String donationIdentificationNumber) {
+  public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable Long componentId) {
 	  
 	    Map<String, Object> map = new  HashMap<String, Object>();
-	    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+            Product product = productRepository.findProductById(componentId);
+	    CollectedSample collectedSample = product.getCollectedSample();
 	    
 	    boolean success = false;
 	    
@@ -187,7 +163,7 @@ public class LotReleaseController {
 	    			         "^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
 	    			         "^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0" +
 	    	    			 "^BY2,3,42^FT285,111^BCN,,Y,N"+
-	    	    			 "^FD>:" + donationIdentificationNumber + "^FS"+
+	    	    			 "^FD>:" + product.getCollectionNumber() + "^FS"+
 	    	    			 inverse +
 	    			         "^PQ1,0,1,Y^XZ"
 	    			         );
@@ -244,23 +220,23 @@ public class LotReleaseController {
 	    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/print/discardlabel/{donationIdentificationNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> printDiscard(@PathVariable String donationIdentificationNumber) {
+  public  ResponseEntity<Map<String, Object>> printDiscard
+        (@PathVariable Long componentId) {
 	  
 	Map<String, Object> map = new  HashMap<String, Object>();
 	boolean success = false;
 	
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
-    List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
+     Product product = productRepository.findProductById(componentId);
     
     // check to make sure discard label can be printed
- 	if (checkCollectionForDiscard(collectedSample, products)){
+ 	if (checkProductForDiscard(product)){
     
  		// discard label can be printed
  		success = true;
 	 	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
-	    String collectionDate = df.format(collectedSample.getCollectedOn());        	
+	    String collectionDate = df.format(product.getCollectedSample().getCollectedOn());        	
 	
 	    // Generate ZPL label
 	    map.put("labelZPL",	
@@ -283,7 +259,7 @@ public class LotReleaseController {
 	    		"^FO18,357^GB748,0,8^FS"+
 	    		"^FT52,749^A0N,28,28^FH\\^FDIf found contact the BTS immediately at (000) 000-0000^FS" +
 	    		"^BY2,3,52^FT408,135^BCN,,Y,N" +
-	    		"^FD>:" + donationIdentificationNumber + "^FS" +
+	    		"^FD>:" + product.getCollectionNumber() + "^FS" +
 	    		"^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
 	    		"^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ" 
 	    		);
@@ -306,7 +282,10 @@ public class LotReleaseController {
     		success=false;
     	}else if(collectedSample.getDonor()!=null && collectedSample.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
-    	}else if(collectedSample.getProducts()!=null && !collectedSample.getProducts().isEmpty() && 
+    	}
+    	// TODO: improve product & blood test checks, or remove if not relevant
+    	/*
+    	else if(collectedSample.getProducts()!=null && !collectedSample.getProducts().isEmpty() && 
     			(collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
     			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
     			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
@@ -317,6 +296,7 @@ public class LotReleaseController {
     			&& !collectedSample.getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}
+    	*/
     	else if(collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
     			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
     			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
@@ -337,19 +317,57 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private boolean checkCollectionForDiscard(CollectedSample collectedSample, List<Product> products){
-		boolean discard = false;
+	private List<Map<String, Object>> getComponentLabellingStatus(CollectedSample collectedSample, List<Product> products){
 		
-		if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
-    		discard=true;
+               
+           List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
+	     if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
+                  Map<String, Object> productStatus = new HashMap<String, Object>();
+    		for(Product product : products){
+    				if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
+	                    productStatus.put("componentId", product.getId());
+	                    productStatus.put("componentName", product.getProductType().getProductType());
+	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
+	                    productStatus.put("discardPackLabel", true);
+	                    productStatus.put("printPackLabel", false);
+	                    productsList.add(productStatus);
+    				}
+                }
+                
+                return productsList;
     	}
-		for(Product product : products){ 
-			if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)){
-				discard = true;
-			}
-		}
-		
-		return discard;
-	}
+            else {
+                for (Product product : products) {
+                	Map<String, Object> productStatus = new HashMap<String, Object>();
+                	if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
+	                    productStatus.put("componentId", product.getId());
+	                    productStatus.put("componentName", product.getProductType().getProductType());
+	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
+	                    if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
+	                        productStatus.put("discardPackLabel", true);
+	                        productStatus.put("printPackLabel", false);
+	                    } else {
+	                        productStatus.put("discardPackLabel", false);
+	                        productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
+	                    }
+	                    productsList.add(productStatus);
+                	}
+                }
+            }
+        return productsList;
+
+    }
+        
+        private Boolean checkProductForDiscard(Product product){
+            
+            
+            if(product.getCollectedSample().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
+                return true;
+            
+             if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) 
+                 return true;
+             return false;
+            
+        }
   
 }
