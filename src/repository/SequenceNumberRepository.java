@@ -386,4 +386,8 @@ public class SequenceNumberRepository {
   synchronized public String getNextBatchNumber() {
     return getNextNumber("collectionBatch", "batchNumber", "B");
   }
+  
+  synchronized public String getNextTestBatchNumber() {
+     return getNextNumber("testbatch", "batchNumber", "TB");
+  }
 }

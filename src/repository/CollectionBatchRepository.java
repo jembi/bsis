@@ -1,8 +1,7 @@
 package repository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -28,7 +27,7 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchByIdEager(Integer batchId) {
-    String queryString = "SELECT b FROM CollectionBatch b LEFT JOIN FETCH b.collectionCenter LEFT JOIN FETCH b.collectionSite " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch LEFT JOIN FETCH b.collectionCenter LEFT JOIN FETCH b.collectionSite " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -37,7 +36,7 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchById(Integer batchId) {
-    String queryString = "SELECT b FROM CollectionBatch b " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -45,14 +44,14 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchByBatchNumber(String batchNumber) throws NoResultException,NonUniqueResultException {
-    String queryString = "SELECT b FROM CollectionBatch b " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch " +
         "WHERE b.batchNumber = :batchNumber and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     try{
     return query.setParameter("batchNumber", batchNumber).getSingleResult();
     }catch(NoResultException ex){
-        throw new NoResultException("No DonatchBatch Exists with ID :"+ batchNumber);
+        throw new NoResultException("No DonationBatch Exists with ID :"+ batchNumber);
     }
   }
 
@@ -70,7 +69,7 @@ public class CollectionBatchRepository {
   
   public CollectionBatch
 	  findCollectionBatchByBatchNumberIncludeDeleted(String batchNumber){
-	String queryString = "SELECT b FROM CollectionBatch b " +
+	String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch " +
 	 "WHERE b.batchNumber = :batchNumber";
 	TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
 	CollectionBatch batch = null;
@@ -81,16 +80,22 @@ public class CollectionBatchRepository {
 	
   }
 
-  public CollectionBatch addCollectionBatch(CollectionBatch collectionBatch) {
+  public void addCollectionBatch(CollectionBatch collectionBatch) {
     em.persist(collectionBatch);
     em.flush();
     em.refresh(collectionBatch);
-    return collectionBatch;
   }
+  
+  public CollectionBatch updateCollectionBatch(CollectionBatch collectionBatch)throws IllegalArgumentException{
+      CollectionBatch existingBatch = findCollectionBatchById(collectionBatch.getId());
+      existingBatch.copy(collectionBatch);
+      return em.merge(existingBatch);
+  }
+  
 
   public List<CollectionBatch> findCollectionBatches(Boolean isClosed,
       List<Long> centerIds, List<Long> siteIds) {
-    String queryStr = "SELECT b from CollectionBatch b WHERE b.isDeleted=:isDeleted ";
+    String queryStr = "SELECT distinct b from CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch WHERE b.isDeleted=:isDeleted ";
     if(!centerIds.isEmpty()){
     	queryStr += "AND b.collectionCenter.id IN (:centerIds) ";
     }
@@ -115,13 +120,26 @@ public class CollectionBatchRepository {
     
     return query.getResultList();
   }
+  
+  public List<CollectionBatch> findUnassignedCollectionBatches() {
+    String queryStr = "SELECT distinct b from CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch WHERE b.isDeleted=:isDeleted " +
+    	"AND b.isClosed=:isClosed " + 
+    	"AND b.testBatch=null";
 
-  public Set<String> findCollectionsInBatch(Integer batchId) {
+    TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
+    query.setParameter("isDeleted", false);
+    query.setParameter("isClosed", false);
+   
+    
+    return query.getResultList();
+  }
+  
+  public List<CollectedSample> findCollectionsInBatch(Integer batchId) {
     CollectionBatch collectionBatch = findCollectionBatchByIdEager(batchId);
-    Set<String> collectionNumbers = new HashSet<String>();
+    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
     for (CollectedSample c : collectionBatch.getCollectionsInBatch()) {
-      collectionNumbers.add(c.getCollectionNumber());
+    	collectedSamples.add(c);
     }
-    return collectionNumbers;
+    return collectedSamples;
   }
 }

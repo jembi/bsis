@@ -147,11 +147,25 @@
     <intercept-url pattern="/ttitests/**" access="isFullyAuthenticated()" />
   </http>
   
+  <http pattern="/bloodgroupingtests/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/bloodgroupingtests/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/bloodgroupingtests/**" access="isFullyAuthenticated()" />
+  </http>
+  
   <http pattern="/testresults/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
     <intercept-url pattern="/testresults/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/testresults/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/testbatches/**" create-session="never" use-expressions="true">
+  	<http-basic />
+    <session-management />
+    <intercept-url pattern="/testbatches/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/testbatches/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/users/**" create-session="never" use-expressions="true">

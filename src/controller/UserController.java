@@ -85,7 +85,7 @@ public class UserController {
             user.setRoles(assignUserRoles(form));
             user.setIsActive(true);
             userRepository.addUser(user);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -104,18 +104,36 @@ public class UserController {
         } 
         user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
-        userRepository.updateUser(user, true);
+        userRepository.updateUser(user);
     
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(user, HttpStatus.OK);
     }
     
+    
+    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "')")
+    public ResponseEntity updateLoginUserInfo(
+            @Valid @RequestBody UserBackingForm form) {
 
+        User user = form.getUser();
+        user.setIsDeleted(false);
+        user.setId(getLoginUser().getId());
+        if (form.isModifyPassword()) {
+            user.setPassword(form.getPassword());
+        } else {
+            user.setPassword(form.getCurrentPassword());
+        } 
+        user.setIsActive(true);
+        userRepository.updateBasicUserInfo(user);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+    
+            
     @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public User getUserDetails(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName(); //get logged in username
-        return userRepository.findUser(userName);
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "' )" )
+    public ResponseEntity getUserDetails(){
+        User user =  getLoginUser();
+        return new ResponseEntity(user, HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -151,6 +169,12 @@ public class UserController {
 
         }
         return userRole;
+    }
+    
+    public User getLoginUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName(); //get logged in username
+        return userRepository.findUser(userName);
     }
 
 

@@ -68,7 +68,7 @@ public class BloodTestingController {
   public ResponseEntity saveNewBloodTest(
       @RequestBody BloodTestBackingForm form) {
       bloodTestingRepository.saveBloodTest(form);
-      return new ResponseEntity(HttpStatus.NO_CONTENT);
+      return new ResponseEntity(new BloodTestViewModel(form.getBloodTest()), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)

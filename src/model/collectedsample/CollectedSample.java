@@ -442,16 +442,16 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return extraBloodTypeInformation;
   }
 
-  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
-  }
+    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+        this.extraBloodTypeInformation = extraBloodTypeInformation;
+    }
 
-	public Integer getDonorPulse() {
-		return donorPulse;
-	}
+    public Integer getDonorPulse() {
+        return donorPulse;
+    }
 
-	public void setDonorPulse(Integer donorPulse) {
-		this.donorPulse = donorPulse;
-	}
-  
+    public void setDonorPulse(Integer donorPulse) {
+        this.donorPulse = donorPulse;
+    }
+
 }
