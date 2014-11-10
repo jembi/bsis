@@ -14,6 +14,8 @@ import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.collectedsample.LotReleaseConstant;
 import model.product.Product;
+import model.product.ProductStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -322,30 +324,32 @@ public class LotReleaseController {
 	     if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
                   Map<String, Object> productStatus = new HashMap<String, Object>();
     		for(Product product : products){
-                    productStatus.put("componentId", product.getId());
-                    productStatus.put("componentName", product.getProductType().getProductType());
-                    productStatus.put("discardPackLabel", true);
-                    productStatus.put("printPackLabel", false);
-                    productsList.add(productStatus);
+    				if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
+	                    productStatus.put("componentId", product.getId());
+	                    productStatus.put("componentName", product.getProductType().getProductType());
+	                    productStatus.put("discardPackLabel", true);
+	                    productStatus.put("printPackLabel", false);
+	                    productsList.add(productStatus);
+    				}
                 }
                 
                 return productsList;
     	}
             else {
-
                 for (Product product : products) {
-                    Map<String, Object> productStatus = new HashMap<String, Object>();
-                    productStatus.put("componentId", product.getId());
-                    productStatus.put("componentName", product.getProductType().getProductType());
-                    if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
-                        productStatus.put("discardPackLabel", true);
-                        productStatus.put("printPackLabel", false);
-                    } else {
-                        productStatus.put("discardPackLabel", false);
-                        productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
-                    }
-                     productsList.add(productStatus);
-
+                	Map<String, Object> productStatus = new HashMap<String, Object>();
+                	if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
+	                    productStatus.put("componentId", product.getId());
+	                    productStatus.put("componentName", product.getProductType().getProductType());
+	                    if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
+	                        productStatus.put("discardPackLabel", true);
+	                        productStatus.put("printPackLabel", false);
+	                    } else {
+	                        productStatus.put("discardPackLabel", false);
+	                        productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
+	                    }
+	                    productsList.add(productStatus);
+                	}
                 }
             }
         return productsList;
