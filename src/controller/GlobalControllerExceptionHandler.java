@@ -109,6 +109,23 @@ public class GlobalControllerExceptionHandler {
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
+ /**
+    * Thrown to indicate that a method has been passed an illegal or inappropriate argument.
+  */
+  @ExceptionHandler(IllegalArgumentException .class)
+  public ResponseEntity<Map<String, Object>> handleIllegalArgumentException (
+        IllegalArgumentException error) {
+    Map<String, Object> errorMap = new HashMap<String, Object>();
+    errorMap.put("hasErrors", "true");
+   errorMap.put("developerMessage","No Object exists with the given id");
+    errorMap.put("userMessage", "");
+    errorMap.put("moreInfo",error.getMessage());
+    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+  
+  
   //Service layer Exceptions
   /**
   *   Exception thrown when a request handler does not support a specific request method.
