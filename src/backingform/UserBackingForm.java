@@ -172,14 +172,14 @@ public class UserBackingForm {
     /**
      * @return the userConfirmPassword
      */
-    public String getUserConfirmPassword() {
+    public String getConfirmPassword() {
         return userConfirmPassword;
     }
 
     /**
      * @param userConfirmPassword the userConfirPassword to set
      */
-    public void setUserConfirmPassword(String userConfirmPassword) {
+    public void setConfirmPassword(String userConfirmPassword) {
         this.userConfirmPassword = userConfirmPassword;
     }
 
