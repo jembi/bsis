@@ -171,11 +171,11 @@ public class UserController {
         return userRole;
     }
     
-    public User getLoginUser(){
+    private User getLoginUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName(); //get logged in username
         return userRepository.findUser(userName);
     }
-
+    
 
 }
