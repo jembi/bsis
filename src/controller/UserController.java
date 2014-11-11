@@ -95,14 +95,14 @@ public class UserController {
         form.setIsDeleted(false);
         User user = form.getUser();
         user.setId(id);
-        if (form.isModifyPassword()) {
-            user.setPassword(form.getPassword());
-        } else {
-            user.setPassword(form.getCurrentPassword());
-        } 
+        boolean modifyPassword  = form.isModifyPassword();
+        if (modifyPassword) {
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+        }
         user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
-        userRepository.updateUser(user);
+        userRepository.updateUser(user, modifyPassword);
     
         return new ResponseEntity(user, HttpStatus.OK);
     }
@@ -114,15 +114,13 @@ public class UserController {
             @Valid @RequestBody UserBackingForm form) {
 
         User user = form.getUser();
-        user.setIsDeleted(false);
         user.setId(getLoginUser().getId());
-        if (form.isModifyPassword()) {
-            user.setPassword(form.getPassword());
-        } else {
-            user.setPassword(form.getCurrentPassword());
-        } 
-        user.setIsActive(true);
-        userRepository.updateBasicUserInfo(user);
+        boolean modifyPassword  = form.isModifyPassword();
+        if (modifyPassword) {
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+        }
+        userRepository.updateBasicUserInfo(user, modifyPassword);
         return new ResponseEntity(user, HttpStatus.OK);
     }
     
