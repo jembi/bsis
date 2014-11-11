@@ -25,21 +25,24 @@ public class UserRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public User updateUser(User user){
+  public User updateUser(User user, boolean modifyPassword){
     User existingUser = findUserById(user.getId());
       existingUser.copy(user);
       existingUser.setIsDeleted(false);
+      if(modifyPassword)
+          existingUser.setPassword(user.getPassword());
       em.merge(existingUser);
       em.flush();
       return existingUser;
   }
   
-  public User updateBasicUserInfo(User user){
+  public User updateBasicUserInfo(User user, boolean modifyPassword){
       User existingUser = findUserById(user.getId());
       existingUser.setFirstName(user.getFirstName());
       existingUser.setLastName(user.getLastName());
       existingUser.setEmailId(user.getEmailId());
-      existingUser.setPassword(user.getPassword());
+      if(modifyPassword)
+          existingUser.setPassword(user.getPassword());
       return em.merge(existingUser);
   }
 
