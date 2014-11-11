@@ -77,9 +77,7 @@ public class UserController {
             addUser(@Valid @RequestBody UserBackingForm form) {
         
             User user = form.getUser();
-            String password = user.getPassword();
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPassword = passwordEncoder.encode(password);
+            String hashedPassword = getHashedPassword(user.getPassword());
             user.setPassword(hashedPassword);
             user.setIsDeleted(false);
             user.setRoles(assignUserRoles(form));
@@ -177,5 +175,10 @@ public class UserController {
         return userRepository.findUser(userName);
     }
     
+    private String getHashedPassword(String rawPassword) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        return hashedPassword;
+    }
 
 }
