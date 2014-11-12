@@ -3497,4 +3497,20 @@
 	     <column name="roles_id" value="16"></column>
 	  </insert>
  </changeSet>
+
+ <!--issue 234[Associate Pack Type with Initial Component Type in Donation]-->
+ <changeSet author="srikanth" id="201411120953">
+
+	 	<addColumn tableName="BloodBagType">
+		    <column name="productType_id" type="smallint(6)"></column>
+		</addColumn>
+
+    <addForeignKeyConstraint baseColumnNames="productType_id"
+            baseTableName="BloodBagType"
+            constraintName="fk_packType_componentType"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="ProductType"/>
+</changeSet>
 </databaseChangeLog>	
