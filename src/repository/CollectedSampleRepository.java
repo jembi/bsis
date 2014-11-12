@@ -22,6 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
@@ -333,9 +334,12 @@ public class CollectedSampleRepository {
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.refresh(collectedSample);
     
-     
-    ProductType productType = collectedSample.getBloodBagType().getProductType();
-    
+  BloodBagType packType = collectedSample.getBloodBagType();
+  
+  if(packType.isCountAsDonation() == true){
+        
+    ProductType productType = packType.getProductType();
+
    // Add product
     Product product = new Product();
     product.setIsDeleted(false);
@@ -346,8 +350,6 @@ public class CollectedSampleRepository {
     product.setCreatedOn(collectedSample.getCollectedOn());
     product.setCreatedBy(collectedSample.getCreatedBy());
     
-   
-    
     Calendar cal = Calendar.getInstance();
     cal.setTime(collectedSample.getCollectedOn());
     cal.add(Calendar.DATE, productType.getExpiresAfter());
@@ -356,8 +358,8 @@ public class CollectedSampleRepository {
     product.setExpiresOn(expiresOn);
     product.setProductType(productType);
     em.persist(product);
-    //em.flush();
     em.refresh(product);
+    }
     return collectedSample;
   }
 
