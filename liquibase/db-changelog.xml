@@ -3518,4 +3518,17 @@
             referencedColumnNames="id"
             referencedTableName="ProductType"/>
 </changeSet>
+
+ <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
+ <changeSet author="srikanth" id="201411121255">
+
+		<addColumn tableName="BloodBagType">
+		    <column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+
+		<addColumn tableName="BloodBagType_AUD">
+		    <column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+
+</changeSet>
 </databaseChangeLog>	
