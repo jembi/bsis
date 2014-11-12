@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -174,9 +175,14 @@ public class CollectedSampleController {
      if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
           donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
       }
-     //set dueToDonate 
-     donor.setDueToDonate(new Date(collectedSample.getCollectedOn().getTime() + 
-             collectedSample.getBloodBagType().getPeriodBetweenDonations()*24*60*60*1000));
+     //set dueToDonate
+      int periodBetweenDays = collectedSample.getBloodBagType().getPeriodBetweenDonations();
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(collectedSample.getCollectedOn());
+      cal.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+      
+     if(donor.getDueToDonate() == null || cal.after(collectedSample.getCollectedOn()) )
+     donor.setDueToDonate(cal.getTime());
      
       collectedSample.setIsDeleted(false);
       savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
