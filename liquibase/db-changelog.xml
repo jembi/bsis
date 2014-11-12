@@ -3501,9 +3501,14 @@
  <!--issue 234[Associate Pack Type with Initial Component Type in Donation]-->
  <changeSet author="srikanth" id="201411120953">
 
-	 	<addColumn tableName="BloodBagType">
+		<addColumn tableName="BloodBagType">
 		    <column name="productType_id" type="smallint(6)"></column>
 		</addColumn>
+
+		<addColumn tableName="BloodBagType_AUD">
+		    <column name="productType_id" type="smallint(6)"></column>
+		</addColumn>
+
 
     <addForeignKeyConstraint baseColumnNames="productType_id"
             baseTableName="BloodBagType"
