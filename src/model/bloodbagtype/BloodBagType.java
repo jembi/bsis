@@ -38,6 +38,8 @@ public class BloodBagType {
   @NotNull
   private Boolean countAsDonation;
   
+  private Integer periodBetweenDonations;
+  
   public Integer getId() {
     return id;
   }
@@ -98,8 +100,14 @@ public class BloodBagType {
   public void setCountAsDonation(Boolean countAsDonation) {
        this.countAsDonation = countAsDonation;
   }
-  
-  
+
+    public int getPeriodBetweenDonations() {
+        return periodBetweenDonations;
+    }
+
+    public void setPeriodBetweenDonations(int periodBetweenDonations) {
+        this.periodBetweenDonations = periodBetweenDonations;
+    }
   
   
 }
