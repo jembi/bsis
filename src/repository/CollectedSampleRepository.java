@@ -333,17 +333,20 @@ public class CollectedSampleRepository {
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.refresh(collectedSample);
     
-    // Add product
+     
+    ProductType productType = collectedSample.getBloodBagType().getProductType();
+    
+   // Add product
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() + "-WB-1");
+    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() +productType.getProductTypeNameShort());
     product.setCollectedSample(collectedSample);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(collectedSample.getCreatedDate());
     product.setCreatedOn(collectedSample.getCollectedOn());
     product.setCreatedBy(collectedSample.getCreatedBy());
     
-    ProductType productType = collectedSample.getBloodBagType().getProductType();
+   
     
     Calendar cal = Calendar.getInstance();
     cal.setTime(collectedSample.getCollectedOn());
