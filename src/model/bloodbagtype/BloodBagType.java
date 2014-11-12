@@ -34,6 +34,8 @@ public class BloodBagType {
   @ManyToOne
   private ProductType productType;
   
+  private Boolean countAsDonation;
+  
   public Integer getId() {
     return id;
   }
@@ -86,6 +88,16 @@ public class BloodBagType {
   public void setProductType(ProductType productType) {
       this.productType = productType;
   }
+
+  public Boolean isCountAsDonation() {
+        return countAsDonation;
+  }
+
+  public void setCountAsDonation(Boolean countAsDonation) {
+       this.countAsDonation = countAsDonation;
+  }
+  
+  
   
   
 }
