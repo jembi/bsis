@@ -3545,4 +3545,19 @@
 		</addColumn>
 
 </changeSet>
+
+ <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
+ <changeSet author="srikanth" id="201411120158">
+
+		<addColumn tableName="Donor">
+		    <column name="dueToDonate" type="date"></column>
+		</addColumn>
+
+		<addColumn tableName="Donor_AUD">
+		    <column name="dueToDonate" type="date"></column>
+		</addColumn>
+
+</changeSet>
+
+
 </databaseChangeLog>	
