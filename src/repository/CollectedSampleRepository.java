@@ -25,6 +25,7 @@ import javax.persistence.TypedQuery;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
@@ -328,13 +329,15 @@ public class CollectedSampleRepository {
   public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
+    updateCollectedSample(collectedSample);
+    collectedSample.setIsDeleted(false);
     em.persist(collectedSample);
     em.flush();
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
     em.refresh(collectedSample);
-    
-  BloodBagType packType = collectedSample.getBloodBagType();
+   
+    BloodBagType packType = collectedSample.getBloodBagType();
   
   if(packType.isCountAsDonation() == true){
         
@@ -361,6 +364,24 @@ public class CollectedSampleRepository {
     em.refresh(product);
     }
     return collectedSample;
+  }
+  
+  private void updateDonorFields(CollectedSample collectedSample){
+           Donor donor = collectedSample.getDonor();
+     
+     //set date of first donation 
+     if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
+          donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
+      }
+      //set dueToDonate
+      int periodBetweenDays = collectedSample.getBloodBagType().getPeriodBetweenDonations();
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(collectedSample.getCollectedOn());
+      cal.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+
+      if (donor.getDueToDonate() == null || cal.after(collectedSample.getCollectedOn())) {
+          donor.setDueToDonate(cal.getTime());
+      }
   }
 
   public List<CollectedSample> findCollectedSampleByCenters(

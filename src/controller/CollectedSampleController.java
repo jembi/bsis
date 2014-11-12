@@ -169,22 +169,7 @@ public class CollectedSampleController {
       map.put("donationFields", formFields);
       CollectedSample savedCollection = null;
       CollectedSample collectedSample = form.getCollectedSample();
- 
-      Donor donor = collectedSample.getDonor();
-         
-     if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
-          donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
-      }
-     //set dueToDonate
-      int periodBetweenDays = collectedSample.getBloodBagType().getPeriodBetweenDonations();
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(collectedSample.getCollectedOn());
-      cal.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
-      
-     if(donor.getDueToDonate() == null || cal.after(collectedSample.getCollectedOn()) )
-     donor.setDueToDonate(cal.getTime());
-     
-      collectedSample.setIsDeleted(false);
+
       savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
       map.put("hasErrors", false);
       form = new CollectedSampleBackingForm();
