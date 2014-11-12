@@ -3531,4 +3531,18 @@
 		</addColumn>
 
 </changeSet>
+
+
+ <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
+ <changeSet author="srikanth" id="201411120115">
+
+		<addColumn tableName="BloodBagType">
+		    <column name="periodBetwwenDonations" type="smallint(6)"></column>
+		</addColumn>
+
+		<addColumn tableName="BloodBagType_AUD">
+		    <column name="periodBetwwenDonations" type="smallint(6)"></column>
+		</addColumn>
+
+</changeSet>
 </databaseChangeLog>	
