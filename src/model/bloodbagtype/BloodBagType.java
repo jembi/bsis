@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import model.producttype.ProductType;
 
 import org.hibernate.envers.Audited;
@@ -34,6 +35,7 @@ public class BloodBagType {
   @ManyToOne
   private ProductType productType;
   
+  @NotNull
   private Boolean countAsDonation;
   
   public Integer getId() {
