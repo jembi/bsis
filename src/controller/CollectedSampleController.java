@@ -6,12 +6,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -166,11 +168,16 @@ public class CollectedSampleController {
       map.put("donationFields", formFields);
       CollectedSample savedCollection = null;
       CollectedSample collectedSample = form.getCollectedSample();
-
-         if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
-          collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
+ 
+      Donor donor = collectedSample.getDonor();
+         
+     if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
+          donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
       }
-
+     //set dueToDonate 
+     donor.setDueToDonate(new Date(collectedSample.getCollectedOn().getTime() + 
+             collectedSample.getBloodBagType().getPeriodBetweenDonations()*24*60*60*1000));
+     
       collectedSample.setIsDeleted(false);
       savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
       map.put("hasErrors", false);
