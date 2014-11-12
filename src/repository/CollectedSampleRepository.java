@@ -343,7 +343,7 @@ public class CollectedSampleRepository {
     product.setCreatedOn(collectedSample.getCollectedOn());
     product.setCreatedBy(collectedSample.getCreatedBy());
     
-    ProductType productType = productRepository.findProductTypeByProductTypeName("Whole Blood");
+    ProductType productType = collectedSample.getBloodBagType().getProductType();
     
     Calendar cal = Calendar.getInstance();
     cal.setTime(collectedSample.getCollectedOn());
