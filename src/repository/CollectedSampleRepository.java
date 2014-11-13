@@ -329,7 +329,6 @@ public class CollectedSampleRepository {
   public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
-    updateCollectedSample(collectedSample);
     updateDonorFields(collectedSample);
     collectedSample.setIsDeleted(false);
     
