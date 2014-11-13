@@ -116,7 +116,7 @@ public class BloodBagType {
         return periodBetweenDonations;
     }
 
-    public void setPeriodBetweenDonations(int periodBetweenDonations) {
+    public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
         this.periodBetweenDonations = periodBetweenDonations;
     }
   
