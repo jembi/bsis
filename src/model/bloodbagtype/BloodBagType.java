@@ -39,7 +39,7 @@ public class BloodBagType {
   @NotNull
   private Boolean countAsDonation;
   
- @AssertTrue(message="Prodxt type should be not null when countAsDOnation is set to true")
+ @AssertTrue(message="Component type should be not null when countAsDonation is set to true")
   private boolean isValid(){
       if(this.countAsDonation == true)
           if(productType != null)
