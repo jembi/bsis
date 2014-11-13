@@ -387,7 +387,7 @@ public class CollectedSampleRepository {
       dueToDonateDate.setTime(collectedSample.getCollectedOn());
       dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
 
-      if (donor.getDueToDonate() == null || dueToDonateDate.after(donor.getDueToDonate())) {
+      if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
           donor.setDueToDonate(dueToDonateDate.getTime());
       }
   }
