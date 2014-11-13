@@ -341,6 +341,7 @@ public class CollectedSampleRepository {
     
     em.refresh(collectedSample);
    
+    //Create initial component only if the countAsDonation is true
     if( collectedSample.getBloodBagType().isCountAsDonation() == true)
         createInitialComponent(collectedSample);
   
