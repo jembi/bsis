@@ -330,20 +330,27 @@ public class CollectedSampleRepository {
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     updateCollectedSample(collectedSample);
+    updateDonorFields(collectedSample);
     collectedSample.setIsDeleted(false);
+    
     em.persist(collectedSample);
     em.flush();
+    
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
+    
     em.refresh(collectedSample);
    
-    BloodBagType packType = collectedSample.getBloodBagType();
+    if( collectedSample.getBloodBagType().isCountAsDonation() == true)
+        createInitialComponent(collectedSample);
   
-  if(packType.isCountAsDonation() == true){
-        
-    ProductType productType = packType.getProductType();
-
-   // Add product
+    return collectedSample;
+  }
+  
+  public void createInitialComponent(CollectedSample collectedSample){
+    
+    ProductType productType = collectedSample.getBloodBagType().getProductType();
+      
     Product product = new Product();
     product.setIsDeleted(false);
     product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() +productType.getProductTypeNameShort());
@@ -362,8 +369,7 @@ public class CollectedSampleRepository {
     product.setProductType(productType);
     em.persist(product);
     em.refresh(product);
-    }
-    return collectedSample;
+   
   }
   
   private void updateDonorFields(CollectedSample collectedSample){
