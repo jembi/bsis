@@ -40,4 +40,12 @@ public class PackTypeViewModel {
         return packType.getIsDeleted();
     }
     
+    public Boolean isCountAsDonation(){
+        return packType.isCountAsDonation();
+    }
+    
+    public Integer getPeriodBetweenDonations(){
+        return packType.getPeriodBetweenDonations();
+    }
+    
 }
