@@ -25,6 +25,7 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.compatibility.CrossmatchType;
@@ -499,7 +500,7 @@ public class AdminController {
     
     @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity savePackType(@RequestBody BloodBagType packType){
+    public ResponseEntity savePackType(@Valid @RequestBody BloodBagType packType){
         bloodBagTypesRepository.saveBloodBagType(packType);
         return new ResponseEntity(new PackTypeViewModel(packType), HttpStatus.CREATED);
     }

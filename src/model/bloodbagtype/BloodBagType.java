@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import model.producttype.ProductType;
 
@@ -37,6 +38,16 @@ public class BloodBagType {
   
   @NotNull
   private Boolean countAsDonation;
+  
+ @AssertTrue(message="Prodxt type should be not null when countAsDOnation is set to true")
+  private boolean isValid(){
+      if(this.countAsDonation == true)
+          if(productType != null)
+              return true;
+          else 
+              return false;
+  return true;
+   }
   
   private Integer periodBetweenDonations;
   
