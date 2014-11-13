@@ -3537,11 +3537,11 @@
  <changeSet author="srikanth" id="201411120115">
 
 		<addColumn tableName="BloodBagType">
-		    <column name="periodBetwwenDonations" type="smallint(6)"></column>
+		    <column name="periodBetweenDonations" type="smallint(6)"></column>
 		</addColumn>
 
 		<addColumn tableName="BloodBagType_AUD">
-		    <column name="periodBetwwenDonations" type="smallint(6)"></column>
+		    <column name="periodBetweenDonations" type="smallint(6)"></column>
 		</addColumn>
 
 </changeSet>
