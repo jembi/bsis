@@ -112,7 +112,7 @@ public class BloodBagType {
        this.countAsDonation = countAsDonation;
   }
 
-    public int getPeriodBetweenDonations() {
+    public Integer getPeriodBetweenDonations() {
         return periodBetweenDonations;
     }
 
