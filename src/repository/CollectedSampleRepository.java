@@ -382,12 +382,12 @@ public class CollectedSampleRepository {
       }
       //set dueToDonate
       int periodBetweenDays = collectedSample.getBloodBagType().getPeriodBetweenDonations();
-      Calendar collectedDate = Calendar.getInstance();
-      collectedDate.setTime(collectedSample.getCollectedOn());
-      collectedDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+      Calendar dueToDonateDate = Calendar.getInstance();
+      dueToDonateDate.setTime(collectedSample.getCollectedOn());
+      dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
 
-      if (donor.getDueToDonate() == null || collectedDate.after(donor.getDueToDonate())) {
-          donor.setDueToDonate(collectedDate.getTime());
+      if (donor.getDueToDonate() == null || dueToDonateDate.after(donor.getDueToDonate())) {
+          donor.setDueToDonate(dueToDonateDate.getTime());
       }
   }
 
