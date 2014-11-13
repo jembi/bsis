@@ -329,11 +329,12 @@ public class CollectedSampleRepository {
   public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
-    updateDonorFields(collectedSample);
     collectedSample.setIsDeleted(false);
     
     em.persist(collectedSample);
     em.flush();
+    em.refresh(collectedSample);
+    updateDonorFields(collectedSample);
     
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
@@ -379,8 +380,9 @@ public class CollectedSampleRepository {
      if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
           donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
       }
-      //set dueToDonate
-      int periodBetweenDays = collectedSample.getBloodBagType().getPeriodBetweenDonations();
+       //set dueToDonate
+      BloodBagType packType = collectedSample.getBloodBagType();
+      int periodBetweenDays = packType.getPeriodBetweenDonations();
       Calendar dueToDonateDate = Calendar.getInstance();
       dueToDonateDate.setTime(collectedSample.getCollectedOn());
       dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
