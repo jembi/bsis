@@ -465,4 +465,15 @@ public class CollectedSampleBackingForm {
         }
     }
   
+    
+    public void setBleedStartTime(String bleedStartTime) throws ParseException{
+        collectedSample.setBleedStartTime(
+                CustomDateFormatter.getDateTimeFromString(bleedStartTime));
+    }
+    
+    public void setBleedEndTime(String bleedEndTime) throws ParseException{
+        
+        collectedSample.setBleedEndTime(
+                CustomDateFormatter.getDateTimeFromString(bleedEndTime));
+    }
 }
