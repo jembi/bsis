@@ -477,8 +477,8 @@ public class ProductController {
 	          
 		      Calendar cal = Calendar.getInstance();
 		      Date createdOn = cal.getTime(); 
-		      cal.setTime(collectedSample.getCreatedDate());
-		      cal.add(Calendar.DATE, productType2.getExpiresAfter());
+		      cal.setTime(product.getCreatedOn());
+		      cal.add(Calendar.DAY_OF_YEAR, productType2.getExpiresAfter());
 		      Date expiresOn = cal.getTime();    
 		      product.setCreatedOn(createdOn);
 		      product.setExpiresOn(expiresOn);
