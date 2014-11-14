@@ -60,7 +60,7 @@ public class ProductTypeViewModel {
     
         public String getTransportInformation(){
         final String DEGREECELSIUS  = "\u2103";
-        return "store at " + productType.getLowTransportTemperature()+ DEGREECELSIUS+ " to "
+        return "transport at " + productType.getLowTransportTemperature()+ DEGREECELSIUS+ " to "
                 + productType.getHighTransportTemperature()+ DEGREECELSIUS; 
                 
     }
