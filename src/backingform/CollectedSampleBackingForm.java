@@ -467,12 +467,14 @@ public class CollectedSampleBackingForm {
   
     
     public void setBleedStartTime(String bleedStartTime) throws ParseException{
+        if(StringUtils.isNotBlank(bleedStartTime))
         collectedSample.setBleedStartTime(
                 CustomDateFormatter.getDateTimeFromString(bleedStartTime));
+        
     }
     
     public void setBleedEndTime(String bleedEndTime) throws ParseException{
-        
+        if(StringUtils.isNotBlank(bleedEndTime))
         collectedSample.setBleedEndTime(
                 CustomDateFormatter.getDateTimeFromString(bleedEndTime));
     }
