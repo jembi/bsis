@@ -63,6 +63,10 @@ public class ProductType {
 
   private Boolean isDeleted;
   
+  private Integer lowStorageTemperature;
+  
+  private Integer highStorageTemperature;
+  
   public Integer getId() {
     return id;
   }
@@ -164,4 +168,22 @@ public class ProductType {
   public void setPediProductType(ProductType pediProductType) {
     this.pediProductType = pediProductType;
   }
+
+    public Integer getLowStorageTemperature() {
+        return lowStorageTemperature;
+    }
+
+    public void setLowStorageTemperature(Integer lowStorageTemperature) {
+        this.lowStorageTemperature = lowStorageTemperature;
+    }
+
+    public Integer getHighStorageTemperature() {
+        return highStorageTemperature;
+    }
+
+    public void setHighStorageTemperature(Integer highStorageTemperature) {
+        this.highStorageTemperature = highStorageTemperature;
+    }
+  
+  
 }
