@@ -3,12 +3,8 @@ package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
-import repository.bloodtesting.BloodTypingStatus;
-import utils.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
@@ -16,6 +12,9 @@ import model.donor.Donor;
 import model.location.Location;
 import model.product.Product;
 import model.user.User;
+import org.apache.commons.lang3.StringUtils;
+import repository.bloodtesting.BloodTypingStatus;
+import utils.CustomDateFormatter;
 
 public class CollectedSampleViewModel {
 
@@ -191,12 +190,30 @@ public class CollectedSampleViewModel {
 		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
   }
   
-  public Integer  getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic();
-	}
+    public Integer getBloodPressureDiastolic() {
+        return collectedSample.getBloodPressureDiastolic();
+    }
 
-	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
-	}
+    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+    }
+    
+    
+    public String getBleedStartTime() {
+        Date bleedStartTime = collectedSample.getBleedStartTime();
+        if (bleedStartTime != null) {
+            return CustomDateFormatter.getDateTimeString(bleedStartTime);
+        }
+        return "";
+    }
+    
+    
+    public String getBleedEndTime() {
+        Date bleedEndTime = collectedSample.getBleedEndTime();
+        if (bleedEndTime != null) {
+            return CustomDateFormatter.getDateTimeString(bleedEndTime);
+        }
+        return "";
+    }
 	 
 }
