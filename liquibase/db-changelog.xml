@@ -3524,4 +3524,15 @@
 	</addColumn>
  </changeSet>
 
+ <!-- Add labelling fields to Component Types #238 -->
+ <changeSet id="201411140235" author="srikanth">
+	<addColumn tableName="ProductType">
+		 <column name="preparation" type="text"></column>
+	</addColumn>
+
+		<addColumn tableName="ProductType_AUD">
+		 <column name="preparation" type="text"></column>
+	</addColumn>
+ </changeSet>
+
 </databaseChangeLog>	

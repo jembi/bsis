@@ -71,6 +71,8 @@ public class ProductType {
   
   private Integer highTransportTemperature;
   
+  private String preparation;
+  
   public Integer getId() {
     return id;
   }
@@ -204,6 +206,16 @@ public class ProductType {
     public void setHighTransportTemperature(Integer highTransportTemperature) {
         this.highTransportTemperature = highTransportTemperature;
     }
+
+    public String getPreparation() {
+        return preparation;
+    }
+
+    public void setPreparation(String preparation) {
+        this.preparation = preparation;
+    }
+    
+    
  
     
   
