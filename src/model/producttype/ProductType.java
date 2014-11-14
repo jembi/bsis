@@ -67,6 +67,10 @@ public class ProductType {
   
   private Integer highStorageTemperature;
   
+  private Integer lowTransportTemperature;
+  
+  private Integer highTransportTemperature;
+  
   public Integer getId() {
     return id;
   }
@@ -184,6 +188,23 @@ public class ProductType {
     public void setHighStorageTemperature(Integer highStorageTemperature) {
         this.highStorageTemperature = highStorageTemperature;
     }
-  
+
+    public Integer getLowTransportTemperature() {
+        return lowTransportTemperature;
+    }
+
+    public void setLowTransportTemperature(Integer lowTransportTemperature) {
+        this.lowTransportTemperature = lowTransportTemperature;
+    }
+
+    public Integer getHighTransportTemperature() {
+        return highTransportTemperature;
+    }
+
+    public void setHighTransportTemperature(Integer highTransportTemperature) {
+        this.highTransportTemperature = highTransportTemperature;
+    }
+ 
+    
   
 }

@@ -3509,9 +3509,19 @@
 		 <column name="lowStorageTemperature" type="smallint(6)"></column>
 		 <column name="highStorageTemperature" type="smallint(6)"></column>
 	</addColumn>
+ </changeSet>
 
+ <!-- Add labelling fields to Component Types #238 -->
+ <changeSet id="201411140230" author="srikanth">
+	<addColumn tableName="ProductType">
+		 <column name="lowTransportTemperature" type="smallint(6)"></column>
+		 <column name="highTransportTemperature" type="smallint(6)"></column>
+	</addColumn>
 
-
+		<addColumn tableName="ProductType_AUD">
+		 <column name="lowTransportTemperature" type="smallint(6)"></column>
+		 <column name="highTransportTemperature" type="smallint(6)"></column>
+	</addColumn>
  </changeSet>
 
 </databaseChangeLog>	
