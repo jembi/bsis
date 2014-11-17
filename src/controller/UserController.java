@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,11 +77,13 @@ public class UserController {
             addUser(@Valid @RequestBody UserBackingForm form) {
         
             User user = form.getUser();
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
             user.setIsDeleted(false);
             user.setRoles(assignUserRoles(form));
             user.setIsActive(true);
             userRepository.addUser(user);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -91,25 +95,41 @@ public class UserController {
         form.setIsDeleted(false);
         User user = form.getUser();
         user.setId(id);
-        if (form.isModifyPassword()) {
-            user.setPassword(form.getPassword());
-        } else {
-            user.setPassword(form.getCurrentPassword());
-        } 
+        boolean modifyPassword  = form.isModifyPassword();
+        if (modifyPassword) {
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+        }
         user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
-        userRepository.updateUser(user, true);
+        userRepository.updateUser(user, modifyPassword);
     
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(user, HttpStatus.OK);
     }
     
+    
+    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "')")
+    public ResponseEntity updateLoginUserInfo(
+            @Valid @RequestBody UserBackingForm form) {
 
+        User user = form.getUser();
+        user.setId(getLoginUser().getId());
+        boolean modifyPassword  = form.isModifyPassword();
+        if (modifyPassword) {
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+        }
+        userRepository.updateBasicUserInfo(user, modifyPassword);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+    
+            
     @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public User getUserDetails(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName(); //get logged in username
-        return userRepository.findUser(userName);
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "' )" )
+    public ResponseEntity getUserDetails(){
+        User user =  getLoginUser();
+        return new ResponseEntity(user, HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -146,6 +166,17 @@ public class UserController {
         }
         return userRole;
     }
-
+    
+    private User getLoginUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName(); //get logged in username
+        return userRepository.findUser(userName);
+    }
+    
+    private String getHashedPassword(String rawPassword) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        return hashedPassword;
+    }
 
 }

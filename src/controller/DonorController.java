@@ -82,7 +82,7 @@ public class DonorController {
     return modelAndView;
   }*/
     
-  @RequestMapping(value = {"{id}"}, method = RequestMethod.GET)
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
   public  ResponseEntity<Map<String, Object>> donorSummaryGenerator(HttpServletRequest request,
       @PathVariable Long id ) {
@@ -145,7 +145,7 @@ public class DonorController {
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
-  @RequestMapping(value ="form", method = RequestMethod.GET)
+  @RequestMapping(value ="/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
 

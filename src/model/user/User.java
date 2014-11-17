@@ -168,6 +168,7 @@ public class User implements Serializable {
     this.lastName = user.getLastName();
     this.isAdmin = user.getIsAdmin();
     this.isActive = user.getIsActive();
+    this.roles = user.getRoles();
   }
 
   @Override

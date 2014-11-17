@@ -67,7 +67,7 @@ public class ProductTypeController {
 
       ProductType componentType = form.getProductType();
       productTypeRepository.saveComponentType(componentType);
-      return new ResponseEntity(HttpStatus.CREATED);
+      return new ResponseEntity( new ProductTypeViewModel(componentType), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
@@ -75,12 +75,10 @@ public class ProductTypeController {
   public  ResponseEntity updatedComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form,
   @PathVariable Integer id) {
 
-      Map<String, Object> map = new HashMap<String, Object>();
       ProductType componentType = form.getProductType();
       componentType.setId(id);
       componentType = productTypeRepository.updateComponentType(componentType);
-      map.put("componentType", componentType);
-      return new ResponseEntity(map, HttpStatus.CREATED);
+      return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.OK);
   }
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
@@ -107,7 +105,7 @@ public class ProductTypeController {
     return getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted);
   }
   
-  @RequestMapping(value="Combinations/{id}", method=RequestMethod.GET)
+  @RequestMapping(value="/combinations/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
       @PathVariable Integer id) {
@@ -118,7 +116,7 @@ public class ProductTypeController {
     return map;
   }
 
-    @RequestMapping(value = "combinations", method = RequestMethod.POST)
+    @RequestMapping(value = "/combinations", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public
             ResponseEntity saveProductTypeCombination(@RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm) {
@@ -129,7 +127,7 @@ public class ProductTypeController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
     
-    @RequestMapping(value = "combinations/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/combinations/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public 
     ResponseEntity updateProductTypeCombination(HttpServletResponse response,

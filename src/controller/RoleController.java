@@ -53,7 +53,7 @@ public class RoleController {
 		return map;
 	}
 
-	@RequestMapping(value = "form", method = RequestMethod.GET)
+	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public  Map<String, Object> editRoleFormGenerator() {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -71,15 +71,16 @@ public class RoleController {
         role.setName(form.getName());
         role.setPermissions(permissions);
         roleRepository.updateRole(role);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(new RoleViewModel(role), HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
-    public ResponseEntity<Role> getRoleBydId(@PathVariable Long id){
-        
+    public ResponseEntity getRoleBydId(@PathVariable Long id){
+        Map<String, Object> map = new HashMap<String, Object>();
         Role role =  roleRepository.findRoleDetailById(id);
-        return new ResponseEntity<Role>(role, HttpStatus.OK);
+        map.put("role", new RoleViewModel(role));
+        return new ResponseEntity (map, HttpStatus.OK);
         
     }
 
@@ -94,7 +95,7 @@ public class RoleController {
         role.setPermissions(permissions);
         roleRepository.addRole(role);
         form = new RoleBackingForm();
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(new RoleViewModel(role), HttpStatus.CREATED);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)

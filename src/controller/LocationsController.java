@@ -55,7 +55,7 @@ public class LocationsController {
             @RequestBody @Valid LocationBackingForm formData) {
         Location location = formData.getLocation();
         locationRepository.saveLocation(location);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(new LocationViewModel(location), HttpStatus.CREATED);
         
   }
    
@@ -67,7 +67,7 @@ public class LocationsController {
         Map<String, Object> map = new HashMap<String, Object>();
         Location location = formData.getLocation();
         Location updatedLocation = locationRepository.updateLocation(id, location);
-        map.put("location", updatedLocation);
+        map.put("location", new LocationViewModel(updatedLocation));
         return new ResponseEntity(map, HttpStatus.OK);
         
   }

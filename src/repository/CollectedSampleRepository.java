@@ -336,7 +336,7 @@ public class CollectedSampleRepository {
     // Add product
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setDonationIdentificationNumber(collectedSample.getCollectionNumber());
+    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() + "-WB-1");
     product.setCollectedSample(collectedSample);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(collectedSample.getCreatedDate());
@@ -507,6 +507,18 @@ public class CollectedSampleRepository {
   }
   */
 
+  public CollectedSample verifyCollectionNumber(String collectionNumber) {
+	  CollectedSample collection = new CollectedSample();
+	  CollectedSample collectedSample = new CollectedSample();
+	  collectedSample.setCollectionNumber(collectionNumber);
+	  collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
+	  if (collectedSample != null) {
+	    return collectedSample;
+	  } else {
+	    return null;
+	  }
+  }
+  
   public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
     List<CollectedSample> collections = new ArrayList<CollectedSample>();
     for (String collectionNumber : collectionNumbers) {
@@ -538,24 +550,4 @@ public class CollectedSampleRepository {
     return statusMap;
   }
   
-  
-  public List<CollectedSample> findLotReleseById(String din) {
-  	String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted";
-  	List<CollectedSample> collectedSample;
-  	TypedQuery<CollectedSample> query = em.createQuery(queryString,CollectedSample.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber",din);
-    collectedSample = query.getResultList();
-    
-    for(CollectedSample sample : collectedSample){
-    	sample.getProducts().size();
-    	sample.getBloodTestResults().size();
-    	sample.getDonor().getDeferrals().size();
-    }
-    
-  	if(collectedSample.size() == 0)
-  		return null;
-  	else 
-  		return collectedSample;
-  }
 }

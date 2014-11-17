@@ -50,7 +50,7 @@ public class Product implements ModificationTracker {
   // imported from another location. In such a case the corresponding collection
   // field is allowed to be null.
   @CollectedSampleExists
-  @ManyToOne(optional=true, fetch=FetchType.LAZY)
+  @ManyToOne(optional=true, fetch=FetchType.EAGER)
   private CollectedSample collectedSample;
 
   @ProductTypeExists
@@ -106,7 +106,7 @@ public class Product implements ModificationTracker {
   private RowModificationTracker modificationTracker;
 
   @Column(length=20)
-  private String donationIdentificationNumber;
+  private String componentIdentificationNumber;
   
   public Product() {
     modificationTracker = new RowModificationTracker();
@@ -119,7 +119,7 @@ public class Product implements ModificationTracker {
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
     this.notes = product.notes;
-    this.donationIdentificationNumber = product.donationIdentificationNumber;
+    this.componentIdentificationNumber = product.componentIdentificationNumber;
   }
 
   public Long getId() {
@@ -288,12 +288,12 @@ public class Product implements ModificationTracker {
     this.parentProduct = parentProduct;
   }
 
-	public String getDonationIdentificationNumber() {
-		return donationIdentificationNumber;
+	public String getComponentIdentificationNumber() {
+		return componentIdentificationNumber;
 	}
 
-	public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-		this.donationIdentificationNumber = donationIdentificationNumber;
+	public void setComponentIdentificationNumber(String componentIdentificationNumber) {
+		this.componentIdentificationNumber = componentIdentificationNumber;
 	}
   
 }

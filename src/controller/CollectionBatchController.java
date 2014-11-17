@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import model.collectionbatch.CollectionBatch;
@@ -78,20 +77,25 @@ public class CollectionBatchController {
 */
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public  Map<String, Object> findCollectionBatch(HttpServletRequest request,
-          @RequestParam(value = "batchNumber", required = false) String batchNumber,
+  public  ResponseEntity findCollectionBatch(HttpServletRequest request,
+          @RequestParam(value = "isClosed", required = false) Boolean isClosed,
           @RequestParam(value = "collectionCenters", required = false) List<Long> centerIds,
           @RequestParam(value = "collectionSites", required = false) List<Long> siteIds ) {
 
-
+	if(centerIds == null){
+		centerIds = new ArrayList<Long>();
+	}
+	if(siteIds == null){
+		siteIds = new ArrayList<Long>();
+	}
 
     List<CollectionBatch> collectionBatches =
-        collectionBatchRepository.findCollectionBatches(batchNumber, centerIds, siteIds);
+        collectionBatchRepository.findCollectionBatches(isClosed, centerIds, siteIds);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allCollectionBatches", getCollectionBatchViewModels(collectionBatches));
+    map.put("donationBatches", getCollectionBatchViewModels(collectionBatches));
 
-    return map;
+    return new ResponseEntity(map, HttpStatus.OK);
   }
 
   
@@ -112,14 +116,24 @@ public class CollectionBatchController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')") 
-  public  HttpStatus addCollectionBatch(
+  public  ResponseEntity addCollectionBatch(
       @RequestBody @Valid CollectionBatchBackingForm form) {
         CollectionBatch collectionBatch = form.getCollectionBatch();
         collectionBatch.setIsDeleted(false);
         collectionBatchRepository.addCollectionBatch(collectionBatch);
-        form = new CollectionBatchBackingForm();
-        return HttpStatus.CREATED;
+        return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.CREATED);
   }
+  
+  
+  @RequestMapping(value = "{id}",method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
+  public ResponseEntity updateCollectionBatch(@PathVariable Long id,
+          @RequestBody @Valid CollectionBatchBackingForm form){
+      
+      CollectionBatch collectionBatch = collectionBatchRepository.updateCollectionBatch(form.getCollectionBatch());
+      return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.OK);
+  }
+  
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
@@ -155,6 +169,5 @@ public class CollectionBatchController {
     }
     return collectionBatchViewModels;
   }
-
   
 }

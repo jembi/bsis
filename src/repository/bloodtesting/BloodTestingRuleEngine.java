@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import viewmodel.BloodTestResultViewModel;
 
 import viewmodel.BloodTestingRuleResult;
 
@@ -200,6 +201,7 @@ public class BloodTestingRuleEngine {
     String bloodRh = "";
 
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setCollectedSample(collectedSample);
     BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
 
     int numBloodTypingTests = 0;
@@ -278,10 +280,11 @@ public class BloodTestingRuleEngine {
     ruleResult.setBloodTypingStatus(bloodTypingStatus);
     ruleResult.setStoredTestResults(storedTestResults);
 
-    Map<String, BloodTestResult> recentTestResultsWithStringKey = new HashMap<String, BloodTestResult>();
+    Map<String, BloodTestResultViewModel> recentTestResultsWithStringKey = new HashMap<String, BloodTestResultViewModel>();
 
     for (Integer testId : recentTestResults.keySet()) {
-      recentTestResultsWithStringKey.put(testId.toString(), recentTestResults.get(testId));
+      recentTestResultsWithStringKey.put(testId.toString(), new BloodTestResultViewModel
+        (recentTestResults.get(testId)));
     }
     
     ruleResult.setRecentTestResults(recentTestResultsWithStringKey);

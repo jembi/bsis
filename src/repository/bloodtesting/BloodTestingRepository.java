@@ -45,6 +45,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.CollectedSampleRepository;
+import repository.CollectionBatchRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.events.ApplicationContextProvider;
@@ -63,6 +64,9 @@ public class BloodTestingRepository {
 
 	@Autowired
 	private CollectedSampleRepository collectedSampleRepository;
+	
+	@Autowired
+	private CollectionBatchRepository collectionBatchRepository;	
 
 	@Autowired
 	private BloodTestingRuleEngine ruleEngine;
@@ -169,7 +173,87 @@ public class BloodTestingRepository {
 
 		return results;
 	}
+	
+	public Map<String, Object> saveBloodTestingResults(
+			Long collectionId,
+			Map<Long, String> bloodTypingTestResults,
+			boolean saveIfUninterpretable) {
 
+		CollectedSample collectedSample = new CollectedSample();
+		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+		Boolean uninterpretableResults = false;
+		Date testedOn = new Date();
+		Map<Long, String> errorMap = validateTestResultValues(collectionId, bloodTypingTestResults);
+		if (errorMap.isEmpty()) {
+			Map<Long, String> bloodTestResultsForCollection = bloodTypingTestResults;
+			collectedSample = collectedSampleRepository
+					.findCollectedSampleById(collectionId);
+			ruleResult = ruleEngine.applyBloodTests(
+					collectedSample, bloodTestResultsForCollection);
+
+			if (ruleResult.getAboUninterpretable()
+					|| ruleResult.getRhUninterpretable()
+					|| ruleResult.getTtiUninterpretable()) {
+				if (saveIfUninterpretable) {
+					saveBloodTestResultsToDatabase(
+							bloodTestResultsForCollection, collectedSample,
+							testedOn, ruleResult);
+				} else {
+					uninterpretableResults = true;
+					errorMap.put(collectionId, "Test results are uninterpretable");
+				}
+			} else {
+				saveBloodTestResultsToDatabase(
+						bloodTestResultsForCollection, collectedSample,
+						testedOn, ruleResult);
+			}
+			em.flush();
+		}
+
+		Map<String, Object> results = new HashMap<String, Object>();
+		results.put("collection", collectedSample);
+		results.put("bloodTestingResults", ruleResult);
+		results.put("uninterpretableResults",
+				uninterpretableResults);
+		results.put("errors", errorMap);
+
+		return results;
+	}
+	
+	public Map<Long, String> validateTestResultValues(Long collectionId,
+			Map<Long, String> bloodTypingTestResults) {
+
+		Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>();
+		for (BloodTest bloodTypingTest : getAllBloodTests()) {
+			allBloodTestsMap.put(bloodTypingTest.getId().toString(),
+					bloodTypingTest);
+		}
+
+		Map<Long, String> errorMap = new HashMap<Long, String>();
+
+		Map<Long, String> testsForCollection = bloodTypingTestResults;
+		for (Long testId : testsForCollection.keySet()) {
+			String result = testsForCollection.get(testId);
+			BloodTest test = allBloodTestsMap.get(testId.toString());
+			if (test == null) {
+				addError(errorMap, collectionId, testId,
+						"Invalid test");
+			}
+			if (StringUtils.isBlank(result) && !test.getIsEmptyAllowed()) {
+				addError(errorMap, collectionId, testId,
+						"No value specified");
+			}
+			List<String> validResults = Arrays.asList(test
+					.getValidResults().split(","));
+			if (!validResults.contains(result)) {
+				addError(errorMap, collectionId, testId,
+						"Invalid value specified");
+			}
+		}
+
+		return errorMap;
+	}
+	
 	private void saveBloodTestResultsToDatabase(
 			Map<Long, String> bloodTestResultsForCollection,
 			CollectedSample collectedSample, Date testedOn,
@@ -278,6 +362,14 @@ public class BloodTestingRepository {
 		}
 		errorsForCollection.put(testId, errorMessage);
 	}
+	
+	private void addError(Map<Long, String> errorMap,
+			Long collectionId, Long testId, String errorMessage) {
+		if (errorMap == null) {
+			errorMap = new HashMap<Long, String>();
+		}
+		errorMap.put(testId, errorMessage);
+	}
 
 	public Map<String, Object> getAllTestsStatusForCollections(
 			List<String> collectionIds) {
@@ -302,6 +394,25 @@ public class BloodTestingRepository {
 		results.put("bloodTestingResults", bloodTypingResultsForCollections);
 		return results;
 	}
+	
+	public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
+			List<Integer> donationBatchIds) {
+
+		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
+
+		for (Integer donationBatchId : donationBatchIds) {
+			List<CollectedSample> collectedSamples = collectionBatchRepository.findCollectionsInBatch(donationBatchId);
+			
+			for (CollectedSample collectedSample : collectedSamples) {
+
+			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
+					collectedSample, new HashMap<Long, String>());
+			bloodTestingRuleResults.add(ruleResult);
+			}
+		}
+		
+		return bloodTestingRuleResults;
+	}
 
 	public BloodTestingRuleResult getAllTestsStatusForCollection(
 			Long collectionId) {
@@ -318,6 +429,17 @@ public class BloodTestingRepository {
 		query.setParameter("category", BloodTestCategory.TTI);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
+	}
+	
+	public List<BloodTestResult> getBloodTestResultsForCollection(
+			Long collectedSampleId) {
+		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
+				+ "bt.collectedSample.id=:collectedSampleId";
+		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
+				BloodTestResult.class);
+		query.setParameter("collectedSampleId", collectedSampleId);
+		List<BloodTestResult> bloodTestResults = query.getResultList();
+		return bloodTestResults;
 	}
 
 	public Map<Integer, BloodTestResult> getRecentTestResultsForCollection(

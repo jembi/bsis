@@ -53,7 +53,7 @@ public class DonorCommunicationsController {
         binder.registerCustomEditor(BloodGroup.class, null, null);
     }
 
-    @RequestMapping(value = "form", method = RequestMethod.GET)
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
     public @ResponseBody
     Map<String, Object> donorCommunicationsFormGenerator(

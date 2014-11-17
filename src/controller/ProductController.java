@@ -17,11 +17,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
@@ -40,12 +42,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repository.CollectedSampleRepository;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 import viewmodel.ProductTypeViewModel;
+import viewmodel.ProductStatusChangeViewModel;
 import utils.CustomDateFormatter;
 
 @RestController
@@ -54,6 +58,9 @@ public class ProductController {
 
   @Autowired
   private ProductRepository productRepository;
+  
+  @Autowired
+  private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
   private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
@@ -105,7 +112,7 @@ public class ProductController {
     return map;
   }
 
-  @RequestMapping(value = "form", method = RequestMethod.GET)
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -229,6 +236,16 @@ public class ProductController {
         map.put("components", components);
         return map;
     }
+    
+	public static List<ProductStatusChangeViewModel> getProductStatusChangeViewModels(List<ProductStatusChange> productStatusChanges) {
+	    if (productStatusChanges == null)
+	      return Arrays.asList(new ProductStatusChangeViewModel[0]);
+	    List<ProductStatusChangeViewModel> productStatusChangeViewModels = new ArrayList<ProductStatusChangeViewModel>();
+	    for (ProductStatusChange productStatusChange : productStatusChanges) {
+	    	productStatusChangeViewModels.add(new ProductStatusChangeViewModel(productStatusChange));
+	    }
+	    return productStatusChangeViewModels;
+	}
 
   public static List<ProductViewModel> getProductViewModels(
       List<Product> products) {
@@ -285,9 +302,32 @@ public class ProductController {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
+      CollectedSample collectedSample = productRepository.findProductById(id).getCollectedSample();
       productRepository.discardProduct(id, statusChangeReason, discardReasonText);
-
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
+      
+      Map<String, Object> map = new HashMap<String, Object>();
+	  Map<String, Object> pagingParams = new HashMap<String, Object>();
+	  pagingParams.put("sortColumn", "id");
+	  pagingParams.put("sortDirection", "asc");
+	  List<Product> results = new ArrayList<Product>();
+	  List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	
+	  results = productRepository.findProductByCollectionNumber(
+	      collectedSample.getCollectionNumber(), statusList,
+	      pagingParams);
+	
+	  List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	
+	  if (results != null){
+	    for(Product product : results){
+	    	ProductViewModel productViewModel = getProductViewModel(product);
+	    	components.add(productViewModel);
+	    }
+	  }
+	
+	  map.put("components", components);
+	
+	  return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   /**
    * issue - #209 
@@ -342,7 +382,10 @@ public class ProductController {
     Product product = productRepository.findProductById(id);
     ProductViewModel productViewModel = getProductViewModel(product);
     map.put("product", productViewModel);
-    map.put("allProductMovements", productRepository.getProductStatusChanges(product));
+    List<ProductStatusChange> productStatusChangeList = productRepository.getProductStatusChanges(product);
+    List<ProductStatusChangeViewModel> productStatusChanges = getProductStatusChangeViewModels(productStatusChangeList);
+    
+    map.put("productStatusChanges", productStatusChanges);
     return map;
   }
 
@@ -404,86 +447,72 @@ public class ProductController {
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
        @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
-      ProductType productType2 = productRepository.findProductTypeBySelectedProductType(Integer.valueOf(form.getProductTypes().get(0)));
-      String collectionNumber = form.getCollectionNumber();
-      String status = form.getStatus().get(0);
-      long productId = form.getProductID();
-      
-      if(collectionNumber.contains("-")){
-      	collectionNumber = collectionNumber.split("-")[0];
-      }
+      ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
+      Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
+      CollectedSample collectedSample = parentComponent.getCollectedSample();
+      String collectionNumber = collectedSample.getCollectionNumber();
+      ProductStatus status = parentComponent.getStatus();
+      long productId = Long.valueOf(form.getParentComponentId());
+
       String sortName = productType2.getProductTypeNameShort();
-      int noOfUnits = form.getNoOfUnits();
-      long collectedSampleID = form.getCollectedSampleID();      
+      int noOfUnits = 1;
+      if (form.getNumUnits() != null){
+    	  noOfUnits = form.getNumUnits();
+      }
+      long collectedSampleID = collectedSample.getId();      
       String createdPackNumber = collectionNumber +"-"+sortName;
       
       // Add New product
-      if(!status.equalsIgnoreCase("PROCESSED")){
-	      if(noOfUnits > 0 ){
+      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
 	      	
-	      	   for (int i = 1; i <= noOfUnits; i++) {
-	              Product product = new Product();
-	              product.setIsDeleted(false);
-	              product.setDonationIdentificationNumber(createdPackNumber + "-" + i);
-	              DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	              Date createdOn = null, expiresOn = null;
-	              createdOn = formatter.parse(form.getDateExpiresFrom());
-	              expiresOn = formatter.parse(form.getDateExpiresTo());
-		          product.setCreatedOn(createdOn);
-		          product.setExpiresOn(expiresOn);
-		          ProductType productType = new ProductType();
-		          productType.setProductType(form.getProductTypes().get(0));
-		          productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-		          product.setProductType(productType);
-		          CollectedSample collectedSample = new CollectedSample();
-		          collectedSample.setId(collectedSampleID);
-		          product.setCollectedSample(collectedSample);
-		          product.setStatus(ProductStatus.QUARANTINED);
-			      productRepository.addProduct(product);
-			      // Set source component status to PROCESSED
-			      productRepository.setProductStatusToProcessed(productId);
-			
-	      	   }
-	      }
-	      else {
-	
-			  Product product = new Product();
-			  product.setIsDeleted(false);
-			  product.setDonationIdentificationNumber(createdPackNumber);
-			  DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			  Date createdOn = null, expiresOn = null;
-			  createdOn = formatter.parse(form.getDateExpiresFrom());
-			  expiresOn = formatter.parse(form.getDateExpiresTo());
-			  product.setCreatedOn(createdOn);
-			  product.setExpiresOn(expiresOn);
-			  ProductType productType = new ProductType();
-			  productType.setProductType(form.getProductTypes().get(0));
-			  productType.setId(Integer.parseInt(form.getProductTypes().get(0)));
-			  product.setProductType(productType);
-			  CollectedSample collectedSample = new CollectedSample();
-			  collectedSample.setId(collectedSampleID);
-			  product.setCollectedSample(collectedSample);
-			  product.setStatus(ProductStatus.QUARANTINED);
-			  productRepository.addProduct(product);
-			  // Set source component status to PROCESSED
-			  productRepository.setProductStatusToProcessed(productId);
-			        
-		  }
+      	   for (int i = 1; i <= noOfUnits; i++) {
+              Product product = new Product();
+              product.setIsDeleted(false);
+              product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
+	          product.setProductType(productType2);
+	          product.setCollectedSample(collectedSample);
+	          product.setParentProduct(parentComponent);
+	          product.setStatus(ProductStatus.QUARANTINED);
+	          product.setCreatedOn(collectedSample.getCollectedOn());
+	          
+		      Calendar cal = Calendar.getInstance();
+		      Date createdOn = cal.getTime(); 
+		      cal.setTime(collectedSample.getCreatedDate());
+		      cal.add(Calendar.DATE, productType2.getExpiresAfter());
+		      Date expiresOn = cal.getTime();    
+		      product.setCreatedOn(createdOn);
+		      product.setExpiresOn(expiresOn);
+	          
+		      productRepository.addProduct(product);
+
+		      // Set source component status to PROCESSED
+		      productRepository.setProductStatusToProcessed(productId);
+      	   }
       }
    
-    List<Product> products = Arrays.asList(new Product[0]);
-   
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allProducts", getProductViewModels(products));
-    
-    if(form.getCollectionNumber().contains("-")){
-    	addEditSelectorOptionsForNewRecordByList(map,productType2);
-  	}
-  	else{
-  		addEditSelectorOptionsForNewRecord(map);
-  	}
-
-    return  new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+	Map<String, Object> map = new HashMap<String, Object>();
+	Map<String, Object> pagingParams = new HashMap<String, Object>();
+	pagingParams.put("sortColumn", "id");
+	pagingParams.put("sortDirection", "asc");
+	List<Product> results = new ArrayList<Product>();
+	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	
+	results = productRepository.findProductByCollectionNumber(
+	      collectedSample.getCollectionNumber(), statusList,
+	      pagingParams);
+	
+	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	
+	if (results != null){
+	    for(Product product : results){
+	    	ProductViewModel productViewModel = getProductViewModel(product);
+	    	components.add(productViewModel);
+	    }
+	}
+	
+	map.put("components", components);
+	
+	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
@@ -503,7 +532,7 @@ public class ProductController {
     map.put("allProducts", getProductViewModels(products));
     map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,donationIdentificationNumber));
     
-    if(donationIdentificationNumber.contains("-") && productTypes != null){
+    if(productTypes != null){
     	addEditSelectorOptionsForNewRecordByList(map,productType);
   	}
   	else{

@@ -100,11 +100,11 @@ public class ProductRepository {
     // In exceptional cases an admin can always delete this product and create a new one
     // if he wants to change the status to a new one.
     // once a product has been labeled as split it does not exist anymore so we just mark
-    // it as SPLIT. Even if the collection is found to be unsafe later it should not matter
-    // as SPLIT products are not allowed to be issued
+    // it as SPLIT/PROCESSED. Even if the collection is found to be unsafe later it should not matter
+    // as SPLIT/PROCESSED products are not allowed to be issued
     List<ProductStatus> statusNotToBeChanged =
         Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
-            ProductStatus.USED, ProductStatus.SPLIT);
+            ProductStatus.USED, ProductStatus.SPLIT, ProductStatus.PROCESSED);
 
     ProductStatus oldProductStatus = product.getStatus();
     

@@ -68,7 +68,7 @@ public class BloodTestingController {
       @RequestBody BloodTestBackingForm form) {
       BloodTest bloodTest = form.getBloodTest();
       bloodTestingRepository.saveBloodTest(form);
-      return new ResponseEntity(HttpStatus.NO_CONTENT);
+      return new ResponseEntity(new BloodTestViewModel(form.getBloodTest()), HttpStatus.CREATED);
   }
   
  /**

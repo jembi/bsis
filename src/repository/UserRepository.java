@@ -27,17 +27,23 @@ public class UserRepository {
 
   public User updateUser(User user, boolean modifyPassword){
     User existingUser = findUserById(user.getId());
-    if (existingUser == null) {
-      return null;
-    }
-    existingUser.copy(user);
-    if (modifyPassword)
-	    existingUser.setRoles(user.getRoles());	
-	    existingUser.setPassword(user.getPassword());
-	    existingUser.setIsDeleted(false);
-	    em.merge(existingUser);
-	    em.flush();
-    return existingUser;
+      existingUser.copy(user);
+      existingUser.setIsDeleted(false);
+      if(modifyPassword)
+          existingUser.setPassword(user.getPassword());
+      em.merge(existingUser);
+      em.flush();
+      return existingUser;
+  }
+  
+  public User updateBasicUserInfo(User user, boolean modifyPassword){
+      User existingUser = findUserById(user.getId());
+      existingUser.setFirstName(user.getFirstName());
+      existingUser.setLastName(user.getLastName());
+      existingUser.setEmailId(user.getEmailId());
+      if(modifyPassword)
+          existingUser.setPassword(user.getPassword());
+      return em.merge(existingUser);
   }
 
   public User findUserById(Integer id) throws NoResultException, NonUniqueResultException{

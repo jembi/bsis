@@ -1,6 +1,5 @@
 package controller;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -57,7 +56,6 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo","");
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
@@ -70,14 +68,30 @@ public class GlobalControllerExceptionHandler {
         NoResultException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "No object/entity fetched, but expected one");
+    errorMap.put("developerMessage",error.getMessage());
     errorMap.put("userMessage", "");
-    errorMap.put("moreInfo",error.getMessage());
+    errorMap.put("moreInfo",error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.NOT_FOUND);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.NOT_FOUND);
   }
   
+ /**
+  * Thrown to indicate that a method has been passed an illegal or inappropriate argument.
+  */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(
+        IllegalArgumentException error) {
+    Map<String, Object> errorMap = new HashMap<String, Object>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("developerMessage",error.getMessage());
+    errorMap.put("userMessage", "");
+    errorMap.put("moreInfo",error.getStackTrace()[0]);
+    errorMap.put("errorCode", HttpStatus.NOT_FOUND);
+    error.printStackTrace();
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+  }
+    
  /**
     * Thrown when the application calls Query.uniqueResult() and the query 
     * returned more than one result. Unlike all other Hibernate exceptions, this one is recoverable!
@@ -174,7 +188,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", error.getMessage());
     errorMap.put("userMessage", "");
-    errorMap.put("moreInfo","");
+    errorMap.put("moreInfo",error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -230,9 +244,9 @@ public class GlobalControllerExceptionHandler {
         NullPointerException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "OOps! Null Pointer Exception" + error.getStackTrace()[0]);
+    errorMap.put("developerMessage", "Null Pointer Exception: " + error.getStackTrace()[0]);
     errorMap.put("userMessage", "");
-    errorMap.put("moreInfo", "");
+    errorMap.put("moreInfo", error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);

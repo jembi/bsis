@@ -203,6 +203,7 @@ public class ProductBackingForm {
     product.setCollectedSample(collectedSample);
   }
 
+  @JsonIgnore
   public Product getProduct() {
     return product;
   }
@@ -211,6 +212,7 @@ public class ProductBackingForm {
     this.product = product;
   }
 
+  @JsonIgnore
   public String getStatus() {
     ProductStatus status = product.getStatus();
     if (status == null)

@@ -68,13 +68,20 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
   }
 
-  @JsonIgnore
   public String getCollectionNumber() {
     if (getProduct() == null || getProduct().getCollectedSample() == null ||
         getProduct().getCollectedSample().getCollectionNumber() == null
        )
       return "";
     return getProduct().getCollectedSample().getCollectionNumber();
+  }
+  
+  public String getCollectedSampleID() {
+    if (getProduct() == null || getProduct().getCollectedSample() == null ||
+        getProduct().getCollectedSample().getId() == null
+       )
+      return "";
+    return getProduct().getCollectedSample().getId().toString();
   }
 
   public String getAge() {
@@ -162,8 +169,8 @@ public class ProductViewModel {
                  .contains(product.getStatus());
   }
   
-  public String getDonationIdentificationNumber() {
-    return product.getDonationIdentificationNumber();
+  public String getComponentIdentificationNumber() {
+    return product.getComponentIdentificationNumber();
   }
   
 }

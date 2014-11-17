@@ -1,119 +1,91 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import model.producttype.ProductType;
+import model.user.User;
 
 public class RecordProductBackingForm {
+	
+	@NotBlank
+    private String parentComponentId;
 
-    private String searchBy;
-
-    @NotBlank
-    private String productNumber;
-
-    @NotBlank
-    private String collectionNumber;
-
-    @NotNull
-    private List<String> productTypes;
-
-    @NotNull
-    private List<String> status;
-
-    @NotBlank
-    private String dateExpiresFrom;
-
-    @NotBlank
-    private String dateExpiresTo;
-
-    @NotNull
-    private Integer noOfUnits;
-
-    @NotNull
-    private Integer collectedSampleID;
-
-    @NotNull
-    private Long productID;
-
-    public String getSearchBy() {
-        return searchBy;
+	@NotBlank
+    private String childComponentTypeId;
+	
+    private Integer numUnits;
+	
+	@JsonIgnore
+	private Date createdDate;
+	@JsonIgnore
+	private Date lastUpdated;
+	@JsonIgnore
+	private User lastUpdatedBy;
+	@JsonIgnore
+	private User createdBy;
+	
+	public String getParentComponentId() {
+        return parentComponentId;
     }
-
-    public String getProductNumber() {
-        return productNumber;
+	
+	public void setParentComponentId(String parentComponentId){
+		this.parentComponentId = parentComponentId;
+	}
+	
+	public String getChildComponentTypeId() {
+        return childComponentTypeId;
     }
-
-    public String getCollectionNumber() {
-        return collectionNumber;
+	
+	public void setChildComponentTypeId(String childComponentTypeId){
+		this.childComponentTypeId = childComponentTypeId;
+	}
+	
+	public Integer getNumUnits() {
+        return numUnits;
     }
+	
+	public void setNumUnits(Integer numUnits){
+		this.numUnits = numUnits;
+	}
+	
+	@JsonIgnore
+	public Date getLastUpdated() {
+	  return lastUpdated;
+	}
+	
+	@JsonIgnore
+	public Date getCreatedDate() {
+	  return createdDate;
+	}
+	
+	@JsonIgnore
+	public User getCreatedBy() {
+	  return createdBy;
+	}
+	
+	@JsonIgnore
+	public User getLastUpdatedBy() {
+	  return lastUpdatedBy;
+	}
+	
+	public void setLastUpdated(Date lastUpdated) {
+	  this.lastUpdated = lastUpdated;
+	}
 
-    public List<String> getProductTypes() {
-        return productTypes;
-    }
+	public void setCreatedDate(Date createdDate) {
+	  this.createdDate = createdDate;
+	}
 
-    public String getDateExpiresFrom() {
-        return dateExpiresFrom;
-    }
+	public void setCreatedBy(User createdBy) {
+	  this.createdBy = createdBy;
+	}
 
-    public String getDateExpiresTo() {
-        return dateExpiresTo;
-    }
-
-    public void setSearchBy(String searchBy) {
-        this.searchBy = searchBy;
-    }
-
-    public void setProductNumber(String productNumber) {
-        this.productNumber = productNumber;
-    }
-
-    public void setCollectionNumber(String collectionNumber) {
-        this.collectionNumber = collectionNumber;
-    }
-
-    public void setProductTypes(List<String> productTypes) {
-        this.productTypes = productTypes;
-    }
-
-    public void setDateExpiresFrom(String dateExpiresFrom) {
-        this.dateExpiresFrom = dateExpiresFrom;
-    }
-
-    public void setDateExpiresTo(String dateExpiresTo) {
-        this.dateExpiresTo = dateExpiresTo;
-    }
-
-    public List<String> getStatus() {
-        return status;
-    }
-
-    public void setStatus(List<String> status) {
-        this.status = status;
-    }
-
-    public Integer getNoOfUnits() {
-        return noOfUnits;
-    }
-
-    public void setNoOfUnits(Integer noOfUnits) {
-        this.noOfUnits = noOfUnits;
-    }
-
-    public Integer getCollectedSampleID() {
-        return collectedSampleID;
-    }
-
-    public void setCollectedSampleID(Integer collectedSampleID) {
-        this.collectedSampleID = collectedSampleID;
-    }
-
-    public Long getProductID() {
-        return productID;
-    }
-
-    public void setProductID(Long productID) {
-        this.productID = productID;
-    }
+	public void setLastUpdatedBy(User lastUpdatedBy) {
+	  this.lastUpdatedBy = lastUpdatedBy;
+	}
 
 }
