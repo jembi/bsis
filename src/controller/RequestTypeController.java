@@ -1,6 +1,8 @@
 package controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.requesttype.RequestType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,8 +34,10 @@ public class RequestTypeController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_REQUESTS + "')")
     public ResponseEntity getRequestTypeById(Integer id) {
 
+        Map<String, Object> map = new HashMap<String, Object>();
         RequestType requestType = requestTypesRepository.getRequestTypeById(id);
-        return new ResponseEntity(requestType, HttpStatus.OK);
+        map.put("requestType", requestType);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -50,9 +54,11 @@ public class RequestTypeController {
     public ResponseEntity updateRequestType(
             @RequestBody RequestType requestType, @PathVariable Integer id) {
 
+        Map<String, Object> map = new HashMap<String, Object>();
         requestType.setId(id);
-        requestTypesRepository.saveRequestType(requestType);
-        return new ResponseEntity(HttpStatus.CREATED);
+        requestType = requestTypesRepository.updateRequestType(requestType);
+        map.put("requestType", requestType);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
 }
