@@ -303,9 +303,32 @@ public class ProductController {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
+      CollectedSample collectedSample = productRepository.findProductById(id).getCollectedSample();
       productRepository.discardProduct(id, statusChangeReason, discardReasonText);
-
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
+      
+      Map<String, Object> map = new HashMap<String, Object>();
+	  Map<String, Object> pagingParams = new HashMap<String, Object>();
+	  pagingParams.put("sortColumn", "id");
+	  pagingParams.put("sortDirection", "asc");
+	  List<Product> results = new ArrayList<Product>();
+	  List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	
+	  results = productRepository.findProductByCollectionNumber(
+	      collectedSample.getCollectionNumber(), statusList,
+	      pagingParams);
+	
+	  List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	
+	  if (results != null){
+	    for(Product product : results){
+	    	ProductViewModel productViewModel = getProductViewModel(product);
+	    	components.add(productViewModel);
+	    }
+	  }
+	
+	  map.put("components", components);
+	
+	  return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   /**
    * issue - #209 
