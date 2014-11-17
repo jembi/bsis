@@ -833,16 +833,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
 
-insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) values
-("Other", "DISCARDED", 0),
-("Positive TTI", "DISCARDED", 0),
-("Expired", "DISCARDED", 0),
-("Other",   "RETURNED", 0),
-("Expired", "RETURNED", 0),
-("Not required", "RETURNED", 0),
-("Wrong product sent", "RETURNED", 0),
-("Did not crossmatch with patient sample", "RETURNED", 0),
-("Split", "SPLIT", 0);
 
 insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
 (1, 'admin','admin321123','admin',1,1,1,0),
@@ -888,13 +878,6 @@ insert into Permission_Role (roles_id, permissions_id) values
 (3, 3),
 (4, 1);
 
-insert into ContactMethodType (contactMethodType, isDeleted) values
-("None", 0),
-("Phone", 0),
-("SMS", 0),
-("Email", 0),
-("Mail", 0),
-("Do not contact", 0);
 
 insert into WellType (wellType, requiresSample, isDeleted) values
 ("Sample", 1, 0),
