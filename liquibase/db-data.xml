@@ -107,7 +107,7 @@
 		<column name="expiresAfter" value="35"/>
 		<column name="expiresAfterUnits" value="DAYS"/>
 		<column name="hasBloodGroup" value="1"/>
-		<column name="pediProductType_id" value="5"/>
+		<column name="pediProductType_id" value="NULL"/>
 		<column name="isDeleted" value="0"/>
 	</insert>
 	<insert tableName = "ProductType">
@@ -117,7 +117,7 @@
 		<column name="expiresAfter" value="35"/>
 		<column name="expiresAfterUnits" value="DAYS"/>
 		<column name="hasBloodGroup" value="1"/>
-		<column name="pediProductType_id" value="6"/>
+		<column name="pediProductType_id" value="NULL"/>
 		<column name="isDeleted" value="0"/>
 	</insert>
 	<insert tableName = "ProductType">
@@ -127,7 +127,7 @@
 		<column name="expiresAfter" value="365"/>
 		<column name="expiresAfterUnits" value="DAYS"/>
 		<column name="hasBloodGroup" value="1"/>
-		<column name="pediProductType_id" value="7"/>
+		<column name="pediProductType_id" value="NULL"/>
 		<column name="isDeleted" value="0"/>
 	</insert>
 	<insert tableName = "ProductType">
@@ -137,7 +137,7 @@
 		<column name="expiresAfter" value="5"/>
 		<column name="expiresAfterUnits" value="DAYS"/>
 		<column name="hasBloodGroup" value="1"/>
-		<column name="pediProductType_id" value="8"/>
+		<column name="pediProductType_id" value="NULL"/>
 		<column name="isDeleted" value="0"/>
 	</insert>
 	<insert tableName = "ProductType">
@@ -197,6 +197,40 @@
 	<insert tableName = "ProductTypeCombination">
 		<column name="combinationName" value="RCC Pedi, FFP Pedi, FFP Pedi"/>
 		<column name="isDeleted" value="0"/>
+	</insert>
+</changeSet>
+<changeSet author = "srikanth" id = "2014-11-17-7">
+	<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="1"/>
+		<column name="productTypes_id" value="1"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="2"/>
+		<column name="productTypes_id" value="2"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="2"/>
+		<column name="productTypes_id" value="3"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="2"/>
+		<column name="productTypes_id" value="4"/>
+	</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="3"/>
+		<column name="productTypes_id" value="5"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="4"/>
+		<column name="productTypes_id" value="6"/>
+	</insert>
+    <insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="4"/>
+		<column name="productTypes_id" value="7"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination_ProductType">
+		<column name="productTypeCombinations_id" value="4"/>
+		<column name="productTypes_id" value="8"/>
 	</insert>
 </changeSet>
 </databaseChangeLog>	

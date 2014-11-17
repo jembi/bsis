@@ -779,16 +779,6 @@ insert into FormField
  '0', '0');
 
 
-insert into ProductTypeCombination_ProductType (productTypeCombinations_id, productTypes_id) values
-(1, 1),
-(2, 2),
-(2, 3),
-(2, 4),
-(3, 5),
-(4, 6),
-(4, 7),
-(4, 8);
-
 insert into Location(name, isCollectionCenter, isCollectionSite, isMobileSite, isUsageSite, isDonorPanel, isDeleted, notes) values
 ('Lusaka', 1, 0, 0, 0, 0, 0, ''),
 ('Ndola', 1, 1, 0, 1, 0, 0, ''),
