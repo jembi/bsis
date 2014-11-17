@@ -67,4 +67,18 @@
 		<column name="isDeleted" value="0"/>
 	</insert>	
 </changeSet>
+<changeSet author = "srikanth" id = "2014-11-17-3">
+	<insert tableName = "BloodBagType">
+		<column name="bloodBagType" value="Single"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "BloodBagType">
+		<column name="bloodBagType" value="Triple"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "BloodBagType">
+		<column name="bloodBagType" value="Pedi"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+</changeSet>
 </databaseChangeLog>	

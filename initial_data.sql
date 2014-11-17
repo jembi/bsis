@@ -813,11 +813,6 @@ insert into ProductTypeCombination_ProductType (productTypeCombinations_id, prod
 (4, 7),
 (4, 8);
 
-insert into BloodBagType (bloodBagType, isDeleted) values
-('Single', '0'),
-('Triple', '0'),
-('Pedi', '0');
-
 insert into Location(name, isCollectionCenter, isCollectionSite, isMobileSite, isUsageSite, isDonorPanel, isDeleted, notes) values
 ('Lusaka', 1, 0, 0, 0, 0, 0, ''),
 ('Ndola', 1, 1, 0, 1, 0, 0, ''),
