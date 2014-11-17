@@ -701,12 +701,6 @@ insert into FormField
  '0', '0',
  '0', '0');
 
- insert into DonationType (donationType, isDeleted) values
-('Voluntary', '0'),
-('Family', '0'),
-('Autologous', '0'),
-('Other', '0');
-
 insert into FormField
 (form, field, defaultDisplayName, defaultValue, maxLength,
  hidden, isHidable,

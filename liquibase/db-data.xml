@@ -1,0 +1,38 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add change sets 
+		reversing the previous ones if you need to change or delete -->
+	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyy-mm-dd-<n>" eg: id="2010-12-07-1" -->
+	<!-- ALWAYS UPDATE YOUR LOCAL COPY FROM SVN AND THEN VERIFY YOUR id BASED 
+		ON THAT LATEST VERSION -->
+
+	<!-- NEVER EVER FORMAT THIS FILE -->
+	<!-- ALWAYS FORMAT YOUR ID IN YYYY-MM-DD-XX -->
+	<!-- NEVER ENTER SINGLE DIGIT MONTH / YEAR / COUNTER. ALWAYS USE 2 DIGITS 
+		SO THAT ORDER BY THIS ID IS ALWAYS PROPER -->
+	<!-- "2012-05-05-01" < "2012-1-1-1" - WHICH IS DB WISE CORRECT, BUT INVALID 
+		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
+		AS WELL AS CHRONOLOGICALLY -->
+
+<changeSet author = "srikanth" id = "201411171101">
+	<insert tableName = "DonationType">
+		<column name="donationType" value="Voluntary"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "DonationType">
+		<column name="donationType" value="Family"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "DonationType">
+		<column name="donationType" value="Autologous"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "DonationType">
+		<column name="donationType" value="Other"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+</changeSet>
+</databaseChangeLog>	
