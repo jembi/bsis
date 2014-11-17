@@ -876,12 +876,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
 
-insert into DeferralReason (reason, isDeleted) values
-("Other", 0),
-("Symptoms of cold", 0),
-("Travel to malarial region", 0),
-("On medication", 0);
-
 insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) values
 ("Other", "DISCARDED", 0),
 ("Positive TTI", "DISCARDED", 0),
