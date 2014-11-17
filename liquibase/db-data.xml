@@ -324,6 +324,31 @@
 		<column name="isDeleted" value="0"/>
 		<column name="notes" value=""/>
 	</insert>
-	
+</changeSet>
+<changeSet author = "srikanth" id = "2014-11-17-11">
+	<insert tableName = "ContactMethodType">
+		<column name="contactMethodType" value="None"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ContactMethodType">
+		<column name="contactMethodType" value="Phone"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ContactMethodType">
+		<column name="contactMethodType" value="SMS"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ContactMethodType">
+		<column name="contactMethodType" value="Email"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ContactMethodType">
+		<column name="contactMethodType" value="Mail"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ContactMethodType">
+		<column name="contactMethodType" value="Do not contact"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
 </changeSet>
 </databaseChangeLog>	
