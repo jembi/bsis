@@ -28,6 +28,7 @@ import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
+import model.producttype.ProductTypeTimeUnits;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -477,8 +478,18 @@ public class ProductController {
 	          
 		      Calendar cal = Calendar.getInstance();
 		      Date createdOn = cal.getTime(); 
-		      cal.setTime(collectedSample.getCreatedDate());
-		      cal.add(Calendar.DATE, productType2.getExpiresAfter());
+		      cal.setTime(product.getCreatedOn());
+                  
+                      //set product expiry date
+                      if(productType2.getExpiresAfterUnits() == ProductTypeTimeUnits.DAYS)
+                          cal.add(Calendar.DAY_OF_YEAR, productType2.getExpiresAfter());
+                      else
+                      if(productType2.getExpiresAfterUnits() == ProductTypeTimeUnits.HOURS)
+                          cal.add(Calendar.HOUR, productType2.getExpiresAfter());
+                      else
+                      if(productType2.getExpiresAfterUnits() == ProductTypeTimeUnits.YEARS)
+                           cal.add(Calendar.YEAR, productType2.getExpiresAfter());
+
 		      Date expiresOn = cal.getTime();    
 		      product.setCreatedOn(createdOn);
 		      product.setExpiresOn(expiresOn);
