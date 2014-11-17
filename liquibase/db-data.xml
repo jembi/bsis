@@ -81,7 +81,7 @@
 		<column name="isDeleted" value="0"/>
 	</insert>
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-5">
+<changeSet author = "srikanth" id = "2014-11-17-4">
 	<insert tableName = "ProductType">
 		<column name="productTypeNameShort" value="Whole Blood"/>
 		<column name="productType" value="Whole Blood"/>
@@ -164,7 +164,7 @@
 	</insert>	
 
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-6">
+<changeSet author = "srikanth" id = "2014-11-17-5">
 	<insert tableName = "ProductTypeCombination">
 		<column name="combinationName" value="Whole Blood"/>
 		<column name="isDeleted" value="0"/>
@@ -182,7 +182,7 @@
 		<column name="isDeleted" value="0"/>
 	</insert>
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-7">
+<changeSet author = "srikanth" id = "2014-11-17-6">
 	<insert tableName = "ProductTypeCombination_ProductType">
 		<column name="productTypeCombinations_id" value="1"/>
 		<column name="productTypes_id" value="1"/>
@@ -216,7 +216,7 @@
 		<column name="productTypes_id" value="8"/>
 	</insert>
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-8">
+<changeSet author = "srikanth" id = "2014-11-17-7">
 <!--Associate product type to pedi -->
     <update tableName="ProductType">
         <column name="pediProductType_id" value = "5"/>
@@ -235,7 +235,7 @@
         <where>id = "4"</where>
     </update>
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-9">
+<changeSet author = "srikanth" id = "2014-11-17-8">
 	<insert tableName = "Location">
 		<column name="name" value="Lusaka"/>
 		<column name="isCollectionCenter" value="1"/>
@@ -307,7 +307,7 @@
 		<column name="notes" value=""/>
 	</insert>
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-11">
+<changeSet author = "srikanth" id = "2014-11-17-9">
 	<insert tableName = "ContactMethodType">
 		<column name="contactMethodType" value="None"/>
 		<column name="isDeleted" value="0"/>
