@@ -779,15 +779,6 @@ insert into FormField
  '0', '0');
 
 
-insert into Location(name, isCollectionCenter, isCollectionSite, isMobileSite, isUsageSite, isDonorPanel, isDeleted, notes) values
-('Lusaka', 1, 0, 0, 0, 0, 0, ''),
-('Ndola', 1, 1, 0, 1, 0, 0, ''),
-('Livingstone', 1, 1, 0, 1, 1, 0, ''),
-('Luanshya', 1, 0, 0, 0, 1, 0, ''),
-('Kasama', 1, 1, 0, 1, 0, 0, ''),
-('Chipata', 1, 0, 0, 0, 0, 0, ''),
-('Chingola', 1, 1, 0, 1, 1, 0, '');
-
 insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),
 ('report.requests.requestsreport', 'Requests report' ,'Track the number of requests by date range, location and blood group.'),

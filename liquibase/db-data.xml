@@ -253,5 +253,77 @@
         <where>id = "4"</where>
     </update>
 </changeSet>
-
+<changeSet author = "srikanth" id = "2014-11-17-9">
+	<insert tableName = "Location">
+		<column name="name" value="Lusaka"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="0"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="0"/>
+		<column name="isDonorPanel" value="0"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>
+	<insert tableName = "Location">
+		<column name="name" value="Ndola"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="1"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="1"/>
+		<column name="isDonorPanel" value="0"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>
+	<insert tableName = "Location">
+		<column name="name" value="Livingstone"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="1"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="1"/>
+		<column name="isDonorPanel" value="1"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>	
+	<insert tableName = "Location">
+		<column name="name" value="Luanshya"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="0"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="0"/>
+		<column name="isDonorPanel" value="1"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>
+	<insert tableName = "Location">
+		<column name="name" value="Kasama"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="1"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="1"/>
+		<column name="isDonorPanel" value="1"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>
+	<insert tableName = "Location">
+		<column name="name" value="Chipata"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="0"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="0"/>
+		<column name="isDonorPanel" value="0"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>
+	<insert tableName = "Location">
+		<column name="name" value="Chingola"/>
+		<column name="isCollectionCenter" value="1"/>
+		<column name="isCollectionSite" value="1"/>
+		<column name="isMobileSite" value="0"/>
+		<column name="isUsageSite" value="1"/>
+		<column name="isDonorPanel" value="1"/>
+		<column name="isDeleted" value="0"/>
+		<column name="notes" value=""/>
+	</insert>
+	
+</changeSet>
 </databaseChangeLog>	
