@@ -52,7 +52,7 @@ public class BloodTestViewModel {
     if (rawBloodTest.getCategory() == null)
       return "";
     switch (rawBloodTest.getCategory()) {
-    case BLOODTYPING: category = "Blood typing";
+    case BLOODTYPING: category = "BLOODTYPING";
                       break;
     case TTI: category = "TTI";
               break;
@@ -63,6 +63,10 @@ public class BloodTestViewModel {
   public String getNegativeResults() {
     return rawBloodTest.getNegativeResults();
   }
+  
+  public String getPositiveResults(){
+      return rawBloodTest.getPositiveResults();
+  }
 
   public Boolean getIsActive() {
     return rawBloodTest.getIsActive();
@@ -72,6 +76,7 @@ public class BloodTestViewModel {
     return rawBloodTest.getRankInCategory();
   }
 
+  @JsonIgnore
   public Set<WorksheetType> getWorksheetTypes() {
     return rawBloodTest.getWorksheetTypes();
   }

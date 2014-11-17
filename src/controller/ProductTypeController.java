@@ -1,5 +1,6 @@
  package controller;
 
+import backingform.ComponentTypeBackingForm;
 import backingform.ProductTypeCombinationBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +63,19 @@ public class ProductTypeController {
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity saveComponentTypeByID(@RequestBody ProductType componentType) {
+  public  ResponseEntity saveComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form) {
 
+      ProductType componentType = form.getProductType();
       productTypeRepository.saveComponentType(componentType);
       return new ResponseEntity( new ProductTypeViewModel(componentType), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity updatedComponentTypeByID(@RequestBody ProductType componentType,
+  public  ResponseEntity updatedComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form,
   @PathVariable Integer id) {
 
+      ProductType componentType = form.getProductType();
       componentType.setId(id);
       componentType = productTypeRepository.updateComponentType(componentType);
       return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.OK);
