@@ -17,7 +17,7 @@
 		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
 		AS WELL AS CHRONOLOGICALLY -->
 
-<changeSet author = "srikanth" id = "201411171101">
+<changeSet author = "srikanth" id = "2014-11-17-1">
 	<insert tableName = "DonationType">
 		<column name="donationType" value="Voluntary"/>
 		<column name="isDeleted" value="0"/>
