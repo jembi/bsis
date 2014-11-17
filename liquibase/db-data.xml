@@ -35,4 +35,36 @@
 		<column name="isDeleted" value="0"/>
 	</insert>
 </changeSet>
+<changeSet author = "srikanth" id = "2014-11-17-2">
+	<insert tableName = "RequestType">
+		<column name="requestType" value="Emergency"/>
+		<column name="description" value="0"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "RequestType">
+		<column name="requestType" value="Group and Save"/>
+		<column name="description" value=""/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "RequestType">
+		<column name="requestType" value="Group and Screen"/>
+		<column name="description" value=""/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "RequestType">
+		<column name="requestType" value="Standard"/>
+		<column name="description" value=""/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "RequestType">
+		<column name="requestType" value="Urgent"/>
+		<column name="description" value=""/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "RequestType">
+		<column name="requestType" value="Elective Surgery"/>
+		<column name="description" value=""/>
+		<column name="isDeleted" value="0"/>
+	</insert>	
+</changeSet>
 </databaseChangeLog>	

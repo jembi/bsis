@@ -778,14 +778,6 @@ insert into FormField
  '0', '0',
  '0', '0');
 
-insert into RequestType (requestType, description, isDeleted) values
-('Emergency', '', '0'),
-('Group and Save', '', '0'),
-('Group and Screen', '', '0'),
-('Standard', '', '0'),
-('Urgent', '', '0'),
-('Elective Surgery', '', '0');
-
 insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, pediProductType_id, isDeleted) values
 (1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', NULL, '0'),
 (2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', NULL, '0'),
