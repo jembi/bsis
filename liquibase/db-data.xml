@@ -181,4 +181,22 @@
 		<column name="isDeleted" value="0"/>
 	</insert>	
 </changeSet>
+<changeSet author = "srikanth" id = "2014-11-17-6">
+	<insert tableName = "ProductTypeCombination">
+		<column name="combinationName" value="Whole Blood"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination">
+		<column name="combinationName" value="RCC, FFP, Platelets"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination">
+		<column name="combinationName" value="Whole Blood Pedi"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+	<insert tableName = "ProductTypeCombination">
+		<column name="combinationName" value="RCC Pedi, FFP Pedi, FFP Pedi"/>
+		<column name="isDeleted" value="0"/>
+	</insert>
+</changeSet>
 </databaseChangeLog>	

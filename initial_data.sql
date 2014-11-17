@@ -779,13 +779,6 @@ insert into FormField
  '0', '0');
 
 
-
-insert into ProductTypeCombination (id, combinationName, isDeleted) values
-(1, 'Whole Blood', 0),
-(2, 'RCC, FFP, Platelets', 0),
-(3, 'Whole Blood Pedi', 0),
-(4, 'RCC Pedi, FFP Pedi, FFP Pedi', 0);
-
 insert into ProductTypeCombination_ProductType (productTypeCombinations_id, productTypes_id) values
 (1, 1),
 (2, 2),
