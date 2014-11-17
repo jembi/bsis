@@ -81,24 +81,6 @@
 		<column name="isDeleted" value="0"/>
 	</insert>
 </changeSet>
-<changeSet author = "srikanth" id = "2014-11-17-4">
-	<insert tableName = "DeferralReason">
-		<column name="reason" value="Other"/>
-		<column name="isDeleted" value="0"/>
-	</insert>
-	<insert tableName = "DeferralReason">
-		<column name="reason" value="Symptoms of cold"/>
-		<column name="isDeleted" value="0"/>
-	</insert>
-	<insert tableName = "DeferralReason">
-		<column name="reason" value="Travel to malarial region"/>
-		<column name="isDeleted" value="0"/>
-	</insert>
-	<insert tableName = "DeferralReason">
-		<column name="reason" value="On medication"/>
-		<column name="isDeleted" value="0"/>
-	</insert>
-</changeSet>
 <changeSet author = "srikanth" id = "2014-11-17-5">
 	<insert tableName = "ProductType">
 		<column name="productTypeNameShort" value="Whole Blood"/>
