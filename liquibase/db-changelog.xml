@@ -3336,4 +3336,10 @@
 	     <column name="roles_id" value="16"></column>
 	  </insert>
  </changeSet>
+ <!-- For issue 57 [Add WHO Product Discard Reasons] -->
+<changeSet author="nikita" id = "2014-11-17-12">
+		<delete tableName="ProductStatusChangeReason">
+			<where>category='DISCARDED'</where>
+	 </delete>
+</changeSet>
 </databaseChangeLog>	

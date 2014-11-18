@@ -367,12 +367,7 @@
     	<column name="isDeleted" value="0"/>
     </insert>
 </changeSet>
-<!-- For issue 57 [Add WHO Product Discard Reasons] -->
-<changeSet author="nikita" id = "2014-11-17-12">
-	<delete tableName="ProductStatusChangeReason">
-		<where>category='DISCARDED'</where>
-	</delete>
-</changeSet>
+
 <changeSet author="nikita" id = "2014-11-17-13">
 	<insert tableName="ProductStatusChangeReason">
         <column name="statusChangeReason" value="Incomplete Donation"/>
