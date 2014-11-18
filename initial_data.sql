@@ -834,20 +834,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowImportedProducts", "true", "productCreationRequirements");
 
 
-insert into User_Role (users_id, roles_id) values
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4),
-(2, 1),
-(2, 2),
-(2, 3),
-(2, 4),
-(3, 2),
-(3, 4),
-(4, 3),
-(4, 4);
-
 insert into Permission_Role (roles_id, permissions_id) values
 (1, 2),
 (1, 3),
