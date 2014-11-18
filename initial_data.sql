@@ -833,12 +833,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
 
-insert into Permission(id, name) values
-(1, 'PERM_LOGIN'),
-(2, 'PERM_VIEW_DONOR_INFORMATION'),
-(3, 'PERM_VIEW_TEST_INFORMATION'),
-(4, 'PERM_EDIT_INFORMATION'),
-(5, 'PERM_EDIT_CONFIGURATION');
 
 insert into User_Role (users_id, roles_id) values
 (1, 1),
