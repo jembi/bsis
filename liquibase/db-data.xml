@@ -673,4 +673,62 @@
 		<column name="roles_id" value="6"></column>
 	</insert>
 </changeSet>
+<!-- Create donor entry clerk  user-->
+<changeSet  author="srikanth" id = "2014-11-17-23">
+	<insert tableName="User">
+		<column name="id" value="7"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="data entry"></column>
+		 <column name="lastName" value="clerk"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$PLMaoepFRavcRsIbcwPlSuwhHnnKLFkZATrXkXlRDf/xsLzjvB1b."></column>
+		<column name="username" value="dataentryclerk"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="7"></column>
+		<column name="roles_id" value="7"></column>
+	</insert>
+</changeSet>
+<!-- Create donor entry clerk  user-->
+<changeSet  author="srikanth" id = "2014-11-17-23">
+	<insert tableName="User">
+		<column name="id" value="7"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="data entry"></column>
+		 <column name="lastName" value="clerk"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$gwkTCjNTB69sMRfqiWmPaO1hhAoIrvNIn569YtSRNnYZj3e.dJSru"></column>
+		<column name="username" value="dataentryclerk"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="7"></column>
+		<column name="roles_id" value="7"></column>
+	</insert>
+</changeSet>
+<!-- Create donor entry clerk  user-->
+<changeSet  author="srikanth" id = "2014-11-17-24">
+	<insert tableName="User">
+		<column name="id" value="8"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="medical"></column>
+		 <column name="lastName" value="officer"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$Yay3jHhcc48quPNvlEFhEOMm9CcTS3zUa2Aa315VwhGz350E1PoRS"></column>
+		<column name="username" value="medicalofficer"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="8"></column>
+		<column name="roles_id" value="8"></column>
+	</insert>
+</changeSet>
+
 </databaseChangeLog>	
