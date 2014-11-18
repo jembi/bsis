@@ -664,22 +664,6 @@
        <column name="email" type="varchar(255)"/>
   </createTable>
 
-      <insert tableName="AddressType">
-	     <column name="id" value="1"></column>
-	     <column name="preferredAddressType" value="Home Address"></column>
-      </insert>
-      <insert tableName="AddressType">
-	     <column name="id" value="2"></column>
-	     <column name="preferredAddressType" value="Work Address"></column>
-      </insert>
-      <insert tableName="AddressType">
-	     <column name="id" value="3"></column>
-	     <column name="preferredAddressType" value="Postal Address"></column>
-      </insert>
-
-
-     
-
  <dropColumn  columnName="city" tableName="Donor"/>
  <dropColumn  columnName="province" tableName="Donor"/>
  <dropColumn  columnName="district" tableName="Donor"/>

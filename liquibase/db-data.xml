@@ -517,7 +517,7 @@
 </changeSet>    
     
  
-<changeSet  author="srikanth" id = "2014-11-17-16">
+<changeSet  author="srikanth" id = "2014-11-17-15">
    <insert tableName="DonorCodeGroup">
      <column name="id" value="1"></column>
      <column name="donorCodeGroup" value="Test Only"></column>
@@ -528,7 +528,7 @@
   </insert>
 </changeSet>    
 
-<changeSet  author="srikanth" id = "2014-11-17-15">
+<changeSet  author="srikanth" id = "2014-11-17-16">
 <insert tableName="DonorCode">
      <column name="id" value="1"></column>
      <column name="donorCode" value="Blood group antibody"></column>
@@ -563,6 +563,20 @@
      <column name="id" value="7"></column>
      <column name="donorCode" value="TTI Reactive"></column>
      <column name="donorCodeGroupId" value="2"></column>   
+  </insert>
+</changeSet>
+<changeSet  author="srikanth" id = "2014-11-17-17">
+  <insert tableName="AddressType">
+     <column name="id" value="1"></column>
+     <column name="preferredAddressType" value="Home Address"></column>
+  </insert>
+  <insert tableName="AddressType">
+     <column name="id" value="2"></column>
+     <column name="preferredAddressType" value="Work Address"></column>
+  </insert>
+  <insert tableName="AddressType">
+     <column name="id" value="3"></column>
+     <column name="preferredAddressType" value="Postal Address"></column>
   </insert>
 </changeSet>
 </databaseChangeLog>	
