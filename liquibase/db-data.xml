@@ -579,4 +579,24 @@
      <column name="preferredAddressType" value="Postal Address"></column>
   </insert>
 </changeSet>
+
+<!-- Create admin user-->
+<changeSet  author="srikanth" id = "2014-11-17-18">
+		<insert tableName="User">
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="adminuser"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="$2a$10$E/mSsUsZ/aE5uajO26SYAeZ7OAhhhQadf3TiIlezSGUy7rvEEo2o6"></column>
+			<column name="username" value="adminuser"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="2"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+</changeSet>
+
+
 </databaseChangeLog>	
