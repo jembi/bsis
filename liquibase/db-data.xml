@@ -333,4 +333,39 @@
 		<column name="isDeleted" value="0"/>
 	</insert>
 </changeSet>
+	<!-- For issue 26 [Add WHO Deferral Reasons] -->
+	<changeSet  author="nikita" id = "2014-11-17-11">
+		<delete tableName="DeferralReason"></delete>
+	</changeSet>
+	<changeSet id="201310241526" author="nikita">
+		<sql>
+			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
+		</sql>
+</changeSet>
+<changeSet author = "nikitha" id = "2014-11-17-11">
+	<insert tableName="DeferralReason">
+    	<column name="reason" value="High risk behaviour"/>
+    	<column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName="DeferralReason">
+    	<column name="reason" value="Low weight"/>
+    	<column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName="DeferralReason">
+    	<column name="reason" value="Low haemoglobin"/>
+    	<column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName="DeferralReason">
+    	<column name="reason" value="Other reasons"/>
+    	<column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName="DeferralReason">
+    	<column name="reason" value="Other medical conditions"/>
+    	<column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName="DeferralReason">
+    	<column name="reason" value="Travel history"/>
+    	<column name="isDeleted" value="0"/>
+    </insert>
+</changeSet>
 </databaseChangeLog>	
