@@ -490,4 +490,23 @@
 	     <column name="preferredLanguage" value="Afrikaans"></column>
     </insert>
 </changeSet>
+    <!-- For issue 134 Remove existing users and add in new Super User  -->
+<changeSet  author="srikanth" id = "2014-11-17-15">
+		<insert tableName="User">
+			<column name="id" value="1"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="superuser"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
+			<column name="username" value="superuser"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="1"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+</changeSet>
+
 </databaseChangeLog>	
