@@ -834,12 +834,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowImportedProducts", "true", "productCreationRequirements");
 
 
-insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
-(1, 'admin','admin321123','admin',1,1,1,0),
-(2, 'test','test','technician',0,1,1,0),
-(3, 'donor_user', 'donor_user', 'donor_user', 0,1,1,0),
-(4, 'test_user', 'test_user', 'test_user', 0,1,1,0);
-
 insert into Role(id, name) values
 (1, 'ROLE_ADMIN'),
 (2, 'ROLE_DONORLAB'),
