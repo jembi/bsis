@@ -834,18 +834,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowImportedProducts", "true", "productCreationRequirements");
 
 
-insert into Permission_Role (roles_id, permissions_id) values
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 5),
-(2, 1),
-(2, 2),
-(3, 1),
-(3, 3),
-(4, 1);
-
-
 insert into WellType (wellType, requiresSample, isDeleted) values
 ("Sample", 1, 0),
 ("Blank", 0, 0),
