@@ -333,7 +333,7 @@
 	</insert>
 </changeSet>
 
-<changeSet author = "nikitha" id = "2014-11-17-11">
+<changeSet author = "nikitha" id = "2014-11-17-10">
 	<insert tableName="DeferralReason">
     	<column name="reason" value="High risk behaviour"/>
     	<column name="isDeleted" value="0"/>
@@ -360,7 +360,7 @@
     </insert>
 </changeSet>
 
-<changeSet author="nikita" id = "2014-11-17-13">
+<changeSet author="nikita" id = "2014-11-17-11">
 	<insert tableName="ProductStatusChangeReason">
         <column name="statusChangeReason" value="Incomplete Donation"/>
         <column name="category" value="DISCARDED"/>
@@ -392,7 +392,7 @@
         <column name="isDeleted" value="0"/>
 	</insert>
 </changeSet>
-<changeSet author="srikanth" id = "2014-11-17-14">
+<changeSet author="srikanth" id = "2014-11-17-12">
 	<insert tableName="PreferredLanguage">
 		 <column name="id" value="1"></column>
 	 	 <column name="preferredLanguage" value="English"></column>
@@ -483,7 +483,7 @@
     </insert>
 </changeSet>
     <!-- For issue 134 Remove existing users and add in new Super User  -->
-<changeSet  author="srikanth" id = "2014-11-17-15">
+<changeSet  author="srikanth" id = "2014-11-17-13">
 		<insert tableName="User">
 			<column name="id" value="1"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -501,7 +501,7 @@
 		</insert>
 </changeSet>
 
-<changeSet  author="srikanth" id = "2014-11-17-16">
+<changeSet  author="srikanth" id = "2014-11-17-14">
 	 <insert tableName="IdType">
 	     <column name="id" value="1"></column>
 	     <column name="idType" value="National Id"></column>
