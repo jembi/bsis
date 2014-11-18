@@ -495,14 +495,4 @@
 	     <column name="preferredLanguage" value="Afrikaans"></column>
     </insert>
 </changeSet>
-<changeSet author="srikanth" id = "2014-11-17-15">
-   <insert tableName="DonorCodeGroup">
-     <column name="id" value="1"></column>
-     <column name="donorCodeGroup" value="Test Only"></column>
-  </insert>
-  <insert tableName="DonorCodeGroup">
-     <column name="id" value="2"></column>
-     <column name="donorCodeGroup" value="Do Not Bleed"></column>
-  </insert>
-</changeSet>  
 </databaseChangeLog>	
