@@ -514,5 +514,55 @@
 	     <column name="id" value="3"></column>
 	     <column name="idType" value="License Number"></column>
 	</insert>
-</changeSet>        
+</changeSet>    
+    
+ 
+<changeSet  author="srikanth" id = "2014-11-17-16">
+   <insert tableName="DonorCodeGroup">
+     <column name="id" value="1"></column>
+     <column name="donorCodeGroup" value="Test Only"></column>
+  </insert>
+  <insert tableName="DonorCodeGroup">
+     <column name="id" value="2"></column>
+     <column name="donorCodeGroup" value="Do Not Bleed"></column>
+  </insert>
+</changeSet>    
+
+<changeSet  author="srikanth" id = "2014-11-17-15">
+<insert tableName="DonorCode">
+     <column name="id" value="1"></column>
+     <column name="donorCode" value="Blood group antibody"></column>
+     <column name="donorCodeGroupId" value="1"></column>   
+</insert>
+ <insert tableName="DonorCode">
+     <column name="id" value="2"></column>
+     <column name="donorCode" value="Follow up samples required"></column>
+     <column name="donorCodeGroupId" value="1"></column>   
+  </insert>
+  <insert tableName="DonorCode">
+     <column name="id" value="3"></column>
+     <column name="donorCode" value="Lab query"></column>
+     <column name="donorCodeGroupId" value="1"></column>   
+  </insert>
+  <insert tableName="DonorCode">
+     <column name="id" value="4"></column>
+     <column name="donorCode" value="Biological false positive"></column>
+     <column name="donorCodeGroupId" value="2"></column>   
+  </insert>
+  <insert tableName="DonorCode">
+     <column name="id" value="5"></column>
+     <column name="donorCode" value="For counseling – HCV"></column>
+     <column name="donorCodeGroupId" value="2"></column>   
+  </insert>
+  <insert tableName="DonorCode">
+     <column name="id" value="6"></column>
+     <column name="donorCode" value="For counseling – HIV"></column>
+     <column name="donorCodeGroupId" value="2"></column>   
+  </insert>
+  <insert tableName="DonorCode">
+     <column name="id" value="7"></column>
+     <column name="donorCode" value="TTI Reactive"></column>
+     <column name="donorCodeGroupId" value="2"></column>   
+  </insert>
+</changeSet>
 </databaseChangeLog>	
