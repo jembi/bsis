@@ -598,7 +598,7 @@
 		<column name="roles_id" value="2"></column>
 	</insert>
 </changeSet>
-<!-- Create admin user-->
+<!-- Create donor clinic supervisor  user-->
 <changeSet  author="srikanth" id = "2014-11-17-19">
 	<insert tableName="User">
 		<column name="id" value="3"></column>
