@@ -634,4 +634,22 @@
 		<column name="roles_id" value="4"></column>
 	</insert>
 </changeSet>
+<!-- Create donor comunications staff  user-->
+<changeSet  author="srikanth" id = "2014-11-17-21">
+	<insert tableName="User">
+		<column name="id" value="5"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="communicationsstaff"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$5NfvkBo2dVOoacIHdQTcQe/1C7StepQ21SJ.18gm7G6LMTzuRpUSu"></column>
+		<column name="username" value="donorcommunicationsstaff"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="5"></column>
+		<column name="roles_id" value="5"></column>
+	</insert>
+</changeSet>
 </databaseChangeLog>	
