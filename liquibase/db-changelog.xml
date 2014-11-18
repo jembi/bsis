@@ -2798,15 +2798,6 @@
     
  
 
-	   <insert tableName="DonorCodeGroup">
-	     <column name="id" value="1"></column>
-	     <column name="donorCodeGroup" value="Test Only"></column>
-	  </insert>
-      <insert tableName="DonorCodeGroup">
-	     <column name="id" value="2"></column>
-	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
-	  </insert>
-      
        <insert tableName="DonorCode">
 	     <column name="id" value="1"></column>
 	     <column name="donorCode" value="Blood group antibody"></column>
