@@ -459,20 +459,7 @@
   <dropColumn  columnName="address" tableName="Donor"/>
   <dropColumn  columnName="phoneNumber" tableName="Donor"/>
  
-	 <insert tableName="IdType">
-	     <column name="id" value="1"></column>
-	     <column name="idType" value="National Id"></column>
-	 </insert>
-	<insert tableName="IdType">
-	     <column name="id" value="2"></column>
-	     <column name="idType" value="Passport Number"></column>
-	 </insert>
-	<insert tableName="IdType">
-	     <column name="id" value="3"></column>
-	     <column name="idType" value="License Number"></column>
-	 </insert>
-    
-    
+
 
 	<addColumn tableName="Donor">
 	            <column name="idType_id" type="BIGINT" defaultValue="NULL">

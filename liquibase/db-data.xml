@@ -509,4 +509,18 @@
 		</insert>
 </changeSet>
 
+<changeSet  author="srikanth" id = "2014-11-17-16">
+	 <insert tableName="IdType">
+	     <column name="id" value="1"></column>
+	     <column name="idType" value="National Id"></column>
+	 </insert>
+	<insert tableName="IdType">
+	     <column name="id" value="2"></column>
+	     <column name="idType" value="Passport Number"></column>
+	</insert>
+	<insert tableName="IdType">
+	     <column name="id" value="3"></column>
+	     <column name="idType" value="License Number"></column>
+	</insert>
+</changeSet>        
 </databaseChangeLog>	
