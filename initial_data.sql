@@ -833,13 +833,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
 
-
-insert into Role(id, name) values
-(1, 'ROLE_ADMIN'),
-(2, 'ROLE_DONORLAB'),
-(3, 'ROLE_TESTLAB'),
-(4, 'ROLE_USER');
-
 insert into Permission(id, name) values
 (1, 'PERM_LOGIN'),
 (2, 'PERM_VIEW_DONOR_INFORMATION'),
