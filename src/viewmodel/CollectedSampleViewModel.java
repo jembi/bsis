@@ -55,14 +55,6 @@ public class CollectedSampleViewModel {
     return collectedSample.getDonor();
   }
 
-  public Location getCollectionCenter() {
-    return collectedSample.getCollectionCenter();
-  }
-
-  public Location getCollectionSite() {
-    return collectedSample.getCollectionSite();
-  }
-
   public DonationType getDonationType() {
     return collectedSample.getDonationType();
   }
