@@ -585,7 +585,8 @@
 	<insert tableName="User">
 		<column name="id" value="2"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="adminuser"></column>
+		<column name="firstName" value="Admin User"></column>
+		<column name="lastName" value=""></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="1"></column>
 		<column name="isDeleted" value="0"></column>
@@ -603,7 +604,8 @@
 	<insert tableName="User">
 		<column name="id" value="3"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="donorsupervisor"></column>
+		<column name="firstName" value="Donor Clinic"></column>
+		<column name="lastName" value="Supervisor"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
 		<column name="isDeleted" value="0"></column>
@@ -621,8 +623,8 @@
 	<insert tableName="User">
 		<column name="id" value="4"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="donorclinic"></column>
-        <column name="lastName" value="staff"></column>
+		<column name="firstName" value="Donor Clinic"></column>
+        <column name="lastName" value="Staff"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
 		<column name="isDeleted" value="0"></column>
@@ -640,8 +642,8 @@
 	<insert tableName="User">
 		<column name="id" value="5"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="communications"></column>
-		 <column name="lastName" value="staff"></column>
+		<column name="firstName" value="Donor Communications"></column>
+		 <column name="lastName" value="Staff"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
 		<column name="isDeleted" value="0"></column>
@@ -659,7 +661,7 @@
 	<insert tableName="User">
 		<column name="id" value="6"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="counseling"></column>
+		<column name="firstName" value="ounseling"></column>
 		 <column name="lastName" value="staff"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
@@ -678,8 +680,8 @@
 	<insert tableName="User">
 		<column name="id" value="7"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="data entry"></column>
-		 <column name="lastName" value="clerk"></column>
+		<column name="firstName" value="Data Entry"></column>
+		 <column name="lastName" value="Clerk"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
 		<column name="isDeleted" value="0"></column>
@@ -697,8 +699,8 @@
 	<insert tableName="User">
 		<column name="id" value="8"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="medical"></column>
-		 <column name="lastName" value="officer"></column>
+		<column name="firstName" value="Medical"></column>
+		 <column name="lastName" value="Officer"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
 		<column name="isDeleted" value="0"></column>
@@ -711,5 +713,4 @@
 		<column name="roles_id" value="8"></column>
 	</insert>
 </changeSet>
-
 </databaseChangeLog>	
