@@ -28,20 +28,6 @@ public class DonorBackingForm {
     @JsonIgnore
     private Donor donor;
 
-    // store a local copy of birthdate string as validation may have failed
-    private String birthDate;
-
-    //to capture date of birth parameters--#11
-    
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    String year;
-    
-    @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
-    String month;
-    
-    @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
-    String dayOfMonth;
-
     private Boolean ageFormatCorrect;
 
     private String ageSpecified;
@@ -68,30 +54,6 @@ public class DonorBackingForm {
     @JsonIgnore
     public DonorStatus getDonorStatus() {
         return donor.getDonorStatus();
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getDayOfMonth() {
-        return dayOfMonth;
-    }
-
-    public void setDayOfMonth(String dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
     }
     
     public String getBirthDate() {
