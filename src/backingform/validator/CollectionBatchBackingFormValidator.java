@@ -1,17 +1,15 @@
 package backingform.validator;
 
+import backingform.CollectionBatchBackingForm;
+import controller.UtilController;
 import java.util.Arrays;
-
 import model.collectionbatch.CollectionBatch;
-
+import model.location.Location;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
 import viewmodel.CollectionBatchViewModel;
-import backingform.CollectionBatchBackingForm;
-import controller.UtilController;
 
 public class CollectionBatchBackingFormValidator implements Validator {
 
@@ -43,6 +41,11 @@ public class CollectionBatchBackingFormValidator implements Validator {
     if ( form.getId() != null && utilController.isDuplicateCollectionBatchNumber(form.getCollectionBatch()))
       errors.rejectValue("collectionBatch.batchNumber", "batchNumber.nonunique",
           "There exists a collection batch with the same batch number.");
+    
+    Location location = form.getCollectionBatch().getDonorPanel();
+    if(location.getIsDonorPanel() == false)
+        errors.rejectValue("collectionBatch.donorPanel", "donorPanel.inCorect",
+          "it is not a donor panel.");
 
     utilController.commonFieldChecks(form, "collectionBatch", errors);
   }
