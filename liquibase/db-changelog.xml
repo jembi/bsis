@@ -3510,4 +3510,16 @@
     <dropColumn columnName="collectionSite_id" tableName="CollectedSample"/>
     <dropColumn columnName="collectionSite_id" tableName="CollectedSample_AUD"/>
 </changeSet>
+
+ <!-- #246 Adapt Donations to use single Location field -->
+<changeSet id="201411190156" author="srikanth">
+   <addColumn tableName="CollectedSample">
+   	<column name="donorPanel_id" type="bigint">
+						<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
+   	</column>
+   </addColumn>
+  <addColumn tableName="CollectedSample_AUD">
+   	<column name="donorPanel_id" type="bigint"></column>
+  </addColumn>
+</changeSet>
 </databaseChangeLog>	
