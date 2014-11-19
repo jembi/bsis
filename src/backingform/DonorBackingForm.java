@@ -95,40 +95,18 @@ public class DonorBackingForm {
     }
     
     public String getBirthDate() {
-        if (birthDate != null) {
-            return birthDate;
-        }
-        if (donor == null) {
-            return "";
-        }
         return CustomDateFormatter.getDateString(donor.getBirthDate());
     }
-
-    public void setBirthDate() {
-        birthDate = dayOfMonth + "/" + month + "/" + year;
+    
+    public void setBirthDate(String birthDate) {
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
         } catch (ParseException ex) {
             ex.printStackTrace();
             donor.setBirthDate(null);
         }
-    }
-
-    public void setBirthDate(String birthDate) {
-    	// if birthDate is an empty string or is null, try set it using dayOfMonth, month and year values
-    	if (birthDate.equals("") || birthDate == null){
-    		setBirthDate();
-    	}
-    	else{
-	        this.birthDate = birthDate;
-	        try {
-	            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-	        } catch (ParseException ex) {
-	            ex.printStackTrace();
-	            donor.setBirthDate(null);
-	        }
-    	}
-    }
+    } 
+    
 //
 //    public DonorViewModel getDonorViewModel() {
 //        return new DonorViewModel(donor);
