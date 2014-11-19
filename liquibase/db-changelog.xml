@@ -3497,4 +3497,17 @@
 	     <column name="roles_id" value="16"></column>
 	  </insert>
  </changeSet>
+
+ <!-- #246 Adapt Donations to use single Location field -->
+ <changeSet author="srikanth" id="201411191235">
+
+		 	<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33B29562D0"/>
+ 			<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33AED1731E"/>   
+         
+    <dropColumn columnName="collectionCenter_id" tableName="CollectedSample"/>
+    <dropColumn columnName="collectionCenter_id" tableName="CollectedSample_AUD"/>
+
+    <dropColumn columnName="collectionSite_id" tableName="CollectedSample"/>
+    <dropColumn columnName="collectionSite_id" tableName="CollectedSample_AUD"/>
+</changeSet>
 </databaseChangeLog>	
