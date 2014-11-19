@@ -3522,4 +3522,19 @@
    	<column name="donorPanel_id" type="bigint"></column>
   </addColumn>
 </changeSet>
+
+
+ <!-- #246 Adapt Donations to use single Location field -->
+ <changeSet author="srikanth" id="201411190258">
+
+		 	<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CAED1731E"/>
+ 			<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CB29562D0"/>   
+         
+    <dropColumn columnName="collectionCenter_id" tableName="CollectionBatch"/>
+    <dropColumn columnName="collectionCenter_id" tableName="CollectionBatch_AUD"/>
+
+    <dropColumn columnName="collectionSite_id" tableName="CollectionBatch"/>
+    <dropColumn columnName="collectionSite_id" tableName="CollectionBatch_AUD"/>
+</changeSet>
+
 </databaseChangeLog>	
