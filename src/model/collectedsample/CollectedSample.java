@@ -28,6 +28,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -160,6 +161,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private Integer donorPulse;
   
   @OneToOne
+  @LocationExists
+  @NotNull
   private Location donorPanel;
   
   public CollectedSample() {
