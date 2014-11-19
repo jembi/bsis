@@ -24,6 +24,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -158,6 +159,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Range(min =0 ,max = 290)
   private Integer donorPulse;
   
+  @OneToOne
+  private Location donorPanel;
+  
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -166,7 +170,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   public Long getId() {
     return id;
   }
-
 
   
   public String getCollectionNumber() {
@@ -426,4 +429,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
         this.donorPulse = donorPulse;
     }
 
+    public Location getDonorPanel() {
+        return donorPanel;
+    }
+
+    public void setDonorPanel(Location donorPanel) {
+        this.donorPanel = donorPanel;
+    }
+    
 }
