@@ -240,6 +240,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donorWeight=collectedSample.donorWeight;
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
+    this.donorPanel = collectedSample.getDonorPanel();
   }
 
   public List<Product> getProducts() {
