@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import model.collectedsample.CollectedSample;
-import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -24,7 +23,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import constraintvalidator.LocationExists;
 import java.util.Collections;
 import javax.persistence.FetchType;
 import model.testbatch.TestBatch;
@@ -42,14 +40,6 @@ public class CollectionBatch implements ModificationTracker {
 
   @Column(length=20, unique=true)
   private String batchNumber;
-
-  @LocationExists
-  @ManyToOne
-  private Location collectionCenter;
-
-  @LocationExists
-  @ManyToOne
-  private Location collectionSite;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -120,21 +110,6 @@ public class CollectionBatch implements ModificationTracker {
     this.isClosed = isClosed;
   }
 
-  public Location getCollectionCenter() {
-    return collectionCenter;
-  }
-
-  public void setCollectionCenter(Location collectionCenter) {
-    this.collectionCenter = collectionCenter;
-  }
-
-  public Location getCollectionSite() {
-    return collectionSite;
-  }
-
-  public void setCollectionSite(Location collectionSite) {
-    this.collectionSite = collectionSite;
-  }
   
   public TestBatch getTestBatch() {
      return testBatch;
@@ -186,9 +161,6 @@ public class CollectionBatch implements ModificationTracker {
   }
   
   public void copy(CollectionBatch collectionBatch){
-      
-      this.setCollectionCenter(collectionBatch.getCollectionCenter());
-      this.setCollectionSite(collectionBatch.getCollectionSite());
       this.setNotes(collectionBatch.getNotes());
   }
 
