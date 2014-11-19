@@ -642,7 +642,7 @@
 	<insert tableName="User">
 		<column name="id" value="5"></column>
 		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="Donor Communications"></column>
+		<column name="firstName" value="Communications"></column>
 		 <column name="lastName" value="Staff"></column>
 		<column name="isActive" value="1"></column>
 		<column name="isAdmin" value="0"></column>
@@ -713,4 +713,43 @@
 		<column name="roles_id" value="8"></column>
 	</insert>
 </changeSet>
+<!--Create component supervisor-->
+<changeSet  author="srikanth" id = "2014-11-17-25">
+	<insert tableName="User">
+		<column name="id" value="9"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="Component"></column>
+		 <column name="lastName" value="Supervisor"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$AJZzwZhO6cpiFafXThsarOLGt8KPck9vlVGBqwmm7GkWtaQiFOJGG"></column>
+		<column name="username" value="componentsupervisor"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="9"></column>
+		<column name="roles_id" value="9"></column>
+	</insert>
+</changeSet>
+<!--Create component supervisor-->
+<changeSet  author="srikanth" id = "2014-11-17-26">
+	<insert tableName="User">
+		<column name="id" value="10"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="Component"></column>
+		 <column name="lastName" value="Staff"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$7t4VGWlSKku8pEGnbsQXruFcoo.Ekfp8LO4axRJyse8WY.dITEf12"></column>
+		<column name="username" value="componentstaff"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="10"></column>
+		<column name="roles_id" value="10"></column>
+	</insert>
+</changeSet>
+
 </databaseChangeLog>	
