@@ -751,5 +751,80 @@
 		<column name="roles_id" value="10"></column>
 	</insert>
 </changeSet>
-
+<!--Create TTI Testing Supervisor user -->
+<changeSet  author="srikanth" id = "2014-11-17-27">
+	<insert tableName="User">
+		<column name="id" value="11"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="TTI Testing"></column>
+		 <column name="lastName" value="Supervisor"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$fK3y5DzBYMGIo3KMkK9z7e.5QUvJrxokqDDfVTbQGALiOcCxgT.Mu"></column>
+		<column name="username" value="ttitestingsupervisor"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="11"></column>
+		<column name="roles_id" value="11"></column>
+	</insert>
+</changeSet>
+<!--Create TTI Testing Supervisor user-->
+<changeSet  author="srikanth" id = "2014-11-17-28">
+	<insert tableName="User">
+		<column name="id" value="12"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="TTI Testing"></column>
+		 <column name="lastName" value="Staff"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$AFmIxt24zmKVKsthJdjPdeGymGmVFYMA1FbbY9tmEZL5XzPXunety"></column>
+		<column name="username" value="ttitestingstaff"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="12"></column>
+		<column name="roles_id" value="12"></column>
+	</insert>
+</changeSet>
+<!--Create Serology  Supervisor user-->
+<changeSet  author="srikanth" id = "2014-11-17-29">
+	<insert tableName="User">
+		<column name="id" value="13"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="Serology"></column>
+		 <column name="lastName" value="Supervisor"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$U/Ms/YP3g3lv1rkQ4AFBWefLxmQBM6D4sP2TKUCar2SVPGiTqUFDu"></column>
+		<column name="username" value="serologysupervisor"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="13"></column>
+		<column name="roles_id" value="13"></column>
+	</insert>
+</changeSet>
+<!--Create Serology  Staff user-->
+<changeSet  author="srikanth" id = "2014-11-17-30">
+	<insert tableName="User">
+		<column name="id" value="14"></column>
+		<column name="emailId" value="xxxx@jembi.org"></column>
+		<column name="firstName" value="Serology"></column>
+		 <column name="lastName" value="Staff"></column>
+		<column name="isActive" value="1"></column>
+		<column name="isAdmin" value="0"></column>
+		<column name="isDeleted" value="0"></column>
+		<column name="isStaff" value="1"></column>
+		<column name="password" value="$2a$10$Bb5D6.MC7YTvHo0W2cl/N.YyrNgUK/1OiWuJz/hZrgiYyd9vUMjeq"></column>
+		<column name="username" value="serologystaff"></column>
+	</insert>
+	<insert tableName="User_Role">
+		<column name="users_id" value="14"></column>
+		<column name="roles_id" value="14"></column>
+	</insert>
+</changeSet>
 </databaseChangeLog>	
