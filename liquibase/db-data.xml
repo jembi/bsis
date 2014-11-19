@@ -692,26 +692,7 @@
 		<column name="roles_id" value="7"></column>
 	</insert>
 </changeSet>
-<!-- Create donor entry clerk  user-->
-<changeSet  author="srikanth" id = "2014-11-17-23">
-	<insert tableName="User">
-		<column name="id" value="7"></column>
-		<column name="emailId" value="xxxx@jembi.org"></column>
-		<column name="firstName" value="data entry"></column>
-		 <column name="lastName" value="clerk"></column>
-		<column name="isActive" value="1"></column>
-		<column name="isAdmin" value="0"></column>
-		<column name="isDeleted" value="0"></column>
-		<column name="isStaff" value="1"></column>
-		<column name="password" value="$2a$10$gwkTCjNTB69sMRfqiWmPaO1hhAoIrvNIn569YtSRNnYZj3e.dJSru"></column>
-		<column name="username" value="dataentryclerk"></column>
-	</insert>
-	<insert tableName="User_Role">
-		<column name="users_id" value="7"></column>
-		<column name="roles_id" value="7"></column>
-	</insert>
-</changeSet>
-<!-- Create donor entry clerk  user-->
+<!-- Create medical officer user-->
 <changeSet  author="srikanth" id = "2014-11-17-24">
 	<insert tableName="User">
 		<column name="id" value="8"></column>
