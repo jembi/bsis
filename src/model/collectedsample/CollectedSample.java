@@ -87,19 +87,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<BloodTestResult> bloodTestResults;
 
-  /**
-   * Which center the collection comes to.
-   */
-  @LocationExists
-  @ManyToOne
-  private Location collectionCenter;
 
-  /**
-   * Where was it actually collected.
-   */
-  @LocationExists
-  @ManyToOne
-  private Location collectionSite;
 
   /**
    * Index to find collections done between date ranges.
@@ -189,13 +177,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return donor;
   }
 
-  public Location getCollectionCenter() {
-    return collectionCenter;
-  }
-
-  public Location getCollectionSite() {
-    return collectionSite;
-  }
 
   public Date getCollectedOn() {
     return collectedOn;
@@ -225,13 +206,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donor = donor;
   }
 
-  public void setCollectionCenter(Location collectionCenter) {
-    this.collectionCenter = collectionCenter;
-  }
-
-  public void setCollectionSite(Location collectionSite) {
-    this.collectionSite = collectionSite;
-  }
 
   public void setCollectedOn(Date collectedOn) {
     this.collectedOn = collectedOn;
@@ -257,8 +231,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
     this.collectionBatch = collectedSample.collectionBatch;
-    this.collectionCenter = collectedSample.collectionCenter;
-    this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
     this.haemoglobinCount=collectedSample.haemoglobinCount;
     this.donorPulse = collectedSample.donorPulse;
