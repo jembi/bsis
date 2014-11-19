@@ -673,7 +673,7 @@
 		<column name="roles_id" value="6"></column>
 	</insert>
 </changeSet>
-<!-- Create donor entry clerk  user-->
+<!-- Create data entry clerk  user-->
 <changeSet  author="srikanth" id = "2014-11-17-23">
 	<insert tableName="User">
 		<column name="id" value="7"></column>
