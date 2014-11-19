@@ -76,4 +76,8 @@ public class CollectionBatchViewModel {
   public Boolean getIsClosed() {
     return collectionBatch.getIsClosed();
   }
+  
+  public LocationViewModel getDonorPanel(){
+      return  new LocationViewModel((collectionBatch.getDonorPanel()));
+  }
 }
