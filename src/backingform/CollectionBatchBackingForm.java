@@ -42,17 +42,6 @@ public class CollectionBatchBackingForm {
     collectionBatch.setBatchNumber(batchNumber);
   }
 
-  public void setCollectionCenter(Long center) {
-      Location l = new Location();
-      l.setId(center);
-      collectionBatch.setCollectionCenter(l);
-  }
-
-  public void setCollectionSite(Long collectionSite) {
-      Location l = new Location();
-      l.setId(collectionSite);
-      collectionBatch.setCollectionSite(l);
-  }
 
   public String getNotes() {
     return collectionBatch.getNotes();
