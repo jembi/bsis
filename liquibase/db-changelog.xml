@@ -3537,4 +3537,16 @@
     <dropColumn columnName="collectionSite_id" tableName="CollectionBatch_AUD"/>
 </changeSet>
 
+ <!-- #246 Adapt Donations to use single Location field -->
+<changeSet id="201411190305" author="srikanth">
+   <addColumn tableName="CollectionBatch">
+   	<column name="donorPanel_id" type="bigint">
+						<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
+   	</column>
+   </addColumn>
+  <addColumn tableName="CollectionBatch_AUD">
+   	<column name="donorPanel_id" type="bigint"></column>
+  </addColumn>
+</changeSet>
+
 </databaseChangeLog>	
