@@ -174,6 +174,7 @@ public class CollectionBatch implements ModificationTracker {
   
   public void copy(CollectionBatch collectionBatch){
       this.setNotes(collectionBatch.getNotes());
+      this.donorPanel = collectionBatch.getDonorPanel();
   }
 
 
