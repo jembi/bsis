@@ -126,7 +126,7 @@
  	
  	<collectionbatch id="1" batchNumber="B0314000000"
  		isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
- 		notes="Notes" collectionCenter_id="2" collectionSite_id="3"
+ 		notes="Notes" 
  		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
  	
  	<collectedsample id="1" bloodAbo=""
