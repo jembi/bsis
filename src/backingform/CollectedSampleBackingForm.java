@@ -424,5 +424,14 @@ public class CollectedSampleBackingForm {
         	collectedSample.setBloodRh(bloodRh);
         }
     }
+    
+    public void setDonorPanel(Location donorPanel){
+        if(donorPanel == null || donorPanel.getId() == null){
+            collectedSample.setDonorPanel(null);
+        }else{
+            collectedSample.setDonorPanel(donorPanel);
+        }
+            
+    }
   
 }
