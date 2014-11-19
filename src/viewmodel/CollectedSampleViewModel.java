@@ -179,16 +179,22 @@ public class CollectedSampleViewModel {
 		return  collectedSample.getBloodPressureSystolic();
   }
 	
-  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
-  }
-  
-  public Integer  getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic();
-	}
+    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+        collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+    }
 
-	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
-	}
-	 
+    public Integer getBloodPressureDiastolic() {
+        return collectedSample.getBloodPressureDiastolic();
+    }
+
+    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+    }
+    
+    public  LocationViewModel getDonorPanel(){
+        return new LocationViewModel(collectedSample.getDonorPanel());
+    }
+
+        
+        
 }
