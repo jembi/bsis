@@ -54,7 +54,6 @@ public class DonorBackingFormValidator implements Validator {
           "There exists a donor with the same donor number.");
     }
 
-    form.setBirthDate();
     validateBirthDate(form, errors);    
     validateBloodGroup(form, errors);
     utilController.commonFieldChecks(form, "donor", errors);
@@ -82,8 +81,7 @@ public class DonorBackingFormValidator implements Validator {
     try{
 
     	// if valid date
-    	if (CustomDateFormatter.isDateStringValid(birthDate) && !birthDate.equals("")){
-    		
+    	if (CustomDateFormatter.isDateStringValid(birthDate) && birthDate != null && !birthDate.isEmpty()){
     		
     	  Date date = CustomDateFormatter.getDateFromString(birthDate);
     	  
