@@ -3,7 +3,6 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<!-- NEVER ALTER THIS FILE -->
 	<!-- Liquibase has issues processing DELIMITER commands that get added in the SQL when we export SPs, Functions, Triggers, etc. -->
 	<!-- So, execute following 2 SQLs manually for now -->
 
