@@ -58,4 +58,10 @@ public class CollectionBatchBackingForm {
   public void setIsClosed(Boolean isClosed) {
 	collectionBatch.setIsClosed(isClosed);
   }
+  
+  public void setDonorPanel(Long donorPanelId){
+      Location donorPanel = new Location();
+      donorPanel.setId(donorPanelId);
+      collectionBatch.setDonorPanel(donorPanel);
+  }
 }
