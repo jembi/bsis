@@ -41,15 +41,6 @@ public class CollectionBatchBackingForm {
   public void setBatchNumber(String batchNumber) {
     collectionBatch.setBatchNumber(batchNumber);
   }
-  
-   public void setDonorPanel(Location donorPanel){
-       if(donorPanel == null || donorPanel.getId() == null){
-           collectionBatch.setDonorPanel(null);
-       }else{
-           collectionBatch.setDonorPanel(donorPanel);
-        }
-            
-    }
 
 
   public String getNotes() {
