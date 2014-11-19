@@ -126,7 +126,7 @@
  	
  	<collectionbatch id="1" batchNumber="B0314000000"
  		isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
- 		notes="Notes" 
+ 		notes="Notes" donorPanel_Id = "1"
  		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
  	
  	<collectedsample id="1" bloodAbo=""
@@ -135,7 +135,7 @@
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
  		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
  		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
- 		collectionBatch_id="1" 
+ 		collectionBatch_id="1" donorPanel_Id = "1"
  		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
  		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
  		donorPulse="60"></collectedsample>
