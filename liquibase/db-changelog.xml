@@ -17,7 +17,7 @@
 		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
 		AS WELL AS CHRONOLOGICALLY -->
 
-	<changeSet author="devang" id="2013-10-18-01">
+	<changeSet author="devang" id="20131018-0101">
 		<sql>
 			CREATE TABLE TEMPTABLE ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
 			`username` VARCHAR(50) NOT NULL,
@@ -25,14 +25,13 @@
 			)
 		</sql>
 	</changeSet>
-	<changeSet id="2013-10-19-01" author="devang">
+	<changeSet  author="devang" id="20131019-0102">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
 
 
-
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
-	<changeSet id="201310242025" author="devang">
+	<changeSet id="20131024-2025" author="devang">
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="haemoglobinCount"></column>
@@ -57,7 +56,7 @@
 	</changeSet>
 
 	<!-- For issue 69 [Allow for entry of donor weight] -->
-	<changeSet id="201310241815" author="devang">
+	<changeSet id="20131024-1815" author="devang">
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="donorWeight"></column>
@@ -82,7 +81,7 @@
 	</changeSet>
 	
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
-    <changeSet id="201310242001" author="devang">
+    <changeSet id="20131024-2001" author="devang">
         <insert tableName="FormField">
             <column name="form" value="CollectedSample"></column>
             <column name="FIELD" value="bloodPressureSystolic"></column>
@@ -130,7 +129,7 @@
     </changeSet>
 	
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
-	<changeSet id="201310241926" author="devang">
+	<changeSet id="20131024-1926" author="devang">
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="donorPulse"></column>
@@ -155,7 +154,7 @@
 	</changeSet>
 
 	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
- 	<changeSet id="201310251212" author="ankur">
+ 	<changeSet id="20131025-1212" author="ankur">
  		<addColumn tableName="Donor">
  			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
  		</addColumn>
@@ -180,7 +179,7 @@
  	</changeSet>
 
 	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
-	<changeSet id="201311071844" author="Ankur">
+	<changeSet id="20131107-1844" author="Ankur">
 		<addColumn tableName="Product">
 			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
@@ -220,7 +219,7 @@
 	</changeSet>
 	
 	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
-	<changeSet id="201311081617" author="devang">
+	<changeSet id="20131108-1617" author="devang">
 	    <addColumn tableName="RequestType">
 	        <column name="bulkTransfer" type="TINYINT(1)"/>
 	    </addColumn>
@@ -230,7 +229,7 @@
 	</changeSet>
 	
 	<!-- Update FormField table to rename Collection info to Donation -->
-	<changeSet id="201311081720" author="danfuterman">
+	<changeSet id="20131108-1720" author="danfuterman">
 		<update tableName="FormField">
     		<column name="defaultDisplayName" value="Donation Identification Number" />
     		<where>field = "collectionNumber"</where>
@@ -246,7 +245,7 @@
 	</changeSet>
 
 	<!-- For issue 104 [Add Lot Release Functionality] -->
-    <changeSet id="201311111726" author="devang">
+    <changeSet id="20131111-1726" author="devang">
             <insert tableName="GenericConfig">
                     <column name="id" value="48"></column>
                     <column name="propertyName" value="lotRelease"></column>
@@ -256,7 +255,7 @@
     </changeSet>
 
     <!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
-     <changeSet id="201311071517" author="devang">
+     <changeSet id="20131107-1517" author="devang">
 	     <addColumn tableName="BloodTestResult">
 	     	<column name="reagentLotNumber" type="varchar(20)" />
 	     </addColumn>
@@ -269,7 +268,7 @@
    </changeSet>
    
    <!-- For issue 58 [Add ability to update Deferrals] -->
-     <changeSet id="201311251517" author="devang">
+     <changeSet id="20131125-1517" author="devang">
 	     <addColumn tableName="DonorDeferral">
 	     	<column name="isVoided" type="tinyint(1)" />
 	     	<column name="voidedBy_id" type="smallint(6)" />
@@ -280,7 +279,7 @@
 			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
    
-    <changeSet id="201311251525" author="devang">
+    <changeSet id="20131125-1525" author="devang">
 	     <addColumn tableName="DonorDeferral_AUD">
 	     	<column name="isVoided" type="tinyint(1)" />
 	     	<column name="voidedBy_id" type="smallint(6)" />
@@ -292,7 +291,7 @@
    </changeSet>
 
    <!-- For issue 64 [Add isDeleted field to BloodTest and BloodTest_AUD Tables] -->
-     <changeSet id="201401140950" author="srikanth">
+     <changeSet id="20140114-0950" author="srikanth">
 	     <addColumn tableName="BloodTest">
 	     	<column name="isDeleted" type="TINYINT(1)" />
 	     </addColumn>
@@ -303,19 +302,19 @@
 	</changeSet>
    
 	<!-- For issue 117 [Configure Role] -->
-	<changeSet id="20131129112" author="nikita">
+	<changeSet id="20131129-0112" author="nikita">
 		<addColumn tableName="Role">
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
-	<changeSet id="20131129113" author="nikita">
+	<changeSet id="20131129-0113" author="nikita">
 		<addColumn tableName="Role_AUD">
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
 	
 	<!-- For issue 117 [for issue role management] -->
-	<changeSet id="201401310210" author="srikanth">
+	<changeSet id="20140131-0210" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="Role"></column>
 			<column name="FIELD" value="name"></column>
@@ -334,7 +333,7 @@
 		</changeSet>
 		
 	<!-- For issue 118[improve admin UI to manage users ] -->
-	<changeSet id="201402030408" author="srikanth">
+	<changeSet id="20140203-0408" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="FIELD" value="username"></column>
@@ -353,7 +352,7 @@
 	</changeSet>
 	
 	<!-- For issue 118[improve admin UI to manage users ] -->
-	<changeSet id="201402030415" author="srikanth">
+	<changeSet id="20140203-0415" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="FIELD" value="firstName"></column>
@@ -389,7 +388,7 @@
 	</changeSet>
 	
 	<!-- For issue 134 [Add New Roles And Permissions]  -->
-	<changeSet id="201402210359" author="srikanth">
+	<changeSet id="20140221-0359" author="srikanth">
 		<delete tableName="User_Role"></delete>
 		<delete tableName="Permission_Role"></delete>
 		<delete tableName="Role"></delete>
@@ -399,7 +398,7 @@
 	
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
-	<changeSet id="201401151001" author="srikanth">
+	<changeSet id="20140115-1001" author="srikanth">
 		<update tableName="FormField">
 			<column name="displayName" value="DIN" />
 			<where>field = "collectionNumber"</where>
@@ -438,7 +437,7 @@
   
   
 <!-- For issue 172[Add in additional donor demographic fields] --> 
-<changeSet id="201405200258" author="srikanth">
+<changeSet id="20140520-0258" author="srikanth">
 
   <createTable  tableName="IdType">
      <column name="id" type="BIGINT" autoIncrement = "true">
@@ -508,18 +507,18 @@
         </insert>
 </changeSet>
 	<!-- For issue 26 [Add WHO Deferral Reasons] -->
-	<changeSet  author="nikita" id = "201310241525">
+	<changeSet  author="nikita" id = "20131024-1525">
 			<delete tableName="DeferralReason"></delete>
 	</changeSet>
 
-<changeSet id="201310241526" author="nikita">
+<changeSet id="20131024-1526" author="nikita">
 		<sql>
 			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
 		</sql>
 </changeSet>
 
 <!--For Issue #36[Add Donor Codes Functionality] -->
-<changeSet id="201405041130" author="srikanth">
+<changeSet id="20140504-1130" author="srikanth">
 
 
        <createTable  tableName="DonorCodeGroup">
@@ -544,7 +543,6 @@
                                   referencedColumnNames="id"
                                   referencedTableName="DonorCodeGroup"/>
 
-       
       
       <createTable  tableName="DonorDonorCode">
          <column name="id" type="BIGINT" autoIncrement="true">
@@ -591,7 +589,7 @@
 
 </changeSet>
 <!-- For issue 172[Add in additional donor demographic fields] -->
- <changeSet id ="201405040141" author = "srikanth">
+ <changeSet id ="20140504-0141" author = "srikanth">
    
      <addColumn tableName="Donor">
 			<column name="addressId" type="int" defaultValue="NULL"></column>
@@ -927,7 +925,7 @@
  </changeSet>
  
  <!-- Add in 'isClosed' field to collectionBatch tables -->
- <changeSet id="201410281957" author="danfuterman">
+ <changeSet id="20141028-1957" author="danfuterman">
 	<addColumn tableName="CollectionBatch">
 		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
 	</addColumn>
@@ -937,7 +935,7 @@
  </changeSet>
 
 <!-- For issue 229 [Create testBatch table]  -->
-   <changeSet id="201311122005" author="nikita">
+   <changeSet id="20131112-2005" author="nikita">
     <createTable tableName="TestBatch">
     	<column name="id" type="smallint(6)" autoIncrement="true">
     		<constraints primaryKey="true" nullable="false"/>
@@ -952,7 +950,7 @@
     	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
     </createTable>
     </changeSet>
-    <changeSet id="201411140420" author="srikanth">
+    <changeSet id="20141114-0420" author="srikanth">
 	    <addColumn tableName="CollectionBatch">
 	    	<column name="testBatch_id" type="smallint(6)"></column>
 	    </addColumn>
@@ -962,7 +960,7 @@
 	    						 baseTableName="CollectionBatch" 
 	    						 referencedColumnNames="id"/>
     </changeSet>
-    <changeSet id="201411140425" author="srikanth">
+    <changeSet id="20141114-0425" author="srikanth">
      <addColumn tableName="CollectionBatch_AUD">
 	    	<column name="testBatch_id" type="smallint(6)"></column>
 	    </addColumn>
@@ -972,7 +970,7 @@
 	    						 baseTableName="CollectionBatch_AUD" 
 	    						 referencedColumnNames="id"/>
     </changeSet>
-    <changeSet id="201311130733" author="srikanth">
+    <changeSet id="20131113-0733" author="srikanth">
     <createTable tableName="TestBatch_AUD">
     	<column name="id" type="smallint(6)">
     		<constraints primaryKey="true" nullable="false"/>
@@ -994,7 +992,7 @@
 
 
  <!-- For issue 57 [Add WHO Product Discard Reasons] -->
-<changeSet author="nikita" id = "2014-11-17-12">
+<changeSet author="nikita" id = "20131024-1507-">
 		<delete tableName="ProductStatusChangeReason">
 			<where>category='DISCARDED'</where>
 	 </delete>

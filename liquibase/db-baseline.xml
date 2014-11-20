@@ -6,7 +6,7 @@
 	<!-- Liquibase has issues processing DELIMITER commands that get added in the SQL when we export SPs, Functions, Triggers, etc. -->
 	<!-- So, execute following 2 SQLs manually for now -->
 
-	<changeSet id="2013-10-18-01" author="devang">
+	<changeSet id="20131018-0101" author="devang">
 		<sqlFile path="./ddl_mysql.sql"/>
 		<sqlFile path="./initial_data.sql"/>
 		<sqlFile path="./tests.sql"/>
