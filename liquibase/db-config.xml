@@ -18,7 +18,7 @@
 		AS WELL AS CHRONOLOGICALLY -->
 
 <!-- For issue 134 [Add New Roles And Permissions]  -->
-<changeSet author="srikanth" id = "2014-11-18-1">
+<changeSet author="srikanth" id = "20141118-0101">
      <insert tableName="Role">
        <column name="id" value="1"></column>
        <column name="name" value="Super User"></column>
@@ -103,7 +103,7 @@
 </changeSet>	    
 	  
 	    <!-- Permissions  -->
-<changeSet author="srikanth" id = "2014-11-18-2">	 
+<changeSet author="srikanth" id = "20141118-0201">	 
    <insert tableName="Permission">
        <column name="id" value="1"></column>
        <column name="name" value="Add Donor"></column>
@@ -387,7 +387,7 @@
   
   
 	<!-- For issue 134 [Add New Roles And Permissions]  -->
-<changeSet author="srikanth" id = "2014-11-18-3">
+<changeSet author="srikanth" id = "20141118-0301">
   
        <!-- Donor Permission Association With Roles -->
        
@@ -1813,7 +1813,7 @@
 </changeSet>
 
  <!-- For issue 150 - Adding New Permissions and Prmission Role Mappings -->
-<changeSet  author="srikanth" id = "2014-11-18-">
+<changeSet  author="srikanth" id = "20141118-1213">
 
   <!-- Donation Batch Permissions -->
   
@@ -2208,7 +2208,7 @@
 </changeSet>
 
  <!-- Add AUTHENTICATED permission level to the system -->
- <changeSet id="201411101128" author="srikanth">
+ <changeSet id="20141110-1128" author="srikanth">
 
  	 <insert tableName="Permission">
 	       <column name="id" value="83"> </column>

@@ -12,7 +12,7 @@
 		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
 		AS WELL AS CHRONOLOGICALLY -->
 
-	<changeSet author = "srikanth" id = "2014-11-17-1">
+	<changeSet author = "srikanth" id = "20141117-0101">
 		<insert tableName = "DonationType">
 			<column name="donationType" value="Voluntary"/>
 			<column name="isDeleted" value="0"/>
@@ -30,7 +30,7 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-2">
+	<changeSet author = "srikanth" id = "20141117-0103">
 		<insert tableName = "RequestType">
 			<column name="requestType" value="Emergency"/>
 			<column name="description" value="0"/>
@@ -62,7 +62,7 @@
 			<column name="isDeleted" value="0"/>
 		</insert>	
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-3">
+	<changeSet author = "srikanth" id = "20141117-0123">
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Single"/>
 			<column name="isDeleted" value="0"/>
@@ -76,7 +76,7 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-4">
+	<changeSet author = "srikanth" id = "20141117-0204">
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Whole Blood"/>
 			<column name="productType" value="Whole Blood"/>
@@ -158,7 +158,7 @@
 			<column name="isDeleted" value="0"/>
 		</insert>	
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-5">
+	<changeSet author = "srikanth" id = "20141117-0915">
 		<insert tableName = "ProductTypeCombination">
 			<column name="combinationName" value="Whole Blood"/>
 			<column name="isDeleted" value="0"/>
@@ -176,7 +176,7 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-6">
+	<changeSet author = "srikanth" id = "20141117-0919">
 		<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="1"/>
 			<column name="productTypes_id" value="1"/>
@@ -210,7 +210,7 @@
 			<column name="productTypes_id" value="8"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-7">
+	<changeSet author = "srikanth" id = "20141117-0931">
 	<!--Associate product type to pedi -->
 	    <update tableName="ProductType">
 	        <column name="pediProductType_id" value = "5"/>
@@ -229,7 +229,7 @@
 	        <where>id = "4"</where>
 	    </update>
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-8">
+	<changeSet author = "srikanth" id = "20141117-0938">
 		<insert tableName = "Location">
 			<column name="name" value="Lusaka"/>
 			<column name="isCollectionCenter" value="1"/>
@@ -301,7 +301,7 @@
 			<column name="notes" value=""/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "2014-11-17-9">
+	<changeSet author = "srikanth" id = "20141117-0945">
 		<insert tableName = "ContactMethodType">
 			<column name="contactMethodType" value="None"/>
 			<column name="isDeleted" value="0"/>
@@ -328,7 +328,7 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet author = "nikitha" id = "2014-11-17-10">
+	<changeSet author = "nikitha" id = "20141117-1012">
 		<insert tableName="DeferralReason">
 	    	<column name="reason" value="High risk behaviour"/>
 	    	<column name="isDeleted" value="0"/>
@@ -355,7 +355,7 @@
 	    </insert>
 	</changeSet>
 	
-	<changeSet author="nikita" id = "2014-11-17-11">
+	<changeSet author="nikita" id = "20141117-1017">
 		<insert tableName="ProductStatusChangeReason">
 	        <column name="statusChangeReason" value="Incomplete Donation"/>
 	        <column name="category" value="DISCARDED"/>
@@ -387,7 +387,7 @@
 	        <column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author="srikanth" id = "2014-11-17-12">
+	<changeSet author="srikanth" id = "20141117-1054">
 		<insert tableName="PreferredLanguage">
 			 <column name="id" value="1"></column>
 		 	 <column name="preferredLanguage" value="English"></column>
@@ -478,7 +478,7 @@
 	    </insert>
 	</changeSet>
 	    <!-- For issue 134 Remove existing users and add in new Super User  -->
-	<changeSet  author="srikanth" id = "2014-11-17-13">
+	<changeSet  author="srikanth" id = "20141117-1101">
 			<insert tableName="User">
 				<column name="id" value="1"></column>
 				<column name="emailId" value="xxxx@jembi.org"></column>
@@ -496,7 +496,7 @@
 			</insert>
 	</changeSet>
 	
-	<changeSet  author="srikanth" id = "2014-11-17-14">
+	<changeSet  author="srikanth" id = "20141117-1121">
 		 <insert tableName="IdType">
 		     <column name="id" value="1"></column>
 		     <column name="idType" value="National Id"></column>
@@ -512,7 +512,7 @@
 	</changeSet>    
 	    
 	 
-	<changeSet  author="srikanth" id = "2014-11-17-15">
+	<changeSet  author="srikanth" id = "20141117-1128">
 	   <insert tableName="DonorCodeGroup">
 	     <column name="id" value="1"></column>
 	     <column name="donorCodeGroup" value="Test Only"></column>
@@ -523,7 +523,7 @@
 	  </insert>
 	</changeSet>    
 	
-	<changeSet  author="srikanth" id = "2014-11-17-16">
+	<changeSet  author="srikanth" id = "20141117-1133">
 	<insert tableName="DonorCode">
 	     <column name="id" value="1"></column>
 	     <column name="donorCode" value="Blood group antibody"></column>
@@ -560,7 +560,7 @@
 	     <column name="donorCodeGroupId" value="2"></column>   
 	  </insert>
 	</changeSet>
-	<changeSet  author="srikanth" id = "2014-11-17-17">
+	<changeSet  author="srikanth" id = "20141117-1141">
 	  <insert tableName="AddressType">
 	     <column name="id" value="1"></column>
 	     <column name="preferredAddressType" value="Home Address"></column>
@@ -576,7 +576,7 @@
 	</changeSet>
 	
 	<!-- Create admin user-->
-	<changeSet  author="srikanth" id = "2014-11-17-18">
+	<changeSet  author="srikanth" id = "20141117-1156">
 		<insert tableName="User">
 			<column name="id" value="2"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -595,7 +595,7 @@
 		</insert>
 	</changeSet>
 	<!-- Create donor clinic supervisor  user-->
-	<changeSet  author="srikanth" id = "2014-11-17-19">
+	<changeSet  author="srikanth" id = "20141117-1212">
 		<insert tableName="User">
 			<column name="id" value="3"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -614,7 +614,7 @@
 		</insert>
 	</changeSet>
 	<!-- Create donor clinic staff  user-->
-	<changeSet  author="srikanth" id = "2014-11-17-20">
+	<changeSet  author="srikanth" id = "20141117-1218">
 		<insert tableName="User">
 			<column name="id" value="4"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -633,7 +633,7 @@
 		</insert>
 	</changeSet>
 	<!-- Create donor comunications staff  user-->
-	<changeSet  author="srikanth" id = "2014-11-17-21">
+	<changeSet  author="srikanth" id = "20141117-1221">
 		<insert tableName="User">
 			<column name="id" value="5"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -652,7 +652,7 @@
 		</insert>
 	</changeSet>
 	<!-- Create donor counseling staff  user-->
-	<changeSet  author="srikanth" id = "2014-11-17-22">
+	<changeSet  author="srikanth" id = "20141117-1234">
 		<insert tableName="User">
 			<column name="id" value="6"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -671,7 +671,7 @@
 		</insert>
 	</changeSet>
 	<!-- Create data entry clerk  user-->
-	<changeSet  author="srikanth" id = "2014-11-17-23">
+	<changeSet  author="srikanth" id = "20141117-1245">
 		<insert tableName="User">
 			<column name="id" value="7"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -690,7 +690,7 @@
 		</insert>
 	</changeSet>
 	<!-- Create medical officer user-->
-	<changeSet  author="srikanth" id = "2014-11-17-24">
+	<changeSet  author="srikanth" id = "20141117-0145">
 		<insert tableName="User">
 			<column name="id" value="8"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -709,7 +709,7 @@
 		</insert>
 	</changeSet>
 	<!--Create component supervisor-->
-	<changeSet  author="srikanth" id = "2014-11-17-25">
+	<changeSet  author="srikanth" id = "20141117-0207">
 		<insert tableName="User">
 			<column name="id" value="9"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -728,7 +728,7 @@
 		</insert>
 	</changeSet>
 	<!--Create component supervisor-->
-	<changeSet  author="srikanth" id = "2014-11-17-26">
+	<changeSet  author="srikanth" id = "20141117-0226">
 		<insert tableName="User">
 			<column name="id" value="10"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -747,7 +747,7 @@
 		</insert>
 	</changeSet>
 	<!--Create TTI Testing Supervisor user -->
-	<changeSet  author="srikanth" id = "2014-11-17-27">
+	<changeSet  author="srikanth" id = "20141117-0227">
 		<insert tableName="User">
 			<column name="id" value="11"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -766,7 +766,7 @@
 		</insert>
 	</changeSet>
 	<!--Create TTI Testing Supervisor user-->
-	<changeSet  author="srikanth" id = "2014-11-17-28">
+	<changeSet  author="srikanth" id = "20141117-0228">
 		<insert tableName="User">
 			<column name="id" value="12"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -785,7 +785,7 @@
 		</insert>
 	</changeSet>
 	<!--Create Serology  Supervisor user-->
-	<changeSet  author="srikanth" id = "2014-11-17-29">
+	<changeSet  author="srikanth" id = "20141117-0229">
 		<insert tableName="User">
 			<column name="id" value="13"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -804,7 +804,7 @@
 		</insert>
 	</changeSet>
 	<!--Create Serology  Staff user-->
-	<changeSet  author="srikanth" id = "2014-11-17-30">
+	<changeSet  author="srikanth" id = "20141117-0230">
 		<insert tableName="User">
 			<column name="id" value="14"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -823,7 +823,7 @@
 		</insert>
 	</changeSet>
 	<!--Create Serology  Staff user-->
-	<changeSet  author="srikanth" id = "2014-11-17-31">
+	<changeSet  author="srikanth" id = "20141117-0231">
 		<insert tableName="User">
 			<column name="id" value="15"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -842,7 +842,7 @@
 		</insert>
 	</changeSet>
 	<!--Create Serology  Staff user-->
-	<changeSet  author="srikanth" id = "2014-11-17-32">
+	<changeSet  author="srikanth" id = "20141117-0232">
 		<insert tableName="User">
 			<column name="id" value="16"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
