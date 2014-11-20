@@ -508,7 +508,7 @@
         </insert>
 </changeSet>
 	<!-- For issue 26 [Add WHO Deferral Reasons] -->
-	<changeSet  author="nikita" id = "201310241516">
+	<changeSet  author="nikita" id = "201310241525">
 			<delete tableName="DeferralReason"></delete>
 	</changeSet>
 
