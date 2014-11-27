@@ -89,6 +89,7 @@ public class CollectionBatchRepository {
   public CollectionBatch updateCollectionBatch(CollectionBatch collectionBatch)throws IllegalArgumentException{
       CollectionBatch existingBatch = findCollectionBatchById(collectionBatch.getId());
       existingBatch.copy(collectionBatch);
+      existingBatch.setIsClosed(collectionBatch.getIsClosed());
       return em.merge(existingBatch);
   }
   
