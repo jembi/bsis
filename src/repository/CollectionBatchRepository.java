@@ -128,7 +128,7 @@ public class CollectionBatchRepository {
 
     TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
     query.setParameter("isDeleted", false);
-    query.setParameter("isClosed", false);
+    query.setParameter("isClosed", true);
    
     
     return query.getResultList();
