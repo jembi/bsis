@@ -2,7 +2,8 @@ package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.Valid;
-
+import java.util.Date;
+import model.user.User;
 import model.collectionbatch.CollectionBatch;
 import model.location.Location;
 
@@ -68,5 +69,25 @@ public class CollectionBatchBackingForm {
 
   public void setIsClosed(Boolean isClosed) {
 	collectionBatch.setIsClosed(isClosed);
+  }
+  
+  @JsonIgnore
+  public Date getLastUpdated() {
+    return collectionBatch.getLastUpdated();
+  }
+
+  @JsonIgnore
+  public Date getCreatedDate() {
+    return collectionBatch.getCreatedDate();
+  }
+
+  @JsonIgnore
+  public User getCreatedBy() {
+    return collectionBatch.getCreatedBy();
+  }
+
+  @JsonIgnore
+  public User getLastUpdatedBy() {
+    return collectionBatch.getLastUpdatedBy();
   }
 }
