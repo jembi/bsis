@@ -3,10 +3,11 @@ package backingform;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 import model.user.User;
 import model.collectionbatch.CollectionBatch;
 import model.location.Location;
-
+import model.collectedsample.CollectedSample;
 import org.apache.commons.lang3.StringUtils;
 
 public class CollectionBatchBackingForm {
@@ -90,4 +91,15 @@ public class CollectionBatchBackingForm {
   public User getLastUpdatedBy() {
     return collectionBatch.getLastUpdatedBy();
   }
+  
+  @JsonIgnore
+  public List<CollectedSample> getCollectionsInBatch() {
+    return collectionBatch.getCollectionsInBatch();
+  }
+  
+  @JsonIgnore
+  public Integer getNumCollections() {
+    return collectionBatch.getCollectionsInBatch().size();
+  }
+  
 }
