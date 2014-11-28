@@ -57,8 +57,7 @@ public class BloodTestingController {
   public Map<String, Object> getBloodTestSummary(@PathVariable Integer id) {
       
     Map<String, Object> map = new HashMap<String, Object>();  
-    BloodTestViewModel bloodTest;
-    bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(id));
+    BloodTestViewModel bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(id));
     map.put("bloodTest", bloodTest);
     return map;
   }
@@ -67,8 +66,23 @@ public class BloodTestingController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity saveNewBloodTest(
       @RequestBody BloodTestBackingForm form) {
+      BloodTest bloodTest = form.getBloodTest();
       bloodTestingRepository.saveBloodTest(form);
       return new ResponseEntity(new BloodTestViewModel(form.getBloodTest()), HttpStatus.CREATED);
+  }
+  
+ /**
+  * TODO - To be improved
+  */
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  public ResponseEntity updateBloodTest(@PathVariable Integer id,
+      @RequestBody BloodTestBackingForm backingObject) {
+      Map<String, Object> map = new HashMap<String, Object>();  
+      backingObject.setId(id);
+      BloodTest bloodTest = bloodTestingRepository.updateBloodTest(backingObject);
+      map.put("bloodTest", bloodTest);
+      return new ResponseEntity(map, HttpStatus.OK);
   }
   
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
