@@ -18,11 +18,11 @@ public class LocationViewModel {
     return location.getName();
   }
 
-  public String getIsDonationCenter() {
+  public String getIsCollectionCenter() {
     return location.getIsCollectionCenter().toString();
   }
 
-  public String getIsDonationSite() {
+  public String getIsCollectionSite() {
     return location.getIsCollectionSite().toString();
   }
 
