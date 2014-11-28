@@ -50,5 +50,25 @@ public class ProductTypeViewModel {
     public String getDescription(){
         return productType.getDescription();
     }
+    
+    public String getStorageInformation(){
+        final String DEGREECELSIUS  = "\u2103";
+        return "store at " + productType.getLowStorageTemperature() + DEGREECELSIUS+ " to "
+                + productType.getHighStorageTemperature() + DEGREECELSIUS; 
+                
+    }
+    
+    public String getTransportInformation(){
+        final String DEGREECELSIUS  = "\u2103";
+        return "transport at " + productType.getLowTransportTemperature()+ DEGREECELSIUS+ " to "
+                + productType.getHighTransportTemperature()+ DEGREECELSIUS; 
+                
+    }
+    
+    public String getPreparation(){
+        return productType.getPreparation();
+    }
+        
+   
    
 }

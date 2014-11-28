@@ -3497,4 +3497,42 @@
 	     <column name="roles_id" value="16"></column>
 	  </insert>
  </changeSet>
+
+  <!-- Add labelling fields to Component Types #238 -->
+ <changeSet id="201401211114" author="srikanth">
+	<addColumn tableName="ProductType">
+		 <column name="lowStorageTemperature" type="smallint(6)"></column>
+		 <column name="highStorageTemperature" type="smallint(6)"></column>
+	</addColumn>
+
+		<addColumn tableName="ProductType_AUD">
+		 <column name="lowStorageTemperature" type="smallint(6)"></column>
+		 <column name="highStorageTemperature" type="smallint(6)"></column>
+	</addColumn>
+ </changeSet>
+
+ <!-- Add labelling fields to Component Types #238 -->
+ <changeSet id="201411140230" author="srikanth">
+	<addColumn tableName="ProductType">
+		 <column name="lowTransportTemperature" type="smallint(6)"></column>
+		 <column name="highTransportTemperature" type="smallint(6)"></column>
+	</addColumn>
+
+		<addColumn tableName="ProductType_AUD">
+		 <column name="lowTransportTemperature" type="smallint(6)"></column>
+		 <column name="highTransportTemperature" type="smallint(6)"></column>
+	</addColumn>
+ </changeSet>
+
+ <!-- Add labelling fields to Component Types #238 -->
+ <changeSet id="201411140235" author="srikanth">
+	<addColumn tableName="ProductType">
+		 <column name="preparation" type="text"></column>
+	</addColumn>
+
+		<addColumn tableName="ProductType_AUD">
+		 <column name="preparation" type="text"></column>
+	</addColumn>
+ </changeSet>
+
 </databaseChangeLog>	

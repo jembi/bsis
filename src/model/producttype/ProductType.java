@@ -63,6 +63,16 @@ public class ProductType {
 
   private Boolean isDeleted;
   
+  private Integer lowStorageTemperature;
+  
+  private Integer highStorageTemperature;
+  
+  private Integer lowTransportTemperature;
+  
+  private Integer highTransportTemperature;
+  
+  private String preparation;
+  
   public Integer getId() {
     return id;
   }
@@ -164,4 +174,49 @@ public class ProductType {
   public void setPediProductType(ProductType pediProductType) {
     this.pediProductType = pediProductType;
   }
+
+    public Integer getLowStorageTemperature() {
+        return lowStorageTemperature;
+    }
+
+    public void setLowStorageTemperature(Integer lowStorageTemperature) {
+        this.lowStorageTemperature = lowStorageTemperature;
+    }
+
+    public Integer getHighStorageTemperature() {
+        return highStorageTemperature;
+    }
+
+    public void setHighStorageTemperature(Integer highStorageTemperature) {
+        this.highStorageTemperature = highStorageTemperature;
+    }
+
+    public Integer getLowTransportTemperature() {
+        return lowTransportTemperature;
+    }
+
+    public void setLowTransportTemperature(Integer lowTransportTemperature) {
+        this.lowTransportTemperature = lowTransportTemperature;
+    }
+
+    public Integer getHighTransportTemperature() {
+        return highTransportTemperature;
+    }
+
+    public void setHighTransportTemperature(Integer highTransportTemperature) {
+        this.highTransportTemperature = highTransportTemperature;
+    }
+
+    public String getPreparation() {
+        return preparation;
+    }
+
+    public void setPreparation(String preparation) {
+        this.preparation = preparation;
+    }
+    
+    
+ 
+    
+  
 }
