@@ -150,8 +150,7 @@ public class CollectionBatchController {
   }
   
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("sites", locationRepository.getAllCollectionSites());
+    m.put("donorPanels", locationRepository.getAllDonorPanels());
   }
 
   private CollectionBatchViewModel getCollectionBatchViewModel(CollectionBatch collectionBatch) {

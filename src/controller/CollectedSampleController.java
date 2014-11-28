@@ -118,10 +118,9 @@ public class CollectedSampleController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("centers", locationRepository.getAllCenters());
+	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes());
-    m.put("sites", locationRepository.getAllCollectionSites());
+    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes()); 
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
