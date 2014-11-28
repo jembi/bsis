@@ -75,7 +75,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		
 		// Id Clinic Date is specified, Donors should not be deferred on that date
 		if(!StringUtils.isBlank(clinicDate)) {
-				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(clinicDate)));				
+				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dueToDonate").as(Date.class), CustomDateFormatter.parse(clinicDate)));				
 				if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {					
 					donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root), 
 					cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor) ));

@@ -25,6 +25,7 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
 import model.compatibility.CrossmatchType;
@@ -54,6 +55,7 @@ import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
 import utils.PermissionConstants;
+import viewmodel.PackTypeViewModel;
 
 @RestController
 public class AdminController {
@@ -386,7 +388,7 @@ public class AdminController {
   }
 
   private void addAllBloodBagTypesToModel(Map<String, Object> m) {
-    m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
+    m.put("allBloodBagTypes", getPackTypeViewModels(bloodBagTypesRepository.getAllBloodBagTypes()));
   }
 
 
@@ -490,7 +492,7 @@ public class AdminController {
     public ResponseEntity<BloodBagType> getPackTypeById(@PathVariable Integer id){
         Map<String, Object> map = new HashMap<String, Object>();
         BloodBagType packType = bloodBagTypesRepository.getBloodBagTypeById(id);
-        map.put("packtype", packType);
+        map.put("packtype", new PackTypeViewModel(packType));
         return new ResponseEntity(map, HttpStatus.OK);
     }
   
@@ -498,9 +500,9 @@ public class AdminController {
     
     @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity savePackType(@RequestBody BloodBagType packType){
+    public ResponseEntity savePackType(@Valid @RequestBody BloodBagType packType){
         bloodBagTypesRepository.saveBloodBagType(packType);
-        return new ResponseEntity(packType, HttpStatus.CREATED);
+        return new ResponseEntity(new PackTypeViewModel(packType), HttpStatus.CREATED);
     }
   
     @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
@@ -509,7 +511,7 @@ public class AdminController {
         Map<String, Object> map = new HashMap<String, Object>();
         packType.setId(id);
         packType = bloodBagTypesRepository.updateBloodBagType(packType);
-        map.put("packtype", packType);
+        map.put("packtype", new PackTypeViewModel(packType));
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
@@ -627,4 +629,12 @@ public class AdminController {
     return listOfServerAddresses;
   }
   
+  private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){
+      
+      List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+      for(BloodBagType packtType : packTypes){
+          viewModels.add(new PackTypeViewModel(packtType));
+      }
+      return viewModels;
+  }
 }

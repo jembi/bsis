@@ -116,7 +116,7 @@ public class DonorCommunicationsController {
             @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) throws ParseException{
        
        LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
-       String eligibleClinicDate = getEligibleDonorDate(clinicDate);
+   //    String eligibleClinicDate = getEligibleDonorDate(clinicDate);
 
        Map<String, Object> map = new HashMap<String, Object>();
 
@@ -127,7 +127,7 @@ public class DonorCommunicationsController {
         pagingParams.put("sortDirection", "asc");
         
         List<Donor> results = new ArrayList<Donor>();
-        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), eligibleClinicDate, lastDonationFromDate,
+        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), clinicDate, lastDonationFromDate,
                 lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, pagingParams, clinicDate);
         
         List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
@@ -143,7 +143,8 @@ public class DonorCommunicationsController {
         return map;
        
     }
-
+/**
+ * - #236 - un useful method
     private static String getEligibleDonorDate(String clinicDate) throws ParseException {
 
         SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
@@ -158,7 +159,7 @@ public class DonorCommunicationsController {
         return clinicDate != null && !clinicDate.trim().equalsIgnoreCase("") ? curFormater
                 .format(cal.getTime()) : "";
     }
-
+*/
     /**
      * issue - #209 - Not used anyehere
      *

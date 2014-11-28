@@ -22,8 +22,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
@@ -327,23 +329,37 @@ public class CollectedSampleRepository {
   public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
+    collectedSample.setIsDeleted(false);
+    
     em.persist(collectedSample);
     em.flush();
+    em.refresh(collectedSample);
+    updateDonorFields(collectedSample);
+    
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
     applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
-    em.refresh(collectedSample);
     
-    // Add product
+    em.refresh(collectedSample);
+   
+    //Create initial component only if the countAsDonation is true
+    if( collectedSample.getBloodBagType().isCountAsDonation() == true)
+        createInitialComponent(collectedSample);
+  
+    return collectedSample;
+  }
+  
+  public void createInitialComponent(CollectedSample collectedSample){
+    
+    ProductType productType = collectedSample.getBloodBagType().getProductType();
+      
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() + "-WB-1");
+    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() +productType.getProductTypeNameShort());
     product.setCollectedSample(collectedSample);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(collectedSample.getCreatedDate());
     product.setCreatedOn(collectedSample.getCollectedOn());
     product.setCreatedBy(collectedSample.getCreatedBy());
-    
-    ProductType productType = productRepository.findProductTypeByProductTypeName("Whole Blood");
     
     Calendar cal = Calendar.getInstance();
     cal.setTime(collectedSample.getCollectedOn());
@@ -353,9 +369,27 @@ public class CollectedSampleRepository {
     product.setExpiresOn(expiresOn);
     product.setProductType(productType);
     em.persist(product);
-    //em.flush();
     em.refresh(product);
-    return collectedSample;
+   
+  }
+  
+  private void updateDonorFields(CollectedSample collectedSample){
+           Donor donor = collectedSample.getDonor();
+     
+     //set date of first donation 
+     if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
+          donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
+      }
+       //set dueToDonate
+      BloodBagType packType = collectedSample.getBloodBagType();
+      int periodBetweenDays = packType.getPeriodBetweenDonations();
+      Calendar dueToDonateDate = Calendar.getInstance();
+      dueToDonateDate.setTime(collectedSample.getCollectedOn());
+      dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+
+      if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
+          donor.setDueToDonate(dueToDonateDate.getTime());
+      }
   }
 
   public List<CollectedSample> findCollectedSampleByCenters(

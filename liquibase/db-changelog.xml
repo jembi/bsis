@@ -3497,4 +3497,67 @@
 	     <column name="roles_id" value="16"></column>
 	  </insert>
  </changeSet>
+
+ <!--issue 234[Associate Pack Type with Initial Component Type in Donation]-->
+ <changeSet author="srikanth" id="201411120953">
+
+		<addColumn tableName="BloodBagType">
+		    <column name="productType_id" type="smallint(6)"></column>
+		</addColumn>
+
+		<addColumn tableName="BloodBagType_AUD">
+		    <column name="productType_id" type="smallint(6)"></column>
+		</addColumn>
+
+
+    <addForeignKeyConstraint baseColumnNames="productType_id"
+            baseTableName="BloodBagType"
+            constraintName="fk_packType_componentType"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="ProductType"/>
+</changeSet>
+
+ <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
+ <changeSet author="srikanth" id="201411121255">
+
+		<addColumn tableName="BloodBagType">
+		    <column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+
+		<addColumn tableName="BloodBagType_AUD">
+		    <column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+
+</changeSet>
+
+
+ <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
+ <changeSet author="srikanth" id="201411120115">
+
+		<addColumn tableName="BloodBagType">
+		    <column name="periodBetweenDonations" type="smallint(6)"></column>
+		</addColumn>
+
+		<addColumn tableName="BloodBagType_AUD">
+		    <column name="periodBetweenDonations" type="smallint(6)"></column>
+		</addColumn>
+
+</changeSet>
+
+ <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
+ <changeSet author="srikanth" id="201411120158">
+
+		<addColumn tableName="Donor">
+		    <column name="dueToDonate" type="date"></column>
+		</addColumn>
+
+		<addColumn tableName="Donor_AUD">
+		    <column name="dueToDonate" type="date"></column>
+		</addColumn>
+
+</changeSet>
+
+
 </databaseChangeLog>	
