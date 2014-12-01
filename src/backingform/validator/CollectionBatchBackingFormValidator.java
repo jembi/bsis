@@ -10,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import viewmodel.CollectionBatchViewModel;
+import repository.LocationRepository;
 
 public class CollectionBatchBackingFormValidator implements Validator {
 
@@ -41,11 +42,16 @@ public class CollectionBatchBackingFormValidator implements Validator {
     if ( form.getId() != null && utilController.isDuplicateCollectionBatchNumber(form.getCollectionBatch()))
       errors.rejectValue("collectionBatch.batchNumber", "batchNumber.nonunique",
           "There exists a collection batch with the same batch number.");
-    
-    Location location = form.getCollectionBatch().getDonorPanel();
-    if(location.getIsDonorPanel() == false)
-        errors.rejectValue("collectionBatch.donorPanel", "donorPanel.inCorect",
-          "it is not a donor panel.");
+
+    Location donorPanel = form.getCollectionBatch().getDonorPanel();
+	if (donorPanel == null) {
+	  errors.rejectValue("collectionBatch.donorPanel", "donorPanel.empty",
+	    "Donor Panel is required.");
+	} 
+	else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
+	  errors.rejectValue("collectionBatch.donorPanel", "donorPanel.invalid",
+		"Location is not a Donor Panel.");
+	}          
 
     utilController.commonFieldChecks(form, "collectionBatch", errors);
   }
