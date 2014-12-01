@@ -15,26 +15,38 @@ public class LocationViewModel {
   }
 
   public String getName() {
+	if (location.getName() == null)
+	   return "";
     return location.getName();
   }
 
   public String getIsCollectionCenter() {
+	if (location.getIsCollectionCenter() == null)
+	   return "";
     return location.getIsCollectionCenter().toString();
   }
 
   public String getIsCollectionSite() {
+	if (location.getIsCollectionSite() == null)
+		return "";
     return location.getIsCollectionSite().toString();
   }
 
   public String getIsUsageSite() {
+	if (location.getIsUsageSite() == null)
+		return "";
     return location.getIsUsageSite().toString();
   }
 
   public String getIsMobileSite() {
+	if (location.getIsMobileSite() == null)
+		return ""; 
     return location.getIsMobileSite().toString();
   }
 
   public String getIsDonorPanel() {
+	if (location.getIsDonorPanel() == null)
+		return ""; 
     return location.getIsDonorPanel().toString();
   }
 }
