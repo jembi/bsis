@@ -79,18 +79,14 @@ public class CollectionBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  ResponseEntity findCollectionBatch(HttpServletRequest request,
           @RequestParam(value = "isClosed", required = false) Boolean isClosed,
-          @RequestParam(value = "collectionCenters", required = false) List<Long> centerIds,
-          @RequestParam(value = "collectionSites", required = false) List<Long> siteIds ) {
+          @RequestParam(value = "donorPanels", required = false) List<Long> donorPanels) {
 
-	if(centerIds == null){
-		centerIds = new ArrayList<Long>();
-	}
-	if(siteIds == null){
-		siteIds = new ArrayList<Long>();
+	if(donorPanels == null){
+		donorPanels = new ArrayList<Long>();
 	}
 
     List<CollectionBatch> collectionBatches =
-        collectionBatchRepository.findCollectionBatches(isClosed, centerIds, siteIds);
+        collectionBatchRepository.findCollectionBatches(isClosed, donorPanels);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationBatches", getCollectionBatchViewModels(collectionBatches));
