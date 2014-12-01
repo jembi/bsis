@@ -77,11 +77,16 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
         errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
-    
-    
+
     Location donorPanel = form.getCollectedSample().getDonorPanel();
-    if(donorPanel != null && donorPanel.getIsDonorPanel() == false)
-        errors.rejectValue("collectedSample.donorPanel", "collectedSample.donorPanel", "it is not a donor panel.");
+	if (donorPanel == null) {
+	  errors.rejectValue("collectedSample.donorPanel", "donorPanel.empty",
+	    "Donor Panel is required.");
+	} 
+	else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
+	  errors.rejectValue("collectedSample.donorPanel", "donorPanel.invalid",
+		"Location is not a Donor Panel.");
+	} 
 
     validateBloodPressure(form,errors);
     utilController.commonFieldChecks(form, "collectedSample", errors);
