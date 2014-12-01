@@ -438,8 +438,6 @@ public class CreateDataController {
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
       collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
-      collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()));
-      collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()));
 
       String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
       collection.setCollectedOn(collectionDate);

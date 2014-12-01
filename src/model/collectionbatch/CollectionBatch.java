@@ -2,32 +2,30 @@ package model.collectionbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import constraintvalidator.LocationExists;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 import model.collectedsample.CollectedSample;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+import model.testbatch.TestBatch;
 import model.user.User;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import constraintvalidator.LocationExists;
-import java.util.Collections;
-import javax.persistence.FetchType;
-import model.testbatch.TestBatch;
 
 
 @Entity
@@ -43,18 +41,15 @@ public class CollectionBatch implements ModificationTracker {
   @Column(length=20, unique=true)
   private String batchNumber;
 
-  @LocationExists
-  @ManyToOne
-  private Location collectionCenter;
-
-  @LocationExists
-  @ManyToOne
-  private Location collectionSite;
-
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectionBatch", fetch = FetchType.EAGER)
   private List<CollectedSample> collectionsInBatch = Collections.EMPTY_LIST;
+  
+  @OneToOne
+  @LocationExists
+  @NotNull
+  private Location donorPanel;
   
   
   @ManyToOne
@@ -120,21 +115,6 @@ public class CollectionBatch implements ModificationTracker {
     this.isClosed = isClosed;
   }
 
-  public Location getCollectionCenter() {
-    return collectionCenter;
-  }
-
-  public void setCollectionCenter(Location collectionCenter) {
-    this.collectionCenter = collectionCenter;
-  }
-
-  public Location getCollectionSite() {
-    return collectionSite;
-  }
-
-  public void setCollectionSite(Location collectionSite) {
-    this.collectionSite = collectionSite;
-  }
   
   public TestBatch getTestBatch() {
      return testBatch;
@@ -144,7 +124,14 @@ public class CollectionBatch implements ModificationTracker {
      this.testBatch = testBatch;
    }
 
+    public Location getDonorPanel() {
+        return donorPanel;
+    }
 
+    public void setDonorPanel(Location donorPanel) {
+        this.donorPanel = donorPanel;
+    }
+  
   @Override
   public Date getLastUpdated() {
     return modificationTracker.getLastUpdated();
@@ -186,10 +173,8 @@ public class CollectionBatch implements ModificationTracker {
   }
   
   public void copy(CollectionBatch collectionBatch){
-      
-      this.setCollectionCenter(collectionBatch.getCollectionCenter());
-      this.setCollectionSite(collectionBatch.getCollectionSite());
       this.setNotes(collectionBatch.getNotes());
+      this.donorPanel = collectionBatch.getDonorPanel();
   }
 
 

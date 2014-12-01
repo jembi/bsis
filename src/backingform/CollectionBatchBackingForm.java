@@ -44,17 +44,6 @@ public class CollectionBatchBackingForm {
     collectionBatch.setBatchNumber(batchNumber);
   }
 
-  public void setCollectionCenter(Long center) {
-      Location l = new Location();
-      l.setId(center);
-      collectionBatch.setCollectionCenter(l);
-  }
-
-  public void setCollectionSite(Long collectionSite) {
-      Location l = new Location();
-      l.setId(collectionSite);
-      collectionBatch.setCollectionSite(l);
-  }
 
   public String getNotes() {
     return collectionBatch.getNotes();
@@ -69,9 +58,15 @@ public class CollectionBatchBackingForm {
   }
 
   public void setIsClosed(Boolean isClosed) {
-	collectionBatch.setIsClosed(isClosed);
+    collectionBatch.setIsClosed(isClosed);
   }
   
+  public void setDonorPanel(Long donorPanelId){
+    Location donorPanel = new Location();
+    donorPanel.setId(donorPanelId);
+    collectionBatch.setDonorPanel(donorPanel);
+  }
+
   @JsonIgnore
   public Date getLastUpdated() {
     return collectionBatch.getLastUpdated();
@@ -101,5 +96,5 @@ public class CollectionBatchBackingForm {
   public Integer getNumCollections() {
     return collectionBatch.getCollectionsInBatch().size();
   }
-  
+
 }

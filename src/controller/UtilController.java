@@ -40,6 +40,7 @@ import repository.CollectionBatchRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
+import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
 import repository.SequenceNumberRepository;
@@ -58,6 +59,9 @@ public class UtilController {
 
   @Autowired
   private DonorRepository donorRepository;
+  
+  @Autowired
+  private LocationRepository locationRepository;
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
@@ -236,6 +240,10 @@ public class UtilController {
     if (formField == null)
       return false;
     return formField.getAutoGenerate();
+  }
+  
+  public Boolean isDonorPanel(Long locationId) {
+    return locationRepository.getLocation(locationId).getIsDonorPanel();
   }
 
   public String getNextDonorNumber() {
