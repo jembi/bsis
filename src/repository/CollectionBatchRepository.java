@@ -27,7 +27,7 @@ public class CollectionBatchRepository {
   }
 
   public CollectionBatch findCollectionBatchByIdEager(Integer batchId) {
-    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch LEFT JOIN FETCH b.collectionCenter LEFT JOIN FETCH b.collectionSite " +
+    String queryString = "SELECT distinct b FROM CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch LEFT JOIN FETCH b.donorPanel " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<CollectionBatch> query = em.createQuery(queryString, CollectionBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -95,13 +95,10 @@ public class CollectionBatchRepository {
   
 
   public List<CollectionBatch> findCollectionBatches(Boolean isClosed,
-      List<Long> centerIds, List<Long> siteIds) {
+      List<Long> donorPanelIds) {
     String queryStr = "SELECT distinct b from CollectionBatch b LEFT JOIN FETCH b.collectionsInBatch WHERE b.isDeleted=:isDeleted ";
-    if(!centerIds.isEmpty()){
-    	queryStr += "AND b.collectionCenter.id IN (:centerIds) ";
-    }
-    if(!siteIds.isEmpty()){
-    	queryStr += "AND b.collectionSite.id IN (:siteIds) ";
+    if(!donorPanelIds.isEmpty()){
+    	queryStr += "AND b.donorPanel.id IN (:donorPanelIds) ";
     }
     if(isClosed != null){
     	queryStr +=    "AND b.isClosed=:isClosed";
@@ -109,11 +106,8 @@ public class CollectionBatchRepository {
     
     TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
     query.setParameter("isDeleted", false);
-    if(!centerIds.isEmpty()){
-    	query.setParameter("centerIds", centerIds);
-    }
-    if(!siteIds.isEmpty()){
-    	query.setParameter("siteIds", siteIds);
+    if(!donorPanelIds.isEmpty()){
+    	query.setParameter("donorPanelIds", donorPanelIds);
     }
     if(isClosed != null){
     	query.setParameter("isClosed", isClosed);
