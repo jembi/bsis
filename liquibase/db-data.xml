@@ -3,14 +3,10 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add change sets 
-		reversing the previous ones if you need to change or delete -->
-	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="YYYY-MM-DD-XX" eg: id="2010-12-07-01" -->
-	<!-- NEVER ENTER SINGLE DIGIT MONTH / YEAR / COUNTER. ALWAYS USE 2 DIGITS 
-		SO THAT ORDER BY THIS ID IS ALWAYS PROPER -->
-	<!-- "2012-05-05-01" < "2012-1-1-1" - WHICH IS DB WISE CORRECT, BUT INVALID 
-		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
-		AS WELL AS CHRONOLOGICALLY -->
+	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
+	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
+	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
+		 reversing the previous ones if you need to change or delete info from another changeset-->
 
 	<changeSet author = "srikanth" id = "20141117-0101">
 		<comment>Add donation types</comment>
