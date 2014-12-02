@@ -374,18 +374,7 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		
 	</changeSet>
-	
-	<!-- For issue 134 [Add New Roles And Permissions]  -->
-	<changeSet id="20140221-1659" author="srikanth">
-		<delete tableName="User_Role"></delete>
-		<delete tableName="Permission_Role"></delete>
-		<delete tableName="Role"></delete>
-		<delete tableName="Permission"></delete>
-		<delete tableName="User"></delete>
-	</changeSet>
-	
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
 	<changeSet id="20140115-1001" author="srikanth">
@@ -487,10 +476,6 @@
 		</insert>
 	</changeSet>
 
-	<!-- For issue 26 [Add WHO Deferral Reasons] -->
-	<changeSet id="20131024-1525" author="nikita">
-		<delete tableName="DeferralReason"></delete>
-	</changeSet>
 	<changeSet id="20131024-1526" author="nikita">
 		<sql>
 			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
@@ -959,13 +944,6 @@
 			</column>
 			<column name="REVTYPE" type="tinyint(4)"></column>
 		</createTable>
-	</changeSet>
-
-	 <!-- For issue 57 [Add WHO Product Discard Reasons] -->
-	<changeSet id="20131024-1507" author="nikita" >
-			<delete tableName="ProductStatusChangeReason">
-				<where>category='DISCARDED'</where>
-		 </delete>
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
