@@ -1,7 +1,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add change sets 
 		reversing the previous ones if you need to change or delete -->
@@ -28,7 +28,6 @@
 	<changeSet  author="devang" id="20131019-0102">
 		<dropTable tableName="TEMPTABLE" />
 	</changeSet>
-
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
 	<changeSet id="20131024-2025" author="devang">
@@ -81,52 +80,52 @@
 	</changeSet>
 	
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
-    <changeSet id="20131024-2001" author="devang">
-        <insert tableName="FormField">
-            <column name="form" value="CollectedSample"></column>
-            <column name="FIELD" value="bloodPressureSystolic"></column>
-            <column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
-            <column name="defaultValue" value=""></column>
-            <column name="maxLength" value="0"></column>
-            <column name="hidden" value="0"></column>
-            <column name="isHidable" value="1"></column>
-            <column name="isRequired" value="0"></column>
-            <column name="canBeOptional" value="1"></column>
-            <column name="autoGenerate" value="0"></column>
-            <column name="isAutoGeneratable" value="0"></column>
-            <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>                        
-        </insert>
-        <insert tableName="FormField">
-            <column name="form" value="CollectedSample"></column>
-            <column name="FIELD" value="bloodPressureDiastolic"></column>
-            <column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
-            <column name="defaultValue" value=""></column>
-            <column name="maxLength" value="0"></column>
-            <column name="hidden" value="0"></column>
-            <column name="isHidable" value="1"></column>
-            <column name="isRequired" value="0"></column>
-            <column name="canBeOptional" value="1"></column>
-            <column name="autoGenerate" value="0"></column>
-            <column name="isAutoGeneratable" value="0"></column>
-            <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>                        
-        </insert>                        
-        <update tableName="CollectedSample">
-            <column name="bloodPressure" type="int" defaultValue="NULL"></column>
-        </update>
-        <renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-        <update tableName="CollectedSample_AUD">
-            <column name="bloodPressure" type="int" defaultValue="NULL"></column>
-        </update>
-        <renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-        <addColumn tableName="CollectedSample">
-            <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
-        </addColumn>
-        <addColumn tableName="CollectedSample_AUD">
-            <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
-        </addColumn>                        
-    </changeSet>
+	<changeSet id="20131024-2001" author="devang">
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="bloodPressureSystolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>                        
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="bloodPressureDiastolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>                        
+		</insert>                        
+		<update tableName="CollectedSample">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<update tableName="CollectedSample_AUD">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<addColumn tableName="CollectedSample">
+			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
+		</addColumn>                        
+	</changeSet>
 	
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
 	<changeSet id="20131024-1926" author="devang">
@@ -154,29 +153,29 @@
 	</changeSet>
 
 	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
- 	<changeSet id="20131025-1212" author="ankur">
- 		<addColumn tableName="Donor">
- 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
- 		</addColumn>
- 		<addColumn tableName="Donor_AUD">
- 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
- 		</addColumn>		
- 		<insert tableName="FormField">
- 			<column name="form" value="Donor"></column>
- 			<column name="FIELD" value="dateOfFirstDonation"></column>
- 			<column name="defaultDisplayName" value="Date of First Donation"></column>
- 			<column name="defaultValue" value=""></column>
- 			<column name="maxLength" value="0"></column>
- 			<column name="hidden" value="0"></column>
- 			<column name="isHidable" value="1"></column>
- 			<column name="isRequired" value="0"></column>
- 			<column name="canBeOptional" value="1"></column>
- 			<column name="autoGenerate" value="0"></column>
- 			<column name="isAutoGeneratable" value="0"></column>
- 			<column name="useCurrentTime" value="0"></column>
- 			<column name="isTimeField" value="0"></column>			
- 		</insert>
- 	</changeSet>
+	<changeSet id="20131025-1212" author="ankur">
+		<addColumn tableName="Donor">
+			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
+			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
+		</addColumn>		
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="dateOfFirstDonation"></column>
+			<column name="defaultDisplayName" value="Date of First Donation"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
 
 	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
 	<changeSet id="20131107-1844" author="Ankur">
@@ -220,101 +219,101 @@
 	
 	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
 	<changeSet id="20131108-1617" author="devang">
-	    <addColumn tableName="RequestType">
-	        <column name="bulkTransfer" type="TINYINT(1)"/>
-	    </addColumn>
+		<addColumn tableName="RequestType">
+			<column name="bulkTransfer" type="TINYINT(1)"/>
+		</addColumn>
 		<addColumn tableName="RequestType_AUD">
-	        <column name="bulkTransfer" type="TINYINT(1)"/>
-	    </addColumn>
+			<column name="bulkTransfer" type="TINYINT(1)"/>
+		</addColumn>
 	</changeSet>
 	
 	<!-- Update FormField table to rename Collection info to Donation -->
 	<changeSet id="20131108-1720" author="danfuterman">
 		<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Identification Number" />
-    		<where>field = "collectionNumber"</where>
+			<column name="defaultDisplayName" value="Donation Identification Number" />
+			<where>field = "collectionNumber"</where>
 		</update>
 		<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Site" />
-    		<where>field = "collectionSite"</where>
+			<column name="defaultDisplayName" value="Donation Site" />
+			<where>field = "collectionSite"</where>
 		</update>
 		<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Centre" />
-    		<where>field = "collectionCenter"</where>
+			<column name="defaultDisplayName" value="Donation Centre" />
+			<where>field = "collectionCenter"</where>
 		</update>
 	</changeSet>
 
 	<!-- For issue 104 [Add Lot Release Functionality] -->
-    <changeSet id="20131111-1726" author="devang">
-            <insert tableName="GenericConfig">
-                    <column name="id" value="48"></column>
-                    <column name="propertyName" value="lotRelease"></column>
-                    <column name="propertyOwner" value="labsetup"></column>
-                    <column name="propertyValue" value="TRUE"></column>
-            </insert>
-    </changeSet>
+	<changeSet id="20131111-1726" author="devang">
+		<insert tableName="GenericConfig">
+			<column name="id" value="48"></column>
+			<column name="propertyName" value="lotRelease"></column>
+			<column name="propertyOwner" value="labsetup"></column>
+			<column name="propertyValue" value="TRUE"></column>
+		</insert>
+	</changeSet>
 
-    <!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
-     <changeSet id="20131107-1517" author="devang">
-	     <addColumn tableName="BloodTestResult">
-	     	<column name="reagentLotNumber" type="varchar(20)" />
-	     </addColumn>
-	     <insert tableName="GenericConfig">
-	     	<column name="id" value="47"></column>
-	     	<column name="propertyName" value="ttiUploadResult"></column>
-	     	<column name="propertyOwner" value="labsetup"></column>
-	     	<column name="propertyValue" value="true"></column>
-	     </insert>
+	<!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
+	 <changeSet id="20131107-1517" author="devang">
+		 <addColumn tableName="BloodTestResult">
+			<column name="reagentLotNumber" type="varchar(20)" />
+		 </addColumn>
+		 <insert tableName="GenericConfig">
+			<column name="id" value="47"></column>
+			<column name="propertyName" value="ttiUploadResult"></column>
+			<column name="propertyOwner" value="labsetup"></column>
+			<column name="propertyValue" value="true"></column>
+		 </insert>
    </changeSet>
    
    <!-- For issue 58 [Add ability to update Deferrals] -->
-     <changeSet id="20131125-1517" author="devang">
-	     <addColumn tableName="DonorDeferral">
-	     	<column name="isVoided" type="tinyint(1)" />
-	     	<column name="voidedBy_id" type="smallint(6)" />
-	     	<column name="voidedDate" type="date" />
-	     </addColumn>
-	    <addForeignKeyConstraint constraintName="fk_voidedBy"
+	 <changeSet id="20131125-1517" author="devang">
+		 <addColumn tableName="DonorDeferral">
+			<column name="isVoided" type="tinyint(1)" />
+			<column name="voidedBy_id" type="smallint(6)" />
+			<column name="voidedDate" type="date" />
+		 </addColumn>
+		<addForeignKeyConstraint constraintName="fk_voidedBy"
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
 			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
    
-    <changeSet id="20131125-1525" author="devang">
-	     <addColumn tableName="DonorDeferral_AUD">
-	     	<column name="isVoided" type="tinyint(1)" />
-	     	<column name="voidedBy_id" type="smallint(6)" />
-	     	<column name="voidedDate" type="date" />
-	     </addColumn>
-	    <addForeignKeyConstraint constraintName="fk_voidedBy_aud"
+	<changeSet id="20131125-1525" author="devang">
+		 <addColumn tableName="DonorDeferral_AUD">
+			<column name="isVoided" type="tinyint(1)" />
+			<column name="voidedBy_id" type="smallint(6)" />
+			<column name="voidedDate" type="date" />
+		 </addColumn>
+		<addForeignKeyConstraint constraintName="fk_voidedBy_aud"
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
 			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
 
    <!-- For issue 64 [Add isDeleted field to BloodTest and BloodTest_AUD Tables] -->
-     <changeSet id="20140114-0950" author="srikanth">
-	     <addColumn tableName="BloodTest">
-	     	<column name="isDeleted" type="TINYINT(1)" />
-	     </addColumn>
-	     
-	     <addColumn tableName="BloodTest_AUD">
-	     	<column name="isDeleted" type="TINYINT(1)" />
-	     </addColumn>
+	 <changeSet id="20140114-0950" author="srikanth">
+		 <addColumn tableName="BloodTest">
+			<column name="isDeleted" type="TINYINT(1)" />
+		 </addColumn>
+		 
+		 <addColumn tableName="BloodTest_AUD">
+			<column name="isDeleted" type="TINYINT(1)" />
+		 </addColumn>
 	</changeSet>
    
 	<!-- For issue 117 [Configure Role] -->
-	<changeSet id="20131129-0112" author="nikita">
+	<changeSet id="20131129-1312" author="nikita">
 		<addColumn tableName="Role">
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
-	<changeSet id="20131129-0113" author="nikita">
+	<changeSet id="20131129-1313" author="nikita">
 		<addColumn tableName="Role_AUD">
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
 	
 	<!-- For issue 117 [for issue role management] -->
-	<changeSet id="20140131-0210" author="srikanth">
+	<changeSet id="20140131-1410" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="Role"></column>
 			<column name="FIELD" value="name"></column>
@@ -333,7 +332,7 @@
 		</changeSet>
 		
 	<!-- For issue 118[improve admin UI to manage users ] -->
-	<changeSet id="20140203-0408" author="srikanth">
+	<changeSet id="20140203-1608" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="FIELD" value="username"></column>
@@ -352,7 +351,7 @@
 	</changeSet>
 	
 	<!-- For issue 118[improve admin UI to manage users ] -->
-	<changeSet id="20140203-0415" author="srikanth">
+	<changeSet id="20140203-1615" author="srikanth">
 		<insert tableName="FormField">
 			<column name="form" value="user"></column>
 			<column name="FIELD" value="firstName"></column>
@@ -388,7 +387,7 @@
 	</changeSet>
 	
 	<!-- For issue 134 [Add New Roles And Permissions]  -->
-	<changeSet id="20140221-0359" author="srikanth">
+	<changeSet id="20140221-1659" author="srikanth">
 		<delete tableName="User_Role"></delete>
 		<delete tableName="Permission_Role"></delete>
 		<delete tableName="Role"></delete>
@@ -432,267 +431,245 @@
 			<column name="isTimeField" value="0"></column>	
 			<column name="displayName" value="BP"></column>		
 		</insert>
-  </changeSet>
-  
-  
-  
-<!-- For issue 172[Add in additional donor demographic fields] --> 
-<changeSet id="20140520-0258" author="srikanth">
-
-  <createTable  tableName="IdType">
-     <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-     </column>
-     <column name="idType" type="varchar(255)"/> 
-      <column name="regExp" type="varchar(255)" defaultValue = "NULL"/>
-  </createTable>
-
-  <createTable  tableName="PreferredLanguage">
-     <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-     </column>
-     <column name="preferredLanguage" type="varchar(255)"/> 
-  </createTable>
-
-
-  <dropColumn  columnName="address" tableName="Donor"/>
-  <dropColumn  columnName="phoneNumber" tableName="Donor"/>
- 
-
-
-	<addColumn tableName="Donor">
-	            <column name="idType_id" type="BIGINT" defaultValue="NULL">
-                          <constraints foreignKeyName="Donor_Idtype_FK" references="IdType(id)"/>
-	            </column>
-	</addColumn>
-
+	</changeSet>
 	
-	<addColumn tableName="Donor">
-	            <column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
-	</addColumn>
+	<!-- For issue 172[Add in additional donor demographic fields] --> 
+	<changeSet id="20140520-1458" author="srikanth">
 
+		<createTable  tableName="IdType">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="idType" type="varchar(255)"/> 
+			<column name="regExp" type="varchar(255)" defaultValue="NULL"/>
+		</createTable>
 
-	 <addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
-	            baseTableName="Donor"
-	            constraintName="fk_donor_preferredLanguage"
-	            referencedColumnNames="id"
-	            referencedTableName="PreferredLanguage"/>
+		<createTable  tableName="PreferredLanguage">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="preferredLanguage" type="varchar(255)"/> 
+		</createTable>
 
+		<dropColumn  columnName="address" tableName="Donor"/>
+		<dropColumn  columnName="phoneNumber" tableName="Donor"/>
 
+		<addColumn tableName="Donor">
+			<column name="idType_id" type="BIGINT" defaultValue="NULL">
+				<constraints foreignKeyName="Donor_Idtype_FK" references="IdType(id)"/>
+			</column>
+		</addColumn>
 
+		<addColumn tableName="Donor">
+			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
+		</addColumn>
 
-      <!-- For issue 38 [Add Donor Title field] -->
-       <addColumn tableName="Donor">
-            <column name="title" type="VARCHAR(15)"></column>
-        </addColumn>
+		<addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
+			 baseTableName="Donor"
+			 constraintName="fk_donor_preferredLanguage"
+			 referencedColumnNames="id"
+			 referencedTableName="PreferredLanguage"/>
 
-        <addColumn tableName="Donor_AUD">
-            <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
-        </addColumn>
+		<!-- For issue 38 [Add Donor Title field] -->
+		<addColumn tableName="Donor">
+			<column name="title" type="VARCHAR(15)"></column>
+		</addColumn>
 
-        <insert tableName="FormField">
-            <column name="form" value="Donor"></column>
-            <column name="FIELD" value="title"></column>
-            <column name="defaultDisplayName" value="Title"></column>
-            <column name="defaultValue" value=""></column>
-            <column name="maxLength" value="0"></column>
-            <column name="hidden" value="0"></column>
-            <column name="isHidable" value="0"></column>
-            <column name="isRequired" value="0"></column>
-            <column name="canBeOptional" value="1"></column>
-            <column name="autoGenerate" value="0"></column>
-            <column name="isAutoGeneratable" value="0"></column>
-            <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>
-        </insert>
-</changeSet>
-	<!-- For issue 26 [Add WHO Deferral Reasons] -->
-	<changeSet  author="nikita" id = "20131024-1525">
-			<delete tableName="DeferralReason"></delete>
+		<addColumn tableName="Donor_AUD">
+			<column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
+		</addColumn>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="title"></column>
+			<column name="defaultDisplayName" value="Title"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 	</changeSet>
 
-<changeSet id="20131024-1526" author="nikita">
+	<!-- For issue 26 [Add WHO Deferral Reasons] -->
+	<changeSet id="20131024-1525" author="nikita">
+		<delete tableName="DeferralReason"></delete>
+	</changeSet>
+	<changeSet id="20131024-1526" author="nikita">
 		<sql>
 			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
 		</sql>
-</changeSet>
+	</changeSet>
 
-<!--For Issue #36[Add Donor Codes Functionality] -->
-<changeSet id="20140504-1130" author="srikanth">
+	<!--For Issue #36[Add Donor Codes Functionality] -->
+	<changeSet id="20140504-1130" author="srikanth">
 
+		<createTable  tableName="DonorCodeGroup">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donorCodeGroup" type="varchar(255)"/> 
+		</createTable>
+	
+		<createTable  tableName="DonorCode">
+			<column name="id" type="BIGINT" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+			 </column>
+			  <column name="donorCode" type="varchar(255)"/> 
+			 <column name="donorCodeGroupId" type="BIGINT">
+				<constraints  nullable="false" />
+			 </column>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
+			 baseTableName="DonorCode"
+			 constraintName="fk_DonorCode_DonorCodeGroup"
+			 referencedColumnNames="id"
+			 referencedTableName="DonorCodeGroup"/>
 
-       <createTable  tableName="DonorCodeGroup">
-          <column name="id" type="BIGINT" autoIncrement = "true">
-          	<constraints primaryKey="true" nullable="false" />
-          </column>
-           <column name="donorCodeGroup" type="varchar(255)"/> 
-       </createTable>
-     
-       <createTable  tableName="DonorCode">
-          <column name="id" type="BIGINT" autoIncrement="true">
-          	<constraints primaryKey="true" nullable="false" />
-         </column>
-          <column name="donorCode" type="varchar(255)"/> 
-         <column name="donorCodeGroupId" type="BIGINT">
-          	<constraints  nullable="false" />
-         </column>
-      </createTable>
-       <addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
-                                  baseTableName="DonorCode"
-                                  constraintName="fk_DonorCode_DonorCodeGroup"
-                                  referencedColumnNames="id"
-                                  referencedTableName="DonorCodeGroup"/>
+		<createTable  tableName="DonorDonorCode">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donorId" type="BIGINT">
+				<constraints  nullable="false" />
+			</column>
+			<column name="donorCodeId" type="BIGINT">
+				<constraints  nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="donorCodeId"
+			  baseTableName="DonorDonorCode"
+			  constraintName="fk_DonorDonorCode_DonorCode"
+			  referencedColumnNames="id"
+			  referencedTableName="DonorCode"/>
+		<addForeignKeyConstraint baseColumnNames="donorId"
+			  baseTableName="DonorDonorCode"
+			  constraintName="fk_DonorDonorCode_Donor"
+			  referencedColumnNames="id"
+			  referencedTableName="Donor"/>
 
-      
-      <createTable  tableName="DonorDonorCode">
-         <column name="id" type="BIGINT" autoIncrement="true">
-          	<constraints primaryKey="true" nullable="false" />
-         </column>
-          <column name="donorId" type="BIGINT">
-          	<constraints  nullable="false" />
-          </column>
-          <column name="donorCodeId" type="BIGINT">
-          	<constraints  nullable="false" />
-          </column>
-          <column name="createdDate" type="TIMESTAMP"/>
-          <column name="lastUpdated" type="TIMESTAMP"/>
-          <column name="createdBy_id" type="SMALLINT"/>
-          <column name="lastUpdatedBy_id" type="SMALLINT"/>
-     </createTable>
-        <addForeignKeyConstraint baseColumnNames="donorCodeId"
-                                  baseTableName="DonorDonorCode"
-                                  constraintName="fk_DonorDonorCode_DonorCode"
-                                  referencedColumnNames="id"
-                                  referencedTableName="DonorCode"/>
-        <addForeignKeyConstraint baseColumnNames="donorId"
-                                  baseTableName="DonorDonorCode"
-                                  constraintName="fk_DonorDonorCode_Donor"
-                                  referencedColumnNames="id"
-                                  referencedTableName="Donor"/>
-   
-    <createTable  tableName="DonorDonorCode_AUD">
-         <column name="id" type="BIGINT" autoIncrement="true">
-          	<constraints primaryKey="true" nullable="false" />
-         </column>
-          <column name="REV" type="INT">
-          	<constraints  primaryKey="true" nullable="false" />
-          </column>
-          <column name="REVTYPE" type="TINYINT"/>
-          <column name="createdDate" type="TIMESTAMP"/>
-          <column name="lastUpdated" type="TIMESTAMP"/>
-          <column name="createdBy_id" type="SMALLINT"/>
-          <column name="lastUpdatedBy_id" type="SMALLINT"/>
-    </createTable>
+		<createTable  tableName="DonorDonorCode_AUD">
+			 <column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="TINYINT"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</createTable>
+	</changeSet>
 
-   
-     
-
-</changeSet>
-<!-- For issue 172[Add in additional donor demographic fields] -->
- <changeSet id ="20140504-0141" author = "srikanth">
-   
-     <addColumn tableName="Donor">
+	<!-- For issue 172[Add in additional donor demographic fields] -->
+	<changeSet id ="20140504-1341" author = "srikanth">
+		<addColumn tableName="Donor">
 			<column name="addressId" type="int" defaultValue="NULL"></column>
-     </addColumn>
-     <addColumn tableName="Donor">
+		</addColumn>
+		<addColumn tableName="Donor">
 			<column name="contactId" type="int" defaultValue="NULL"></column>
-     </addColumn>
-     <addColumn tableName="Donor">
+		</addColumn>
+		<addColumn tableName="Donor">
 			<column name="idNumber" type="VARCHAR(255)" ></column>
-     </addColumn>
-     <addColumn tableName="Donor_AUD">
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
 			<column name="idNumber" type="VARCHAR(255)" ></column>
-     </addColumn>
-    
-   <createTable  tableName="AddressType">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
-       <column name="preferredAddressType" type="varchar(255)"/> 
-   </createTable>
+		</addColumn>
 
-   <createTable  tableName="Address">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
+		<createTable  tableName="AddressType">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="preferredAddressType" type="varchar(255)"/> 
+		</createTable>
 
-       <column name="homeAddressLine1" type="varchar(255)"/> 
-       <column name="homeAddressLine2" type="varchar(255)"/> 
-       <column name="homeAddressCity" type="varchar(255)"/> 
-       <column name="homeAddressProvince" type="varchar(255)"/> 
-       <column name="homeAddressDistrict" type="varchar(255)"/> 
-       <column name="homeAddressState" type="varchar(255)"/> 
-       <column name="homeAddressCountry" type="varchar(255)"/> 
-       <column name="homeAddressZipcode" type="varchar(255)"/> 
+		<createTable  tableName="Address">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
 
-	    <column name="workAddressLine1" type="varchar(255)"/> 
-	    <column name="workAddressLine2" type="varchar(255)"/> 
-	    <column name="workAddressCity" type="varchar(255)"/> 
-	    <column name="workAddressProvince" type="varchar(255)"/> 
-	    <column name="workAddressDistrict" type="varchar(255)"/> 
-	    <column name="workAddressCountry" type="varchar(255)"/> 
-	    <column name="workAddressState" type="varchar(255)"/> 
-	    <column name="workAddressZipcode" type="varchar(255)"/> 
+			<column name="homeAddressLine1" type="varchar(255)"/> 
+			<column name="homeAddressLine2" type="varchar(255)"/> 
+			<column name="homeAddressCity" type="varchar(255)"/> 
+			<column name="homeAddressProvince" type="varchar(255)"/> 
+			<column name="homeAddressDistrict" type="varchar(255)"/> 
+			<column name="homeAddressState" type="varchar(255)"/> 
+			<column name="homeAddressCountry" type="varchar(255)"/> 
+			<column name="homeAddressZipcode" type="varchar(255)"/> 
 
+			<column name="workAddressLine1" type="varchar(255)"/> 
+			<column name="workAddressLine2" type="varchar(255)"/> 
+			<column name="workAddressCity" type="varchar(255)"/> 
+			<column name="workAddressProvince" type="varchar(255)"/> 
+			<column name="workAddressDistrict" type="varchar(255)"/> 
+			<column name="workAddressCountry" type="varchar(255)"/> 
+			<column name="workAddressState" type="varchar(255)"/> 
+			<column name="workAddressZipcode" type="varchar(255)"/> 
 
-       <column name="postalAddressLine1" type="varchar(255)"/> 
-       <column name="postalAddressLine2" type="varchar(255)"/> 
-       <column name="postalAddressCity" type="varchar(255)"/> 
-       <column name="postalAddressProvince" type="varchar(255)"/> 
-       <column name="postalAddressDistrict" type="varchar(255)"/> 
-       <column name="postalAddressCountry" type="varchar(255)"/> 
-       <column name="postalAddressState" type="varchar(255)"/> 
-       <column name="postalAddressZipcode" type="varchar(255)"/> 
-      
+			<column name="postalAddressLine1" type="varchar(255)"/> 
+			<column name="postalAddressLine2" type="varchar(255)"/> 
+			<column name="postalAddressCity" type="varchar(255)"/> 
+			<column name="postalAddressProvince" type="varchar(255)"/> 
+			<column name="postalAddressDistrict" type="varchar(255)"/> 
+			<column name="postalAddressCountry" type="varchar(255)"/> 
+			<column name="postalAddressState" type="varchar(255)"/> 
+			<column name="postalAddressZipcode" type="varchar(255)"/> 
+		</createTable>
 
-       
-  </createTable>
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
 
-  <dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
+		<createTable  tableName="Contact">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
 
+			<column name="mobileNumber" type="varchar(255)"/> 
+			<column name="homeNumber" type="varchar(255)"/> 
+			<column name="workNumber" type="varchar(255)"/> 
+			<column name="email" type="varchar(255)"/>
+		</createTable>
 
- <createTable  tableName="Contact">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
+		<dropColumn  columnName="city" tableName="Donor"/>
+		<dropColumn  columnName="province" tableName="Donor"/>
+		<dropColumn  columnName="district" tableName="Donor"/>
+		<dropColumn  columnName="country" tableName="Donor"/>
+		<dropColumn  columnName="state" tableName="Donor"/>
+		<dropColumn  columnName="zipcode" tableName="Donor"/>
+		<dropColumn  columnName="nationalId" tableName="Donor"/>
+		<dropColumn  columnName="otherPhoneNumber" tableName="Donor"/>
 
-       <column name="mobileNumber" type="varchar(255)"/> 
-       <column name="homeNumber" type="varchar(255)"/> 
-       <column name="workNumber" type="varchar(255)"/> 
-       <column name="email" type="varchar(255)"/>
-  </createTable>
+		<dropColumn  columnName="city" tableName="Donor_AUD"/>
+		<dropColumn  columnName="province" tableName="Donor_AUD"/>
+		<dropColumn  columnName="district" tableName="Donor_AUD"/>
+		<dropColumn  columnName="country" tableName="Donor_AUD"/>
+		<dropColumn  columnName="state" tableName="Donor_AUD"/>
+		<dropColumn  columnName="zipcode" tableName="Donor_AUD"/>
+		<dropColumn  columnName="nationalId" tableName="Donor_AUD"/>
+		<dropColumn  columnName="otherPhoneNumber" tableName="Donor_AUD"/>
 
- <dropColumn  columnName="city" tableName="Donor"/>
- <dropColumn  columnName="province" tableName="Donor"/>
- <dropColumn  columnName="district" tableName="Donor"/>
- <dropColumn  columnName="country" tableName="Donor"/>
- <dropColumn  columnName="state" tableName="Donor"/>
- <dropColumn  columnName="zipcode" tableName="Donor"/>
- <dropColumn  columnName="nationalId" tableName="Donor"/>
- <dropColumn  columnName="otherPhoneNumber" tableName="Donor"/>
+		<addColumn tableName="Donor">
+			<column name="contactMethodType_id" type="SMALLINT(6)">
+					<constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
+			</column> 
+		</addColumn>
+		<addColumn tableName="Donor">
+			<column name="addressTypeId" type="BIGINT"> 
+				<constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
+			</column>
+		</addColumn>
 
- <dropColumn  columnName="city" tableName="Donor_AUD"/>
- <dropColumn  columnName="province" tableName="Donor_AUD"/>
- <dropColumn  columnName="district" tableName="Donor_AUD"/>
- <dropColumn  columnName="country" tableName="Donor_AUD"/>
- <dropColumn  columnName="state" tableName="Donor_AUD"/>
- <dropColumn  columnName="zipcode" tableName="Donor_AUD"/>
- <dropColumn  columnName="nationalId" tableName="Donor_AUD"/>
- <dropColumn  columnName="otherPhoneNumber" tableName="Donor_AUD"/>
-
- <addColumn tableName="Donor">
-	<column name="contactMethodType_id" type="SMALLINT(6)">
-			  	    <constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
-    </column> 
- </addColumn>
- <addColumn tableName="Donor">
-	<column name="addressTypeId" type="BIGINT"> 
-		 <constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
-   </column>
- </addColumn>
-
- 
- <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="mobileNumber"></column>
 			<column name="defaultDisplayName" value="Mobile Number"></column>
@@ -705,9 +682,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="idNumber"></column>
 			<column name="defaultDisplayName" value="ID Number"></column>
@@ -720,9 +697,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="workNumber"></column>
 			<column name="defaultDisplayName" value="Work Number"></column>
@@ -735,10 +712,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
-<insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="callingName"></column>
 			<column name="defaultDisplayName" value="Calling Name"></column>
@@ -751,9 +728,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="idType"></column>
 			<column name="defaultDisplayName" value="Id Type"></column>
@@ -766,10 +743,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
- <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="homeNumber"></column>
 			<column name="defaultDisplayName" value="Home Number"></column>
@@ -782,10 +759,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
-<insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="email"></column>
 			<column name="defaultDisplayName" value="Email"></column>
@@ -798,9 +775,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="addressLine1"></column>
 			<column name="defaultDisplayName" value="Address Line1"></column>
@@ -813,9 +790,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="addressLine2"></column>
 			<column name="defaultDisplayName" value="Address Line2"></column>
@@ -828,9 +805,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="preferredAddressType"></column>
 			<column name="defaultDisplayName" value="Preferred Address Type"></column>
@@ -843,9 +820,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="workAddress"></column>
 			<column name="defaultDisplayName" value="Work Address"></column>
@@ -858,10 +835,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
-  <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="homeAddress"></column>
 			<column name="defaultDisplayName" value="Home Address"></column>
@@ -874,10 +851,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
- <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="postalAddress"></column>
 			<column name="defaultDisplayName" value="Postal Address"></column>
@@ -890,9 +867,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-  <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="contactMethodType"></column>
 			<column name="defaultDisplayName" value="Contact Method Type"></column>
@@ -905,9 +882,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="preferredLanguage"></column>
 			<column name="defaultDisplayName" value="Preferred Language"></column>
@@ -920,81 +897,128 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- </changeSet>
- 
- <!-- Add in 'isClosed' field to collectionBatch tables -->
- <changeSet id="20141028-1957" author="danfuterman">
-	<addColumn tableName="CollectionBatch">
-		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
-	</addColumn>
-	<addColumn tableName="CollectionBatch_AUD">
-		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
-	</addColumn>		
- </changeSet>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+	</changeSet>
 
-<!-- For issue 229 [Create testBatch table]  -->
-   <changeSet id="20131112-2005" author="nikita">
-    <createTable tableName="TestBatch">
-    	<column name="id" type="smallint(6)" autoIncrement="true">
-    		<constraints primaryKey="true" nullable="false"/>
-    	</column>
-    	<column name="batchNumber" type="varchar(20)"></column>
-    	<column name="isDeleted" type="tinyint(1)"></column>
-    	<column name="createdDate" type="timestamp"></column>
-    	<column name="lastUpdated" type="timestamp"></column>
-    	<column name="notes" type="longtext"></column>
-    	<column name="status" type="varchar(20)"></column>
-    	<column name="createdBy_id" type="smallint(6)"></column>
-    	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
-    </createTable>
-    </changeSet>
-    <changeSet id="20141114-0420" author="srikanth">
-	    <addColumn tableName="CollectionBatch">
-	    	<column name="testBatch_id" type="smallint(6)"></column>
-	    </addColumn>
-	    <addForeignKeyConstraint constraintName="testBatch_id_FK" 
-	    						 referencedTableName="TestBatch" 
-	    						 baseColumnNames="testBatch_id" 
-	    						 baseTableName="CollectionBatch" 
-	    						 referencedColumnNames="id"/>
-    </changeSet>
-    <changeSet id="20141114-0425" author="srikanth">
-     <addColumn tableName="CollectionBatch_AUD">
-	    	<column name="testBatch_id" type="smallint(6)"></column>
-	    </addColumn>
-	    <addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
-	    						 referencedTableName="TestBatch" 
-	    						 baseColumnNames="testBatch_id" 
-	    						 baseTableName="CollectionBatch_AUD" 
-	    						 referencedColumnNames="id"/>
-    </changeSet>
-    <changeSet id="20131113-0733" author="srikanth">
-    <createTable tableName="TestBatch_AUD">
-    	<column name="id" type="smallint(6)">
-    		<constraints primaryKey="true" nullable="false"/>
-    	</column>
-    	<column name="batchNumber" type="varchar(20)"></column>
-    	<column name="isDeleted" type="tinyint(1)"></column>
-    	<column name="createdDate" type="timestamp"></column>
-    	<column name="lastUpdated" type="timestamp"></column>
-    	<column name="notes" type="longtext"></column>
-    	<column name="status" type="varchar(20)"></column>
-    	<column name="createdBy_id" type="smallint(6)"></column>
-    	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
-    	<column name="REV" type="INT">
-          	<constraints  primaryKey="true" nullable="false" />
-        </column>
-    	<column name="REVTYPE" type="tinyint(4)"></column>
-    </createTable>
-    </changeSet>
+	<!-- Add in 'isClosed' field to collectionBatch tables -->
+	<changeSet id="20141028-1957" author="danfuterman">
+		<addColumn tableName="CollectionBatch">
+			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+		<addColumn tableName="CollectionBatch_AUD">
+			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
 
+	<!-- For issue 229 [Create testBatch table]  -->
+	<changeSet id="20131112-2005" author="nikita">
+		<createTable tableName="TestBatch">
+			<column name="id" type="smallint(6)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+		</createTable>
+	</changeSet>
 
- <!-- For issue 57 [Add WHO Product Discard Reasons] -->
-<changeSet author="nikita" id = "20131024-1507-">
-		<delete tableName="ProductStatusChangeReason">
-			<where>category='DISCARDED'</where>
-	 </delete>
-</changeSet>
-</databaseChangeLog>	
+	<changeSet id="20141114-1620" author="srikanth">
+		<addColumn tableName="CollectionBatch">
+			<column name="testBatch_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="testBatch_id_FK" 
+			 referencedTableName="TestBatch" 
+			 baseColumnNames="testBatch_id" 
+			 baseTableName="CollectionBatch" 
+			 referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet id="20141114-1625" author="srikanth">
+		<addColumn tableName="CollectionBatch_AUD">
+				<column name="testBatch_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
+			 referencedTableName="TestBatch" 
+			 baseColumnNames="testBatch_id" 
+			 baseTableName="CollectionBatch_AUD" 
+			 referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet id="20131113-1933" author="srikanth">
+		<createTable tableName="TestBatch_AUD">
+			<column name="id" type="smallint(6)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="tinyint(4)"></column>
+		</createTable>
+	</changeSet>
+
+	 <!-- For issue 57 [Add WHO Product Discard Reasons] -->
+	<changeSet id="20131024-1507" author="nikita" >
+			<delete tableName="ProductStatusChangeReason">
+				<where>category='DISCARDED'</where>
+		 </delete>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1235" author="srikanth">
+		<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33B29562D0"/>
+		<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33AED1731E"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample_AUD"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectedSample"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectedSample_AUD"/>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1356" author="srikanth">
+		<addColumn tableName="CollectedSample">
+			<column name="donorPanel_id" type="bigint">
+				<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="donorPanel_id" type="bigint"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1558" author="srikanth">
+		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CAED1731E"/>
+		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CB29562D0"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch_AUD"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch_AUD"/>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1605" author="srikanth">
+		<addColumn tableName="CollectionBatch">
+			<column name="donorPanel_id" type="bigint">
+				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="CollectionBatch_AUD">
+			<column name="donorPanel_id" type="bigint"></column>
+		</addColumn>
+	</changeSet>
+
+</databaseChangeLog>

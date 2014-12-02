@@ -1,9 +1,6 @@
 package viewmodel;
 
 import java.util.List;
-
-import utils.CustomDateFormatter;
-
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
@@ -11,6 +8,7 @@ import model.request.Request;
 import model.requesttype.RequestType;
 import model.user.User;
 import model.util.BloodGroup;
+import utils.CustomDateFormatter;
 
 public class RequestViewModel {
   private Request request;

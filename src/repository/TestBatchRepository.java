@@ -75,7 +75,7 @@ public class TestBatchRepository {
 	      String status, String createdAfterDate,
 	      String createdBeforeDate,Map<String, Object> pagingParams) {
 
-	    String queryStr =  "SELECT * FROM testbatch where status = :status "
+	    String queryStr =  "SELECT * FROM TestBatch where status = :status "
                     + " or createdDate BETWEEN :createdAfterDate AND :createdBeforeDate";
 	    
 	  

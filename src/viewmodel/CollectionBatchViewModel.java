@@ -50,13 +50,6 @@ public class CollectionBatchViewModel {
 	 return collectionBatch.getCollectionsInBatch().size();
   }
 
-  public Location getCollectionCenter() {
-    return collectionBatch.getCollectionCenter();
-  }
-
-  public Location getCollectionSite() {
-    return collectionBatch.getCollectionSite();
-  }
 
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(collectionBatch.getLastUpdated());
@@ -82,5 +75,9 @@ public class CollectionBatchViewModel {
   
   public Boolean getIsClosed() {
     return collectionBatch.getIsClosed();
+  }
+  
+  public LocationViewModel getDonorPanel(){
+      return  new LocationViewModel((collectionBatch.getDonorPanel()));
   }
 }

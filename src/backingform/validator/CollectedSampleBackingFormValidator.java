@@ -78,6 +78,16 @@ public class CollectedSampleBackingFormValidator implements Validator {
         errors.rejectValue("collectedSample.donor", "donor.tti", "Donor is not allowed to donate.");
     }
 
+    Location donorPanel = form.getCollectedSample().getDonorPanel();
+	if (donorPanel == null) {
+	  errors.rejectValue("collectedSample.donorPanel", "donorPanel.empty",
+	    "Donor Panel is required.");
+	} 
+	else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
+	  errors.rejectValue("collectedSample.donorPanel", "donorPanel.invalid",
+		"Location is not a Donor Panel.");
+	} 
+
     validateBloodPressure(form,errors);
     utilController.commonFieldChecks(form, "collectedSample", errors);
   }
@@ -119,20 +129,6 @@ public class CollectedSampleBackingFormValidator implements Validator {
       if (collectionBatch == null) {
         errors.rejectValue("collectedSample.collectionBatch", "collectionbatch.notspecified", "Collection batch should be specified");
         return;
-      }
-      Location center = collectionBatch.getCollectionCenter();
-      if (center == null) {
-        errors.rejectValue("useParametersFromBatch", "collectionCenter.notspecified",
-            "Collection center not present in batch and is required.");
-      } else {
-        form.setCollectionCenter(center);
-      }
-      Location site = collectionBatch.getCollectionSite();
-      if (site == null) {
-        errors.rejectValue("useParametersFromBatch", "collectionSite.notspecified",
-            "Collection site not present in batch and is required.");
-      } else {
-        form.setCollectionSite(site);
       }
     }
   }

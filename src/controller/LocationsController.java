@@ -80,7 +80,7 @@ public class LocationsController {
         Map<String, Object> map = new HashMap<String, Object>();
         Location location = locationRepository.getLocation(id);
         map.put("location", new LocationViewModel(location));
-        return new ResponseEntity(location, HttpStatus.OK);
+        return new ResponseEntity(map, HttpStatus.OK);
         
   }
     

@@ -909,9 +909,6 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressState("State");
         donorBackingForm.setHomeAddressZipcode("361001");
         donorBackingForm.setBirthDate(donorBirthdate);
-        donorBackingForm.setDayOfMonth("10");
-        donorBackingForm.setMonth("06");
-        donorBackingForm.setYear("2000");
         donorBackingForm.setBirthDateEstimated(true);
 
     }

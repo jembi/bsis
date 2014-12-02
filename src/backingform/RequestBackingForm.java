@@ -3,8 +3,6 @@ package backingform;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
@@ -17,11 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import repository.RequestRepository;
 import utils.CustomDateFormatter;
 
-
 public class RequestBackingForm {
 
-  @NotNull
-  @Valid
+  @JsonIgnore
   private Request request;
 
   private String patientBirthDate;
@@ -36,6 +32,10 @@ public class RequestBackingForm {
 
   public Long getId() {
     return request.getId();
+  }
+  
+  public void setId(Long id) {
+    request.setId(id);
   }
 
   public String getRequestNumber() {
@@ -70,41 +70,8 @@ public class RequestBackingForm {
     return request.getNotes();
   }
 
-  @JsonIgnore
-  public RowModificationTracker getModificationTracker() {
-    return request.getModificationTracker();
-  }
-
-  public String getProductType() {
-    ProductType productType = request.getProductType();
-    if (productType == null || productType.getId() == null)
-      return "";
-    else
-      return productType.getId().toString();
-  }
-
-  public String getRequestType() {
-    RequestType requestType = request.getRequestType();
-    if (requestType == null || requestType.getId() == null)
-      return "";
-    else
-      return requestType.getId().toString();
-  }
-
-
-  public String getRequestSite() {
-    Location site = request.getRequestSite();
-    if (site == null || site.getId() == null)
-      return null;
-    return site.getId().toString();
-  }
-
   public Boolean getIsDeleted() {
     return request.getIsDeleted();
-  }
-
-  public void setId(Long id) {
-    request.setId(id);
   }
 
   public void setRequestNumber(String requestNumber) {
@@ -145,26 +112,26 @@ public class RequestBackingForm {
     request.setNotes(notes);
   }
 
-  public void setProductType(String productTypeId) {
-    if (StringUtils.isBlank(productTypeId)) {
-      request.setProductType(null);
-    }
-    else {
-      ProductType pt = new ProductType();
-      pt.setId(Integer.parseInt(productTypeId));
-      request.setProductType(pt);
-    }
+  public void setRequestType(String requestTypeId) {
+	if (StringUtils.isBlank(requestTypeId)) {
+		request.setRequestType(null);
+	}
+	else {
+		RequestType rt = new RequestType();
+		rt.setId(Integer.parseInt(requestTypeId));
+		request.setRequestType(rt);
+	}
   }
 
-  public void setRequestType(String requestTypeId) {
-    if (StringUtils.isBlank(requestTypeId)) {
-      request.setRequestType(null);
-    }
-    else {
-      RequestType rt = new RequestType();
-      rt.setId(Integer.parseInt(requestTypeId));
-      request.setRequestType(rt);
-    }
+  public void setProductType(String productTypeId) {
+	if (StringUtils.isBlank(productTypeId)) {
+		request.setProductType(null);
+	}
+	else {
+		ProductType pt = new ProductType();
+		pt.setId(Integer.parseInt(productTypeId));
+		request.setProductType(pt);
+	}
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -179,19 +146,15 @@ public class RequestBackingForm {
     return request.hashCode();
   }
 
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
-    request.setModificationTracker(modificationTracker);
-  }
-
   public void setRequestSite(String requestSite) {
-    if (requestSite == null) {
-      request.setRequestSite(null);
-    }
-    else {
-      Location l = new Location();
-      l.setId(Long.parseLong(requestSite));
-      request.setRequestSite(l);
-    }
+	if (requestSite == null) {
+		request.setRequestSite(null);
+	}
+	else {
+		Location l = new Location();
+		l.setId(Long.parseLong(requestSite));
+		request.setRequestSite(l);
+	}
   }
 
   @JsonIgnore

@@ -126,19 +126,6 @@ public class CollectedSampleBackingForm {
     return collectedSample.getDonor();
   }
 
-  public String getCollectionCenter() {
-    Location center = collectedSample.getCollectionCenter();
-    if (center == null || center.getId() == null)
-      return null;
-    return center.getId().toString();
-  }
-
-  public String getCollectionSite() {
-    Location site = collectedSample.getCollectionSite();
-    if (site == null || site.getId() == null)
-      return null;
-    return site.getId().toString();
-  }
 
   public String getDonationType() {
     DonationType donationType = collectedSample.getDonationType();
@@ -200,34 +187,7 @@ public class CollectedSampleBackingForm {
     collectedSample.setDonor(donor);
   }
   
-  public void setCollectionCenter(Location center){
-  	if (center == null){
-  		collectedSample.setCollectionCenter(null);
-  	}
-  	else if (center.getId() == null){
-  		collectedSample.setCollectionCenter(null);
-  	}
-  	else{
-  		Location c = new Location();
-  		c.setId(center.getId());
-  		collectedSample.setCollectionCenter(c);
-  	}
-  }
-  
-  public void setCollectionSite(Location collectionSite){
-  	if (collectionSite == null){
-  		collectedSample.setCollectionSite(null);
-  	}
-  	else if (collectionSite.getId() == null){
-  		collectedSample.setCollectionSite(null);
-  	}
-  	else{
-  		Location s = new Location();
-  		s.setId(collectionSite.getId());
-  		collectedSample.setCollectionSite(s);
-  	}
-  }
-  
+ 
   public void setDonationType(DonationType donationType){
   	if (donationType == null){
   		collectedSample.setDonationType(null);
@@ -463,6 +423,15 @@ public class CollectedSampleBackingForm {
         } else {
         	collectedSample.setBloodRh(bloodRh);
         }
+    }
+    
+    public void setDonorPanel(Location donorPanel){
+        if(donorPanel == null || donorPanel.getId() == null){
+            collectedSample.setDonorPanel(null);
+        }else{
+            collectedSample.setDonorPanel(donorPanel);
+        }
+            
     }
   
 }

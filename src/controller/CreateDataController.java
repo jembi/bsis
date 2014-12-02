@@ -438,8 +438,6 @@ public class CreateDataController {
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
       collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
-      collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()));
-      collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()));
 
       String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
       collection.setCollectedOn(collectionDate);
@@ -731,9 +729,10 @@ public class CreateDataController {
       form.setRequestNumber(requestNumbers.get(i));
       form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
       form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
+    /** issue - #225 straight object bindings
       form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
       form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
-      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());
+      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());*/
       form.setNumUnitsRequested(1 + Math.abs(random.nextInt()) % 20);
       form.setIsDeleted(false);
       form.setFulfilled(false);
