@@ -402,6 +402,35 @@
 		</insert>
 	</changeSet>
 
+	<changeSet id="20141202-0950" author="danfuterman">
+		<comment>Add component return and split reasons</comment>
+		<insert tableName="ProductStatusChangeReason">
+			<column name="statusChangeReason" value="Expired"/>
+			<column name="category" value="RETURNED"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="ProductStatusChangeReason">
+			<column name="statusChangeReason" value="Not required"/>
+			<column name="category" value="RETURNED"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="ProductStatusChangeReason">
+			<column name="statusChangeReason" value="Incorrect Component Sent"/>
+			<column name="category" value="RETURNED"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="ProductStatusChangeReason">
+			<column name="statusChangeReason" value="Did not crossmatch with patient sample"/>
+			<column name="category" value="RETURNED"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="ProductStatusChangeReason">
+			<column name="statusChangeReason" value="Split"/>
+			<column name="category" value="SPLIT"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+	</changeSet>
+
 	<changeSet id="20141117-1054" author="srikanth">
 		<comment>Add preferred languages</comment>
 		<insert tableName="PreferredLanguage">
