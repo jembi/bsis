@@ -8,7 +8,7 @@
 	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
 		 reversing the previous ones if you need to change or delete info from another changeset-->
 
-	<changeSet id="20141117-1301" author="srikanth">
+	<changeSet id="20141117-1301" author="srikanthmalyala">
 		<comment>Add donation types</comment>
 		<insert tableName = "DonationType">
 			<column name="donationType" value="Voluntary"/>
@@ -28,7 +28,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1303" author="srikanth">
+	<changeSet id="20141117-1303" author="srikanthmalyala">
 		<comment>Add request types</comment>
 		<insert tableName = "RequestType">
 			<column name="requestType" value="Emergency"/>
@@ -62,7 +62,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1323" author="srikanth">
+	<changeSet id="20141117-1323" author="srikanthmalyala">
 		<comment>add blood bag types</comment>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Single"/>
@@ -78,7 +78,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1404" author="srikanth">
+	<changeSet id="20141117-1404" author="srikanthmalyala">
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Whole Blood"/>
@@ -162,7 +162,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0915" author="srikanth">
+	<changeSet id="20141117-0915" author="srikanthmalyala">
 		<comment>Add product type combinations</comment>
 		<insert tableName = "ProductTypeCombination">
 			<column name="combinationName" value="Whole Blood"/>
@@ -182,7 +182,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0919" author="srikanth">
+	<changeSet id="20141117-0919" author="srikanthmalyala">
 		<comment>Add product type combination mappings</comment>
 		<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="1"/>
@@ -218,7 +218,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0931" author="srikanth">
+	<changeSet id="20141117-0931" author="srikanthmalyala">
 		<comment>Add paediatric product type associations</comment>
 		<update tableName="ProductType">
 			<column name="pediProductType_id" value = "5"/>
@@ -238,7 +238,7 @@
 		</update>
 	</changeSet>
 
-	<changeSet id="20141117-0938" author="srikanth">
+	<changeSet id="20141117-0938" author="srikanthmalyala">
 		<comment>Add locations</comment>
 		<insert tableName = "Location">
 			<column name="name" value="Lusaka"/>
@@ -312,7 +312,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0945" author="srikanth">
+	<changeSet id="20141117-0945" author="srikanthmalyala">
 		<comment>Add contact method types</comment>
 		<insert tableName = "ContactMethodType">
 			<column name="contactMethodType" value="None"/>
@@ -340,7 +340,7 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20131024-1527" author="nikita">
+	<changeSet id="20131024-1527" author="gtlnikita">
 		<comment>Add deferral reasons</comment>
 		<insert tableName="DeferralReason">
 			<column name="reason" value="High risk behaviour"/>
@@ -368,7 +368,7 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20131024-1508" author="nikita">
+	<changeSet id="20131024-1508" author="gtlnikita">
 		<comment>Add component discard reasons</comment>
 		<insert tableName="ProductStatusChangeReason">
 			<column name="statusChangeReason" value="Incomplete Donation"/>
@@ -431,7 +431,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1054" author="srikanth">
+	<changeSet id="20141117-1054" author="srikanthmalyala">
 		<comment>Add preferred languages</comment>
 		<insert tableName="PreferredLanguage">
 			 <column name="id" value="1"></column>
@@ -523,7 +523,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1127" author="srikanth">
+	<changeSet id="20141117-1127" author="srikanthmalyala">
 		<comment>Add superuser user</comment>
 		<insert tableName="User">
 			<column name="id" value="1"></column>
@@ -542,7 +542,7 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20141117-1121" author="srikanth">
+	<changeSet id="20141117-1121" author="srikanthmalyala">
 		<comment>Add identity types</comment>
 		<insert tableName="IdType">
 			<column name="id" value="1"></column>
@@ -558,7 +558,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1128" author="srikanth">
+	<changeSet id="20141117-1128" author="srikanthmalyala">
 		<comment>Add donor code groups</comment>
 		<insert tableName="DonorCodeGroup">
 			<column name="id" value="1"></column>
@@ -570,7 +570,7 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20141117-1133" author="srikanth">
+	<changeSet id="20141117-1133" author="srikanthmalyala">
 		<comment>Add donor codes</comment>
 		<insert tableName="DonorCode">
 			<column name="id" value="1"></column>
@@ -609,7 +609,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1141" author="srikanth">
+	<changeSet id="20141117-1141" author="srikanthmalyala">
 		<comment>Add address types</comment>
 		<insert tableName="AddressType">
 			<column name="id" value="1"></column>
@@ -625,7 +625,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1156" author="srikanth">
+	<changeSet id="20141117-1156" author="srikanthmalyala">
 		<comment>Add admin user</comment>
 		<insert tableName="User">
 			<column name="id" value="2"></column>
@@ -645,7 +645,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1212" author="srikanth">
+	<changeSet id="20141117-1212" author="srikanthmalyala">
 		<comment>Add donor clinic supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="3"></column>
@@ -665,7 +665,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1218" author="srikanth">
+	<changeSet id="20141117-1218" author="srikanthmalyala">
 		<comment>Add donor clinic staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="4"></column>
@@ -685,7 +685,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1221" author="srikanth">
+	<changeSet id="20141117-1221" author="srikanthmalyala">
 		<comment>Add donor communications staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="5"></column>
@@ -705,7 +705,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1234" author="srikanth">
+	<changeSet id="20141117-1234" author="srikanthmalyala">
 		<comment>Add donor counselling staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="6"></column>
@@ -725,7 +725,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1245" author="srikanth">
+	<changeSet id="20141117-1245" author="srikanthmalyala">
 		<comment>Add data entry clerk user</comment>
 		<insert tableName="User">
 			<column name="id" value="7"></column>
@@ -745,7 +745,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1345" author="srikanth">
+	<changeSet id="20141117-1345" author="srikanthmalyala">
 		<comment>Add medical officer user</comment>
 		<insert tableName="User">
 			<column name="id" value="8"></column>
@@ -765,7 +765,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1407" author="srikanth">
+	<changeSet id="20141117-1407" author="srikanthmalyala">
 		<comment>Add component supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="9"></column>
@@ -785,7 +785,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1426" author="srikanth">
+	<changeSet id="20141117-1426" author="srikanthmalyala">
 		<comment>Add component staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="10"></column>
@@ -805,7 +805,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1427" author="srikanth">
+	<changeSet id="20141117-1427" author="srikanthmalyala">
 		<comment>Add TTI testing supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="11"></column>
@@ -825,7 +825,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1428" author="srikanth">
+	<changeSet id="20141117-1428" author="srikanthmalyala">
 		<comment>Add TTI testing staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="12"></column>
@@ -845,7 +845,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1429" author="srikanth">
+	<changeSet id="20141117-1429" author="srikanthmalyala">
 		<comment>Add blood group serology supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="13"></column>
@@ -865,7 +865,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1430" author="srikanth">
+	<changeSet id="20141117-1430" author="srikanthmalyala">
 		<comment>Add blood group serology staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="14"></column>
@@ -885,7 +885,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1431" author="srikanth">
+	<changeSet id="20141117-1431" author="srikanthmalyala">
 		<comment>Add inventory staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="15"></column>
@@ -905,7 +905,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0232" author="srikanth">
+	<changeSet id="20141117-0232" author="srikanthmalyala">
 		<comment>Add blood bank staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="16"></column>
