@@ -17,8 +17,8 @@
 		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
 		AS WELL AS CHRONOLOGICALLY -->
 
-<!-- For issue 134 [Add New Roles And Permissions]  -->
-<changeSet id="20141118-0101" author="srikanth">
+<!-- For issue 134 [Add New Roles]  -->
+<changeSet id="20140225-1103" author="srikanth">
      <insert tableName="Role">
        <column name="id" value="1"></column>
        <column name="name" value="Super User"></column>
@@ -100,10 +100,10 @@
        <column name="description" value="Blood Bank Staff"></column>
     </insert>
 	    
-</changeSet>	    
+</changeSet>
 	  
-<!-- Permissions  -->
-<changeSet author="srikanth" id = "20141118-0201">	 
+<!-- For issue 134 [Add New Permissions]  -->
+<changeSet id="20140225-1303" author="srikanth">
    <insert tableName="Permission">
        <column name="id" value="1"></column>
        <column name="name" value="Add Donor"></column>
@@ -386,8 +386,8 @@
  </changeSet>
   
   
-	<!-- For issue 134 [Add New Roles And Permissions]  -->
-<changeSet author="srikanth" id = "20141118-0301">
+<!-- For issue 134 [Add New Permission Role Mappings]  -->
+<changeSet id="20140221-1616" author="srikanth">
   
        <!-- Donor Permission Association With Roles -->
        
@@ -1812,8 +1812,8 @@
   </insert>
 </changeSet>
 
- <!-- For issue 150 - Adding New Permissions and Prmission Role Mappings -->
-<changeSet  author="srikanth" id = "20141118-1213">
+ <!-- For issue 150 - Add New Permissions and Permission Role Mappings -->
+<changeSet id="20140319-1102" author="srikanth">
 
   <!-- Donation Batch Permissions -->
   
@@ -1834,7 +1834,7 @@
        <column name="name" value="Void Donation Batch"></column>
   </insert>
   
-  <!-- Test Reslut Permissions -->
+  <!-- Test Result Permissions -->
   
   <insert tableName="Permission">
        <column name="id" value="73"></column>
@@ -2207,7 +2207,7 @@
   </insert>  
 </changeSet>
 
- <!-- Add AUTHENTICATED permission level to the system -->
+ <!-- Add AUTHENTICATED Permission and Role Mappings -->
  <changeSet id="20141110-1128" author="srikanth">
 
  	 <insert tableName="Permission">
