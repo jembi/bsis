@@ -1,14 +1,14 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
 	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
 	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
 		 reversing the previous ones if you need to change or delete info from another changeset-->
 
-	<changeSet author = "srikanth" id = "20141117-0101">
+	<changeSet id="20141117-1301" author="srikanth">
 		<comment>Add donation types</comment>
 		<insert tableName = "DonationType">
 			<column name="donationType" value="Voluntary"/>
@@ -27,7 +27,8 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0103">
+
+	<changeSet id="20141117-1303" author="srikanth">
 		<comment>Add request types</comment>
 		<insert tableName = "RequestType">
 			<column name="requestType" value="Emergency"/>
@@ -58,9 +59,10 @@
 			<column name="requestType" value="Elective Surgery"/>
 			<column name="description" value=""/>
 			<column name="isDeleted" value="0"/>
-		</insert>	
+		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0123">
+
+	<changeSet id="20141117-1323" author="srikanth">
 		<comment>add blood bag types</comment>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Single"/>
@@ -75,7 +77,8 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0204">
+
+	<changeSet id="20141117-1404" author="srikanth">
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Whole Blood"/>
@@ -156,10 +159,11 @@
 			<column name="hasBloodGroup" value="0"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
-		</insert>	
+		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0915">
-		<comment>Insert product type combinations</comment>
+
+	<changeSet id="20141117-0915" author="srikanth">
+		<comment>Add product type combinations</comment>
 		<insert tableName = "ProductTypeCombination">
 			<column name="combinationName" value="Whole Blood"/>
 			<column name="isDeleted" value="0"/>
@@ -177,8 +181,9 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0919">
-		<comment>add product and combination  association data</comment>
+
+	<changeSet id="20141117-0919" author="srikanth">
+		<comment>Add product type combination mappings</comment>
 		<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="1"/>
 			<column name="productTypes_id" value="1"/>
@@ -203,7 +208,7 @@
 			<column name="productTypeCombinations_id" value="4"/>
 			<column name="productTypes_id" value="6"/>
 		</insert>
-	    <insert tableName = "ProductTypeCombination_ProductType">
+		<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="4"/>
 			<column name="productTypes_id" value="7"/>
 		</insert>
@@ -212,28 +217,29 @@
 			<column name="productTypes_id" value="8"/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0931">
-	<!--Associate product type to pedi -->
-	<comment>Add product type and pedi association data</comment>
-	    <update tableName="ProductType">
-	        <column name="pediProductType_id" value = "5"/>
-	        <where>id = "1"</where>
-	    </update>
-	    <update tableName="ProductType">
-	        <column name="pediProductType_id" value = "6"/>
-	        <where>id = "2"</where>
-	    </update>
-	    <update tableName="ProductType">
-	        <column name="pediProductType_id" value = "7"/>
-	        <where>id = "3"</where>
-	    </update>
-	    <update tableName="ProductType">
-	        <column name="pediProductType_id" value = "8"/>
-	        <where>id = "4"</where>
-	    </update>
+
+	<changeSet id="20141117-0931" author="srikanth">
+		<comment>Add paediatric product type associations</comment>
+		<update tableName="ProductType">
+			<column name="pediProductType_id" value = "5"/>
+			<where>id = "1"</where>
+		</update>
+		<update tableName="ProductType">
+			<column name="pediProductType_id" value = "6"/>
+			<where>id = "2"</where>
+		</update>
+		<update tableName="ProductType">
+			<column name="pediProductType_id" value = "7"/>
+			<where>id = "3"</where>
+		</update>
+		<update tableName="ProductType">
+			<column name="pediProductType_id" value = "8"/>
+			<where>id = "4"</where>
+		</update>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0938">
-		<comment>Add locations </comment>
+
+	<changeSet id="20141117-0938" author="srikanth">
+		<comment>Add locations</comment>
 		<insert tableName = "Location">
 			<column name="name" value="Lusaka"/>
 			<column name="isCollectionCenter" value="1"/>
@@ -305,8 +311,9 @@
 			<column name="notes" value=""/>
 		</insert>
 	</changeSet>
-	<changeSet author = "srikanth" id = "20141117-0945">
-		<comment>Add contact  method types</comment>
+
+	<changeSet id="20141117-0945" author="srikanth">
+		<comment>Add contact method types</comment>
 		<insert tableName = "ContactMethodType">
 			<column name="contactMethodType" value="None"/>
 			<column name="isDeleted" value="0"/>
@@ -333,72 +340,73 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet author = "nikitha" id = "20141117-1012">
-		<comment>Add deferral  reasons</comment>
+	<changeSet id="20131024-1527" author="nikita">
+		<comment>Add deferral reasons</comment>
 		<insert tableName="DeferralReason">
-	    	<column name="reason" value="High risk behaviour"/>
-	    	<column name="isDeleted" value="0"/>
-	    </insert>
-	    <insert tableName="DeferralReason">
-	    	<column name="reason" value="Low weight"/>
-	    	<column name="isDeleted" value="0"/>
-	    </insert>
-	    <insert tableName="DeferralReason">
-	    	<column name="reason" value="Low haemoglobin"/>
-	    	<column name="isDeleted" value="0"/>
-	    </insert>
-	    <insert tableName="DeferralReason">
-	    	<column name="reason" value="Other reasons"/>
-	    	<column name="isDeleted" value="0"/>
-	    </insert>
-	    <insert tableName="DeferralReason">
-	    	<column name="reason" value="Other medical conditions"/>
-	    	<column name="isDeleted" value="0"/>
-	    </insert>
-	    <insert tableName="DeferralReason">
-	    	<column name="reason" value="Travel history"/>
-	    	<column name="isDeleted" value="0"/>
-	    </insert>
+			<column name="reason" value="High risk behaviour"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="DeferralReason">
+			<column name="reason" value="Low weight"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="DeferralReason">
+			<column name="reason" value="Low haemoglobin"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="DeferralReason">
+			<column name="reason" value="Other reasons"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="DeferralReason">
+			<column name="reason" value="Other medical conditions"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName="DeferralReason">
+			<column name="reason" value="Travel history"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
 	</changeSet>
 	
-	<changeSet author="nikita" id = "20141117-1017">
-		<comment>Add product  status change reasons</comment>
+	<changeSet id="20131024-1508" author="nikita">
+		<comment>Add component discard reasons</comment>
 		<insert tableName="ProductStatusChangeReason">
-	        <column name="statusChangeReason" value="Incomplete Donation"/>
-	        <column name="category" value="DISCARDED"/>
-	        <column name="isDeleted" value="0"/>
+			<column name="statusChangeReason" value="Incomplete Donation"/>
+			<column name="category" value="DISCARDED"/>
+			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName="ProductStatusChangeReason">
-	        <column name="statusChangeReason" value="Processing Problems"/>
-	        <column name="category" value="DISCARDED"/>
-	        <column name="isDeleted" value="0"/>
+			<column name="statusChangeReason" value="Processing Problems"/>
+			<column name="category" value="DISCARDED"/>
+			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName="ProductStatusChangeReason">
-	        <column name="statusChangeReason" value="Passed Expiry Dates"/>
-	        <column name="category" value="DISCARDED"/>
-	        <column name="isDeleted" value="0"/>
+			<column name="statusChangeReason" value="Passed Expiry Dates"/>
+			<column name="category" value="DISCARDED"/>
+			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName="ProductStatusChangeReason">
-	        <column name="statusChangeReason" value="Reactive FOR TTIs"/>
-	        <column name="category" value="DISCARDED"/>
-	        <column name="isDeleted" value="0"/>
+			<column name="statusChangeReason" value="Reactive FOR TTIs"/>
+			<column name="category" value="DISCARDED"/>
+			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName="ProductStatusChangeReason">
-	        <column name="statusChangeReason" value="Storage Problems"/>
-	        <column name="category" value="DISCARDED"/>
-	        <column name="isDeleted" value="0"/>
+			<column name="statusChangeReason" value="Storage Problems"/>
+			<column name="category" value="DISCARDED"/>
+			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName="ProductStatusChangeReason">
-	        <column name="statusChangeReason" value="Transport Problems"/>
-	        <column name="category" value="DISCARDED"/>
-	        <column name="isDeleted" value="0"/>
+			<column name="statusChangeReason" value="Transport Problems"/>
+			<column name="category" value="DISCARDED"/>
+			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	<changeSet author="srikanth" id = "20141117-1054">
-		<comment>Add preferred  languages</comment>
+
+	<changeSet id="20141117-1054" author="srikanth">
+		<comment>Add preferred languages</comment>
 		<insert tableName="PreferredLanguage">
 			 <column name="id" value="1"></column>
-		 	 <column name="preferredLanguage" value="English"></column>
+			 <column name="preferredLanguage" value="English"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
 			 <column name="id" value="2"></column>
@@ -409,192 +417,191 @@
 			  <column name="preferredLanguage" value="Portuguese"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="4"></column>
-		     <column name="preferredLanguage" value="Spanish"></column>
+			 <column name="id" value="4"></column>
+			 <column name="preferredLanguage" value="Spanish"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="5"></column>
-		     <column name="preferredLanguage" value="Arabic"></column>
+			 <column name="id" value="5"></column>
+			 <column name="preferredLanguage" value="Arabic"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="6"></column>
-		     <column name="preferredLanguage" value="Berber"></column>
+			 <column name="id" value="6"></column>
+			 <column name="preferredLanguage" value="Berber"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="7"></column>
-		     <column name="preferredLanguage" value="Amharic"></column>
+			 <column name="id" value="7"></column>
+			 <column name="preferredLanguage" value="Amharic"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="8"></column>
-		     <column name="preferredLanguage" value="Tigrinya"></column>
+			 <column name="id" value="8"></column>
+			 <column name="preferredLanguage" value="Tigrinya"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="9"></column>
-		     <column name="preferredLanguage" value="Setswana"></column>
+			 <column name="id" value="9"></column>
+			 <column name="preferredLanguage" value="Setswana"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="10"></column>
-		     <column name="preferredLanguage" value="Swahili"></column>
+			 <column name="id" value="10"></column>
+			 <column name="preferredLanguage" value="Swahili"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="11"></column>
-		     <column name="preferredLanguage" value="Comorian"></column>
+			 <column name="id" value="11"></column>
+			 <column name="preferredLanguage" value="Comorian"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="12"></column>
-		     <column name="preferredLanguage" value="Chichewa"></column>
+			 <column name="id" value="12"></column>
+			 <column name="preferredLanguage" value="Chichewa"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="13"></column>
-		     <column name="preferredLanguage" value="Kinyarwanda"></column>
+			 <column name="id" value="13"></column>
+			 <column name="preferredLanguage" value="Kinyarwanda"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="14"></column>
-		     <column name="preferredLanguage" value="Kirundi"></column>
+			 <column name="id" value="14"></column>
+			 <column name="preferredLanguage" value="Kirundi"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="15"></column>
-		     <column name="preferredLanguage" value="Sango"></column>
+			 <column name="id" value="15"></column>
+			 <column name="preferredLanguage" value="Sango"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="16"></column>
-		     <column name="preferredLanguage" value="Swati"></column>
+			 <column name="id" value="16"></column>
+			 <column name="preferredLanguage" value="Swati"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="17"></column>
-		     <column name="preferredLanguage" value="Malagasy"></column>
-	    </insert>
-		<insert tableName="PreferredLanguage">
-		     <column name="id" value="18"></column>
-		     <column name="preferredLanguage" value="Seychellois"></column>
+			 <column name="id" value="17"></column>
+			 <column name="preferredLanguage" value="Malagasy"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="19"></column>
-		     <column name="preferredLanguage" value="Mauritian"></column>
+			 <column name="id" value="18"></column>
+			 <column name="preferredLanguage" value="Seychellois"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="20"></column>
-		     <column name="preferredLanguage" value="Shona"></column>
+			 <column name="id" value="19"></column>
+			 <column name="preferredLanguage" value="Mauritian"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="21"></column>
-		     <column name="preferredLanguage" value="Sesotho"></column>
+			 <column name="id" value="20"></column>
+			 <column name="preferredLanguage" value="Shona"></column>
 		</insert>
 		<insert tableName="PreferredLanguage">
-		     <column name="id" value="22"></column>
-		     <column name="preferredLanguage" value="Afrikaans"></column>
-	    </insert>
+			 <column name="id" value="21"></column>
+			 <column name="preferredLanguage" value="Sesotho"></column>
+		</insert>
+		<insert tableName="PreferredLanguage">
+			 <column name="id" value="22"></column>
+			 <column name="preferredLanguage" value="Afrikaans"></column>
+		</insert>
 	</changeSet>
-	    <!-- For issue 134 Remove existing users and add in new Super User  -->
-	<changeSet  author="srikanth" id = "20141117-1101">
-			<comment>Add superuser</comment>
-			<insert tableName="User">
-				<column name="id" value="1"></column>
-				<column name="emailId" value="xxxx@jembi.org"></column>
-				<column name="firstName" value="superuser"></column>
-				<column name="isActive" value="1"></column>
-				<column name="isAdmin" value="1"></column>
-				<column name="isDeleted" value="0"></column>
-				<column name="isStaff" value="1"></column>
-				<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
-				<column name="username" value="superuser"></column>
-			</insert>
-			<insert tableName="User_Role">
-				<column name="users_id" value="1"></column>
-				<column name="roles_id" value="1"></column>
-			</insert>
+
+	<changeSet id="20141117-1127" author="srikanth">
+		<comment>Add superuser user</comment>
+		<insert tableName="User">
+			<column name="id" value="1"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="superuser"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
+			<column name="username" value="superuser"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="1"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
 	</changeSet>
 	
-	<changeSet  author="srikanth" id = "20141117-1121">
+	<changeSet id="20141117-1121" author="srikanth">
 		<comment>Add identity types</comment>
-		 <insert tableName="IdType">
-		     <column name="id" value="1"></column>
-		     <column name="idType" value="National Id"></column>
-		 </insert>
 		<insert tableName="IdType">
-		     <column name="id" value="2"></column>
-		     <column name="idType" value="Passport Number"></column>
+			<column name="id" value="1"></column>
+			<column name="idType" value="National Id"></column>
 		</insert>
 		<insert tableName="IdType">
-		     <column name="id" value="3"></column>
-		     <column name="idType" value="License Number"></column>
+			<column name="id" value="2"></column>
+			<column name="idType" value="Passport Number"></column>
 		</insert>
-	</changeSet>    
-	    
-	 
-	<changeSet  author="srikanth" id = "20141117-1128">
-	 	<comment>Add donor code groups</comment>
-	   <insert tableName="DonorCodeGroup">
-	     <column name="id" value="1"></column>
-	     <column name="donorCodeGroup" value="Test Only"></column>
-	  </insert>
-	  <insert tableName="DonorCodeGroup">
-	     <column name="id" value="2"></column>
-	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
-	  </insert>
-	</changeSet>    
+		<insert tableName="IdType">
+			<column name="id" value="3"></column>
+			<column name="idType" value="License Number"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20141117-1128" author="srikanth">
+		<comment>Add donor code groups</comment>
+		<insert tableName="DonorCodeGroup">
+			<column name="id" value="1"></column>
+			<column name="donorCodeGroup" value="Test Only"></column>
+		</insert>
+		<insert tableName="DonorCodeGroup">
+			<column name="id" value="2"></column>
+			<column name="donorCodeGroup" value="Do Not Bleed"></column>
+		</insert>
+	</changeSet>
 	
-	<changeSet  author="srikanth" id = "20141117-1133">
+	<changeSet id="20141117-1133" author="srikanth">
 		<comment>Add donor codes</comment>
-	<insert tableName="DonorCode">
-	     <column name="id" value="1"></column>
-	     <column name="donorCode" value="Blood group antibody"></column>
-	     <column name="donorCodeGroupId" value="1"></column>   
-	</insert>
-	 <insert tableName="DonorCode">
-	     <column name="id" value="2"></column>
-	     <column name="donorCode" value="Follow up samples required"></column>
-	     <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="3"></column>
-	     <column name="donorCode" value="Lab query"></column>
-	     <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="4"></column>
-	     <column name="donorCode" value="Biological false positive"></column>
-	     <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="5"></column>
-	     <column name="donorCode" value="For counseling – HCV"></column>
-	     <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="6"></column>
-	     <column name="donorCode" value="For counseling – HIV"></column>
-	     <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="7"></column>
-	     <column name="donorCode" value="TTI Reactive"></column>
-	     <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="1"></column>
+			<column name="donorCode" value="Blood group antibody"></column>
+			<column name="donorCodeGroupId" value="1"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="2"></column>
+			<column name="donorCode" value="Follow up samples required"></column>
+			<column name="donorCodeGroupId" value="1"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="3"></column>
+			<column name="donorCode" value="Lab query"></column>
+			<column name="donorCodeGroupId" value="1"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="4"></column>
+			<column name="donorCode" value="Biological false positive"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="5"></column>
+			<column name="donorCode" value="For counseling – HCV"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="6"></column>
+			<column name="donorCode" value="For counseling – HIV"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="7"></column>
+			<column name="donorCode" value="TTI Reactive"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
 	</changeSet>
-	<changeSet  author="srikanth" id = "20141117-1141">
-		<comment>Add adress types</comment>
-	  <insert tableName="AddressType">
-	     <column name="id" value="1"></column>
-	     <column name="preferredAddressType" value="Home Address"></column>
-	  </insert>
-	  <insert tableName="AddressType">
-	     <column name="id" value="2"></column>
-	     <column name="preferredAddressType" value="Work Address"></column>
-	  </insert>
-	  <insert tableName="AddressType">
-	     <column name="id" value="3"></column>
-	     <column name="preferredAddressType" value="Postal Address"></column>
-	  </insert>
+
+	<changeSet id="20141117-1141" author="srikanth">
+		<comment>Add address types</comment>
+		<insert tableName="AddressType">
+			<column name="id" value="1"></column>
+			<column name="preferredAddressType" value="Home Address"></column>
+		</insert>
+		<insert tableName="AddressType">
+			<column name="id" value="2"></column>
+			<column name="preferredAddressType" value="Work Address"></column>
+		</insert>
+		<insert tableName="AddressType">
+			<column name="id" value="3"></column>
+			<column name="preferredAddressType" value="Postal Address"></column>
+		</insert>
 	</changeSet>
-	
-	<!-- Create admin user-->
-	<changeSet  author="srikanth" id = "20141117-1156">
+
+	<changeSet id="20141117-1156" author="srikanth">
 		<comment>Add admin user</comment>
 		<insert tableName="User">
 			<column name="id" value="2"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
-			<column name="firstName" value="Admin User"></column>
+			<column name="firstName" value="Administrator"></column>
 			<column name="lastName" value=""></column>
 			<column name="isActive" value="1"></column>
 			<column name="isAdmin" value="1"></column>
@@ -608,9 +615,9 @@
 			<column name="roles_id" value="2"></column>
 		</insert>
 	</changeSet>
-	<!-- Create donor clinic supervisor  user-->
-	<changeSet  author="srikanth" id = "20141117-1212">
-		<comment>Add donor clinic supervisor</comment>
+
+	<changeSet id="20141117-1212" author="srikanth">
+		<comment>Add donor clinic supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="3"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -628,14 +635,14 @@
 			<column name="roles_id" value="3"></column>
 		</insert>
 	</changeSet>
-	<!-- Create donor clinic staff  user-->
-	<changeSet  author="srikanth" id = "20141117-1218">
+
+	<changeSet id="20141117-1218" author="srikanth">
 		<comment>Add donor clinic staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="4"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
 			<column name="firstName" value="Donor Clinic"></column>
-	        <column name="lastName" value="Staff"></column>
+			<column name="lastName" value="Staff"></column>
 			<column name="isActive" value="1"></column>
 			<column name="isAdmin" value="0"></column>
 			<column name="isDeleted" value="0"></column>
@@ -648,13 +655,13 @@
 			<column name="roles_id" value="4"></column>
 		</insert>
 	</changeSet>
-	<!-- Create donor comunications staff  user-->
-	<changeSet  author="srikanth" id = "20141117-1221">
+
+	<changeSet id="20141117-1221" author="srikanth">
 		<comment>Add donor communications staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="5"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
-			<column name="firstName" value="Communications"></column>
+			<column name="firstName" value="Donor Comms"></column>
 			 <column name="lastName" value="Staff"></column>
 			<column name="isActive" value="1"></column>
 			<column name="isAdmin" value="0"></column>
@@ -668,14 +675,14 @@
 			<column name="roles_id" value="5"></column>
 		</insert>
 	</changeSet>
-	<!-- Create donor counseling staff  user-->
-	<changeSet  author="srikanth" id = "20141117-1234">
-		<comment>Add donor counseling staff user</comment>
+
+	<changeSet id="20141117-1234" author="srikanth">
+		<comment>Add donor counselling staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="6"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
-			<column name="firstName" value="ounseling"></column>
-			 <column name="lastName" value="staff"></column>
+			<column name="firstName" value="Donor Counselling"></column>
+			 <column name="lastName" value="Staff"></column>
 			<column name="isActive" value="1"></column>
 			<column name="isAdmin" value="0"></column>
 			<column name="isDeleted" value="0"></column>
@@ -688,9 +695,9 @@
 			<column name="roles_id" value="6"></column>
 		</insert>
 	</changeSet>
-	<!-- Create data entry clerk  user-->
-	<changeSet  author="srikanth" id = "20141117-1245">
-		<comment>Add data  entry  clerk user</comment>
+
+	<changeSet id="20141117-1245" author="srikanth">
+		<comment>Add data entry clerk user</comment>
 		<insert tableName="User">
 			<column name="id" value="7"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -708,9 +715,9 @@
 			<column name="roles_id" value="7"></column>
 		</insert>
 	</changeSet>
-	<!-- Create medical officer user-->
-	<changeSet  author="srikanth" id = "20141117-0145">
-		<comment>Add medical officer  user</comment>
+
+	<changeSet id="20141117-1345" author="srikanth">
+		<comment>Add medical officer user</comment>
 		<insert tableName="User">
 			<column name="id" value="8"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -728,9 +735,9 @@
 			<column name="roles_id" value="8"></column>
 		</insert>
 	</changeSet>
-	<!--Create component supervisor-->
-	<changeSet  author="srikanth" id = "20141117-0207">
-		<comment>Add component  supervisor user</comment>
+
+	<changeSet id="20141117-1407" author="srikanth">
+		<comment>Add component supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="9"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -748,9 +755,9 @@
 			<column name="roles_id" value="9"></column>
 		</insert>
 	</changeSet>
-	<!--Create component supervisor-->
-	<changeSet  author="srikanth" id = "20141117-0226">
-		<comment>Add component  staff user</comment>
+
+	<changeSet id="20141117-1426" author="srikanth">
+		<comment>Add component staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="10"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -768,9 +775,9 @@
 			<column name="roles_id" value="10"></column>
 		</insert>
 	</changeSet>
-	<!--Create TTI Testing Supervisor user -->
-	<changeSet  author="srikanth" id = "20141117-0227">
-		<comment>Add TTi testing supervisor user</comment>
+
+	<changeSet id="20141117-1427" author="srikanth">
+		<comment>Add TTI testing supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="11"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -788,9 +795,9 @@
 			<column name="roles_id" value="11"></column>
 		</insert>
 	</changeSet>
-	<!--Create TTI Testing Supervisor user-->
-	<changeSet  author="srikanth" id = "20141117-0228">
-		<comment>Add TTi testing staff user</comment>
+
+	<changeSet id="20141117-1428" author="srikanth">
+		<comment>Add TTI testing staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="12"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -808,8 +815,9 @@
 			<column name="roles_id" value="12"></column>
 		</insert>
 	</changeSet>
-	<!--Create Serology  Supervisor user-->
-	<changeSet  author="srikanth" id = "20141117-0229">
+
+	<changeSet id="20141117-1429" author="srikanth">
+		<comment>Add blood group serology supervisor user</comment>
 		<insert tableName="User">
 			<column name="id" value="13"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -827,8 +835,9 @@
 			<column name="roles_id" value="13"></column>
 		</insert>
 	</changeSet>
-	<!--Create Serology  Staff user-->
-	<changeSet  author="srikanth" id = "20141117-0230">
+
+	<changeSet id="20141117-1430" author="srikanth">
+		<comment>Add blood group serology staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="14"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -846,9 +855,9 @@
 			<column name="roles_id" value="14"></column>
 		</insert>
 	</changeSet>
-	<!--Create Serology  Staff user-->
-	<changeSet  author="srikanth" id = "20141117-0231">
-		<comment>Add Inventory staff user</comment>
+
+	<changeSet id="20141117-1431" author="srikanth">
+		<comment>Add inventory staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="15"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -866,9 +875,9 @@
 			<column name="roles_id" value="15"></column>
 		</insert>
 	</changeSet>
-	<!--Create Serology  Staff user-->
-	<changeSet  author="srikanth" id = "20141117-0232">
-		<comment>Add blood bank  staff user</comment>
+
+	<changeSet id="20141117-0232" author="srikanth">
+		<comment>Add blood bank staff user</comment>
 		<insert tableName="User">
 			<column name="id" value="16"></column>
 			<column name="emailId" value="xxxx@jembi.org"></column>
@@ -886,5 +895,5 @@
 			<column name="roles_id" value="16"></column>
 		</insert>
 	</changeSet>
-	
-</databaseChangeLog>	
+
+</databaseChangeLog>
