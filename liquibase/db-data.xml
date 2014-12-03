@@ -523,25 +523,6 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1127" author="srikanthmalyala">
-		<comment>Add superuser user</comment>
-		<insert tableName="User">
-			<column name="id" value="1"></column>
-			<column name="emailId" value="xxxx@jembi.org"></column>
-			<column name="firstName" value="superuser"></column>
-			<column name="isActive" value="1"></column>
-			<column name="isAdmin" value="1"></column>
-			<column name="isDeleted" value="0"></column>
-			<column name="isStaff" value="1"></column>
-			<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
-			<column name="username" value="superuser"></column>
-		</insert>
-		<insert tableName="User_Role">
-			<column name="users_id" value="1"></column>
-			<column name="roles_id" value="1"></column>
-		</insert>
-	</changeSet>
-	
 	<changeSet id="20141117-1121" author="srikanthmalyala">
 		<comment>Add identity types</comment>
 		<insert tableName="IdType">
@@ -625,6 +606,26 @@
 		</insert>
 	</changeSet>
 
+	<changeSet id="20141117-1127" author="srikanthmalyala">
+		<comment>Add superuser user</comment>
+		<insert tableName="User">
+			<column name="id" value="1"></column>
+			<column name="emailId" value="xxxx@jembi.org"></column>
+			<column name="firstName" value="Super"></column>
+			<column name="lastName" value="User"></column>
+			<column name="isActive" value="1"></column>
+			<column name="isAdmin" value="1"></column>
+			<column name="isDeleted" value="0"></column>
+			<column name="isStaff" value="1"></column>
+			<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
+			<column name="username" value="superuser"></column>
+		</insert>
+		<insert tableName="User_Role">
+			<column name="users_id" value="1"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+	</changeSet>
+
 	<changeSet id="20141117-1156" author="srikanthmalyala">
 		<comment>Add admin user</comment>
 		<insert tableName="User">
@@ -636,8 +637,8 @@
 			<column name="isAdmin" value="1"></column>
 			<column name="isDeleted" value="0"></column>
 			<column name="isStaff" value="1"></column>
-			<column name="password" value="$2a$10$E/mSsUsZ/aE5uajO26SYAeZ7OAhhhQadf3TiIlezSGUy7rvEEo2o6"></column>
-			<column name="username" value="adminuser"></column>
+			<column name="password" value="$2a$10$QZ5AfikU7//fZHw8TnnH7uYXLbcupZhK4TbSWk7ig4gI7GieNmnC."></column>
+			<column name="username" value="administrator"></column>
 		</insert>
 		<insert tableName="User_Role">
 			<column name="users_id" value="2"></column>
@@ -736,7 +737,7 @@
 			<column name="isAdmin" value="0"></column>
 			<column name="isDeleted" value="0"></column>
 			<column name="isStaff" value="1"></column>
-			<column name="password" value="$2a$10$PLMaoepFRavcRsIbcwPlSuwhHnnKLFkZATrXkXlRDf/xsLzjvB1b."></column>
+			<column name="password" value="$2a$10$56YwOM5naFLA69mQFOnUuumD/6EVcdLDtWfwVtZ.Jl3wJF1odwIoa"></column>
 			<column name="username" value="dataentryclerk"></column>
 		</insert>
 		<insert tableName="User_Role">
