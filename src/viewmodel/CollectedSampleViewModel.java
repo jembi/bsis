@@ -34,7 +34,7 @@ public class CollectedSampleViewModel {
   public String getCollectedOn() {
     if (collectedSample.getCollectedOn() == null)
       return "";
-    return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
+    return CustomDateFormatter.getDateString(collectedSample.getCollectedOn());
   }
 
   public boolean equals(Object obj) {
@@ -193,7 +193,7 @@ public class CollectedSampleViewModel {
   public String getBleedStartTime() {
     Date bleedStartTime = collectedSample.getBleedStartTime();
     if (bleedStartTime != null) {
-        return CustomDateFormatter.getDateTimeString(bleedStartTime);
+        return CustomDateFormatter.getTimeString(bleedStartTime);
     }
     return "";
   }
@@ -201,7 +201,7 @@ public class CollectedSampleViewModel {
   public String getBleedEndTime() {
     Date bleedEndTime = collectedSample.getBleedEndTime();
     if (bleedEndTime != null) {
-        return CustomDateFormatter.getDateTimeString(bleedEndTime);
+        return CustomDateFormatter.getTimeString(bleedEndTime);
     }
     return "";
   }
