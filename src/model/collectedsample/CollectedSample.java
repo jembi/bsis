@@ -24,9 +24,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -87,19 +89,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<BloodTestResult> bloodTestResults;
 
-  /**
-   * Which center the collection comes to.
-   */
-  @LocationExists
-  @ManyToOne
-  private Location collectionCenter;
 
-  /**
-   * Where was it actually collected.
-   */
-  @LocationExists
-  @ManyToOne
-  private Location collectionSite;
 
   /**
    * Index to find collections done between date ranges.
@@ -169,13 +159,18 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   
   @Range(min =0 ,max = 290)
   private Integer donorPulse;
-  
+
   @Temporal(TemporalType.TIMESTAMP)
   private Date bleedStartTime;
-  
+
   @Temporal(TemporalType.TIMESTAMP) 
   private Date bleedEndTime;
-  
+
+  @OneToOne
+  @LocationExists
+  @NotNull
+  private Location donorPanel;
+
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -193,13 +188,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return donor;
   }
 
-  public Location getCollectionCenter() {
-    return collectionCenter;
-  }
-
-  public Location getCollectionSite() {
-    return collectionSite;
-  }
 
   public Date getCollectedOn() {
     return collectedOn;
@@ -229,13 +217,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donor = donor;
   }
 
-  public void setCollectionCenter(Location collectionCenter) {
-    this.collectionCenter = collectionCenter;
-  }
-
-  public void setCollectionSite(Location collectionSite) {
-    this.collectionSite = collectionSite;
-  }
 
   public void setCollectedOn(Date collectedOn) {
     this.collectedOn = collectedOn;
@@ -261,14 +242,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
     this.collectionBatch = collectedSample.collectionBatch;
-    this.collectionCenter = collectedSample.collectionCenter;
-    this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
     this.haemoglobinCount=collectedSample.haemoglobinCount;
     this.donorPulse = collectedSample.donorPulse;
     this.donorWeight=collectedSample.donorWeight;
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
+    this.donorPanel = collectedSample.getDonorPanel();
   }
 
   public List<Product> getProducts() {
@@ -473,6 +453,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     public void setBleedEndTime(Date bleedEndTime) {
         this.bleedEndTime = bleedEndTime;
     }
-    
+
+    public Location getDonorPanel() {
+        return donorPanel;
+    }
+
+    public void setDonorPanel(Location donorPanel) {
+        this.donorPanel = donorPanel;
+    }
 
 }

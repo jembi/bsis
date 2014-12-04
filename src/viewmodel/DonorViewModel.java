@@ -69,12 +69,7 @@ public class DonorViewModel {
   }
 
   public String getBirthDate() {
-    Date birthDate = donor.getBirthDate();
-    if (birthDate != null) {
-      return CustomDateFormatter.getDateString(birthDate);
-    } else {
-      return "";
-    }
+	return CustomDateFormatter.getDateString(donor.getBirthDate());
   }
   
   public String getDateOfFirstDonation() {
