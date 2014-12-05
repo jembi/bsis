@@ -59,9 +59,19 @@ public class CollectedSampleBackingFormValidator implements Validator {
           "There exists a collection with the same collection number.");
 
     String collectedOn = form.getCollectedOn();
-    if (!CustomDateFormatter.isDateTimeStringValid(collectedOn))
+    if (!CustomDateFormatter.isDateStringValid(collectedOn))
       errors.rejectValue("collectedSample.collectedOn", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+          CustomDateFormatter.getDateErrorMessage());
+    
+    String bleedStartTime = form.getBleedStartTime();
+    if (!CustomDateFormatter.isTimeStringValid(bleedStartTime))
+      errors.rejectValue("collectedSample.bleedStartTime", "timeFormat.incorrect",
+          CustomDateFormatter.getTimeErrorMessage());
+    
+    String bleedEndTime = form.getBleedEndTime();
+    if (!CustomDateFormatter.isTimeStringValid(bleedEndTime))
+      errors.rejectValue("collectedSample.bleedEndTime", "timeFormat.incorrect",
+          CustomDateFormatter.getTimeErrorMessage());
 
     updateRelatedEntities(form);
     inheritParametersFromCollectionBatch(form, errors);
