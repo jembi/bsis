@@ -95,7 +95,7 @@ public class CollectedSampleBackingForm {
   public void setCollectedOn(String collectedOn) {
     this.collectedOn = collectedOn;
     try {
-      collectedSample.setCollectedOn(CustomDateFormatter.getDateTimeFromString(collectedOn));
+      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setCollectedOn(null);
