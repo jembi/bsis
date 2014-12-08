@@ -30,9 +30,9 @@ public class CollectedSampleBackingForm {
 
   private List<String> centers;
   private List<String> sites;
-  private String dateCollectedFrom;
-  private String dateCollectedTo;
   private String collectedOn;
+  private String bleedStartTime;
+  private String bleedEndTime;
   private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
@@ -71,6 +71,22 @@ public class CollectedSampleBackingForm {
       return "";
     return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
   }
+  
+  public String getBleedStartTime() {
+    if (bleedStartTime != null)
+      return bleedStartTime;
+    if (collectedSample == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(collectedSample.getBleedStartTime());
+  }
+  
+  public String getBleedEndTime() {
+    if (bleedEndTime != null)
+      return bleedEndTime;
+    if (collectedSample == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(collectedSample.getBleedEndTime());
+  }
 
   public String getCollectionNumber() {
     return collectedSample.getCollectionNumber();
@@ -79,29 +95,33 @@ public class CollectedSampleBackingForm {
   public void setCollectedOn(String collectedOn) {
     this.collectedOn = collectedOn;
     try {
-      collectedSample.setCollectedOn(CustomDateFormatter.getDateTimeFromString(collectedOn));
+      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setCollectedOn(null);
     }
   }
-
-  public String getDateCollectedFrom() {
-    return dateCollectedFrom;
+  
+  public void setBleedStartTime(String bleedStartTime) {
+    this.bleedStartTime = bleedStartTime;
+    try {
+      collectedSample.setBleedStartTime(CustomDateFormatter.getTimeFromString(bleedStartTime));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      collectedSample.setBleedStartTime(null);
+    }
   }
-
-  public void setDateCollectedFrom(String dateCollectedFrom) {
-    this.dateCollectedFrom = dateCollectedFrom;
+  
+  public void setBleedEndTime(String bleedEndTime) {
+    this.bleedEndTime = bleedEndTime;
+    try {
+      collectedSample.setBleedEndTime(CustomDateFormatter.getTimeFromString(bleedEndTime));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      collectedSample.setBleedEndTime(null);
+    }
   }
-
-  public String getDateCollectedTo() {
-    return dateCollectedTo;
-  }
-
-  public void setDateCollectedTo(String dateCollectedTo) {
-    this.dateCollectedTo = dateCollectedTo;
-  }
-
+	  
   public void setCollection(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -433,5 +453,5 @@ public class CollectedSampleBackingForm {
         }
             
     }
-  
+
 }

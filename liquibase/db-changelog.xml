@@ -978,4 +978,20 @@
 		</addColumn>
 	</changeSet>
 
+	<!-- Add donation bleed time fields -->
+	<changeSet id="20141114-0949" author="srikanthmalyala">
+		<addColumn tableName="CollectedSample">
+			<column name="bleedStartTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample">
+			<column name="bleedEndTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bleedStartTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bleedEndTime" type="DATETIME"></column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>

@@ -50,13 +50,12 @@ public class CollectionBatchViewModel {
 	 return collectionBatch.getCollectionsInBatch().size();
   }
 
-
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(collectionBatch.getLastUpdated());
   }
 
   public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(collectionBatch.getCreatedDate());
+    return CustomDateFormatter.getDateString(collectionBatch.getCreatedDate());
   }
 
   public String getCreatedBy() {

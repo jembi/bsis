@@ -159,12 +159,18 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   
   @Range(min =0 ,max = 290)
   private Integer donorPulse;
-  
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date bleedStartTime;
+
+  @Temporal(TemporalType.TIMESTAMP) 
+  private Date bleedEndTime;
+
   @OneToOne
   @LocationExists
   @NotNull
   private Location donorPanel;
-  
+
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -174,7 +180,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
-  
   public String getCollectionNumber() {
     return collectionNumber;
   }
@@ -433,6 +438,22 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
         this.donorPulse = donorPulse;
     }
 
+    public Date getBleedStartTime() {
+        return bleedStartTime;
+    }
+
+    public void setBleedStartTime(Date bleedStartTime) {
+        this.bleedStartTime = bleedStartTime;
+    }
+
+    public Date getBleedEndTime() {
+        return bleedEndTime;
+    }
+
+    public void setBleedEndTime(Date bleedEndTime) {
+        this.bleedEndTime = bleedEndTime;
+    }
+
     public Location getDonorPanel() {
         return donorPanel;
     }
@@ -440,5 +461,5 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     public void setDonorPanel(Location donorPanel) {
         this.donorPanel = donorPanel;
     }
-    
+
 }

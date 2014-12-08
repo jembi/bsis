@@ -344,12 +344,24 @@ public class CollectedSampleRepository {
     product.setCreatedBy(collectedSample.getCreatedBy());
     
     ProductType productType = productRepository.findProductTypeByProductTypeName("Whole Blood");
-    
+
+    // set cal to collectedOn Date 
     Calendar cal = Calendar.getInstance();
     cal.setTime(collectedSample.getCollectedOn());
+    
+    // second calendar to store bleedStartTime 
+    Calendar bleedStartTime = Calendar.getInstance();
+    bleedStartTime.setTime(collectedSample.getBleedStartTime());
+    
+    // update cal to set time to bleedStartTime
+    cal.set(Calendar.HOUR_OF_DAY, bleedStartTime.get(Calendar.HOUR_OF_DAY));
+    cal.set(Calendar.MINUTE, bleedStartTime.get(Calendar.MINUTE));
+    cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
+    
+    // update cal with initial component expiry period
     cal.add(Calendar.DATE, productType.getExpiresAfter());
     Date expiresOn = cal.getTime();    
- 
+
     product.setExpiresOn(expiresOn);
     product.setProductType(productType);
     em.persist(product);
