@@ -57,24 +57,7 @@ public class CollectionBatchController {
     }
     return reqUrl;
   }
-  
-  /**
-   * #209 - COmmented as not used anywhere 
-   * @param request
-   * @return 
-   
 
-  @RequestMapping(value = "/findform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    addEditSelectorOptions(map);
-    // to ensure custom field names are displayed in the form
-    map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
-    return map;
-  }
-*/
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  ResponseEntity findCollectionBatch(HttpServletRequest request,
@@ -94,7 +77,6 @@ public class CollectionBatchController {
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
-  
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
   public   Map<String, Object> addCollectionBatchFormGenerator(HttpServletRequest request) {
@@ -120,7 +102,6 @@ public class CollectionBatchController {
         return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.CREATED);
   }
   
-  
   @RequestMapping(value = "{id}",method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
   public ResponseEntity updateCollectionBatch(@PathVariable Long id,
@@ -129,7 +110,6 @@ public class CollectionBatchController {
       CollectionBatch collectionBatch = collectionBatchRepository.updateCollectionBatch(form.getCollectionBatch());
       return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.OK);
   }
-  
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
@@ -140,7 +120,6 @@ public class CollectionBatchController {
     CollectionBatch  collectionBatch = collectionBatchRepository.findCollectionBatchById(id);
     CollectionBatchViewModel collectionBatchViewModel = getCollectionBatchViewModel(collectionBatch);
     map.put("collectionBatch", collectionBatchViewModel);
-
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
@@ -164,5 +143,4 @@ public class CollectionBatchController {
     }
     return collectionBatchViewModels;
   }
-  
 }
